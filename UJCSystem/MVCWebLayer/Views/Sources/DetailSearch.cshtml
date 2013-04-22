@@ -1,0 +1,39 @@
+﻿@using Ujc.Naki.MVCWebLayer.Services
+@using Ujc.Naki.MVCWebLayer.Enums
+@model Ujc.Naki.MVCWebLayer.ViewModels.SearchSourceDetailViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="main-content">
+    @Html.Partial("~/Views/Shared/_SourcesMenu.cshtml", SourceDetailPart.Hledat)
+    <div id="source-detail-content">
+        @Html.Partial("~/Views/Shared/_SourceDetailSearchPanel.cshtml", Model)
+        <div id="source-detail-search-results">
+            @if (Model.ShowResults)
+            {
+                <div class="result">
+                    <h4>Pes</h4>
+                    <div class="found-part">
+                        <span class="page">str.34, odst.3</span>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut <strong>pes</strong> labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                        <a class="detail-button" href="/Sources/Prochazet/1-zizka">Přejít na obsah</a>
+                    </div>
+                    <div class="found-part">
+                        <span class="page">str.79, odst.1</span>
+                        <p>
+                            <strong>Pes</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                        <a class="detail-button" href="/Sources/Prochazet/1-zizka">Přejít na obsah</a>
+                    </div>
+                </div>
+                <div class="result">
+                    <h4>Peskovati</h4>
+                </div>
+            }
+        </div>
+    </div>
+</div>

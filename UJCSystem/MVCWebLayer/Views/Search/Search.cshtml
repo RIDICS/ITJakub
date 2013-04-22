@@ -1,0 +1,48 @@
+﻿@using Ujc.Naki.MVCWebLayer.Services
+@using Ujc.Naki.MVCWebLayer.Services.Enums
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Ujc.Naki.MVCWebLayer.ViewModels.SearchResultViewModel
+
+@Html.Partial("~/Views/Shared/_SearchPanel.cshtml", Model.Search)
+
+<script type="text/javascript">
+    $(function () {
+        showAlphabeticalResults();
+    });
+
+</script>
+
+<div id="main-content">
+    <div id="results-menu">
+		<a href="#" onclick="showAlphabeticalResults(); return false;" class="active alphabetical-button">Abecedně</a> |
+		<a href="#" onclick="showTypeResults(); return false;" class="type-button">Podle druhu a díla</a>
+	</div>
+    <div class="results-container">
+	    <div id="alphabetical-results" class="results">
+		    <ul>
+                @foreach (var result in Model.FoundWords)
+                {
+                    <li><a href="#" onclick="loadTermDetail(this, '@result'); return false;">@result</a></li>
+                }
+		    </ul>
+	    </div>
+        <div id="type-results" class="results" style="display:none">
+            @foreach(KeyValuePair<BookCategory, List<string>> category in Model.FoundByType) 
+            {
+                <h4>@category.Key.CzechString()</h4>
+                <ul>
+                    @foreach(var book in category.Value) 
+                    {
+                        <li><a href="#" onclick="bookDetail(this, '@book'); return false;">@book</a></li>
+                    }
+                </ul>
+            }
+        </div>
+	    <div id="result-detail-panel" style="height: 409px;">
+	    </div>
+        <div style="clear:both"></div>
+    </div>
+</div>

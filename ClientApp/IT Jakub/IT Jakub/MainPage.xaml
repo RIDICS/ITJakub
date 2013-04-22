@@ -1,0 +1,25 @@
+﻿<Page
+    x:Class="IT_Jakub.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IT_Jakub"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.TopAppBar>
+        <AppBar Height="50" Margin="0" VerticalAlignment="Top">
+            <Grid Margin="1,0,1.429,-0.143">
+                <StackPanel Orientation="Horizontal" Margin="0,0,1149,0"/>
+                <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Width="0"/>
+                <StackPanel Margin="0,0,0,0"/>
+                <Button x:Name="BackButton" Content="Back" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Stretch" Click="BackButton_Click"/>
+                <Button x:Name="TestPage" Content="TestPage" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Stretch" Click="MainButton_Click"/>
+            </Grid>
+        </AppBar>
+    </Page.TopAppBar>
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Frame Name="mainFrame">
+            <Image x:Name="image" PointerPressed="image_PointerPressed" PointerReleased="image_PointerReleased" Margin="0" Width="1000.505" Height="600.7" PointerMoved="image_PointerMoved"/>
+        </Frame>
+    </Grid>
+</Page>

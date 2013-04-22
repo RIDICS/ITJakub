@@ -1,0 +1,9 @@
+﻿@using Ujc.Naki.MVCWebLayer.Services
+
+<div id="search-panel" style="margin-top:1em;">
+    @using (Html.BeginForm("DetailHledat", "Sources", FormMethod.Get))
+    {
+        @Html.TextBox("searchTerm", string.Empty, new { id = "search-term" })
+	    <input type="submit" id="search-submit" value="Vyhledat" />
+    }
+</div>

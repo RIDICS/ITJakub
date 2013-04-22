@@ -1,0 +1,14 @@
+﻿<Page
+    x:Class="IT_Jakub.Views.UserLoggedIn.ChooseApp"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IT_Jakub.Views.UserLoggedIn"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Button x:Name="SynchronizedReadingButton" Content="Synchronizované čtení" HorizontalAlignment="Left" Height="190" Margin="195,143,0,0" VerticalAlignment="Top" Width="190" Click="SynchronizedReadingButton_Click"/>
+
+    </Grid>
+</Page>

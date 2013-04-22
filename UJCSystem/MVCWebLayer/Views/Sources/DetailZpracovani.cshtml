@@ -1,0 +1,15 @@
+﻿@using Ujc.Naki.MVCWebLayer.Services
+@using Ujc.Naki.MVCWebLayer.Enums
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Ujc.Naki.MVCWebLayer.Services.DTOs.Source
+
+<div id="main-content">
+    @Html.Partial("~/Views/Shared/_SourcesMenu.cshtml", SourceDetailPart.Zpracovani)
+    <div id="source-detail-content">
+        <h4>Způsob zpracování dokumentu</h4>
+    </div>
+</div>

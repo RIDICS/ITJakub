@@ -1,0 +1,25 @@
+﻿<Page
+    x:Class="IT_Jakub.Views.EducationalApplications.SynchronizedReading.SyncReadingApp"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IT_Jakub.Views.EducationalApplications.SynchronizedReading"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="mainGrid" Background="{StaticResource ApplicationPageBackgroundThemeBrush}" Loaded="mainGrid_Loaded">
+        <RichEditBox x:Name="textRichEditBox" HorizontalAlignment="Left" Height="559" Margin="46,45,0,0" VerticalAlignment="Top" Width="1026"/>
+        <Button x:Name="openFileButton" Content="Otevřít soubor" HorizontalAlignment="Left" Height="46" Margin="46,624,0,0" VerticalAlignment="Top" Width="249" Click="openFileButton_Click"/>
+        <Button x:Name="highligtTextButton" Content="Označit text" HorizontalAlignment="Left" Margin="313,624,0,0" VerticalAlignment="Top" Click="highligtTextButton_Click"/>
+        <Popup x:Name="openPopup">
+            <Grid Background="#FFBBBBBB" Margin="62,167,310,299" Width="1000" Height="276">
+                <TextBox x:Name="uriTextBox" HorizontalAlignment="Left" Margin="50,106,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="29" Width="907"/>
+                <Button x:Name="openButton" Content="Otevřít" HorizontalAlignment="Left" Margin="50,188,0,0" VerticalAlignment="Top" Foreground="Black" BorderBrush="Black" Click="openButton_Click"/>
+                <Button x:Name="cancelButton" Content="Storno" HorizontalAlignment="Left" Margin="150,188,0,0" VerticalAlignment="Top" BorderBrush="Black" Foreground="Black" Click="cancelButton_Click"/>
+                <TextBlock x:Name="uriLabel" HorizontalAlignment="Left" Margin="50,88,0,0" TextWrapping="Wrap" Text="Adresa souboru" VerticalAlignment="Top" Foreground="Black"/>
+            </Grid>
+        </Popup>
+        <Button x:Name="autoUpdateButton" Content="ON" HorizontalAlignment="Left" Height="38" Margin="983,624,0,0" VerticalAlignment="Top" Width="89" BorderBrush="#FF1A7A1A" Foreground="Black" Background="Lime" Click="autoUpdateButton_Click"/>
+
+    </Grid>
+</Page>

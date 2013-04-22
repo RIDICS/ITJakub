@@ -1,0 +1,353 @@
+#wrapper 
+{
+    width:960px;
+    margin:auto;
+}
+
+.hidden {
+	visibility:hidden;
+}
+
+.not-shown {
+	display:none;
+}
+
+.clear-list {
+	clear:both;
+}
+
+body {
+	font-family: "Geneva CE", "Arial CE", sans-serif;
+}
+
+h3 {
+	margin:0.5em 0;
+}
+
+#logo a
+{
+    color:Black;
+    text-decoration:none;
+}
+
+.banner 
+{
+    padding:0.5em;
+    border:1px solid black;
+}
+
+#menu {
+	margin:1em 0;
+}
+a {
+	text-decoration:none;
+}
+
+a:hover {
+	text-decoration:underline;
+}
+
+a.active {
+	color:#0099ff;
+}
+
+.arrow {
+	display: inline-block;
+	width:13px;
+	height:13px;
+	background:url('../Images/arrow.png') no-repeat left top;
+}
+
+#search-panel {
+	width:92%;
+	padding:0.5em 2em;
+	border:1px solid black;
+	text-align:center;
+}
+
+#advanced-search {
+	text-align:left;
+	position:relative;
+}
+
+#advanced-search .show {
+	position:absolute;
+	right:1em;
+	top:0;
+}
+
+#advanced-search-active {
+	text-align:left;
+	margin:1em 0 0 0;
+	position:relative;
+}
+
+#advanced-search-active .cancel-button {
+	position:absolute;
+	right:1em;
+	cursor:pointer;
+}
+
+#advanced-search-active ul {
+	list-style:none;
+	padding-left:1em;
+}
+
+#advanced-search-active li {
+	padding:0.2em 0 0.2em 20px;
+	width:25em;
+}
+
+#advanced-search-active li.has-children {
+	padding-left:3px;
+}
+
+.has-children>label {
+	cursor:pointer;
+}
+
+.two-column {
+	width:60em;
+}
+
+.two-column ul {
+	width:60em;
+	padding:1em 0;
+}
+
+.two-column>ul>li {
+	float:left;
+}
+
+#search-term {
+	width:100%;
+	background:none;
+	border:1px solid gray;
+	height:2em;
+}
+
+#search-submit {
+	margin:1em 0 0 0;
+}
+
+#main-content {
+	position:relative;
+	padding:1em 0.5em;
+	border:1px solid black;
+	margin:1em 0 0 0;
+	width:97%;
+}
+
+#welcome-text, #news-panel {
+	float:left;
+}
+
+#welcome-text {
+	width:70%;
+}
+
+#news-panel {
+	width:20%;
+	margin-left:1em;
+}
+
+/* RESULTS */
+
+.results-container 
+{
+    border:1px solid black;
+    padding:0.5em 0;
+}
+
+.results {
+	width:40%;
+	float:left;
+	padding:0.5em;
+}
+
+#alphabetical-results ul {
+	padding:0;
+}
+
+.results li {
+	list-style:none;
+	padding:0.5em 0 0 0.5em;
+	cursor:pointer;
+}
+
+.results li .selected {
+	border:2px solid black;
+}
+
+#alphabetical-results li:nth-child(even) {
+	background: #CCC
+}
+
+#alphabetical-results li:nth-child(odd) {
+	background: #FFF
+}
+
+#type-results h4 {
+	margin:0.5em 0;
+}
+
+#type-results ul {
+	margin-top:0.5em;
+}
+
+#result-detail-panel {
+	width:53%;
+	float:left;
+	margin-left:1.5em;
+	border:1px solid black;
+	padding:0.5em;
+}
+
+#dictionary-results-panel {
+	height:150px;
+}
+
+#texts-results-panel {
+	height:140px;
+}
+
+#results-menu 
+{
+    margin:0.5em;
+}
+
+/* SOURCES */
+
+#alphabet-menu 
+{
+    margin:1em auto;
+}
+
+#alphabet-menu td
+{
+    border:1px solid black;
+    width:2em;
+    padding:0.3em 0;
+    text-align:center;
+}
+
+#alphabet-menu .selected 
+{
+    color:#0099ff;
+}
+
+.source-small 
+{
+    border:1px solid black;
+    padding:1em;
+    margin-bottom:1em;
+    position:relative;
+}
+
+.source-small .buttons 
+{
+    position:absolute;
+    right:50px;
+    bottom:1em;
+}
+
+.source-small .buttons a 
+{
+    margin-right:1em;
+}
+
+.source-detail-browse 
+{
+    position:absolute;
+    top:1em;
+    right:1em;
+}
+
+.results-title 
+{
+    display:block;
+    text-align:right;
+}
+
+.results-title a
+{
+    color:Gray;
+    font-size:0.8em;
+}
+
+#source-detail-content
+{
+    margin:0.5em 3em;
+    padding:0 1em 1em 1em;
+    border:1px solid black;
+}
+
+#source-detail-menu ul
+{
+    list-style-type: none;
+}
+
+#source-detail-menu li
+{
+    float:left;
+    margin-left:0.5em;
+}
+
+#source-detail-menu li a 
+{
+    margin-right:0.5em;
+}
+
+#source-detail-menu li.selected a 
+{
+    font-weight:bold;
+    text-decoration: underline;
+}
+
+#paging-controls 
+{
+    position:relative;
+    text-align:center;
+}
+
+#paging-controls .next-button
+{
+    position:absolute;
+    right:5em;
+    bottom:0.2em;
+}
+
+#paging-controls .pages .selected 
+{
+    text-decoration:underline;
+    font-weight:bold;
+}
+
+#paging-controls .prev-button
+{
+    position:absolute;
+    left:5em;
+    bottom:0.2em;
+}
+
+#source-detail-search-results .result .found-part
+{
+    position:relative;
+}
+
+#source-detail-search-results .result h4 
+{
+    text-decoration:underline;
+}
+
+#source-detail-search-results .result .page 
+{
+    font-weight:bold;
+}
+
+#source-detail-search-results .result .detail-button 
+{
+    position:absolute;
+    right:2em;
+    top:0;
+}

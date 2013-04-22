@@ -1,0 +1,36 @@
+﻿@model Ujc.Naki.ITJakub.WebGui.Models.SearchModel
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Main Search page</h2>
+
+@using (Html.BeginForm("Search", "Search")) {
+    <div>
+        <fieldset>
+            <legend>Search:</legend>
+
+            <div>
+                @Html.LabelFor(m => m.Author)
+            </div>
+
+            <div>
+                @Html.TextBoxFor(m => m.Author)
+                @Html.ValidationMessageFor(m => m.Author)
+            </div>
+
+            <div>
+                @Html.LabelFor(m => m.Title)
+            </div>
+            <div>
+                @Html.PasswordFor(m => m.Title)
+                @Html.ValidationMessageFor(m => m.Title)
+            </div>
+
+            <p>
+                <input type="submit" value="Search" />
+            </p>
+        </fieldset>
+    </div>
+}

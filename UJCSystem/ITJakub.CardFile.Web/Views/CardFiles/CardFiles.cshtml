@@ -1,0 +1,28 @@
+﻿@model Ujc.Naki.CardFile.Web.Models.CardFilesModel
+@{
+    ViewBag.Title = "Card File";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title</h1>
+</hgroup>
+
+<section id="cardFilesForm">
+<h2>Use a local account to log in.</h2>
+@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    
+    <fieldset>
+        <legend>CardFileForm</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Headword)
+                @Html.TextBoxFor(m => m.Headword)
+                @Html.ValidationMessageFor(m => m.Headword)
+            </li>
+        </ol>
+        <input type="submit" value="Hledat" />
+    </fieldset>
+}
+</section>

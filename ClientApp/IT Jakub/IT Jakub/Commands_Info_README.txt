@@ -1,0 +1,31 @@
+﻿=== Structure of commands: ===
+ - "XXX:YYYYYYYYY:ZZZZ"
+ - X.. => Kód aplikace které se tento příkaz týká
+ - Y.. => Objekt v aplikaci, kterého se příkaz týká
+ - Z.. => Příkaz na tento objekt
+
+=== Synchronized reading App: ===
+
+  - App code: "501"
+
+ == Objects ==
+  * "App" => Whole application
+  * "Pointer" => Pointer where is the text readed
+  * "Text" => Readed text
+ 
+  = App =
+  * "Start()" => Start of application
+  * "Close()" => Application closed
+
+  = Pointer =
+  * "Possition(x,y)" => Position of pointer
+  * "Hide()" => Hide a pointer
+  * "Show()" => Show a pointer
+
+  = Text =
+  * "Highlight(RGBA(R, G, B, A); startingRange; endingRange)" => Highlight text in specified range
+
+
+
+  /* Notes */
+  url for RTF file on a web: http://38511.w11.wedos.ws/domains/kavoj.cz/testRTF.rtf

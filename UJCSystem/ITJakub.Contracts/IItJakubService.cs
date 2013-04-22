@@ -1,0 +1,16 @@
+﻿using System.Collections.Generic;
+using System.ServiceModel;
+using ITJakub.Contracts.Searching;
+
+namespace ITJakub.Contracts
+{
+    [ServiceContract]
+    public interface IItJakubService
+    {
+        [OperationContract]
+        List<string> GetAllExtendedTermsForKey(string key);
+
+        [OperationContract]
+        KwicResult[] GetContextForKeyWord(string keyWord);
+    }
+}
