@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using Windows.UI;
@@ -21,6 +22,7 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
         public const string POINTER = "Pointer";
         public const string START_APPLICATION = "Start()";
 
+        RichEditBox textBox = Views.EducationalApplications.SynchronizedReading.SyncReadingApp.getTextRichEditBox();
 
         private Command c;
 
@@ -55,14 +57,9 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
 
         private void procedePointerCommand() {
             if (c.command.StartsWith("Move(")) {
-                string commandAtributes = c.command.Replace("Move(", "");
-                commandAtributes = commandAtributes.Replace(")", "");
-                string[] splitedCommand = commandAtributes.Split(';');
-                double x = double.Parse(splitedCommand[0]);
-                double y = double.Parse(splitedCommand[1]);
-                TranslateTransform dragTranslation = Views.EducationalApplications.SynchronizedReading.SyncReadingApp.getDragTranslation();
-                dragTranslation.X = x;
-                dragTranslation.Y = y;
+                string commandAtribute = c.command.Replace("Move(", "");
+                commandAtribute = commandAtribute.Replace(")", "");
+                Views.EducationalApplications.SynchronizedReading.SyncReadingApp.movePointerToCharIndex(int.Parse(commandAtribute));
             }
         }
 
@@ -133,8 +130,8 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
             }
         }
 
-        internal static string getPointerMoveCommand(double x, double y) {
-            string text = SYNCHRONIZED_READING_APPLICATION + SEPARATOR + POINTER + SEPARATOR + "Move(" + x + ';' + y + ")";
+        internal static string getPointerMoveCommand(int charIndex) {
+            string text = SYNCHRONIZED_READING_APPLICATION + SEPARATOR + POINTER + SEPARATOR + "Move("+charIndex+")";
             return text;
         }
     }

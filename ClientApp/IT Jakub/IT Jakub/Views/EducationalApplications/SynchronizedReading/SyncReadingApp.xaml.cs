@@ -40,18 +40,16 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private bool autoUpdate = true;
         
         private ITextRange oldRange;
-        private TranslateTransform dragTranslation;
         private Color oldColor;
-        private double horizontalOffset;
-        private double verticalOffset;
+        private static double horizontalOffset;
+        private static double verticalOffset;
         private ScrollViewer scrollViewer;
+        private static Image staticPointer;
 
         public SyncReadingApp() {
             this.InitializeComponent();
             textBox = textRichEditBox;
-            dragTranslation = new TranslateTransform();
-            tt = dragTranslation;
-            pointer.RenderTransform = this.dragTranslation;
+            staticPointer = pointer;
             oldRange = textBox.Document.GetRange(0, 0);
             scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
         }
@@ -146,39 +144,27 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         }
         
 
-
         private async void pointer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e) {
             scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
-            
+
             verticalOffset = scrollViewer.VerticalOffset;
             horizontalOffset = scrollViewer.HorizontalOffset;
             
-            movePointer(e);
+            double top = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) + e.Delta.Translation.Y;
+            double left = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + e.Delta.Translation.X;
 
-            setPointerScrollbarOffset();
-            await ss.sendCommand(Classes.Models.SyncronizedReadingApp.SyncReadingAppCommand.getPointerMoveCommand(dragTranslation.X, dragTranslation.Y));
-        }
+            pointer.SetValue(Canvas.LeftProperty, left);
+            pointer.SetValue(Canvas.TopProperty, top);
 
-        private void movePointer(ManipulationDeltaRoutedEventArgs e) {
-            dragTranslation.X += e.Delta.Translation.X;
-            dragTranslation.Y += e.Delta.Translation.Y;
-
-            double pointerPossitionX = pointer.Margin.Left + dragTranslation.X + 35;
-            double pointerPossitionY = pointer.Margin.Top + dragTranslation.Y;
-            
             unhighlightPointerWord();
-            
-            ITextRange range = textBox.Document.GetRangeFromPoint(new Point(pointerPossitionX, pointerPossitionY), PointOptions.Start);
-            
+
+            ITextRange range = textBox.Document.GetRangeFromPoint(new Point(left + (pointer.Width/2), top), PointOptions.Start);
             highlightPointerWord(range);
 
-            if (pointerPossitionX >= textBox.ActualWidth - 30) {
-                scrollViewer.ScrollToHorizontalOffsetWithAnimation(scrollViewer.VerticalOffset + 50);
-            }
-            if (pointerPossitionY >= textBox.ActualHeight - 30) {
-                scrollViewer.ScrollToVerticalOffsetWithAnimation(scrollViewer.VerticalOffset + 50);
-            }
+            setPointerScrollbarOffset();
+            await ss.sendCommand(Classes.Models.SyncronizedReadingApp.SyncReadingAppCommand.getPointerMoveCommand(range.StartPosition));
         }
+
 
         private void highlightPointerWord(ITextRange range) {
             range.Expand(TextRangeUnit.Character);
@@ -204,8 +190,6 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             charFormatting.BackgroundColor = c;
             textRichEditBox.Document.Selection.CharacterFormat = charFormatting;
             textRichEditBox.IsReadOnly = true;
-
-            
         }
 
         private void setPointerScrollbarOffset() {
@@ -213,12 +197,22 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             scrollViewer.ScrollToHorizontalOffset(horizontalOffset);
         }
 
-        private void pointer_Tapped(object sender, TappedRoutedEventArgs e) {
+        public static void movePointerToCharIndex(int index) {
+            ITextRange range = textBox.Document.GetRange(index, index+1);
+            Point p;
+            range.GetPoint(HorizontalCharacterAlignment.Left, VerticalCharacterAlignment.Baseline, PointOptions.ClientCoordinates, out p);
 
-        }
+            verticalOffset = (p.Y - textBox.ActualHeight) + 30;
 
-        internal static TranslateTransform getDragTranslation() {
-            return tt;
+            if (verticalOffset <= 0) {
+                verticalOffset = 0;
+            }
+
+            ScrollViewer scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
+            scrollViewer.ScrollToVerticalOffset(verticalOffset);
+            
+            staticPointer.SetValue(Canvas.LeftProperty, p.X - (staticPointer.Width/2));
+            staticPointer.SetValue(Canvas.TopProperty, p.Y - verticalOffset + 30);
         }
 
         private void pointer_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e) {
