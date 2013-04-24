@@ -127,6 +127,7 @@
     <Compile Include="Classes\Models\SyncronizedReadingApp\RtfFileOpener.cs" />
     <Compile Include="Classes\Models\SyncronizedReadingApp\SyncReadingAppCommand.cs" />
     <Compile Include="Classes\Models\User.cs" />
+    <Compile Include="Classes\Networking\FileDownloader.cs" />
     <Compile Include="Classes\Networking\MobileService.cs" />
     <Compile Include="Classes\Utils\Generator.cs" />
     <Compile Include="Classes\Utils\MyDialogs.cs" />
@@ -177,8 +178,10 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="IT Jakub_TemporaryKey.pfx" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\pointer.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
@@ -261,8 +264,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="WriteableBitmapEx.WinRT, Version=1.0.7.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="WinRTXamlToolkit">
+      <HintPath>..\packages\winrtxamltoolkit.1.3.7.1\lib\netcore45\WinRTXamlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="WriteableBitmapEx.WinRT">
       <HintPath>..\..\..\..\..\Users\Kopr\Desktop\WriteableBitmapEx_v1.0.7.0\WinRT\WriteableBitmapEx.WinRT.dll</HintPath>
     </Reference>
   </ItemGroup>

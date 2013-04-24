@@ -8,7 +8,6 @@
     mc:Ignorable="d">
 
     <Grid x:Name="mainGrid" Background="{StaticResource ApplicationPageBackgroundThemeBrush}" Loaded="mainGrid_Loaded">
-        <RichEditBox x:Name="textRichEditBox" HorizontalAlignment="Left" Height="559" Margin="46,45,0,0" VerticalAlignment="Top" Width="1026"/>
         <Button x:Name="openFileButton" Content="Otevřít soubor" HorizontalAlignment="Left" Height="46" Margin="46,624,0,0" VerticalAlignment="Top" Width="249" Click="openFileButton_Click"/>
         <Button x:Name="highligtTextButton" Content="Označit text" HorizontalAlignment="Left" Margin="313,624,0,0" VerticalAlignment="Top" Click="highligtTextButton_Click"/>
         <Popup x:Name="openPopup">
@@ -20,6 +19,9 @@
             </Grid>
         </Popup>
         <Button x:Name="autoUpdateButton" Content="ON" HorizontalAlignment="Left" Height="38" Margin="983,624,0,0" VerticalAlignment="Top" Width="89" BorderBrush="#FF1A7A1A" Foreground="Black" Background="Lime" Click="autoUpdateButton_Click"/>
+        <Button Content="Button" HorizontalAlignment="Left" Height="45" Margin="1175,164,0,0" VerticalAlignment="Top" Width="43" Click="Button_Click_1"/>
+        <RichEditBox x:Name="textRichEditBox" HorizontalAlignment="Left" Height="559" VerticalAlignment="Top" Width="1026" IsReadOnly="True" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" Margin="10,10,0,0"/>
+        <Image x:Name="pointer" HorizontalAlignment="Left" Height="70" Margin="371,279,0,0" VerticalAlignment="Top" Width="70" Source="ms-appx:///Assets/pointer.png" ManipulationMode="All" ManipulationDelta="pointer_ManipulationDelta" ManipulationStarting="pointer_ManipulationStarting" ManipulationCompleted="pointer_ManipulationCompleted"/>
 
     </Grid>
 </Page>

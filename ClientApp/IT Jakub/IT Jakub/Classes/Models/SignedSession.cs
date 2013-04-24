@@ -78,7 +78,11 @@ namespace IT_Jakub.Classes.Models {
         public async Task<bool> sendCommand(string commandText) {
             CommandTable ct = new CommandTable();
             var x = lu;
-            bool test = await ct.createCommand(sessionData, lu.getUserData(), commandText);
+            long sentCommandId = await ct.createCommand(sessionData, lu.getUserData(), commandText);
+            if (sentCommandId != -1) {
+                latestCommandId = sentCommandId;
+                return false;
+            }
             return true;
         }
     }

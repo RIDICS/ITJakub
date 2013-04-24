@@ -14,7 +14,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
         private static MobileService ms = MobileService.getInstance();
         private static MobileServiceClient msc = MobileService.getMobileServiceClient();
 
-        internal async Task<bool> createCommand(Session s, User u, string commandText) {
+        internal async Task<long> createCommand(Session s, User u, string commandText) {
             try {
                 IMobileServiceTable<Command> table = msc.GetTable<Command>();
                 Command c = new Command {
@@ -23,11 +23,17 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     SessionId = s.Id
                 };
                 await table.InsertAsync(c);
-                return true;
+                List<Command> command = await table
+                    .Where(Item => Item.CommandText == c.CommandText)
+                    .Where(Item => Item.UserId == c.UserId)
+                    .Where(Item => Item.SessionId == c.SessionId)
+                    .ToListAsync();
+                long id = command[0].Id;
+                return id;
             } catch (Exception e) {
-                MyDialogs.showDialogOK(e.Message);
+                // MyDialogs.showDialogOK(e.Message);
             }
-            return false;
+            return -1;
         }
 
         internal async Task<List<Command>> getAllSessionCommands(Session s) {

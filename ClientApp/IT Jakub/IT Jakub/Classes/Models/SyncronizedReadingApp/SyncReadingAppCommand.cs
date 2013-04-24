@@ -11,12 +11,14 @@ using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
     class SyncReadingAppCommand : Command {
 
         public const string WHOLE_APPLICATION = "App";
         public const string TEXT = "Text";
+        public const string POINTER = "Pointer";
         public const string START_APPLICATION = "Start()";
 
 
@@ -44,8 +46,24 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
                 case TEXT:
                     await procedeTextCommand();
                     break;
+                case POINTER:
+                    procedePointerCommand();
+                    break;
             }
             return true;
+        }
+
+        private void procedePointerCommand() {
+            if (c.command.StartsWith("Move(")) {
+                string commandAtributes = c.command.Replace("Move(", "");
+                commandAtributes = commandAtributes.Replace(")", "");
+                string[] splitedCommand = commandAtributes.Split(';');
+                double x = double.Parse(splitedCommand[0]);
+                double y = double.Parse(splitedCommand[1]);
+                TranslateTransform dragTranslation = Views.EducationalApplications.SynchronizedReading.SyncReadingApp.getDragTranslation();
+                dragTranslation.X = x;
+                dragTranslation.Y = y;
+            }
         }
 
         private async Task<bool> procedeTextCommand() {
@@ -83,8 +101,14 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
             string startingRangeText = splitedCommand[1];
             string endingRangeText = splitedCommand[2];
             endingRangeText = endingRangeText.Replace(")", "");
-            colorCommand = colorCommand.Replace("Highlight(RGBA(", "");
+            colorCommand = colorCommand.Replace("Highlight(ARGB(", "");
             colorCommand = colorCommand.Replace(")", "");
+
+            string[] argb = colorCommand.Split(',');
+            byte[] argbInt = new byte[4];
+            for (int i = 0; i < argbInt.Length; i++) {
+                argbInt[i] = byte.Parse(argb[i].Trim());
+            }
 
             int startingRange = int.Parse(startingRangeText);
             int endingRange = int.Parse(endingRangeText);
@@ -93,7 +117,7 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
             textRichEditBox.Document.Selection.SetRange(startingRange, endingRange);
             ITextCharacterFormat charFormatting = textRichEditBox.Document.Selection.CharacterFormat;
             textRichEditBox.IsReadOnly = false;
-            Color color = Colors.Violet;
+            Color color = Color.FromArgb(argbInt[0], argbInt[1], argbInt[2], argbInt[3]);
             charFormatting.BackgroundColor = color;
             textRichEditBox.Document.Selection.CharacterFormat = charFormatting;
             textRichEditBox.IsReadOnly = true;
@@ -107,6 +131,11 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
                     rootFrame.Navigate(typeof(Views.EducationalApplications.SynchronizedReading.SyncReadingApp));
                     break;
             }
+        }
+
+        internal static string getPointerMoveCommand(double x, double y) {
+            string text = SYNCHRONIZED_READING_APPLICATION + SEPARATOR + POINTER + SEPARATOR + "Move(" + x + ';' + y + ")";
+            return text;
         }
     }
 }
