@@ -1,0 +1,13 @@
+.masthead a {
+    text-decoration: none;
+}
+
+.footer {
+    border-top: 1px solid rgb(230,230,230);
+    margin-bottom: 30px;
+    padding: 10px 0px 70px 0px;
+}
+
+.footer p {
+    text-align: right;
+}
