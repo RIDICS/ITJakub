@@ -8,7 +8,7 @@
     mc:Ignorable="d">
 
     <Grid x:Name="mainGrid" Background="{StaticResource ApplicationPageBackgroundThemeBrush}" Loaded="mainGrid_Loaded">
-        <Canvas HorizontalAlignment="Left" Height="758" Margin="10,0,0,0" VerticalAlignment="Top" Width="1346">
+        <Canvas HorizontalAlignment="Left" Height="768" VerticalAlignment="Top" Width="1366">
             <Button x:Name="openFileButton" Content="Otevřít soubor" HorizontalAlignment="Left" Height="46" Margin="46,624,0,0" VerticalAlignment="Top" Width="249" Click="openFileButton_Click"/>
             <Button x:Name="highligtTextButton" Content="Označit text" HorizontalAlignment="Left" Margin="313,624,0,0" VerticalAlignment="Top" Click="highligtTextButton_Click"/>
             <Popup x:Name="openPopup">

@@ -66,9 +66,6 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             openPopup.IsOpen = true;
         }
 
-        
-       
-
         private async void highligtTextButton_Click(object sender, RoutedEventArgs e) {
             ITextCharacterFormat charFormatting = textRichEditBox.Document.Selection.CharacterFormat;
             textRichEditBox.IsReadOnly = false;
@@ -140,7 +137,23 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
-            
+            object o = textBox.Height;
+            string s;
+            textBox.Document.GetText(TextGetOptions.None, out s);
+            int l = s.Length;
+
+            ITextRange range = textBox.Document.GetRange(l, l);
+            range.Expand(TextRangeUnit.Character);
+
+            Point endP;
+            range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out endP);
+
+            range = textBox.Document.GetRange(0, 0);
+            range.Expand(TextRangeUnit.Character);
+
+            Point startP;
+            range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out startP);
+            return;
         }
         
 
@@ -198,21 +211,42 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         }
 
         public static void movePointerToCharIndex(int index) {
-            ITextRange range = textBox.Document.GetRange(index, index+1);
-            Point p;
-            range.GetPoint(HorizontalCharacterAlignment.Left, VerticalCharacterAlignment.Baseline, PointOptions.ClientCoordinates, out p);
+            string documentText;
+            textBox.Document.GetText(TextGetOptions.None, out documentText);
+            int docLenght = documentText.Length;
 
-            verticalOffset = (p.Y - textBox.ActualHeight) + 30;
+            ITextRange range = textBox.Document.GetRange(docLenght, docLenght);
+            range.Expand(TextRangeUnit.Character);
+            Point docEndPoint;
+            range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out docEndPoint);
+
+            range = textBox.Document.GetRange(0, 0);
+            range.Expand(TextRangeUnit.Character);
+            Point docStartPoint;
+            range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out docStartPoint);
+
+            range = textBox.Document.GetRange(index, index);
+            range.Expand(TextRangeUnit.Character);
+            Point focusCharacterPoint;
+            range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
+
+            double docHeight = docEndPoint.Y - docStartPoint.Y;
+            double charOffsetPercent = (focusCharacterPoint.Y - docStartPoint.Y) / docHeight;
+
+            ScrollViewer scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
+            verticalOffset = charOffsetPercent * scrollViewer.ScrollableHeight;
 
             if (verticalOffset <= 0) {
                 verticalOffset = 0;
             }
 
-            ScrollViewer scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
             scrollViewer.ScrollToVerticalOffset(verticalOffset);
-            
-            staticPointer.SetValue(Canvas.LeftProperty, p.X - (staticPointer.Width/2));
-            staticPointer.SetValue(Canvas.TopProperty, p.Y - verticalOffset + 30);
+
+
+            range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
+
+            staticPointer.SetValue(Canvas.LeftProperty, focusCharacterPoint.X - (staticPointer.ActualWidth / 2));
+            staticPointer.SetValue(Canvas.TopProperty, focusCharacterPoint.Y);
         }
 
         private void pointer_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e) {
