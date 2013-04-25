@@ -47,7 +47,7 @@
             
             function defineCheckboxes(asElement) {
                 asCheckboxes = null;
-                asElement.find(".advanced-search .span6 > ul > li > label > input[type=checkbox]:checked").each(function () {
+                asElement.find(".advanced-search .span6 > ul > li > label > input[type=checkbox]").each(function () {
                     var children = null;
                     $(this).parent().parent().find("ul li input[type=checkbox]:checked").each(function () {
                         if (children == null) {
@@ -55,14 +55,15 @@
                         }
                         children.push($(this).parent().find("span").html());
                     });
-                    if (asCheckboxes == null) {
-                        asCheckboxes = {};
+                    if (!(children == null && !$(this).is(':checked'))) {
+                        if (asCheckboxes == null) {
+                            asCheckboxes = {};
+                        }
+                        asCheckboxes[$(this).val()] = {};
+                        asCheckboxes[$(this).val()]["label"] = $(this).parent().find("span").html();
+                        asCheckboxes[$(this).val()]["children"] = children;
                     }
-                    asCheckboxes[$(this).val()] = {};
-                    asCheckboxes[$(this).val()]["label"] = $(this).parent().find("span").html();
-                    asCheckboxes[$(this).val()]["children"] = children;
                 });
-                console.debug(asCheckboxes);
                 asElement.find(".searched-books").html(createFindsHtml());
             }
 
