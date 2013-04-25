@@ -19,8 +19,6 @@ namespace IT_Jakub.Classes.Models {
             this.appCommand = commandArray[0];
             this.commandObject = commandArray[1];
             this.command = commandArray[2];
-            
-            ss.setLatestCommandId(this.Id);
 
             switch (appCommand) {
                 case Command.SYNCHRONIZED_READING_APPLICATION:
@@ -28,6 +26,7 @@ namespace IT_Jakub.Classes.Models {
                     break;
             }
             await this.commandState.procedeCommand();
+            ss.setLatestCommandId(this.Id);
             return true;
         }
     }

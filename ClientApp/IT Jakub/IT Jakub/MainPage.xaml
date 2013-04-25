@@ -19,7 +19,6 @@
     </Page.TopAppBar>
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
         <Frame Name="mainFrame">
-            <Image x:Name="image" PointerPressed="image_PointerPressed" PointerReleased="image_PointerReleased" Margin="0" Width="1000.505" Height="600.7" PointerMoved="image_PointerMoved"/>
         </Frame>
     </Grid>
 </Page>

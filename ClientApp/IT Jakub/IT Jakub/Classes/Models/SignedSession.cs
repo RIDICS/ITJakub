@@ -77,13 +77,24 @@ namespace IT_Jakub.Classes.Models {
 
         public async Task<bool> sendCommand(string commandText) {
             CommandTable ct = new CommandTable();
-            var x = lu;
             long sentCommandId = await ct.createCommand(sessionData, lu.getUserData(), commandText);
-            if (sentCommandId != -1) {
+            if (sentCommandId > latestCommandId) {
                 latestCommandId = sentCommandId;
-                return false;
+                return true;
             }
-            return true;
+            return false;
+        }
+
+        internal async void sendPointerMoveCommand(int pointerIndex) {
+            CommandTable ct = new CommandTable();
+            string commandText = Classes.Models.SyncronizedReadingApp.SyncReadingAppCommand.getPointerMoveCommand(pointerIndex);
+            await this.sendCommand(commandText);
+            removePrevCommands();
+        }
+
+        internal void removePrevCommands() {
+            CommandTable ct = new CommandTable();
+            ct.deletePrevMoveCommands(latestCommandId, sessionData);
         }
     }
 }

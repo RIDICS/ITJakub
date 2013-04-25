@@ -28,18 +28,9 @@ namespace IT_Jakub
 
         Page rootPage = null;
 
-        WriteableBitmap wb;
-        int oldX = -1;
-        int oldY = -1;
-
         public MainPage()
         {
             this.InitializeComponent();
-            int w = Convert.ToInt32(Math.Round(image.Width, 0));
-            int h = Convert.ToInt32(Math.Round(image.Height, 0));
-            wb = new WriteableBitmap(w, h);
-            wb.Clear(Color.FromArgb(255, 255, 255, 255));
-            image.Source = wb;
         }
 
         /// <summary>
@@ -60,46 +51,11 @@ namespace IT_Jakub
             }
         }
 
-        /*
-        private void Canvas_PointerPressed(object sender, PointerRoutedEventArgs e) {
-            PointerPoint o = e.GetCurrentPoint(canvas);
-            Point p = new Point(o.Position.X,o.Position.Y);
-            
-            
-        }
-         *
-         */
-        
 
         private void MainButton_Click(object sender, RoutedEventArgs e) {
             mainFrame.Navigate(typeof(TestPage), this);
         }
 
-        private void image_PointerPressed(object sender, PointerRoutedEventArgs e) {
-            int x = (int)e.GetCurrentPoint(image).Position.X;
-            int y = (int)e.GetCurrentPoint(image).Position.Y;
-            wb.SetPixel(x, y, Color.FromArgb(255, 0, 0, 0));
-            oldX = x;
-            oldY = y;
-        }
-
-        private void image_PointerReleased(object sender, PointerRoutedEventArgs e) {
-            oldX = -1;
-            oldY = -1;
-        }
-
-        private void image_PointerMoved(object sender, PointerRoutedEventArgs e) {
-            if (e.GetCurrentPoint(image).Properties.IsLeftButtonPressed) {
-                int x = (int)e.GetCurrentPoint(image).Position.X;
-                int y = (int)e.GetCurrentPoint(image).Position.Y;
-                wb.SetPixel(x, y, Color.FromArgb(255, 0, 0, 0));
-                if (oldX != -1 || oldY != -1) {
-                    wb.DrawLineAa(oldX, oldY, x, y, Color.FromArgb(255, 0, 0, 0));
-                }
-                oldX = x;
-                oldY = y;
-            }
-        }
         
     }
 }

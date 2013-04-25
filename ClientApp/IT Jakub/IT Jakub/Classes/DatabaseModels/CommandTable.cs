@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace IT_Jakub.Classes.DatabaseModels {
@@ -23,12 +24,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     SessionId = s.Id
                 };
                 await table.InsertAsync(c);
-                List<Command> command = await table
+                List<Command> command = await table.Take(1)
                     .Where(Item => Item.CommandText == c.CommandText)
                     .Where(Item => Item.UserId == c.UserId)
-                    .Where(Item => Item.SessionId == c.SessionId)
-                    .ToListAsync();
-                long id = command[0].Id;
+                    .Where(Item => Item.SessionId == c.SessionId).ToListAsync();
+                long id = command[command.Count-1].Id;
                 return id;
             } catch (Exception e) {
                 // MyDialogs.showDialogOK(e.Message);
@@ -49,9 +49,12 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
 
-        private async void deleteCommand(Command c) {
+        private void deleteCommand(Command c) {
             IMobileServiceTable<Command> sessionUserTable = msc.GetTable<Command>();
-            await sessionUserTable.DeleteAsync(c);
+            try {
+                sessionUserTable.DeleteAsync(c);
+            } catch (Exception e) {
+            }
         }
 
         internal async Task<bool> removeSessionsCommand(Session s) {
@@ -68,6 +71,21 @@ namespace IT_Jakub.Classes.DatabaseModels {
             IMobileServiceTable<Command> table = msc.GetTable<Command>();
             List<Command> items = await table.Where(Item => Item.SessionId == s.getSessionData().Id).Where(Item => Item.Id > s.getLatestCommandId()).ToListAsync();
             return items;
+        }
+
+
+        internal async void deletePrevMoveCommands(long latestCommandId, Session s) {
+            IMobileServiceTable<Command> table = msc.GetTable<Command>();
+            try {
+                List<Command> items = await table.Take(150).Where(Item => Item.SessionId == s.Id).Where(Item => Item.Id < latestCommandId).Where(Item => Item.CommandText.Contains("Move(")).ToListAsync();
+                if (items.Count > 0) {
+                    LinkedList<Command> l = new LinkedList<Command>(items);
+                    for (LinkedListNode<Command> ln = l.First; ln != l.Last.Next; ln = ln.Next) {
+                        this.deleteCommand(ln.Value);
+                    }
+                }
+            } catch (Exception e) {
+            }
         }
     }
 }

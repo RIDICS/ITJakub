@@ -35,7 +35,6 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
     public sealed partial class SyncReadingApp : Page {
 
         static RichEditBox textBox;
-        static TranslateTransform tt;
         private static SignedSession ss = SignedSession.getInstance();
         private bool autoUpdate = true;
         
@@ -45,6 +44,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private static double verticalOffset;
         private ScrollViewer scrollViewer;
         private static Image staticPointer;
+        private ITextRange rangeComp;
 
         public SyncReadingApp() {
             this.InitializeComponent();
@@ -52,6 +52,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             staticPointer = pointer;
             oldRange = textBox.Document.GetRange(0, 0);
             scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
+            rangeComp = textBox.Document.GetRange(0, 0);
         }
 
         /// <summary>
@@ -103,8 +104,8 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
 
         private async void startAutoUpdate() {
             while (autoUpdate) {
+                await Task.Delay(40);
                 try {
-                    await Task.Delay(40);
                     CommandTable ct = new CommandTable();
                     List<Command> newCommands = await ct.getAllNewSessionCommands(ss);
                     for (int i = 0; i < newCommands.Count; i++) {
@@ -137,50 +138,37 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
-            object o = textBox.Height;
-            string s;
-            textBox.Document.GetText(TextGetOptions.None, out s);
-            int l = s.Length;
-
-            ITextRange range = textBox.Document.GetRange(l, l);
-            range.Expand(TextRangeUnit.Character);
-
-            Point endP;
-            range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out endP);
-
-            range = textBox.Document.GetRange(0, 0);
-            range.Expand(TextRangeUnit.Character);
-
-            Point startP;
-            range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out startP);
-            return;
-        }
-        
-
-        private async void pointer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e) {
-            scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
-
-            verticalOffset = scrollViewer.VerticalOffset;
-            horizontalOffset = scrollViewer.HorizontalOffset;
             
-            double top = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) + e.Delta.Translation.Y;
-            double left = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + e.Delta.Translation.X;
+        }
 
-            pointer.SetValue(Canvas.LeftProperty, left);
-            pointer.SetValue(Canvas.TopProperty, top);
 
-            unhighlightPointerWord();
+        private void pointer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e) {
+                scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
 
-            ITextRange range = textBox.Document.GetRangeFromPoint(new Point(left + (pointer.Width/2), top), PointOptions.Start);
-            highlightPointerWord(range);
+                verticalOffset = scrollViewer.VerticalOffset;
+                horizontalOffset = scrollViewer.HorizontalOffset;
 
-            setPointerScrollbarOffset();
-            await ss.sendCommand(Classes.Models.SyncronizedReadingApp.SyncReadingAppCommand.getPointerMoveCommand(range.StartPosition));
+                double top = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) + e.Delta.Translation.Y;
+                double left = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + e.Delta.Translation.X;
+
+                pointer.SetValue(Canvas.LeftProperty, left);
+                pointer.SetValue(Canvas.TopProperty, top);
+
+                unhighlightPointerWord();
+
+                ITextRange range = textBox.Document.GetRangeFromPoint(new Point(left + (pointer.Width / 2), top), PointOptions.Start);
+                range.Expand(TextRangeUnit.Word);
+                highlightPointerWord(range);
+
+                setPointerScrollbarOffset();
+                if (rangeComp.StartPosition != range.StartPosition) {
+                    ss.sendPointerMoveCommand(range.StartPosition);
+                    rangeComp = range;
+                }
         }
 
 
         private void highlightPointerWord(ITextRange range) {
-            range.Expand(TextRangeUnit.Character);
             textRichEditBox.Document.Selection.SetRange(range.StartPosition, range.EndPosition);
 
             ITextCharacterFormat charFormatting = textBox.Document.Selection.CharacterFormat;
@@ -226,7 +214,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out docStartPoint);
 
             range = textBox.Document.GetRange(index, index);
-            range.Expand(TextRangeUnit.Character);
+            range.Expand(TextRangeUnit.Word);
             Point focusCharacterPoint;
             range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
 
@@ -240,10 +228,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
                 verticalOffset = 0;
             }
 
-            scrollViewer.ScrollToVerticalOffset(verticalOffset);
-
-
-            range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
+            range.GetPoint(HorizontalCharacterAlignment.Left, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
 
             staticPointer.SetValue(Canvas.LeftProperty, focusCharacterPoint.X - (staticPointer.ActualWidth / 2));
             staticPointer.SetValue(Canvas.TopProperty, focusCharacterPoint.Y);

@@ -134,5 +134,6 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
             string text = SYNCHRONIZED_READING_APPLICATION + SEPARATOR + POINTER + SEPARATOR + "Move("+charIndex+")";
             return text;
         }
+
     }
 }
