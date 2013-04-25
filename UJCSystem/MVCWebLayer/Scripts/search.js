@@ -22,6 +22,50 @@
                 }
             }
 
+            var asCheckboxes = null;
+            
+            function createFindsHtml() {
+                if (asCheckboxes == null) {
+                    return "<span class=\"muted\">Aktivní prohledávání ve všech dostupných dílech</span>";
+                }
+                var html = "";
+                $.each(asCheckboxes, function (key, value) {
+                    html += "<div class=\"muted\">";
+                    html += "<strong>";
+                    html += value.label + " ";
+                    html += "</strong>";
+                    if (value.children == null) {
+                        html += "<span>všechny</span>";
+                    } else {
+                        var a = Array.prototype.slice.call(value.children);
+                        html += a.join(", ");
+                    }
+                    html += "</div>";
+                });
+                return html;
+            }
+            
+            function defineCheckboxes(asElement) {
+                asCheckboxes = null;
+                asElement.find(".advanced-search .span6 > ul > li > label > input[type=checkbox]:checked").each(function () {
+                    var children = null;
+                    $(this).parent().parent().find("ul li input[type=checkbox]:checked").each(function () {
+                        if (children == null) {
+                            children = new Array();
+                        }
+                        children.push($(this).parent().find("span").html());
+                    });
+                    if (asCheckboxes == null) {
+                        asCheckboxes = {};
+                    }
+                    asCheckboxes[$(this).val()] = {};
+                    asCheckboxes[$(this).val()]["label"] = $(this).parent().find("span").html();
+                    asCheckboxes[$(this).val()]["children"] = children;
+                });
+                console.debug(asCheckboxes);
+                asElement.find(".searched-books").html(createFindsHtml());
+            }
+
             return this.each(function () {
                 var asElement = $(this);
                 
@@ -30,6 +74,10 @@
                 $('.show-advanced-search').click(function () {
                     changeASVisibility(asElement);
                 });
+
+                asElement.find('.advanced-search input[type=checkbox]').click(function () {
+                    defineCheckboxes(asElement);
+                }); 
             });
         }
     });
