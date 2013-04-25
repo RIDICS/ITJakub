@@ -53,7 +53,7 @@ namespace IT_Jakub
 
 
         private void MainButton_Click(object sender, RoutedEventArgs e) {
-            mainFrame.Navigate(typeof(TestPage), this);
+           // mainFrame.Navigate(typeof(TestPage), this);
         }
 
         

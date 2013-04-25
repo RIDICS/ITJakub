@@ -4,7 +4,16 @@
  - Y.. => Objekt v aplikaci, kterého se příkaz týká
  - Z.. => Příkaz na tento objekt
 
- - General Command: "000" // command that dont care about type of application
+
+=== General Commands ===
+ 
+ - General Command Code: "000" // command that dont care about type of application
+
+ == Objects ==
+  * "User" => User of application
+
+  = User =
+  * "login(id)" => user with id logged in
 
 === Synchronized reading App: ===
 
