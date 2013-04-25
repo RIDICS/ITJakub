@@ -1,6 +1,7 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Models;
-using IT_Jakub.Classes.Models.SyncronizedReadingApp;
+using IT_Jakub.Classes.Models.Commands;
+using IT_Jakub.Classes.Models.Utils;
 using IT_Jakub.Classes.Utils;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private ScrollViewer scrollViewer;
         private static Image staticPointer;
         private ITextRange rangeComp;
+        private static ListView staticUserList;
 
         public SyncReadingApp() {
             this.InitializeComponent();
@@ -53,6 +55,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             oldRange = textBox.Document.GetRange(0, 0);
             scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
             rangeComp = textBox.Document.GetRange(0, 0);
+            staticUserList = userList;
         }
 
         /// <summary>
@@ -136,11 +139,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             }
             
         }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e) {
-            
-        }
-
+        
 
         private void pointer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e) {
                 scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
@@ -224,9 +223,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             ScrollViewer scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
             verticalOffset = charOffsetPercent * scrollViewer.ScrollableHeight;
 
-            if (verticalOffset <= 0) {
-                verticalOffset = 0;
-            }
+            scrollViewer.ScrollToVerticalOffset(verticalOffset);
 
             range.GetPoint(HorizontalCharacterAlignment.Left, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
 
@@ -242,5 +239,22 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             autoUpdate = true;
             startAutoUpdate();
         }
+
+        public static async void updateUserList() {
+            SessionUserTable sut = new SessionUserTable();
+            UserTable ut = new UserTable();
+            List<SessionUser> items = await sut.getAllUsersInSession(ss.getSessionData());
+            List<User> userList = new List<User>();
+            for (int i = 0; i < items.Count; i++) {
+                User u = await ut.getUserById(items[i].UserId);
+                userList.Add(u);
+            }
+            staticUserList.ItemsSource = userList;
+        }
+
+        private void updateUserListButton_Click(object sender, RoutedEventArgs e) {
+            updateUserList();
+        }
+
     }
 }

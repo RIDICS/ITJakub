@@ -87,5 +87,16 @@ namespace IT_Jakub.Classes.DatabaseModels {
             } catch (Exception e) {
             }
         }
+
+        internal async Task removeUserLoginLogoutCommands(Session s, User u) {
+            IMobileServiceTable<Command> table = msc.GetTable<Command>();
+            List<Command> items = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Login("+u.Id+")")).ToListAsync();
+            if (items.Count > 0) {
+                LinkedList<Command> l = new LinkedList<Command>(items);
+                for (int i = 0; i < items.Count; i++) {
+                    this.deleteCommand(items[i]);
+                }
+            }
+        }
     }
 }

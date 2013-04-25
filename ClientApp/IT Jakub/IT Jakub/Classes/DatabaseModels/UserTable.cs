@@ -42,7 +42,21 @@ namespace IT_Jakub.Classes.DatabaseModels {
             IMobileServiceTable<User> userTable = msc.GetTable<User>();
             List<User> items;
             try {
-                items = await userTable.Where(userItem => userItem.Username == username).ToListAsync();
+                items = await userTable.Take(1).Where(userItem => userItem.Username == username).ToListAsync();
+            } catch (Exception e) {
+                throw new ServerErrorException();
+            }
+            if (items.Count > 0) {
+                return (User)items[0];
+            }
+            return null;
+        }
+
+        internal async Task<User> getUserById(long id) {
+            IMobileServiceTable<User> userTable = msc.GetTable<User>();
+            List<User> items;
+            try {
+                items = await userTable.Take(1).Where(userItem => userItem.Id == id).ToListAsync();
             } catch (Exception e) {
                 throw new ServerErrorException();
             }
@@ -56,7 +70,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             IMobileServiceTable<User> userTable = msc.GetTable<User>();
             List<User> items;
             try {
-                items = await userTable.Where(userItem => userItem.Email == email).ToListAsync();
+                items = await userTable.Take(1).Where(userItem => userItem.Email == email).ToListAsync();
             } catch (Exception e) {
                 throw new ServerErrorException();
             }

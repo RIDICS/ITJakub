@@ -1,4 +1,5 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
+using IT_Jakub.Classes.Models.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,8 +14,9 @@ using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using WinRTXamlToolkit.Controls.Extensions;
 
-namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
+namespace IT_Jakub.Classes.Models.Commands {
     class SyncReadingAppCommand : Command {
 
         public const string WHOLE_APPLICATION = "App";
@@ -92,6 +94,11 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
         }
 
         private void procedeTextHighlightCommand() {
+            RichEditBox textRichEditBox = Views.EducationalApplications.SynchronizedReading.SyncReadingApp.getTextRichEditBox();
+            ScrollViewer scrollViewer = textRichEditBox.GetFirstDescendantOfType<ScrollViewer>();
+            double verticalOffset = scrollViewer.VerticalOffset;
+            double horizontalOffset = scrollViewer.HorizontalOffset;
+
             string[] splitedCommand = c.command.Split(';');
 
             string colorCommand = splitedCommand[0];
@@ -110,7 +117,6 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
             int startingRange = int.Parse(startingRangeText);
             int endingRange = int.Parse(endingRangeText);
 
-            RichEditBox textRichEditBox = Views.EducationalApplications.SynchronizedReading.SyncReadingApp.getTextRichEditBox();
             textRichEditBox.Document.Selection.SetRange(startingRange, endingRange);
             ITextCharacterFormat charFormatting = textRichEditBox.Document.Selection.CharacterFormat;
             textRichEditBox.IsReadOnly = false;
@@ -119,6 +125,9 @@ namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
             textRichEditBox.Document.Selection.CharacterFormat = charFormatting;
             textRichEditBox.IsReadOnly = true;
             textRichEditBox.Document.Selection.SetRange(0, 0);
+
+            scrollViewer.ScrollToVerticalOffset(verticalOffset);
+            scrollViewer.ScrollToHorizontalOffset(horizontalOffset);
         }
 
         private void procedeAppCommand() {

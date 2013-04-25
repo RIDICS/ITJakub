@@ -9,7 +9,7 @@ using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using Windows.UI.Xaml.Controls;
 
-namespace IT_Jakub.Classes.Models.SyncronizedReadingApp {
+namespace IT_Jakub.Classes.Models.Utils {
     class RtfFileOpener {
 
         internal async Task<string> openDocumentFromUri(string uri) {

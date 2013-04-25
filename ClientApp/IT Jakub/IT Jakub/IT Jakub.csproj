@@ -118,14 +118,15 @@
     <Compile Include="Classes\Exceptions\ServerErrorException.cs" />
     <Compile Include="Classes\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Classes\Models\Command.cs" />
+    <Compile Include="Classes\Models\Commands\GeneralCommand.cs" />
     <Compile Include="Classes\Models\ICommand.cs" />
     <Compile Include="Classes\Models\LoggedUser.cs" />
     <Compile Include="Classes\Models\Session.cs" />
     <Compile Include="Classes\Models\SessionUpdate.cs" />
     <Compile Include="Classes\Models\SessionUser.cs" />
     <Compile Include="Classes\Models\SignedSession.cs" />
-    <Compile Include="Classes\Models\SyncronizedReadingApp\RtfFileOpener.cs" />
-    <Compile Include="Classes\Models\SyncronizedReadingApp\SyncReadingAppCommand.cs" />
+    <Compile Include="Classes\Utils\RtfFileOpener.cs" />
+    <Compile Include="Classes\Models\Commands\SyncReadingAppCommand.cs" />
     <Compile Include="Classes\Models\User.cs" />
     <Compile Include="Classes\Networking\FileDownloader.cs" />
     <Compile Include="Classes\Networking\MobileService.cs" />

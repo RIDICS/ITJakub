@@ -4,6 +4,8 @@
  - Y.. => Objekt v aplikaci, kterého se příkaz týká
  - Z.. => Příkaz na tento objekt
 
+ - General Command: "000" // command that dont care about type of application
+
 === Synchronized reading App: ===
 
   - App code: "501"

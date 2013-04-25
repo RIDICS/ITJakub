@@ -19,9 +19,9 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return items;
         }
 
-        public async Task<List<SessionUser>> getAllUsersInSession(long sessionId) {
+        public async Task<List<SessionUser>> getAllUsersInSession(Session s) {
             IMobileServiceTable<SessionUser> sessionUserTable = msc.GetTable<SessionUser>();
-            List<SessionUser> items = await sessionUserTable.Where(Item => Item.SessionId == sessionId).ToListAsync();
+            List<SessionUser> items = await sessionUserTable.Where(Item => Item.SessionId == s.Id).ToListAsync();
             return items;
         }
 

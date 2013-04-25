@@ -19,10 +19,33 @@
                     <TextBlock x:Name="uriLabel" HorizontalAlignment="Left" Margin="50,88,0,0" TextWrapping="Wrap" Text="Adresa souboru" VerticalAlignment="Top" Foreground="Black"/>
                 </Grid>
             </Popup>
-            <Button x:Name="autoUpdateButton" Content="ON" HorizontalAlignment="Left" Height="38" Margin="983,624,0,0" VerticalAlignment="Top" Width="89" BorderBrush="#FF1A7A1A" Foreground="Black" Background="Lime" Click="autoUpdateButton_Click"/>
-            <Button Content="Button" HorizontalAlignment="Left" Height="45" Margin="1175,164,0,0" VerticalAlignment="Top" Width="43" Click="Button_Click_1"/>
+            <Button x:Name="autoUpdateButton" Content="ON" HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="89" BorderBrush="#FF1A7A1A" Foreground="Black" Background="Lime" Click="autoUpdateButton_Click" Canvas.Left="947" Canvas.Top="624"/>
             <RichEditBox x:Name="textRichEditBox" HorizontalAlignment="Left" Height="559" VerticalAlignment="Top" Width="1026" IsReadOnly="True" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" Margin="10,10,0,0"/>
             <Image x:Name="pointer" HorizontalAlignment="Left" Height="70" VerticalAlignment="Top" Width="70" Source="ms-appx:///Assets/pointer.png" ManipulationMode="All" ManipulationDelta="pointer_ManipulationDelta" ManipulationStarting="pointer_ManipulationStarting" ManipulationCompleted="pointer_ManipulationCompleted" Canvas.Left="10" Canvas.Top="10"/>
+            <ListView x:Name="userList" Height="559" Canvas.Left="1045" Canvas.Top="10" Width="311">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+
+                        <Grid Height="50" Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                                <TextBlock Text="{Binding Id}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
+                                <TextBlock Text="{Binding Username}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Top" Margin="10,0,0,0">
+                                <TextBlock Text="{Binding FirstName}" Style="{StaticResource BodyTextStyle}" MaxHeight="60"/>
+                                <TextBlock Text="{Binding LastName}" Style="{StaticResource BodyTextStyle}" MaxHeight="60"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button x:Name="updateUserListButton" Content="Obnovit seznam uživatelů" Height="38" Canvas.Left="648" Canvas.Top="624" Width="213" Click="updateUserListButton_Click"/>
         </Canvas>
 
     </Grid>

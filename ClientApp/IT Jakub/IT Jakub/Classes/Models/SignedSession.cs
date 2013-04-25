@@ -46,11 +46,15 @@ namespace IT_Jakub.Classes.Models {
         }
 
         public async void login() {
+            SessionUserTable sut = new SessionUserTable();
+            await sut.signOutUserFromAllSessions(lu.getUserData());
+            sut.loginUserInSession(lu.getUserData(), this.sessionData);
+
+            await sendCommand(Command.getUserLoggedInCommand(lu.getUserData()));
+
             CommandTable ct = new CommandTable();
             List<Command> cl = await ct.getAllSessionCommands(this.sessionData);
-
             LinkedList<Command> cll = new LinkedList<Command>();
-
             for (int i = 0; i < cl.Count; i++) {
                 cll.AddLast(cl[i]);
             }
@@ -68,9 +72,12 @@ namespace IT_Jakub.Classes.Models {
             return latestCommandId;
         }
 
-        public async void signout() {
+        public async Task signout() {
             SessionUserTable sut = new SessionUserTable();
+            CommandTable ct = new CommandTable();
             await sut.removeUserFromSession(this.getSessionData(), lu.getUserData());
+            await sendCommand(Command.getUserLoggedOutCommand(lu.getUserData()));
+            await ct.removeUserLoginLogoutCommands(sessionData, lu.getUserData());
             setSessionData(null);
             signedState = false;
         }
@@ -87,12 +94,12 @@ namespace IT_Jakub.Classes.Models {
 
         internal async void sendPointerMoveCommand(int pointerIndex) {
             CommandTable ct = new CommandTable();
-            string commandText = Classes.Models.SyncronizedReadingApp.SyncReadingAppCommand.getPointerMoveCommand(pointerIndex);
+            string commandText = Classes.Models.Commands.SyncReadingAppCommand.getPointerMoveCommand(pointerIndex);
             await this.sendCommand(commandText);
-            removePrevCommands();
+            removePrevPointerMoveCommands();
         }
 
-        internal void removePrevCommands() {
+        internal void removePrevPointerMoveCommands() {
             CommandTable ct = new CommandTable();
             ct.deletePrevMoveCommands(latestCommandId, sessionData);
         }

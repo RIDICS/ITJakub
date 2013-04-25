@@ -75,11 +75,8 @@ namespace IT_Jakub.Views.UserLoggedIn {
             }
         }
 
-        private async void joinChossenSession_Click(object sender, RoutedEventArgs e) {
-            SessionUserTable sut = new SessionUserTable();
-            await sut.signOutUserFromAllSessions(lu.getUserData());
+        private void joinChossenSession_Click(object sender, RoutedEventArgs e) {
             if (selectedSession != null) {
-                sut.loginUserInSession(lu.getUserData(), selectedSession);
                 ss.register(selectedSession);
                 ss.login();
             }

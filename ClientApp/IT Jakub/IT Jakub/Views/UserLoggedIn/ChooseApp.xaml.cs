@@ -1,6 +1,6 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Models;
-using IT_Jakub.Classes.Models.SyncronizedReadingApp;
+using IT_Jakub.Classes.Models.Commands;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -45,7 +45,7 @@ namespace IT_Jakub.Classes.Models {
         public async Task<bool> logout() {
             SessionUserTable sut = new SessionUserTable();
             await sut.signOutUserFromAllSessions(this.userData);
-            ss.signout();
+            await ss.signout();
             
             setUserData(null);
             loggedState = false;
