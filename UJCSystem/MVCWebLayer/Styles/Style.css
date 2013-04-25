@@ -1,3 +1,4 @@
+/* Layout */
 .masthead a {
     text-decoration: none;
 }
@@ -11,3 +12,37 @@
 .footer p {
     text-align: right;
 }
+/* Layout */
+
+/* SearchPanel */
+.advanced-search-wrapper {
+  position: relative;
+  padding: 30px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+
+.advanced-search-wrapper form {
+    margin: 0px;
+}
+
+.advanced-search-wrapper .search-inputs {
+    width: 100%;
+}
+
+.advanced-search-wrapper .advanced-search {
+    padding-top: 20px;
+}
+
+.advanced-search-wrapper .advanced-search ul.nav {
+    margin-bottom: 10px;        
+}
+
+.advanced-search-wrapper .advanced-search ul.nav li {
+    padding-left: 30px;
+}
+/* SearchPanel */
+

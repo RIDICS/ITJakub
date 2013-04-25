@@ -1,4 +1,42 @@
-﻿var arrowUpImg = new Image();
+﻿$(document).ready(function () {
+    $('.advanced-search-wrapper').advancedSearch();
+});
+
+
+(function ($) {
+    $.fn.extend({
+        advancedSearch: function (options) {
+
+            var defaults = {};
+            
+            var options = $.extend(defaults, options);
+            var advancedSearchVisible = true;
+            
+            function changeASVisibility(asElement) {
+                if (advancedSearchVisible) {
+                    asElement.find('.advanced-search').slideUp();
+                    advancedSearchVisible = false;
+                } else {
+                    asElement.find('.advanced-search').slideDown();
+                    advancedSearchVisible = true;
+                }
+            }
+
+            return this.each(function () {
+                var asElement = $(this);
+                
+                asElement.find('.advanced-search').hide();
+                advancedSearchVisible = false;
+                $('.show-advanced-search').click(function () {
+                    changeASVisibility(asElement);
+                });
+            });
+        }
+    });
+})(jQuery);
+
+    
+/* var arrowUpImg = new Image();
 arrowUpImg.src = "/Images/arrow-up.png";
 
 var arrowDownImg = new Image();
@@ -144,4 +182,4 @@ function uncheckParentNodes(element) {
             $(this).find("input[type='checkbox']").first().removeAttr("checked");
         });
     }
-}
+}*/
