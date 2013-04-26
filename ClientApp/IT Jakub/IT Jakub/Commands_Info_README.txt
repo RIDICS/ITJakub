@@ -40,3 +40,7 @@
 
   /* Notes */
   url for RTF file on a web: http://38511.w11.wedos.ws/domains/kavoj.cz/testRTF.rtf
+
+  /* Ikony */
+  http://icons8.com/license/
+  http://icons8.com/download-huge-windows8-set/
