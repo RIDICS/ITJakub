@@ -24,7 +24,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     SessionId = s.Id
                 };
                 await table.InsertAsync(c);
-                List<Command> command = await table.Take(1)
+                List<Command> command = await table
                     .Where(Item => Item.CommandText == c.CommandText)
                     .Where(Item => Item.UserId == c.UserId)
                     .Where(Item => Item.SessionId == c.SessionId).ToListAsync();
@@ -91,10 +91,31 @@ namespace IT_Jakub.Classes.DatabaseModels {
         internal async Task removeUserLoginLogoutCommands(Session s, User u) {
             IMobileServiceTable<Command> table = msc.GetTable<Command>();
             List<Command> items = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Login("+u.Id+")")).ToListAsync();
+            List<Command> logoutItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Logout(" + u.Id + ")")).ToListAsync();
             if (items.Count > 0) {
-                LinkedList<Command> l = new LinkedList<Command>(items);
                 for (int i = 0; i < items.Count; i++) {
                     this.deleteCommand(items[i]);
+                }
+            }
+            if (logoutItems.Count > 0) {
+                for (int i = 0; i < logoutItems.Count; i++) {
+                    this.deleteCommand(logoutItems[i]);
+                }
+            }
+        }
+
+        internal async Task deletePrevPromoteDemoteCommands(Session s) {
+            IMobileServiceTable<Command> table = msc.GetTable<Command>();
+            List<Command> items = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Promote(")).ToListAsync();
+            List<Command> demoteItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Demote(")).ToListAsync();
+            if (items.Count > 0) {
+                for (int i = 0; i < items.Count - 1; i++) {
+                    this.deleteCommand(items[i]);
+                }
+            }
+            if (demoteItems.Count > 0) {
+                for (int i = 0; i < demoteItems.Count - 1; i++) {
+                    this.deleteCommand(demoteItems[i]);
                 }
             }
         }

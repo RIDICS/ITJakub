@@ -9,8 +9,8 @@
 
     <Grid x:Name="mainGrid" Background="{StaticResource ApplicationPageBackgroundThemeBrush}" Loaded="mainGrid_Loaded">
         <Canvas HorizontalAlignment="Left" Height="768" VerticalAlignment="Top" Width="1366">
-            <Button x:Name="openFileButton" Content="Otevřít soubor" HorizontalAlignment="Left" Height="46" Margin="46,624,0,0" VerticalAlignment="Top" Width="249" Click="openFileButton_Click"/>
-            <Button x:Name="highligtTextButton" Content="Označit text" HorizontalAlignment="Left" Margin="313,624,0,0" VerticalAlignment="Top" Click="highligtTextButton_Click"/>
+            <Button x:Name="openFileButton" Content="Otevřít soubor" HorizontalAlignment="Left" Height="46" Margin="46,624,0,0" VerticalAlignment="Top" Width="249" Click="openFileButton_Click" IsEnabled="False"/>
+            <Button x:Name="highligtTextButton" Content="Označit text" HorizontalAlignment="Left" Margin="313,624,0,0" VerticalAlignment="Top" Click="highligtTextButton_Click" IsEnabled="False"/>
             <Popup x:Name="openPopup">
                 <Grid Background="#FFBBBBBB" Margin="62,167,310,299" Width="1000" Height="276">
                     <TextBox x:Name="uriTextBox" HorizontalAlignment="Left" Margin="50,106,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="29" Width="907"/>
@@ -21,8 +21,8 @@
             </Popup>
             <Button x:Name="autoUpdateButton" Content="ON" HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="89" BorderBrush="#FF1A7A1A" Foreground="Black" Background="Lime" Click="autoUpdateButton_Click" Canvas.Left="947" Canvas.Top="624"/>
             <RichEditBox x:Name="textRichEditBox" HorizontalAlignment="Left" Height="559" VerticalAlignment="Top" Width="1026" IsReadOnly="True" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" Margin="10,10,0,0"/>
-            <Image x:Name="pointer" HorizontalAlignment="Left" Height="70" VerticalAlignment="Top" Width="70" Source="ms-appx:///Assets/pointer.png" ManipulationMode="All" ManipulationDelta="pointer_ManipulationDelta" ManipulationStarting="pointer_ManipulationStarting" ManipulationCompleted="pointer_ManipulationCompleted" Canvas.Left="10" Canvas.Top="10"/>
-            <ListView x:Name="userList" Height="559" Canvas.Left="1045" Canvas.Top="10" Width="311">
+            <Image x:Name="pointer" HorizontalAlignment="Left" Height="70" VerticalAlignment="Top" Width="70" Source="ms-appx:///Assets/pointer.png" ManipulationMode="None" ManipulationDelta="pointer_ManipulationDelta" ManipulationStarting="pointer_ManipulationStarting" ManipulationCompleted="pointer_ManipulationCompleted" Canvas.Left="10" Canvas.Top="10"/>
+            <ListView x:Name="userList" Height="559" Canvas.Left="1045" Canvas.Top="10" Width="311" SelectionChanged="userList_SelectionChanged">
                 <ListView.ItemTemplate>
                     <DataTemplate>
 
@@ -46,6 +46,8 @@
                 </ListView.ItemTemplate>
             </ListView>
             <Button x:Name="updateUserListButton" Content="Obnovit seznam uživatelů" Height="38" Canvas.Left="648" Canvas.Top="624" Width="213" Click="updateUserListButton_Click"/>
+            <Popup/>
+            <Grid x:Name="userMenuLayout" Background="#FFE5E5E5" Canvas.Left="985" Canvas.Top="100" Width="200" Height="200" Visibility="Collapsed"/>
         </Canvas>
 
     </Grid>

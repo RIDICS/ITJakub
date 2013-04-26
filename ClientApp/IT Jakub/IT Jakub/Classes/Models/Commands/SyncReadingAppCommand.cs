@@ -144,5 +144,7 @@ namespace IT_Jakub.Classes.Models.Commands {
             return text;
         }
 
+
+        
     }
 }

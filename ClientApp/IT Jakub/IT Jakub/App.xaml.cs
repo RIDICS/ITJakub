@@ -90,7 +90,7 @@ namespace IT_Jakub
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
-            if (lu.getUserData() != null) {
+            if (LoggedUser.isLoogedIn) {
                 await lu.logout();
                 
                 Frame rootFrame = Window.Current.Content as Frame;

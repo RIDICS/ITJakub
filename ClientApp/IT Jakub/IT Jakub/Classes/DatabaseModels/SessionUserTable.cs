@@ -45,7 +45,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
 
         private async void deleteSessionUser(SessionUser su) {
             IMobileServiceTable<SessionUser> sessionUserTable = msc.GetTable<SessionUser>();
-            await sessionUserTable.DeleteAsync(su);
+            try {
+                await sessionUserTable.DeleteAsync(su);
+            } catch (Exception e) {
+                return;
+            }
         }
 
         internal async Task<bool> removeUserFromSession(Session s, User u) {

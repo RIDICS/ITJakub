@@ -15,6 +15,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -38,6 +39,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         static RichEditBox textBox;
         private static SignedSession ss = SignedSession.getInstance();
         private bool autoUpdate = true;
+        private static LoggedUser lu = LoggedUser.getInstance();
         
         private ITextRange oldRange;
         private Color oldColor;
@@ -47,6 +49,8 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private static Image staticPointer;
         private ITextRange rangeComp;
         private static ListView staticUserList;
+        private static Button staticOpenFileButton;
+        private static Button staticHighligtTextButton;
 
         public SyncReadingApp() {
             this.InitializeComponent();
@@ -56,6 +60,43 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
             rangeComp = textBox.Document.GetRange(0, 0);
             staticUserList = userList;
+            staticOpenFileButton = openFileButton;
+            staticHighligtTextButton = highligtTextButton;
+            setUsersRights();
+        }
+
+        public static void setUsersRights() {
+            long x = ss.getSessionData().OwnerUserId;
+            x = lu.getUserData().Id;
+            x = ss.getSessionData().PrefferedUserId;
+
+            if (ss.getSessionData().OwnerUserId == lu.getUserData().Id) {
+                setOwnersRights();
+                return;
+            }
+            if (ss.getSessionData().PrefferedUserId == lu.getUserData().Id) {
+                setPreferedUserRights();
+                return;
+            }
+            setDefaultUserRights();
+        }
+
+        private static void setDefaultUserRights() {
+            staticPointer.ManipulationMode = ManipulationModes.None;
+            staticOpenFileButton.IsEnabled = false;
+            staticHighligtTextButton.IsEnabled = false;
+        }
+
+        private static void setPreferedUserRights() {
+            staticPointer.ManipulationMode = ManipulationModes.TranslateX | ManipulationModes.TranslateY;
+            staticOpenFileButton.IsEnabled = false;
+            staticHighligtTextButton.IsEnabled = true;
+        }
+
+        private static void setOwnersRights() {
+            staticPointer.ManipulationMode = ManipulationModes.TranslateX | ManipulationModes.TranslateY;
+            staticOpenFileButton.IsEnabled = true;
+            staticHighligtTextButton.IsEnabled = true;
         }
 
         /// <summary>
@@ -254,6 +295,34 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
 
         private void updateUserListButton_Click(object sender, RoutedEventArgs e) {
             updateUserList();
+        }
+
+        private async void userList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (ss.getSessionData().OwnerUserId == lu.getUserData().Id) {
+                if (e.AddedItems.Count == 1) {
+                    User u = e.AddedItems[0] as User;
+                    PopupMenu userMenu = new PopupMenu();
+                    UICommand promoteDemoteCommand = new UICommand("Zvýšit práva uživatele", promoteUser, u);
+                    if (u.Id == ss.getSessionData().PrefferedUserId) {
+                        promoteDemoteCommand = new UICommand("Snížit práva uživatele", demoteUser, u);
+                    }
+                    userMenu.Commands.Add(promoteDemoteCommand);
+                    await userMenu.ShowForSelectionAsync(userMenuLayout.GetBoundingRect());
+                }
+            }
+            userList.SelectedValue = null;
+        }
+
+        private async void promoteUser(IUICommand command) {
+            User u = command.Id as User;
+            await ss.sendCommand(GeneralCommand.getPromoteCommand(u));
+            ss.promoteUser(u.Id);
+        }
+
+        private async void demoteUser(IUICommand command) {
+            User u = command.Id as User;
+            await ss.sendCommand(GeneralCommand.getDemoteCommand(u));
+            ss.demoteUser(u.Id);
         }
 
     }

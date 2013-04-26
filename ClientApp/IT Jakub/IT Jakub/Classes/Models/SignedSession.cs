@@ -50,18 +50,12 @@ namespace IT_Jakub.Classes.Models {
             await sut.signOutUserFromAllSessions(lu.getUserData());
             sut.loginUserInSession(lu.getUserData(), this.sessionData);
 
-            await sendCommand(Command.getUserLoggedInCommand(lu.getUserData()));
-
             CommandTable ct = new CommandTable();
-            List<Command> cl = await ct.getAllSessionCommands(this.sessionData);
-            LinkedList<Command> cll = new LinkedList<Command>();
-            for (int i = 0; i < cl.Count; i++) {
-                cll.AddLast(cl[i]);
+            List<Command> items = await ct.getAllSessionCommands(this.sessionData);
+            for (int i = 0; i < items.Count; i++) {
+                await items[i].procedeCommand();
             }
-            for (LinkedListNode<Command> node = cll.First; node != cll.Last.Next; node = node.Next) {
-                Command command = node.Value as Command;
-                await command.procedeCommand();
-            }
+            await sendCommand(Command.getUserLoggedInCommand(lu.getUserData()));
         }
 
         internal void setLatestCommandId(long id) {
@@ -102,6 +96,20 @@ namespace IT_Jakub.Classes.Models {
         internal void removePrevPointerMoveCommands() {
             CommandTable ct = new CommandTable();
             ct.deletePrevMoveCommands(latestCommandId, sessionData);
+        }
+
+        internal async void promoteUser(long userId) {
+            sessionData.PrefferedUserId = userId;
+            CommandTable ct = new CommandTable();
+            await ct.deletePrevPromoteDemoteCommands(sessionData);
+        }
+
+        internal async void demoteUser(long userId) {
+            if (sessionData.PrefferedUserId == userId) {
+                sessionData.PrefferedUserId = 0;
+                CommandTable ct = new CommandTable();
+                await ct.deletePrevPromoteDemoteCommands(sessionData);
+            }
         }
     }
 }

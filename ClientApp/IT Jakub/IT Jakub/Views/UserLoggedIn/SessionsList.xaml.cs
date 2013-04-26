@@ -71,7 +71,6 @@ namespace IT_Jakub.Views.UserLoggedIn {
                 selectedSession = (Session)e.AddedItems[0];
                 CommandTable ct = new CommandTable();
                 List<Command> cl = await ct.getAllSessionCommands(selectedSession);
-                cl = await ct.getAllCommands();
             }
         }
 
