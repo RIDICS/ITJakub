@@ -77,8 +77,9 @@ namespace IT_Jakub.Views.ApplicationStart
                     username.BorderBrush = new SolidColorBrush(redColor);
                 }
             } catch (ServerErrorException ex) {
-                MyDialogs.showDialogOK(ex.Message);
+                throw new ServerErrorException(ex);
             } catch (UserNotFoundException ex) {
+                throw new UserNotFoundException(ex);
             }
         }
 

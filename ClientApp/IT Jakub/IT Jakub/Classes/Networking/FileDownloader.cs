@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IT_Jakub.Classes.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,8 +31,7 @@ namespace IT_Jakub.Classes.Networking {
                 destinationFile = await temporaryFolder.CreateFileAsync(
                     destination, CreationCollisionOption.GenerateUniqueName);
             } catch (FileNotFoundException ex) {
-                // rootPage.NotifyUser("Error while creating file: " + ex.Message, NotifyType.ErrorMessage);
-                return null;
+                throw new MyFileNotFoundException(ex);
             }
 
             BackgroundDownloader downloader = new BackgroundDownloader();

@@ -13,82 +13,83 @@ namespace IT_Jakub.Classes.DatabaseModels {
         
         private static MobileService ms = MobileService.getInstance();
         private static MobileServiceClient msc = MobileService.getMobileServiceClient();
+        private IMobileServiceTable<User> userTable = msc.GetTable<User>();
 
         public UserTable() {
         }
 
         internal async Task<User> createUser(User user) {
-            IMobileServiceTable<User> userTable = msc.GetTable<User>();
             try {
                 await userTable.InsertAsync(user);
             } catch (Exception e) {
-                throw new ServerErrorException();
+                throw new ServerErrorException(e);
             }
             return user;
         }
 
         internal MobileServiceCollectionView<User> getAllUsers() {
-            IMobileServiceTable<User> userTable = msc.GetTable<User>();
             MobileServiceCollectionView<User> items;
             try {
                 items = userTable.ToCollectionView();
             } catch (Exception e) {
-                throw new ServerErrorException();
+                throw new ServerErrorException(e);
             }
             return items;
         }
 
         internal async Task<User> getUserByUsername(string username) {
-            IMobileServiceTable<User> userTable = msc.GetTable<User>();
             List<User> items;
             try {
                 items = await userTable.Take(1).Where(userItem => userItem.Username == username).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException();
+                throw new ServerErrorException(e);
             }
             if (items.Count > 0) {
-                return (User)items[0];
+                return items[0];
             }
             return null;
         }
 
         internal async Task<User> getUserById(long id) {
-            IMobileServiceTable<User> userTable = msc.GetTable<User>();
             List<User> items;
             try {
                 items = await userTable.Take(1).Where(userItem => userItem.Id == id).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException();
+                throw new ServerErrorException(e);
             }
             if (items.Count > 0) {
-                return (User)items[0];
+                return items[0];
             }
             return null;
         }
 
         internal async Task<User> getUserByEmail(string email) {
-            IMobileServiceTable<User> userTable = msc.GetTable<User>();
             List<User> items;
             try {
                 items = await userTable.Take(1).Where(userItem => userItem.Email == email).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException();
+                throw new ServerErrorException(e);
             }
             if (items.Count > 0) {
-                return (User)items[0];
+                return items[0];
             }
             return null;
         }
 
-        internal async Task<User> deleteUser(User u) {
-            IMobileServiceTable<User> userTable = msc.GetTable<User>();
-            await userTable.DeleteAsync(u);
-            return null;
+        internal async Task deleteUser(User u) {
+            try {
+                await userTable.DeleteAsync(u);
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
+            }
         }
 
         internal async Task updateUser(User u) {
-            IMobileServiceTable<User> userTable = msc.GetTable<User>();
-            await userTable.UpdateAsync(u);
+            try {
+                await userTable.UpdateAsync(u);
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
+            }
         }
     }
 }

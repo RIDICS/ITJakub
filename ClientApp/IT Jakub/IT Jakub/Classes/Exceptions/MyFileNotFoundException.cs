@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace IT_Jakub.Classes.Exceptions {
     
-    class ServerErrorException : MyException {
+    class MyFileNotFoundException : MyException {
 
-        public ServerErrorException(Exception e) : base("Vyskytl se problém při kontaktování serveru, ověřte své připojení k internetu a zkuste to znovu."){
+        public MyFileNotFoundException(Exception e) : base("Soubor nemohl být nalezen."){
             invoker = e;
         }
     }

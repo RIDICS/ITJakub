@@ -1,4 +1,5 @@
-﻿using IT_Jakub.Classes.Models;
+﻿using IT_Jakub.Classes.Exceptions;
+using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Networking;
 using IT_Jakub.Classes.Utils;
 using Microsoft.WindowsAzure.MobileServices;
@@ -14,10 +15,10 @@ namespace IT_Jakub.Classes.DatabaseModels {
 
         private static MobileService ms = MobileService.getInstance();
         private static MobileServiceClient msc = MobileService.getMobileServiceClient();
+        private IMobileServiceTable<Command> table = msc.GetTable<Command>();
 
         internal async Task<long> createCommand(Session s, User u, string commandText) {
             try {
-                IMobileServiceTable<Command> table = msc.GetTable<Command>();
                 Command c = new Command {
                     UserId = u.Id,
                     CommandText = commandText,
@@ -28,56 +29,71 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     .Where(Item => Item.CommandText == c.CommandText)
                     .Where(Item => Item.UserId == c.UserId)
                     .Where(Item => Item.SessionId == c.SessionId).ToListAsync();
-                long id = command[command.Count-1].Id;
+                long id = command[command.Count - 1].Id;
                 return id;
             } catch (Exception e) {
-                // MyDialogs.showDialogOK(e.Message);
+                throw new ServerErrorException(e);
             }
-            return -1;
         }
 
         internal async Task<List<Command>> getAllSessionCommands(Session s) {
-            IMobileServiceTable<Command> table = msc.GetTable<Command>();
-            List<Command> items = await table.Where(Item => Item.SessionId == s.Id).ToListAsync();
+            List<Command> items;
+            try {
+                items = await table.Where(Item => Item.SessionId == s.Id).ToListAsync();
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
+            }
             return items;
         }
 
         internal async Task<List<Command>> getAllCommands() {
-            IMobileServiceTable<Command> table = msc.GetTable<Command>();
-            List<Command> items = await table.ToListAsync();
+            List<Command> items;
+            try {
+                items = await table.ToListAsync();
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
+            }
             return items;
         }
 
 
-        private void deleteCommand(Command c) {
-            IMobileServiceTable<Command> sessionUserTable = msc.GetTable<Command>();
+        private async void deleteCommand(Command c) {
             try {
-                sessionUserTable.DeleteAsync(c);
+                await table.DeleteAsync(c);
             } catch (Exception e) {
+                throw new ServerErrorException(e);
             }
         }
 
         internal async Task<bool> removeSessionsCommand(Session s) {
-            IMobileServiceTable<Command> sessionUserTable = msc.GetTable<Command>();
-            List<Command> list = await sessionUserTable.Where(Item => Item.SessionId == s.Id).ToListAsync();
-            for (int i = 0; i < list.Count; i++) {
-                deleteCommand(list[i]);
+            List<Command> items;
+            try {
+                items = await table.Where(Item => Item.SessionId == s.Id).ToListAsync();
+                for (int i = 0; i < items.Count; i++) {
+                    deleteCommand(items[i]);
+                }
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
             }
             return true;
         }
 
 
         internal async Task<List<Command>> getAllNewSessionCommands(SignedSession s) {
-            IMobileServiceTable<Command> table = msc.GetTable<Command>();
-            List<Command> items = await table.Where(Item => Item.SessionId == s.getSessionData().Id).Where(Item => Item.Id > s.getLatestCommandId()).ToListAsync();
+            List<Command> items;
+            try {
+                items = await table.Where(Item => Item.SessionId == s.getSessionData().Id).Where(Item => Item.Id > s.getLatestCommandId()).ToListAsync();
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
+            }
             return items;
         }
 
 
         internal async void deletePrevMoveCommands(long latestCommandId, Session s) {
-            IMobileServiceTable<Command> table = msc.GetTable<Command>();
+            List<Command> items;
             try {
-                List<Command> items = await table.Take(150).Where(Item => Item.SessionId == s.Id).Where(Item => Item.Id < latestCommandId).Where(Item => Item.CommandText.Contains("Move(")).ToListAsync();
+                items = await table.Take(150).Where(Item => Item.SessionId == s.Id).Where(Item => Item.Id < latestCommandId).Where(Item => Item.CommandText.Contains("Move(")).ToListAsync();
                 if (items.Count > 0) {
                     LinkedList<Command> l = new LinkedList<Command>(items);
                     for (LinkedListNode<Command> ln = l.First; ln != l.Last.Next; ln = ln.Next) {
@@ -85,38 +101,61 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
+                throw new ServerErrorException(e);
             }
         }
 
         internal async Task removeUserLoginLogoutCommands(Session s, User u) {
-            IMobileServiceTable<Command> table = msc.GetTable<Command>();
-            List<Command> items = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Login("+u.Id+")")).ToListAsync();
-            List<Command> logoutItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Logout(" + u.Id + ")")).ToListAsync();
-            if (items.Count > 0) {
-                for (int i = 0; i < items.Count; i++) {
-                    this.deleteCommand(items[i]);
+            List<Command> loginItems;
+            try {
+                loginItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Login(" + u.Id + ")")).ToListAsync();
+                if (loginItems.Count > 0) {
+                    for (int i = 0; i < loginItems.Count; i++) {
+                        this.deleteCommand(loginItems[i]);
+                    }
                 }
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
             }
-            if (logoutItems.Count > 0) {
-                for (int i = 0; i < logoutItems.Count; i++) {
-                    this.deleteCommand(logoutItems[i]);
+
+            List<Command> logoutItems;
+            try {
+                logoutItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Logout(" + u.Id + ")")).ToListAsync();
+
+                if (logoutItems.Count > 0) {
+                    for (int i = 0; i < logoutItems.Count; i++) {
+                        this.deleteCommand(logoutItems[i]);
+                    }
                 }
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
             }
         }
 
         internal async Task deletePrevPromoteDemoteCommands(Session s) {
-            IMobileServiceTable<Command> table = msc.GetTable<Command>();
-            List<Command> items = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Promote(")).ToListAsync();
-            List<Command> demoteItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Demote(")).ToListAsync();
-            if (items.Count > 0) {
-                for (int i = 0; i < items.Count - 1; i++) {
-                    this.deleteCommand(items[i]);
+            List<Command> promoteItems;
+            try {
+                promoteItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Promote(")).ToListAsync();
+
+                if (promoteItems.Count > 0) {
+                    for (int i = 0; i < promoteItems.Count - 1; i++) {
+                        this.deleteCommand(promoteItems[i]);
+                    }
                 }
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
             }
-            if (demoteItems.Count > 0) {
-                for (int i = 0; i < demoteItems.Count - 1; i++) {
-                    this.deleteCommand(demoteItems[i]);
+
+            List<Command> demoteItems;
+            try {
+                demoteItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Demote(")).ToListAsync();
+                if (demoteItems.Count > 0) {
+                    for (int i = 0; i < demoteItems.Count - 1; i++) {
+                        this.deleteCommand(demoteItems[i]);
+                    }
                 }
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
             }
         }
     }

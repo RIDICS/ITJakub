@@ -13,43 +13,46 @@ namespace IT_Jakub.Classes.DatabaseModels {
 
         private static MobileService ms = MobileService.getInstance();
         private static MobileServiceClient msc = MobileService.getMobileServiceClient();
+        private IMobileServiceTable<Session> table = msc.GetTable<Session>();
 
         public SessionTable() {
         }
 
 
         internal MobileServiceCollectionView<Session> getAllSessions() {
-            IMobileServiceTable<Session> sessionTable = msc.GetTable<Session>();
-            MobileServiceCollectionView<Session> items = sessionTable.ToCollectionView();
+            MobileServiceCollectionView<Session> items;
+            try {
+                items = table.ToCollectionView();
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
+            }
             return items;
         }
 
         internal async Task<bool> createSession(Session s) {
             try {
-                IMobileServiceTable<Session> table = msc.GetTable<Session>();
                 await table.InsertAsync(s);
                 return true;
             } catch (Exception e) {
+                throw new ServerErrorException(e);
             }
-            return false;
         }
 
         internal async void removeSession(Session s) {
             try {
-                IMobileServiceTable<Session> table = msc.GetTable<Session>();
                 await table.DeleteAsync(s);
             } catch (Exception e) {
+                throw new ServerErrorException(e);
             }
         }
 
 
         internal async Task<Session> getSessionByName(string sessionName) {
-            IMobileServiceTable<Session> table = msc.GetTable<Session>();
             List<Session> items;
             try {
                 items = await table.Where(Item => Item.Name == sessionName.Trim()).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException();
+                throw new ServerErrorException(e);
             }
             if (items.Count > 0) {
                 return (Session)items[0];

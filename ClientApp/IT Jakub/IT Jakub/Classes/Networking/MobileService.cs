@@ -1,4 +1,5 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
+using IT_Jakub.Classes.Exceptions;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace IT_Jakub.Classes.Networking {
                     "https://itjakub.azure-mobile.net/",
                     "IKzmwpfkbiryIglFPmMRlsmAqwnLdY61");
             } catch (Exception e) {
-                throw new Exception("Srat");
+                throw new ServerErrorException(e);
             }
         }
 

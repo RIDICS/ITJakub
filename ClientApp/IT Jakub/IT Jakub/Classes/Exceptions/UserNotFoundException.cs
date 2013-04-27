@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace IT_Jakub.Classes.Exceptions {
     class UserNotFoundException : MyException {
-        public UserNotFoundException()
-            : base("User was not found in database") {
+
+        public UserNotFoundException(Exception e)
+            : base("Uživatel nebyl nalezen v databázi.") {
+            invoker = e;
         }
     }
 }
