@@ -28,4 +28,434 @@
         <Setter Property="Height" Value="26"/>
     </Style>
 
+    <SolidColorBrush x:Key="ApplicationBackground" Color="#FF4183FF"/>
+    
+    <!-- AppBar -->
+
+    <!-- AppBar Colors -->
+    <SolidColorBrush x:Key="AppBarButtonNormalForegroundThemeBrush" Color="#FF008ef4" />
+    <SolidColorBrush x:Key="AppBarButtonPointOverForegroundThemeBrush" Color="#FF8bbaff" />
+    <SolidColorBrush x:Key="AppBarButtonPressedForegroundThemeBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="AppBarButtonDisabledForegroundThemeBrush" Color="#FF3e80fd" />
+
+    <SolidColorBrush x:Key="AppBarItemForegroundThemeBrush" Color="#FF008ef4" />
+    <SolidColorBrush x:Key="AppBarItemPointerOverForegroundThemeBrush" Color="#FF8bbaff" />
+    <SolidColorBrush x:Key="AppBarItemPressedForegroundThemeBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="AppBarItemDisabledForegroundThemeBrush" Color="#FF3e80fd" />
+
+    <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="#FF0048D1" />
+    <SolidColorBrush x:Key="AppBarBorderThemeBrush" Color="#FFF0F5FF" />
+    <SolidColorBrush x:Key="AppBarItemBackgroundThemeBrush" Color="Transparent" />
+    <SolidColorBrush x:Key="AppBarItemPointerOverBackgroundThemeBrush" Color="#FF0048D1" />
+
+    <Style TargetType="AppBar" x:Key="BottomAppBar">
+        <Setter Property="Background" Value="{StaticResource AppBarBackgroundThemeBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource AppBarBorderThemeBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="MinHeight" Value="{StaticResource AppBarThemeMinHeight}" />
+        <Setter Property="Padding" Value="10,0,10,0" />
+    </Style>
+    
+
+    
+    
+    <!-- Home Button -->
+    <ControlTemplate x:Key="HomeButtonTemplate" TargetType="Button" x:Name="homeButton">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5,0">
+            <Image x:Name="homeButtonImage" Stretch="None" Visibility="Visible" />
+            <TextBlock x:Name="homeButtonText" Text="Domů" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" FontSize="16" />
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="homeButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonNormalForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="homeButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Normal/Normal_home-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="homeButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonPressedForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="homeButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                            <BitmapImage UriSource="ms-appx:///Assets/Icons/Pressed/Pressed_home-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="homeButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonDisabledForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="homeButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Disabled/Disabled_home-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="PointerOver">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="homeButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonPointOverForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="homeButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/PointOver/PointOver_home-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Focused"/>
+                    <VisualState x:Name="PointerFocused"/>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </StackPanel>
+    </ControlTemplate>
+
+    <!-- Login Button -->
+    <ControlTemplate x:Key="LoginButtonTemplate" TargetType="Button" x:Name="loginButton">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5,0">
+            <Image x:Name="loginButtonImage" Stretch="None" Visibility="Visible" />
+            <TextBlock x:Name="loginButtonText" Text="Přihlásit se" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" FontSize="16" />
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="loginButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonNormalForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="loginButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Normal/Normal_login-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="loginButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonPressedForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="loginButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Pressed/Pressed_login-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="loginButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonDisabledForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="loginButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Disabled/Disabled_login-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="PointerOver">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="loginButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonPointOverForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="loginButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/PointOver/PointOver_login-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Focused"/>
+                    <VisualState x:Name="PointerFocused"/>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </StackPanel>
+    </ControlTemplate>
+
+    <!-- Logout Button -->
+    <ControlTemplate x:Key="LogoutButtonTemplate" TargetType="Button" x:Name="logoutButton">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5,0">
+            <Image x:Name="logoutButtonImage" Stretch="None" Visibility="Visible" />
+            <TextBlock x:Name="logoutButtonText" Text="Odhlásit se" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" FontSize="16" />
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="logoutButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonNormalForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="logoutButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Normal/Normal_logout-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="logoutButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonPressedForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="logoutButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Pressed/Pressed_logout-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="logoutButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonDisabledForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="logoutButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Disabled/Disabled_logout-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="PointerOver">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="logoutButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonPointOverForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="logoutButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/PointOver/PointOver_logout-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Focused"/>
+                    <VisualState x:Name="PointerFocused"/>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </StackPanel>
+    </ControlTemplate>
+
+    <!-- Signout Session Button -->
+    <ControlTemplate x:Key="SignoutSessionButtonTemplate" TargetType="Button" x:Name="signoutSessionButton">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5,0">
+            <Image x:Name="signoutSessionButtonImage" Stretch="None" Visibility="Visible" />
+            <TextBlock x:Name="signoutSessionButtonText" Text="Odpojit ze sezení" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" FontSize="16" />
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signoutSessionButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonNormalForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signoutSessionButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Normal/Normal_signOutSession-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signoutSessionButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonPressedForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signoutSessionButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Pressed/Pressed_signOutSession-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signoutSessionButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonDisabledForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signoutSessionButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Disabled/Disabled_signOutSession-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="PointerOver">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signoutSessionButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonPointOverForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signoutSessionButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/PointOver/PointOver_signOutSession-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Focused"/>
+                    <VisualState x:Name="PointerFocused"/>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </StackPanel>
+    </ControlTemplate>
+
+    <!-- SignIn Session Button -->
+    <ControlTemplate x:Key="SigninSessionButtonTemplate" TargetType="Button" x:Name="signinSessionButton">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5,0">
+            <Image x:Name="signinSessionButtonImage" Stretch="None" Visibility="Visible" />
+            <TextBlock x:Name="signinSessionButtonText" Text="Připojit k sezení" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" FontSize="16" />
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signinSessionButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonNormalForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signinSessionButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Normal/Normal_signInSession-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signinSessionButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonPressedForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signinSessionButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Pressed/Pressed_signInSession-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signinSessionButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonDisabledForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signinSessionButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/Disabled/Disabled_signInSession-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+
+                    <VisualState x:Name="PointerOver">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signinSessionButtonText" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButtonPointOverForegroundThemeBrush}"/>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="signinSessionButtonImage" Storyboard.TargetProperty="(Image.Source)">
+                                <DiscreteObjectKeyFrame KeyTime="0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icons/PointOver/PointOver_signInSession-32.png" />
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Focused"/>
+                    <VisualState x:Name="PointerFocused"/>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </StackPanel>
+    </ControlTemplate>
+
 </ResourceDictionary>

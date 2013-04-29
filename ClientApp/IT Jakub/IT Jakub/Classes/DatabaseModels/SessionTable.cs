@@ -40,7 +40,14 @@ namespace IT_Jakub.Classes.DatabaseModels {
 
         internal async void removeSession(Session s) {
             try {
-                await table.DeleteAsync(s);
+                List<Session> items = await table.Where(Item => Item.Id == s.Id).ToListAsync();
+                if (items.Count > 0) {
+                    try {
+                        await table.DeleteAsync(s);
+                    } catch (Exception e) {
+                        object o = e;
+                    }
+                }
             } catch (Exception e) {
                 throw new ServerErrorException(e);
             }

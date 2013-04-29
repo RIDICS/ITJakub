@@ -42,16 +42,24 @@ namespace IT_Jakub.Classes.Models {
             loggedState = true;
         }
 
-        public async Task<bool> logout() {
-            SessionUserTable sut = new SessionUserTable();
-            await sut.signOutUserFromAllSessions(this.userData);
-            if (SignedSession.isSignedIn) {
-                await ss.signout();
+        public async Task logout() {
+            if (isLoogedIn == true) {
+                SessionUserTable sut = new SessionUserTable();
+                if (SignedSession.isSignedIn) {
+                    await ss.signout();
+                }
+                try {
+                    await sut.signOutUserFromAllSessions(this.userData);
+                } catch (Exception e) {
+                    object o = e;
+                }
+                setUserData(null);
+                loggedState = false;
             }
-            
-            setUserData(null);
-            loggedState = false;
-            return true;
+        }
+
+        internal bool isLoggedIn() {
+            return isLoogedIn;
         }
 
     }

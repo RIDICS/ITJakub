@@ -15,7 +15,6 @@ namespace IT_Jakub.Classes.Models.Utils {
         internal async Task<string> openDocumentFromUri(string uri) {
             Uri source;
             if (!Uri.TryCreate(uri.Trim(), UriKind.Absolute, out source)) {
-                //    rootPage.NotifyUser("Invalid URI.", NotifyType.ErrorMessage);
                 return null;
             }
             Windows.Storage.StorageFile file = await FileDownloader.downloadFileFromUri(source);

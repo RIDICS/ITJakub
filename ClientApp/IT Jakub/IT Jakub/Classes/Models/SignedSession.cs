@@ -1,4 +1,5 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
+using IT_Jakub.Classes.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace IT_Jakub.Classes.Models {
         private static bool signedState = false;
         private static LoggedUser lu = LoggedUser.getInstance();
         private long latestCommandId = 0;
+        
 
         public static bool isSignedIn {
             get {
@@ -29,7 +31,7 @@ namespace IT_Jakub.Classes.Models {
         }
 
         private SignedSession() {
-
+            
         }
 
         private void setSessionData(Session s) {
@@ -67,11 +69,14 @@ namespace IT_Jakub.Classes.Models {
         }
 
         public async Task signout() {
+            TaskKiller.killEducationalApplicationTasks();
             SessionUserTable sut = new SessionUserTable();
             CommandTable ct = new CommandTable();
+            
             await sut.removeUserFromSession(this.getSessionData(), lu.getUserData());
             await sendCommand(Command.getUserLoggedOutCommand(lu.getUserData()));
             await ct.removeUserLoginLogoutCommands(sessionData, lu.getUserData());
+            
             setSessionData(null);
             signedState = false;
         }
@@ -86,18 +91,6 @@ namespace IT_Jakub.Classes.Models {
             return false;
         }
 
-        internal async void sendPointerMoveCommand(int pointerIndex) {
-            CommandTable ct = new CommandTable();
-            string commandText = Classes.Models.Commands.SyncReadingAppCommand.getPointerMoveCommand(pointerIndex);
-            await this.sendCommand(commandText);
-            removePrevPointerMoveCommands();
-        }
-
-        internal void removePrevPointerMoveCommands() {
-            CommandTable ct = new CommandTable();
-            ct.deletePrevMoveCommands(latestCommandId, sessionData);
-        }
-
         internal async void promoteUser(long userId) {
             sessionData.PrefferedUserId = userId;
             CommandTable ct = new CommandTable();
@@ -110,6 +103,10 @@ namespace IT_Jakub.Classes.Models {
                 CommandTable ct = new CommandTable();
                 await ct.deletePrevPromoteDemoteCommands(sessionData);
             }
+        }
+
+        internal bool isSignedInSession() {
+            return isSignedIn;
         }
     }
 }

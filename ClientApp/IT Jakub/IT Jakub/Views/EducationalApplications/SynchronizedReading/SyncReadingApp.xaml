@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="mainGrid" Background="{StaticResource ApplicationPageBackgroundThemeBrush}" Loaded="mainGrid_Loaded">
+    <Grid x:Name="mainGrid" Background="{StaticResource ApplicationBackground}" Loaded="mainGrid_Loaded">
         <Canvas HorizontalAlignment="Left" Height="768" VerticalAlignment="Top" Width="1366">
             <Button x:Name="openFileButton" Content="Otevřít soubor" HorizontalAlignment="Left" Height="46" Margin="46,624,0,0" VerticalAlignment="Top" Width="249" Click="openFileButton_Click" IsEnabled="False"/>
             <Button x:Name="highligtTextButton" Content="Označit text" HorizontalAlignment="Left" Margin="313,624,0,0" VerticalAlignment="Top" Click="highligtTextButton_Click" IsEnabled="False"/>

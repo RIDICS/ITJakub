@@ -40,7 +40,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private static SignedSession ss = SignedSession.getInstance();
         private bool autoUpdate = true;
         private static LoggedUser lu = LoggedUser.getInstance();
-        
+
         private ITextRange oldRange;
         private Color oldColor;
         private static double horizontalOffset;
@@ -51,6 +51,10 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private static ListView staticUserList;
         private static Button staticOpenFileButton;
         private static Button staticHighligtTextButton;
+        private static bool autoUpdateAllowed;
+        private static LinkedList<string> commandList = new LinkedList<string>();
+        private static Task commandListSender;
+        private static bool sendingMoveCommandsAllowed = false;
 
         public SyncReadingApp() {
             this.InitializeComponent();
@@ -64,6 +68,8 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             staticHighligtTextButton = highligtTextButton;
             setUsersRights();
         }
+
+
 
         public static void setUsersRights() {
             long x = ss.getSessionData().OwnerUserId;
@@ -105,6 +111,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         /// <param name="e">Event data that describes how this page was reached.  The Parameter
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e) {
+
         }
 
         private void openFileButton_Click(object sender, RoutedEventArgs e) {
@@ -120,7 +127,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             textRichEditBox.IsReadOnly = true;
             int startPosition = textRichEditBox.Document.Selection.StartPosition;
             int endPosition = textRichEditBox.Document.Selection.EndPosition;
-            await ss.sendCommand(SyncReadingAppCommand.getHighlightCommand("ARGB(" + c.A + ", "+ c.R + ", " + c.G + ", " + c.B + ")", startPosition, endPosition));
+            await ss.sendCommand(SyncReadingAppCommand.getHighlightCommand("ARGB(" + c.A + ", " + c.R + ", " + c.G + ", " + c.B + ")", startPosition, endPosition));
         }
 
         public static RichEditBox getTextRichEditBox() {
@@ -132,7 +139,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             string source = await opener.openDocumentFromUri(uriTextBox.Text.Trim());
 
             if (source != null) {
-                
+
                 await ss.sendCommand(SyncReadingAppCommand.getOpenCommand(source));
             }
             openPopup.IsOpen = false;
@@ -143,19 +150,28 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         }
 
         private void mainGrid_Loaded(object sender, RoutedEventArgs e) {
+            autoUpdateAllowed = true;
+            autoUpdate = true;
             startAutoUpdate();
         }
 
+        public static void killAutoUpdateTask() {
+            autoUpdateAllowed = false;
+            stopSendingMoveCommands();
+        }
+
         private async void startAutoUpdate() {
-            while (autoUpdate) {
-                await Task.Delay(40);
-                try {
-                    CommandTable ct = new CommandTable();
-                    List<Command> newCommands = await ct.getAllNewSessionCommands(ss);
-                    for (int i = 0; i < newCommands.Count; i++) {
-                        await newCommands[i].procedeCommand();
+            while (autoUpdateAllowed) {
+                await Task.Delay(250);
+                if (autoUpdate) {
+                    try {
+                        CommandTable ct = new CommandTable();
+                        List<Command> newCommands = await ct.getAllNewSessionCommands(ss);
+                        for (int i = 0; i < newCommands.Count; i++) {
+                            await newCommands[i].procedeCommand();
+                        }
+                    } catch {
                     }
-                } catch {
                 }
             }
         }
@@ -163,7 +179,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private void autoUpdateButton_Click(object sender, RoutedEventArgs e) {
             switch (autoUpdate) {
                 case true:
-                    autoUpdateButton.BorderBrush = new SolidColorBrush(Color.FromArgb(255,122,26,26));
+                    autoUpdateButton.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 122, 26, 26));
                     autoUpdateButton.Background = new SolidColorBrush(Color.FromArgb(255, 122, 0, 0));
                     autoUpdateButton.Foreground = new SolidColorBrush(Colors.White);
                     autoUpdateButton.Content = "OFF";
@@ -175,36 +191,33 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
                     autoUpdateButton.Foreground = new SolidColorBrush(Colors.Black);
                     autoUpdateButton.Content = "ON";
                     autoUpdate = true;
-                    startAutoUpdate();
                     break;
             }
-            
         }
-        
 
         private void pointer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e) {
-                scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
+            scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
 
-                verticalOffset = scrollViewer.VerticalOffset;
-                horizontalOffset = scrollViewer.HorizontalOffset;
+            verticalOffset = scrollViewer.VerticalOffset;
+            horizontalOffset = scrollViewer.HorizontalOffset;
 
-                double top = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) + e.Delta.Translation.Y;
-                double left = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + e.Delta.Translation.X;
+            double top = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) + e.Delta.Translation.Y;
+            double left = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + e.Delta.Translation.X;
 
-                pointer.SetValue(Canvas.LeftProperty, left);
-                pointer.SetValue(Canvas.TopProperty, top);
+            pointer.SetValue(Canvas.LeftProperty, left);
+            pointer.SetValue(Canvas.TopProperty, top);
 
-                unhighlightPointerWord();
+            unhighlightPointerWord();
 
-                ITextRange range = textBox.Document.GetRangeFromPoint(new Point(left + (pointer.Width / 2), top), PointOptions.Start);
-                range.Expand(TextRangeUnit.Word);
-                highlightPointerWord(range);
+            ITextRange range = textBox.Document.GetRangeFromPoint(new Point(left + (pointer.Width / 2), top), PointOptions.Start);
+            range.Expand(TextRangeUnit.Word);
+            highlightPointerWord(range);
 
-                setPointerScrollbarOffset();
-                if (rangeComp.StartPosition != range.StartPosition) {
-                    ss.sendPointerMoveCommand(range.StartPosition);
-                    rangeComp = range;
-                }
+            setPointerScrollbarOffset();
+            if (rangeComp.StartPosition != range.StartPosition) {
+                sendPointerMoveCommand(range.StartPosition);
+                rangeComp = range;
+            }
         }
 
 
@@ -225,7 +238,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private void unhighlightPointerWord() {
             textBox.Document.Selection.SetRange(oldRange.StartPosition, oldRange.EndPosition);
             ITextCharacterFormat charFormatting = textBox.Document.Selection.CharacterFormat;
-            
+
             textRichEditBox.IsReadOnly = false;
             Color c = oldColor;
             charFormatting.BackgroundColor = c;
@@ -263,7 +276,6 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
 
             ScrollViewer scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
             verticalOffset = charOffsetPercent * scrollViewer.ScrollableHeight;
-
             scrollViewer.ScrollToVerticalOffset(verticalOffset);
 
             range.GetPoint(HorizontalCharacterAlignment.Left, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
@@ -274,23 +286,27 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
 
         private void pointer_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e) {
             autoUpdate = false;
+            startSendingMoveCommands();
         }
 
         private void pointer_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e) {
             autoUpdate = true;
-            startAutoUpdate();
         }
 
         public static async void updateUserList() {
             SessionUserTable sut = new SessionUserTable();
             UserTable ut = new UserTable();
-            List<SessionUser> items = await sut.getAllUsersInSession(ss.getSessionData());
-            List<User> userList = new List<User>();
-            for (int i = 0; i < items.Count; i++) {
-                User u = await ut.getUserById(items[i].UserId);
-                userList.Add(u);
+            try {
+                List<SessionUser> items = await sut.getAllUsersInSession(ss.getSessionData());
+                List<User> userList = new List<User>();
+                for (int i = 0; i < items.Count; i++) {
+                    User u = await ut.getUserById(items[i].UserId);
+                    userList.Add(u);
+                }
+                staticUserList.ItemsSource = userList;
+            } catch (Exception e) {
+                object o = e;
             }
-            staticUserList.ItemsSource = userList;
         }
 
         private void updateUserListButton_Click(object sender, RoutedEventArgs e) {
@@ -324,6 +340,36 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             await ss.sendCommand(GeneralCommand.getDemoteCommand(u));
             ss.demoteUser(u.Id);
         }
+
+
+        internal static void stopSendingMoveCommands() {
+            Task.Delay(1000);
+            sendingMoveCommandsAllowed = false;
+        }
+
+        internal void startSendingMoveCommands() {
+            sendingMoveCommandsAllowed = true;
+            commandListSender = new Task(sendCommandList);
+            commandListSender.Start();
+        }
+
+        internal void sendPointerMoveCommand(int pointerIndex) {
+            CommandTable ct = new CommandTable();
+            string commandText = Classes.Models.Commands.SyncReadingAppCommand.getPointerMoveCommand(pointerIndex);
+            commandList.AddLast(commandText);
+        }
+
+        private async void sendCommandList() {
+            CommandTable ct = new CommandTable();
+            while (sendingMoveCommandsAllowed) {
+                if (commandList.Last != null) {
+                    await ss.sendCommand(commandList.Last.Value);
+                    commandList.Clear();
+                    await ct.deletePrevMoveCommands(ss.getSessionData());
+                }
+            }
+        }
+
 
     }
 }

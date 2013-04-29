@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IT_Jakub.Classes.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,11 @@ namespace IT_Jakub.Classes.Exceptions {
     
     class MyFileNotFoundException : MyException {
 
-        public MyFileNotFoundException(Exception e) : base("Soubor nemohl být nalezen."){
+        private static string myMessage = "Soubor nemohl být nalezen.";
+
+        public MyFileNotFoundException(Exception e) : base(myMessage){
             invoker = e;
+            MyDialogs.showDialogOK(myMessage + "\n\n" + e.Message);
         }
     }
 }

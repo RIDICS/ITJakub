@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{StaticResource ApplicationBackground}">
         <Grid Style="{StaticResource MenuGridStyle}">
             <StackPanel>
                 <Button x:Name="showSessionsList" Content="Zobrazit seznam sezení" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="showSessionsList_Click"/>

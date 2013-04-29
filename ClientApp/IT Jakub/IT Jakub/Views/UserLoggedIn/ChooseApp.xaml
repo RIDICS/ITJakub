@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{StaticResource ApplicationBackground}">
         <Button x:Name="SynchronizedReadingButton" Content="Synchronizované čtení" HorizontalAlignment="Left" Height="190" Margin="195,143,0,0" VerticalAlignment="Top" Width="190" Click="SynchronizedReadingButton_Click"/>
 
     </Grid>

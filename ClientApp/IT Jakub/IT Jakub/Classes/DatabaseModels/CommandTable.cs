@@ -37,7 +37,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
         internal async Task<List<Command>> getAllSessionCommands(Session s) {
-            List<Command> items;
+            List<Command> items = null;
             try {
                 items = await table.Where(Item => Item.SessionId == s.Id).ToListAsync();
             } catch (Exception e) {
@@ -47,7 +47,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
         internal async Task<List<Command>> getAllCommands() {
-            List<Command> items;
+            List<Command> items = null;
             try {
                 items = await table.ToListAsync();
             } catch (Exception e) {
@@ -56,10 +56,16 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return items;
         }
 
-
-        private async void deleteCommand(Command c) {
+        private async Task deleteCommand(Command c) {
             try {
-                await table.DeleteAsync(c);
+                List<Command> test = await table.Where(Item => Item.Id == c.Id).ToListAsync();
+                if (test.Count > 0) {
+                    try {
+                        await table.DeleteAsync(c);
+                    } catch (Exception e) {
+                        object o = e;
+                    }
+                }
             } catch (Exception e) {
                 throw new ServerErrorException(e);
             }
@@ -80,7 +86,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
 
 
         internal async Task<List<Command>> getAllNewSessionCommands(SignedSession s) {
-            List<Command> items;
+            List<Command> items = null;
             try {
                 items = await table.Where(Item => Item.SessionId == s.getSessionData().Id).Where(Item => Item.Id > s.getLatestCommandId()).ToListAsync();
             } catch (Exception e) {
@@ -90,14 +96,13 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
 
-        internal async void deletePrevMoveCommands(long latestCommandId, Session s) {
-            List<Command> items;
+        internal async Task deletePrevMoveCommands(Session s) {
+            List<Command> items = null;
             try {
-                items = await table.Take(150).Where(Item => Item.SessionId == s.Id).Where(Item => Item.Id < latestCommandId).Where(Item => Item.CommandText.Contains("Move(")).ToListAsync();
+                items = await table.Take(150).Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Move(")).ToListAsync();
                 if (items.Count > 0) {
-                    LinkedList<Command> l = new LinkedList<Command>(items);
-                    for (LinkedListNode<Command> ln = l.First; ln != l.Last.Next; ln = ln.Next) {
-                        this.deleteCommand(ln.Value);
+                    for (int i = 0; i < items.Count-1; i++) {
+                        await deleteCommand(items[i]);
                     }
                 }
             } catch (Exception e) {
@@ -111,7 +116,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 loginItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Login(" + u.Id + ")")).ToListAsync();
                 if (loginItems.Count > 0) {
                     for (int i = 0; i < loginItems.Count; i++) {
-                        this.deleteCommand(loginItems[i]);
+                        deleteCommand(loginItems[i]);
                     }
                 }
             } catch (Exception e) {
@@ -124,7 +129,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
 
                 if (logoutItems.Count > 0) {
                     for (int i = 0; i < logoutItems.Count; i++) {
-                        this.deleteCommand(logoutItems[i]);
+                        deleteCommand(logoutItems[i]);
                     }
                 }
             } catch (Exception e) {
@@ -139,7 +144,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
 
                 if (promoteItems.Count > 0) {
                     for (int i = 0; i < promoteItems.Count - 1; i++) {
-                        this.deleteCommand(promoteItems[i]);
+                        deleteCommand(promoteItems[i]);
                     }
                 }
             } catch (Exception e) {
@@ -151,7 +156,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 demoteItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Demote(")).ToListAsync();
                 if (demoteItems.Count > 0) {
                     for (int i = 0; i < demoteItems.Count - 1; i++) {
-                        this.deleteCommand(demoteItems[i]);
+                        deleteCommand(demoteItems[i]);
                     }
                 }
             } catch (Exception e) {

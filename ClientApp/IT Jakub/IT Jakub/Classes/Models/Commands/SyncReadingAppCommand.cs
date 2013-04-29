@@ -67,7 +67,7 @@ namespace IT_Jakub.Classes.Models.Commands {
 
         private async Task<bool> procedeTextCommand() {
             if (c.command.StartsWith("Highlight(")) {
-                procedeTextHighlightCommand();
+                await procedeTextHighlightCommand();
                 return true;
             }
             if (c.command.StartsWith("Open(")) {
@@ -93,7 +93,7 @@ namespace IT_Jakub.Classes.Models.Commands {
             return false;
         }
 
-        private void procedeTextHighlightCommand() {
+        private async Task procedeTextHighlightCommand() {
             RichEditBox textRichEditBox = Views.EducationalApplications.SynchronizedReading.SyncReadingApp.getTextRichEditBox();
             ScrollViewer scrollViewer = textRichEditBox.GetFirstDescendantOfType<ScrollViewer>();
             double verticalOffset = scrollViewer.VerticalOffset;
@@ -133,8 +133,8 @@ namespace IT_Jakub.Classes.Models.Commands {
         private void procedeAppCommand() {
             switch (c.command) {
                 case START_APPLICATION:
-                    Frame rootFrame = Window.Current.Content as Frame;
-                    rootFrame.Navigate(typeof(Views.EducationalApplications.SynchronizedReading.SyncReadingApp));
+                    Frame mainFrame = MainPage.getMainFrame();
+                    mainFrame.Navigate(typeof(Views.EducationalApplications.SynchronizedReading.SyncReadingApp));
                     break;
             }
         }

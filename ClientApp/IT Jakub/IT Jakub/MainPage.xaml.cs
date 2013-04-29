@@ -27,10 +27,14 @@ namespace IT_Jakub
     {
 
         Page rootPage = null;
+        private static Frame staticMainFrame;
+        private static Views.Controls.BottomAppBar staticBottomAppBar;
 
         public MainPage()
         {
             this.InitializeComponent();
+            staticMainFrame = mainFrame;
+            staticBottomAppBar = bottomAppBar;
         }
 
         /// <summary>
@@ -51,11 +55,22 @@ namespace IT_Jakub
             }
         }
 
+        public static Frame getMainFrame() {
+            return staticMainFrame;
+        }
 
         private void MainButton_Click(object sender, RoutedEventArgs e) {
            // mainFrame.Navigate(typeof(TestPage), this);
         }
 
-        
+        private void mainFrame_Navigated(object sender, NavigationEventArgs e) {
+            Views.Controls.BottomAppBar.repaint(bottomAppBar);
+            BottomAppBar.IsOpen = false;
+            TopAppBar.IsOpen = false;
+        }
+
+        internal static Views.Controls.BottomAppBar getBottomAppBar() {
+            return staticBottomAppBar;
+        }
     }
 }

@@ -78,11 +78,19 @@ namespace IT_Jakub.Classes.DatabaseModels {
 
         internal async Task deleteUser(User u) {
             try {
-                await userTable.DeleteAsync(u);
+                List<User> items = await userTable.Where(Item => Item.Id == u.Id).ToListAsync();
+                if (items.Count > 0) {
+                    try {
+                        await userTable.DeleteAsync(u);
+                    } catch (Exception e) {
+                        object o = e;
+                    }
+                }
             } catch (Exception e) {
                 throw new ServerErrorException(e);
             }
         }
+        
 
         internal async Task updateUser(User u) {
             try {

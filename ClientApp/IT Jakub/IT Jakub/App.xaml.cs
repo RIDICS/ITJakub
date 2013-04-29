@@ -1,10 +1,12 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Models;
+using IT_Jakub.Classes.Networking;
 using IT_Jakub.Views.ApplicationStart;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -36,6 +38,7 @@ namespace IT_Jakub
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            FileDownloader.clearTempFolder();
         }
 
         /// <summary>
@@ -92,7 +95,6 @@ namespace IT_Jakub
             //TODO: Save application state and stop any background activity
             if (LoggedUser.isLoogedIn) {
                 await lu.logout();
-                
                 Frame rootFrame = Window.Current.Content as Frame;
                 rootFrame.Navigate(typeof(MainPage));
             }

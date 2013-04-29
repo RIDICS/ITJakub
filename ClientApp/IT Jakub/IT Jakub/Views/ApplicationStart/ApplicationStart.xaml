@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{StaticResource ApplicationBackground}">
         <Grid x:Name="Menu" Style="{StaticResource MenuGridStyle}">
             <Button x:Name="LoginButton" Content="Přihlásit se" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="32" Click="loginButtonClick" Height="70"/>
             <Button x:Name="ShowHelpButton" Content="Zobrazit nápovědu" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="30" Height="70" Margin="0,70,0,0"/>

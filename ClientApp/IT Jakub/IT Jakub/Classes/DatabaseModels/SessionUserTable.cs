@@ -36,7 +36,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
         public async Task<bool> signOutUserFromAllSessions(User u) {
-            List<SessionUser> items;
+            List<SessionUser> items = null;
             try {
                 items = await sessionUserTable.Where(Item => Item.UserId == u.Id).ToListAsync();
                 for (int i = 0; i < items.Count; i++) {
@@ -62,7 +62,14 @@ namespace IT_Jakub.Classes.DatabaseModels {
 
         private async void deleteSessionUser(SessionUser su) {
             try {
-                await sessionUserTable.DeleteAsync(su);
+                List<SessionUser> items = await sessionUserTable.Where(Item => Item.UserId == su.UserId).ToListAsync();
+                if (items.Count > 0) {
+                    try {
+                        await sessionUserTable.DeleteAsync(su);
+                    } catch (Exception e) {
+                        object o = e;
+                    }
+                }
             } catch (Exception e) {
                 throw new ServerErrorException(e);
             }

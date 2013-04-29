@@ -27,7 +27,6 @@ namespace IT_Jakub.Classes.Networking {
             try {
                 var applicationData = Windows.Storage.ApplicationData.Current;
                 var temporaryFolder = applicationData.TemporaryFolder;
-
                 destinationFile = await temporaryFolder.CreateFileAsync(
                     destination, CreationCollisionOption.GenerateUniqueName);
             } catch (FileNotFoundException ex) {
@@ -37,8 +36,18 @@ namespace IT_Jakub.Classes.Networking {
             BackgroundDownloader downloader = new BackgroundDownloader();
             DownloadOperation download = downloader.CreateDownload(source, destinationFile);
             await download.StartAsync();
+            object ob = destinationFile;
             return destinationFile;
         }
 
+        public static async void clearTempFolder() {
+            var applicationData = Windows.Storage.ApplicationData.Current;
+            var temporaryFolder = applicationData.TemporaryFolder;
+            try {
+                await temporaryFolder.DeleteAsync();
+            } catch (Exception e) {
+                object o = e;
+            }
+        }
     }
 }
