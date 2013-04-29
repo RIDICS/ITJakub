@@ -22,6 +22,12 @@ namespace Ujc.Naki.MVCWebLayer
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                "SearchDetail",
+                "Search/Detail/{searchTerm}",
+                new { controller = "Search", action = "Detail", searchTerm = "" }
+            );
+
+            routes.MapRoute(
                 "SourcesMain",
                 "Sources",
                 new { controller = "Sources", action = "Listing", mode = "Jmeno", alphabet = "A" }
@@ -61,6 +67,12 @@ namespace Ujc.Naki.MVCWebLayer
                 "ModuleDetail",
                 "Module/{id}",
                 new { controller = "Modules", action = "Index" }
+            );
+
+            routes.MapRoute(
+                "HomePage",
+                "",
+                new { controller = "Index", action = "Index" }
             );
 
             routes.MapRoute(

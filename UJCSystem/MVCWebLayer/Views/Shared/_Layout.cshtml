@@ -10,7 +10,6 @@
     @* ORIGINAL STYLE <link href="@Url.Content("~/Styles/Main.css")" rel="stylesheet" type="text/css" />*@
     <link href="@Url.Content("~/Styles/ui-lightness/jquery-ui-1.8.23.custom.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Styles/bootstrap.min.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Styles/bootstrap-responsive.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Styles/Style.css")" rel="stylesheet" type="text/css" />
     <script src="@Url.Content("~/Scripts/jquery-1.9.1.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.min.js")" type="text/javascript"></script>
@@ -22,40 +21,49 @@
 
 <body>
     <div class="container">
-        <div class="masthead">
-            <a href="@Url.RouteUrl("Default", new { controller = "Index", action = "Index" })">
-                <h3 class="muted">Vokabulář webový</h3>
-            </a>
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <ul class="nav">
-                            <li @if (currentAction == "Index" && currentController == "Index")
-                                {
-                                    @Html.Raw("class=\"active\"");
-                                }>
-                                @Html.RouteLink("Vyhledávání", "Default", new { controller = "Index", action = "Index" })
-                            </li>
-                            <li @if (false)
-                                {
-                                    @Html.Raw("class=\"active\"");
-                                }>
-                                <a href="/#">Listování ve slovnících</a>
-                            </li>
-                            <li @if (currentController == "Sources")
-                                {
-                                    @Html.Raw("class=\"active\"");
-                                }>
-                                @Html.RouteLink("Zdroje", "SourcesListing", new { mode = "Jmeno", alphabet = "A" })
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        
+        <div class="header">
+            <a href="@Url.RouteUrl("HomePage")"><h1>Vokabulář Webový</h1></a>
+            <p><strong>Webové hnízdo pramenů k poznání historické češtiny</strong></p>
         </div>
-        @RenderBody()
+        
+        <div class="page-wrapper">
+            <ul class="nav nav-tabs">
+                <li @if (currentController == "Index" || currentController == "Search")
+                    {
+                        @Html.Raw("class=\"active\"");
+                    }>
+                    @Html.RouteLink("Vyhledávání", "HomePage")
+                </li>
+                <li @if (false)
+                    {
+                        @Html.Raw("class=\"active\"");
+                    }>
+                    <a href="/#">Listování ve slovnících</a>
+                </li>
+                <li @if (currentController == "Sources")
+                    {
+                        @Html.Raw("class=\"active\"");
+                    }>
+                    @Html.RouteLink("Zdroje", "SourcesListing", new { mode = "Jmeno", alphabet = "A" })
+                </li>
+            </ul>
+        
+            @RenderBody()
+        </div>
+
         <div class="footer">
-            <p class="muted">2013 &copy; Ústav</p>
+            <p>
+                <a href="#">Copyright</a> |
+                <a href="#">Kontakty</a> |
+                <a href="#">Grantová podpora</a> |
+                <a href="#">Odkazy</a> |
+                <a href="#">Nápověda</a> |
+                <a href="#">Jak citovat</a> |
+                <a href="#">Připomínky</a>
+                <br>
+                <span>Vokabulář webový byl spuštěn před 6 lety, 5 měsíci a 13 dny</span>
+            </p>
         </div>
     </div>
 </body>

@@ -84,6 +84,17 @@
     });
 })(jQuery);
 
+
+function loadTermDetail(element, url) {
+    $(element).parent().parent().find("li").removeClass("active");
+    $(element).parent().addClass("active");
+
+    $.get(url, function (data) {
+        $('#alphabetical-result-detail').html(data);
+        $(element).blur();
+    });
+}
+
     
 /* var arrowUpImg = new Image();
 arrowUpImg.src = "/Images/arrow-up.png";

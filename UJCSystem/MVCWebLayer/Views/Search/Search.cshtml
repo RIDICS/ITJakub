@@ -19,21 +19,26 @@
 
 <h4>Výsledky hledání:</h4>
 
-<div class="row">
-    <div class="span3">
-        <ul class="nav nav-tabs tabs-left">
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="nav nav-tabs">
             <li class="active"><a href="#results-alphabetical" data-toggle="tab">Abecedně</a></li>
             <li><a href="#results-type" data-toggle="tab">Podle druhu a díla</a></li>
         </ul>
         
         <div class="tab-content">
-            <div class="tab-pane active" id="results-alphabetical">
-                <ul>
+            <div class="tab-pane active tabs-left" id="results-alphabetical">
+                <ul class="nav nav-tabs">
                     @foreach (var result in Model.FoundWords)
                     {
-                        <li><a href="#" onclick="loadTermDetail(this, '@result'); return false;">@result</a></li>
+                        <li><a href="#" onclick="loadTermDetail(this, '@Url.RouteUrl("SearchDetail", new { searchTerm = result })'); return false;">@result</a></li>
                     }
-                </ul>                    
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="alphabetical-result-detail">
+                                  
+                    </div>
+                </div>            
             </div>
             <div class="tab-pane" id="results-type">
                 @foreach(KeyValuePair<BookCategory, List<string>> category in Model.FoundByType) 
@@ -48,9 +53,6 @@
                 }
             </div>
         </div>
-    </div>
-    <div class="span11">
-        
     </div>
 </div>
 

@@ -1,7 +1,7 @@
 ﻿@using Ujc.Naki.MVCWebLayer.Services
 @using Ujc.Naki.MVCWebLayer.Services.Enums
 @model Ujc.Naki.MVCWebLayer.ViewModels.SearchViewModel
-<div class="row">
+<div class="row-fluid">
     <div class="span12">
         <div class="advanced-search-wrapper">
             @using (Html.BeginForm("Search", "Search", FormMethod.Post))
@@ -44,7 +44,7 @@
                 <div class="advanced-search">
                     <h4>Vyberte prohledávaná díla</h4>
                     <div class="row-fluid">
-                        <div class="span6">
+                        <div class="span12">
                             <ul class="nav">
                                 <li>
                                     <label class="checkbox">
@@ -110,10 +110,6 @@
                                         </li>
                                     </ul>
                                 </li>
-                            </ul>
-                        </div>
-                        <div class="span6">
-                            <ul class="nav">
                                 <li>
                                     <label class="checkbox">
                                         <input type="checkbox" name="SearchPart" value="historic" id="historic" @(GetCheckedString("historic")) /><span>Historické texty</span>
