@@ -152,6 +152,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private void mainGrid_Loaded(object sender, RoutedEventArgs e) {
             autoUpdateAllowed = true;
             autoUpdate = true;
+            startSendingMoveCommands();
             startAutoUpdate();
         }
 
@@ -286,7 +287,6 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
 
         private void pointer_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e) {
             autoUpdate = false;
-            startSendingMoveCommands();
         }
 
         private void pointer_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e) {
