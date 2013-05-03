@@ -32,8 +32,9 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 long id = command[command.Count - 1].Id;
                 return id;
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
             }
+            return -1;
         }
 
         internal async Task<List<Command>> getAllSessionCommands(Session s) {
@@ -120,7 +121,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
             }
 
             List<Command> logoutItems;
@@ -142,7 +143,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 promoteItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Promote(")).ToListAsync();
 
-                if (promoteItems.Count > 0) {
+                if (promoteItems.Count > 1) {
                     for (int i = 0; i < promoteItems.Count - 1; i++) {
                         deleteCommand(promoteItems[i]);
                     }
@@ -154,9 +155,30 @@ namespace IT_Jakub.Classes.DatabaseModels {
             List<Command> demoteItems;
             try {
                 demoteItems = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Demote(")).ToListAsync();
-                if (demoteItems.Count > 0) {
+                if (demoteItems.Count > 1) {
                     for (int i = 0; i < demoteItems.Count - 1; i++) {
                         deleteCommand(demoteItems[i]);
+                    }
+                }
+            } catch (Exception e) {
+                throw new ServerErrorException(e);
+            }
+        }
+
+        internal async Task removeOldOpenCommands(Session s) {
+            List<Command> items;
+            try {
+                items = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.CommandText.Contains("Open(")).ToListAsync();
+                if (items.Count > 1) {
+                    for (int i = 0; i < items.Count - 1; i++) {
+                        deleteCommand(items[i]);
+                    }
+                    long idsToDelete = items[items.Count - 1].Id;
+                    items = await table.Where(Item => Item.SessionId == s.Id).Where(Item => Item.Id < idsToDelete).ToListAsync();
+                    if (items.Count > 0) {
+                        for (int i = 1; i < items.Count; i++) {
+                            deleteCommand(items[i]);
+                        }
                     }
                 }
             } catch (Exception e) {

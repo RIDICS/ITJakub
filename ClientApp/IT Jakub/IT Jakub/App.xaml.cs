@@ -58,7 +58,9 @@ namespace IT_Jakub
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
-
+                if (!lu.isLoggedIn()) {
+                    rootFrame.Navigate(typeof(MainPage));
+                }
                 if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Load state from previously suspended application
@@ -93,10 +95,8 @@ namespace IT_Jakub
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
-            if (LoggedUser.isLoogedIn) {
+            if (lu.isLoggedIn()) {
                 await lu.logout();
-                Frame rootFrame = Window.Current.Content as Frame;
-                rootFrame.Navigate(typeof(MainPage));
             }
 
             deferral.Complete();

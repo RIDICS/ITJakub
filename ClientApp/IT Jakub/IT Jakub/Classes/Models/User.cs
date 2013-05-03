@@ -1,8 +1,10 @@
-﻿using System;
+﻿using IT_Jakub.Classes.Enumerations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace IT_Jakub.Classes.Models {
     class User {
@@ -20,8 +22,8 @@ namespace IT_Jakub.Classes.Models {
         public string ClassName { get; set; }
         public int YearOfGraduation { get; set; }
         public string ClassTeacher { get; set; }
-
-
+        public UserRole Role { get; set; }
+        
         public User() {
         }
 

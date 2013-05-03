@@ -35,6 +35,7 @@ namespace IT_Jakub
             this.InitializeComponent();
             staticMainFrame = mainFrame;
             staticBottomAppBar = bottomAppBar;
+            
         }
 
         /// <summary>
@@ -60,11 +61,9 @@ namespace IT_Jakub
         }
 
         private void MainButton_Click(object sender, RoutedEventArgs e) {
-           // mainFrame.Navigate(typeof(TestPage), this);
         }
 
         private void mainFrame_Navigated(object sender, NavigationEventArgs e) {
-            Views.Controls.BottomAppBar.repaint(bottomAppBar);
             BottomAppBar.IsOpen = false;
             TopAppBar.IsOpen = false;
         }
@@ -72,5 +71,10 @@ namespace IT_Jakub
         internal static Views.Controls.BottomAppBar getBottomAppBar() {
             return staticBottomAppBar;
         }
+
+        private void botBar_Opened(object sender, object e) {
+            Views.Controls.BottomAppBar.repaint(bottomAppBar);
+        }
+
     }
 }

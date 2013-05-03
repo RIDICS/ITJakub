@@ -83,7 +83,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     deleteSessionUser(items[i]);
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
             }
             return true;
         }
@@ -96,7 +96,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     deleteSessionUser(items[i]);
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
             }
             return true;
         }

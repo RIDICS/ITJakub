@@ -1,8 +1,11 @@
-﻿using IT_Jakub.Classes.DatabaseModels;
+﻿using Callisto.Controls;
+using IT_Jakub.Classes.DatabaseModels;
+using IT_Jakub.Classes.Enumerations;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Models.Commands;
 using IT_Jakub.Classes.Models.Utils;
 using IT_Jakub.Classes.Utils;
+using IT_Jakub.Views.Controls.FlyoutControls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,6 +26,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using WinRTXamlToolkit.Controls.Extensions;
 
@@ -38,23 +42,22 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
 
         static RichEditBox textBox;
         private static SignedSession ss = SignedSession.getInstance();
-        private bool autoUpdate = true;
+        private static bool autoUpdate = true;
         private static LoggedUser lu = LoggedUser.getInstance();
 
-        private ITextRange oldRange;
-        private Color oldColor;
+        private static ITextRange oldRange;
+        private static Color oldColor;
         private static double horizontalOffset;
         private static double verticalOffset;
         private ScrollViewer scrollViewer;
         private static Image staticPointer;
-        private ITextRange rangeComp;
+        private ITextRange rangeCompare;
         private static ListView staticUserList;
-        private static Button staticOpenFileButton;
-        private static Button staticHighligtTextButton;
         private static bool autoUpdateAllowed;
         private static LinkedList<string> commandList = new LinkedList<string>();
         private static Task commandListSender;
         private static bool sendingMoveCommandsAllowed = false;
+        private double fluctY = 0;
 
         public SyncReadingApp() {
             this.InitializeComponent();
@@ -62,19 +65,12 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             staticPointer = pointer;
             oldRange = textBox.Document.GetRange(0, 0);
             scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
-            rangeComp = textBox.Document.GetRange(0, 0);
+            rangeCompare = textBox.Document.GetRange(0, 0);
             staticUserList = userList;
-            staticOpenFileButton = openFileButton;
-            staticHighligtTextButton = highligtTextButton;
             setUsersRights();
         }
 
-
-
         public static void setUsersRights() {
-            long x = ss.getSessionData().OwnerUserId;
-            x = lu.getUserData().Id;
-            x = ss.getSessionData().PrefferedUserId;
 
             if (ss.getSessionData().OwnerUserId == lu.getUserData().Id) {
                 setOwnersRights();
@@ -88,21 +84,18 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         }
 
         private static void setDefaultUserRights() {
+            Controls.BottomAppBar.setUserRights(UserRights.Default);
             staticPointer.ManipulationMode = ManipulationModes.None;
-            staticOpenFileButton.IsEnabled = false;
-            staticHighligtTextButton.IsEnabled = false;
         }
 
         private static void setPreferedUserRights() {
+            Controls.BottomAppBar.setUserRights(UserRights.Prefered);
             staticPointer.ManipulationMode = ManipulationModes.TranslateX | ManipulationModes.TranslateY;
-            staticOpenFileButton.IsEnabled = false;
-            staticHighligtTextButton.IsEnabled = true;
         }
 
         private static void setOwnersRights() {
+            Controls.BottomAppBar.setUserRights(UserRights.Owner);
             staticPointer.ManipulationMode = ManipulationModes.TranslateX | ManipulationModes.TranslateY;
-            staticOpenFileButton.IsEnabled = true;
-            staticHighligtTextButton.IsEnabled = true;
         }
 
         /// <summary>
@@ -114,19 +107,15 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
 
         }
 
-        private void openFileButton_Click(object sender, RoutedEventArgs e) {
-            openPopup.IsOpen = true;
-        }
-
-        private async void highligtTextButton_Click(object sender, RoutedEventArgs e) {
-            ITextCharacterFormat charFormatting = textRichEditBox.Document.Selection.CharacterFormat;
-            textRichEditBox.IsReadOnly = false;
+        public static async void highligtTextButton_Click() {
+            ITextCharacterFormat charFormatting = textBox.Document.Selection.CharacterFormat;
+            textBox.IsReadOnly = false;
             Color c = Colors.Yellow;
             charFormatting.BackgroundColor = c;
-            textRichEditBox.Document.Selection.CharacterFormat = charFormatting;
-            textRichEditBox.IsReadOnly = true;
-            int startPosition = textRichEditBox.Document.Selection.StartPosition;
-            int endPosition = textRichEditBox.Document.Selection.EndPosition;
+            textBox.Document.Selection.CharacterFormat = charFormatting;
+            textBox.IsReadOnly = true;
+            int startPosition = textBox.Document.Selection.StartPosition;
+            int endPosition = textBox.Document.Selection.EndPosition;
             await ss.sendCommand(SyncReadingAppCommand.getHighlightCommand("ARGB(" + c.A + ", " + c.R + ", " + c.G + ", " + c.B + ")", startPosition, endPosition));
         }
 
@@ -134,19 +123,16 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             return textBox;
         }
 
-        private async void openButton_Click(object sender, RoutedEventArgs e) {
+        internal static async void openFile(string uri) {
             RtfFileOpener opener = new RtfFileOpener();
-            string source = await opener.openDocumentFromUri(uriTextBox.Text.Trim());
+
+            string source = await opener.openDocumentFromUri(uri.Trim());
 
             if (source != null) {
-
                 await ss.sendCommand(SyncReadingAppCommand.getOpenCommand(source));
+                CommandTable ct = new CommandTable();
+                await ct.removeOldOpenCommands(ss.getSessionData());
             }
-            openPopup.IsOpen = false;
-        }
-
-        private void cancelButton_Click(object sender, RoutedEventArgs e) {
-            openPopup.IsOpen = false;
         }
 
         private void mainGrid_Loaded(object sender, RoutedEventArgs e) {
@@ -176,24 +162,9 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
                 }
             }
         }
-
-        private void autoUpdateButton_Click(object sender, RoutedEventArgs e) {
-            switch (autoUpdate) {
-                case true:
-                    autoUpdateButton.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 122, 26, 26));
-                    autoUpdateButton.Background = new SolidColorBrush(Color.FromArgb(255, 122, 0, 0));
-                    autoUpdateButton.Foreground = new SolidColorBrush(Colors.White);
-                    autoUpdateButton.Content = "OFF";
-                    autoUpdate = false;
-                    break;
-                case false:
-                    autoUpdateButton.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 26, 122, 26));
-                    autoUpdateButton.Background = new SolidColorBrush(Color.FromArgb(255, 0, 255, 0));
-                    autoUpdateButton.Foreground = new SolidColorBrush(Colors.Black);
-                    autoUpdateButton.Content = "ON";
-                    autoUpdate = true;
-                    break;
-            }
+        
+        public static bool isAutoUpdateEnabled() {
+            return autoUpdate;
         }
 
         private void pointer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e) {
@@ -202,49 +173,61 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             verticalOffset = scrollViewer.VerticalOffset;
             horizontalOffset = scrollViewer.HorizontalOffset;
 
+            fluctY += e.Delta.Translation.Y;
+
             double top = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) + e.Delta.Translation.Y;
+            
+            if (fluctY > 25 || fluctY < -25) {
+                pointer.SetValue(Canvas.TopProperty, top);                
+            }
             double left = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + e.Delta.Translation.X;
 
             pointer.SetValue(Canvas.LeftProperty, left);
-            pointer.SetValue(Canvas.TopProperty, top);
 
             unhighlightPointerWord();
 
-            ITextRange range = textBox.Document.GetRangeFromPoint(new Point(left + (pointer.Width / 2), top), PointOptions.Start);
-            range.Expand(TextRangeUnit.Word);
+            double testX = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString());
+            double testY = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString());
+            double testW = (pointer.ActualWidth / 3);
+
+            double leftPoint = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + (pointer.ActualWidth / 2.7);
+            double topPoint = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) - 10;
+
+            ITextRange range = textRichEditBox.Document.GetRangeFromPoint(new Point(leftPoint, topPoint), PointOptions.None);
+            range.Expand(TextRangeUnit.Character);
             highlightPointerWord(range);
 
             setPointerScrollbarOffset();
-            if (rangeComp.StartPosition != range.StartPosition) {
+            if (rangeCompare.StartPosition != range.StartPosition) {
                 sendPointerMoveCommand(range.StartPosition);
-                rangeComp = range;
+                rangeCompare = range;
             }
         }
 
 
-        private void highlightPointerWord(ITextRange range) {
-            textRichEditBox.Document.Selection.SetRange(range.StartPosition, range.EndPosition);
+        private static void highlightPointerWord(ITextRange range) {
+            textBox.Document.Selection.SetRange(range.StartPosition, range.EndPosition);
 
             ITextCharacterFormat charFormatting = textBox.Document.Selection.CharacterFormat;
             oldColor = charFormatting.BackgroundColor;
 
-            textRichEditBox.IsReadOnly = false;
+            textBox.IsReadOnly = false;
             Color c = Colors.Aqua;
             charFormatting.BackgroundColor = c;
-            textRichEditBox.Document.Selection.CharacterFormat = charFormatting;
-            textRichEditBox.IsReadOnly = true;
+            textBox.Document.Selection.CharacterFormat = charFormatting;
+            textBox.IsReadOnly = true;
             oldRange = range;
         }
 
-        private void unhighlightPointerWord() {
+        private static void unhighlightPointerWord() {
             textBox.Document.Selection.SetRange(oldRange.StartPosition, oldRange.EndPosition);
             ITextCharacterFormat charFormatting = textBox.Document.Selection.CharacterFormat;
 
-            textRichEditBox.IsReadOnly = false;
+            textBox.IsReadOnly = false;
             Color c = oldColor;
             charFormatting.BackgroundColor = c;
-            textRichEditBox.Document.Selection.CharacterFormat = charFormatting;
-            textRichEditBox.IsReadOnly = true;
+            textBox.Document.Selection.CharacterFormat = charFormatting;
+            textBox.IsReadOnly = true;
         }
 
         private void setPointerScrollbarOffset() {
@@ -270,7 +253,6 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             range = textBox.Document.GetRange(index, index);
             range.Expand(TextRangeUnit.Word);
             Point focusCharacterPoint;
-            range.GetPoint(HorizontalCharacterAlignment.Center, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
 
             double docHeight = docEndPoint.Y - docStartPoint.Y;
             double charOffsetPercent = (focusCharacterPoint.Y - docStartPoint.Y) / docHeight;
@@ -279,14 +261,20 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             verticalOffset = charOffsetPercent * scrollViewer.ScrollableHeight;
             scrollViewer.ScrollToVerticalOffset(verticalOffset);
 
-            range.GetPoint(HorizontalCharacterAlignment.Left, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
+            range = textBox.Document.GetRange(index, index);
+            range.Expand(TextRangeUnit.Character);
 
-            staticPointer.SetValue(Canvas.LeftProperty, focusCharacterPoint.X - (staticPointer.ActualWidth / 2));
+            unhighlightPointerWord();
+            highlightPointerWord(range);
+
+            range.GetPoint(HorizontalCharacterAlignment.Left, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
+            staticPointer.SetValue(Canvas.LeftProperty, focusCharacterPoint.X - (staticPointer.ActualWidth / 2.5));
             staticPointer.SetValue(Canvas.TopProperty, focusCharacterPoint.Y);
         }
 
         private void pointer_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e) {
             autoUpdate = false;
+            fluctY = 0;
         }
 
         private void pointer_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e) {
@@ -303,6 +291,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
                     User u = await ut.getUserById(items[i].UserId);
                     userList.Add(u);
                 }
+                userList.OrderBy(Item => Item.LastName);
                 staticUserList.ItemsSource = userList;
             } catch (Exception e) {
                 object o = e;
@@ -313,30 +302,27 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             updateUserList();
         }
 
-        private async void userList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void userList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (ss.getSessionData().OwnerUserId == lu.getUserData().Id) {
-                if (e.AddedItems.Count == 1) {
+                if (e.AddedItems.Count == 1) {                   
                     User u = e.AddedItems[0] as User;
-                    PopupMenu userMenu = new PopupMenu();
-                    UICommand promoteDemoteCommand = new UICommand("Zvýšit práva uživatele", promoteUser, u);
-                    if (u.Id == ss.getSessionData().PrefferedUserId) {
-                        promoteDemoteCommand = new UICommand("Snížit práva uživatele", demoteUser, u);
-                    }
-                    userMenu.Commands.Add(promoteDemoteCommand);
-                    await userMenu.ShowForSelectionAsync(userMenuLayout.GetBoundingRect());
+
+                    Flyout flyOut = new Flyout();
+                    flyOut.Content = new PromoteDemoteFlyout(u, flyOut);
+                    flyOut.PlacementTarget = sender as UIElement;
+                    flyOut.Placement = PlacementMode.Top;
+                    flyOut.IsOpen = true;
                 }
             }
             userList.SelectedValue = null;
         }
 
-        private async void promoteUser(IUICommand command) {
-            User u = command.Id as User;
+        internal static async void promoteUser(User u) {
             await ss.sendCommand(GeneralCommand.getPromoteCommand(u));
             ss.promoteUser(u.Id);
         }
 
-        private async void demoteUser(IUICommand command) {
-            User u = command.Id as User;
+        internal static async void demoteUser(User u) {
             await ss.sendCommand(GeneralCommand.getDemoteCommand(u));
             ss.demoteUser(u.Id);
         }
@@ -370,6 +356,8 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             }
         }
 
-
+        internal static void setAutoUpdate(bool allowed) {
+            autoUpdate = allowed;
+        }
     }
 }

@@ -19,8 +19,8 @@
         </AppBar>
     </Page.TopAppBar>
     <Page.BottomAppBar>
-        <AppBar Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" Style="{StaticResource BottomAppBar}">
-            <controls:BottomAppBar x:Name="bottomAppBar"  Margin="0,5,0,0" />
+        <AppBar x:Name="botBar" Height="105" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" Style="{StaticResource BottomAppBar}" Opened="botBar_Opened">
+            <controls:BottomAppBar x:Name="bottomAppBar" />
         </AppBar>
     </Page.BottomAppBar>
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">

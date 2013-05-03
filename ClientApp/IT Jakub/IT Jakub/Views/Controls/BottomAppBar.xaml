@@ -6,16 +6,56 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="70"
+    d:DesignHeight="100"
     >
-    <Grid>
-        <StackPanel x:Name="leftStackPannel" HorizontalAlignment="Left" Height="70" VerticalAlignment="Top" Width="662" Orientation="Horizontal">
-            <Button x:Name="homeButton" HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Padding="5" Template="{StaticResource HomeButtonTemplate}" Click="homeButton_Click" />
-            <Button x:Name="loginButton" Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Padding="5" Template="{StaticResource LoginButtonTemplate}" Click="loginButton_Click" />
-            <Button x:Name="logoutButton" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Padding="5" Template="{StaticResource LogoutButtonTemplate}" Click="logoutButton_Click" />
-            <Button x:Name="signinSessionButton" Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Padding="5" Template="{StaticResource SigninSessionButtonTemplate}" Click="signinSessionButton_Click" />
-            <Button x:Name="signoutSessionButton" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Padding="5" Template="{StaticResource SignoutSessionButtonTemplate}" Click="signoutSessionButton_Click" />
+    <Grid x:Name="FrameLayoutRoot">
+        <StackPanel x:Name="leftStackPannel" HorizontalAlignment="Left" Width="662" Orientation="Horizontal">
+            <!-- Application control bar -->
+            <Button x:Name="RulesButton" AutomationProperties.Name="Domů" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="homeButton_Click">
+                <Image Source="ms-appx:///Assets/Icons/white/home-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="logoutButton" AutomationProperties.Name="Odhlásit se" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="logoutButton_Click">
+                <Image Source="ms-appx:///Assets/Icons/white/logout-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            
         </StackPanel>
-        <StackPanel x:Name="rightStackPannel" HorizontalAlignment="Right" Height="70" VerticalAlignment="Top" Width="354"/>
+        <StackPanel x:Name="rightStackPannel" HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="699" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <!-- Application bar for specific pages -->
+            <!-- SessionsList -->
+            <Button x:Name="signinSessionButton" AutomationProperties.Name="Připojit k sezení" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="signinSessionButton_Click">
+                <Image Source="ms-appx:///Assets/Icons/white/joinSession-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="createSession" AutomationProperties.Name="Vytvořit sezení" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="createSession_Click" >
+                <Image Source="ms-appx:///Assets/Icons/white/add_row-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="deleteSession" AutomationProperties.Name="Odstranit sezení" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="deleteSession_Click" >
+                <Image Source="ms-appx:///Assets/Icons/white/delete_row-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="findSession" AutomationProperties.Name="Vyhledat sezení" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}">
+                <Image Source="ms-appx:///Assets/Icons/white/search-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <!-- Educational Applications -->
+            <Button x:Name="signoutSessionButton" AutomationProperties.Name="Odpojit od sezení" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="signoutSessionButton_Click" >
+                <Image Source="ms-appx:///Assets/Icons/white/leaveSession-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="autoUpdateOnButton" AutomationProperties.Name="Zapnout aktualizaci" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="autoUpdateOnButton_Click">
+                <Image Source="ms-appx:///Assets/Icons/white/repeat-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="autoUpdateOffButton" AutomationProperties.Name="Vypnout aktualizaci" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="autoUpdateOffButton_Click" >
+                <Image Source="ms-appx:///Assets/Icons/white/repeat-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="updateUserlistButton" AutomationProperties.Name="Aktualizovat uživatele" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="updateUserlistButton_Click">
+                <Image Source="ms-appx:///Assets/Icons/white/refresh-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <!-- Synchronized reading -->
+            <Button x:Name="highlightTextButton" AutomationProperties.Name="Zvýraznit vybraný text" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="highlightTextButton_Click" >
+                <Image Source="ms-appx:///Assets/Icons/white/pencil-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="openFileButton" AutomationProperties.Name="Otevřít soubor" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="openFileButton_Click">
+                <Image Source="ms-appx:///Assets/Icons/white/folder-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+        </StackPanel>
     </Grid>
 </UserControl>
+
+    
