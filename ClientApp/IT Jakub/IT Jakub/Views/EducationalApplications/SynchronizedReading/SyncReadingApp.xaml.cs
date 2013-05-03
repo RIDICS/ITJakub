@@ -138,7 +138,6 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private void mainGrid_Loaded(object sender, RoutedEventArgs e) {
             autoUpdateAllowed = true;
             autoUpdate = true;
-            startSendingMoveCommands();
             startAutoUpdate();
         }
 
@@ -275,10 +274,12 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private void pointer_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e) {
             autoUpdate = false;
             fluctY = 0;
+            startSendingMoveCommands();
         }
 
         private void pointer_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e) {
             autoUpdate = true;
+            stopSendingMoveCommands();
         }
 
         public static async void updateUserList() {
@@ -348,6 +349,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private async void sendCommandList() {
             CommandTable ct = new CommandTable();
             while (sendingMoveCommandsAllowed) {
+                await Task.Delay(250);
                 if (commandList.Last != null) {
                     await ss.sendCommand(commandList.Last.Value);
                     commandList.Clear();

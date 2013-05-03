@@ -9,6 +9,5 @@
 
     <Grid x:Name="mainGrid" Background="{StaticResource ApplicationBackground}">
         <Button x:Name="userManagement" Content="Správa uživatelů" HorizontalAlignment="Stretch" Height="54" VerticalAlignment="Bottom" Click="userManagement_Click" RenderTransformOrigin="0.491,0.483" Margin="0,0,1066,0"/>
-        <Image x:Name="loader" Source="ms-appx:///Assets/loaderLogo.gif" HorizontalAlignment="Center" VerticalAlignment="Center" Width="620" Height="620" Stretch="None" />
     </Grid>
 </Page>
