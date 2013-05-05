@@ -1,9 +1,13 @@
 ﻿@using Ujc.Naki.MVCWebLayer.Services
 
-<div id="search-panel">
-    @using (Html.BeginForm("Search", "Sources", FormMethod.Get))
-    {
-        @Html.TextBox("searchTerm", string.Empty, new { id = "search-term" })
-	    <input type="submit" id="search-submit" value="Vyhledat" />
-    }
+<div class="row-fluid">
+    <div class="span12 well text-center">
+        @using (Html.BeginForm("Search", "Sources", FormMethod.Get))
+        {
+            <div class="input-append text-center">
+                @Html.TextBox("searchTerm", string.Empty, new { @class = "input-xxlarge" })
+                <button type="submit" id="search-submit" class="btn">Vyhledat</button>
+            </div>
+        }
+    </div>
 </div>

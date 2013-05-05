@@ -175,3 +175,52 @@ blockquote p {
 
 /* Detail */
 
+/* Sources Listing */
+
+form.sources-order.form-horizontal .control-label {
+    text-align: left;
+    width: 110px;
+}
+
+form.sources-order.form-horizontal.form-horizontal .controls {
+    margin-left: 0px;
+}
+
+.well.well-search {
+    background-color: transparent;
+}
+
+/* Sources Listing */
+
+/* Sources prochazet */
+
+.pager.sources-prochazet {
+    margin-top: 40px;    
+    margin-bottom: -50px;    
+}
+
+/* Sources prochazet */
+
+/* Sources Detail search */
+
+.btn-sources-top {
+    margin-bottom: 20px;
+}
+
+.btn-sources-top p {
+    padding-top: 10px;
+}
+
+/* Sources Detail search */
+
+/* Module search */
+
+.control-group.module-search {
+    width: 400px;
+    position: relative;
+    margin: auto;
+    padding-bottom: 10px;
+}
+
+/* Module search */
+

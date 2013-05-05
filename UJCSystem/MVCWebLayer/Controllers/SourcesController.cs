@@ -50,14 +50,14 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
         [HttpGet]
         public ActionResult Prochazet(string id, int page)
         {
-            if (page == 1)
-            {
+            /* WTF if (page == 1)
+            {*/
                 return View("Prochazet");
-            }
+            /* }
             else
             {
                 return View("Prochazet2");
-            }
+            }*/
         }
 
         [HttpGet]

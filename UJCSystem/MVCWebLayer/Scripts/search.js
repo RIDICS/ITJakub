@@ -71,14 +71,14 @@
                 var asElement = $(this);
                 
                 asElement.find('.advanced-search').hide();
-                advancedSearchVisible = false;
+                /*advancedSearchVisible = false;
                 $('.show-advanced-search').click(function () {
                     changeASVisibility(asElement);
                 });
 
                 asElement.find('.advanced-search input[type=checkbox]').click(function () {
                     defineCheckboxes(asElement);
-                }); 
+                });*/ 
             });
         }
     });

@@ -11,20 +11,23 @@
 
 <div id="main-content">
     
-    <a href="/Sources">Zrušit vyhledávání</a>
+    <a href="/Sources"><i class="icon-remove"></i> Zrušit vyhledávání</a>
+
     <br /><br />
 
     @foreach (var source in Model.FoundSources)
     {
-        <div class="source-small">
-            <h4>@source.Title</h4>
-            <span class="author">@source.Author</span><br />
-            <span class="datation">@source.Datation</span><br />
-            <p>@source.Perex</p>
-
-            <div class="buttons">
-                <a href="/Sources/Detail/1-zizka">Detail</a>
-                <a href="/Sources/Prochazet/1-zizka">Procházet</a>
+        <div class="row-fluid">
+            <div class="span12 well well-search">
+                <h4>@source.Title</h4>
+                <span class="author">@source.Author</span><br />
+                <span class="datation">@source.Datation</span><br />
+                <p>@source.Perex</p>
+                
+                <div class="pull-right">
+                    <a class="btn" href="@Url.RouteUrl("SourcesDetail", new { id = "1-zizka" })">Detail</a>
+                    <a class="btn" href="@Url.RouteUrl("SourcesGoThrough", new { id = 1, page = 1 })">Procházet</a>
+                </div>
             </div>
         </div>
     }

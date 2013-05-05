@@ -1,13 +1,12 @@
 ﻿@using Ujc.Naki.MVCWebLayer.Enums
 @model Ujc.Naki.MVCWebLayer.Enums.SourceDetailPart
 
-<div id="source-detail-menu">
-    <ul>
-        <li @(Model == SourceDetailPart.Info ? "class=selected": "")><a href="/Sources/Detail/1-zizka/Info">Podrobné informace</a>&nbsp;|&nbsp;</li>
-        <li @(Model == SourceDetailPart.Hledat ? "class=selected": "")><a href="/Sources/Hledat/1-zizka">Hledat v obsahu</a>&nbsp;|&nbsp;</li>
-        <li @(Model == SourceDetailPart.Prochazet ? "class=selected": "")><a href="/Sources/Prochazet/1-zizka">Procházet obsah</a>&nbsp;|&nbsp;</li>
-        <li @(Model == SourceDetailPart.Zpracovani ? "class=selected": "")><a href="/Sources/Detail/1-zizka/Zpracovani">Způsob zpracování dokumentu</a>&nbsp;|&nbsp;</li>
-        <li @(Model == SourceDetailPart.Podminky ? "class=selected": "")><a href="/Sources/Detail/1-zizka/Podminky">Podmínky užití</a></li>
+
+    <ul class="nav nav-tabs">
+        <li @(Model == SourceDetailPart.Info ? "class=active": "")><a href="@Url.RouteUrl("SourcesDetail", new { id = ViewContext.RouteData.Values["id"], part = SourceDetailPart.Info })">Podrobné informace</a></li>
+        <li @(Model == SourceDetailPart.Hledat ? "class=active": "")><a href="@Url.RouteUrl("SourcesDetailSearch", new { id = ViewContext.RouteData.Values["id"] })">Hledat v obsahu</a></li>
+        <li @(Model == SourceDetailPart.Prochazet ? "class=active": "")><a href="@Url.RouteUrl("SourcesGoThrough", new { id = ViewContext.RouteData.Values["id"] })">Procházet obsah</a></li>
+        <li @(Model == SourceDetailPart.Zpracovani ? "class=active": "")><a href="@Url.RouteUrl("SourcesDetail", new { id = ViewContext.RouteData.Values["id"], part = SourceDetailPart.Zpracovani})">Způsob zpracování dokumentu</a></li>
+        <li @(Model == SourceDetailPart.Podminky ? "class=active": "")><a href="@Url.RouteUrl("SourcesDetail", new { id = ViewContext.RouteData.Values["id"], part = SourceDetailPart.Podminky})">Podmínky užití</a></li>
     </ul>
-    <br style="clear:both" />
-</div>
+    
