@@ -85,10 +85,6 @@
       <Project>{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}</Project>
       <Name>ITJakub.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServicesLayer\ITJakub.ServicesLayer.csproj">
-      <Project>{A2E10684-F110-4593-81BC-1B417364E154}</Project>
-      <Name>ITJakub.ServicesLayer</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
