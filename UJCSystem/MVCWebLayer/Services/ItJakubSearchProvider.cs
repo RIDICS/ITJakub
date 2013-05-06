@@ -12,7 +12,6 @@ namespace Ujc.Naki.MVCWebLayer.Services
 
         private readonly ItJakubServiceClient m_serviceClient;
         private SearchResult[] m_searchResult;
-
         public ItJakubSearchProvider()
         {
             m_serviceClient = Container.Current.Resolve<ItJakubServiceClient>();
@@ -27,19 +26,11 @@ namespace Ujc.Naki.MVCWebLayer.Services
 
         public Dictionary<BookCategory, List<string>> GetSearchResultsByType(string query)
         {
-
-
-            if (m_searchResult == null)
-                m_searchResult = m_serviceClient.GetContextForKeyWord(query);
-
-            var result = new Dictionary<BookCategory, List<string>>();
-
-            foreach (var searchResult in m_searchResult)
-            {
-            }
-
-            return result;
+			//todo remove mockup
+            ISearchResultProvider resultsProvider = new SearchResultsMockProvider();
+            return resultsProvider.GetSearchResultsByType(query);
         }
+
 
         public SearchResult[] GetKwicForKeyWord(string searchTerm)
         {

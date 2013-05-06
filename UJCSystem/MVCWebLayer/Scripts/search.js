@@ -1,4 +1,102 @@
-﻿var arrowUpImg = new Image();
+﻿$(document).ready(function () {
+    $('.advanced-search-wrapper').advancedSearch();
+});
+
+
+(function ($) {
+    $.fn.extend({
+        advancedSearch: function (options) {
+
+            var defaults = {};
+            
+            var options = $.extend(defaults, options);
+            var advancedSearchVisible = true;
+            
+            function changeASVisibility(asElement) {
+                if (advancedSearchVisible) {
+                    asElement.find('.advanced-search').slideUp();
+                    advancedSearchVisible = false;
+                } else {
+                    asElement.find('.advanced-search').slideDown();
+                    advancedSearchVisible = true;
+                }
+            }
+
+            var asCheckboxes = null;
+            
+            function createFindsHtml() {
+                if (asCheckboxes == null) {
+                    return "<span class=\"muted\">Aktivní prohledávání ve všech dostupných dílech</span>";
+                }
+                var html = "";
+                $.each(asCheckboxes, function (key, value) {
+                    html += "<div class=\"muted\">";
+                    html += "<strong>";
+                    html += value.label + " ";
+                    html += "</strong>";
+                    if (value.children == null) {
+                        html += "<span>všechny</span>";
+                    } else {
+                        var a = Array.prototype.slice.call(value.children);
+                        html += a.join(", ");
+                    }
+                    html += "</div>";
+                });
+                return html;
+            }
+            
+            function defineCheckboxes(asElement) {
+                asCheckboxes = null;
+                asElement.find(".advanced-search .span6 > ul > li > label > input[type=checkbox]").each(function () {
+                    var children = null;
+                    $(this).parent().parent().find("ul li input[type=checkbox]:checked").each(function () {
+                        if (children == null) {
+                            children = new Array();
+                        }
+                        children.push($(this).parent().find("span").html());
+                    });
+                    if (!(children == null && !$(this).is(':checked'))) {
+                        if (asCheckboxes == null) {
+                            asCheckboxes = {};
+                        }
+                        asCheckboxes[$(this).val()] = {};
+                        asCheckboxes[$(this).val()]["label"] = $(this).parent().find("span").html();
+                        asCheckboxes[$(this).val()]["children"] = children;
+                    }
+                });
+                asElement.find(".searched-books").html(createFindsHtml());
+            }
+
+            return this.each(function () {
+                var asElement = $(this);
+                
+                asElement.find('.advanced-search').hide();
+                /*advancedSearchVisible = false;
+                $('.show-advanced-search').click(function () {
+                    changeASVisibility(asElement);
+                });
+
+                asElement.find('.advanced-search input[type=checkbox]').click(function () {
+                    defineCheckboxes(asElement);
+                });*/ 
+            });
+        }
+    });
+})(jQuery);
+
+
+function loadTermDetail(element, url) {
+    $(element).parent().parent().find("li").removeClass("active");
+    $(element).parent().addClass("active");
+
+    $.get(url, function (data) {
+        $('#alphabetical-result-detail').html(data);
+        $(element).blur();
+    });
+}
+
+    
+/* var arrowUpImg = new Image();
 arrowUpImg.src = "/Images/arrow-up.png";
 
 var arrowDownImg = new Image();
@@ -144,4 +242,4 @@ function uncheckParentNodes(element) {
             $(this).find("input[type='checkbox']").first().removeAttr("checked");
         });
     }
-}
+}*/

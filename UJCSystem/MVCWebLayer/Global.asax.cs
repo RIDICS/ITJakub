@@ -22,45 +22,63 @@ namespace Ujc.Naki.MVCWebLayer
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                "SearchSearch",
+                "hledani",
+                new { controller = "Search", action = "Search" }
+            );
+
+            routes.MapRoute(
+                "SearchDetail",
+                "hledani/{searchTerm}/detail",
+                new { controller = "Search", action = "Detail", searchTerm = "" }
+            );
+
+            routes.MapRoute(
                 "SourcesMain",
-                "Sources",
+                "zdroje",
                 new { controller = "Sources", action = "Listing", mode = "Jmeno", alphabet = "A" }
             );
 
             routes.MapRoute(
                 "SourcesListing",
-                "Sources/Listing/{mode}/{alphabet}",
+                "zdroje/listovani/{mode}/{alphabet}",
                 new { controller = "Sources", action = "Listing", mode = "Jmeno", alphabet = "A" }
             );
 
             routes.MapRoute(
-                "SourcesDetail",
-                "Sources/Detail/{id}/{part}",
-                new { controller = "Sources", action = "Detail", part = "Info"}
-            );
-
-            routes.MapRoute(
                 "SourcesDetailSearch",
-                "Sources/Hledat/{id}",
-                new { controller = "Sources", action = "DetailHledat" }
+                "zdroje/{id}/hledani/{searchTerm}",
+                new { controller = "Sources", action = "DetailHledat", searchTerm="" }
             );
 
             routes.MapRoute(
                 "SourcesGoThrough",
-                "Sources/Prochazet/{id}/{page}",
-                new { controller = "Sources", action = "Prochazet", page = 1 }
+                "zdroje/{id}/plny-text/{page}",
+                new { controller = "Sources", action = "Prochazet", page = 1}
             );
 
             routes.MapRoute(
                 "SourcesGoThroughWithId",
-                "Sources/Prochazet/{id}",
+                "zdroje/{id}/plny-text",
                 new { controller = "Sources", action = "Prochazet", id = 1 }
             );
 
             routes.MapRoute(
-                "ModuleDetail",
-                "Module/{id}",
+                "SourcesDetail",
+                "zdroje/{id}/{part}",
+                new { controller = "Sources", action = "Detail", part = "Info", id = "1-zizka" }
+            );
+
+            routes.MapRoute(
+                "StaroceskaBanka",
+                "staroceska-textova-banka/{id}",
                 new { controller = "Modules", action = "Index" }
+            );
+
+            routes.MapRoute(
+                "HomePage",
+                "homepage/vyhledavani",
+                new { controller = "Index", action = "Index" }
             );
 
             routes.MapRoute(

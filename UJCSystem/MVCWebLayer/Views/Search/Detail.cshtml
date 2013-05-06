@@ -6,15 +6,14 @@
         <h3>Výsledky</h3>
         @foreach (var result in Model.Results)
         {
-            <p>
-                @result.Kwic.Before
-                <strong>@result.Kwic.Match</strong>
-                @result.Kwic.After
-                <span class="results-title">
-                    <a href="#">@result.Title</a>
-                    (<a href="#">@result.Author</a>)
-                </span>
-            </p>
+            <blockquote>
+                <p>
+                    @result.Kwic.Before
+                    <strong>@result.Kwic.Match</strong>
+                    @result.Kwic.After
+                </p>
+                <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@result.Author</a>)</small>
+            </blockquote>
         }
     </div>
 }
@@ -91,5 +90,3 @@ else
 	    <h3>Historické texty – @Model</h3>
     </div>
 }*@
-
-<div style="clear:both"></div>

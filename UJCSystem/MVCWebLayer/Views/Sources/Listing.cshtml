@@ -10,56 +10,43 @@
 @Html.Partial("~/Views/Shared/_SourcesSearchPanel.cshtml")
 
 <div id="main-content">
-    Procházet podle @Html.DropDownList("ViewMode", GetSourcesViewModes())
-    <table id="alphabet-menu" cellpadding="0" cellspacing="0">
-        <tr>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "A", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/A">A</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "B", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/b">B</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "C", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/c">C</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "Č", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/c">Č</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "D", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/d">D</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "Ď", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/d">Ď</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "E", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/e">E</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "F", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/f">F</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "G", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/g">G</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "H", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/h">H</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "I", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/i">I</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "J", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/j">J</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "K", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/k">K</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "L", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/l">L</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "M", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/m">M</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "N", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/n">N</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "O", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/o">O</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "P", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/p">P</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "Q", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/q">Q</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "R", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/r">R</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "Ř", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/r">Ř</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "S", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/s">S</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "Š", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/s">Š</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "T", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/t">T</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "Ť", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/t">Ť</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "U", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/u">U</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "V", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/v">V</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "W", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/w">W</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "X", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/x">X</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "Y", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/y">Y</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "Z", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/z">Z</a></td>
-            <td><a @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), "Ž", StringComparison.InvariantCultureIgnoreCase) ? "class=selected" : "") href="/Sources/Listing/@(Model.ViewMode)/z">Ž</a></td>
-        </tr>
-    </table>
+    <form class="form-inline form-horizontal sources-order">
+        <div class="control-group">
+            <label class="control-label" for="ViewMode">Procházet podle </label>
+            <div class="controls">
+                <select id="ViewMode" class="input-small" name="ViewMode"> 
+                    @foreach (var mode in GetSourcesViewModes())
+                    {
+                        <option data-url="@Url.RouteUrl("SourcesListing", new { mode = mode.Value, alphabet = ViewContext.RouteData.Values["alphabet"].ToString() })" value="@mode.Value" @(string.Equals(ViewContext.RouteData.Values["mode"].ToString(), mode.Value, StringComparison.InvariantCultureIgnoreCase) ? "selected=selected" : "")>@mode.Text</option>
+                    }       
+                </select>
+            </div>
+        </div>
+    </form>
+    <div class="pagination pagination-mini">
+        <ul>
+            @foreach (var alphabet in Model.Alphabet)
+            {
+                @* If there are no sources for the letter set class of li tag to class=disabled *@
+                <li @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), @alphabet, StringComparison.InvariantCultureIgnoreCase) ? "class=active" : "")><a href="@Url.RouteUrl("SourcesListing", new { mode = Model.ViewMode, alphabet = @alphabet })">@alphabet</a></li>
+            }
+        </ul>
+    </div>
 
     @foreach (var source in Model.FoundSources)
     {
-        <div class="source-small">
-            <h4>@source.Title</h4>
-            <span class="author">@source.Author</span><br />
-            <span class="datation">@source.Datation</span><br />
-            <p>@source.Perex</p>
+        <div class="row-fluid">
+            <div class="span12 well well-search">
+                <h4>@source.Title</h4>
+                <span class="author">@source.Author</span><br />
+                <span class="datation">@source.Datation</span><br />
+                <p>@source.Perex</p>
 
-            <div class="buttons">
-                <a href="/Sources/Detail/1-zizka">Detail</a>
-                <a href="/Sources/Prochazet">Procházet</a>
-            </div>
+                <div class="pull-right">
+                    <a class="btn" href="@Url.RouteUrl("SourcesDetail", new { id = "1-zizka", part="Ïnfo" })">Detail</a>
+                    <a class="btn" href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = 1 })">Procházet</a>
+                </div>
+            </div>    
         </div>
     }
 
