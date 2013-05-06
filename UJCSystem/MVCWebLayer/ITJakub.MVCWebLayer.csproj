@@ -121,7 +121,14 @@
     <Content Include="Images\arrow-up.png" />
     <Content Include="Images\arrow.png" />
     <Content Include="Images\cancel.png" />
+    <Content Include="Images\glyphicons-halflings-white.png" />
+    <Content Include="Images\glyphicons-halflings.png" />
+    <Content Include="Images\header.png" />
+    <Content Include="Images\hr.png" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\texture.png" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\sources.js" />
     <Content Include="Styles\bootstrap-responsive.min.css" />
     <Content Include="Styles\bootstrap.min.css" />
