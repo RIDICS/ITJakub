@@ -11,6 +11,6 @@ namespace ITJakub.Contracts
         List<string> GetAllExtendedTermsForKey(string key);
 
         [OperationContract]
-        KwicResult[] GetContextForKeyWord(string keyWord);
+        SearchResult[] GetContextForKeyWord(string keyWord);
     }
 }

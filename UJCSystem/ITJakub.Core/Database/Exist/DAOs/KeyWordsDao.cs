@@ -31,12 +31,12 @@ namespace ITJakub.Core.Database.Exist.DAOs
             return result.ToList();
         }
 
-        public KwicResult[] GetKeyWordInContextByWord(string word)
+        public SearchResult[] GetKeyWordInContextByWord(string word)
         {
             string query = GetKeyWordInContextQuery(word);
             string dbResult = m_existDao.QueryXml(query);
 
-            List<KwicResult> results = new List<KwicResult>();
+            List<SearchResult> results = new List<SearchResult>();
 
             XmlDocument dbXmlResult = new XmlDocument();
             dbXmlResult.LoadXml(dbResult);
@@ -51,9 +51,10 @@ namespace ITJakub.Core.Database.Exist.DAOs
             if (hits != null)
                 foreach (XmlNode hit in hits)
                 {
-                    KwicResult result = new KwicResult();
+                    SearchResult result = new SearchResult();
                     result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//author"), TeiP5Descriptor.AuthorNodeName, nManager);
                     result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
+                    result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
                     result.Kwic = XmlTool.ParseKwicStructure(hit.SelectSingleNode("kwic"), TeiP5Descriptor.ParagraphNodeName, nManager);
                     result.OriginalXml = hit.InnerXml;
 
@@ -106,11 +107,13 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("let $expanded := kwic:expand($hit/..)");
             builder.AppendLine("let $title := $hit/ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
             builder.AppendLine("let $author := $hit/ancestor::tei:TEI//tei:author");
+            builder.AppendLine("let $categories := $hit/ancestor::tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:catRef");
             builder.AppendLine(string.Format("let $kwic:= kwic:get-summary($expanded, ($expanded//exist:match), <config width=\"{0}\"/>)", KeyWordValue));
             builder.AppendLine("order by $hit");
             builder.AppendLine("return <hit>");
             builder.AppendLine("<title>{$title}</title>");
             builder.AppendLine("<author>{$author}</author>");
+            builder.AppendLine("<categories>{$categories}</categories>");
             builder.AppendLine("<kwic>{$kwic}</kwic>");
             builder.AppendLine("</hit>");
             builder.AppendLine();

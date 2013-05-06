@@ -14,7 +14,7 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
         //private readonly ISearchResultProvider m_resultsProvider = new SearchResultsMockProvider();
         private readonly ISearchResultProvider m_resultsProvider = new ItJakubSearchProvider();
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult Search(SearchViewModel model)
         {
             return View(new SearchResultViewModel
@@ -37,8 +37,6 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
                 {
                     Results = m_resultsProvider.GetKwicForKeyWord(searchTerm)
                 });
-
-            //return View("Detail", null, searchTerm);
         }
 
         [HttpGet]

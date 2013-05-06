@@ -4,13 +4,6 @@ using Ujc.Naki.MVCWebLayer.Services.Enums;
 
 namespace Ujc.Naki.MVCWebLayer.Services.Mocks
 {
-    public interface ISearchResultProvider
-    {
-        string[] GetSearchResults(string query);
-        Dictionary<BookCategory, List<string>> GetSearchResultsByType(string query);
-        KwicResult[] GetKwicForKeyWord(string searchTerm);
-    }
-
     public class SearchResultsMockProvider : ISearchResultProvider
     {
         private static readonly string[] m_pesQueryResults = new string[] 
@@ -51,9 +44,9 @@ namespace Ujc.Naki.MVCWebLayer.Services.Mocks
             }
         }
 
-        public KwicResult[] GetKwicForKeyWord(string searchTerm)
+        public SearchResult[] GetKwicForKeyWord(string searchTerm)
         {
-            return new KwicResult[0];
+            return new SearchResult[0];
         }
     }
 }

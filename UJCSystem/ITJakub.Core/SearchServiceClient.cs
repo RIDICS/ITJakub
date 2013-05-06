@@ -53,7 +53,7 @@ namespace ITJakub.Core
             }
         }
 
-        public KwicResult[] GetContextForKeyWord(string keyWord)
+        public SearchResult[] GetContextForKeyWord(string keyWord)
         {
             try
             {

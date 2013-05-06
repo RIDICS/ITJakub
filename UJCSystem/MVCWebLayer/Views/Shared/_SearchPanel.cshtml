@@ -3,7 +3,7 @@
 @model Ujc.Naki.MVCWebLayer.ViewModels.SearchViewModel
 
 <div id="search-panel">
-    @using (Html.BeginForm("Search", "Search", FormMethod.Post))
+    @using (Html.BeginForm("Search", "Search", FormMethod.Get))
     {
         @Html.TextBoxFor(a => a.SearchTerm, new { id = "search-term" })
 	    <div id="advanced-search">

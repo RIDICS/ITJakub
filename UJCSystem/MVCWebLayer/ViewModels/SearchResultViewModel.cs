@@ -17,6 +17,6 @@ namespace Ujc.Naki.MVCWebLayer.ViewModels
 
     public class SearchKeyWordsViewModel
     {
-        public KwicResult[] Results { get; set; }
+        public SearchResult[] Results { get; set; }
     }
 }

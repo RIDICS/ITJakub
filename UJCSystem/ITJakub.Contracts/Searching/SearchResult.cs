@@ -1,9 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace ITJakub.Contracts.Searching
 {
     [DataContract]
-    public class KwicResult
+    public class SearchResult
     {
         [DataMember]
         public string Title { get; set; }
@@ -16,6 +17,9 @@ namespace ITJakub.Contracts.Searching
 
         [DataMember]
         public string OriginalXml { get; set; }
+
+        [DataMember]
+        public List<string> Categories { get; set; }
     }
 
     [DataContract]

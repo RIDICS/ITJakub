@@ -11,6 +11,7 @@ namespace Ujc.Naki.MVCWebLayer.Services
     {
 
         private readonly ItJakubServiceClient m_serviceClient;
+        private SearchResult[] m_searchResult;
 
         public ItJakubSearchProvider()
         {
@@ -26,13 +27,25 @@ namespace Ujc.Naki.MVCWebLayer.Services
 
         public Dictionary<BookCategory, List<string>> GetSearchResultsByType(string query)
         {
-            return new Dictionary<BookCategory, List<string>>();
+
+
+            if (m_searchResult == null)
+                m_searchResult = m_serviceClient.GetContextForKeyWord(query);
+
+            var result = new Dictionary<BookCategory, List<string>>();
+
+            foreach (var searchResult in m_searchResult)
+            {
+            }
+
+            return result;
         }
 
-        public KwicResult[] GetKwicForKeyWord(string searchTerm)
+        public SearchResult[] GetKwicForKeyWord(string searchTerm)
         {
-            var result = m_serviceClient.GetContextForKeyWord(searchTerm);
-            return result;
+            if(m_searchResult == null)
+                m_searchResult = m_serviceClient.GetContextForKeyWord(searchTerm);
+            return m_searchResult;
         }
     }
 

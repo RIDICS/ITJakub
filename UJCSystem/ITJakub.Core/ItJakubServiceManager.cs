@@ -17,7 +17,7 @@ namespace ITJakub.Core
             return m_searchClient.AllExtendedTermsForKey(key);
         }
 
-        public KwicResult[] GetContextForKeyWord(string keyWord)
+        public SearchResult[] GetContextForKeyWord(string keyWord)
         {
             return m_searchClient.GetContextForKeyWord(keyWord);
         }
