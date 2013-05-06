@@ -122,7 +122,10 @@
     <Content Include="Images\arrow-up.png" />
     <Content Include="Images\arrow.png" />
     <Content Include="Images\cancel.png" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\sources.js" />
+    <Content Include="Styles\bootstrap-responsive.min.css" />
+    <Content Include="Styles\bootstrap.min.css" />
     <Content Include="Styles\Main.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\jquery-1.5.1-vsdoc.js" />
@@ -136,6 +139,7 @@
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
     <Content Include="Scripts\search.js" />
+    <Content Include="Styles\Style.css" />
     <Content Include="Styles\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
     <Content Include="Styles\ui-lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
     <Content Include="Styles\ui-lightness\images\ui-bg_flat_10_000000_40x100.png" />
@@ -265,7 +269,7 @@
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>51356</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <DevelopmentServerVPath>/wokabular</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
