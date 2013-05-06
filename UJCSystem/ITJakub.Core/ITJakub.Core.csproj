@@ -77,7 +77,7 @@
       <Name>ITJakub.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Jewelery\Jewelery.csproj">
-      <Project>{246eadf4-905a-4fbd-b939-c88bdefdc4a7}</Project>
+      <Project>{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}</Project>
       <Name>Jewelery</Name>
     </ProjectReference>
   </ItemGroup>

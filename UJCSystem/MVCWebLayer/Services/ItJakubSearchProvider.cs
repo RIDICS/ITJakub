@@ -26,7 +26,9 @@ namespace Ujc.Naki.MVCWebLayer.Services
 
         public Dictionary<BookCategory, List<string>> GetSearchResultsByType(string query)
         {
-            return new Dictionary<BookCategory, List<string>>();
+            //todo remove mockup
+            ISearchResultProvider resultsProvider = new SearchResultsMockProvider();
+            return resultsProvider.GetSearchResultsByType(query);
         }
 
         public KwicResult[] GetKwicForKeyWord(string searchTerm)
