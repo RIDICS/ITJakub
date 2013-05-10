@@ -22,15 +22,21 @@ namespace Ujc.Naki.MVCWebLayer
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                "SearchSearch",
-                "hledani",
-                new { controller = "Search", action = "Search" }
+                "SearchDetailType",
+                "hledani/{searchTerm}/detail-podle-druhu",
+                new { controller = "Search", action = "DetailByType", searchTerm = "" }
             );
 
             routes.MapRoute(
                 "SearchDetail",
                 "hledani/{searchTerm}/detail",
                 new { controller = "Search", action = "Detail", searchTerm = "" }
+            );
+
+            routes.MapRoute(
+                "SearchSearch",
+                "hledani",
+                new { controller = "Search", action = "Search" }
             );
 
             routes.MapRoute(

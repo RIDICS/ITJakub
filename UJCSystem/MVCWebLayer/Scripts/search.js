@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
-    $('.advanced-search-wrapper').advancedSearch(); 
+    $('.advanced-search-wrapper').advancedSearch();
     $("#search-results-alphabetical a.search-results-alphabetical-result").initLoadingAlphTermDetail();
+    $("#results-type a.search-results-type-result").initLoadingTypeTermDetail();
 });
 
 
@@ -95,15 +96,42 @@
             var defaults = {};
 
             var options = $.extend(defaults, options);
-            
+
             return this.each(function () {
                 var element = $(this);
                 element.click(function () {
                     element.parent().parent().find("li").removeClass("active");
                     element.parent().addClass("active");
-                    
+
                     $.get(element.attr("data-url"), function (data) {
                         $('#alphabetical-result-detail').html(data);
+                        element.blur();
+                    });
+                    return false;
+                });
+            });
+        }
+    });
+})(jQuery);
+
+
+(function ($) {
+
+    $.fn.extend({
+        initLoadingTypeTermDetail: function (options) {
+
+            var defaults = {};
+
+            var options = $.extend(defaults, options);
+
+            return this.each(function () {
+                var element = $(this);
+                element.click(function () {
+                    element.parent().parent().find("li").removeClass("active");
+                    element.parent().addClass("active");
+
+                    $.get(element.attr("data-url"), function (data) {
+                        $('#type-result-detail').html(data);
                         element.blur();
                     });
                     return false;

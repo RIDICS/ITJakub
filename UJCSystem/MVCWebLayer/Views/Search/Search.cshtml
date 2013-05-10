@@ -23,7 +23,7 @@
 <div class="row-fluid">
     <div class="span12">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#results-alphabetical" data-toggle="tab">Abecedně</a></li>
+            <li class="active"><a href="#search-results-alphabetical" data-toggle="tab">Abecedně</a></li>
             <li><a href="#results-type" data-toggle="tab">Podle druhu a díla</a></li>
         </ul>
         
@@ -41,17 +41,28 @@
                     </div>
                 </div>            
             </div>
-            <div class="tab-pane" id="results-type">
-                @foreach(KeyValuePair<BookCategory, List<string>> category in Model.FoundByType) 
+            <div class="tab-pane tabs-left" id="results-type">
+                @foreach (KeyValuePair<BookCategory, List<string>> category in Model.FoundByType)
                 {
-                    <h4>@category.Key.CzechString()</h4>
-                    <ul>
-                        @foreach(var book in category.Value) 
+                    <ul class="nav nav-tabs">
+                        <li><h4>@category.Key.CzechString()</h4></li>
+                        @foreach (var book in category.Value)
                         {
-                            <li><a href="#" onclick="bookDetail(this, '@book'); return false;">@book</a></li>
+                            <li><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { searchTerm = "book" @* book pozor na dvojtecku *@ })">@book</a></li>
+                        }
+                        @*TODO delete the one*@
+                        <li><h4>@category.Key.CzechString()</h4></li>
+                        @foreach (var book in category.Value)
+                        {
+                            <li><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { searchTerm = book })">@book</a></li>
                         }
                     </ul>
                 }
+                <div class="tab-content">
+                    <div class="tab-pane active" id="type-result-detail">
+                                  
+                    </div>
+                </div>         
             </div>
         </div>
     </div>
