@@ -12,6 +12,6 @@ namespace Ujc.Naki.MVCWebLayer.ViewModels
     {
         public SourcesViewMode ViewMode { get; set; }
         public IEnumerable<Source> FoundSources { get; set; }
-        public List<string> Alphabet = new List<string> { "A", "B", "C", "Č", "D", "Ď", "E", "F", "G", "H", "CH", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "Ř", "S", "Š", "T", "Ť", "U", "V", "W", "X", "Y", "Z", "Ž"};
+        public List<string> Alphabet = new List<string> { "A", "B", "C", "Č", "D", "Ď", "E", "F", "G", "H", "Ch", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "Ř", "S", "Š", "T", "Ť", "U", "V", "W", "X", "Y", "Z", "Ž"};
     }
 }
