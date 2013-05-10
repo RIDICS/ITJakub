@@ -1,17 +1,19 @@
 ﻿$(document).ready(function () {
-    $('.advanced-search-wrapper').advancedSearch();
+    $('.advanced-search-wrapper').advancedSearch(); 
+    $("#search-results-alphabetical a.search-results-alphabetical-result").initLoadingAlphTermDetail();
 });
 
 
 (function ($) {
+    /* todo */
     $.fn.extend({
         advancedSearch: function (options) {
 
             var defaults = {};
-            
+
             var options = $.extend(defaults, options);
             var advancedSearchVisible = true;
-            
+
             function changeASVisibility(asElement) {
                 if (advancedSearchVisible) {
                     asElement.find('.advanced-search').slideUp();
@@ -23,7 +25,7 @@
             }
 
             var asCheckboxes = null;
-            
+
             function createFindsHtml() {
                 if (asCheckboxes == null) {
                     return "<span class=\"muted\">Aktivní prohledávání ve všech dostupných dílech</span>";
@@ -44,7 +46,7 @@
                 });
                 return html;
             }
-            
+
             function defineCheckboxes(asElement) {
                 asCheckboxes = null;
                 asElement.find(".advanced-search .span6 > ul > li > label > input[type=checkbox]").each(function () {
@@ -69,7 +71,7 @@
 
             return this.each(function () {
                 var asElement = $(this);
-                
+
                 asElement.find('.advanced-search').hide();
                 /*advancedSearchVisible = false;
                 $('.show-advanced-search').click(function () {
@@ -78,22 +80,38 @@
 
                 asElement.find('.advanced-search input[type=checkbox]').click(function () {
                     defineCheckboxes(asElement);
-                });*/ 
+                });*/
             });
         }
     });
 })(jQuery);
 
 
-function loadTermDetail(element, url) {
-    $(element).parent().parent().find("li").removeClass("active");
-    $(element).parent().addClass("active");
+(function ($) {
 
-    $.get(url, function (data) {
-        $('#alphabetical-result-detail').html(data);
-        $(element).blur();
+    $.fn.extend({
+        initLoadingAlphTermDetail: function (options) {
+
+            var defaults = {};
+
+            var options = $.extend(defaults, options);
+            
+            return this.each(function () {
+                var element = $(this);
+                element.click(function () {
+                    element.parent().parent().find("li").removeClass("active");
+                    element.parent().addClass("active");
+                    
+                    $.get(element.attr("data-url"), function (data) {
+                        $('#alphabetical-result-detail').html(data);
+                        element.blur();
+                    });
+                    return false;
+                });
+            });
+        }
     });
-}
+})(jQuery);
 
     
 /* var arrowUpImg = new Image();
