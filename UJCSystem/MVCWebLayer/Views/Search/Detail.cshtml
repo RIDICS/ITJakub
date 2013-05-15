@@ -12,7 +12,7 @@
                     <strong>@result.Kwic.Match</strong>
                     @result.Kwic.After
                 </p>
-                <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@result.Author</a>)</small>
+                <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@(result.Author.IsEmpty() ? "autor neznámý" : result.Author)</a>)</small>
             </blockquote>
         }
     </div>
