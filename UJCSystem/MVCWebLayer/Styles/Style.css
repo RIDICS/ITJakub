@@ -59,10 +59,11 @@ a {
     -webkit-border-radius: 10px;
         -moz-border-radius: 10px;
             border-radius: 10px;
-    -webkit-box-shadow: 1px -1px 5px rgba(0, 0, 0, 0.7);
-       -moz-box-shadow: 1px -1px 5px rgba(0, 0, 0, 0.7);
-            box-shadow: 1px -1px 5px rgba(0, 0, 0, 0.7);
+    -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
+       -moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
     background: #fff url('../Images/hr.png') 915px center repeat-y;
+    border: 1px solid rgb(240,240,240);
 }
 
 .page-wrapper > .nav.nav-tabs {
@@ -188,6 +189,10 @@ form.sources-order.form-horizontal.form-horizontal .controls {
 
 .well.well-search {
     background-color: transparent;
+}
+
+.pagination.alphabet ul li a {
+    padding: 4px 7px;
 }
 
 /* Sources Listing */
