@@ -27,16 +27,16 @@ a {
 }
 
 .header {
-    width: 960px;
-    height: 230px;
+    width: 690px;
+    height: 160px;
     background: transparent url('../Images/header.png') center top no-repeat;
     margin-left: -10px;
+    padding-left: 270px;
+    padding-top: 70px;
 }
 
 .header a {
     position: relative;
-    top: 90px;
-    left: 270px;
     text-decoration: none;
 }
 
@@ -47,10 +47,9 @@ a {
 
 .header p {
     position: relative;
-    top: 100px;
-    left: 265px;
     color: #1f3039;
-    font-size: 14pt;    
+    font-size: 14pt;
+    padding-top: 10px; 
 }
 
 .page-wrapper {
