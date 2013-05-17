@@ -52,15 +52,21 @@ namespace Ujc.Naki.MVCWebLayer
             );
 
             routes.MapRoute(
+                "SourcesDetail",
+                "zdroje/{id}",
+                new { controller = "Sources", action = "Detail", part = "Info", id = "1-zizka" }
+            );
+
+            routes.MapRoute(
                 "SourcesDetailSearch",
                 "zdroje/{id}/hledani/{searchTerm}",
-                new { controller = "Sources", action = "DetailHledat", searchTerm="" }
+                new { controller = "Sources", action = "DetailHledat", searchTerm = "" }
             );
 
             routes.MapRoute(
                 "SourcesGoThrough",
                 "zdroje/{id}/plny-text/{page}",
-                new { controller = "Sources", action = "Prochazet", page = 1}
+                new { controller = "Sources", action = "Prochazet", page = 1 }
             );
 
             routes.MapRoute(
@@ -70,9 +76,15 @@ namespace Ujc.Naki.MVCWebLayer
             );
 
             routes.MapRoute(
-                "SourcesDetail",
-                "zdroje/{id}/{part}",
-                new { controller = "Sources", action = "Detail", part = "Info", id = "1-zizka" }
+                "SourcesDetailZpracovani",
+                "zdroje/{id}/zpracovani-dokumentu",
+                new { controller = "Sources", action = "Detail", part = "Zpracovani", id = "1-zizka" }
+            );
+
+            routes.MapRoute(
+                "SourcesDetailPodminky",
+                "zdroje/{id}/podminky-uziti",
+                new { controller = "Sources", action = "Detail", part = "Podminky", id = "1-zizka" }
             );
 
             routes.MapRoute(
