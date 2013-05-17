@@ -25,10 +25,25 @@
     </form>
     <div class="pagination alphabet">
         <ul>
-            @foreach (var alphabet in Model.Alphabet)
+            @foreach (var alphabetLetter in Model.Alphabet)
             {
                 @* If there are no sources for the letter set class of li tag to class=disabled *@
-                <li @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), @alphabet, StringComparison.InvariantCultureIgnoreCase) ? "class=active" : "")><a href="@Url.RouteUrl("SourcesListing", new { mode = Model.ViewMode, alphabet = @alphabet })">@alphabet</a></li>
+                var active = string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), @alphabetLetter.Letter, StringComparison.InvariantCultureIgnoreCase);
+                var disabled = alphabetLetter.Disabled;
+                var liClass = "";
+                    
+                if (active && disabled)
+                {
+                    liClass = "active disabled";
+                }
+                else if (disabled)
+                {
+                    liClass = "disabled";
+                } else if (active)
+                {
+                    liClass = "active";
+                }
+                <li@( !liClass.IsEmpty() ? " class=" + liClass : "")><a href="@Url.RouteUrl("SourcesListing", new { mode = Model.ViewMode, alphabet = @alphabetLetter.Letter })">@alphabetLetter.Letter</a></li>
             }
         </ul>
     </div>

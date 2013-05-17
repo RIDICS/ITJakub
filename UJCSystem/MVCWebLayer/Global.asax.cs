@@ -53,7 +53,7 @@ namespace Ujc.Naki.MVCWebLayer
 
             routes.MapRoute(
                 "SourcesDetail",
-                "zdroje/{id}",
+                "zdroje/{id}/detail",
                 new { controller = "Sources", action = "Detail", part = "Info", id = "1-zizka" }
             );
 

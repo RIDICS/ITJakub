@@ -194,7 +194,9 @@ form.sources-order.form-horizontal.form-horizontal .controls {
 }
 
 .pagination.alphabet ul li a {
-    padding: 4px 7px;
+    padding: 4px 0px;
+    width: 26px;
+    text-align: center;
 }
 
 /* Sources Listing */
