@@ -1,3 +1,7 @@
+html {
+    min-height: 100%;
+}
+
 body {
     background: #CBD8DE url('../Images/texture.png') scroll;
     background: linear-gradient(top, rgba(65, 90, 101, 0.09) 0, rgba(255, 255, 255, 0.25) 1050px) no-repeat, url('../Images/texture.png'), linear-gradient(top, #7396A5 0, #FFFFFF 1050px) no-repeat;
