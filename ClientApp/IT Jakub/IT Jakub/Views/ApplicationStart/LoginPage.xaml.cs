@@ -20,6 +20,7 @@ using Windows.UI.Popups;
 using IT_Jakub.Classes.Exceptions;
 using IT_Jakub.Classes.Utils;
 
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace IT_Jakub.Views.ApplicationStart

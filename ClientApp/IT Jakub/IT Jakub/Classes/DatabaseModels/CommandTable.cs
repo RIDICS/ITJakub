@@ -37,6 +37,26 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return -1;
         }
 
+        internal async Task<long> createCrossWordSolutionCommand(Session s, User u, string commandText) {
+            try {
+                Command c = new Command {
+                    UserId = u.Id,
+                    CommandText = commandText,
+                    SessionId = s.Id
+                };
+                await table.InsertAsync(c);
+                List<Command> command = await table
+                    .Where(Item => Item.CommandText.Contains("Solution(" + c.UserId + ", "))
+                    .Where(Item => Item.UserId == c.UserId)
+                    .Where(Item => Item.SessionId == c.SessionId).ToListAsync();
+                long id = command[command.Count - 1].Id;
+                return id;
+            } catch (Exception e) {
+                object o = e;
+            }
+            return -1;
+        }
+
         internal async Task<List<Command>> getAllSessionCommands(Session s) {
             List<Command> items = null;
             try {
@@ -57,7 +77,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return items;
         }
 
-        private async Task deleteCommand(Command c) {
+        public async Task deleteCommand(Command c) {
             try {
                 List<Command> test = await table.Where(Item => Item.Id == c.Id).ToListAsync();
                 if (test.Count > 0) {
@@ -184,6 +204,99 @@ namespace IT_Jakub.Classes.DatabaseModels {
             } catch (Exception e) {
                 throw new ServerErrorException(e);
             }
+        }
+
+        internal async Task updateCommandById(long updateId, Session s, User u, string commandText) {
+            try {
+                Command c = new Command {
+                    Id = updateId,
+                    UserId = u.Id,
+                    CommandText = commandText,
+                    SessionId = s.Id
+                };
+                await table.UpdateAsync(c);
+            } catch (Exception e) {
+                object o = e;
+            }
+        }
+
+        internal async Task<Command> getUsersSolutionCommand(Session s, User u) {
+            try {
+                List<Command> items = await table
+                    .Where(Item => Item.SessionId == s.Id)
+                    .Where(Item => Item.UserId == u.Id)
+                    .Where(Item => Item.CommandText.Contains("Solution(" + u.Id))
+                    .ToListAsync();
+                if (items.Count > 0) {
+                    return items[items.Count - 1];
+                }
+            } catch (Exception e) {
+
+            }
+            return null;
+        }
+
+        internal async Task<List<Command>> getAllUsersFinalSolutionCommands(Session s) {
+            try {
+                List<Command> items = await table
+                    .Where(Item => Item.SessionId == s.Id)
+                    .Where(Item => Item.CommandText.Contains("SolutionFinal("))
+                    .ToListAsync();
+                if (items.Count > 0) {
+                    return items;
+                }
+            } catch (Exception e) {
+
+            }
+            return null;
+        }
+
+
+        internal async Task<List<Command>> getAllFinalSolutionMadeByOwner(Session s) {
+            try {
+                List<Command> items = await table
+                    .Where(Item => Item.SessionId == s.Id)
+                    .Where(Item => Item.UserId == s.OwnerUserId)
+                    .Where(Item => Item.CommandText.Contains("SolutionFinal("))
+                    .ToListAsync();
+                if (items.Count > 0) {
+                    return items;
+                }
+            } catch (Exception e) {
+
+            }
+            return null;
+        }
+
+        internal async Task<List<Command>> getAllSessionSolutionCommands(Session s) {
+            try {
+                List<Command> items = await table
+                    .Where(Item => Item.SessionId == s.Id)
+                    .Where(Item => Item.CommandText.Contains("Solution("))
+                    .ToListAsync();
+                if (items.Count > 0) {
+                    return items;
+                }
+            } catch (Exception e) {
+
+            }
+            return null;
+        }
+
+        internal async Task<Command> getEndSolutionCommand(Session s) {
+            try {
+                List<Command> items = await table
+                    .Where(Item => Item.SessionId == s.Id)
+                    .Where(Item => Item.UserId == s.OwnerUserId)
+                    .Where(Item => Item.CommandText.Contains("SolutionEnd("))
+                    .ToListAsync();
+                if (items.Count > 0) {
+                    return items[items.Count - 1];
+                }
+            } catch (Exception e) {
+
+            }
+            return null;
         }
     }
 }

@@ -1,0 +1,28 @@
+﻿<Page
+    x:Class="IT_Jakub.Views.EducationalApplications.Crosswords.CrosswordsApp"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IT_Jakub.Views.EducationalApplications.Crosswords"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:common="using:IT_Jakub.Common"
+    mc:Ignorable="d">
+    <Page.TopAppBar>
+        <AppBar x:Name="topUsersListAppBar" Height="100" Margin="0" VerticalAlignment="Top" Opened="topUsersListAppBar_Opened">
+            <Grid Margin="1,0">
+                <ListView x:Name="userList" Height="100" SelectionChanged="userList_SelectionChanged" ItemTemplate="{StaticResource UserListDefaultTemplate}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </Grid>
+        </AppBar>
+    </Page.TopAppBar>
+    <Grid x:Name="mainGrid" Background="{StaticResource ApplicationBackground}" Loaded="mainGrid_Loaded">
+        <TextBlock x:Name="userSolution" HorizontalAlignment="Left" Height="43" Margin="10,60,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="258"/>
+
+    </Grid>
+
+</Page>

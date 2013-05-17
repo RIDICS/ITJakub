@@ -1,4 +1,5 @@
 ﻿<Page
+    xmlns:common="using:IT_Jakub.Common"
     x:Class="IT_Jakub.Views.UserManagement.CreateNewUser"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

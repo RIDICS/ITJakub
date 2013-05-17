@@ -1,5 +1,6 @@
 ﻿using Callisto.Controls;
 using IT_Jakub.Views.EducationalApplications.SynchronizedReading;
+using IT_Jakub.Views.EducationalApplications.Crosswords;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,8 +19,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace IT_Jakub.Views.Controls.FlyoutControls {
     public sealed partial class OpenFileFlyout : UserControl {
+        
         private Flyout flyOut;
-
+        private static string currentPage;
         
         public OpenFileFlyout() {
             this.InitializeComponent();
@@ -30,7 +32,14 @@ namespace IT_Jakub.Views.Controls.FlyoutControls {
         }
         
         private void openButton_Click(object sender, RoutedEventArgs e) {
-            SyncReadingApp.openFile(uri.Text.Trim());
+            Frame mainFrame = MainPage.getMainFrame();
+            currentPage = mainFrame.CurrentSourcePageType.FullName;
+            if (currentPage.Contains("Views.EducationalApplications.SynchronizedReading")) {
+                SyncReadingApp.openFile(uri.Text.Trim());
+            }
+            if (currentPage.Contains("Views.EducationalApplications.Crosswords")) {
+                CrosswordsApp.openFileFromUri(uri.Text.Trim());
+            }
             flyOut.IsOpen = false;
         }
     }

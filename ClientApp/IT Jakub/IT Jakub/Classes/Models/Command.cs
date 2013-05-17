@@ -23,7 +23,10 @@ namespace IT_Jakub.Classes.Models {
 
             switch (appCommand) {
                 case Command.SYNCHRONIZED_READING_APPLICATION:
-                    this.commandState = new Commands.SyncReadingAppCommand(this);
+                    this.commandState = new SyncReadingAppCommand(this);
+                    break;
+                case Command.CROSSWORDS_APPLICATION:
+                    this.commandState = new CrosswordsAppCommand(this);
                     break;
                 case Command.GENERAL:
                     this.commandState = new GeneralCommand(this);

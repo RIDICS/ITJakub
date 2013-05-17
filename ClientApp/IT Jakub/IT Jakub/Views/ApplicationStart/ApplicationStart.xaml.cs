@@ -3,6 +3,7 @@ using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Exceptions;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Utils;
+
 using IT_Jakub.Views.UserManagement;
 using System;
 using System.Collections.Generic;
@@ -44,10 +45,7 @@ namespace IT_Jakub.Views.ApplicationStart
         /// property is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            
-            if (lu.isLoggedIn()) {
-                this.Frame.Navigate(typeof(UserLoggedIn.SessionsList));
-            } else {
+            if (!lu.isLoggedIn()) {
                 CredentialPickerResults credentials = await MyDialogs.showLoginDialog(isCredentialsCorrect);
 
                 UserTable us = new UserTable();
@@ -59,7 +57,6 @@ namespace IT_Jakub.Views.ApplicationStart
                         lu.login(u);
                         this.Frame.Navigate(typeof(UserLoggedIn.SessionsList));
                     } else {
-                        // MyDialogs.showDialogOK("Nesprávné uživatelské jméno nebo heslo");
                         this.Frame.Navigate(typeof(ApplicationStart));
                     }
                 } catch (ServerErrorException ex) {

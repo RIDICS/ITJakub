@@ -9,7 +9,7 @@ namespace IT_Jakub.Classes.Models {
     class LoggedUser {
 
         private User userData = null;
-        private static bool userLoggedIn;
+        private static bool userLoggedIn = false;
 
         private static LoggedUser instance;
         private static SignedSession ss = SignedSession.getInstance();

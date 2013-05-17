@@ -45,7 +45,7 @@ namespace IT_Jakub
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             rootPage = e.Parameter as Page;
-            mainFrame.Navigate(typeof(ApplicationStart),this);
+            mainFrame.Navigate(typeof(ApplicationStart));
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e) {

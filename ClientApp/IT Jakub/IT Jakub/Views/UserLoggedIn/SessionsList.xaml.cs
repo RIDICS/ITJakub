@@ -1,6 +1,7 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Utils;
+
 using Microsoft.WindowsAzure.MobileServices;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace IT_Jakub.Views.UserLoggedIn {
         public SessionsList() {
             this.InitializeComponent();
         }
-
+        
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -42,10 +43,9 @@ namespace IT_Jakub.Views.UserLoggedIn {
             sessionListUpdate_Click(sessionListUpdate, null);
         }
 
-        private async void sessionListUpdate_Click(object sender, RoutedEventArgs e) {
+        private void sessionListUpdate_Click(object sender, RoutedEventArgs e) {
             SessionTable st = new SessionTable();
             SessionUserTable sut = new SessionUserTable();
-            List<SessionUser> list = await sut.getAllSessionUsers();
             try {
                 MobileServiceCollectionView<Session> allSessions = st.getAllSessions();
                 sessionList.ItemsSource = allSessions;
@@ -62,13 +62,16 @@ namespace IT_Jakub.Views.UserLoggedIn {
             }
         }
 
-        private void sessionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private async void sessionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (e.RemovedItems.Count > 0) {
                 selectedSession = null;
             }
 
             if (e.AddedItems.Count > 0) {
                 selectedSession = (Session)e.AddedItems[0];
+                CommandTable ct = new CommandTable();
+                List<Command> all = await ct.getAllCommands();
+                List<Command> sessions = await ct.getAllSessionCommands(selectedSession);
             }
             Views.Controls.BottomAppBar.setSelectedSession(selectedSession);
             Views.Controls.BottomAppBar.repaint(MainPage.getBottomAppBar());

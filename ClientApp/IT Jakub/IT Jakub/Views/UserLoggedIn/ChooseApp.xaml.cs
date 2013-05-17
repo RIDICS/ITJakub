@@ -1,6 +1,7 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Models.Commands;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,6 +31,7 @@ namespace IT_Jakub.Views.UserLoggedIn {
             this.InitializeComponent();
         }
 
+
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -46,6 +48,16 @@ namespace IT_Jakub.Views.UserLoggedIn {
             sessionData = await st.getSessionByName(sessionData.Name.Trim());
             ss.register(sessionData);
             await ss.sendCommand(Command.SYNCHRONIZED_READING_APPLICATION + ':' + SyncReadingAppCommand.WHOLE_APPLICATION + ':' + SyncReadingAppCommand.START_APPLICATION);
+            ss.login();
+        }
+
+        private async void CrosswordsButton_Click(object sender, RoutedEventArgs e) {
+            SessionTable st = new SessionTable();
+            await st.createSession(sessionData);
+
+            sessionData = await st.getSessionByName(sessionData.Name.Trim());
+            ss.register(sessionData);
+            await ss.sendCommand(Command.CROSSWORDS_APPLICATION + Command.SEPARATOR + CrosswordsAppCommand.WHOLE_APPLICATION + Command.SEPARATOR + CrosswordsAppCommand.START_APPLICATION);
             ss.login();
         }
     }

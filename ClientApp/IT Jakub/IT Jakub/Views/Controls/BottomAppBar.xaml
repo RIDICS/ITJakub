@@ -11,7 +11,7 @@
     <Grid x:Name="FrameLayoutRoot">
         <StackPanel x:Name="leftStackPannel" HorizontalAlignment="Left" Width="662" Orientation="Horizontal">
             <!-- Application control bar -->
-            <Button x:Name="RulesButton" AutomationProperties.Name="Domů" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="homeButton_Click">
+            <Button x:Name="homeButton" AutomationProperties.Name="Domů" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="homeButton_Click">
                 <Image Source="ms-appx:///Assets/Icons/white/home-32.png" Stretch="Fill" Height="25" Width="25"/>
             </Button>
             <Button x:Name="logoutButton" AutomationProperties.Name="Odhlásit se" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="logoutButton_Click">
@@ -53,6 +53,16 @@
             </Button>
             <Button x:Name="openFileButton" AutomationProperties.Name="Otevřít soubor" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="openFileButton_Click">
                 <Image Source="ms-appx:///Assets/Icons/white/folder-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <!-- Crosswords -->
+            <Button x:Name="sendFinalSolution" AutomationProperties.Name="Odeslat řešení" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="sendFinalSolution_Click">
+                <Image Source="ms-appx:///Assets/Icons/white/ok-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="requestFinalSolutions" AutomationProperties.Name="Vyžádat odevzdání" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="requestFinalSolutions_Click">
+                <Image Source="ms-appx:///Assets/Icons/white/error-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="evaluateSolutions" AutomationProperties.Name="Vyhodnotit výsledky" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="evaluateSolutions_Click">
+                <Image Source="ms-appx:///Assets/Icons/white/checkmark-32.png" Stretch="Fill" Height="25" Width="25"/>
             </Button>
         </StackPanel>
     </Grid>

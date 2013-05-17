@@ -1,0 +1,19 @@
+﻿<UserControl
+    x:Class="IT_Jakub.Views.Controls.FlyoutControls.CrosswordUserListChangedFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IT_Jakub.Views.Controls.FlyoutControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="100"
+    d:DesignWidth="100">
+    
+        <Grid Background="{StaticResource ApplicationBackground}">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="solution" AutomationProperties.Name="Zobrazit řešení uživatele" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="solution_Click">
+                    <Image Source="ms-appx:///Assets/Icons/white/reviewer-32.png" Stretch="Fill" Height="25" Width="25"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+</UserControl>

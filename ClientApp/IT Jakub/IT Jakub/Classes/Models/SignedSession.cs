@@ -81,14 +81,13 @@ namespace IT_Jakub.Classes.Models {
             signedState = false;
         }
 
-        public async Task<bool> sendCommand(string commandText) {
+        public async Task<long> sendCommand(string commandText) {
             CommandTable ct = new CommandTable();
             long sentCommandId = await ct.createCommand(sessionData, lu.getUserData(), commandText);
             if (sentCommandId > latestCommandId) {
                 latestCommandId = sentCommandId;
-                return true;
             }
-            return false;
+            return sentCommandId;
         }
 
         internal async void promoteUser(long userId) {

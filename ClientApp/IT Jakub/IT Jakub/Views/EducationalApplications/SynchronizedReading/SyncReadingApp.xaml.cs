@@ -5,6 +5,7 @@ using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Models.Commands;
 using IT_Jakub.Classes.Models.Utils;
 using IT_Jakub.Classes.Utils;
+
 using IT_Jakub.Views.Controls.FlyoutControls;
 using System;
 using System.Collections.Generic;
@@ -349,12 +350,12 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         private async void sendCommandList() {
             CommandTable ct = new CommandTable();
             while (sendingMoveCommandsAllowed) {
-                await Task.Delay(250);
                 if (commandList.Last != null) {
                     await ss.sendCommand(commandList.Last.Value);
                     commandList.Clear();
                     await ct.deletePrevMoveCommands(ss.getSessionData());
                 }
+                await Task.Delay(250);
             }
         }
 

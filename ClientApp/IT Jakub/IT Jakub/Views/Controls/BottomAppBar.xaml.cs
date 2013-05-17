@@ -41,32 +41,131 @@ namespace IT_Jakub.Views.Controls {
             Frame mainFrame = MainPage.getMainFrame();
             currentPage = mainFrame.CurrentSourcePageType.FullName;
 
-            if (currentPage.Contains("Views.ApplicationStart")) {
-                bar.applicationStartTemplate(bar);
+            if (currentPage.Contains("Views.UserLoggedIn")) {
+                bar.userLoggedInTemplate();
             }
 
-            if (currentPage.Contains("Views.UserLoggedIn")) {
-                bar.userLoggedInTemplate(bar);
+            if (currentPage.Contains("Views.ApplicationStart")) {
+                bar.applicationStartTemplate();
+            }
+
+            if (currentPage.Contains("Views.UserLoggedIn.SessionsList")) {
+                bar.sessionsListTemplate(bar);
             }
 
             if (currentPage.Contains("EducationalApplications")) {
                 bar.educationalApplicationsTemplate();
             }
+        }
 
-            if (ss.isSignedInSession()) {
-                bar.sessionSignedInTemplate();
+        private void userLoggedInTemplate() {
+            homeButton.Visibility = Visibility.Visible;
+            logoutButton.Visibility = Visibility.Visible;
+
+            signinSessionButton.Visibility = Visibility.Collapsed;
+            createSession.Visibility = Visibility.Collapsed;
+            deleteSession.Visibility = Visibility.Collapsed;
+            findSession.Visibility = Visibility.Collapsed;
+            signoutSessionButton.Visibility = Visibility.Collapsed;
+            autoUpdateOnButton.Visibility = Visibility.Collapsed;
+            autoUpdateOffButton.Visibility = Visibility.Collapsed;
+
+            updateUserlistButton.Visibility = Visibility.Collapsed;
+            highlightTextButton. Visibility = Visibility.Collapsed;
+            openFileButton.Visibility = Visibility.Collapsed;
+            
+            requestFinalSolutions.Visibility = Visibility.Collapsed;
+            sendFinalSolution.Visibility = Visibility.Collapsed;
+            evaluateSolutions.Visibility = Visibility.Collapsed;
+        }
+
+        private void applicationStartTemplate() {
+            homeButton.Visibility = Visibility.Visible;
+            logoutButton.Visibility = Visibility.Collapsed;
+
+            signinSessionButton.Visibility = Visibility.Collapsed;
+            createSession.Visibility = Visibility.Collapsed;
+            deleteSession.Visibility = Visibility.Collapsed;
+            findSession.Visibility = Visibility.Collapsed;
+            signoutSessionButton.Visibility = Visibility.Collapsed;
+            autoUpdateOnButton.Visibility = Visibility.Collapsed;
+            autoUpdateOffButton.Visibility = Visibility.Collapsed;
+
+            updateUserlistButton.Visibility = Visibility.Collapsed;
+            highlightTextButton.Visibility = Visibility.Collapsed;
+            openFileButton.Visibility = Visibility.Collapsed;
+
+            requestFinalSolutions.Visibility = Visibility.Collapsed;
+            sendFinalSolution.Visibility = Visibility.Collapsed;
+            evaluateSolutions.Visibility = Visibility.Collapsed;
+        }
+
+        private void sessionsListTemplate(BottomAppBar bar) {
+            homeButton.Visibility = Visibility.Visible;
+            logoutButton.Visibility = Visibility.Visible;
+
+            signinSessionButton.Visibility = Visibility.Visible;
+
+            if (lu.getUserData().Role == UserRole.Teacher || lu.getUserData().Role == UserRole.Principal) {
+                createSession.Visibility = Visibility.Visible;
+                deleteSession.Visibility = Visibility.Visible;
+            }
+
+            findSession.Visibility = Visibility.Visible;
+            signoutSessionButton.Visibility = Visibility.Collapsed;
+            autoUpdateOnButton.Visibility = Visibility.Collapsed;
+            autoUpdateOffButton.Visibility = Visibility.Collapsed;
+
+            updateUserlistButton.Visibility = Visibility.Collapsed;
+            highlightTextButton.Visibility = Visibility.Collapsed;
+            openFileButton.Visibility = Visibility.Collapsed;
+
+            requestFinalSolutions.Visibility = Visibility.Collapsed;
+            sendFinalSolution.Visibility = Visibility.Collapsed;
+            evaluateSolutions.Visibility = Visibility.Collapsed;
+
+            if (selectedSession != null) {
+                signinSessionButton.IsEnabled = true;
+                deleteSession.IsEnabled = true;
             } else {
-                bar.sessionSignedOutTemplate();
+                signinSessionButton.IsEnabled = false;
+                deleteSession.IsEnabled = false;
             }
         }
 
         private void educationalApplicationsTemplate() {
-            createSession.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            deleteSession.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            findSession.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            signinSessionButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            highlightTextButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            homeButton.Visibility = Visibility.Visible;
+            logoutButton.Visibility = Visibility.Visible;
 
+            signinSessionButton.Visibility = Visibility.Collapsed;
+            createSession.Visibility = Visibility.Collapsed;
+            deleteSession.Visibility = Visibility.Collapsed;
+            findSession.Visibility = Visibility.Collapsed;
+            signoutSessionButton.Visibility = Visibility.Visible;
+            autoUpdateOnButton.Visibility = Visibility.Collapsed;
+            autoUpdateOffButton.Visibility = Visibility.Collapsed;
+
+            updateUserlistButton.Visibility = Visibility.Collapsed;
+            highlightTextButton.Visibility = Visibility.Collapsed;
+            openFileButton.Visibility = Visibility.Collapsed;
+
+            requestFinalSolutions.Visibility = Visibility.Collapsed;
+            sendFinalSolution.Visibility = Visibility.Collapsed;
+            evaluateSolutions.Visibility = Visibility.Collapsed;
+
+            if (currentPage.Contains("SyncReadingApp")) {
+                syncReadingAppTemplate();
+            }
+            if (currentPage.Contains("Crosswords")) {
+                crosswordsAppTemplate();
+            }
+        }
+
+        private void syncReadingAppTemplate() {
+            updateUserlistButton.Visibility = Visibility.Visible;
+            highlightTextButton.Visibility = Visibility.Visible;
+            openFileButton.Visibility = Visibility.Collapsed;
+           
             if (EducationalApplications.SynchronizedReading.SyncReadingApp.isAutoUpdateEnabled()) {
                 autoUpdateOnButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 autoUpdateOffButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -75,80 +174,33 @@ namespace IT_Jakub.Views.Controls {
                 autoUpdateOffButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
 
-            if (currentPage.Contains("SyncReadingApp")) {
-                syncReadingAppTemplate();
-            }
-        }
-
-        private void syncReadingAppTemplate() {
-            updateUserlistButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
             if (userRights == UserRights.Owner) {
-                openFileButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                openFileButton.Visibility = Visibility.Visible;
                 highlightTextButton.IsEnabled = true;
             }
             if (userRights == UserRights.Prefered) {
-                openFileButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 highlightTextButton.IsEnabled = true;
             }
             if (userRights == UserRights.Default) {
-                openFileButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 highlightTextButton.IsEnabled = false;
             }
         }
 
-        private void applicationStartTemplate(BottomAppBar bar) {
-            createSession.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            deleteSession.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            findSession.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            signinSessionButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            signoutSessionButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            logoutButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            updateUserlistButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-        }
+        private void crosswordsAppTemplate() {
+            updateUserlistButton.Visibility = Visibility.Collapsed;
+            highlightTextButton.Visibility = Visibility.Collapsed;
+            openFileButton.Visibility = Visibility.Collapsed;
+            autoUpdateOnButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            autoUpdateOffButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
-        private void userLoggedInTemplate(BottomAppBar bar) {
-            updateUserlistButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            createSession.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            deleteSession.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            findSession.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
-            if (lu.isLoggedIn()) {
-                logoutButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            } else {
-                logoutButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            }
-
-            if (currentPage.Contains("Views.UserLoggedIn.SessionsList")) {
-                if (lu.getUserData().Role == UserRole.Teacher || lu.getUserData().Role == UserRole.Principal) {
-                    createSession.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                    deleteSession.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                    if (selectedSession != null) {
-                        deleteSession.IsEnabled = true;
-                    } else {
-                        deleteSession.IsEnabled = false;
-                    }
-                }
-                findSession.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            }
-        }
-        
-
-        private void sessionSignedInTemplate() {
-            signinSessionButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            signoutSessionButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-        }
-
-        private void sessionSignedOutTemplate() {
-            signoutSessionButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            if (currentPage.Contains("Views.UserLoggedIn.SessionsList")) {
-                signinSessionButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                if (selectedSession != null) {
-                    signinSessionButton.IsEnabled = true;
-                } else {
-                    signinSessionButton.IsEnabled = false;
-                }
-            } else {
-                signinSessionButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            requestFinalSolutions.Visibility = Visibility.Collapsed;
+            sendFinalSolution.Visibility = Visibility.Visible;
+            evaluateSolutions.Visibility = Visibility.Collapsed;
+            
+            if (userRights == UserRights.Owner) {
+                openFileButton.Visibility = Visibility.Visible;
+                requestFinalSolutions.Visibility = Visibility.Visible;
+                evaluateSolutions.Visibility = Visibility.Visible;
             }
         }
 
@@ -166,9 +218,11 @@ namespace IT_Jakub.Views.Controls {
 
         private async void signOutSession() {
             selectedSession = null;
-            await ss.signout();
+            if (ss.isSignedInSession()) {
+                await ss.signout();
+            }
             mainFrame = MainPage.getMainFrame();
-            mainFrame.Navigate(typeof(Views.UserLoggedIn.SessionsList));
+            mainFrame.Navigate(typeof(UserLoggedIn.SessionsList));
         }
 
         private void signInSession() {
@@ -185,7 +239,12 @@ namespace IT_Jakub.Views.Controls {
         }
 
         private void homeButton_Click(object sender, RoutedEventArgs e) {
-            logoutUser();
+            mainFrame = MainPage.getMainFrame();
+            if (lu.isLoggedIn()) {
+                signOutSession();
+                return;
+            }
+            mainFrame.Navigate(typeof(MainPage));
         }
 
         private void logoutButton_Click(object sender, RoutedEventArgs e) {
@@ -250,6 +309,19 @@ namespace IT_Jakub.Views.Controls {
         private void createSession_Click(object sender, RoutedEventArgs e) {
             mainFrame = MainPage.getMainFrame();
             mainFrame.Navigate(typeof(UserLoggedIn.CreateSession));
+        }
+
+        private void requestFinalSolutions_Click(object sender, RoutedEventArgs e) {
+            Views.EducationalApplications.Crosswords.CrosswordsApp.requestFinalSolutions();
+        }
+
+        private void sendFinalSolution_Click(object sender, RoutedEventArgs e) {
+            Views.EducationalApplications.Crosswords.CrosswordsApp.sendFinalSolution();
+        }
+
+        private void evaluateSolutions_Click(object sender, RoutedEventArgs e) {
+            TaskKiller.killEducationalApplicationTasks();
+            Views.EducationalApplications.Crosswords.CrosswordsApp.evaluateSolutions();
         }
 
     }

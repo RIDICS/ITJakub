@@ -8,7 +8,8 @@ namespace IT_Jakub.Classes.Models {
     abstract class ICommand {
 
         internal const string SYNCHRONIZED_READING_APPLICATION = "501";
-        internal Command commandState;
+        internal const string CROSSWORDS_APPLICATION = "502";
+        internal ICommand commandState;
 
         internal const char SEPARATOR = ':';
         internal const string GENERAL = "000";

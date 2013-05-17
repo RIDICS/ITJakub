@@ -1,0 +1,22 @@
+﻿<Page
+    x:Class="IT_Jakub.Views.EducationalApplications.Crosswords.EvaluateSolutions"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IT_Jakub.Views.EducationalApplications.Crosswords"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource ApplicationBackground}">
+        <ListView x:Name="userList" HorizontalAlignment="Left" Height="748" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" ItemTemplate="{StaticResource UserListDefaultTemplate}" SelectionChanged="userList_SelectionChanged">
+        </ListView>
+
+        <Grid HorizontalAlignment="Left" Height="748" Margin="380,10,0,0" VerticalAlignment="Top" Width="964">
+            <TextBlock x:Name="name" HorizontalAlignment="Left" Height="42" Margin="17,14,0,0" TextWrapping="Wrap" Text="Jméno Příjmení" VerticalAlignment="Top" Width="934" Style="{StaticResource GroupHeaderTextStyle}"/>
+            <TextBlock x:Name="percentage" HorizontalAlignment="Left" Height="48" Margin="23,72,0,0" TextWrapping="Wrap" Text="Dosáhl výsledku:" VerticalAlignment="Top" Width="343" Style="{StaticResource BodyTextStyle}"/>
+            <Grid x:Name="solutionGrid" HorizontalAlignment="Left" Height="628" Margin="26,120,0,0" VerticalAlignment="Top" Width="909"/>
+        </Grid>
+        
+        <ListView x:Name="userSolutionsList" HorizontalAlignment="Left" Height="748" Margin="160,10,0,0" VerticalAlignment="Top" Width="210" ItemTemplate="{StaticResource SolutionsDefaultTemplate}" SelectionChanged="userSolutionsList_SelectionChanged"/>
+    </Grid>
+</Page>

@@ -9,6 +9,7 @@ namespace IT_Jakub.Classes.Utils {
 
         public static void killEducationalApplicationTasks() {
             IT_Jakub.Views.EducationalApplications.SynchronizedReading.SyncReadingApp.killAutoUpdateTask();
+            IT_Jakub.Views.EducationalApplications.Crosswords.CrosswordsApp.killAutoUpdateTask();
         }
 
     }

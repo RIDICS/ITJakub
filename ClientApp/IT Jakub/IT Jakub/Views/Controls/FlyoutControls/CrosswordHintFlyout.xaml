@@ -1,0 +1,20 @@
+﻿<UserControl
+    x:Class="IT_Jakub.Views.Controls.FlyoutControls.CrosswordHintFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IT_Jakub.Views.Controls.FlyoutControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="130"
+    d:DesignWidth="300">
+    
+    <Grid Background="{StaticResource ApplicationBackground}" Height="130" Width="300">
+        <StackPanel Margin="10">
+            <TextBlock x:Name="horizontal" TextWrapping="Wrap" FontSize="18"/>
+            <TextBox x:Name="inputHorizontal" TextWrapping="Wrap" TextChanged="inputHorizontal_TextChanged"/>
+            <TextBlock x:Name="vertical" TextWrapping="Wrap" FontSize="18"/>
+            <TextBox x:Name="inputVertical" TextWrapping="Wrap" TextChanged="inputVertical_TextChanged"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

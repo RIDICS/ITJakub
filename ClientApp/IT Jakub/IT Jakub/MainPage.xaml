@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.TopAppBar>
-        <AppBar Height="50" Margin="0" VerticalAlignment="Top">
+        <AppBar x:Name="commonTopAppBar" Height="50" Margin="0" VerticalAlignment="Top">
             <Grid Margin="1,0,1.429,-0.143">
                 <StackPanel Orientation="Horizontal" Margin="0,0,1149,0"/>
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Width="0"/>

@@ -120,13 +120,20 @@
     <Compile Include="Classes\Exceptions\ServerErrorException.cs" />
     <Compile Include="Classes\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Classes\Models\Command.cs" />
+    <Compile Include="Classes\Models\Commands\CrosswordsAppCommand.cs" />
     <Compile Include="Classes\Models\Commands\GeneralCommand.cs" />
+    <Compile Include="Classes\Models\CrosswordsApp\Crossword.cs" />
+    <Compile Include="Classes\Models\CrosswordsApp\CrosswordChar.cs" />
+    <Compile Include="Classes\Models\CrosswordsApp\CrosswordField.cs" />
+    <Compile Include="Classes\Models\CrosswordsApp\CrosswordHint.cs" />
+    <Compile Include="Classes\Models\CrosswordsApp\CrossWordSolution.cs" />
     <Compile Include="Classes\Models\ICommand.cs" />
     <Compile Include="Classes\Models\LoggedUser.cs" />
     <Compile Include="Classes\Models\Session.cs" />
     <Compile Include="Classes\Models\SessionUpdate.cs" />
     <Compile Include="Classes\Models\SessionUser.cs" />
     <Compile Include="Classes\Models\SignedSession.cs" />
+    <Compile Include="Classes\Networking\CommandBuilder.cs" />
     <Compile Include="Classes\Utils\RtfFileOpener.cs" />
     <Compile Include="Classes\Models\Commands\SyncReadingAppCommand.cs" />
     <Compile Include="Classes\Models\User.cs" />
@@ -136,21 +143,45 @@
     <Compile Include="Classes\Utils\MyDialogs.cs" />
     <Compile Include="Classes\Utils\TaskKiller.cs" />
     <Compile Include="Classes\Utils\Validator.cs" />
+    <Compile Include="Common\BindableBase.cs" />
+    <Compile Include="Common\BooleanNegationConverter.cs" />
+    <Compile Include="Common\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Common\LayoutAwarePage.cs" />
+    <Compile Include="Common\RichTextColumns.cs" />
+    <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Controls\FlyoutControls\CrosswordUserListChangedFlyout.xaml.cs">
+      <DependentUpon>CrosswordUserListChangedFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EducationalApplications\Crosswords\CrosswordsApp.xaml.cs">
+      <DependentUpon>CrosswordsApp.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ApplicationStart\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\BottomAppBar.xaml.cs">
       <DependentUpon>BottomAppBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\CrossWord\Char.xaml.cs">
+      <DependentUpon>Char.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\CrossWord\Hint.xaml.cs">
+      <DependentUpon>Hint.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\FlyoutControls\CrosswordHintFlyout.xaml.cs">
+      <DependentUpon>CrosswordHintFlyout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\FlyoutControls\OpenFileFlyout.xaml.cs">
       <DependentUpon>OpenFileFlyout.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\FlyoutControls\PromoteDemoteFlyout.xaml.cs">
       <DependentUpon>PromoteDemoteFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EducationalApplications\Crosswords\EvaluateSolutions.xaml.cs">
+      <DependentUpon>EvaluateSolutions.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EducationalApplications\SynchronizedReading\SyncReadingApp.xaml.cs">
       <DependentUpon>SyncReadingApp.xaml</DependentUpon>
@@ -203,6 +234,7 @@
     <Content Include="Assets\Icons\white\checkmark-32.png" />
     <Content Include="Assets\Icons\white\collaborator-32.png" />
     <Content Include="Assets\Icons\white\conference-32.png" />
+    <Content Include="Assets\Icons\white\crossword-64.png" />
     <Content Include="Assets\Icons\white\delete-32.png" />
     <Content Include="Assets\Icons\white\delete_row-32.png" />
     <Content Include="Assets\Icons\white\download-32.png" />
@@ -276,6 +308,7 @@
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\WideLogo.png" />
     <Content Include="Commands_Info_README.txt" />
+    <Content Include="Common\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -295,6 +328,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Controls\FlyoutControls\CrosswordUserListChangedFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EducationalApplications\Crosswords\CrosswordsApp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ApplicationStart\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -303,6 +344,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\CrossWord\Char.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\CrossWord\Hint.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\FlyoutControls\CrosswordHintFlyout.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Controls\FlyoutControls\OpenFileFlyout.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -310,6 +363,10 @@
     <Page Include="Views\Controls\FlyoutControls\PromoteDemoteFlyout.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EducationalApplications\Crosswords\EvaluateSolutions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EducationalApplications\SynchronizedReading\SyncReadingApp.xaml">
       <SubType>Designer</SubType>

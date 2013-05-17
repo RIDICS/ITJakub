@@ -2,6 +2,7 @@
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Networking;
 using IT_Jakub.Views.ApplicationStart;
+using IT_Jakub.Views.UserLoggedIn;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,7 +48,7 @@ namespace IT_Jakub
         /// search results, and so forth.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        protected async override void OnLaunched(LaunchActivatedEventArgs args)
         {
 
             Frame rootFrame = Window.Current.Content as Frame;
@@ -58,16 +59,15 @@ namespace IT_Jakub
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
-                if (!lu.isLoggedIn()) {
-                    rootFrame.Navigate(typeof(MainPage));
-                }
-                if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
+                if (args.PreviousExecutionState == ApplicationExecutionState.Terminated) {
+                    
                     //TODO: Load state from previously suspended application
                 }
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
+                rootFrame.Navigate(typeof(MainPage));
+                //rootFrame.Navigate(typeof(TEST));
             }
 
             if (rootFrame.Content == null)
@@ -95,9 +95,7 @@ namespace IT_Jakub
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
-            if (lu.isLoggedIn()) {
-                await lu.logout();
-            }
+
 
             deferral.Complete();
         }
