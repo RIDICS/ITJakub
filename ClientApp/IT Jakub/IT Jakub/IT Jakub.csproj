@@ -102,7 +102,6 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <Folder Include="Assets\Buttons\" />
-    <Folder Include="Assets\Icons\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -114,32 +113,44 @@
     <Compile Include="Classes\DatabaseModels\SessionUpdateTable.cs" />
     <Compile Include="Classes\DatabaseModels\SessionUserTable.cs" />
     <Compile Include="Classes\DatabaseModels\UserTable.cs" />
+    <Compile Include="Classes\Enumerations\UserRights.cs" />
+    <Compile Include="Classes\Enumerations\UserRole.cs" />
+    <Compile Include="Classes\Exceptions\MyFileNotFoundException.cs" />
     <Compile Include="Classes\Exceptions\MyException.cs" />
     <Compile Include="Classes\Exceptions\ServerErrorException.cs" />
     <Compile Include="Classes\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Classes\Models\Command.cs" />
+    <Compile Include="Classes\Models\Commands\GeneralCommand.cs" />
     <Compile Include="Classes\Models\ICommand.cs" />
     <Compile Include="Classes\Models\LoggedUser.cs" />
     <Compile Include="Classes\Models\Session.cs" />
     <Compile Include="Classes\Models\SessionUpdate.cs" />
     <Compile Include="Classes\Models\SessionUser.cs" />
     <Compile Include="Classes\Models\SignedSession.cs" />
-    <Compile Include="Classes\Models\SyncronizedReadingApp\RtfFileOpener.cs" />
-    <Compile Include="Classes\Models\SyncronizedReadingApp\SyncReadingAppCommand.cs" />
+    <Compile Include="Classes\Utils\RtfFileOpener.cs" />
+    <Compile Include="Classes\Models\Commands\SyncReadingAppCommand.cs" />
     <Compile Include="Classes\Models\User.cs" />
+    <Compile Include="Classes\Networking\FileDownloader.cs" />
     <Compile Include="Classes\Networking\MobileService.cs" />
     <Compile Include="Classes\Utils\Generator.cs" />
     <Compile Include="Classes\Utils\MyDialogs.cs" />
+    <Compile Include="Classes\Utils\TaskKiller.cs" />
     <Compile Include="Classes\Utils\Validator.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestPage.xaml.cs">
-      <DependentUpon>TestPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ApplicationStart\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\BottomAppBar.xaml.cs">
+      <DependentUpon>BottomAppBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\FlyoutControls\OpenFileFlyout.xaml.cs">
+      <DependentUpon>OpenFileFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\FlyoutControls\PromoteDemoteFlyout.xaml.cs">
+      <DependentUpon>PromoteDemoteFlyout.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EducationalApplications\SynchronizedReading\SyncReadingApp.xaml.cs">
       <DependentUpon>SyncReadingApp.xaml</DependentUpon>
@@ -177,12 +188,93 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="IT Jakub_TemporaryKey.pfx" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Icons\white\add_file-32.png" />
+    <Content Include="Assets\Icons\white\add_list-32.png" />
+    <Content Include="Assets\Icons\white\add_row-32.png" />
+    <Content Include="Assets\Icons\white\add_user-32.png" />
+    <Content Include="Assets\Icons\white\administrator-32.png" />
+    <Content Include="Assets\Icons\white\alphabetical_sorting-32.png" />
+    <Content Include="Assets\Icons\white\alphabetical_sorting2-32.png" />
+    <Content Include="Assets\Icons\white\cancel-32.png" />
+    <Content Include="Assets\Icons\white\checked_user-32.png" />
+    <Content Include="Assets\Icons\white\checkmark-32.png" />
+    <Content Include="Assets\Icons\white\collaborator-32.png" />
+    <Content Include="Assets\Icons\white\conference-32.png" />
+    <Content Include="Assets\Icons\white\delete-32.png" />
+    <Content Include="Assets\Icons\white\delete_row-32.png" />
+    <Content Include="Assets\Icons\white\download-32.png" />
+    <Content Include="Assets\Icons\white\edit_user-32.png" />
+    <Content Include="Assets\Icons\white\empty_filter-32.png" />
+    <Content Include="Assets\Icons\white\error-32.png" />
+    <Content Include="Assets\Icons\white\filled_filter-32.png" />
+    <Content Include="Assets\Icons\white\folder-32.png" />
+    <Content Include="Assets\Icons\white\graduation_cap-128.png" />
+    <Content Include="Assets\Icons\white\graduation_cap-256.png" />
+    <Content Include="Assets\Icons\white\graduation_cap-32.png" />
+    <Content Include="Assets\Icons\white\graduation_cap-48.png" />
+    <Content Include="Assets\Icons\white\graduation_cap-512_.png" />
+    <Content Include="Assets\Icons\white\graduation_cap-64.png" />
+    <Content Include="Assets\Icons\white\guest-32.png" />
+    <Content Include="Assets\Icons\white\help-32.png" />
+    <Content Include="Assets\Icons\white\home-32.png" />
+    <Content Include="Assets\Icons\white\info-32.png" />
+    <Content Include="Assets\Icons\white\joinSession-128.png" />
+    <Content Include="Assets\Icons\white\joinSession-256.png" />
+    <Content Include="Assets\Icons\white\joinSession-32.png" />
+    <Content Include="Assets\Icons\white\joinSession-512.png" />
+    <Content Include="Assets\Icons\white\joinSession-64.png" />
+    <Content Include="Assets\Icons\white\leaveSession-128.png" />
+    <Content Include="Assets\Icons\white\leaveSession-256.png" />
+    <Content Include="Assets\Icons\white\leaveSession-32.png" />
+    <Content Include="Assets\Icons\white\leaveSession-512.png" />
+    <Content Include="Assets\Icons\white\leaveSession-64.png" />
+    <Content Include="Assets\Icons\white\list-128.png" />
+    <Content Include="Assets\Icons\white\list-256.png" />
+    <Content Include="Assets\Icons\white\list-32.png" />
+    <Content Include="Assets\Icons\white\list-48.png" />
+    <Content Include="Assets\Icons\white\list-512.png" />
+    <Content Include="Assets\Icons\white\list-64.png" />
+    <Content Include="Assets\Icons\white\literature-128.png" />
+    <Content Include="Assets\Icons\white\literature-256.png" />
+    <Content Include="Assets\Icons\white\literature-32.png" />
+    <Content Include="Assets\Icons\white\literature-48.png" />
+    <Content Include="Assets\Icons\white\literature-512_.png" />
+    <Content Include="Assets\Icons\white\literature-64.png" />
+    <Content Include="Assets\Icons\white\lock-32.png" />
+    <Content Include="Assets\Icons\white\login-128.png" />
+    <Content Include="Assets\Icons\white\login-256.png" />
+    <Content Include="Assets\Icons\white\login-32.png" />
+    <Content Include="Assets\Icons\white\login-48.png" />
+    <Content Include="Assets\Icons\white\login-512.png" />
+    <Content Include="Assets\Icons\white\login-64.png" />
+    <Content Include="Assets\Icons\white\logout-32.png" />
+    <Content Include="Assets\Icons\white\minus-32.png" />
+    <Content Include="Assets\Icons\white\moderator-32.png" />
+    <Content Include="Assets\Icons\white\ok-32.png" />
+    <Content Include="Assets\Icons\white\pencil-32.png" />
+    <Content Include="Assets\Icons\white\plus-32.png" />
+    <Content Include="Assets\Icons\white\private-32.png" />
+    <Content Include="Assets\Icons\white\refresh-32.png" />
+    <Content Include="Assets\Icons\white\remove_user-32.png" />
+    <Content Include="Assets\Icons\white\repeat-32.png" />
+    <Content Include="Assets\Icons\white\reviewer-32.png" />
+    <Content Include="Assets\Icons\white\save-32.png" />
+    <Content Include="Assets\Icons\white\save_as-32.png" />
+    <Content Include="Assets\Icons\white\search-32.png" />
+    <Content Include="Assets\Icons\white\settings-32.png" />
+    <Content Include="Assets\Icons\white\settings2-32.png" />
+    <Content Include="Assets\Icons\white\unlock-32.png" />
+    <Content Include="Assets\Icons\white\user-32.png" />
+    <Content Include="Assets\loaderLogo.gif" />
+    <Content Include="Assets\pointer.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\WideLogo.png" />
     <Content Include="Commands_Info_README.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -203,13 +295,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TestPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ApplicationStart\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\BottomAppBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\FlyoutControls\OpenFileFlyout.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\FlyoutControls\PromoteDemoteFlyout.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EducationalApplications\SynchronizedReading\SyncReadingApp.xaml">
       <SubType>Designer</SubType>
@@ -261,9 +361,11 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="WriteableBitmapEx.WinRT, Version=1.0.7.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Users\Kopr\Desktop\WriteableBitmapEx_v1.0.7.0\WinRT\WriteableBitmapEx.WinRT.dll</HintPath>
+    <Reference Include="Callisto">
+      <HintPath>..\packages\Callisto.1.2.9\lib\winrt45\Callisto.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRTXamlToolkit">
+      <HintPath>..\packages\winrtxamltoolkit.1.3.8.0\lib\netcore45\WinRTXamlToolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">

@@ -24,7 +24,7 @@ namespace ITJakub.SearchService
            m_searchServiceManager.Search(criteria);
         }
 
-        public KwicResult[] GetContextForKeyWord(string keyWord)
+        public SearchResult[] GetContextForKeyWord(string keyWord)
         {
             return m_searchServiceManager.GetContextForKeyWord(keyWord);
         }

@@ -4,6 +4,17 @@
  - Y.. => Objekt v aplikaci, kterého se příkaz týká
  - Z.. => Příkaz na tento objekt
 
+
+=== General Commands ===
+ 
+ - General Command Code: "000" // command that dont care about type of application
+
+ == Objects ==
+  * "User" => User of application
+
+  = User =
+  * "login(id)" => user with id logged in
+
 === Synchronized reading App: ===
 
   - App code: "501"
@@ -29,3 +40,7 @@
 
   /* Notes */
   url for RTF file on a web: http://38511.w11.wedos.ws/domains/kavoj.cz/testRTF.rtf
+
+  /* Ikony */
+  http://icons8.com/license/
+  http://icons8.com/download-huge-windows8-set/

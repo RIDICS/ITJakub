@@ -9,12 +9,8 @@ namespace IT_Jakub.Classes.Models {
     class LoggedUser {
 
         private User userData = null;
-        private static bool loggedState = false;
-        public static bool isLoogedIn {
-            get {
-                return loggedState;
-            }
-        }
+        private static bool userLoggedIn;
+
         private static LoggedUser instance;
         private static SignedSession ss = SignedSession.getInstance();
 
@@ -39,17 +35,27 @@ namespace IT_Jakub.Classes.Models {
 
         public void login(User u) {
             setUserData(u);
-            loggedState = true;
+            userLoggedIn = true;
         }
 
-        public async Task<bool> logout() {
-            SessionUserTable sut = new SessionUserTable();
-            await sut.signOutUserFromAllSessions(this.userData);
-            ss.signout();
-            
-            setUserData(null);
-            loggedState = false;
-            return true;
+        public async Task logout() {
+            if (userLoggedIn == true) {
+                userLoggedIn = false;
+                SessionUserTable sut = new SessionUserTable();
+                if (SignedSession.isSignedIn) {
+                    await ss.signout();
+                }
+                try {
+                    await sut.signOutUserFromAllSessions(this.userData);
+                } catch (Exception e) {
+                    object o = e;
+                }
+                setUserData(null);
+            }
+        }
+
+        internal bool isLoggedIn() {
+            return userLoggedIn;
         }
 
     }

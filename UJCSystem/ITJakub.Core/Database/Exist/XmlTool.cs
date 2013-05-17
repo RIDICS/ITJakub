@@ -164,5 +164,19 @@ namespace ITJakub.Core.Database.Exist
             }
             return null;
         }
+
+        public static List<string> ParseTeiCategoriesIds(XmlNode categoriesNode, string categoriesNodeName, string categoryTargetAttName, XmlNamespaceManager namespaceManager)
+        {
+            XmlNodeList catList = categoriesNode.SelectNodes(string.Format(".//tei:{0}", categoriesNodeName), namespaceManager);
+            var result = new List<string>();
+            if (catList != null)
+                foreach (XmlNode catNode in catList)
+                {
+                    if (catNode.Attributes != null)
+                        result.Add(catNode.Attributes[categoryTargetAttName].Value);
+                }
+
+            return result;
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.GetAllExtendedTermsForKey(key);
         }
 
-        public KwicResult[] GetContextForKeyWord(string keyWord)
+        public SearchResult[] GetContextForKeyWord(string keyWord)
         {
             return m_serviceManager.GetContextForKeyWord(keyWord);
         }

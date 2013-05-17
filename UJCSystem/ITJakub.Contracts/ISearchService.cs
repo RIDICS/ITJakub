@@ -14,6 +14,6 @@ namespace ITJakub.Contracts
         void Search(List<SearchCriteriumBase> criteria);
 
         [OperationContract]
-        KwicResult[] GetContextForKeyWord(string keyWord);
+        SearchResult[] GetContextForKeyWord(string keyWord);
     }
 }

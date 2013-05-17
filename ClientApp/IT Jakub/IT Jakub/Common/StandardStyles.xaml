@@ -246,6 +246,8 @@
         and should fit within the 40 pixel radius glyph provided.  16-point Segoe UI Symbol is used for content text 
         to simplify the use of glyphs from that font.  AutomationProperties.Name is used for the text below the glyph.
     -->
+    
+<!--
     <Style x:Key="AppBarButtonStyle" TargetType="ButtonBase">
         <Setter Property="Foreground" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -260,13 +262,13 @@
                         <StackPanel VerticalAlignment="Top" Margin="0,12,0,11">
                             <Grid Width="40" Height="40" Margin="0,0,0,5" HorizontalAlignment="Center">
                                 <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0" Foreground="{StaticResource AppBarItemBackgroundThemeBrush}"/>
-                                <TextBlock x:Name="OutlineGlyph" Text="&#xE0A7;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0"/>
+                                <TextBlock x:Name="OutlineGlyph" Text="&#xE0A7;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0" Foreground="{StaticResource AppBarItemNormalBackgroundThemeBrush}"/>
                                 <ContentPresenter x:Name="Content" HorizontalAlignment="Center" Margin="-1,-1,0,0" VerticalAlignment="Center"/>
                             </Grid>
                             <TextBlock
                                 x:Name="TextLabel"
                                 Text="{TemplateBinding AutomationProperties.Name}"
-                                Foreground="{StaticResource AppBarItemForegroundThemeBrush}"
+                                Foreground="{StaticResource AppBarItemNormalForegroundThemeBrush}"
                                 Margin="0,0,2,0"
                                 FontSize="12"
                                 TextAlignment="Center"
@@ -398,7 +400,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+-->
     <!-- 
         Standard AppBarButton Styles for use with Button and ToggleButton
     

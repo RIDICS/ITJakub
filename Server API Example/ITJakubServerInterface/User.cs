@@ -27,5 +27,7 @@ namespace ITJakubServerInterface
         public int YearOfGraduation { get; set; }
 
         public string ClassTeacher { get; set; }
+
+        public int Role { get; set; }
     }
 }

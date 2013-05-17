@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{StaticResource ApplicationBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="80*"/>
             <RowDefinition Height="712*"/>

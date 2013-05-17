@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace IT_Jakub.Classes.Exceptions {
     class MyException : Exception {
+
+        public Exception invoker;
+
         protected MyException(string message)
             : base(message) {
         }

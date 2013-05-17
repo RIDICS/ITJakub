@@ -41,7 +41,7 @@ namespace ITJakub.SearchService
             throw new NotImplementedException();
         }
 
-        public KwicResult[] GetContextForKeyWord(string keyWord)
+        public SearchResult[] GetContextForKeyWord(string keyWord)
         {
             var dbResult = m_keyWordsDao.GetKeyWordInContextByWord(keyWord);
             return dbResult;

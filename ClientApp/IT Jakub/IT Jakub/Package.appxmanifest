@@ -15,9 +15,9 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="IT_Jakub.App">
-      <VisualElements DisplayName="IT Jakub - Client App" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="IT Jakub" ForegroundText="light" BackgroundColor="#464646">
-        <DefaultTile ShowName="allLogos" />
-        <SplashScreen Image="Assets\SplashScreen.png" />
+      <VisualElements DisplayName="IT Jakub - Client App" Logo="Assets\logo.png" SmallLogo="Assets\SmallLogo.png" Description="IT Jakub" ForegroundText="light" BackgroundColor="#4183FF">
+        <DefaultTile ShowName="allLogos" WideLogo="Assets\WideLogo.png" />
+        <SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#4183FF" />
       </VisualElements>
     </Application>
   </Applications>

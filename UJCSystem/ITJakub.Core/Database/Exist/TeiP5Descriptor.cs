@@ -53,6 +53,11 @@ namespace ITJakub.Core.Database.Exist
             get { return "title"; }
         }
 
+        public static string CategoriesNodeName
+        {
+            get { return "catRef"; }
+        }
+
         public static string ParagraphNodeName
         {
             get { return "p"; }
@@ -66,6 +71,11 @@ namespace ITJakub.Core.Database.Exist
         public static string SpaceTagName
         {
             get { return "c"; }
+        }
+
+        public static string CategoriesTargetAttributName
+        {
+            get { return "target"; }
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetAllNamespaces()

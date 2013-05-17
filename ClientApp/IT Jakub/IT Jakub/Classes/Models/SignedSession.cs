@@ -1,4 +1,5 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
+using IT_Jakub.Classes.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace IT_Jakub.Classes.Models {
         private static bool signedState = false;
         private static LoggedUser lu = LoggedUser.getInstance();
         private long latestCommandId = 0;
+        
 
         public static bool isSignedIn {
             get {
@@ -29,7 +31,7 @@ namespace IT_Jakub.Classes.Models {
         }
 
         private SignedSession() {
-
+            
         }
 
         private void setSessionData(Session s) {
@@ -46,18 +48,16 @@ namespace IT_Jakub.Classes.Models {
         }
 
         public async void login() {
+            SessionUserTable sut = new SessionUserTable();
+            await sut.signOutUserFromAllSessions(lu.getUserData());
+            sut.loginUserInSession(lu.getUserData(), this.sessionData);
+
             CommandTable ct = new CommandTable();
-            List<Command> cl = await ct.getAllSessionCommands(this.sessionData);
-
-            LinkedList<Command> cll = new LinkedList<Command>();
-
-            for (int i = 0; i < cl.Count; i++) {
-                cll.AddLast(cl[i]);
+            List<Command> items = await ct.getAllSessionCommands(this.sessionData);
+            for (int i = 0; i < items.Count; i++) {
+                await items[i].procedeCommand();
             }
-            for (LinkedListNode<Command> node = cll.First; node != cll.Last.Next; node = node.Next) {
-                Command command = node.Value as Command;
-                await command.procedeCommand();
-            }
+            await sendCommand(Command.getUserLoggedInCommand(lu.getUserData()));
         }
 
         internal void setLatestCommandId(long id) {
@@ -68,18 +68,45 @@ namespace IT_Jakub.Classes.Models {
             return latestCommandId;
         }
 
-        public async void signout() {
+        public async Task signout() {
+            TaskKiller.killEducationalApplicationTasks();
             SessionUserTable sut = new SessionUserTable();
+            CommandTable ct = new CommandTable();
+            
             await sut.removeUserFromSession(this.getSessionData(), lu.getUserData());
+            await sendCommand(Command.getUserLoggedOutCommand(lu.getUserData()));
+            await ct.removeUserLoginLogoutCommands(sessionData, lu.getUserData());
+            
             setSessionData(null);
             signedState = false;
         }
 
         public async Task<bool> sendCommand(string commandText) {
             CommandTable ct = new CommandTable();
-            var x = lu;
-            bool test = await ct.createCommand(sessionData, lu.getUserData(), commandText);
-            return true;
+            long sentCommandId = await ct.createCommand(sessionData, lu.getUserData(), commandText);
+            if (sentCommandId > latestCommandId) {
+                latestCommandId = sentCommandId;
+                return true;
+            }
+            return false;
+        }
+
+        internal async void promoteUser(long userId) {
+            sessionData.PrefferedUserId = userId;
+            CommandTable ct = new CommandTable();
+            await ct.deletePrevPromoteDemoteCommands(sessionData);
+        }
+
+        internal async void demoteUser(long userId) {
+            if (sessionData.PrefferedUserId == userId) {
+                sessionData.PrefferedUserId = 0;
+                CommandTable ct = new CommandTable();
+                await ct.deletePrevPromoteDemoteCommands(sessionData);
+            }
+        }
+
+        internal bool isSignedInSession() {
+            return isSignedIn;
         }
     }
 }

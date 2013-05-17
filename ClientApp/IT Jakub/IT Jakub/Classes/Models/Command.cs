@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IT_Jakub.Classes.Models.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,16 +20,26 @@ namespace IT_Jakub.Classes.Models {
             this.appCommand = commandArray[0];
             this.commandObject = commandArray[1];
             this.command = commandArray[2];
-            
-            ss.setLatestCommandId(this.Id);
 
             switch (appCommand) {
                 case Command.SYNCHRONIZED_READING_APPLICATION:
-                    this.commandState = new SyncronizedReadingApp.SyncReadingAppCommand(this);
+                    this.commandState = new Commands.SyncReadingAppCommand(this);
+                    break;
+                case Command.GENERAL:
+                    this.commandState = new GeneralCommand(this);
                     break;
             }
             await this.commandState.procedeCommand();
+            ss.setLatestCommandId(this.Id);
             return true;
+        }
+
+        internal static string getUserLoggedInCommand(User user) {
+            return Command.GENERAL + Command.SEPARATOR + Command.USER + SEPARATOR + "Login(" + user.Id + ")";
+        }
+
+        internal static string getUserLoggedOutCommand(User user) {
+            return Command.GENERAL + Command.SEPARATOR + Command.USER + SEPARATOR + "Logout(" + user.Id + ")";
         }
     }
 }

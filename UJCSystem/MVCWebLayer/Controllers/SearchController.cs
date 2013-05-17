@@ -37,8 +37,6 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
                 {
                     Results = m_resultsProvider.GetKwicForKeyWord(searchTerm)
                 });
-
-            //return View("Detail", null, searchTerm);
         }
 
         [HttpGet]

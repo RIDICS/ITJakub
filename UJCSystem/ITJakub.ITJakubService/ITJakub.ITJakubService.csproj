@@ -85,6 +85,7 @@
     <Content Include="packages.config" />
     <Content Include="ITJakub.ITJakubService.Container.Config" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
+    <None Include="Properties\PublishProfiles\Outside.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

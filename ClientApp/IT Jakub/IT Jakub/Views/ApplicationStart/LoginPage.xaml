@@ -8,7 +8,7 @@
     x:Class="IT_Jakub.Views.ApplicationStart.LoginPage"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{StaticResource ApplicationBackground}">
         <Grid Style="{StaticResource MenuGridStyle}">
             <StackPanel>
                 <TextBlock x:Name="errorTextBlock" TextWrapping="Wrap" FontSize="14" Text="Nesprávné uživatelské jméno nebo heslo" Foreground="#FFFF6C6C" Visibility="Collapsed"/>

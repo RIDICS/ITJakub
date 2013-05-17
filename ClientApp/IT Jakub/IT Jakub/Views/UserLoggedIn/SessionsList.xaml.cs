@@ -62,24 +62,20 @@ namespace IT_Jakub.Views.UserLoggedIn {
             }
         }
 
-        private async void sessionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void sessionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (e.RemovedItems.Count > 0) {
                 selectedSession = null;
             }
 
             if (e.AddedItems.Count > 0) {
                 selectedSession = (Session)e.AddedItems[0];
-                CommandTable ct = new CommandTable();
-                List<Command> cl = await ct.getAllSessionCommands(selectedSession);
-                cl = await ct.getAllCommands();
             }
+            Views.Controls.BottomAppBar.setSelectedSession(selectedSession);
+            Views.Controls.BottomAppBar.repaint(MainPage.getBottomAppBar());
         }
 
-        private async void joinChossenSession_Click(object sender, RoutedEventArgs e) {
-            SessionUserTable sut = new SessionUserTable();
-            await sut.signOutUserFromAllSessions(lu.getUserData());
+        private void joinChossenSession_Click(object sender, RoutedEventArgs e) {
             if (selectedSession != null) {
-                sut.loginUserInSession(lu.getUserData(), selectedSession);
                 ss.register(selectedSession);
                 ss.login();
             }
