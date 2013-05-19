@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 namespace IT_Jakub.Classes.DatabaseModels {
     class SessionTable {
 
-        private static MobileService ms = MobileService.getInstance();
         private static MobileServiceClient msc = MobileService.getMobileServiceClient();
         private IMobileServiceTable<Session> table = msc.GetTable<Session>();
 
@@ -24,6 +23,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = table.ToCollectionView();
             } catch (Exception e) {
+                object o = e;
                 throw new ServerErrorException(e);
             }
             return items;

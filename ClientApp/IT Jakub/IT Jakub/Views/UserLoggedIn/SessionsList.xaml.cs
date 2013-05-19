@@ -44,9 +44,9 @@ namespace IT_Jakub.Views.UserLoggedIn {
         }
 
         private void sessionListUpdate_Click(object sender, RoutedEventArgs e) {
-            SessionTable st = new SessionTable();
-            SessionUserTable sut = new SessionUserTable();
             try {
+                SessionTable st = new SessionTable();
+                SessionUserTable sut = new SessionUserTable();
                 MobileServiceCollectionView<Session> allSessions = st.getAllSessions();
                 sessionList.ItemsSource = allSessions;
                 /* Neodchycena vyjímka: 
@@ -57,21 +57,17 @@ namespace IT_Jakub.Views.UserLoggedIn {
                  * 
                  */
             } catch (Exception ex) {
-                MyDialogs.showDialogOK(ex.Message);
-                return;
+                object o = ex;
             }
         }
 
-        private async void sessionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void sessionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (e.RemovedItems.Count > 0) {
                 selectedSession = null;
             }
 
             if (e.AddedItems.Count > 0) {
                 selectedSession = (Session)e.AddedItems[0];
-                CommandTable ct = new CommandTable();
-                List<Command> all = await ct.getAllCommands();
-                List<Command> sessions = await ct.getAllSessionCommands(selectedSession);
             }
             Views.Controls.BottomAppBar.setSelectedSession(selectedSession);
             Views.Controls.BottomAppBar.repaint(MainPage.getBottomAppBar());

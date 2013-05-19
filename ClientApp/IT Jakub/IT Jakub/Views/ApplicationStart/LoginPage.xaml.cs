@@ -1,5 +1,5 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
-using IT_Jakub.Classes.Autentifcation;
+using IT_Jakub.Classes.Authentification;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Networking;
 using System;

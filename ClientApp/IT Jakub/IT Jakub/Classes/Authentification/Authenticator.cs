@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Utils;
 
-namespace IT_Jakub.Classes.Autentifcation {
+namespace IT_Jakub.Classes.Authentification {
     class Authenticator {
 
         public Authenticator() {
