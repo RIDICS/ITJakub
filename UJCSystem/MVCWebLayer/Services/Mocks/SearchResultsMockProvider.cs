@@ -49,4 +49,20 @@ namespace Ujc.Naki.MVCWebLayer.Services.Mocks
             return new SearchResult[0];
         }
     }
+
+
+    public class SelectionBase
+    {
+        public string Name {get;set;}
+        public string Id { get; set; }
+    }
+
+    public class Book:SelectionBase
+    {   
+    }
+
+    public class Categorie : SelectionBase
+    {
+        public List<SelectionBase> Subitems{get;set;}    
+    }
 }
