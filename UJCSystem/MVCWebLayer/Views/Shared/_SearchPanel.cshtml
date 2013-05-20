@@ -7,7 +7,7 @@
     @using (Html.BeginForm("Search", "Search", FormMethod.Get))
     {
                 <div class="input-append search-inputs text-center">
-                    @Html.TextBoxFor(a => a.SearchTerm, new { id = "search-term", @class = "input-xxlarge" })
+                    @Html.TextBoxFor(a => a.SearchTerm, new { id = "search-term", @class = "input-xxlarge search-term" })
                     <button id="search-submit" type="submit" name="search-submit" class="btn">Vyhledat</button>
                     <button class="btn show-advanced-search" type="button">Upřesnit <span class="caret"></span></button>
                 </div>

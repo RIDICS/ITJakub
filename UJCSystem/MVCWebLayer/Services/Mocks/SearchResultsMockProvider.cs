@@ -57,10 +57,6 @@ namespace Ujc.Naki.MVCWebLayer.Services.Mocks
         public string Id { get; set; }
     }
 
-    public class Book:SelectionBase
-    {   
-    }
-
     public class Categorie : SelectionBase
     {
         public List<SelectionBase> Subitems{get;set;}

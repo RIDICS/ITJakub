@@ -1,10 +1,10 @@
 ﻿using Ujc.Naki.MVCWebLayer.Services.Enums;
+using Ujc.Naki.MVCWebLayer.Services.Mocks;
 
 namespace Ujc.Naki.MVCWebLayer.Services.DTOs
 {
-    public class Book
+    public class Book:SelectionBase
     {
-        public Book() { }
         public Book(string name, BookCategory category, bool isRoot)
         {
             Name = name;
@@ -12,7 +12,7 @@ namespace Ujc.Naki.MVCWebLayer.Services.DTOs
             IsRoot = isRoot;
         }
 
-        public string Name { get; set; }
+        
         public BookCategory Category { get; set; }
         public bool IsRoot { get; set; }
     }

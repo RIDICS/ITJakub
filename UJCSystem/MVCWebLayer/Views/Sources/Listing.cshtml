@@ -23,12 +23,36 @@
             </div>
         </div>
     </form>
-    <div class="pagination pagination-mini">
+    <div class="pagination alphabet">
         <ul>
-            @foreach (var alphabet in Model.Alphabet)
+            @foreach (var alphabetLetter in Model.Alphabet)
             {
                 @* If there are no sources for the letter set class of li tag to class=disabled *@
-                <li @(string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), @alphabet, StringComparison.InvariantCultureIgnoreCase) ? "class=active" : "")><a href="@Url.RouteUrl("SourcesListing", new { mode = Model.ViewMode, alphabet = @alphabet })">@alphabet</a></li>
+                var active = string.Equals(ViewContext.RouteData.Values["alphabet"].ToString(), @alphabetLetter.Letter, StringComparison.InvariantCultureIgnoreCase);
+                var disabled = alphabetLetter.Disabled;
+                var liClass = "";
+                    
+                if (active && disabled)
+                {
+                    liClass = "active disabled";
+                }
+                else if (disabled)
+                {
+                    liClass = "disabled";
+                } else if (active)
+                {
+                    liClass = "active";
+                }
+                <li@( !liClass.IsEmpty() ? " class=" + liClass : "")>
+                    @if (!disabled)
+                    {
+                        <a href="@Url.RouteUrl("SourcesListing", new {mode = Model.ViewMode.ToUrlParam(), alphabet = @alphabetLetter.Letter})">@alphabetLetter.Letter</a>
+                    }
+                    else
+                    {
+                        <span>@alphabetLetter.Letter</span>
+                    }
+                </li>
             }
         </ul>
     </div>
@@ -43,7 +67,7 @@
                 <p>@source.Perex</p>
 
                 <div class="pull-right">
-                    <a class="btn" href="@Url.RouteUrl("SourcesDetail", new { id = "1-zizka", part="Ïnfo" })">Detail</a>
+                    <a class="btn" href="@Url.RouteUrl("SourcesDetail", new { id = "1-zizka" })">Detail</a>
                     <a class="btn" href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = 1 })">Procházet</a>
                 </div>
             </div>    
@@ -60,7 +84,7 @@
         var data = Enum.GetValues(typeof(SourcesViewMode)).Cast<SourcesViewMode>().Select(v => new SelectListItem
         {
             Text = v.ToCzechString(),
-            Value = v.ToString(),
+            Value = v.ToUrlParam(),
         }).ToList();
 
         return data;

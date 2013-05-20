@@ -12,6 +12,52 @@ namespace Ujc.Naki.MVCWebLayer.ViewModels
     {
         public SourcesViewMode ViewMode { get; set; }
         public IEnumerable<Source> FoundSources { get; set; }
-        public List<string> Alphabet = new List<string> { "A", "B", "C", "Č", "D", "Ď", "E", "F", "G", "H", "CH", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "Ř", "S", "Š", "T", "Ť", "U", "V", "W", "X", "Y", "Z", "Ž"};
+        public List<AlphabetLetters> Alphabet = new List<AlphabetLetters>
+            {
+                new AlphabetLetters("A", false), 
+                new AlphabetLetters("B", false), 
+                new AlphabetLetters("C", true), 
+                new AlphabetLetters("Č", true), 
+                new AlphabetLetters("D", true), 
+                new AlphabetLetters("E", true), 
+                new AlphabetLetters("F", true), 
+                new AlphabetLetters("G", true), 
+                new AlphabetLetters("H", true), 
+                new AlphabetLetters("Ch", true), 
+                new AlphabetLetters("I", true), 
+                new AlphabetLetters("J", true), 
+                new AlphabetLetters("K", true), 
+                new AlphabetLetters("L", true), 
+                new AlphabetLetters("M", true), 
+                new AlphabetLetters("N", true), 
+                new AlphabetLetters("O", true), 
+                new AlphabetLetters("P", true), 
+                new AlphabetLetters("Q", true), 
+                new AlphabetLetters("R", true), 
+                new AlphabetLetters("Ř", true), 
+                new AlphabetLetters("S", true), 
+                new AlphabetLetters("Š", true), 
+                new AlphabetLetters("T", true), 
+                new AlphabetLetters("U", true), 
+                new AlphabetLetters("V", true), 
+                new AlphabetLetters("W", true), 
+                new AlphabetLetters("X", true), 
+                new AlphabetLetters("Y", true), 
+                new AlphabetLetters("Z", true), 
+                new AlphabetLetters("Ž", true) 
+            };
     }
+
+    public class AlphabetLetters
+    {
+        public string Letter;
+        public bool Disabled;
+        
+        public AlphabetLetters(string letter, bool disabled)
+        {
+            Letter = letter;
+            Disabled = disabled;
+        }
+    }
+
 }

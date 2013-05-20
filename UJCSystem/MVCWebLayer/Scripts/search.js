@@ -1,17 +1,20 @@
 ﻿$(document).ready(function () {
     $('.advanced-search-wrapper').advancedSearch();
+    $("#search-results-alphabetical a.search-results-alphabetical-result").initLoadingAlphTermDetail();
+    $("#results-type a.search-results-type-result").initLoadingTypeTermDetail();
 });
 
 
 (function ($) {
+    /* todo */
     $.fn.extend({
         advancedSearch: function (options) {
 
             var defaults = {};
-            
+
             var options = $.extend(defaults, options);
             var advancedSearchVisible = true;
-            
+
             function changeASVisibility(asElement) {
                 if (advancedSearchVisible) {
                     asElement.find('.advanced-search').slideUp();
@@ -23,7 +26,7 @@
             }
 
             var asCheckboxes = null;
-            
+
             function createFindsHtml() {
                 if (asCheckboxes == null) {
                     return "<span class=\"muted\">Aktivní prohledávání ve všech dostupných dílech</span>";
@@ -44,7 +47,7 @@
                 });
                 return html;
             }
-            
+
             function defineCheckboxes(asElement) {
                 asCheckboxes = null;
                 asElement.find(".advanced-search .span6 > ul > li > label > input[type=checkbox]").each(function () {
@@ -69,7 +72,7 @@
 
             return this.each(function () {
                 var asElement = $(this);
-                
+
                 asElement.find('.advanced-search').hide();
                 /*advancedSearchVisible = false;
                 $('.show-advanced-search').click(function () {
@@ -78,22 +81,115 @@
 
                 asElement.find('.advanced-search input[type=checkbox]').click(function () {
                     defineCheckboxes(asElement);
-                });*/ 
+                });*/
             });
         }
     });
 })(jQuery);
 
 
-function loadTermDetail(element, url) {
-    $(element).parent().parent().find("li").removeClass("active");
-    $(element).parent().addClass("active");
+(function ($) {
 
-    $.get(url, function (data) {
-        $('#alphabetical-result-detail').html(data);
-        $(element).blur();
+    $.fn.extend({
+        initLoadingAlphTermDetail: function (options) {
+
+            var loadingHTML = "<div class=\"progress progress-striped active search-progress\"><div class=\"bar\" style=\"width: 0%;\"></div></div>";
+            
+            var defaults = {};
+
+            var options = $.extend(defaults, options);
+
+            var progressState = 0;
+
+            function makeProgress(element) {
+                if (progressState + 10 < 100) {
+                    progressState = progressState + 10;
+                    element.width(progressState + "%");
+                    setTimeout(function() {
+                        makeProgress(element);
+                    }, 400);
+                }
+            }
+            
+            function endProgress(element) {
+                progressState = 100;
+                element.width("100%");
+            }
+
+            return this.each(function () {
+                var element = $(this);
+                element.click(function () {
+                    element.parent().parent().find("li").removeClass("active");
+                    element.parent().addClass("active");
+
+                    $('#alphabetical-result-detail').html(loadingHTML);
+                    progressState = 0;
+                    makeProgress($('#alphabetical-result-detail .progress .bar'));
+                    $.get(element.attr("data-url"), function (data) {
+                        endProgress($('#alphabetical-result-detail .progress .bar'));
+                        setTimeout(function () {
+                            $('#alphabetical-result-detail').html(data);
+                        }, 500);
+                        element.blur();
+                    });
+                    return false;
+                });
+            });
+        }
     });
-}
+})(jQuery);
+
+
+(function ($) {
+
+    $.fn.extend({
+        initLoadingTypeTermDetail: function (options) {
+
+            var loadingHTML = "<div class=\"progress progress-striped active search-progress\"><div class=\"bar\" style=\"width: 0%;\"></div></div>";
+            
+            var defaults = {};
+
+            var options = $.extend(defaults, options);
+
+            var progressState = 0;
+
+            function makeProgress(element) {
+                if (progressState + 10 < 100) {
+                    progressState = progressState + 10;
+                    element.width(progressState + "%");
+                    setTimeout(function () {
+                        makeProgress(element);
+                    }, 400);
+                }
+            }
+
+            function endProgress(element) {
+                progressState = 100;
+                element.width("100%");
+            }
+
+            return this.each(function () {
+                var element = $(this);
+                element.click(function () {
+                    element.parent().parent().find("li").removeClass("active");
+                    element.parent().addClass("active");
+
+                    $('#type-result-detail').html(loadingHTML);
+                    progressState = 0;
+                    makeProgress($('#type-result-detail .progress .bar'));
+                    $.get(element.attr("data-url"), function (data) {
+                        endProgress($('#type-result-detail .progress .bar'));
+                        setTimeout(function () {
+                            $('#type-result-detail').html(data);
+                        }, 500);
+                        element.blur();
+                    });
+                    return false;
+                });
+            });
+        }
+    });
+})(jQuery);
 
     
 /* var arrowUpImg = new Image();

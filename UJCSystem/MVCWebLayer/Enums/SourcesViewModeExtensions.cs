@@ -20,5 +20,31 @@ namespace Ujc.Naki.MVCWebLayer.Enums
                     return string.Empty;
             }
         }
+
+        public static string ToUrlParam(this SourcesViewMode mode)
+        {
+            switch (mode)
+            {
+                case SourcesViewMode.Autor:
+                    return "autor";
+                case SourcesViewMode.Jmeno:
+                    return "nazev";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public static SourcesViewMode FromUrlParam(string mode)
+        {
+            switch (mode)
+            {
+                case "autor":
+                    return SourcesViewMode.Autor;
+                case "nazev":
+                    return SourcesViewMode.Jmeno;
+                default:
+                    return SourcesViewMode.Jmeno;
+            }
+        }
     }
 }

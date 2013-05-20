@@ -22,9 +22,9 @@ namespace Ujc.Naki.MVCWebLayer
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                "SearchSearch",
-                "hledani",
-                new { controller = "Search", action = "Search" }
+                "SearchDetailType",
+                "hledani/{searchTerm}/detail-podle-druhu",
+                new { controller = "Search", action = "DetailByType", searchTerm = "" }
             );
 
             routes.MapRoute(
@@ -34,27 +34,39 @@ namespace Ujc.Naki.MVCWebLayer
             );
 
             routes.MapRoute(
+                "SearchSearch",
+                "hledani",
+                new { controller = "Search", action = "Search" }
+            );
+
+            routes.MapRoute(
                 "SourcesMain",
                 "zdroje",
-                new { controller = "Sources", action = "Listing", mode = "Jmeno", alphabet = "A" }
+                new { controller = "Sources", action = "Listing", mode = "nazev", alphabet = "A" }
             );
 
             routes.MapRoute(
                 "SourcesListing",
                 "zdroje/listovani/{mode}/{alphabet}",
-                new { controller = "Sources", action = "Listing", mode = "Jmeno", alphabet = "A" }
+                new { controller = "Sources", action = "Listing" }
+            );
+
+            routes.MapRoute(
+                "SourcesDetail",
+                "zdroje/{id}",
+                new { controller = "Sources", action = "Detail", part = "Info" }
             );
 
             routes.MapRoute(
                 "SourcesDetailSearch",
                 "zdroje/{id}/hledani/{searchTerm}",
-                new { controller = "Sources", action = "DetailHledat", searchTerm="" }
+                new { controller = "Sources", action = "DetailHledat", searchTerm = "" }
             );
 
             routes.MapRoute(
                 "SourcesGoThrough",
                 "zdroje/{id}/plny-text/{page}",
-                new { controller = "Sources", action = "Prochazet", page = 1}
+                new { controller = "Sources", action = "Prochazet", page = 1 }
             );
 
             routes.MapRoute(
@@ -64,9 +76,15 @@ namespace Ujc.Naki.MVCWebLayer
             );
 
             routes.MapRoute(
-                "SourcesDetail",
-                "zdroje/{id}/{part}",
-                new { controller = "Sources", action = "Detail", part = "Info", id = "1-zizka" }
+                "SourcesDetailZpracovani",
+                "zdroje/{id}/zpracovani-dokumentu",
+                new { controller = "Sources", action = "Detail", part = "Zpracovani", id = "1-zizka" }
+            );
+
+            routes.MapRoute(
+                "SourcesDetailPodminky",
+                "zdroje/{id}/podminky-uziti",
+                new { controller = "Sources", action = "Detail", part = "Podminky", id = "1-zizka" }
             );
 
             routes.MapRoute(
@@ -77,7 +95,7 @@ namespace Ujc.Naki.MVCWebLayer
 
             routes.MapRoute(
                 "HomePage",
-                "homepage/vyhledavani",
+                "",
                 new { controller = "Index", action = "Index" }
             );
 

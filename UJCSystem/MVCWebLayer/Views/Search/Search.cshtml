@@ -10,8 +10,15 @@
 
 <script type="text/javascript">
     $(function () {
+        $("#results-type > ul li.search-item:first").addClass("active");
+        $("#results-type > ul li.search-item:first a").click();
+
         $("#results-alphabetical > ul li:first-child").addClass("active");
         $("#results-alphabetical > ul li:first-child a").click();
+        
+        $("#search-results-alphabetical > ul li:first-child").addClass("active");
+        $("#search-results-alphabetical > ul li:first-child a").click();
+        
     });
 
 </script>
@@ -23,16 +30,16 @@
 <div class="row-fluid">
     <div class="span12">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#results-alphabetical" data-toggle="tab">Abecedně</a></li>
+            <li class="active"><a href="#search-results-alphabetical" data-toggle="tab">Abecedně</a></li>
             <li><a href="#results-type" data-toggle="tab">Podle druhu a díla</a></li>
         </ul>
         
         <div class="tab-content">
-            <div class="tab-pane active tabs-left" id="results-alphabetical">
+            <div class="tab-pane active tabs-left" id="search-results-alphabetical">
                 <ul class="nav nav-tabs">
                     @foreach (var result in Model.FoundWords)
                     {
-                        <li><a href="#" onclick="loadTermDetail(this, '@Url.RouteUrl("SearchDetail", new { searchTerm = result })'); return false;">@result</a></li>
+                        <li><a href="#" class="search-results-alphabetical-result" data-url="@Url.RouteUrl("SearchDetail", new { searchTerm = result })" >@result</a></li>
                     }
                 </ul>
                 <div class="tab-content">
@@ -41,17 +48,22 @@
                     </div>
                 </div>            
             </div>
-            <div class="tab-pane" id="results-type">
-                @foreach(KeyValuePair<BookCategory, List<string>> category in Model.FoundByType) 
+            <div class="tab-pane tabs-left" id="results-type">
+                @foreach (KeyValuePair<BookCategory, List<string>> category in Model.FoundByType)
                 {
-                    <h4>@category.Key.CzechString()</h4>
-                    <ul>
-                        @foreach(var book in category.Value) 
+                    <ul class="nav nav-tabs">
+                        <li><h4>@category.Key.CzechString()</h4></li>
+                        @foreach (var book in category.Value)
                         {
-                            <li><a href="#" onclick="bookDetail(this, '@book'); return false;">@book</a></li>
+                            <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { searchTerm = "book" @* book pozor na dvojtecku *@ })">@book</a></li>
                         }
                     </ul>
                 }
+                <div class="tab-content">
+                    <div class="tab-pane active" id="type-result-detail">
+                                  
+                    </div>
+                </div>         
             </div>
         </div>
     </div>
