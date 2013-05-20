@@ -10,8 +10,15 @@
 
 <script type="text/javascript">
     $(function () {
+        $("#results-type > ul li.search-item:first").addClass("active");
+        $("#results-type > ul li.search-item:first a").click();
+
         $("#results-alphabetical > ul li:first-child").addClass("active");
         $("#results-alphabetical > ul li:first-child a").click();
+        
+        $("#search-results-alphabetical > ul li:first-child").addClass("active");
+        $("#search-results-alphabetical > ul li:first-child a").click();
+        
     });
 
 </script>
@@ -48,7 +55,7 @@
                         <li><h4>@category.Key.CzechString()</h4></li>
                         @foreach (var book in category.Value)
                         {
-                            <li><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { searchTerm = "book" @* book pozor na dvojtecku *@ })">@book</a></li>
+                            <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { searchTerm = "book" @* book pozor na dvojtecku *@ })">@book</a></li>
                         }
                     </ul>
                 }
