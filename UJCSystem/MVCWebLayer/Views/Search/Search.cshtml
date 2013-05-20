@@ -50,12 +50,6 @@
                         {
                             <li><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { searchTerm = "book" @* book pozor na dvojtecku *@ })">@book</a></li>
                         }
-                        @*TODO delete the one*@
-                        <li><h4>@category.Key.CzechString()</h4></li>
-                        @foreach (var book in category.Value)
-                        {
-                            <li><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { searchTerm = book })">@book</a></li>
-                        }
                     </ul>
                 }
                 <div class="tab-content">

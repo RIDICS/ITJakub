@@ -93,11 +93,28 @@
     $.fn.extend({
         initLoadingAlphTermDetail: function (options) {
 
-            var loadingHTML = "<div class=\"progress progress-striped active search-progress\"><div class=\"bar\" style=\"width: 100%;\"></div></div>";
+            var loadingHTML = "<div class=\"progress progress-striped active search-progress\"><div class=\"bar\" style=\"width: 0%;\"></div></div>";
             
             var defaults = {};
 
             var options = $.extend(defaults, options);
+
+            var progressState = 0;
+
+            function makeProgress(element) {
+                if (progressState + 10 < 100) {
+                    progressState = progressState + 10;
+                    element.width(progressState + "%");
+                    setTimeout(function() {
+                        makeProgress(element);
+                    }, 400);
+                }
+            }
+            
+            function endProgress(element) {
+                progressState = 100;
+                element.width("100%");
+            }
 
             return this.each(function () {
                 var element = $(this);
@@ -106,8 +123,13 @@
                     element.parent().addClass("active");
 
                     $('#alphabetical-result-detail').html(loadingHTML);
+                    progressState = 0;
+                    makeProgress($('#alphabetical-result-detail .progress .bar'));
                     $.get(element.attr("data-url"), function (data) {
-                        $('#alphabetical-result-detail').html(data);
+                        endProgress($('#alphabetical-result-detail .progress .bar'));
+                        setTimeout(function () {
+                            $('#alphabetical-result-detail').html(data);
+                        }, 500);
                         element.blur();
                     });
                     return false;
@@ -123,11 +145,28 @@
     $.fn.extend({
         initLoadingTypeTermDetail: function (options) {
 
-            var loadingHTML = "<div class=\"progress progress-striped active search-progress\"><div class=\"bar\" style=\"width: 100%;\"></div></div>";
+            var loadingHTML = "<div class=\"progress progress-striped active search-progress\"><div class=\"bar\" style=\"width: 0%;\"></div></div>";
             
             var defaults = {};
 
             var options = $.extend(defaults, options);
+
+            var progressState = 0;
+
+            function makeProgress(element) {
+                if (progressState + 10 < 100) {
+                    progressState = progressState + 10;
+                    element.width(progressState + "%");
+                    setTimeout(function () {
+                        makeProgress(element);
+                    }, 400);
+                }
+            }
+
+            function endProgress(element) {
+                progressState = 100;
+                element.width("100%");
+            }
 
             return this.each(function () {
                 var element = $(this);
@@ -135,9 +174,14 @@
                     element.parent().parent().find("li").removeClass("active");
                     element.parent().addClass("active");
 
-                    $('#alphabetical-result-detail').html(loadingHTML);
+                    $('#type-result-detail').html(loadingHTML);
+                    progressState = 0;
+                    makeProgress($('#type-result-detail .progress .bar'));
                     $.get(element.attr("data-url"), function (data) {
-                        $('#type-result-detail').html(data);
+                        endProgress($('#type-result-detail .progress .bar'));
+                        setTimeout(function () {
+                            $('#type-result-detail').html(data);
+                        }, 500);
                         element.blur();
                     });
                     return false;
