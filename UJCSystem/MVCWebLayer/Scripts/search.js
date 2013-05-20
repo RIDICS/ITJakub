@@ -93,6 +93,8 @@
     $.fn.extend({
         initLoadingAlphTermDetail: function (options) {
 
+            var loadingHTML = "<div class=\"progress progress-striped active search-progress\"><div class=\"bar\" style=\"width: 100%;\"></div></div>";
+            
             var defaults = {};
 
             var options = $.extend(defaults, options);
@@ -103,6 +105,7 @@
                     element.parent().parent().find("li").removeClass("active");
                     element.parent().addClass("active");
 
+                    $('#alphabetical-result-detail').html(loadingHTML);
                     $.get(element.attr("data-url"), function (data) {
                         $('#alphabetical-result-detail').html(data);
                         element.blur();
@@ -120,6 +123,8 @@
     $.fn.extend({
         initLoadingTypeTermDetail: function (options) {
 
+            var loadingHTML = "<div class=\"progress progress-striped active search-progress\"><div class=\"bar\" style=\"width: 100%;\"></div></div>";
+            
             var defaults = {};
 
             var options = $.extend(defaults, options);
@@ -130,6 +135,7 @@
                     element.parent().parent().find("li").removeClass("active");
                     element.parent().addClass("active");
 
+                    $('#alphabetical-result-detail').html(loadingHTML);
                     $.get(element.attr("data-url"), function (data) {
                         $('#type-result-detail').html(data);
                         element.blur();

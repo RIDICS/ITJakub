@@ -233,3 +233,14 @@ form.sources-order.form-horizontal.form-horizontal .controls {
 
 /* Module search */
 
+/* Search progress */
+
+ .search-progress {
+     width: 200px;
+     margin: auto;
+     margin-top: 50px;
+ }
+
+/* Search progress */
+
+
