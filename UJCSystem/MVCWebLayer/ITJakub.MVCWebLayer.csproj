@@ -127,7 +127,10 @@
     <Content Include="Images\header.png" />
     <Content Include="Images\hr.png" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\texture.jpg" />
     <Content Include="Images\texture.png" />
+    <Content Include="Images\_header.png" />
+    <Content Include="Images\_texture.png" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\sources.js" />

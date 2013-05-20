@@ -32,11 +32,11 @@ a {
 
 .header {
     width: 690px;
-    height: 160px;
+    height: 167px;
     background: transparent url('../Images/header.png') center top no-repeat;
     margin-left: -10px;
     padding-left: 270px;
-    padding-top: 70px;
+    padding-top: 75px;
 }
 
 .header a {
