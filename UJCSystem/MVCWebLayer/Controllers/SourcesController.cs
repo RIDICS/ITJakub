@@ -62,7 +62,7 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
         }
 
         [HttpGet]
-        public ActionResult Listing(string alphabet, SourcesViewMode mode)
+        public ActionResult Listing(string alphabet, string mode)
         {
             if (string.IsNullOrEmpty(alphabet))
             {
@@ -70,8 +70,8 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
             }
 
             return View(new ListSourcesViewModel {
-                ViewMode = mode,
-                FoundSources = m_mockProvider.GetSources(alphabet, mode),
+                ViewMode = SourcesViewModeExtensions.FromUrlParam(mode),
+                FoundSources = m_mockProvider.GetSources(alphabet, SourcesViewModeExtensions.FromUrlParam(mode)),
             });
         }
     }

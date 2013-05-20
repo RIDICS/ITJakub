@@ -43,7 +43,16 @@
                 {
                     liClass = "active";
                 }
-                <li@( !liClass.IsEmpty() ? " class=" + liClass : "")><a href="@Url.RouteUrl("SourcesListing", new { mode = Model.ViewMode, alphabet = @alphabetLetter.Letter })">@alphabetLetter.Letter</a></li>
+                <li@( !liClass.IsEmpty() ? " class=" + liClass : "")>
+                    @if (!disabled)
+                    {
+                        <a href="@Url.RouteUrl("SourcesListing", new {mode = Model.ViewMode.ToUrlParam(), alphabet = @alphabetLetter.Letter})">@alphabetLetter.Letter</a>
+                    }
+                    else
+                    {
+                        <span>@alphabetLetter.Letter</span>
+                    }
+                </li>
             }
         </ul>
     </div>
@@ -75,7 +84,7 @@
         var data = Enum.GetValues(typeof(SourcesViewMode)).Cast<SourcesViewMode>().Select(v => new SelectListItem
         {
             Text = v.ToCzechString(),
-            Value = v.ToString(),
+            Value = v.ToUrlParam(),
         }).ToList();
 
         return data;

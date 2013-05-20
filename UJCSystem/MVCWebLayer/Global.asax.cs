@@ -42,19 +42,19 @@ namespace Ujc.Naki.MVCWebLayer
             routes.MapRoute(
                 "SourcesMain",
                 "zdroje",
-                new { controller = "Sources", action = "Listing", mode = "Jmeno", alphabet = "A" }
+                new { controller = "Sources", action = "Listing", mode = "nazev", alphabet = "A" }
             );
 
             routes.MapRoute(
                 "SourcesListing",
                 "zdroje/listovani/{mode}/{alphabet}",
-                new { controller = "Sources", action = "Listing", mode = "Jmeno", alphabet = "A" }
+                new { controller = "Sources", action = "Listing" }
             );
 
             routes.MapRoute(
                 "SourcesDetail",
-                "zdroje/{id}/detail",
-                new { controller = "Sources", action = "Detail", part = "Info", id = "1-zizka" }
+                "zdroje/{id}",
+                new { controller = "Sources", action = "Detail", part = "Info" }
             );
 
             routes.MapRoute(
@@ -95,7 +95,7 @@ namespace Ujc.Naki.MVCWebLayer
 
             routes.MapRoute(
                 "HomePage",
-                "homepage/vyhledavani",
+                "",
                 new { controller = "Index", action = "Index" }
             );
 

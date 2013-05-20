@@ -193,7 +193,7 @@ form.sources-order.form-horizontal.form-horizontal .controls {
     background-color: transparent;
 }
 
-.pagination.alphabet ul li a {
+.pagination.alphabet ul li a, .pagination.alphabet ul li span {
     padding: 4px 0px;
     width: 26px;
     text-align: center;
