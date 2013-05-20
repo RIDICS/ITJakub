@@ -63,6 +63,6 @@ namespace Ujc.Naki.MVCWebLayer.Services.Mocks
 
     public class Categorie : SelectionBase
     {
-        public List<SelectionBase> Subitems{get;set;}    
+        public List<SelectionBase> Subitems{get;set;}
     }
 }
