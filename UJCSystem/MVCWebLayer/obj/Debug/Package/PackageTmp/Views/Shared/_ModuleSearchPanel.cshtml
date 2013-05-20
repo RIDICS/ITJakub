@@ -1,0 +1,24 @@
+﻿@using Ujc.Naki.MVCWebLayer.Services
+
+<div class="well text-center">
+    @using (Html.BeginForm("Index", "Modules", FormMethod.Get, new{@class="form-horizontal"}))
+    {
+        <div class="control-group">
+            @Html.TextBox("searchTerm", string.Empty, new { @class = "input-xxlarge" })
+        </div>
+        <div class="control-group module-search">
+            <label class="control-label text-right">Zobrazení:</label>
+            <div class="controls text-left">
+                <label class="radio">
+                    <input type="radio" name="view" id="optionsRadios1" value="odstavce" checked>
+                    odstavce
+                </label>
+                <label class="radio">
+                    <input type="radio" name="view" id="optionsRadios2" value="kontext">
+                    kontext
+                </label>
+            </div>
+        </div>
+        <button type="submit" id="search-submit" class="btn">Vyhledat</button>
+    }
+</div>

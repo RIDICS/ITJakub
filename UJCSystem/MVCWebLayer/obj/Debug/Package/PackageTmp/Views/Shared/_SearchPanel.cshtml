@@ -1,0 +1,172 @@
+﻿@using Ujc.Naki.MVCWebLayer.Services
+@using Ujc.Naki.MVCWebLayer.Services.Enums
+@model Ujc.Naki.MVCWebLayer.ViewModels.SearchViewModel
+<div class="row-fluid">
+    <div class="span12">
+        <div class="advanced-search-wrapper">
+    @using (Html.BeginForm("Search", "Search", FormMethod.Get))
+    {
+                <div class="input-append search-inputs text-center">
+                    @Html.TextBoxFor(a => a.SearchTerm, new { id = "search-term", @class = "input-xxlarge" })
+                    <button id="search-submit" type="submit" name="search-submit" class="btn">Vyhledat</button>
+                    <button class="btn show-advanced-search" type="button">Upřesnit <span class="caret"></span></button>
+                </div>
+                <div class="text-center">
+                    <strong>Prohledávaná díla: </strong>
+                    <div class="searched-books">
+            @if (Model.SearchedBooks == null)
+            {
+                            <span class="muted">Aktivní prohledávání ve všech dostupných dílech</span>
+            }
+            else
+            {
+                foreach (KeyValuePair<BookCategory, List<string>> pair in Model.SearchedBooks)
+                {
+                            <div class="muted">
+                    <strong>@pair.Key.CzechString():</strong>
+                                @if (pair.Value == null || pair.Value.Count == 0)
+                    {
+                                    <span>@("všechny")</span>
+                    }
+                    else
+                    {
+                        foreach (var book in pair.Value)
+                        {
+                            @book
+                            @(pair.Value.Last().Equals(book) ? string.Empty : ", ")
+                        }
+                    }
+                            </div>
+                }
+            }
+	    </div>
+                </div>
+                <div class="advanced-search">
+                    <h4>Vyberte prohledávaná díla</h4>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <ul class="nav">
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="SearchPart" value="dictionary" id="dictionary" @(GetCheckedString("dictionary")) /><span>Slovníky</span>
+                                    </label>
+                                    <ul class="nav">
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="SearchPart" value="current-dictionary" id="current-dictionary" @(GetCheckedString("current-dictionary")) /><span>Soudobé slovníky</span>
+                                            </label>
+                                            <ul class="nav">
+                                                <li>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="SearchPart" value="mss" id="mss" @(GetCheckedString("mss")) /><span>Malý staročeský slovník (MSS)</span>
+                                                    </label>
+                                                </li>
+                                                @*<li>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="SearchPart" value="mss" id="mss" @(GetCheckedString("mss")) /><span>Malý staročeský slovník (MSS)</span>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="SearchPart" value="mss" id="mss" @(GetCheckedString("mss")) /><span>Malý staročeský slovník (MSS)</span>
+                                                    </label>
+                                                </li>*@
+							    @*<li><input type="checkbox" name="SearchPart" value="mss2" id="mss2" @(GetCheckedString("mss2")) /><label for="mss2">Malý staročeský slovník (MSS)</label></li>*@
+                                                <li>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="SearchPart" value="essc" id="essc" @(GetCheckedString("essc")) /><span>Elektronický slovník staré češtiny (ESSČ)</span>
+                                                    </label>
+                                                </li>
+							    @*<li><input type="checkbox" name="SearchPart" value="essc2" id="essc2" @(GetCheckedString("essc2")) /><label for="essc2">Elektronický slovník staré češtiny (ESSČ)</label></li>*@
+                                                <li>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="SearchPart" value="gbslov" id="gbslov" @(GetCheckedString("gbslov")) /><span>Jan Gebauer: Slovník staročeský</span>
+                                                    </label>
+                                                </li>
+							    @*<li><input type="checkbox" name="SearchPart" value="gbslov2" id="gbslov2" @(GetCheckedString("gbslov2")) /><label for="gbslov2">Jan Gebauer: Slovník staročeský</label></li>*@
+                                                <li>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="SearchPart" value="stcs" id="stcs" @(GetCheckedString("stcs")) /><span>Staročeský slovník (sešit 1–26) (StčS)</span>
+                                                    </label>
+                                                </li>
+							    @*<li><input type="checkbox" name="SearchPart" value="stcs2" id="stcs2" @(GetCheckedString("stcs2")) /><label for="stcs2">Staročeský slovník (sešit 1–26) (StčS)</label></li>*@
+                                                <li>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="SearchPart" value="simekslov" id="simekslov" @(GetCheckedString("simekslov")) /><span>F. Šimek, Slovníček staré češtiny (ŠimekSlov)</span>
+                                                    </label>
+                                                </li>
+							    @*<li><input type="checkbox" name="SearchPart" value="simekslov2" id="simekslov2" @(GetCheckedString("simekslov2")) /><label for="simekslov2">F. Šimek, Slovníček staré češtiny (ŠimekSlov)</label></li>*@
+						    </ul>
+					    </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="SearchPart" value="old-dictionary" @(GetCheckedString("old-dictionary")) /><span>Dobové slovníky</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="SearchPart" value="digitalized-dictionary" id="digitalized-dictionary" @(GetCheckedString("digitalized-dictionary")) /><span>Digitalizované slovníky</span>
+                                            </label>
+                                        </li>
+				    </ul>
+			    </li>
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="SearchPart" value="historic" id="historic" @(GetCheckedString("historic")) /><span>Historické texty</span>
+                                    </label>
+                                    <ul class="nav">
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="SearchPart" value="slovo" id="staroceske" @(GetCheckedString("staroceske")) /><span>Staročeské</span>
+                                            </label>
+                                            <ul class="nav">
+                                                <li>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="SearchPart" value="slovo" id="slovo" @(GetCheckedString("slovo")) /><span>Slovo do světa</span>
+                                                    </label>
+                                                    <input type="text" name="historic-input" class="autocomplete" />
+                                                </li>
+				            </ul>
+                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="SearchPart" value="slovo" id="stredneceske" @(GetCheckedString("stredneceske")) /><span>Středněčeské</span>
+                                            </label>
+                                        </li>
+				    </ul>
+			    </li>
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="SearchPart" value="technical" id="technical" @(GetCheckedString("technical")) /><span>Odborné texty</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="SearchPart" value="grammar" id="grammar" @(GetCheckedString("grammar")) /><span>Digitalizované mluvnice</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="SearchPart" value="lists" id="lists" @(GetCheckedString("lists")) /><span>Lístkové kartotéky</span>
+                                    </label>
+                                </li>
+		    </ul>
+	    </div>
+                    </div>
+                </div>
+    }
+</div>
+    </div>
+</div>
+
+@functions {
+    public string GetCheckedString(string id)
+    {
+        if (Model.SearchPart != null && Model.SearchPart.Contains(id))
+        {
+            return "checked='chedked'";
+        }
+        
+        return string.Empty;
+    }
+}

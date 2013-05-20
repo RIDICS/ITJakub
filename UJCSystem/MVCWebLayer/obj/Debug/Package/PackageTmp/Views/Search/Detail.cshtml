@@ -1,0 +1,92 @@
+﻿@model Ujc.Naki.MVCWebLayer.ViewModels.SearchKeyWordsViewModel
+
+@if (Model.Results.Length > 0)
+{
+    <div id="dictionary-results-panel">
+        <h3>Výsledky</h3>
+        @foreach (var result in Model.Results)
+        {
+            <blockquote>
+                <p>
+                    @result.Kwic.Before
+                    <strong>@result.Kwic.Match</strong>
+                    @result.Kwic.After
+                </p>
+                <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@result.Author</a>)</small>
+            </blockquote>
+        }
+    </div>
+}
+
+@*@model string
+@if (string.Equals(Model, "pes"))
+{
+    
+<div id="dictionary-results-panel">
+<h3>Slovníky</h3>
+    <p>
+        <strong>pes</strong>, psa m., poses. psóv<br />
+        <span class="results-title"><a href="/Sources/Detail/stcs" >Staročeský slovník (StčS)</a>
+        <a href="/Sources/Prochazet">[do textu]</a></span>
+    </p>
+    <h3>Historické texty</h3>
+    <p>
+        …synóv israhelských nezahyne ani myš ani <strong>pes</strong>, ot člověka až do brava…<br />
+        <span class="results-title"><a href="/Sources/Detail/bible-olomoucka">[Bible olomoucká, Genesis–Esdráš]</a>
+        <a href="/Sources/Prochazet">[do textu]</a></span>
+    </p>
+    <p>
+        …Nabal do zajtřie ani <strong>pes</strong>…<br />
+        <span class="results-title"><a href="/Sources/Detail/bible-olomoucka">[Bible olomoucká, Genesis–Esdráš]</a>
+        <a href="/Sources/Prochazet">[do textu]</a></span>
+    </p>
+    <p>
+        … i jíti zase, jakož <strong>pes</strong>, vyvrátě to, jehož jest požiti nemohl, vrátie…<br />
+        <span class="results-title"><a href="/Sources/Detail/bible-kladrubska">[Bible kladrubská, kniha Jozue]</a>
+        <a href="/Sources/Prochazet">[do textu]</a></span>
+    </p>
+    <p>
+        …svých kuřátek před luňákem, ale jako <strong>pes</strong> brání mrchy…<br />
+        <span class="results-title"><a href="/Sources/Detail/alexandreida" class="results-title">[Alexandreida. Zlomek budějovický druhý.]</a>
+        <a href="/Sources/Prochazet">[do textu]</a></span>
+    </p>
+    </div>
+}
+else if(string.Equals(Model, "peský")) {
+    <h3>Slovníky</h3>
+    <p>
+        <strong>pes(s)ký, adj. psovský</strong>; nešlechetný, hanebný, bídný: peská závist<br />
+        <span class="results-title"><a href="/Sources/Detail/mss">Malý staročeský slovník (MSS)</a>
+        <a href="/Sources/Prochazet">[do textu]</a></span>
+    </p>
+    <p>
+        <strong>peský adj.</strong>, též pesský; k pesky, pes<br />
+        <span class="results-title"><a href="/Sources/Detail/stcs">Staročeský slovník (StčS)</a>
+        <a href="/Sources/Prochazet">[do textu]</a></span>
+    </p>
+    <p>
+        <strong>pes(s)ký, adj.</strong> = psovský, hanebný, nešlechetný<br />
+        <span class="results-title"><a href="/Sources/Detail/simekslov">F. Šimek, Slovníček staré češtiny (ŠimekSlov)</a>
+        <a href="/Sources/Prochazet">[do textu]</a></span>
+    </p>
+    <h3>Historické texty</h3>
+    <p>
+        …takéž po zlé řeči a nekázané aneb <strong>peské</strong> znáti jest, že z ďáblova královstvie jest…<br />
+        <span class="results-title"><a href="/Sources/Detail/alexandreida">[Alexandreida. Zlomek budějovický druhý.]</a>
+        <a href="/Sources/Prochazet">[do textu]</a></span>
+    </p>
+    <p>
+        …ty budeš nemocen <strong>peskú</strong> nemocí tvého břicha…<br />
+        <span class="results-title"><a href="/Sources/Detail/bible-olomoucka">[Bible olomoucká, Genesis–Esdráš]</a>
+        <a href="/Sources/Prochazet">[do textu]</a></span>
+    </p>
+}
+else
+{
+    <div id="dictionary-results-panel">
+	    <h3>Slovníky – @Model</h3>
+    </div>
+    <div id="texts-results-panel">
+	    <h3>Historické texty – @Model</h3>
+    </div>
+}*@

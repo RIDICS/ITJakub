@@ -1,0 +1,18 @@
+﻿@using Ujc.Naki.MVCWebLayer.Services
+@using Ujc.Naki.MVCWebLayer.Enums
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Ujc.Naki.MVCWebLayer.Services.DTOs.Source
+
+<div id="main-content">
+    @Html.Partial("~/Views/Shared/_SourcesMenu.cshtml", SourceDetailPart.Info)
+    <div id="source-detail-content">
+        <h4>@Model.Title</h4>
+        <span class="author">@Model.Author</span><br />
+        <span class="datation">@Model.Datation</span><br />
+        <p>@Model.Perex</p>
+    </div>
+</div>

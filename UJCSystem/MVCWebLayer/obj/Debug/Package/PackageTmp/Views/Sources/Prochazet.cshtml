@@ -1,0 +1,49 @@
+﻿@using Ujc.Naki.MVCWebLayer.Services
+@using Ujc.Naki.MVCWebLayer.Enums
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="main-content">
+     @Html.Partial("~/Views/Shared/_SourcesMenu.cshtml", SourceDetailPart.Prochazet)
+    <div id="source-detail-content">
+        <h4>Jedenádctý</h4>
+        <p>
+            I vecě hospodin k Mojžiešovi: „Ještě jednú ranú dotknu faraona a Ejipta, a potomť
+            vás pustí jíti pryč i připudí. I dieš proto všemu lidu, ať muž potřebuje ot přietele svého
+            a žena ot súsědy své osudie střiebrného i zlatého i rúcha. A dáť hospodin milost lidu
+            svému před Ejiptskými.“ I byl jest Mojžieš muž veliký velmi v zemi ejiptské před sluhami
+            faraonovými i přede vším lidem. I vecě: „Toť praví hospodin: V puolnoci vejdu do
+            Ejipta a zemře všecko prvorozené v zemi ejiptské ot prvorozeného faraona, jenž
+            sedí na stolici jeho, až do prvorozeného dievčina, ješto jest u žrnova, i vše prvorozené rodu
+            dobytčieho. I budeť křik veliký po všie zemi ejiptské, jakýž jest nebyl dřieve ani bude
+            potom. A u všěch pak synóv israhelských nezahyne ani myš ani pes, ot člověka až do
+            brava, abyšte věděli, kolikým divem rozdělí hospodin Ejiptské ot Israhelských. I sstúpie
+            všickni tito služebníci ke mně a budú sě mně klaněti a řkúc: Vyjdi ty i vešken lid, jenž poddán
+            jest tobě; potom vyjdemy i my.“ I vyjide ot faroana hněvivě velmi. I vecě pak hospodin
+            k Mojžiešovi: „Neuslyšíť vás farao, aby mnoho divóv sě stalo v zemi ejiptské.“  Ale
+            pak Mojžieš a Áron učinila sta znamenie všěcka i divy, ješto napsána sú, před faraonem. I
+            zatvrdil jest hospodin srdce faraonovo i nepusti israhelských z země své.
+        </p>
+        
+        <ul class="pager sources-prochazet">
+            <li class="previous">
+                <a href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = "1"})">Předchozí stránka</a>
+            </li>
+            <li class="next">
+                <a href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = "5"})">Další stránka</a>
+            </li>
+        </ul>
+
+        <div class="pagination text-center">
+            <ul>
+                <li><a href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = "1"})">1</a></li>
+                <li class="disabled"><a href="#">&hellip;</a></li>
+                <li><a href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = "23"})">23</a></li>
+                <li class="disabled"><a href="#">&hellip;</a></li>
+                <li><a href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = "87"})">87</a></li>
+             </ul>
+        </div>
+    </div>
+</div>

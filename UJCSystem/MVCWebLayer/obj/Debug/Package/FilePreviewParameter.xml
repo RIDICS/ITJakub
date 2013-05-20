@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="Default Web Site\" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\Pool\\ITJakub\\trunk\\UJCSystem\\MVCWebLayer\\obj\\Debug\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^D:\\Pool\\ITJakub\\trunk\\UJCSystem\\MVCWebLayer\\obj\\Debug\\Package\\PackageTmp$" />
+  </parameter>
+</parameters>

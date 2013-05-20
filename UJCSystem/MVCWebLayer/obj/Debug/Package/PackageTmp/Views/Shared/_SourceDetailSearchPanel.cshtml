@@ -1,0 +1,13 @@
+﻿@using Ujc.Naki.MVCWebLayer.Services
+
+<div class="row-fluid">
+    <div class="span12 well text-center">
+        @using (Html.BeginForm("DetailHledat", "Sources", FormMethod.Get, new{id = "sources-search-form"}))
+        {
+            <div class="input-append text-center">
+                @Html.TextBox("searchTerm", string.Empty, new { @class = "input-xxlarge" })
+                <button type="submit" id="search-submit" class="btn" data-url="@Url.RouteUrl("SourcesDetailSearch", new{ searchTerm = "" })">Vyhledat</button>
+            </div>
+        }
+    </div>
+</div>
