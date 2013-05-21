@@ -77,10 +77,9 @@ namespace IT_Jakub.Views.ApplicationStart
                     password.BorderBrush = new SolidColorBrush(redColor);
                     username.BorderBrush = new SolidColorBrush(redColor);
                 }
-            } catch (ServerErrorException ex) {
-                throw new ServerErrorException(ex);
-            } catch (UserNotFoundException ex) {
-                throw new UserNotFoundException(ex);
+            } catch (Exception ex) {
+                object o = ex;
+                return;
             }
         }
 

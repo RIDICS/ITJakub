@@ -16,21 +16,23 @@ namespace IT_Jakub.Classes.DatabaseModels {
         private IMobileServiceTable<SessionUser> sessionUserTable = msc.GetTable<SessionUser>();
 
         public async Task<List<SessionUser>> getAllSessionUsers() {
-            List<SessionUser> items;
+            List<SessionUser> items = null;
             try {
                 items = await sessionUserTable.ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             return items;
         }
 
         public async Task<List<SessionUser>> getAllUsersInSession(Session s) {
-            List<SessionUser> items;
+            List<SessionUser> items = null;
             try {
                 items = await sessionUserTable.Where(Item => Item.SessionId == s.Id).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             return items;
         }
@@ -43,7 +45,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     deleteSessionUser(items[i]);
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return false;
             }
             return true;
         }
@@ -56,7 +59,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 await sessionUserTable.InsertAsync(su);
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
 
@@ -68,10 +72,12 @@ namespace IT_Jakub.Classes.DatabaseModels {
                         await sessionUserTable.DeleteAsync(su);
                     } catch (Exception e) {
                         object o = e;
+                        return;
                     }
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
 
@@ -84,6 +90,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 }
             } catch (Exception e) {
                 object o = e;
+                return false;
             }
             return true;
         }
@@ -97,6 +104,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 }
             } catch (Exception e) {
                 object o = e;
+                return false;
             }
             return true;
         }

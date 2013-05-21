@@ -22,27 +22,30 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 await userTable.InsertAsync(user);
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             return user;
         }
 
         internal MobileServiceCollectionView<User> getAllUsers() {
-            MobileServiceCollectionView<User> items;
+            MobileServiceCollectionView<User> items = null;
             try {
                 items = userTable.ToCollectionView();
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             return items;
         }
 
         internal async Task<User> getUserByUsername(string username) {
-            List<User> items;
+            List<User> items = null;
             try {
                 items = await userTable.Take(1).Where(userItem => userItem.Username == username).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             if (items.Count > 0) {
                 return items[0];
@@ -51,11 +54,12 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
         internal async Task<User> getUserById(long id) {
-            List<User> items;
+            List<User> items = null;
             try {
                 items = await userTable.Take(1).Where(userItem => userItem.Id == id).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             if (items.Count > 0) {
                 return items[0];
@@ -64,11 +68,12 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
         internal async Task<User> getUserByEmail(string email) {
-            List<User> items;
+            List<User> items = null;
             try {
                 items = await userTable.Take(1).Where(userItem => userItem.Email == email).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             if (items.Count > 0) {
                 return items[0];
@@ -84,10 +89,12 @@ namespace IT_Jakub.Classes.DatabaseModels {
                         await userTable.DeleteAsync(u);
                     } catch (Exception e) {
                         object o = e;
+                        return;
                     }
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
         
@@ -96,7 +103,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 await userTable.UpdateAsync(u);
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
     }

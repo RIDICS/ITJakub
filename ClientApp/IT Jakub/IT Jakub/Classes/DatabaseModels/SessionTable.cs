@@ -18,13 +18,13 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
 
-        internal MobileServiceCollectionView<Session> getAllSessions() {
-            MobileServiceCollectionView<Session> items;
+        internal async Task<List<Session>> getAllSessions() {
+            List<Session> items = null;
             try {
-                items = table.ToCollectionView();
+                items = await table.ToListAsync();
             } catch (Exception e) {
                 object o = e;
-                throw new ServerErrorException(e);
+                return null;
             }
             return items;
         }
@@ -34,7 +34,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 await table.InsertAsync(s);
                 return true;
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return false;
             }
         }
 
@@ -46,20 +47,23 @@ namespace IT_Jakub.Classes.DatabaseModels {
                         await table.DeleteAsync(s);
                     } catch (Exception e) {
                         object o = e;
+                        return;
                     }
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
 
 
         internal async Task<Session> getSessionByName(string sessionName) {
-            List<Session> items;
+            List<Session> items = null;
             try {
                 items = await table.Where(Item => Item.Name == sessionName.Trim()).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             if (items.Count > 0) {
                 return (Session)items[0];

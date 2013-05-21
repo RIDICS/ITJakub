@@ -59,10 +59,9 @@ namespace IT_Jakub.Views.ApplicationStart
                     } else {
                         this.Frame.Navigate(typeof(ApplicationStart));
                     }
-                } catch (ServerErrorException ex) {
-                    throw new ServerErrorException(ex);
-                } catch (UserNotFoundException ex) {
-                    throw new UserNotFoundException(ex);
+                } catch (Exception ex) {
+                    object o = e;
+                    return;
                 }
             }
         }

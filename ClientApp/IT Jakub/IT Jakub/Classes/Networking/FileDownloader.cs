@@ -23,14 +23,15 @@ namespace IT_Jakub.Classes.Networking {
                 return null;
             }
 
-            StorageFile destinationFile;
+            StorageFile destinationFile = null;
             try {
                 var applicationData = Windows.Storage.ApplicationData.Current;
                 var temporaryFolder = applicationData.TemporaryFolder;
                 destinationFile = await temporaryFolder.CreateFileAsync(
                     destination, CreationCollisionOption.GenerateUniqueName);
             } catch (FileNotFoundException ex) {
-                throw new MyFileNotFoundException(ex);
+                object o = ex;
+                return null;
             }
 
             BackgroundDownloader downloader = new BackgroundDownloader();
@@ -47,6 +48,7 @@ namespace IT_Jakub.Classes.Networking {
                 await temporaryFolder.DeleteAsync();
             } catch (Exception e) {
                 object o = e;
+                return;
             }
         }
     }

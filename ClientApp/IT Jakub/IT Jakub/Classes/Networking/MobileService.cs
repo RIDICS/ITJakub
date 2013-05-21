@@ -19,7 +19,8 @@ namespace IT_Jakub.Classes.Networking {
                     "https://itjakub.azure-mobile.net/",
                     "IKzmwpfkbiryIglFPmMRlsmAqwnLdY61");
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
 

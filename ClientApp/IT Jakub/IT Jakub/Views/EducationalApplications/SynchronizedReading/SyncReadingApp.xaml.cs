@@ -297,6 +297,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
                 staticUserList.ItemsSource = userList;
             } catch (Exception e) {
                 object o = e;
+                return;
             }
         }
 

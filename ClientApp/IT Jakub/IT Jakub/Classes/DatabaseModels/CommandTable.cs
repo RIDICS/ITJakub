@@ -33,8 +33,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 return id;
             } catch (Exception e) {
                 object o = e;
+                return -1;
             }
-            return -1;
         }
 
         internal async Task<long> createCrossWordSolutionCommand(Session s, User u, string commandText) {
@@ -53,8 +53,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 return id;
             } catch (Exception e) {
                 object o = e;
+                return -1;
             }
-            return -1;
         }
 
         internal async Task<List<Command>> getAllSessionCommands(Session s) {
@@ -62,7 +62,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await table.Where(Item => Item.SessionId == s.Id).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             return items;
         }
@@ -72,7 +73,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await table.ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             return items;
         }
@@ -85,10 +87,12 @@ namespace IT_Jakub.Classes.DatabaseModels {
                         await table.DeleteAsync(c);
                     } catch (Exception e) {
                         object o = e;
+                        return;
                     }
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
 
@@ -100,7 +104,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     deleteCommand(items[i]);
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return false;
             }
             return true;
         }
@@ -111,7 +116,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await table.Where(Item => Item.SessionId == s.getSessionData().Id).Where(Item => Item.Id > s.getLatestCommandId()).ToListAsync();
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return null;
             }
             return items;
         }
@@ -127,7 +133,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
 
@@ -142,6 +149,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 }
             } catch (Exception e) {
                 object o = e;
+                return;
             }
 
             List<Command> logoutItems;
@@ -154,7 +162,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
 
@@ -169,7 +178,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
 
             List<Command> demoteItems;
@@ -181,7 +191,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
 
@@ -202,7 +213,8 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                throw new ServerErrorException(e);
+                object o = e;
+                return;
             }
         }
 
@@ -217,6 +229,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 await table.UpdateAsync(c);
             } catch (Exception e) {
                 object o = e;
+                return;
             }
         }
 

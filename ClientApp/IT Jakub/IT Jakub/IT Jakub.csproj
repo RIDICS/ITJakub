@@ -107,7 +107,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Autentifcation\Authenticator.cs" />
+    <Compile Include="Classes\Authentification\Authenticator.cs" />
     <Compile Include="Classes\DatabaseModels\CommandTable.cs" />
     <Compile Include="Classes\DatabaseModels\SessionTable.cs" />
     <Compile Include="Classes\DatabaseModels\SessionUpdateTable.cs" />

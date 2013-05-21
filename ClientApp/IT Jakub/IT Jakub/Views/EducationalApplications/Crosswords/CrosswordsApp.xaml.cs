@@ -283,6 +283,7 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
                 updateId = await sendSolutionCommand(CommandBuilder.getCrosswordSolutionCommand(xmlString));
             } catch (Exception e) {
                 object o = e;
+                return;
             }
         }
 
@@ -300,6 +301,7 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
                 staticUserList.ItemsSource = userList;
             } catch (Exception e) {
                 object o = e;
+                return;
             }
         }
         

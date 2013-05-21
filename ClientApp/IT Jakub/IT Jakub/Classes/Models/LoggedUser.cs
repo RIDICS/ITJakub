@@ -49,6 +49,7 @@ namespace IT_Jakub.Classes.Models {
                     await sut.signOutUserFromAllSessions(this.userData);
                 } catch (Exception e) {
                     object o = e;
+                    return;
                 }
                 setUserData(null);
             }

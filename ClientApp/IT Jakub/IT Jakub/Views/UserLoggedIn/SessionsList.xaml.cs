@@ -43,11 +43,11 @@ namespace IT_Jakub.Views.UserLoggedIn {
             sessionListUpdate_Click(sessionListUpdate, null);
         }
 
-        private void sessionListUpdate_Click(object sender, RoutedEventArgs e) {
+        private async void sessionListUpdate_Click(object sender, RoutedEventArgs e) {
             try {
                 SessionTable st = new SessionTable();
                 SessionUserTable sut = new SessionUserTable();
-                MobileServiceCollectionView<Session> allSessions = st.getAllSessions();
+                List<Session> allSessions = await st.getAllSessions();
                 sessionList.ItemsSource = allSessions;
                 /* Neodchycena vyjímka: 
                  * Microsoft.WindowsAzure.MobileServices.MobileServiceInvalidOperationException was unhandled
@@ -58,6 +58,7 @@ namespace IT_Jakub.Views.UserLoggedIn {
                  */
             } catch (Exception ex) {
                 object o = ex;
+                return;
             }
         }
 
