@@ -1,4 +1,4 @@
-﻿using IT_Jakub.Classes.Authentification;
+﻿using IT_Jakub.Classes.Authentication;
 using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Exceptions;
 using IT_Jakub.Classes.Models;

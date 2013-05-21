@@ -9,15 +9,36 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace IT_Jakub.Classes.DatabaseModels {
+    
+    /// <summary>
+    /// Class represents database Table Session and allows through some metods operations with this table.
+    /// </summary>
     class SessionTable {
 
-        private static MobileServiceClient msc = MobileService.getMobileServiceClient();
+        /// <summary>
+        /// The ms stands for MobileService singleton class
+        /// </summary>
+        private static MobileService ms = MobileService.getInstance();
+        /// <summary>
+        /// The msc stands for MobileServiceClient which allows Azure SQL database connections.
+        /// </summary>
+        private static MobileServiceClient msc = ms.getMobileServiceClient();
+        /// <summary>
+        /// The table represents connection to database table Session.
+        /// </summary>
         private IMobileServiceTable<Session> table = msc.GetTable<Session>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SessionTable"/> class.
+        /// </summary>
         public SessionTable() {
         }
 
 
+        /// <summary>
+        /// Gets all sessions.
+        /// </summary>
+        /// <returns></returns>
         internal async Task<List<Session>> getAllSessions() {
             List<Session> items = null;
             try {
@@ -29,6 +50,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return items;
         }
 
+        /// <summary>
+        /// Creates the session and insert it in database.
+        /// </summary>
+        /// <param name="s">The Session which needs to be created and inserted in database.</param>
+        /// <returns></returns>
         internal async Task<bool> createSession(Session s) {
             try {
                 await table.InsertAsync(s);
@@ -39,6 +65,10 @@ namespace IT_Jakub.Classes.DatabaseModels {
             }
         }
 
+        /// <summary>
+        /// Removes the particular session from database.
+        /// </summary>
+        /// <param name="s">The Session which needs to be deleted.</param>
         internal async void removeSession(Session s) {
             try {
                 List<Session> items = await table.Where(Item => Item.Id == s.Id).ToListAsync();
@@ -57,6 +87,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
 
+        /// <summary>
+        /// Gets the Session by its name.
+        /// </summary>
+        /// <param name="sessionName">Name of the session.</param>
+        /// <returns></returns>
         internal async Task<Session> getSessionByName(string sessionName) {
             List<Session> items = null;
             try {

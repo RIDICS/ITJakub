@@ -11,12 +11,38 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace IT_Jakub.Classes.DatabaseModels {
+
+    /// <summary>
+    ///   <para>
+    /// Class represents table "Command" in SQL database.
+    ///   </para>
+    ///   <para>
+    /// Methods in this class offer operations in this table.
+    ///   </para>
+    /// </summary>
     class CommandTable {
 
+
+        /// <summary>
+        /// The ms stands for MobileService singleton class
+        /// </summary>
         private static MobileService ms = MobileService.getInstance();
-        private static MobileServiceClient msc = MobileService.getMobileServiceClient();
+        /// <summary>
+        /// The msc stands for MobileServiceClient which allows Azure SQL database connections.
+        /// </summary>
+        private static MobileServiceClient msc = ms.getMobileServiceClient();
+        /// <summary>
+        /// The table represents connection to database table Command.
+        /// </summary>
         private IMobileServiceTable<Command> table = msc.GetTable<Command>();
 
+        /// <summary>
+        /// Creates the command and insert it in database.
+        /// </summary>
+        /// <param name="s">The <see cref="Session"/> for command, each command is assigned to Session.</param>
+        /// <param name="u">The <see cref="User"/> who created this command.</param>
+        /// <param name="commandText">The command text.</param>
+        /// <returns>Task</returns>
         internal async Task<long> createCommand(Session s, User u, string commandText) {
             try {
                 Command c = new Command {
@@ -37,6 +63,13 @@ namespace IT_Jakub.Classes.DatabaseModels {
             }
         }
 
+        /// <summary>
+        /// Creates the cross word solution command.
+        /// </summary>
+        /// <param name="s">The Session for which is command assigned</param>
+        /// <param name="u">The User who created this command.</param>
+        /// <param name="commandText">The command text.</param>
+        /// <returns>Task</returns>
         internal async Task<long> createCrossWordSolutionCommand(Session s, User u, string commandText) {
             try {
                 Command c = new Command {
@@ -57,6 +90,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             }
         }
 
+        /// <summary>
+        /// Gets all session commands.
+        /// </summary>
+        /// <param name="s">The Session for which is Commands requested.</param>
+        /// <returns>Task</returns>
         internal async Task<List<Command>> getAllSessionCommands(Session s) {
             List<Command> items = null;
             try {
@@ -68,6 +106,10 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return items;
         }
 
+        /// <summary>
+        /// Gets all commands.
+        /// </summary>
+        /// <returns>Task</returns>
         internal async Task<List<Command>> getAllCommands() {
             List<Command> items = null;
             try {
@@ -79,6 +121,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return items;
         }
 
+        /// <summary>
+        /// Deletes the command.
+        /// </summary>
+        /// <param name="c">The Command to delete</param>
+        /// <returns>Task</returns>
         public async Task deleteCommand(Command c) {
             try {
                 List<Command> test = await table.Where(Item => Item.Id == c.Id).ToListAsync();
@@ -96,6 +143,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             }
         }
 
+        /// <summary>
+        /// Removes all sessions command.
+        /// </summary>
+        /// <param name="s">The Session where commands need to be deleted.</param>
+        /// <returns>Task</returns>
         internal async Task<bool> removeSessionsCommand(Session s) {
             List<Command> items;
             try {
@@ -111,6 +163,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
 
+        /// <summary>
+        /// Gets all new session commands. Which is newer then latest executed command in SignedSession singleton class.
+        /// </summary>
+        /// <param name="s">The SignedSession, where is User currently logged in.</param>
+        /// <returns>Task</returns>
         internal async Task<List<Command>> getAllNewSessionCommands(SignedSession s) {
             List<Command> items = null;
             try {
@@ -123,6 +180,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
 
+        /// <summary>
+        /// Deletes the previous pointer move commands for Syncronized Reading App.
+        /// </summary>
+        /// <param name="s">The Session where move commands need to be deleted.</param>
+        /// <returns></returns>
         internal async Task deletePrevMoveCommands(Session s) {
             List<Command> items = null;
             try {
@@ -138,6 +200,13 @@ namespace IT_Jakub.Classes.DatabaseModels {
             }
         }
 
+
+        /// <summary>
+        /// Removes the user login logout commands in specified Session for particular User.
+        /// </summary>
+        /// <param name="s">The Session where commands need to be deleted.</param>
+        /// <param name="u">The User who is logged in or logged out in particular Session.</param>
+        /// <returns></returns>
         internal async Task removeUserLoginLogoutCommands(Session s, User u) {
             List<Command> loginItems;
             try {
@@ -167,6 +236,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             }
         }
 
+        /// <summary>
+        /// Deletes the previous promote demote commands.
+        /// </summary>
+        /// <param name="s">The Session where promote and demote commands need to be deleted.</param>
+        /// <returns></returns>
         internal async Task deletePrevPromoteDemoteCommands(Session s) {
             List<Command> promoteItems;
             try {
@@ -196,6 +270,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             }
         }
 
+        /// <summary>
+        /// Removes the old open file commands.
+        /// </summary>
+        /// <param name="s">The Session where commands need to be deleted.</param>
+        /// <returns></returns>
         internal async Task removeOldOpenCommands(Session s) {
             List<Command> items;
             try {
@@ -218,6 +297,14 @@ namespace IT_Jakub.Classes.DatabaseModels {
             }
         }
 
+        /// <summary>
+        /// Updates the command with specified Command.Id.
+        /// </summary>
+        /// <param name="updateId">The Id of Command</param>
+        /// <param name="s">The Session for whis command.</param>
+        /// <param name="u">The User who created this command.</param>
+        /// <param name="commandText">The command text.</param>
+        /// <returns></returns>
         internal async Task updateCommandById(long updateId, Session s, User u, string commandText) {
             try {
                 Command c = new Command {
@@ -233,6 +320,12 @@ namespace IT_Jakub.Classes.DatabaseModels {
             }
         }
 
+        /// <summary>
+        /// Gets the users solution command for Crosswords Application.
+        /// </summary>
+        /// <param name="s">The Session where is this commands assigned.</param>
+        /// <param name="u">The User whose is this solution.</param>
+        /// <returns></returns>
         internal async Task<Command> getUsersSolutionCommand(Session s, User u) {
             try {
                 List<Command> items = await table
@@ -249,6 +342,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return null;
         }
 
+        /// <summary>
+        /// Gets all users final solution commands for Crosswords App.
+        /// </summary>
+        /// <param name="s">The Session where is this commands assigned.</param>
+        /// <returns></returns>
         internal async Task<List<Command>> getAllUsersFinalSolutionCommands(Session s) {
             try {
                 List<Command> items = await table
@@ -265,6 +363,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
         }
 
 
+        /// <summary>
+        /// Gets all final solution made by Session Owner.
+        /// </summary>
+        /// <param name="s">The Session for which is this commands assigned.</param>
+        /// <returns></returns>
         internal async Task<List<Command>> getAllFinalSolutionMadeByOwner(Session s) {
             try {
                 List<Command> items = await table
@@ -281,6 +384,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return null;
         }
 
+        /// <summary>
+        /// Gets all session solution commands made by all users.
+        /// </summary>
+        /// <param name="s">The Session where is commands assigned.</param>
+        /// <returns></returns>
         internal async Task<List<Command>> getAllSessionSolutionCommands(Session s) {
             try {
                 List<Command> items = await table
@@ -296,6 +404,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return null;
         }
 
+        /// <summary>
+        /// Gets the end solution command. This is original and right solution of Crossword.
+        /// </summary>
+        /// <param name="s">The Session where is command assigned.</param>
+        /// <returns></returns>
         internal async Task<Command> getEndSolutionCommand(Session s) {
             try {
                 List<Command> items = await table

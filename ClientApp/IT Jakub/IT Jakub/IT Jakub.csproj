@@ -159,9 +159,6 @@
     <Compile Include="Views\EducationalApplications\Crosswords\CrosswordsApp.xaml.cs">
       <DependentUpon>CrosswordsApp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ApplicationStart\LoginPage.xaml.cs">
-      <DependentUpon>LoginPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\BottomAppBar.xaml.cs">
       <DependentUpon>BottomAppBar.xaml</DependentUpon>
     </Compile>
@@ -209,9 +206,6 @@
     </Compile>
     <Compile Include="Views\ApplicationStart\ApplicationStart.xaml.cs">
       <DependentUpon>ApplicationStart.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserLoggedIn\UserLoggedIn.xaml.cs">
-      <DependentUpon>UserLoggedIn.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -336,10 +330,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ApplicationStart\LoginPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Controls\BottomAppBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -401,10 +391,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ApplicationStart\ApplicationStart.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserLoggedIn\UserLoggedIn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

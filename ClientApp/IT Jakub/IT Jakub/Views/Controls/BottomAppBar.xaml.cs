@@ -206,7 +206,7 @@ namespace IT_Jakub.Views.Controls {
 
         private void navigateToLoginPage() {
             mainFrame = MainPage.getMainFrame();
-            mainFrame.Navigate(typeof(Views.ApplicationStart.LoginPage));
+            mainFrame.Navigate(typeof(Views.ApplicationStart.ApplicationStart));
         }
 
         private async void logoutUser() {

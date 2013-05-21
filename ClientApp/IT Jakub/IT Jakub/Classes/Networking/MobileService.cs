@@ -31,7 +31,7 @@ namespace IT_Jakub.Classes.Networking {
                 return instance;
         }
 
-        internal static MobileServiceClient getMobileServiceClient() {
+        internal MobileServiceClient getMobileServiceClient() {
             return mobileServiceClient;
         }
     }

@@ -9,15 +9,35 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace IT_Jakub.Classes.DatabaseModels {
+    /// <summary>
+    /// Class represents table User from database and allows some operations with this table.
+    /// </summary>
     class UserTable {
-        
+
+        /// <summary>
+        /// The ms stands for MobileService singleton class
+        /// </summary>
         private static MobileService ms = MobileService.getInstance();
-        private static MobileServiceClient msc = MobileService.getMobileServiceClient();
+        /// <summary>
+        /// The msc stands for MobileServiceClient which allows Azure SQL database connections.
+        /// </summary>
+        private static MobileServiceClient msc = ms.getMobileServiceClient();
+        /// <summary>
+        /// The table represents connection to database table User.
+        /// </summary>
         private IMobileServiceTable<User> userTable = msc.GetTable<User>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserTable"/> class.
+        /// </summary>
         public UserTable() {
         }
 
+        /// <summary>
+        /// Creates the user and insert it in database.
+        /// </summary>
+        /// <param name="user">The user which is created and inserted in database.</param>
+        /// <returns></returns>
         internal async Task<User> createUser(User user) {
             try {
                 await userTable.InsertAsync(user);
@@ -28,10 +48,14 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return user;
         }
 
-        internal MobileServiceCollectionView<User> getAllUsers() {
-            MobileServiceCollectionView<User> items = null;
+        /// <summary>
+        /// Gets all users from database.
+        /// </summary>
+        /// <returns></returns>
+        internal async Task<List<User>> getAllUsers() {
+            List<User> items = null;
             try {
-                items = userTable.ToCollectionView();
+                items = await userTable.ToListAsync();
             } catch (Exception e) {
                 object o = e;
                 return null;
@@ -39,6 +63,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return items;
         }
 
+        /// <summary>
+        /// Gets the user by his username.
+        /// </summary>
+        /// <param name="username">The Users username</param>
+        /// <returns></returns>
         internal async Task<User> getUserByUsername(string username) {
             List<User> items = null;
             try {
@@ -53,6 +82,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return null;
         }
 
+        /// <summary>
+        /// Gets the user by his id.
+        /// </summary>
+        /// <param name="id">The Users id</param>
+        /// <returns></returns>
         internal async Task<User> getUserById(long id) {
             List<User> items = null;
             try {
@@ -67,6 +101,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return null;
         }
 
+        /// <summary>
+        /// Gets the user by email.
+        /// </summary>
+        /// <param name="email">The Users email</param>
+        /// <returns></returns>
         internal async Task<User> getUserByEmail(string email) {
             List<User> items = null;
             try {
@@ -81,6 +120,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             return null;
         }
 
+        /// <summary>
+        /// Deletes the user from database.
+        /// </summary>
+        /// <param name="u">The User which needs to be deleted.</param>
+        /// <returns></returns>
         internal async Task deleteUser(User u) {
             try {
                 List<User> items = await userTable.Where(Item => Item.Id == u.Id).ToListAsync();
@@ -97,8 +141,13 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 return;
             }
         }
-        
 
+
+        /// <summary>
+        /// Updates the user.
+        /// </summary>
+        /// <param name="u">The User which needs to be updated.</param>
+        /// <returns></returns>
         internal async Task updateUser(User u) {
             try {
                 await userTable.UpdateAsync(u);
