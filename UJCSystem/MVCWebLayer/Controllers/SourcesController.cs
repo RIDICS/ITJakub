@@ -60,6 +60,7 @@ namespace ITJakub.MVCWebLayer.Controllers
         [HttpGet]
         public ActionResult Listing(string alphabet, string mode)
         {
+            alphabet = alphabet.ToUpper();
             if (string.IsNullOrEmpty(alphabet))
             {
                 alphabet = "A";
