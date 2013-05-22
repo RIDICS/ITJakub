@@ -92,5 +92,26 @@ namespace ITJakub.Core
                 throw;
             }
         }
+
+        public SelectionBase[] GetRootCategories()
+        {
+            try
+            {
+                return Channel.GetRootCategories();
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetRootCategories failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetRootCategories timeouted with: {0}", ex);
+                throw;
+            }
+
+        }
     }
 }

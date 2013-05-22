@@ -1,33 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace Ujc.Naki.MVCWebLayer.Enums
+﻿namespace ITJakub.MVCWebLayer.Enums
 {
     public static class SourcesViewModeExtensions
     {
-        public static string ToCzechString(this SourcesViewMode mode)
-        {
-            switch (mode)
-            {
-                case SourcesViewMode.Autor:
-                    return "Autor";
-                case SourcesViewMode.Jmeno:
-                    return "Název";
-                default:
-                    return string.Empty;
-            }
-        }
-
         public static string ToUrlParam(this SourcesViewMode mode)
         {
             switch (mode)
             {
-                case SourcesViewMode.Autor:
+                case SourcesViewMode.Author:
                     return "autor";
-                case SourcesViewMode.Jmeno:
+                case SourcesViewMode.Name:
                     return "nazev";
                 default:
                     return string.Empty;
@@ -39,11 +20,11 @@ namespace Ujc.Naki.MVCWebLayer.Enums
             switch (mode)
             {
                 case "autor":
-                    return SourcesViewMode.Autor;
+                    return SourcesViewMode.Author;
                 case "nazev":
-                    return SourcesViewMode.Jmeno;
+                    return SourcesViewMode.Name;
                 default:
-                    return SourcesViewMode.Jmeno;
+                    return SourcesViewMode.Name;
             }
         }
     }

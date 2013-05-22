@@ -1,10 +1,5 @@
 @model ITJakub.MVCWebLayer.ViewModels.CategoriesViewModel 
 
-
-@if (Model != null) 
-{
-    <ul class="nav">
-        <li data-category-id="0">
 <ul class="nav">
     @foreach (var category in Model.Children)
     {

@@ -13,7 +13,7 @@ namespace ITJakub.MVCWebLayer.Controllers
         [HttpGet]
         public ActionResult Detail(string id, string part)
         {
-            var enumValue = SourceDetailPart.Info;
+            var enumValue =  SourceDetailPart.Info;
             try
             {
                 enumValue = (SourceDetailPart)Enum.Parse(typeof(SourceDetailPart), part);

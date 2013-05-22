@@ -19,5 +19,8 @@ namespace ITJakub.Contracts
 
         [OperationContract]
         SelectionBase[] GetCategoryChildrenById(string categoryId);
+
+        [OperationContract]
+        SelectionBase[] GetRootCategories();
     }
 }

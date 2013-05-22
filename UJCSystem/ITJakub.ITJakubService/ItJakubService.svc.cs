@@ -40,6 +40,11 @@ namespace ITJakub.ITJakubService
         {
             return m_serviceManager.GetCategoryChildrenById(categoryId);
         }
+
+        public SelectionBase[] GetRootCategories()
+        {
+            return m_serviceManager.GetRootCategories();
+        }
     }
 
     [ServiceContract]

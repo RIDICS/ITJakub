@@ -28,6 +28,11 @@ namespace ITJakub.MVCWebLayer.Services.Mocks
         {
             return new SelectionBase[0];
         }
+
+        public SelectionBase[] GetRootCategories()
+        {
+            return new SelectionBase[0];
+        }
     }
 
 

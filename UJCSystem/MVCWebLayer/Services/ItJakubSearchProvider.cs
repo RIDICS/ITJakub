@@ -43,6 +43,11 @@ namespace ITJakub.MVCWebLayer.Services
         {
             return m_serviceClient.GetCategoryChildrenById(categoryId);
         }
+
+        public SelectionBase[] GetRootCategories()
+        {
+            return m_serviceClient.GetRootCategories();
+        }
     }
 
     

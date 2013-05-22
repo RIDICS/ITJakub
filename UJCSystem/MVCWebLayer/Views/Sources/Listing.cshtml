@@ -82,7 +82,7 @@
     {
         var data = Enum.GetValues(typeof(SourcesViewMode)).Cast<SourcesViewMode>().Select(v => new SelectListItem
         {
-            Text = v.ToCzechString(),
+            Text = v.ToString(),
             Value = v.ToUrlParam(),
         }).ToList();
 

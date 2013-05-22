@@ -10,9 +10,10 @@ namespace ITJakub.Core
         private readonly SearchServiceClient m_searchClient;
         private readonly ReleationDatabaseMock m_releationDatabaseMock;
 
-        public ItJakubServiceManager(SearchServiceClient searchClient)
+        public ItJakubServiceManager(SearchServiceClient searchClient, ReleationDatabaseMock releationDatabaseMock)
         {
             m_searchClient = searchClient;
+            m_releationDatabaseMock = releationDatabaseMock;
         }
 
         public List<string> GetAllExtendedTermsForKey(string key)

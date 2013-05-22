@@ -1,4 +1,5 @@
 ﻿@using ITJakub.MVCWebLayer.Enums
+@using Jewelery
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -33,18 +34,18 @@
 
 </div>
 
-@functions
+@*@functions
 {
 
     IEnumerable<SelectListItem> GetSourcesViewModes()
     {
         var data = Enum.GetValues(typeof(SourcesViewMode)).Cast<SourcesViewMode>().Select(v => new SelectListItem
         {
-            Text = v.ToCzechString(),
+            Text = v.GetStringValue(),
             Value = v.ToString(),
         }).ToList();
 
         return data;
     }
 
-}
+}*@

@@ -29,7 +29,7 @@ namespace ITJakub.MVCWebLayer.Services.Mocks
 
             query = query.Trim();
 
-            if (string.Equals(query, "A", StringComparison.InvariantCultureIgnoreCase) && mode == SourcesViewMode.Jmeno)
+            if (string.Equals(query, "A", StringComparison.InvariantCultureIgnoreCase) && mode == SourcesViewMode.Name)
             {
                 return new List<Source>
                 {
@@ -38,7 +38,7 @@ namespace ITJakub.MVCWebLayer.Services.Mocks
                     { new Source{ Title = "[Alexandreida. Zlomek budějovický druhý.]", Author = "", Datation = "polovina 14. století", Perex = "Alexandreida, epická báseň o Alexandru Velikém" } }
                 };
             }
-            else if (string.Equals(query, "B", StringComparison.InvariantCultureIgnoreCase) && mode == SourcesViewMode.Jmeno)
+            else if (string.Equals(query, "B", StringComparison.InvariantCultureIgnoreCase) && mode == SourcesViewMode.Name)
             {
                 return new List<Source>
                 {
@@ -46,7 +46,7 @@ namespace ITJakub.MVCWebLayer.Services.Mocks
                     { new Source{ Title = "	[Bible olomoucká, Genesis–Esdráš]", Author = "", Datation = "1417", Perex = "	Bible olomoucká" } }
                 };
             }
-            else if (string.Equals(query, "B", StringComparison.InvariantCultureIgnoreCase) && mode == SourcesViewMode.Autor)
+            else if (string.Equals(query, "B", StringComparison.InvariantCultureIgnoreCase) && mode == SourcesViewMode.Author)
             {
                 return new List<Source>
                 {
