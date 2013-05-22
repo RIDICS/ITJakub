@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Ujc.Naki.MVCWebLayer.Services;
-
-namespace Ujc.Naki.MVCWebLayer.ViewModels
+﻿namespace ITJakub.MVCWebLayer.ViewModels
 {
     public class SearchSourceDetailViewModel
     {

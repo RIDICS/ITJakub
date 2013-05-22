@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using ITJakub.Contracts.Categories;
+﻿using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 
-namespace Ujc.Naki.MVCWebLayer.Services.Mocks
+namespace ITJakub.MVCWebLayer.Services.Mocks
 {
     public class SearchResultsMockProvider : ISearchResultProvider
     {

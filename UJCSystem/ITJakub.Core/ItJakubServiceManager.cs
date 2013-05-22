@@ -29,5 +29,10 @@ namespace ITJakub.Core
         {
             return m_releationDatabaseMock.GetChildren(categoryId).ToArray();
         }
+
+        public SelectionBase[] GetRootCategories()
+        {
+            return m_releationDatabaseMock.GetRootCategories().ToArray();
+        }
     }
 }

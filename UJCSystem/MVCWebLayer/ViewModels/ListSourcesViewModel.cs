@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Ujc.Naki.MVCWebLayer.Services;
-using Ujc.Naki.MVCWebLayer.Enums;
-using Ujc.Naki.MVCWebLayer.Services.DTOs;
+﻿using System.Collections.Generic;
+using ITJakub.MVCWebLayer.Enums;
+using ITJakub.MVCWebLayer.Services.DTOs;
 
-namespace Ujc.Naki.MVCWebLayer.ViewModels
+namespace ITJakub.MVCWebLayer.ViewModels
 {
     public class ListSourcesViewModel
     {

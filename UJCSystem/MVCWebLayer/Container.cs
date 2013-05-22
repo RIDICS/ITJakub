@@ -4,7 +4,7 @@ using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
 using log4net.Config;
 
-namespace Ujc.Naki.MVCWebLayer
+namespace ITJakub.MVCWebLayer
 {
     public class Container : WindsorContainer
     {

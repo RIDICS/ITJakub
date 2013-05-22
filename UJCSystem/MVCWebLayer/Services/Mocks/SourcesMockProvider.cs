@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ujc.Naki.MVCWebLayer.Enums;
-using Ujc.Naki.MVCWebLayer.Services.DTOs;
+using ITJakub.MVCWebLayer.Enums;
+using ITJakub.MVCWebLayer.Services.DTOs;
 
-namespace Ujc.Naki.MVCWebLayer.Services.Mocks
+namespace ITJakub.MVCWebLayer.Services.Mocks
 {
     public class SourcesMockProvider
     {

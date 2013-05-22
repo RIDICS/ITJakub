@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Ujc.Naki.MVCWebLayer.Enums;
-using Ujc.Naki.MVCWebLayer.Services;
-using Ujc.Naki.MVCWebLayer.Services.Mocks;
-using Ujc.Naki.MVCWebLayer.ViewModels;
+using ITJakub.MVCWebLayer.Enums;
+using ITJakub.MVCWebLayer.Services.Mocks;
+using ITJakub.MVCWebLayer.ViewModels;
 
-namespace Ujc.Naki.MVCWebLayer.Controllers
+namespace ITJakub.MVCWebLayer.Controllers
 {
     public sealed class SourcesController : Controller
     {

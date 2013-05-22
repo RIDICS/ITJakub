@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using ITJakub.Contracts.Searching;
-using Ujc.Naki.MVCWebLayer.Services;
+﻿using ITJakub.Contracts.Searching;
 
-namespace Ujc.Naki.MVCWebLayer.ViewModels
+namespace ITJakub.MVCWebLayer.ViewModels
 {
     public class SearchViewModel
     {

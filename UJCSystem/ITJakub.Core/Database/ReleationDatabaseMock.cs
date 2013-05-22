@@ -11,21 +11,21 @@ namespace ITJakub.Core.Database
     {
         private readonly Dictionary<string, string> m_books = new Dictionary<string, string>();
 
-        private readonly List<Categorie> m_categories = new List<Categorie>();
+        private readonly List<SelectionBase> m_categories = new List<SelectionBase>();
 
         public ReleationDatabaseMock()
         {
             LoadTaxonomy();
         }
 
-        public List<Categorie> GetRootCategories()
+        public List<SelectionBase> GetRootCategories()
         {
             return m_categories;
         }
 
         public List<SelectionBase> GetChildren(string id)
         {
-            var self = m_categories.FirstOrDefault(x => x.Id == id);
+            Categorie self = m_categories.FirstOrDefault(x => x.Id == id) as Categorie;
 
             if (self != null) 
                 return self.Subitems;

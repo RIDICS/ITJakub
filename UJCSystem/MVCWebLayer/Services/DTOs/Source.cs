@@ -1,4 +1,4 @@
-﻿namespace Ujc.Naki.MVCWebLayer.Services.DTOs
+﻿namespace ITJakub.MVCWebLayer.Services.DTOs
 {
     public class Source
     {

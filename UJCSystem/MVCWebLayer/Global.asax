@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="Ujc.Naki.MVCWebLayer.MvcApplication" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="ITJakub.MVCWebLayer.MvcApplication" Language="C#" %>

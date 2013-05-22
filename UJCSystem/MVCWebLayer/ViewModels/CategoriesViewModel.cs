@@ -1,6 +1,6 @@
 ﻿using ITJakub.Contracts.Categories;
 
-namespace Ujc.Naki.MVCWebLayer.ViewModels
+namespace ITJakub.MVCWebLayer.ViewModels
 {
     public class CategoriesViewModel
     {

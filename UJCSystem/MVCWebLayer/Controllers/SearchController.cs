@@ -1,13 +1,9 @@
-﻿using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using ITJakub.Contracts.Categories;
-using ITJakub.Contracts.Searching;
-using Ujc.Naki.MVCWebLayer.Services;
-using Ujc.Naki.MVCWebLayer.Services.Mocks;
-using Ujc.Naki.MVCWebLayer.ViewModels;
+using ITJakub.MVCWebLayer.Services;
+using ITJakub.MVCWebLayer.ViewModels;
 
-namespace Ujc.Naki.MVCWebLayer.Controllers
+namespace ITJakub.MVCWebLayer.Controllers
 {
     public class SearchController : Controller
     {
