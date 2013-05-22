@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core;
 using Ujc.Naki.MVCWebLayer.Services.Mocks;
@@ -38,6 +39,11 @@ namespace Ujc.Naki.MVCWebLayer.Services
                 m_searchResult = m_serviceClient.GetContextForKeyWord(searchTerm);
 
             return m_searchResult;
+        }
+
+        public SelectionBase[] GetCategoryChildrenById(string categoryId)
+        {
+            return m_serviceClient.GetCategoryChildrenById(categoryId);
         }
     }
 

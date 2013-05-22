@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using Castle.Windsor;
 using ITJakub.Contracts;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core;
 
@@ -33,6 +34,11 @@ namespace ITJakub.ITJakubService
         {
             //TODO return m_serviceManager.GetResultsFromBook(book, keyWord);
             return null;
+        }
+
+        public SelectionBase[] GetCategoryChildrenById(string categoryId)
+        {
+            return m_serviceManager.GetCategoryChildrenById(categoryId);
         }
     }
 

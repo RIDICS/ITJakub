@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 
 namespace ITJakub.Contracts
@@ -15,5 +16,8 @@ namespace ITJakub.Contracts
 
         [OperationContract]
         SearchResult[] GetResultsByBooks(string book, string keyWord);
+
+        [OperationContract]
+        SelectionBase[] GetCategoryChildrenById(string categoryId);
     }
 }

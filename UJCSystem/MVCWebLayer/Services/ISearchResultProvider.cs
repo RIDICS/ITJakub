@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 
 namespace Ujc.Naki.MVCWebLayer.Services
@@ -8,5 +9,6 @@ namespace Ujc.Naki.MVCWebLayer.Services
         string[] GetSearchResults(string query);
         SearchResult[] GetSearchResultsByType(string book, string searchTerm);
         SearchResult[] GetKwicForKeyWord(string searchTerm);
+        SelectionBase[] GetCategoryChildrenById(string categoryId);
     }
 }

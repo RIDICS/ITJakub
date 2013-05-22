@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 
 namespace Ujc.Naki.MVCWebLayer.Services.Mocks
@@ -22,6 +23,11 @@ namespace Ujc.Naki.MVCWebLayer.Services.Mocks
         public SearchResult[] GetKwicForKeyWord(string searchTerm)
         {
             return new SearchResult[0];
+        }
+
+        public SelectionBase[] GetCategoryChildrenById(string categoryId)
+        {
+            return new SelectionBase[0];
         }
     }
 

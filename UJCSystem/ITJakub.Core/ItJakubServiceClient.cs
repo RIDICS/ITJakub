@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.ServiceModel;
 using ITJakub.Contracts;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using log4net;
 
@@ -68,6 +69,26 @@ namespace ITJakub.Core
             {
                 if (m_log.IsErrorEnabled)
                     m_log.ErrorFormat("GetResultsByBooks timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public SelectionBase[] GetCategoryChildrenById(string categoryId)
+        {
+            try
+            {
+                return Channel.GetCategoryChildrenById(categoryId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetCategoryChildrenById failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetCategoryChildrenById timeouted with: {0}", ex);
                 throw;
             }
         }

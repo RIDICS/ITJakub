@@ -10,6 +10,11 @@ namespace ITJakub.Contracts.Categories
 
     public class Categorie : SelectionBase
     {
-        public List<SelectionBase> Subitems { get; set; }
+        public Categorie()
+        {
+            Subitems = new List<SelectionBase>();
+        }
+
+        public List<SelectionBase> Subitems { get; private set; }
     }
 }

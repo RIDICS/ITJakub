@@ -18,14 +18,27 @@ namespace ITJakub.Core.Database
             LoadTaxonomy();
         }
 
+        public List<Categorie> GetRootCategories()
+        {
+            return m_categories;
+        }
+
+        public List<SelectionBase> GetChildren(string id)
+        {
+            var self = m_categories.FirstOrDefault(x => x.Id == id);
+
+            if (self != null) 
+                return self.Subitems;
+            return null;
+        }
+
+
         private void LoadTaxonomy()
         {
             var dict = new Categorie() {Id = "taxonomy-dictionary", Name = "slovník"};
             dict.Subitems.Add( new Categorie() { Id = "taxonomy-dictionary-contemporary", Name = "soudobý" });
             dict.Subitems.Add(new Categorie() {Id = "taxonomy-dictionary-historical", Name = "dobový"});
             m_categories.Add(dict);
-
-
 
             var histText = new Categorie() { Id = "taxonomy-historical_text", Name = "historický text" };
             histText.Subitems.Add(new Categorie() { Id = "taxonomy-historical_text-old_czech", Name = "staročeský" });

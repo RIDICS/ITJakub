@@ -30,6 +30,10 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
         [HttpGet]
         public ActionResult GetCategoryChildren(string categoryId)
         {
+
+            var children = m_resultsProvider.GetCategoryChildrenById(categoryId);
+
+
             return View("GetCategoryChildren", null, categoryId);
         }
 
