@@ -12,5 +12,8 @@ namespace ITJakub.Contracts
 
         [OperationContract]
         SearchResult[] GetContextForKeyWord(string keyWord);
+
+        [OperationContract]
+        SearchResult[] GetResultsByBooks(string book, string keyWord);
     }
 }

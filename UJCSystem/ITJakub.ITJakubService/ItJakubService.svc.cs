@@ -7,8 +7,7 @@ using ITJakub.Core;
 
 namespace ITJakub.ITJakubService
 {
-    public 
-        class ItJakubService : IItJakubServiceLocal
+    public class ItJakubService : IItJakubServiceLocal
     {
 
         private readonly WindsorContainer m_container;
@@ -28,6 +27,12 @@ namespace ITJakub.ITJakubService
         public SearchResult[] GetContextForKeyWord(string keyWord)
         {
             return m_serviceManager.GetContextForKeyWord(keyWord);
+        }
+
+        public SearchResult[] GetResultsByBooks(string book, string keyWord)
+        {
+            //TODO return m_serviceManager.GetResultsFromBook(book, keyWord);
+            return null;
         }
     }
 

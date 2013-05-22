@@ -104,14 +104,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Mocks\BookCategoryService.cs" />
     <Compile Include="Services\DTOs\Source.cs" />
     <Compile Include="Services\ISearchResultProvider.cs" />
     <Compile Include="Services\Mocks\SourcesMockProvider.cs" />
     <Compile Include="Services\Mocks\SearchResultsMockProvider.cs" />
-    <Compile Include="Services\DTOs\Book.cs" />
     <Compile Include="Services\Enums\BookCategory.cs" />
-    <Compile Include="Services\Enums\BookCategoryExtensions.cs" />
     <Compile Include="ViewModels\SearchSourceDetailViewModel.cs" />
     <Compile Include="ViewModels\SearchSourcesViewModel.cs" />
     <Compile Include="ViewModels\SearchResultViewModel.cs" />

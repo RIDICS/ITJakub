@@ -178,5 +178,15 @@ namespace ITJakub.Core.Database.Exist
 
             return result;
         }
+
+        public static string ParseId(XmlNode selectedNode, string idAttributeName)
+        {
+            if (selectedNode.Attributes != null)
+            {
+                XmlAttribute item = selectedNode.Attributes[idAttributeName];
+                return item.Value;
+            }
+            return null;
+        }
     }
 }

@@ -10,7 +10,6 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly BookCategoryService m_service = new BookCategoryService();
         //private readonly ISearchResultProvider m_resultsProvider = new SearchResultsMockProvider();
         private readonly ISearchResultProvider m_resultsProvider = new ItJakubSearchProvider();
 
@@ -23,10 +22,8 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
                     {
                         SearchTerm = model.SearchTerm,
                         SearchPart = model.SearchPart,
-                        SearchedBooks = m_service.GetSearchedBooks(model.SearchPart),
                     },
                 FoundWords = m_resultsProvider.GetSearchResults(model.SearchTerm),
-                FoundByType = m_resultsProvider.GetSearchResultsByType(model.SearchTerm),
             });
         }
 

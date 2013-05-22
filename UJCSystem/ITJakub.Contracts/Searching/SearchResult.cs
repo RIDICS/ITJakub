@@ -10,6 +10,9 @@ namespace ITJakub.Contracts.Searching
         public string Title { get; set; }
 
         [DataMember]
+        public string Id { get; set; }
+
+        [DataMember]
         public string Author { get; set; }
 
         [DataMember]

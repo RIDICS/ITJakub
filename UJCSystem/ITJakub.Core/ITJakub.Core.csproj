@@ -58,6 +58,7 @@
     <Compile Include="Database\Exist\TeiP5Descriptor.cs" />
     <Compile Include="Database\Exist\XmlTool.cs" />
     <Compile Include="Database\Exist\XQBuilder.cs" />
+    <Compile Include="Database\ReleationDatabaseMock.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ItJakubServiceClient.cs" />
     <Compile Include="ItJakubServiceManager.cs" />

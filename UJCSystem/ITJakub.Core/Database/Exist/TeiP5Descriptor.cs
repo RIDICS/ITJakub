@@ -3,6 +3,7 @@ using System.Xml;
 
 namespace ITJakub.Core.Database.Exist
 {
+
     /// <summary>
     /// XML format that describes XPaths of TEI P5 standard.
     /// </summary>
@@ -72,6 +73,8 @@ namespace ITJakub.Core.Database.Exist
         {
             get { return "c"; }
         }
+
+        public static string IdAttributeName { get { return "n"; } }
 
         public static string CategoriesTargetAttributName
         {

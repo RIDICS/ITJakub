@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Contracts.Searching;
-using Ujc.Naki.MVCWebLayer.Services.Enums;
 
 namespace Ujc.Naki.MVCWebLayer.Services.Mocks
 {
@@ -10,38 +9,14 @@ namespace Ujc.Naki.MVCWebLayer.Services.Mocks
             { "pes", "Pes", "peskovati", "peskovati sě", "pesky", "peský", "pessky", "pesský" };
         private static readonly string[] m_janQueryResults = new string[] { "Jan" };
 
-        private static Dictionary<BookCategory, List<string>> PesQueryResultsByType = new Dictionary<BookCategory,List<string>>()
-        {
-            { BookCategory.Dictionary, new List<string> { "Malý staročeský slovník (MSS)",  "Jan Gebauer: Slovník staročeský (GbSlov)", "Staročeský slovník (StčS)" }},
-            { BookCategory.Historic, new List<string> { "Alexandreida. Zlomek budějovický druhý" , "Bible kladrubská, kniha Jozue", "Bible olomoucká, Genesis–Esdráš"}}
-        };
-        private static Dictionary<BookCategory, List<string>> JanQueryResultsByType = new Dictionary<BookCategory,List<string>>()
-        {
-            { BookCategory.Dictionary, new List<string> { "Jan Gebauer: Slovník staročeský (GbSlov)", "Staročeský slovník (StčS)" }}
-        };
-
         public string[] GetSearchResults(string query)
         {
-            if (string.Equals(query, "pes*"))
-            {
-                return m_pesQueryResults;
-            }
-            else
-            {
-                return m_janQueryResults;
-            }
+            return new string[0];
         }
 
-        public Dictionary<BookCategory, List<string>> GetSearchResultsByType(string query)
+        public SearchResult[] GetSearchResultsByType(string book, string searchTerm)
         {
-            if (string.Equals(query, "pes*"))
-            {
-                return PesQueryResultsByType;
-            }
-            else
-            {
-                return JanQueryResultsByType;
-            }
+            return new SearchResult[0];
         }
 
         public SearchResult[] GetKwicForKeyWord(string searchTerm)
@@ -51,14 +26,5 @@ namespace Ujc.Naki.MVCWebLayer.Services.Mocks
     }
 
 
-    public class SelectionBase
-    {
-        public string Name {get;set;}
-        public string Id { get; set; }
-    }
-
-    public class Categorie : SelectionBase
-    {
-        public List<SelectionBase> Subitems{get;set;}
-    }
+    
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core;
-using Ujc.Naki.MVCWebLayer.Services.Enums;
 using Ujc.Naki.MVCWebLayer.Services.Mocks;
 
 namespace Ujc.Naki.MVCWebLayer.Services
@@ -24,11 +23,12 @@ namespace Ujc.Naki.MVCWebLayer.Services
             return result.ToArray();
         }
 
-        public Dictionary<BookCategory, List<string>> GetSearchResultsByType(string query)
+        public SearchResult[] GetSearchResultsByType(string book, string searchTerm)
         {
-			//todo remove mockup
-            ISearchResultProvider resultsProvider = new SearchResultsMockProvider();
-            return resultsProvider.GetSearchResultsByType(query);
+            if (m_searchResult == null)
+                m_searchResult = m_serviceClient.GetResultsByBooks(book, searchTerm);
+
+            return m_searchResult;
         }
 
 
@@ -36,6 +36,7 @@ namespace Ujc.Naki.MVCWebLayer.Services
         {
             if(m_searchResult == null)
                 m_searchResult = m_serviceClient.GetContextForKeyWord(searchTerm);
+
             return m_searchResult;
         }
     }

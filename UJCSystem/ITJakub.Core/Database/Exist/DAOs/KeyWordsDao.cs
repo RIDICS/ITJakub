@@ -54,6 +54,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
                     SearchResult result = new SearchResult();
                     result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//author"), TeiP5Descriptor.AuthorNodeName, nManager);
                     result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
+                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
                     result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
                     result.Kwic = XmlTool.ParseKwicStructure(hit.SelectSingleNode("kwic"), TeiP5Descriptor.ParagraphNodeName, nManager);
                     result.OriginalXml = hit.InnerXml;
@@ -106,12 +107,14 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("for $hit in $words");
             builder.AppendLine("let $expanded := kwic:expand($hit/..)");
             builder.AppendLine("let $title := $hit/ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
+            builder.AppendLine("let $id := $hit/ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/@n");
             builder.AppendLine("let $author := $hit/ancestor::tei:TEI//tei:author");
             builder.AppendLine("let $categories := $hit/ancestor::tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:catRef");
             builder.AppendLine(string.Format("let $kwic:= kwic:get-summary($expanded, ($expanded//exist:match), <config width=\"{0}\"/>)", KeyWordValue));
             builder.AppendLine("order by $hit");
             builder.AppendLine("return <hit>");
             builder.AppendLine("<title>{$title}</title>");
+            builder.AppendLine("<id>{$id}</id>");
             builder.AppendLine("<author>{$author}</author>");
             builder.AppendLine("<categories>{$categories}</categories>");
             builder.AppendLine("<kwic>{$kwic}</kwic>");
