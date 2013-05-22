@@ -33,14 +33,5 @@ namespace ITJakub.Contracts.Categories
     [DataContract]
     public class Book : SelectionBase
     {
-        public Book(string name, bool isRoot)
-        {
-            Name = name;
-            IsRoot = isRoot;
-        }
-
-        [DataMember]
-        public bool IsRoot { get; set; }
-
     }
 }

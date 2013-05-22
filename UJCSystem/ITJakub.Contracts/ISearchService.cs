@@ -15,5 +15,9 @@ namespace ITJakub.Contracts
 
         [OperationContract]
         SearchResult[] GetContextForKeyWord(string keyWord);
+
+
+        [OperationContract]
+        string GetTitleById(string id);
     }
 }

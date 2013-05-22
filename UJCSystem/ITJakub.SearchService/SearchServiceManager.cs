@@ -16,21 +16,23 @@ namespace ITJakub.SearchService
     public class SearchServiceManager:ISearchService
     {
 
-        private readonly KeyWordsDao m_keyWordsDao;
+        private readonly ExistWordsDao m_existWordsDao;
         private readonly IFilenamesResolver m_fileNameResolver;
         private readonly TeiP5Descriptor m_xmlFormatDescriptor;
+        private readonly BookDao m_bookDao;
 
 
         public SearchServiceManager(IFilenamesResolver fileNameResolver, TeiP5Descriptor xmlFormatDescriptor)
         {
             m_fileNameResolver = fileNameResolver;
             m_xmlFormatDescriptor = xmlFormatDescriptor;
-            m_keyWordsDao = Container.Current.Resolve<KeyWordsDao>();
+            m_existWordsDao = Container.Current.Resolve<ExistWordsDao>();
+            m_bookDao = Container.Current.Resolve<BookDao>();
         }
 
         public List<string> AllExtendedTermsForKey(string key)
         {
-            var dbResult = m_keyWordsDao.GetAllPossibleKeyWords(key);
+            var dbResult = m_existWordsDao.GetAllPossibleKeyWords(key);
             
             return dbResult;
         }
@@ -43,7 +45,13 @@ namespace ITJakub.SearchService
 
         public SearchResult[] GetContextForKeyWord(string keyWord)
         {
-            var dbResult = m_keyWordsDao.GetKeyWordInContextByWord(keyWord);
+            var dbResult = m_existWordsDao.GetKeyWordInContextByWord(keyWord);
+            return dbResult;
+        }
+
+        public string GetTitleById(string id)
+        {
+            var dbResult = m_bookDao.GetTitleByBookId(id);
             return dbResult;
         }
     }

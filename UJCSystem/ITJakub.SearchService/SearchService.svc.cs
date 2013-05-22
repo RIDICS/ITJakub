@@ -28,6 +28,11 @@ namespace ITJakub.SearchService
         {
             return m_searchServiceManager.GetContextForKeyWord(keyWord);
         }
+
+        public string GetTitleById(string id)
+        {
+            return m_searchServiceManager.GetTitleById(id);
+        }
     }
 
     [ServiceContract]

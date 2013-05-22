@@ -9,19 +9,23 @@ namespace ITJakub.Core.Database
 {
     public class ReleationDatabaseMock
     {
+        
 
         private readonly List<SelectionBase> m_rootCategories = new List<SelectionBase>();
         private readonly List<SelectionBase>  m_allCategories = new List<SelectionBase>();
 
         private readonly List<SelectionBase> m_books = new List<SelectionBase>();
 
-        public ReleationDatabaseMock()
+        private readonly SearchServiceClient m_searchClient;
+
+        public ReleationDatabaseMock(SearchServiceClient searchClient)
         {
+            m_searchClient = searchClient;
             LoadTaxonomy();
             LoadBooks();
         }
 
-        
+
 
         public List<SelectionBase> GetRootCategories()
         {
@@ -59,8 +63,6 @@ namespace ITJakub.Core.Database
             var cards = new Categorie { Id = "taxonomy-card-index", Name = "lístková kartotéka" };
             m_rootCategories.Add(cards);
 
-
-
             m_allCategories.AddRange(m_rootCategories);
             foreach (Categorie cat in m_rootCategories.OfType<Categorie>())
             {
@@ -71,7 +73,12 @@ namespace ITJakub.Core.Database
 
         private void LoadBooks()
         {
+            const string bookId = "{2A100BE0-D058-486C-8E27-63801CDFDA22}";
+            var bookTitle = m_searchClient.GetTitleById(bookId);
 
+            Categorie category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Categorie;
+            if (category != null) 
+                category.Subitems.Add(new Book{Id=bookId, Name = bookTitle});
         }
 
     }    
