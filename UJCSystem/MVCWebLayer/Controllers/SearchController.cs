@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using Ujc.Naki.MVCWebLayer.Services;
 using Ujc.Naki.MVCWebLayer.Services.Mocks;
@@ -31,10 +32,16 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
         public ActionResult GetCategoryChildren(string categoryId)
         {
 
-            var children = m_resultsProvider.GetCategoryChildrenById(categoryId);
+            SelectionBase[] children = m_resultsProvider.GetCategoryChildrenById(categoryId);
 
 
-            return View("GetCategoryChildren", null, categoryId);
+            return View("GetCategoryChildren", null, new CategoriesViewModel{Children = children});
+        }
+
+        [HttpGet]
+        public ActionResult GetBooksFromCategory(string categoryId)
+        {
+            return View("GetBooksFromCategory", null, categoryId);
         }
 
         [HttpGet]

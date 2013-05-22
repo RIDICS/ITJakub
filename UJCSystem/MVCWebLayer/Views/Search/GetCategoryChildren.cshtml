@@ -1,4 +1,5 @@
-@model string
+@model Ujc.Naki.MVCWebLayer.ViewModels.CategoriesViewModel 
+
 
 @if (Model.IsEmpty()) 
 {
@@ -13,7 +14,8 @@
             <i class="icon-chevron-right"></i>
             <label class="checkbox">
                 <input type="checkbox" name="SearchPart" value="historic" id="historic" /><span>Historické texty</span>
-            </label>                        </li>
+            </label>
+        </li>
         <li data-category-id="2">
             <i class="icon-chevron-right"></i>
             <label class="checkbox">
