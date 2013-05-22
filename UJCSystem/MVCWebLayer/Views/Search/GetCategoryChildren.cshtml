@@ -1,100 +1,16 @@
 @model Ujc.Naki.MVCWebLayer.ViewModels.CategoriesViewModel 
 
+<ul class="nav">
+    @foreach (var category in Model.Children)
+    {
+        <li data-category-id="@category.Id">
+            <i class="icon-chevron-right"></i>
+            <label class="checkbox">
+                <input type="checkbox" name="SearchPart" value="@category.Id" id="@category.Id" /><span>@category.Name</span>
+            </label>
+        </li>
+    }
+</ul>
 
-@if (Model.IsEmpty()) 
-{
-    <ul class="nav">
-        <li data-category-id="0">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="dictionary" id="dictionary" /><span>Slovníky</span>
-            </label>
-        </li>
-        <li data-category-id="1">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="historic" id="historic" /><span>Historické texty</span>
-            </label>
-        </li>
-        <li data-category-id="2">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="technical" id="technical" /><span>Odborné texty</span>
-            </label>
-        </li>
-        <li data-category-id="3">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="grammar" id="grammar" /><span>Digitalizované mluvnice</span>
-            </label>
-        </li>
-        <li data-category-id="4">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="lists" id="lists" /><span>Lístkové kartotéky</span>
-            </label>
-        </li>
-    </ul>
-}
-
-@if (string.Equals(Model, "0"))
-{
-    <ul class="nav">
-        <li data-category-id="5">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="current-dictionary" id="current-dictionary" /><span>Soudobé slovníky</span>
-            </label>  
-        </li>
-        <li data-category-id="6">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="old-dictionary" /><span>Dobové slovníky</span>
-            </label>
-        </li>
-        <li data-category-id="7">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="digitalized-dictionary" id="digitalized-dictionary" /><span>Digitalizované slovníky</span>
-            </label>
-        </li>
-    </ul>
-}
-
-@if (string.Equals(Model, "5"))
-{
-    <ul class="nav">
-        <li data-category-id="9">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="mss" id="mss" /><span>Malý staroèeský slovník (MSS)</span>
-            </label>
-        </li>
-        <li data-category-id="9">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="essc" id="essc" /><span>Elektronický slovník staré èeštiny (ESSÈ)</span>
-            </label>
-        </li>
-        <li data-category-id="9">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="gbslov" id="gbslov" /><span>Jan Gebauer: Slovník staroèeský</span>
-            </label>
-        </li>
-        <li data-category-id="9">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="stcs" id="stcs" /><span>Staroèeský slovník (sešit 1–26) (StèS)</span>
-            </label>
-        </li>
-        <li data-category-id="9">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="simekslov" id="simekslov" /><span>F. Šimek, Slovníèek staré èeštiny (ŠimekSlov)</span>
-            </label>
-        </li>
-    </ul>
-}
 
     
