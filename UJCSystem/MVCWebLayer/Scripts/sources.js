@@ -5,7 +5,7 @@ $(document).ready(function () {
     });
 
     $("#sources-search-form").submit(function () {
-        window.location.href = $("#sources-search-form #search-submit").attr("data-url") + "/" + $("#sources-search-form #searchTerm").val();
+        window.location.href = $("#sources-search-form").attr("action") + "/" + $("#sources-search-form #searchTerm").val();
         return false;
     });
 });

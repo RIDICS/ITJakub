@@ -54,6 +54,12 @@ namespace ITJakub.MVCWebLayer
             );
 
             routes.MapRoute(
+                "SourcesSearch",
+                "zdroje/hledani/{searchTerm}",
+                new { controller = "Sources", action = "Search", searchTerm = "" }
+            );
+
+            routes.MapRoute(
                 "SourcesDetail",
                 "zdroje/{id}",
                 new { controller = "Sources", action = "Detail", part = "Info" }
@@ -62,7 +68,7 @@ namespace ITJakub.MVCWebLayer
             routes.MapRoute(
                 "SourcesDetailSearch",
                 "zdroje/{id}/hledani/{searchTerm}",
-                new { controller = "Sources", action = "DetailHledat", searchTerm = "" }
+                new { controller = "Sources", action = "DetailHledat", searchTerm = ""}
             );
 
             routes.MapRoute(

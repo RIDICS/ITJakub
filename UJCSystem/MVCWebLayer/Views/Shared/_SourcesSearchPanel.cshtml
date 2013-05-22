@@ -1,11 +1,10 @@
 ﻿<div class="row-fluid">
     <div class="span12 well text-center">
-        @using (Html.BeginForm("Search", "Sources", FormMethod.Get))
-        {
+        <form method="get" action="@Url.RouteUrl("SourcesSearch")">
             <div class="input-append text-center">
                 @Html.TextBox("searchTerm", string.Empty, new { @class = "input-xxlarge" })
                 <button type="submit" id="search-submit" class="btn">Vyhledat</button>
             </div>
-        }
+        </form>
     </div>
 </div>
