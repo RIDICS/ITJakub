@@ -29,8 +29,6 @@ namespace ITJakub.Contracts.Categories
     }
 
 
-
-
     [DataContract]
     public class Book : SelectionBase
     {
