@@ -1,16 +1,19 @@
 @model ITJakub.MVCWebLayer.ViewModels.CategoriesViewModel 
+           
+@if (Model.Children.Count() > 0) {
+    <ul class="nav">
+        @foreach (var category in Model.Children)
+        {
+            <li data-category-id="@category.Id">
+                <i class="icon-chevron-right"></i>
+                <label class="checkbox">
+                    <input type="checkbox" name="SearchPart" value="@category.Id" id="@category.Id" /><span>@category.Name</span>
+                </label>
+            </li>
+        }
+    </ul>
+}
 
-<ul class="nav">
-    @foreach (var category in Model.Children)
-    {
-        <li data-category-id="@category.Id">
-            <i class="icon-chevron-right"></i>
-            <label class="checkbox">
-                <input type="checkbox" name="SearchPart" value="@category.Id" id="@category.Id" /><span>@category.Name</span>
-            </label>
-        </li>
-    }
-</ul>
 
 
     
