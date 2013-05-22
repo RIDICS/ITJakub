@@ -9,16 +9,19 @@ namespace ITJakub.Core.Database
 {
     public class ReleationDatabaseMock
     {
-        private readonly Dictionary<string, string> m_books = new Dictionary<string, string>();
 
         private readonly List<SelectionBase> m_rootCategories = new List<SelectionBase>();
         private readonly List<SelectionBase>  m_allCategories = new List<SelectionBase>();
 
+        private readonly List<SelectionBase> m_books = new List<SelectionBase>();
 
         public ReleationDatabaseMock()
         {
             LoadTaxonomy();
+            LoadBooks();
         }
+
+        
 
         public List<SelectionBase> GetRootCategories()
         {
@@ -63,6 +66,12 @@ namespace ITJakub.Core.Database
             {
                 m_allCategories.AddRange(cat.Subitems);
             }
+        }
+
+
+        private void LoadBooks()
+        {
+
         }
 
     }    
