@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ITJakub.Contracts.Categories;
 
 namespace ITJakub.Core.Database
 {
     public class ReleationDatabaseMock
     {
-        
-
         private readonly List<SelectionBase> m_rootCategories = new List<SelectionBase>();
         private readonly List<SelectionBase>  m_allCategories = new List<SelectionBase>();
-
-        private readonly List<SelectionBase> m_books = new List<SelectionBase>();
 
         private readonly SearchServiceClient m_searchClient;
 
@@ -73,12 +66,29 @@ namespace ITJakub.Core.Database
 
         private void LoadBooks()
         {
-            const string bookId = "{2A100BE0-D058-486C-8E27-63801CDFDA22}";
-            var bookTitle = m_searchClient.GetTitleById(bookId);
+            const string book1Id = "{2A100BE0-D058-486C-8E27-63801CDFDA22}";
+            var bookTitle = m_searchClient.GetTitleById(book1Id);
 
             Categorie category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Categorie;
-            if (category != null) 
-                category.Subitems.Add(new Book{Id=bookId, Name = bookTitle});
+            if (category != null)
+                category.Subitems.Add(new Book { Id = book1Id, Name = bookTitle });
+
+
+
+            string book2Id = "{8C922B93-1185-4B16-BCFC-B8F7A05F1082}";
+            bookTitle = m_searchClient.GetTitleById(book2Id);
+
+            category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Categorie;
+            if (category != null)
+                category.Subitems.Add(new Book { Id = book2Id, Name = bookTitle });
+
+
+            string book3Id = "{E776D714-0D0A-475A-962F-FC9F8CCAC846}";
+            bookTitle = m_searchClient.GetTitleById(book3Id);
+
+            category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-old_czech") as Categorie;
+            if (category != null)
+                category.Subitems.Add(new Book { Id = book3Id, Name = bookTitle });
         }
 
     }    
