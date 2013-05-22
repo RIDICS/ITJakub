@@ -188,7 +188,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Services\Enums\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

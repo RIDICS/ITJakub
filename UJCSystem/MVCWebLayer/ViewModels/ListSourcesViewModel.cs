@@ -3,7 +3,7 @@ using ITJakub.MVCWebLayer.Enums;
 using ITJakub.MVCWebLayer.Services.DTOs;
 
 namespace ITJakub.MVCWebLayer.ViewModels
-{
+{ 
     public class ListSourcesViewModel
     {
         public SourcesViewMode ViewMode { get; set; }
