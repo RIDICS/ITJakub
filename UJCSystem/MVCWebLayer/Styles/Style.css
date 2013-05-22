@@ -156,9 +156,19 @@ a {
     display: inline-block;
 }
 
+.advanced-search-wrapper label.checkbox input {
+    float: none;
+    display: inline;
+    margin: -3px 5px 0px -10px;
+}
+
 .advanced-search .categories i[class=icon-chevron-right], .advanced-search .categories i[class=icon-chevron-down] {
     cursor: pointer;
 } 
+
+.advanced-search .categories ul.nav {
+    display: none;   
+}
 
 /* SearchPanel */
 

@@ -49,17 +49,20 @@ function isBlank(str) {
                     showLevel(parentElement.find(" > i[class=icon-chevron-down]"));
                 } else {
                     $.get(categoriesUrl, function (data) {
-                        var htmlLevel = $($.parseHTML(data));
-                        htmlLevel.find("ul.nav").hide();
-                        parentElement.append(htmlLevel);
+                        parentElement.append(data);
                         if (isBlank(data)) {
                             parentElement.find(" > i[class=icon-chevron-right]").css("background", "none");
                             parentElement.find(" > i[class=icon-chevron-right]").unbind("click");
                         } else {
-                            showLevel(parentElement.find(" > i[class=icon-chevron-right]"));
+                            if (parentElement.find(" > i[class=icon-chevron-right]").length > 0) {
+                                showLevel(parentElement.find(" > i[class=icon-chevron-right]"));
+                            } else {
+                                parentElement.find(" > ul.nav").slideDown();
+                            }
                             parentElement.find(" > ul.nav i[class=icon-chevron-right]").click(function () {
                                 $(this).parent().loadChildren({ categoriesUrl: options.categoriesUrl, categoryId: $(this).parent().attr("data-category-id") });
-                            });                        }
+                            });
+                        }
                     });
                 }
             });
@@ -95,7 +98,7 @@ function isBlank(str) {
 
                 categoriesUrl = asElement.find(".categories").attr("data-categories-url");
                     
-                //asElement.find('.advanced-search').hide();
+                asElement.find('.advanced-search').hide();
                 asElement.find(".categories").loadChildren({ categoriesUrl: categoriesUrl });
 
                 advancedSearchVisible = false;
