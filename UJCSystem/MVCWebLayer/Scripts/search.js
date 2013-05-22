@@ -4,16 +4,81 @@
     $("#results-type a.search-results-type-result").initLoadingTypeTermDetail();
 });
 
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
 
 (function ($) {
-    /* todo */
+    $.fn.extend({
+        loadChildren: function (options) {
+
+            var defaults = {
+                categoryId: null,
+                categoriesUrl: "/hledani/search-category-children"
+            };
+
+            var options = $.extend(defaults, options);
+
+            function showLevel(iconElement) {
+                iconElement.parent().find(" > ul.nav").slideDown();
+                iconElement.attr("class", "icon-chevron-down");
+                iconElement.unbind('click');
+                iconElement.click(function () {
+                    hideLevel(iconElement);
+                });
+            }
+
+            function hideLevel(iconElement) {
+                iconElement.parent().find(" > ul.nav").slideUp();
+                iconElement.attr("class", "icon-chevron-right");
+                iconElement.unbind('click');
+                iconElement.click(function () {
+                    showLevel(iconElement);
+                });
+            }
+
+            return this.each(function () {
+                var categoriesUrl = options.categoriesUrl;
+                if (options.categoryId != null) {
+                    categoriesUrl = categoriesUrl + "/" + options.categoryId;
+                }
+                
+                var parentElement = $(this);
+
+                if (parentElement.find(" > ul.nav").length > 0) {
+                    showLevel(parentElement.find(" > i[class=icon-chevron-down]"));
+                } else {
+                    $.get(categoriesUrl, function (data) {
+                        var htmlLevel = $($.parseHTML(data));
+                        htmlLevel.find("ul.nav").hide();
+                        parentElement.append(htmlLevel);
+                        if (isBlank(data)) {
+                            parentElement.find(" > i[class=icon-chevron-right]").css("background", "none");
+                            parentElement.find(" > i[class=icon-chevron-right]").unbind("click");
+                        } else {
+                            showLevel(parentElement.find(" > i[class=icon-chevron-right]"));
+                            parentElement.find(" > ul.nav i[class=icon-chevron-right]").click(function () {
+                                $(this).parent().loadChildren({ categoriesUrl: options.categoriesUrl, categoryId: $(this).parent().attr("data-category-id") });
+                            });                        }
+                    });
+                }
+            });
+        }
+    });
+})(jQuery);
+
+
+(function ($) {
     $.fn.extend({
         advancedSearch: function (options) {
 
             var defaults = {};
 
             var options = $.extend(defaults, options);
+
             var advancedSearchVisible = true;
+
+            var categoriesUrl = null;
 
             function changeASVisibility(asElement) {
                 if (advancedSearchVisible) {
@@ -25,63 +90,19 @@
                 }
             }
 
-            var asCheckboxes = null;
-
-            function createFindsHtml() {
-                if (asCheckboxes == null) {
-                    return "<span class=\"muted\">Aktivní prohledávání ve všech dostupných dílech</span>";
-                }
-                var html = "";
-                $.each(asCheckboxes, function (key, value) {
-                    html += "<div class=\"muted\">";
-                    html += "<strong>";
-                    html += value.label + " ";
-                    html += "</strong>";
-                    if (value.children == null) {
-                        html += "<span>všechny</span>";
-                    } else {
-                        var a = Array.prototype.slice.call(value.children);
-                        html += a.join(", ");
-                    }
-                    html += "</div>";
-                });
-                return html;
-            }
-
-            function defineCheckboxes(asElement) {
-                asCheckboxes = null;
-                asElement.find(".advanced-search .span6 > ul > li > label > input[type=checkbox]").each(function () {
-                    var children = null;
-                    $(this).parent().parent().find("ul li input[type=checkbox]:checked").each(function () {
-                        if (children == null) {
-                            children = new Array();
-                        }
-                        children.push($(this).parent().find("span").html());
-                    });
-                    if (!(children == null && !$(this).is(':checked'))) {
-                        if (asCheckboxes == null) {
-                            asCheckboxes = {};
-                        }
-                        asCheckboxes[$(this).val()] = {};
-                        asCheckboxes[$(this).val()]["label"] = $(this).parent().find("span").html();
-                        asCheckboxes[$(this).val()]["children"] = children;
-                    }
-                });
-                asElement.find(".searched-books").html(createFindsHtml());
-            }
-
             return this.each(function () {
                 var asElement = $(this);
 
-                asElement.find('.advanced-search').hide();
-                /*advancedSearchVisible = false;
+                categoriesUrl = asElement.find(".categories").attr("data-categories-url");
+                    
+                //asElement.find('.advanced-search').hide();
+                asElement.find(".categories").loadChildren({ categoriesUrl: categoriesUrl });
+
+                advancedSearchVisible = false;
                 $('.show-advanced-search').click(function () {
                     changeASVisibility(asElement);
                 });
 
-                asElement.find('.advanced-search input[type=checkbox]').click(function () {
-                    defineCheckboxes(asElement);
-                });*/
             });
         }
     });

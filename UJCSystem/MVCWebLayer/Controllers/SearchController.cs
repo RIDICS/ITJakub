@@ -28,6 +28,12 @@ namespace Ujc.Naki.MVCWebLayer.Controllers
         }
 
         [HttpGet]
+        public ActionResult GetCategoryChildren(string categoryId)
+        {
+            return View("GetCategoryChildren", null, categoryId);
+        }
+
+        [HttpGet]
         public ActionResult Detail(string searchTerm)
         {
             return View("Detail", null,new SearchKeyWordsViewModel

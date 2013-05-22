@@ -247,6 +247,7 @@
     <Content Include="ITJakub.MVCWebLayer.Container.Config" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\Outside.pubxml" />
+    <Content Include="Views\Search\GetCategoryChildren.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.Contracts\ITJakub.Contracts.csproj">
