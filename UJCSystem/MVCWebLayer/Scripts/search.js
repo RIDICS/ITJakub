@@ -51,7 +51,7 @@ function isBlank(str) {
                     $.get(categoriesUrl, function (data) {
                         parentElement.append(data);
                         if (isBlank(data)) {
-                            parentElement.find(" > i[class=icon-chevron-right]").css("background", "none");
+                            parentElement.find(" > i[class=icon-chevron-right]").attr("class", "icon-chevron-down");
                             parentElement.find(" > i[class=icon-chevron-right]").unbind("click");
                         } else {
                             if (parentElement.find(" > i[class=icon-chevron-right]").length > 0) {

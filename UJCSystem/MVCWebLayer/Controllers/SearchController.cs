@@ -38,12 +38,6 @@ namespace ITJakub.MVCWebLayer.Controllers
             return View("GetCategoryChildren", null, new CategoriesViewModel {Children = children});
         }
 
-        //[HttpGet]
-        //public ActionResult GetBooksFromCategory(string categoryId)
-        //{
-        //    return View("GetBooksFromCategory", null, categoryId);
-        //}
-
         [HttpGet]
         public ActionResult Detail(string searchTerm)
         {
