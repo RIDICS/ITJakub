@@ -48,13 +48,13 @@
                 </div>            
             </div>
             <div class="tab-pane tabs-left" id="results-type">
-                @foreach (KeyValuePair<BookCategory, List<string>> category in Model.FoundByType)
+                @foreach (var item in Model.Results)
                 {
                     <ul class="nav nav-tabs">
-                        <li><h4>@category.Key.CzechString()</h4></li>
-                        @foreach (var book in category.Value)
+                        <li><h4>@item.Title</h4></li>
+                        @foreach (var category in item.Categories)
                         {
-                            <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { searchTerm = "book" @* book pozor na dvojtecku *@ })">@book</a></li>
+                            <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { searchTerm = "book" @* book pozor na dvojtecku *@ })">@category</a></li>
                         }
                     </ul>
                 }

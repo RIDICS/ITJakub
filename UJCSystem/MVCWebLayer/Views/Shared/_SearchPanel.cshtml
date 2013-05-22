@@ -19,20 +19,20 @@
                         }
                         else
                         {
-                            foreach (KeyValuePair<BookCategory, List<string>> pair in Model.SearchedBooks)
+                            foreach (var item in Model.SearchedBooks)
                             {
                                 <div class="muted">
-                                    <strong>@pair.Key.CzechString():</strong>
-                                    @if (pair.Value == null || pair.Value.Count == 0)
+                                    <strong>@item.Categories</strong>
+                                    @if (item.Categories == null || item.Categories.Count == 0)
                                     {
                                         <span>@("všechny")</span>
                                     }
                                     else
                                     {
-                                        foreach (var book in pair.Value)
+                                        foreach (var category in item.Categories)
                                         {
-                                            @book
-                                            @(pair.Value.Last().Equals(book) ? string.Empty : ", ")
+                                            @category
+                                            @(item.Categories.Last().Equals(category) ? string.Empty : ", ")
                                         }
                                     }
                                 </div>
