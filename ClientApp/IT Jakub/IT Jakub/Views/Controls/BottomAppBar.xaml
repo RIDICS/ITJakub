@@ -34,7 +34,10 @@
             <Button x:Name="deleteSession" AutomationProperties.Name="Odstranit sezení" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="deleteSession_Click" >
                 <Image Source="ms-appx:///Assets/Icons/white/delete_row-32.png" Stretch="Fill" Height="25" Width="25"/>
             </Button>
-            <Button x:Name="findSession" AutomationProperties.Name="Vyhledat sezení" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}">
+            <Button x:Name="updateSessionList" AutomationProperties.Name="Aktualizovat seznam sezení" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="updateSessionList_Click">
+                <Image Source="ms-appx:///Assets/Icons/white/refresh-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Button x:Name="findSession" AutomationProperties.Name="Vyhledat sezení" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="findSession_Click">
                 <Image Source="ms-appx:///Assets/Icons/white/search-32.png" Stretch="Fill" Height="25" Width="25"/>
             </Button>
             <!-- Educational Applications -->

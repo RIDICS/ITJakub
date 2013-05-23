@@ -8,7 +8,7 @@ namespace IT_Jakub.Classes.Models {
     /// <summary>
     /// Representation of row in database table Session.
     /// </summary>
-    class Session {
+    public class Session {
 
         /// <summary>
         /// Gets or sets the id.

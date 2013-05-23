@@ -22,12 +22,12 @@
                         </Grid.ColumnDefinitions>
                         
                         <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
-                            <TextBlock Text="{Binding Id}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
-                            <TextBlock Text="{Binding Username}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap"/>
+                            <TextBlock Text="{Binding LastName}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
+                            <TextBlock Text="{Binding Nickname}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2" VerticalAlignment="Top" Margin="10,0,0,0">
-                            <TextBlock Text="{Binding Password}" Style="{StaticResource BodyTextStyle}" MaxHeight="60"/>
-                            <TextBlock Text="{}{}email{}" Style="{StaticResource BodyTextStyle}" MaxHeight="60"/>
+                            <TextBlock Text="{Binding FirstName}" Style="{StaticResource BodyTextStyle}" MaxHeight="60"/>
+                            <TextBlock Text="{Binding Email}" Style="{StaticResource BodyTextStyle}" MaxHeight="60"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>

@@ -9,7 +9,7 @@
     d:DesignHeight="200"
     d:DesignWidth="400">
     
-    <Grid Background="{StaticResource AppBarBackgroundThemeBrush}">
+    <Grid Background="#FFC34E3B">
         <Image Width="32" Height="32" Source="ms-appx:///Assets/Icons/white/error-32.png" Stretch="None" Margin="10,10,358,158" />
         <TextBlock x:Name="heading" HorizontalAlignment="Left" Margin="47,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343" Height="32" FontSize="25"/>
         <TextBlock x:Name="message" HorizontalAlignment="Left" Height="93" Margin="47,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>

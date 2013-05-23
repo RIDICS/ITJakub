@@ -243,7 +243,6 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         /// </summary>
         private async void startAutoUpdate() {
             while (autoUpdateAllowed) {
-                await Task.Delay(250);
                 if (autoUpdate) {
                     try {
                         CommandTable ct = new CommandTable();
@@ -254,6 +253,7 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
                     } catch {
                     }
                 }
+                await Task.Delay(250);
             }
         }
 

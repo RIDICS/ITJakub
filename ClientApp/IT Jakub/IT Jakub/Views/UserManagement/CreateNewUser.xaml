@@ -34,6 +34,7 @@
                 <Rectangle Fill="#FFF4F4F5" Height="1" Stroke="White" Margin="0"/>
                 <TextBlock x:Name="classNameLabel" HorizontalAlignment="Right" TextWrapping="Wrap" Text="Třída" VerticalAlignment="Top" Margin="0,10,0,0"/>
                 <TextBlock x:Name="yearOfGraduationLabel" HorizontalAlignment="Right" TextWrapping="Wrap" Text="Předpokládaný rok ukončení studia" VerticalAlignment="Top" Margin="0,21,0,0"/>
+                <TextBlock x:Name="roleLabel" HorizontalAlignment="Right" TextWrapping="Wrap" Text="Uživatelská role" VerticalAlignment="Top" Margin="0,21,0,0"/>
 
                 <TextBlock Text="Přihlašovací informace" Margin="0,15,0,0" FontSize="14" TextWrapping="Wrap"/>
                 <Rectangle Fill="#FFF4F4F5" Height="1" Stroke="White" Margin="0"/>
@@ -57,6 +58,7 @@
                 </Grid>
                 <TextBox x:Name="classNameTextBox" TextWrapping="Wrap" Style="{StaticResource FormTextBox}" Margin="0,26,0,0"/>
                 <ComboBox x:Name="yearOfGraduationComboBox" Style="{StaticResource FormComboBox}" Margin="0,10,0,0"/>
+                <ComboBox x:Name="roleComboBox" Style="{StaticResource FormComboBox}" Margin="0,10,0,0"/>
                 <TextBox x:Name="usernameTextBox" TextWrapping="Wrap" Style="{StaticResource FormTextBox}" Margin="0,31,0,0"/>
                 <TextBox x:Name="emailTextBox" TextWrapping="Wrap" Style="{StaticResource FormTextBox}"/>
                 <PasswordBox x:Name="passwordPasswordBox" Style="{StaticResource FormPasswordBox}"/>

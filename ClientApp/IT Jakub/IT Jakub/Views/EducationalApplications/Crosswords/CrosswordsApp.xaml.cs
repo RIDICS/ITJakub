@@ -94,6 +94,7 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
             _userSolution = userSolution;
             _crosswordGrid = crosswordGrid;
             _updateButton = updateSolution;
+            title.Text = ss.getSessionData().Name;
         }
         
         /// <summary>
@@ -167,7 +168,7 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
                     r = new Regex(Regex.Escape(")") + "$");
                     xml = r.Replace(xml, "");
                     updateId = c.Id;
-                    Views.EducationalApplications.Crosswords.CrosswordsApp.openCrossword(xml, spectatedUser);
+                    openCrossword(xml, spectatedUser);
                 }
             } catch (Exception ex) {
                 object o = ex;
@@ -189,8 +190,7 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
         /// <param name="commandText">The command text.</param>
         /// <returns></returns>
         private static async Task<long> sendSolutionCommand(string commandText) {
-            CommandTable ct = new CommandTable();
-            long sentCommandId = await ct.createCrossWordSolutionCommand(ss.getSessionData(), lu.getUserData(), commandText);
+            long sentCommandId = await ss.sendCommand(commandText);
             return sentCommandId;
         }
 
@@ -204,7 +204,7 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
         /// <summary>
         /// Starts the auto update.
         /// </summary>
-        private static async void startAutoUpdate() {
+        private async static void startAutoUpdate() {
             while (autoUpdateAllowed) {
                 try {
                     CommandTable ct = new CommandTable();
@@ -212,20 +212,12 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
                     for (int i = 0; i < newCommands.Count; i++) {
                         await newCommands[i].procedeCommand();
                     }
-                    sendUpdateCrosswordCommand();
+                    if (getFilledCrossword() != null) {
+                        await ct.updateCommandById(updateId, ss.getSessionData(), lu.getUserData(), CommandBuilder.getCrosswordSolutionCommand(getFilledCrossword()));
+                    }
                 } catch {
                 }
                 await Task.Delay(1000);
-            }
-        }
-
-        /// <summary>
-        /// Sends the update crossword command.
-        /// </summary>
-        private static async void sendUpdateCrosswordCommand() {
-            CommandTable ct = new CommandTable();
-            if (getFilledCrossword() != null) {
-                await ct.updateCommandById(updateId, ss.getSessionData(), lu.getUserData(), CommandBuilder.getCrosswordSolutionCommand(getFilledCrossword()));
             }
         }
 
@@ -255,7 +247,7 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
                 _updateButton.Visibility = Visibility.Visible;
             }
         }
-
+        
         /// <summary>
         /// Gets the cross word GUI.
         /// </summary>
@@ -446,9 +438,11 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
                 XmlDocument xmlDoc = await XmlDocument.LoadFromFileAsync(file, settings);
                 string xmlString = xmlDoc.GetXml();
                 openCrossword(xmlString);
-                await ss.sendCommand(CommandBuilder.getOpenCrosswordCommand(getEmptyCrossword()));
-                await ss.sendCommand(CommandBuilder.getCorrectSolutionCrosswordCommand(getFilledCrossword()));
-                updateId = await sendSolutionCommand(CommandBuilder.getCrosswordSolutionCommand(xmlString));
+                string filledCrossword = getFilledCrossword();
+                await sendSolutionCommand(CommandBuilder.getOpenCrosswordCommand(getEmptyCrossword()));
+                await sendSolutionCommand(CommandBuilder.getCorrectSolutionCrosswordCommand(filledCrossword));
+                CommandTable ct = new CommandTable();
+                await ct.updateCommandById(updateId, ss.getSessionData(), lu.getUserData(), CommandBuilder.getCrosswordSolutionCommand(filledCrossword));
             } catch (Exception e) {
                 object o = e;
                 return;
@@ -485,7 +479,6 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
             if (ss.getSessionData().OwnerUserId == lu.getUserData().Id) {
                 if (e.AddedItems.Count == 1) {
                     User u = e.AddedItems[0] as User;
-
                     Flyout flyOut = new Flyout();
                     flyOut.Content = new CrosswordUserListChangedFlyout(u, flyOut);
                     flyOut.PlacementTarget = sender as UIElement;
@@ -535,8 +528,10 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
             CommandTable ct = new CommandTable();
             
             List<Command> itemsToDelete = await ct.getAllFinalSolutionMadeByOwner(ss.getSessionData());
-            for (int i = 0; i < itemsToDelete.Count; i++) {
-                await ct.deleteCommand(itemsToDelete[i]);
+            if (itemsToDelete != null) {
+                for (int i = 0; i < itemsToDelete.Count; i++) {
+                    await ct.deleteCommand(itemsToDelete[i]);
+                }
             }
 
             List<Command> items = await ct.getAllSessionSolutionCommands(ss.getSessionData());
@@ -566,9 +561,11 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
                 XmlDocument xmlDoc = await XmlDocument.LoadFromFileAsync(f, settings);
                 string xmlString = xmlDoc.GetXml();
                 openCrossword(xmlString);
+                string filledCrossword = getFilledCrossword();
                 await ss.sendCommand(CommandBuilder.getOpenCrosswordCommand(getEmptyCrossword()));
-                await ss.sendCommand(CommandBuilder.getCorrectSolutionCrosswordCommand(getFilledCrossword()));
-                updateId = await sendSolutionCommand(CommandBuilder.getCrosswordSolutionCommand(xmlString));
+                await ss.sendCommand(CommandBuilder.getCorrectSolutionCrosswordCommand(filledCrossword));
+                CommandTable ct = new CommandTable();
+                await ct.updateCommandById(updateId, ss.getSessionData(), lu.getUserData(), CommandBuilder.getCrosswordSolutionCommand(filledCrossword));
             } catch (Exception e) {
                 object o = e;
                 return;

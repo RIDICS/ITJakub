@@ -1,5 +1,6 @@
 ﻿using Callisto.Controls;
 using IT_Jakub.Classes.DatabaseModels;
+using IT_Jakub.Classes.Enumerations;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Utils;
 using IT_Jakub.Views.Controls.FlyoutControls;
@@ -70,6 +71,17 @@ namespace IT_Jakub.Views.UserManagement {
             nicknameTextBox.Text = editedUser.Nickname;
             usernameTextBox.Text = editedUser.Username;
             yearOfGraduationComboBox.SelectedItem = editedUser.YearOfGraduation;
+            
+            roleComboBox.ItemsSource = Generator.getRoles();
+            if (editedUser.Role == (int)UserRole.Student) {
+                roleComboBox.SelectedIndex = 1;
+            }
+            if (editedUser.Role == (int)UserRole.Teacher) {
+                roleComboBox.SelectedIndex = 0;
+            }
+            if (editedUser.Role == (int)UserRole.Principal) {
+                roleComboBox.SelectedIndex = 2;
+            }
         }
 
         /// <summary>

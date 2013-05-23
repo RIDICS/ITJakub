@@ -104,5 +104,24 @@ namespace IT_Jakub.Classes.DatabaseModels {
             }
             return null;
         }
+
+        /// <summary>
+        /// Finds sessions that contains the name string.
+        /// </summary>
+        /// <param name="name">The string for sessions to contain.</param>
+        /// <returns></returns>
+        internal async Task<List<Session>> findSessionsByName(string name) {
+            List<Session> items = null;
+            try {
+                items = await table.Where(Item => Item.Name.Contains(name)).ToListAsync();
+            } catch (Exception e) {
+                object o = e;
+                return null;
+            }
+            if (items.Count > 0) {
+                return items;
+            }
+            return null;
+        }
     }
 }

@@ -1,0 +1,22 @@
+﻿<UserControl
+    x:Class="IT_Jakub.Views.Controls.FlyoutControls.FindSessionFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IT_Jakub.Views.Controls.FlyoutControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="150"
+    d:DesignWidth="400">
+    
+    <Grid x:Name="mainGrid" Background="{StaticResource AppBarBackgroundThemeBrush}" Margin="0,0,0,0">
+        <TextBlock HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" TextWrapping="Wrap" Text="Název sezení:" VerticalAlignment="Top" Width="380" Style="{StaticResource GroupHeaderTextStyle}"/>
+        <TextBox x:Name="name" HorizontalAlignment="Left" Height="40" Margin="10,55,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="380" Padding="5"/>
+        <Button x:Name="findSessionButton" HorizontalAlignment="Left" Height="40" Margin="10,100,0,0" VerticalAlignment="Top" Width="380" Click="findSessionButton_Click">
+            <StackPanel Orientation="Horizontal" Width="111">
+                <Image Source="ms-appx:///Assets/Icons/white/search-32.png" />
+                <TextBlock Text="Najít sezení" Margin="10,0,0,0" />
+            </StackPanel>
+        </Button>
+    </Grid>
+</UserControl>

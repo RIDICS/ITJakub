@@ -1,7 +1,7 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
+using IT_Jakub.Classes.Enumerations;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Utils;
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,6 +42,9 @@ namespace IT_Jakub.Views.UserManagement {
 
             yearOfGraduationComboBox.ItemsSource = Generator.getNextYears(6);
             yearOfGraduationComboBox.SelectedItem = DateTime.Now.Year + 4;
+
+            roleComboBox.ItemsSource = Generator.getRoles();
+            roleComboBox.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -100,6 +103,19 @@ namespace IT_Jakub.Views.UserManagement {
                 string password = Generator.generateHashForPassword(passwordPasswordBox.Password);
 
                 if (isDataValid) {
+
+                    int role = (int)UserRole.Student;
+
+                    if (roleComboBox.SelectedValue.ToString() == "Student") {
+                        role = (int)UserRole.Student;
+                    }
+                    if (roleComboBox.SelectedValue.ToString() == "Vyučující") {
+                        role = (int)UserRole.Teacher;
+                    }
+                    if (roleComboBox.SelectedValue.ToString() == "Ředitel") {
+                        role = (int)UserRole.Principal;
+                    }
+
                     User u = new User {
                         ClassName = classNameTextBox.Text,
                         ClassTeacher = "",
@@ -109,6 +125,7 @@ namespace IT_Jakub.Views.UserManagement {
                         LastName = lastNameTextBox.Text,
                         Nickname = nicknameTextBox.Text,
                         OpenId = "",
+                        Role = role,
                         ServiceName = "",
                         Password = password,
                         Username = usernameTextBox.Text,

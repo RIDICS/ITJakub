@@ -107,6 +107,7 @@ namespace IT_Jakub.Views.Controls {
             signinSessionButton.Visibility = Visibility.Collapsed;
             createSession.Visibility = Visibility.Collapsed;
             deleteSession.Visibility = Visibility.Collapsed;
+            updateSessionList.Visibility = Visibility.Collapsed;
             findSession.Visibility = Visibility.Collapsed;
             signoutSessionButton.Visibility = Visibility.Collapsed;
             autoUpdateOnButton.Visibility = Visibility.Collapsed;
@@ -132,6 +133,7 @@ namespace IT_Jakub.Views.Controls {
             signinSessionButton.Visibility = Visibility.Collapsed;
             createSession.Visibility = Visibility.Collapsed;
             deleteSession.Visibility = Visibility.Collapsed;
+            updateSessionList.Visibility = Visibility.Collapsed;
             findSession.Visibility = Visibility.Collapsed;
             signoutSessionButton.Visibility = Visibility.Collapsed;
             autoUpdateOnButton.Visibility = Visibility.Collapsed;
@@ -157,11 +159,12 @@ namespace IT_Jakub.Views.Controls {
 
             signinSessionButton.Visibility = Visibility.Visible;
 
-            if (lu.getUserData().Role == UserRole.Teacher || lu.getUserData().Role == UserRole.Principal) {
+            if (lu.getUserData().Role == (int)UserRole.Teacher || lu.getUserData().Role == (int)UserRole.Principal) {
                 createSession.Visibility = Visibility.Visible;
                 deleteSession.Visibility = Visibility.Visible;
             }
 
+            updateSessionList.Visibility = Visibility.Visible;
             findSession.Visibility = Visibility.Visible;
             signoutSessionButton.Visibility = Visibility.Collapsed;
             autoUpdateOnButton.Visibility = Visibility.Collapsed;
@@ -196,6 +199,7 @@ namespace IT_Jakub.Views.Controls {
             signinSessionButton.Visibility = Visibility.Collapsed;
             createSession.Visibility = Visibility.Collapsed;
             deleteSession.Visibility = Visibility.Collapsed;
+            updateSessionList.Visibility = Visibility.Collapsed;
             findSession.Visibility = Visibility.Collapsed;
             signoutSessionButton.Visibility = Visibility.Collapsed;
             autoUpdateOnButton.Visibility = Visibility.Collapsed;
@@ -222,6 +226,7 @@ namespace IT_Jakub.Views.Controls {
             signinSessionButton.Visibility = Visibility.Collapsed;
             createSession.Visibility = Visibility.Collapsed;
             deleteSession.Visibility = Visibility.Collapsed;
+            updateSessionList.Visibility = Visibility.Collapsed;
             findSession.Visibility = Visibility.Collapsed;
             signoutSessionButton.Visibility = Visibility.Collapsed;
             autoUpdateOnButton.Visibility = Visibility.Collapsed;
@@ -247,6 +252,7 @@ namespace IT_Jakub.Views.Controls {
             signinSessionButton.Visibility = Visibility.Collapsed;
             createSession.Visibility = Visibility.Collapsed;
             deleteSession.Visibility = Visibility.Collapsed;
+            updateSessionList.Visibility = Visibility.Collapsed;
             findSession.Visibility = Visibility.Collapsed;
             signoutSessionButton.Visibility = Visibility.Visible;
             autoUpdateOnButton.Visibility = Visibility.Collapsed;
@@ -358,8 +364,16 @@ namespace IT_Jakub.Views.Controls {
         /// </summary>
         private void signInSession() {
             if (selectedSession != null) {
-                ss.register(selectedSession);
-                ss.login();
+                if (selectedSession.Password == null) {
+                    ss.register(selectedSession);
+                    ss.login();
+                } else {
+                    Flyout f = new Flyout();
+                    f.Content = new PasswordSessionFlyout(selectedSession, f);
+                    f.PlacementTarget = signinSessionButton;
+                    f.Placement = PlacementMode.Top;
+                    f.IsOpen = true;
+                }
                 selectedSession = null;
             }
             return;
@@ -481,16 +495,24 @@ namespace IT_Jakub.Views.Controls {
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void deleteSession_Click(object sender, RoutedEventArgs e) {
             if (selectedSession != null) {
-                SessionTable st = new SessionTable();
-                st.removeSession(selectedSession);
+                if (selectedSession.OwnerUserId == lu.getUserData().Id) {
+                    SessionTable st = new SessionTable();
+                    st.removeSession(selectedSession);
 
-                SessionUserTable sut = new SessionUserTable();
-                await sut.removeAllUsersFromSession(selectedSession);
+                    SessionUserTable sut = new SessionUserTable();
+                    await sut.removeAllUsersFromSession(selectedSession);
 
-                CommandTable ct = new CommandTable();
-                await ct.removeSessionsCommand(selectedSession);
+                    CommandTable ct = new CommandTable();
+                    await ct.removeSessionsCommand(selectedSession);
 
-                selectedSession = null;
+                    selectedSession = null;
+                } else {
+                    Flyout f = new Flyout();
+                    f.Content = new ErrorFlyout("Nedostatečná oprávnění !", "Sezení vytvořil jiný uživatel.\r\nNemáte dostatečná oprávnění k jeho smazání.", f);
+                    f.PlacementTarget = MainPage.getMainFrame();
+                    f.Placement = PlacementMode.Top;
+                    f.IsOpen = true;
+                }
             }
             Views.UserLoggedIn.SessionsList.updateSessionList();
         }
@@ -533,8 +555,35 @@ namespace IT_Jakub.Views.Controls {
             Views.EducationalApplications.Crosswords.CrosswordsApp.evaluateSolutions();
         }
 
+        /// <summary>
+        /// Handles the Click event of the backButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void backButton_Click(object sender, RoutedEventArgs e) {
             MainPage.goBack();
+        }
+
+        /// <summary>
+        /// Handles the Click event of the findSession control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void findSession_Click(object sender, RoutedEventArgs e) {
+            Flyout f = new Flyout();
+            f.Content = new FindSessionFlyout(f);
+            f.PlacementTarget = findSession;
+            f.Placement = PlacementMode.Top;
+            f.IsOpen = true;
+        }
+
+        /// <summary>
+        /// Handles the Click event of the updateSessionList control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void updateSessionList_Click(object sender, RoutedEventArgs e) {
+            Views.UserLoggedIn.SessionsList.updateSessionList();
         }
 
     }

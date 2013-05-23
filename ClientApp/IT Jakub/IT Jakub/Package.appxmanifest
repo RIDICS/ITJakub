@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="d826c87c-69db-4d54-8faa-e85b841755b6" Publisher="CN=Kopr" Version="1.0.0.0" />
+  <Identity Name="d826c87c-69db-4d54-8faa-e85b841755b6" Publisher="CN=Kopr" Version="1.0.0.2" />
   <Properties>
     <DisplayName>IT Jakub</DisplayName>
     <PublisherDisplayName>Kopr</PublisherDisplayName>

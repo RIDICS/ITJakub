@@ -18,7 +18,7 @@
                 <Image Source="ms-appx:///Assets/Icons/white/list-48.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="120,0,0,10" />
                 <TextBlock Margin="200,0,0,0" Text="Seznam dostupných sezení" Style="{StaticResource PageHeaderTextStyle}" Width="1152" Height="56" HorizontalAlignment="Left"/>
             </Grid>
-            <ListView x:Name="sessionList" Margin="10,10,0,10" SelectionMode="Single" HorizontalAlignment="Left" Width="1346" SelectionChanged="sessionList_SelectionChanged" Grid.Row="1">
+            <ListView x:Name="sessionList" Margin="10,10,0,100" SelectionMode="Single" HorizontalAlignment="Left" Width="1346" SelectionChanged="sessionList_SelectionChanged" Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
 

@@ -112,7 +112,9 @@ namespace IT_Jakub.Classes.Models {
         /// </summary>
         /// <param name="id">The command id.</param>
         internal void setLatestCommandId(long id) {
-            latestCommandId = id;
+            if (latestCommandId < id) {
+                latestCommandId = id;
+            }
         }
 
         /// <summary>

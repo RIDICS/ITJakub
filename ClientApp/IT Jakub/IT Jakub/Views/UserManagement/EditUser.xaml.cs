@@ -65,12 +65,10 @@ namespace IT_Jakub.Views.UserManagement {
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void removeUser_Click(object sender, RoutedEventArgs e) {
-            ItemCollection items = userList.Items;
             UserTable us = new UserTable();
             await us.deleteUser(selectedUser);
-
             selectedUser = null;
-            userList.ItemsSource = us.getAllUsers();
+            updateUserList_Click(sender, e);
         }
 
         /// <summary>

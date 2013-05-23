@@ -76,12 +76,30 @@ namespace IT_Jakub.Views.UserLoggedIn {
             Views.Controls.BottomAppBar.repaint(MainPage.getBottomAppBar());
         }
 
+        /// <summary>
+        /// Updates the session list.
+        /// </summary>
         internal async static void updateSessionList() {
             try {
                 SessionTable st = new SessionTable();
                 SessionUserTable sut = new SessionUserTable();
                 List<Session> allSessions = await st.getAllSessions();
                 _sessionList.ItemsSource = allSessions;
+            } catch (Exception ex) {
+                object o = ex;
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Finds sessions containing the name string.
+        /// </summary>
+        /// <param name="name">The string that sessions must contain to display in list</param>
+        internal async static void findSessionWithName(string name) {
+            try {
+                SessionTable st = new SessionTable();
+                List<Session> items = await st.findSessionsByName(name);
+                _sessionList.ItemsSource = items;
             } catch (Exception ex) {
                 object o = ex;
                 return;

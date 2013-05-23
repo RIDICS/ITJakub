@@ -109,7 +109,7 @@ namespace IT_Jakub.Classes.Models {
         /// <value>
         /// The role.
         /// </value>
-        public UserRole Role { get; set; }
+        public int Role { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="User"/> class.

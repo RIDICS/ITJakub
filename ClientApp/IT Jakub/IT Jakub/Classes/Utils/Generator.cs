@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IT_Jakub.Classes.Enumerations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -67,6 +68,17 @@ namespace IT_Jakub.Classes.Utils {
             for (int i = 0; i < toReturn.Length; i++) {
                 toReturn[i] = yearNow + i;
             }
+            return toReturn;
+
+        }
+
+
+        /// <summary>
+        /// Gets the user roles.
+        /// </summary>
+        /// <returns></returns>
+        public static string[] getRoles() {
+            string[] toReturn = { "Vyučující", "Student", "Ředitel" };
             return toReturn;
 
         }

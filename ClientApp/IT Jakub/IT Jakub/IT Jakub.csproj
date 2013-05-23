@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>IT Jakub_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -159,6 +160,9 @@
     <Compile Include="Views\Controls\CrossWord\Null.xaml.cs">
       <DependentUpon>Null.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\FlyoutControls\FindSessionFlyout.xaml.cs">
+      <DependentUpon>FindSessionFlyout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\FlyoutControls\CrosswordHintFlyout.xaml.cs">
       <DependentUpon>CrosswordHintFlyout.xaml</DependentUpon>
     </Compile>
@@ -170,6 +174,9 @@
     </Compile>
     <Compile Include="Views\Controls\FlyoutControls\InformationFlyout.xaml.cs">
       <DependentUpon>InformationFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\FlyoutControls\PasswordSessionFlyout.xaml.cs">
+      <DependentUpon>PasswordSessionFlyout.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EducationalApplications\Crosswords\CrosswordsApp.xaml.cs">
       <DependentUpon>CrosswordsApp.xaml</DependentUpon>
@@ -345,6 +352,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Controls\FlyoutControls\FindSessionFlyout.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Controls\FlyoutControls\CrosswordHintFlyout.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -358,6 +369,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\FlyoutControls\InformationFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\FlyoutControls\PasswordSessionFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

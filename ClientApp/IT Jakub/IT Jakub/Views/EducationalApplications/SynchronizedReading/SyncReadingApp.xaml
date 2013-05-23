@@ -14,7 +14,7 @@
         </Grid>
         <Canvas x:Name="canvas" HorizontalAlignment="Left" Margin="0,100,0,0" VerticalAlignment="Top" Width="1366">
                 <RichEditBox x:Name="textRichEditBox" HorizontalAlignment="Left" Height="535" VerticalAlignment="Top" Width="1346" IsReadOnly="True" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" Canvas.Left="10" Canvas.Top="10"/>
-                <ListView x:Name="userList" Height="100" Canvas.Top="564" Width="1346" SelectionChanged="userList_SelectionChanged" ItemTemplate="{StaticResource UserListDefaultTemplate}" Style="{StaticResource HorizontalListView}" Canvas.Left="10" >
+                <ListView x:Name="userList" Height="100" Canvas.Top="550" Width="1346" SelectionChanged="userList_SelectionChanged" ItemTemplate="{StaticResource UserListDefaultTemplate}" Style="{StaticResource HorizontalListView}" Canvas.Left="10" >
                 </ListView>
                 <Image x:Name="pointer" HorizontalAlignment="Left" VerticalAlignment="Top" Source="ms-appx:///Assets/pointer.png" ManipulationMode="None" ManipulationDelta="pointer_ManipulationDelta" ManipulationStarting="pointer_ManipulationStarting" ManipulationCompleted="pointer_ManipulationCompleted" Canvas.Left="10" Canvas.Top="10" Stretch="None"/>
             </Canvas>            
