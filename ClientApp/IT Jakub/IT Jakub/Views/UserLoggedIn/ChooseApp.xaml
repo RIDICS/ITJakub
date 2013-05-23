@@ -8,12 +8,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource ApplicationBackground}">
-        <Button x:Name="SynchronizedReadingButton" AutomationProperties.Name="Synchronizované čtení"  HorizontalAlignment="Left" Height="190" Margin="195,143,0,0" VerticalAlignment="Top" Width="190" Click="SynchronizedReadingButton_Click" Style="{StaticResource ApplicationButtonStyle}">
-            <Image Source="ms-appx:///Assets/Icons/white/literature-64.png" Stretch="None" />
-        </Button>
-        <Button x:Name="CrosswordsButton" AutomationProperties.Name="Křížovky"  HorizontalAlignment="Left" Height="190" Margin="464,143,0,0" VerticalAlignment="Top" Width="190" Style="{StaticResource ApplicationButtonStyle}" Click="CrosswordsButton_Click">
-            <Image Source="ms-appx:///Assets/Icons/white/crossword-64.png" Stretch="None" />
-        </Button>
+    <Grid x:Name="mainGrid" Background="{StaticResource ApplicationBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Image Source="ms-appx:///Assets/Icons/white/graduation_cap-48.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="120,0,0,10" />
+            <TextBlock Margin="200,0,0,0" Text="Výběr typu sezení" Style="{StaticResource PageHeaderTextStyle}" Width="607" Height="56" HorizontalAlignment="Left"/>
+        </Grid>
+
+        <ListView Padding="20,0,20,0" Height="500" Style="{StaticResource HorizontalListView}" SelectionMode="None" HorizontalAlignment="Center" Margin="249,13.593,249,134" Grid.Row="1">
+            <ListView.Items>
+                <Button x:Name="SynchronizedReadingButton" AutomationProperties.Name="Synchronizované čtení" Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}" Click="SynchronizedReadingButton_Click">
+                    <Image Source="ms-appx:///Assets/Icons/white/literature-64.png" Stretch="None" />
+                </Button>
+                <Button x:Name="CrosswordsButton" AutomationProperties.Name="Křížovky" Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}" Click="CrosswordsButton_Click">
+                    <Image Source="ms-appx:///Assets/Icons/white/crossword-64.png" Stretch="None" />
+                </Button>
+            </ListView.Items>
+        </ListView>
     </Grid>
 </Page>

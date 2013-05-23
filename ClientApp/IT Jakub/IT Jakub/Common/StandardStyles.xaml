@@ -408,13 +408,14 @@
         Uncomment any style you reference (as not all may be required).
     -->
 
+
     <!--
-    
     <Style x:Key="SkipBackAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
         <Setter Property="AutomationProperties.AutomationId" Value="SkipBackAppBarButton"/>
         <Setter Property="AutomationProperties.Name" Value="Skip Back"/>
         <Setter Property="Content" Value="&#xE100;"/>
     </Style>
+    
     <Style x:Key="SkipAheadAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
         <Setter Property="AutomationProperties.AutomationId" Value="SkipAheadAppBarButton"/>
         <Setter Property="AutomationProperties.Name" Value="Skip Ahead"/>
@@ -1313,13 +1314,13 @@
         <Setter Property="AutomationProperties.Name" Value="Post Update"/>
         <Setter Property="Content" Value="&#xE1D7;"/>
     </Style>
+  
     <Style x:Key="BackToWindowAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
         <Setter Property="AutomationProperties.AutomationId" Value="BackToWindowAppBarButton"/>
         <Setter Property="AutomationProperties.Name" Value="Back to Window"/>
         <Setter Property="Content" Value="&#xE1D8;"/>
     </Style>
-    -->
-
+  -->
     <!--
     <Style x:Key="FullScreenAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
         <Setter Property="AutomationProperties.AutomationId" Value="FullScreenAppBarButton"/>
@@ -1426,6 +1427,7 @@
         BackButtonStyle is used to style a Button for use in the title area of a page.  Margins appropriate for
         the conventional page layout are included as part of the style.
     -->
+
     <Style x:Key="BackButtonStyle" TargetType="Button">
         <Setter Property="MinWidth" Value="0"/>
         <Setter Property="Width" Value="48"/>

@@ -10,6 +10,32 @@
     mc:Ignorable="d">
 
     <Grid x:Name="mainGrid" Background="{StaticResource ApplicationBackground}">
-        <Button x:Name="userManagement" Content="Správa uživatelů" HorizontalAlignment="Stretch" Height="54" VerticalAlignment="Bottom" Click="userManagement_Click" RenderTransformOrigin="0.491,0.483" Margin="0,0,1066,0"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid>
+        <Image Source="ms-appx:///Assets/Icons/white/graduation_cap-48.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="120,0,0,10" />
+        <TextBlock Margin="200,0,0,0" Text="Úvod" Style="{StaticResource PageHeaderTextStyle}" Width="300" Height="56" HorizontalAlignment="Left"/>
+        </Grid>
+        
+        <ListView Padding="20,0,20,0" Height="500" Style="{StaticResource HorizontalListView}" SelectionMode="None" HorizontalAlignment="Center" Margin="249,13.593,249,134" Grid.Row="1">
+            <ListView.Items>
+                <Button x:Name="loginButton" AutomationProperties.Name="Přihlásit se" Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}" Click="loginButton_Click">
+                    <Image Source="ms-appx:///Assets/Icons/white/login-512.png" />
+                </Button>
+                <Button x:Name="helpButton" AutomationProperties.Name="Zobrazit nápovědu" Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}">
+                    <Image Source="ms-appx:///Assets/Icons/white/info-32.png" />
+                </Button>
+                <Button x:Name="aboutButton" AutomationProperties.Name="O aplikaci" Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}">
+                    <Image Source="ms-appx:///Assets/Icons/white/graduation_cap-64.png" />
+                </Button>
+                <Button x:Name="userManagementButton" AutomationProperties.Name="Správa uživatelů"  Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}" Click="userManagement_Click">
+                    <Image Source="ms-appx:///Assets/Icons/white/administrator-32.png" />
+                </Button>
+            </ListView.Items>
+        </ListView>
+        
     </Grid>
 </Page>

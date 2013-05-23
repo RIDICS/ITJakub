@@ -1,5 +1,4 @@
-﻿using IT_Jakub.Classes.Exceptions;
-using IT_Jakub.Classes.Models;
+﻿using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Networking;
 using IT_Jakub.Classes.Utils;
 using Microsoft.WindowsAzure.MobileServices;

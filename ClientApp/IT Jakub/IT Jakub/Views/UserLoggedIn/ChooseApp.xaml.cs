@@ -1,7 +1,7 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Models.Commands;
-
+using IT_Jakub.Classes.Networking;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,13 +20,22 @@ using Windows.UI.Xaml.Navigation;
 
 namespace IT_Jakub.Views.UserLoggedIn {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page where user can choose an type of application
     /// </summary>
     public sealed partial class ChooseApp : Page {
 
+        /// <summary>
+        /// The session data
+        /// </summary>
         Session sessionData = null;
+        /// <summary>
+        /// The ss is singleton instance of SignedSession where user is signed in.
+        /// </summary>
         private static SignedSession ss = SignedSession.getInstance();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChooseApp"/> class.
+        /// </summary>
         public ChooseApp() {
             this.InitializeComponent();
         }
@@ -40,24 +49,34 @@ namespace IT_Jakub.Views.UserLoggedIn {
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             sessionData = (Session)e.Parameter;
         }
-        
+
+        /// <summary>
+        /// Handles the Click event of the SynchronizedReadingButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void SynchronizedReadingButton_Click(object sender, RoutedEventArgs e) {
             SessionTable st = new SessionTable();
             await st.createSession(sessionData);
 
             sessionData = await st.getSessionByName(sessionData.Name.Trim());
             ss.register(sessionData);
-            await ss.sendCommand(Command.SYNCHRONIZED_READING_APPLICATION + ':' + SyncReadingAppCommand.WHOLE_APPLICATION + ':' + SyncReadingAppCommand.START_APPLICATION);
+            await ss.sendCommand(CommandBuilder.getSyncReadingAppStartCommand());
             ss.login();
         }
 
+        /// <summary>
+        /// Handles the Click event of the CrosswordsButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void CrosswordsButton_Click(object sender, RoutedEventArgs e) {
             SessionTable st = new SessionTable();
             await st.createSession(sessionData);
 
             sessionData = await st.getSessionByName(sessionData.Name.Trim());
             ss.register(sessionData);
-            await ss.sendCommand(Command.CROSSWORDS_APPLICATION + Command.SEPARATOR + CrosswordsAppCommand.WHOLE_APPLICATION + Command.SEPARATOR + CrosswordsAppCommand.START_APPLICATION);
+            await ss.sendCommand(CommandBuilder.getCrosswordAppStartCommand());
             ss.login();
         }
     }

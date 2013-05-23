@@ -4,8 +4,8 @@ using IT_Jakub.Classes.Enumerations;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Models.Commands;
 using IT_Jakub.Classes.Models.Utils;
+using IT_Jakub.Classes.Networking;
 using IT_Jakub.Classes.Utils;
-
 using IT_Jakub.Views.Controls.FlyoutControls;
 using System;
 using System.Collections.Generic;
@@ -35,31 +35,89 @@ using WinRTXamlToolkit.Controls.Extensions;
 
 namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page used to show synchronized reading application.
     /// </summary>
     /// 
 
     public sealed partial class SyncReadingApp : Page {
 
+        /// <summary>
+        /// The text box with readed document
+        /// </summary>
         static RichEditBox textBox;
+        /// <summary>
+        /// The ss is singleton instance of SignedSession where user is signed in.
+        /// </summary>
         private static SignedSession ss = SignedSession.getInstance();
+        /// <summary>
+        /// if should application autoupdate commands while dragging a pointer
+        /// </summary>
         private static bool autoUpdate = true;
+        /// <summary>
+        /// The lu is singleton instance of LoggedUser. LoggedUser is user which is currently logged in.
+        /// </summary>
         private static LoggedUser lu = LoggedUser.getInstance();
 
+        /// <summary>
+        /// The old range of text which was highlighted by pointer before it moved
+        /// </summary>
         private static ITextRange oldRange;
+        /// <summary>
+        /// The old color of text highlight which was highlighted by pointer before it moved
+        /// </summary>
         private static Color oldColor;
+        /// <summary>
+        /// The horizontal offset of scrollbar
+        /// </summary>
         private static double horizontalOffset;
+        /// <summary>
+        /// The vertical offset of scrollbar
+        /// </summary>
         private static double verticalOffset;
+        /// <summary>
+        /// The scroll viewer which is assigned to textblock of readed text
+        /// </summary>
         private ScrollViewer scrollViewer;
+        /// <summary>
+        /// The text pointer
+        /// </summary>
         private static Image staticPointer;
+        /// <summary>
+        /// The range compare serves for comparing if text pointer moved, so it is old position of pointer.
+        /// </summary>
         private ITextRange rangeCompare;
+        /// <summary>
+        /// The user list
+        /// </summary>
         private static ListView staticUserList;
+        /// <summary>
+        /// If is autoupdate allowed
+        /// </summary>
         private static bool autoUpdateAllowed;
+        /// <summary>
+        /// The list of commands
+        /// </summary>
         private static LinkedList<string> commandList = new LinkedList<string>();
+        /// <summary>
+        /// The command list sender task
+        /// </summary>
         private static Task commandListSender;
+        /// <summary>
+        /// The sending move commands allowed
+        /// </summary>
         private static bool sendingMoveCommandsAllowed = false;
+        /// <summary>
+        /// The fluct Y serves for eliminating fluctation of pointer position while dragged
+        /// </summary>
         private double fluctY = 0;
+        /// <summary>
+        /// The Canvas
+        /// </summary>
+        private static Canvas _canvas;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SyncReadingApp"/> class.
+        /// </summary>
         public SyncReadingApp() {
             this.InitializeComponent();
             textBox = textRichEditBox;
@@ -68,9 +126,13 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
             rangeCompare = textBox.Document.GetRange(0, 0);
             staticUserList = userList;
+            _canvas = canvas;
             setUsersRights();
         }
 
+        /// <summary>
+        /// Sets the users rights.
+        /// </summary>
         public static void setUsersRights() {
 
             if (ss.getSessionData().OwnerUserId == lu.getUserData().Id) {
@@ -84,16 +146,25 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             setDefaultUserRights();
         }
 
+        /// <summary>
+        /// Sets the default user rights.
+        /// </summary>
         private static void setDefaultUserRights() {
             Controls.BottomAppBar.setUserRights(UserRights.Default);
             staticPointer.ManipulationMode = ManipulationModes.None;
         }
 
+        /// <summary>
+        /// Sets the prefered user rights.
+        /// </summary>
         private static void setPreferedUserRights() {
             Controls.BottomAppBar.setUserRights(UserRights.Prefered);
             staticPointer.ManipulationMode = ManipulationModes.TranslateX | ManipulationModes.TranslateY;
         }
 
+        /// <summary>
+        /// Sets the owners rights.
+        /// </summary>
         private static void setOwnersRights() {
             Controls.BottomAppBar.setUserRights(UserRights.Owner);
             staticPointer.ManipulationMode = ManipulationModes.TranslateX | ManipulationModes.TranslateY;
@@ -108,6 +179,9 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
 
         }
 
+        /// <summary>
+        /// Highligts the text which user selected.
+        /// </summary>
         public static async void highligtTextButton_Click() {
             ITextCharacterFormat charFormatting = textBox.Document.Selection.CharacterFormat;
             textBox.IsReadOnly = false;
@@ -117,36 +191,56 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             textBox.IsReadOnly = true;
             int startPosition = textBox.Document.Selection.StartPosition;
             int endPosition = textBox.Document.Selection.EndPosition;
-            await ss.sendCommand(SyncReadingAppCommand.getHighlightCommand("ARGB(" + c.A + ", " + c.R + ", " + c.G + ", " + c.B + ")", startPosition, endPosition));
+            await ss.sendCommand(CommandBuilder.getHighlightCommand("ARGB(" + c.A + ", " + c.R + ", " + c.G + ", " + c.B + ")", startPosition, endPosition));
         }
 
+        /// <summary>
+        /// Gets the text rich edit box with document.
+        /// </summary>
+        /// <returns></returns>
         public static RichEditBox getTextRichEditBox() {
             return textBox;
         }
 
+        /// <summary>
+        /// Opens the file from URI.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
         internal static async void openFile(string uri) {
             RtfFileOpener opener = new RtfFileOpener();
 
             string source = await opener.openDocumentFromUri(uri.Trim());
 
             if (source != null) {
-                await ss.sendCommand(SyncReadingAppCommand.getOpenCommand(source));
+                await ss.sendCommand(CommandBuilder.getOpenBookCommand(source));
                 CommandTable ct = new CommandTable();
                 await ct.removeOldOpenCommands(ss.getSessionData());
             }
         }
 
+        /// <summary>
+        /// Handles the Loaded event of the mainGrid control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void mainGrid_Loaded(object sender, RoutedEventArgs e) {
+            this.sessionName.Text = ss.getSessionData().Name;
             autoUpdateAllowed = true;
             autoUpdate = true;
             startAutoUpdate();
         }
 
+        /// <summary>
+        /// Ends the auto update task.
+        /// </summary>
         public static void killAutoUpdateTask() {
             autoUpdateAllowed = false;
             stopSendingMoveCommands();
         }
 
+        /// <summary>
+        /// Starts the auto update of commands.
+        /// </summary>
         private async void startAutoUpdate() {
             while (autoUpdateAllowed) {
                 await Task.Delay(250);
@@ -162,11 +256,22 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Determines whether [is auto update enabled].
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if [is auto update enabled]; otherwise, <c>false</c>.
+        /// </returns>
         public static bool isAutoUpdateEnabled() {
             return autoUpdate;
         }
 
+        /// <summary>
+        /// Handles the ManipulationDelta event of the text pointer control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ManipulationDeltaRoutedEventArgs"/> instance containing the event data.</param>
         private void pointer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e) {
             scrollViewer = textBox.GetFirstDescendantOfType<ScrollViewer>();
 
@@ -174,28 +279,23 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             horizontalOffset = scrollViewer.HorizontalOffset;
 
             fluctY += e.Delta.Translation.Y;
-
-            double top = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) + e.Delta.Translation.Y;
+            double top = (double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) + e.Delta.Translation.Y);
             
             if (fluctY > 25 || fluctY < -25) {
                 pointer.SetValue(Canvas.TopProperty, top);                
             }
-            double left = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + e.Delta.Translation.X;
+            double left = (double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + e.Delta.Translation.X);
 
             pointer.SetValue(Canvas.LeftProperty, left);
 
-            unhighlightPointerWord();
+            unhighlightPointerChar();
 
-            double testX = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString());
-            double testY = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString());
-            double testW = (pointer.ActualWidth / 3);
-
-            double leftPoint = double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + (pointer.ActualWidth / 2.7);
-            double topPoint = double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) - 10;
+            double leftPoint = (double.Parse(pointer.GetValue(Canvas.LeftProperty).ToString()) + (pointer.ActualWidth / 2.7));
+            double topPoint = ((double.Parse(pointer.GetValue(Canvas.TopProperty).ToString()) + canvas.Margin.Top)) - 10;
 
             ITextRange range = textRichEditBox.Document.GetRangeFromPoint(new Point(leftPoint, topPoint), PointOptions.None);
             range.Expand(TextRangeUnit.Character);
-            highlightPointerWord(range);
+            highlightPointerChar(range);
 
             setPointerScrollbarOffset();
             if (rangeCompare.StartPosition != range.StartPosition) {
@@ -203,9 +303,12 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
                 rangeCompare = range;
             }
         }
-
-
-        private static void highlightPointerWord(ITextRange range) {
+        
+        /// <summary>
+        /// Highlights the pointer char.
+        /// </summary>
+        /// <param name="range">The range.</param>
+        private static void highlightPointerChar(ITextRange range) {
             textBox.Document.Selection.SetRange(range.StartPosition, range.EndPosition);
 
             ITextCharacterFormat charFormatting = textBox.Document.Selection.CharacterFormat;
@@ -219,7 +322,10 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             oldRange = range;
         }
 
-        private static void unhighlightPointerWord() {
+        /// <summary>
+        /// Unhighlights the pointer char.
+        /// </summary>
+        private static void unhighlightPointerChar() {
             textBox.Document.Selection.SetRange(oldRange.StartPosition, oldRange.EndPosition);
             ITextCharacterFormat charFormatting = textBox.Document.Selection.CharacterFormat;
 
@@ -230,11 +336,18 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             textBox.IsReadOnly = true;
         }
 
+        /// <summary>
+        /// Sets the pointer scrollbar offset.
+        /// </summary>
         private void setPointerScrollbarOffset() {
             scrollViewer.ScrollToVerticalOffset(verticalOffset);
             scrollViewer.ScrollToHorizontalOffset(horizontalOffset);
         }
 
+        /// <summary>
+        /// Moves the the pointer to char index in document.
+        /// </summary>
+        /// <param name="index">The index.</param>
         public static void movePointerToCharIndex(int index) {
             string documentText;
             textBox.Document.GetText(TextGetOptions.None, out documentText);
@@ -264,25 +377,38 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             range = textBox.Document.GetRange(index, index);
             range.Expand(TextRangeUnit.Character);
 
-            unhighlightPointerWord();
-            highlightPointerWord(range);
+            unhighlightPointerChar();
+            highlightPointerChar(range);
 
             range.GetPoint(HorizontalCharacterAlignment.Left, VerticalCharacterAlignment.Baseline, PointOptions.None, out focusCharacterPoint);
             staticPointer.SetValue(Canvas.LeftProperty, focusCharacterPoint.X - (staticPointer.ActualWidth / 2.5));
-            staticPointer.SetValue(Canvas.TopProperty, focusCharacterPoint.Y);
+            staticPointer.SetValue(Canvas.TopProperty, focusCharacterPoint.Y - _canvas.Margin.Top);
         }
 
+        /// <summary>
+        /// Handles the ManipulationStarting event of the pointer control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ManipulationStartingRoutedEventArgs"/> instance containing the event data.</param>
         private void pointer_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e) {
             autoUpdate = false;
             fluctY = 0;
             startSendingMoveCommands();
         }
 
+        /// <summary>
+        /// Handles the ManipulationCompleted event of the pointer control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ManipulationCompletedRoutedEventArgs"/> instance containing the event data.</param>
         private void pointer_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e) {
             autoUpdate = true;
             stopSendingMoveCommands();
         }
 
+        /// <summary>
+        /// Updates the user list.
+        /// </summary>
         public static async void updateUserList() {
             SessionUserTable sut = new SessionUserTable();
             UserTable ut = new UserTable();
@@ -301,10 +427,20 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the updateUserListButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void updateUserListButton_Click(object sender, RoutedEventArgs e) {
             updateUserList();
         }
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the userList control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void userList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (ss.getSessionData().OwnerUserId == lu.getUserData().Id) {
                 if (e.AddedItems.Count == 1) {                   
@@ -320,31 +456,49 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             userList.SelectedValue = null;
         }
 
+        /// <summary>
+        /// Promotes the user.
+        /// </summary>
+        /// <param name="u">The u.</param>
         internal static async void promoteUser(User u) {
-            await ss.sendCommand(GeneralCommand.getPromoteCommand(u));
+            await ss.sendCommand(CommandBuilder.getPromoteCommand(u));
             ss.promoteUser(u.Id);
         }
 
+        /// <summary>
+        /// Demotes the user.
+        /// </summary>
+        /// <param name="u">The u.</param>
         internal static async void demoteUser(User u) {
-            await ss.sendCommand(GeneralCommand.getDemoteCommand(u));
+            await ss.sendCommand(CommandBuilder.getDemoteCommand(u));
             ss.demoteUser(u.Id);
         }
 
 
+        /// <summary>
+        /// Stops sending the move commands.
+        /// </summary>
         internal static void stopSendingMoveCommands() {
             Task.Delay(1000);
             sendingMoveCommandsAllowed = false;
         }
 
+        /// <summary>
+        /// Starts sending the move commands.
+        /// </summary>
         internal void startSendingMoveCommands() {
             sendingMoveCommandsAllowed = true;
             commandListSender = new Task(sendCommandList);
             commandListSender.Start();
         }
 
+        /// <summary>
+        /// Sends the pointer move command.
+        /// </summary>
+        /// <param name="pointerIndex">Index of the pointer.</param>
         internal void sendPointerMoveCommand(int pointerIndex) {
             CommandTable ct = new CommandTable();
-            string commandText = Classes.Models.Commands.SyncReadingAppCommand.getPointerMoveCommand(pointerIndex);
+            string commandText = CommandBuilder.getPointerMoveCommand(pointerIndex);
             commandList.AddLast(commandText);
         }
 
@@ -360,6 +514,10 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             }
         }
 
+        /// <summary>
+        /// Sets the auto update.
+        /// </summary>
+        /// <param name="allowed">if set to <c>true</c> [allowed].</param>
         internal static void setAutoUpdate(bool allowed) {
             autoUpdate = allowed;
         }

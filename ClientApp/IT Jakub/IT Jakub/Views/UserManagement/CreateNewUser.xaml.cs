@@ -1,5 +1,4 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
-using IT_Jakub.Classes.Exceptions;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Utils;
 
@@ -22,9 +21,12 @@ using Windows.UI.Xaml.Navigation;
 
 namespace IT_Jakub.Views.UserManagement {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page that shows a form to create new user
     /// </summary>
     public sealed partial class CreateNewUser : Page {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateNewUser"/> class.
+        /// </summary>
         public CreateNewUser() {
             this.InitializeComponent();
             yearComboBox.ItemsSource = Generator.getPastYears(150);
@@ -50,6 +52,11 @@ namespace IT_Jakub.Views.UserManagement {
         protected override void OnNavigatedTo(NavigationEventArgs e) {
         }
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the yearComboBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void yearComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (yearComboBox.SelectedItem != null && monthComboBox.SelectedItem != null) {
                 int selectedMonth = int.Parse(monthComboBox.SelectedItem.ToString());
@@ -60,6 +67,11 @@ namespace IT_Jakub.Views.UserManagement {
             }
         }
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the monthComboBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void monthComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (yearComboBox.SelectedItem != null && monthComboBox.SelectedItem != null) {
                 int selectedMonth = int.Parse(monthComboBox.SelectedItem.ToString());
@@ -70,6 +82,11 @@ namespace IT_Jakub.Views.UserManagement {
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the createUserButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void createUserButton_Click(object sender, RoutedEventArgs e) {
             try {
                 bool usernameExists = await Validator.doesUsernameExists(usernameTextBox.Text.Trim());
@@ -99,18 +116,18 @@ namespace IT_Jakub.Views.UserManagement {
                     };
                     UserTable ut = new UserTable();
                     await ut.createUser(u);
-                    MyDialogs.showDialogOK("Uživatel byl vytvořen", userCreated);
+                    //TODO: Notify that user was created
+                    userCreated();
                 }
             } catch (Exception ex) {
-                MyDialogs.showDialogOK(ex.Message);
-                // Funguje az na druhe kliknuti
-                // Pokud se uzivatel znovu pripoji tak se uzivatel vytvori :(
+                object o = ex;
             }
         }
-            
-        
 
-        private void userCreated(IUICommand command) {
+        /// <summary>
+        /// Users has been created.
+        /// </summary>
+        private void userCreated() {
             if (this.Frame.CanGoBack) {
                 this.Frame.GoBack();
             } else {

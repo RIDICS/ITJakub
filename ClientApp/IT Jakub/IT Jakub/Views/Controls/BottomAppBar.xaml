@@ -11,6 +11,9 @@
     <Grid x:Name="FrameLayoutRoot">
         <StackPanel x:Name="leftStackPannel" HorizontalAlignment="Left" Width="662" Orientation="Horizontal">
             <!-- Application control bar -->
+            <Button x:Name="backButton" Style="{StaticResource AppBarButtonStyle}" AutomationProperties.Name="Zpět" Visibility="Collapsed" Click="backButton_Click">
+                <TextBlock Text="&#xE0A6;" Width="48" Height="48" FontSize="48" Margin="0,-22,0,0" Foreground="White"/>
+            </Button>
             <Button x:Name="homeButton" AutomationProperties.Name="Domů" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AppBarButtonStyle}" Click="homeButton_Click">
                 <Image Source="ms-appx:///Assets/Icons/white/home-32.png" Stretch="Fill" Height="25" Width="25"/>
             </Button>

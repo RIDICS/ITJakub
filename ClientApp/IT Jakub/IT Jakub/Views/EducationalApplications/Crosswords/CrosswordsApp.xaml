@@ -10,19 +10,32 @@
     <Page.TopAppBar>
         <AppBar x:Name="topUsersListAppBar" Height="100" Margin="0" VerticalAlignment="Top" Opened="topUsersListAppBar_Opened">
             <Grid Margin="1,0">
-                <ListView x:Name="userList" Height="100" SelectionChanged="userList_SelectionChanged" ItemTemplate="{StaticResource UserListDefaultTemplate}">
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
+                <ListView x:Name="userList" Height="100" Canvas.Top="564" Width="1346" SelectionChanged="userList_SelectionChanged" ItemTemplate="{StaticResource UserListDefaultTemplate}" Style="{StaticResource HorizontalListView}" Canvas.Left="10" >
                 </ListView>
             </Grid>
         </AppBar>
     </Page.TopAppBar>
     <Grid x:Name="mainGrid" Background="{StaticResource ApplicationBackground}" Loaded="mainGrid_Loaded">
-        <TextBlock x:Name="userSolution" HorizontalAlignment="Left" Height="43" Margin="10,60,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="258"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <Grid Grid.ColumnSpan="2">
+            <Image Source="ms-appx:///Assets/Icons/white/crossword-64.png" Stretch="Uniform" Width="48" Height="48" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="120,0,0,10" />
+            <TextBlock Margin="200,0,0,0" Text="Crosswords App" Style="{StaticResource PageHeaderTextStyle}" Width="1152" Height="56" HorizontalAlignment="Left"/>
+        </Grid>
+        <Grid Margin="10,10,0,10" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1" Width="1226">
+            <TextBlock x:Name="userSolution" HorizontalAlignment="Left" Height="46" Margin="10,10,0,0" TextWrapping="Wrap" Text="text" VerticalAlignment="Top" Width="1100" Style="{StaticResource GroupHeaderTextStyle}"/>
+            <Button x:Name="updateSolution" AutomationProperties.Name="Aktualizovat řešení" Visibility="Collapsed" Style="{StaticResource AppBarButtonStyle}" Click="update_Click" Margin="1126,0,0,544" >
+                <Image Source="ms-appx:///Assets/Icons/white/refresh-32.png" Stretch="Fill" Height="25" Width="25"/>
+            </Button>
+            <Grid x:Name="crosswordGrid" Margin="0,67,105,0">
+            </Grid>
+        </Grid>
     </Grid>
-
 </Page>

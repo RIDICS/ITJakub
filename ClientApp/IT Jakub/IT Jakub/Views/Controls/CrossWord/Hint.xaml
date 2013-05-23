@@ -6,11 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="40"
-    d:DesignWidth="40">
+    d:DesignHeight="60"
+    d:DesignWidth="60">
     <UserControl.Resources>
         <ControlTemplate x:Key="ButtonControlTemplate1" TargetType="Button">
-            <Border BorderBrush="{StaticResource AppBarItemNormalBackgroundThemeBrush}" BorderThickness="1" Background="{StaticResource AppBarItemDisabledForegroundThemeBrush}" Width="40" Height="40">
+            <Border BorderBrush="{StaticResource AppBarItemNormalBackgroundThemeBrush}" BorderThickness="1" Background="{StaticResource AppBarItemDisabledForegroundThemeBrush}" Width="60" Height="60">
                 <ContentPresenter x:Name="Content" HorizontalAlignment="Center" Margin="-1,-1,0,0" VerticalAlignment="Center"/>
             </Border>
         </ControlTemplate>

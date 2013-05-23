@@ -8,15 +8,54 @@ using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
 
 namespace IT_Jakub.Classes.Models.CrosswordsApp {
+    /// <summary>
+    /// This class stands for Solution of crossword, with timestamp and Id of User who created it.
+    /// </summary>
     class CrossWordSolution {
 
+        /// <summary>
+        /// The users id
+        /// </summary>
         public long userId;
+        /// <summary>
+        /// Gets or sets the date time.
+        /// </summary>
+        /// <value>
+        /// The date time.
+        /// </value>
         public DateTime dateTime { get; set; }
+        /// <summary>
+        /// The text is solution xml of crossword
+        /// </summary>
         public string text;
+        /// <summary>
+        /// The command of this solution.
+        /// </summary>
         public Command command;
+        /// <summary>
+        /// Gets or sets the creator of this solution.
+        /// </summary>
+        /// <value>
+        /// The creator.
+        /// </value>
         public User creator { get; set; }
+        /// <summary>
+        /// The right solution of crossword
+        /// </summary>
         private Command endSolution;
+        /// <summary>
+        /// Gets or sets the percentage of correct filled crossword.
+        /// </summary>
+        /// <value>
+        /// The percentage.
+        /// </value>
         public double percentage { get; set; }
+        /// <summary>
+        /// Gets or sets the percentage nuber parsed to string.
+        /// </summary>
+        /// <value>
+        /// The percentage text.
+        /// </value>
         public string PercentageText { get; set; }
 
         public CrossWordSolution(Command c, User creator, Command endSolution) {
@@ -40,6 +79,9 @@ namespace IT_Jakub.Classes.Models.CrosswordsApp {
             this.calculatePercentage();
         }
 
+        /// <summary>
+        /// Calculates the percentage of right filled crossword.
+        /// </summary>
         private void calculatePercentage() {
             string pattern = "^.+SolutionEnd\\((?<solution>[\\s\\S]*)\\)$";
             Regex r = new Regex(pattern);

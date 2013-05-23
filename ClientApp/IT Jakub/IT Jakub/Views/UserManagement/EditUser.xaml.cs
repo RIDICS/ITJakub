@@ -25,6 +25,9 @@ namespace IT_Jakub.Views.UserManagement {
     /// </summary>
     public sealed partial class EditUser : Page {
 
+        /// <summary>
+        /// The selected user
+        /// </summary>
         User selectedUser = null;
         
         public EditUser() {
@@ -40,24 +43,27 @@ namespace IT_Jakub.Views.UserManagement {
         protected override void OnNavigatedTo(NavigationEventArgs e) {
         }
 
-        private void updateUserList_Click(object sender, RoutedEventArgs e) {
+        /// <summary>
+        /// Handles the Click event of the updateUserList control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private async void updateUserList_Click(object sender, RoutedEventArgs e) {
             UserTable u = new UserTable();
             try {
-                MobileServiceCollectionView<User> allUsers = u.getAllUsers();
+                List<User> allUsers = await u.getAllUsers();
                 userList.ItemsSource = allUsers;
-                /* Neodchycena vyjímka: 
-                 * Microsoft.WindowsAzure.MobileServices.MobileServiceInvalidOperationException was unhandled
-                 * The request could not be completed.  (NameResolutionFailure)
-                 * 
-                 * Objevuje se při pokusu o vylistování uživatelů v offline režimu.
-                 * 
-                 */
             } catch (Exception ex){
-                MyDialogs.showDialogOK(ex.Message);
+                object o = ex;
                 return;
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the removeUser control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void removeUser_Click(object sender, RoutedEventArgs e) {
             ItemCollection items = userList.Items;
             UserTable us = new UserTable();
@@ -67,10 +73,20 @@ namespace IT_Jakub.Views.UserManagement {
             userList.ItemsSource = us.getAllUsers();
         }
 
+        /// <summary>
+        /// Handles the Click event of the createUserButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void createUserButton_Click(object sender, RoutedEventArgs e) {
             this.Frame.Navigate(typeof(CreateNewUser));
         }
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the userList control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void userList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (e.RemovedItems.Count > 0) {
                 selectedUser = null;
@@ -81,6 +97,11 @@ namespace IT_Jakub.Views.UserManagement {
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the editUser control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void editUser_Click(object sender, RoutedEventArgs e) {
             if (selectedUser != null) {
                 this.Frame.Navigate(typeof(EditSelectedUser), selectedUser);

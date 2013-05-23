@@ -102,35 +102,35 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <Folder Include="Assets\Buttons\" />
+    <Folder Include="Classes\Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Authentification\Authenticator.cs" />
+    <Compile Include="Classes\Authentication\Authenticator.cs" />
     <Compile Include="Classes\DatabaseModels\CommandTable.cs" />
     <Compile Include="Classes\DatabaseModels\SessionTable.cs" />
-    <Compile Include="Classes\DatabaseModels\SessionUpdateTable.cs" />
     <Compile Include="Classes\DatabaseModels\SessionUserTable.cs" />
     <Compile Include="Classes\DatabaseModels\UserTable.cs" />
+    <Compile Include="Classes\Enumerations\ApplicationType.cs" />
+    <Compile Include="Classes\Enumerations\CrosswordAppObject.cs" />
+    <Compile Include="Classes\Enumerations\GeneralApplicationObject.cs" />
+    <Compile Include="Classes\Enumerations\SyncReadingAppObject.cs" />
     <Compile Include="Classes\Enumerations\UserRights.cs" />
     <Compile Include="Classes\Enumerations\UserRole.cs" />
-    <Compile Include="Classes\Exceptions\MyFileNotFoundException.cs" />
-    <Compile Include="Classes\Exceptions\MyException.cs" />
-    <Compile Include="Classes\Exceptions\ServerErrorException.cs" />
-    <Compile Include="Classes\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Classes\Models\Command.cs" />
     <Compile Include="Classes\Models\Commands\CrosswordsAppCommand.cs" />
     <Compile Include="Classes\Models\Commands\GeneralCommand.cs" />
+    <Compile Include="Classes\Models\CrosswordsApp\CrosswordHint.cs" />
     <Compile Include="Classes\Models\CrosswordsApp\Crossword.cs" />
     <Compile Include="Classes\Models\CrosswordsApp\CrosswordChar.cs" />
     <Compile Include="Classes\Models\CrosswordsApp\CrosswordField.cs" />
-    <Compile Include="Classes\Models\CrosswordsApp\CrosswordHint.cs" />
+    <Compile Include="Classes\Models\CrosswordsApp\CrosswordQuestion.cs" />
     <Compile Include="Classes\Models\CrosswordsApp\CrossWordSolution.cs" />
     <Compile Include="Classes\Models\ICommand.cs" />
     <Compile Include="Classes\Models\LoggedUser.cs" />
     <Compile Include="Classes\Models\Session.cs" />
-    <Compile Include="Classes\Models\SessionUpdate.cs" />
     <Compile Include="Classes\Models\SessionUser.cs" />
     <Compile Include="Classes\Models\SignedSession.cs" />
     <Compile Include="Classes\Networking\CommandBuilder.cs" />
@@ -153,8 +153,23 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Controls\CrossWord\Hint.xaml.cs">
+      <DependentUpon>Hint.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\CrossWord\Null.xaml.cs">
+      <DependentUpon>Null.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\FlyoutControls\CrosswordHintFlyout.xaml.cs">
+      <DependentUpon>CrosswordHintFlyout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\FlyoutControls\CrosswordUserListChangedFlyout.xaml.cs">
       <DependentUpon>CrosswordUserListChangedFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\FlyoutControls\ErrorFlyout.xaml.cs">
+      <DependentUpon>ErrorFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\FlyoutControls\InformationFlyout.xaml.cs">
+      <DependentUpon>InformationFlyout.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EducationalApplications\Crosswords\CrosswordsApp.xaml.cs">
       <DependentUpon>CrosswordsApp.xaml</DependentUpon>
@@ -165,11 +180,11 @@
     <Compile Include="Views\Controls\CrossWord\Char.xaml.cs">
       <DependentUpon>Char.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\CrossWord\Hint.xaml.cs">
-      <DependentUpon>Hint.xaml</DependentUpon>
+    <Compile Include="Views\Controls\CrossWord\Question.xaml.cs">
+      <DependentUpon>Question.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\FlyoutControls\CrosswordHintFlyout.xaml.cs">
-      <DependentUpon>CrosswordHintFlyout.xaml</DependentUpon>
+    <Compile Include="Views\Controls\FlyoutControls\CrosswordQuestionFlyout.xaml.cs">
+      <DependentUpon>CrosswordQuestionFlyout.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\FlyoutControls\OpenFileFlyout.xaml.cs">
       <DependentUpon>OpenFileFlyout.xaml</DependentUpon>
@@ -322,7 +337,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Controls\CrossWord\Hint.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\CrossWord\Null.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\FlyoutControls\CrosswordHintFlyout.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Controls\FlyoutControls\CrosswordUserListChangedFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\FlyoutControls\ErrorFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\FlyoutControls\InformationFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -338,11 +373,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\CrossWord\Hint.xaml">
+    <Page Include="Views\Controls\CrossWord\Question.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\FlyoutControls\CrosswordHintFlyout.xaml">
+    <Page Include="Views\Controls\FlyoutControls\CrosswordQuestionFlyout.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

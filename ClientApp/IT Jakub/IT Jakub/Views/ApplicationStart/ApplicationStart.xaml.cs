@@ -1,6 +1,5 @@
 ﻿using IT_Jakub.Classes.Authentication;
 using IT_Jakub.Classes.DatabaseModels;
-using IT_Jakub.Classes.Exceptions;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Utils;
 
@@ -20,21 +19,26 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
-namespace IT_Jakub.Views.ApplicationStart
-{
+namespace IT_Jakub.Views.ApplicationStart {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page shown at application start.
     /// </summary>
-    public sealed partial class ApplicationStart : Page
-    {
+    public sealed partial class ApplicationStart : Page {
 
+        /// <summary>
+        /// The lu is singleton instance of LoggedUser. LoggedUser is user which is currently logged in.
+        /// </summary>
         private static LoggedUser lu = LoggedUser.getInstance();
+
+        /// <summary>
+        /// Means if loggin credentials are correct
+        /// </summary>
         private static bool isCredentialsCorrect = true;
 
-        public ApplicationStart()
-        {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApplicationStart"/> class.
+        /// </summary>
+        public ApplicationStart() {
             this.InitializeComponent();
         }
 
@@ -43,10 +47,20 @@ namespace IT_Jakub.Views.ApplicationStart
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.  The Parameter
         /// property is typically used to configure the page.</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
-        {
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+        }
+
+        private void userManagement_Click(object sender, RoutedEventArgs e) {
+            if (this.Frame != null) {
+                this.Frame.Navigate(typeof(UserManagementStart));
+            }
+        }
+
+        private async void loginButton_Click(object sender, RoutedEventArgs e) {
+            loginButton.IsEnabled = false;
+            CredentialPickerResults credentials = await MyDialogs.showLoginDialog(isCredentialsCorrect);
             if (!lu.isLoggedIn()) {
-                CredentialPickerResults credentials = await MyDialogs.showLoginDialog(isCredentialsCorrect);
+                
 
                 UserTable us = new UserTable();
                 try {
@@ -63,12 +77,6 @@ namespace IT_Jakub.Views.ApplicationStart
                     object o = e;
                     return;
                 }
-            }
-        }
-
-        private void userManagement_Click(object sender, RoutedEventArgs e) {
-            if (this.Frame != null) {
-                this.Frame.Navigate(typeof(UserManagementStart));
             }
         }
     }

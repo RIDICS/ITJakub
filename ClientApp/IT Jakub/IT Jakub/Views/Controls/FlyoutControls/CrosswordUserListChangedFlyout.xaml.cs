@@ -16,25 +16,51 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace IT_Jakub.Views.Controls.FlyoutControls {
+    /// <summary>
+    /// Flayout control that shows on click at userlist in Crossword app
+    /// </summary>
     public sealed partial class CrosswordUserListChangedFlyout : UserControl {
+        /// <summary>
+        /// The clicked user in userlist
+        /// </summary>
         private Classes.Models.User u;
+        /// <summary>
+        /// The flyout itself
+        /// </summary>
         private Callisto.Controls.Flyout flyOut;
+        /// <summary>
+        /// The ss is singleton instance of SignedSession where user is signed in.
+        /// </summary>
         private static SignedSession ss = SignedSession.getInstance();
+        /// <summary>
+        /// The lu is singleton instance of LoggedUser. LoggedUser is user which is currently logged in.
+        /// </summary>
         private static LoggedUser lu = LoggedUser.getInstance();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CrosswordUserListChangedFlyout"/> class.
+        /// </summary>
         public CrosswordUserListChangedFlyout() {
             this.InitializeComponent();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CrosswordUserListChangedFlyout"/> class.
+        /// </summary>
+        /// <param name="u">The u.</param>
+        /// <param name="flyOut">The fly out.</param>
         internal CrosswordUserListChangedFlyout(Classes.Models.User u, Callisto.Controls.Flyout flyOut)
             : this() {
             this.u = u;
             this.flyOut = flyOut;
         }
 
+        /// <summary>
+        /// Handles the Click event of the solution control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void solution_Click(object sender, RoutedEventArgs e) {
             CommandTable ct = new CommandTable();
             Command c = await ct.getUsersSolutionCommand(ss.getSessionData(), u);

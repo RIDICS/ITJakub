@@ -7,35 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:common="using:IT_Jakub.Common"
     mc:Ignorable="d">
-    <Grid x:Name="mainGrid" Background="{StaticResource ApplicationBackground}" Loaded="mainGrid_Loaded">
-        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="768" VerticalAlignment="Top" Width="1366">
-            <RichEditBox x:Name="textRichEditBox" HorizontalAlignment="Left" Height="559" VerticalAlignment="Top" Width="1346" IsReadOnly="True" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" Canvas.Left="10" Canvas.Top="10"/>            
-            <ListView x:Name="userList" Height="100" Canvas.Top="574" Width="1346" SelectionChanged="userList_SelectionChanged" ItemTemplate="{StaticResource UserListDefaultTemplate}">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                
-            </ListView>
-            <Image x:Name="pointer" HorizontalAlignment="Left" VerticalAlignment="Top" Source="ms-appx:///Assets/pointer.png" ManipulationMode="None" ManipulationDelta="pointer_ManipulationDelta" ManipulationStarting="pointer_ManipulationStarting" ManipulationCompleted="pointer_ManipulationCompleted" Canvas.Left="10" Canvas.Top="10" Stretch="None"/>
-        </Canvas>
-        <VisualStateManager.VisualStateGroups>
-
-            <VisualStateGroup x:Name="ApplicationViewStates">
-                <VisualState x:Name="FullScreenLandscape">
-                </VisualState>
-                
-                <VisualState x:Name="Filled"/>
-
-                <VisualState x:Name="FullScreenPortrait">
-                    
-                </VisualState>
-
-                <VisualState x:Name="Snapped">
-                    
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-    </Grid>
+        <Grid x:Name="mainGrid" Background="{StaticResource ApplicationBackground}" Loaded="mainGrid_Loaded">
+        <Grid>
+            <Image Source="ms-appx:///Assets/Icons/white/literature-48.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,44,0,10" />
+            <TextBlock x:Name="sessionName" Margin="200,44,0,0" Text="Synchronizované čtení" Style="{StaticResource PageHeaderTextStyle}" Width="1151" Height="56" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </Grid>
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Margin="0,100,0,0" VerticalAlignment="Top" Width="1366">
+                <RichEditBox x:Name="textRichEditBox" HorizontalAlignment="Left" Height="535" VerticalAlignment="Top" Width="1346" IsReadOnly="True" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" Canvas.Left="10" Canvas.Top="10"/>
+                <ListView x:Name="userList" Height="100" Canvas.Top="564" Width="1346" SelectionChanged="userList_SelectionChanged" ItemTemplate="{StaticResource UserListDefaultTemplate}" Style="{StaticResource HorizontalListView}" Canvas.Left="10" >
+                </ListView>
+                <Image x:Name="pointer" HorizontalAlignment="Left" VerticalAlignment="Top" Source="ms-appx:///Assets/pointer.png" ManipulationMode="None" ManipulationDelta="pointer_ManipulationDelta" ManipulationStarting="pointer_ManipulationStarting" ManipulationCompleted="pointer_ManipulationCompleted" Canvas.Left="10" Canvas.Top="10" Stretch="None"/>
+            </Canvas>            
+        </Grid>
 </Page>

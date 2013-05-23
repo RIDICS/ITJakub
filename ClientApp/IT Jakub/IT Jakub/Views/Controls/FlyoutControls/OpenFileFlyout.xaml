@@ -12,10 +12,16 @@
     <Grid x:Name="mainGrid" Background="{StaticResource AppBarBackgroundThemeBrush}" Margin="0,0,0,0">
         <TextBlock HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" TextWrapping="Wrap" Text="Adresa souboru:" VerticalAlignment="Top" Width="380" Style="{StaticResource GroupHeaderTextStyle}"/>
         <TextBox x:Name="uri" HorizontalAlignment="Left" Height="40" Margin="10,55,0,0" TextWrapping="Wrap" Text="http://" VerticalAlignment="Top" Width="380" Padding="5"/>
-        <Button x:Name="openButton" HorizontalAlignment="Left" Height="40" Margin="10,148,0,0" VerticalAlignment="Top" Width="166" Click="openButton_Click">
-            <StackPanel Orientation="Horizontal" Width="132">
+        <Button x:Name="openUriButton" HorizontalAlignment="Left" Height="40" Margin="10,100,0,0" VerticalAlignment="Top" Width="380" Click="openUriButton_Click">
+            <StackPanel Orientation="Horizontal" Width="247">
                 <Image Source="ms-appx:///Assets/Icons/white/folder-32.png" />
-                <TextBlock Text="Otevřít soubor" Margin="10,0,0,0" />
+                <TextBlock Text="Otevřít soubor z Webové adresy" Margin="10,0,0,0" />
+            </StackPanel>
+        </Button>
+        <Button x:Name="openFileButton" HorizontalAlignment="Left" Height="40" Margin="10,150,0,0" VerticalAlignment="Top" Width="380" Click="openFileButton_Click">
+            <StackPanel Orientation="Horizontal" Width="268">
+                <Image Source="ms-appx:///Assets/Icons/white/folder-32.png" />
+                <TextBlock Text="Otevřít soubor z lokálního umístění" Margin="10,0,0,0" />
             </StackPanel>
         </Button>
 

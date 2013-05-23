@@ -1,7 +1,8 @@
-﻿using IT_Jakub.Classes.DatabaseModels;
+﻿using Callisto.Controls;
+using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Utils;
-
+using IT_Jakub.Views.Controls.FlyoutControls;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
 using System.Collections.Generic;
@@ -22,16 +23,31 @@ using Windows.UI.Xaml.Navigation;
 
 namespace IT_Jakub.Views.UserLoggedIn {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page that shows an list of currently running sessions.
     /// </summary>
     public sealed partial class SessionsList : Page {
 
+
+        private static ListView _sessionList;
+        /// <summary>
+        /// The selected session
+        /// </summary>
         Session selectedSession = null;
+        /// <summary>
+        /// The ss is singleton instance of SignedSession where user is signed in.
+        /// </summary>
         private static SignedSession ss = SignedSession.getInstance();
+        /// <summary>
+        /// The lu is singleton instance of LoggedUser. LoggedUser is user which is currently logged in.
+        /// </summary>
         private static LoggedUser lu = LoggedUser.getInstance();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SessionsList"/> class.
+        /// </summary>
         public SessionsList() {
             this.InitializeComponent();
+            _sessionList = sessionList;
         }
         
         /// <summary>
@@ -39,29 +55,15 @@ namespace IT_Jakub.Views.UserLoggedIn {
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.  The Parameter
         /// property is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e) {
-            sessionListUpdate_Click(sessionListUpdate, null);
+        protected async override void OnNavigatedTo(NavigationEventArgs e) {
+            updateSessionList();
         }
 
-        private async void sessionListUpdate_Click(object sender, RoutedEventArgs e) {
-            try {
-                SessionTable st = new SessionTable();
-                SessionUserTable sut = new SessionUserTable();
-                List<Session> allSessions = await st.getAllSessions();
-                sessionList.ItemsSource = allSessions;
-                /* Neodchycena vyjímka: 
-                 * Microsoft.WindowsAzure.MobileServices.MobileServiceInvalidOperationException was unhandled
-                 * The request could not be completed.  (NameResolutionFailure)
-                 * 
-                 * Objevuje se při pokusu o vylistování uživatelů v offline režimu.
-                 * 
-                 */
-            } catch (Exception ex) {
-                object o = ex;
-                return;
-            }
-        }
-
+        /// <summary>
+        /// Handles the SelectionChanged event of the sessionList control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void sessionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (e.RemovedItems.Count > 0) {
                 selectedSession = null;
@@ -74,29 +76,16 @@ namespace IT_Jakub.Views.UserLoggedIn {
             Views.Controls.BottomAppBar.repaint(MainPage.getBottomAppBar());
         }
 
-        private void joinChossenSession_Click(object sender, RoutedEventArgs e) {
-            if (selectedSession != null) {
-                ss.register(selectedSession);
-                ss.login();
-            }
-            return;
-        }
-
-        private void createSession_Click(object sender, RoutedEventArgs e) {
-            this.Frame.Navigate(typeof(CreateSession));
-        }
-
-        private async void removeSelectedSessionButton_Click(object sender, RoutedEventArgs e) {
-            if (selectedSession != null) {
+        internal async static void updateSessionList() {
+            try {
                 SessionTable st = new SessionTable();
-                st.removeSession(selectedSession);
-                CommandTable ct = new CommandTable();
-                await ct.removeSessionsCommand(selectedSession);
                 SessionUserTable sut = new SessionUserTable();
-                await sut.removeAllUsersFromSession(selectedSession);
+                List<Session> allSessions = await st.getAllSessions();
+                _sessionList.ItemsSource = allSessions;
+            } catch (Exception ex) {
+                object o = ex;
+                return;
             }
-            sessionListUpdate_Click(sender, null);
-            
         }
     }
 }

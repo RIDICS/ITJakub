@@ -1,4 +1,5 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
+using IT_Jakub.Classes.Enumerations;
 using IT_Jakub.Classes.Models.Utils;
 using System;
 using System.Collections.Generic;
@@ -17,46 +18,56 @@ using Windows.UI.Xaml.Media;
 using WinRTXamlToolkit.Controls.Extensions;
 
 namespace IT_Jakub.Classes.Models.Commands {
+    /// <summary>
+    /// Class represents Command which is supposed to be proceded as Synchronized readnig App Command.
+    /// </summary>
     class SyncReadingAppCommand : Command {
-
-        public const string WHOLE_APPLICATION = "App";
-        public const string TEXT = "Text";
-        public const string POINTER = "Pointer";
+        
+        /// <summary>
+        /// Command start this application.
+        /// </summary>
         public const string START_APPLICATION = "Start()";
 
+        /// <summary>
+        /// The text box in Synchronized Reading App.
+        /// </summary>
         RichEditBox textBox = Views.EducationalApplications.SynchronizedReading.SyncReadingApp.getTextRichEditBox();
 
+        /// <summary>
+        /// The c is representation of the particular Command.
+        /// </summary>
         private Command c;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SyncReadingAppCommand"/> class.
+        /// </summary>
+        /// <param name="c">The Command which created this instance.</param>
         public SyncReadingAppCommand(Command c) {
             this.c = c;
         }
 
-        internal static string getHighlightCommand(string color, int startingRange, int endingRange) {
-            string text = SYNCHRONIZED_READING_APPLICATION + SEPARATOR + TEXT + SEPARATOR + "Highlight(" + color + ';' + startingRange.ToString() + ';' + endingRange.ToString() + ")";
-            return text;
-        }
-
-        internal static string getOpenCommand(string path) {
-            string text = SYNCHRONIZED_READING_APPLICATION + SEPARATOR + TEXT + SEPARATOR + "Open(" + path + ")";
-            return text;
-        }
-
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <returns></returns>
         internal async override Task<bool> procedeCommand() {
             switch (c.commandObject) {
-                case WHOLE_APPLICATION:
+                case SyncReadingAppObject.WHOLE_APPLICATION:
                     procedeAppCommand();
                     break;
-                case TEXT:
+                case SyncReadingAppObject.TEXT:
                     await procedeTextCommand();
                     break;
-                case POINTER:
+                case SyncReadingAppObject.POINTER:
                     procedePointerCommand();
                     break;
             }
             return true;
         }
 
+        /// <summary>
+        /// Procedes the text pointer command.
+        /// </summary>
         private void procedePointerCommand() {
             if (c.command.StartsWith("Move(")) {
                 string commandAtribute = c.command.Replace("Move(", "");
@@ -65,6 +76,10 @@ namespace IT_Jakub.Classes.Models.Commands {
             }
         }
 
+        /// <summary>
+        /// Procedes the actual text command.
+        /// </summary>
+        /// <returns></returns>
         private async Task<bool> procedeTextCommand() {
             if (c.command.StartsWith("Highlight(")) {
                 await procedeTextHighlightCommand();
@@ -77,6 +92,10 @@ namespace IT_Jakub.Classes.Models.Commands {
             return false;
         }
 
+        /// <summary>
+        /// Procedes the open file command.
+        /// </summary>
+        /// <returns></returns>
         private async Task<bool> procedeOpenCommand() {
             int index = c.CommandText.IndexOf("Open(");
             string path = c.CommandText.Substring(index);
@@ -93,6 +112,10 @@ namespace IT_Jakub.Classes.Models.Commands {
             return false;
         }
 
+        /// <summary>
+        /// Procedes the text highlight command.
+        /// </summary>
+        /// <returns></returns>
         private async Task procedeTextHighlightCommand() {
             RichEditBox textRichEditBox = Views.EducationalApplications.SynchronizedReading.SyncReadingApp.getTextRichEditBox();
             ScrollViewer scrollViewer = textRichEditBox.GetFirstDescendantOfType<ScrollViewer>();
@@ -130,6 +153,9 @@ namespace IT_Jakub.Classes.Models.Commands {
             scrollViewer.ScrollToHorizontalOffset(horizontalOffset);
         }
 
+        /// <summary>
+        /// Procedes the whole application command.
+        /// </summary>
         private void procedeAppCommand() {
             switch (c.command) {
                 case START_APPLICATION:
@@ -138,13 +164,5 @@ namespace IT_Jakub.Classes.Models.Commands {
                     break;
             }
         }
-
-        internal static string getPointerMoveCommand(int charIndex) {
-            string text = SYNCHRONIZED_READING_APPLICATION + SEPARATOR + POINTER + SEPARATOR + "Move("+charIndex+")";
-            return text;
-        }
-
-
-        
     }
 }

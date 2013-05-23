@@ -1,7 +1,8 @@
-﻿using IT_Jakub.Classes.DatabaseModels;
+﻿using Callisto.Controls;
+using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Utils;
-
+using IT_Jakub.Views.Controls.FlyoutControls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,12 +21,18 @@ using Windows.UI.Xaml.Navigation;
 
 namespace IT_Jakub.Views.UserManagement {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page that shows form to edit users data.
     /// </summary>
     public sealed partial class EditSelectedUser : Page {
 
+        /// <summary>
+        /// The edited user
+        /// </summary>
         User editedUser = null;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditSelectedUser"/> class.
+        /// </summary>
         public EditSelectedUser() {
             this.InitializeComponent();
         }
@@ -65,6 +72,10 @@ namespace IT_Jakub.Views.UserManagement {
             yearOfGraduationComboBox.SelectedItem = editedUser.YearOfGraduation;
         }
 
+        /// <summary>
+        /// Checks the user data.
+        /// </summary>
+        /// <param name="u">The u.</param>
         private void checkUserData(User u) {
             if (u.ClassName == null) {
                 u.ClassName = "";
@@ -105,6 +116,11 @@ namespace IT_Jakub.Views.UserManagement {
         }
 
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the yearComboBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void yearComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (yearComboBox.SelectedItem != null && monthComboBox.SelectedItem != null) {
                 int selectedMonth = int.Parse(monthComboBox.SelectedItem.ToString());
@@ -115,6 +131,11 @@ namespace IT_Jakub.Views.UserManagement {
             }
         }
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the monthComboBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void monthComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (yearComboBox.SelectedItem != null && monthComboBox.SelectedItem != null) {
                 int selectedMonth = int.Parse(monthComboBox.SelectedItem.ToString());
@@ -125,6 +146,11 @@ namespace IT_Jakub.Views.UserManagement {
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the editUserButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void editUserButton_Click(object sender, RoutedEventArgs e) {
             try {
                 bool usernameExists = false;
@@ -149,41 +175,82 @@ namespace IT_Jakub.Views.UserManagement {
                     editedUser.Password = password;
                     UserTable ut = new UserTable();
                     await ut.updateUser(editedUser);
-                    MyDialogs.showDialogOK("Změněná data byla uložena", userEdited);
+                    //TODO: Notify user that user has been edited.
+                    userEdited();
                     return;
                 }
-                MyDialogs.showDialogOK("Chyba v zadávání dat");
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout(
+                    "Chyba zadání",
+                    "Data která jste zadali nemohou být uložena do databáze.\r\nZkontrolujte prosím zadání.",
+                    f
+                    );
+                f.PlacementTarget = this.Frame;
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
                 } catch (Exception ex) {
-                MyDialogs.showDialogOK(ex.Message);
-                // Funguje az na druhe kliknuti
-                // Pokud se uzivatel znovu pripoji tak se uzivatel vytvori :(
+                    object o = ex;
             }
         }
 
-        private void userEdited(Windows.UI.Popups.IUICommand command) {
+        /// <summary>
+        /// Users has been edited.
+        /// </summary>
+        private void userEdited() {
             this.Frame.Navigate(typeof(EditUser));
         }
 
+        /// <summary>
+        /// Handles the TextChanged event of the nameTextBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
         private void nameTextBox_TextChanged(object sender, TextChangedEventArgs e) {
             editedUser.FirstName = nameTextBox.Text;
         }
 
+        /// <summary>
+        /// Handles the TextChanged event of the lastNameTextBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
         private void lastNameTextBox_TextChanged(object sender, TextChangedEventArgs e) {
             editedUser.LastName = lastNameTextBox.Text;
         }
 
+        /// <summary>
+        /// Handles the TextChanged event of the nicknameTextBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
         private void nicknameTextBox_TextChanged(object sender, TextChangedEventArgs e) {
             editedUser.Nickname = nicknameTextBox.Text;
         }
 
+        /// <summary>
+        /// Handles the TextChanged event of the classNameTextBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
         private void classNameTextBox_TextChanged(object sender, TextChangedEventArgs e) {
             editedUser.ClassName = classNameTextBox.Text;
         }
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the yearOfGraduationComboBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void yearOfGraduationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             editedUser.YearOfGraduation = int.Parse(yearOfGraduationComboBox.SelectedItem.ToString());
         }
-        
+
+        /// <summary>
+        /// Determines whether [has username changed].
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if [has username changed]; otherwise, <c>false</c>.
+        /// </returns>
         private bool hasUsernameChanged() {
             if (usernameTextBox.Text.Trim() != editedUser.Username.Trim()) {
                 editedUser.Username = usernameTextBox.Text;
@@ -192,6 +259,12 @@ namespace IT_Jakub.Views.UserManagement {
             return false;
         }
 
+        /// <summary>
+        /// Determines whether [has email changed].
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if [has email changed]; otherwise, <c>false</c>.
+        /// </returns>
         private bool hasEmailChanged() {
             if (emailTextBox.Text.Trim() != editedUser.Email.Trim()) {
                 editedUser.Email = emailTextBox.Text.Trim();

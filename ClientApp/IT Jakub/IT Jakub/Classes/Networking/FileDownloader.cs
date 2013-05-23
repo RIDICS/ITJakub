@@ -1,5 +1,4 @@
-﻿using IT_Jakub.Classes.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,9 +9,17 @@ using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 
 namespace IT_Jakub.Classes.Networking {
+    /// <summary>
+    /// This class is used for background file downloading.
+    /// </summary>
     class FileDownloader {
 
 
+        /// <summary>
+        /// Downloads the file from URI.
+        /// </summary>
+        /// <param name="source">The source URI</param>
+        /// <returns></returns>
         public static async Task<StorageFile> downloadFileFromUri(Uri source) {
 
             string fileext = Path.GetExtension(source.ToString());
@@ -41,6 +48,9 @@ namespace IT_Jakub.Classes.Networking {
             return destinationFile;
         }
 
+        /// <summary>
+        /// Clears the temp folder.
+        /// </summary>
         public static async void clearTempFolder() {
             var applicationData = Windows.Storage.ApplicationData.Current;
             var temporaryFolder = applicationData.TemporaryFolder;

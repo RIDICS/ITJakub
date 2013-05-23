@@ -7,18 +7,32 @@ using System.Threading.Tasks;
 namespace IT_Jakub.Classes.Models {
     abstract class ICommand {
 
-        internal const string SYNCHRONIZED_READING_APPLICATION = "501";
-        internal const string CROSSWORDS_APPLICATION = "502";
+        /// <summary>
+        /// The command type which should be executed.
+        /// </summary>
         internal ICommand commandState;
 
-        internal const char SEPARATOR = ':';
-        internal const string GENERAL = "000";
-        internal const string USER = "User";
+        /// <summary>
+        /// The array containing splited command.
+        /// </summary>
         internal string[] commandArray;
+        /// <summary>
+        /// The Application type of command.
+        /// </summary>
         internal string appCommand;
+        /// <summary>
+        /// The object in application on whic is command targeted.
+        /// </summary>
         internal string commandObject;
+        /// <summary>
+        /// The actual command.
+        /// </summary>
         internal string command;
 
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <returns></returns>
         abstract internal Task<bool> procedeCommand();
     }
 }

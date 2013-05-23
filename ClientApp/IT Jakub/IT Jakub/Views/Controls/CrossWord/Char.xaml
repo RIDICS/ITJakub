@@ -6,10 +6,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="40"
-    d:DesignWidth="40">
+    d:DesignHeight="60"
+    d:DesignWidth="60">
     
-    <Grid Background="#FFF0F0F0">
-        <TextBox x:Name="text" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="Black" FontSize="24" MinWidth="0" MinHeight="0" Padding="0" Width="40" Height="40"/>
+    <Grid Background="#FFF0F0F0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="60">
+        <TextBox x:Name="text" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Text="CH"  VerticalAlignment="Center" Foreground="Black" FontSize="24" MinWidth="0" MinHeight="0" Padding="0,10,0,0" Height="60" Width="60" Background="{StaticResource AppBarItemBackgroundThemeBrush}"/>
     </Grid>
 </UserControl>

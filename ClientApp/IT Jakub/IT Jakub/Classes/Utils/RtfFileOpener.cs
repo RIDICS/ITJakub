@@ -10,8 +10,16 @@ using Windows.Storage;
 using Windows.UI.Xaml.Controls;
 
 namespace IT_Jakub.Classes.Models.Utils {
+    /// <summary>
+    /// Class can open RTF file.
+    /// </summary>
     class RtfFileOpener {
 
+        /// <summary>
+        /// Opens the document from URI and loads it to SyncReadingApp.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <returns></returns>
         internal async Task<string> openDocumentFromUri(string uri) {
             Uri source;
             if (!Uri.TryCreate(uri.Trim(), UriKind.Absolute, out source)) {
@@ -24,7 +32,6 @@ namespace IT_Jakub.Classes.Models.Utils {
 
             RichEditBox reb = Views.EducationalApplications.SynchronizedReading.SyncReadingApp.getTextRichEditBox();
             reb.IsReadOnly = false;
-            // Load the file into the Document property of the RichEditBox.
             reb.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
             reb.IsReadOnly = true;
             return source.ToString();

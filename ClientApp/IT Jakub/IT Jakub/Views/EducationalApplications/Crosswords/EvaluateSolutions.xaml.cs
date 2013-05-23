@@ -21,16 +21,34 @@ using Windows.UI.Xaml.Navigation;
 
 namespace IT_Jakub.Views.EducationalApplications.Crosswords {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page for evaluating crossword solutions
     /// </summary>
     public sealed partial class EvaluateSolutions : Page {
 
+        /// <summary>
+        /// The ss is singleton instance of SignedSession where user is signed in.
+        /// </summary>
         private static SignedSession ss = SignedSession.getInstance();
+        /// <summary>
+        /// The lu is singleton instance of LoggedUser. LoggedUser is user which is currently logged in.
+        /// </summary>
         private static LoggedUser lu = LoggedUser.getInstance();
+        /// <summary>
+        /// The user list
+        /// </summary>
         private static ListView _userList;
+        /// <summary>
+        /// The users solutions list
+        /// </summary>
         private static ListView _userSolutions;
+        /// <summary>
+        /// The list of solutions
+        /// </summary>
         private static List<CrossWordSolution> solutions;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EvaluateSolutions"/> class.
+        /// </summary>
         public EvaluateSolutions() {
             this.InitializeComponent();
             _userList = userList;
@@ -46,6 +64,9 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
             updateUserList();
         }
 
+        /// <summary>
+        /// Updates the user list.
+        /// </summary>
         public static async void updateUserList() {
             CommandTable ct = new CommandTable();
             UserTable ut = new UserTable();
@@ -56,15 +77,15 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
 
 
             Dictionary<long, long> userIds = new Dictionary<long, long>(); ;
-
-            for (int i = 0; i < items.Count; i++) {
-                User creator = await ut.getUserById(items[i].UserId);
-                Command endSolution = await ct.getEndSolutionCommand(ss.getSessionData());
-                CrossWordSolution sol = new CrossWordSolution(items[i], creator, endSolution);
-                solutions.Add(sol);
-                userIds[sol.userId] = sol.userId;
+            if (items != null) {
+                for (int i = 0; i < items.Count; i++) {
+                    User creator = await ut.getUserById(items[i].UserId);
+                    Command endSolution = await ct.getEndSolutionCommand(ss.getSessionData());
+                    CrossWordSolution sol = new CrossWordSolution(items[i], creator, endSolution);
+                    solutions.Add(sol);
+                    userIds[sol.userId] = sol.userId;
+                }
             }
-
             
 
             List<User> userList = new List<User>();
@@ -76,6 +97,11 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
             _userList.ItemsSource = userList;
         }
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the userList control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void userList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (ss.getSessionData().OwnerUserId == lu.getUserData().Id) {
                 if (e.AddedItems.Count == 1) {
@@ -93,6 +119,11 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
 
         }
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the userSolutionsList control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void userSolutionsList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (ss.getSessionData().OwnerUserId == lu.getUserData().Id) {
                 if (e.AddedItems.Count == 1) {
@@ -102,7 +133,7 @@ namespace IT_Jakub.Views.EducationalApplications.Crosswords {
                     xmlDoc.LoadXml(cs.text);
                     Crossword c = new Crossword(xmlDoc);
                     solutionGrid.Children.Clear();
-                    solutionGrid.Children.Add(c.getUI());
+                    solutionGrid.Children.Add(c.getGUI());
                 }
             }
         }

@@ -24,19 +24,47 @@ using WinRTXamlToolkit.Controls.Extensions;
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace IT_Jakub.Views.Controls {
+    /// <summary>
+    /// Control of BottomAppBar
+    /// </summary>
     public sealed partial class BottomAppBar : UserControl {
 
+        /// <summary>
+        /// The lu is singleton instance of LoggedUser. LoggedUser is user which is currently logged in.
+        /// </summary>
         private static LoggedUser lu = LoggedUser.getInstance();
+        /// <summary>
+        /// The ss is singleton instance of SignedSession where user is signed in.
+        /// </summary>
         private static SignedSession ss = SignedSession.getInstance();
+        /// <summary>
+        /// The main frame of every page
+        /// </summary>
         private Frame mainFrame;
+        /// <summary>
+        /// The selected session from sessionlist
+        /// </summary>
         private static Session selectedSession;
+        /// <summary>
+        /// The current navigated page
+        /// </summary>
         private static string currentPage;
+        /// <summary>
+        /// The user rights
+        /// </summary>
         private static UserRights userRights = UserRights.Default;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BottomAppBar"/> class.
+        /// </summary>
         public BottomAppBar() {
             this.InitializeComponent();
         }
 
+        /// <summary>
+        /// Repaints the specified bar.
+        /// </summary>
+        /// <param name="bar">The bar to be repainted</param>
         public static void repaint(BottomAppBar bar) {
             Frame mainFrame = MainPage.getMainFrame();
             currentPage = mainFrame.CurrentSourcePageType.FullName;
@@ -53,12 +81,26 @@ namespace IT_Jakub.Views.Controls {
                 bar.sessionsListTemplate(bar);
             }
 
+            if (currentPage.Contains("Views.UserLoggedIn.CreateSession")) {
+                bar.createSessionTemplate(bar);
+            }
+
+            if (currentPage.Contains("Views.UserLoggedIn.ChooseApp")) {
+                bar.chooseAppTemplate(bar);
+            }
+
             if (currentPage.Contains("EducationalApplications")) {
                 bar.educationalApplicationsTemplate();
             }
         }
 
+        
+
+        /// <summary>
+        /// Users logged in template.
+        /// </summary>
         private void userLoggedInTemplate() {
+            backButton.Visibility = Visibility.Collapsed;
             homeButton.Visibility = Visibility.Visible;
             logoutButton.Visibility = Visibility.Visible;
 
@@ -79,7 +121,11 @@ namespace IT_Jakub.Views.Controls {
             evaluateSolutions.Visibility = Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// Application start template.
+        /// </summary>
         private void applicationStartTemplate() {
+            backButton.Visibility = Visibility.Collapsed;
             homeButton.Visibility = Visibility.Visible;
             logoutButton.Visibility = Visibility.Collapsed;
 
@@ -100,7 +146,12 @@ namespace IT_Jakub.Views.Controls {
             evaluateSolutions.Visibility = Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// Sessions list template.
+        /// </summary>
+        /// <param name="bar">The bar.</param>
         private void sessionsListTemplate(BottomAppBar bar) {
+            backButton.Visibility = Visibility.Collapsed;
             homeButton.Visibility = Visibility.Visible;
             logoutButton.Visibility = Visibility.Visible;
 
@@ -133,7 +184,63 @@ namespace IT_Jakub.Views.Controls {
             }
         }
 
+        /// <summary>
+        /// Create session template.
+        /// </summary>
+        /// <param name="bar">The bar.</param>
+        private void createSessionTemplate(BottomAppBar bar) {
+            backButton.Visibility = Visibility.Visible;
+            homeButton.Visibility = Visibility.Visible;
+            logoutButton.Visibility = Visibility.Visible;
+
+            signinSessionButton.Visibility = Visibility.Collapsed;
+            createSession.Visibility = Visibility.Collapsed;
+            deleteSession.Visibility = Visibility.Collapsed;
+            findSession.Visibility = Visibility.Collapsed;
+            signoutSessionButton.Visibility = Visibility.Collapsed;
+            autoUpdateOnButton.Visibility = Visibility.Collapsed;
+            autoUpdateOffButton.Visibility = Visibility.Collapsed;
+
+            updateUserlistButton.Visibility = Visibility.Collapsed;
+            highlightTextButton.Visibility = Visibility.Collapsed;
+            openFileButton.Visibility = Visibility.Collapsed;
+
+            requestFinalSolutions.Visibility = Visibility.Collapsed;
+            sendFinalSolution.Visibility = Visibility.Collapsed;
+            evaluateSolutions.Visibility = Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// Choose app template.
+        /// </summary>
+        /// <param name="bar">The bar.</param>
+        private void chooseAppTemplate(BottomAppBar bar) {
+            backButton.Visibility = Visibility.Visible;
+            homeButton.Visibility = Visibility.Visible;
+            logoutButton.Visibility = Visibility.Visible;
+
+            signinSessionButton.Visibility = Visibility.Collapsed;
+            createSession.Visibility = Visibility.Collapsed;
+            deleteSession.Visibility = Visibility.Collapsed;
+            findSession.Visibility = Visibility.Collapsed;
+            signoutSessionButton.Visibility = Visibility.Collapsed;
+            autoUpdateOnButton.Visibility = Visibility.Collapsed;
+            autoUpdateOffButton.Visibility = Visibility.Collapsed;
+
+            updateUserlistButton.Visibility = Visibility.Collapsed;
+            highlightTextButton.Visibility = Visibility.Collapsed;
+            openFileButton.Visibility = Visibility.Collapsed;
+
+            requestFinalSolutions.Visibility = Visibility.Collapsed;
+            sendFinalSolution.Visibility = Visibility.Collapsed;
+            evaluateSolutions.Visibility = Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// Educational applications template.
+        /// </summary>
         private void educationalApplicationsTemplate() {
+            backButton.Visibility = Visibility.Collapsed;
             homeButton.Visibility = Visibility.Visible;
             logoutButton.Visibility = Visibility.Visible;
 
@@ -161,7 +268,11 @@ namespace IT_Jakub.Views.Controls {
             }
         }
 
+        /// <summary>
+        /// Syncs reading app template.
+        /// </summary>
         private void syncReadingAppTemplate() {
+            backButton.Visibility = Visibility.Collapsed;
             updateUserlistButton.Visibility = Visibility.Visible;
             highlightTextButton.Visibility = Visibility.Visible;
             openFileButton.Visibility = Visibility.Collapsed;
@@ -186,7 +297,11 @@ namespace IT_Jakub.Views.Controls {
             }
         }
 
+        /// <summary>
+        /// Crosswords app template.
+        /// </summary>
         private void crosswordsAppTemplate() {
+            backButton.Visibility = Visibility.Collapsed;
             updateUserlistButton.Visibility = Visibility.Collapsed;
             highlightTextButton.Visibility = Visibility.Collapsed;
             openFileButton.Visibility = Visibility.Collapsed;
@@ -202,13 +317,23 @@ namespace IT_Jakub.Views.Controls {
                 requestFinalSolutions.Visibility = Visibility.Visible;
                 evaluateSolutions.Visibility = Visibility.Visible;
             }
+
+            if (currentPage.Contains("EvaluateSolutions")) {
+                backButton.Visibility = Visibility.Visible;
+            }
         }
 
+        /// <summary>
+        /// Navigates to login page.
+        /// </summary>
         private void navigateToLoginPage() {
             mainFrame = MainPage.getMainFrame();
             mainFrame.Navigate(typeof(Views.ApplicationStart.ApplicationStart));
         }
 
+        /// <summary>
+        /// Logout the user.
+        /// </summary>
         private async void logoutUser() {
             selectedSession = null;
             await lu.logout();
@@ -216,6 +341,9 @@ namespace IT_Jakub.Views.Controls {
             mainFrame.Navigate(typeof(ApplicationStart.ApplicationStart));
         }
 
+        /// <summary>
+        /// Signs out user from session.
+        /// </summary>
         private async void signOutSession() {
             selectedSession = null;
             if (ss.isSignedInSession()) {
@@ -225,6 +353,9 @@ namespace IT_Jakub.Views.Controls {
             mainFrame.Navigate(typeof(UserLoggedIn.SessionsList));
         }
 
+        /// <summary>
+        /// Signs in user in session.
+        /// </summary>
         private void signInSession() {
             if (selectedSession != null) {
                 ss.register(selectedSession);
@@ -234,10 +365,19 @@ namespace IT_Jakub.Views.Controls {
             return;
         }
 
+        /// <summary>
+        /// Sets the selected session.
+        /// </summary>
+        /// <param name="s">The s.</param>
         internal static void setSelectedSession(Session s) {
             selectedSession = s;
         }
 
+        /// <summary>
+        /// Handles the Click event of the homeButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void homeButton_Click(object sender, RoutedEventArgs e) {
             mainFrame = MainPage.getMainFrame();
             if (lu.isLoggedIn()) {
@@ -247,40 +387,84 @@ namespace IT_Jakub.Views.Controls {
             mainFrame.Navigate(typeof(MainPage));
         }
 
+        /// <summary>
+        /// Handles the Click event of the logoutButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void logoutButton_Click(object sender, RoutedEventArgs e) {
             logoutUser();
         }
 
+        /// <summary>
+        /// Handles the Click event of the signinSessionButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void signinSessionButton_Click(object sender, RoutedEventArgs e) {
             signInSession();
         }
 
+        /// <summary>
+        /// Handles the Click event of the signoutSessionButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void signoutSessionButton_Click(object sender, RoutedEventArgs e) {
             signOutSession();
         }
 
+        /// <summary>
+        /// Handles the Click event of the autoUpdateOnButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void autoUpdateOnButton_Click(object sender, RoutedEventArgs e) {
             EducationalApplications.SynchronizedReading.SyncReadingApp.setAutoUpdate(true);
             repaint(this);
         }
 
+        /// <summary>
+        /// Handles the Click event of the autoUpdateOffButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void autoUpdateOffButton_Click(object sender, RoutedEventArgs e) {
             EducationalApplications.SynchronizedReading.SyncReadingApp.setAutoUpdate(false);
             repaint(this);
         }
 
+        /// <summary>
+        /// Handles the Click event of the highlightTextButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void highlightTextButton_Click(object sender, RoutedEventArgs e) {
             SyncReadingApp.highligtTextButton_Click();
         }
 
+        /// <summary>
+        /// Handles the Click event of the updateUserlistButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void updateUserlistButton_Click(object sender, RoutedEventArgs e) {
             SyncReadingApp.updateUserList();
         }
 
+        /// <summary>
+        /// Sets the user rights.
+        /// </summary>
+        /// <param name="ur">The ur.</param>
         public static void setUserRights (UserRights ur) {
             userRights = ur;
         }
 
+        /// <summary>
+        /// Handles the Click event of the openFileButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void openFileButton_Click(object sender, RoutedEventArgs e) {
             Flyout flyOut = new Flyout();
             flyOut.Content = new OpenFileFlyout(flyOut);
@@ -290,38 +474,67 @@ namespace IT_Jakub.Views.Controls {
             flyOut.IsOpen = true;
         }
 
-        private void deleteSession_Click(object sender, RoutedEventArgs e) {
+        /// <summary>
+        /// Handles the Click event of the deleteSession control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private async void deleteSession_Click(object sender, RoutedEventArgs e) {
             if (selectedSession != null) {
                 SessionTable st = new SessionTable();
                 st.removeSession(selectedSession);
 
                 SessionUserTable sut = new SessionUserTable();
-                sut.removeAllUsersFromSession(selectedSession);
+                await sut.removeAllUsersFromSession(selectedSession);
 
                 CommandTable ct = new CommandTable();
-                ct.removeSessionsCommand(selectedSession);
+                await ct.removeSessionsCommand(selectedSession);
 
                 selectedSession = null;
             }
-            return;
+            Views.UserLoggedIn.SessionsList.updateSessionList();
         }
 
+        /// <summary>
+        /// Handles the Click event of the createSession control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void createSession_Click(object sender, RoutedEventArgs e) {
             mainFrame = MainPage.getMainFrame();
             mainFrame.Navigate(typeof(UserLoggedIn.CreateSession));
         }
 
+        /// <summary>
+        /// Handles the Click event of the requestFinalSolutions control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void requestFinalSolutions_Click(object sender, RoutedEventArgs e) {
             Views.EducationalApplications.Crosswords.CrosswordsApp.requestFinalSolutions();
         }
 
+        /// <summary>
+        /// Handles the Click event of the sendFinalSolution control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void sendFinalSolution_Click(object sender, RoutedEventArgs e) {
             Views.EducationalApplications.Crosswords.CrosswordsApp.sendFinalSolution();
         }
 
+        /// <summary>
+        /// Handles the Click event of the evaluateSolutions control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void evaluateSolutions_Click(object sender, RoutedEventArgs e) {
             TaskKiller.killEducationalApplicationTasks();
             Views.EducationalApplications.Crosswords.CrosswordsApp.evaluateSolutions();
+        }
+
+        private void backButton_Click(object sender, RoutedEventArgs e) {
+            MainPage.goBack();
         }
 
     }

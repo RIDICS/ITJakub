@@ -21,13 +21,21 @@ using Windows.UI.Xaml.Navigation;
 namespace IT_Jakub
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Main page where all common components are designed
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
+        /// <summary>
+        /// The root page
+        /// </summary>
         Page rootPage = null;
+        /// <summary>
+        /// The mainFrame
+        /// </summary>
         private static Frame staticMainFrame;
+        /// <summary>
+        /// The bottom app bar
+        /// </summary>
         private static Views.Controls.BottomAppBar staticBottomAppBar;
 
         public MainPage()
@@ -35,7 +43,6 @@ namespace IT_Jakub
             this.InitializeComponent();
             staticMainFrame = mainFrame;
             staticBottomAppBar = bottomAppBar;
-            
         }
 
         /// <summary>
@@ -48,30 +55,54 @@ namespace IT_Jakub
             mainFrame.Navigate(typeof(ApplicationStart));
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e) {
-            if (mainFrame.CanGoBack) {
-                mainFrame.GoBack();
-            } else if (rootPage != null && rootPage.Frame.CanGoBack) {
-                rootPage.Frame.GoBack();
+        /// <summary>
+        /// Goes back.
+        /// </summary>
+        /// 
+        public static void goBack() {
+            if (staticMainFrame.CanGoBack) {
+                staticMainFrame.GoBack();
             }
         }
 
+        /// <summary>
+        /// Gets the main frame.
+        /// </summary>
+        /// <returns></returns>
         public static Frame getMainFrame() {
             return staticMainFrame;
         }
 
+        /// <summary>
+        /// Handles the Click event of the MainButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void MainButton_Click(object sender, RoutedEventArgs e) {
         }
 
+        /// <summary>
+        /// Handles the Navigated event of the mainFrame control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="NavigationEventArgs"/> instance containing the event data.</param>
         private void mainFrame_Navigated(object sender, NavigationEventArgs e) {
             BottomAppBar.IsOpen = false;
-            TopAppBar.IsOpen = false;
         }
 
+        /// <summary>
+        /// Gets the bottom app bar.
+        /// </summary>
+        /// <returns></returns>
         internal static Views.Controls.BottomAppBar getBottomAppBar() {
             return staticBottomAppBar;
         }
 
+        /// <summary>
+        /// Bots the bar_ opened.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
         private void botBar_Opened(object sender, object e) {
             Views.Controls.BottomAppBar.repaint(bottomAppBar);
         }

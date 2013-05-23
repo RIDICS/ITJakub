@@ -1,4 +1,5 @@
 ﻿using IT_Jakub.Classes.DatabaseModels;
+using IT_Jakub.Classes.Enumerations;
 using IT_Jakub.Classes.Models.Utils;
 using System;
 using System.Collections.Generic;
@@ -18,33 +19,54 @@ using Windows.UI.Xaml.Media;
 using WinRTXamlToolkit.Controls.Extensions;
 
 namespace IT_Jakub.Classes.Models.Commands {
+    /// <summary>
+    /// Class represents Command which is supposed to be proceded as Crosswords App Command.
+    /// </summary>
     class CrosswordsAppCommand : Command {
 
-        public const string WHOLE_APPLICATION = "App";
+        
+        /// <summary>
+        /// Command which says to the Application to Start.
+        /// </summary>
         public const string START_APPLICATION = "Start()";
-        public const string CROSSWORD = "Crossword";
+        
+        /// <summary>
+        /// The lu is singleton instance of LoggedUser.
+        /// </summary>
         public static LoggedUser lu = LoggedUser.getInstance();
 
-        RichEditBox textBox = Views.EducationalApplications.SynchronizedReading.SyncReadingApp.getTextRichEditBox();
-
+        /// <summary>
+        /// The c is representation of the particular Command.
+        /// </summary>
         private Command c;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CrosswordsAppCommand"/> class.
+        /// </summary>
+        /// <param name="c">The Command which created this instance.</param>
         public CrosswordsAppCommand(Command c) {
             this.c = c;
         }
 
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <returns></returns>
         internal async override Task<bool> procedeCommand() {
             switch (c.commandObject) {
-                case WHOLE_APPLICATION:
+                case CrosswordAppObject.WHOLE_APPLICATION:
                     procedeAppCommand();
                     break;
-                case CROSSWORD:
+                case CrosswordAppObject.CROSSWORD:
                     procedeCrosswordCommand();
                     break;
             }
             return true;
         }
 
+        /// <summary>
+        /// Procedes the command targeted on the Crossword itself.
+        /// </summary>
         private void procedeCrosswordCommand() {
             if (c.command.StartsWith("Open(")) {
                 procedeOpenCommand();
@@ -54,6 +76,14 @@ namespace IT_Jakub.Classes.Models.Commands {
             }
         }
 
+        /// <summary>
+        /// <para>
+        /// Procedes the fill user solution command.
+        /// </para>
+        /// <para>
+        /// Open the partial solution of crossword.
+        /// </para>
+        /// </summary>
         private void procedeFillUserSolutionCommand() {
             string xml;
             Regex r = new Regex("^Solution" + Regex.Escape("(") + ".+" + Regex.Escape(", "));
@@ -65,6 +95,14 @@ namespace IT_Jakub.Classes.Models.Commands {
             Views.EducationalApplications.Crosswords.CrosswordsApp.setUpdateId(c.Id);
         }
 
+        /// <summary>
+        /// <para>
+        /// Procedes the open command.
+        /// </para>
+        /// <para>
+        /// Opens new crossword.
+        /// </para>
+        /// </summary>
         private void procedeOpenCommand() {
             string xml;
             Regex r = new Regex("^Open" + Regex.Escape("("));
@@ -75,6 +113,9 @@ namespace IT_Jakub.Classes.Models.Commands {
             Views.EducationalApplications.Crosswords.CrosswordsApp.openCrossword(xml);
         }
 
+        /// <summary>
+        /// Procedes the command targeted at whole application.
+        /// </summary>
         private void procedeAppCommand() {
             switch (c.command) {
                 case START_APPLICATION:
