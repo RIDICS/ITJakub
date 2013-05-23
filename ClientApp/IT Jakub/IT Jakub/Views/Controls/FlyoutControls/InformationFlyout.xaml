@@ -1,0 +1,16 @@
+﻿<UserControl
+    x:Class="IT_Jakub.Views.Controls.FlyoutControls.InformationFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IT_Jakub.Views.Controls.FlyoutControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="52"
+    d:DesignWidth="500">
+    
+    <Grid Background="{StaticResource AppBarBackgroundThemeBrush}">
+        <Image Width="32" Height="32" Source="ms-appx:///Assets/Icons/white/info-32.png" Stretch="None" Margin="10,10,458,10" />
+        <TextBlock x:Name="text" HorizontalAlignment="Left" Margin="50,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="23" FontSize="14" Width="440"/>
+    </Grid>
+</UserControl>
