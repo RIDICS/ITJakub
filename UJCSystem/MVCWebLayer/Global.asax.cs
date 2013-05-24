@@ -44,7 +44,7 @@ namespace ITJakub.MVCWebLayer
             routes.MapRoute(
                 "SourcesMain",
                 "zdroje",
-                new { controller = "Sources", action = "Listing", mode = "nazev", alphabet = "A" }
+                new { controller = "Sources", action = "Listing", mode = "nazev", alphabet = "a" }
             );
 
             routes.MapRoute(
