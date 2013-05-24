@@ -10,7 +10,7 @@
                  <li data-category-id="@child.Id">
                      <i class="icon-chevron-right"></i>
                      <label class="checkbox">
-                         <input type="checkbox" name="SearchPart" value="@child.Id" /><span>@child.Name</span>
+                         <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="category" data-name="@child.Name" /><span>@child.Name</span>
                      </label>
                  </li>
              }
@@ -18,7 +18,7 @@
              {
                  <li data-book-id="@child.Id">
                      <label class="checkbox">
-                         <input type="checkbox" name="SearchPart" value="@child.Id" /><span>@child.Name</span>
+                         <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="book" data-name="@child.Name" /><span>@child.Name</span>
                      </label>
                  </li>
              }

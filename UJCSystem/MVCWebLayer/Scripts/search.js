@@ -4,9 +4,114 @@
     $("#results-type a.search-results-type-result").initLoadingTypeTermDetail();
 });
 
-function isBlank(str) {
+function isBlankString(str) {
     return (!str || /^\s*$/.test(str));
 }
+
+var SelectedSources = function () {
+    var selectedCategories = new Array();
+    var selectedBooks = new Array();
+
+    this.book = "book";
+    this.category = "category";
+
+    this.addSource = function (type, id, name) {
+        if (type == this.category) {
+            selectedCategories.push({
+                id: id,
+                name: name
+            });
+        }
+        if (type == this.book) {
+            selectedBooks.push({
+                id: id,
+                name: name
+            });
+        }
+    };
+
+    this.removeSource = function (type, id, name) {
+        if (type == this.category) {
+            for (var i = 0; i < selectedCategories.length; i++) {
+                if (id == selectedCategories[i].id) {
+                    selectedCategories.splice(i, 1);
+                }
+            }
+        }
+        if (type == this.book) {
+            for (var i = 0; i < selectedBooks.length; i++) {
+                if (id == selectedBooks[i].id) {
+                    selectedBooks.splice(i, 1);
+                }
+            }
+        }
+    }
+
+    this.getSelectedHtml = function () {
+        var categoriesNames = new Array();
+        for (var i = 0; i < selectedCategories.length; i++) {
+            categoriesNames.push(selectedCategories[i].name);
+        }
+        var booksNames = new Array();
+        for (var i = 0; i < selectedBooks.length; i++) {
+            booksNames.push(selectedBooks[i].name);
+        }
+
+        if (categoriesNames.length == 0 && booksNames.length == 0) {
+            return "<span class=\"muted\">Aktivní prohledávání ve všech dostupných dílech</span>";
+        }
+
+        var categoriesString = categoriesNames.join(", ");
+        var booksString = booksNames.join(", ");
+
+        if (categoriesNames.length == 0) {
+            categoriesString = "-";
+        }
+
+        if (booksNames.length == 0) {
+            booksString = "-";
+        }
+
+        return "<div class=\"muted\">" +
+            "<strong>Kategorie:</strong> " + categoriesString + "<br>" +
+            "<strong>Díla:</strong> " + booksString;
+    };
+
+    this.getSelectedUrlParam = function () {
+        var categoriesIds = new Array();
+        for (var i = 0; i < selectedCategories.length; i++) { 
+            categoriesIds.push(selectedCategories[i].id); 
+        }
+        var booksIds = new Array();
+        for (var i = 0; i < selectedBooks.length; i++) { 
+            booksIds.push(selectedBooks[i].id); 
+        }
+
+        var categoriesString = categoriesIds.join("+");
+        var booksString = booksIds.join("+");
+
+        return "kategorie=" + categoriesString + "&books=" + booksString;
+    };
+
+    this.checkCheckboxes = function (selector) {
+        var _this = this;
+        selector.each(function () {
+            _this.addSource($(this).attr("data-type"), $(this).attr("data-id"), $(this).attr("data-name"));
+        });
+        $(".advanced-search-wrapper .searched-books").html(this.getSelectedHtml());
+    };
+
+    this.uncheckCheckboxes = function (selector) {
+        var _this = this;
+        selector.each(function () {
+            _this.removeSource($(this).attr("data-type"), $(this).attr("data-id"), $(this).attr("data-name"));
+        });
+        $(".advanced-search-wrapper .searched-books").html(this.getSelectedHtml());
+    };
+
+}
+
+var selectedsources = new SelectedSources();
 
 (function ($) {
     $.fn.extend({
@@ -50,7 +155,51 @@ function isBlank(str) {
                 } else {
                     $.get(categoriesUrl, function (data) {
                         parentElement.append(data);
-                        if (isBlank(data)) {
+                        parentElement.find("input[type=checkbox]").unbind("change");
+                        parentElement.find("input[type=checkbox]").change(function () {
+                            if ($(this).is(":checked")) {
+                                selectedsources.checkCheckboxes($(this));
+                            } else {
+                                selectedsources.uncheckCheckboxes($(this));
+                            }
+
+                            if ($(this).is(":checked")) {
+                                $(this).parent().parent().find("> ul input[type=checkbox]").prop("checked", false);
+                                selectedsources.uncheckCheckboxes($(this).parent().parent().find("> ul input[type=checkbox]"));
+                                $(this).parent().parent().parent().parent().find("> label > input[type=checkbox]").prop("checked", false);
+                                $(this).parent().parent().parent().parent().find("> label > input[type=checkbox]").change();
+                            } else {
+                                $(this).parent().parent().parent().parent().find("> label > input[type=checkbox]").prop("checked", false);
+                                $(this).parent().parent().parent().parent().find("> label > input[type=checkbox]").change();
+                            }
+
+                            function checkParentIfAllChildrenChecked(chckbx) {
+                                if (chckbx.parent().parent().parent().find("> li > label > input[type=checkbox]").length > 0) {
+                                    var allChecked = true;
+
+                                    chckbx.parent().parent().parent().find("> li > label > input[type=checkbox]").each(function () {
+                                        if (!$(this).is(":checked")) {
+                                            allChecked = false;
+                                        }
+                                    });
+
+                                    if (allChecked) {
+                                        chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]").prop("checked", true);
+                                        selectedsources.checkCheckboxes(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
+                                        chckbx.parent().parent().parent().find("input[type=checkbox]").each(function () {
+                                            $(this).prop("checked", false);
+                                            selectedsources.uncheckCheckboxes($(this));
+                                        });
+
+                                        checkParentIfAllChildrenChecked(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
+                                    }
+                                }
+                            }
+
+                            checkParentIfAllChildrenChecked($(this));
+                        });
+
+                        if (isBlankString(data)) {
                             parentElement.find(" > i[class=icon-chevron-right]").attr("class", "icon-chevron-down");
                             parentElement.find(" > i[class=icon-chevron-right]").unbind("click");
                         } else {
@@ -106,6 +255,10 @@ function isBlank(str) {
                     changeASVisibility(asElement);
                 });
 
+                $(".advanced-search-wrapper form.search-form").submit(function () {
+                    window.location.href = $(this).attr("action") + "?searchTerm=" + $(this).find("#search-term").val() + "&" + selectedsources.getSelectedUrlParam();
+                    return false;
+                });
             });
         }
     });

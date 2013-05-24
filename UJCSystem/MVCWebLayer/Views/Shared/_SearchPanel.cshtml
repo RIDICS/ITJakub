@@ -3,7 +3,7 @@
 <div class="row-fluid">
     <div class="span12">
         <div class="advanced-search-wrapper">
-    @using (Html.BeginForm("Search", "Search", FormMethod.Get))
+    @using (Html.BeginForm("Search", "Search", FormMethod.Get, new { @class = "search-form" }))
     {
                 <div class="input-append search-inputs text-center">
                     @Html.TextBoxFor(a => a.SearchTerm, new { id = "search-term", @class = "input-xxlarge search-term" })
@@ -43,29 +43,7 @@
         <div class="advanced-search">
             <h4>Vyberte prohledávaná díla</h4>
             <div class="row-fluid">
-                <div class="span12 categories" data-categories-url="@Url.RouteUrl("GetCategoryChildren", new { categoryId = ""})">
-                            @*<ul class="nav">
-                                <li>
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="SearchPart" value="slovo" id="staroceske" @(GetCheckedString("staroceske")) /><span>Staročeské</span>
-                                    </label>
-                                    <ul class="nav">
-                                        <li>
-                                            <label class="checkbox">
-                                                <input type="checkbox" name="SearchPart" value="slovo" id="slovo" @(GetCheckedString("slovo")) /><span>Slovo do světa</span>
-                                            </label>
-                                            <input type="text" name="historic-input" class="autocomplete" />
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="SearchPart" value="slovo" id="stredneceske" @(GetCheckedString("stredneceske")) /><span>Středněčeské</span>
-                                    </label>
-                                </li>
-                            </ul>*@
-
-                </div>
+                <div class="span12 categories" data-categories-url="@Url.RouteUrl("GetCategoryChildren", new { categoryId = "" })"></div>
             </div>
         </div>
     }
