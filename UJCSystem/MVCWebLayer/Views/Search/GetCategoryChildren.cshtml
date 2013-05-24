@@ -5,9 +5,10 @@
     <ul class="nav">
         @foreach (var child in Model.Children)
         {
-             if (child != null && child.IsBook)
+             if (child is ITJakub.Contracts.Categories.Categorie)
              {
-                 <li data-book-id="@child.Id">
+                 <li data-category-id="@child.Id">
+                     <i class="icon-chevron-right"></i>
                      <label class="checkbox">
                          <input type="checkbox" name="SearchPart" value="@child.Id" /><span>@child.Name</span>
                      </label>
@@ -15,8 +16,7 @@
              }
              else
              {
-                 <li data-category-id="@child.Id">
-                     <i class="icon-chevron-right"></i>
+                 <li data-book-id="@child.Id">
                      <label class="checkbox">
                          <input type="checkbox" name="SearchPart" value="@child.Id" /><span>@child.Name</span>
                      </label>
