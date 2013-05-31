@@ -33,6 +33,15 @@ a {
     min-height: 500px;
 }
 
+.tabs-left .tab-content {
+    border-left: 1px solid #DDDDDD;
+    padding-left: 19px;
+}
+
+.tabs-left ul.nav.nav-tabs {
+    margin-right: 0px;
+    margin-right: -1px;
+}
 
 /* Layout */
 
