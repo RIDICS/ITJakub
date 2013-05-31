@@ -35,7 +35,7 @@ namespace ITJakub.MVCWebLayer.Controllers
                 children = m_resultsProvider.GetCategoryChildrenById(categoryId);
 
 
-            return View("GetCategoryChildren", null, new CategoriesViewModel {Children = children});
+            return View("GetCategoryChildren", null, new CategoriesViewModel { Children = children, CategoryId = categoryId });
         }
 
         [HttpGet]

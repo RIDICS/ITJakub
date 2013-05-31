@@ -173,10 +173,18 @@ a {
 
 .advanced-search .categories i[class=icon-chevron-right], .advanced-search .categories i[class=icon-chevron-down] {
     cursor: pointer;
-} 
+}
 
-.advanced-search .categories ul.nav {
-    display: none;   
+.category-select form {
+    margin-left: 30px;
+}
+
+.categories .nav {
+    display: none;
+}
+
+.categories .nav.selected-categories {
+    display: block;
 }
 
 /* SearchPanel */

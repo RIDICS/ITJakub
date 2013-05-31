@@ -125,7 +125,7 @@ var selectedsources = new SelectedSources();
             var options = $.extend(defaults, options);
 
             function showLevel(iconElement) {
-                iconElement.parent().find(" > ul.nav").slideDown();
+                iconElement.parent().find(" > ul.nav.show-categories").slideDown();
                 iconElement.attr("class", "icon-chevron-down");
                 iconElement.unbind('click');
                 iconElement.click(function () {
@@ -134,7 +134,7 @@ var selectedsources = new SelectedSources();
             }
 
             function hideLevel(iconElement) {
-                iconElement.parent().find(" > ul.nav").slideUp();
+                iconElement.parent().find(" > ul.nav.show-categories").slideUp();
                 iconElement.attr("class", "icon-chevron-right");
                 iconElement.unbind('click');
                 iconElement.click(function () {
@@ -155,10 +155,37 @@ var selectedsources = new SelectedSources();
                 } else {
                     $.get(categoriesUrl, function (data) {
                         parentElement.append(data);
+
+                        parentElement.find(".category-select input[type=text]").typeahead({
+                            source: function () {
+                                var children = new Array();
+                                parentElement.find('> .nav input[type=checkbox]').each(function () {
+                                    children.push($(this).attr('data-name'));
+                                });
+                                return children;
+                            }
+                        });
+                        parentElement.find(".category-select form").submit(function () {
+                            var selectedName = $(this).find('input[type=text]').val();
+                            $(this).find('input[type=text]').val("");
+                            var formEl = $(this);
+                            $(this).parent().parent().find('input[type=checkbox]').each(function () {
+                                if ($(this).attr("data-name") == selectedName) {
+                                    $(this).prop("checked", true);
+                                    selectedsources.checkCheckboxes($(this));
+                                    formEl.parent().find('.selected-categories').append($(this).parent().parent());
+                                }
+                            });
+                            return false;
+                        });
+
                         parentElement.find("input[type=checkbox]").unbind("change");
                         parentElement.find("input[type=checkbox]").change(function () {
                             if (!$(this).is(":checked")) {
                                 selectedsources.uncheckCheckboxes($(this));
+                                if ($(this).parent().parent().parent().is(".selected-categories")) {
+                                    $(this).parent().parent().parent().parent().parent().find("> ul.nav").append($(this).parent().parent());
+                                }
                             }
 
                             function uncheckParentIfAllChildrenUnchecked(chckbx) {
@@ -196,7 +223,7 @@ var selectedsources = new SelectedSources();
                             if (parentElement.find(" > i[class=icon-chevron-right]").length > 0) {
                                 showLevel(parentElement.find(" > i[class=icon-chevron-right]"));
                             } else {
-                                parentElement.find(" > ul.nav").slideDown();
+                                parentElement.find(" > ul.nav.show-categories").slideDown();
                             }
                             parentElement.find(" > ul.nav i[class=icon-chevron-right]").click(function () {
                                 $(this).parent().loadChildren({ categoriesUrl: options.categoriesUrl, categoryId: $(this).parent().attr("data-category-id") });

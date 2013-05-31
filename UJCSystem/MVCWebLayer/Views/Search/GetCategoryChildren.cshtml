@@ -2,28 +2,38 @@
            
 @if (Model.Children.Count() > 0) 
 {
-    <ul class="nav">
+    <ul class="nav@(!string.Equals(Model.CategoryId, "taxonomy-historical_text-medieval_czech") ? " show-categories" : "")">
         @foreach (var child in Model.Children)
-        {
-             if (child is ITJakub.Contracts.Categories.Categorie)
-             {
-                 <li data-category-id="@child.Id">
-                     <i class="icon-chevron-right"></i>
-                     <label class="checkbox">
-                         <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="category" data-name="@child.Name" /><span>@child.Name</span>
-                     </label>
-                 </li>
-             }
-             else
-             {
-                 <li data-book-id="@child.Id">
-                     <label class="checkbox">
-                         <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="book" data-name="@child.Name" /><span>@child.Name</span>
-                     </label>
-                 </li>
-             }
+        {       
+                if (child is ITJakub.Contracts.Categories.Categorie)
+                {
+                    <li data-category-id="@child.Id">
+                        <i class="icon-chevron-right"></i>
+                        <label class="checkbox">
+                            <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="category" data-name="@child.Name" /><span>@child.Name</span>
+                        </label>
+                    </li>
+                }
+                else
+                {
+                    <li data-book-id="@child.Id">
+                        <label class="checkbox">
+                            <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="book" data-name="@child.Name" /><span>@child.Name</span>
+                        </label>
+                    </li>
+                }
         }
     </ul>
+    if (string.Equals(Model.CategoryId, "taxonomy-historical_text-medieval_czech"))
+    {
+        <div class="category-select">
+            <ul class="nav selected-categories"></ul>
+            <form class="form-search">
+                <input autocomplete="off" type="text" class="input-medium search-query">
+                <button type="submit" class="btn"><i class="icon-plus"></i></button>
+            </form>
+        </div>
+    }
 }
 
 
