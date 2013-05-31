@@ -15,6 +15,19 @@
             }
         }
 
+        public static string ToCsName(this SourcesViewMode mode)
+        {
+            switch (mode)
+            {
+                case SourcesViewMode.Author:
+                    return "Autor";
+                case SourcesViewMode.Name:
+                    return "Název";
+                default:
+                    return string.Empty;
+            }
+        }
+
         public static SourcesViewMode FromUrlParam(string mode)
         {
             switch (mode)
