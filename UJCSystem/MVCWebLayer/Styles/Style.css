@@ -183,8 +183,16 @@ a {
     display: none;
 }
 
+.categories div.category-select {
+    display: none;
+}
+
 .categories .nav.selected-categories {
     display: block;
+}
+
+.icon-chevron-right.empty {
+    background: none;
 }
 
 /* SearchPanel */

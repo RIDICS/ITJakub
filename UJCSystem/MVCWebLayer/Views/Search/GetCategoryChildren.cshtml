@@ -8,7 +8,17 @@
                 if (child is ITJakub.Contracts.Categories.Categorie)
                 {
                     <li data-category-id="@child.Id">
-                        <i class="icon-chevron-right"></i>
+                        @if (
+                            !string.Equals(child.Id, "taxonomy-dictionary-contemporary") &&
+                            !string.Equals(child.Id, "taxonomy-dictionary-historical") && 
+                            !string.Equals(child.Id, "taxonomy-scholary_text") &&  
+                            !string.Equals(child.Id, "taxonomy-digitized-grammar") && 
+                            !string.Equals(child.Id, "taxonomy-card-index") 
+                            ) {
+                            <i class="icon-chevron-right"></i>
+                        } else {
+                            <i class="icon-chevron-right empty"></i>
+                        }
                         <label class="checkbox">
                             <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="category" data-name="@child.Name" /><span>@child.Name</span>
                         </label>

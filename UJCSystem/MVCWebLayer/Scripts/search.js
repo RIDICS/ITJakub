@@ -126,6 +126,7 @@ var selectedsources = new SelectedSources();
 
             function showLevel(iconElement) {
                 iconElement.parent().find(" > ul.nav.show-categories").slideDown();
+                iconElement.parent().find(" > div.category-select").slideDown();
                 iconElement.attr("class", "icon-chevron-down");
                 iconElement.unbind('click');
                 iconElement.click(function () {
@@ -135,6 +136,7 @@ var selectedsources = new SelectedSources();
 
             function hideLevel(iconElement) {
                 iconElement.parent().find(" > ul.nav.show-categories").slideUp();
+                iconElement.parent().find(" > div.category-select").slideUp();
                 iconElement.attr("class", "icon-chevron-right");
                 iconElement.unbind('click');
                 iconElement.click(function () {
@@ -181,13 +183,6 @@ var selectedsources = new SelectedSources();
 
                         parentElement.find("input[type=checkbox]").unbind("change");
                         parentElement.find("input[type=checkbox]").change(function () {
-                            if (!$(this).is(":checked")) {
-                                selectedsources.uncheckCheckboxes($(this));
-                                if ($(this).parent().parent().parent().is(".selected-categories")) {
-                                    $(this).parent().parent().parent().parent().parent().find("> ul.nav").append($(this).parent().parent());
-                                }
-                            }
-
                             function uncheckParentIfAllChildrenUnchecked(chckbx) {
                                 if (chckbx.parent().parent().parent().find("> li > label > input[type=checkbox]").length > 0) {
                                     var allUnchecked = true;
@@ -207,12 +202,24 @@ var selectedsources = new SelectedSources();
                             }
 
                             if ($(this).is(":checked")) {
-                                $(this).parent().parent().find("input[type=checkbox]").each(function () {
-                                            $(this).prop("checked", true);
-                                            selectedsources.checkCheckboxes($(this));
+                                $(this).parent().parent().find("> label > input[type=checkbox]").each(function () {
+                                        $(this).prop("checked", true);
+                                        selectedsources.checkCheckboxes($(this));
+                                });
+                                $(this).parent().parent().find("ul.nav.show-categories > li > label > input[type=checkbox]").each(function () {
+                                    if (!$(this).prop("checked")) {
+                                        $(this).prop("checked", true);
+                                        selectedsources.checkCheckboxes($(this));
+                                    }
                                 });
                             } else {
-                                uncheckParentIfAllChildrenUnchecked($(this));
+                                selectedsources.uncheckCheckboxes($(this));
+                                if (!$(this).parent().parent().parent().is(".selected-categories")) {
+                                    uncheckParentIfAllChildrenUnchecked($(this));
+                                }
+                                if ($(this).parent().parent().parent().is(".selected-categories")) {
+                                    $(this).parent().parent().parent().parent().parent().find("> ul.nav").append($(this).parent().parent());
+                                }
                             }
                         });
 
@@ -224,6 +231,7 @@ var selectedsources = new SelectedSources();
                                 showLevel(parentElement.find(" > i[class=icon-chevron-right]"));
                             } else {
                                 parentElement.find(" > ul.nav.show-categories").slideDown();
+                                parentElement.find(" > div.category-select").slideDown();
                             }
                             parentElement.find(" > ul.nav i[class=icon-chevron-right]").click(function () {
                                 $(this).parent().loadChildren({ categoriesUrl: options.categoriesUrl, categoryId: $(this).parent().attr("data-category-id") });
