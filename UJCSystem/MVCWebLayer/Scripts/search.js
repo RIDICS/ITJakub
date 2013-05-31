@@ -184,10 +184,10 @@ var selectedsources = new SelectedSources();
                         parentElement.find("input[type=checkbox]").unbind("change");
                         parentElement.find("input[type=checkbox]").change(function () {
                             function uncheckParentIfAllChildrenUnchecked(chckbx) {
-                                if (chckbx.parent().parent().parent().find("> li > label > input[type=checkbox]").length > 0) {
+                                if (chckbx.parent().parent().parent().find("input[type=checkbox]").length > 0) {
                                     var allUnchecked = true;
 
-                                    chckbx.parent().parent().parent().find("> li > label > input[type=checkbox]").each(function () {
+                                    chckbx.parent().parent().parent().find("input[type=checkbox]").each(function () {
                                         if ($(this).is(":checked")) {
                                             allUnchecked = false;
                                         }

@@ -20,7 +20,7 @@
                             <i class="icon-chevron-right empty"></i>
                         }
                         <label class="checkbox">
-                            <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="category" data-name="@child.Name" /><span>@child.Name</span>
+                            <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="category" data-name="@UppercaseFirst(child.Name)" /><span>@UppercaseFirst(child.Name)</span>
                         </label>
                     </li>
                 }
@@ -28,7 +28,7 @@
                 {
                     <li data-book-id="@child.Id">
                         <label class="checkbox">
-                            <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="book" data-name="@child.Name" /><span>@child.Name</span>
+                            <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="book" data-name="@UppercaseFirst(child.Name)" /><span>@UppercaseFirst(child.Name)</span>
                         </label>
                     </li>
                 }
@@ -45,6 +45,16 @@
         </div>
     }
 }
+
+@functions
+{
+    string UppercaseFirst(string s)
+    {
+        return char.ToUpper(s[0]) + s.Substring(1);
+    }
+}
+
+
 
 
 
