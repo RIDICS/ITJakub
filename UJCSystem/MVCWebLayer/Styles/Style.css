@@ -21,6 +21,14 @@ a {
     color: #09a0cd;
 }
 
+.loading {
+    width: 200px;
+    height: 200px;
+    background: transparent url('../Images/loading.gif') center top no-repeat;
+    margin: auto;
+    margin-top: 100px;
+}
+
 
 /* Layout */
 

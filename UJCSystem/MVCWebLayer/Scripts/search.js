@@ -157,46 +157,36 @@ var selectedsources = new SelectedSources();
                         parentElement.append(data);
                         parentElement.find("input[type=checkbox]").unbind("change");
                         parentElement.find("input[type=checkbox]").change(function () {
-                            if ($(this).is(":checked")) {
-                                selectedsources.checkCheckboxes($(this));
-                            } else {
+                            if (!$(this).is(":checked")) {
                                 selectedsources.uncheckCheckboxes($(this));
                             }
 
-                            if ($(this).is(":checked")) {
-                                $(this).parent().parent().find("> ul input[type=checkbox]").prop("checked", false);
-                                selectedsources.uncheckCheckboxes($(this).parent().parent().find("> ul input[type=checkbox]"));
-                                $(this).parent().parent().parent().parent().find("> label > input[type=checkbox]").prop("checked", false);
-                                $(this).parent().parent().parent().parent().find("> label > input[type=checkbox]").change();
-                            } else {
-                                $(this).parent().parent().parent().parent().find("> label > input[type=checkbox]").prop("checked", false);
-                                $(this).parent().parent().parent().parent().find("> label > input[type=checkbox]").change();
-                            }
-
-                            function checkParentIfAllChildrenChecked(chckbx) {
+                            function uncheckParentIfAllChildrenUnchecked(chckbx) {
                                 if (chckbx.parent().parent().parent().find("> li > label > input[type=checkbox]").length > 0) {
-                                    var allChecked = true;
+                                    var allUnchecked = true;
 
                                     chckbx.parent().parent().parent().find("> li > label > input[type=checkbox]").each(function () {
-                                        if (!$(this).is(":checked")) {
-                                            allChecked = false;
+                                        if ($(this).is(":checked")) {
+                                            allUnchecked = false;
                                         }
                                     });
 
-                                    if (allChecked) {
-                                        chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]").prop("checked", true);
-                                        selectedsources.checkCheckboxes(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
-                                        chckbx.parent().parent().parent().find("input[type=checkbox]").each(function () {
-                                            $(this).prop("checked", false);
-                                            selectedsources.uncheckCheckboxes($(this));
-                                        });
-
-                                        checkParentIfAllChildrenChecked(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
+                                    if (allUnchecked) {
+                                        chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]").prop("checked", false);
+                                        selectedsources.uncheckCheckboxes(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
+                                        uncheckParentIfAllChildrenUnchecked(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
                                     }
                                 }
                             }
 
-                            checkParentIfAllChildrenChecked($(this));
+                            if ($(this).is(":checked")) {
+                                $(this).parent().parent().find("input[type=checkbox]").each(function () {
+                                            $(this).prop("checked", true);
+                                            selectedsources.checkCheckboxes($(this));
+                                });
+                            } else {
+                                uncheckParentIfAllChildrenUnchecked($(this));
+                            }
                         });
 
                         if (isBlankString(data)) {
@@ -270,28 +260,11 @@ var selectedsources = new SelectedSources();
     $.fn.extend({
         initLoadingAlphTermDetail: function (options) {
 
-            var loadingHTML = "<div class=\"progress progress-striped active search-progress\"><div class=\"bar\" style=\"width: 0%;\"></div></div>";
+            var loadingHTML = "<div class=\"loading\"></div>";
             
             var defaults = {};
 
             var options = $.extend(defaults, options);
-
-            var progressState = 0;
-
-            function makeProgress(element) {
-                if (progressState + 10 < 100) {
-                    progressState = progressState + 10;
-                    element.width(progressState + "%");
-                    setTimeout(function() {
-                        makeProgress(element);
-                    }, 400);
-                }
-            }
-            
-            function endProgress(element) {
-                progressState = 100;
-                element.width("100%");
-            }
 
             return this.each(function () {
                 var element = $(this);
@@ -300,13 +273,8 @@ var selectedsources = new SelectedSources();
                     element.parent().addClass("active");
 
                     $('#alphabetical-result-detail').html(loadingHTML);
-                    progressState = 0;
-                    makeProgress($('#alphabetical-result-detail .progress .bar'));
                     $.get(element.attr("data-url"), function (data) {
-                        endProgress($('#alphabetical-result-detail .progress .bar'));
-                        setTimeout(function () {
-                            $('#alphabetical-result-detail').html(data);
-                        }, 500);
+                        $('#alphabetical-result-detail').html(data);
                         element.blur();
                     });
                     return false;

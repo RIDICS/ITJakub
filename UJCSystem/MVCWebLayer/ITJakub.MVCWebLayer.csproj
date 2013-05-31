@@ -123,6 +123,7 @@
     <Content Include="Images\glyphicons-halflings.png" />
     <Content Include="Images\header.png" />
     <Content Include="Images\hr.png" />
+    <Content Include="Images\loading.gif" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\texture.jpg" />
     <Content Include="Images\texture.png" />
