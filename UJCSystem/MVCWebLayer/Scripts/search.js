@@ -183,6 +183,7 @@ var selectedsources = new SelectedSources();
 
                         parentElement.find("input[type=checkbox]").unbind("change");
                         parentElement.find("input[type=checkbox]").change(function () {
+
                             function uncheckParentIfAllChildrenUnchecked(chckbx) {
                                 if (chckbx.parent().parent().parent().find("input[type=checkbox]").length > 0) {
                                     var allUnchecked = true;
@@ -200,6 +201,13 @@ var selectedsources = new SelectedSources();
                                     }
                                 }
                             }
+                            function uncheckAllParent(chckbx) {
+                                chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]").prop("checked", false);
+                                selectedsources.uncheckCheckboxes(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
+                                if (chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]").length > 0) {
+                                    uncheckAllParent(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
+                                }
+                            }
 
                             if ($(this).is(":checked")) {
                                 $(this).parent().parent().find("> label > input[type=checkbox]").each(function () {
@@ -215,7 +223,8 @@ var selectedsources = new SelectedSources();
                             } else {
                                 selectedsources.uncheckCheckboxes($(this));
                                 if (!$(this).parent().parent().parent().is(".selected-categories")) {
-                                    uncheckParentIfAllChildrenUnchecked($(this));
+                                    //uncheckParentIfAllChildrenUnchecked($(this));
+                                    uncheckAllParent($(this));
                                 }
                                 if ($(this).parent().parent().parent().is(".selected-categories")) {
                                     $(this).parent().parent().parent().parent().parent().find("> ul.nav").append($(this).parent().parent());
