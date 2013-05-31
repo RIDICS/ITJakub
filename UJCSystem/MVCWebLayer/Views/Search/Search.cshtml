@@ -48,18 +48,25 @@
                 </div>            
             </div>
             <div class="tab-pane tabs-left" id="results-type">
-                @if (Model.Results != null) {
+                @if (Model.Results != null)
+                {
                     foreach (var item in Model.Results)
                     {
                         <ul class="nav nav-tabs">
                             <li><h4>@item.Title</h4></li>
                             @foreach (var category in item.Categories)
                             {
-                                <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { searchTerm = "book" @* book pozor na dvojtecku *@ })">@category</a></li>
+                                <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { category = "book" @* book pozor na dvojtecku *@ })">@category</a></li>
                             }
                         </ul>
                     }
                 }
+                <ul class="nav nav-tabs">
+                    <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss1" })">slovník - soudobý</a></li>
+                    <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss2" })">historický text - staročeský</a></li>
+                    <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss3" })">historický text - středněčeský</a></li>
+                    <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss4" })">lístková kartotéka</a></li>
+                </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="type-result-detail">
                                   

@@ -25,8 +25,8 @@ namespace ITJakub.MVCWebLayer
 
             routes.MapRoute(
                 "SearchDetailType",
-                "hledani/{searchTerm}/detail-podle-druhu",
-                new { controller = "Search", action = "DetailByType", searchTerm = "" }
+                "hledani/{category}/detail-podle-druhu",
+                new { controller = "Search", action = "DetailByType", category = "" }
             );
 
             routes.MapRoute(

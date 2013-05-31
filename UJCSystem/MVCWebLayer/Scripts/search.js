@@ -325,28 +325,11 @@ var selectedsources = new SelectedSources();
     $.fn.extend({
         initLoadingTypeTermDetail: function (options) {
 
-            var loadingHTML = "<div class=\"progress progress-striped active search-progress\"><div class=\"bar\" style=\"width: 0%;\"></div></div>";
+            var loadingHTML = "<div class=\"loading\"></div>";
             
             var defaults = {};
 
             var options = $.extend(defaults, options);
-
-            var progressState = 0;
-
-            function makeProgress(element) {
-                if (progressState + 10 < 100) {
-                    progressState = progressState + 10;
-                    element.width(progressState + "%");
-                    setTimeout(function () {
-                        makeProgress(element);
-                    }, 400);
-                }
-            }
-
-            function endProgress(element) {
-                progressState = 100;
-                element.width("100%");
-            }
 
             return this.each(function () {
                 var element = $(this);
@@ -355,13 +338,8 @@ var selectedsources = new SelectedSources();
                     element.parent().addClass("active");
 
                     $('#type-result-detail').html(loadingHTML);
-                    progressState = 0;
-                    makeProgress($('#type-result-detail .progress .bar'));
                     $.get(element.attr("data-url"), function (data) {
-                        endProgress($('#type-result-detail .progress .bar'));
-                        setTimeout(function () {
-                            $('#type-result-detail').html(data);
-                        }, 500);
+                        $('#type-result-detail').html(data);
                         element.blur();
                     });
                     return false;

@@ -48,9 +48,9 @@ namespace ITJakub.MVCWebLayer.Controllers
         }
 
         [HttpGet]
-        public ActionResult DetailByType(string book)
+        public ActionResult DetailByType(string category)
         {
-            return View("DetailByType", null, book);
+            return View("DetailByType", null, category);
         }
     }
 }
