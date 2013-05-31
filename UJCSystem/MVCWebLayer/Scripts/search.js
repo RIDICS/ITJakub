@@ -201,6 +201,23 @@ var selectedsources = new SelectedSources();
                                     }
                                 }
                             }
+                            function checkParentIfAllChildrenChecked(chckbx) {
+                                if (chckbx.parent().parent().parent().parent().find("ul.nav.show-categories > li > label > input[type=checkbox]").length > 0) {
+                                    var allChecked = true;
+
+                                    chckbx.parent().parent().parent().parent().find("ul.nav.show-categories > li > label > input[type=checkbox]").each(function () {
+                                        if (!$(this).is(":checked")) {
+                                            allChecked = false;
+                                        }
+                                    });
+
+                                    if (allChecked) {
+                                        chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]").prop("checked", true);
+                                        selectedsources.checkCheckboxes(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
+                                        checkParentIfAllChildrenChecked(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
+                                    }
+                                }
+                            }
                             function uncheckAllParent(chckbx) {
                                 chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]").prop("checked", false);
                                 selectedsources.uncheckCheckboxes(chckbx.parent().parent().parent().parent().find("> label > input[type=checkbox]"));
@@ -220,10 +237,14 @@ var selectedsources = new SelectedSources();
                                         selectedsources.checkCheckboxes($(this));
                                     }
                                 });
+                                if (!$(this).parent().parent().parent().is(".selected-categories")) {
+                                    checkParentIfAllChildrenChecked($(this));
+                                }
                             } else {
                                 selectedsources.uncheckCheckboxes($(this));
                                 if (!$(this).parent().parent().parent().is(".selected-categories")) {
                                     //uncheckParentIfAllChildrenUnchecked($(this));
+                                    //checkParentIfAllChildrenChecked($(this));
                                     uncheckAllParent($(this));
                                 }
                                 if ($(this).parent().parent().parent().is(".selected-categories")) {
