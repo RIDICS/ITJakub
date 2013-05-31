@@ -123,6 +123,8 @@
     <Content Include="Images\glyphicons-halflings.png" />
     <Content Include="Images\header.png" />
     <Content Include="Images\hr.png" />
+    <Content Include="Images\kartoteka-th.jpg" />
+    <Content Include="Images\kartoteka.jpeg" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\texture.jpg" />
