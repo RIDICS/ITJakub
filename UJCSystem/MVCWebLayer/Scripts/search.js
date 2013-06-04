@@ -1,7 +1,13 @@
 ﻿$(document).ready(function () {
     $('.advanced-search-wrapper').advancedSearch();
-    $("#search-results-alphabetical a.search-results-alphabetical-result").initLoadingAlphTermDetail();
-    $("#results-type a.search-results-type-result").initLoadingTypeTermDetail();
+    $("#search-results-ordering > ul > li > a[data-toggle=tab]").initLoadingSearchResults();
+    $("#search-results-alphabetical a[data-toggle=tab]").initLoadingAlphTermDetail();
+    $("#results-type a[data-toggle=tab]").initLoadingTypeTermDetail();
+    history.initHash();
+    
+    $(window).on('hashchange', function () {
+            history.initHash();
+    });
 });
 
 function isBlankString(str) {
@@ -319,30 +325,84 @@ var selectedsources = new SelectedSources();
     });
 })(jQuery);
 
+var History = function() {
+    this.main = null;
+    this.alphabet = null;
+    this.type = null;
+
+    this.initHash = function () {
+        var hash = window.location.hash.replace('#', '');;
+        var hashAr = hash.split("+");
+        if (hashAr.length == 3) {
+            this.main = hashAr[0];
+            this.alphabet = hashAr[1];
+            this.type = hashAr[2];
+
+            $("#search-results-ordering > ul > li > a[href='#" + this.main + "']").first().tab("show");
+            $("#search-results-alphabetical > ul > li > a[href='#" + this.alphabet + "']").first().tab("show");
+            $("#results-type > ul > li > a[href='#" + this.type + "']").first().tab("show");
+        } else {
+            $("#search-results-ordering > ul > li > a").first().tab("show");
+            $("#search-results-alphabetical > ul > li > a").first().tab("show");
+            $("#results-type > ul > li > a").first().tab("show");
+        }
+    };
+
+    this.getHash = function() {
+        return this.main + "+" + this.alphabet + "+" + this.type;
+    };
+
+    this.renewHash = function() {
+        window.location.hash = "#" + this.getHash();
+    };
+};
+var history = new History;
 
 (function ($) {
 
     $.fn.extend({
-        initLoadingAlphTermDetail: function (options) {
-
-            var loadingHTML = "<div class=\"loading\"></div>";
-            
+        initLoadingSearchResults: function (options) {
             var defaults = {};
 
             var options = $.extend(defaults, options);
 
             return this.each(function () {
                 var element = $(this);
-                element.click(function () {
-                    element.parent().parent().find("li").removeClass("active");
-                    element.parent().addClass("active");
+                element.on('shown', function (e) {
+                    history.main = element.attr("data-result");
+                    history.renewHash();
+                });
+            });
+        }
+    });
+})(jQuery);
 
-                    $('#alphabetical-result-detail').html(loadingHTML);
-                    $.get(element.attr("data-url"), function (data) {
-                        $('#alphabetical-result-detail').html(data);
-                        element.blur();
-                    });
-                    return false;
+(function ($) {
+
+    $.fn.extend({
+        initLoadingAlphTermDetail: function (options) {
+            var loadingHTML = "<div class=\"loading\"></div>";
+
+            var defaults = {};
+
+            var options = $.extend(defaults, options);
+
+            return this.each(function () {
+                var element = $(this);
+                var show = false;
+
+                element.on('shown', function (e) {
+                    history.alphabet = element.attr("data-result");
+                    history.renewHash();
+
+                    if (!show) {
+                        var tabElement = $("#" + element.attr("data-result"));
+                        tabElement.html(loadingHTML);
+                        $.get(element.attr("data-url"), function (data) {
+                            tabElement.html(data);
+                        });
+                        show = true;
+                    }
                 });
             });
         }
@@ -354,25 +414,28 @@ var selectedsources = new SelectedSources();
 
     $.fn.extend({
         initLoadingTypeTermDetail: function (options) {
-
             var loadingHTML = "<div class=\"loading\"></div>";
-            
+
             var defaults = {};
 
             var options = $.extend(defaults, options);
 
             return this.each(function () {
                 var element = $(this);
-                element.click(function () {
-                    element.parent().parent().find("li").removeClass("active");
-                    element.parent().addClass("active");
+                var show = false;
 
-                    $('#type-result-detail').html(loadingHTML);
-                    $.get(element.attr("data-url"), function (data) {
-                        $('#type-result-detail').html(data);
-                        element.blur();
-                    });
-                    return false;
+                element.on('shown', function (e) {
+                    history.type = element.attr("data-result");
+                    history.renewHash();
+                    
+                    if (!show) {
+                        var tabElement = $("#" + element.attr("data-result"));
+                        tabElement.html(loadingHTML);
+                        $.get(element.attr("data-url"), function (data) {
+                            tabElement.html(data);
+                        });
+                        show = true;
+                    }
                 });
             });
         }
