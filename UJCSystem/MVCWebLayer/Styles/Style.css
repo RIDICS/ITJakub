@@ -314,4 +314,42 @@ form.sources-order.form-horizontal.form-horizontal .controls {
 
 /* Search progress */
 
+/* Module search */
+.sctb-results {
+    overflow: auto;
+    padding: 5px;
+    margin: 20px 0px;
+    border: 1px solid rgb(200,200,200);
+}
+
+.sctb-results table {
+    margin: 0px;
+}
+
+.sctb-results table td {
+    text-align: center;
+    white-space: nowrap;
+    padding: 5px 2px;
+}
+
+.sctb-results .table-striped tbody > tr:nth-child(2n+1) > td.strong, .sctb-results .table-striped tbody > tr:nth-child(2n) > td.strong {
+    background-color: #cbd8de;
+    font-weight: bold;
+    color: rgb(0,0,0);
+    padding: 5px;
+}
+
+.sctb-results table td:first-child {
+    text-align: right;
+    padding-right: 5px;
+}
+
+.sctb-results table td:last-child {
+    text-align: left;
+    padding-left: 5px;
+}
+
+
+/* Module search */
+
 

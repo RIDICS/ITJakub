@@ -109,6 +109,7 @@
     <Compile Include="Services\ISearchResultProvider.cs" />
     <Compile Include="Services\Mocks\SourcesMockProvider.cs" />
     <Compile Include="Services\Mocks\SearchResultsMockProvider.cs" />
+    <Compile Include="ViewModels\ModuleViewModel.cs" />
     <Compile Include="ViewModels\SearchSourceDetailViewModel.cs" />
     <Compile Include="ViewModels\SearchSourcesViewModel.cs" />
     <Compile Include="ViewModels\SearchResultViewModel.cs" />
@@ -251,6 +252,7 @@
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\Outside.pubxml" />
     <Content Include="Views\Search\GetCategoryChildren.cshtml" />
+    <None Include="Views\Modules\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.Contracts\ITJakub.Contracts.csproj">

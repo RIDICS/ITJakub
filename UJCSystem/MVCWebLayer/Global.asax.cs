@@ -97,8 +97,14 @@ namespace ITJakub.MVCWebLayer
 
             routes.MapRoute(
                 "StaroceskaBanka",
-                "staroceska-textova-banka/{id}",
+                "staroceska-textova-banka",
                 new { controller = "Modules", action = "Index" }
+            );
+
+            routes.MapRoute(
+                "StaroceskaBankaSearch",
+                "staroceska-textova-banka/hledani",
+                new { controller = "Modules", action = "Search" }
             );
 
             routes.MapRoute(

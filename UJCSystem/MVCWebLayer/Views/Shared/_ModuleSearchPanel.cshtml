@@ -1,8 +1,7 @@
 ﻿@using ITJakub.MVCWebLayer.Services
 
 <div class="well text-center">
-    @using (Html.BeginForm("Index", "Modules", FormMethod.Get, new{@class="form-horizontal"}))
-    {
+    <form class="form-horizontal" method="get" action="@Url.RouteUrl("StaroceskaBankaSearch")">
         <div class="control-group">
             @Html.TextBox("searchTerm", string.Empty, new { @class = "input-xxlarge" })
         </div>
@@ -20,5 +19,5 @@
             </div>
         </div>
         <button type="submit" id="search-submit" class="btn">Vyhledat</button>
-    }
+    </form>
 </div>
