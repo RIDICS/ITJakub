@@ -1,4 +1,5 @@
 ﻿@using ITJakub.MVCWebLayer.Enums
+@using Jewelery
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -82,7 +83,7 @@
     {
         var data = Enum.GetValues(typeof(SourcesViewMode)).Cast<SourcesViewMode>().Select(v => new SelectListItem
         {
-            Text = v.ToCsName(),
+            Text = v.GetStringValue(),
             Value = v.ToUrlParam(),
         }).ToList();
 
