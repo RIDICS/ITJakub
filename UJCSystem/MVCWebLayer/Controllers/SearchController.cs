@@ -11,7 +11,7 @@ namespace ITJakub.MVCWebLayer.Controllers
         private readonly ISearchResultProvider m_resultsProvider = new ItJakubSearchProvider();
 
         [HttpGet]
-        public ActionResult Search(SearchViewModel model, string searchTerm, string kategorie, string dila)
+        public ActionResult Search(SearchViewModel model)
         {
             return View(new SearchResultViewModel
                 {
