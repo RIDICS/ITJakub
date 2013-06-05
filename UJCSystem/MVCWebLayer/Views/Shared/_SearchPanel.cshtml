@@ -13,7 +13,7 @@
                 <div class="text-center">
                     <strong>Prohledávaná díla: </strong>
                     <div class="searched-books">
-                        @if (Model.SearchedBooks == null)
+                        @*@if (Model.SearchedBooks == null)
                         {
                             <span class="muted">Aktivní prohledávání ve všech dostupných dílech</span>
                         }
@@ -37,7 +37,7 @@
                                     }
                                 </div>
                             }
-                        }
+                        }*@
                     </div>
                 </div>
         <div class="advanced-search">
@@ -54,10 +54,10 @@
 @functions {
     public string GetCheckedString(string id)
     {
-        if (Model.SearchPart != null && Model.SearchPart.Contains(id))
+        /*if (Model.SearchPart != null && Model.SearchPart.Contains(id))
         {
             return "checked='chedked'";
-        }
+        }*/
         
         return string.Empty;
     }

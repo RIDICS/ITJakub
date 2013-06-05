@@ -18,7 +18,6 @@ namespace ITJakub.MVCWebLayer.Controllers
                     Search = new SearchViewModel
                         {
                             SearchTerm = model.SearchTerm,
-                            SearchPart = model.SearchPart,
                         },
                     FoundWords = m_resultsProvider.GetSearchResults(model.SearchTerm),
                 });

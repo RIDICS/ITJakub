@@ -96,7 +96,7 @@ var SelectedSources = function () {
         var categoriesString = categoriesIds.join("+");
         var booksString = booksIds.join("+");
 
-        return "kategorie=" + categoriesString + "&books=" + booksString;
+        return "kategorie=" + categoriesString + "&dila=" + booksString;
     };
 
     this.checkCheckboxes = function (selector) {
