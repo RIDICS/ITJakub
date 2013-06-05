@@ -15,7 +15,6 @@
             }
         }
 
-
         public static SourcesViewMode FromUrlParam(string mode)
         {
             switch (mode)

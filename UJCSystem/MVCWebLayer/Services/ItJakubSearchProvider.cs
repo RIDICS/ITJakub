@@ -30,7 +30,6 @@ namespace ITJakub.MVCWebLayer.Services
             return m_searchResult;
         }
 
-
         public SearchResult[] GetKwicForKeyWord(string searchTerm)
         {
             if(m_searchResult == null)

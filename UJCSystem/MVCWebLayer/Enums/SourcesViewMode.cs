@@ -1,5 +1,4 @@
 ﻿using Jewelery;
-
 namespace ITJakub.MVCWebLayer.Enums
 {
     public enum SourcesViewMode
