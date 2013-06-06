@@ -8,7 +8,7 @@ namespace ITJakub.MVCWebLayer.ViewModels
         {
         }
 
-        public SearchViewModel Search { get; set; }
+        public string SearchTerm { get; set; }
         public string[] FoundWords { get; set; }
 
         public SearchResult[] Results { get; set; }

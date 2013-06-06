@@ -30,7 +30,7 @@ namespace ITJakub.SearchService
             m_bookDao = Container.Current.Resolve<BookDao>();
         }
 
-        public List<string> AllExtendedTermsForKey(string key)
+        public List<string> AllExtendedTermsForKey(string key, List<string> booksIds)
         {
             var dbResult = m_existWordsDao.GetAllPossibleKeyWords(key);
             

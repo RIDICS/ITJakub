@@ -14,11 +14,6 @@ namespace ITJakub.SearchService
             m_searchServiceManager = Container.Current.Resolve<SearchServiceManager>();
         }
 
-        public List<string> AllExtendedTermsForKey(string key)
-        {
-            return m_searchServiceManager.AllExtendedTermsForKey(key);
-        }
-
         public void Search(List<SearchCriteriumBase> criteria)
         {
            m_searchServiceManager.Search(criteria);
@@ -32,6 +27,11 @@ namespace ITJakub.SearchService
         public string GetTitleById(string id)
         {
             return m_searchServiceManager.GetTitleById(id);
+        }
+
+        public List<string> AllExtendedTermsForKey(string key, List<string> booksIds)
+        {
+            return m_searchServiceManager.AllExtendedTermsForKey(key, booksIds);
         }
     }
 

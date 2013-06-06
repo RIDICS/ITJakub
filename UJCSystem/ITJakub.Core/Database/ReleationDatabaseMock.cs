@@ -91,5 +91,9 @@ namespace ITJakub.Core.Database
                 category.Subitems.Add(new Book { Id = book3Id, Name = bookTitle });
         }
 
+        public List<string> GetBookIdsByCategories(List<string> categorieIds)
+        {
+            return new List<string>();   
+        }
     }    
 }

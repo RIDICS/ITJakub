@@ -16,9 +16,9 @@ namespace ITJakub.Core
             m_releationDatabaseMock = releationDatabaseMock;
         }
 
-        public List<string> GetAllExtendedTermsForKey(string key)
+        public List<string> GetAllExtendedTermsForKey(string key, List<string> booksIds)
         {
-            return m_searchClient.AllExtendedTermsForKey(key);
+            return m_searchClient.AllExtendedTermsForKey(key, booksIds);
         }
 
         public SearchResult[] GetContextForKeyWord(string keyWord)
@@ -34,6 +34,17 @@ namespace ITJakub.Core
         public SelectionBase[] GetRootCategories()
         {
             return m_releationDatabaseMock.GetRootCategories().ToArray();
+        }
+
+        public List<string> GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)
+        {
+
+            var bookIdsByCategories = m_releationDatabaseMock.GetBookIdsByCategories(categorieIds);
+
+            bookIdsByCategories.AddRange(booksIds);
+
+
+            return m_searchClient.AllExtendedTermsForKey(key, bookIdsByCategories);
         }
     }
 }

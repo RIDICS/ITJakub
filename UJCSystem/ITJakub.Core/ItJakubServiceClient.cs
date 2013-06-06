@@ -13,11 +13,11 @@ namespace ITJakub.Core
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public List<string> GetAllExtendedTermsForKey(string key)
+        public List<string> GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)
         {
             try
             {
-                return Channel.GetAllExtendedTermsForKey(key);
+                return Channel.GetAllExtendedTermsForKey(key, categorieIds, booksIds);
             }
             catch (CommunicationException ex)
             {
@@ -113,5 +113,6 @@ namespace ITJakub.Core
             }
 
         }
+
     }
 }

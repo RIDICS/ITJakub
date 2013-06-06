@@ -108,7 +108,6 @@
     <Compile Include="Services\DTOs\Source.cs" />
     <Compile Include="Services\ISearchResultProvider.cs" />
     <Compile Include="Services\Mocks\SourcesMockProvider.cs" />
-    <Compile Include="Services\Mocks\SearchResultsMockProvider.cs" />
     <Compile Include="ViewModels\ModuleViewModel.cs" />
     <Compile Include="ViewModels\SearchSourceDetailViewModel.cs" />
     <Compile Include="ViewModels\SearchSourcesViewModel.cs" />

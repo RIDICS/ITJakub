@@ -8,16 +8,15 @@ namespace ITJakub.Contracts
     public interface ISearchService
     {
         [OperationContract]
-        List<string> AllExtendedTermsForKey(string key);
-
-        [OperationContract]
         void Search(List<SearchCriteriumBase> criteria);
 
         [OperationContract]
         SearchResult[] GetContextForKeyWord(string keyWord);
 
-
         [OperationContract]
         string GetTitleById(string id);
+
+        [OperationContract]
+        List<string> AllExtendedTermsForKey(string key, List<string> booksIds);
     }
 }
