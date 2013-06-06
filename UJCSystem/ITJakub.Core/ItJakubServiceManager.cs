@@ -16,11 +16,6 @@ namespace ITJakub.Core
             m_releationDatabaseMock = releationDatabaseMock;
         }
 
-        public List<string> GetAllExtendedTermsForKey(string key, List<string> booksIds)
-        {
-            return m_searchClient.AllExtendedTermsForKey(key, booksIds);
-        }
-
         public SearchResult[] GetContextForKeyWord(string keyWord)
         {
             return m_searchClient.GetContextForKeyWord(keyWord);
