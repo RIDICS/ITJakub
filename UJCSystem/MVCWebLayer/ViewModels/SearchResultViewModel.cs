@@ -1,17 +1,16 @@
-﻿using ITJakub.Contracts.Searching;
+﻿using System.Web.Mvc;
+using ITJakub.Contracts.Searching;
 
 namespace ITJakub.MVCWebLayer.ViewModels
 {
     public class SearchResultViewModel
     {
-        public SearchResultViewModel()
-        {
-        }
-
         public string SearchTerm { get; set; }
         public string[] FoundWords { get; set; }
 
         public SearchResult[] Results { get; set; }
+
+        public SearchViewModel Search { get; set; }
     }
 
     public class SearchKeyWordsViewModel

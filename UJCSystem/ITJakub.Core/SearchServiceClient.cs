@@ -13,6 +13,7 @@ namespace ITJakub.Core
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+
         public List<string> AllExtendedTermsForKey(string key, List<string> booksIds)
         {
             try
@@ -93,6 +94,7 @@ namespace ITJakub.Core
             }
         }
 
-     
+
+      
     }
 }

@@ -7,8 +7,8 @@ namespace ITJakub.Core
 {
     public class ItJakubServiceManager
     {
-        private readonly SearchServiceClient m_searchClient;
         private readonly ReleationDatabaseMock m_releationDatabaseMock;
+        private readonly SearchServiceClient m_searchClient;
 
         public ItJakubServiceManager(SearchServiceClient searchClient, ReleationDatabaseMock releationDatabaseMock)
         {
@@ -33,11 +33,14 @@ namespace ITJakub.Core
 
         public List<string> GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)
         {
+            if(categorieIds == null)
+                categorieIds = new List<string>();
+            if (booksIds == null)
+                booksIds = new List<string>();
 
-            var bookIdsByCategories = m_releationDatabaseMock.GetBookIdsByCategories(categorieIds);
 
+            List<string> bookIdsByCategories = m_releationDatabaseMock.GetBookIdsByCategories(categorieIds);
             bookIdsByCategories.AddRange(booksIds);
-
 
             return m_searchClient.AllExtendedTermsForKey(key, bookIdsByCategories);
         }
