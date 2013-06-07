@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using ITJakub.Contracts.Categories;
 using ITJakub.MVCWebLayer.Services;
 using ITJakub.MVCWebLayer.ViewModels;
-using System.Linq;
 
 namespace ITJakub.MVCWebLayer.Controllers
 {
@@ -17,22 +17,20 @@ namespace ITJakub.MVCWebLayer.Controllers
         {
             return View(new SearchResultViewModel
                 {
-                    Search = new SearchViewModel()
+                    Search = new SearchViewModel
                         {
                             SearchTerm = model.SearchTerm,
                             Dila = model.Dila,
                             Kategorie = model.Kategorie
                         },
                     FoundWords = m_resultsProvider.GetSearchResults(model.SearchTerm, ParseParamList(model.Kategorie), ParseParamList(model.Dila)),
-                    
                 });
         }
 
-
         private List<string> ParseParamList(string paramList)
         {
-            if(paramList == null) return new List<string>();
-            var splitted = paramList.Split('+');
+            if (paramList == null) return new List<string>();
+            var splitted = paramList.Split(' ');
             return splitted.ToList();
         }
 

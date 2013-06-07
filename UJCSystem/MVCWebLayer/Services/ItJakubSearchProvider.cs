@@ -15,6 +15,14 @@ namespace ITJakub.MVCWebLayer.Services
             m_serviceClient = Container.Current.Resolve<ItJakubServiceClient>();
         }
 
+
+
+        public string[] GetSearchResults(string query, List<string> categorieIds, List<string> booksIds)
+        {
+            List<string> result = m_serviceClient.GetAllExtendedTermsForKey(query, categorieIds, booksIds);
+            return result.ToArray();
+        }
+
         public SearchResult[] GetSearchResultsByType(string book, string searchTerm)
         {
             if (m_searchResult == null)
@@ -39,12 +47,6 @@ namespace ITJakub.MVCWebLayer.Services
         public SelectionBase[] GetRootCategories()
         {
             return m_serviceClient.GetRootCategories();
-        }
-
-        public string[] GetSearchResults(string query, List<string> categorieIds, List<string> booksIds)
-        {
-            List<string> result = m_serviceClient.GetAllExtendedTermsForKey(query, categorieIds, booksIds);
-            return result.ToArray();
         }
     }
 
