@@ -35,19 +35,34 @@ namespace ITJakub.Core.Database.Exist.DAOs
         {
         }
 
-        public List<string> GetAllPossibleKeyWords(string input)
+        public List<string> GetAllPossibleKeyWords(string key, List<string> booksIds = null)
         {
-            string query = GetAllPossibleKeywordsQuery(input);
+            var restriction = GetRestrictionByBookIds(booksIds);
+
+            string query = GetAllPossibleKeywordsQuery(key, restriction);
 
             string dbResult = ExistDao.QueryXml(query);
             var result = XmlTool.CutElementsText(dbResult, "word");
-
             return result.ToList();
         }
 
-        public SearchResult[] GetKeyWordInContextByWord(string word)
+        private static string GetRestrictionByBookIds(List<string> booksIds)
         {
-            string query = GetKeyWordInContextQuery(word);
+            string restriction = string.Empty;
+            if (booksIds != null && booksIds.Count > 0)
+            {
+                string idCollection = string.Join(",", booksIds.Select(id => string.Format("\"{0}\"", id)));
+
+                restriction = string.Format("where $id = ({0})", idCollection);
+            }
+            return restriction;
+        }
+
+        public SearchResult[] GetKeyWordInContextByWord(string word, List<string> booksIds = null)
+        {
+            var restriction = GetRestrictionByBookIds(booksIds);
+
+            string query = GetKeyWordInContextQuery(word, restriction);
             string dbResult = ExistDao.QueryXml(query);
 
             List<SearchResult> results = new List<SearchResult>();
@@ -83,12 +98,16 @@ namespace ITJakub.Core.Database.Exist.DAOs
             return results.ToArray();
         }
 
-        private string GetAllPossibleKeywordsQuery(string input)
+        private string GetAllPossibleKeywordsQuery(string input, string restrictions)
         {
             StringBuilder builder = new StringBuilder();
 
             AddNamespacesAndCollation(builder);
             builder.AppendLine("<words> {");
+
+            builder.AppendLine("for $distinctVal in");
+            builder.AppendLine("distinct-values(<undistinctedValues> {");
+
             builder.AppendLine("let $query :=");
             builder.AppendLine("<query>");
             builder.AppendLine("<bool>");
@@ -96,15 +115,22 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("</bool>");
             builder.AppendLine("</query>");
             builder.AppendLine("let $words := collection(\"\")//tei:w[ft:query(., $query)]");
-            builder.AppendLine("for $word in distinct-values($words)");
+            builder.AppendLine("for $word in $words");
+
+            builder.AppendLine("let $id := $word/ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/@n");
+            builder.AppendLine(restrictions);
+            
             builder.AppendLine("order by $word");
             builder.AppendLine("return <word>{$word}</word>");
+            builder.AppendLine("} </undistinctedValues>//tei:w)");
+
+            builder.AppendLine("return <word>{$distinctVal}</word>");
             builder.AppendLine("} </words>");
 
             return builder.ToString();
         }
 
-        private string GetKeyWordInContextQuery(string word)
+        private string GetKeyWordInContextQuery(string word, string restrictions)
         {
             StringBuilder builder = new StringBuilder();
             AddNamespacesAndCollation(builder);
@@ -125,6 +151,9 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("let $author := $hit/ancestor::tei:TEI//tei:author");
             builder.AppendLine("let $categories := $hit/ancestor::tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:catRef");
             builder.AppendLine(string.Format("let $kwic:= kwic:get-summary($expanded, ($expanded//exist:match), <config width=\"{0}\"/>)", KeyWordValue));
+
+            builder.AppendLine(restrictions);
+
             builder.AppendLine("order by $hit");
             builder.AppendLine("return <hit>");
             builder.AppendLine("<title>{$title}</title>");
@@ -140,6 +169,8 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             return builder.ToString();
         }
+
+        
     }
 
     public class BookDao : ExistDaoBase

@@ -30,10 +30,15 @@ namespace ITJakub.SearchService
             m_bookDao = Container.Current.Resolve<BookDao>();
         }
 
-        public List<string> AllExtendedTermsForKey(string key, List<string> booksIds)
+        public List<string> AllExtendedTermsForKey(string key)
         {
             var dbResult = m_existWordsDao.GetAllPossibleKeyWords(key);
-            
+            return dbResult;
+        }
+
+        public List<string> AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds)
+        {
+            var dbResult = m_existWordsDao.GetAllPossibleKeyWords(key, booksIds);
             return dbResult;
         }
 
@@ -49,10 +54,20 @@ namespace ITJakub.SearchService
             return dbResult;
         }
 
+
+        public SearchResult[] GetContextForKeyWord(string keyWord, List<string> booksIds)
+        {
+            var dbResult = m_existWordsDao.GetKeyWordInContextByWord(keyWord, booksIds);
+            return dbResult;
+        }
+
+
         public string GetTitleById(string id)
         {
             var dbResult = m_bookDao.GetTitleByBookId(id);
             return dbResult;
         }
+
+       
     }
 }

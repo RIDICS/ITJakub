@@ -42,7 +42,10 @@ namespace ITJakub.Core
             List<string> bookIdsByCategories = m_releationDatabaseMock.GetBookIdsByCategories(categorieIds);
             bookIdsByCategories.AddRange(booksIds);
 
-            return m_searchClient.AllExtendedTermsForKey(key, bookIdsByCategories);
+
+            if (bookIdsByCategories.Count == 0)
+                return m_searchClient.AllExtendedTermsForKey(key);
+            return m_searchClient.AllExtendedTermsForKeyWithBooksRestriction(key, bookIdsByCategories);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace ITJakub.SearchService
 
         public void Search(List<SearchCriteriumBase> criteria)
         {
-           m_searchServiceManager.Search(criteria);
+            m_searchServiceManager.Search(criteria);
         }
 
         public SearchResult[] GetContextForKeyWord(string keyWord)
@@ -29,10 +29,16 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetTitleById(id);
         }
 
-        public List<string> AllExtendedTermsForKey(string key, List<string> booksIds)
+        public List<string> AllExtendedTermsForKey(string key)
         {
-            return m_searchServiceManager.AllExtendedTermsForKey(key, booksIds);
+            return m_searchServiceManager.AllExtendedTermsForKey(key);
         }
+
+        public List<string> AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds)
+        {
+            return m_searchServiceManager.AllExtendedTermsForKeyWithBooksRestriction(key, booksIds);
+        }
+
     }
 
     [ServiceContract]

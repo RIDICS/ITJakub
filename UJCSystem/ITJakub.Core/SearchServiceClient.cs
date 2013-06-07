@@ -14,11 +14,31 @@ namespace ITJakub.Core
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 
-        public List<string> AllExtendedTermsForKey(string key, List<string> booksIds)
+        public List<string> AllExtendedTermsForKey(string key)
         {
             try
             {
-                return Channel.AllExtendedTermsForKey(key, booksIds);
+                return Channel.AllExtendedTermsForKey(key);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AllExtendedTermsForKey failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AllExtendedTermsForKey timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public List<string> AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds)
+        {
+            try
+            {
+                return Channel.AllExtendedTermsForKeyWithBooksRestriction(key, booksIds);
             }
             catch (CommunicationException ex)
             {
@@ -93,8 +113,5 @@ namespace ITJakub.Core
                 throw;
             }
         }
-
-
-      
     }
 }
