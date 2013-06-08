@@ -40,8 +40,12 @@ namespace ITJakub.Core
 
 
             List<string> bookIdsByCategories = m_releationDatabaseMock.GetBookIdsByCategories(categorieIds);
-            bookIdsByCategories.AddRange(booksIds);
 
+            foreach (var bookId in booksIds)
+            {
+             if(!bookIdsByCategories.Contains(bookId))   
+                 bookIdsByCategories.Add(bookId);
+            }
 
             if (bookIdsByCategories.Count == 0)
                 return m_searchClient.AllExtendedTermsForKey(key);

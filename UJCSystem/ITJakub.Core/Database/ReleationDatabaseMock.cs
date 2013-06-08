@@ -73,8 +73,6 @@ namespace ITJakub.Core.Database
             if (category != null)
                 category.Subitems.Add(new Book { Id = book1Id, Name = bookTitle });
 
-
-
             string book2Id = "{8C922B93-1185-4B16-BCFC-B8F7A05F1082}";
             bookTitle = m_searchClient.GetTitleById(book2Id);
 
@@ -89,11 +87,34 @@ namespace ITJakub.Core.Database
             category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-old_czech") as Categorie;
             if (category != null)
                 category.Subitems.Add(new Book { Id = book3Id, Name = bookTitle });
+            
+
+            string bookId4 = "{E494DBC5-F3C4-4841-B4D3-C52FE99839EB}";
+            bookTitle = m_searchClient.GetTitleById(bookId4);
+            category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-old_czech") as Categorie;
+            if (category != null)
+                category.Subitems.Add(new Book { Id = bookId4, Name = bookTitle });
+
         }
 
         public List<string> GetBookIdsByCategories(List<string> categorieIds)
         {
-            return new List<string>();   
+            List<string> result = new List<string>();
+            foreach (var categorieId in categorieIds)
+            {
+                Categorie category = m_allCategories.FirstOrDefault(x => x.Id == categorieId) as Categorie;
+
+                if (category != null)
+                {
+                    foreach (var subitem in category.Subitems)
+                    {
+                        if(subitem is Book && !result.Contains(subitem.Id))
+                            result.Add(subitem.Id);
+                    }
+                }
+
+            }
+            return result;
         }
     }    
 }
