@@ -66,31 +66,32 @@ namespace ITJakub.Core.Database
 
         private void LoadBooks()
         {
-            const string book1Id = "{2A100BE0-D058-486C-8E27-63801CDFDA22}";
+            string book1Id = "59C0C5DC-300A-42E4-8BF2-0CB4874E8255";
             var bookTitle = m_searchClient.GetTitleById(book1Id);
 
             Categorie category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Categorie;
             if (category != null)
                 category.Subitems.Add(new Book { Id = book1Id, Name = bookTitle });
 
-            string book2Id = "{8C922B93-1185-4B16-BCFC-B8F7A05F1082}";
+            string book2Id = "66C9C773-7542-4820-A4F9-71C180CBFDEB";
             bookTitle = m_searchClient.GetTitleById(book2Id);
 
-            category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Categorie;
+            category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-old_czech") as Categorie;
             if (category != null)
                 category.Subitems.Add(new Book { Id = book2Id, Name = bookTitle });
 
 
-            string book3Id = "{E776D714-0D0A-475A-962F-FC9F8CCAC846}";
+            string book3Id = "CACB63F9-B6AE-4C9C-9101-584F8100BDB4";
             bookTitle = m_searchClient.GetTitleById(book3Id);
 
             category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-old_czech") as Categorie;
             if (category != null)
                 category.Subitems.Add(new Book { Id = book3Id, Name = bookTitle });
-            
 
-            string bookId4 = "{E494DBC5-F3C4-4841-B4D3-C52FE99839EB}";
+
+            string bookId4 = "1A74599E-3A19-44AA-AB1A-EF54077B81DB";
             bookTitle = m_searchClient.GetTitleById(bookId4);
+
             category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-old_czech") as Categorie;
             if (category != null)
                 category.Subitems.Add(new Book { Id = bookId4, Name = bookTitle });
