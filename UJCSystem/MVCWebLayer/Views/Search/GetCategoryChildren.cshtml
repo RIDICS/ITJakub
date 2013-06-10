@@ -1,11 +1,24 @@
+@using ITJakub.Contracts.Categories
 @model ITJakub.MVCWebLayer.ViewModels.CategoriesViewModel 
            
 @if (Model.Children.Count() > 0) 
 {
     <ul class="nav@(!string.Equals(Model.CategoryId, "taxonomy-historical_text-medieval_czech") ? " show-categories" : "")">
         @foreach (var child in Model.Children)
-        {       
-                if (child is ITJakub.Contracts.Categories.Category)
+        {
+           // Category childAsCat = child as Category;
+           //if (childAsCat != null)
+           //{
+           //    //TODO tady je to kategories childAsCat.HasChildren
+           //}
+           // Book childAsBook = child as Book;
+           // if (childAsBook != null)
+           // {
+           //        //TODO tady je to book (childAsBook.Name....)
+           // }
+          
+            
+                if (child is Category)
                 {
                     <li data-category-id="@child.Id">
                         @if (
