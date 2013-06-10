@@ -5,7 +5,7 @@
     <ul class="nav@(!string.Equals(Model.CategoryId, "taxonomy-historical_text-medieval_czech") ? " show-categories" : "")">
         @foreach (var child in Model.Children)
         {       
-                if (child is ITJakub.Contracts.Categories.Categorie)
+                if (child is ITJakub.Contracts.Categories.Category)
                 {
                     <li data-category-id="@child.Id">
                         @if (
