@@ -7,6 +7,7 @@ namespace ITJakub.Contracts.Categories
     {
         [EnumMember]
         SelectionBox,
+        
         [EnumMember]
         Enumeration,
     }
