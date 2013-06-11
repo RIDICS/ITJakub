@@ -1,12 +1,17 @@
 ﻿@model ITJakub.MVCWebLayer.ViewModels.SearchKeyWordsViewModel
 
-@*           
+           
 @if (Model.Results.Length > 0)
 {
     <div id="dictionary-results-panel">
-        <h3>Historický text - staročeský</h3>
         @foreach (var result in Model.Results)
         {
+            <h3>
+                @foreach (var category in result.Categories)
+                {
+                    <span>@category</span>
+                }  
+            </h3>
             <blockquote>
                 <p>
                     @result.Kwic.Before
@@ -18,9 +23,8 @@
         }
     </div>
 }
-*@
 
-<div id="dictionary-results-panel">
+@*<div id="dictionary-results-panel">
     <h3>Slovník - soudobý</h3>
     <blockquote>
         <p><strong>pes(s)ký, adj. psovský</strong>; nešlechetný, hanebný, bídný: peská závist</p>
@@ -78,7 +82,7 @@
         </p>
         <small><cite title="lístková kartotéka"><a class="muted" href="@Url.RouteUrl("SourcesDetail", new { id = "1-zizka" })">lístková kartotéka</a></cite></small>
     </blockquote>
-</div>
+</div>*@
 
 
 
