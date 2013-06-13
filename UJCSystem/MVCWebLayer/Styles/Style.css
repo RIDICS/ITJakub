@@ -207,6 +207,10 @@ a {
     background: none;
 }
 
+.text-left {
+    text-align: left;
+}
+
 /* SearchPanel */
 
 /* Index */

@@ -1,17 +1,24 @@
 ﻿$(document).ready(function () {
-    $('.advanced-search-wrapper').advancedSearch();
+    rootNode.init();
+    
+
+    /*$('.advanced-search-wrapper').advancedSearch();
     $("#search-results-ordering > ul > li > a[data-toggle=tab]").initLoadingSearchResults();
     $("#search-results-alphabetical a[data-toggle=tab]").initLoadingAlphTermDetail();
     $("#results-type a[data-toggle=tab]").initLoadingTypeTermDetail();
+
     history.initHash();
-    
     $(window).on('hashchange', function () {
             history.initHash();
-    });
+    });*/
 });
 
 function isBlankString(str) {
     return (!str || /^\s*$/.test(str));
+}
+
+function ulfirst(string) {
+    return string.charAt(0).toLowerCase() + string.slice(1);
 }
 
 var SelectedSources = function () {
@@ -163,6 +170,8 @@ var selectedsources = new SelectedSources();
                 } else {
                     $.get(categoriesUrl, function (data) {
                         parentElement.append(data);
+                        
+                        /*todelete*/rootNode.reloadTree($("#search-categories-tree > ul"));
 
                         parentElement.find(".category-select input[type=text]").typeahead({
                             source: function () {
@@ -325,6 +334,296 @@ var selectedsources = new SelectedSources();
     });
 })(jQuery);
 
+/************************************************************************
+ *  Advance search category tree
+ ***********************************************************************/
+var TreeNode = function () {
+    this.ìd = null;
+    this.name = null;
+    this.type = null;
+    this.parent = null;
+    this.children = new Array;
+    this.treeSelector = null;
+    this.selected = false;
+    
+    var advancedSearchVisible = false;
+
+    this.init = function () {
+        var currentNode = this;
+        $(".advanced-search").hide();
+        currentNode.loadChildTreeHtml($('#search-categories-tree'));
+        $('.show-advanced-search').click(function () {
+            changeASVisibility($(this).parent().parent());
+            $(this).blur();
+        });
+    };
+
+    function changeASVisibility(asElement) {
+        if (advancedSearchVisible) {
+            asElement.find('.advanced-search').slideUp();
+            advancedSearchVisible = false;
+        } else {
+            asElement.find('.advanced-search').slideDown();
+            advancedSearchVisible = true;
+        }
+    }
+
+    function showLevel(iconElement) {
+        iconElement.parent().find(" > ul.nav.show-categories").slideDown();
+        iconElement.parent().find(" > div.category-select").slideDown();
+        iconElement.attr("class", "icon-chevron-down");
+        iconElement.unbind('click');
+        iconElement.click(function () {
+            hideLevel(iconElement);
+        });
+    }
+
+    function hideLevel(iconElement) {
+        iconElement.parent().find(" > ul.nav.show-categories").slideUp();
+        iconElement.parent().find(" > div.category-select").slideUp();
+        iconElement.attr("class", "icon-chevron-right");
+        iconElement.unbind('click');
+        iconElement.click(function () {
+            showLevel(iconElement);
+        });
+    }
+
+    this.initTree = function (ulSelector) {
+        this.treeSelector = ulSelector;
+        var childrenSelectors = ulSelector.find("> li > label > input[type=checkbox]");
+        
+        for (var i = 0; i < childrenSelectors.length; i++) {
+            var childrenNode = new TreeNode;
+            var childrenSelector = $(childrenSelectors[i]);
+            
+            childrenNode.id = childrenSelector.attr("data-id");
+            childrenNode.name = childrenSelector.attr("data-name");
+            childrenNode.type = childrenSelector.attr("data-type");
+            childrenNode.parent = this;
+            childrenNode.treeSelector = childrenSelector;
+            this.children.push(childrenNode);
+            allNodes[childrenNode.id] = childrenNode;
+            childrenNode.initTree(childrenSelector.parent().parent().find("ul.nav"));
+        }
+    };
+
+    this.loadChildTreeHtml = function (inTo, categoryId) {
+        if (!categoryId) {
+            categoryId = "";
+        }
+        var url = $('#search-categories-tree').attr("data-categories-url") + "/" + categoryId;
+        var currentNode = this;
+        $.get(url, function (data) {
+            inTo.append(data);
+            inTo.find("> ul.nav.show-categories").slideDown();
+            inTo.find("div.category-select").slideDown();
+            
+            if (inTo.attr("data-category-id")) {
+                allNodes[inTo.attr("data-category-id")].initTree(inTo.find("> ul.nav"));
+            } else {
+                currentNode.initTree(inTo.find("> ul.nav"));
+            }
+            inTo.find("> ul.nav i[class=icon-chevron-right]").click(function() {
+                showLevel($(this));
+                currentNode.loadChildTreeHtml($(this).parent(), $(this).parent().attr("data-category-id"));
+            });
+            inTo.find("> ul.nav > li > label > input[type=checkbox]").change(function () {
+                if ($(this).is(":checked")) {
+                    currentNode.checkInput(this);
+                } else {
+                    currentNode.uncheckInput(this);
+                }
+            });
+            inTo.find(".category-select input[type=text]").typeahead({
+                source: function () {
+                    var children = new Array();
+                    inTo.find('> .nav input[type=checkbox]').each(function () {
+                        children.push($(this).attr('data-name'));
+                    });
+                    return children;
+                }
+            });
+            inTo.find(".category-select form").submit(function () {
+                var selectedName = $(this).find('input[type=text]').val();
+                $(this).find('input[type=text]').val("");
+                var formEl = $(this);
+                $(this).parent().parent().find('input[type=checkbox]').each(function () {
+                    if ($(this).attr("data-name") == selectedName) {
+                        $(this).prop("checked", true);
+                        selectedsources.checkCheckboxes($(this));
+                        formEl.parent().find('.selected-categories').append($(this).parent().parent());
+                    }
+                });
+                return false;
+            });
+        });
+    };
+
+    this.checkInput = function (checkedInput) {
+        var checkedInputSelector = $(checkedInput);
+        allNodes[checkedInputSelector.attr("data-id")].selected = true;
+        this.apllyCheckRules(checkedInputSelector);
+        //checkedCheckboxes.push(checkedInputSelector.attr("data-id"));
+        createCheckedCategoriesArray();
+        createCheckedBooksArray();
+        $(".advanced-search-wrapper .searched-books").html(getSelectedSourcesHtml());
+    };
+
+    this.uncheckInput = function (checkedInput) {
+        var checkedInputSelector = $(checkedInput);
+        allNodes[checkedInputSelector.attr("data-id")].selected = false;
+        this.apllyUncheckRules(checkedInputSelector);
+        //uncheckedCheckboxes.push(checkedInputSelector.attr("data-id"));
+        createCheckedCategoriesArray();
+        createCheckedBooksArray();
+        $(".advanced-search-wrapper .searched-books").html(getSelectedSourcesHtml());
+    };
+
+    this.apllyCheckRules = function (checkedInputSelector) {
+        checkAllChildren(checkedInputSelector.attr("data-id"));
+        checkParentIfChildrenChecked(checkedInputSelector.attr("data-id"));
+        this.updateCheckboxesView();
+    };
+
+    this.apllyUncheckRules = function (checkedInputSelector) {
+        uncheckAllParents(checkedInputSelector.attr("data-id"));
+        this.updateCheckboxesView();
+    };
+
+    function select(checkboxId) {
+        allNodes[checkboxId].selected = true;
+        checkedCheckboxes.push(checkboxId);
+    };
+
+    function deselect(checkboxId) {
+        allNodes[checkboxId].selected = false;
+        uncheckedCheckboxes.push(checkboxId);
+    };
+
+    function checkAllChildren(checkedInputId) {
+        for (var i = 0; i < allNodes[checkedInputId].children.length; i++) {
+            var child = allNodes[checkedInputId].children[i];
+            select(child.id);
+            checkAllChildren(child.id);
+        }
+    };
+
+    function checkParentIfChildrenChecked(checkedInputId) {
+        if (allChildrenChecked(checkedInputId)) {
+            select(allNodes[checkedInputId].parent.id);
+            checkParentIfChildrenChecked(allNodes[checkedInputId].parent.id);
+        }
+    };
+
+    function uncheckAllParents(checkedInputId) {
+        if (allNodes[checkedInputId] && allNodes[checkedInputId].parent.id != null) {
+            deselect(allNodes[checkedInputId].parent.id);
+            uncheckAllParents(allNodes[checkedInputId].parent.id);
+        }
+    };
+
+    this.updateCheckboxesView = function () {
+        for (var i = 0; i < checkedCheckboxes.length; i++) {
+            var checkboxSelector = $("input[data-id=" + checkedCheckboxes[i] + "]");
+            checkboxSelector.prop("checked", true);
+            //selectedsources.checkCheckboxes(checkboxSelector);
+        }
+        checkedCheckboxes = new Array;
+        for (var i = 0; i < uncheckedCheckboxes.length; i++) {
+            var checkboxSelector = $("input[data-id=" + uncheckedCheckboxes[i] + "]");
+            checkboxSelector.prop("checked", false);
+            //selectedsources.uncheckCheckboxes(checkboxSelector);
+        }
+        uncheckedCheckboxes = new Array;
+    };
+
+    function allChildrenChecked(checkedInputId) {
+        var checked = true;
+        for (var i = 0; i < allNodes[checkedInputId].parent.children.length; i++) {
+            var child = allNodes[checkedInputId].parent.children[i];
+            if (!child.selected) {
+                checked = false;
+            }
+        }
+        return checked;
+    };
+
+    function allChildrenUnChecked(checkedInputId) {
+        var has = true;
+        for (var i = 0; i < allNodes[checkedInputId].children.length; i++) {
+            var child = allNodes[checkedInputId].children[i];
+            if (child.selected && child.type == "category") {
+                has = false;
+            }
+        }
+        return has;
+    };
+
+    function createCheckedCategoriesArray() {
+        $.each(allNodes, function (index, value) {
+            if (value.selected && value.type == "category" && allChildrenUnChecked(value.id)) {
+                var names = new Array;
+                names.push(ulfirst(value.name));
+                var currentNode = value.parent;
+                while (currentNode.name != null) {
+                    names.push(ulfirst(currentNode.name));
+                    currentNode = currentNode.parent;
+                }
+                names.reverse();
+                checkedCategoriesNames.push(names.join(" — "));
+            }
+        });
+    };
+
+    function createCheckedBooksArray() {
+        $.each(allNodes, function (index, value) {
+            if (value.selected && value.type == "book" && !allChildrenChecked(value.parent.id)) {
+                checkedBookNames.push(value.name);
+            }
+        });
+    };
+    
+    function getSelectedSourcesHtml() {
+        if ((checkedBookNames.length == 0 && checkedCategoriesNames.length == 0) || (checkedCategoriesNames.length + checkedBookNames.length == allNodes.length)) {
+            return "<span class=\"muted\">Aktivní prohledávání ve všech dostupných dílech</span>";
+        }
+
+        var categoriesString = checkedCategoriesNames.join(", ");
+        var booksString = checkedBookNames.join(", ");
+
+        if (checkedCategoriesNames.length == 0) {
+            categoriesString = "-";
+        }
+
+        if (checkedBookNames.length == 0) {
+            booksString = "-";
+        }
+
+        checkedCategoriesNames = new Array;
+        checkedBookNames = new Array;
+        return "<div class=\"muted\">" +
+            "<strong>Kategorie:</strong> " + categoriesString + "<br>" +
+            "<strong>Díla:</strong> " + booksString;
+    };
+
+};
+var rootNode = new TreeNode;
+var allNodes = new Object;
+var checkedCheckboxes = new Array;
+var uncheckedCheckboxes = new Array;
+var checkedCategoriesNames = new Array;
+var checkedBookNames = new Array;
+/************************************************************************
+ *  Advance search category tree
+ ***********************************************************************/
+
+
+
+
+
+/************************************************************************
+ *  Tabs loading
+ ***********************************************************************/
 var History = function() {
     this.main = null;
     this.alphabet = null;
@@ -442,151 +741,8 @@ var history = new History;
     });
 })(jQuery);
 
-    
-/* var arrowUpImg = new Image();
-arrowUpImg.src = "/Images/arrow-up.png";
+/************************************************************************
+ *  Tabs loading
+ ***********************************************************************/
 
-var arrowDownImg = new Image();
-arrowDownImg.src = "/Images/arrow.png";
 
-var autocompleteStrings = [
-         		 "Alexandreida. Zlomek budějovicko-muzejní",
-                "Alexandreida. Zlomek budějovický",
-    "Alexandreida. Zlomek budějovický druhý",
-    "Alexandreida. Zlomek jindřichohradecký"
-         		];
-
-$(document).ready(function () {
-    closeAdvancedSearch();
-
-    $("#advanced-search .show").click(function () {
-        showAdvancedSearch();
-        return false;
-    });
-
-    $("#advanced-search-active .cancel-button").click(function () {
-        closeAdvancedSearch();
-    });
-
-    $("#advanced-search-active input[type='checkbox']").click(function () {
-        checkChildrenNodes(this);
-        uncheckParentNodes(this);
-    });
-
-    $(".has-children .arrow").click(function () {
-        showHideChildrenNodes(this);
-    });
-
-    $(".has-children").hover(function () {
-        showArrow(this);
-    }, function () {
-        hideArrows(this);
-    });
-
-    $("#search-submit").click(function () {
-        window.location = "results.html";
-    });
-
-    $(".autocomplete").autocomplete({
-        source: autocompleteStrings,
-        select: function (event, ui) {
-            createNewCheckbox(ui.item.value);
-        }
-    });
-});
-
-function showAdvancedSearch() {
-	$("#advanced-search").hide();
-	$("#advanced-search-active").show();
-}
-
-function closeAdvancedSearch() {
-	$("#advanced-search").show();
-	$("#advanced-search-active").hide();
-}
-
-function showHideChildrenNodes(element) {
-	var firstList = $(element).parent().find("ul").first();
-	
-	if($(element).parent().hasClass("opened")) {
-		$(element).parent().removeClass("opened");
-		// $(element).parent().find("input[type='checkbox']").first().removeAttr("checked");
-		$(firstList).addClass("not-shown");
-	} else {
-		$(element).parent().addClass("opened");
-		if($(firstList).hasClass("not-shown")) {
-			$(firstList).removeClass("not-shown");
-		}
-		// $(element).parent().find("input[type='checkbox']").first().attr("checked", "checked");
-	}
-}
-
-function showArrow(element) {
-    if ($(element).hasClass("opened")) {
-		$(element).find(".arrow").first().attr("src", arrowUpImg.src);
-		$(element).find(".arrow").first().removeClass("hidden");
-		$(element).addClass("hovered");
-    } else {
-		$(element).find(".arrow").first().attr("src", arrowDownImg.src);
-		$(element).find(".arrow").first().removeClass("hidden");
-		$(element).addClass("hovered");
-	}
-}
-
-function hideArrows(element) {
-	$(element).find(".arrow").first().addClass("hidden");
-	$(element).removeClass("hovered");
-}
-
-function createNewCheckbox(value) {
-	var html = "<li><input type='checkbox' checked='checked' name='SearchPart' value='aa' id='aa' /><label for='aa'>";
-	html += value;
-	html += "</label></li>";
-	
-	$(".autocomplete").parent().parent().prepend(html);
-}
-
-function loadTermDetail(element, searchTerm) {
-    $("#alphabetical-results li a").removeClass("selected");
-    $(element).addClass("selected");
-
-    $('#result-detail-panel').load('/Search/Detail?searchTerm=' + searchTerm);
-}
-
-function bookDetail(element, searchTerm) {
-    $("#type-results li a").removeClass("selected");
-    $(element).addClass("selected");
-
-    $('#result-detail-panel').load('/Search/DetailByType?book=' + encodeURIComponent(searchTerm));
-}
-
-function showTypeResults() {
-    $(".type-button").addClass("active");
-    $(".alphabetical-button").removeClass("active");
-
-    $("#alphabetical-results").hide();
-    $("#type-results").show();
-}
-
-function showAlphabeticalResults() {
-    $(".type-button").removeClass("active");
-    $(".alphabetical-button").addClass("active");
-
-    $("#alphabetical-results").show();
-    $("#type-results").hide();
-    $("#alphabetical-results li:first a").click();
-}
-
-function checkChildrenNodes(element) {
-    if ($(element).parent().hasClass('has-children') && $(element).is(":checked")) {
-        $(element).parent().find("input[type='checkbox']").attr("checked", "checked");
-    }
-}
-
-function uncheckParentNodes(element) {
-    if (!$(element).is(":checked")) {
-        $(element).parent().parents(".has-children").each(function () {
-            $(this).find("input[type='checkbox']").first().removeAttr("checked");
-        });
-    }
-}*/

@@ -1,8 +1,9 @@
 @using ITJakub.Contracts.Categories
 @model ITJakub.MVCWebLayer.ViewModels.CategoriesViewModel 
            
-@if (Model.Children.Count() > 0) 
+@if (Model.Children.Count() > 0)
 {
+    var rand = new Random();
     <ul class="nav@(!string.Equals(Model.CategoryId, "taxonomy-historical_text-medieval_czech") ? " show-categories" : "")">
         @foreach (var child in Model.Children)
         {
@@ -10,12 +11,7 @@
             if (childAsCat != null)
             {
                 <li data-category-id="@childAsCat.Id">
-                    @if (childAsCat.HasChildren ||
-                        (!string.Equals(child.Id, "taxonomy-dictionary-contemporary") &&
-                        !string.Equals(child.Id, "taxonomy-dictionary-historical") && 
-                        !string.Equals(child.Id, "taxonomy-scholary_text") &&  
-                        !string.Equals(child.Id, "taxonomy-digitized-grammar") && 
-                        !string.Equals(child.Id, "taxonomy-card-index")))
+                    @if (childAsCat.HasChildren)
                     {
                         <i class="icon-chevron-right"></i>
                     } else {
@@ -28,10 +24,11 @@
             }
             Book childAsBook = child as Book;
             if (childAsBook != null)
-            {   
-                <li data-book-id="@childAsBook.Id">
+            { 
+                var randid = rand.Next();
+                <li data-book-id="@childAsBook.Id@randid">
                     <label class="checkbox">
-                        <input type="checkbox" name="SearchPart" value="@childAsBook.Id" data-id="@childAsBook.Id" data-type="book" data-name="@UppercaseFirst(childAsBook.Name)" /><span>@UppercaseFirst(childAsBook.Name)</span>
+                        <input type="checkbox" name="SearchPart" value="@childAsBook.Id@randid" data-id="@childAsBook.Id@randid" data-type="book" data-name="@UppercaseFirst(childAsBook.Name)" /><span>@UppercaseFirst(childAsBook.Name)</span>
                     </label>
                 </li>
             }
@@ -42,7 +39,7 @@
         <div class="category-select">
             <ul class="nav selected-categories"></ul>
             <form class="form-search">
-                <input autocomplete="off" type="text" class="input-medium search-query">
+                <input autocomplete="off" type="text" class="input-xlarge search-query">
                 <button type="submit" class="btn"><i class="icon-plus"></i></button>
             </form>
         </div>
@@ -53,6 +50,10 @@
 {
     string UppercaseFirst(string s)
     {
+        if (s == null)
+        {
+            return string.Empty;
+        }
         return char.ToUpper(s[0]) + s.Substring(1);
     }
 }
