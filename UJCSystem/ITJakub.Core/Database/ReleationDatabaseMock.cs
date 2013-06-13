@@ -123,14 +123,29 @@ namespace ITJakub.Core.Database
             bookTitle = m_searchClient.GetTitleById(bookId6);
             category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-dictionary-contemporary") as Category;
             if (category != null)
-                category.Subitems.Add(new Book {Id = bookId5, Name = bookTitle});
+                category.Subitems.Add(new Book {Id = bookId6, Name = bookTitle});
 
 
             string bookId7 = "6810F0EC-989E-42F1-A2E3-2D22B5E67EC7";
             bookTitle = m_searchClient.GetTitleById(bookId7);
             category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-dictionary-contemporary") as Category;
             if (category != null)
-                category.Subitems.Add(new Book {Id = bookId5, Name = bookTitle});
+                category.Subitems.Add(new Book {Id = bookId7, Name = bookTitle});
+
+
+
+            //medival czech books
+            string bookId8 = "2A100BE0-D058-486C-8E27-63801CDFDA22";
+            bookTitle = m_searchClient.GetTitleById(bookId8);
+            category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Category;
+            if (category != null)
+                category.Subitems.Add(new Book { Id = bookId8, Name = bookTitle });
+
+            string bookId9 = "8C922B93-1185-4B16-BCFC-B8F7A05F1082";
+            bookTitle = m_searchClient.GetTitleById(bookId9);
+            category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Category;
+            if (category != null)
+                category.Subitems.Add(new Book { Id = bookId9, Name = bookTitle });
         }
 
         public List<string> GetBookIdsByCategories(List<string> categorieIds)
