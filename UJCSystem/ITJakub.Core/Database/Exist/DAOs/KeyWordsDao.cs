@@ -118,7 +118,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("let $words := collection(\"\")//tei:w[ft:query(., $query)]");
             builder.AppendLine("for $word in $words");
 
-            builder.AppendLine("let $id := $word/ancestor::tei:TEI/@n");
+            builder.AppendLine("let $id := $word/ancestor-or-self::tei:TEI/@n");
             builder.AppendLine(restrictions);
             
             builder.AppendLine("order by $word");
@@ -150,7 +150,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("let $words := collection(\"\")//tei:w[ft:query(@nlp:lemma, $query)]");
             builder.AppendLine("for $word in $words");
 
-            builder.AppendLine("let $id := $word/ancestor::tei:TEI/@n");
+            builder.AppendLine("let $id := $word/ancestor-or-self::tei:TEI/@n");
             builder.AppendLine(restrictions);
 
             builder.AppendLine("order by $word");
@@ -180,10 +180,10 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("let $words := collection(\"\")//tei:w[ft:query(., $query)]");
             builder.AppendLine("for $hit in $words");
             builder.AppendLine("let $expanded := kwic:expand($hit/..)");
-            builder.AppendLine("let $title := $hit/ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
-            builder.AppendLine("let $id := $hit/ancestor::tei:TEI/@n");
-            builder.AppendLine("let $author := $hit/ancestor::tei:TEI//tei:author");
-            builder.AppendLine("let $categories := $hit/ancestor::tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:catRef");
+            builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
+            builder.AppendLine("let $id := $hit/ancestor-or-self::tei:TEI/@n");
+            builder.AppendLine("let $author := $hit/ancestor-or-self::tei:TEI//tei:author");
+            builder.AppendLine("let $categories := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:catRef");
             builder.AppendLine(string.Format("let $kwic:= kwic:get-summary($expanded, ($expanded//exist:match), <config width=\"{0}\"/>)", KeyWordValue));
 
             builder.AppendLine(restrictions);
@@ -238,7 +238,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
             AddNamespacesAndCollation(builder);
             builder.AppendLine(string.Format("let $words := collection(\"\")//tei:TEI[@n='{0}']", id));
             builder.AppendLine("for $hit in $words");
-            builder.AppendLine("let $title := $hit/ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
+            builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
             builder.AppendLine("return <title>{$title}</title>");
 
             return builder.ToString();
