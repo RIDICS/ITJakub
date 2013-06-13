@@ -6,45 +6,35 @@
     <ul class="nav@(!string.Equals(Model.CategoryId, "taxonomy-historical_text-medieval_czech") ? " show-categories" : "")">
         @foreach (var child in Model.Children)
         {
-           // Category childAsCat = child as Category;
-           //if (childAsCat != null)
-           //{
-           //    //TODO tady je to kategories childAsCat.HasChildren
-           //}
-           // Book childAsBook = child as Book;
-           // if (childAsBook != null)
-           // {
-           //        //TODO tady je to book (childAsBook.Name....)
-           // }
-          
-            
-                if (child is Category)
-                {
-                    <li data-category-id="@child.Id">
-                        @if (
-                            !string.Equals(child.Id, "taxonomy-dictionary-contemporary") &&
-                            !string.Equals(child.Id, "taxonomy-dictionary-historical") && 
-                            !string.Equals(child.Id, "taxonomy-scholary_text") &&  
-                            !string.Equals(child.Id, "taxonomy-digitized-grammar") && 
-                            !string.Equals(child.Id, "taxonomy-card-index") 
-                            ) {
-                            <i class="icon-chevron-right"></i>
-                        } else {
-                            <i class="icon-chevron-right empty"></i>
-                        }
-                        <label class="checkbox">
-                            <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="category" data-name="@UppercaseFirst(child.Name)" /><span>@UppercaseFirst(child.Name)</span>
-                        </label>
-                    </li>
-                }
-                else
-                {
-                    <li data-book-id="@child.Id">
-                        <label class="checkbox">
-                            <input type="checkbox" name="SearchPart" value="@child.Id" data-id="@child.Id" data-type="book" data-name="@UppercaseFirst(child.Name)" /><span>@UppercaseFirst(child.Name)</span>
-                        </label>
-                    </li>
-                }
+            Category childAsCat = child as Category;
+            if (childAsCat != null)
+            {
+                <li data-category-id="@childAsCat.Id">
+                    @if (childAsCat.HasChildren ||
+                        (!string.Equals(child.Id, "taxonomy-dictionary-contemporary") &&
+                        !string.Equals(child.Id, "taxonomy-dictionary-historical") && 
+                        !string.Equals(child.Id, "taxonomy-scholary_text") &&  
+                        !string.Equals(child.Id, "taxonomy-digitized-grammar") && 
+                        !string.Equals(child.Id, "taxonomy-card-index")))
+                    {
+                        <i class="icon-chevron-right"></i>
+                    } else {
+                        <i class="icon-chevron-right empty"></i>
+                    }
+                    <label class="checkbox">
+                        <input type="checkbox" name="SearchPart" value="@childAsCat.Id" data-id="@childAsCat.Id" data-type="category" data-name="@UppercaseFirst(childAsCat.Name)" /><span>@UppercaseFirst(childAsCat.Name)</span>
+                    </label>
+                </li>
+            }
+            Book childAsBook = child as Book;
+            if (childAsBook != null)
+            {   
+                <li data-book-id="@childAsBook.Id">
+                    <label class="checkbox">
+                        <input type="checkbox" name="SearchPart" value="@childAsBook.Id" data-id="@childAsBook.Id" data-type="book" data-name="@UppercaseFirst(childAsBook.Name)" /><span>@UppercaseFirst(childAsBook.Name)</span>
+                    </label>
+                </li>
+            }
         }
     </ul>
     if (string.Equals(Model.CategoryId, "taxonomy-historical_text-medieval_czech"))
