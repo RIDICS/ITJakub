@@ -22,7 +22,7 @@ namespace ITJakub.Core.Database.Exist
 
         public string GetCustomNamespace()
         {
-            return "http://vokabular.ujc.cas.cz/schema/tei-nlp";
+            return "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
         }
 
         //public string GetTitleXPath()

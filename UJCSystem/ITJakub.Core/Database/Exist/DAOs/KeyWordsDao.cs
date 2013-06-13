@@ -39,7 +39,8 @@ namespace ITJakub.Core.Database.Exist.DAOs
         {
             var restriction = GetRestrictionByBookIds(booksIds);
 
-            string query = GetAllPossibleKeywordsQuery(key, restriction);
+            //string query = GetAllPossibleKeywordsQuery(key, restriction);
+            string query = GetAllPossibleKeyWordsByLemmaAttributeQuery(key, restriction);
 
             string dbResult = ExistDao.QueryXml(query);
             var result = XmlTool.CutElementsText(dbResult, "word");
@@ -129,6 +130,39 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             return builder.ToString();
         }
+
+        private string GetAllPossibleKeyWordsByLemmaAttributeQuery(string input, string restrictions)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            AddNamespacesAndCollation(builder);
+            builder.AppendLine("<words> {");
+
+            builder.AppendLine("for $distinctVal in");
+            builder.AppendLine("distinct-values(<undistinctedValues> {");
+
+            builder.AppendLine("let $query :=");
+            builder.AppendLine("<query>");
+            builder.AppendLine("<bool>");
+            builder.AppendLine(string.Format("<wildcard occur='must'>{0}</wildcard>", input));
+            builder.AppendLine("</bool>");
+            builder.AppendLine("</query>");
+            builder.AppendLine("let $words := collection(\"\")//tei:w[ft:query(@nlp:lemma, $query)]");
+            builder.AppendLine("for $word in $words");
+
+            builder.AppendLine("let $id := $word/ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/@n");
+            builder.AppendLine(restrictions);
+
+            builder.AppendLine("order by $word");
+            builder.AppendLine("return <word>{$word}</word>");
+            builder.AppendLine("} </undistinctedValues>//tei:w)");
+
+            builder.AppendLine("return <word>{$distinctVal}</word>");
+            builder.AppendLine("} </words>");
+
+            return builder.ToString();
+        }
+
 
         private string GetKeyWordInContextQuery(string word, string restrictions)
         {
