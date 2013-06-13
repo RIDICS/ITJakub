@@ -1,8 +1,7 @@
 ﻿$(document).ready(function () {
     rootNode.init();
     
-
-    /*$('.advanced-search-wrapper').advancedSearch();
+    //$('.advanced-search-wrapper').advancedSearch();
     $("#search-results-ordering > ul > li > a[data-toggle=tab]").initLoadingSearchResults();
     $("#search-results-alphabetical a[data-toggle=tab]").initLoadingAlphTermDetail();
     $("#results-type a[data-toggle=tab]").initLoadingTypeTermDetail();
@@ -10,7 +9,7 @@
     history.initHash();
     $(window).on('hashchange', function () {
             history.initHash();
-    });*/
+    });
 });
 
 function isBlankString(str) {
