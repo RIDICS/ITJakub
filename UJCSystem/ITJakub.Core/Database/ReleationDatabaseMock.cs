@@ -89,12 +89,16 @@ namespace ITJakub.Core.Database
                 category.Subitems.Add(new Book { Id = book3Id, Name = bookTitle });
 
 
+            //book in two categories
             string bookId4 = "1A74599E-3A19-44AA-AB1A-EF54077B81DB";
             bookTitle = m_searchClient.GetTitleById(bookId4);
-
+            Book book = new Book {Id = bookId4, Name = bookTitle};
             category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-old_czech") as Category;
             if (category != null)
-                category.Subitems.Add(new Book { Id = bookId4, Name = bookTitle });
+                category.Subitems.Add(book);
+            category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Category;
+            if (category != null)
+                category.Subitems.Add(book);
 
         }
 
