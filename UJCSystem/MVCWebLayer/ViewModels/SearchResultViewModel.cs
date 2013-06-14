@@ -16,6 +16,10 @@ namespace ITJakub.MVCWebLayer.ViewModels
         public SearchResult[] Results { get; set; }
 
         public List<SelectionBase> Categories { get; set; }
+
+        public string SelectedCategoryIds { get; set; }
+
+        public string SelectedBookIds { get; set; }
     }
 
     public class SearchKeyWordsViewModel

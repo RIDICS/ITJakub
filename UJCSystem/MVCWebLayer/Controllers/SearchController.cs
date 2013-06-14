@@ -28,6 +28,8 @@ namespace ITJakub.MVCWebLayer.Controllers
                         },
                     FoundWords = response.FoundTerms,
                     Categories = response.CategoryTree,
+                    SelectedCategoryIds = model.Kategorie,
+                    SelectedBookIds = model.Dila,
                 });
         }
 
