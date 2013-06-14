@@ -3,7 +3,6 @@
            
 @if (Model.Children.Count() > 0)
 {
-    var rand = new Random();
     <ul class="nav@(!string.Equals(Model.CategoryId, "taxonomy-historical_text-medieval_czech") ? " show-categories" : "")">
         @foreach (var child in Model.Children)
         {
@@ -25,10 +24,9 @@
             Book childAsBook = child as Book;
             if (childAsBook != null)
             { 
-                var randid = rand.Next();
-                <li data-book-id="@childAsBook.Id@randid">
+                <li data-book-id="@childAsBook.Id">
                     <label class="checkbox">
-                        <input type="checkbox" name="SearchPart" value="@childAsBook.Id@randid" data-id="@childAsBook.Id@randid" data-type="book" data-name="@UppercaseFirst(childAsBook.Name)" /><span>@UppercaseFirst(childAsBook.Name)</span>
+                        <input type="checkbox" name="SearchPart" value="@childAsBook.Id" data-id="@childAsBook.Id" data-type="book" data-name="@UppercaseFirst(childAsBook.Name)" /><span>@UppercaseFirst(childAsBook.Name)</span>
                     </label>
                 </li>
             }
