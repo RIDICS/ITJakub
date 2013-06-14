@@ -15,31 +15,6 @@
                 <strong>Prohledávaná díla: </strong>
                 <div class="searched-books">
                     <span class="muted">Aktivní prohledávání ve všech dostupných dílech</span>
-                    @*@if (Model.SearchedBooks == null)
-                        {
-                            <span class="muted">Aktivní prohledávání ve všech dostupných dílech</span>
-                        }
-                        else
-                        {
-                            foreach (var item in Model.SearchedBooks)
-                            {
-                                <div class="muted">
-                                    <strong>@item.Categories</strong>
-                                    @if (item.Categories == null || item.Categories.Count == 0)
-                                    {
-                                        <span>@("všechny")</span>
-                                    }
-                                    else
-                                    {
-                                        foreach (var category in item.Categories)
-                                        {
-                                            @category
-                                            @(item.Categories.Last().Equals(category) ? string.Empty : ", ")
-                                        }
-                                    }
-                                </div>
-                            }
-                        }*@
                 </div>
             </div>
             <br/>

@@ -12,6 +12,16 @@
     });
 });
 
+(function ($) {
+    $.fn.moveTo = function (selector) {
+        return this.each(function () {
+            var cl = $(this).clone();
+            $(cl).appendTo(selector);
+            $(this).remove();
+        });
+    };
+})(jQuery);
+
 function isBlankString(str) {
     return (!str || /^\s*$/.test(str));
 }
@@ -450,7 +460,9 @@ var TreeNode = function () {
                     if ($(this).attr("data-name") == selectedName) {
                         $(this).prop("checked", true);
                         $(this).change();
+                        $(this).parent().parent().hide();
                         formEl.parent().find('.selected-categories').append($(this).parent().parent());
+                        $(this).parent().parent().slideDown();
                     }
                 });
                 return false;
@@ -481,7 +493,7 @@ var TreeNode = function () {
         if (mbsel.is("div.category-select")) {
             var movedCheckbox = checkedInputSelector.parent().parent();
             movedCheckbox.slideUp('fast', function () {
-                mbsel.append(movedCheckbox);
+                mbsel.parent().find("> ul").append($(this));
             });
         }
     };
@@ -584,7 +596,7 @@ var TreeNode = function () {
 
     function createCheckedBooksArray() {
         $.each(allNodes, function (index, value) {
-            if (value.selected && value.type == "book" && !allChildrenChecked(value.id)) {
+            if (value.selected && value.type == "book" && !value.parent.selected) {
                 checkedBookNames.push(value.name);
             }
         });
