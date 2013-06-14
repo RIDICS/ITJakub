@@ -15,6 +15,9 @@ namespace ITJakub.MVCWebLayer.Controllers
         [HttpGet]
         public ActionResult Search(SearchViewModel model)
         {
+
+            KeyWordsResponse response = m_resultsProvider.GetSearchResults(model.SearchTerm, ParseParamList(model.Kategorie), ParseParamList(model.Dila));
+
             return View(new SearchResultViewModel
                 {
                     Search = new SearchViewModel
@@ -23,7 +26,8 @@ namespace ITJakub.MVCWebLayer.Controllers
                             Dila = model.Dila,
                             Kategorie = model.Kategorie
                         },
-                    FoundWords = m_resultsProvider.GetSearchResults(model.SearchTerm, ParseParamList(model.Kategorie), ParseParamList(model.Dila)),
+                    FoundWords = response.FoundTerms,
+                    Categories = response.CategoryTree,
                 });
         }
 

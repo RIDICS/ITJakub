@@ -166,5 +166,10 @@ namespace ITJakub.Core.Database
             }
             return result;
         }
+
+        public List<SelectionBase> GetSelectedTreePart(List<string> categorieIds, List<string> booksIds)
+        {
+            return m_rootCategories;
+        }
     }
 }

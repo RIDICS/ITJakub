@@ -13,7 +13,7 @@ namespace ITJakub.Core
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public List<string> GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)
+        public KeyWordsResponse GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)
         {
             try
             {

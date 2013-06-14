@@ -17,10 +17,11 @@ namespace ITJakub.MVCWebLayer.Services
 
 
 
-        public string[] GetSearchResults(string query, List<string> categorieIds, List<string> booksIds)
+        public KeyWordsResponse GetSearchResults(string query, List<string> categorieIds, List<string> booksIds)
         {
-            List<string> result = m_serviceClient.GetAllExtendedTermsForKey(query, categorieIds, booksIds);
-            return result.ToArray();
+            KeyWordsResponse response = m_serviceClient.GetAllExtendedTermsForKey(query, categorieIds, booksIds);
+
+            return response;
         }
 
         public SearchResult[] GetSearchResultsByType(string book, string searchTerm)

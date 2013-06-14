@@ -9,7 +9,7 @@ namespace ITJakub.Contracts
     public interface IItJakubService
     {
         [OperationContract]
-        List<string> GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds);
+        KeyWordsResponse GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds);
 
         [OperationContract]
         SearchResult[] GetContextForKeyWord(string keyWord);

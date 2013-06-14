@@ -1,4 +1,6 @@
-﻿using ITJakub.Contracts.Searching;
+﻿using System.Collections.Generic;
+using ITJakub.Contracts.Categories;
+using ITJakub.Contracts.Searching;
 
 namespace ITJakub.MVCWebLayer.ViewModels
 {
@@ -12,6 +14,8 @@ namespace ITJakub.MVCWebLayer.ViewModels
         public string[] FoundWords { get; set; }
 
         public SearchResult[] Results { get; set; }
+
+        public List<SelectionBase> Categories { get; set; }
     }
 
     public class SearchKeyWordsViewModel

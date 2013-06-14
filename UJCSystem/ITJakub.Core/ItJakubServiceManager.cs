@@ -31,25 +31,39 @@ namespace ITJakub.Core
             return m_releationDatabaseMock.GetRootCategories().ToArray();
         }
 
-        public List<string> GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)
+        public KeyWordsResponse GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)
         {
             if(categorieIds == null)
                 categorieIds = new List<string>();
             if (booksIds == null)
                 booksIds = new List<string>();
 
+            var result = new KeyWordsResponse();
+           
 
             List<string> bookIdsByCategories = m_releationDatabaseMock.GetBookIdsByCategories(categorieIds);
 
             foreach (var bookId in booksIds)
             {
-             if(!bookIdsByCategories.Contains(bookId))   
-                 bookIdsByCategories.Add(bookId);
+                if(!bookIdsByCategories.Contains(bookId))   
+                    bookIdsByCategories.Add(bookId);
             }
 
+            var selectedTreePart = m_releationDatabaseMock.GetSelectedTreePart(categorieIds, booksIds);
+
+
+
+            List<string> keyWords;
             if (bookIdsByCategories.Count == 0)
-                return m_searchClient.AllExtendedTermsForKey(key);
-            return m_searchClient.AllExtendedTermsForKeyWithBooksRestriction(key, bookIdsByCategories);
+                keyWords = m_searchClient.AllExtendedTermsForKey(key);
+            else
+                keyWords = m_searchClient.AllExtendedTermsForKeyWithBooksRestriction(key, bookIdsByCategories);
+
+
+            result.FoundTerms = keyWords.ToArray();
+            result.CategoryTree = selectedTreePart;
+
+            return result;
         }
     }
 }

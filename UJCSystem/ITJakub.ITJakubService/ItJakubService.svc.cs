@@ -20,7 +20,7 @@ namespace ITJakub.ITJakubService
             m_serviceManager = m_container.Resolve<ItJakubServiceManager>();
         }
 
-        public List<string> GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)
+        public KeyWordsResponse GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)
         {
             return m_serviceManager.GetAllExtendedTermsForKey(key, categorieIds, booksIds);
         }
