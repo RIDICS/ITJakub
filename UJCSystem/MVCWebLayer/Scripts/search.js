@@ -449,7 +449,7 @@ var TreeNode = function () {
                 $(this).parent().parent().find('input[type=checkbox]').each(function () {
                     if ($(this).attr("data-name") == selectedName) {
                         $(this).prop("checked", true);
-                        selectedsources.checkCheckboxes($(this));
+                        $(this).change();
                         formEl.parent().find('.selected-categories').append($(this).parent().parent());
                     }
                 });
@@ -462,7 +462,7 @@ var TreeNode = function () {
         var checkedInputSelector = $(checkedInput);
         allNodes[checkedInputSelector.attr("data-id")].selected = true;
         this.apllyCheckRules(checkedInputSelector);
-        //checkedCheckboxes.push(checkedInputSelector.attr("data-id"));
+        
         createCheckedCategoriesArray();
         createCheckedBooksArray();
         $(".advanced-search-wrapper .searched-books").html(getSelectedSourcesHtml());
@@ -472,10 +472,18 @@ var TreeNode = function () {
         var checkedInputSelector = $(checkedInput);
         allNodes[checkedInputSelector.attr("data-id")].selected = false;
         this.apllyUncheckRules(checkedInputSelector);
-        //uncheckedCheckboxes.push(checkedInputSelector.attr("data-id"));
+        
         createCheckedCategoriesArray();
         createCheckedBooksArray();
         $(".advanced-search-wrapper .searched-books").html(getSelectedSourcesHtml());
+
+        var mbsel = checkedInputSelector.parent().parent().parent().parent();
+        if (mbsel.is("div.category-select")) {
+            var movedCheckbox = checkedInputSelector.parent().parent();
+            movedCheckbox.slideUp('fast', function () {
+                mbsel.append(movedCheckbox);
+            });
+        }
     };
 
     this.apllyCheckRules = function (checkedInputSelector) {
@@ -508,10 +516,10 @@ var TreeNode = function () {
     };
 
     function checkParentIfChildrenChecked(checkedInputId) {
-        if (allChildrenChecked(checkedInputId)) {
-            select(allNodes[checkedInputId].parent.id);
-            checkParentIfChildrenChecked(allNodes[checkedInputId].parent.id);
-        }
+            if (allChildrenChecked(checkedInputId)) {
+                select(allNodes[checkedInputId].parent.id);
+                checkParentIfChildrenChecked(allNodes[checkedInputId].parent.id);
+            }
     };
 
     function uncheckAllParents(checkedInputId) {
@@ -576,7 +584,7 @@ var TreeNode = function () {
 
     function createCheckedBooksArray() {
         $.each(allNodes, function (index, value) {
-            if (value.selected && value.type == "book" && !allChildrenChecked(value.parent.id)) {
+            if (value.selected && value.type == "book" && !allChildrenChecked(value.id)) {
                 checkedBookNames.push(value.name);
             }
         });
