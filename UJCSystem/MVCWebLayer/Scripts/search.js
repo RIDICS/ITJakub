@@ -573,6 +573,13 @@ var TreeNode = function () {
             var checkboxSelector = $("input[data-id=" + uncheckedCheckboxes[i] + "]");
             checkboxSelector.prop("checked", false);
             //selectedsources.uncheckCheckboxes(checkboxSelector);
+            var mbsel = checkboxSelector.parent().parent().parent().parent();
+            if (mbsel.is("div.category-select")) {
+                var movedCheckbox = checkboxSelector.parent().parent();
+                movedCheckbox.slideUp('fast', function () {
+                    mbsel.parent().find("> ul").append($(this));
+                });
+            }
         }
         uncheckedCheckboxes = new Array;
     };
