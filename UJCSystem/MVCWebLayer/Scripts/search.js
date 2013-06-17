@@ -436,6 +436,16 @@ var TreeNode = function () {
                 showLevel($(this));
                 currentNode.loadChildTreeHtml($(this).parent(), $(this).parent().attr("data-category-id"));
             });
+
+            var parentCheckbox = inTo.find("> label > input");
+            if (parentCheckbox.is(":checked")) {
+                inTo.find("> ul.nav > li > label > input[type=checkbox]").each(function () {
+                    select($(this).attr("data-id"));
+                });
+                updateCheckboxesView();
+                changeState();
+            }
+            
             inTo.find("> ul.nav > li > label > input[type=checkbox]").change(function () {
                 if ($(this).is(":checked")) {
                     currentNode.checkInput(this);
@@ -469,25 +479,27 @@ var TreeNode = function () {
             });
         });
     };
+    
+    function changeState () {
+        createCheckedCategoriesArray();
+        createCheckedBooksArray();
+        $(".advanced-search-wrapper .searched-books").html(getSelectedSourcesHtml());
+    }
 
     this.checkInput = function (checkedInput) {
         var checkedInputSelector = $(checkedInput);
         allNodes[checkedInputSelector.attr("data-id")].selected = true;
         this.apllyCheckRules(checkedInputSelector);
-        
-        createCheckedCategoriesArray();
-        createCheckedBooksArray();
-        $(".advanced-search-wrapper .searched-books").html(getSelectedSourcesHtml());
+
+        changeState();
     };
 
     this.uncheckInput = function (checkedInput) {
         var checkedInputSelector = $(checkedInput);
         allNodes[checkedInputSelector.attr("data-id")].selected = false;
         this.apllyUncheckRules(checkedInputSelector);
-        
-        createCheckedCategoriesArray();
-        createCheckedBooksArray();
-        $(".advanced-search-wrapper .searched-books").html(getSelectedSourcesHtml());
+
+        changeState();
 
         var mbsel = checkedInputSelector.parent().parent().parent().parent();
         if (mbsel.is("div.category-select")) {
@@ -501,12 +513,12 @@ var TreeNode = function () {
     this.apllyCheckRules = function (checkedInputSelector) {
         checkAllChildren(checkedInputSelector.attr("data-id"));
         checkParentIfChildrenChecked(checkedInputSelector.attr("data-id"));
-        this.updateCheckboxesView();
+        updateCheckboxesView();
     };
 
     this.apllyUncheckRules = function (checkedInputSelector) {
         uncheckAllParents(checkedInputSelector.attr("data-id"));
-        this.updateCheckboxesView();
+        updateCheckboxesView();
     };
 
     function select(checkboxId) {
@@ -541,7 +553,7 @@ var TreeNode = function () {
         }
     };
 
-    this.updateCheckboxesView = function () {
+    function updateCheckboxesView () {
         for (var i = 0; i < checkedCheckboxes.length; i++) {
             var checkboxSelector = $("input[data-id=" + checkedCheckboxes[i] + "]");
             checkboxSelector.prop("checked", true);
