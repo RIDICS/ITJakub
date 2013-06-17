@@ -517,6 +517,7 @@ var TreeNode = function () {
     };
 
     this.apllyUncheckRules = function (checkedInputSelector) {
+        unCheckAllChildren(checkedInputSelector.attr("data-id"));
         uncheckAllParents(checkedInputSelector.attr("data-id"));
         updateCheckboxesView();
     };
@@ -536,6 +537,14 @@ var TreeNode = function () {
             var child = allNodes[checkedInputId].children[i];
             select(child.id);
             checkAllChildren(child.id);
+        }
+    };
+
+    function unCheckAllChildren(checkedInputId) {
+        for (var i = 0; i < allNodes[checkedInputId].children.length; i++) {
+            var child = allNodes[checkedInputId].children[i];
+            deselect(child.id);
+            unCheckAllChildren(child.id);
         }
     };
 
