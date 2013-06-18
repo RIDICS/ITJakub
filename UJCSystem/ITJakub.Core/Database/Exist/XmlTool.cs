@@ -188,5 +188,10 @@ namespace ITJakub.Core.Database.Exist
             }
             return null;
         }
+
+        public static string ParseXmlContext(XmlNode contextNode)
+        {
+            return contextNode.InnerXml;
+        }
     }
 }

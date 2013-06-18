@@ -59,14 +59,14 @@ namespace ITJakub.Core.Database.Exist.DAOs
             return restriction;
         }
 
-        public SearchResult[] GetKeyWordInContextByWord(string word, List<string> booksIds = null)
+        public List<SearchResultWithKwicContext> GetKeyWordInContextByWord(string word, List<string> booksIds = null)
         {
             var restriction = GetRestrictionByBookIds(booksIds);
 
             string query = GetKeyWordInContextQuery(word, restriction);
             string dbResult = ExistDao.QueryXml(query);
 
-            List<SearchResult> results = new List<SearchResult>();
+            List<SearchResultWithKwicContext> results = new List<SearchResultWithKwicContext>();
 
             XmlDocument dbXmlResult = new XmlDocument();
             dbXmlResult.LoadXml(dbResult);
@@ -81,7 +81,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
             if (hits != null)
                 foreach (XmlNode hit in hits)
                 {
-                    SearchResult result = new SearchResult();
+                    SearchResultWithKwicContext result = new SearchResultWithKwicContext();
                     result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//author"), TeiP5Descriptor.AuthorNodeName, nManager);
                     result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
                     result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
@@ -96,7 +96,46 @@ namespace ITJakub.Core.Database.Exist.DAOs
             XmlDocument xmlResult = new XmlDocument();
             xmlResult.LoadXml(dbResult);
 
-            return results.ToArray();
+            return results;
+        }
+
+        public List<SearchResultWithXmlContext> GetXmlContextByWord(string word, List<string> booksIds = null)
+        {
+            var restriction = GetRestrictionByBookIds(booksIds);
+            string query = GetXmlContextForWordQuery(word, restriction);
+            string dbResult = ExistDao.QueryXml(query);
+
+            List<SearchResultWithXmlContext> results = new List<SearchResultWithXmlContext>();
+
+            XmlDocument dbXmlResult = new XmlDocument();
+            dbXmlResult.LoadXml(dbResult);
+
+            XmlNamespaceManager nManager = new XmlNamespaceManager(dbXmlResult.NameTable);
+            foreach (var allNamespace in Descriptor.GetAllNamespaces())
+            {
+                nManager.AddNamespace(allNamespace.Key, allNamespace.Value);
+            }
+
+            XmlNodeList hits = dbXmlResult.SelectNodes("//hit");
+            if (hits != null)
+                foreach (XmlNode hit in hits)
+                {
+                    SearchResultWithXmlContext result = new SearchResultWithXmlContext();
+                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//author"), TeiP5Descriptor.AuthorNodeName, nManager);
+                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
+                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
+                    result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
+                    result.XmlContext = XmlTool.ParseXmlContext(hit.SelectSingleNode("context"));
+                    result.OriginalXml = hit.InnerXml;
+
+                    results.Add(result);
+                }
+
+
+            XmlDocument xmlResult = new XmlDocument();
+            xmlResult.LoadXml(dbResult);
+
+            return results;
         }
 
         private string GetAllPossibleKeywordsQuery(string input, string restrictions)
@@ -204,7 +243,51 @@ namespace ITJakub.Core.Database.Exist.DAOs
             return builder.ToString();
         }
 
-        
+        private string GetXmlContextForWordQuery(string word, string restrictions)
+        {
+            StringBuilder builder = new StringBuilder();
+            AddNamespacesAndCollation(builder);
+
+            builder.AppendLine("import module namespace kwic=\"http://exist-db.org/xquery/kwic\";");
+            builder.AppendLine("<words>{");
+            builder.AppendLine("let $query :=");
+            builder.AppendLine("<query>");
+            builder.AppendLine("<bool>");
+            builder.AppendLine(string.Format("<wildcard occur='must'>{0}</wildcard>", word));
+            builder.AppendLine("</bool>");
+            builder.AppendLine("</query>");
+            builder.AppendLine("let $words := collection(\"\")//tei:w[ft:query(@nlp:lemma, $query)]");
+            builder.AppendLine("for $hit in $words");
+            builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
+            builder.AppendLine("let $id := $hit/ancestor-or-self::tei:TEI/@n");
+            builder.AppendLine("let $author := $hit/ancestor-or-self::tei:TEI//tei:author");
+            builder.AppendLine("let $categories := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:catRef");
+
+            builder.AppendLine("let $context := if ($hit/ancestor::tei:p instance of element(tei:p)) then");
+            builder.AppendLine("$hit/ancestor::tei:p");
+            builder.AppendLine("else if($hit/ancestor::tei:entryFree instance of element(tei:entryFree)) then");
+            builder.AppendLine("$hit/ancestor::tei:entryFree");
+            builder.AppendLine("else");
+            builder.AppendLine("$hit/..");
+
+            builder.AppendLine(restrictions);
+
+            builder.AppendLine("order by $hit");
+            builder.AppendLine("return <hit>");
+            builder.AppendLine("<title>{$title}</title>");
+            builder.AppendLine("<id>{$id}</id>");
+            builder.AppendLine("<author>{$author}</author>");
+            builder.AppendLine("<categories>{$categories}</categories>");
+            builder.AppendLine("<context>{$context}</context>");
+            builder.AppendLine("</hit>");
+            builder.AppendLine();
+            builder.AppendLine("}");
+            builder.AppendLine("</words>");
+
+
+            return builder.ToString();
+        }
+
     }
 
     public class BookDao : ExistDaoBase

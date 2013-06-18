@@ -9,6 +9,7 @@ namespace ITJakub.MVCWebLayer.Services
         KeyWordsResponse GetSearchResults(string searchTerm, List<string> categorieIds, List<string> booksIds);
         SearchResult[] GetSearchResultsByType(string book, string searchTerm);
         SearchResult[] GetKwicForKeyWord(string searchTerm);
+        SearchResult[] GetXmlForKeyWord(string searchTerm);
         SelectionBase[] GetCategoryChildrenById(string categoryId);
         SelectionBase[] GetRootCategories();
     }

@@ -24,6 +24,6 @@ namespace ITJakub.MVCWebLayer.ViewModels
 
     public class SearchKeyWordsViewModel
     {
-        public SearchResult[] Results { get; set; }
+        public SearchResultWithKwicContext[] Results { get; set; }
     }
 }

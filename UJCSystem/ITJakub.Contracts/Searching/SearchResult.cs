@@ -4,6 +4,8 @@ using System.Runtime.Serialization;
 namespace ITJakub.Contracts.Searching
 {
     [DataContract]
+    [KnownType(typeof(SearchResultWithKwicContext))]
+    [KnownType(typeof(SearchResultWithXmlContext))]
     public class SearchResult
     {
         [DataMember]
@@ -16,13 +18,24 @@ namespace ITJakub.Contracts.Searching
         public string Author { get; set; }
 
         [DataMember]
-        public KwicStructure Kwic { get; set; }
-
-        [DataMember]
         public string OriginalXml { get; set; }
 
         [DataMember]
         public List<string> Categories { get; set; }
+    }
+
+    [DataContract]
+    public class SearchResultWithXmlContext:SearchResult
+    {
+        [DataMember]
+        public string XmlContext { get; set; }
+    }
+
+    [DataContract]
+    public class SearchResultWithKwicContext : SearchResult
+    {
+        [DataMember]
+        public KwicStructure Kwic { get; set; }
     }
 
     [DataContract]

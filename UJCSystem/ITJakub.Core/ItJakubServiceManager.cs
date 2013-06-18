@@ -16,7 +16,7 @@ namespace ITJakub.Core
             m_releationDatabaseMock = releationDatabaseMock;
         }
 
-        public SearchResult[] GetContextForKeyWord(string keyWord)
+        public List<SearchResultWithKwicContext> GetContextForKeyWord(string keyWord)
         {
             return m_searchClient.GetContextForKeyWord(keyWord);
         }

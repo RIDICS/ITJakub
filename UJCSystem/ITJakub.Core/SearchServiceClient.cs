@@ -74,11 +74,32 @@ namespace ITJakub.Core
             }
         }
 
-        public SearchResult[] GetContextForKeyWord(string keyWord)
+        public List<SearchResultWithKwicContext> GetKwicContextForKeyWord(string keyWord)
         {
             try
             {
-                return Channel.GetContextForKeyWord(keyWord);
+                return Channel.GetKwicContextForKeyWord(keyWord);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+
+        public List<SearchResultWithXmlContext> GetXmlContextForKeyWord(string keyWord)
+        {
+            try
+            {
+                return Channel.GetXmlContextForKeyWord(keyWord);
             }
             catch (CommunicationException ex)
             {

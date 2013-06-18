@@ -19,9 +19,14 @@ namespace ITJakub.SearchService
             m_searchServiceManager.Search(criteria);
         }
 
-        public SearchResult[] GetContextForKeyWord(string keyWord)
+        public List<SearchResultWithKwicContext> GetKwicContextForKeyWord(string keyWord)
         {
-            return m_searchServiceManager.GetContextForKeyWord(keyWord);
+            return m_searchServiceManager.GetKwicContextForKeyWord(keyWord);
+        }
+
+        public List<SearchResultWithXmlContext> GetXmlContextForKeyWord(string keyWord)
+        {
+            return m_searchServiceManager.GetXmlContextForKeyWord(keyWord);
         }
 
         public string GetTitleById(string id)

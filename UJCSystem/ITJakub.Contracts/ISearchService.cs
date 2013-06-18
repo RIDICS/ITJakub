@@ -11,9 +11,6 @@ namespace ITJakub.Contracts
         void Search(List<SearchCriteriumBase> criteria);
 
         [OperationContract]
-        SearchResult[] GetContextForKeyWord(string keyWord);
-
-        [OperationContract]
         string GetTitleById(string id);
 
         [OperationContract]
@@ -21,5 +18,11 @@ namespace ITJakub.Contracts
 
         [OperationContract]
         List<string> AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds);
+
+        [OperationContract]
+        List<SearchResultWithKwicContext> GetKwicContextForKeyWord(string keyWord);
+
+        [OperationContract]
+        List<SearchResultWithXmlContext> GetXmlContextForKeyWord(string keyWord);
     }
 }

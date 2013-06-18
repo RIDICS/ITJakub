@@ -48,16 +48,30 @@ namespace ITJakub.SearchService
             throw new NotImplementedException();
         }
 
-        public SearchResult[] GetContextForKeyWord(string keyWord)
+        public List<SearchResultWithKwicContext> GetKwicContextForKeyWord(string keyWord)
         {
             var dbResult = m_existWordsDao.GetKeyWordInContextByWord(keyWord);
             return dbResult;
         }
 
 
-        public SearchResult[] GetContextForKeyWord(string keyWord, List<string> booksIds)
+        public List<SearchResultWithKwicContext> GetKwicContextForKeyWord(string keyWord, List<string> booksIds)
         {
             var dbResult = m_existWordsDao.GetKeyWordInContextByWord(keyWord, booksIds);
+            return dbResult;
+        }
+
+
+        public List<SearchResultWithXmlContext> GetXmlContextForKeyWord(string keyWord)
+        {
+            var dbResult = m_existWordsDao.GetXmlContextByWord(keyWord);
+            return dbResult;
+        }
+
+
+        public List<SearchResultWithXmlContext> GetXmlContextForKeyWord(string keyWord, List<string> booksIds)
+        {
+            var dbResult = m_existWordsDao.GetXmlContextByWord(keyWord, booksIds);
             return dbResult;
         }
 

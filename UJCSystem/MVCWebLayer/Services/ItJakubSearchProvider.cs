@@ -40,6 +40,13 @@ namespace ITJakub.MVCWebLayer.Services
             return m_searchResult;
         }
 
+        public SearchResult[] GetXmlForKeyWord(string searchTerm)
+        {
+            if (m_searchResult == null)
+                m_searchResult = m_serviceClient.GetContextForKeyWord(searchTerm);
+            return m_searchResult;
+        }
+
         public SelectionBase[] GetCategoryChildrenById(string categoryId)
         {
             return m_serviceClient.GetCategoryChildrenById(categoryId);
