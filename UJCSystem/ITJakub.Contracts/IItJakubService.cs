@@ -12,10 +12,10 @@ namespace ITJakub.Contracts
         KeyWordsResponse GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds);
 
         [OperationContract]
-        List<SearchResultWithKwicContext> GetContextForKeyWord(string keyWord);
+        List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord);
 
         [OperationContract]
-        SearchResult[] GetResultsByBooks(string book, string keyWord);
+        List<SearchResultWithHtmlContext> GetResultsByBooks(string book, string keyWord);
 
         [OperationContract]
         SelectionBase[] GetCategoryChildrenById(string categoryId);

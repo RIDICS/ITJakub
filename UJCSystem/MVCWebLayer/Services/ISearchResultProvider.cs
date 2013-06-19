@@ -7,9 +7,8 @@ namespace ITJakub.MVCWebLayer.Services
     public interface ISearchResultProvider
     {
         KeyWordsResponse GetSearchResults(string searchTerm, List<string> categorieIds, List<string> booksIds);
-        SearchResult[] GetSearchResultsByType(string book, string searchTerm);
-        SearchResult[] GetKwicForKeyWord(string searchTerm);
-        SearchResult[] GetXmlForKeyWord(string searchTerm);
+        List<SearchResultWithHtmlContext> GetSearchResultsByType(string book, string searchTerm);
+        List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string searchTerm);
         SelectionBase[] GetCategoryChildrenById(string categoryId);
         SelectionBase[] GetRootCategories();
     }

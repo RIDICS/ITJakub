@@ -9,13 +9,12 @@ namespace ITJakub.MVCWebLayer.Services
     {
 
         private readonly ItJakubServiceClient m_serviceClient;
-        private SearchResult[] m_searchResult;
+        private List<SearchResultWithHtmlContext> m_searchResult;
         public ItJakubSearchProvider()
         {
             m_serviceClient = Container.Current.Resolve<ItJakubServiceClient>();
         }
-
-
+        
 
         public KeyWordsResponse GetSearchResults(string query, List<string> categorieIds, List<string> booksIds)
         {
@@ -24,26 +23,18 @@ namespace ITJakub.MVCWebLayer.Services
             return response;
         }
 
-        public SearchResult[] GetSearchResultsByType(string book, string searchTerm)
+        public List<SearchResultWithHtmlContext> GetSearchResultsByType(string book, string searchTerm)
         {
             if (m_searchResult == null)
                 m_searchResult = m_serviceClient.GetResultsByBooks(book, searchTerm);
-
             return m_searchResult;
         }
 
-        public SearchResult[] GetKwicForKeyWord(string searchTerm)
-        {
-            if(m_searchResult == null)
-                m_searchResult = m_serviceClient.GetContextForKeyWord(searchTerm);
 
-            return m_searchResult;
-        }
-
-        public SearchResult[] GetXmlForKeyWord(string searchTerm)
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string searchTerm)
         {
             if (m_searchResult == null)
-                m_searchResult = m_serviceClient.GetContextForKeyWord(searchTerm);
+                m_searchResult = m_serviceClient.GetHtmlContextForKeyWord(searchTerm);
             return m_searchResult;
         }
 

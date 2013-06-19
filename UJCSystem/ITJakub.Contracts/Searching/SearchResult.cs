@@ -6,6 +6,7 @@ namespace ITJakub.Contracts.Searching
     [DataContract]
     [KnownType(typeof(SearchResultWithKwicContext))]
     [KnownType(typeof(SearchResultWithXmlContext))]
+    [KnownType(typeof(SearchResultWithHtmlContext))]
     public class SearchResult
     {
         [DataMember]
@@ -36,6 +37,13 @@ namespace ITJakub.Contracts.Searching
     {
         [DataMember]
         public KwicStructure Kwic { get; set; }
+    }
+
+    [DataContract]
+    public class SearchResultWithHtmlContext:SearchResult
+    {
+        [DataMember]
+        public string HtmlContext { get; set; }
     }
 
     [DataContract]

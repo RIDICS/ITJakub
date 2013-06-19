@@ -33,11 +33,11 @@ namespace ITJakub.Core
             }
         }
 
-        public List<SearchResultWithKwicContext> GetContextForKeyWord(string searchTerm)
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string searchTerm)
         {
             try
             {
-                return Channel.GetContextForKeyWord(searchTerm);
+                return Channel.GetHtmlContextForKeyWord(searchTerm);
             }
             catch (CommunicationException ex)
             {
@@ -53,7 +53,7 @@ namespace ITJakub.Core
             }
         }
 
-        public SearchResult[] GetResultsByBooks(string book, string keyWord)
+        public List<SearchResultWithHtmlContext> GetResultsByBooks(string book, string keyWord)
         {
             try
             {

@@ -16,9 +16,13 @@ namespace ITJakub.Core
             m_releationDatabaseMock = releationDatabaseMock;
         }
 
-        public List<SearchResultWithKwicContext> GetContextForKeyWord(string keyWord)
+        public List<SearchResultWithHtmlContext> GetContextForKeyWord(string keyWord)
         {
-            return m_searchClient.GetContextForKeyWord(keyWord);
+            List<SearchResultWithXmlContext> result = m_searchClient.GetXmlContextForKeyWord(keyWord);
+            //TODO transform here
+
+
+            return new List<SearchResultWithHtmlContext>();
         }
 
         public SelectionBase[] GetCategoryChildrenById(string categoryId)

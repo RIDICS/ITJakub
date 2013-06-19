@@ -1,7 +1,8 @@
 ﻿@model ITJakub.MVCWebLayer.ViewModels.SearchKeyWordsViewModel
 
            
-@*@if (Model.Results.Length > 0)
+@*@if (Model.Results.Count > 0)
+=======
 {
     <div id="dictionary-results-panel">
         @foreach (var result in Model.Results)
@@ -14,9 +15,7 @@
             </h3>
             <blockquote>
                 <p>
-                    @result.Kwic.Before
-                    <strong>@result.Kwic.Match</strong>
-                    @result.Kwic.After
+                    @result.HtmlContext
                 </p>
                 <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@(result.Author.IsEmpty() ? "autor neznámý" : result.Author)</a>)</small>
             </blockquote>
