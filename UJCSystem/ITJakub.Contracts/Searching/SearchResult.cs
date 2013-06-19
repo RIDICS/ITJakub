@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.Contracts.Searching
@@ -7,7 +8,7 @@ namespace ITJakub.Contracts.Searching
     [KnownType(typeof(SearchResultWithKwicContext))]
     [KnownType(typeof(SearchResultWithXmlContext))]
     [KnownType(typeof(SearchResultWithHtmlContext))]
-    public class SearchResult
+    public class SearchResult: ICloneable
     {
         [DataMember]
         public string Title { get; set; }
@@ -23,6 +24,11 @@ namespace ITJakub.Contracts.Searching
 
         [DataMember]
         public List<string> Categories { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 
     [DataContract]

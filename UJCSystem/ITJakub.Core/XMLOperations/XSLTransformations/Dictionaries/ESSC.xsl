@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet 
-    xmlns:xsl="http://www.w3.org/1998/XSL/Transform" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
     xmlns:tei="http://www.tei-c.org/ns/1.0" 
     xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" 

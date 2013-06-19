@@ -2,27 +2,43 @@
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core.Database;
+using ITJakub.Core.XMLOperations;
 
 namespace ITJakub.Core
 {
     public class ItJakubServiceManager
     {
         private readonly ReleationDatabaseMock m_releationDatabaseMock;
+        private readonly XslTransformDirector m_xsltTransformDirector;
         private readonly SearchServiceClient m_searchClient;
 
-        public ItJakubServiceManager(SearchServiceClient searchClient, ReleationDatabaseMock releationDatabaseMock)
+
+        public ItJakubServiceManager(SearchServiceClient searchClient, ReleationDatabaseMock releationDatabaseMock, XslTransformDirector xsltTransformDirector)
         {
             m_searchClient = searchClient;
             m_releationDatabaseMock = releationDatabaseMock;
+            m_xsltTransformDirector = xsltTransformDirector;
         }
 
         public List<SearchResultWithHtmlContext> GetContextForKeyWord(string keyWord)
         {
-            List<SearchResultWithXmlContext> result = m_searchClient.GetXmlContextForKeyWord(keyWord);
+            List<SearchResultWithXmlContext> results = m_searchClient.GetXmlContextForKeyWord(keyWord);
             //TODO transform here
+            List<SearchResultWithHtmlContext> resultWithHtml = new List<SearchResultWithHtmlContext>();
+            foreach (var result in results)
+            {
+                var item = new SearchResultWithHtmlContext();
+                item.Id = result.Id;
+                item.Author = result.Author;
+                item.OriginalXml = result.OriginalXml;
+                item.Title = result.Title;
+                item.Categories = result.Categories;
+                item.HtmlContext = m_xsltTransformDirector.TransformResult(result.XmlContext);
 
+                resultWithHtml.Add(item);
+            }
 
-            return new List<SearchResultWithHtmlContext>();
+            return resultWithHtml;
         }
 
         public SelectionBase[] GetCategoryChildrenById(string categoryId)
