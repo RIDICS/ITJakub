@@ -38,7 +38,7 @@ namespace ITJakub.SearchService
 
         public List<string> AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds)
         {
-            var dbResult = m_existWordsDao.GetAllPossibleKeyWords(key, booksIds);
+            var dbResult = m_existWordsDao.GetAllPossibleKeyWords(key, booksIds);//todo delete toLowercase
             return dbResult;
         }
 
@@ -50,28 +50,28 @@ namespace ITJakub.SearchService
 
         public List<SearchResultWithKwicContext> GetKwicContextForKeyWord(string keyWord)
         {
-            var dbResult = m_existWordsDao.GetKeyWordInContextByWord(keyWord);
+            var dbResult = m_existWordsDao.GetKeyWordInContextByWord(keyWord.ToLowerInvariant());//todo delete toLowercase
             return dbResult;
         }
 
 
         public List<SearchResultWithKwicContext> GetKwicContextForKeyWord(string keyWord, List<string> booksIds)
         {
-            var dbResult = m_existWordsDao.GetKeyWordInContextByWord(keyWord, booksIds);
+            var dbResult = m_existWordsDao.GetKeyWordInContextByWord(keyWord.ToLowerInvariant(), booksIds);//todo delete toLowercase
             return dbResult;
         }
 
 
         public List<SearchResultWithXmlContext> GetXmlContextForKeyWord(string keyWord)
         {
-            var dbResult = m_existWordsDao.GetXmlContextByWord(keyWord);
+            var dbResult = m_existWordsDao.GetXmlContextByWord(keyWord.ToLowerInvariant());//todo delete toLowercase
             return dbResult;
         }
 
 
         public List<SearchResultWithXmlContext> GetXmlContextForKeyWord(string keyWord, List<string> booksIds)
         {
-            var dbResult = m_existWordsDao.GetXmlContextByWord(keyWord, booksIds);
+            var dbResult = m_existWordsDao.GetXmlContextByWord(keyWord.ToLowerInvariant(), booksIds);//todo delete toLowercase
             return dbResult;
         }
 

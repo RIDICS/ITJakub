@@ -1,8 +1,7 @@
 ﻿@model ITJakub.MVCWebLayer.ViewModels.SearchKeyWordsViewModel
 
            
-@*@if (Model.Results.Count > 0)
-=======
+@if (Model.Results.Count > 0)
 {
     <div id="dictionary-results-panel">
         @foreach (var result in Model.Results)
@@ -17,13 +16,13 @@
                 <p>
                     @result.HtmlContext
                 </p>
-                <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@(result.Author.IsEmpty() ? "autor neznámý" : result.Author)</a>)</small>
+                <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@(result.Author)</a>)</small>
             </blockquote>
         }
     </div>
-}*@
+}
 
-<div id="dictionary-results-panel">
+@*<div id="dictionary-results-panel">
     <h3>Slovník - soudobý</h3>
     <blockquote>
         <p><strong>pes(s)ký, adj. psovský</strong>; nešlechetný, hanebný, bídný: peská závist</p>
@@ -82,6 +81,6 @@
         <small><cite title="lístková kartotéka"><a class="muted" href="@Url.RouteUrl("SourcesDetail", new { id = "1-zizka" })">lístková kartotéka</a></cite></small>
     </blockquote>
 </div>
-
+*@
 
 
