@@ -27,7 +27,7 @@ namespace ITJakub.Core
             List<SearchResultWithHtmlContext> resultWithHtml = new List<SearchResultWithHtmlContext>();
             foreach (var result in results)
             {
-                var item = new SearchResultWithHtmlContext();
+                SearchResultWithHtmlContext item = new SearchResultWithHtmlContext();
                 item.Id = result.Id;
                 item.Author = result.Author;
                 item.OriginalXml = result.OriginalXml;
