@@ -14,7 +14,7 @@
             </h3>
             <blockquote>
                 <p>
-                    @result.HtmlContext
+                    @(new HtmlString(result.HtmlContext))
                 </p>
                 <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@(result.Author)</a>)</small>
             </blockquote>
