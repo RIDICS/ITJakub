@@ -2,38 +2,23 @@
 using System.Linq;
 using System.Text;
 using System.Xml;
+using Castle.MicroKernel;
 using ITJakub.Contracts.Searching;
+using ITJakub.Core.XMLOperations;
 
 namespace ITJakub.Core.Database.Exist.DAOs
 {
-    public abstract class ExistDaoBase
-    {
-        protected readonly TeiP5Descriptor Descriptor;
-        protected readonly ExistDao ExistDao;
-
-        protected ExistDaoBase(ExistDao existDao, TeiP5Descriptor descriptor)
-        {
-            ExistDao = existDao;
-            Descriptor = descriptor;
-        }
-
-        protected void AddNamespacesAndCollation(StringBuilder builder)
-        {
-            builder.AppendLine(string.Format("declare default collation \"{0}\";", Descriptor.GetCollation()));
-            foreach (KeyValuePair<string, string> allNamespace in Descriptor.GetAllNamespaces())
-            {
-                builder.AppendLine(string.Format("declare namespace {0} = \"{1}\";", allNamespace.Key, allNamespace.Value));
-            }
-        }
-    }
-
     public class ExistWordsDao : ExistDaoBase
     {
         private const int KeyWordValue = 45;
+        private XslTransformDirector m_xsltTransformer;
 
-        public ExistWordsDao(ExistDao existDao, TeiP5Descriptor descriptor) : base(existDao, descriptor)
+        public ExistWordsDao(IKernel container) : base(container)
         {
+            m_xsltTransformer = container.Resolve<XslTransformDirector>();
         }
+
+        
 
         public List<string> GetAllPossibleKeyWords(string key, List<string> booksIds = null)
         {
@@ -98,7 +83,25 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             return results;
         }
+        public List<SearchResultWithHtmlContext> GetHtmlContextByWord(string word, List<string> bookIds = null)
+        {
+            var restriction = GetRestrictionByBookIds(bookIds);
+            string query = GetXmlContextForWordQuery(word, restriction);
+            string dbResult = ExistDao.QueryXml(query);
 
+            List<SearchResultWithXmlContext> results = new List<SearchResultWithXmlContext>();
+
+            XmlDocument dbXmlResult = new XmlDocument();
+            dbXmlResult.LoadXml(dbResult);
+
+            XmlNamespaceManager nManager = new XmlNamespaceManager(dbXmlResult.NameTable);
+            foreach (var allNamespace in Descriptor.GetAllNamespaces())
+            {
+                nManager.AddNamespace(allNamespace.Key, allNamespace.Value);
+            }
+
+            return ConstructResultsWithHtmlContext(dbXmlResult, nManager);
+        }
         public List<SearchResultWithXmlContext> GetXmlContextByWord(string word, List<string> booksIds = null)
         {
             var restriction = GetRestrictionByBookIds(booksIds);
@@ -116,6 +119,12 @@ namespace ITJakub.Core.Database.Exist.DAOs
                 nManager.AddNamespace(allNamespace.Key, allNamespace.Value);
             }
 
+            return ConstructResultsWithXmlContext(dbXmlResult, nManager);
+        }
+
+        private List<SearchResultWithXmlContext> ConstructResultsWithXmlContext(XmlDocument dbXmlResult, XmlNamespaceManager nManager)
+        {
+            var results = new List<SearchResultWithXmlContext>();
             XmlNodeList hits = dbXmlResult.SelectNodes("//hit");
             if (hits != null)
                 foreach (XmlNode hit in hits)
@@ -126,14 +135,33 @@ namespace ITJakub.Core.Database.Exist.DAOs
                     result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
                     result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
                     result.XmlContext = XmlTool.ParseXmlContext(hit.SelectSingleNode("context"));
-                    result.OriginalXml = hit.InnerXml;
-
                     results.Add(result);
                 }
 
 
-            XmlDocument xmlResult = new XmlDocument();
-            xmlResult.LoadXml(dbResult);
+    
+
+            return results;
+        }
+
+        private List<SearchResultWithHtmlContext> ConstructResultsWithHtmlContext(XmlDocument dbXmlResult, XmlNamespaceManager nManager)
+        {
+            var results = new List<SearchResultWithHtmlContext>();
+            XmlNodeList hits = dbXmlResult.SelectNodes("//hit");
+            if (hits != null)
+                foreach (XmlNode hit in hits)
+                {
+                    SearchResultWithHtmlContext result = new SearchResultWithHtmlContext();
+                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//author"), TeiP5Descriptor.AuthorNodeName, nManager);
+                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
+                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
+                    result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
+
+                    string xmlContext = XmlTool.ParseXmlContext(hit.SelectSingleNode("context"));
+                    result.HtmlContext = m_xsltTransformer.TransformResult(xmlContext);
+
+                    results.Add(result);
+                }
 
             return results;
         }
@@ -288,43 +316,5 @@ namespace ITJakub.Core.Database.Exist.DAOs
             return builder.ToString();
         }
 
-    }
-
-    public class BookDao : ExistDaoBase
-    {
-        public BookDao(ExistDao existDao, TeiP5Descriptor descriptor) : base(existDao, descriptor)
-        {
-        }
-
-        public string GetTitleByBookId(string id)
-        {
-            string query = GetTitleQuery(id);
-            string dbResult = ExistDao.QueryXml(query);
-
-            XmlDocument dbXmlResult = new XmlDocument();
-            dbXmlResult.LoadXml(dbResult);
-
-            XmlNamespaceManager nManager = new XmlNamespaceManager(dbXmlResult.NameTable);
-            foreach (var allNamespace in Descriptor.GetAllNamespaces())
-            {
-                nManager.AddNamespace(allNamespace.Key, allNamespace.Value);
-            }
-
-            var hit = dbXmlResult.SelectSingleNode("//title");
-            string result = XmlTool.ParseTeiTitle(hit, TeiP5Descriptor.TitleNodeName, nManager);
-            return result;
-        }
-
-        private string GetTitleQuery(string id)
-        {
-             StringBuilder builder = new StringBuilder();
-            AddNamespacesAndCollation(builder);
-            builder.AppendLine(string.Format("let $words := collection(\"\")//tei:TEI[@n='{0}']", id));
-            builder.AppendLine("for $hit in $words");
-            builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
-            builder.AppendLine("return <title>{$title}</title>");
-
-            return builder.ToString();
-        }
     }
 }

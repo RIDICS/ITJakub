@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\Exist\BaseXClient.cs" />
+    <Compile Include="Database\Exist\DAOs\BookDao.cs" />
+    <Compile Include="Database\Exist\DAOs\ExistDaoBase.cs" />
     <Compile Include="Database\Exist\DAOs\KeyWordsDao.cs" />
     <Compile Include="Database\Exist\DefaultFilenamesResolver.cs" />
     <Compile Include="Database\Exist\ExistDao.cs" />

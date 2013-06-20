@@ -35,7 +35,6 @@ namespace ITJakub.Core.XMLOperations
 
     public class DictionaryXslt : XslTransformationBase
     {
-
         public override string SourceFile { get { return "D:\\Pool\\ITJakub\\trunk\\UJCSystem\\ITJakub.Core\\XMLOperations\\XSLTransformations\\Dictionaries\\Dictionaries.xsl"; } }
     }
 }

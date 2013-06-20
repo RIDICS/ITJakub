@@ -61,6 +61,12 @@ namespace ITJakub.SearchService
             return dbResult;
         }
 
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord, List<string> booksIds)
+        {
+            var dbResult = m_existWordsDao.GetHtmlContextByWord(keyWord.ToLowerInvariant(), booksIds);//todo delete toLowercase
+            return dbResult;
+        }
+
 
         public List<SearchResultWithXmlContext> GetXmlContextForKeyWord(string keyWord)
         {
