@@ -165,25 +165,25 @@ a {
     padding-top: 20px;
 }
 
-.advanced-search-wrapper .advanced-search ul.nav {
+ul.nav.nav-categories {
     margin-bottom: 10px;        
 }
 
-.advanced-search-wrapper .advanced-search ul.nav li {
+ul.nav.nav-categories li {
     padding-left: 30px;
 }
 
-.advanced-search-wrapper label.checkbox {
+.nav-categories label.checkbox {
     display: inline-block;
 }
 
-.advanced-search-wrapper label.checkbox input {
+.nav-categories label.checkbox input {
     float: none;
     display: inline;
     margin: -3px 5px 0px -10px;
 }
 
-.advanced-search .categories i[class=icon-chevron-right], .advanced-search .categories i[class=icon-chevron-down] {
+.nav-categories i[class=icon-chevron-right], .nav-categories .categories i[class=icon-chevron-down] {
     cursor: pointer;
 }
 
@@ -355,5 +355,19 @@ form.sources-order.form-horizontal.form-horizontal .controls {
 
 
 /* Module search */
+
+
+/* dictonaries.css */
+.entryFree { display:block; text-align: justify; margin-bottom: 1em; }
+span[lang=ger] { font-family: courier, fixed, monospace; }
+span[lang=cze] { font-family: 'Times New Roman', serif; }
+.match { background-color: yellow; }
+.note {display:block; font-size:85%; padding-bottom:0; padding-top:0; }
+.sense {display:block; }
+.senses {display:block; }
+.xr {}
+.etym {display: block;}
+/* dictonaries.css */
+
 
 
