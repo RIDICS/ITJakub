@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Xsl;
 
-namespace ITJakub.Core.XMLOperations
+namespace ITJakub.Xml.XMLOperations
 {
     public abstract class XslTransformationBase
     {

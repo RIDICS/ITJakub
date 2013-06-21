@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ITJakub.Core.XMLOperations
+namespace ITJakub.Xml.XMLOperations
 {
     public class XslTransformDirector
     {

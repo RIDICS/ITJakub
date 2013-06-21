@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.Core.XMLOperations;
 
 namespace ITJakub.Core.Database.Exist.DAOs
 {

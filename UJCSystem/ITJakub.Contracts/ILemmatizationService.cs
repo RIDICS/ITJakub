@@ -5,7 +5,6 @@ namespace ITJakub.Contracts
     [ServiceContract]
     public interface ILemmatizationService
     {
-
         [OperationContract]
         string GetLemma(string word);
 

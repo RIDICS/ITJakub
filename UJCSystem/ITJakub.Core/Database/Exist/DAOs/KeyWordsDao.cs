@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.Contracts.Searching;
-using ITJakub.Core.XMLOperations;
+using ITJakub.Xml.XMLOperations;
 
 namespace ITJakub.Core.Database.Exist.DAOs
 {

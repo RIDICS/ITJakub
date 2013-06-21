@@ -2,7 +2,7 @@
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core.Database;
-using ITJakub.Core.XMLOperations;
+using ITJakub.Xml.XMLOperations;
 
 namespace ITJakub.Core
 {
