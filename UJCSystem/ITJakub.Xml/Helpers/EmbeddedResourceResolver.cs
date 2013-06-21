@@ -23,7 +23,7 @@ namespace ITJakub.Xml.Helpers
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("Getting XSLT Transformation from Embedded resource: {0}", Path.GetFileName(absoluteUri.AbsolutePath));
 
-            return assembly.GetManifestResourceStream(XsltType, Path.GetFileName(absoluteUri.AbsolutePath));
+            return assembly.GetManifestResourceStream(XsltType, Path.GetFileName(absoluteUri.AbsolutePath)) ;
         }
     }
 }
