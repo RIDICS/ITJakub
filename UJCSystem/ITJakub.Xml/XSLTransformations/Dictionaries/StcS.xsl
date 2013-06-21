@@ -7,15 +7,18 @@
     xmlns:exist = "http://exist.sourceforge.net/NS/exist"
     exclude-result-prefixes="xd tei nlp exist"
     version="1.0">
-    
-    <xd:doc scope="stylesheet">
-        <xd:desc>
-            <xd:p><xd:b>Created on:</xd:b> Jun 10, 2013</xd:p>
+    <xd:doc>
+            <xd:p><xd:b>Created on:</xd:b> Jun 21, 2013</xd:p>
             <xd:p><xd:b>Author:</xd:b> Boris Lehečka</xd:p>
-            <xd:p>Šablona pro zobrazení slovníkových hesel v novém Vokabuláři webovém.</xd:p>
-        </xd:desc>
+            <xd:p>Šablona pro transformaci specifických prvkú StčS na HTML</xd:p>
     </xd:doc>
     
-<!--    <xsl:include href="Common/CommonDictionaries.xsl"/>-->
+    <xsl:output method="html"/>
+    
+    <xsl:template match="tei:ref[@type='pram']">
+        <span class="cap">
+            <xsl:apply-templates />
+        </span>
+    </xsl:template>
     
 </xsl:stylesheet>

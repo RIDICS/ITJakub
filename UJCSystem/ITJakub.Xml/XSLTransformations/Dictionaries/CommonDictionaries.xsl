@@ -55,10 +55,14 @@
         </span>
     </xsl:template>
     
-    <xsl:template match="tei:pc | tei:c">
+    <xsl:template match="tei:pc">
         <span data-nlp-type="{name()}">
             <xsl:apply-templates/>
         </span>
+    </xsl:template>
+    
+    <xsl:template match="tei:c[@type='space']">
+        <xsl:text> </xsl:text>
     </xsl:template>
     
     <xsl:template match="tei:num">
@@ -76,5 +80,25 @@
             <xsl:text>[</xsl:text><xsl:value-of select="@n" /><xsl:text>]</xsl:text>
         </span>
     </xsl:template>
+    
+    <xsl:template match="*[@rend]" priority="-1">
+        <span class="{@rend}">
+            <xsl:apply-templates />
+        </span>
+    </xsl:template>
+    
+    <xsl:template match="*[@rend='hidden']" priority="10">
+        <span class="{name()}  {@rend}">
+            <xsl:apply-templates />
+        </span>
+    </xsl:template>
+
+    <xsl:template match="*[@type='hidden']" priority="10">
+        <span class="{name()}  {@type}">
+            <xsl:apply-templates />
+        </span>
+    </xsl:template>
+    
+    
     
 </xsl:stylesheet>

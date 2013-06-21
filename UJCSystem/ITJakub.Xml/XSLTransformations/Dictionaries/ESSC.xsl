@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
@@ -37,7 +38,9 @@
     </xsl:template>
     
     <xsl:template match="tei:abbr[@rend]">
-        <span class="{@rend}"></span>
+        <span class="{@rend}">
+            <xsl:apply-templates />
+        </span>
     </xsl:template>
     
     <xsl:template match="tei:note">
@@ -80,6 +83,12 @@
         <div class="{name()}">
             <xsl:apply-templates />
         </div>
+    </xsl:template>
+    
+    <xsl:template match="tei:form[@type]">
+        <span class="{@type}">
+            <xsl:apply-templates />
+        </span>
     </xsl:template>
     
 </xsl:stylesheet>
