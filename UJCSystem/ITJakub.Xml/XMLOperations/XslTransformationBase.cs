@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Xml;
 using System.Xml.Xsl;
+using ITJakub.Xml.Helpers;
 
 namespace ITJakub.Xml.XMLOperations
 {
@@ -27,15 +28,26 @@ namespace ITJakub.Xml.XMLOperations
 
         protected XslCompiledTransform LoadTransformation()
         {
-            XslCompiledTransform result = new XslCompiledTransform(true);
-            result.Load(SourceFile);
-            return result;
-        }
-    }
+            XslCompiledTransform xslt = new XslCompiledTransform();
+            EmbeddedResourceResolver resolver = new EmbeddedResourceResolver(GetType());
+            xslt.Load(SourceFile, XsltSettings.TrustedXslt, resolver);
 
-    public class DictionaryXslt : XslTransformationBase
-    {
-        //public override string SourceFile { get { return "D:\\Pool\\ITJakub\\trunk\\UJCSystem\\ITJakub.Core\\XMLOperations\\XSLTransformations\\Dictionaries\\Dictionaries.xsl"; } }
-        public override string SourceFile { get { return "assembly://ITJakub.Core/ITJakub.Core.XMLOperations.XSLTransformations.Dictionaries.Dictionaries.xsl"; } }
+            return xslt;
+        }
+
+        //protected XslCompiledTransform LoadTransformation()
+        //{
+
+
+        //    XslCompiledTransform xslt = new XslCompiledTransform();
+        //    EmbeddedResourceResolver resolver = new EmbeddedResourceResolver();
+        //    xslt.Load(SourceFile, XsltSettings.TrustedXslt, resolver);
+
+
+        //    XmlReader xsltReader = XmlReader.Create(GetType().Assembly.GetManifestResourceStream(SourceFile));           
+        //    XslCompiledTransform result = new XslCompiledTransform(true);
+        //    result.Load(xsltReader);
+        //    return result;
+        //}
     }
 }
