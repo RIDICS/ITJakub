@@ -19,7 +19,7 @@
     <xsl:strip-space elements="*"/>
     
     
-    <xsl:include href="Common/CommonDictionaries.xsl"/>
+    <xsl:include href="CommonDictionaries.xsl"/>
     <xsl:include href="DDBW.xsl"/>
     <xsl:include href="ESSC.xsl"/>
     

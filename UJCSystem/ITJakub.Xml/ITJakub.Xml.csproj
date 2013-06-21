@@ -49,14 +49,17 @@
     <Compile Include="XMLOperations\XSLTransformDirector.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="XSLTransformations\Dictionaries\Common\CommonDictionaries.xsl" />
-    <EmbeddedResource Include="XSLTransformations\Dictionaries\Common\CommonExist.xsl" />
+    <EmbeddedResource Include="XSLTransformations\Dictionaries\CommonDictionaries.xsl" />
+    <EmbeddedResource Include="XSLTransformations\Dictionaries\CommonExist.xsl" />
     <EmbeddedResource Include="XSLTransformations\Dictionaries\DDBW.xsl" />
     <EmbeddedResource Include="XSLTransformations\Dictionaries\ESSC.xsl" />
     <EmbeddedResource Include="XSLTransformations\Dictionaries\Dictionaries.xsl" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.Xml.Container.Config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="XSLTransformations\Dictionaries\Common\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
