@@ -2,9 +2,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@model ITJakub.MVCWebLayer.ViewModels.SearchViewModel
+@model ITJakub.MVCWebLayer.ViewModels.SearchResultViewModel
 
-@Html.Partial("~/Views/Shared/_SearchPanel.cshtml", Model)
+@Html.Partial("~/Views/Shared/_SearchPanel.cshtml", Model.Search)
 
 <div class="row-fluid">
     <div class="span8">

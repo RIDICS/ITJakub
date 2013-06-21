@@ -1,9 +1,10 @@
 @using ITJakub.Contracts.Categories
+@using ITJakub.MVCWebLayer.ViewModels
 @model ITJakub.MVCWebLayer.ViewModels.CategoriesViewModel 
            
 @if (Model.Children.Count() > 0)
 {
-    <ul class="nav@(!string.Equals(Model.CategoryId, "taxonomy-historical_text-medieval_czech") ? " show-categories" : "")">
+    <ul class="nav nav-categories @(!string.Equals(Model.CategoryId, "taxonomy-historical_text-medieval_czech") ? " show-categories" : "")">
         @foreach (var child in Model.Children)
         {
             Category childAsCat = child as Category;
@@ -19,6 +20,13 @@
                     <label class="checkbox">
                         <input type="checkbox" name="SearchPart" value="@childAsCat.Id" data-id="@childAsCat.Id" data-type="category" data-name="@UppercaseFirst(childAsCat.Name)" /><span>@UppercaseFirst(childAsCat.Name)</span>
                     </label>
+                    @if (childAsCat.HasChildren && childAsCat.Subitems.Count > 0)
+                    {
+                        CategoriesViewModel children = new CategoriesViewModel();
+                        children.Children = childAsCat.Subitems;
+                        children.CategoryId = childAsCat.Id;
+                        @Html.Partial("~/Views/Search/GetCategoryChildren.cshtml", children)
+                    }
                 </li>
             }
             Book childAsBook = child as Book;

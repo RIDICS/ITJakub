@@ -36,12 +36,12 @@ namespace ITJakub.ITJakubService
             return null;
         }
 
-        public SelectionBase[] GetCategoryChildrenById(string categoryId)
+        public List<SelectionBase> GetCategoryChildrenById(string categoryId)
         {
             return m_serviceManager.GetCategoryChildrenById(categoryId);
         }
 
-        public SelectionBase[] GetRootCategories()
+        public List<SelectionBase> GetRootCategories()
         {
             return m_serviceManager.GetRootCategories();
         }

@@ -41,14 +41,14 @@ namespace ITJakub.Core
             return resultWithHtml;
         }
 
-        public SelectionBase[] GetCategoryChildrenById(string categoryId)
+        public List<SelectionBase> GetCategoryChildrenById(string categoryId)
         {
-            return m_releationDatabaseMock.GetChildren(categoryId).ToArray();
+            return m_releationDatabaseMock.GetChildren(categoryId);
         }
 
-        public SelectionBase[] GetRootCategories()
+        public List<SelectionBase> GetRootCategories()
         {
-            return m_releationDatabaseMock.GetRootCategories().ToArray();
+            return m_releationDatabaseMock.GetRootCategories();
         }
 
         public KeyWordsResponse GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)

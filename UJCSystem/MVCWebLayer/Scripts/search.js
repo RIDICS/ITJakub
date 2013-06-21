@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     rootNode.init();
     
     //$('.advanced-search-wrapper').advancedSearch();
@@ -360,10 +361,24 @@ var TreeNode = function () {
     this.init = function () {
         var currentNode = this;
         $(".advanced-search").hide();
-        currentNode.loadChildTreeHtml($('#search-categories-tree'));
+
+        if ($("#created-searched-tree").length > 0) {
+            $("#search-categories-tree").html("");
+            $("#search-categories-tree").html($("#created-searched-tree").html());
+            $("#created-searched-tree").remove();
+            currentNode.loadedChildTree($('#search-categories-tree'));
+        } else {
+            currentNode.loadChildTreeHtml($('#search-categories-tree'));
+        }
+        
         $('.show-advanced-search').click(function () {
             changeASVisibility($(this).parent().parent());
             $(this).blur();
+        });
+        
+        $(".advanced-search-wrapper form.search-form").submit(function () {
+            window.location.href = $(this).attr("action") + "?searchTerm=" + $(this).find("#search-term").val() + "&" + getUrlCatBookParams();
+            return false;
         });
     };
 
@@ -412,8 +427,120 @@ var TreeNode = function () {
             childrenNode.treeSelector = childrenSelector;
             this.children.push(childrenNode);
             allNodes[childrenNode.id] = childrenNode;
-            childrenNode.initTree(childrenSelector.parent().parent().find("ul.nav"));
+            childrenNode.initTree(childrenSelector.parent().parent().find("> ul.nav"));
         }
+    };
+
+    this.loadedChildTree = function (inTo, noInitTree) {
+        var currentNode = this;
+        
+        inTo.find("> ul.nav.show-categories").slideDown();
+        inTo.find("> div.category-select").slideDown();
+
+        if (!noInitTree) {
+            if (inTo.attr("data-category-id")) {
+                allNodes[inTo.attr("data-category-id")].initTree(inTo.find("> ul.nav"));
+            } else {
+                currentNode.initTree(inTo.find("> ul.nav"));
+            }
+        }
+
+        inTo.find("> ul.nav > li > i[class=icon-chevron-right]").click(function () {
+            showLevel($(this));
+            if ($(this).parent().find("> ul.nav").length > 0) {
+                currentNode.loadedChildTree($(this).parent(), true);
+            } else {
+                currentNode.loadChildTreeHtml($(this).parent(), $(this).parent().attr("data-category-id"));
+            }
+        });
+
+        var parentCheckbox = inTo.find("> label > input");
+        if (parentCheckbox.is(":checked")) {
+            inTo.find("> ul.nav > li > label > input[type=checkbox]").each(function () {
+                select($(this).attr("data-id"));
+            });
+            updateCheckboxesView();
+            changeState();
+        }
+
+        inTo.find("> ul.nav > li > label > input[type=checkbox]").change(function () {
+            if ($(this).is(":checked")) {
+                currentNode.checkInput(this);
+            } else {
+                currentNode.uncheckInput(this);
+            }
+        });
+        
+        inTo.find("> .category-select > form > input[type=text]").typeahead({
+            source: function () {
+                var children = new Array();
+                inTo.find('> .nav > li > label > input[type=checkbox]').each(function () {
+                    children.push($(this).attr('data-name'));
+                });
+                return children;
+            }
+        });
+        inTo.find(".category-select > form").submit(function () {
+            var selectedName = $(this).find('> input[type=text]').val();
+            $(this).find('> input[type=text]').val("");
+            var formEl = $(this);
+            $(this).parent().parent().find('input[type=checkbox]').each(function () {
+                if ($(this).attr("data-name") == selectedName) {
+                    $(this).prop("checked", true);
+                    $(this).change();
+                    $(this).parent().parent().hide();
+                    formEl.parent().find('.selected-categories').append($(this).parent().parent());
+                    $(this).parent().parent().slideDown();
+                }
+            });
+            return false;
+        });
+
+        $.each(loadedCheckedCategories, function (index, value) {
+            var checkedCategorySelector = inTo.find("input[data-id='" + value + "']");
+            if (checkedCategorySelector.length > 0) {
+                checkedCategorySelector.prop("checked", true);
+                allNodes[checkedCategorySelector.attr("data-id")].selected = true;
+                
+                if (checkedCategorySelector.parent().parent().parent().parent().find("> div.category-select").length > 0) {
+                    var movedCheckbox = checkedCategorySelector.parent().parent();
+                    movedCheckbox.parent().parent().find("> div.category-select > ul.nav").append(movedCheckbox);
+                    movedCheckbox.slideDown();
+                    checkedCategorySelector.change(function () {
+                        if ($(this).is(":checked")) {
+                            allNodes[checkedCategorySelector.attr("data-id")].checkInput(this);
+                        } else {
+                            allNodes[checkedCategorySelector.attr("data-id")].uncheckInput(this);
+                        }
+                    });
+                }
+            }
+        });
+
+        $.each(loadedCheckedBook, function (index, value) {
+            var checkedBookSelector = inTo.find("input[data-id='" + value + "']");
+            if (checkedBookSelector.length > 0) {
+                checkedBookSelector.prop("checked", true);
+                allNodes[checkedBookSelector.attr("data-id")].selected = true;
+
+                if (checkedBookSelector.parent().parent().parent().parent().find("> div.category-select").length > 0) {
+                    var movedCheckbox = checkedBookSelector.parent().parent();
+                    movedCheckbox.parent().parent().find("> div.category-select > ul.nav").append(movedCheckbox);
+                    movedCheckbox.slideDown();
+                    checkedBookSelector.change(function () {
+                        if ($(this).is(":checked")) {
+                            allNodes[checkedBookSelector.attr("data-id")].checkInput(this);
+                        } else {
+                            allNodes[checkedBookSelector.attr("data-id")].uncheckInput(this);
+                        }
+                    });
+                }
+            }
+        });
+        
+        createCheckedCategoriesArray();
+        createCheckedBooksArray();
+        $(".searched-books").html(getSelectedSourcesHtml());
     };
 
     this.loadChildTreeHtml = function (inTo, categoryId) {
@@ -424,15 +551,16 @@ var TreeNode = function () {
         var currentNode = this;
         $.get(url, function (data) {
             inTo.append(data);
+
             inTo.find("> ul.nav.show-categories").slideDown();
             inTo.find("div.category-select").slideDown();
-            
+
             if (inTo.attr("data-category-id")) {
                 allNodes[inTo.attr("data-category-id")].initTree(inTo.find("> ul.nav"));
             } else {
                 currentNode.initTree(inTo.find("> ul.nav"));
             }
-            inTo.find("> ul.nav i[class=icon-chevron-right]").click(function() {
+            inTo.find("> ul.nav i[class=icon-chevron-right]").click(function () {
                 showLevel($(this));
                 currentNode.loadChildTreeHtml($(this).parent(), $(this).parent().attr("data-category-id"));
             });
@@ -445,7 +573,7 @@ var TreeNode = function () {
                 updateCheckboxesView();
                 changeState();
             }
-            
+
             inTo.find("> ul.nav > li > label > input[type=checkbox]").change(function () {
                 if ($(this).is(":checked")) {
                     currentNode.checkInput(this);
@@ -607,6 +735,7 @@ var TreeNode = function () {
     };
 
     function createCheckedCategoriesArray() {
+        checkedCategoriesIds = new Array();
         $.each(allNodes, function (index, value) {
             if (value.selected && value.type == "category" && allChildrenUnChecked(value.id)) {
                 var names = new Array;
@@ -619,13 +748,20 @@ var TreeNode = function () {
                 names.reverse();
                 checkedCategoriesNames.push(names.join(" — "));
             }
+            if (value.selected && value.type == "category") {
+                checkedCategoriesIds.push(value.id);
+            }
         });
     };
 
     function createCheckedBooksArray() {
+        checkedBookIds = new Array();
         $.each(allNodes, function (index, value) {
             if (value.selected && value.type == "book" && !value.parent.selected) {
                 checkedBookNames.push(value.name);
+            }
+            if (value.selected && value.type == "book") {
+                checkedBookIds.push(value.id);
             }
         });
     };
@@ -652,6 +788,13 @@ var TreeNode = function () {
             "<strong>Kategorie:</strong> " + categoriesString + "<br>" +
             "<strong>Díla:</strong> " + booksString;
     };
+    
+    function getUrlCatBookParams() {
+        var categoriesString = checkedCategoriesIds.join("+");
+        var booksString = checkedBookIds.join("+");
+        
+        return "kategorie=" + categoriesString + "&dila=" + booksString;
+    };
 
 };
 var rootNode = new TreeNode;
@@ -660,6 +803,10 @@ var checkedCheckboxes = new Array;
 var uncheckedCheckboxes = new Array;
 var checkedCategoriesNames = new Array;
 var checkedBookNames = new Array;
+var checkedCategoriesIds = new Array;
+var checkedBookIds = new Array;
+var loadedCheckedCategories = new Array;
+var loadedCheckedBook = new Array;
 /************************************************************************
  *  Advance search category tree
  ***********************************************************************/

@@ -38,12 +38,12 @@ namespace ITJakub.MVCWebLayer.Services
             return m_searchResult;
         }
 
-        public SelectionBase[] GetCategoryChildrenById(string categoryId)
+        public List<SelectionBase> GetCategoryChildrenById(string categoryId)
         {
             return m_serviceClient.GetCategoryChildrenById(categoryId);
         }
 
-        public SelectionBase[] GetRootCategories()
+        public List<SelectionBase> GetRootCategories()
         {
             return m_serviceClient.GetRootCategories();
         }

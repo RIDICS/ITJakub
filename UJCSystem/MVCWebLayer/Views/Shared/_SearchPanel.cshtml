@@ -3,28 +3,28 @@
 <div class="row-fluid">
     <div class="span12">
         <div class="advanced-search-wrapper">
-    @using (Html.BeginForm("Search", "Search", FormMethod.Get, new { @class = "search-form" }))
-    {
+            @using (Html.BeginForm("Search", "Search", FormMethod.Get, new { @class = "search-form" }))
+            {
                 <div class="input-append search-inputs text-center">
                     @Html.TextBoxFor(a => a.SearchTerm, new { id = "search-term", @class = "input-xxlarge search-term" })
                     <button id="search-submit" type="submit" name="search-submit" class="btn">Vyhledat</button>
                     <button class="btn show-advanced-search" type="button">Upřesnit <span class="caret"></span></button>
                 </div>
-        <div class="advanced-search">
-            <div class="text-left">
-                <strong>Prohledávaná díla: </strong>
-                <div class="searched-books">
-                    <span class="muted">Aktivní prohledávání ve všech dostupných dílech</span>
+                <div class="advanced-search">
+                    <div class="text-left">
+                        <strong>Prohledávaná díla: </strong>
+                        <div class="searched-books">
+                            <span class="muted">Aktivní prohledávání ve všech dostupných dílech</span>
+                        </div>
+                    </div>
+                    <br/>
+                    <h4>Vyberte prohledávaná díla</h4>
+                    <div class="row-fluid">
+                        <div id="search-categories-tree" class="span12 categories" data-categories-url="@Url.RouteUrl("GetCategoryChildren", new { categoryId = "" })"></div>
+                    </div>
                 </div>
-            </div>
-            <br/>
-            <h4>Vyberte prohledávaná díla</h4>
-            <div class="row-fluid">
-                <div id="search-categories-tree" class="span12 categories" data-categories-url="@Url.RouteUrl("GetCategoryChildren", new { categoryId = "" })"></div>
-            </div>
+            }
         </div>
-    }
-</div>
     </div>
 </div>
 

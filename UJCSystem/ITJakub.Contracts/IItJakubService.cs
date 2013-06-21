@@ -18,9 +18,9 @@ namespace ITJakub.Contracts
         List<SearchResultWithHtmlContext> GetResultsByBooks(string book, string keyWord);
 
         [OperationContract]
-        SelectionBase[] GetCategoryChildrenById(string categoryId);
+        List<SelectionBase> GetCategoryChildrenById(string categoryId);
 
         [OperationContract]
-        SelectionBase[] GetRootCategories();
+        List<SelectionBase> GetRootCategories();
     }
 }

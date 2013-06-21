@@ -7,7 +7,7 @@ namespace ITJakub.MVCWebLayer.Controllers
     {
         public ActionResult Index()
         {
-            return View(new SearchViewModel());
+            return View(new SearchResultViewModel());
         }
 
     }

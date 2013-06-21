@@ -29,7 +29,7 @@ namespace ITJakub.Contracts.Categories
         }
 
         [DataMember]
-        public List<SelectionBase> Subitems { get; private set; }
+        public List<SelectionBase> Subitems { get; set; }
 
         [DataMember]
         public CategoryShowType ShowType { get; set; }

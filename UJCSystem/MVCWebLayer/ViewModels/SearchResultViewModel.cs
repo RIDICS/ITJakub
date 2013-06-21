@@ -8,6 +8,7 @@ namespace ITJakub.MVCWebLayer.ViewModels
     {
         public SearchResultViewModel()
         {
+            Search = new SearchViewModel();
         }
 
         public SearchViewModel Search { get; set; }
@@ -17,9 +18,9 @@ namespace ITJakub.MVCWebLayer.ViewModels
 
         public List<SelectionBase> Categories { get; set; }
 
-        public string SelectedCategoryIds { get; set; }
+        public List<string> SelectedCategoryIds { get; set; }
 
-        public string SelectedBookIds { get; set; }
+        public List<string> SelectedBookIds { get; set; }
     }
 
     public class SearchKeyWordsViewModel

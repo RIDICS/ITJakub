@@ -106,9 +106,9 @@ namespace ITJakub.Core.Database
             category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-scholary_text") as Category;
             if (category != null)
                 category.Subitems.Add(book);
-            category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Category;
+            /*category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Category;
             if (category != null)
-                category.Subitems.Add(book);
+                category.Subitems.Add(book);*/
 
 
             //slovniky

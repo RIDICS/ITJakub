@@ -73,7 +73,7 @@ namespace ITJakub.Core
             }
         }
 
-        public SelectionBase[] GetCategoryChildrenById(string categoryId)
+        public List<SelectionBase> GetCategoryChildrenById(string categoryId)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace ITJakub.Core
             }
         }
 
-        public SelectionBase[] GetRootCategories()
+        public List<SelectionBase> GetRootCategories()
         {
             try
             {

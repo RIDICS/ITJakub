@@ -1,4 +1,6 @@
-﻿@using ITJakub.MVCWebLayer.Services
+﻿@using ITJakub.Contracts.Categories
+@using ITJakub.MVCWebLayer.Services
+@using ITJakub.MVCWebLayer.ViewModels
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -10,6 +12,41 @@
 <br>
 
 <h4>Výsledky hledání:</h4>
+
+<br>
+
+<div class="text-left">
+    <strong>Prohledávaná díla: </strong>
+    <div class="searched-books">
+        <span class="muted">Aktivní prohledávání ve všech dostupných dílech</span>
+    </div>
+</div>
+
+<div id="created-searched-tree">
+    @{
+        CategoriesViewModel children = new CategoriesViewModel();
+        children.Children = Model.Categories;
+    }
+    @Html.Partial("~/Views/Search/GetCategoryChildren.cshtml", children)
+</div>
+
+<script>
+    @if (Model.SelectedCategoryIds != null)
+    {
+        foreach (var categoryId in Model.SelectedCategoryIds) {
+            @(new HtmlString("loadedCheckedCategories.push('" + categoryId + "');" + Environment.NewLine))
+        }
+    }
+    @if (Model.SelectedBookIds != null)
+    {
+        foreach (var bookId in Model.SelectedBookIds)
+        {
+            @(new HtmlString("loadedCheckedBook.push('" + bookId + "');" + Environment.NewLine))
+        }
+    }
+</script>
+
+<br><br>
 
 <div class="row-fluid">
     <div class="span12" id="search-results-ordering">
@@ -66,4 +103,5 @@
         </div>
     </div>
 </div>
+
 
