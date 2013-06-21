@@ -54,21 +54,6 @@
     <Compile Include="Searching\SearchCriteriumBase.cs" />
     <Compile Include="Searching\SearchRequest.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="XSLTransformations\Dictionaries\Common\CommonDictionaries.xsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="XSLTransformations\Dictionaries\Common\CommonExist.xsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="XSLTransformations\Dictionaries\DDBW.xsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="XSLTransformations\Dictionaries\ESSC.xsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <EmbeddedResource Include="XSLTransformations\Dictionaries\Dictionaries.xsl" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

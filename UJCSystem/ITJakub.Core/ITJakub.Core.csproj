@@ -69,8 +69,6 @@
     <Compile Include="Searching\CriteriumCompilers\CriteriumCompilerBase.cs" />
     <Compile Include="Searching\CriteriumCompilers\CriteriumCompilerDirector.cs" />
     <Compile Include="SearchServiceClient.cs" />
-    <Compile Include="XMLOperations\XslTransformationBase.cs" />
-    <Compile Include="XMLOperations\XSLTransformDirector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
