@@ -1,4 +1,6 @@
-﻿using IT_Jakub.Views.ApplicationStart;
+﻿using Callisto.Controls;
+using IT_Jakub.Views.ApplicationStart;
+using IT_Jakub.Views.Controls.FlyoutControls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,6 +40,11 @@ namespace IT_Jakub
         /// </summary>
         private static Views.Controls.BottomAppBar staticBottomAppBar;
 
+        /// <summary>
+        /// The error flyout
+        /// </summary>
+        private static Flyout errorFlyout = new Flyout();
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -53,6 +60,19 @@ namespace IT_Jakub
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             rootPage = e.Parameter as Page;
             mainFrame.Navigate(typeof(ApplicationStart));
+        }
+
+        /// <summary>
+        /// Shows the error.
+        /// </summary>
+        /// <param name="title">The title of error.</param>
+        /// <param name="text">The text of error.</param>
+        /// <param name="exceptionMessage">The exception message.</param>
+        public static void showError(string title, string text, string exceptionMessage) {
+            errorFlyout.Content = new ErrorFlyout(title, text + exceptionMessage, errorFlyout);
+            errorFlyout.PlacementTarget = MainPage.getMainFrame();
+            errorFlyout.Placement = PlacementMode.Top;
+            errorFlyout.IsOpen = true;
         }
 
         /// <summary>

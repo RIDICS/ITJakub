@@ -25,10 +25,10 @@
                 <Button x:Name="loginButton" AutomationProperties.Name="Přihlásit se" Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}" Click="loginButton_Click">
                     <Image Source="ms-appx:///Assets/Icons/white/login-512.png" />
                 </Button>
-                <Button x:Name="helpButton" AutomationProperties.Name="Zobrazit nápovědu" Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}">
+                <Button x:Name="helpButton" AutomationProperties.Name="Zobrazit nápovědu" Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}" Click="helpButton_Click">
                     <Image Source="ms-appx:///Assets/Icons/white/info-32.png" />
                 </Button>
-                <Button x:Name="aboutButton" AutomationProperties.Name="O aplikaci" Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}">
+                <Button x:Name="aboutButton" AutomationProperties.Name="O aplikaci" Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}" Click="aboutButton_Click">
                     <Image Source="ms-appx:///Assets/Icons/white/graduation_cap-64.png" />
                 </Button>
                 <Button x:Name="userManagementButton" AutomationProperties.Name="Správa uživatelů"  Height="450" Width="186" Style="{StaticResource ListViewButtonStyle}" Click="userManagement_Click">

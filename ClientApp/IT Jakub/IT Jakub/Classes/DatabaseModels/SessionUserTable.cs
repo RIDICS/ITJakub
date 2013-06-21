@@ -1,11 +1,14 @@
-﻿using IT_Jakub.Classes.Models;
+﻿using Callisto.Controls;
+using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Networking;
+using IT_Jakub.Views.Controls.FlyoutControls;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace IT_Jakub.Classes.DatabaseModels {
     /// <summary>
@@ -35,7 +38,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await sessionUserTable.ToListAsync();
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return null;
             }
             return items;
@@ -51,7 +54,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await sessionUserTable.Where(Item => Item.SessionId == s.Id).ToListAsync();
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return null;
             }
             return items;
@@ -70,7 +73,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     deleteSessionUser(items[i]);
                 }
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return false;
             }
             return true;
@@ -89,7 +92,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 await sessionUserTable.InsertAsync(su);
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return;
             }
         }
@@ -105,12 +108,12 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     try {
                         await sessionUserTable.DeleteAsync(su);
                     } catch (Exception e) {
-                        object o = e;
+                        MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                         return;
                     }
                 }
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return;
             }
         }
@@ -129,7 +132,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     deleteSessionUser(items[i]);
                 }
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return false;
             }
             return true;
@@ -148,7 +151,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     deleteSessionUser(items[i]);
                 }
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return false;
             }
             return true;

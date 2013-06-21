@@ -209,13 +209,17 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
         internal static async void openFile(string uri) {
             RtfFileOpener opener = new RtfFileOpener();
 
-            string source = await opener.openDocumentFromUri(uri.Trim());
-
-            if (source != null) {
-                await ss.sendCommand(CommandBuilder.getOpenBookCommand(source));
-                CommandTable ct = new CommandTable();
-                await ct.removeOldOpenCommands(ss.getSessionData());
+            try {
+                string source = await opener.openDocumentFromUri(uri.Trim());
+                if (source != null) {
+                    await ss.sendCommand(CommandBuilder.getOpenBookCommand(source));
+                    CommandTable ct = new CommandTable();
+                    await ct.removeOldOpenCommands(ss.getSessionData());
+                }
+            } catch (Exception e) {
+                MainPage.showError("Soubor nenalezen !", "Soubor nebyl nalezen, zkontrolujte umístění souboru.\r\n", e.Message);
             }
+            
         }
 
         /// <summary>
@@ -506,9 +510,13 @@ namespace IT_Jakub.Views.EducationalApplications.SynchronizedReading {
             CommandTable ct = new CommandTable();
             while (sendingMoveCommandsAllowed) {
                 if (commandList.Last != null) {
-                    await ss.sendCommand(commandList.Last.Value);
-                    commandList.Clear();
-                    await ct.deletePrevMoveCommands(ss.getSessionData());
+                    try {
+                        await ss.sendCommand(commandList.Last.Value);
+                        commandList.Clear();
+                        await ct.deletePrevMoveCommands(ss.getSessionData());
+                    } catch (Exception e) {
+                        object o = e;
+                    }
                 }
                 await Task.Delay(250);
             }

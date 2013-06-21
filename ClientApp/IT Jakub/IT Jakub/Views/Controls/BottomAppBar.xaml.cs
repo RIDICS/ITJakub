@@ -364,7 +364,7 @@ namespace IT_Jakub.Views.Controls {
         /// </summary>
         private void signInSession() {
             if (selectedSession != null) {
-                if (selectedSession.Password == null) {
+                if (selectedSession.Password.Trim() == "") {
                     ss.register(selectedSession);
                     ss.login();
                 } else {

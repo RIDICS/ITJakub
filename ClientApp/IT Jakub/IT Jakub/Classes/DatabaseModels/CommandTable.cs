@@ -1,6 +1,8 @@
-﻿using IT_Jakub.Classes.Models;
+﻿using Callisto.Controls;
+using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Networking;
 using IT_Jakub.Classes.Utils;
+using IT_Jakub.Views.Controls.FlyoutControls;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
 using System.Collections.Generic;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace IT_Jakub.Classes.DatabaseModels {
 
@@ -50,14 +53,21 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     SessionId = s.Id
                 };
                 await table.InsertAsync(c);
+                int length = commandText.Length;
+                if (length > 45) { length = 45; }
+                string substr = commandText.Substring(0, length);
                 List<Command> command = await table
-                    .Where(Item => Item.CommandText == c.CommandText)
+                    .Where(Item => Item.CommandText.StartsWith(substr))
                     .Where(Item => Item.UserId == c.UserId)
                     .Where(Item => Item.SessionId == c.SessionId).ToListAsync();
                 long id = command[command.Count - 1].Id;
                 return id;
             } catch (Exception e) {
-                object o = e;
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                f.PlacementTarget = MainPage.getMainFrame();
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
                 return -1;
             }
         }
@@ -84,7 +94,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 long id = command[command.Count - 1].Id;
                 return id;
             } catch (Exception e) {
-                object o = e;
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                f.PlacementTarget = MainPage.getMainFrame();
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
                 return -1;
             }
         }
@@ -99,7 +113,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await table.Where(Item => Item.SessionId == s.Id).ToListAsync();
             } catch (Exception e) {
-                object o = e;
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                f.PlacementTarget = MainPage.getMainFrame();
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
                 return null;
             }
             return items;
@@ -114,7 +132,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await table.ToListAsync();
             } catch (Exception e) {
-                object o = e;
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                f.PlacementTarget = MainPage.getMainFrame();
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
                 return null;
             }
             return items;
@@ -132,7 +154,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     try {
                         await table.DeleteAsync(c);
                     } catch (Exception e) {
-                        object o = e;
+                        Flyout f = new Flyout();
+                        f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                        f.PlacementTarget = MainPage.getMainFrame();
+                        f.Placement = PlacementMode.Top;
+                        f.IsOpen = true;
                         return;
                     }
                 }
@@ -155,7 +181,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     deleteCommand(items[i]);
                 }
             } catch (Exception e) {
-                object o = e;
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                f.PlacementTarget = MainPage.getMainFrame();
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
                 return false;
             }
             return true;
@@ -172,7 +202,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await table.Where(Item => Item.SessionId == s.getSessionData().Id).Where(Item => Item.Id > s.getLatestCommandId()).ToListAsync();
             } catch (Exception e) {
-                object o = e;
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                f.PlacementTarget = MainPage.getMainFrame();
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
                 return null;
             }
             return items;
@@ -194,7 +228,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                object o = e;
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                f.PlacementTarget = MainPage.getMainFrame();
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
                 return;
             }
         }
@@ -216,7 +254,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                object o = e;
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                f.PlacementTarget = MainPage.getMainFrame();
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
                 return;
             }
 
@@ -230,7 +272,11 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                object o = e;
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                f.PlacementTarget = MainPage.getMainFrame();
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
                 return;
             }
         }
@@ -251,7 +297,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return;
             }
 
@@ -264,7 +310,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return;
             }
         }
@@ -291,7 +337,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     }
                 }
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return;
             }
         }
@@ -314,7 +360,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                 };
                 await table.UpdateAsync(c);
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return;
             }
         }
@@ -336,7 +382,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     return items[items.Count - 1];
                 }
             } catch (Exception e) {
-
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
             }
             return null;
         }
@@ -356,7 +402,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     return items;
                 }
             } catch (Exception e) {
-
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
             }
             return null;
         }
@@ -378,7 +424,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     return items;
                 }
             } catch (Exception e) {
-
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
             }
             return null;
         }
@@ -398,7 +444,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     return items;
                 }
             } catch (Exception e) {
-
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
             }
             return null;
         }
@@ -419,7 +465,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     return items[items.Count - 1];
                 }
             } catch (Exception e) {
-
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
             }
             return null;
         }

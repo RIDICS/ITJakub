@@ -1,11 +1,14 @@
-﻿using IT_Jakub.Classes.DatabaseModels;
+﻿using Callisto.Controls;
+using IT_Jakub.Classes.DatabaseModels;
 using IT_Jakub.Classes.Networking;
 using IT_Jakub.Classes.Utils;
+using IT_Jakub.Views.Controls.FlyoutControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace IT_Jakub.Classes.Models {
     /// <summary>
@@ -100,11 +103,15 @@ namespace IT_Jakub.Classes.Models {
             sut.loginUserInSession(lu.getUserData(), this.sessionData);
 
             CommandTable ct = new CommandTable();
-            List<Command> items = await ct.getAllSessionCommands(this.sessionData);
-            for (int i = 0; i < items.Count; i++) {
-                await items[i].procedeCommand();
+            try {
+                List<Command> items = await ct.getAllSessionCommands(this.sessionData);
+                for (int i = 0; i < items.Count; i++) {
+                    await items[i].procedeCommand();
+                }
+                await sendCommand(CommandBuilder.getUserLoggedInCommand(lu.getUserData()));
+            } catch (Exception e) {
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
             }
-            await sendCommand(CommandBuilder.getUserLoggedInCommand(lu.getUserData()));
         }
 
         /// <summary>
@@ -149,11 +156,20 @@ namespace IT_Jakub.Classes.Models {
         /// <returns></returns>
         public async Task<long> sendCommand(string commandText) {
             CommandTable ct = new CommandTable();
-            long sentCommandId = await ct.createCommand(sessionData, lu.getUserData(), commandText);
-            if (sentCommandId > latestCommandId) {
-                latestCommandId = sentCommandId;
+            try {
+                long sentCommandId = await ct.createCommand(sessionData, lu.getUserData(), commandText);
+                if (sentCommandId > latestCommandId) {
+                    latestCommandId = sentCommandId;
+                }
+                return sentCommandId;
+            } catch (Exception e) {
+                Flyout f = new Flyout();
+                f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                f.PlacementTarget = MainPage.getMainFrame();
+                f.Placement = PlacementMode.Top;
+                f.IsOpen = true;
+                return -1;
             }
-            return sentCommandId;
         }
 
         /// <summary>

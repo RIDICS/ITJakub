@@ -79,5 +79,13 @@ namespace IT_Jakub.Views.ApplicationStart {
                 }
             }
         }
+
+        private void aboutButton_Click(object sender, RoutedEventArgs e) {
+            this.Frame.Navigate(typeof(About));
+        }
+
+        private void helpButton_Click(object sender, RoutedEventArgs e) {
+            this.Frame.Navigate(typeof(Help));
+        }
     }
 }

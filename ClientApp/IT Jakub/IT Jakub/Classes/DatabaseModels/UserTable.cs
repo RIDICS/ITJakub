@@ -1,11 +1,14 @@
-﻿using IT_Jakub.Classes.Models;
+﻿using Callisto.Controls;
+using IT_Jakub.Classes.Models;
 using IT_Jakub.Classes.Networking;
+using IT_Jakub.Views.Controls.FlyoutControls;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace IT_Jakub.Classes.DatabaseModels {
     /// <summary>
@@ -41,7 +44,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 await userTable.InsertAsync(user);
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return null;
             }
             return user;
@@ -56,7 +59,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await userTable.ToListAsync();
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return null;
             }
             return items;
@@ -72,8 +75,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await userTable.Take(1).Where(userItem => userItem.Username == username).ToListAsync();
             } catch (Exception e) {
-                object o = e;
-                return null;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
             }
             if (items.Count > 0) {
                 return items[0];
@@ -91,8 +93,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await userTable.Take(1).Where(userItem => userItem.Id == id).ToListAsync();
             } catch (Exception e) {
-                object o = e;
-                return null;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
             }
             if (items.Count > 0) {
                 return items[0];
@@ -110,8 +111,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 items = await userTable.Take(1).Where(userItem => userItem.Email == email).ToListAsync();
             } catch (Exception e) {
-                object o = e;
-                return null;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
             }
             if (items.Count > 0) {
                 return items[0];
@@ -131,12 +131,16 @@ namespace IT_Jakub.Classes.DatabaseModels {
                     try {
                         await userTable.DeleteAsync(u);
                     } catch (Exception e) {
-                        object o = e;
+                        Flyout f = new Flyout();
+                        f.Content = new ErrorFlyout("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n" + e.Message, f);
+                        f.PlacementTarget = MainPage.getMainFrame();
+                        f.Placement = PlacementMode.Top;
+                        f.IsOpen = true;
                         return;
                     }
                 }
             } catch (Exception e) {
-                object o = e;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);
                 return;
             }
         }
@@ -151,8 +155,7 @@ namespace IT_Jakub.Classes.DatabaseModels {
             try {
                 await userTable.UpdateAsync(u);
             } catch (Exception e) {
-                object o = e;
-                return;
+                MainPage.showError("Chyba v komunikaci se serverem !", "Nepodařilo se kontaktovat server.\r\nZkontrolujte prosím připojení k internetu a akci opakujte.\r\n", e.Message);               
             }
         }
     }
