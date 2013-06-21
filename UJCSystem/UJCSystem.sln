@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Contracts", "ITJaku
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jewelery", "Jewelery\Jewelery.csproj", "{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Xml", "ITJakub.Xml\ITJakub.Xml.csproj", "{C5A88432-F387-4732-9548-12BBFC4019EB}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -146,6 +148,16 @@ Global
 		{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}.Release|x86.ActiveCfg = Release|Any CPU
+		{C5A88432-F387-4732-9548-12BBFC4019EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5A88432-F387-4732-9548-12BBFC4019EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5A88432-F387-4732-9548-12BBFC4019EB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C5A88432-F387-4732-9548-12BBFC4019EB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C5A88432-F387-4732-9548-12BBFC4019EB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C5A88432-F387-4732-9548-12BBFC4019EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5A88432-F387-4732-9548-12BBFC4019EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5A88432-F387-4732-9548-12BBFC4019EB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C5A88432-F387-4732-9548-12BBFC4019EB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C5A88432-F387-4732-9548-12BBFC4019EB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

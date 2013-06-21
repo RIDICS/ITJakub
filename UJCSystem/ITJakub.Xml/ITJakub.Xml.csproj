@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</ProjectGuid>
+    <ProjectGuid>{C5A88432-F387-4732-9548-12BBFC4019EB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ITJakub.Contracts</RootNamespace>
-    <AssemblyName>ITJakub.Contracts</AssemblyName>
+    <RootNamespace>ITJakub.Xml</RootNamespace>
+    <AssemblyName>ITJakub.Xml</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,8 +32,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,33 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Categories\Book.cs" />
-    <Compile Include="Categories\CategoryShowType.cs" />
-    <Compile Include="Categories\KeyWordsResponse.cs" />
-    <Compile Include="Categories\SelectionBase.cs" />
-    <Compile Include="IItJakubService.cs" />
-    <Compile Include="ILemmatizationService.cs" />
-    <Compile Include="ISearchService.cs" />
-    <Compile Include="Searching\SearchResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Searching\CriteriumTextElement.cs" />
-    <Compile Include="Searching\SearchCriteriumBase.cs" />
-    <Compile Include="Searching\SearchRequest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="XSLTransformations\Dictionaries\Common\CommonDictionaries.xsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="XSLTransformations\Dictionaries\Common\CommonExist.xsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="XSLTransformations\Dictionaries\DDBW.xsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="XSLTransformations\Dictionaries\ESSC.xsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <EmbeddedResource Include="XSLTransformations\Dictionaries\Dictionaries.xsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
