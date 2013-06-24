@@ -21,6 +21,10 @@ namespace ITJakub.MVCWebLayer.ViewModels
         public List<string> SelectedCategoryIds { get; set; }
 
         public List<string> SelectedBookIds { get; set; }
+
+        public string CategoryIds { get; set; }
+
+        public string BookIds { get; set; }
     }
 
     public class SearchKeyWordsViewModel

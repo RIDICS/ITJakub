@@ -33,6 +33,8 @@ namespace ITJakub.MVCWebLayer.Controllers
                     Categories = response.CategoryTree,
                     SelectedCategoryIds = parsedCategories,
                     SelectedBookIds = parsedBooks,
+                    CategoryIds = model.Kategorie,
+                    BookIds = model.Dila,
                 });
         }
 
@@ -66,7 +68,7 @@ namespace ITJakub.MVCWebLayer.Controllers
         }
 
         [HttpGet]
-        public ActionResult Detail(string searchTerm)
+        public ActionResult Detail(string searchTerm, string Kategorie, string Dila)
         {
             return View("Detail", null, new SearchKeyWordsViewModel
                 {
@@ -75,7 +77,7 @@ namespace ITJakub.MVCWebLayer.Controllers
         }
 
         [HttpGet]
-        public ActionResult DetailByType(string category)
+        public ActionResult DetailByType(string category, string Kategorie, string Dila)
         {
             return View("DetailByType", null, category);
         }

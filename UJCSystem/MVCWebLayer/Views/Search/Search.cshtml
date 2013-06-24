@@ -60,7 +60,7 @@
                 <ul class="nav nav-tabs">
                     @foreach (var result in Model.FoundWords)
                     {
-                        <li><a data-toggle="tab" href="#@result" class="search-results-alphabetical-result" data-result="@result" data-url="@Url.RouteUrl("SearchDetail", new { searchTerm = result })" >@result</a></li>
+                        <li><a data-toggle="tab" href="#@result" class="search-results-alphabetical-result" data-result="@result" data-url="@Url.RouteUrl("SearchDetail", new { searchTerm = result })?Kategorie=(@Model.CategoryIds)&Dila=(@Model.BookIds)" >@result</a></li>
                     }
                 </ul>   
                 <div class="tab-content" id="alphabetical-result-detail">
@@ -79,19 +79,19 @@
                             <li><h4>@item.Title</h4></li>
                             @foreach (var category in item.Categories)
                             {
-                                <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { category = "book" @* book pozor na dvojtecku *@ })">@category</a></li>
+                                <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { category = "book" })?Kategorie=(@Model.CategoryIds)&Dila=(@Model.BookIds)">@category</a></li>
                             }
                         </ul>
                     }
                 }
                 <ul class="nav nav-tabs">
                     <li><h4>Slovník - soudobý</h4></li>
-                    <li class="search-item"><a data-toggle="tab" href="#ss1" class="search-results-type-result" data-result="ss1" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss1" })">Malý staročeský slovník (MSS)</a></li>
+                    <li class="search-item"><a data-toggle="tab" href="#ss1" class="search-results-type-result" data-result="ss1" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss1" })?Kategorie=(@Model.CategoryIds)&Dila=(@Model.BookIds)">Malý staročeský slovník (MSS)</a></li>
                     <li><h4>Historický text - staročeský</h4></li>
-                    <li class="search-item"><a data-toggle="tab" href="#ss2" class="search-results-type-result" data-result="ss2" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss2" })">Knížky o řádném mluvení a mlčení</a></li>
-                    <li class="search-item"><a data-toggle="tab" href="#ss3" class="search-results-type-result" data-result="ss3" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss3" })">Slovo do světa stvořenie</a></li>
+                    <li class="search-item"><a data-toggle="tab" href="#ss2" class="search-results-type-result" data-result="ss2" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss2" })?Kategorie=(@Model.CategoryIds)&Dila=(@Model.BookIds)">Knížky o řádném mluvení a mlčení</a></li>
+                    <li class="search-item"><a data-toggle="tab" href="#ss3" class="search-results-type-result" data-result="ss3" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss3" })?Kategorie=(@Model.CategoryIds)&Dila=(@Model.BookIds)">Slovo do světa stvořenie</a></li>
                     <li><h4>Lístková kartotéka</h4></li>
-                    <li class="search-item"><a data-toggle="tab" href="#ss4" class="search-results-type-result" data-result="ss4" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss4" })">Lístková kartotéka Jana Gebauera</a></li>
+                    <li class="search-item"><a data-toggle="tab" href="#ss4" class="search-results-type-result" data-result="ss4" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss4" })?Kategorie=(@Model.CategoryIds)&Dila=(@Model.BookIds)">Lístková kartotéka Jana Gebauera</a></li>
                 </ul>
                 <div class="tab-content" id="type-result-detail">
                     <div class="tab-pane" id="ss1"></div>
