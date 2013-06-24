@@ -18,7 +18,7 @@ namespace ITJakub.Xml.XMLOperations
         {
             //todo loading by attribute
             m_transformations.Add(new UniversalXslt());
-            m_transformations.Add(new DictionaryXslt());
+            //m_transformations.Add(new DictionaryXslt());
         }
 
         public string TransformResult(string xmlContext, string searchedTerm)
