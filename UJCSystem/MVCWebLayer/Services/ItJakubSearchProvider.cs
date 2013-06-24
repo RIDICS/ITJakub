@@ -31,10 +31,10 @@ namespace ITJakub.MVCWebLayer.Services
         }
 
 
-        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string searchTerm)
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string searchTerm, List<string> categorieIds, List<string> booksIds)
         {
             if (m_searchResult == null)
-                m_searchResult = m_serviceClient.GetHtmlContextForKeyWord(searchTerm);
+                m_searchResult = m_serviceClient.GetHtmlContextForKeyWord(searchTerm, categorieIds, booksIds);
             return m_searchResult;
         }
 

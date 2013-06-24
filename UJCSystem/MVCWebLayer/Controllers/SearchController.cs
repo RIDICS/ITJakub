@@ -72,7 +72,7 @@ namespace ITJakub.MVCWebLayer.Controllers
         {
             return View("Detail", null, new SearchKeyWordsViewModel
                 {
-                    Results = m_resultsProvider.GetHtmlContextForKeyWord(searchTerm)
+                    Results = m_resultsProvider.GetHtmlContextForKeyWord(searchTerm, ParseParamList(Kategorie), ParseParamList(Dila))
                 });
         }
 
