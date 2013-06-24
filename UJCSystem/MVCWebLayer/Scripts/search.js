@@ -678,15 +678,19 @@ var TreeNode = function () {
 
     function checkParentIfChildrenChecked(checkedInputId) {
             if (allChildrenChecked(checkedInputId)) {
-                select(allNodes[checkedInputId].parent.id);
-                checkParentIfChildrenChecked(allNodes[checkedInputId].parent.id);
+                if (allNodes[checkedInputId].parent.id) {
+                    select(allNodes[checkedInputId].parent.id);
+                    checkParentIfChildrenChecked(allNodes[checkedInputId].parent.id);
+                }
             }
     };
 
     function uncheckAllParents(checkedInputId) {
         if (allNodes[checkedInputId] && allNodes[checkedInputId].parent.id != null) {
-            deselect(allNodes[checkedInputId].parent.id);
-            uncheckAllParents(allNodes[checkedInputId].parent.id);
+            if (allNodes[checkedInputId].parent.id) {
+                deselect(allNodes[checkedInputId].parent.id);
+                uncheckAllParents(allNodes[checkedInputId].parent.id);
+            }
         }
     };
 
