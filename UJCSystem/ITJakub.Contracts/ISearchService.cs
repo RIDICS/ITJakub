@@ -24,5 +24,11 @@ namespace ITJakub.Contracts
 
         [OperationContract]
         List<SearchResultWithXmlContext> GetXmlContextForKeyWord(string keyWord);
+
+        [OperationContract]
+        List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord);
+
+        [OperationContract]
+        List<SearchResultWithHtmlContext> GetHtmlContextForKeyWordWithBooksRestriction(string keyWord, List<string> bookIds);
     }
 }

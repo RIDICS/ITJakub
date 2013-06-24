@@ -43,7 +43,7 @@
         </span>
     </xsl:template>
     
-    <xsl:template match="tei:note">
+    <xsl:template match="tei:entryFree/tei:note" priority="20">
         <div class="{name()}">
             <xsl:apply-templates />
         </div>

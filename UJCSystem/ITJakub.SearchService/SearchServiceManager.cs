@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using ITJakub.Contracts;
 using ITJakub.Contracts.Searching;
-using ITJakub.Core;
 using ITJakub.Core.Database.Exist;
 using ITJakub.Core.Database.Exist.DAOs;
-using ITJakub.Core.Searching;
-using Ujc.Naki.DataLayer;
-using IFilenamesResolver = ITJakub.Core.Database.Exist.IFilenamesResolver;
-using System.Linq;
 
 namespace ITJakub.SearchService
 {
@@ -20,6 +14,7 @@ namespace ITJakub.SearchService
         private readonly IFilenamesResolver m_fileNameResolver;
         private readonly TeiP5Descriptor m_xmlFormatDescriptor;
         private readonly BookDao m_bookDao;
+        //private readonly XSLTransformDirector m_xsltDirector;
 
 
         public SearchServiceManager(IFilenamesResolver fileNameResolver, TeiP5Descriptor xmlFormatDescriptor)
@@ -28,6 +23,7 @@ namespace ITJakub.SearchService
             m_xmlFormatDescriptor = xmlFormatDescriptor;
             m_existWordsDao = Container.Current.Resolve<ExistWordsDao>();
             m_bookDao = Container.Current.Resolve<BookDao>();
+            //m_xsltDirector = Container.Current.Resolve<XSLTransformDirector>();
         }
 
         public List<string> AllExtendedTermsForKey(string key)
@@ -71,6 +67,18 @@ namespace ITJakub.SearchService
         public List<SearchResultWithXmlContext> GetXmlContextForKeyWord(string keyWord)
         {
             var dbResult = m_existWordsDao.GetXmlContextByWord(keyWord.ToLowerInvariant());//todo delete toLowercase
+            return dbResult;
+        }
+
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord)
+        {
+            var dbResult = m_existWordsDao.GetHtmlContextByWord(keyWord.ToLowerInvariant());//todo delete toLowercase
+            return dbResult;
+        }
+
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWordWithBooksRestriction(string keyWord, List<string> bookIds)
+        {
+            var dbResult = m_existWordsDao.GetHtmlContextByWord(keyWord.ToLowerInvariant(), bookIds);//todo delete toLowercase
             return dbResult;
         }
 

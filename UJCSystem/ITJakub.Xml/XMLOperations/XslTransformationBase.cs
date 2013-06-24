@@ -16,14 +16,23 @@ namespace ITJakub.Xml.XMLOperations
         protected XslCompiledTransform InnerTransformation { get; private set; }
 
 
-        public string Transform(string xml)
+        public string Transform(string xml, string searchedTerm)
         {
+            var arguments = GetArgumentList(searchedTerm);
             StringWriter writer = new StringWriter();
             XmlReader xmlReadB = new XmlTextReader(new StringReader(xml));
 
-            InnerTransformation.Transform(xmlReadB, null, writer);
+            InnerTransformation.Transform(xmlReadB, arguments, writer);
 
             return writer.ToString();
+        }
+
+        private XsltArgumentList GetArgumentList(string searchedTerm)
+        {
+            XsltArgumentList argsList = new XsltArgumentList();
+            argsList.AddParam("searchedLemma", "", searchedTerm);
+
+            return argsList;
         }
 
         protected XslCompiledTransform LoadTransformation()

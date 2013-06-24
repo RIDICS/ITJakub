@@ -89,8 +89,6 @@ namespace ITJakub.Core.Database.Exist.DAOs
             string query = GetXmlContextForWordQuery(word, restriction);
             string dbResult = ExistDao.QueryXml(query);
 
-            List<SearchResultWithXmlContext> results = new List<SearchResultWithXmlContext>();
-
             XmlDocument dbXmlResult = new XmlDocument();
             dbXmlResult.LoadXml(dbResult);
 
@@ -100,7 +98,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
                 nManager.AddNamespace(allNamespace.Key, allNamespace.Value);
             }
 
-            return ConstructResultsWithHtmlContext(dbXmlResult, nManager);
+            return ConstructResultsWithHtmlContext(dbXmlResult, nManager, word);
         }
         public List<SearchResultWithXmlContext> GetXmlContextByWord(string word, List<string> booksIds = null)
         {
@@ -138,15 +136,12 @@ namespace ITJakub.Core.Database.Exist.DAOs
                     results.Add(result);
                 }
 
-
-    
-
             return results;
         }
 
-        private List<SearchResultWithHtmlContext> ConstructResultsWithHtmlContext(XmlDocument dbXmlResult, XmlNamespaceManager nManager)
+        private List<SearchResultWithHtmlContext> ConstructResultsWithHtmlContext(XmlDocument dbXmlResult, XmlNamespaceManager nManager, string searchedTerm)
         {
-            var results = new List<SearchResultWithHtmlContext>();
+            List<SearchResultWithHtmlContext> results = new List<SearchResultWithHtmlContext>();
             XmlNodeList hits = dbXmlResult.SelectNodes("//hit");
             if (hits != null)
                 foreach (XmlNode hit in hits)
@@ -158,7 +153,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
                     result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
 
                     string xmlContext = XmlTool.ParseXmlContext(hit.SelectSingleNode("context"));
-                    result.HtmlContext = m_xsltTransformer.TransformResult(xmlContext);
+                    result.HtmlContext = m_xsltTransformer.TransformResult(xmlContext, searchedTerm);
 
                     results.Add(result);
                 }

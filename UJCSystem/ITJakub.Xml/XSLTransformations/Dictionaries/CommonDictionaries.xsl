@@ -19,6 +19,8 @@
     <xsl:output method="html"/>
     
     <xsl:include href="CommonExist.xsl"/>
+    <xsl:include href="CommonTEI.xsl"/>
+    
     
     <xsl:template match="tei:entryFree">
         <div class="entryFree">
@@ -49,21 +51,7 @@
         </span>
     </xsl:template>
     
-    <xsl:template match="tei:w">
-        <span data-nlp-type="{name()}" data-nlp-lemma="{@nlp:lemma}">
-            <xsl:apply-templates/>
-        </span>
-    </xsl:template>
     
-    <xsl:template match="tei:pc">
-        <span data-nlp-type="{name()}">
-            <xsl:apply-templates/>
-        </span>
-    </xsl:template>
-    
-    <xsl:template match="tei:c[@type='space']">
-        <xsl:text> </xsl:text>
-    </xsl:template>
     
     <xsl:template match="tei:num">
         <xsl:apply-templates/>
@@ -72,30 +60,6 @@
     <xsl:template match="tei:cit">
         <span lang="{@xml:lang}" data-orth-type="{@type}">
             <xsl:apply-templates/>
-        </span>
-    </xsl:template>
-    
-    <xsl:template match="tei:pb">
-        <span class="pb">
-            <xsl:text>[</xsl:text><xsl:value-of select="@n" /><xsl:text>]</xsl:text>
-        </span>
-    </xsl:template>
-    
-    <xsl:template match="*[@rend]" priority="-1">
-        <span class="{@rend}">
-            <xsl:apply-templates />
-        </span>
-    </xsl:template>
-    
-    <xsl:template match="*[@rend='hidden']" priority="10">
-        <span class="{name()}  {@rend}">
-            <xsl:apply-templates />
-        </span>
-    </xsl:template>
-
-    <xsl:template match="*[@type='hidden']" priority="10">
-        <span class="{name()}  {@type}">
-            <xsl:apply-templates />
         </span>
     </xsl:template>
     

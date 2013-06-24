@@ -65,6 +65,11 @@
     <EmbeddedResource Include="XSLTransformations\Dictionaries\Html.xsl" />
     <EmbeddedResource Include="XSLTransformations\Dictionaries\StcS.xsl" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="XSLTransformations\Dictionaries\CommonTEI.xsl" />
+    <Content Include="XSLTransformations\Dictionaries\Texts.xsl" />
+    <Content Include="XSLTransformations\Dictionaries\TextsAndDictionaries.xsl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

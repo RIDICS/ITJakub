@@ -29,6 +29,16 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetXmlContextForKeyWord(keyWord);
         }
 
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord)
+        {
+            return m_searchServiceManager.GetHtmlContextForKeyWord(keyWord);
+        }
+
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWordWithBooksRestriction(string keyWord, List<string> bookIds)
+        {
+            return m_searchServiceManager.GetHtmlContextForKeyWord(keyWord, bookIds);
+        }
+
         public string GetTitleById(string id)
         {
             return m_searchServiceManager.GetTitleById(id);

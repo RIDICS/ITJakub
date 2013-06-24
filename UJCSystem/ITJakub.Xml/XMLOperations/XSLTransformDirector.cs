@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using ITJakub.Xml.XSLTransformations.Dictionaries;
 
 namespace ITJakub.Xml.XMLOperations
@@ -16,13 +17,14 @@ namespace ITJakub.Xml.XMLOperations
         private void LoadTransformations()
         {
             //todo loading by attribute
+            m_transformations.Add(new UniversalXslt());
             m_transformations.Add(new DictionaryXslt());
         }
 
-        public string TransformResult(string xmlContext)
+        public string TransformResult(string xmlContext, string searchedTerm)
         {
             //todo transformation selection
-           return m_transformations.First().Transform(xmlContext);
+           return m_transformations.First().Transform(xmlContext, searchedTerm);
         }
     }
 }

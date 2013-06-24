@@ -33,11 +33,13 @@ namespace ITJakub.Core
             }
         }
 
-        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string searchTerm)
+
+
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord, List<string> categorieIds, List<string> booksIds)
         {
             try
             {
-                return Channel.GetHtmlContextForKeyWord(searchTerm);
+                return Channel.GetHtmlContextForKeyWord(keyWord, categorieIds, booksIds);
             }
             catch (CommunicationException ex)
             {

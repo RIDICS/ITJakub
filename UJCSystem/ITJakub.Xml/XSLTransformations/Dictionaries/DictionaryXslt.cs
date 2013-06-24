@@ -6,4 +6,12 @@ namespace ITJakub.Xml.XSLTransformations.Dictionaries
     {
         public override string SourceFile { get { return "Dictionaries.xsl"; } }
     }
+
+    public class UniversalXslt : XslTransformationBase
+    {
+        public override string SourceFile
+        {
+            get { return "TextsAndDictionaries.xsl"; }
+        }
+    }
 }

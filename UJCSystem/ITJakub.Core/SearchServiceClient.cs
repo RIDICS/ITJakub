@@ -115,6 +115,46 @@ namespace ITJakub.Core
             }
         }
 
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord)
+        {
+            try
+            {
+                return Channel.GetHtmlContextForKeyWord(keyWord);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWordWithBooksRestriction(string keyWord, List<string> bookIds)
+        {
+            try
+            {
+                return Channel.GetHtmlContextForKeyWordWithBooksRestriction(keyWord, bookIds);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
         public string GetTitleById(string id)
         {
             try
@@ -134,5 +174,7 @@ namespace ITJakub.Core
                 throw;
             }
         }
+
+       
     }
 }

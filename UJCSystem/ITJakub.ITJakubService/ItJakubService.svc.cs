@@ -25,9 +25,10 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.GetAllExtendedTermsForKey(key, categorieIds, booksIds);
         }
 
-        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord)
+
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord, List<string> categorieIds, List<string> booksIds)
         {
-            return m_serviceManager.GetContextForKeyWord(keyWord);
+            return m_serviceManager.GetContextForKeyWord(keyWord, categorieIds, booksIds);
         }
 
         public List<SearchResultWithHtmlContext> GetResultsByBooks(string book, string keyWord)
