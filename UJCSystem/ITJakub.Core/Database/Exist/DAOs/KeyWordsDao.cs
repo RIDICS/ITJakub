@@ -22,12 +22,18 @@ namespace ITJakub.Core.Database.Exist.DAOs
         public List<string> GetAllPossibleKeyWords(string key, List<string> booksIds = null)
         {
             var restriction = GetRestrictionByBookIds(booksIds);
-
-            //string query = GetAllPossibleKeywordsQuery(key, restriction);
             string query = GetAllPossibleKeyWordsByLemmaAttributeQuery(key, restriction);
-
             string dbResult = ExistDao.QueryXml(query);
             var result = XmlTool.CutElementsText(dbResult, "word");
+            return result.ToList();
+        }
+
+        public List<string> GetAllPossibleIds(string key, List<string> bookIds = null)
+        {
+            var restrictions = GetRestrictionByBookIds(bookIds);
+            string query = GetAllPossibleIdsByLemmaAttributeQuery(key, restrictions);
+            string dbResult = ExistDao.QueryXml(query);
+            var result = XmlTool.CutElementsText(dbResult, "id");
             return result.ToList();
         }
 
@@ -154,8 +160,8 @@ namespace ITJakub.Core.Database.Exist.DAOs
                     result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
 
                     string xmlContext = XmlTool.ParseXmlContext(hit.SelectSingleNode("context"));
-                   // result.HtmlContext = m_xsltTransformer.TransformResult(xmlContext, searchedTerm);//todo parse only hit.SelectSingleNode
-                   result.HtmlContext = m_xsltTransformer.TransformResult(hit.OuterXml, searchedTerm);//todo parse only hit.SelectSingleNode
+                    // result.HtmlContext = m_xsltTransformer.TransformResult(xmlContext, searchedTerm);//todo parse only hit.SelectSingleNode
+                    result.HtmlContext = m_xsltTransformer.TransformResult(hit.OuterXml, searchedTerm); //todo parse only hit.SelectSingleNode
 
                     results.Add(result);
                 }
@@ -223,6 +229,33 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             builder.AppendLine("return <word>{$distinctVal}</word>");
             builder.AppendLine("} </words>");
+
+            return builder.ToString();
+        }
+
+
+        public string GetAllPossibleIdsByLemmaAttributeQuery(string input, string restrictions)
+        {
+            StringBuilder builder = new StringBuilder();
+            AddNamespacesAndCollation(builder);
+            builder.AppendLine("<ids> {");
+            builder.AppendLine("for $distinctVal in distinct-values(<undistinctedValues> {");
+            builder.AppendLine("let $query :=");
+            builder.AppendLine("<query>");
+            builder.AppendLine("<bool>");
+            builder.AppendLine(string.Format("<wildcard occur='must'>{0}</wildcard>", input));
+            builder.AppendLine("</bool>");
+            builder.AppendLine("</query>");
+            builder.AppendLine("let $words := collection(\"\")//tei:w[ft:query(@nlp:lemma, $query)]");
+            builder.AppendLine("for $word in $words");
+            builder.AppendLine("let $id := $word/ancestor-or-self::tei:TEI/@n");
+            builder.AppendLine(restrictions);
+            builder.AppendLine("return <id>{$id}</id>");
+            builder.AppendLine("} ");
+            builder.AppendLine("</undistinctedValues>//@n)");
+            builder.AppendLine("return <id>{$distinctVal}</id>");
+            builder.AppendLine("} </ids>");
+
 
             return builder.ToString();
         }

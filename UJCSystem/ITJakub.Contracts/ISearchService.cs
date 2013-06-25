@@ -14,10 +14,10 @@ namespace ITJakub.Contracts
         string GetTitleById(string id);
 
         [OperationContract]
-        List<string> AllExtendedTermsForKey(string key);
+        SearchTermPossibleResult AllExtendedTermsForKey(string key);
 
         [OperationContract]
-        List<string> AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds);
+        SearchTermPossibleResult AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds);
 
         [OperationContract]
         List<SearchResultWithKwicContext> GetKwicContextForKeyWord(string keyWord);

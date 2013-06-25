@@ -26,17 +26,24 @@ namespace ITJakub.SearchService
             //m_xsltDirector = Container.Current.Resolve<XSLTransformDirector>();
         }
 
-        public List<string> AllExtendedTermsForKey(string key)
+        public SearchTermPossibleResult AllExtendedTermsForKey(string key)
         {
-            var dbResult = m_existWordsDao.GetAllPossibleKeyWords(key);
-            return dbResult;
+            var words = m_existWordsDao.GetAllPossibleKeyWords(key);
+            var ids = m_existWordsDao.GetAllPossibleIds(key);
+
+
+            return new SearchTermPossibleResult {AllPossibleTerms = words, AllPossibleBookIds = ids};
         }
 
-        public List<string> AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds)
+        public SearchTermPossibleResult AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds)
         {
-            var dbResult = m_existWordsDao.GetAllPossibleKeyWords(key, booksIds);//todo delete toLowercase
-            return dbResult;
+            var words = m_existWordsDao.GetAllPossibleKeyWords(key, booksIds);
+            var ids = m_existWordsDao.GetAllPossibleIds(key, booksIds);
+
+
+            return new SearchTermPossibleResult { AllPossibleTerms = words, AllPossibleBookIds = ids };
         }
+
 
         public void Search(List<SearchCriteriumBase> criteria)
         {

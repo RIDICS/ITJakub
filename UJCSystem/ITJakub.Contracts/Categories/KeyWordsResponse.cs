@@ -7,7 +7,10 @@ namespace ITJakub.Contracts.Categories
     public class KeyWordsResponse
     {
         [DataMember]
-        public string[] FoundTerms { get; set; }
+        public List<string> FoundTerms { get; set; }
+
+        [DataMember]
+        public List<Book> FoundInBooks { get; set; }
 
         [DataMember]
         public List<SelectionBase> CategoryTree { get; set; }

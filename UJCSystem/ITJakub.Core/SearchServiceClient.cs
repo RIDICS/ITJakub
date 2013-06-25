@@ -14,7 +14,7 @@ namespace ITJakub.Core
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 
-        public List<string> AllExtendedTermsForKey(string key)
+        public SearchTermPossibleResult AllExtendedTermsForKey(string key)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace ITJakub.Core
             }
         }
 
-        public List<string> AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds)
+        public SearchTermPossibleResult AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds)
         {
             try
             {

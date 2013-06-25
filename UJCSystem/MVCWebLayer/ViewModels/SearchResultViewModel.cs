@@ -12,9 +12,10 @@ namespace ITJakub.MVCWebLayer.ViewModels
         }
 
         public SearchViewModel Search { get; set; }
-        public string[] FoundWords { get; set; }
+        public List<string> FoundWords { get; set; }
+        public List<Book> FoundInBooks { get; set; }
 
-        public SearchResult[] Results { get; set; }
+        //public SearchResult[] Results { get; set; }
 
         public List<SelectionBase> Categories { get; set; }
 
@@ -25,6 +26,7 @@ namespace ITJakub.MVCWebLayer.ViewModels
         public string CategoryIds { get; set; }
 
         public string BookIds { get; set; }
+        
     }
 
     public class SearchKeyWordsViewModel

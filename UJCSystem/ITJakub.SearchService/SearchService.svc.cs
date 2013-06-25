@@ -44,12 +44,12 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetTitleById(id);
         }
 
-        public List<string> AllExtendedTermsForKey(string key)
+        public SearchTermPossibleResult AllExtendedTermsForKey(string key)
         {
             return m_searchServiceManager.AllExtendedTermsForKey(key);
         }
 
-        public List<string> AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds)
+        public SearchTermPossibleResult AllExtendedTermsForKeyWithBooksRestriction(string key, List<string> booksIds)
         {
             return m_searchServiceManager.AllExtendedTermsForKeyWithBooksRestriction(key, booksIds);
         }

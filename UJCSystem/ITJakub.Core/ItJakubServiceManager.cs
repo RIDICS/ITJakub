@@ -50,14 +50,21 @@ namespace ITJakub.Core
 
 
 
-            List<string> keyWords;
+            SearchTermPossibleResult keyWords;
             if (bookIdsByCategories.Count == 0)
                 keyWords = m_searchClient.AllExtendedTermsForKey(key);
             else
                 keyWords = m_searchClient.AllExtendedTermsForKeyWithBooksRestriction(key, bookIdsByCategories);
 
 
-            result.FoundTerms = keyWords.ToArray();
+            List<Book> possibleBooks = new List<Book>();
+            foreach (var bookId in keyWords.AllPossibleBookIds)
+            {
+                possibleBooks.Add(m_releationDatabaseMock.GetBookById(bookId));
+            }
+            
+            result.FoundTerms = keyWords.AllPossibleTerms;
+            result.FoundInBooks = possibleBooks;
             result.CategoryTree = selectedTreePart;
 
             return result;

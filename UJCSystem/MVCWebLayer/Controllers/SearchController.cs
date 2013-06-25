@@ -29,6 +29,7 @@ namespace ITJakub.MVCWebLayer.Controllers
                             Kategorie = model.Kategorie
                         },
                     FoundWords = response.FoundTerms,
+                    FoundInBooks = response.FoundInBooks,
                     Categories = response.CategoryTree,
                     SelectedCategoryIds = parsedCategories,
                     SelectedBookIds = parsedBooks,
