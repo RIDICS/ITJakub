@@ -9,7 +9,6 @@ namespace ITJakub.MVCWebLayer.Controllers
 {
     public class SearchController : Controller
     {
-        //private readonly ISearchResultProvider m_resultsProvider = new SearchResultsMockProvider();
         private readonly ISearchResultProvider m_resultsProvider = new ItJakubSearchProvider();
 
         [HttpGet]

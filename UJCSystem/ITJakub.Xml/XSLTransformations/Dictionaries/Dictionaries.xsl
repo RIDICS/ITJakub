@@ -25,8 +25,8 @@
     <xsl:include href="ESSC.xsl"/>
     <xsl:include href="StcS.xsl"/>
     
-    <xsl:template match="/">
-          <xsl:apply-templates select="//tei:entryFree" />
+    <xsl:template match="context[tei:entryFree]">
+        <xsl:apply-templates select="tei:entryFree" />
     </xsl:template>
     
 </xsl:stylesheet>

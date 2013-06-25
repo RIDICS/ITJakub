@@ -24,7 +24,7 @@
         <xsl:include href="Texts.xsl"/>
         
         <xsl:template match="context">
-            <xsl:apply-imports />
+            <xsl:apply-templates />
         </xsl:template>
         
     
