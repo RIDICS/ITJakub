@@ -357,6 +357,10 @@ form.sources-order.form-horizontal.form-horizontal .controls {
     display: none;
 }
 
+.searched-books {
+    min-height: 70px;
+}
+
 /* Module search */
 
 
