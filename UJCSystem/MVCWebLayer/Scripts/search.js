@@ -338,7 +338,7 @@ var selectedsources = new SelectedSources();
                 });
 
                 $(".advanced-search-wrapper form.search-form").submit(function () {
-                    window.location.href = $(this).attr("action") + "?searchTerm=" + $(this).find("#search-term").val() + "&" + selectedsources.getSelectedUrlParam();
+                    window.location.href = $(this).attr("action") + "?SearchTerm=" + $(this).find("#search-term").val() + "&" + selectedsources.getSelectedUrlParam();
                     return false;
                 });
             });
