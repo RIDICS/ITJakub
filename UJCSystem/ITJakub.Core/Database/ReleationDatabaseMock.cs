@@ -73,10 +73,40 @@ namespace ITJakub.Core.Database
             }
         }
 
+        private void AddBook(string bookId, string categoryId)
+        {
+            string bookTitle = m_searchClient.GetTitleById(bookId);
+
+            var category = m_allCategories.FirstOrDefault(x => x.Id == categoryId) as Category;
+            if (category != null)
+                category.Subitems.Add(new Book { Id = bookId, Name = bookTitle });
+        }
 
         private void LoadBooks()
         {
-            string book1Id = "59C0C5DC-300A-42E4-8BF2-0CB4874E8255";
+            AddBook("2A100BE0-D058-486C-8E27-63801CDFDA22", "taxonomy-historical_text-medieval_czech");
+            AddBook("8C922B93-1185-4B16-BCFC-B8F7A05F1082", "taxonomy-historical_text-medieval_czech");
+            AddBook("E776D714-0D0A-475A-962F-FC9F8CCAC846", "taxonomy-historical_text-old_czech");
+            AddBook("8688926F-9106-4A70-9440-673779415D07", "taxonomy-historical_text-old_czech");
+            AddBook("E494DBC5-F3C4-4841-B4D3-C52FE99839EB", "taxonomy-historical_text-old_czech");
+            AddBook("FA10177B-25E6-4BB6-B061-0DB988AD3840", "taxonomy-historical_text-old_czech");
+            AddBook("D122AA8E-BE32-4EAF-B274-011CBBD2A01B", "taxonomy-historical_text-old_czech");
+            AddBook("DB31F937-74B1-45A9-B976-8672FA1DC8C7", "taxonomy-historical_text-old_czech");
+            AddBook("125A0032-03B5-40EC-B68D-80473CC5653A", "taxonomy-historical_text-old_czech");
+            AddBook("9BE99DC1-C7F1-4F89-882C-4C8C07FE25F5", "taxonomy-historical_text-old_czech");
+            AddBook("59C0C5DC-300A-42E4-8BF2-0CB4874E8255", "taxonomy-scholary_text");
+            AddBook("1A74599E-3A19-44AA-AB1A-EF54077B81DB", "taxonomy-scholary_text");
+            AddBook("CC8D75B1-06B3-4C8E-9B4C-E366FEE76175", "taxonomy-scholary_text");
+            AddBook("D7ACD09E-8778-4246-86E7-126CCC98F1FF", "taxonomy-scholary_text");
+            AddBook("640F2E22-5443-496B-BCB6-A6184EE43388", "taxonomy-scholary_text");
+            AddBook("795E13F1-B52A-402F-B716-D06DFE7A9811", "taxonomy-scholary_text");
+            AddBook("719AA5BF-E24D-45C0-A835-FAC774B1FFF8", "taxonomy-scholary_text");
+            AddBook("CACB63F9-B6AE-4C9C-9101-584F8100BDB4", "taxonomy-scholary_text");
+            AddBook("66C9C773-7542-4820-A4F9-71C180CBFDEB", "taxonomy-scholary_text");
+            AddBook("DBB04F82-912D-4252-ACB2-FAF43D3A8E2C", "taxonomy-dictionary-historical");
+            AddBook("4E5DB418-B49B-4AC0-AE9F-78A53E9BE4FE", "taxonomy-dictionary-contemporary");
+            AddBook("6810F0EC-989E-42F1-A2E3-2D22B5E67EC7", "taxonomy-dictionary-contemporary");
+            /*string book1Id = "59C0C5DC-300A-42E4-8BF2-0CB4874E8255";
             string bookTitle = m_searchClient.GetTitleById(book1Id);
 
             var category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-scholary_text") as Category;
@@ -106,9 +136,9 @@ namespace ITJakub.Core.Database
             category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-scholary_text") as Category;
             if (category != null)
                 category.Subitems.Add(book);
-            /*category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Category;
-            if (category != null)
-                category.Subitems.Add(book);*/
+            //category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Category;
+            //if (category != null)
+            //    category.Subitems.Add(book);
 
 
             //slovniky
@@ -145,7 +175,7 @@ namespace ITJakub.Core.Database
             bookTitle = m_searchClient.GetTitleById(bookId9);
             category = m_allCategories.FirstOrDefault(x => x.Id == "taxonomy-historical_text-medieval_czech") as Category;
             if (category != null)
-                category.Subitems.Add(new Book { Id = bookId9, Name = bookTitle });
+                category.Subitems.Add(new Book { Id = bookId9, Name = bookTitle });*/
         }
 
         public List<string> GetBookIdsByCategories(List<string> categorieIds)
