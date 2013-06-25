@@ -67,8 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="XSLTransformations\Dictionaries\CommonTEI.xsl" />
-    <EmbeddedResource Include="XSLTransformations\Dictionaries\Texts.xsl" />
-    <EmbeddedResource Include="XSLTransformations\Dictionaries\TextsAndDictionaries.xsl" />
+    <EmbeddedResource Include="XSLTransformations\Dictionaries\Texts.xsl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XSLTransformations\Dictionaries\TextsAndDictionaries.xsl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

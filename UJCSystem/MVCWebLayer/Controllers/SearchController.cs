@@ -40,7 +40,7 @@ namespace ITJakub.MVCWebLayer.Controllers
 
         private List<string> ParseParamList(string paramList)
         {
-            if (paramList == null) return new List<string>();
+            if (string.IsNullOrWhiteSpace(paramList)) return new List<string>();
             var splitted = paramList.Split(' ');
             return splitted.ToList();
         }

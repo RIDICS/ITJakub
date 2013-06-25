@@ -26,5 +26,10 @@ namespace ITJakub.Xml.XMLOperations
             //todo transformation selection
            return m_transformations.First().Transform(xmlContext, searchedTerm);
         }
+
+        public string TransformResult(XmlNode selectSingleNode, string searchedTerm)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

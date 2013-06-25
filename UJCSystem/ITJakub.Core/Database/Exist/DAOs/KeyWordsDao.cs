@@ -18,7 +18,6 @@ namespace ITJakub.Core.Database.Exist.DAOs
             m_xsltTransformer = container.Resolve<XslTransformDirector>();
         }
 
-        
 
         public List<string> GetAllPossibleKeyWords(string key, List<string> booksIds = null)
         {
@@ -83,6 +82,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             return results;
         }
+
         public List<SearchResultWithHtmlContext> GetHtmlContextByWord(string word, List<string> bookIds = null)
         {
             var restriction = GetRestrictionByBookIds(bookIds);
@@ -100,6 +100,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             return ConstructResultsWithHtmlContext(dbXmlResult, nManager, word);
         }
+
         public List<SearchResultWithXmlContext> GetXmlContextByWord(string word, List<string> booksIds = null)
         {
             var restriction = GetRestrictionByBookIds(booksIds);
@@ -147,13 +148,14 @@ namespace ITJakub.Core.Database.Exist.DAOs
                 foreach (XmlNode hit in hits)
                 {
                     SearchResultWithHtmlContext result = new SearchResultWithHtmlContext();
-                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//author"), TeiP5Descriptor.AuthorNodeName, nManager);
+                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//authors"), TeiP5Descriptor.AuthorNodeName, nManager);
                     result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
                     result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
                     result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
 
                     string xmlContext = XmlTool.ParseXmlContext(hit.SelectSingleNode("context"));
-                    result.HtmlContext = m_xsltTransformer.TransformResult(xmlContext, searchedTerm);
+                   // result.HtmlContext = m_xsltTransformer.TransformResult(xmlContext, searchedTerm);//todo parse only hit.SelectSingleNode
+                   result.HtmlContext = m_xsltTransformer.TransformResult(hit.OuterXml, searchedTerm);//todo parse only hit.SelectSingleNode
 
                     results.Add(result);
                 }
@@ -182,7 +184,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             builder.AppendLine("let $id := $word/ancestor-or-self::tei:TEI/@n");
             builder.AppendLine(restrictions);
-            
+
             builder.AppendLine("order by $word");
             builder.AppendLine("return <word>{$word}</word>");
             builder.AppendLine("} </undistinctedValues>//tei:w)");
@@ -261,7 +263,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine();
             builder.AppendLine("}");
             builder.AppendLine("</words>");
-            
+
 
             return builder.ToString();
         }
@@ -271,7 +273,22 @@ namespace ITJakub.Core.Database.Exist.DAOs
             StringBuilder builder = new StringBuilder();
             AddNamespacesAndCollation(builder);
 
+
             builder.AppendLine("import module namespace kwic=\"http://exist-db.org/xquery/kwic\";");
+
+
+            builder.AppendLine("declare function local:getAdequateContext($hit as node()) {");
+            builder.AppendLine("let $context := ");
+            builder.AppendLine("if($hit instance of element(tei:body)) then $hit");
+            builder.AppendLine("else if ($hit/.. instance of element(tei:div)) then $hit/..");
+            builder.AppendLine("else if ($hit/.. instance of element(tei:p)) then $hit/..");
+            builder.AppendLine("else if($hit/.. instance of element(tei:entryFree)) then $hit/..");
+            builder.AppendLine("else if ($hit/.. instance of element(tei:l)) then $hit/..     ");
+            builder.AppendLine("else local:getAdequateContext($hit/..)");
+            builder.AppendLine("return $context");
+
+            builder.AppendLine("};");
+
             builder.AppendLine("<words>{");
             builder.AppendLine("let $query :=");
             builder.AppendLine("<query>");
@@ -286,20 +303,15 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("let $author := $hit/ancestor-or-self::tei:TEI//tei:author");
             builder.AppendLine("let $categories := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:catRef");
 
-            builder.AppendLine("let $context := if ($hit/ancestor::tei:p instance of element(tei:p)) then");
-            builder.AppendLine("$hit/ancestor::tei:p");
-            builder.AppendLine("else if($hit/ancestor::tei:entryFree instance of element(tei:entryFree)) then");
-            builder.AppendLine("$hit/ancestor::tei:entryFree");
-            builder.AppendLine("else");
-            builder.AppendLine("$hit/..");
+            builder.AppendLine("let $context := local:getAdequateContext($hit)");
 
             builder.AppendLine(restrictions);
 
             builder.AppendLine("order by $hit");
             builder.AppendLine("return <hit>");
-            builder.AppendLine("<title>{$title}</title>");
             builder.AppendLine("<id>{$id}</id>");
-            builder.AppendLine("<author>{$author}</author>");
+            builder.AppendLine("<title>{$title}</title>");
+            builder.AppendLine("<authors>{$author}</authors>");
             builder.AppendLine("<categories>{$categories}</categories>");
             builder.AppendLine("<context>{$context}</context>");
             builder.AppendLine("</hit>");
@@ -310,6 +322,5 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             return builder.ToString();
         }
-
     }
 }
