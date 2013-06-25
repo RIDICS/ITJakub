@@ -715,7 +715,7 @@ var TreeNode = function () {
             if (mbsel.is("div.category-select")) {
                 var movedCheckbox = checkboxSelector.parent().parent();
                 movedCheckbox.slideUp('fast', function () {
-                    mbsel.parent().find("> ul").append($(this));
+                    movedCheckbox.parent().parent().parent().find("> ul.nav").append(movedCheckbox);
                 });
             }
         }
