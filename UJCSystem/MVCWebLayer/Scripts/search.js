@@ -187,7 +187,9 @@ var selectedsources = new SelectedSources();
                             source: function () {
                                 var children = new Array();
                                 parentElement.find('> .nav input[type=checkbox]').each(function () {
-                                    children.push($(this).attr('data-name'));
+                                    if (!$(this).is(":checked")) {
+                                        children.push($(this).attr('data-name'));
+                                    }
                                 });
                                 return children;
                             }
@@ -475,7 +477,9 @@ var TreeNode = function () {
             source: function () {
                 var children = new Array();
                 inTo.find('> .nav > li > label > input[type=checkbox]').each(function () {
-                    children.push($(this).attr('data-name'));
+                    if (!$(this).is(":checked")) {
+                        children.push($(this).attr('data-name'));   
+                    }
                 });
                 return children;
             }
@@ -585,7 +589,9 @@ var TreeNode = function () {
                 source: function () {
                     var children = new Array();
                     inTo.find('> .nav input[type=checkbox]').each(function () {
-                        children.push($(this).attr('data-name'));
+                        if (!$(this).is(":checked")) {
+                            children.push($(this).attr('data-name'));
+                        }
                     });
                     return children;
                 }
@@ -633,7 +639,7 @@ var TreeNode = function () {
         if (mbsel.is("div.category-select")) {
             var movedCheckbox = checkedInputSelector.parent().parent();
             movedCheckbox.slideUp('fast', function () {
-                mbsel.parent().find("> ul").append($(this));
+                mbsel.parent().find("> ul.nav").append(movedCheckbox);
             });
         }
     };
