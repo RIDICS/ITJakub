@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using Jewelery;
+using log4net;
 
 namespace ITJakub.Core.Database.Exist
 {
@@ -37,6 +39,8 @@ namespace ITJakub.Core.Database.Exist
 
         private const string Xsd1Name = "TEI_UJC_OVJ_Strict.xsd";
         private const string Xsd2Name = "xml.xsd";
+
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ExistDao(ExistConnectionSettingsSkeleton connectionSettings)
         {
@@ -102,7 +106,7 @@ namespace ITJakub.Core.Database.Exist
             var req = (HttpWebRequest)WebRequest.Create(m_settings.BaseUri + relativeUri);
 
             // authentication header
-            string auth = m_settings.DBUser + ":" + m_settings.DBPassword;
+            string auth = string.Format("{0}:{1}",m_settings.DBUser, m_settings.DBPassword);
             auth = Convert.ToBase64String(Encoding.UTF8.GetBytes(auth));
             req.Headers[HttpRequestHeader.Authorization] = "Basic " + auth;
 
@@ -118,7 +122,8 @@ namespace ITJakub.Core.Database.Exist
             var resp = (HttpWebResponse) req.GetResponse();
 
             long ms = stopwatch.ElapsedMilliseconds;
-            Debug.WriteLine("HTTP request on DB's REST API took " + ms + "ms");
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("HTTP request on DB's REST API took {0} ms", ms);
             stopwatch.Stop();
 
             Stream respStream = resp.GetResponseStream();

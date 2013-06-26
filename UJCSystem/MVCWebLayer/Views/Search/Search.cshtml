@@ -77,7 +77,7 @@
                     foreach (Book book in Model.FoundInBooks)
                     {
                         <ul class="nav nav-tabs">
-                            <li><h4>@book.Name</h4></li>
+                            @*<li><h4>@book.Name</h4></li>*@
                             @*@foreach (var category in item.Categories)
                             {
                                 <li class="search-item"><a href="#" class="search-results-type-result" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = category.id })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">@category.name</a></li>
@@ -85,19 +85,23 @@
                         </ul>
                     }
                 }
-                @*<ul class="nav nav-tabs">
-                    @foreach (var item in Model.JoinedResults())
-                    {
-                        <li class="search-item"><a data-toggle="tab" href="#ss1" class="search-results-type-result" data-result="ss1" data-url="@Url.RouteUrl("SearchDetailType", new { category = "ss1" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">@item</a></li>
-                    }
+                <ul class="nav nav-tabs">
                     <li><h4>Slovník - soudobýp</h4></li>
+                    @if (Model.FoundInBooks != null)
+                    {
+                        foreach (Book book in Model.FoundInBooks)
+                        {
+                            <li class="search-item"><a data-toggle="tab" href="#ss1" class="search-results-type-result" data-result="ss1" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss1" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">@book.Name</a></li>
+                        }
+                    }
+                   @* <li><h4>Slovník - soudobýp</h4></li>
                     <li class="search-item"><a data-toggle="tab" href="#ss1" class="search-results-type-result" data-result="ss1" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss1" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">Malý staročeský slovník (MSS)</a></li>
                     <li><h4>Historický text - staročeský</h4></li>
                     <li class="search-item"><a data-toggle="tab" href="#ss2" class="search-results-type-result" data-result="ss2" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss2" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">Knížky o řádném mluvení a mlčení</a></li>
                     <li class="search-item"><a data-toggle="tab" href="#ss3" class="search-results-type-result" data-result="ss3" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss3" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">Slovo do světa stvořenie</a></li>
                     <li><h4>Lístková kartotéka</h4></li>
-                    <li class="search-item"><a data-toggle="tab" href="#ss4" class="search-results-type-result" data-result="ss4" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss4" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">Lístková kartotéka Jana Gebauera</a></li>
-                </ul>*@
+                    <li class="search-item"><a data-toggle="tab" href="#ss4" class="search-results-type-result" data-result="ss4" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss4" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">Lístková kartotéka Jana Gebauera</a></li>*@
+                </ul>
                 @if (Model.FoundInBooks != null)
                 {
                     <div class="tab-content" id="type-result-detail">
