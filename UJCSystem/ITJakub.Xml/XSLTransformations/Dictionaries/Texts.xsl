@@ -272,9 +272,9 @@
     </xd:doc>
 
     <xsl:template match="tei:p">
-        <xsl:copy>
+        <p>
             <xsl:apply-templates/>
-        </xsl:copy>
+        </p>
     </xsl:template>
 
 
