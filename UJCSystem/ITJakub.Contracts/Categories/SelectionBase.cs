@@ -42,5 +42,7 @@ namespace ITJakub.Contracts.Categories
     [DataContract]
     public class Book : SelectionBase
     {
+        [DataMember]
+        public string TextCategoryClassification { get; set; }
     }
 }
