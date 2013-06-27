@@ -384,6 +384,15 @@ var TreeNode = function () {
             window.location.href = $(this).attr("action") + "?searchTerm=" + $(this).find("#search-term").val() + "&" + getUrlCatBookParams();
             return false;
         });
+
+        $(".nav-categories input[type=checkbox]").each(function () {
+            $(this).prop("indeterminate", false);
+            if (!$(this).is(":checked")) {
+                if ($(this).parent().parent().find(".nav-categories input[type=checkbox]:checked").length > 0) {
+                    $(this).prop("indeterminate", true);
+                }
+            }
+        });
     };
 
     function changeASVisibility(asElement) {
