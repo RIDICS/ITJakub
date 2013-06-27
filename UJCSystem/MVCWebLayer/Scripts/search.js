@@ -728,6 +728,15 @@ var TreeNode = function () {
             }
         }
         uncheckedCheckboxes = new Array;
+
+        $(".nav-categories input[type=checkbox]").each(function () {
+            $(this).prop("indeterminate", false);
+            if (!$(this).is(":checked")) {
+                if ($(this).parent().parent().find(".nav-categories input[type=checkbox]:checked").length > 0) {
+                    $(this).prop("indeterminate", true);
+                }
+            }
+        });
     };
 
     function allChildrenChecked(checkedInputId) {
