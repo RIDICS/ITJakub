@@ -93,7 +93,7 @@
                             <li><h4>@categoryCombination</h4></li>
                             foreach (Book book in Model.GetBooksByCategoryCombination(categoryCombination))
                             {
-                                <li class="search-item"><a data-toggle="tab" href="#" class="search-results-type-result" data-result="@book.Id" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = @book.Id })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">@book.Name</a></li>
+                                <li class="search-item"><a data-toggle="tab" href="#@book.Id" class="search-results-type-result" data-result="@book.Id" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = @book.Id })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">@book.Name</a></li>
                             }
                         }
                     }
