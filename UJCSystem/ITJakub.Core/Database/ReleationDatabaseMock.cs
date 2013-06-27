@@ -46,24 +46,24 @@ namespace ITJakub.Core.Database
 
         private void LoadTaxonomy()
         {
-            var dict = new Category {Id = "taxonomy-dictionary", Name = "slovník"};
-            dict.Subitems.Add(new Category {Id = "taxonomy-dictionary-contemporary", Name = "soudobý"});
-            dict.Subitems.Add(new Category {Id = "taxonomy-dictionary-historical", Name = "dobový"});
+            var dict = new Category { Id = "taxonomy-dictionary", Name = "slovník", TextValue = "Slovníky" };
+            dict.Subitems.Add(new Category { Id = "taxonomy-dictionary-contemporary", Name = "soudobý", TextValue = "Soudobé", Parrent = dict});
+            dict.Subitems.Add(new Category {Id = "taxonomy-dictionary-historical", Name = "dobový", TextValue = "Dobové", Parrent = dict});
             m_rootCategories.Add(dict);
 
-            var histText = new Category {Id = "taxonomy-historical_text", Name = "historický text"};
-            histText.Subitems.Add(new Category {Id = "taxonomy-historical_text-old_czech", Name = "staročeský"});
-            histText.Subitems.Add(new Category {Id = "taxonomy-historical_text-medieval_czech", Name = "středněčeský", ShowType = CategoryShowType.SelectionBox});
+            var histText = new Category {Id = "taxonomy-historical_text", Name = "historický text", TextValue = "Historické texty"};
+            histText.Subitems.Add(new Category {Id = "taxonomy-historical_text-old_czech", Name = "staročeský", TextValue = "Staročeské",Parrent = histText});
+            histText.Subitems.Add(new Category {Id = "taxonomy-historical_text-medieval_czech", Name = "středněčeský", TextValue = "Středněčeské",Parrent = histText, ShowType = CategoryShowType.SelectionBox});
 
             m_rootCategories.Add(histText);
 
-            var scholarText = new Category {Id = "taxonomy-scholary_text", Name = "odborný text"};
+            var scholarText = new Category {Id = "taxonomy-scholary_text", Name = "odborný text", TextValue = "Odborné texty"};
             m_rootCategories.Add(scholarText);
 
-            var grammar = new Category {Id = "taxonomy-digitized-grammar", Name = "digitalizovaná mluvnice"};
+            var grammar = new Category {Id = "taxonomy-digitized-grammar", Name = "digitalizovaná mluvnice", TextValue = "Digitalizované mluvnice"};
             m_rootCategories.Add(grammar);
 
-            var cards = new Category {Id = "taxonomy-card-index", Name = "lístková kartotéka"};
+            var cards = new Category {Id = "taxonomy-card-index", Name = "lístková kartotéka", TextValue = "Lístková kartotéka"};
             m_rootCategories.Add(cards);
 
             m_allCategories.AddRange(m_rootCategories);
@@ -80,10 +80,26 @@ namespace ITJakub.Core.Database
             var category = m_allCategories.FirstOrDefault(x => x.Id == categoryId) as Category;
             if (category != null)
             {
+                string catClassification = GetCategoryTextValue(category);
                 var book = new Book {Id = bookId, Name = bookTitle};
+                book.TextCategoriesClassification.Add(catClassification);
                 category.Subitems.Add(book);
                 m_allBooks.Add(book);
             }
+        }
+
+        private string GetCategoryTextValue(Category category)
+        {
+            List<Category> levels = new List<Category>();
+            Category level = category;
+            while (level != null)
+            {
+                levels.Add(level);
+                level = level.Parrent;
+            }
+
+            levels.Reverse();
+            return string.Join(" - ", levels.Select(x => x.TextValue));
         }
 
         private void LoadBooks()

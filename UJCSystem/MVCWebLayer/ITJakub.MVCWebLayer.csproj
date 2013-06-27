@@ -110,6 +110,7 @@
     <Compile Include="Services\Mocks\SourcesMockProvider.cs" />
     <Compile Include="ViewModels\DetailByTypeViewModel.cs" />
     <Compile Include="ViewModels\ModuleViewModel.cs" />
+    <Compile Include="ViewModels\SearchKeyWordsViewModel.cs" />
     <Compile Include="ViewModels\SearchSourceDetailViewModel.cs" />
     <Compile Include="ViewModels\SearchSourcesViewModel.cs" />
     <Compile Include="ViewModels\SearchResultViewModel.cs" />

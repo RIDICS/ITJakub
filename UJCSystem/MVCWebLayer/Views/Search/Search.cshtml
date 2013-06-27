@@ -86,12 +86,15 @@
                     }
                 }
                 <ul class="nav nav-tabs">
-                    <li><h4>Slovník - soudobýp</h4></li>
                     @if (Model.FoundInBooks != null)
                     {
-                        foreach (Book book in Model.FoundInBooks)
+                        foreach (var categoryCombination in Model.GetAllCategoryCombinations())
                         {
-                            <li class="search-item"><a data-toggle="tab" href="#ss1" class="search-results-type-result" data-result="ss1" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss1" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">@book.Name</a></li>
+                            <li><h4>@categoryCombination</h4></li>
+                            foreach (Book book in Model.GetBooksByCategoryCombination(categoryCombination))
+                            {
+                                <li class="search-item"><a data-toggle="tab" href="#ss1" class="search-results-type-result" data-result="ss1" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss1" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">@book.Name</a></li>
+                            }
                         }
                     }
                    @* <li><h4>Slovník - soudobýp</h4></li>

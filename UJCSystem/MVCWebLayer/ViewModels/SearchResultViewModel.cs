@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Contracts.Categories;
-using ITJakub.Contracts.Searching;
 using System.Linq;
 
 namespace ITJakub.MVCWebLayer.ViewModels
@@ -28,30 +27,23 @@ namespace ITJakub.MVCWebLayer.ViewModels
 
         public string BookIds { get; set; }
 
-
-        public List<SelectionBase> GetCategoryTextSequence(string bookId, List<SelectionBase> parrents, SelectionBase currentCat)
+        public IEnumerable<string> GetAllCategoryCombinations()
         {
-            var asCat = currentCat as Category;
-            if (asCat != null)
+            List<string> result = new List<string>();
+            foreach (var foundInBook in FoundInBooks)
             {
-                if (asCat.Subitems.FirstOrDefault(x => x.Id == bookId) != null)
-                    return parrents;
-
-                
-                foreach (var sublevel in asCat.Subitems)
+                foreach (var categoryCombination in foundInBook.TextCategoriesClassification)
                 {
-                    var listcopy = new List<SelectionBase>(parrents);
-                    listcopy.Add(currentCat);
-                    return GetCategoryTextSequence(bookId, listcopy, sublevel);
+                    if (!result.Contains(categoryCombination))
+                        result.Add(categoryCombination);    
                 }
-
             }
-            return null;
+            return result;
         }
-    }
 
-    public class SearchKeyWordsViewModel
-    {
-        public List<SearchResultWithHtmlContext> Results { get; set; }
+        public IEnumerable<Book> GetBooksByCategoryCombination(string categoryCombination)
+        {
+            return FoundInBooks.Where(x => x.TextCategoriesClassification.Contains(categoryCombination));
+        }
     }
 }

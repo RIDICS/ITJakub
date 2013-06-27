@@ -11,6 +11,7 @@ namespace ITJakub.Contracts.Categories
     [KnownType(typeof(Book))]
     public class SelectionBase
     {
+       
         [DataMember]
         public string Name { get; set; }
 
@@ -29,6 +30,9 @@ namespace ITJakub.Contracts.Categories
         }
 
         [DataMember]
+        public string TextValue { get; set; }
+
+        [DataMember]
         public List<SelectionBase> Subitems { get; set; }
 
         [DataMember]
@@ -37,12 +41,19 @@ namespace ITJakub.Contracts.Categories
         [DataMember]
         public bool HasChildren { get; set; }
 
+        public Category Parrent { get; set; }
     }
 
     [DataContract]
     public class Book : SelectionBase
     {
+        public Book()
+        {
+            TextCategoriesClassification = new List<string>();
+        }
+
         [DataMember]
-        public string TextCategoryClassification { get; set; }
+        public List<string> TextCategoriesClassification { get; set; }
+
     }
 }
