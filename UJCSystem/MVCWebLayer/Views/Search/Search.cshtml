@@ -61,7 +61,7 @@
                 <ul class="nav nav-tabs">
                     @foreach (var result in Model.FoundWords)
                     {
-                        <li><a data-toggle="tab" href="#@result" class="search-results-alphabetical-result" data-result="@result" data-url="@Url.RouteUrl("SearchDetail", new { searchTerm = result })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds" >@result</a></li>
+                        <li><a data-toggle="tab" href="#@result" class="search-results-alphabetical-result" data-result="@result" data-url="@Url.RouteUrl("SearchDetail", new SearchViewModel{ SearchTerm = Model.Search.SearchTerm, SelectedTerm = result, Dila = Model.BookIds, Kategorie = Model.CategoryIds})">@result</a></li>
                     }
                 </ul>   
                 <div class="tab-content" id="alphabetical-result-detail">
@@ -93,7 +93,7 @@
                             <li><h4>@categoryCombination</h4></li>
                             foreach (Book book in Model.GetBooksByCategoryCombination(categoryCombination))
                             {
-                                <li class="search-item"><a data-toggle="tab" href="#@book.Id" class="search-results-type-result" data-result="@book.Id" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = @book.Id })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">@book.Name</a></li>
+                                <li class="search-item"><a data-toggle="tab" href="#@book.Id" class="search-results-type-result" data-result="@book.Id" data-url="@Url.RouteUrl("SearchDetailType", new SearchViewModel{ BookId = book.Id, Kategorie = Model.CategoryIds, Dila = Model.BookIds, SearchTerm = Model.Search.SearchTerm})">@book.Name</a></li>
                             }
                         }
                     }
