@@ -202,7 +202,8 @@ var selectedsources = new SelectedSources();
                                 if ($(this).attr("data-name") == selectedName) {
                                     $(this).prop("checked", true);
                                     selectedsources.checkCheckboxes($(this));
-                                    formEl.parent().find('.selected-categories').append($(this).parent().parent());
+                                    $(this).parent().parent().appendTo(formEl.parent().find('.selected-categories'));
+                                    //formEl.parent().find('.selected-categories').append($(this).parent().parent());
                                 }
                             });
                             return false;
@@ -275,7 +276,8 @@ var selectedsources = new SelectedSources();
                                     uncheckAllParent($(this));
                                 }
                                 if ($(this).parent().parent().parent().is(".selected-categories")) {
-                                    $(this).parent().parent().parent().parent().parent().find("> ul.nav").append($(this).parent().parent());
+                                    $(this).parent().parent().appendTo($(this).parent().parent().parent().parent().parent().find("> ul.nav"));
+                                    //$(this).parent().parent().parent().parent().parent().find("> ul.nav").append($(this).parent().parent());
                                 }
                             }
                         });
@@ -493,7 +495,8 @@ var TreeNode = function () {
                     $(this).prop("checked", true);
                     $(this).change();
                     $(this).parent().parent().hide();
-                    formEl.parent().find('.selected-categories').append($(this).parent().parent());
+                    $(this).parent().parent().appendTo(formEl.parent().find('.selected-categories'));
+                    //formEl.parent().find('.selected-categories').append($(this).parent().parent());
                     $(this).parent().parent().slideDown();
                 }
             });
@@ -508,7 +511,8 @@ var TreeNode = function () {
                 
                 if (checkedCategorySelector.parent().parent().parent().parent().find("> div.category-select").length > 0) {
                     var movedCheckbox = checkedCategorySelector.parent().parent();
-                    movedCheckbox.parent().parent().find("> div.category-select > ul.nav").append(movedCheckbox);
+                    movedCheckbox.appendTo(movedCheckbox.parent().parent().find("> div.category-select > ul.nav"));
+                    //movedCheckbox.parent().parent().find("> div.category-select > ul.nav").append(movedCheckbox);
                     movedCheckbox.slideDown();
                     checkedCategorySelector.change(function () {
                         if ($(this).is(":checked")) {
@@ -529,7 +533,8 @@ var TreeNode = function () {
 
                 if (checkedBookSelector.parent().parent().parent().parent().find("> div.category-select").length > 0) {
                     var movedCheckbox = checkedBookSelector.parent().parent();
-                    movedCheckbox.parent().parent().find("> div.category-select > ul.nav").append(movedCheckbox);
+                    movedCheckbox.appendTo(movedCheckbox.parent().parent().find("> div.category-select > ul.nav"));
+                    //movedCheckbox.parent().parent().find("> div.category-select > ul.nav").append(movedCheckbox);
                     movedCheckbox.slideDown();
                     checkedBookSelector.change(function () {
                         if ($(this).is(":checked")) {
@@ -605,7 +610,8 @@ var TreeNode = function () {
                         $(this).prop("checked", true);
                         $(this).change();
                         $(this).parent().parent().hide();
-                        formEl.parent().find('.selected-categories').append($(this).parent().parent());
+                        $(this).parent().parent().appendTo(formEl.parent().find('.selected-categories'));
+                        //formEl.parent().find('.selected-categories').append($(this).parent().parent());
                         $(this).parent().parent().slideDown();
                     }
                 });
@@ -639,7 +645,8 @@ var TreeNode = function () {
         if (mbsel.is("div.category-select")) {
             var movedCheckbox = checkedInputSelector.parent().parent();
             movedCheckbox.slideUp('fast', function () {
-                mbsel.parent().find("> ul.nav").append(movedCheckbox);
+                movedCheckbox.appendTo(mbsel.parent().find("> ul.nav"));
+                //mbsel.parent().find("> ul.nav").append(movedCheckbox);
             });
         }
     };
@@ -715,7 +722,8 @@ var TreeNode = function () {
             if (mbsel.is("div.category-select")) {
                 var movedCheckbox = checkboxSelector.parent().parent();
                 movedCheckbox.slideUp('fast', function () {
-                    movedCheckbox.parent().parent().parent().find("> ul.nav").append(movedCheckbox);
+                    movedCheckbox.appendTo(movedCheckbox.parent().parent().parent().find("> ul.nav"));
+                    //movedCheckbox.parent().parent().parent().find("> ul.nav").append(movedCheckbox);
                 });
             }
         }
