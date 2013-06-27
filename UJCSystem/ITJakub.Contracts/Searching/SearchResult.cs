@@ -8,6 +8,7 @@ namespace ITJakub.Contracts.Searching
     [KnownType(typeof(SearchResultWithKwicContext))]
     [KnownType(typeof(SearchResultWithXmlContext))]
     [KnownType(typeof(SearchResultWithHtmlContext))]
+    [KnownType(typeof(SearchResultWithImageContext))]
     public class SearchResult: ICloneable
     {
         [DataMember]
@@ -50,6 +51,12 @@ namespace ITJakub.Contracts.Searching
     {
         [DataMember]
         public string HtmlContext { get; set; }
+    }
+
+    public class SearchResultWithImageContext:SearchResult
+    {
+        [DataMember]
+        public string Image { get; set; }//todo change type of image from string to stream...
     }
 
     [DataContract]

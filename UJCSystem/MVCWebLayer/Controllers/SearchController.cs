@@ -77,7 +77,7 @@ namespace ITJakub.MVCWebLayer.Controllers
         }
 
         [HttpGet]
-        public ActionResult DetailByType(DetailByTypeViewModel model)
+        public ActionResult DetailByType(SearchViewModel model)
         {
             return View("DetailByType", null, model.BookId);
         }
