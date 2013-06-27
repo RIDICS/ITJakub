@@ -93,28 +93,21 @@
                             <li><h4>@categoryCombination</h4></li>
                             foreach (Book book in Model.GetBooksByCategoryCombination(categoryCombination))
                             {
-                                <li class="search-item"><a data-toggle="tab" href="#ss1" class="search-results-type-result" data-result="ss1" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss1" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">@book.Name</a></li>
+                                <li class="search-item"><a data-toggle="tab" href="#" class="search-results-type-result" data-result="@book.Id" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = @book.Id })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">@book.Name</a></li>
                             }
                         }
                     }
-                   @* <li><h4>Slovník - soudobýp</h4></li>
-                    <li class="search-item"><a data-toggle="tab" href="#ss1" class="search-results-type-result" data-result="ss1" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss1" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">Malý staročeský slovník (MSS)</a></li>
-                    <li><h4>Historický text - staročeský</h4></li>
-                    <li class="search-item"><a data-toggle="tab" href="#ss2" class="search-results-type-result" data-result="ss2" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss2" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">Knížky o řádném mluvení a mlčení</a></li>
-                    <li class="search-item"><a data-toggle="tab" href="#ss3" class="search-results-type-result" data-result="ss3" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss3" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">Slovo do světa stvořenie</a></li>
-                    <li><h4>Lístková kartotéka</h4></li>
-                    <li class="search-item"><a data-toggle="tab" href="#ss4" class="search-results-type-result" data-result="ss4" data-url="@Url.RouteUrl("SearchDetailType", new { BookId = "ss4" })?Kategorie=@Model.CategoryIds&Dila=@Model.BookIds">Lístková kartotéka Jana Gebauera</a></li>*@
                 </ul>
                 @if (Model.FoundInBooks != null)
                 {
                     <div class="tab-content" id="type-result-detail">
-                    @*@foreach (var book in Model.FoundInBooks)
+                   @foreach (var categoryCombination in Model.GetAllCategoryCombinations())
                     {
-                            @foreach (var category in item.Categories)
+                            foreach (var book in Model.GetBooksByCategoryCombination(categoryCombination))
                             {
-                                <div class="tab-pane" id="@category.id"></div>
+                                <div class="tab-pane" id="@book.Id"></div>
                             }
-                    }*@
+                    }
                     </div>  
                 }
                 @*<div class="tab-content" id="type-result-detail">
