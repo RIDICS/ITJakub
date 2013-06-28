@@ -157,5 +157,15 @@ namespace ITJakub.Core.Database
         {
             return m_allBooks.FirstOrDefault(x => x.Id == bookId);
         }
+
+        public List<string> GetCategoryByBookId(string id)
+        {
+            var book = m_allBooks.FirstOrDefault(x => x.Id == id);
+            if (book != null)
+            {
+                return book.TextCategoriesClassification;
+            }
+            return new List<string>();
+        }
     }
 }

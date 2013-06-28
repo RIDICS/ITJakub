@@ -22,11 +22,20 @@ namespace ITJakub.Core
         public List<SearchResultWithHtmlContext> GetContextForKeyWord(string keyWord, List<string> categorieIds, List<string> booksIds)
         {
             var bookIdsByCategories = GetBookIdsByCategorie(ref categorieIds, ref booksIds);
+            List<SearchResultWithHtmlContext> dbResult;
             if (bookIdsByCategories.Count == 0)
-                return m_searchClient.GetHtmlContextForKeyWord(keyWord);
+                dbResult = m_searchClient.GetHtmlContextForKeyWord(keyWord);
             else
-                return m_searchClient.GetHtmlContextForKeyWordWithBooksRestriction(keyWord, bookIdsByCategories);
-          
+                dbResult = m_searchClient.GetHtmlContextForKeyWordWithBooksRestriction(keyWord, bookIdsByCategories);
+
+
+            foreach (var searchResultWithHtmlContext in dbResult)
+            {
+                var category = m_releationDatabaseMock.GetCategoryByBookId(searchResultWithHtmlContext.Id);
+                searchResultWithHtmlContext.Categories = category;
+            }
+
+            return dbResult;
         }
 
         public List<SelectionBase> GetCategoryChildrenById(string categoryId)
@@ -47,8 +56,6 @@ namespace ITJakub.Core
             var bookIdsByCategories = GetBookIdsByCategorie(ref categorieIds, ref booksIds);
 
             var selectedTreePart = m_releationDatabaseMock.GetSelectedTreePart(categorieIds, booksIds);
-
-
 
             SearchTermPossibleResult keyWords;
             if (bookIdsByCategories.Count == 0)
