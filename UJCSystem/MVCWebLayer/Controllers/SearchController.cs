@@ -72,14 +72,17 @@ namespace ITJakub.MVCWebLayer.Controllers
         {
             return View("Detail", null, new SearchKeyWordsViewModel
                 {
-                    Results = m_resultsProvider.GetHtmlContextForKeyWord(model.SearchTerm, ParseParamList(model.Kategorie), ParseParamList(model.Dila))
+                    Results = m_resultsProvider.GetHtmlContextForKeyWord(model.SelectedTerm, ParseParamList(model.Kategorie), ParseParamList(model.Dila))
                 });
         }
 
         [HttpGet]
         public ActionResult DetailByType(SearchViewModel model)
         {
-            return View("DetailByType", null, model.BookId);
+            List<string> bookIds = new List<string> {model.BookId};
+            return View("DetailByType", null, new SearchKeyWordsViewModel {Results = m_resultsProvider.GetHtmlContextForKeyWord(model.SearchTerm, new List<string>(), bookIds )});
+
+            //return View("DetailByType", null, model.BookId);
         }
     }
 }

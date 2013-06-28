@@ -1,6 +1,29 @@
-﻿@model string
+﻿@model ITJakub.MVCWebLayer.ViewModels.SearchKeyWordsViewModel
+           
+@if (Model.Results.Count > 0)
+{
+    <div id="dictionary-results-panel">
+        @foreach (var result in Model.Results)
+        {
+            <h3>
+                @foreach (var category in result.Categories)
+                {
+                    <span>@category</span>
+                }  
+            </h3>
+            <blockquote>
+                <p>
+                    @(new HtmlString(result.HtmlContext))
+                </p>
+                <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@(result.Author)</a>)</small>
+            </blockquote>
+        }
+    </div>
+}
 
-@if (string.Equals(Model, "ss1")) 
+
+
+@*@if (string.Equals(Model, "ss1")) 
 {
     <div id="results-panel">
 	    <h3>mluv</h3>
@@ -219,4 +242,4 @@ else
             <small><cite title="lístková kartotéka"><a class="muted" href="@Url.RouteUrl("SourcesDetail", new { id = "1-zizka" })">lístková kartotéka</a></cite></small>
         </blockquote>
     </div>
-}
+}*@
