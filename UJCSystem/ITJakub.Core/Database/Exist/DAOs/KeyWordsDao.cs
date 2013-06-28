@@ -217,7 +217,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine(string.Format("<wildcard occur='must'>{0}</wildcard>", input));
             builder.AppendLine("</bool>");
             builder.AppendLine("</query>");
-            builder.AppendLine("let $words := collection(\"\")//tei:w[ft:query(@nlp:lemma, $query)]");
+            builder.AppendLine("let $words := collection(\"\")/tei:TEI/tei:text/tei:body//tei:w[ft:query(@nlp:lemma, $query)]");
             builder.AppendLine("for $word in $words");
 
             builder.AppendLine("let $id := $word/ancestor-or-self::tei:TEI/@n");
@@ -246,7 +246,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine(string.Format("<wildcard occur='must'>{0}</wildcard>", input));
             builder.AppendLine("</bool>");
             builder.AppendLine("</query>");
-            builder.AppendLine("let $words := collection(\"\")//tei:w[ft:query(@nlp:lemma, $query)]");
+            builder.AppendLine("let $words := collection(\"\")/tei:TEI/tei:text/tei:body//tei:w[ft:query(@nlp:lemma, $query)]");
             builder.AppendLine("for $word in $words");
             builder.AppendLine("let $id := $word/ancestor-or-self::tei:TEI/@n");
             builder.AppendLine(restrictions);
@@ -329,7 +329,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine(string.Format("<wildcard occur='must'>{0}</wildcard>", word));
             builder.AppendLine("</bool>");
             builder.AppendLine("</query>");
-            builder.AppendLine("let $words := collection(\"\")//tei:w[ft:query(@nlp:lemma, $query)]");
+            builder.AppendLine("let $words := collection(\"\")/tei:TEI/tei:text/tei:body//tei:w[ft:query(@nlp:lemma, $query)]");
             builder.AppendLine("for $hit in $words");
             builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
             builder.AppendLine("let $id := $hit/ancestor-or-self::tei:TEI/@n");
