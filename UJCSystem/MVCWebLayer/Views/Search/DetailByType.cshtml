@@ -4,9 +4,6 @@
 @if (Model.Results.Count > 0)
 {
     <div id="dictionary-results-panel">
-        <h3>
-            <span>@Model.Results.First().Categories.First()</span>
-        </h3>
         @foreach (var result in Model.Results)
         {   
             <blockquote>
