@@ -385,10 +385,10 @@ var TreeNode = function () {
             return false;
         });
 
-        $(".nav-categories input[type=checkbox]").each(function () {
+        $("input[type=checkbox]").each(function () {
             $(this).prop("indeterminate", false);
             if (!$(this).is(":checked")) {
-                if ($(this).parent().parent().find(".nav-categories input[type=checkbox]:checked").length > 0) {
+                if ($(this).parent().parent().find("input[type=checkbox]:checked").length > 0) {
                     $(this).prop("indeterminate", true);
                 }
             }
@@ -738,10 +738,10 @@ var TreeNode = function () {
         }
         uncheckedCheckboxes = new Array;
 
-        $(".nav-categories input[type=checkbox]").each(function () {
+        $("input[type=checkbox]").each(function () {
             $(this).prop("indeterminate", false);
             if (!$(this).is(":checked")) {
-                if ($(this).parent().parent().find(".nav-categories input[type=checkbox]:checked").length > 0) {
+                if ($(this).parent().parent().find("input[type=checkbox]:checked").length > 0) {
                     $(this).prop("indeterminate", true);
                 }
             }
