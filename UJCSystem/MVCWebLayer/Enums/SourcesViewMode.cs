@@ -9,4 +9,5 @@ namespace ITJakub.MVCWebLayer.Enums
         [StringValue("Autor")]
         Author
     }
+
 }

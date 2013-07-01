@@ -8,7 +8,7 @@ namespace ITJakub.MVCWebLayer.ViewModels
     {
         public SourcesViewMode ViewMode { get; set; }
         public IEnumerable<Source> FoundSources { get; set; }
-        public List<AlphabetLetters> Alphabet = new List<AlphabetLetters>
+        public readonly List<AlphabetLetters> Alphabet = new List<AlphabetLetters>
             {
                 new AlphabetLetters("A", false), 
                 new AlphabetLetters("B", false), 
@@ -46,8 +46,8 @@ namespace ITJakub.MVCWebLayer.ViewModels
 
     public class AlphabetLetters
     {
-        public string Letter;
-        public bool Disabled;
+        public readonly string Letter;
+        public readonly bool Disabled;
         
         public AlphabetLetters(string letter, bool disabled)
         {

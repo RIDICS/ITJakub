@@ -1,7 +1,8 @@
 ﻿namespace ITJakub.MVCWebLayer.Enums
 {
-    public static class SourcesViewModeExtensions
+    public static class SourcesViewModeConverter
     {
+
         public static string ToUrlParam(this SourcesViewMode mode)
         {
             switch (mode)

@@ -5,7 +5,7 @@ using ITJakub.MVCWebLayer.Services.DTOs;
 
 namespace ITJakub.MVCWebLayer.Services.Mocks
 {
-    public class SourcesMockProvider
+    public class MockSourcesProvider : ISourcesProvider
     {
         public IEnumerable<Source> GetSearchResult()
         {
@@ -15,7 +15,7 @@ namespace ITJakub.MVCWebLayer.Services.Mocks
                 };
         }
 
-        public Source GetDetail()
+        public Source GetDetail(string id)
         {
             return new Source { Title = "Bible olomoucká, Genesis–Esdráš", Author = "", Datation = "1417", Perex = "Elektronická edice Olomoucké bible vznikla naskenováním a pozdějším rozpoznáním textu tištěné edice Vladimíra Kyase (Kyas, Vladimír: Staročeská bible Drážďanská a Olomoucká III. Praha, Academia 1988). Do textu Kyasovy edice nebylo zasahováno, pouze v místech, kde V. Kyas doplňoval chybějící text Olomoucké bible textem jiné biblické památky, byly tyto přejímky vypuštěny. Naopak informace o emendacích a dalších úpravách textu, které obsahovala v tištěné edici ediční poznámka, byly pro elektronickou verzi zapracovány přímo do textu." };
         }

@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Container.cs" />
+    <Compile Include="Services\ItJakubSourcesProvider.cs" />
     <Compile Include="ViewModels\CategoriesViewModel.cs" />
     <Compile Include="Services\ItJakubSearchProvider.cs" />
     <Compile Include="Controllers\ModulesController.cs" />
@@ -100,7 +101,7 @@
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Enums\SourceDetailPart.cs" />
     <Compile Include="Enums\SourcesViewMode.cs" />
-    <Compile Include="Enums\SourcesViewModeExtensions.cs" />
+    <Compile Include="Enums\SourcesViewModeConverter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

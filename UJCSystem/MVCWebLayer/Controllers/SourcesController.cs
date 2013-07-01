@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using ITJakub.MVCWebLayer.Enums;
+using ITJakub.MVCWebLayer.Services;
 using ITJakub.MVCWebLayer.Services.Mocks;
 using ITJakub.MVCWebLayer.ViewModels;
 
@@ -8,7 +9,7 @@ namespace ITJakub.MVCWebLayer.Controllers
 {
     public sealed class SourcesController : Controller
     {
-        private readonly SourcesMockProvider m_mockProvider = new SourcesMockProvider();
+        private readonly ISourcesProvider m_provider = new MockSourcesProvider();
 
         [HttpGet]
         public ActionResult Detail(string id, string part)
@@ -23,13 +24,13 @@ namespace ITJakub.MVCWebLayer.Controllers
             switch (enumValue)
             {
                 case SourceDetailPart.Info:
-                    return View("Detail", m_mockProvider.GetDetail());
+                    return View("Detail", m_provider.GetDetail(id));
                 case SourceDetailPart.Podminky:
                     return View("DetailPodminky");
                 case SourceDetailPart.Zpracovani:
                     return View("DetailZpracovani");
                 default:
-                    return View("Detail", m_mockProvider.GetDetail());
+                    return View("Detail", m_provider.GetDetail(id));
             }
         }
 
@@ -53,7 +54,7 @@ namespace ITJakub.MVCWebLayer.Controllers
         public ActionResult Search(string searchTerm)
         {
             return View("Search", new SearchSourcesViewModel { 
-                FoundSources = m_mockProvider.GetSearchResult(),
+                FoundSources = m_provider.GetSearchResult(),
             });
         }
 
@@ -67,9 +68,14 @@ namespace ITJakub.MVCWebLayer.Controllers
             }
 
             return View(new ListSourcesViewModel {
-                ViewMode = SourcesViewModeExtensions.FromUrlParam(mode),
-                FoundSources = m_mockProvider.GetSources(alphabet, SourcesViewModeExtensions.FromUrlParam(mode)),
+                ViewMode = SourcesViewModeConverter.FromUrlParam(mode),
+                FoundSources = m_provider.GetSources(alphabet, SourcesViewModeConverter.FromUrlParam(mode)),
             });
         }
+
+
+        
+
+        
     }
 }
