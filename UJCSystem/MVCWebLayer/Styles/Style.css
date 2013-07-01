@@ -364,24 +364,5 @@ form.sources-order.form-horizontal.form-horizontal .controls {
 /* Module search */
 
 
-/* dictonaries.css */
-.entryFree { display:block; text-align: justify; margin-bottom: 1em; }
-span[lang=ger] { font-family: courier, fixed, monospace; }
-span[lang=cze] { font-family: 'Times New Roman', serif; }
-.match { background-color: yellow; }
-.note {display:block; font-size:85%; padding-bottom:0; padding-top:0; }
-.sense {display:block; }
-.senses {display:block; margin-bottom: 1em;}
-.xr {}
-.etym {display: block;}
-.compound {font-family:arial, helvetica, sans-serif; font-size:90%; font-weight:bold;}
-.def {font-style: italic; }
-.hidden {display:none; visibility: collapse;}
-.it {font-style: italic; }
-.bo {font-weight:bold;}
-.nonp {font-size:85%; }
-.cap {font-variant:small-caps;}
-/* dictonaries.css */
-
 
 
