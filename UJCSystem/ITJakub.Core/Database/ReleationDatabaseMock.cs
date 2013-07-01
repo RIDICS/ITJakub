@@ -99,7 +99,7 @@ namespace ITJakub.Core.Database
             }
 
             levels.Reverse();
-            return string.Join(" - ", levels.Select(x => x.TextValue));
+            return string.Join(" – ", levels.Select(x => x.TextValue));
         }
 
         private void LoadBooks()
