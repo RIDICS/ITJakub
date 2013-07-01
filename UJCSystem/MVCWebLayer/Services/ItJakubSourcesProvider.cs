@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using ITJakub.Contracts.Categories;
 using ITJakub.Core;
 using ITJakub.MVCWebLayer.Enums;
-using ITJakub.MVCWebLayer.Services.DTOs;
 
 namespace ITJakub.MVCWebLayer.Services
 {
@@ -14,19 +14,19 @@ namespace ITJakub.MVCWebLayer.Services
             m_serviceClient = Container.Current.Resolve<ItJakubServiceClient>();
         }
 
-        public IEnumerable<Source> GetSearchResult()
+        public IEnumerable<Book> GetSearchResult()
         {
-            return new List<Source>();
+            return new List<Book>();
         }
 
-        public Source GetDetail(string id)
+        public Book GetDetail(string id)
         {
-            return new Source();
+            return new Book();
         }
 
-        public IEnumerable<Source> GetSources(string query, SourcesViewMode mode)
+        public IEnumerable<Book> GetSources(string query, SourcesViewMode mode)
         {
-            return new List<Source>();
+            return new List<Book>();
         }
     }
 }

@@ -53,6 +53,9 @@ namespace ITJakub.Contracts.Categories
         }
 
         [DataMember]
+        public string Author { get; set; }
+
+        [DataMember]
         public List<string> TextCategoriesClassification { get; set; }
 
     }

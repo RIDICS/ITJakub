@@ -2,7 +2,6 @@
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.MVCWebLayer.Enums;
-using ITJakub.MVCWebLayer.Services.DTOs;
 
 namespace ITJakub.MVCWebLayer.Services
 {
@@ -17,9 +16,9 @@ namespace ITJakub.MVCWebLayer.Services
 
     public interface ISourcesProvider
     {
-        IEnumerable<Source> GetSearchResult();
-        Source GetDetail(string id);
-        IEnumerable<Source> GetSources(string query, SourcesViewMode mode);
+        IEnumerable<Book> GetSearchResult();
+        Book GetDetail(string id);
+        IEnumerable<Book> GetSources(string query, SourcesViewMode mode);
     }
     
 }

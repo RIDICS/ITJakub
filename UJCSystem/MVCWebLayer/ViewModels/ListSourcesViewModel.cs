@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
+using ITJakub.Contracts.Categories;
 using ITJakub.MVCWebLayer.Enums;
-using ITJakub.MVCWebLayer.Services.DTOs;
 
 namespace ITJakub.MVCWebLayer.ViewModels
 { 
     public class ListSourcesViewModel
     {
         public SourcesViewMode ViewMode { get; set; }
-        public IEnumerable<Source> FoundSources { get; set; }
+        public IEnumerable<Book> FoundSources { get; set; }
         public readonly List<AlphabetLetters> Alphabet = new List<AlphabetLetters>
             {
                 new AlphabetLetters("A", false), 
