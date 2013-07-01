@@ -12,26 +12,21 @@ namespace ITJakub.MVCWebLayer.Controllers
         private readonly ISourcesProvider m_provider = new MockSourcesProvider();
 
         [HttpGet]
-        public ActionResult Detail(string id, string part)
+        public ActionResult Detail(string id)
         {
-            var enumValue =  SourceDetailPart.Info;
-            try
-            {
-                enumValue = (SourceDetailPart)Enum.Parse(typeof(SourceDetailPart), part);
-            }
-            catch (Exception) {}
+            return View("Detail", m_provider.GetDetail(id));
+        }
 
-            switch (enumValue)
-            {
-                case SourceDetailPart.Info:
-                    return View("Detail", m_provider.GetDetail(id));
-                case SourceDetailPart.Podminky:
-                    return View("DetailPodminky");
-                case SourceDetailPart.Zpracovani:
-                    return View("DetailZpracovani");
-                default:
-                    return View("Detail", m_provider.GetDetail(id));
-            }
+        [HttpGet]
+        public ActionResult DetailPodminky(string id)
+        {
+            return View("DetailPodminky", m_provider.GetDetail(id));
+        }
+
+        [HttpGet]
+        public ActionResult DetailZpracovani(string id)
+        {
+            return View("DetailZpracovani", m_provider.GetDetail(id));
         }
 
         [HttpGet]

@@ -62,7 +62,7 @@ namespace ITJakub.MVCWebLayer
             routes.MapRoute(
                 "SourcesDetail",
                 "zdroje/{id}",
-                new { controller = "Sources", action = "Detail", part = "Info" }
+                new { controller = "Sources", action = "Detail" }
             );
 
             routes.MapRoute(
@@ -84,15 +84,15 @@ namespace ITJakub.MVCWebLayer
             );
 
             routes.MapRoute(
-                "SourcesDetailZpracovani",
-                "zdroje/{id}/zpracovani-dokumentu",
-                new { controller = "Sources", action = "Detail", part = "Zpracovani", id = "1-zizka" }
+                "SourcesDetailPodminky",
+                "zdroje/{id}/podminky-uziti",
+                new { controller = "Sources", action = "DetailPodminky" }
             );
 
             routes.MapRoute(
-                "SourcesDetailPodminky",
-                "zdroje/{id}/podminky-uziti",
-                new { controller = "Sources", action = "Detail", part = "Podminky", id = "1-zizka" }
+                "SourcesDetailZpracovani",
+                "zdroje/{id}/zpracovani-dokumentu",
+                new { controller = "Sources", action = "DetailZpracovani" }
             );
 
             routes.MapRoute(
