@@ -103,6 +103,11 @@ namespace ITJakub.SearchService
             return dbResult;
         }
 
-       
+
+        public IEnumerable<SearchResult> GetAllBooksContainingSearchTerm(string searchTerm)
+        {
+            IEnumerable<SearchResult> dbResult = m_bookDao.GetAllBooksContainsTerm(searchTerm);
+            return dbResult;
+        }
     }
 }

@@ -1,6 +1,8 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 using Castle.MicroKernel;
+using ITJakub.Contracts.Searching;
 
 namespace ITJakub.Core.Database.Exist.DAOs
 {
@@ -38,6 +40,77 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("for $hit in $words");
             builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
             builder.AppendLine("return <title>{$title}</title>");
+
+            return builder.ToString();
+        }
+
+        public IEnumerable<SearchResult> GetAllBooksContainsTerm(string searchTerm)
+        {
+
+            string query = GetBooksContainsTermQuery(searchTerm);
+            string dbResult = ExistDao.QueryXml(query);
+
+            XmlDocument dbXmlResult = new XmlDocument();
+            dbXmlResult.LoadXml(dbResult);
+
+            XmlNamespaceManager nManager = new XmlNamespaceManager(dbXmlResult.NameTable);
+            foreach (var allNamespace in Descriptor.GetAllNamespaces())
+            {
+                nManager.AddNamespace(allNamespace.Key, allNamespace.Value);
+            }
+
+
+            List<SearchResult> results = new List<SearchResult>();
+            XmlNodeList hits = dbXmlResult.SelectNodes("//hit");
+            if (hits != null)
+                foreach (XmlNode hit in hits)
+                {
+                    SearchResult result = new SearchResult();
+                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//authors"), TeiP5Descriptor.AuthorNodeName, nManager);
+                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
+                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
+
+                    results.Add(result);
+                }
+
+            return results;
+        }
+
+        private string GetBooksContainsTermQuery(string word)
+        {
+            StringBuilder builder = new StringBuilder();
+            AddNamespacesAndCollation(builder);
+
+
+            builder.AppendLine("import module namespace kwic=\"http://exist-db.org/xquery/kwic\";");
+
+            builder.AppendLine("<words>{");
+            builder.AppendLine("let $query :=");
+            builder.AppendLine("<query>");
+            builder.AppendLine("<bool>");
+            builder.AppendLine(string.Format("<wildcard occur='must'>{0}</wildcard>", word));
+            builder.AppendLine("</bool>");
+            builder.AppendLine("</query>");
+
+            builder.AppendLine("let $words := collection(\"\")/tei:TEI/tei:text/tei:body//tei:w[ft:query(@nlp:lemma, $query)]");
+            builder.AppendLine("for $hit in $words");
+            builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
+            builder.AppendLine("let $id := $hit/ancestor-or-self::tei:TEI/@n");
+            builder.AppendLine("let $author := $hit/ancestor-or-self::tei:TEI//tei:author");
+            builder.AppendLine("let $categories := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:catRef");
+
+
+            builder.AppendLine("order by $hit");
+            builder.AppendLine("return <hit>");
+            builder.AppendLine("<id>{$id}</id>");
+            builder.AppendLine("<title>{$title}</title>");
+            builder.AppendLine("<authors>{$author}</authors>");
+            builder.AppendLine("<categories>{$categories}</categories>");
+            builder.AppendLine("</hit>");
+            builder.AppendLine();
+            builder.AppendLine("}");
+            builder.AppendLine("</words>");
+
 
             return builder.ToString();
         }

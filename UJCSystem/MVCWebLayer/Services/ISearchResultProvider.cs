@@ -16,7 +16,7 @@ namespace ITJakub.MVCWebLayer.Services
 
     public interface ISourcesProvider
     {
-        IEnumerable<Book> GetSearchResult();
+        IEnumerable<SearchResult> GetSearchResult(string searchTerm);
         Book GetDetail(string id);
         IEnumerable<Book> GetSources(string query, SourcesViewMode mode);
     }

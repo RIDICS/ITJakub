@@ -9,7 +9,7 @@ namespace ITJakub.MVCWebLayer.Controllers
 {
     public sealed class SourcesController : Controller
     {
-        private readonly ISourcesProvider m_provider = new MockSourcesProvider();
+        private readonly ISourcesProvider m_provider = new ItJakubSourcesProvider();
 
         [HttpGet]
         public ActionResult Detail(string id)
@@ -49,7 +49,7 @@ namespace ITJakub.MVCWebLayer.Controllers
         public ActionResult Search(string searchTerm)
         {
             return View("Search", new SearchSourcesViewModel { 
-                FoundSources = m_provider.GetSearchResult(),
+                FoundSources = m_provider.GetSearchResult(searchTerm),
             });
         }
 

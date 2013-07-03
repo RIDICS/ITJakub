@@ -39,6 +39,11 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetHtmlContextForKeyWord(keyWord, bookIds);
         }
 
+        public IEnumerable<SearchResult> GetAllBooksContainingSearchTerm(string searchTerm)
+        {
+            return m_searchServiceManager.GetAllBooksContainingSearchTerm(searchTerm);
+        }
+
         public string GetTitleById(string id)
         {
             return m_searchServiceManager.GetTitleById(id);

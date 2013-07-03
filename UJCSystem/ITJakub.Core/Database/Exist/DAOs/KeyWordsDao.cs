@@ -77,7 +77,6 @@ namespace ITJakub.Core.Database.Exist.DAOs
                     result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
                     result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
                     result.Kwic = XmlTool.ParseKwicStructure(hit.SelectSingleNode("kwic"), TeiP5Descriptor.ParagraphNodeName, nManager);
-                    result.OriginalXml = hit.InnerXml;
 
                     results.Add(result);
                 }
@@ -159,7 +158,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
                     result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
                     result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
 
-                    string xmlContext = XmlTool.ParseXmlContext(hit.SelectSingleNode("context"));
+                    //string xmlContext = XmlTool.ParseXmlContext(hit.SelectSingleNode("context"));
                     // result.HtmlContext = m_xsltTransformer.TransformResult(xmlContext, searchedTerm);//todo parse only hit.SelectSingleNode
                     result.HtmlContext = m_xsltTransformer.TransformResult(hit.OuterXml, searchedTerm); //todo parse only hit.SelectSingleNode
 

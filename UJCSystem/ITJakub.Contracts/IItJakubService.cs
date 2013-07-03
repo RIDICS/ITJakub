@@ -22,5 +22,8 @@ namespace ITJakub.Contracts
 
         [OperationContract]
         List<SelectionBase> GetRootCategories();
+
+        [OperationContract]
+        IEnumerable<SearchResult> GetBooksBySearchTerm(string searchTerm);
     }
 }

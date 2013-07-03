@@ -30,5 +30,8 @@ namespace ITJakub.Contracts
 
         [OperationContract]
         List<SearchResultWithHtmlContext> GetHtmlContextForKeyWordWithBooksRestriction(string keyWord, List<string> bookIds);
+
+        [OperationContract]
+        IEnumerable<SearchResult> GetAllBooksContainingSearchTerm(string searchTerm);
     }
 }

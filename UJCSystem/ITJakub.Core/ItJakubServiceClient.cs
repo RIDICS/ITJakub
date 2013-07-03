@@ -116,5 +116,24 @@ namespace ITJakub.Core
 
         }
 
+        public IEnumerable<SearchResult> GetBooksBySearchTerm(string searchTerm)
+        {
+            try
+            {
+                return Channel.GetBooksBySearchTerm(searchTerm);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBooksBySearchTerm failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBooksBySearchTerm timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

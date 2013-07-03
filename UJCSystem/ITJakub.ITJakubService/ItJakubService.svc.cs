@@ -46,6 +46,11 @@ namespace ITJakub.ITJakubService
         {
             return m_serviceManager.GetRootCategories();
         }
+
+        public IEnumerable<SearchResult> GetBooksBySearchTerm(string searchTerm)
+        {
+            return m_serviceManager.GetBookBySearchTerm(searchTerm);
+        }
     }
 
     [ServiceContract]

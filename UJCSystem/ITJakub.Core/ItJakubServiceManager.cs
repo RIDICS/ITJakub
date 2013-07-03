@@ -92,5 +92,11 @@ namespace ITJakub.Core
             }
             return bookIdsByCategories;
         }
+
+        public IEnumerable<SearchResult> GetBookBySearchTerm(string searchTerm)
+        {
+            IEnumerable<SearchResult> dbResult = m_searchClient.GetAllBooksContainingSearchTerm(searchTerm);
+            return dbResult;
+        }
     }
 }

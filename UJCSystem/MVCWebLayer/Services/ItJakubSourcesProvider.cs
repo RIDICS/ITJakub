@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Contracts.Categories;
+using ITJakub.Contracts.Searching;
 using ITJakub.Core;
 using ITJakub.MVCWebLayer.Enums;
 
@@ -14,9 +15,11 @@ namespace ITJakub.MVCWebLayer.Services
             m_serviceClient = Container.Current.Resolve<ItJakubServiceClient>();
         }
 
-        public IEnumerable<Book> GetSearchResult()
+        public IEnumerable<SearchResult> GetSearchResult(string searchTerm)
         {
-            return new List<Book>();
+            return m_serviceClient.GetBooksBySearchTerm(searchTerm);
+
+            return new List<SearchResult>();
         }
 
         public Book GetDetail(string id)

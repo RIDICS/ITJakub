@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using ITJakub.Contracts.Categories;
+using ITJakub.Contracts.Searching;
 using ITJakub.MVCWebLayer.Enums;
 
 namespace ITJakub.MVCWebLayer.Services.Mocks
 {
     public class MockSourcesProvider : ISourcesProvider
     {
-        public IEnumerable<Book> GetSearchResult()
+        public IEnumerable<SearchResult> GetSearchResult(string searchTerm)
         {
-            return new List<Book>
+            return new List<SearchResult>
                 {
-                    { new Book {Name = "Bible olomoucká, Genesis–Esdráš", Author = ""} }
+                    { new SearchResult {Title = "Bible olomoucká, Genesis–Esdráš", Author = ""} }
                 };
         }
 
