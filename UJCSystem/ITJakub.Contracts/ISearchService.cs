@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 
 namespace ITJakub.Contracts
@@ -33,5 +34,12 @@ namespace ITJakub.Contracts
 
         [OperationContract]
         IEnumerable<SearchResult> GetAllBooksContainingSearchTerm(string searchTerm);
+
+        [OperationContract]
+        IEnumerable<Book> GetBooksByTitleFirstLetter(string letter);
+
+        [OperationContract]
+        IEnumerable<Book> GetBooksByAuthorFirstLetter(string letter);
+
     }
 }

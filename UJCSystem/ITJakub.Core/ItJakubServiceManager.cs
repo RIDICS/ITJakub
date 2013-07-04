@@ -98,5 +98,16 @@ namespace ITJakub.Core
             IEnumerable<SearchResult> dbResult = m_searchClient.GetAllBooksContainingSearchTerm(searchTerm);
             return dbResult;
         }
+
+        public IEnumerable<Book> GetBooksTitleByLetter(string letter)
+        {
+            
+            return m_searchClient.GetBooksByTitleFirstLetter(letter);
+        }
+
+        public IEnumerable<Book> GetSourcesAuthorByLetter(string letter)
+        {
+            return m_searchClient.GetBooksByAuthorFirstLetter(letter);
+        }
     }
 }

@@ -51,6 +51,16 @@ namespace ITJakub.ITJakubService
         {
             return m_serviceManager.GetBookBySearchTerm(searchTerm);
         }
+
+        public IEnumerable<Book> GetBooksTitleByLetter(string letter)
+        {
+            return m_serviceManager.GetBooksTitleByLetter(letter);
+        }
+
+        public IEnumerable<Book> GetSourcesAuthorByLetter(string letter)
+        {
+            return m_serviceManager.GetSourcesAuthorByLetter(letter);
+        }
     }
 
     [ServiceContract]

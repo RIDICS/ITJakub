@@ -14,10 +14,10 @@
         <div class="control-group">
             <label class="control-label" for="ViewMode">Procházet podle </label>
             <div class="controls">
-                <select id="ViewMode" class="input-small" name="ViewMode"> 
+                <select id="ViewMode" class="input-small" name="viewType"> 
                     @foreach (var mode in GetSourcesViewModes())
                     {
-                        <option data-url="@Url.RouteUrl("SourcesListing", new { mode = mode.Value, alphabet = ViewContext.RouteData.Values["alphabet"].ToString().ToLower() })" value="@mode.Value" @(string.Equals(ViewContext.RouteData.Values["mode"].ToString(), mode.Value, StringComparison.InvariantCultureIgnoreCase) ? "selected=selected" : "")>@mode.Text</option>
+                        <option data-url="@Url.RouteUrl("SourcesListing", new { mode = mode.Value, alphabet = ViewContext.RouteData.Values["alphabet"].ToString().ToLower() })" value="@mode.Value" @(string.Equals(ViewContext.RouteData.Values["type"].ToString(), mode.Value, StringComparison.InvariantCultureIgnoreCase) ? "selected=selected" : "")>@mode.Text</option>
                     }
                 </select>
             </div>
@@ -46,7 +46,7 @@
                 <li@( !liClass.IsEmpty() ? " class=" + liClass : "")>
                     @if (!disabled)
                     {
-                        <a href="@Url.RouteUrl("SourcesListing", new {mode = Model.ViewMode.ToUrlParam(), alphabet = @alphabetLetter.Letter.ToLower()})">@alphabetLetter.Letter</a>
+                        <a href="@Url.RouteUrl("SourcesListing", new {mode = Model.ViewType.ToUrlParam(), alphabet = @alphabetLetter.Letter.ToLower()})">@alphabetLetter.Letter</a>
                     }
                     else
                     {
@@ -81,7 +81,7 @@
 
     IEnumerable<SelectListItem> GetSourcesViewModes()
     {
-        var data = Enum.GetValues(typeof(SourcesViewMode)).Cast<SourcesViewMode>().Select(v => new SelectListItem
+        var data = Enum.GetValues(typeof(SourcesViewType)).Cast<SourcesViewType>().Select(v => new SelectListItem
         {
             Text = v.GetStringValue(),
             Value = v.ToUrlParam(),

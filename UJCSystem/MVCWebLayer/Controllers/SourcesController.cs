@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using ITJakub.Contracts.Categories;
 using ITJakub.MVCWebLayer.Enums;
 using ITJakub.MVCWebLayer.Services;
-using ITJakub.MVCWebLayer.Services.Mocks;
 using ITJakub.MVCWebLayer.ViewModels;
 
 namespace ITJakub.MVCWebLayer.Controllers
@@ -33,24 +33,25 @@ namespace ITJakub.MVCWebLayer.Controllers
         public ActionResult DetailHledat(string id, string searchTerm)
         {
             return View("DetailSearch", new SearchSourceDetailViewModel
-            {
-                SearchTerm = string.Empty,
-                ShowResults = !string.IsNullOrEmpty(searchTerm),
-            });
+                {
+                    SearchTerm = string.Empty,
+                    ShowResults = !string.IsNullOrEmpty(searchTerm),
+                });
         }
 
         [HttpGet]
         public ActionResult Prochazet(string id, int page)
         {
-                return View("Prochazet");
+            return View("Prochazet");
         }
 
         [HttpGet]
         public ActionResult Search(string searchTerm)
         {
-            return View("Search", new SearchSourcesViewModel { 
-                FoundSources = m_provider.GetSearchResult(searchTerm),
-            });
+            return View("Search", new SearchSourcesViewModel
+                {
+                    FoundSources = m_provider.GetSearchResult(searchTerm),
+                });
         }
 
         [HttpGet]
@@ -62,15 +63,24 @@ namespace ITJakub.MVCWebLayer.Controllers
                 alphabet = "A";
             }
 
-            return View(new ListSourcesViewModel {
-                ViewMode = SourcesViewModeConverter.FromUrlParam(mode),
-                FoundSources = m_provider.GetSources(alphabet, SourcesViewModeConverter.FromUrlParam(mode)),
-            });
+            SourcesViewType viewType = SourcesViewModeConverter.FromUrlParam(mode);
+
+            IEnumerable<Book> results = new List<Book>();
+            switch (viewType)
+            {
+                case SourcesViewType.Author:
+                    results = m_provider.GetSourcesAuthorByLetter(alphabet);
+                    break;
+                case SourcesViewType.Name:
+                    results = m_provider.GetSourcesTitleByLetter(alphabet);
+                    break;
+            }
+
+            return View(new ListSourcesViewModel
+                {
+                    ViewType = SourcesViewModeConverter.FromUrlParam(mode),
+                    FoundSources = results,
+                });
         }
-
-
-        
-
-        
-    }
+    };
 }

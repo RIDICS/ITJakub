@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ITJakub.Contracts;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core.Database.Exist;
 using ITJakub.Core.Database.Exist.DAOs;
@@ -107,6 +108,18 @@ namespace ITJakub.SearchService
         public IEnumerable<SearchResult> GetAllBooksContainingSearchTerm(string searchTerm)
         {
             IEnumerable<SearchResult> dbResult = m_bookDao.GetAllBooksContainsTerm(searchTerm);
+            return dbResult;
+        }
+
+        public IEnumerable<Book> GetBooksByAuthorFirstLetter(string letter)
+        {
+            var dbResult = m_bookDao.GetAllBooksByAuthorFirstLetter(letter);
+            return dbResult;
+        }
+
+        public IEnumerable<Book> GetBooksByTitleFirstLetter(string letter)
+        {
+            var dbResult = m_bookDao.GetAllBooksByAuthorFirstLetter(letter);
             return dbResult;
         }
     }

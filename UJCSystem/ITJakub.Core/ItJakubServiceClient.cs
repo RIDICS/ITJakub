@@ -135,5 +135,45 @@ namespace ITJakub.Core
                 throw;
             }
         }
+
+        public IEnumerable<Book> GetBooksTitleByLetter(string letter)
+        {
+            try
+            {
+                return Channel.GetBooksTitleByLetter(letter);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBooksTitleByLetter failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBooksBySearchTerm timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public IEnumerable<Book> GetSourcesAuthorByLetter(string letter)
+        {
+            try
+            {
+                return Channel.GetSourcesAuthorByLetter(letter);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetSourcesAuthorByLetter failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetSourcesAuthorByLetter timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

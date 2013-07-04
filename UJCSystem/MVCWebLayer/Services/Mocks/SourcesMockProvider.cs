@@ -21,41 +21,13 @@ namespace ITJakub.MVCWebLayer.Services.Mocks
             return new Book { Name = "Bible olomoucká, Genesis–Esdráš", Author = "" };
         }
 
-        public IEnumerable<Book> GetSources(string query, SourcesViewMode mode)
+        public IEnumerable<Book> GetSourcesTitleByLetter(string letter)
         {
-            if (string.IsNullOrEmpty(query))
-            {
-                return null;
-            }
+            return new List<Book>();
+        }
 
-            query = query.Trim();
-
-            if (string.Equals(query, "A", StringComparison.InvariantCultureIgnoreCase) && mode == SourcesViewMode.Name)
-            {
-                return new List<Book>
-                {
-                    { new Book{ Name = "[Alexandreida. Zlomek budějovicko-muzejní.]", Author = ""} },
-                    { new Book{ Name = "[Alexandreida. Zlomek budějovický.]"} },
-                    { new Book{ Name = "[Alexandreida. Zlomek budějovický druhý.]"} }
-                };
-            }
-            else if (string.Equals(query, "B", StringComparison.InvariantCultureIgnoreCase) && mode == SourcesViewMode.Name)
-            {
-                return new List<Book>
-                {
-                    { new Book{ Name = "[Bible kladrubská, kniha Jozue]", Author = ""} },
-                    { new Book{ Name = "	[Bible olomoucká, Genesis–Esdráš]", Author = ""} }
-                };
-            }
-            else if (string.Equals(query, "B", StringComparison.InvariantCultureIgnoreCase) && mode == SourcesViewMode.Author)
-            {
-                return new List<Book>
-                {
-                    { new Book{ Name = "[Sborník traktátů Jana Bechyňky (neuberský)]", Author = "Bechyňka, Jan"} },
-                    { new Book{ Name = "Překlad kroniky Twingerovy", Author = "Beneš z Hořovic"} }
-                };
-            }
-
+        public IEnumerable<Book> GetSourcesAuthorByLetter(string letter)
+        {
             return new List<Book>();
         }
     }

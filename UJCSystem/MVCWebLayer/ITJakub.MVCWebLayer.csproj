@@ -100,7 +100,7 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Enums\SourceDetailPart.cs" />
-    <Compile Include="Enums\SourcesViewMode.cs" />
+    <Compile Include="Enums\SourcesViewType.cs" />
     <Compile Include="Enums\SourcesViewModeConverter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

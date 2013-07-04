@@ -11,7 +11,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
     public class ExistWordsDao : ExistDaoBase
     {
         private const int KeyWordValue = 45;
-        private XslTransformDirector m_xsltTransformer;
+        private readonly XslTransformDirector m_xsltTransformer;
 
         public ExistWordsDao(IKernel container) : base(container)
         {

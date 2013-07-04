@@ -25,5 +25,11 @@ namespace ITJakub.Contracts
 
         [OperationContract]
         IEnumerable<SearchResult> GetBooksBySearchTerm(string searchTerm);
+
+        [OperationContract]
+        IEnumerable<Book> GetBooksTitleByLetter(string letter);
+
+        [OperationContract]
+        IEnumerable<Book> GetSourcesAuthorByLetter(string letter);
     }
 }

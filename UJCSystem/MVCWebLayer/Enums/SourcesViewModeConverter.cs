@@ -3,29 +3,29 @@
     public static class SourcesViewModeConverter
     {
 
-        public static string ToUrlParam(this SourcesViewMode mode)
+        public static string ToUrlParam(this SourcesViewType type)
         {
-            switch (mode)
+            switch (type)
             {
-                case SourcesViewMode.Author:
+                case SourcesViewType.Author:
                     return "autor";
-                case SourcesViewMode.Name:
+                case SourcesViewType.Name:
                     return "nazev";
                 default:
                     return string.Empty;
             }
         }
 
-        public static SourcesViewMode FromUrlParam(string mode)
+        public static SourcesViewType FromUrlParam(string mode)
         {
             switch (mode)
             {
                 case "autor":
-                    return SourcesViewMode.Author;
+                    return SourcesViewType.Author;
                 case "nazev":
-                    return SourcesViewMode.Name;
+                    return SourcesViewType.Name;
                 default:
-                    return SourcesViewMode.Name;
+                    return SourcesViewType.Name;
             }
         }
     }

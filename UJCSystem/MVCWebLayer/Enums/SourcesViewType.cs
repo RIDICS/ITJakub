@@ -1,7 +1,7 @@
 ﻿using Jewelery;
 namespace ITJakub.MVCWebLayer.Enums
 {
-    public enum SourcesViewMode
+    public enum SourcesViewType
     {
         [StringValue("Název")]
         Name,

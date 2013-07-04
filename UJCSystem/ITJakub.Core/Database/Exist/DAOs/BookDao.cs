@@ -2,6 +2,7 @@
 using System.Text;
 using System.Xml;
 using Castle.MicroKernel;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 
 namespace ITJakub.Core.Database.Exist.DAOs
@@ -46,7 +47,6 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
         public IEnumerable<SearchResult> GetAllBooksContainsTerm(string searchTerm)
         {
-
             string query = GetBooksContainsTermQuery(searchTerm);
             string dbResult = ExistDao.QueryXml(query);
 
@@ -58,7 +58,6 @@ namespace ITJakub.Core.Database.Exist.DAOs
             {
                 nManager.AddNamespace(allNamespace.Key, allNamespace.Value);
             }
-
 
             List<SearchResult> results = new List<SearchResult>();
             XmlNodeList hits = dbXmlResult.SelectNodes("//hit");
@@ -99,7 +98,6 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("let $author := $hit/ancestor-or-self::tei:TEI//tei:author");
             builder.AppendLine("let $categories := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:catRef");
 
-
             builder.AppendLine("order by $hit");
             builder.AppendLine("return <hit>");
             builder.AppendLine("<id>{$id}</id>");
@@ -113,6 +111,11 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
 
             return builder.ToString();
+        }
+
+        public IEnumerable<Book> GetAllBooksByAuthorFirstLetter(string letter)
+        {
+            return new List<Book>();
         }
     }
 }

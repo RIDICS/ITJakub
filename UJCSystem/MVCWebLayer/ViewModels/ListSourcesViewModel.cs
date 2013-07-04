@@ -6,7 +6,7 @@ namespace ITJakub.MVCWebLayer.ViewModels
 { 
     public class ListSourcesViewModel
     {
-        public SourcesViewMode ViewMode { get; set; }
+        public SourcesViewType ViewType { get; set; }
         public IEnumerable<Book> FoundSources { get; set; }
         public readonly List<AlphabetLetters> Alphabet = new List<AlphabetLetters>
             {

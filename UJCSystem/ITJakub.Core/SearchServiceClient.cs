@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.ServiceModel;
 using ITJakub.Contracts;
+using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core.Searching;
 using log4net;
@@ -181,6 +182,46 @@ namespace ITJakub.Core
             try
             {
                 return Channel.GetAllBooksContainingSearchTerm(searchTerm);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public IEnumerable<Book> GetBooksByTitleFirstLetter(string letter)
+        {
+            try
+            {
+                return Channel.GetBooksByTitleFirstLetter(letter);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public IEnumerable<Book> GetBooksByAuthorFirstLetter(string letter)
+        {
+            try
+            {
+                return Channel.GetBooksByAuthorFirstLetter(letter);
             }
             catch (CommunicationException ex)
             {
