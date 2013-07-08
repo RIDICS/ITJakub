@@ -21,7 +21,7 @@ namespace ITJakub.Core
 
         public List<SearchResultWithHtmlContext> GetContextForKeyWord(string keyWord, List<string> categorieIds, List<string> booksIds)
         {
-            var bookIdsByCategories = GetBookIdsByCategorie(ref categorieIds, ref booksIds);
+            var bookIdsByCategories = GetBookIdsByCategorie(categorieIds, booksIds);
             List<SearchResultWithHtmlContext> dbResult;
             if (bookIdsByCategories.Count == 0)
                 dbResult = m_searchClient.GetHtmlContextForKeyWord(keyWord);
@@ -53,7 +53,7 @@ namespace ITJakub.Core
 
             var result = new KeyWordsResponse();
 
-            var bookIdsByCategories = GetBookIdsByCategorie(ref categorieIds, ref booksIds);
+            var bookIdsByCategories = GetBookIdsByCategorie(categorieIds, booksIds);
 
             var selectedTreePart = m_releationDatabaseMock.GetSelectedTreePart(categorieIds, booksIds);
 
@@ -77,7 +77,7 @@ namespace ITJakub.Core
             return result;
         }
 
-        private List<string> GetBookIdsByCategorie(ref List<string> categorieIds, ref List<string> booksIds)
+        private List<string> GetBookIdsByCategorie(List<string> categorieIds, List<string> booksIds)
         {
             if (categorieIds == null)
                 categorieIds = new List<string>();

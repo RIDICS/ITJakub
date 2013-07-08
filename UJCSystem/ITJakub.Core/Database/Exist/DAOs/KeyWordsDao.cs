@@ -134,10 +134,10 @@ namespace ITJakub.Core.Database.Exist.DAOs
                 foreach (XmlNode hit in hits)
                 {
                     SearchResultWithXmlContext result = new SearchResultWithXmlContext();
-                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//author"), TeiP5Descriptor.AuthorNodeName, nManager);
-                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
-                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
-                    result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
+                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("author"), TeiP5Descriptor.AuthorNodeName, nManager);
+                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("title"), TeiP5Descriptor.TitleNodeName, nManager);
+                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("id"), TeiP5Descriptor.IdAttributeName);
+                    result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
                     result.XmlContext = XmlTool.ParseXmlContext(hit.SelectSingleNode("context"));
                     results.Add(result);
                 }
@@ -153,10 +153,10 @@ namespace ITJakub.Core.Database.Exist.DAOs
                 foreach (XmlNode hit in hits)
                 {
                     SearchResultWithHtmlContext result = new SearchResultWithHtmlContext();
-                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//authors"), TeiP5Descriptor.AuthorNodeName, nManager);
-                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
-                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
-                    result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("//categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
+                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("authors"), TeiP5Descriptor.AuthorNodeName, nManager);
+                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("title"), TeiP5Descriptor.TitleNodeName, nManager);
+                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("id"), TeiP5Descriptor.IdAttributeName);
+                    result.Categories = XmlTool.ParseTeiCategoriesIds(hit.SelectSingleNode("categories"), TeiP5Descriptor.CategoriesNodeName, TeiP5Descriptor.CategoriesTargetAttributName, nManager);
 
                     //string xmlContext = XmlTool.ParseXmlContext(hit.SelectSingleNode("context"));
                     // result.HtmlContext = m_xsltTransformer.TransformResult(xmlContext, searchedTerm);//todo parse only hit.SelectSingleNode
