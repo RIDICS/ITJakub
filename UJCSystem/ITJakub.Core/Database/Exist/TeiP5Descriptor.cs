@@ -9,6 +9,8 @@ namespace ITJakub.Core.Database.Exist
     /// </summary>
     public class TeiP5Descriptor
     {
+        public string GetDataLocation { get { return "/db/apps/jacob-test/data"; } }
+
 
         public string GetTeiNameSpace()
         {
@@ -24,26 +26,6 @@ namespace ITJakub.Core.Database.Exist
         {
             return "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
         }
-
-        //public string GetTitleXPath()
-        //{
-        //    return "/TEI/teiHeader/fileDesc/titleStmt/title";
-        //}
-
-        //public string GetAuthorXPath()
-        //{
-        //    return "/TEI/teiHeader/fileDesc/titleStmt/author";
-        //}
-
-        //public string GetDatationFromXPath()
-        //{
-        //    return "/TEI/teiHeader/fileDesc/sourceDesc/msDesc/history/origin/origDate/@notBefore";
-        //}
-
-        //public string GetDatationToXPath()
-        //{
-        //    return "/TEI/teiHeader/fileDesc/sourceDesc/msDesc/history/origin/origDate/@notAfter"; ;
-        //}
 
         public static string AuthorNodeName
         {

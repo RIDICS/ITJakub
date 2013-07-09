@@ -11,7 +11,6 @@ namespace ITJakub.Core.Database.Exist.DAOs
     {
         public BookDao(IKernel container) : base(container)
         {
-            
         }
 
         public string GetTitleByBookId(string id)
@@ -37,7 +36,9 @@ namespace ITJakub.Core.Database.Exist.DAOs
         {
             StringBuilder builder = new StringBuilder();
             AddNamespacesAndCollation(builder);
-            builder.AppendLine(string.Format("let $words := collection(\"\")//tei:TEI[@n='{0}']", id));
+            builder.AppendLine(string.Format("let $collections:= string(\"{0}\")", Descriptor.GetDataLocation));
+
+            builder.AppendLine(string.Format("let $words := collection($collections)//tei:TEI[@n='{0}']", id));
             builder.AppendLine("for $hit in $words");
             builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
             builder.AppendLine("return <title>{$title}</title>");
@@ -91,7 +92,9 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine("</bool>");
             builder.AppendLine("</query>");
 
-            builder.AppendLine("let $words := collection(\"\")/tei:TEI/tei:text/tei:body//tei:w[ft:query(@nlp:lemma, $query)]");
+            builder.AppendLine(string.Format("let $collections:= string(\"{0}\")", Descriptor.GetDataLocation));
+
+            builder.AppendLine("let $words := collection($collections)/tei:TEI/tei:text/tei:body//tei:w[ft:query(@nlp:lemma, $query)]");
             builder.AppendLine("for $hit in $words");
             builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
             builder.AppendLine("let $id := $hit/ancestor-or-self::tei:TEI/@n");
@@ -116,6 +119,26 @@ namespace ITJakub.Core.Database.Exist.DAOs
         public IEnumerable<Book> GetAllBooksByAuthorFirstLetter(string letter)
         {
             return new List<Book>();
+        }
+
+        public string GetBooksByAuthorFirstLetterQuery(string letter)
+        {
+            StringBuilder builder = new StringBuilder();
+            AddNamespacesAndCollation(builder);
+
+
+            builder.AppendLine(string.Format("let $letter := \"{0}\"", letter));
+            builder.AppendLine(string.Format("let $collections:= string(\"{0}\")", Descriptor.GetDataLocation));
+
+            builder.AppendLine("let $books := collection($collections)/tei:TEI");
+            builder.AppendLine("for $book in $books");
+
+            builder.AppendLine("let $titleWord := $book/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[1]/tei:w[1]");
+
+            builder.AppendLine("where fn:starts-with(fn:upper-case($titleWord),fn:upper-case($letter))");
+
+            builder.AppendLine("return <book>{$titleWord}</book>");
+            return builder.ToString();
         }
     }
 }
