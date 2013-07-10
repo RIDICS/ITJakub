@@ -81,7 +81,7 @@
 
     IEnumerable<SelectListItem> GetSourcesViewModes()
     {
-        var data = Enum.GetValues(typeof(SourcesViewType)).Cast<SourcesViewType>().Select(v => new SelectListItem
+        List<SelectListItem> data = Enum.GetValues(typeof(SourcesViewType)).Cast<SourcesViewType>().Select(v => new SelectListItem
         {
             Text = v.GetStringValue(),
             Value = v.ToUrlParam(),
