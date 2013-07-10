@@ -17,7 +17,7 @@
                 <select id="ViewMode" class="input-small" name="viewType"> 
                     @foreach (var mode in GetSourcesViewModes())
                     {
-                        <option data-url="@Url.RouteUrl("SourcesListing", new { mode = mode.Value, alphabet = ViewContext.RouteData.Values["alphabet"].ToString().ToLower() })" value="@mode.Value" @(string.Equals(ViewContext.RouteData.Values["type"].ToString(), mode.Value, StringComparison.InvariantCultureIgnoreCase) ? "selected=selected" : "")>@mode.Text</option>
+                        <option data-url="@Url.RouteUrl("SourcesListing", new { mode = mode.Value, alphabet = ViewContext.RouteData.Values["alphabet"].ToString().ToLower() })" value="@mode.Value" @(string.Equals(ViewContext.RouteData.Values["mode"].ToString(), mode.Value, StringComparison.InvariantCultureIgnoreCase) ? "selected=selected" : "")>@mode.Text</option>
                     }
                 </select>
             </div>
