@@ -111,13 +111,13 @@ namespace ITJakub.SearchService
             return dbResult;
         }
 
-        public IEnumerable<Book> GetBooksByAuthorFirstLetter(string letter)
+        public IEnumerable<SearchResult> GetBooksByAuthorFirstLetter(string letter)
         {
             var dbResult = m_bookDao.GetAllBooksByAuthorFirstLetter(letter);
             return dbResult;
         }
 
-        public IEnumerable<Book> GetBooksByTitleFirstLetter(string letter)
+        public IEnumerable<SearchResult> GetBooksByTitleFirstLetter(string letter)
         {
             var dbResult = m_bookDao.GetAllBooksByAuthorFirstLetter(letter);
             return dbResult;

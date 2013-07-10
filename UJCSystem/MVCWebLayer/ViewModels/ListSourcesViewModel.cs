@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Contracts.Categories;
+using ITJakub.Contracts.Searching;
 using ITJakub.MVCWebLayer.Enums;
 
 namespace ITJakub.MVCWebLayer.ViewModels
@@ -7,7 +8,7 @@ namespace ITJakub.MVCWebLayer.ViewModels
     public class ListSourcesViewModel
     {
         public SourcesViewType ViewType { get; set; }
-        public IEnumerable<Book> FoundSources { get; set; }
+        public IEnumerable<SearchResult> FoundSources { get; set; }
         public readonly List<AlphabetLetters> Alphabet = new List<AlphabetLetters>
             {
                 new AlphabetLetters("A", false), 

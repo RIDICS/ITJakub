@@ -27,9 +27,9 @@ namespace ITJakub.Contracts
         IEnumerable<SearchResult> GetBooksBySearchTerm(string searchTerm);
 
         [OperationContract]
-        IEnumerable<Book> GetBooksTitleByLetter(string letter);
+        IEnumerable<SearchResult> GetBooksTitleByLetter(string letter);
 
         [OperationContract]
-        IEnumerable<Book> GetSourcesAuthorByLetter(string letter);
+        IEnumerable<SearchResult> GetSourcesAuthorByLetter(string letter);
     }
 }

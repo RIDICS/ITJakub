@@ -116,9 +116,35 @@ namespace ITJakub.Core.Database.Exist.DAOs
             return builder.ToString();
         }
 
-        public IEnumerable<Book> GetAllBooksByAuthorFirstLetter(string letter)
+        public IEnumerable<SearchResult> GetAllBooksByAuthorFirstLetter(string letter)
         {
-            return new List<Book>();
+            string query = GetBooksByAuthorFirstLetterQuery(letter);
+            string dbResult = ExistDao.QueryXml(query);
+
+            XmlDocument dbXmlResult = new XmlDocument();
+            dbXmlResult.LoadXml(dbResult);
+
+            XmlNamespaceManager nManager = new XmlNamespaceManager(dbXmlResult.NameTable);
+            foreach (var allNamespace in Descriptor.GetAllNamespaces())
+            {
+                nManager.AddNamespace(allNamespace.Key, allNamespace.Value);
+            }
+
+            List<SearchResult> results = new List<SearchResult>();
+            XmlNodeList hits = dbXmlResult.SelectNodes("//hit");
+            if (hits != null)
+                foreach (XmlNode hit in hits)
+                {
+                    SearchResult result = new SearchResult();
+                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//authors"), TeiP5Descriptor.AuthorNodeName, nManager);
+                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
+                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
+
+                    results.Add(result);
+                }
+
+
+            return results;
         }
 
         public string GetBooksByAuthorFirstLetterQuery(string letter)
@@ -126,18 +152,29 @@ namespace ITJakub.Core.Database.Exist.DAOs
             StringBuilder builder = new StringBuilder();
             AddNamespacesAndCollation(builder);
 
+            builder.AppendLine("<books>{");
 
             builder.AppendLine(string.Format("let $letter := \"{0}\"", letter));
             builder.AppendLine(string.Format("let $collections:= string(\"{0}\")", Descriptor.GetDataLocation));
+            builder.AppendLine("let $hits := collection($collections)/tei:TEI");
+            builder.AppendLine("for $hit in $hits");
 
-            builder.AppendLine("let $books := collection($collections)/tei:TEI");
-            builder.AppendLine("for $book in $books");
-
-            builder.AppendLine("let $titleWord := $book/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[1]/tei:w[1]");
+            builder.AppendLine("let $titleWord := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[1]/tei:w[1]");
+            builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
+            builder.AppendLine("let $id := $hit/ancestor-or-self::tei:TEI/@n");
+            builder.AppendLine("let $author := $hit/ancestor-or-self::tei:TEI//tei:author");
 
             builder.AppendLine("where fn:starts-with(fn:upper-case($titleWord),fn:upper-case($letter))");
 
-            builder.AppendLine("return <book>{$titleWord}</book>");
+            builder.AppendLine("order by $hit");
+            builder.AppendLine("return <hit>");
+            builder.AppendLine("<id>{$id}</id>");
+            builder.AppendLine("<title>{$title}</title>");
+            builder.AppendLine("<authors>{$author}</authors>");
+            builder.AppendLine("</hit>");
+
+            builder.AppendLine("}</books>");
+
             return builder.ToString();
         }
     }

@@ -1,4 +1,0 @@
-﻿namespace ITJakub.Contracts.Categories
-{
-    
-}

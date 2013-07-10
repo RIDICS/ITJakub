@@ -136,7 +136,7 @@ namespace ITJakub.Core
             }
         }
 
-        public IEnumerable<Book> GetBooksTitleByLetter(string letter)
+        public IEnumerable<SearchResult> GetBooksTitleByLetter(string letter)
         {
             try
             {
@@ -156,7 +156,7 @@ namespace ITJakub.Core
             }
         }
 
-        public IEnumerable<Book> GetSourcesAuthorByLetter(string letter)
+        public IEnumerable<SearchResult> GetSourcesAuthorByLetter(string letter)
         {
             try
             {

@@ -18,8 +18,8 @@ namespace ITJakub.MVCWebLayer.Services
     {
         IEnumerable<SearchResult> GetSearchResult(string searchTerm);
         Book GetDetail(string id);
-        IEnumerable<Book> GetSourcesTitleByLetter(string letter);
-        IEnumerable<Book> GetSourcesAuthorByLetter(string letter);
+        IEnumerable<SearchResult> GetSourcesTitleByLetter(string letter);
+        IEnumerable<SearchResult> GetSourcesAuthorByLetter(string letter);
     }
     
 }

@@ -45,12 +45,12 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetAllBooksContainingSearchTerm(searchTerm);
         }
 
-        public IEnumerable<Book> GetBooksByTitleFirstLetter(string letter)
+        public IEnumerable<SearchResult> GetBooksByTitleFirstLetter(string letter)
         {
             return m_searchServiceManager.GetBooksByTitleFirstLetter(letter);
         }
 
-        public IEnumerable<Book> GetBooksByAuthorFirstLetter(string letter)
+        public IEnumerable<SearchResult> GetBooksByAuthorFirstLetter(string letter)
         {
             return m_searchServiceManager.GetBooksByAuthorFirstLetter(letter);
         }

@@ -25,12 +25,12 @@ namespace ITJakub.MVCWebLayer.Services
             return new Book();
         }
 
-        public IEnumerable<Book> GetSourcesTitleByLetter(string letter)
+        public IEnumerable<SearchResult> GetSourcesTitleByLetter(string letter)
         {
             return m_serviceClient.GetBooksTitleByLetter(letter);
         }
 
-        public IEnumerable<Book> GetSourcesAuthorByLetter(string letter)
+        public IEnumerable<SearchResult> GetSourcesAuthorByLetter(string letter)
         {
             return m_serviceClient.GetSourcesAuthorByLetter(letter);
         }

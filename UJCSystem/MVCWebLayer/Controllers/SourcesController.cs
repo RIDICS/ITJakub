@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using ITJakub.Contracts.Categories;
+using ITJakub.Contracts.Searching;
 using ITJakub.MVCWebLayer.Enums;
 using ITJakub.MVCWebLayer.Services;
 using ITJakub.MVCWebLayer.ViewModels;
@@ -65,7 +66,7 @@ namespace ITJakub.MVCWebLayer.Controllers
 
             SourcesViewType viewType = SourcesViewModeConverter.FromUrlParam(mode);
 
-            IEnumerable<Book> results = new List<Book>();
+            IEnumerable<SearchResult> results = new List<SearchResult>();
             switch (viewType)
             {
                 case SourcesViewType.Author:

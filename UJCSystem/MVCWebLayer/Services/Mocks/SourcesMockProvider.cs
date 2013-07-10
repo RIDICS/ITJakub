@@ -21,14 +21,14 @@ namespace ITJakub.MVCWebLayer.Services.Mocks
             return new Book { Name = "Bible olomoucká, Genesis–Esdráš", Author = "" };
         }
 
-        public IEnumerable<Book> GetSourcesTitleByLetter(string letter)
+        public IEnumerable<SearchResult> GetSourcesTitleByLetter(string letter)
         {
-            return new List<Book>();
+            return new List<SearchResult>();
         }
 
-        public IEnumerable<Book> GetSourcesAuthorByLetter(string letter)
+        public IEnumerable<SearchResult> GetSourcesAuthorByLetter(string letter)
         {
-            return new List<Book>();
+            return new List<SearchResult>();
         }
     }
 }

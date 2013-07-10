@@ -99,13 +99,13 @@ namespace ITJakub.Core
             return dbResult;
         }
 
-        public IEnumerable<Book> GetBooksTitleByLetter(string letter)
+        public IEnumerable<SearchResult> GetBooksTitleByLetter(string letter)
         {
             
             return m_searchClient.GetBooksByTitleFirstLetter(letter);
         }
 
-        public IEnumerable<Book> GetSourcesAuthorByLetter(string letter)
+        public IEnumerable<SearchResult> GetSourcesAuthorByLetter(string letter)
         {
             return m_searchClient.GetBooksByAuthorFirstLetter(letter);
         }

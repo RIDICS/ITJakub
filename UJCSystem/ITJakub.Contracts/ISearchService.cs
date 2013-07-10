@@ -36,10 +36,10 @@ namespace ITJakub.Contracts
         IEnumerable<SearchResult> GetAllBooksContainingSearchTerm(string searchTerm);
 
         [OperationContract]
-        IEnumerable<Book> GetBooksByTitleFirstLetter(string letter);
+        IEnumerable<SearchResult> GetBooksByTitleFirstLetter(string letter);
 
         [OperationContract]
-        IEnumerable<Book> GetBooksByAuthorFirstLetter(string letter);
+        IEnumerable<SearchResult> GetBooksByAuthorFirstLetter(string letter);
 
     }
 }
