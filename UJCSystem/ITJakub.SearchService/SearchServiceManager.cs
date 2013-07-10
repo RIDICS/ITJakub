@@ -119,7 +119,7 @@ namespace ITJakub.SearchService
 
         public IEnumerable<SearchResult> GetBooksByTitleFirstLetter(string letter)
         {
-            var dbResult = m_bookDao.GetAllBooksByAuthorFirstLetter(letter);
+            var dbResult = m_bookDao.GetAllBooksByTitleFirstLetter(letter);
             return dbResult;
         }
     }

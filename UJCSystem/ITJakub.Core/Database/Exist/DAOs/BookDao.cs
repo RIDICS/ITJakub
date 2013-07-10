@@ -116,9 +116,8 @@ namespace ITJakub.Core.Database.Exist.DAOs
             return builder.ToString();
         }
 
-        public IEnumerable<SearchResult> GetAllBooksByAuthorFirstLetter(string letter)
+        private IEnumerable<SearchResult> ExecuteQueryAndReturnResults(string query)
         {
-            string query = GetBooksByAuthorFirstLetterQuery(letter);
             string dbResult = ExistDao.QueryXml(query);
 
             XmlDocument dbXmlResult = new XmlDocument();
@@ -136,9 +135,9 @@ namespace ITJakub.Core.Database.Exist.DAOs
                 foreach (XmlNode hit in hits)
                 {
                     SearchResult result = new SearchResult();
-                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//authors"), TeiP5Descriptor.AuthorNodeName, nManager);
-                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
-                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
+                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("authors"), TeiP5Descriptor.AuthorNodeName, nManager);
+                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("title"), TeiP5Descriptor.TitleNodeName, nManager);
+                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("id"), TeiP5Descriptor.IdAttributeName);
 
                     results.Add(result);
                 }
@@ -147,7 +146,19 @@ namespace ITJakub.Core.Database.Exist.DAOs
             return results;
         }
 
-        public string GetBooksByAuthorFirstLetterQuery(string letter)
+        public IEnumerable<SearchResult> GetAllBooksByAuthorFirstLetter(string letter)
+        {
+            string query = GetBooksByAuthorFirstLetterQuery(letter);
+            return ExecuteQueryAndReturnResults(query);
+        }
+
+        public IEnumerable<SearchResult> GetAllBooksByTitleFirstLetter(string letter)
+        {
+            string query = GetBooksByTitleFirstLetterQuery(letter);
+            return ExecuteQueryAndReturnResults(query);
+        }
+
+        public string GetBooksByTitleFirstLetterQuery(string letter)
         {
             StringBuilder builder = new StringBuilder();
             AddNamespacesAndCollation(builder);
@@ -177,5 +188,38 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             return builder.ToString();
         }
+
+        public string GetBooksByAuthorFirstLetterQuery(string letter)
+        {
+            StringBuilder builder = new StringBuilder();
+            AddNamespacesAndCollation(builder);
+
+            builder.AppendLine("<books>{");
+
+            builder.AppendLine(string.Format("let $letter := \"{0}\"", letter));
+            builder.AppendLine(string.Format("let $collections:= string(\"{0}\")", Descriptor.GetDataLocation));
+            builder.AppendLine("let $hits := collection($collections)/tei:TEI");
+            builder.AppendLine("for $hit in $hits");
+
+            builder.AppendLine("let $authorWord := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:author[1]/tei:w[1]");
+            builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
+            builder.AppendLine("let $id := $hit/ancestor-or-self::tei:TEI/@n");
+            builder.AppendLine("let $author := $hit/ancestor-or-self::tei:TEI//tei:author");
+
+            builder.AppendLine("where fn:starts-with(fn:upper-case($authorWord),fn:upper-case($letter))");
+
+            builder.AppendLine("order by $hit");
+            builder.AppendLine("return <hit>");
+            builder.AppendLine("<id>{$id}</id>");
+            builder.AppendLine("<title>{$title}</title>");
+            builder.AppendLine("<authors>{$author}</authors>");
+            builder.AppendLine("</hit>");
+
+            builder.AppendLine("}</books>");
+
+            return builder.ToString();
+        }
+
+        
     }
 }
