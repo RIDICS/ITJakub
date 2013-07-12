@@ -81,7 +81,6 @@ namespace ITJakub.Core.Database.Exist.DAOs
                     results.Add(result);
                 }
 
-
             XmlDocument xmlResult = new XmlDocument();
             xmlResult.LoadXml(dbResult);
 
@@ -313,9 +312,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
             StringBuilder builder = new StringBuilder();
             AddNamespacesAndCollation(builder);
 
-
             builder.AppendLine("import module namespace kwic=\"http://exist-db.org/xquery/kwic\";");
-
 
             builder.AppendLine("declare function local:getAdequateContext($hit as node()) {");
             builder.AppendLine("let $context := ");
@@ -360,7 +357,6 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine();
             builder.AppendLine("}");
             builder.AppendLine("</words>");
-
 
             return builder.ToString();
         }
