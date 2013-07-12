@@ -15,35 +15,62 @@ namespace ITJakub.MVCWebLayer.Controllers
         [HttpGet]
         public ActionResult Detail(string id)
         {
-            return View("Detail", m_provider.GetDetail(id));
+            SearchResult searchResult = new SearchResult();
+            if (id != "undefined")
+            {
+                searchResult = m_provider.GetDetail(id);
+            }
+            return View("Detail", searchResult);
         }
 
         [HttpGet]
         public ActionResult DetailPodminky(string id)
         {
-            return View("DetailPodminky", m_provider.GetDetail(id));
+            SearchResult searchResult = new SearchResult();
+            if (id != "undefined")
+            {
+                searchResult = m_provider.GetDetail(id);
+            }
+            return View("DetailPodminky", searchResult);
         }
 
         [HttpGet]
         public ActionResult DetailZpracovani(string id)
         {
-            return View("DetailZpracovani", m_provider.GetDetail(id));
+            SearchResult searchResult = new SearchResult();
+            if (id != "undefined")
+            {
+                searchResult = m_provider.GetDetail(id);    
+            }
+            return View("DetailZpracovani", searchResult);
         }
 
         [HttpGet]
         public ActionResult DetailHledat(string id, string searchTerm)
         {
-            return View("DetailSearch", new SearchSourceDetailViewModel
+            if(string.IsNullOrEmpty(searchTerm))
+                return View("DetailSearch", new SearchSourceDetailViewModel
                 {
                     SearchTerm = string.Empty,
                     ShowResults = !string.IsNullOrEmpty(searchTerm),
+                });
+            var items = m_provider.GetHtmlContextForKeyWord(searchTerm, id);
+
+            return View("DetailSearch", new SearchSourceDetailViewModel
+                {
+                    
+                    SearchTerm = searchTerm,
+                    ShowResults = !string.IsNullOrEmpty(searchTerm),
+                    SearchResults = items,
                 });
         }
 
         [HttpGet]
         public ActionResult Prochazet(string id, int page)
         {
-            return View("Prochazet");
+            var detail = m_provider.GetContentByBookId(id);
+
+            return View("Prochazet", detail);
         }
 
         [HttpGet]

@@ -55,6 +55,16 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetBooksByAuthorFirstLetter(letter);
         }
 
+        public string GetContentByBookId(string id)
+        {
+            return m_searchServiceManager.GetContentByBookId(id);
+        }
+
+        public SearchResult GetBookById(string id)
+        {
+            return m_searchServiceManager.GetBookById(id);
+        }
+
         public string GetTitleById(string id)
         {
             return m_searchServiceManager.GetTitleById(id);

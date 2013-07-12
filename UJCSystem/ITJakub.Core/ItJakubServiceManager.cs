@@ -109,5 +109,15 @@ namespace ITJakub.Core
         {
             return m_searchClient.GetBooksByAuthorFirstLetter(letter);
         }
+
+        public string GetContentByBookId(string id)
+        {
+            return m_searchClient.GetContentByBookId(id);
+        }
+
+        public SearchResult GetBookById(string id)
+        {
+            return m_searchClient.GetBookById(id);
+        }
     }
 }

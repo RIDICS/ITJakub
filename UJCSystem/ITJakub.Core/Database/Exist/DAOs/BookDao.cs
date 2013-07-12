@@ -4,13 +4,18 @@ using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
+using ITJakub.Xml.XMLOperations;
+using System.Linq;
 
 namespace ITJakub.Core.Database.Exist.DAOs
 {
     public class BookDao : ExistDaoBase
     {
+        private readonly XslTransformDirector m_xsltTransformer;
+
         public BookDao(IKernel container) : base(container)
         {
+            m_xsltTransformer = container.Resolve<XslTransformDirector>();
         }
 
         public string GetTitleByBookId(string id)
@@ -66,9 +71,9 @@ namespace ITJakub.Core.Database.Exist.DAOs
                 foreach (XmlNode hit in hits)
                 {
                     SearchResult result = new SearchResult();
-                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("//authors"), TeiP5Descriptor.AuthorNodeName, nManager);
-                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("//title"), TeiP5Descriptor.TitleNodeName, nManager);
-                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("//id"), TeiP5Descriptor.IdAttributeName);
+                    result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("authors"), TeiP5Descriptor.AuthorNodeName, nManager);
+                    result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("title"), TeiP5Descriptor.TitleNodeName, nManager);
+                    result.Id = XmlTool.ParseId(hit.SelectSingleNode("id"), TeiP5Descriptor.IdAttributeName);
 
                     results.Add(result);
                 }
@@ -220,6 +225,90 @@ namespace ITJakub.Core.Database.Exist.DAOs
             return builder.ToString();
         }
 
-        
+
+        public string GetHtmlContentByBookId(string id)
+        {
+            string query = GetXmlContentByBookQuery(id);
+            string dbResult = ExistDao.QueryXml(query);
+
+            string result = m_xsltTransformer.TransformResult(dbResult, string.Empty);
+            return result;
+        }
+
+        private string GetXmlContentByBookQuery(string id)
+        {
+            StringBuilder builder = new StringBuilder();
+            AddNamespacesAndCollation(builder);
+
+
+            builder.AppendLine(string.Format("let $id := \"{0}\"", id));
+
+            builder.AppendLine(string.Format("let $collection := string(\"{0}\")", Descriptor.GetDataLocation));
+
+            builder.AppendLine("let $hits := collection($collection)/tei:TEI");
+            builder.AppendLine("for $hit in $hits");
+            builder.AppendLine("   let $bookId := $hit/ancestor-or-self::tei:TEI/@n");
+
+            builder.AppendLine("   where $bookId = ($id)");
+
+            builder.AppendLine("   return $hit");
+
+            return builder.ToString();
+        }
+
+        private string GetBookByIdQuery(string id)
+        {
+            StringBuilder builder = new StringBuilder();
+            AddNamespacesAndCollation(builder);
+
+
+            builder.AppendLine(string.Format("let $id := \"{0}\"", id));
+
+            builder.AppendLine(string.Format("let $collection := string(\"{0}\")", Descriptor.GetDataLocation));
+
+            builder.AppendLine("let $hits := collection($collection)/tei:TEI");
+            builder.AppendLine("for $hit in $hits");
+            builder.AppendLine("   let $bookId := $hit/ancestor-or-self::tei:TEI/@n");
+            builder.AppendLine("   let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
+            builder.AppendLine("   let $author := $hit/ancestor-or-self::tei:TEI//tei:author");
+            builder.AppendLine("   where $bookId = ($id)");
+
+            builder.AppendLine("return <hit>");
+            builder.AppendLine("<id>{$bookId}</id>");
+            builder.AppendLine("<title>{$title}</title>");
+            builder.AppendLine("<authors>{$author}</authors>");
+            builder.AppendLine("</hit>");
+
+            return builder.ToString();
+        }
+
+        public SearchResult GetBookById(string id)
+        {
+            string query = GetBookByIdQuery(id);
+            string dbResult = ExistDao.QueryXml(query);
+
+            XmlDocument dbXmlResult = new XmlDocument();
+            dbXmlResult.LoadXml(dbResult);
+
+            XmlNamespaceManager nManager = new XmlNamespaceManager(dbXmlResult.NameTable);
+            foreach (var allNamespace in Descriptor.GetAllNamespaces())
+            {
+                nManager.AddNamespace(allNamespace.Key, allNamespace.Value);
+            }
+
+            XmlNodeList hits = dbXmlResult.SelectNodes("/hit");
+            if (hits != null && hits.Count == 1)
+            {
+                XmlNode hit = hits[0];
+                SearchResult result = new SearchResult();
+                result.Author = XmlTool.ParseTeiAuthor(hit.SelectSingleNode("authors"), TeiP5Descriptor.AuthorNodeName, nManager);
+                result.Title = XmlTool.ParseTeiTitle(hit.SelectSingleNode("title"), TeiP5Descriptor.TitleNodeName, nManager);
+                result.Id = XmlTool.ParseId(hit.SelectSingleNode("id"), TeiP5Descriptor.IdAttributeName);
+
+
+                return result;
+            }
+            return null;
+        }
     }
 }

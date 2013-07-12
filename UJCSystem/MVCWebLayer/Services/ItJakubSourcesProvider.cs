@@ -20,9 +20,9 @@ namespace ITJakub.MVCWebLayer.Services
             return m_serviceClient.GetBooksBySearchTerm(searchTerm);
         }
 
-        public Book GetDetail(string id)
+        public SearchResult GetDetail(string id)
         {
-            return new Book();
+            return m_serviceClient.GetBookById(id);
         }
 
         public IEnumerable<SearchResult> GetSourcesTitleByLetter(string letter)
@@ -33,6 +33,16 @@ namespace ITJakub.MVCWebLayer.Services
         public IEnumerable<SearchResult> GetSourcesAuthorByLetter(string letter)
         {
             return m_serviceClient.GetSourcesAuthorByLetter(letter);
+        }
+
+        public string GetContentByBookId(string id)
+        {
+            return m_serviceClient.GetContentByBookId(id);
+        }
+
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string searchTerm, string booksIds)
+        {
+            return m_serviceClient.GetHtmlContextForKeyWord(searchTerm, new List<string>(), new List<string> {booksIds});
         }
     }
 }

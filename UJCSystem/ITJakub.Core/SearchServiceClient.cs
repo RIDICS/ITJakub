@@ -236,5 +236,45 @@ namespace ITJakub.Core
                 throw;
             }
         }
+
+        public string GetContentByBookId(string id)
+        {
+            try
+            {
+                return Channel.GetContentByBookId(id);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public SearchResult GetBookById(string id)
+        {
+            try
+            {
+                return Channel.GetBookById(id);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("Search timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

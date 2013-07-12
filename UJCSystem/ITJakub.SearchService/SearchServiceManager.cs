@@ -122,5 +122,17 @@ namespace ITJakub.SearchService
             var dbResult = m_bookDao.GetAllBooksByTitleFirstLetter(letter);
             return dbResult;
         }
+
+        public string GetContentByBookId(string id)
+        {
+            string dbResult = m_bookDao.GetHtmlContentByBookId(id);
+            return dbResult;
+        }
+
+        public SearchResult GetBookById(string id)
+        {
+            var dbResult = m_bookDao.GetBookById(id);
+            return dbResult;
+        }
     }
 }

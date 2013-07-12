@@ -17,9 +17,12 @@ namespace ITJakub.MVCWebLayer.Services
     public interface ISourcesProvider
     {
         IEnumerable<SearchResult> GetSearchResult(string searchTerm);
-        Book GetDetail(string id);
+        SearchResult GetDetail(string id);
         IEnumerable<SearchResult> GetSourcesTitleByLetter(string letter);
         IEnumerable<SearchResult> GetSourcesAuthorByLetter(string letter);
+        string GetContentByBookId(string id);
+
+        List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string searchTerm, string booksIds);
     }
     
 }

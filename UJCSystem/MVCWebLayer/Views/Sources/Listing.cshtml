@@ -64,12 +64,11 @@
                 <h4>@source.Title</h4>
                 <span class="author">@source.Author</span><br />
                 @*<span class="datation">@source.Datation</span><br />*@
-                @*<p>@source.Perex</p>
-
+                @*<p>@source.Perex</p>*@
                 <div class="pull-right">
-                    <a class="btn" href="@Url.RouteUrl("SourcesDetail", new { id = "1-zizka" })">Detail</a>
-                    <a class="btn" href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = 1 })">Procházet</a>
-                </div>*@
+                    <a class="btn" href="@Url.RouteUrl("SourcesDetail", new { id = @source.Id })">Detail</a>
+                    <a class="btn" href="@Url.RouteUrl("SourcesGoThrough", new { id = @source.Id, page = 1 })">Procházet</a>
+                </div>
             </div>    
         </div>
     }

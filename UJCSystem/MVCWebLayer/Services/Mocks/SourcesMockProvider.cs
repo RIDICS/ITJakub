@@ -16,9 +16,9 @@ namespace ITJakub.MVCWebLayer.Services.Mocks
                 };
         }
 
-        public Book GetDetail(string id)
+        public SearchResult GetDetail(string id)
         {
-            return new Book { Name = "Bible olomoucká, Genesis–Esdráš", Author = "" };
+            return new SearchResult { Title = "Bible olomoucká, Genesis–Esdráš", Author = "" };
         }
 
         public IEnumerable<SearchResult> GetSourcesTitleByLetter(string letter)
@@ -29,6 +29,16 @@ namespace ITJakub.MVCWebLayer.Services.Mocks
         public IEnumerable<SearchResult> GetSourcesAuthorByLetter(string letter)
         {
             return new List<SearchResult>();
+        }
+
+        public string GetContentByBookId(string id)
+        {
+            return string.Empty;
+        }
+
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string searchTerm, string booksIds)
+        {
+            return new List<SearchResultWithHtmlContext>();
         }
     }
 }
