@@ -1,11 +1,10 @@
 ﻿@using ITJakub.Contracts.Categories
-@using ITJakub.MVCWebLayer.Services
 @using ITJakub.MVCWebLayer.ViewModels
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@model ITJakub.MVCWebLayer.ViewModels.SearchResultViewModel
+@model SearchResultViewModel
 
 @Html.Partial("~/Views/Shared/_SearchPanel.cshtml", Model.Search)
     

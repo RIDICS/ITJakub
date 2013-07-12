@@ -252,9 +252,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ITJakub.MVCWebLayer.Container.Config" />
-    <Content Include="ClassDiagram1.cd" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
-    <None Include="Properties\PublishProfiles\Outside.pubxml" />
+    <None Include="Properties\PublishProfiles\Outside.pubxml">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Views\Search\GetCategoryChildren.cshtml" />
     <None Include="Views\Modules\Search.cshtml" />
   </ItemGroup>

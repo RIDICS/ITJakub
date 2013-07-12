@@ -10,7 +10,19 @@
                 <p>
                     @(new HtmlString(result.HtmlContext))
                 </p>
-                <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@(result.Author)</a>)</small>
+                
+                <small>
+                    @if (string.IsNullOrEmpty(result.Author))
+                    {
+                        <cite title="@result.Title">@result.Title</cite>
+                    }
+                    else
+                    {
+                        <a href="#" class="muted">@result.Author</a>
+                        @: :
+                        <cite title="@result.Title">@result.Title</cite>
+                    }
+                </small>
             </blockquote>
         }
     </div>

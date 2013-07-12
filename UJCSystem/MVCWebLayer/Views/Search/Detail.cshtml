@@ -1,10 +1,41 @@
 ﻿@model ITJakub.MVCWebLayer.ViewModels.SearchKeyWordsViewModel
-
            
 @if (Model.Results.Count > 0)
 {
     <div id="dictionary-results-panel">
-        @foreach (var result in Model.Results)
+        
+        
+        @foreach (var category in Model.GetAllPossibleCategories())
+        {
+            
+            <h3>
+                <span>@category</span>
+            </h3>
+
+            foreach (var result in Model.Results.Where(x => x.Categories.Contains(category)))
+            {
+                <blockquote>
+                <p>
+                    @(new HtmlString(result.HtmlContext))
+                </p>
+                <small>
+                    @if (string.IsNullOrEmpty(result.Author))
+                    {
+                        <cite title="@result.Title">@result.Title</cite>
+                    }
+                    else
+                    {
+                        <a href="#" class="muted">@result.Author</a>
+                        @: :
+                        <cite title="@result.Title">@result.Title</cite>
+                    }
+                </small>
+            </blockquote>
+            }
+            
+        }
+
+       @* @foreach (var result in Model.Results)
         {
             <h3>
                 @foreach (var category in result.Categories)
@@ -16,9 +47,20 @@
                 <p>
                     @(new HtmlString(result.HtmlContext))
                 </p>
-                <small><cite title="@result.Title"><a href="#" class="muted">@result.Title</a></cite> (<a href="#" class="muted">@(result.Author)</a>)</small>
+                <small>
+                    @if (string.IsNullOrEmpty(result.Author))
+                    {
+                        <cite title="@result.Title">@result.Title</cite>
+                    }
+                    else
+                    {
+                        <a href="#" class="muted">@result.Author</a>
+                        @: :
+                        <cite title="@result.Title">@result.Title</cite>
+                    }
+                </small>
             </blockquote>
-        }
+        }*@
     </div>
 }
 

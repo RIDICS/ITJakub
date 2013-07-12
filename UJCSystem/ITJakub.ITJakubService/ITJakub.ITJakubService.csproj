@@ -86,6 +86,9 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="ITJakub.ITJakubService.Container.Config" />
+    <Content Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\Outside.pubxml" />
     <None Include="Web.Debug.config">

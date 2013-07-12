@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using ITJakub.Contracts.Categories;
+using log4net;
 
 namespace ITJakub.Core.Database
 {
@@ -10,6 +13,7 @@ namespace ITJakub.Core.Database
         private readonly List<SelectionBase> m_rootCategories = new List<SelectionBase>();
         private readonly List<Book> m_allBooks = new List<Book>();
         private readonly SearchServiceClient m_searchClient;
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ReleationDatabaseMock(SearchServiceClient searchClient)
         {
@@ -46,14 +50,21 @@ namespace ITJakub.Core.Database
 
         private void LoadTaxonomy()
         {
-            var dict = new Category { Id = "taxonomy-dictionary", Name = "slovník", TextValue = "Slovníky" };
-            dict.Subitems.Add(new Category { Id = "taxonomy-dictionary-contemporary", Name = "soudobý", TextValue = "Soudobé", Parrent = dict});
+            var dict = new Category {Id = "taxonomy-dictionary", Name = "slovník", TextValue = "Slovníky"};
+            dict.Subitems.Add(new Category {Id = "taxonomy-dictionary-contemporary", Name = "soudobý", TextValue = "Soudobé", Parrent = dict});
             dict.Subitems.Add(new Category {Id = "taxonomy-dictionary-historical", Name = "dobový", TextValue = "Dobové", Parrent = dict});
             m_rootCategories.Add(dict);
 
             var histText = new Category {Id = "taxonomy-historical_text", Name = "historický text", TextValue = "Historické texty"};
-            histText.Subitems.Add(new Category {Id = "taxonomy-historical_text-old_czech", Name = "staročeský", TextValue = "Staročeské",Parrent = histText});
-            histText.Subitems.Add(new Category {Id = "taxonomy-historical_text-medieval_czech", Name = "středněčeský", TextValue = "Středněčeské",Parrent = histText, ShowType = CategoryShowType.SelectionBox});
+            histText.Subitems.Add(new Category {Id = "taxonomy-historical_text-old_czech", Name = "staročeský", TextValue = "Staročeské", Parrent = histText});
+            histText.Subitems.Add(new Category
+                {
+                    Id = "taxonomy-historical_text-medieval_czech",
+                    Name = "středněčeský",
+                    TextValue = "Středněčeské",
+                    Parrent = histText,
+                    ShowType = CategoryShowType.SelectionBox
+                });
 
             m_rootCategories.Add(histText);
 
@@ -75,6 +86,9 @@ namespace ITJakub.Core.Database
 
         private void AddBook(string bookId, string categoryId)
         {
+            if (m_log.IsInfoEnabled)
+                m_log.InfoFormat("Adding book with id: {0}", bookId);
+
             string bookTitle = m_searchClient.GetTitleById(bookId);
 
             var category = m_allCategories.FirstOrDefault(x => x.Id == categoryId) as Category;
@@ -126,10 +140,9 @@ namespace ITJakub.Core.Database
             AddBook("DBB04F82-912D-4252-ACB2-FAF43D3A8E2C", "taxonomy-dictionary-historical");
             AddBook("4E5DB418-B49B-4AC0-AE9F-78A53E9BE4FE", "taxonomy-dictionary-contemporary");
             AddBook("6810F0EC-989E-42F1-A2E3-2D22B5E67EC7", "taxonomy-dictionary-contemporary");
-           
         }
 
-        public List<string> GetBookIdsByCategories(List<string> categorieIds)
+        public List<string> GetBookIdsByCategories(IEnumerable<string> categorieIds)
         {
             var result = new List<string>();
             foreach (string categorieId in categorieIds)
