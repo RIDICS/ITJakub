@@ -29,10 +29,11 @@ namespace ITJakub.Core
                 dbResult = m_searchClient.GetHtmlContextForKeyWordWithBooksRestriction(keyWord, bookIdsByCategories);
 
 
-            foreach (var searchResultWithHtmlContext in dbResult)
+            foreach (SearchResultWithHtmlContext searchResultWithHtmlContext in dbResult)
             {
-                var category = m_releationDatabaseMock.GetCategoryByBookId(searchResultWithHtmlContext.Id);
-                searchResultWithHtmlContext.Categories = category;
+                var categorieTextClassification = m_releationDatabaseMock.GetCategoryTextClassificationByBookId(searchResultWithHtmlContext.Id);
+                searchResultWithHtmlContext.Categories = categorieTextClassification;
+                searchResultWithHtmlContext.ShowOrder = m_releationDatabaseMock.GetCategoryShowOrderByBook(searchResultWithHtmlContext.Id);
             }
 
             return dbResult;

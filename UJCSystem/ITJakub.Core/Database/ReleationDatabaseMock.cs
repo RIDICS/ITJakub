@@ -50,31 +50,26 @@ namespace ITJakub.Core.Database
 
         private void LoadTaxonomy()
         {
-            var dict = new Category {Id = "taxonomy-dictionary", Name = "slovník", TextValue = "Slovníky"};
-            dict.Subitems.Add(new Category {Id = "taxonomy-dictionary-contemporary", Name = "soudobý", TextValue = "Soudobé", Parrent = dict});
-            dict.Subitems.Add(new Category {Id = "taxonomy-dictionary-historical", Name = "dobový", TextValue = "Dobové", Parrent = dict});
+            int showorder = 0;
+
+            var dict = new Category {Id = "taxonomy-dictionary", Name = "slovník", TextValue = "Slovníky", ShowOrder = showorder++};
+            dict.Subitems.Add(new Category { Id = "taxonomy-dictionary-contemporary", Name = "soudobý", TextValue = "Soudobé", Parrent = dict, ShowOrder = showorder++ });
+            dict.Subitems.Add(new Category { Id = "taxonomy-dictionary-historical", Name = "dobový", TextValue = "Dobové", Parrent = dict, ShowOrder = showorder++ });
             m_rootCategories.Add(dict);
 
-            var histText = new Category {Id = "taxonomy-historical_text", Name = "historický text", TextValue = "Historické texty"};
-            histText.Subitems.Add(new Category {Id = "taxonomy-historical_text-old_czech", Name = "staročeský", TextValue = "Staročeské", Parrent = histText});
-            histText.Subitems.Add(new Category
-                {
-                    Id = "taxonomy-historical_text-medieval_czech",
-                    Name = "středněčeský",
-                    TextValue = "Středněčeské",
-                    Parrent = histText,
-                    ShowType = CategoryShowType.SelectionBox
-                });
+            var histText = new Category { Id = "taxonomy-historical_text", Name = "historický text", TextValue = "Historické texty", ShowOrder = showorder++ };
+            histText.Subitems.Add(new Category { Id = "taxonomy-historical_text-old_czech", Name = "staročeský", TextValue = "Staročeské", Parrent = histText, ShowOrder = showorder++ });
+            histText.Subitems.Add(new Category { Id = "taxonomy-historical_text-medieval_czech", Name = "středněčeský", TextValue = "Středněčeské", Parrent = histText, ShowType = CategoryShowType.SelectionBox, ShowOrder = showorder++ });
 
             m_rootCategories.Add(histText);
 
-            var scholarText = new Category {Id = "taxonomy-scholary_text", Name = "odborný text", TextValue = "Odborné texty"};
+            var scholarText = new Category { Id = "taxonomy-scholary_text", Name = "odborný text", TextValue = "Odborné texty", ShowOrder = showorder++ };
             m_rootCategories.Add(scholarText);
 
-            var grammar = new Category {Id = "taxonomy-digitized-grammar", Name = "digitalizovaná mluvnice", TextValue = "Digitalizované mluvnice"};
+            var grammar = new Category { Id = "taxonomy-digitized-grammar", Name = "digitalizovaná mluvnice", TextValue = "Digitalizované mluvnice", ShowOrder = showorder++ };
             m_rootCategories.Add(grammar);
 
-            var cards = new Category {Id = "taxonomy-card-index", Name = "lístková kartotéka", TextValue = "Lístková kartotéka"};
+            var cards = new Category { Id = "taxonomy-card-index", Name = "lístková kartotéka", TextValue = "Lístková kartotéka", ShowOrder = showorder++ };
             m_rootCategories.Add(cards);
 
             m_allCategories.AddRange(m_rootCategories);
@@ -171,7 +166,7 @@ namespace ITJakub.Core.Database
             return m_allBooks.FirstOrDefault(x => x.Id == bookId);
         }
 
-        public List<string> GetCategoryByBookId(string id)
+        public List<string> GetCategoryTextClassificationByBookId(string id)
         {
             var book = m_allBooks.FirstOrDefault(x => x.Id == id);
             if (book != null)
@@ -179,6 +174,14 @@ namespace ITJakub.Core.Database
                 return book.TextCategoriesClassification;
             }
             return new List<string>();
+        }
+
+        public int GetCategoryShowOrderByBook(string bookId)
+        {
+            Category category = m_allCategories.Cast<Category>().FirstOrDefault(cat => cat.Subitems.FirstOrDefault(x => x.Id == bookId) != null);
+
+            if (category != null) return category.ShowOrder;
+            return int.MinValue;
         }
     }
 }

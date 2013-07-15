@@ -21,6 +21,9 @@ namespace ITJakub.Contracts.Searching
         public string Author { get; set; }
 
         [DataMember]
+        public int ShowOrder { get; set; }
+
+        [DataMember]
         public List<string> Categories { get; set; }
 
         public object Clone()

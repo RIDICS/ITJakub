@@ -30,6 +30,9 @@ namespace ITJakub.Contracts.Categories
         }
 
         [DataMember]
+        public int ShowOrder { get; set; }
+
+        [DataMember]
         public string TextValue { get; set; }
 
         [DataMember]

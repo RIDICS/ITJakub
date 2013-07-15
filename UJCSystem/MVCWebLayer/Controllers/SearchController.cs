@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using ITJakub.Contracts.Categories;
+using ITJakub.Contracts.Searching;
 using ITJakub.MVCWebLayer.Services;
 using ITJakub.MVCWebLayer.ViewModels;
 
@@ -70,9 +71,11 @@ namespace ITJakub.MVCWebLayer.Controllers
         [HttpGet]
         public ActionResult Detail(SearchViewModel model)
         {
+            var searchResultWithHtmlContexts = m_resultsProvider.GetHtmlContextForKeyWord(model.SelectedTerm, ParseParamList(model.Kategorie), ParseParamList(model.Dila));
+            searchResultWithHtmlContexts.Sort((x,y)=>x.ShowOrder.CompareTo(y.ShowOrder));
             return View("Detail", null, new SearchKeyWordsViewModel
                 {
-                    Results = m_resultsProvider.GetHtmlContextForKeyWord(model.SelectedTerm, ParseParamList(model.Kategorie), ParseParamList(model.Dila))
+                    Results = searchResultWithHtmlContexts
                 });
         }
 
@@ -80,7 +83,11 @@ namespace ITJakub.MVCWebLayer.Controllers
         public ActionResult DetailByType(SearchViewModel model)
         {
             List<string> bookIds = new List<string> {model.BookId};
-            return View("DetailByType", null, new SearchKeyWordsViewModel {Results = m_resultsProvider.GetHtmlContextForKeyWord(model.SearchTerm, new List<string>(), bookIds )});
+            List<SearchResultWithHtmlContext> searchResultWithHtmlContexts = m_resultsProvider.GetHtmlContextForKeyWord(model.SearchTerm, new List<string>(), bookIds);
+            searchResultWithHtmlContexts.Sort((x, y) => x.ShowOrder.CompareTo(y.ShowOrder));
+
+
+            return View("DetailByType", null, new SearchKeyWordsViewModel { Results = searchResultWithHtmlContexts });
 
             //return View("DetailByType", null, model.BookId);
         }

@@ -53,7 +53,7 @@
     <Compile Include="Database\Exist\BaseXClient.cs" />
     <Compile Include="Database\Exist\DAOs\BookDao.cs" />
     <Compile Include="Database\Exist\DAOs\ExistDaoBase.cs" />
-    <Compile Include="Database\Exist\DAOs\KeyWordsDao.cs" />
+    <Compile Include="Database\Exist\DAOs\ExistWordsDao.cs" />
     <Compile Include="Database\Exist\DefaultFilenamesResolver.cs" />
     <Compile Include="Database\Exist\ExistDao.cs" />
     <Compile Include="Database\Exist\IFilenamesResolver.cs" />
@@ -72,7 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <EmbeddedResource Include="ITJakub.Core.Container.Config" />  </ItemGroup>
+    <EmbeddedResource Include="ITJakub.Core.Container.Config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.Contracts\ITJakub.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
