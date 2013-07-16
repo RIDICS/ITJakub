@@ -363,7 +363,7 @@ form.sources-order.form-horizontal.form-horizontal .controls {
 
 /* Module search */
 
-h3 {
+div #dictionary-results-panel h3 span {
     color: #cbd8de;
 }
 
