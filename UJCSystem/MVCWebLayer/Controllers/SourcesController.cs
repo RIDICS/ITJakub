@@ -68,9 +68,17 @@ namespace ITJakub.MVCWebLayer.Controllers
         [HttpGet]
         public ActionResult Prochazet(string id, int page)
         {
-            var detail = m_provider.GetContentByBookId(id);
+            string detail = m_provider.GetContentByBookId(id);
 
-            return View("Prochazet", detail);
+            detail = "START Toto je content of book with id \"" + id +"\" END";
+ 
+            return View("Prochazet", new SourcesContentViewModel 
+            {
+                Id = id,
+                Page = page,
+                PageCount = 87 /*TODO get page count*/,
+                Content = detail
+            });
         }
 
         [HttpGet]

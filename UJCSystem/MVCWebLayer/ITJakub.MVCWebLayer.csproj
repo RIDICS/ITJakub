@@ -108,6 +108,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ISearchResultProvider.cs" />
     <Compile Include="Services\Mocks\SourcesMockProvider.cs" />
+    <Compile Include="ViewModels\SourcesContentViewModel.cs" />
     <Compile Include="ViewModels\ModuleViewModel.cs" />
     <Compile Include="ViewModels\SearchKeyWordsViewModel.cs" />
     <Compile Include="ViewModels\SearchSourceDetailViewModel.cs" />

@@ -1,5 +1,6 @@
 ﻿@using ITJakub.MVCWebLayer.Enums
-@model string
+@using ITJakub.MVCWebLayer.ViewModels
+@model SourcesContentViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,25 +11,31 @@
     <div id="source-detail-content">
         <h4>Jedenádctý</h4>
         <p>
-            @(new HtmlString(@Model))
+            @(new HtmlString(Model.Content))
         </p>
         
         <ul class="pager sources-prochazet">
-            <li class="previous">
-                <a href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = "1"})">Předchozí stránka</a>
+            <li class="previous@(Model.first() ? " disabled":"")">
+                <a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.PrevPage()})">Předchozí stránka</a>
             </li>
-            <li class="next">
-                <a href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = "5"})">Další stránka</a>
+            <li class="next@(Model.last() ? " disabled":"")">
+                <a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.NextPage()})">Další stránka</a>
             </li>
         </ul>
 
         <div class="pagination text-center">
             <ul>
-                <li><a href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = "1"})">1</a></li>
+                @if (!Model.first())
+                {
+                <li@(Model.first() ? " class=\"disabled\"":"")><a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.FirstPage()})">@Model.FirstPage()</a></li>
                 <li class="disabled"><a href="#">&hellip;</a></li>
-                <li><a href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = "23"})">23</a></li>
+                }
+                <li class="disabled"><a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.CurrentPage()})">@Model.CurrentPage()</a></li>
+                @if (!Model.last())
+                {
                 <li class="disabled"><a href="#">&hellip;</a></li>
-                <li><a href="@Url.RouteUrl("SourcesGoThrough", new { id = "1-zizka", page = "87"})">87</a></li>
+                <li@(Model.last() ? " class=\"disabled\"":"")><a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.LastPage()})">@Model.LastPage()</a></li>
+                }
              </ul>
         </div>
     </div>
