@@ -14,13 +14,13 @@
                 <small>
                     @if (string.IsNullOrEmpty(result.Author))
                     {
-                        <cite title="@result.Title">@result.Title</cite>
+                        <a href="@Url.RouteUrl("SourcesDetail", new{ id = result.Id })" class="muted"><cite title="@result.Title">@result.Title</cite></a>
                     }
                     else
                     {
-                        <a href="#" class="muted">@result.Author</a>
+                        @result.Author
                         @: :
-                        <cite title="@result.Title">@result.Title</cite>
+                        <a href="@Url.RouteUrl("SourcesDetail", new{ id = result.Id })" class="muted"><cite title="@result.Title">@result.Title</cite></a>
                     }
                 </small>
             </blockquote>
