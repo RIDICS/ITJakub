@@ -1,7 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.DataLayer", "DataLayer\ITJakub.DataLayer.csproj", "{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AC2C7960-9D11-43FE-B880-A7B0430BA770}"
 	ProjectSection(SolutionItems) = preProject
 		Local.testsettings = Local.testsettings
@@ -42,10 +40,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Xml", "ITJakub.Xml\ITJakub.Xml.csproj", "{C5A88432-F387-4732-9548-12BBFC4019EB}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi
 	EndGlobalSection
@@ -58,16 +52,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF}.Release|x86.ActiveCfg = Release|Any CPU
 		{45118A71-641D-4A5F-8E92-57B4972B19B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{45118A71-641D-4A5F-8E92-57B4972B19B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45118A71-641D-4A5F-8E92-57B4972B19B5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -164,10 +148,13 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A12068E9-19A4-45E4-924B-C9D509C6B950} = {03208FD7-4079-4AE7-8BC9-643C06A89967}
-		{2B5507BB-7A29-49BD-AE3C-493CD771B1CF} = {03208FD7-4079-4AE7-8BC9-643C06A89967}
 		{45118A71-641D-4A5F-8E92-57B4972B19B5} = {53A1BA5E-DF69-4655-AB7B-3BBF58B426FD}
 		{F00801BF-D6B2-4F6C-B808-68BABF177055} = {E9E91BD8-38D8-4A14-8CC2-002292F7C355}
 		{AF3E2B33-A604-4A22-BA84-68FF447E266C} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
 		{6DF4DC1A-0BB9-4586-B427-651BD0BEF709} = {1E2AFC91-8173-47AC-B7D4-799C5BF555F6}
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

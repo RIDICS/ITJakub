@@ -1,52 +1,56 @@
-﻿
-namespace ITJakub.MVCWebLayer.ViewModels
+﻿namespace ITJakub.MVCWebLayer.ViewModels
 {
     public class SourcesContentViewModel
     {
+        private const int CharCountToPage = 1800;
+
         public string Id { get; set; }
         public string Content { get; set; }
         public int Page { get; set; }
-        public int PageCount { get; set; }
-        
-        public int NextPage()
+        public int PageCount { get { return Content.Length/CharCountToPage; } }
+
+
+
+        public int GetNextPage()
         {
-            if (this.Page >= this.PageCount) {
-                return this.PageCount;
+            if (Page >= PageCount)
+            {
+                return PageCount;
             }
-            return this.Page + 1;
+            return Page + 1;
         }
 
-        public int PrevPage()
+        public int GetPrevPage()
         {
-            if (this.Page < 2) {
+            if (Page < 2)
                 return 1;
-            }
-            return this.Page - 1;
+            return Page - 1;
         }
 
-        public bool first()
+        public bool First
         {
-            return this.Page == 1;
+            get { return Page == 1; }
         }
 
-        public int FirstPage()
+
+        public int FirstPage
         {
-            return 1;
+            get { return 1; }
         }
 
-        public bool last()
+        public bool Last
         {
-            return this.Page == this.PageCount;
+            get { return Page == PageCount; }
         }
 
-        public int LastPage()
+        public int LastPage
         {
-            return this.PageCount;
+            get { return PageCount; }
         }
 
-        public int CurrentPage()
+        public int CurrentPage
         {
-            return this.Page;
+            get { return Page; }
         }
     }
 }

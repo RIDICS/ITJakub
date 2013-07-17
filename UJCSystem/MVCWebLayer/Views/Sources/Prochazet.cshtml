@@ -15,26 +15,26 @@
         </p>
         
         <ul class="pager sources-prochazet">
-            <li class="previous@(Model.first() ? " disabled":"")">
-                <a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.PrevPage()})">Předchozí stránka</a>
+            <li class="previous@(Model.First ? " disabled":"")">
+                <a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.GetPrevPage()})">Předchozí stránka</a>
             </li>
-            <li class="next@(Model.last() ? " disabled":"")">
-                <a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.NextPage()})">Další stránka</a>
+            <li class="next@(Model.Last ? " disabled":"")">
+                <a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.GetNextPage()})">Další stránka</a>
             </li>
         </ul>
 
         <div class="pagination text-center">
             <ul>
-                @if (!Model.first())
+                @if (!Model.First)
                 {
-                <li@(Model.first() ? " class=\"disabled\"":"")><a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.FirstPage()})">@Model.FirstPage()</a></li>
+                <li@(Model.First ? " class=\"disabled\"":"")><a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.FirstPage})">@Model.FirstPage</a></li>
                 <li class="disabled"><a href="#">&hellip;</a></li>
                 }
-                <li class="disabled"><a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.CurrentPage()})">@Model.CurrentPage()</a></li>
-                @if (!Model.last())
+                <li class="disabled"><a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.CurrentPage})">@Model.CurrentPage</a></li>
+                @if (!Model.Last)
                 {
                 <li class="disabled"><a href="#">&hellip;</a></li>
-                <li@(Model.last() ? " class=\"disabled\"":"")><a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.LastPage()})">@Model.LastPage()</a></li>
+                <li@(Model.Last ? " class=\"disabled\"":"")><a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.LastPage})">@Model.LastPage</a></li>
                 }
              </ul>
         </div>

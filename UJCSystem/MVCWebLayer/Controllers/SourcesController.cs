@@ -70,13 +70,12 @@ namespace ITJakub.MVCWebLayer.Controllers
         {
             string detail = m_provider.GetContentByBookId(id);
 
-            detail = "START Toto je content of book with id \"" + id +"\" END";
+            //detail = "START Toto je content of book with id \"" + id +"\" END";
  
             return View("Prochazet", new SourcesContentViewModel 
             {
                 Id = id,
                 Page = page,
-                PageCount = 87 /*TODO get page count*/,
                 Content = detail
             });
         }
