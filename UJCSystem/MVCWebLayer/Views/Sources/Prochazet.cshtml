@@ -9,11 +9,7 @@
 <div id="main-content">
      @Html.Partial("~/Views/Shared/_SourcesMenu.cshtml", SourceDetailPart.Prochazet)
     <div id="source-detail-content">
-        <h4>Jedenádctý</h4>
-        <p>
-            @(new HtmlString(Model.Content))
-        </p>
-        
+        <p>@(new HtmlString(Model.Content))</p>
         <ul class="pager sources-prochazet">
             <li class="previous@(Model.First ? " disabled":"")">
                 <a href="@Url.RouteUrl("SourcesGoThrough", new { id = Model.Id, page = Model.GetPrevPage()})">Předchozí stránka</a>
