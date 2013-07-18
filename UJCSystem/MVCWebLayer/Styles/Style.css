@@ -240,6 +240,11 @@ ul.nav.nav-categories li {
 
 /* Detail */
 
+blockquote {
+    font-size: 14pt;
+    font-family: 'Times New Roman';
+}
+
 blockquote p {
     font-size: 14pt;
     font-family: 'Times New Roman';
