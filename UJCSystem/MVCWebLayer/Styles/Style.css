@@ -86,6 +86,7 @@ a {
             box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
     background: #fff url('../Images/hr.png') 915px center repeat-y;
     border: 1px solid rgb(240,240,240);
+    min-height: 800px;
 }
 
 .page-wrapper > .nav.nav-tabs {
