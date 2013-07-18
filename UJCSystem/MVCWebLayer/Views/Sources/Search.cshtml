@@ -21,6 +21,10 @@
             <div class="span12 well well-search">
                 <h4>@source.Title</h4>
                 <span class="author">@source.Author</span><br />
+                <div class="pull-right">
+                    <a class="btn" href="@Url.RouteUrl("SourcesDetail", new { id = @source.Id })">Detail</a>
+                    <a class="btn" href="@Url.RouteUrl("SourcesGoThrough", new { id = @source.Id, page = 1 })">Procházet</a>
+                </div>
             </div>
         </div>
     }
