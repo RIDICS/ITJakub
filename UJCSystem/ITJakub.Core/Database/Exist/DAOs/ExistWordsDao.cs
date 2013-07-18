@@ -90,7 +90,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
         public List<SearchResultWithHtmlContext> GetHtmlContextByWord(string word, List<string> bookIds = null)
         {
             var restriction = GetRestrictionByBookIds(bookIds);
-            string query = GetXmlContextForWordQuery(word, restriction);
+            string query = GetXmlContextForWordQueryV2(word, restriction);
             string dbResult = ExistDao.QueryXml(query);
 
             XmlDocument dbXmlResult = new XmlDocument();
@@ -227,7 +227,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             builder.AppendLine("order by $word");
             builder.AppendLine("return <word>{$word}</word>");
-            builder.AppendLine("} </undistinctedValues>//tei:w)");
+            builder.AppendLine("} </undistinctedValues>//tei:w/@nlp:lemma)");
 
             builder.AppendLine("return <word>{$distinctVal}</word>");
             builder.AppendLine("} </words>");
@@ -357,6 +357,50 @@ namespace ITJakub.Core.Database.Exist.DAOs
             builder.AppendLine();
             builder.AppendLine("}");
             builder.AppendLine("</words>");
+
+            return builder.ToString();
+        }
+
+        private string GetXmlContextForWordQueryV2(string word, string restrictions)
+        {
+            StringBuilder builder = new StringBuilder();
+            AddNamespacesAndCollation(builder);
+            builder.AppendLine("declare copy-namespaces no-preserve, inherit;");
+
+
+            builder.AppendLine("<words xmlns:tei=\"http://www.tei-c.org/ns/1.0\" xmlns:nlp=\"http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0\">");
+
+            builder.AppendLine("{");
+            builder.AppendLine("let $query :=");
+            builder.AppendLine("<query>");
+            builder.AppendLine("<bool>");
+            builder.AppendLine(string.Format("<wildcard occur='must'>{0}</wildcard>", word));
+            builder.AppendLine("</bool>");
+            builder.AppendLine("</query>");
+
+            builder.AppendLine(string.Format("let $collections:= string(\"{0}\")", Descriptor.GetDataLocation));
+
+            builder.AppendLine("let $segDictionaries := collection($collections)//tei:TEI//tei:entryFree[*//tei:w[ft:query(@nlp:lemma, $query)]]");
+            builder.AppendLine("let $segTexts := collection($collections)//tei:TEI//(tei:p | tei:l | tei:title | tei:item | tei:head)[tei:w[ft:query(@nlp:lemma, $query)]]");
+            builder.AppendLine("let $segments := ($segDictionaries, $segTexts)");
+
+            builder.AppendLine("for $segment in $segments  ");
+            builder.AppendLine("let $id := $segment/ancestor::tei:TEI/@n");
+            builder.AppendLine("let $title := $segment/ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
+            builder.AppendLine("let $author := $segment/ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:author");
+            builder.AppendLine("let $categories := $segment/ancestor::tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:catRef");
+            builder.AppendLine(restrictions);
+
+            builder.AppendLine("    return <hit>");
+            builder.AppendLine("<id>{$id}</id>");
+            builder.AppendLine("<title>{$title}</title>");
+            builder.AppendLine("<authors>{$author}</authors>");
+            builder.AppendLine("<categories>{$categories}</categories>");
+            builder.AppendLine("<context>{$segment}</context>");
+            builder.AppendLine("</hit>");
+            builder.AppendLine("}");
+            builder.AppendLine("</words>");
+
 
             return builder.ToString();
         }

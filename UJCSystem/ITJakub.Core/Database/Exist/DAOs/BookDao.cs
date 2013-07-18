@@ -53,7 +53,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
         public IEnumerable<SearchResult> GetAllBooksContainsTerm(string searchTerm)
         {
-            string query = GetBooksContainsTermQuery(searchTerm);
+            string query = GetBooksContainsWordInMetadata(searchTerm);
             string dbResult = ExistDao.QueryXml(query);
 
             XmlDocument dbXmlResult = new XmlDocument();
@@ -81,11 +81,10 @@ namespace ITJakub.Core.Database.Exist.DAOs
             return results;
         }
 
-        private string GetBooksContainsTermQuery(string word)
+        private string GetBooksContainsWordInMetadata(string word)
         {
             StringBuilder builder = new StringBuilder();
             AddNamespacesAndCollation(builder);
-
 
             builder.AppendLine("import module namespace kwic=\"http://exist-db.org/xquery/kwic\";");
 
@@ -99,7 +98,7 @@ namespace ITJakub.Core.Database.Exist.DAOs
 
             builder.AppendLine(string.Format("let $collections:= string(\"{0}\")", Descriptor.GetDataLocation));
 
-            builder.AppendLine("let $words := collection($collections)/tei:TEI/tei:text/tei:body//tei:w[ft:query(@nlp:lemma, $query)]");
+            builder.AppendLine("let $words := collection($collections)/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt//tei:w[ft:query(@nlp:lemma, $query)]");
             builder.AppendLine("for $hit in $words");
             builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
             builder.AppendLine("let $id := $hit/ancestor-or-self::tei:TEI/@n");

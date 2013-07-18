@@ -14,7 +14,7 @@
             <xd:p></xd:p>
         </xd:desc>
     </xd:doc>
-        
+     
         
         <xsl:strip-space elements="*"/>
         <xsl:param name="searchedLemma" select="'pes'" />
@@ -26,6 +26,7 @@
         <xsl:template match="context">
             <xsl:apply-templates />
         </xsl:template>
-        
-    
+
+      <xsl:template match="tei:teiHeader" />
+      <xsl:template match="tei:text/tei:front" />
 </xsl:stylesheet>
