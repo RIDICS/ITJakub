@@ -1,0 +1,85 @@
+================================================================================
+Zápis z porady
+================================================================================
+Místo: UJC
+Čas: 18.7.2013 13:00
+Přítomni:
+    Vývoj: Strelec, Mudra, Klíma
+    UJC: Lehečka,
+
+Úkoly:
+  * Výnimka pri zadaní slova pes* do hledání
+  * Dorobiť odkaz z vyhledávaní priamo na procházení zdroju - teda keď v hlavnom
+    vyhledávaní neco najdu a zobrazí sa mi tam třeba jeden odstavec textu, tak
+    nejaký odkaz na procházení toho díla ve zdrojích - ale tam, kde sa nachází v
+    procházení nájdená fráza (teraz je to jednoduché lebo procházení
+    nestránkujeme, keď budeme stránkovať, tak by mal odkaz viesť na konkrétnu
+    stránku v procházení kde sa daný výraz našel)
+  * Spraviť loading ikonke tretí stav - teda nie aby loadovala do nekonečna, ale
+    v prípade, že stránka spadne aby to oznámilo, že došlo k chybe. (Prípadne
+    celú loading ikonku vymeniť za nejakú js fíčuru miesto gif)
+  * Termin abecedne pri zobrazení výsledkov je zavadějíci vymyslet jiny
+    (Češtinári na to niečo vymysleli ale už som nezachytil čo)
+  * Zmensit rozsah odstavcov vo výsledkoch hledani - teraz je tam strašného
+    bordelu okolo toho, čo sa našlo - buď zmenšiť veľkosť okolitého textu okolo
+    nalezených slov, alebo vymysleť nejaké skrývanie aby sa výsledky vyhledávaní
+    zpřehlednili.
+  * Pri výsledkoch vyhledávaní zobrazovať vlevo při slovách počet nalezených
+    výsledků k danému slovu
+  * Rozdelit hledani este na heslova slova a fulltext - tady mám napísané, že to
+    zachytil Boris - moc neviem o čo sa jedná.
+  * Prerobiť vyhledávaní na úvodní strane - upřesnit zatím nebude a strom s
+    kategóriami bude zobrazený vždy - na začiatku nebudú zaškrtnuté žiadne
+    kategórie, čo znamená, že sa vyhľadáva ve všem.
+    - Tady MK navrhol zaviesť ešte sessnu pre každého užívateľa a že by bol
+      výber kategórií pre každého užívateľa zapamataný a nejaký iný -- myslím,
+      že to bolo zamietnute.
+    - Upresnit prehodiť k prohledávaným dílam a prohledávaná díla zobraziť vždy.
+      Upřesnit ale zatiaľ nemá zmysel ak budú prohledávaná díla zobrazená vždy,
+      pretože zatiaľ nič iné ako prohledávaná díla neupresňujeme.
+    - strom s kategoriami na začiatku všetko odškrtnuté a znamená to že sa hľadá
+      všade tak ako je teraz
+  * Alena: "Viem že sú digitalizované mluvnice a chcem si nájsť zoznam mluvníc a
+    pozreť do konkrétnej mluvnice" - z toho vyplýva, že potrebujeme niekde ešte
+    zoznam všetkých diel zaradených v kategóriach. Potrebujú mať prehľad nad
+    dielami a potrebujú to vidieť zaradené v nejakom strome podobne ako sa
+    pozerajú v PC na súbory.
+    - Vedle kategorie v strome kategorií bude ikonka a po kliknuti na tuto ikonku
+      sa dostane na zoznam všetkých diel v tej kategorii.
+  * To povidaní z uvodní stránky bude v zapatí, alebo to zabaliť a po kliknutí
+    sa to zobrazí. - aby sme mali viac miesta na zobrazenie(budeme zobrazovať
+    vždy) stromu kategorii pri vyhledávaní.
+  * Odlíšiť každý zdroj nejak barevně - v zdrojích nevie že do ktorej kategórie
+    zdroj patri -- To som zachytil ako návrh zo strany češtinárov a neviem ako
+    to nakoniec dopadlo. Možno bolo následne v diskuzi zamietnuté - ale príde mi
+    to v pohode, keby to bolo nejak graficky rozumne spravené tak by mohol mať
+    každý zdroj nejakú barvu - třeba len ako label v trellu.
+  * Malé w v nadpise Vokabulář Webový
+  * Hlavičku vokabuláře nechať len na úvodnej stránke a na iných stránkach
+    zrušiť - na inych strankach dáme len nejake kolečko nalevo hore a vedle
+    neho nejaký breadcumb aby sme ušetrili miesto
+  * Do patičky dorobiť odkaz na mapu stránek a dorobiť nejakú mapu stránek
+  * Vo výsledkoch hledání pri abecedne v pravo by mohli byť kategórie
+    rozbaľovacie - teda na začiatku pri vyhledání niečoho by boli všetky
+    kategórie zabalené, čo by to zprehľadnilo.
+  * Toto som zachytil tiež ako návrh zo strany češtinárov a neviem, či náhodou
+    nebol v diskuzi zamietnutý: Pri výsledkoch vyhledavani mať možnosť pri
+    abecedne v levom tabe zaškrtnúť, že ktoré výsledky chcem zobraziť paralelne
+    velde sebe - aby som mohol zobraziť vásledky z viacerých tvarov slov vedle
+    sebe - teda dám hledat mluv* a zobrazia sa mi vlevo odkazy na výsledky pre
+    mluv, mluvit, ..., a klikáním na taby môžem zobraziť výsledky len pre jedno
+    konkrétne slovo, chceli by ale, aby sa mohlo zaškrtnúť aj mluv aj mluvit a
+    zobrazili by sa výsledky dokopy pre oba výrazy.
+  * Češtinári chcú zachovať našeptávač zo starého vokabuláře
+  * Toto som zachytil tiež ako návrh zo strany češtinárov a neviem, či náhodou
+    nebol v diskuzi zamietnutý: v strome kategorii zobrazovať len kategórie a
+    nie aj diela
+  * Pri vyhledávaní keď sa nič nenájde tak sa zobrazí tab s výsledkami ale nie
+    je na ňom nič napísané - ked sa nenajde nic tak tam napisat ze sa nic
+    nenaslo
+  * v zdrojich vyrobiť vyhledavaní podle metadat tak ako je autor a nazev tak aj
+    ine metadáta ... celé vyhledavaní v zdrojích spraviť podle metadat
+  * Záložku zdroje možno radšej pomenovať vyhledavani v meta datech alebo tak
+    niečo
+  * Na hlavni stranke zobrazit seznam typu zdroju - niečo ako je tam Staročeská
+    banka, tak aby tam boli aj ostatné typy.
