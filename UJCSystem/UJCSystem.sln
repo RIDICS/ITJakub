@@ -1,12 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AC2C7960-9D11-43FE-B880-A7B0430BA770}"
-	ProjectSection(SolutionItems) = preProject
-		Local.testsettings = Local.testsettings
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-		UJCSystem.vsmdi = UJCSystem.vsmdi
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MVCWebLayer", "MVCWebLayer\ITJakub.MVCWebLayer.csproj", "{45118A71-641D-4A5F-8E92-57B4972B19B5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocProjectStorageWeb", "DocProjectStorageWeb", "{6BE20559-7CBC-463D-9328-343591DC8DD9}"
@@ -38,6 +31,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jewelery", "Jewelery\Jewelery.csproj", "{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Xml", "ITJakub.Xml\ITJakub.Xml.csproj", "{C5A88432-F387-4732-9548-12BBFC4019EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.DataEntities", "ITJakub.DataEntities\ITJakub.DataEntities.csproj", "{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -142,14 +137,24 @@ Global
 		{C5A88432-F387-4732-9548-12BBFC4019EB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C5A88432-F387-4732-9548-12BBFC4019EB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C5A88432-F387-4732-9548-12BBFC4019EB}.Release|x86.ActiveCfg = Release|Any CPU
+		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{A12068E9-19A4-45E4-924B-C9D509C6B950} = {03208FD7-4079-4AE7-8BC9-643C06A89967}
 		{45118A71-641D-4A5F-8E92-57B4972B19B5} = {53A1BA5E-DF69-4655-AB7B-3BBF58B426FD}
 		{F00801BF-D6B2-4F6C-B808-68BABF177055} = {E9E91BD8-38D8-4A14-8CC2-002292F7C355}
+		{A12068E9-19A4-45E4-924B-C9D509C6B950} = {03208FD7-4079-4AE7-8BC9-643C06A89967}
 		{AF3E2B33-A604-4A22-BA84-68FF447E266C} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
 		{6DF4DC1A-0BB9-4586-B427-651BD0BEF709} = {1E2AFC91-8173-47AC-B7D4-799C5BF555F6}
 	EndGlobalSection

@@ -107,6 +107,10 @@
       <Project>{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}</Project>
       <Name>ITJakub.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
+      <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
+      <Name>ITJakub.DataEntities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

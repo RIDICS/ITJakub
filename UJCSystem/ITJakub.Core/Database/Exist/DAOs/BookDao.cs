@@ -41,13 +41,17 @@ namespace ITJakub.Core.Database.Exist.DAOs
         {
             StringBuilder builder = new StringBuilder();
             AddNamespacesAndCollation(builder);
+
+
+
+            builder.AppendLine("<titles>{");
             builder.AppendLine(string.Format("let $collections:= string(\"{0}\")", Descriptor.GetDataLocation));
 
             builder.AppendLine(string.Format("let $words := collection($collections)//tei:TEI[@n='{0}']", id));
             builder.AppendLine("for $hit in $words");
             builder.AppendLine("let $title := $hit/ancestor-or-self::tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
             builder.AppendLine("return <title>{$title}</title>");
-
+            builder.AppendLine("}</titles>");
             return builder.ToString();
         }
 
