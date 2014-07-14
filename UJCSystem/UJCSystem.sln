@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Core", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.DataEntities", "ITJakub.MobileApps.DataEntities\ITJakub.MobileApps.DataEntities.csproj", "{8E467186-0805-4652-9319-98F6619492F8}"
 EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "ITJakub.MobileApps.Azure", "ITJakub.MobileApps.Azure\ITJakub.MobileApps.Azure.ccproj", "{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -197,6 +199,16 @@ Global
 		{8E467186-0805-4652-9319-98F6619492F8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8E467186-0805-4652-9319-98F6619492F8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8E467186-0805-4652-9319-98F6619492F8}.Release|x86.ActiveCfg = Release|Any CPU
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -210,7 +222,10 @@ Global
 		{E8C06B28-1F1A-4283-B17F-3E648D91C879} = {600F24BC-C549-4154-852C-20426F962E25}
 		{2047D77A-D751-4729-860B-B17B4A1E0728} = {600F24BC-C549-4154-852C-20426F962E25}
 		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D} = {E8C06B28-1F1A-4283-B17F-3E648D91C879}
+		{C079C465-CBDE-47D2-963F-ADF59E8CB90E} = {E8C06B28-1F1A-4283-B17F-3E648D91C879}
+		{3E038D2A-CAD9-4D45-AFFF-688EB1BB5AA2} = {E8C06B28-1F1A-4283-B17F-3E648D91C879}
 		{8E467186-0805-4652-9319-98F6619492F8} = {E8C06B28-1F1A-4283-B17F-3E648D91C879}
+		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B} = {E8C06B28-1F1A-4283-B17F-3E648D91C879}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi

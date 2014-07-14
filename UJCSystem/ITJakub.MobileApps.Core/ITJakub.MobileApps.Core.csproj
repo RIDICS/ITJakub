@@ -39,12 +39,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MobileServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.MobileApps.Core.Container.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj">
+      <Project>{C079C465-CBDE-47D2-963F-ADF59E8CB90E}</Project>
+      <Name>ITJakub.MobileApps.DataContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

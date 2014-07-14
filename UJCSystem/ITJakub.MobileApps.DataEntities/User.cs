@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ITJakub.MobileApps.DataEntities
 {
@@ -19,8 +15,6 @@ namespace ITJakub.MobileApps.DataEntities
         public virtual Role RoleId { get; set; }
 
         public virtual Institution InstitutionId { get; set; }
-
-
 
         //gets from bag
         public virtual IList<UsersGroup> UserGroups { get; set; } 
