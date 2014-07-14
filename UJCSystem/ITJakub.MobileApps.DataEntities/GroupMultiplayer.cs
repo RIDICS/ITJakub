@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ITJakub.MobileApps.DataEntities
 {
+    //Should save data for multiplayer with more groups
     public class GroupMultiplayer
     {
         public virtual long Id { get; set; }

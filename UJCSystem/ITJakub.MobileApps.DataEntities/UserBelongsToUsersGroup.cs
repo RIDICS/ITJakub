@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ITJakub.MobileApps.DataEntities
 {
+    /// <summary>
+    /// Relationship table between user and group
+    /// </summary>
     public class UserBelongsToUsersGroup
     {
         public virtual long Id { get; set; }

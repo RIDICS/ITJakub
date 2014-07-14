@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ITJakub.MobileApps.DataEntities
 {
 
-    //Its like Session
+    //group is more users solving the same task
     public class UsersGroup
     {
         public virtual long Id { get; set; }
@@ -18,7 +18,9 @@ namespace ITJakub.MobileApps.DataEntities
 
 
         //gets from bag
-        public virtual IEnumerable<User> Users { get; set; }
+        public virtual IList<User> Users { get; set; }
+
+        public virtual IList<GroupStateObject> GroupStateObjects { get; set; }
 
     }
 }

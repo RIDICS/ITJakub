@@ -42,13 +42,13 @@
     <Compile Include="Application.cs" />
     <Compile Include="GroupStateObject.cs" />
     <Compile Include="UsersGroup.cs" />
-    <Compile Include="ApplicationSettingsObject.cs" />
+    <Compile Include="GroupApplicationSettingsObject.cs" />
     <Compile Include="GroupMultiplayer.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="Institution.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UsersGroupToUser.cs" />
+    <Compile Include="UserBelongsToUsersGroup.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
