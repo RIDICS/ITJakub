@@ -10,13 +10,13 @@ using log4net.Config;
 
 namespace ITJakub.MobileApps.Service
 {
-      ///<summary>
+    ///<summary>
     ///Container for IOC
     ///</summary>
     public class Container : WindsorContainer
     {
-     
-        private volatile static WindsorContainer m_current;
+
+        private static volatile WindsorContainer m_current;
 
 
         public static WindsorContainer Current
@@ -25,7 +25,7 @@ namespace ITJakub.MobileApps.Service
             {
                 if (m_current == null)
                 {
-                    lock (typeof(Container))
+                    lock (typeof (Container))
                     {
                         if (m_current == null)
                         {
@@ -38,28 +38,29 @@ namespace ITJakub.MobileApps.Service
             set { m_current = value; }
         }
 
-       public Container(string configFile)
+        public Container(string configFile)
             : base(new XmlInterpreter(configFile))
         {
             //configure log4net
             XmlConfigurator.Configure(new FileInfo("log4net.config"));
         }
 
-        static string GetAssembly()
+        private static string GetAssembly()
         {
             return Assembly.GetEntryAssembly().Location;
         }
 
-        static string GetAssemblyNamePrefixForWebservice()
+        private static string GetAssemblyNamePrefixForWebservice()
         {
             return "ITJakub.MobileApps.Service";
         }
 
-        static string GetAssemblyNamePrefix()
+        private static string GetAssemblyNamePrefix()
         {
             var assembly = GetAssembly();
             var directory = Path.GetDirectoryName(assembly);
             var prefix = Path.GetFileNameWithoutExtension(assembly);
             return string.Format(@"{0}\{1}", directory, prefix);
         }
+    }
 }
