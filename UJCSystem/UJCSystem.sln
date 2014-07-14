@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MVCWebLayer", "MVCWebLayer\ITJakub.MVCWebLayer.csproj", "{45118A71-641D-4A5F-8E92-57B4972B19B5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocProjectStorageWeb", "DocProjectStorageWeb", "{6BE20559-7CBC-463D-9328-343591DC8DD9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.CardFile", "ITJakub.CardFile", "{E9E91BD8-38D8-4A14-8CC2-002292F7C355}"
 EndProject
@@ -34,10 +34,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Xml", "ITJakub.Xml\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.DataEntities", "ITJakub.DataEntities\ITJakub.DataEntities.csproj", "{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.MobileApps", "ITJakub.MobileApps", "{600F24BC-C549-4154-852C-20426F962E25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.MobileApps.Server", "ITJakub.MobileApps.Server", "{E8C06B28-1F1A-4283-B17F-3E648D91C879}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.MobileApps.Client", "ITJakub.MobileApps.Client", "{2047D77A-D751-4729-860B-B17B4A1E0728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.DataContracts", "ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj", "{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Service", "ITJakub.MobileApps.Service\ITJakub.MobileApps.Service.csproj", "{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}"
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = UJCSystem.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -147,6 +154,26 @@ Global
 		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}.Release|x86.ActiveCfg = Release|Any CPU
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}.Release|x86.ActiveCfg = Release|Any CPU
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +184,13 @@ Global
 		{A12068E9-19A4-45E4-924B-C9D509C6B950} = {03208FD7-4079-4AE7-8BC9-643C06A89967}
 		{AF3E2B33-A604-4A22-BA84-68FF447E266C} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
 		{6DF4DC1A-0BB9-4586-B427-651BD0BEF709} = {1E2AFC91-8173-47AC-B7D4-799C5BF555F6}
+		{E8C06B28-1F1A-4283-B17F-3E648D91C879} = {600F24BC-C549-4154-852C-20426F962E25}
+		{2047D77A-D751-4729-860B-B17B4A1E0728} = {600F24BC-C549-4154-852C-20426F962E25}
+		{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8} = {600F24BC-C549-4154-852C-20426F962E25}
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D} = {E8C06B28-1F1A-4283-B17F-3E648D91C879}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = UJCSystem.vsmdi
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
