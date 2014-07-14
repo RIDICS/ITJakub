@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9768F6AA-D3F0-48E2-AA1A-B8C47B1F6EB8}</ProjectGuid>
+    <ProjectGuid>{C079C465-CBDE-47D2-963F-ADF59E8CB90E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ITJakub.MobileApps.DataContracts</RootNamespace>
