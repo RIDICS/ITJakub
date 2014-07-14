@@ -2,6 +2,8 @@
 
 namespace ITJakub.MobileApps.DataEntities
 {
+
+    //Base user info
     public class User
     {
         public virtual long Id { get; set; }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ITJakub.MobileApps.DataEntities
 {
+    //Institution i.e school
     public class Institution
     {
         public virtual long Id { get; set; }
