@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3E038D2A-CAD9-4D45-AFFF-688EB1BB5AA2}</ProjectGuid>
+    <ProjectGuid>{8E467186-0805-4652-9319-98F6619492F8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ITJakub.MobileApps.Core</RootNamespace>
-    <AssemblyName>ITJakub.MobileApps.Core</AssemblyName>
+    <RootNamespace>ITJakub.MobileApps.DataEntities</RootNamespace>
+    <AssemblyName>ITJakub.MobileApps.DataEntities</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,19 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MobileServiceManager.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="GroupStateObject.cs" />
+    <Compile Include="UsersGroup.cs" />
+    <Compile Include="GroupApplicationSettingsObject.cs" />
+    <Compile Include="GroupMultiplayer.cs" />
+    <Compile Include="Role.cs" />
+    <Compile Include="Institution.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ITJakub.MobileApps.Core.Container.Config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj">
-      <Project>{C079C465-CBDE-47D2-963F-ADF59E8CB90E}</Project>
-      <Name>ITJakub.MobileApps.DataContracts</Name>
-    </ProjectReference>
+    <Compile Include="UserBelongsToUsersGroup.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

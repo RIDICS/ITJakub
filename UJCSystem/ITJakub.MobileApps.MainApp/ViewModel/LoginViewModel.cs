@@ -104,7 +104,7 @@ namespace ITJakub.MobileApps.MainApp.ViewModel
 
         private async void GoogleLogin()
         {
-          /*   var startURL =
+             var startURL =
                  "https://accounts.google.com/o/oauth2/auth?client_id=***REMOVED***&response_type=code&scope=openid%20email&redirect_uri=urn:ietf:wg:oauth:2.0:oob";
             
 
@@ -146,15 +146,15 @@ namespace ITJakub.MobileApps.MainApp.ViewModel
              Message = result;
              RaisePropertyChanged(() => Message);
 
-             */
+             
 
           
             
-                 var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+               /*  var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                          new Uri("ms-appx:///Assets/client_secrets.json"),
                          new[] { Uri.EscapeUriString(CalendarService.Scope.Calendar) },
                          "user",
-                         CancellationToken.None);
+                         CancellationToken.None);*/
             
         }
     }

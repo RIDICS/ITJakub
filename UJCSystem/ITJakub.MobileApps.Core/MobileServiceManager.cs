@@ -1,31 +1,28 @@
-﻿using ITJakub.MobileApps.DataContracts;
+﻿using System.Collections.Generic;
+using System.Net.Mail;
+using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.RequestObjects;
 using ITJakub.MobileApps.DataContracts.ResponseObjects;
 
-namespace ITJakub.MobileApps.Service
+namespace ITJakub.MobileApps.Core
 {
-    public class MobileAppsService : IMobileAppsService
+    public class MobileServiceManager : IMobileAppsService
     {
-        private readonly IMobileAppsService m_manager;
-
-        public MobileAppsService()
-        {
-            m_manager = Container.Current.Resolve<IMobileAppsService>();
-        }
-
         public string TestMethod(string test)
         {
-            return m_manager.TestMethod(test);//Handle exceptions and different managers here
-        }   
+            return string.Format("Hello {0}", test);
+        }
 
         public CreateInstitutionResponse CreateInstitution(Institution institution)
         {
-            return m_manager.CreateInstitution(institution);
+
+            return new CreateInstitutionResponse();
+            throw new System.NotImplementedException();
         }
 
         public InstitutionDetailsResponse GetInstitutionDetails(string institutionId)
         {
-            return m_manager.GetInstitutionDetails(institutionId);
+            return new InstitutionDetailsResponse(){Name = "jmeno Institusce", Users = new List<UserDetailsResponse>(){new UserDetailsResponse(){Email = "mail",FirstName = "Pepa",LastName = "Novak", Role = "reditel"},new UserDetailsResponse(){Email = "email@cisu", FirstName = "Stana", LastName = "Novakova", Role = "teacher"}}};
         }
 
         public CreateUserResponse CreateUser(string institutionId, User user)

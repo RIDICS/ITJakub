@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -41,8 +42,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RequestObjects\AppTask.cs" />
+    <Compile Include="RequestObjects\SynchronizedObject.cs" />
+    <Compile Include="ResponseObjects\CreateGroupResponse.cs" />
+    <Compile Include="ResponseObjects\CreateInstitutionResponse.cs" />
+    <Compile Include="ResponseObjects\CreateSynchronizedObjectResponse.cs" />
+    <Compile Include="ResponseObjects\CreateTaskForAppResponse.cs" />
+    <Compile Include="ResponseObjects\CreateUserResponse.cs" />
+    <Compile Include="RequestObjects\Group.cs" />
     <Compile Include="IMobileAppsService.cs" />
+    <Compile Include="RequestObjects\Institution.cs" />
+    <Compile Include="ResponseObjects\InstitutionDetailsResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResponseObjects\SynchronizedObjectsResponse.cs" />
+    <Compile Include="ResponseObjects\TasksForAppResponse.cs" />
+    <Compile Include="RequestObjects\User.cs" />
+    <Compile Include="ResponseObjects\UserDetailsResponse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.MobileApps.DataEntities\ITJakub.MobileApps.DataEntities.csproj">
+      <Project>{8E467186-0805-4652-9319-98F6619492F8}</Project>
+      <Name>ITJakub.MobileApps.DataEntities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
