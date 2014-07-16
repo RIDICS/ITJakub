@@ -1,6 +1,5 @@
-﻿using ITJakub.MobileApps.DataContracts;
-using ITJakub.MobileApps.DataContracts.RequestObjects;
-using ITJakub.MobileApps.DataContracts.ResponseObjects;
+﻿using System.Collections.Generic;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Service
 {
@@ -18,47 +17,52 @@ namespace ITJakub.MobileApps.Service
             return m_manager.TestMethod(test);//Handle exceptions and different managers here
         }   
 
-        public CreateInstitutionResponse CreateInstitution(Institution institution)
+        public void CreateInstitution(Institution institution)
         {
-            return m_manager.CreateInstitution(institution);
+             m_manager.CreateInstitution(institution);
         }
 
-        public InstitutionDetailsResponse GetInstitutionDetails(string institutionId)
+        public Institution GetInstitutionDetails(string institutionId)
         {
             return m_manager.GetInstitutionDetails(institutionId);
         }
 
-        public CreateUserResponse CreateUser(string institutionId, User user)
+        public void CreateUser(User user)
         {
             throw new System.NotImplementedException();
         }
 
-        public UserDetailsResponse GetUserDetails(string institutionId, string userId)
+        public UserDetails GetUserDetails(string userId)
         {
             throw new System.NotImplementedException();
         }
 
-        public TasksForAppResponse GetTasksForApplication(string applicationId)
+        public IEnumerable<AppTaskDetails> GetTasksForApplication(string applicationId)
         {
             throw new System.NotImplementedException();
         }
 
-        public CreateTaskForAppResponse CreateTaskForApplication(AppTask apptask)
+        public void CreateTaskForApplication(string applicationId, AppTask apptask)
         {
             throw new System.NotImplementedException();
         }
 
-        public CreateGroupResponse CreateGroup(Group group)
+        public void CreateGroup(string institutionId, Group @group)
         {
             throw new System.NotImplementedException();
         }
 
-        public SynchronizedObjectsResponse GetSynchronizedObjects(string groupId, string userId, string since)
+        public Group GetGroupDetails(string institutionId, string groupId)
         {
             throw new System.NotImplementedException();
         }
 
-        public CreateSynchronizedObjectResponse CreateSynchronizedObject(string groupId, string userId, SynchronizedObject synchronizedObject)
+        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string userId, string since)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void CreateSynchronizedObject(string groupId, string userId, SynchronizedObject synchronizedObject)
         {
             throw new System.NotImplementedException();
         }

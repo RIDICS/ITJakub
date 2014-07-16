@@ -54,6 +54,9 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\Libs\Iesi.Collections\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Libs\log4net-1.2.11\4.0\log4net.dll</HintPath>
     </Reference>

@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ITJakub.MobileApps.DataContracts.ResponseObjects
+namespace ITJakub.MobileApps.DataContracts
 {
     [DataContract]
-    public class UserDetailsResponse
+    public class User
     {
         [DataMember]
         public string FirstName;

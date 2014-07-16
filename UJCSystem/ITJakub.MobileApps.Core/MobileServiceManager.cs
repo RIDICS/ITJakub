@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Mail;
 using ITJakub.MobileApps.DataContracts;
-using ITJakub.MobileApps.DataContracts.RequestObjects;
-using ITJakub.MobileApps.DataContracts.ResponseObjects;
 
 namespace ITJakub.MobileApps.Core
 {
@@ -13,49 +11,51 @@ namespace ITJakub.MobileApps.Core
             return string.Format("Hello {0}", test);
         }
 
-        public CreateInstitutionResponse CreateInstitution(Institution institution)
+        public void CreateInstitution(Institution institution)
         {
-
-            return new CreateInstitutionResponse();
-            throw new System.NotImplementedException();
         }
 
-        public InstitutionDetailsResponse GetInstitutionDetails(string institutionId)
+        public Institution GetInstitutionDetails(string institutionId)
         {
-            return new InstitutionDetailsResponse(){Name = "jmeno Institusce", Users = new List<UserDetailsResponse>(){new UserDetailsResponse(){Email = "mail",FirstName = "Pepa",LastName = "Novak", Role = "reditel"},new UserDetailsResponse(){Email = "email@cisu", FirstName = "Stana", LastName = "Novakova", Role = "teacher"}}};
+            return new Institution(){Name = "jmeno Institusce", Principal = new User(){Email = "mail",FirstName = "Pepa",LastName = "Novak"}};
         }
 
-        public CreateUserResponse CreateUser(string institutionId, User user)
+        public void CreateUser(User user)
         {
             throw new System.NotImplementedException();
         }
 
-        public UserDetailsResponse GetUserDetails(string institutionId, string userId)
+        public UserDetails GetUserDetails(string userId)
         {
             throw new System.NotImplementedException();
         }
 
-        public TasksForAppResponse GetTasksForApplication(string applicationId)
+        public IEnumerable<AppTaskDetails> GetTasksForApplication(string applicationId)
         {
             throw new System.NotImplementedException();
         }
 
-        public CreateTaskForAppResponse CreateTaskForApplication(AppTask apptask)
+        public void CreateTaskForApplication(string applicationId, AppTask apptask)
         {
             throw new System.NotImplementedException();
         }
 
-        public CreateGroupResponse CreateGroup(Group group)
+        public void CreateGroup(string institutionId, Group @group)
         {
             throw new System.NotImplementedException();
         }
 
-        public SynchronizedObjectsResponse GetSynchronizedObjects(string groupId, string userId, string since)
+        public Group GetGroupDetails(string institutionId, string groupId)
         {
             throw new System.NotImplementedException();
         }
 
-        public CreateSynchronizedObjectResponse CreateSynchronizedObject(string groupId, string userId, SynchronizedObject synchronizedObject)
+        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string userId, string since)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void CreateSynchronizedObject(string groupId, string userId, SynchronizedObject synchronizedObject)
         {
             throw new System.NotImplementedException();
         }

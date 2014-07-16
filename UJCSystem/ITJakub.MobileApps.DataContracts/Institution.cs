@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace ITJakub.MobileApps.DataContracts.RequestObjects
+namespace ITJakub.MobileApps.DataContracts
 {
     [DataContract]
     public class Institution
@@ -9,8 +8,7 @@ namespace ITJakub.MobileApps.DataContracts.RequestObjects
         [DataMember]
         public string Name;
 
-        //TODO add adress
-
+        //users working for institution (principal, teachers)
         [DataMember]
         public User Principal;
     }

@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ITJakub.MobileApps.DataContracts.RequestObjects
+namespace ITJakub.MobileApps.DataContracts
 {
     [DataContract]
-    public class AppTask
+    public class SynchronizedObject
     {
         [DataMember]
         public string Data;
