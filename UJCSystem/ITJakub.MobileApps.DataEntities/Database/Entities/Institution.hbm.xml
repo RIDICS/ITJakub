@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.MobileApps.DataEntities" namespace="ITJakub.MobileApps.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Institution" table="Institution" lazy="true" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    <property name="Name">
+      <column name="Name" sql-type="varchar" not-null="true" />
+    </property>
+    <bag name="Groups">
+      <key column="InstitutionId" />
+      <one-to-many class="Group" />
+    </bag>
+    <bag name="Users">
+      <key column="InstitutionId" />
+      <one-to-many class="UserToInstitution" />
+    </bag>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.MobileApps.DataEntities" namespace="ITJakub.MobileApps.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Group" table="Group" lazy="true" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    <many-to-one name="Task">
+      <column name="TaskId" sql-type="bigint" not-null="true" />
+    </many-to-one>
+    <many-to-one name="Institution">
+      <column name="InstitutionId" sql-type="bigint" not-null="true" />
+    </many-to-one>
+    <bag name="SynchronizedObjects">
+      <key column="GroupId" />
+      <one-to-many class="SynchronizedObject" />
+    </bag>
+    <bag name="Users">
+      <key column="GroupId" />
+      <one-to-many class="UserToGroup" />
+    </bag>
+  </class>
+</hibernate-mapping>

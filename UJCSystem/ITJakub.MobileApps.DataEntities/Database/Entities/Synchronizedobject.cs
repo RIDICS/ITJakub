@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 
 namespace ITJakub.MobileApps.DataEntities.Database.Entities
 {
-    public class Role : IEquatable<Role>
+    public class SynchronizedObject : IEquatable<SynchronizedObject>
     {
-        public virtual byte Id { get; set; }
+        public virtual long Id { get; set; }
+        public virtual User User { get; set; }
+        public virtual Group Group { get; set; }
+        public virtual DateTime CreateTime { get; set; }
         public virtual string Name { get; set; }
+        public virtual string Guid { get; set; }
 
-
-        public virtual List<User> Users { get; set; } 
-
-        public bool Equals(Role other)
+        public bool Equals(SynchronizedObject other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -23,7 +23,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Role) obj);
+            return Equals((SynchronizedObject) obj);
         }
 
         public override int GetHashCode()

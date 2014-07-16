@@ -57,23 +57,33 @@
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
     <Compile Include="Database\Entities\Application.cs" />
-    <Compile Include="Database\Entities\GroupStateObject.cs" />
-    <Compile Include="Database\Entities\UsersGroup.cs" />
-    <Compile Include="Database\Entities\GroupApplicationSettingsObject.cs" />
-    <Compile Include="Database\Entities\GroupMultiplayer.cs" />
+    <Compile Include="Database\Entities\Group.cs" />
     <Compile Include="Database\Entities\Role.cs" />
     <Compile Include="Database\Entities\Institution.cs" />
+    <Compile Include="Database\Entities\SynchronizedObject.cs" />
+    <Compile Include="Database\Entities\Task.cs" />
     <Compile Include="Database\Entities\User.cs" />
+    <Compile Include="Database\Entities\UserToGroup.cs" />
+    <Compile Include="Database\Entities\UserToInstitution.cs" />
     <Compile Include="Database\Repositories\TestRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Database\Entities\UserBelongsToUsersGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.MobileApps.DataEntities.Container.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Database\Entities\Application.hbm.xml" />
+    <Content Include="Database\Entities\Group.hbm.xml" />
+    <Content Include="Database\Entities\Institution.hbm.xml" />
+    <Content Include="Database\Entities\Role.hbm.xml" />
+    <Content Include="Database\Entities\SynchronizedObject.hbm.xml" />
+    <Content Include="Database\Entities\Task.hbm.xml" />
+    <Content Include="Database\Entities\User.hbm.xml" />
+    <Content Include="Database\Entities\UserToGroup.hbm.xml" />
+    <Content Include="Database\Entities\UserToInstitution.hbm.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
