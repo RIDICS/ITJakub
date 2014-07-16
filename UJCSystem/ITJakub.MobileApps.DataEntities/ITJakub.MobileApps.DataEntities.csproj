@@ -30,6 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Facilities.NHibernateIntegration">
+      <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Facilities.NHibernateIntegration.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Services.Transaction">
+      <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Services.Transaction.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net-1.2.11\4.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\Libs\Nhibernate\lib\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,17 +51,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application.cs" />
-    <Compile Include="GroupStateObject.cs" />
-    <Compile Include="UsersGroup.cs" />
-    <Compile Include="GroupApplicationSettingsObject.cs" />
-    <Compile Include="GroupMultiplayer.cs" />
-    <Compile Include="Role.cs" />
-    <Compile Include="Institution.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
+    <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
+    <Compile Include="Database\Entities\Application.cs" />
+    <Compile Include="Database\Entities\GroupStateObject.cs" />
+    <Compile Include="Database\Entities\UsersGroup.cs" />
+    <Compile Include="Database\Entities\GroupApplicationSettingsObject.cs" />
+    <Compile Include="Database\Entities\GroupMultiplayer.cs" />
+    <Compile Include="Database\Entities\Role.cs" />
+    <Compile Include="Database\Entities\Institution.cs" />
+    <Compile Include="Database\Entities\User.cs" />
+    <Compile Include="Database\Repositories\TestRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserBelongsToUsersGroup.cs" />
+    <Compile Include="Database\Entities\UserBelongsToUsersGroup.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ITJakub.MobileApps.DataEntities.Container.Config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
