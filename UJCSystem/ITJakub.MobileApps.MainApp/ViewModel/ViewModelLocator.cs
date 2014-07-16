@@ -38,8 +38,8 @@ namespace ITJakub.MobileApps.MainApp.ViewModel
             ////}
             ////else
             ////{
-            ////    // Create run time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DataService>();
+                // Create run time view services and models
+                SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
 
             SimpleIoc.Default.Register<LoginViewModel>();
