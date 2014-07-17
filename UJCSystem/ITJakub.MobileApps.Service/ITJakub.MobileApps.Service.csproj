@@ -150,6 +150,10 @@
       <Project>{C079C465-CBDE-47D2-963F-ADF59E8CB90E}</Project>
       <Name>ITJakub.MobileApps.DataContracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.DataEntities\ITJakub.MobileApps.DataEntities.csproj">
+      <Project>{8e467186-0805-4652-9319-98f6619492f8}</Project>
+      <Name>ITJakub.MobileApps.DataEntities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
