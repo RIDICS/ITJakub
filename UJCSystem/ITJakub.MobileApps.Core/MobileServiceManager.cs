@@ -1,15 +1,24 @@
 ﻿using System.Collections.Generic;
-using System.Net.Mail;
+using Castle.MicroKernel;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataEntities;
 
 namespace ITJakub.MobileApps.Core
 {
     public class MobileServiceManager : IMobileAppsService
     {
+        private StorageManager m_StorageManager;
+
+        public MobileServiceManager(IKernel container)
+        {
+            m_StorageManager = container.Resolve<StorageManager>();
+        }
+
         public string TestMethod(string test)
         {
             return string.Format("Hello {0}", test);
         }
+
 
         public void CreateInstitution(Institution institution)
         {
