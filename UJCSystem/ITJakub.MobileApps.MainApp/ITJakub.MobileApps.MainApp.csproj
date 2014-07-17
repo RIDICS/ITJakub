@@ -105,6 +105,11 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\ChatControl.xaml.cs">
+      <DependentUpon>ChatControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\ViewModel\ChatViewModel.cs" />
+    <Compile Include="Control\ViewModel\MessageViewModel.cs" />
     <Compile Include="Enum\LoginProvider.cs" />
     <Compile Include="JSON\GoogleIdToken.cs" />
     <Compile Include="LoginPage.xaml.cs">
@@ -149,6 +154,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Control\ChatControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
