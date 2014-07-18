@@ -105,12 +105,17 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\INavigationService.cs" />
+    <Compile Include="Common\NavigationService.cs" />
     <Compile Include="Control\ChatControl.xaml.cs">
       <DependentUpon>ChatControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Control\ViewModel\ChatViewModel.cs" />
     <Compile Include="Control\ViewModel\MessageViewModel.cs" />
     <Compile Include="Enum\LoginProvider.cs" />
+    <Compile Include="GroupListView.xaml.cs">
+      <DependentUpon>GroupListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JSON\GoogleIdToken.cs" />
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
@@ -124,8 +129,10 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="JSON\GoogleToken.cs" />
     <Compile Include="JSON\GoogleUserInfo.cs" />
-    <Compile Include="ViewModel\DataService.cs" />
-    <Compile Include="ViewModel\IDataService.cs" />
+    <Compile Include="DataService\DataService.cs" />
+    <Compile Include="ViewModel\GroupInfo.cs" />
+    <Compile Include="ViewModel\GroupListViewModel.cs" />
+    <Compile Include="DataService\IDataService.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\UserInfo.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -158,6 +165,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GroupListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -185,7 +196,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataService\" />
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

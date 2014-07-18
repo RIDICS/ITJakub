@@ -1,7 +1,9 @@
 using System;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using ITJakub.MobileApps.MainApp.Common;
+using ITJakub.MobileApps.MainApp.DataService;
 using ITJakub.MobileApps.MainApp.Enum;
+using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
 
 namespace ITJakub.MobileApps.MainApp.ViewModel
 {
@@ -22,12 +24,13 @@ namespace ITJakub.MobileApps.MainApp.ViewModel
         private readonly RelayCommand m_facebookLoginCommand;
         private readonly RelayCommand m_googleLoginCommand;
         private readonly RelayCommand m_liveIdCommand;
-        private IDataService m_dataService;
+        private readonly IDataService m_dataService;
+        private readonly INavigationService m_navigationService;
 
         /// <summary>
         /// Initializes a new instance of the LoginViewModel class.
         /// </summary>
-        public LoginViewModel(IDataService dataService)
+        public LoginViewModel(IDataService dataService, INavigationService navigationService)
         {
             ////if (IsInDesignMode)
             ////{
@@ -39,6 +42,7 @@ namespace ITJakub.MobileApps.MainApp.ViewModel
             ////}
 
             m_dataService = dataService;
+            m_navigationService = navigationService;
             m_liveIdCommand = new RelayCommand(LiveIdLogin);
             m_facebookLoginCommand = new RelayCommand(FacebookLogin);
             m_googleLoginCommand = new RelayCommand(GoogleLogin);
@@ -86,6 +90,7 @@ namespace ITJakub.MobileApps.MainApp.ViewModel
                 Message = String.Format("{0} {1} {2} {3} {4}", info.Success, info.Email, info.FirstName, info.LastName, info.AccessToken);
                 RaisePropertyChanged(() => Message);
             });
+            m_navigationService.Navigate(typeof(GroupListView));
         }
     }
 }

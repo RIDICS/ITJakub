@@ -14,7 +14,9 @@
 
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
+using ITJakub.MobileApps.MainApp.Common;
 using ITJakub.MobileApps.MainApp.Control.ViewModel;
+using ITJakub.MobileApps.MainApp.DataService;
 using Microsoft.Practices.ServiceLocation;
 
 namespace ITJakub.MobileApps.MainApp.ViewModel
@@ -40,11 +42,13 @@ namespace ITJakub.MobileApps.MainApp.ViewModel
             ////else
             ////{
                 // Create run time view services and models
-                SimpleIoc.Default.Register<IDataService, DataService>();
+                SimpleIoc.Default.Register<IDataService, DataService.DataService>();
             ////}
 
+            SimpleIoc.Default.Register<INavigationService, NavigationService>();
             SimpleIoc.Default.Register<LoginViewModel>();
             SimpleIoc.Default.Register<ChatViewModel>();
+            SimpleIoc.Default.Register<GroupListViewModel>();
         }
 
         public LoginViewModel LoginViewModel
@@ -58,6 +62,11 @@ namespace ITJakub.MobileApps.MainApp.ViewModel
         public ChatViewModel ChatViewModel
         {
             get { return ServiceLocator.Current.GetInstance<ChatViewModel>(); }
+        }
+
+        public GroupListViewModel GroupListViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<GroupListViewModel>(); }
         }
         
         public static void Cleanup()
