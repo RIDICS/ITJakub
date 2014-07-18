@@ -16,6 +16,9 @@
     <property name="Email">
       <column name="Email" sql-type="varchar" not-null="true" />
     </property>
+    <property name="CreateTime">
+      <column name="CreateTime" sql-type="datetime" not-null="true" />
+    </property>
     <bag name="SynchronizedObjects">
       <key column="AuthorId" />
       <one-to-many class="SynchronizedObject" />
@@ -28,7 +31,7 @@
       <key column="UserId" />
       <one-to-many class="UserToGroup" />
     </bag>
-    <bag name="UserToInstitution">
+    <bag name="Institutions">
       <key column="UserId" />
       <one-to-many class="UserToInstitution" />
     </bag>

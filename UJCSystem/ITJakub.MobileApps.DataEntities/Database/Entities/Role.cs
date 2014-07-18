@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
 
         public virtual List<User> Users { get; set; } 
 
-        public bool Equals(Role other)
+        public virtual bool Equals(Role other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
