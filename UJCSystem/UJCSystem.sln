@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.DataEnti
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "ITJakub.MobileApps.Azure", "ITJakub.MobileApps.Azure\ITJakub.MobileApps.Azure.ccproj", "{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.DataContracts", "ITJakub.MobileApps.Client.DataContracts\ITJakub.MobileApps.Client.DataContracts.csproj", "{A6F66019-70E7-4177-9389-554D1E73C437}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -305,6 +307,20 @@ Global
 		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Release|x64.ActiveCfg = Release|Any CPU
 		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}.Release|x86.ActiveCfg = Release|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Release|x64.ActiveCfg = Release|Any CPU
+		{A6F66019-70E7-4177-9389-554D1E73C437}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -323,6 +339,7 @@ Global
 		{D2F6CC21-5137-4353-B861-1FF505B34CB2} = {2047D77A-D751-4729-860B-B17B4A1E0728}
 		{8E467186-0805-4652-9319-98F6619492F8} = {E8C06B28-1F1A-4283-B17F-3E648D91C879}
 		{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B} = {E8C06B28-1F1A-4283-B17F-3E648D91C879}
+		{A6F66019-70E7-4177-9389-554D1E73C437} = {2047D77A-D751-4729-860B-B17B4A1E0728}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi

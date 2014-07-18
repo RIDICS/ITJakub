@@ -59,7 +59,7 @@ namespace ITJakub.MobileApps.Core
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string userId, string since)
+        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string userId, string since)//TODO opravdu je since string ? nemel by to byt dateTIme
         {
             throw new System.NotImplementedException();
         }
