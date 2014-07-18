@@ -7,9 +7,11 @@ namespace ITJakub.MobileApps.DataContracts
     public class Group
     {
         [DataMember]
-        public string AppGUID;
-
+        public long TaskId { get; set; }
+        
         [DataMember]
-        public IEnumerable<User> Users;
+        public IEnumerable<User> Users { get; set; }
+
+    
     }
 }

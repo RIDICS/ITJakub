@@ -10,15 +10,17 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
         public virtual string Email { get; set; }
-
-
+        public virtual DateTime CreateTime { get; set; }
         public virtual List<Group> Groups { get; set; }
 
         public virtual List<Institution> Institutions { get; set; } //TODO resolve M:N
 
         public virtual List<Task> Tasks { get; set; }
 
-        public bool Equals(User other)
+        public virtual List<SynchronizedObject> SynchronizedObjects { get; set; }
+        
+
+        public virtual bool Equals(User other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

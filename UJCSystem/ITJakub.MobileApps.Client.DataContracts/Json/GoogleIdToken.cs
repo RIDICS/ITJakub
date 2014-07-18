@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace ITJakub.MobileApps.MainApp.JSON
+namespace ITJakub.MobileApps.Client.DataContracts.Json
 {
-    class GoogleIdToken
+    public class GoogleIdToken
     {
         [JsonProperty("user_id")]
         public string UserId { get; set; }

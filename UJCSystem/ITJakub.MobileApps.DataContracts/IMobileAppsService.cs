@@ -7,14 +7,6 @@ namespace ITJakub.MobileApps.DataContracts
     [ServiceContract]
     public interface IMobileAppsService
     {
-        //TODO delete this test method
-        [OperationContract]
-        [WebInvoke(Method = "GET", 
-            BodyStyle = WebMessageBodyStyle.Wrapped,
-            RequestFormat = WebMessageFormat.Json, 
-            ResponseFormat = WebMessageFormat.Json, 
-            UriTemplate = "json/{test}")]
-        string TestMethod(string test);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -31,7 +23,7 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "institution/{institutionId}")]
-        Institution GetInstitutionDetails(string institutionId);
+        InstitutionDetails  GetInstitutionDetails(string institutionId);
 
 
         [OperationContract]
@@ -97,8 +89,8 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "institution/{institutionId}/group/{groupId}")]
-        Group GetGroupDetails(string institutionId, string groupId);
+            UriTemplate = "group/{groupId}")]
+        GroupDetails GetGroupDetails(string groupId);
 
 
         /// <summary>

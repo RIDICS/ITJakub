@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
 
         public virtual List<Task> Tasks { get; set; }
 
-        public bool Equals(Application other)
+        public virtual bool Equals(Application other)
         {
             return Id == other.Id;
         }

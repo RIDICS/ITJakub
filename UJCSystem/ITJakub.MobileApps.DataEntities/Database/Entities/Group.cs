@@ -9,12 +9,13 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
         public virtual Task Task { get; set; }
         public virtual Institution Institution { get; set; }
 
-
+        public virtual User Author { get; set; }
         public virtual List<User> Users { get; set; }
 
         public virtual List<SynchronizedObject> SynchronizedObjects { get; set; }
+        public virtual DateTime CreateTime { get; set; }
 
-        public bool Equals(Group other)
+        public virtual bool Equals(Group other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

@@ -4,8 +4,14 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
+    <property name="CreateTime">
+      <column name="CreateTime" sql-type="datetime" not-null="true" />
+    </property>
     <many-to-one name="Task">
       <column name="TaskId" sql-type="bigint" not-null="true" />
+    </many-to-one>
+    <many-to-one name="Author">
+      <column name="AuthorId" sql-type="bigint" not-null="true" />
     </many-to-one>
     <many-to-one name="Institution">
       <column name="InstitutionId" sql-type="bigint" not-null="true" />

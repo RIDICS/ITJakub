@@ -7,12 +7,15 @@ using Windows.Security.Authentication.Web;
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
 using Facebook;
-using ITJakub.MobileApps.MainApp.JSON;
+using ITJakub.MobileApps.Client.DataContracts.Json;
 using ITJakub.MobileApps.MainApp.ViewModel;
 using Newtonsoft.Json;
 
 namespace ITJakub.MobileApps.MainApp.Manager
 {
+    //AAAAAAAAAAAAAAAAAAAARGH CO JE  TOHLE ZA TRIDU.
+    //ROZDELIT DO JEDNOTLIVYCH MANAGERU. PODLE FUNKCIONALITY (MANAGER PRO GOOGLE, MANAGER PRO LIVEID, MANAGER PRO FACEBOOK ETC)
+    //DODELAT K TOMU ZASTRESUJICI TRIDU KTERA BUDE SELECTOVAT PRISLUSNEHO MANAGERA NA ZAKLADE ENUMU (LoginProvider)
     public class LoginManager
     {
         public async Task<UserInfo> LoginLiveId()

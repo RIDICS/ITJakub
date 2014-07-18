@@ -7,11 +7,12 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
     {
         public virtual long Id { get; set; }
         public virtual string Name { get; set; }
+        public virtual DateTime CreateTime { get; set; }
 
         public virtual List<Group> Groups { get; set; }
         public virtual List<User> Users { get; set; } //TODO resolve N:M relationship
 
-        public bool Equals(Institution other)
+        public virtual bool Equals(Institution other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

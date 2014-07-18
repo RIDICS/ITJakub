@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
         public virtual string Name { get; set; }
         public virtual string Guid { get; set; }
 
-        public bool Equals(SynchronizedObject other)
+        public virtual bool Equals(SynchronizedObject other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

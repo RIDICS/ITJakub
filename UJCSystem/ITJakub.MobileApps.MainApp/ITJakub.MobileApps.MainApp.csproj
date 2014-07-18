@@ -116,7 +116,6 @@
     <Compile Include="GroupListView.xaml.cs">
       <DependentUpon>GroupListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JSON\GoogleIdToken.cs" />
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -127,8 +126,6 @@
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
-    <Compile Include="JSON\GoogleToken.cs" />
-    <Compile Include="JSON\GoogleUserInfo.cs" />
     <Compile Include="DataService\DataService.cs" />
     <Compile Include="ViewModel\GroupInfo.cs" />
     <Compile Include="ViewModel\GroupListViewModel.cs" />
@@ -199,6 +196,12 @@
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
       <Name>Behaviors SDK %28XAML%29</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.MobileApps.Client.DataContracts\ITJakub.MobileApps.Client.DataContracts.csproj">
+      <Project>{A6F66019-70E7-4177-9389-554D1E73C437}</Project>
+      <Name>ITJakub.MobileApps.Client.DataContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace ITJakub.MobileApps.MainApp.JSON
+namespace ITJakub.MobileApps.Client.DataContracts.Json
 {
     public class GoogleUserInfo
     {

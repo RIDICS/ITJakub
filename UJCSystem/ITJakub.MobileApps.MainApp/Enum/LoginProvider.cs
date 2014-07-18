@@ -2,6 +2,8 @@
 {
     public enum LoginProvider
     {
-        LiveId, Facebook, Google
+        LiveId,
+        Facebook,
+        Google
     }
 }
