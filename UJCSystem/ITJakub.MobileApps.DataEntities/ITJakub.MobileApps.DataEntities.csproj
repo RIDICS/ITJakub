@@ -72,7 +72,6 @@
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Entities\UserToGroup.cs" />
     <Compile Include="Database\Entities\UserToInstitution.cs" />
-    <Compile Include="Database\Repositories\TestRepository.cs" />
     <Compile Include="Database\Repositories\GroupRepository.cs" />
     <Compile Include="Database\Repositories\InstitutionRepository.cs" />
     <Compile Include="StorageManager.cs" />
@@ -86,15 +85,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database\Entities\Application.hbm.xml" />
-    <Content Include="Database\Entities\Group.hbm.xml" />
-    <Content Include="Database\Entities\Institution.hbm.xml" />
-    <Content Include="Database\Entities\Role.hbm.xml" />
-    <Content Include="Database\Entities\SynchronizedObject.hbm.xml" />
-    <Content Include="Database\Entities\Task.hbm.xml" />
-    <Content Include="Database\Entities\User.hbm.xml" />
-    <Content Include="Database\Entities\UserToGroup.hbm.xml" />
-    <Content Include="Database\Entities\UserToInstitution.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Application.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Group.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Institution.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Role.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\SynchronizedObject.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Task.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\User.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\UserToGroup.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\UserToInstitution.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

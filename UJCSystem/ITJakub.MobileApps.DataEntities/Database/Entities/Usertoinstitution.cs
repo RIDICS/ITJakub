@@ -8,7 +8,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual User User { get; set; }
         public virtual Institution Institution { get; set; }
 
-        public bool Equals(UserToInstitution other)
+        public virtual bool Equals(UserToInstitution other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

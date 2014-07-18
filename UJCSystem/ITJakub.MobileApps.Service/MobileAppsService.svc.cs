@@ -11,60 +11,57 @@ namespace ITJakub.MobileApps.Service
         {
             m_manager = Container.Current.Resolve<IMobileAppsService>();
         }
-
-        public string TestMethod(string test)
-        {
-            return m_manager.TestMethod(test);//Handle exceptions and different managers here
-        }   
+ 
 
         public void CreateInstitution(Institution institution)
         {
              m_manager.CreateInstitution(institution);
         }
 
-        public Institution GetInstitutionDetails(string institutionId)
+        public InstitutionDetails GetInstitutionDetails(string institutionId)
         {
             return m_manager.GetInstitutionDetails(institutionId);
         }
 
+
         public void CreateUser(User user)
         {
-            throw new System.NotImplementedException();
+            m_manager.CreateUser(user);
         }
 
         public UserDetails GetUserDetails(string userId)
         {
-            throw new System.NotImplementedException();
+            return m_manager.GetUserDetails(userId);
         }
 
         public IEnumerable<AppTaskDetails> GetTasksForApplication(string applicationId)
         {
-            throw new System.NotImplementedException();
+            return m_manager.GetTasksForApplication(applicationId);
         }
 
         public void CreateTaskForApplication(string applicationId, AppTask apptask)
         {
-            throw new System.NotImplementedException();
+            m_manager.CreateTaskForApplication(applicationId,apptask);
         }
 
-        public void CreateGroup(string institutionId, Group @group)
+        public void CreateGroup(string institutionId, Group group)
         {
-            throw new System.NotImplementedException();
+            m_manager.CreateGroup(institutionId,group);
         }
 
-        public Group GetGroupDetails(string institutionId, string groupId)
+        public GroupDetails GetGroupDetails(string groupId)
         {
-            throw new System.NotImplementedException();
+            return m_manager.GetGroupDetails(groupId);
         }
 
         public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string userId, string since)
         {
-            throw new System.NotImplementedException();
+            return m_manager.GetSynchronizedObjects(groupId, userId, since);
         }
 
         public void CreateSynchronizedObject(string groupId, string userId, SynchronizedObject synchronizedObject)
         {
-            throw new System.NotImplementedException();
+            m_manager.CreateSynchronizedObject(groupId, userId, synchronizedObject);
         }
     }
 }

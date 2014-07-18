@@ -15,7 +15,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
 
         public virtual List<Group> Groups { get; set; }
 
-        public bool Equals(Task other)
+        public virtual bool Equals(Task other)
         {
             return Id == other.Id;
         }

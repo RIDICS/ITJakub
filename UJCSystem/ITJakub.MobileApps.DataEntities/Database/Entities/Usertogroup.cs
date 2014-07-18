@@ -8,7 +8,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual User User { get; set; }
         public virtual Group Group { get; set; }
 
-        public bool Equals(UserToGroup other)
+        public virtual bool Equals(UserToGroup other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

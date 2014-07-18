@@ -30,24 +30,26 @@ BEGIN TRAN
 /* Application */
 CREATE TABLE [Application](
     [Id] [bigint] IDENTITY(1,1) NOT NULL,
-    [Name] [varchar] NOT NULL,
+    [Name] [varchar] (100) NOT NULL,
     CONSTRAINT [PK_Application] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 
 /* Institution */
 CREATE TABLE [Institution](
     [Id] [bigint] IDENTITY(1,1) NOT NULL,
-    [Name] [varchar] NOT NULL,
+    [Name] [varchar] (100) NOT NULL,
+    [CreateTime] [datetime] NOT NULL,
     CONSTRAINT [PK_Institution] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 
 /* User */
 CREATE TABLE [User](
     [Id] [bigint] IDENTITY(1,1) NOT NULL,
-    [FirstName] [varchar] NOT NULL,
-    [LastName] [varchar] NOT NULL,
-    [Email] [varchar] NOT NULL,
+    [FirstName] [varchar] (50) NOT NULL,
+    [LastName] [varchar] (50) NOT NULL,
+    [Email] [varchar] (255) NOT NULL UNIQUE,
     [RoleId] [tinyint] NOT NULL,
+    [CreateTime] [datetime] NOT NULL,
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 
@@ -55,14 +57,16 @@ CREATE TABLE [User](
 CREATE TABLE [Group](
     [Id] [bigint] IDENTITY(1,1) NOT NULL,
     [TaskId] [bigint] NOT NULL,
+    [AuthorId] [bigint] NOT NULL,
     [InstitutionId] [bigint] NOT NULL,
+    [CreateTime] [datetime] NOT NULL,
     CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 
 /* Users role */
 CREATE TABLE [Role](
     [Id] [tinyint] IDENTITY(1,1) NOT NULL,
-    [Name] [varchar] NOT NULL,
+    [Name] [varchar] (50) NOT NULL,
     CONSTRAINT [PK_Role] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 
@@ -73,8 +77,8 @@ CREATE TABLE [SynchronizedObject](
     [CreateTime] [datetime] NOT NULL,
     [AuthorId] [bigint] NOT NULL,
     [GroupId] [bigint] NOT NULL,
-    [Name] [varchar],
-    [GUID] [varchar],
+    [Name] [varchar] (255),
+    [GUID] [varchar] (255),
     CONSTRAINT [PK_SynchronizedObject] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)      
 )
 
@@ -85,8 +89,8 @@ CREATE TABLE [Task](
     [ApplicationId] [bigint] NOT NULL,
     [CreateTime] [datetime] NOT NULL,
     [AuthorId] [bigint] NOT NULL,
-    [Name] [varchar],
-    [GUID] [varchar],
+    [Name] [varchar] (255),
+    [GUID] [varchar] (255),
     CONSTRAINT [PK_Task] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 
@@ -141,6 +145,13 @@ ALTER TABLE [dbo].[SynchronizedObject]  WITH CHECK ADD  CONSTRAINT [FK_Synchroni
 REFERENCES [dbo].[User] ([Id])
 GO
 ALTER TABLE [dbo].[SynchronizedObject] CHECK CONSTRAINT [FK_SynchronizedObject_User]
+GO
+
+/* FK Group -> User */
+ALTER TABLE [dbo].[Group]  WITH CHECK ADD  CONSTRAINT [FK_Group_User] FOREIGN KEY([AuthorId])
+REFERENCES [dbo].[User] ([Id])
+GO
+ALTER TABLE [dbo].[Group] CHECK CONSTRAINT [FK_Group_User]
 GO
 
 
@@ -198,6 +209,12 @@ REFERENCES [dbo].[Institution] ([Id])
 GO
 ALTER TABLE [dbo].[UserToInstitution] CHECK CONSTRAINT [FK_UserToInstitution_Institution]
 GO
+
+
+
+/* Insert user roles */
+
+INSERT INTO [dbo].[Role]	([Name]) VALUES ('Principal'), ('Teacher'), ('Student');
 
 
 

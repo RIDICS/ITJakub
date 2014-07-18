@@ -11,5 +11,12 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         public GroupRepository(ISessionManager sessManager): base(sessManager)
         {
         }
+
+        public void CreateGroup(Institution institution, Task task, Group group)
+        {
+            group.Institution = institution;
+            group.Task = task;
+            Create(group);
+        }
     }
 }

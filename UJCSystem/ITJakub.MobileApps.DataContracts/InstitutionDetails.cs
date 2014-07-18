@@ -6,11 +6,19 @@ namespace ITJakub.MobileApps.DataContracts
     [DataContract]
     public class InstitutionDetails
     {
+        [DataMember]
+        public long Id { get; set; }
+
         [DataMember] 
-        public Institution InstitutionBaseInfo;
+        public Institution InstitutionBaseInfo { get; set; }
 
         //users working for institution (principal, teachers)
         [DataMember]
-        public IEnumerable<UserDetails> Users;
+        public IEnumerable<long> UserIds { get; set; }
+
+        [DataMember]
+        public IEnumerable<long> GroupIds { get; set; }
+
+       
     }
 }
