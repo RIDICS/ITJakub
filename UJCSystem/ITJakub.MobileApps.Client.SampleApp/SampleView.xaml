@@ -5,9 +5,14 @@
     xmlns:local="using:ITJakub.MobileApps.Client.SampleApp"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    Width="600" Height="600" mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock FontSize="50">Sample app</TextBlock>
+    <Grid Background="Blue">
+        <StackPanel>
+            <TextBlock FontSize="80">Sample app</TextBlock>
+            <TextBlock FontSize="80">Sample app</TextBlock>
+            <TextBlock FontSize="80">Sample app</TextBlock>
+            <TextBlock FontSize="100" Text="{Binding TestString}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

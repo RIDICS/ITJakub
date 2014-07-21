@@ -109,6 +109,11 @@
     <Compile Include="SampleViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="SampleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

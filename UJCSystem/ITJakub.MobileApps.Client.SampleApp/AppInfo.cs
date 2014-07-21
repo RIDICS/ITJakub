@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.SampleApp
@@ -8,21 +9,17 @@ namespace ITJakub.MobileApps.Client.SampleApp
     {
         public override string Name
         {
-            get { return "Sample app"; }
+            get { return "Sample application name"; }
         }
 
         public override ApplicationBaseViewModel ApplicationViewModel
         {
-            get { return new ApplicationBaseViewModel(); }
+            get { return new SampleViewModel(); }
         }
 
-        public override DataTemplate ApplicationDataTemplate
+        public override Type ApplicationDataTemplate
         {
-            get
-            {
-                var a =  new DataTemplate();
-                return a;
-            }
+            get { return typeof (SampleView); }
         }
 
         public override bool IsChatSupported

@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 
 namespace ITJakub.MobileApps.Client.Shared
 {
@@ -8,7 +9,7 @@ namespace ITJakub.MobileApps.Client.Shared
 
         public abstract ApplicationBaseViewModel ApplicationViewModel { get; }
 
-        public abstract DataTemplate ApplicationDataTemplate { get; }
+        public abstract Type ApplicationDataTemplate { get; }
 
         public abstract bool IsChatSupported { get; }
     }
