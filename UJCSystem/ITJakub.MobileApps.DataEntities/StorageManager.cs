@@ -1,4 +1,5 @@
-﻿using Castle.MicroKernel;
+﻿using System;
+using Castle.MicroKernel;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
 
@@ -47,6 +48,11 @@ namespace ITJakub.MobileApps.DataEntities
         public void CreateTask(Application application, string data)
         {
             m_taskRepository.Create(new Task() {Application = application}); //TODO add Data
+        }
+
+        public void CreateInstitution(string name,string enterCode,DateTime createTime)
+        {
+            m_institutionRepository.Create(new Institution(){Name = name, EnterCode = enterCode, CreateTime = createTime});
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
 
         public virtual List<Task> Tasks { get; set; }
 
-        public bool Equals(Application other)
+        public virtual bool Equals(Application other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

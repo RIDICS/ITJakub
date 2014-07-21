@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities;
@@ -7,22 +8,16 @@ namespace ITJakub.MobileApps.Core
 {
     public class MobileServiceManager : IMobileAppsService
     {
-        private StorageManager m_StorageManager;
+        private readonly StorageManager m_storageManager;
 
         public MobileServiceManager(IKernel container)
         {
-            m_StorageManager = container.Resolve<StorageManager>();
+            m_storageManager = container.Resolve<StorageManager>();
         }
-
-        public string TestMethod(string test)
-        {
-            return string.Format("Hello {0}", test);
-        }
-
 
         public void CreateInstitution(Institution institution)
         {
-            throw new System.NotImplementedException();
+            m_storageManager.CreateInstitution(institution.Name, EnterCodeGenerator.GenerateCode(), DateTime.Now.ToUniversalTime()); //TODO add check that generated code were unique (catch exception form DB)
         }
 
         public InstitutionDetails GetInstitutionDetails(string institutionId)

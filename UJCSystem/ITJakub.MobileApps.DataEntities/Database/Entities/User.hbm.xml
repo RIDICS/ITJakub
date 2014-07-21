@@ -31,9 +31,9 @@
       <key column="AuthorId" />
       <one-to-many class="Task" />
     </bag>
-    <bag name="Usertogroup">
+    <bag name="UserToGroup">
       <key column="UserId" />
-      <one-to-many class="Usertogroup" />
+      <one-to-many class="UserToGroup" />
     </bag>
   </class>
 </hibernate-mapping>

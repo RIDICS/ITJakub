@@ -20,7 +20,9 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual List<SynchronizedObject> SynchronizedObjects { get; set; } //Sync objects made by this user
         public virtual List<Task> Tasks { get; set; }   //Tasks made by this user
 
-        public bool Equals(User other)
+        public virtual List<UserToGroup> UserToGroup { get; set; }
+
+        public virtual bool Equals(User other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

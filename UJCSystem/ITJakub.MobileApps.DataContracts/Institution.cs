@@ -8,8 +8,5 @@ namespace ITJakub.MobileApps.DataContracts
         [DataMember]
         public string Name;
 
-        //users working for institution (principal, teachers)
-        [DataMember]
-        public User Principal;
     }
 }

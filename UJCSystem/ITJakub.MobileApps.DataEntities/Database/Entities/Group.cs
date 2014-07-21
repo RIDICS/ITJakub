@@ -15,8 +15,11 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual string EnterCode { get; set; }
 
         public virtual List<SynchronizedObject> SynchronizedObjects { get; set; }
+        public virtual List<UserToGroup> UserToGroup { get; set; }
 
-        public bool Equals(Group other)
+
+
+        public virtual bool Equals(Group other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
