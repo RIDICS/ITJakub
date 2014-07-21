@@ -14,8 +14,8 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual DateTime CreateTime { get; set; }
         public virtual string EnterCode { get; set; }
 
-        public virtual List<SynchronizedObject> SynchronizedObjects { get; set; }
-        public virtual List<User> Members { get; set; }
+        public virtual IList<SynchronizedObject> SynchronizedObjects { get; set; }
+        public virtual IList<User> Members { get; set; }
 
 
 

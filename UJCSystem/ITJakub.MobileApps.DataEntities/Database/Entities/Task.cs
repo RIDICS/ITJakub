@@ -15,7 +15,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual DateTime CreateTime { get; set; }
         public virtual string Guid { get; set; }
 
-        public virtual List<Group> Groups { get; set; }
+        public virtual IList<Group> Groups { get; set; }
 
         public virtual bool Equals(Task other)
         {

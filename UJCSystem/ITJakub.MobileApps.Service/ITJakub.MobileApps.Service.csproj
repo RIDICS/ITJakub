@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\Libs\AutoMapper.3.1.0\lib\windows8\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Core.dll</HintPath>
     </Reference>

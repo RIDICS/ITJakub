@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\Libs\AutoMapper.3.1.0\lib\windows8\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Windsor, Version=3.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Windsor.dll</HintPath>
@@ -43,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapperProfiles\InstitutionDetailsProfile.cs" />
+    <Compile Include="AutoMapperProfiles\InstitutionProfile.cs" />
+    <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="EnterCodeGenerator.cs" />
     <Compile Include="MobileServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

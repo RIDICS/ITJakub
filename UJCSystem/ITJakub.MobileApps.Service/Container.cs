@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using AutoMapper;
 using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
 using log4net.Config;
@@ -15,7 +16,6 @@ namespace ITJakub.MobileApps.Service
     ///</summary>
     public class Container : WindsorContainer
     {
-
         private static volatile WindsorContainer m_current;
 
 
@@ -43,6 +43,14 @@ namespace ITJakub.MobileApps.Service
         {
             //configure log4net
             XmlConfigurator.Configure(new FileInfo("log4net.config"));
+
+            //configure AutoMapper
+            ConfigureAutoMapper();
+        }
+
+        private void ConfigureAutoMapper()
+        {
+            foreach (var profile in ResolveAll<Profile>()) Mapper.AddProfile(profile);
         }
 
         private static string GetAssembly()

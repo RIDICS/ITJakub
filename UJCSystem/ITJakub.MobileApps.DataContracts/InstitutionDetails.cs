@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.MobileApps.DataContracts
@@ -10,15 +11,12 @@ namespace ITJakub.MobileApps.DataContracts
         public long Id { get; set; }
 
         [DataMember] 
-        public Institution InstitutionBaseInfo { get; set; }
-
-        //users working for institution (principal, teachers)
-        [DataMember]
-        public IEnumerable<long> UserIds { get; set; }
+        public string Name { get; set; }
 
         [DataMember]
-        public IEnumerable<long> GroupIds { get; set; }
+        public IEnumerable<User> Employees { get; set; }
 
-       
+        [DataMember]
+        public DateTime CreateTime { get; set; }
     }
 }

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.DataContracts;
-using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
+using DE = ITJakub.MobileApps.DataEntities.Database.Entities;
 
 namespace ITJakub.MobileApps.Core
 {
@@ -28,28 +28,23 @@ namespace ITJakub.MobileApps.Core
 
         public void CreateInstitution(Institution institution)
         {
-            m_institutionRepository.Create(new DataEntities.Database.Entities.Institution()
-            {
-                Name = institution.Name,
-                EnterCode = EnterCodeGenerator.GenerateCode(),
-                CreateTime = DateTime.Now.ToUniversalTime()
-            }); //TODO add check that generated code were unique (catch exception form DB)
+            var deInstitution = AutoMapper.Mapper.Map<DE.Institution>(institution);
+            deInstitution.EnterCode = EnterCodeGenerator.GenerateCode();
+            deInstitution.CreateTime = DateTime.UtcNow;
+            m_institutionRepository.Create(deInstitution); //TODO add check that generated enterCode were unique (catch exception form DB)
         }
 
         public InstitutionDetails GetInstitutionDetails(string institutionId)
         {
-            throw new System.NotImplementedException();
+            var institution = m_institutionRepository.FindById(long.Parse(institutionId));
+            return AutoMapper.Mapper.Map<InstitutionDetails>(institution);  //TODO resolve lazy inicialization exception
         }
 
         public void CreateUser(User user)
         {
-            m_userRepository.Create(new DataEntities.Database.Entities.User()
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                CreateTime = DateTime.Now.ToUniversalTime()
-            });
+            var deUser = AutoMapper.Mapper.Map<DE.User>(user);
+            deUser.CreateTime = DateTime.UtcNow;
+            m_userRepository.Create(deUser); //TODO add check that email were unique (catch exception form DB)
         }
 
         public UserDetails GetUserDetails(string userId)

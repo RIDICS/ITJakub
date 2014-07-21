@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual long Id { get; set; }
         public virtual string Name { get; set; }
 
-        public virtual List<Task> Tasks { get; set; }
+        public virtual IList<Task> Tasks { get; set; }
 
         public virtual bool Equals(Application other)
         {

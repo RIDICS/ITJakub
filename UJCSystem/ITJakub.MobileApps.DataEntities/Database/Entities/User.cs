@@ -16,11 +16,11 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual DateTime CreateTime { get; set; }
 
 
-        public virtual List<Group> CreatedGroups { get; set; }     //Groups made by this user
-        public virtual List<SynchronizedObject> CreatedSynchronizedObjects { get; set; } //Sync objects made by this user
-        public virtual List<Task> CreatedTasks { get; set; }   //Tasks made by this user
+        public virtual IList<Group> CreatedGroups { get; set; }     //Groups made by this user
+        public virtual IList<SynchronizedObject> CreatedSynchronizedObjects { get; set; } //Sync objects made by this user
+        public virtual IList<Task> CreatedTasks { get; set; }   //Tasks made by this user
 
-        public virtual List<Group> MemberOfGroups { get; set; } //Groups where is this user as a member
+        public virtual IList<Group> MemberOfGroups { get; set; } //Groups where is this user as a member
 
         public virtual bool Equals(User other)
         {
