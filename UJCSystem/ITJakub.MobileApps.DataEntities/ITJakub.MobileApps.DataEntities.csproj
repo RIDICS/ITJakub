@@ -68,7 +68,6 @@
     <Compile Include="Database\Entities\SynchronizedObject.cs" />
     <Compile Include="Database\Entities\Task.cs" />
     <Compile Include="Database\Entities\User.cs" />
-    <Compile Include="Database\Entities\UserToGroup.cs" />
     <Compile Include="Database\Repositories\GroupRepository.cs" />
     <Compile Include="Database\Repositories\InstitutionRepository.cs" />
     <Compile Include="StorageManager.cs" />
@@ -88,7 +87,6 @@
     <EmbeddedResource Include="Database\Entities\SynchronizedObject.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Task.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\User.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\UserToGroup.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

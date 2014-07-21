@@ -19,21 +19,21 @@
     <property name="CreateTime">
       <column name="CreateTime" sql-type="datetime" not-null="true" />
     </property>
-    <bag name="Groups">
+    <bag name="CreatedGroups">
       <key column="AuthorId" />
       <one-to-many class="Group" />
     </bag>
-    <bag name="SynchronizedObjects">
+    <bag name="CreatedSynchronizedObjects">
       <key column="AuthorId" />
       <one-to-many class="SynchronizedObject" />
     </bag>
-    <bag name="Tasks">
+    <bag name="CreatedTasks">
       <key column="AuthorId" />
       <one-to-many class="Task" />
     </bag>
-    <bag name="UserToGroup">
-      <key column="UserId" />
-      <one-to-many class="UserToGroup" />
+    <bag name="MemberOfGroups" table="UserToGroup">
+      <key column="UserId"/>
+      <many-to-many class="Group" column="GroupId"/>
     </bag>
   </class>
 </hibernate-mapping>

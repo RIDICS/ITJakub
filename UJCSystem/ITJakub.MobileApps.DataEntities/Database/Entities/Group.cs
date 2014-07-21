@@ -9,13 +9,13 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
     {
         public Group() { }
         public virtual long Id { get; set; }
-        public virtual User User { get; set; }
+        public virtual User Author { get; set; }
         public virtual Task Task { get; set; }
         public virtual DateTime CreateTime { get; set; }
         public virtual string EnterCode { get; set; }
 
         public virtual List<SynchronizedObject> SynchronizedObjects { get; set; }
-        public virtual List<UserToGroup> UserToGroup { get; set; }
+        public virtual List<User> Members { get; set; }
 
 
 
