@@ -13,12 +13,12 @@
 */
 
 using GalaSoft.MvvmLight.Ioc;
-using ITJakub.MobileApps.Client.MainApp.Common;
+using ITJakub.MobileApps.Client.Core;
+using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.MainApp.Control.ViewModel;
-using ITJakub.MobileApps.Client.MainApp.DataService;
 using Microsoft.Practices.ServiceLocation;
 
-namespace ITJakub.MobileApps.Client.MainApp.ViewModel
+namespace ITJakub.MobileApps.Client.MainApp
 {
     /// <summary>
     /// This class contains static references to all the view models in the
@@ -41,13 +41,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             ////else
             ////{
                 // Create run time view services and models
-                SimpleIoc.Default.Register<IDataService, DataService.DataService>();
+                SimpleIoc.Default.Register<IDataService, Core.DataService.DataService>();
             ////}
 
             SimpleIoc.Default.Register<INavigationService, NavigationService>();
             SimpleIoc.Default.Register<LoginViewModel>();
             SimpleIoc.Default.Register<ChatViewModel>();
             SimpleIoc.Default.Register<GroupListViewModel>();
+            SimpleIoc.Default.Register<ApplicationHostViewModel>();
         }
 
         public LoginViewModel LoginViewModel
@@ -66,6 +67,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public GroupListViewModel GroupListViewModel
         {
             get { return ServiceLocator.Current.GetInstance<GroupListViewModel>(); }
+        }
+
+        public ApplicationHostViewModel ApplicationHostViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<ApplicationHostViewModel>(); }
         }
         
         public static void Cleanup()

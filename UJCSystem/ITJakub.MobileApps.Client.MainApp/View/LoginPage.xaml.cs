@@ -1,9 +1,11 @@
 ﻿// The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
+
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.MainApp.Common;
 
-namespace ITJakub.MobileApps.Client.MainApp
+namespace ITJakub.MobileApps.Client.MainApp.View
 {
     /// <summary>
     /// A page that displays a grouped collection of items.

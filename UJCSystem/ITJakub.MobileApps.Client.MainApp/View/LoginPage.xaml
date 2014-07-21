@@ -1,6 +1,6 @@
 ﻿<Page
     x:Name="pageRoot"
-    x:Class="ITJakub.MobileApps.Client.MainApp.GroupedItemsPage"
+    x:Class="ITJakub.MobileApps.Client.MainApp.View.GroupedItemsPage"
     DataContext="{Binding LoginViewModel, Source={StaticResource Locator}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

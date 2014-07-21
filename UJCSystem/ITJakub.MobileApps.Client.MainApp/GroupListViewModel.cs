@@ -2,11 +2,9 @@
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using ITJakub.MobileApps.Client.MainApp.Common;
-using ITJakub.MobileApps.Client.MainApp.DataService;
-using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
+using ITJakub.MobileApps.Client.Core.DataService;
 
-namespace ITJakub.MobileApps.Client.MainApp.ViewModel
+namespace ITJakub.MobileApps.Client.MainApp
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -104,7 +102,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             if (group != null)
             {
                 //TODO open group
-                m_navigationService.Navigate(typeof(HangmanTest.MainView));
+                //m_navigationService.Navigate(typeof(HangmanTest.MainView));
             }
         }
     }

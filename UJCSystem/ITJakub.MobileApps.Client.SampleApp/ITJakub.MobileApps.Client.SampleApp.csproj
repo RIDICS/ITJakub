@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A6182390-8F74-4DE0-8F37-974D9321FB74}</ProjectGuid>
+    <ProjectGuid>{1478B0C2-F435-44BE-9EBA-D33B78B88596}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ITJakub.MobileApps.Client.Core</RootNamespace>
-    <AssemblyName>ITJakub.MobileApps.Client.Core</AssemblyName>
+    <RootNamespace>ITJakub.MobileApps.Client.SampleApp</RootNamespace>
+    <AssemblyName>ITJakub.MobileApps.Client.SampleApp</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
@@ -101,36 +101,26 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\ITJakub.MobileApps.Client.DataContracts\ITJakub.MobileApps.Client.DataContracts.csproj">
-      <Project>{A6F66019-70E7-4177-9389-554D1E73C437}</Project>
-      <Name>ITJakub.MobileApps.Client.DataContracts</Name>
-    </ProjectReference>
+    <Compile Include="AppInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleView.xaml.cs">
+      <DependentUpon>SampleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SampleViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="SampleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ITJakub.MobileApps.Client.Shared\ITJakub.MobileApps.Client.Shared.csproj">
       <Project>{2009029F-A9B8-4A44-AC3D-A05C1E65E1E1}</Project>
       <Name>ITJakub.MobileApps.Client.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationManager.cs" />
-    <Compile Include="Configuration\ApplicationConfig.cs" />
-    <Compile Include="ApplicationHostViewModel.cs" />
-    <Compile Include="ApplicationLoader.cs" />
-    <Compile Include="ApplicationTemplateSelector.cs" />
-    <Compile Include="Configuration\ApplicationConfigLoader.cs" />
-    <Compile Include="DataService\DataService.cs" />
-    <Compile Include="DataService\IDataService.cs" />
-    <Compile Include="DataService\INavigationService.cs" />
-    <Compile Include="DataService\NavigationService.cs" />
-    <Compile Include="Manager\LoginManager.cs" />
-    <Compile Include="Manager\LoginProvider.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\UserInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Facebook">
-      <HintPath>..\packages\Facebook.6.6.0\lib\win81\Facebook.dll</HintPath>
-    </Reference>
     <Reference Include="GalaSoft.MvvmLight">
       <HintPath>..\packages\MvvmLightLibs.4.4.32.1\lib\netcore45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -140,14 +130,10 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\netcore45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

@@ -1,8 +1,9 @@
 <Application x:Class="ITJakub.MobileApps.Client.MainApp.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:viewModel="using:ITJakub.MobileApps.Client.MainApp.ViewModel">
+             xmlns:core="using:ITJakub.MobileApps.Client.Core"
+             xmlns:mainApp="using:ITJakub.MobileApps.Client.MainApp">
   <Application.Resources>
     <!-- Application-specific resources -->
     <x:String x:Key="AppName">IT Jakub</x:String>
-    <viewModel:ViewModelLocator x:Key="Locator" />
-  </Application.Resources>
+        <mainApp:ViewModelLocator x:Key="Locator" />
+    </Application.Resources>
 </Application>

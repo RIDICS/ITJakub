@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ITJakub.MobileApps.Client.Core
+namespace ITJakub.MobileApps.Client.SampleApp
 {
-    public abstract class ApplicationBase
+    public class SampleViewModel
     {
     }
 }

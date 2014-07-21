@@ -6,7 +6,9 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 // The Grid App template is documented at http://go.microsoft.com/fwlink/?LinkId=234226
+using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.MainApp.Common;
+using ITJakub.MobileApps.Client.MainApp.View;
 
 namespace ITJakub.MobileApps.Client.MainApp
 {

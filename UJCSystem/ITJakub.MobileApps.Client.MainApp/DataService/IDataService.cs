@@ -1,6 +1,5 @@
 using System;
-using ITJakub.MobileApps.Client.MainApp.Enum;
-using ITJakub.MobileApps.Client.MainApp.ViewModel;
+using ITJakub.MobileApps.Client.Core.Manager;
 
 namespace ITJakub.MobileApps.Client.MainApp.DataService
 {

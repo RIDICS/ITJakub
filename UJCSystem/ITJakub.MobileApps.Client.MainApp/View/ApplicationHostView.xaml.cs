@@ -1,16 +1,17 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-
-// The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
+using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.MainApp.Common;
 
-namespace ITJakub.MobileApps.Client.MainApp
+// The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
+
+namespace ITJakub.MobileApps.Client.MainApp.View
 {
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class GroupListView : Page
+    public sealed partial class ApplicationHostView : Page
     {
 
         private NavigationHelper navigationHelper;
@@ -34,7 +35,7 @@ namespace ITJakub.MobileApps.Client.MainApp
         }
 
 
-        public GroupListView()
+        public ApplicationHostView()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);

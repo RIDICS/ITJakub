@@ -1,11 +1,11 @@
 using System;
 using GalaSoft.MvvmLight;
-using ITJakub.MobileApps.Client.MainApp.Common;
-using ITJakub.MobileApps.Client.MainApp.DataService;
-using ITJakub.MobileApps.Client.MainApp.Enum;
-using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
+using GalaSoft.MvvmLight.Command;
+using ITJakub.MobileApps.Client.Core.DataService;
+using ITJakub.MobileApps.Client.Core.Manager;
+using ITJakub.MobileApps.Client.MainApp.View;
 
-namespace ITJakub.MobileApps.Client.MainApp.ViewModel
+namespace ITJakub.MobileApps.Client.MainApp
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.
@@ -90,7 +90,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 Message = String.Format("{0} {1} {2} {3} {4}", info.Success, info.Email, info.FirstName, info.LastName, info.AccessToken);
                 RaisePropertyChanged(() => Message);
             });
-            m_navigationService.Navigate(typeof(GroupListView));
+
+            m_navigationService.Navigate(typeof(ApplicationHostView));
+            //m_navigationService.Navigate(typeof(GroupListView));            
         }
     }
 }

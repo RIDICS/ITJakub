@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Windows.ApplicationModel.Background;
-using ITJakub.MobileApps.Client.Core;
 using ITJakub.MobileApps.Client.Core.Manager;
+using ITJakub.MobileApps.Client.MainApp;
 using ITJakub.MobileApps.Client.Shared;
 
-namespace ITJakub.MobileApps.Client.MainApp.DataService
+namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public class DataService : IDataService
     {

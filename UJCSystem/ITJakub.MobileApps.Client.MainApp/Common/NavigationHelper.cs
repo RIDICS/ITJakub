@@ -105,24 +105,24 @@ namespace ITJakub.MobileApps.Client.MainApp.Common
 
         #region Navigation support
 
-        RelayCommand _goBackCommand;
-        RelayCommand _goForwardCommand;
+        GalaSoft.MvvmLight.Command.RelayCommand _goBackCommand;
+        GalaSoft.MvvmLight.Command.RelayCommand _goForwardCommand;
 
         /// <summary>
-        /// <see cref="RelayCommand"/> used to bind to the back Button's Command property
+        /// <see cref="GalaSoft.MvvmLight.Command.RelayCommand"/> used to bind to the back Button's Command property
         /// for navigating to the most recent item in back navigation history, if a Frame
         /// manages its own navigation history.
         /// 
-        /// The <see cref="RelayCommand"/> is set up to use the virtual method <see cref="GoBack"/>
+        /// The <see cref="GalaSoft.MvvmLight.Command.RelayCommand"/> is set up to use the virtual method <see cref="GoBack"/>
         /// as the Execute Action and <see cref="CanGoBack"/> for CanExecute.
         /// </summary>
-        public RelayCommand GoBackCommand
+        public GalaSoft.MvvmLight.Command.RelayCommand GoBackCommand
         {
             get
             {
                 if (_goBackCommand == null)
                 {
-                    _goBackCommand = new RelayCommand(
+                    _goBackCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                         () => this.GoBack(),
                         () => this.CanGoBack());
                 }
@@ -134,19 +134,19 @@ namespace ITJakub.MobileApps.Client.MainApp.Common
             }
         }
         /// <summary>
-        /// <see cref="RelayCommand"/> used for navigating to the most recent item in 
+        /// <see cref="GalaSoft.MvvmLight.Command.RelayCommand"/> used for navigating to the most recent item in 
         /// the forward navigation history, if a Frame manages its own navigation history.
         /// 
-        /// The <see cref="RelayCommand"/> is set up to use the virtual method <see cref="GoForward"/>
+        /// The <see cref="GalaSoft.MvvmLight.Command.RelayCommand"/> is set up to use the virtual method <see cref="GoForward"/>
         /// as the Execute Action and <see cref="CanGoForward"/> for CanExecute.
         /// </summary>
-        public RelayCommand GoForwardCommand
+        public GalaSoft.MvvmLight.Command.RelayCommand GoForwardCommand
         {
             get
             {
                 if (_goForwardCommand == null)
                 {
-                    _goForwardCommand = new RelayCommand(
+                    _goForwardCommand = new GalaSoft.MvvmLight.Command.RelayCommand(
                         () => this.GoForward(),
                         () => this.CanGoForward());
                 }

@@ -8,10 +8,10 @@ using Windows.Web.Http;
 using Windows.Web.Http.Headers;
 using Facebook;
 using ITJakub.MobileApps.Client.DataContracts.Json;
-using ITJakub.MobileApps.Client.MainApp.ViewModel;
+using ITJakub.MobileApps.Client.MainApp;
 using Newtonsoft.Json;
 
-namespace ITJakub.MobileApps.Client.MainApp.Manager
+namespace ITJakub.MobileApps.Client.Core.Manager
 {
     //AAAAAAAAAAAAAAAAAAAARGH CO JE  TOHLE ZA TRIDU.
     //ROZDELIT DO JEDNOTLIVYCH MANAGERU. PODLE FUNKCIONALITY (MANAGER PRO GOOGLE, MANAGER PRO LIVEID, MANAGER PRO FACEBOOK ETC)
