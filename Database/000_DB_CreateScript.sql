@@ -38,7 +38,8 @@ CREATE TABLE [Application](
 CREATE TABLE [Institution](
     [Id] [bigint] IDENTITY(1,1) NOT NULL,
     [Name] [varchar] (100) NOT NULL,
-    [CreateTime] [datetime] NOT NULL,
+    [CreateTime] [datetime] NOT NULL,    
+    [EnterCode] [varchar] (100) NOT NULL,
     CONSTRAINT [PK_Institution] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 
@@ -48,36 +49,29 @@ CREATE TABLE [User](
     [FirstName] [varchar] (50) NOT NULL,
     [LastName] [varchar] (50) NOT NULL,
     [Email] [varchar] (255) NOT NULL UNIQUE,
-    [RoleId] [tinyint] NOT NULL,
+    [InstitutionId] [bigint],
     [CreateTime] [datetime] NOT NULL,
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 
 /* Group*/
 CREATE TABLE [Group](
-    [Id] [bigint] IDENTITY(1,1) NOT NULL,
-    [TaskId] [bigint] NOT NULL,
+    [Id] [bigint] IDENTITY(1,1) NOT NULL,    
     [AuthorId] [bigint] NOT NULL,
-    [InstitutionId] [bigint] NOT NULL,
+    [TaskId] [bigint] NOT NULL,
     [CreateTime] [datetime] NOT NULL,
+    [EnterCode] [varchar] (100) NOT NULL,
     CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-)
-
-/* Users role */
-CREATE TABLE [Role](
-    [Id] [tinyint] IDENTITY(1,1) NOT NULL,
-    [Name] [varchar] (50) NOT NULL,
-    CONSTRAINT [PK_Role] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 
 
 /* Synchronized object in group */
 CREATE TABLE [SynchronizedObject](
-    [Id] [bigint] IDENTITY(1,1) NOT NULL,
-    [CreateTime] [datetime] NOT NULL,
+    [Id] [bigint] IDENTITY(1,1) NOT NULL,    
     [AuthorId] [bigint] NOT NULL,
     [GroupId] [bigint] NOT NULL,
-    [Name] [varchar] (255),
+    [CreateTime] [datetime] NOT NULL,
+    [ObjectType] [varchar] (50),
     [GUID] [varchar] (255),
     CONSTRAINT [PK_SynchronizedObject] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)      
 )
@@ -85,11 +79,11 @@ CREATE TABLE [SynchronizedObject](
 
 /* Predefined task for application */
 CREATE TABLE [Task](
-    [Id] [bigint] IDENTITY(1,1) NOT NULL,
-    [ApplicationId] [bigint] NOT NULL,
-    [CreateTime] [datetime] NOT NULL,
+    [Id] [bigint] IDENTITY(1,1) NOT NULL,    
     [AuthorId] [bigint] NOT NULL,
-    [Name] [varchar] (255),
+    [ApplicationId] [bigint] NOT NULL,    
+    [Name] [varchar] (100) NOT NULL,
+    [CreateTime] [datetime] NOT NULL,
     [GUID] [varchar] (255),
     CONSTRAINT [PK_Task] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
@@ -97,54 +91,27 @@ CREATE TABLE [Task](
 
 /* Relationship User <--> Group */
 CREATE TABLE [UserToGroup](
-    [Id] [bigint] IDENTITY(1,1) NOT NULL,
     [UserId] [bigint]  NOT NULL,
     [GroupId] [bigint]  NOT NULL,
-    CONSTRAINT [PK_UserToGroup] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+    CONSTRAINT [PK_UserToGroup] PRIMARY KEY CLUSTERED ([UserId],[GroupId])WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
-
-/* Relationship User <--> Institution */
-CREATE TABLE [UserToInstitution](
-    [Id] [bigint] IDENTITY(1,1) NOT NULL,
-    [UserId] [bigint]  NOT NULL,
-    [InstitutionId] [bigint] NOT NULL,
-    CONSTRAINT [PK_UserToInstitution] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-)
-
-
 
 
 
 /********************* CONSTRAINTS *******************/
 
-/* FK User -> Role */
-ALTER TABLE [dbo].[User]  WITH CHECK ADD  CONSTRAINT [FK_User_Role] FOREIGN KEY([RoleId])
-REFERENCES [dbo].[Role] ([Id])
+/* FK User -> Institution */
+ALTER TABLE [dbo].[User]  WITH CHECK ADD  CONSTRAINT [FK_User_Institution] FOREIGN KEY([InstitutionId])
+REFERENCES [dbo].[Institution] ([Id])
 GO
-ALTER TABLE [dbo].[User] CHECK CONSTRAINT [FK_User_Role]
+ALTER TABLE [dbo].[User] CHECK CONSTRAINT [FK_User_Institution]
 GO
-
 
 /* FK Group -> Task */
 ALTER TABLE [dbo].[Group]  WITH CHECK ADD  CONSTRAINT [FK_Group_Task] FOREIGN KEY([TaskId])
 REFERENCES [dbo].[Task] ([Id])
 GO
 ALTER TABLE [dbo].[Group] CHECK CONSTRAINT [FK_Group_Task]
-GO
-
-/* FK Group -> Institution */
-ALTER TABLE [dbo].[Group]  WITH CHECK ADD  CONSTRAINT [FK_Group_Institution] FOREIGN KEY([InstitutionId])
-REFERENCES [dbo].[Institution] ([Id])
-GO
-ALTER TABLE [dbo].[Group] CHECK CONSTRAINT [FK_Group_Institution]
-GO
-
-
-/* FK SynchronizedObject -> User */
-ALTER TABLE [dbo].[SynchronizedObject]  WITH CHECK ADD  CONSTRAINT [FK_SynchronizedObject_User] FOREIGN KEY([AuthorId])
-REFERENCES [dbo].[User] ([Id])
-GO
-ALTER TABLE [dbo].[SynchronizedObject] CHECK CONSTRAINT [FK_SynchronizedObject_User]
 GO
 
 /* FK Group -> User */
@@ -154,6 +121,12 @@ GO
 ALTER TABLE [dbo].[Group] CHECK CONSTRAINT [FK_Group_User]
 GO
 
+/* FK SynchronizedObject -> User */
+ALTER TABLE [dbo].[SynchronizedObject]  WITH CHECK ADD  CONSTRAINT [FK_SynchronizedObject_User] FOREIGN KEY([AuthorId])
+REFERENCES [dbo].[User] ([Id])
+GO
+ALTER TABLE [dbo].[SynchronizedObject] CHECK CONSTRAINT [FK_SynchronizedObject_User]
+GO
 
 /* FK SynchronizedObject -> Group */
 ALTER TABLE [dbo].[SynchronizedObject]  WITH CHECK ADD  CONSTRAINT [FK_SynchronizedObject_Group] FOREIGN KEY([GroupId])
@@ -177,7 +150,6 @@ ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [FK_Task_Application]
 GO
 
 
-
 /* FK UserToGroup -> User */
 ALTER TABLE [dbo].[UserToGroup]  WITH CHECK ADD  CONSTRAINT [FK_UserToGroup_User] FOREIGN KEY([UserId])
 REFERENCES [dbo].[User] ([Id])
@@ -192,31 +164,6 @@ REFERENCES [dbo].[Group] ([Id])
 GO
 ALTER TABLE [dbo].[UserToGroup] CHECK CONSTRAINT [FK_UserToGroup_Group]
 GO
-
-
-
-/* FK UserToInstitution -> User */
-ALTER TABLE [dbo].[UserToInstitution]  WITH CHECK ADD  CONSTRAINT [FK_UserToInstitution_User] FOREIGN KEY([UserId])
-REFERENCES [dbo].[User] ([Id])
-GO
-ALTER TABLE [dbo].[UserToInstitution] CHECK CONSTRAINT [FK_UserToInstitution_User]
-GO
-
-
-/* FK UserToInstitution -> Institution */
-ALTER TABLE [dbo].[UserToInstitution]  WITH CHECK ADD  CONSTRAINT [FK_UserToInstitution_Institution] FOREIGN KEY([InstitutionId])
-REFERENCES [dbo].[Institution] ([Id])
-GO
-ALTER TABLE [dbo].[UserToInstitution] CHECK CONSTRAINT [FK_UserToInstitution_Institution]
-GO
-
-
-
-/* Insert user roles */
-
-INSERT INTO [dbo].[Role]	([Name]) VALUES ('Principal'), ('Teacher'), ('Student');
-
-
 
 --ROLLBACK
 COMMIT
