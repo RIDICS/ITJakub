@@ -53,7 +53,7 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "application/{applicationId}/tasks")]
-        IEnumerable<AppTaskDetails> GetTasksForApplication(string applicationId);
+        IEnumerable<TaskDetails> GetTasksForApplication(string applicationId);
 
 
 
@@ -68,7 +68,7 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "application/{applicationId}/tasks/create")]
-        void CreateTaskForApplication(string applicationId, AppTask apptask);
+        void CreateTaskForApplication(string applicationId, Task apptask);
 
 
         /// <summary>

@@ -3,7 +3,7 @@
 namespace ITJakub.MobileApps.DataContracts
 {
     [DataContract]
-    public class AppTask
+    public class Task
     {
         [DataMember]
         public string Data;

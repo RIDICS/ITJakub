@@ -7,18 +7,18 @@ namespace ITJakub.MobileApps.DataContracts
     public class UserDetails
     {
         [DataMember]
-        public long Id;
+        public long Id { get; set; }
 
         [DataMember]
-        public User User;
+        public User User { get; set; }
 
         [DataMember]
-        public string Role;
+        public IEnumerable<Group> MemberOfGroups { get; set; }
 
         [DataMember]
-        public List<long> GroupIds { get; set; }
+        public IEnumerable<Group> CreatedGroups { get; set; }
 
         [DataMember]
-        public List<long> TaskIds { get; set; }
+        public IEnumerable<Task> CreatedTasks { get; set; }
     }
 }

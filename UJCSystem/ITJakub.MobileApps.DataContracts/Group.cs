@@ -7,10 +7,10 @@ namespace ITJakub.MobileApps.DataContracts
     public class Group
     {
         [DataMember]
-        public long TaskId { get; set; }
+        public Task Task { get; set; }
         
         [DataMember]
-        public IEnumerable<User> Users { get; set; }
+        public IEnumerable<User> Members { get; set; }
 
     
     }

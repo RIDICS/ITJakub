@@ -34,12 +34,12 @@ namespace ITJakub.MobileApps.Service
             return m_manager.GetUserDetails(userId);
         }
 
-        public IEnumerable<AppTaskDetails> GetTasksForApplication(string applicationId)
+        public IEnumerable<TaskDetails> GetTasksForApplication(string applicationId)
         {
             return m_manager.GetTasksForApplication(applicationId);
         }
 
-        public void CreateTaskForApplication(string applicationId, AppTask apptask)
+        public void CreateTaskForApplication(string applicationId, Task apptask)
         {
             m_manager.CreateTaskForApplication(applicationId,apptask);
         }

@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppTask.cs" />
+    <Compile Include="Task.cs" />
     <Compile Include="GroupDetails.cs" />
     <Compile Include="InstitutionDetails.cs" />
     <Compile Include="SynchronizedObject.cs" />
@@ -51,7 +51,7 @@
     <Compile Include="Institution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SynchronizedObjectDetails.cs" />
-    <Compile Include="AppTaskDetails.cs" />
+    <Compile Include="TaskDetails.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserDetails.cs" />
   </ItemGroup>

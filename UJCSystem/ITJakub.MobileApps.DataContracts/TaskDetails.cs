@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace ITJakub.MobileApps.DataContracts
 {
     [DataContract]
-    public class AppTaskDetails
+    public class TaskDetails
     {
 
         [DataMember]
@@ -15,7 +15,7 @@ namespace ITJakub.MobileApps.DataContracts
         public DateTime CreateTime;
 
         [DataMember]
-        public AppTask AppTask;
+        public Task m_task;
     }
 
 }

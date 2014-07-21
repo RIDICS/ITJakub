@@ -11,13 +11,13 @@ namespace ITJakub.MobileApps.DataContracts
         public long Id { get; set; }
 
         [DataMember]
-        public long AuthorId { get; set; }
+        public User Author { get; set; }
 
         [DataMember]
-        public DateTime CreateTime;
+        public DateTime CreateTime { get; set; }
 
         [DataMember] 
-        public Group Group;
+        public Group Group { get; set; }
 
     }
 }

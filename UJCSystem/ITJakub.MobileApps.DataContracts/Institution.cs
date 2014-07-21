@@ -6,7 +6,7 @@ namespace ITJakub.MobileApps.DataContracts
     public class Institution
     {
         [DataMember]
-        public string Name;
+        public string Name { get; set; }
 
     }
 }

@@ -36,8 +36,8 @@ namespace ITJakub.MobileApps.Core
 
         public InstitutionDetails GetInstitutionDetails(string institutionId)
         {
-            var institution = m_institutionRepository.FindById(long.Parse(institutionId));
-            return AutoMapper.Mapper.Map<InstitutionDetails>(institution);  //TODO resolve lazy inicialization exception
+            var institution = m_institutionRepository.LoadInstitutionWithDetails(long.Parse(institutionId));
+            return AutoMapper.Mapper.Map<InstitutionDetails>(institution); 
         }
 
         public void CreateUser(User user)
@@ -49,15 +49,16 @@ namespace ITJakub.MobileApps.Core
 
         public UserDetails GetUserDetails(string userId)
         {
-            throw new System.NotImplementedException();
+            var user = m_userRepository.LoadUserWithDetails(long.Parse(userId));
+            return AutoMapper.Mapper.Map<UserDetails>(user);
         }
 
-        public IEnumerable<AppTaskDetails> GetTasksForApplication(string applicationId)
+        public IEnumerable<TaskDetails> GetTasksForApplication(string applicationId)
         {
             throw new System.NotImplementedException();
         }
 
-        public void CreateTaskForApplication(string applicationId, AppTask apptask)
+        public void CreateTaskForApplication(string applicationId, Task apptask)
         {
             throw new System.NotImplementedException();
         }

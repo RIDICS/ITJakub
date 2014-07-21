@@ -9,12 +9,12 @@ namespace ITJakub.MobileApps.DataContracts
     public class SynchronizedObjectDetails
     {
         [DataMember]
-        public User Author;
+        public User Author { get; set; }
 
-        [DataMember] 
-        public DateTime CreateTime;
+        [DataMember]
+        public DateTime CreateTime { get; set; }
 
-        [DataMember] 
-        public SynchronizedObject SynchronizedObject;
+        [DataMember]
+        public SynchronizedObject SynchronizedObject { get; set; }
     }
 }

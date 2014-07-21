@@ -13,7 +13,7 @@
     <property name="EnterCode">
       <column name="EnterCode" sql-type="varchar" not-null="true" />
     </property>
-    <bag name="Users">
+    <bag name="Members">
       <key column="InstitutionId" />
       <one-to-many class="User" />
     </bag>
