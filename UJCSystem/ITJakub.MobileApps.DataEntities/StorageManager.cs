@@ -12,7 +12,6 @@ namespace ITJakub.MobileApps.DataEntities
         private readonly GroupRepository m_groupRepository;
         private readonly TaskRepository m_taskRepository;
         private readonly ApplicationRepository m_applicationRepository;
-        private RoleRepository m_roleRepository;
 
         public StorageManager(IKernel container)
         {
@@ -22,7 +21,6 @@ namespace ITJakub.MobileApps.DataEntities
             m_groupRepository = container.Resolve<GroupRepository>();
             m_taskRepository = container.Resolve<TaskRepository>();
             m_applicationRepository = container.Resolve<ApplicationRepository>();
-            m_roleRepository = container.Resolve<RoleRepository>();
         }
 
         public Institution FindInstitutionById(long id)
@@ -49,21 +47,6 @@ namespace ITJakub.MobileApps.DataEntities
         public void CreateTask(Application application, string data)
         {
             m_taskRepository.Create(new Task() {Application = application}); //TODO add Data
-        }
-
-        public void CreateGroup(Institution institution, Task task, Group group)
-        {
-            m_groupRepository.CreateGroup(institution, task, group);
-        }
-
-        public Task FindTaskById(long id)
-        {
-            return m_taskRepository.FindById(id);
-        }
-
-        public Group FindGroupById(long id)
-        {
-            return m_groupRepository.FindById(id);
         }
     }
 }

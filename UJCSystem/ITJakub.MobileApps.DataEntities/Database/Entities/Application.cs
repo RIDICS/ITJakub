@@ -1,17 +1,22 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 
-namespace ITJakub.MobileApps.DataEntities.Database.Entities
-{
-    public class Application : IEquatable<Application>
+
+namespace ITJakub.MobileApps.DataEntities.Database.Entities {
+    
+    public class Application:IEquatable<Application>
     {
+        public Application() { }
         public virtual long Id { get; set; }
         public virtual string Name { get; set; }
 
         public virtual List<Task> Tasks { get; set; }
 
-        public virtual bool Equals(Application other)
+        public bool Equals(Application other)
         {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
             return Id == other.Id;
         }
 

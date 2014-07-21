@@ -15,7 +15,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 
         public void CreateUser(User user)
         {
-            Create(new User() {FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, Role = new Role() {Id = 3, Name = "student"}, CreateTime = DateTime.Now.ToUniversalTime()});    //TODO change after test
+            Create(new User() {FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, CreateTime = DateTime.Now.ToUniversalTime()});    //TODO change after test
         }
     }
 }

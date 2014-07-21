@@ -1,17 +1,20 @@
 using System;
+using System.Text;
+using System.Collections.Generic;
 
-namespace ITJakub.MobileApps.DataEntities.Database.Entities
-{
-    public class SynchronizedObject : IEquatable<SynchronizedObject>
+
+namespace ITJakub.MobileApps.DataEntities.Database.Entities {
+    
+    public class SynchronizedObject:IEquatable<SynchronizedObject>
     {
         public virtual long Id { get; set; }
         public virtual User User { get; set; }
         public virtual Group Group { get; set; }
         public virtual DateTime CreateTime { get; set; }
-        public virtual string Name { get; set; }
+        public virtual string ObjectType { get; set; }
         public virtual string Guid { get; set; }
 
-        public virtual bool Equals(SynchronizedObject other)
+        public bool Equals(SynchronizedObject other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

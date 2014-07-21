@@ -1,25 +1,26 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 
-namespace ITJakub.MobileApps.DataEntities.Database.Entities
-{
-    public class Group : IEquatable<Group>
-    {
-        public virtual long Id { get; set; }
-        public virtual Task Task { get; set; }
-        public virtual Institution Institution { get; set; }
 
-        public virtual User Author { get; set; }
-        public virtual List<User> Users { get; set; }
+namespace ITJakub.MobileApps.DataEntities.Database.Entities {
+    
+    public class Group:IEquatable<Group>
+    {
+        public Group() { }
+        public virtual long Id { get; set; }
+        public virtual User User { get; set; }
+        public virtual Task Task { get; set; }
+        public virtual DateTime CreateTime { get; set; }
+        public virtual string EnterCode { get; set; }
 
         public virtual List<SynchronizedObject> SynchronizedObjects { get; set; }
-        public virtual DateTime CreateTime { get; set; }
 
-        public virtual bool Equals(Group other)
+        public bool Equals(Group other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Id == other.Id && Equals(Task, other.Task) && Equals(Institution, other.Institution);
+            return Id == other.Id;
         }
 
         public override bool Equals(object obj)
@@ -32,13 +33,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                int hashCode = Id.GetHashCode();
-                hashCode = (hashCode*397) ^ (Task != null ? Task.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Institution != null ? Institution.GetHashCode() : 0);
-                return hashCode;
-            }
+            return Id.GetHashCode();
         }
     }
 }

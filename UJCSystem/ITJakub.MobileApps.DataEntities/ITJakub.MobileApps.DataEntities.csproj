@@ -59,19 +59,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\Repositories\ApplicationRepository.cs" />
-    <Compile Include="Database\Repositories\RoleRepository.cs" />
     <Compile Include="Database\Repositories\TaskRepository.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
     <Compile Include="Database\Entities\Application.cs" />
     <Compile Include="Database\Entities\Group.cs" />
-    <Compile Include="Database\Entities\Role.cs" />
     <Compile Include="Database\Entities\Institution.cs" />
     <Compile Include="Database\Entities\SynchronizedObject.cs" />
     <Compile Include="Database\Entities\Task.cs" />
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Entities\UserToGroup.cs" />
-    <Compile Include="Database\Entities\UserToInstitution.cs" />
     <Compile Include="Database\Repositories\GroupRepository.cs" />
     <Compile Include="Database\Repositories\InstitutionRepository.cs" />
     <Compile Include="StorageManager.cs" />
@@ -88,12 +85,10 @@
     <EmbeddedResource Include="Database\Entities\Application.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Group.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Institution.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\Role.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\SynchronizedObject.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Task.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\User.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\UserToGroup.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\UserToInstitution.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

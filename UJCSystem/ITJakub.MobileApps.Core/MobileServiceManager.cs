@@ -22,11 +22,12 @@ namespace ITJakub.MobileApps.Core
 
         public void CreateInstitution(Institution institution)
         {
+            throw new System.NotImplementedException();
         }
 
-        public Institution GetInstitutionDetails(string institutionId)
+        public InstitutionDetails GetInstitutionDetails(string institutionId)
         {
-            return new Institution(){Name = "jmeno Institusce", Principal = new User(){Email = "mail",FirstName = "Pepa",LastName = "Novak"}};
+            throw new System.NotImplementedException();
         }
 
         public void CreateUser(User user)
@@ -54,12 +55,12 @@ namespace ITJakub.MobileApps.Core
             throw new System.NotImplementedException();
         }
 
-        public Group GetGroupDetails(string institutionId, string groupId)
+        public GroupDetails GetGroupDetails(string groupId)
         {
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string userId, string since)//TODO opravdu je since string ? nemel by to byt dateTIme
+        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string userId, string since)
         {
             throw new System.NotImplementedException();
         }

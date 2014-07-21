@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 
-namespace ITJakub.MobileApps.DataEntities.Database.Entities
-{
-    public class Institution : IEquatable<Institution>
+
+namespace ITJakub.MobileApps.DataEntities.Database.Entities {
+    
+    public class Institution:IEquatable<Institution>
     {
+        public Institution() { }
         public virtual long Id { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime CreateTime { get; set; }
+        public virtual string EnterCode { get; set; }
 
-        public virtual List<Group> Groups { get; set; }
-        public virtual List<User> Users { get; set; } //TODO resolve N:M relationship
+        public virtual List<User> Users { get; set; }
 
-        public virtual bool Equals(Institution other)
+        public bool Equals(Institution other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

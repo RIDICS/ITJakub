@@ -1,26 +1,26 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
+
 
 namespace ITJakub.MobileApps.DataEntities.Database.Entities {
     
     public class User:IEquatable<User>
     {
+        public User() { }
         public virtual long Id { get; set; }
-        public virtual Role Role { get; set; }
+        public virtual Institution Institution { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
         public virtual string Email { get; set; }
         public virtual DateTime CreateTime { get; set; }
-        public virtual List<Group> Groups { get; set; }
 
-        public virtual List<Institution> Institutions { get; set; } //TODO resolve M:N
 
-        public virtual List<Task> Tasks { get; set; }
+        public virtual List<Group> Groups { get; set; }     //Groups made by this user
+        public virtual List<SynchronizedObject> SynchronizedObjects { get; set; } //Sync objects made by this user
+        public virtual List<Task> Tasks { get; set; }   //Tasks made by this user
 
-        public virtual List<SynchronizedObject> SynchronizedObjects { get; set; }
-        
-
-        public virtual bool Equals(User other)
+        public bool Equals(User other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
