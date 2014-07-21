@@ -9,7 +9,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
     {
         public Task() { }
         public virtual long Id { get; set; }
-        public virtual User User { get; set; }
+        public virtual User Author { get; set; }
         public virtual Application Application { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime CreateTime { get; set; }
