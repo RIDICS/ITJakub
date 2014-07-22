@@ -13,7 +13,7 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "institution/create")]
+            UriTemplate = "institutions/create")]
         void CreateInstitution(Institution institution);
 
 
@@ -22,7 +22,7 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "institution/{institutionId}")]
+            UriTemplate = "institutions/{institutionId}")]
         InstitutionDetails  GetInstitutionDetails(string institutionId);
 
 
@@ -31,7 +31,7 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "user/create")]
+            UriTemplate = "users/create")]
         void CreateUser(User user);
 
 
@@ -40,7 +40,7 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "user/{userId}")]
+            UriTemplate = "users/{userId}")]
         UserDetails GetUserDetails(string userId);
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "application/{applicationId}/tasks")]
+            UriTemplate = "tasks/?app={applicationId}")]
         IEnumerable<TaskDetails> GetTasksForApplication(string applicationId);
 
 
@@ -60,20 +60,20 @@ namespace ITJakub.MobileApps.DataContracts
         /// <summary>
         /// Saves predefined task by teacher to application
         /// </summary>
-        /// <param name="test"></param>
         /// <returns></returns>
         [OperationContract]
         [WebInvoke(Method = "POST",
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "application/{applicationId}/tasks/create")]
+            UriTemplate = "tasks/create?app={applicationId}")]
         void CreateTaskForApplication(string applicationId, Task apptask);
 
 
         /// <summary>
         /// Creates group of users in one application
         /// </summary>
+        /// <param name="userId">Id of author</param>
         /// <param name="group">object describing users belongs to this group</param>
         /// <returns></returns>
         [OperationContract]
@@ -81,40 +81,41 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "institution/{institutionId}/group/create")]
-        void CreateGroup(string institutionId, Group group);
+            UriTemplate = "groups/create?author={userId}")]
+        void CreateGroup(string userId, Group group);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "group/{groupId}")]
+            UriTemplate = "groups/{groupId}")]
         GroupDetails GetGroupDetails(string groupId);
 
 
         /// <summary>
         /// Returns collection of synchronized objects
         /// </summary>
-        /// <param name="since">Time since objects we should return</param>
-        /// <param name="groupId">GUID of group where we are synchronizing</param>
-        /// <param name="userId">GUID of group where we are synchronizing</param>
+        /// <param name="objectType">Determines kind of object (for possibility to retrive objects for app only of some kind like in Dictionary)</param>
+        /// <param name="since">Time in UTC since objects we should return</param>
+        /// <param name="groupId">Id of group where we are synchronizing</param>
+        /// <param name="applicationId">Id of application which object belongs to</param>
         /// <returns></returns>
         [OperationContract]
         [WebInvoke(Method = "GET",
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "group/{groupId}/user/{userId}/syncobjects/{since}")]
-        IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string userId, string since);
+            UriTemplate = "syncobjects/?group={groupId}&app={applicationId}&type={objectType}&since={since}")]
+        IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string applicationId, string objectType, string since);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "group/{groupId}/user/{userId}/syncobjects/create")]
-        void CreateSynchronizedObject(string groupId, string userId,SynchronizedObject synchronizedObject);
+            UriTemplate = "syncobjects/create?group={groupId}&app={applicationId}&type={objectType}&author={userId}")]
+        void CreateSynchronizedObject(string groupId, string applicationId, string objectType, string userId, SynchronizedObject synchronizedObject);
         
     }
 }

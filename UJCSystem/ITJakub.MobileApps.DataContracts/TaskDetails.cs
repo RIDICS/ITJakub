@@ -9,13 +9,13 @@ namespace ITJakub.MobileApps.DataContracts
     {
 
         [DataMember]
-        public User Author;
+        public User Author { get; set; }
 
         [DataMember]
-        public DateTime CreateTime;
+        public DateTime CreateTime { get; set; }
 
         [DataMember]
-        public Task m_task;
+        public Task Task { get; set; }
     }
 
 }

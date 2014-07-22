@@ -12,5 +12,6 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
             : base(sessManager)
         {
         }
+
     }
 }

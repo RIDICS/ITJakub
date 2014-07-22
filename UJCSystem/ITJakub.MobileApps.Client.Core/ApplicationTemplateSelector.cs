@@ -22,13 +22,13 @@ namespace ITJakub.MobileApps.Client.Core
             List<ApplicationBase> apps = ApplicationLoader.Instance.GetAllApplications();
             foreach (ApplicationBase app in apps)
             {
-                m_applicationTemplates.Add(app.ApplicationViewModel.GetType(), TestMethod(app.ApplicationDataTemplate));
+                m_applicationTemplates.Add(app.ApplicationViewModel.GetType(), CreateDataTemplate(app.ApplicationDataTemplate));
             }
         }
 
-        private DataTemplate TestMethod(Type viewType)
+        private DataTemplate CreateDataTemplate(Type viewType)
         {
-            var dataTemplate = TestMethod(viewType.Namespace, viewType.Name);
+            var dataTemplate = CreateDataTemplate(viewType.Namespace, viewType.Name);
             return dataTemplate;
         }
 
@@ -40,7 +40,7 @@ namespace ITJakub.MobileApps.Client.Core
             return base.SelectTemplateCore(item, container);
         }
 
-        public DataTemplate TestMethod(string userControlNamespace, string viewName)
+        private DataTemplate CreateDataTemplate(string userControlNamespace, string viewName)
         {
             var sb = new StringBuilder();
             sb.Append(string.Format(@"<DataTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
