@@ -130,8 +130,6 @@
     <Compile Include="DataModel\SampleDataSource.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
-    <Compile Include="DataService\DataService.cs" />
-    <Compile Include="DataService\IDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
