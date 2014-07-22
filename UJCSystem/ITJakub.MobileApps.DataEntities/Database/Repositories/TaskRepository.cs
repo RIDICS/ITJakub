@@ -1,7 +1,10 @@
-﻿using Castle.Facilities.NHibernateIntegration;
+﻿using System.Collections.Generic;
+using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
+using NHibernate;
+using NHibernate.Criterion;
 
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
@@ -12,5 +15,16 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
         }
 
+        public IList<Task> LoadTasksWithDetailsByApplication(Application application)
+        {
+            using (var session = GetSession())
+            {
+                return
+                    session.CreateCriteria<Task>()
+                    .Add(Restrictions.Eq("Application", application))
+                        .SetFetchMode("Groups", FetchMode.Join)
+                        .List<Task>();
+            }
+        }
     }
 }

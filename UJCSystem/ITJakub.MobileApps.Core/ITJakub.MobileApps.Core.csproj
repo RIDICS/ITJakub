@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="AutoMapperProfiles\InstitutionDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\InstitutionProfile.cs" />
+    <Compile Include="AutoMapperProfiles\TaskProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="EnterCodeGenerator.cs" />

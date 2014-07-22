@@ -55,15 +55,20 @@ namespace ITJakub.MobileApps.Core
 
         public IEnumerable<TaskDetails> GetTasksForApplication(string applicationId)
         {
-            throw new System.NotImplementedException();
+            var application = m_applicationRepository.FindById(long.Parse(applicationId));
+            var tasks = m_taskRepository.LoadTasksWithDetailsByApplication(application);
+            return AutoMapper.Mapper.Map<IList<TaskDetails>>(tasks);
         }
 
         public void CreateTaskForApplication(string applicationId, Task apptask)
         {
-            throw new System.NotImplementedException();
+            var application = m_applicationRepository.FindById(long.Parse(applicationId));
+            var deTask = AutoMapper.Mapper.Map<DE.Task>(apptask);
+            deTask.Application = application;
+            m_taskRepository.Create(deTask);
         }
 
-        public void CreateGroup(string institutionId, Group @group)
+        public void CreateGroup(string institutionId, Group group)
         {
             throw new System.NotImplementedException();
         }
