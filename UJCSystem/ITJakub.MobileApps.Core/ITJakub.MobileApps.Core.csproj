@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticationProvider.cs" />
     <Compile Include="AutoMapperProfiles\InstitutionDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\InstitutionProfile.cs" />
     <Compile Include="AutoMapperProfiles\TaskProfile.cs" />

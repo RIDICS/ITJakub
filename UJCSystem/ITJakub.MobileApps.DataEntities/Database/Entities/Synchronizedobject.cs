@@ -10,6 +10,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual long Id { get; set; }
         public virtual User User { get; set; }
         public virtual Group Group { get; set; }
+        public virtual Application Application { get; set; }
         public virtual DateTime CreateTime { get; set; }
         public virtual string ObjectType { get; set; }
         public virtual string Guid { get; set; }

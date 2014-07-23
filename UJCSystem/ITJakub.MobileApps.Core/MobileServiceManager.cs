@@ -40,11 +40,13 @@ namespace ITJakub.MobileApps.Core
             return AutoMapper.Mapper.Map<InstitutionDetails>(institution); 
         }
 
-        public void CreateUser(User user)
+        public void CreateUser(string authenticationProvider, string authenticationProviderToken, User user)
         {
             var deUser = AutoMapper.Mapper.Map<DE.User>(user);
             deUser.CreateTime = DateTime.UtcNow;
-            m_userRepository.Create(deUser); //TODO add check that email were unique (catch exception form DB)
+            deUser.AuthenticationProvider = (byte)Enum.Parse(typeof(AuthenticationProvider), authenticationProvider);
+            deUser.AuthenticationProviderToken = authenticationProviderToken;
+            m_userRepository.Create(deUser); //TODO add check that pair (email,authenticationProvider) were unique (catch exception form DB)
         }
 
         public UserDetails GetUserDetails(string userId)
@@ -78,14 +80,14 @@ namespace ITJakub.MobileApps.Core
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string userId, string since)
+        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string applicationId, string objectType, string since)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public void CreateSynchronizedObject(string groupId, string userId, SynchronizedObject synchronizedObject)
+        public void CreateSynchronizedObject(string groupId, string applicationId, string objectType, string userId, SynchronizedObject synchronizedObject)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

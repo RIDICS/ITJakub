@@ -48,9 +48,13 @@ CREATE TABLE [User](
     [Id] [bigint] IDENTITY(1,1) NOT NULL,
     [FirstName] [varchar] (50) NOT NULL,
     [LastName] [varchar] (50) NOT NULL,
-    [Email] [varchar] (255) NOT NULL UNIQUE,
+    [Email] [varchar] (255) NOT NULL,
+    [AuthenticationProvider] [tinyint] NOT NULL,
+    [AuthenticationProviderToken] [varchar] (255) NOT NULL,
+    [CommunicationToken] [varchar] (255),
     [InstitutionId] [bigint],
     [CreateTime] [datetime] NOT NULL,
+    CONSTRAINT [Uniq_User] UNIQUE ([Email],[AuthenticationProvider]),
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 
@@ -70,6 +74,7 @@ CREATE TABLE [SynchronizedObject](
     [Id] [bigint] IDENTITY(1,1) NOT NULL,    
     [AuthorId] [bigint] NOT NULL,
     [GroupId] [bigint] NOT NULL,
+    [ApplicationId] [bigint] NOT NULL,
     [CreateTime] [datetime] NOT NULL,
     [ObjectType] [varchar] (50),
     [GUID] [varchar] (255),
@@ -134,6 +139,14 @@ REFERENCES [dbo].[Group] ([Id])
 GO
 ALTER TABLE [dbo].[SynchronizedObject] CHECK CONSTRAINT [FK_SynchronizedObject_Group]
 GO
+
+/* FK SynchronizedObject -> Application */
+ALTER TABLE [dbo].[SynchronizedObject]  WITH CHECK ADD  CONSTRAINT [FK_SynchronizedObject_Application] FOREIGN KEY([ApplicationId])
+REFERENCES [dbo].[Application] ([Id])
+GO
+ALTER TABLE [dbo].[SynchronizedObject] CHECK CONSTRAINT [FK_SynchronizedObject_Application]
+GO
+
 
 /* FK Task -> User */
 ALTER TABLE [dbo].[Task]  WITH CHECK ADD  CONSTRAINT [FK_Task_User] FOREIGN KEY([AuthorId])

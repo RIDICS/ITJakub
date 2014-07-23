@@ -23,10 +23,9 @@ namespace ITJakub.MobileApps.Service
             return m_manager.GetInstitutionDetails(institutionId);
         }
 
-
-        public void CreateUser(User user)
+        public void CreateUser(string authenticationProvider, string authenticationProviderToken, User user)
         {
-            m_manager.CreateUser(user);
+            m_manager.CreateUser(authenticationProvider, authenticationProviderToken, user);
         }
 
         public UserDetails GetUserDetails(string userId)
@@ -54,14 +53,14 @@ namespace ITJakub.MobileApps.Service
             return m_manager.GetGroupDetails(groupId);
         }
 
-        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string userId, string since)
+        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string applicationId, string objectType, string since)
         {
-            return m_manager.GetSynchronizedObjects(groupId, userId, since);
+            return m_manager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
         }
 
-        public void CreateSynchronizedObject(string groupId, string userId, SynchronizedObject synchronizedObject)
+        public void CreateSynchronizedObject(string groupId, string applicationId, string objectType, string userId, SynchronizedObject synchronizedObject)
         {
-            m_manager.CreateSynchronizedObject(groupId, userId, synchronizedObject);
+            m_manager.CreateSynchronizedObject(groupId,applicationId,objectType,userId,synchronizedObject);
         }
     }
 }

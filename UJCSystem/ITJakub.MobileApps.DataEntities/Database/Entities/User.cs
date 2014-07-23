@@ -13,6 +13,9 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
         public virtual string Email { get; set; }
+        public virtual byte AuthenticationProvider { get; set; }
+        public virtual string AuthenticationProviderToken { get; set; }
+        public virtual string CommunicationToken { get; set; }
         public virtual DateTime CreateTime { get; set; }
 
 

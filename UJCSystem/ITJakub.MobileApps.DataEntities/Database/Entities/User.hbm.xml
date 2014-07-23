@@ -16,6 +16,15 @@
     <property name="Email">
       <column name="Email" sql-type="varchar" not-null="true" unique="true" />
     </property>
+    <property name="AuthenticationProvider">
+      <column name="AuthenticationProvider" not-null="true" sql-type="tinyint" unique="true"/>
+    </property>
+    <property name="AuthenticationProviderToken">
+      <column name="AuthenticationProviderToken" not-null="true" sql-type="varchar"/>
+    </property>
+    <property name="CommunicationToken">
+      <column name="CommunicationToken" sql-type="varchar"/>
+    </property>
     <property name="CreateTime">
       <column name="CreateTime" sql-type="datetime" not-null="true" />
     </property>
