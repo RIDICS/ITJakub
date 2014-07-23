@@ -62,7 +62,7 @@ CREATE TABLE [User](
 CREATE TABLE [Group](
     [Id] [bigint] IDENTITY(1,1) NOT NULL,    
     [AuthorId] [bigint] NOT NULL,
-    [TaskId] [bigint] NOT NULL,
+    [TaskId] [bigint],
     [CreateTime] [datetime] NOT NULL,
     [EnterCode] [varchar] (100) NOT NULL UNIQUE,
     CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 

@@ -6,12 +6,9 @@ namespace ITJakub.MobileApps.DataContracts
     [DataContract]
     public class Group
     {
-        [DataMember]
-        public Task Task { get; set; }
-        
-        [DataMember]
-        public IEnumerable<User> Members { get; set; }
 
+        [DataMember]
+        public IEnumerable<UserDetails> Members { get; set; }
     
     }
 }

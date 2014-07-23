@@ -4,12 +4,11 @@ using DE = ITJakub.MobileApps.DataEntities.Database.Entities;
 
 namespace ITJakub.MobileApps.Core.AutoMapperProfiles
 {
-    public class InstitutionProfile : Profile
+    public class GroupProfile : Profile
     {
         protected override void Configure()
         {
-            CreateMap<Institution, DE.Institution>().ReverseMap();
-            
+            CreateMap<Group, DE.Group>().ReverseMap();
         }
     }
 }

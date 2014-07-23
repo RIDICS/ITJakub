@@ -47,8 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationProvider.cs" />
+    <Compile Include="AutoMapperProfiles\GroupDetailsProfile.cs" />
+    <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
     <Compile Include="AutoMapperProfiles\InstitutionDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\InstitutionProfile.cs" />
+    <Compile Include="AutoMapperProfiles\SynchronizedObjectProfile.cs" />
     <Compile Include="AutoMapperProfiles\TaskProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />

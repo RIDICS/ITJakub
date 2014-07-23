@@ -4,7 +4,7 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    <many-to-one name="User">
+    <many-to-one name="Author">
       <column name="AuthorId" sql-type="bigint" not-null="true" />
     </many-to-one>
     <many-to-one name="Group">

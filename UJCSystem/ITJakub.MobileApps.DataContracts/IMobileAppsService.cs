@@ -66,8 +66,8 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "tasks/create?app={applicationId}")]
-        void CreateTaskForApplication(string applicationId, Task apptask);
+            UriTemplate = "tasks/create?app={applicationId}&author={userId}")]
+        void CreateTaskForApplication(string applicationId, string userId, Task task);
 
 
         /// <summary>
@@ -114,8 +114,8 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "syncobjects/create?group={groupId}&app={applicationId}&type={objectType}&author={userId}")]
-        void CreateSynchronizedObject(string groupId, string applicationId, string objectType, string userId, SynchronizedObject synchronizedObject);
+            UriTemplate = "syncobjects/create?group={groupId}&app={applicationId}&author={userId}")]
+        void CreateSynchronizedObject(string groupId, string applicationId, string userId, SynchronizedObject synchronizedObject);
         
     }
 }

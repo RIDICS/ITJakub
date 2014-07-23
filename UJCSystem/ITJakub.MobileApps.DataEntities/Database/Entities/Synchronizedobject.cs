@@ -8,7 +8,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
     public class SynchronizedObject:IEquatable<SynchronizedObject>
     {
         public virtual long Id { get; set; }
-        public virtual User User { get; set; }
+        public virtual User Author { get; set; }
         public virtual Group Group { get; set; }
         public virtual Application Application { get; set; }
         public virtual DateTime CreateTime { get; set; }

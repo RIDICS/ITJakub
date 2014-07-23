@@ -11,11 +11,11 @@ namespace ITJakub.MobileApps.Service
         {
             m_manager = Container.Current.Resolve<IMobileAppsService>();
         }
- 
+
 
         public void CreateInstitution(Institution institution)
         {
-             m_manager.CreateInstitution(institution);
+            m_manager.CreateInstitution(institution);
         }
 
         public InstitutionDetails GetInstitutionDetails(string institutionId)
@@ -38,14 +38,14 @@ namespace ITJakub.MobileApps.Service
             return m_manager.GetTasksForApplication(applicationId);
         }
 
-        public void CreateTaskForApplication(string applicationId, Task apptask)
+        public void CreateTaskForApplication(string applicationId, string userId, Task task)
         {
-            m_manager.CreateTaskForApplication(applicationId,apptask);
+            m_manager.CreateTaskForApplication(applicationId, userId, task);
         }
 
-        public void CreateGroup(string institutionId, Group group)
+        public void CreateGroup(string userId, Group group)
         {
-            m_manager.CreateGroup(institutionId,group);
+            m_manager.CreateGroup(userId, group);
         }
 
         public GroupDetails GetGroupDetails(string groupId)
@@ -58,9 +58,9 @@ namespace ITJakub.MobileApps.Service
             return m_manager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
         }
 
-        public void CreateSynchronizedObject(string groupId, string applicationId, string objectType, string userId, SynchronizedObject synchronizedObject)
+        public void CreateSynchronizedObject(string groupId, string applicationId, string userId, SynchronizedObject synchronizedObject)
         {
-            m_manager.CreateSynchronizedObject(groupId,applicationId,objectType,userId,synchronizedObject);
+            m_manager.CreateSynchronizedObject(groupId, applicationId, userId, synchronizedObject);
         }
     }
 }

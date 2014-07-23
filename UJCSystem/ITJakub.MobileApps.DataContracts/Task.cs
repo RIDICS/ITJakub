@@ -6,6 +6,9 @@ namespace ITJakub.MobileApps.DataContracts
     public class Task
     {
         [DataMember]
-        public string Data;
+        public string Name { get; set; }
+
+        [DataMember]
+        public string Data { get; set; }
     }
 }

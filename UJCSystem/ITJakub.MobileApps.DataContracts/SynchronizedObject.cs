@@ -6,6 +6,9 @@ namespace ITJakub.MobileApps.DataContracts
     public class SynchronizedObject
     {
         [DataMember]
+        public string ObjectType { get; set; }
+
+        [DataMember]
         public string Data { get; set; }
     }
 }

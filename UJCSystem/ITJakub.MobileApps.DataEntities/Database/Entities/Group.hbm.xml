@@ -8,7 +8,7 @@
       <column name="AuthorId" sql-type="bigint" not-null="true" />
     </many-to-one>
     <many-to-one name="Task">
-      <column name="TaskId" sql-type="bigint" not-null="true" />
+      <column name="TaskId" sql-type="bigint" />
     </many-to-one>
     <property name="CreateTime">
       <column name="CreateTime" sql-type="datetime" not-null="true" />
