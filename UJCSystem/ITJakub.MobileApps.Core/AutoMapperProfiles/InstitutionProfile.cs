@@ -9,7 +9,6 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<Institution, DE.Institution>().ReverseMap();
-            
         }
     }
 }

@@ -37,14 +37,14 @@ namespace ITJakub.MobileApps.Core
         public InstitutionDetails GetInstitutionDetails(string institutionId)
         {
             var institution = m_institutionRepository.LoadInstitutionWithDetails(long.Parse(institutionId));
-            return AutoMapper.Mapper.Map<InstitutionDetails>(institution); 
+            return AutoMapper.Mapper.Map<InstitutionDetails>(institution);
         }
 
         public void CreateUser(string authenticationProvider, string authenticationProviderToken, User user)
         {
             var deUser = AutoMapper.Mapper.Map<DE.User>(user);
             deUser.CreateTime = DateTime.UtcNow;
-            deUser.AuthenticationProvider = (byte)Enum.Parse(typeof(AuthenticationProvider), authenticationProvider);
+            deUser.AuthenticationProvider = (byte) Enum.Parse(typeof (AuthenticationProvider), authenticationProvider);
             deUser.AuthenticationProviderToken = authenticationProviderToken;
             m_userRepository.Create(deUser); //TODO add check that pair (email,authenticationProvider) were unique (catch exception form DB)
         }
@@ -59,7 +59,7 @@ namespace ITJakub.MobileApps.Core
         {
             var application = m_applicationRepository.FindById(long.Parse(applicationId));
             var tasks = m_taskRepository.LoadTasksWithDetailsByApplication(application);
-            return AutoMapper.Mapper.Map<IList<TaskDetails>>(tasks);
+            return AutoMapper.Mapper.Map<IList<TaskDetails>>(tasks); //TODO load Data from azure tables here
         }
 
         public void CreateTaskForApplication(string applicationId, string userId, Task apptask)
@@ -93,7 +93,11 @@ namespace ITJakub.MobileApps.Core
 
         public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string applicationId, string objectType, string since)
         {
-            throw new NotImplementedException();
+            var group = m_groupRepository.FindById(long.Parse(groupId));
+            var application = m_applicationRepository.FindById(long.Parse(applicationId));
+            var sinceTime = DateTime.Parse(since);
+            var syncObjs = m_synchronizedObjectRepository.LoadSyncObjectsWithDetails(group, application, objectType, sinceTime);
+            return AutoMapper.Mapper.Map<IList<SynchronizedObjectDetails>>(syncObjs); //TODO load Data from azure tables here
         }
 
         public void CreateSynchronizedObject(string groupId, string applicationId, string userId, SynchronizedObject synchronizedObject)

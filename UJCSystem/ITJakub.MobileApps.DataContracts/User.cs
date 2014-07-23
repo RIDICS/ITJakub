@@ -13,6 +13,5 @@ namespace ITJakub.MobileApps.DataContracts
 
         [DataMember]
         public string Email { get; set; }
-
     }
 }

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
-using System.Web;
 using AutoMapper;
 using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;

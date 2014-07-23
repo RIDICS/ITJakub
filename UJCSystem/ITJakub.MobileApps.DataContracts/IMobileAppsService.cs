@@ -7,7 +7,6 @@ namespace ITJakub.MobileApps.DataContracts
     [ServiceContract]
     public interface IMobileAppsService
     {
-
         [OperationContract]
         [WebInvoke(Method = "POST",
             BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -23,7 +22,7 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "institutions/{institutionId}")]
-        InstitutionDetails  GetInstitutionDetails(string institutionId);
+        InstitutionDetails GetInstitutionDetails(string institutionId);
 
 
         [OperationContract]
@@ -54,7 +53,6 @@ namespace ITJakub.MobileApps.DataContracts
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "tasks/?app={applicationId}")]
         IEnumerable<TaskDetails> GetTasksForApplication(string applicationId);
-
 
 
         /// <summary>
@@ -116,6 +114,5 @@ namespace ITJakub.MobileApps.DataContracts
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "syncobjects/create?group={groupId}&app={applicationId}&author={userId}")]
         void CreateSynchronizedObject(string groupId, string applicationId, string userId, SynchronizedObject synchronizedObject);
-        
     }
 }

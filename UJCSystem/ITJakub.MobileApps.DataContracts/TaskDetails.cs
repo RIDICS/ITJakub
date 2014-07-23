@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.MobileApps.DataContracts
@@ -19,5 +18,4 @@ namespace ITJakub.MobileApps.DataContracts
         [DataMember]
         public Task Task { get; set; }
     }
-
 }

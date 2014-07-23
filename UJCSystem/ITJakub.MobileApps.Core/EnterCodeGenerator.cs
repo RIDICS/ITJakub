@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ITJakub.MobileApps.Core
 {
@@ -14,8 +11,8 @@ namespace ITJakub.MobileApps.Core
 
         public static string GenerateCode()
         {
-           var random = new Random();
-           return new string(Enumerable.Repeat(EnabledChars, DefaultCodeLength).Select(s => s[random.Next(s.Length)]).ToArray());
+            var random = new Random();
+            return new string(Enumerable.Repeat(EnabledChars, DefaultCodeLength).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         public static string GenerateCode(int length)

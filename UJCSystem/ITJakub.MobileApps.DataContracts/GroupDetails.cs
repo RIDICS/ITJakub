@@ -6,7 +6,6 @@ namespace ITJakub.MobileApps.DataContracts
     [DataContract]
     public class GroupDetails
     {
-
         [DataMember]
         public long Id { get; set; }
 
@@ -16,8 +15,7 @@ namespace ITJakub.MobileApps.DataContracts
         [DataMember]
         public DateTime CreateTime { get; set; }
 
-        [DataMember] 
+        [DataMember]
         public Group Group { get; set; }
-
     }
 }

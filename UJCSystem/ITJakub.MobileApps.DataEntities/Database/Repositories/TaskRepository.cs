@@ -9,20 +9,22 @@ using NHibernate.Criterion;
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
     [Transactional]
-    public class TaskRepository: NHibernateTransactionalDao<Task>
+    public class TaskRepository : NHibernateTransactionalDao<Task>
     {
         public TaskRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
 
-        public IList<Task> LoadTasksWithDetailsByApplication(Application application)
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Task> LoadTasksWithDetailsByApplication(Application application)
         {
             using (var session = GetSession())
             {
                 return
                     session.CreateCriteria<Task>()
-                    .Add(Restrictions.Eq("Application", application))
+                        .Add(Restrictions.Eq("Application", application))
                         .SetFetchMode("Groups", FetchMode.Join)
+                        .SetFetchMode("Author", FetchMode.Join)
                         .List<Task>();
             }
         }

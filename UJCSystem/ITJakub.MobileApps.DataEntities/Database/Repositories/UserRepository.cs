@@ -1,5 +1,4 @@
-﻿using System;
-using Castle.Facilities.NHibernateIntegration;
+﻿using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
@@ -15,7 +14,8 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
         }
 
-        public User LoadUserWithDetails(long id)
+        [Transaction(TransactionMode.Requires)]
+        public virtual User LoadUserWithDetails(long id)
         {
             using (var session = GetSession())
             {

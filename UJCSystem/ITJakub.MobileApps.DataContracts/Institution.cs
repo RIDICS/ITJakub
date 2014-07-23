@@ -7,6 +7,5 @@ namespace ITJakub.MobileApps.DataContracts
     {
         [DataMember]
         public string Name { get; set; }
-
     }
 }

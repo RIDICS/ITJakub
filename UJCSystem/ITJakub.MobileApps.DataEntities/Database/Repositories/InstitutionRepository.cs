@@ -10,16 +10,16 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
     [Transactional]
     public class InstitutionRepository : NHibernateTransactionalDao<Institution>
     {
-        public InstitutionRepository(ISessionManager sessManager): base(sessManager)
+        public InstitutionRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
 
         [Transaction(TransactionMode.Requires)]
         public virtual Institution LoadInstitutionWithDetails(long id)
         {
-            using (ISession session=GetSession())
+            using (ISession session = GetSession())
             {
-                return session.CreateCriteria<Institution>().Add(Restrictions.Eq(Projections.Id(),id)).SetFetchMode("Members", FetchMode.Join).UniqueResult<Institution>();
+                return session.CreateCriteria<Institution>().Add(Restrictions.Eq(Projections.Id(), id)).SetFetchMode("Members", FetchMode.Join).UniqueResult<Institution>();
             }
         }
     }

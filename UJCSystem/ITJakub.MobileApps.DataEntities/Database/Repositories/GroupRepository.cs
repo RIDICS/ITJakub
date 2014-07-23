@@ -8,13 +8,14 @@ using NHibernate.Criterion;
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
     [Transactional]
-    public class GroupRepository: NHibernateTransactionalDao<Group>
+    public class GroupRepository : NHibernateTransactionalDao<Group>
     {
-        public GroupRepository(ISessionManager sessManager): base(sessManager)
+        public GroupRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
 
-        public Group LoadGroupWithDetails(long id)
+        [Transaction(TransactionMode.Requires)]
+        public virtual Group LoadGroupWithDetails(long id)
         {
             using (var session = GetSession())
             {

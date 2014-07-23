@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.DataContracts
         [DataMember]
         public long Id { get; set; }
 
-        [DataMember] 
+        [DataMember]
         public string Name { get; set; }
 
         [DataMember]
