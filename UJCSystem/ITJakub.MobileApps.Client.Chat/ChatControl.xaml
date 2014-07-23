@@ -1,0 +1,75 @@
+﻿<UserControl
+    x:Class="ITJakub.MobileApps.Client.Chat.ChatControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Chat.Converter"
+    DataContext="{Binding ChatViewModel, Source={StaticResource Locator}}">
+    
+    <UserControl.Resources>
+        <converter:MyMessageToAlignmentConverter x:Key="MyMessageToAlignmentConverter"/>
+        <converter:MessageDateTimeToStringConverter x:Key="MessageDateTimeToStringConverter"/>
+    </UserControl.Resources>
+    
+    <Grid Background="#22FFFFFF">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ListView Grid.Row="0"
+                  SelectionMode="None"
+                  ItemsSource="{Binding MessageHistory}"
+                  x:Name="MessageHistoryListView"
+                  RequestedTheme="Light" 
+                  Padding="5">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="320">
+                        <Grid Background="#EEEEEE"
+                              Width="Auto"
+                              HorizontalAlignment="{Binding IsMyMessage, Converter={StaticResource MyMessageToAlignmentConverter}}">
+                            <StackPanel Orientation="Vertical"
+                                        Margin="10 3 10 3">
+                                
+                                <TextBlock>
+                                    <Run Text="{Binding Name}"
+                                         FontWeight="Bold"/>
+                                    <Run Text=" " />
+                                    <Run Text="{Binding DateTime, Converter={StaticResource MessageDateTimeToStringConverter}}"
+                                         FontSize="12"/>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Content}"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        <Grid Row="1"
+              Margin="5 0 5 5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <TextBox Grid.Column="0" 
+                     Text="{Binding Message, Mode=TwoWay}"
+                     KeyUp="MessageBox_OnKeyUp"
+                     x:Name="MessageBox"/>
+            
+            <Button Grid.Column="1"
+                    Content="Odeslat"
+                    Command="{Binding SendCommand}"
+                    Click="SendButton_OnClick"
+                    x:Name="SendButton"/>
+        </Grid>
+    </Grid>
+    
+</UserControl>

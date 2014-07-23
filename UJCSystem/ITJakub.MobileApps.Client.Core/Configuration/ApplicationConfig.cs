@@ -26,7 +26,6 @@ namespace ITJakub.MobileApps.Client.Core.Configuration
         /// Deserialize config from string 
         /// </summary> 
         /// <param name="xml"></param> 
-        /// <param name="messageType"></param> 
         /// <returns></returns> 
         public static ApplicationConfig FromXml(string xml)
         {

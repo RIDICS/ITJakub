@@ -12,13 +12,14 @@
   See http://www.galasoft.ch/mvvm
 */
 
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
+using ITJakub.MobileApps.Client.Chat.ViewModel;
 using ITJakub.MobileApps.Client.Core;
 using ITJakub.MobileApps.Client.Core.DataService;
-using ITJakub.MobileApps.Client.MainApp.Control.ViewModel;
 using Microsoft.Practices.ServiceLocation;
 
-namespace ITJakub.MobileApps.Client.MainApp
+namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     /// <summary>
     /// This class contains static references to all the view models in the
@@ -33,16 +34,16 @@ namespace ITJakub.MobileApps.Client.MainApp
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            ////if (ViewModelBase.IsInDesignModeStatic)
-            ////{
-            ////    // Create design time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            ////}
-            ////else
-            ////{
+            if (ViewModelBase.IsInDesignModeStatic)
+            {
+                // Create design time view services and models
+                SimpleIoc.Default.Register<IDataService, DesignDataService>();
+            }
+            else
+            {
                 // Create run time view services and models
-                SimpleIoc.Default.Register<IDataService, Core.DataService.DataService>();
-            ////}
+                SimpleIoc.Default.Register<IDataService, DataService>();
+            }
 
             SimpleIoc.Default.Register<INavigationService, NavigationService>();
             SimpleIoc.Default.Register<LoginViewModel>();

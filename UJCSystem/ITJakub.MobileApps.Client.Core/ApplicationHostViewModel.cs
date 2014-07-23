@@ -12,6 +12,9 @@ namespace ITJakub.MobileApps.Client.Core
         private string m_applicationName;
         private ObservableCollection<ApplicationBaseViewModel> m_allApps;
         private ApplicationBaseViewModel m_applicationViewModel;
+        private bool m_isChatDisplayed;
+        private bool m_isChatSupported;
+        private bool m_isCommandBarOpen;
 
 
         public ApplicationHostViewModel(IDataService dataService)
@@ -51,6 +54,36 @@ namespace ITJakub.MobileApps.Client.Core
             set { m_applicationViewModel = value; RaisePropertyChanged();}
         }
 
-        public bool IsChatSupported { get; protected set; }
+        public bool IsChatSupported
+        {
+            get { return m_isChatSupported; }
+            protected set
+            {
+                m_isChatSupported = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsChatDisplayed
+        {
+            get { return m_isChatDisplayed; }
+            set
+            {
+                m_isChatDisplayed = value;
+                RaisePropertyChanged();
+                if (m_isChatDisplayed)
+                    IsCommandBarOpen = false;
+            }
+        }
+
+        public bool IsCommandBarOpen
+        {
+            get { return m_isCommandBarOpen; }
+            set
+            {
+                m_isCommandBarOpen = value;
+                RaisePropertyChanged();
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-namespace ITJakub.MobileApps.Client.MainApp
+namespace ITJakub.MobileApps.Client.MainApp.Common
 {
     public class BooleanToVisibilityConverter : IValueConverter
     {

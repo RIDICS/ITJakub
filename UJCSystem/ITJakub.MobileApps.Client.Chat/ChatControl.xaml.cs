@@ -1,13 +1,15 @@
 ﻿// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
+
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Windows.System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using ITJakub.MobileApps.Client.MainApp.Control.ViewModel;
+using ITJakub.MobileApps.Client.Chat.ViewModel;
 
-namespace ITJakub.MobileApps.Client.MainApp.Control
+namespace ITJakub.MobileApps.Client.Chat
 {
     public sealed partial class ChatControl : UserControl
     {
@@ -17,10 +19,10 @@ namespace ITJakub.MobileApps.Client.MainApp.Control
         {
             InitializeComponent();
             m_viewModel = DataContext as ChatViewModel;
-            var items = new ObservableCollection<MessageViewModel>();
-            items.CollectionChanged += ScrollToBottom;
-            if (m_viewModel != null) 
-                m_viewModel.MessageHistory = items;
+            if (m_viewModel != null)
+            {
+                m_viewModel.MessageHistory.CollectionChanged += ScrollToBottom;
+            }
         }
 
         private async void ScrollToBottom(object sender, NotifyCollectionChangedEventArgs e)
@@ -38,7 +40,7 @@ namespace ITJakub.MobileApps.Client.MainApp.Control
             MessageHistoryListView.ScrollIntoView(MessageHistoryListView.SelectedItem);
         }
 
-        private void SendMessage_OnKeyUp(object sender, KeyRoutedEventArgs e)
+        private void MessageBox_OnKeyUp(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key != VirtualKey.Enter)
                 return;
@@ -48,6 +50,11 @@ namespace ITJakub.MobileApps.Client.MainApp.Control
 
             m_viewModel.Message = MessageBox.Text;
             m_viewModel.SendCommand.Execute(null);
+        }
+
+        private void SendButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Focus(FocusState.Keyboard);
         }
     }
 }

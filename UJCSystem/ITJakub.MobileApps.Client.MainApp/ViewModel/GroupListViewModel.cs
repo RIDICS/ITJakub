@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
 
-namespace ITJakub.MobileApps.Client.MainApp
+namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
