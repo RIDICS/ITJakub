@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Castle.MicroKernel;
+using Castle.MicroKernel.ModelBuilder.Descriptors;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataEntities.AzureTables;
+using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
+using ITJakub.MobileApps.DataEntities.AzureTables.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
 using DE = ITJakub.MobileApps.DataEntities.Database.Entities;
 
@@ -15,6 +19,8 @@ namespace ITJakub.MobileApps.Core
         private readonly GroupRepository m_groupRepository;
         private readonly TaskRepository m_taskRepository;
         private readonly ApplicationRepository m_applicationRepository;
+        private readonly AzureTableTaskDao m_azureTableTaskDao;
+        private readonly AzureTableSynchronizedObjectDao m_azureTableSynchronizedObjectDao;
 
         public MobileServiceManager(IKernel container)
         {
@@ -24,6 +30,8 @@ namespace ITJakub.MobileApps.Core
             m_groupRepository = container.Resolve<GroupRepository>();
             m_taskRepository = container.Resolve<TaskRepository>();
             m_applicationRepository = container.Resolve<ApplicationRepository>();
+            m_azureTableTaskDao = container.Resolve<AzureTableTaskDao>();
+            m_azureTableSynchronizedObjectDao = container.Resolve<AzureTableSynchronizedObjectDao>();
         }
 
         public void CreateInstitution(Institution institution)
@@ -59,7 +67,12 @@ namespace ITJakub.MobileApps.Core
         {
             var application = m_applicationRepository.FindById(long.Parse(applicationId));
             var tasks = m_taskRepository.LoadTasksWithDetailsByApplication(application);
-            return AutoMapper.Mapper.Map<IList<TaskDetails>>(tasks); //TODO load Data from azure tables here
+            foreach (var task in tasks) //TODO try to find some better way how to fill Data property
+            {
+                var taskEntity=m_azureTableTaskDao.FindByRowAndPartitionKey(task.Guid,task.Application.Id.ToString());
+                if(taskEntity!=null) task.Data = taskEntity.Data;
+            }
+            return AutoMapper.Mapper.Map<IList<TaskDetails>>(tasks);
         }
 
         public void CreateTaskForApplication(string applicationId, string userId, Task apptask)
@@ -72,7 +85,7 @@ namespace ITJakub.MobileApps.Core
             deTask.CreateTime = DateTime.UtcNow;
             deTask.Guid = Guid.NewGuid().ToString();
             m_taskRepository.Create(deTask);
-            //TODO save appTask.Data to Azure tables here under deTask.Application.Id as partition key and deTask.GUID as row key
+            m_azureTableTaskDao.Create(new TaskEntity(deTask.Guid,applicationId,apptask.Data));
         }
 
         public void CreateGroup(string userId, Group group)
@@ -97,7 +110,12 @@ namespace ITJakub.MobileApps.Core
             var application = m_applicationRepository.FindById(long.Parse(applicationId));
             var sinceTime = DateTime.Parse(since);
             var syncObjs = m_synchronizedObjectRepository.LoadSyncObjectsWithDetails(group, application, objectType, sinceTime);
-            return AutoMapper.Mapper.Map<IList<SynchronizedObjectDetails>>(syncObjs); //TODO load Data from azure tables here
+            foreach (var syncObj in syncObjs) //TODO try to find some better way how to fill Data property
+            {
+                var syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.Guid, syncObj.Group.Id.ToString());
+                if (syncObjEntity != null) syncObj.Data = syncObjEntity.Data;
+            }
+            return AutoMapper.Mapper.Map<IList<SynchronizedObjectDetails>>(syncObjs);
         }
 
         public void CreateSynchronizedObject(string groupId, string applicationId, string userId, SynchronizedObject synchronizedObject)
@@ -112,7 +130,7 @@ namespace ITJakub.MobileApps.Core
             deSyncObject.CreateTime = DateTime.UtcNow;
             deSyncObject.Guid = Guid.NewGuid().ToString();
             m_synchronizedObjectRepository.Create(deSyncObject);
-            //TODO save SyncObject.Data to Azure tables here under deSyncObject.Group.Id as partition key and deSyncObject.GUID as row key
+            m_azureTableSynchronizedObjectDao.Create(new SynchronizedObjectEntity(deSyncObject.Guid, groupId, synchronizedObject.Data));
         }
     }
 }

@@ -16,6 +16,9 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
 
         public virtual IList<Group> Groups { get; set; }
 
+
+        public virtual string Data { get; set; }    //not mapped because its stored in azure tables
+
         public virtual bool Equals(Task other)
         {
             if (ReferenceEquals(null, other)) return false;

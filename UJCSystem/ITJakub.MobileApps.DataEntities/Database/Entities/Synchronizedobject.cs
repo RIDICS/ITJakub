@@ -13,6 +13,10 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual string ObjectType { get; set; }
         public virtual string Guid { get; set; }
 
+
+        public virtual string Data { get; set; }    //not mapped because its stored in azure tables
+
+
         public virtual bool Equals(SynchronizedObject other)
         {
             if (ReferenceEquals(null, other)) return false;
