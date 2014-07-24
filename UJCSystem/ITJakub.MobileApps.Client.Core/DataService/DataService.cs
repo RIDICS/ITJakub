@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -18,7 +19,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             m_applicationManager = new ApplicationManager();
         }
 
-        public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, object> callback)
+        public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
         {
             m_applicationManager.GetAllApplicationViewModels(callback);
         }
@@ -26,6 +27,16 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         public void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback)
         {
             callback(new ObservableCollection<MessageViewModel>(), null);
+        }
+
+        public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
+        {
+            m_applicationManager.GetAllApplications(callback);
+        }
+
+        public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
+        {
+            m_applicationManager.GetApplication(type, callback);
         }
 
         public async void LoginAsync(LoginProvider loginProvider, Action<UserInfo, Exception> callback)

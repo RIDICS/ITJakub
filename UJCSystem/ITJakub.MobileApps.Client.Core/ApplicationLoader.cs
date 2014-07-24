@@ -50,9 +50,9 @@ namespace ITJakub.MobileApps.Client.Core
             return m_applications[applicationType];
         }
 
-        public List<ApplicationBase> GetAllApplications()
+        public Dictionary<ApplicationType, ApplicationBase> GetAllApplications()
         {
-            return m_applications.Values.ToList();
+            return new Dictionary<ApplicationType, ApplicationBase>(m_applications);
         }
         
     }

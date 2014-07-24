@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Shared;
@@ -10,7 +9,6 @@ namespace ITJakub.MobileApps.Client.Core
     {
         private readonly IDataService m_dataService;
         private string m_applicationName;
-        private ObservableCollection<ApplicationBaseViewModel> m_allApps;
         private ApplicationBaseViewModel m_applicationViewModel;
         private bool m_isChatDisplayed;
         private bool m_isChatSupported;
@@ -20,21 +18,17 @@ namespace ITJakub.MobileApps.Client.Core
         public ApplicationHostViewModel(IDataService dataService)
         {
             m_dataService = dataService;
-            LoadInitData();
         }
 
-        private void LoadInitData()
+        public void LoadInitData(ApplicationType type)
         {
-            m_dataService.GetAllApplicationViewModels((data, exception) =>
+            m_dataService.GetApplication(type, (application, exception) =>
             {
                 if (exception != null)
                     return;
-                else
-                {
-                    m_allApps = data;
-                    ApplicationViewModel = m_allApps.FirstOrDefault();
-                }
-                    
+
+                ApplicationViewModel = application.ApplicationViewModel;
+                ApplicationName = application.Name;
             });
         }
 
@@ -51,7 +45,10 @@ namespace ITJakub.MobileApps.Client.Core
         public ApplicationBaseViewModel ApplicationViewModel
         {
             get { return m_applicationViewModel; }
-            set { m_applicationViewModel = value; RaisePropertyChanged();}
+            set { 
+                m_applicationViewModel = value;
+                RaisePropertyChanged();
+            }
         }
 
         public bool IsChatSupported

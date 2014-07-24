@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -14,7 +15,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             throw new NotImplementedException();
         }
 
-        public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, object> callback)
+        public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
         {
             throw new NotImplementedException();
         }
@@ -53,6 +54,16 @@ namespace ITJakub.MobileApps.Client.Core.DataService
                 },
             };
             callback(messages, null);
+        }
+
+        public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,17 +14,28 @@ namespace ITJakub.MobileApps.Client.Core
             m_loader = ApplicationLoader.Instance;
         }
 
-        public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, object> callback)
+        public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
         {
-            List<ApplicationBase> apps = m_loader.GetAllApplications();
+            var apps = m_loader.GetAllApplications();
             var result = new ObservableCollection<ApplicationBaseViewModel>();
 
             foreach (var applicationBase in apps)
             {
-                result.Add(applicationBase.ApplicationViewModel);
+                result.Add(applicationBase.Value.ApplicationViewModel);
             }
 
+            callback(result, null);
+        }
 
+        public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
+        {
+            var result = m_loader.GetAllApplications();
+            callback(result, null);
+        }
+
+        public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
+        {
+            var result = m_loader.GetApplicationByType(type);
             callback(result, null);
         }
     }

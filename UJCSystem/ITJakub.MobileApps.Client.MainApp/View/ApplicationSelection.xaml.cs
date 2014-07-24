@@ -1,19 +1,16 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using ITJakub.MobileApps.Client.Core;
-using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.MainApp.Common;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
-using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.MainApp.View
 {
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class ApplicationHostView : Page
+    public sealed partial class ApplicationSelection : Page
     {
 
         private NavigationHelper navigationHelper;
@@ -37,7 +34,7 @@ namespace ITJakub.MobileApps.Client.MainApp.View
         }
 
 
-        public ApplicationHostView()
+        public ApplicationSelection()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
@@ -86,14 +83,6 @@ namespace ITJakub.MobileApps.Client.MainApp.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            if (e.Parameter is ApplicationType)
-            {
-                var selectedApplication = (ApplicationType) e.Parameter;
-                var viewModel = DataContext as ApplicationHostViewModel;
-                if (viewModel == null)
-                    return;
-                viewModel.LoadInitData(selectedApplication);
-            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

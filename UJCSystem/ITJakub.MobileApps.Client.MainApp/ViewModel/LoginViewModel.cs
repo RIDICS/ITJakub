@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.MainApp.View;
+using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -91,7 +92,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged(() => Message);
             });
 
-            m_navigationService.Navigate(typeof(ApplicationHostView));
+            m_navigationService.Navigate(typeof(ApplicationSelection));
             //m_navigationService.Navigate(typeof(GroupListView));            
         }
     }

@@ -2,6 +2,6 @@
 {
     public enum ApplicationType
     {
-        Unknown, Hangman, Crosswords
+        Unknown, SampleApp, Hangman, Crosswords
     }
 }

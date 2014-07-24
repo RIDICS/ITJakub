@@ -105,6 +105,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ApplicationSelectionViewModel.cs" />
+    <Compile Include="View\ApplicationSelection.xaml.cs">
+      <DependentUpon>ApplicationSelection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
@@ -154,6 +158,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\ApplicationSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ApplicationHostView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -205,6 +213,10 @@
     <ProjectReference Include="..\ITJakub.MobileApps.Client.DataContracts\ITJakub.MobileApps.Client.DataContracts.csproj">
       <Project>{A6F66019-70E7-4177-9389-554D1E73C437}</Project>
       <Name>ITJakub.MobileApps.Client.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.Client.Hangman\ITJakub.MobileApps.Client.Hangman.csproj">
+      <Project>{83410335-c9de-416f-8ab8-d94cb1933ffc}</Project>
+      <Name>ITJakub.MobileApps.Client.Hangman</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.Client.SampleApp\ITJakub.MobileApps.Client.SampleApp.csproj">
       <Project>{1478b0c2-f435-44be-9eba-d33b78b88596}</Project>

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
-using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.Core
 {
@@ -19,8 +19,8 @@ namespace ITJakub.MobileApps.Client.Core
 
         private void LoadAllDataTemplates()
         {
-            List<ApplicationBase> apps = ApplicationLoader.Instance.GetAllApplications();
-            foreach (ApplicationBase app in apps)
+            var apps = ApplicationLoader.Instance.GetAllApplications();
+            foreach (var app in apps.Select(keyValuePair => keyValuePair.Value))
             {
                 m_applicationTemplates.Add(app.ApplicationViewModel.GetType(), CreateDataTemplate(app.ApplicationDataTemplate));
             }

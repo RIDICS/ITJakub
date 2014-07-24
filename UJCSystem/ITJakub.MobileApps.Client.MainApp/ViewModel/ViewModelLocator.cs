@@ -50,6 +50,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             SimpleIoc.Default.Register<ChatViewModel>();
             SimpleIoc.Default.Register<GroupListViewModel>();
             SimpleIoc.Default.Register<ApplicationHostViewModel>();
+            SimpleIoc.Default.Register<ApplicationSelectionViewModel>();
         }
 
         public LoginViewModel LoginViewModel
@@ -73,6 +74,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public ApplicationHostViewModel ApplicationHostViewModel
         {
             get { return ServiceLocator.Current.GetInstance<ApplicationHostViewModel>(); }
+        }
+
+        public ApplicationSelectionViewModel ApplicationSelectionViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<ApplicationSelectionViewModel>(); }
         }
         
         public static void Cleanup()
