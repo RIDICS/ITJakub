@@ -16,9 +16,6 @@
     <property name="CreateTime">
       <column name="CreateTime" sql-type="datetime" not-null="true" />
     </property>
-    <property name="Guid">
-      <column name="GUID" sql-type="varchar" not-null="false" />
-    </property>
     <bag name="Groups">
       <key column="TaskId" />
       <one-to-many class="Group" />

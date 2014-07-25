@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Castle.MicroKernel;
-using Castle.MicroKernel.ModelBuilder.Descriptors;
 using ITJakub.MobileApps.DataContracts;
-using ITJakub.MobileApps.DataEntities.AzureTables;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
 using ITJakub.MobileApps.DataEntities.AzureTables.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
@@ -48,6 +46,14 @@ namespace ITJakub.MobileApps.Core
             return AutoMapper.Mapper.Map<InstitutionDetails>(institution);
         }
 
+        public void AddUserToInstitution(string enterCode, string userId)
+        {
+            var institution = m_institutionRepository.FindByEnterCode(enterCode);
+            var user = m_userRepository.FindById(long.Parse(userId));
+            user.Institution = institution;
+            m_groupRepository.Update(user);
+        }
+
         public void CreateUser(string authenticationProvider, string authenticationProviderToken, User user)
         {
             var deUser = AutoMapper.Mapper.Map<DE.User>(user);
@@ -69,7 +75,7 @@ namespace ITJakub.MobileApps.Core
             var tasks = m_taskRepository.LoadTasksWithDetailsByApplication(application);
             foreach (var task in tasks) //TODO try to find some better way how to fill Data property
             {
-                var taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(task.Guid, task.Application.Id.ToString());
+                var taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(task.Id.ToString(), task.Application.Id.ToString());
                 if (taskEntity != null) task.Data = taskEntity.Data;
             }
             return AutoMapper.Mapper.Map<IList<TaskDetails>>(tasks);
@@ -83,9 +89,8 @@ namespace ITJakub.MobileApps.Core
             deTask.Application = application;
             deTask.Author = user;
             deTask.CreateTime = DateTime.UtcNow;
-            deTask.Guid = Guid.NewGuid().ToString();
-            m_taskRepository.Create(deTask);
-            m_azureTableTaskDao.Create(new TaskEntity(deTask.Guid, applicationId, apptask.Data));
+            var taskId = m_taskRepository.Create(deTask);
+            m_azureTableTaskDao.Create(new TaskEntity(taskId.ToString(), applicationId, apptask.Data));
         }
 
         public CreateGroupResponse CreateGroup(string userId, Group group)
@@ -131,7 +136,7 @@ namespace ITJakub.MobileApps.Core
             var syncObjs = m_synchronizedObjectRepository.LoadSyncObjectsWithDetails(group, application, objectType, sinceTime);
             foreach (var syncObj in syncObjs) //TODO try to find some better way how to fill Data property
             {
-                var syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.Guid, syncObj.Group.Id.ToString());
+                var syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.Id.ToString(), syncObj.Group.Id.ToString());
                 if (syncObjEntity != null) syncObj.Data = syncObjEntity.Data;
             }
             return AutoMapper.Mapper.Map<IList<SynchronizedObjectDetails>>(syncObjs);
@@ -147,9 +152,8 @@ namespace ITJakub.MobileApps.Core
             deSyncObject.Author = user;
             deSyncObject.Group = group;
             deSyncObject.CreateTime = DateTime.UtcNow;
-            deSyncObject.Guid = Guid.NewGuid().ToString();
-            m_synchronizedObjectRepository.Create(deSyncObject);
-            m_azureTableSynchronizedObjectDao.Create(new SynchronizedObjectEntity(deSyncObject.Guid, groupId, synchronizedObject.Data));
+            var syncObjId = m_synchronizedObjectRepository.Create(deSyncObject);
+            m_azureTableSynchronizedObjectDao.Create(new SynchronizedObjectEntity(syncObjId.ToString(), groupId, synchronizedObject.Data));
         }
     }
 }

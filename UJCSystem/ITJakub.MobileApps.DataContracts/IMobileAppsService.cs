@@ -24,6 +24,20 @@ namespace ITJakub.MobileApps.DataContracts
             UriTemplate = "institutions/{institutionId}")]
         InstitutionDetails GetInstitutionDetails(string institutionId);
 
+        /// <summary>
+        /// Add user to institution
+        /// </summary>
+        /// <param name="userId">userId which want to enter institution</param>
+        /// <param name="enterCode">Code generated at time of creating instituion (password)</param>
+        /// <returns></returns>
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "institutions/enter?code={enterCode}&user={userId}")]
+        void AddUserToInstitution(string enterCode, string userId);
+
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -51,7 +65,7 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "tasks/?app={applicationId}")]
+            UriTemplate = "tasks/search?app={applicationId}")]
         IEnumerable<TaskDetails> GetTasksForApplication(string applicationId);
 
 

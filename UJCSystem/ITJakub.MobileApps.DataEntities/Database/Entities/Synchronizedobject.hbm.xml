@@ -19,8 +19,5 @@
     <property name="ObjectType">
       <column name="ObjectType" sql-type="varchar" not-null="false" />
     </property>
-    <property name="Guid">
-      <column name="GUID" sql-type="varchar" not-null="false" />
-    </property>
   </class>
 </hibernate-mapping>

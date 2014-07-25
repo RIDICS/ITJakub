@@ -11,9 +11,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual Application Application { get; set; }
         public virtual DateTime CreateTime { get; set; }
         public virtual string ObjectType { get; set; }
-        public virtual string Guid { get; set; }
-
-
+   
         public virtual string Data { get; set; }    //not mapped because its stored in azure tables
 
 

@@ -23,6 +23,11 @@ namespace ITJakub.MobileApps.Service
             return m_manager.GetInstitutionDetails(institutionId);
         }
 
+        public void AddUserToInstitution(string enterCode, string userId)
+        {
+            m_manager.AddUserToInstitution(enterCode,userId);
+        }
+
         public void CreateUser(string authenticationProvider, string authenticationProviderToken, User user)
         {
             m_manager.CreateUser(authenticationProvider, authenticationProviderToken, user);

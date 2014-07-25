@@ -77,7 +77,6 @@ CREATE TABLE [SynchronizedObject](
     [ApplicationId] [bigint] NOT NULL,
     [CreateTime] [datetime] NOT NULL,
     [ObjectType] [varchar] (50),
-    [GUID] [varchar] (255),
     CONSTRAINT [PK_SynchronizedObject] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)      
 )
 
@@ -89,7 +88,6 @@ CREATE TABLE [Task](
     [ApplicationId] [bigint] NOT NULL,    
     [Name] [varchar] (100) NOT NULL,
     [CreateTime] [datetime] NOT NULL,
-    [GUID] [varchar] (255),
     CONSTRAINT [PK_Task] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )
 

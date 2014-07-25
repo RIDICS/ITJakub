@@ -14,7 +14,7 @@ namespace ITJakub.MobileApps.DataContracts
         public string Name { get; set; }
 
         [DataMember]
-        public IEnumerable<User> Employees { get; set; }
+        public IEnumerable<UserBasicDetails> Employees { get; set; }
 
         [DataMember]
         public DateTime CreateTime { get; set; }

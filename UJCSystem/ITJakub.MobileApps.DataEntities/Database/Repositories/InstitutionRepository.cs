@@ -22,5 +22,14 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 return session.CreateCriteria<Institution>().Add(Restrictions.Eq(Projections.Id(), id)).SetFetchMode("Members", FetchMode.Join).UniqueResult<Institution>();
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Institution FindByEnterCode(string enterCode)
+        {
+            using (ISession session = GetSession())
+            {
+                return session.CreateCriteria<Institution>().Add(Restrictions.Eq("EnterCode",enterCode)).SetFetchMode("Members", FetchMode.Join).UniqueResult<Institution>();
+            }
+        }
     }
 }
