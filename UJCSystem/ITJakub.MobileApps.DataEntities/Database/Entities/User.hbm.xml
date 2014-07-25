@@ -40,7 +40,7 @@
       <key column="AuthorId" />
       <one-to-many class="Task" />
     </bag>
-    <bag name="MemberOfGroups" table="UserToGroup">
+    <bag name="MemberOfGroups" table="UserToGroup" inverse="true">
       <key column="UserId"/>
       <many-to-many class="Group" column="GroupId"/>
     </bag>

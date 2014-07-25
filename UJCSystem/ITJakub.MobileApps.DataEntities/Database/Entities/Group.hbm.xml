@@ -20,7 +20,7 @@
       <key column="GroupId" />
       <one-to-many class="SynchronizedObject" />
     </bag>
-    <bag name="Members" table="UserToGroup" inverse="true">
+    <bag name="Members" table="UserToGroup" cascade="all-delete-orphan">
       <key column="GroupId"/>
       <many-to-many class="User" column="UserId"/>
     </bag>

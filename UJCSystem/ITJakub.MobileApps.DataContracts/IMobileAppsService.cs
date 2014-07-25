@@ -80,8 +80,44 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "groups/create?author={userId}")]
-        void CreateGroup(string userId, Group group);
+        CreateGroupResponse CreateGroup(string userId, Group group);
 
+        /// <summary>
+        /// Assign task to group
+        /// </summary>
+        /// <param name="groupId">Id of group</param>
+        /// <param name="userId">userId which should be same as authorId</param>
+        /// <param name="taskId">Id of task to be assigned</param>
+        /// <returns></returns>
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "groups/{groupId}/assign?task={taskId}&user={userId}")]
+        void AssignTaskToGroup(string groupId, string taskId, string userId);
+
+
+
+        /// <summary>
+        /// Add user to group
+        /// </summary>
+        /// <param name="userId">userId which want to enter group</param>
+        /// <param name="enterCode">Code generated at time of creating group (password)</param>
+        /// <returns></returns>
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "groups/enter?code={enterCode}&user={userId}")]
+        void AddUserToGroup(string enterCode, string userId);
+
+        /// <summary>
+        /// Return detail information about group
+        /// </summary>
+        /// <param name="groupId">ID of group</param>
+        /// <returns></returns>
         [OperationContract]
         [WebInvoke(Method = "GET",
             BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -104,7 +140,7 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "syncobjects/?group={groupId}&app={applicationId}&type={objectType}&since={since}")]
+            UriTemplate = "syncobjects/search?group={groupId}&app={applicationId}&type={objectType}&since={since}")]
         IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string applicationId, string objectType, string since);
 
         [OperationContract]

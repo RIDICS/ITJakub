@@ -27,5 +27,19 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                         .UniqueResult<Group>();
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Group FindByEnterCode(string enterCode)
+        {
+            using (var session = GetSession())
+            {
+                return
+                    session.CreateCriteria<Group>()
+                    .Add(Restrictions.Eq("EnterCode",enterCode))
+                        .SetFetchMode("Members", FetchMode.Join)
+                        .SetFetchMode("Author", FetchMode.Join)
+                        .UniqueResult<Group>();
+            }
+        }
     }
 }

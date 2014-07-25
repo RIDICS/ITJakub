@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Runtime.Serialization;
 
 namespace ITJakub.MobileApps.DataContracts
 {
     [DataContract]
-    public class Group
+    public class CreateGroupResponse
     {
         [DataMember]
-        public IEnumerable<UserBasicDetails> Members { get; set; }
+        public string EnterCode { get; set; }
     }
 }

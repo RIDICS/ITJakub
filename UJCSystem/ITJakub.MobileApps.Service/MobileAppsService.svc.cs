@@ -43,9 +43,19 @@ namespace ITJakub.MobileApps.Service
             m_manager.CreateTaskForApplication(applicationId, userId, task);
         }
 
-        public void CreateGroup(string userId, Group group)
+        public CreateGroupResponse CreateGroup(string userId, Group group)
         {
-            m_manager.CreateGroup(userId, group);
+            return m_manager.CreateGroup(userId, group);
+        }
+
+        public void AssignTaskToGroup(string groupId, string taskId, string userId)
+        {
+            m_manager.AssignTaskToGroup(groupId, taskId, userId);
+        }
+
+        public void AddUserToGroup(string enterCode, string userId)
+        {
+            m_manager.AddUserToGroup(enterCode, userId);
         }
 
         public GroupDetails GetGroupDetails(string groupId)

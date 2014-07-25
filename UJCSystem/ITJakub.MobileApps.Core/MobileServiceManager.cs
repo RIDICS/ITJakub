@@ -69,8 +69,8 @@ namespace ITJakub.MobileApps.Core
             var tasks = m_taskRepository.LoadTasksWithDetailsByApplication(application);
             foreach (var task in tasks) //TODO try to find some better way how to fill Data property
             {
-                var taskEntity=m_azureTableTaskDao.FindByRowAndPartitionKey(task.Guid,task.Application.Id.ToString());
-                if(taskEntity!=null) task.Data = taskEntity.Data;
+                var taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(task.Guid, task.Application.Id.ToString());
+                if (taskEntity != null) task.Data = taskEntity.Data;
             }
             return AutoMapper.Mapper.Map<IList<TaskDetails>>(tasks);
         }
@@ -85,17 +85,36 @@ namespace ITJakub.MobileApps.Core
             deTask.CreateTime = DateTime.UtcNow;
             deTask.Guid = Guid.NewGuid().ToString();
             m_taskRepository.Create(deTask);
-            m_azureTableTaskDao.Create(new TaskEntity(deTask.Guid,applicationId,apptask.Data));
+            m_azureTableTaskDao.Create(new TaskEntity(deTask.Guid, applicationId, apptask.Data));
         }
 
-        public void CreateGroup(string userId, Group group)
+        public CreateGroupResponse CreateGroup(string userId, Group group)
         {
             var user = m_userRepository.FindById(long.Parse(userId));
-            var deGroup = AutoMapper.Mapper.Map<DE.Group>(group);
+            var deGroup = AutoMapper.Mapper.Map<DE.Group>(group) ?? new DE.Group();
             deGroup.Author = user;
             deGroup.CreateTime = DateTime.UtcNow;
             deGroup.EnterCode = EnterCodeGenerator.GenerateCode();
-            m_groupRepository.Create(deGroup);
+            var gid = m_groupRepository.Create(deGroup);
+            return new CreateGroupResponse() {EnterCode = m_groupRepository.FindById(gid).EnterCode};
+        }
+
+        public void AssignTaskToGroup(string groupId, string taskId, string userId)
+        {
+            var group = m_groupRepository.FindById(long.Parse(groupId));
+            var user = m_userRepository.FindById(long.Parse(userId));
+            if (!user.Equals(group.Author)) return;
+            var task = m_taskRepository.FindById(long.Parse(taskId));
+            group.Task = task;
+            m_groupRepository.Update(group);
+        }
+
+        public void AddUserToGroup(string enterCode, string userId)
+        {
+            var group = m_groupRepository.FindByEnterCode(enterCode);
+            var user = m_userRepository.FindById(long.Parse(userId));
+            group.Members.Add(user);
+            m_groupRepository.Update(group);
         }
 
         public GroupDetails GetGroupDetails(string groupId)
