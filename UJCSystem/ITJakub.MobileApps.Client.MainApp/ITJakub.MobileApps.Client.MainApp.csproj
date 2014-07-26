@@ -138,6 +138,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icon\facebook-128.png" />
+    <Content Include="Icon\google_plus-128.png" />
+    <Content Include="Icon\windows8-128.png" />
     <None Include="Common\ReadMe.txt" />
     <Content Include="Fonts\LiveSymbol.ttf" />
     <None Include="ITJakub.MobileApps.MainApp_TemporaryKey.pfx" />
@@ -158,6 +161,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Skin\Skin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="View\ApplicationSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

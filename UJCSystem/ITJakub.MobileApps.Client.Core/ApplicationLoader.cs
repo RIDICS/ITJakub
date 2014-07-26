@@ -37,9 +37,13 @@ namespace ITJakub.MobileApps.Client.Core
                     {
                         var applicationBase = Activator.CreateInstance(type.AsType()) as ApplicationBase;
                         if (applicationBase != null)
+                        {
+                            applicationBase.Assembly = assembly;
                             m_applications.Add(mobileApplicationAttribute.ApplicationType, applicationBase);
+                        }
                         else
-                            throw new InvalidOperationException(string.Format("Type {0} does not implement {1}", type.FullName, typeof(ApplicationBase).FullName));
+                            throw new InvalidOperationException(string.Format("Type {0} does not implement {1}",
+                                type.FullName, typeof (ApplicationBase).FullName));
                     }
                 }
             }

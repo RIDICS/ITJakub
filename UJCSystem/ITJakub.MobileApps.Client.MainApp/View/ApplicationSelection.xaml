@@ -62,10 +62,15 @@
                 <DataTemplate>
                     <StackPanel Orientation="Vertical"
                                 Width="200">
-                        <SymbolIcon Symbol="Accept" />
-                        <Grid Background="LightSkyBlue">
+                        <Image Source="{Binding Icon}"
+                               Width="128"
+                               Height="128"
+                               Margin="20"/>
+                        <Grid Background="#3468CD"
+                              Height="50">
                             <TextBlock Text="{Binding Name}"
                                        HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
                                        TextWrapping="Wrap"/>
                         </Grid>
                     </StackPanel>

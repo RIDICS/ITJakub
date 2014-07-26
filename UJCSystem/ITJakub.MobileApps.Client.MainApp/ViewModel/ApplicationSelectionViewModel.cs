@@ -43,7 +43,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     AppList.Add(new AppInfoViewModel
                     {
                         Name = applicationKeyValue.Value.Name,
-                        ApplicationType = applicationKeyValue.Key
+                        ApplicationType = applicationKeyValue.Key,
+                        Icon = applicationKeyValue.Value.Icon
                     });
                 }
             });

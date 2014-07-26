@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.SampleApp
@@ -24,6 +25,16 @@ namespace ITJakub.MobileApps.Client.SampleApp
         public override bool IsChatSupported
         {
             get { return true; }
+        }
+
+        public override BitmapImage Icon
+        {
+            get
+            {
+                var uri = new Uri(BaseUri, "Icon/file-128.png");
+                var image = new BitmapImage(uri);
+                return image;
+            }
         }
     }
 }

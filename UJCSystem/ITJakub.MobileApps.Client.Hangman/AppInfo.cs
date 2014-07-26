@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.Hangman
@@ -24,6 +25,15 @@ namespace ITJakub.MobileApps.Client.Hangman
         public override bool IsChatSupported
         {
             get { return false; }
+        }
+
+        public override BitmapImage Icon
+        {
+            get
+            {
+                var uri = new Uri(BaseUri, "Icon/scythe-128.png");
+                return new BitmapImage(uri);
+            }
         }
     }
 }

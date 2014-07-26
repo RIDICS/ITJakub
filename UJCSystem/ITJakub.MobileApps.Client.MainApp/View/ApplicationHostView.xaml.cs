@@ -98,6 +98,7 @@ namespace ITJakub.MobileApps.Client.MainApp.View
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            ChatButton.IsChecked = false;
             navigationHelper.OnNavigatedFrom(e);
         }
 

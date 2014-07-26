@@ -7,6 +7,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:control="using:ITJakub.MobileApps.Client.Chat"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d">
 
     <!--
@@ -23,8 +25,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="140"/>
         </Grid.RowDefinitions>
 
@@ -37,54 +37,55 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
-                        Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
-                        AutomationProperties.Name="Back"
-                        AutomationProperties.AutomationId="BackButton"
-                        AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="Přihlášení" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+            <Button x:Name="backButton" 
+                    Margin="39,59,39,0" 
+                    Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                    Style="{StaticResource NavigationBackButtonNormalStyle}"
+                    VerticalAlignment="Top"
+                    AutomationProperties.Name="Back"
+                    AutomationProperties.AutomationId="BackButton"
+                    AutomationProperties.ItemType="Navigation Button"/>
+            <TextBlock x:Name="pageTitle" 
+                       Text="Přihlášení" 
+                       Style="{StaticResource HeaderTextBlockStyle}" 
+                       Grid.Column="1" 
+                       IsHitTestVisible="false" 
+                       TextWrapping="NoWrap" 
+                       VerticalAlignment="Bottom" 
+                       Margin="0,0,30,40"/>
 
         </Grid>
-        
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="250" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Vertical"
-                    HorizontalAlignment="Stretch"
-                    Grid.Column="1">
+        <ListView Grid.Row="1"
+                  SelectionMode="None"
+                  IsItemClickEnabled="True"
+                  ItemsSource="{Binding MenuItems}"
+                  Style="{StaticResource HorizontalListView}"
+                  HorizontalAlignment="Center">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical"
+                                Width="200">
+                        <Image Source="{Binding Icon}"
+                               Width="128"
+                               Height="128"
+                               Margin="35"/>
+                        <Grid Background="#3468CD"
+                              Height="50">
+                            <TextBlock Text="{Binding Name}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap"/>
+                        </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
 
-                <Button Content="Live ID"
-                        HorizontalAlignment="Stretch"
-                        FontSize="20"
-                        Command="{Binding LiveIdLoginCommand}"/>
-
-                <Button Content="Facebook"
-                        HorizontalAlignment="Stretch"
-                        FontSize="20"
-                        Command="{Binding FacebookLoginCommand}"/>
-
-                <Button Content="Google"
-                        HorizontalAlignment="Stretch"
-                        FontSize="20"
-                        Command="{Binding GoogleLoginCommand}"/>
-
-                <Button Content="Chat" HorizontalAlignment="Stretch" FontSize="20">
-                    <Button.Flyout>
-                        <Flyout>
-                            <Grid Width="400" Height="400">
-                                <control:ChatControl/>
-                            </Grid>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
-
-            </StackPanel>
-        </Grid>
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="ItemClick">
+                    <core:InvokeCommandAction Command="{Binding ItemClickCommand}"/>
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </ListView>
     </Grid>
 </Page>
