@@ -51,6 +51,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             SimpleIoc.Default.Register<GroupListViewModel>();
             SimpleIoc.Default.Register<ApplicationHostViewModel>();
             SimpleIoc.Default.Register<ApplicationSelectionViewModel>();
+            SimpleIoc.Default.Register<EditGroupViewModel>();
         }
 
         public LoginViewModel LoginViewModel
@@ -80,7 +81,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get { return ServiceLocator.Current.GetInstance<ApplicationSelectionViewModel>(); }
         }
-        
+
+        public EditGroupViewModel EditGroupViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<EditGroupViewModel>(); }
+        }
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

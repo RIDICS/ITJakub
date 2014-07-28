@@ -1,11 +1,8 @@
-using System;
-using System.Collections.ObjectModel;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
-using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.MainApp.View;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -26,8 +23,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private ObservableCollection<LoginItem> m_menuItems;
-        private RelayCommand<ItemClickEventArgs> m_itemClickCommand;
+        private readonly RelayCommand<ItemClickEventArgs> m_itemClickCommand;
+        private Visibility m_loginDialogVisibility;
+        private bool m_loggingIn;
 
         /// <summary>
         /// Initializes a new instance of the LoginViewModel class.
@@ -45,46 +43,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             m_dataService = dataService;
             m_navigationService = navigationService;
+            LoggingIn = false;
             m_itemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
-
-            InitMenu();
-        }
-
-        private void InitMenu()
-        {
-            MenuItems = new ObservableCollection<LoginItem>
-            {
-                new LoginItem
-                {
-                    LoginProvider = LoginProvider.LiveId,
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/windows8-128.png")),
-                    Name = "Live ID"
-                },
-                new LoginItem
-                {
-                    LoginProvider = LoginProvider.Facebook,
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/facebook-128.png")),
-                    Name = "Facebook"
-                },
-                new LoginItem
-                {
-                    LoginProvider = LoginProvider.Google,
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/google_plus-128.png")),
-                    Name = "Google"
-                }
-            };
-        }
-
-        public string Message { get; set; }
-
-        public ObservableCollection<LoginItem> MenuItems
-        {
-            get { return m_menuItems; }
-            set
-            {
-                m_menuItems = value;
-                RaisePropertyChanged();
-            }
         }
 
         public RelayCommand<ItemClickEventArgs> ItemClickCommand
@@ -92,61 +52,42 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             get { return m_itemClickCommand; }
         }
 
-        private void FacebookLogin()
+        public Visibility LoginDialogVisibility
         {
-            m_dataService.LoginAsync(LoginProvider.Facebook, (info, exception) =>
+            get { return m_loginDialogVisibility; }
+            set
             {
-                Message = String.Format("{0} {1} {2} {3} {4}", info.Success, info.Email, info.FirstName, info.LastName, info.AccessToken);
-                RaisePropertyChanged(() => Message);
-            });
+                m_loginDialogVisibility = value;
+                RaisePropertyChanged();
+            }
         }
 
-        private void GoogleLogin()
+        public bool LoggingIn
         {
-            m_dataService.LoginAsync(LoginProvider.Google, (info, exception) =>
+            get { return m_loggingIn; }
+            set
             {
-                Message = String.Format("{0} {1} {2} {3} {4}", info.Success, info.Email, info.FirstName, info.LastName, info.AccessToken);
-                RaisePropertyChanged(() => Message);
-            });
-        }
-
-        private void LiveIdLogin()
-        {
-            m_dataService.LoginAsync(LoginProvider.LiveId, (info, exception) =>
-            {
-                Message = String.Format("{0} {1} {2} {3} {4}", info.Success, info.Email, info.FirstName, info.LastName, info.AccessToken);
-                RaisePropertyChanged(() => Message);
-            });
-
-            m_navigationService.Navigate(typeof(ApplicationSelection));
-            //m_navigationService.Navigate(typeof(GroupListView));            
+                m_loggingIn = value;
+                LoginDialogVisibility = value ? Visibility.Visible : Visibility.Collapsed;
+                RaisePropertyChanged();
+            }
         }
 
         private void ItemClick(ItemClickEventArgs args)
         {
-            var item = args.ClickedItem as LoginItem;
+            var item = args.ClickedItem as LoginMenuItemViewModel;
             if (item == null)
                 return;
 
-            switch (item.LoginProvider)
+            LoggingIn = true;
+            m_dataService.LoginAsync(item.LoginProvider, (info, exception) =>
             {
-                case LoginProvider.LiveId:
-                    LiveIdLogin();
-                    break;
-                case LoginProvider.Facebook:
-                    FacebookLogin();
-                    break;
-                case LoginProvider.Google:
-                    GoogleLogin();
-                    break;
-            }
+                LoggingIn = false;
+                if (exception != null)
+                    return;
+                if (info.Success)
+                    m_navigationService.Navigate(typeof(GroupListView));
+            });
         }
-    }
-
-    public class LoginItem
-    {
-        public string Name { get; set; }
-        public BitmapImage Icon { get; set; }
-        public LoginProvider LoginProvider { get; set; }
     }
 }

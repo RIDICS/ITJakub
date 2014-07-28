@@ -6,7 +6,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 // The Grid App template is documented at http://go.microsoft.com/fwlink/?LinkId=234226
-using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.MainApp.Common;
 using ITJakub.MobileApps.Client.MainApp.View;
 
@@ -15,7 +14,7 @@ namespace ITJakub.MobileApps.Client.MainApp
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : Application
+    sealed partial class App
     {
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
@@ -23,8 +22,8 @@ namespace ITJakub.MobileApps.Client.MainApp
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
         }
 
         /// <summary>
@@ -40,7 +39,7 @@ namespace ITJakub.MobileApps.Client.MainApp
             if (System.Diagnostics.Debugger.IsAttached)
             {
                 // Display the current frame rate counters
-                this.DebugSettings.EnableFrameRateCounter = true;
+                DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
 
@@ -82,7 +81,7 @@ namespace ITJakub.MobileApps.Client.MainApp
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate(typeof(GroupedItemsPage), e.Arguments);
+                rootFrame.Navigate(typeof(LoginView), e.Arguments);
             }
             // Ensure the current window is active
             Window.Current.Activate();

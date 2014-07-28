@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Name="pageRoot"
+    x:Name="PageRoot"
     x:Class="ITJakub.MobileApps.Client.MainApp.View.GroupListView"
     DataContext="{Binding GroupListViewModel, Source={StaticResource Locator}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -14,7 +14,12 @@
     </Page.Resources>
     
     <Page.BottomAppBar>
-        <CommandBar>
+        <CommandBar IsOpen="{Binding CommandBarOpen, Mode=TwoWay}"
+                    IsSticky="True">
+            <AppBarButton Icon="Sync" 
+                          Label="Aktualizovat seznam"
+                          Command="{Binding RefreshListCommand}"/>
+            
             <AppBarButton Icon="Forward" 
                           Label="Připojit se k nové skupině">
                 <AppBarButton.Flyout>
@@ -33,21 +38,41 @@
             </AppBarButton>
             
             <AppBarButton Icon="Add" 
-                          Label="Vytvořit skupinu">
+                          Label="Vytvořit skupinu"
+                          Visibility="{Binding TeachersButtonVisibility}">
                 <AppBarButton.Flyout>
                     <Flyout>
                         <StackPanel Orientation="Vertical">
                             <TextBlock FontSize="15"
-                                       Text="Zadejte název skupiny"/>
+                                       Text="Zadejte název skupiny:"/>
                             <TextBox Width="250"
                                      Text="{Binding NewGroupName, Mode=TwoWay}"/>
                             <TextBlock FontSize="15"
                                        Margin="0 10 0 0"
                                        Text="Vyberte aplikaci:"/>
-                            <RadioButton GroupName="SelectApp">App 1</RadioButton>
-                            <RadioButton GroupName="SelectApp">App 2</RadioButton>
-                            <RadioButton GroupName="SelectApp">App 3</RadioButton>
-                            <RadioButton GroupName="SelectApp">App 4</RadioButton>
+                            <ListView SelectionMode="Single"
+                                      MinHeight="100"
+                                      MaxHeight="200"
+                                      DataContext="{Binding EditGroupViewModel, Source={StaticResource Locator}}"
+                                      ItemsSource="{Binding AppList}"
+                                      SelectedItem="{Binding SelectedGroup}">
+                                
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid Background="DarkGray">
+                                                <Image Width="32"
+                                                       Height="32"
+                                                       Margin="2"
+                                                       Source="{Binding Icon}"/>
+                                            </Grid>
+                                            <TextBlock Text="{Binding Name}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="4 0 0 0"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                             <Button HorizontalAlignment="Right" 
                                     Content="Vytvořit"
                                     Command="{Binding CreateNewGroupCommand}"/>
@@ -55,29 +80,37 @@
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <AppBarButton Icon="Delete" 
-                          Label="Odstranit skupinu"
-                          Command="{Binding DeleteGroupCommand}">
-                <AppBarButton.Flyout>
-                    <Flyout>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock FontSize="15"
-                                       Text="Chystáte se odstranit skupinu &quot;Název skupiny&quot;."/>
-                            <Button HorizontalAlignment="Right"
-                                    Margin="0 10 0 0"
-                                    Content="Odstranit"/>
-                        </StackPanel>
-                    </Flyout>
-                </AppBarButton.Flyout>
-            </AppBarButton>
-            <AppBarButton Icon="Sync" 
-                          Label="Aktualizovat seznam"
-                          Command="{Binding RefreshListCommand}"/>
             
             <CommandBar.SecondaryCommands>
-                <AppBarButton Icon="Help" 
-                              Label="Test"
-                              Command="{Binding Test}"/>
+                <AppBarButton Icon="Forward"
+                              Label="Připojit se"
+                              Command="{Binding ConnectCommand}"
+                              Visibility="{Binding ConnectButtonVisibility}"/>
+                <AppBarButton Icon="Edit"
+                              Label="Upravit"
+                              Visibility="{Binding TeachersSecondaryButtonVisibility}"/>
+                <AppBarButton Icon="Delete" 
+                              Label="Odstranit"
+                              Command="{Binding DeleteGroupCommand}"
+                              Visibility="{Binding TeachersSecondaryButtonVisibility}">
+                    <AppBarButton.Flyout>
+                        <Flyout>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontSize="15"
+                                           MaxWidth="350"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding DeleteMessage}">
+                                    <Run Text="Chystáte se odstranit skupinu &quot;" />
+                                    <Run Text="{Binding ElementName=PageRoot, Path=DataContext.SelectedGroup.GroupName}" />
+                                    <Run Text="&quot;." />
+                                </TextBlock>
+                                <Button HorizontalAlignment="Right"
+                                    Margin="0 10 0 0"
+                                    Content="Odstranit"/>
+                            </StackPanel>
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
@@ -105,14 +138,21 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
-                        Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
-                        AutomationProperties.Name="Back"
-                        AutomationProperties.AutomationId="BackButton"
-                        AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="Seznam dostupných skupin" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+            <Button Margin="39,59,39,0" 
+                    Command="{Binding NavigationHelper.GoBackCommand, ElementName=PageRoot}"
+                    Style="{StaticResource NavigationBackButtonNormalStyle}"
+                    VerticalAlignment="Top"
+                    AutomationProperties.Name="Back"
+                    AutomationProperties.AutomationId="BackButton"
+                    AutomationProperties.ItemType="Navigation Button"
+                    IsEnabled="False"/>
+            <TextBlock Text="Seznam dostupných skupin"
+                       Style="{StaticResource HeaderTextBlockStyle}"
+                       Grid.Column="1"
+                       IsHitTestVisible="false"
+                       TextWrapping="NoWrap"
+                       VerticalAlignment="Bottom"
+                       Margin="0,0,30,40"/>
             <Button Grid.Column="2"
                     Style="{StaticResource TextBlockButtonStyle}"
                     FontSize="30"
@@ -123,17 +163,19 @@
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Odhlásit se"
-                                        FontSize="20"/>
+                                        FontSize="20"
+                                        Command="{Binding LogOutCommand}"/>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
         </Grid>
-        <ContentControl Grid.Row="1" Content=""></ContentControl>
+        
         <GridView Grid.Row="1"
                   IsItemClickEnabled="True"
                   SelectionMode="Single"
                   Padding="110,0,50,100"
-                  ItemsSource="{Binding GroupList}">
+                  ItemsSource="{Binding GroupList}"
+                  SelectedItem="{Binding SelectedGroup, Mode=TwoWay}">
             
             <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="ItemClick">
@@ -147,16 +189,40 @@
             </GridView.ItemsPanel>
             <GridView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <StackPanel Orientation="Horizontal"
+                                Width="350"
+                                Margin="4">
+                        <Image Width="64"
+                               Height="64"
+                               Source="{Binding Icon}"/>
                         <StackPanel Orientation="Vertical"
-                                    Width="350"
-                                    Margin="4">
-                            <TextBlock Text="Název skupiny" />
-                            <TextBlock Text="Popis skupiny" />
+                                    Width="270"
+                                    Margin="10 0 0 0">
+                            <TextBlock Text="{Binding GroupName}"
+                                       FontWeight="Bold"/>
+                            <TextBlock Foreground="{StaticResource ApplicationForegroundThemeBrush}">
+                                <Run Text="Aplikace: " />
+                                <Run Text="{Binding ApplicationName}" />
+                            </TextBlock>
+                            <TextBlock Foreground="{StaticResource ApplicationForegroundThemeBrush}">
+                                <Run Text="Počet členů: " />
+                                <Run Text="{Binding MemberCount}" />
+                            </TextBlock>
+                            <TextBlock Foreground="{StaticResource ApplicationForegroundThemeBrush}"
+                                       Visibility="{Binding ElementName=PageRoot, Path=DataContext.TeachersButtonVisibility}">
+                                <Run Text="Číslo skupiny: " />
+                                <Run Text="{Binding GroupCode}" />
+                            </TextBlock>
                         </StackPanel>
-                    </Grid>
+                    </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
+        
+        <TextBlock Grid.Row="1"
+                   Text="Nejsou dostupné žádné skupiny."
+                   Style="{StaticResource SubheaderTextBlockStyle}"
+                   Margin="120 20 0 0"
+                   Visibility="{Binding NoGroupVisibility}"/>
     </Grid>
 </Page>

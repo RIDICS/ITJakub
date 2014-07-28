@@ -1,8 +1,11 @@
 ﻿using System.Collections.ObjectModel;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
+using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.MainApp.View;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -14,9 +17,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     /// </summary>
     public class GroupListViewModel : ViewModelBase
     {
-        private IDataService m_dataService;
+        private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private ObservableCollection<GroupInfo> m_groupList;
+        private ObservableCollection<GroupInfoViewModel> m_groupList;
         private RelayCommand<ItemClickEventArgs> m_groupClickCommand;
         private RelayCommand m_createNewGroupCommand;
         private RelayCommand m_deleteGroupCommand;
@@ -24,6 +27,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private string m_connectToGroupNumber;
         private RelayCommand m_connectToGroupCommand;
         private string m_newGroupName;
+        private bool m_commandBarOpen;
+        private GroupInfoViewModel m_selectedGroup;
+        private RelayCommand m_connectCommand;
+        private bool m_isTeacher;
+        private string m_deleteMessage;
+        private RelayCommand m_logOutCommand;
+        private Visibility m_noGroupVisibility;
 
         /// <summary>
         /// Initializes a new instance of the GroupListViewModel class.
@@ -32,11 +42,24 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
-            GroupList = new ObservableCollection<GroupInfo>();
-            m_groupClickCommand = new RelayCommand<ItemClickEventArgs>(OpenGroup);
+            GroupList = new ObservableCollection<GroupInfoViewModel>();
+            NoGroupVisibility = Visibility.Collapsed;
+            
+            InitCommands();
+            LoadGroupList();
+
+            //TODO load correct information
+            m_isTeacher = true;
         }
 
-        public ObservableCollection<GroupInfo> GroupList
+        private void InitCommands()
+        {
+            m_groupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
+            m_connectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
+            m_logOutCommand = new RelayCommand(LogOut);
+        }
+
+        public ObservableCollection<GroupInfoViewModel> GroupList
         {
             get { return m_groupList; }
             set
@@ -66,11 +89,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             get { return m_refreshListCommand; }
         }
 
-        public RelayCommand Test
-        {
-            get { return new RelayCommand(() => GroupList.Add(new GroupInfo()));}
-        }
-
         public string ConnectToGroupNumber
         {
             get { return m_connectToGroupNumber; }
@@ -96,14 +114,111 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        private void OpenGroup(ItemClickEventArgs args)
+        public bool CommandBarOpen
         {
-            var group = args.ClickedItem as GroupInfo;
+            get { return m_commandBarOpen; }
+            set
+            {
+                m_commandBarOpen = value; 
+                RaisePropertyChanged();
+            }
+        }
+
+        public GroupInfoViewModel SelectedGroup
+        {
+            get { return m_selectedGroup; }
+            set
+            {
+                m_selectedGroup = value;
+                CommandBarOpen = value != null;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => ConnectButtonVisibility);
+                RaisePropertyChanged(() => TeachersSecondaryButtonVisibility);
+                if (value != null)
+                    DeleteMessage = string.Format("Chystáte se odstranit skupinu \"{0}\"", value.GroupName);
+            }
+        }
+
+        public RelayCommand ConnectCommand
+        {
+            get { return m_connectCommand; }
+        }
+
+        public Visibility ConnectButtonVisibility
+        {
+            get
+            {
+                return SelectedGroup != null ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public Visibility TeachersSecondaryButtonVisibility
+        {
+            get
+            {
+                var isVisible = m_isTeacher && SelectedGroup != null;
+                return isVisible ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public Visibility TeachersButtonVisibility
+        {
+            get { return m_isTeacher ? Visibility.Visible : Visibility.Collapsed; }
+        }
+
+        public string DeleteMessage
+        {
+            get { return m_deleteMessage; }
+            set
+            {
+                m_deleteMessage = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public RelayCommand LogOutCommand
+        {
+            get { return m_logOutCommand; }
+        }
+
+        public Visibility NoGroupVisibility
+        {
+            get { return m_noGroupVisibility; }
+            set
+            {
+                m_noGroupVisibility = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private void LoadGroupList()
+        {
+            m_dataService.GetGroupList((groupList, exception) =>
+            {
+                if (exception != null)
+                    return;
+                GroupList = groupList;
+                NoGroupVisibility = groupList.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            });
+        }
+
+        private void GroupClick(ItemClickEventArgs args)
+        {
+            var group = args.ClickedItem as GroupInfoViewModel;
+            OpenGroup(group);
+        }
+
+        private void OpenGroup(GroupInfoViewModel group)
+        {
             if (group != null)
             {
-                //TODO open group
-                //m_navigationService.Navigate(typeof(HangmanTest.MainView));
+                m_navigationService.Navigate(typeof (ApplicationHostView), group.ApplicationType);
             }
+        }
+
+        private void LogOut()
+        {
+            m_navigationService.GoHome();
         }
     }
 }

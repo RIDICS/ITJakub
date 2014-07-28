@@ -1,4 +1,4 @@
-namespace ITJakub.MobileApps.Client.MainApp
+namespace ITJakub.MobileApps.Client.Core.ViewModel
 {
     public class UserInfo
     {

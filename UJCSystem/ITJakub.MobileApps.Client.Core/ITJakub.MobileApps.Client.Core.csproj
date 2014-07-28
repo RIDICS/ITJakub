@@ -125,8 +125,10 @@
     <Compile Include="DataService\NavigationService.cs" />
     <Compile Include="Manager\LoginManager.cs" />
     <Compile Include="Manager\LoginProvider.cs" />
+    <Compile Include="Manager\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AppInfoViewModel.cs" />
+    <Compile Include="ViewModel\GroupInfoViewModel.cs" />
     <Compile Include="ViewModel\MessageViewModel.cs" />
     <Compile Include="ViewModel\UserInfo.cs" />
   </ItemGroup>
@@ -149,9 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

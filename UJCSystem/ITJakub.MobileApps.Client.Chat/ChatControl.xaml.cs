@@ -1,17 +1,15 @@
 ﻿// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Windows.System;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using ITJakub.MobileApps.Client.Chat.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Chat
 {
-    public sealed partial class ChatControl : UserControl
+    public sealed partial class ChatControl
     {
         private ChatViewModel m_viewModel;
 

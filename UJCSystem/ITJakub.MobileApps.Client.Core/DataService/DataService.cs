@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.ViewModel;
-using ITJakub.MobileApps.Client.MainApp;
 using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.Core.DataService
@@ -26,6 +25,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 
         public void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback)
         {
+            //TODO load messages from server
             callback(new ObservableCollection<MessageViewModel>(), null);
         }
 
@@ -36,7 +36,37 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 
         public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
         {
-            m_applicationManager.GetApplication(type, callback);
+            var application = m_applicationManager.GetApplication(type);
+            callback(application, null);
+        }
+
+        public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        {
+            //TODO load group list from server
+            var list = new ObservableCollection<GroupInfoViewModel>
+            {
+                new GroupInfoViewModel
+                {
+                    ApplicationType = ApplicationType.SampleApp,
+                    GroupCode = "123546",
+                    MemberCount = 5,
+                    GroupName = "Group A"
+                },
+                new GroupInfoViewModel
+                {
+                    ApplicationType = ApplicationType.Hangman,
+                    GroupCode = "123546",
+                    MemberCount = 5,
+                    GroupName = "Group B"
+                },
+            };
+            foreach (var group in list)
+            {
+                var application = m_applicationManager.GetApplication(group.ApplicationType);
+                group.Icon = application.Icon;
+                group.ApplicationName = application.Name;
+            }
+            callback(list, null);
         }
 
         public async void LoginAsync(LoginProvider loginProvider, Action<UserInfo, Exception> callback)

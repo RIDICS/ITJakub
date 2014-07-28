@@ -7,8 +7,8 @@ using Windows.Security.Authentication.Web;
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
 using Facebook;
+using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.DataContracts.Json;
-using ITJakub.MobileApps.Client.MainApp;
 using Newtonsoft.Json;
 
 namespace ITJakub.MobileApps.Client.Core.Manager
@@ -20,7 +20,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager
     {
         public async Task<UserInfo> LoginLiveId()
         {
-            return null;
+            return new UserInfo
+            {
+                Success = true,
+                FirstName = "Mocked",
+                LastName = "User",
+                AccessToken = "Aaaaaaaaa",
+                Email = "email@example.com"
+            };
             /*
             const bool signIn = false;
             try
@@ -116,7 +123,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             switch (webAuthenticationResult.ResponseStatus)
             {
                 case WebAuthenticationStatus.Success:
-                    var callbackUri = new Uri(webAuthenticationResult.ResponseData.ToString());
+                    var callbackUri = new Uri(webAuthenticationResult.ResponseData);
                     var facebookOAuthResult = fbClient.ParseOAuthCallbackUrl(callbackUri);
 
                     // Retrieve the Access Token. You can now interact with Facebook on behalf of the user
@@ -200,7 +207,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         private async Task<GoogleToken> GetGoogleTokensAsync(string authenticationResponse)
         {
             const string successString = "Success ";
-            string code = null;
+            string code;
             try
             {
                 if (authenticationResponse.StartsWith(successString))

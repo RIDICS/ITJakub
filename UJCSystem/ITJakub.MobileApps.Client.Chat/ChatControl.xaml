@@ -15,7 +15,7 @@
         <converter:MessageDateTimeToStringConverter x:Key="MessageDateTimeToStringConverter"/>
     </UserControl.Resources>
     
-    <Grid Background="#22FFFFFF">
+    <Grid Background="#88000000">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -67,8 +67,7 @@
             <Button Grid.Column="1"
                     Content="Odeslat"
                     Command="{Binding SendCommand}"
-                    Click="SendButton_OnClick"
-                    x:Name="SendButton"/>
+                    Click="SendButton_OnClick" />
         </Grid>
     </Grid>
     

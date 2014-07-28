@@ -33,10 +33,9 @@ namespace ITJakub.MobileApps.Client.Core
             callback(result, null);
         }
 
-        public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
+        public ApplicationBase GetApplication(ApplicationType type)
         {
-            var result = m_loader.GetApplicationByType(type);
-            callback(result, null);
+            return m_loader.GetApplicationByType(type);
         }
     }
 }

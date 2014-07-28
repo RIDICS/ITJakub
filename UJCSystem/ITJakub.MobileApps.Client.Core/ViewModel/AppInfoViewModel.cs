@@ -1,4 +1,3 @@
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Shared;
 
