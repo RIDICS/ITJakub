@@ -47,6 +47,14 @@ namespace ITJakub.MobileApps.DataContracts
             UriTemplate = "users/create?authprovider={authenticationProvider}&token={authenticationProviderToken}")]
         void CreateUser(string authenticationProvider, string authenticationProviderToken, User user);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "users/login?authprovider={authenticationProvider}&token={authenticationProviderToken}")]
+        LoginUserResponse LoginUser(string authenticationProvider, string authenticationProviderToken);
+
 
         [OperationContract]
         [WebInvoke(Method = "GET",

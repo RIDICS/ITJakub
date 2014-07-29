@@ -2,9 +2,9 @@
 {
     public enum AuthenticationProvider : byte
     {
-        ITJakub = 0,
-        Gmail = 1,
-        Facebook = 2,
-        LiveId = 3
+        itjakub = 0,
+        gmail = 1,
+        facebook = 2,
+        liveid = 3
     }
 }

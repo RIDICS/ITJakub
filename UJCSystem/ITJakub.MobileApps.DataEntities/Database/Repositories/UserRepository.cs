@@ -1,9 +1,11 @@
-﻿using Castle.Facilities.NHibernateIntegration;
+﻿using System;
+using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Exceptions;
 
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
@@ -26,6 +28,32 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                         .SetFetchMode("CreatedGroups", FetchMode.Join)
                         .SetFetchMode("CreatedTasks", FetchMode.Join)
                         .UniqueResult<User>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual string GetCommunicationToken(byte authenticationProvider, string authenticationProviderToken)
+        {
+            using (var session = GetSession())
+            {
+                var user = session.CreateCriteria<User>()
+                    .Add(Restrictions.Eq("AuthenticationProvider", authenticationProvider))
+                    .Add(Restrictions.Eq("AuthenticationProviderToken", authenticationProviderToken))
+                    .UniqueResult<User>();
+                return user == null ? null : user.CommunicationToken;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public override object Create(User instance)
+        {
+            try
+            {
+                return base.Create(instance);
+            }
+            catch (DataException)
+            {
+                throw new CreateEntityFailedException();
             }
         }
     }

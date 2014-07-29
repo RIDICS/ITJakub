@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
 using ITJakub.MobileApps.DataEntities.AzureTables.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
@@ -19,6 +21,7 @@ namespace ITJakub.MobileApps.Core
         private readonly ApplicationRepository m_applicationRepository;
         private readonly AzureTableTaskDao m_azureTableTaskDao;
         private readonly AzureTableSynchronizedObjectDao m_azureTableSynchronizedObjectDao;
+        private const int MaxAttemptsToSave = 5; //TODO add to config
 
         public MobileServiceManager(IKernel container)
         {
@@ -35,9 +38,22 @@ namespace ITJakub.MobileApps.Core
         public void CreateInstitution(Institution institution)
         {
             var deInstitution = AutoMapper.Mapper.Map<DE.Institution>(institution);
-            deInstitution.EnterCode = EnterCodeGenerator.GenerateCode();
             deInstitution.CreateTime = DateTime.UtcNow;
-            m_institutionRepository.Create(deInstitution); //TODO add check that generated enterCode were unique (catch exception form DB)
+            var attempt = 0;
+            while (attempt < MaxAttemptsToSave)
+            {
+                try
+                {
+                    deInstitution.EnterCode = EnterCodeGenerator.GenerateCode();
+                    m_institutionRepository.Create(deInstitution);
+                    return;
+                }
+                catch (CreateEntityFailedException ex)
+                {
+                    ++attempt;
+                }
+            }
+            //TODO throw exception or send fail message here
         }
 
         public InstitutionDetails GetInstitutionDetails(string institutionId)
@@ -58,9 +74,23 @@ namespace ITJakub.MobileApps.Core
         {
             var deUser = AutoMapper.Mapper.Map<DE.User>(user);
             deUser.CreateTime = DateTime.UtcNow;
-            deUser.AuthenticationProvider = (byte) Enum.Parse(typeof (AuthenticationProvider), authenticationProvider);
+            deUser.AuthenticationProvider = (byte) Enum.Parse(typeof (AuthenticationProvider), authenticationProvider.ToLower());
             deUser.AuthenticationProviderToken = authenticationProviderToken;
-            m_userRepository.Create(deUser); //TODO add check that pair (email,authenticationProvider) were unique (catch exception form DB)
+            deUser.CommunicationToken = Guid.NewGuid().ToString(); //TODO change to encode some user profile values to token
+            try
+            {
+                m_userRepository.Create(deUser);
+            }
+            catch (CreateEntityFailedException)
+            {
+                return; //TODO return exception or fail message to client
+            }
+        }
+
+        public LoginUserResponse LoginUser(string authenticationProvider, string authenticationProviderToken)
+        {
+            var provider = (byte) Enum.Parse(typeof (AuthenticationProvider), authenticationProvider.ToLower());
+            return new LoginUserResponse() {CommunicationToken = m_userRepository.GetCommunicationToken(provider, authenticationProviderToken)};
         }
 
         public UserDetails GetUserDetails(string userId)
@@ -99,9 +129,21 @@ namespace ITJakub.MobileApps.Core
             var deGroup = AutoMapper.Mapper.Map<DE.Group>(group) ?? new DE.Group();
             deGroup.Author = user;
             deGroup.CreateTime = DateTime.UtcNow;
-            deGroup.EnterCode = EnterCodeGenerator.GenerateCode();
-            var gid = m_groupRepository.Create(deGroup);
-            return new CreateGroupResponse() {EnterCode = m_groupRepository.FindById(gid).EnterCode};
+            var attempt = 0;
+            while (attempt < MaxAttemptsToSave)
+            {
+                try
+                {
+                    deGroup.EnterCode = EnterCodeGenerator.GenerateCode();
+                    var gid = m_groupRepository.Create(deGroup);
+                    return new CreateGroupResponse() {EnterCode = m_groupRepository.FindById(gid).EnterCode};
+                }
+                catch (CreateEntityFailedException ex)
+                {
+                    ++attempt;
+                }
+            }
+            return null; //TODO return exception here or fail message here
         }
 
         public void AssignTaskToGroup(string groupId, string taskId, string userId)
