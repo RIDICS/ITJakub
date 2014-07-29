@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Shared;
 
@@ -36,5 +37,7 @@ namespace ITJakub.MobileApps.Client.SampleApp
                 return image;
             }
         }
+
+    
     }
 }

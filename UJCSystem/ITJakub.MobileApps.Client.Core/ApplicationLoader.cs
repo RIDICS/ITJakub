@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using ITJakub.MobileApps.Client.Core.Configuration;
 using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.Communication;
 
 namespace ITJakub.MobileApps.Client.Core
 {
@@ -11,9 +12,9 @@ namespace ITJakub.MobileApps.Client.Core
     {
         private readonly Dictionary<ApplicationType, ApplicationBase> m_applications = new Dictionary<ApplicationType, ApplicationBase>();
 
-        public ApplicationLoader()
+        private ApplicationLoader()
         {
-            LoadAllDiffingWrappers(ApplicationConfigLoader.Instance.CurrentConfig.ApplicationAssemblies);
+            LoadAllDiffingWrappers(ApplicationConfigLoader.Instance.CurrentConfig.ApplicationAssemblies, SynchronizeManager.Instance);
         }
 
         private static readonly ApplicationLoader m_instance = new ApplicationLoader();
@@ -24,7 +25,7 @@ namespace ITJakub.MobileApps.Client.Core
         }
 
 
-        private void LoadAllDiffingWrappers(IEnumerable<string> assemblies)
+        private void LoadAllDiffingWrappers(IEnumerable<string> assemblies, ISynchronizeCommunication applicationCommunication)
         {
             foreach (var assembly in assemblies)
             {
@@ -38,7 +39,7 @@ namespace ITJakub.MobileApps.Client.Core
                         var applicationBase = Activator.CreateInstance(type.AsType()) as ApplicationBase;
                         if (applicationBase != null)
                         {
-                            applicationBase.Assembly = assembly;
+                            applicationBase.ApplicationCommunication = applicationCommunication;
                             m_applications.Add(mobileApplicationAttribute.ApplicationType, applicationBase);
                         }
                         else

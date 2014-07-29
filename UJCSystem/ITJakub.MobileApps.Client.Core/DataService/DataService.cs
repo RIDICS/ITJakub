@@ -9,13 +9,17 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public class DataService : IDataService
     {
-        private LoginManager m_loginManager;
-        private ApplicationManager m_applicationManager;
+        private readonly LoginManager m_loginManager;
+        private readonly ApplicationManager m_applicationManager;
+        private SynchronizeManager m_synchronizeManager;
 
         public DataService()
         {
             m_loginManager = new LoginManager();
             m_applicationManager = new ApplicationManager();
+            m_synchronizeManager = SynchronizeManager.Instance;
+         //   var x = new MobileAppsServiceClient(null, null);
+            
         }
 
         public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
