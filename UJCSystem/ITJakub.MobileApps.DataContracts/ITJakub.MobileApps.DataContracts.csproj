@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateGroupResponse.cs" />
+    <Compile Include="LoginUserResponse.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="GroupDetails.cs" />
     <Compile Include="InstitutionDetails.cs" />

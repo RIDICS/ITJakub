@@ -4,6 +4,7 @@ using ITJakub.MobileApps.DataEntities.Database.Daos;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Exceptions;
 
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
@@ -35,10 +36,24 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
             {
                 return
                     session.CreateCriteria<Group>()
-                    .Add(Restrictions.Eq("EnterCode",enterCode))
+                        .Add(Restrictions.Eq("EnterCode", enterCode))
                         .SetFetchMode("Members", FetchMode.Join)
                         .SetFetchMode("Author", FetchMode.Join)
                         .UniqueResult<Group>();
+            }
+        }
+
+
+        [Transaction(TransactionMode.Requires)]
+        public override object Create(Group group)
+        {
+            try
+            {
+                return base.Create(group);
+            }
+            catch (DataException)
+            {
+                throw new CreateEntityFailedException();
             }
         }
     }
