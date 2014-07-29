@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.Storage;
+﻿using ITJakub.MobileApps.Configuration;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace ITJakub.MobileApps.DataEntities.AzureTables
@@ -7,9 +8,9 @@ namespace ITJakub.MobileApps.DataEntities.AzureTables
     {
         private readonly CloudTableClient m_tableClient;
 
-        public AzureTablesClient(string azureTableConnectionString)
+        public AzureTablesClient(IConnectionStringProvider connectionStringProvider)
         {
-            var storageAccount = CloudStorageAccount.Parse(azureTableConnectionString);
+            var storageAccount = CloudStorageAccount.Parse(connectionStringProvider.GetAzureTableConnectionString());
             m_tableClient = storageAccount.CreateCloudTableClient();
             m_tableClient.DefaultRequestOptions.PayloadFormat = TablePayloadFormat.JsonNoMetadata;
         }

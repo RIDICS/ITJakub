@@ -120,6 +120,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.MobileApps.Configuration\ITJakub.MobileApps.Configuration.csproj">
+      <Project>{7A5C997B-0795-43AA-9C21-C65D8A25821C}</Project>
+      <Name>ITJakub.MobileApps.Configuration</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
