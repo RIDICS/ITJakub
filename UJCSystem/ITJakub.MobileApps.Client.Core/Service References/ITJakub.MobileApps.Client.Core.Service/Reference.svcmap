@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d45cf19f-ca1e-494f-8950-f0f6c9790b5f" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>false</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:22771/MobileAppsService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="MobileAppsService.wsdl" MetadataType="Wsdl" ID="0def2800-a218-4733-b276-ce4795c79c88" SourceId="1" SourceUrl="http://localhost:22771/MobileAppsService.svc?wsdl" />
+    <MetadataFile FileName="MobileAppsService.xsd" MetadataType="Schema" ID="cb47ddc9-d3cd-4113-b173-b378f5dfc6e2" SourceId="1" SourceUrl="http://localhost:22771/MobileAppsService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MobileAppsService.disco" MetadataType="Disco" ID="6ac586ea-8560-43b5-932d-2f60ab4887d1" SourceId="1" SourceUrl="http://localhost:22771/MobileAppsService.svc?disco" />
+    <MetadataFile FileName="MobileAppsService1.xsd" MetadataType="Schema" ID="d2ed0ff9-2492-448e-ba9b-892de1bae4b3" SourceId="1" SourceUrl="http://localhost:22771/MobileAppsService.svc?xsd=xsd2" />
+    <MetadataFile FileName="MobileAppsService2.xsd" MetadataType="Schema" ID="61c3c0a9-0df8-41b1-b532-ffc0d5602541" SourceId="1" SourceUrl="http://localhost:22771/MobileAppsService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

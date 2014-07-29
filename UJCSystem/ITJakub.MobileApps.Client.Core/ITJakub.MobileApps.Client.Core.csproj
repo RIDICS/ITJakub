@@ -113,6 +113,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationManager.cs" />
+    <Compile Include="Service References\Service\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="SynchronizeManager.cs" />
     <Compile Include="Configuration\ApplicationConfig.cs" />
     <Compile Include="ApplicationHostViewModel.cs" />
@@ -153,9 +158,58 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\ServiceReferences.Designer.ClientConfig" />
+    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.CreateGroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.GroupDetails.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.InstitutionDetails.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.LoginUserResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.SynchronizedObjectDetails.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.TaskDetails.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.UserDetails.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Service\MobileAppsService.wsdl" />
+    <None Include="Service References\Service\MobileAppsService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Service\MobileAppsService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Service\MobileAppsService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\Service\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Service\MobileAppsService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Service\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Service\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Service\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

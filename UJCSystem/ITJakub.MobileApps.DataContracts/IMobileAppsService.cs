@@ -10,8 +10,8 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [WebInvoke(Method = "POST",
             BodyStyle = WebMessageBodyStyle.Wrapped,
-            RequestFormat = WebMessageFormat.Xml,
-            ResponseFormat = WebMessageFormat.Xml,
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "institutions/create")]
         void CreateInstitution(Institution institution);
 
