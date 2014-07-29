@@ -12,9 +12,13 @@
             </basicHttpBinding>
           </bindings>
           <client>
-            <endpoint address="http://127.0.0.1:22771/MobileAppsService.svc"
+            <!--<endpoint address="http://127.0.0.1:22771/MobileAppsService.svc"
                 binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IMobileAppsService"
-                contract="IMobileAppsService" />
+                contract="IMobileAppsService" />-->
+            <endpoint address="http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc/"
+                            binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IMobileAppsService"
+                            contract="IMobileAppsService" />
+
           </client>
         </system.serviceModel>
       </configuration>

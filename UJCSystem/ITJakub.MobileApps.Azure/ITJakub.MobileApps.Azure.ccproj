@@ -48,11 +48,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ITJakub.MobileApps.ServiceContent\" />
+    <Folder Include="Profiles" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ITJakub.MobileApps.ServiceContent\diagnostics.wadcfg">
       <SubType>Content</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishProfile Include="Profiles\ITJakubMobileAppsServiceProduction.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
