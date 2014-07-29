@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities;
@@ -21,9 +20,9 @@ namespace ITJakub.MobileApps.Core
         private readonly ApplicationRepository m_applicationRepository;
         private readonly AzureTableTaskDao m_azureTableTaskDao;
         private readonly AzureTableSynchronizedObjectDao m_azureTableSynchronizedObjectDao;
-        private const int MaxAttemptsToSave = 5; //TODO add to config
+        private readonly int m_maxAttemptsToSave;
 
-        public MobileServiceManager(IKernel container)
+        public MobileServiceManager(IKernel container, int maxAttemptsToSave)
         {
             m_userRepository = container.Resolve<UserRepository>();
             m_synchronizedObjectRepository = container.Resolve<SynchronizedObjectRepository>();
@@ -33,6 +32,7 @@ namespace ITJakub.MobileApps.Core
             m_applicationRepository = container.Resolve<ApplicationRepository>();
             m_azureTableTaskDao = container.Resolve<AzureTableTaskDao>();
             m_azureTableSynchronizedObjectDao = container.Resolve<AzureTableSynchronizedObjectDao>();
+            m_maxAttemptsToSave = maxAttemptsToSave;
         }
 
         public void CreateInstitution(Institution institution)
@@ -40,7 +40,7 @@ namespace ITJakub.MobileApps.Core
             var deInstitution = AutoMapper.Mapper.Map<DE.Institution>(institution);
             deInstitution.CreateTime = DateTime.UtcNow;
             var attempt = 0;
-            while (attempt < MaxAttemptsToSave)
+            while (attempt < m_maxAttemptsToSave)
             {
                 try
                 {
@@ -48,7 +48,7 @@ namespace ITJakub.MobileApps.Core
                     m_institutionRepository.Create(deInstitution);
                     return;
                 }
-                catch (CreateEntityFailedException ex)
+                catch (CreateEntityFailedException)
                 {
                     ++attempt;
                 }
@@ -130,7 +130,7 @@ namespace ITJakub.MobileApps.Core
             deGroup.Author = user;
             deGroup.CreateTime = DateTime.UtcNow;
             var attempt = 0;
-            while (attempt < MaxAttemptsToSave)
+            while (attempt < m_maxAttemptsToSave)
             {
                 try
                 {
@@ -138,7 +138,7 @@ namespace ITJakub.MobileApps.Core
                     var gid = m_groupRepository.Create(deGroup);
                     return new CreateGroupResponse() {EnterCode = m_groupRepository.FindById(gid).EnterCode};
                 }
-                catch (CreateEntityFailedException ex)
+                catch (CreateEntityFailedException)
                 {
                     ++attempt;
                 }
