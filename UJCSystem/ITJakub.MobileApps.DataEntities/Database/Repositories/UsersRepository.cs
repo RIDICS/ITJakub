@@ -10,9 +10,9 @@ using NHibernate.Exceptions;
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
     [Transactional]
-    public class UserRepository : NHibernateTransactionalDao<User>
+    public class UsersRepository : NHibernateTransactionalDao<User>
     {
-        public UserRepository(ISessionManager sessManager) : base(sessManager)
+        public UsersRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
 

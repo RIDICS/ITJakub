@@ -12,7 +12,7 @@ namespace ITJakub.MobileApps.Core
 {
     public class MobileServiceManager : IMobileAppsService
     {
-        private readonly UserRepository m_userRepository;
+        private readonly UsersRepository m_usersRepository;
         private readonly SynchronizedObjectRepository m_synchronizedObjectRepository;
         private readonly InstitutionRepository m_institutionRepository;
         private readonly GroupRepository m_groupRepository;
@@ -26,7 +26,7 @@ namespace ITJakub.MobileApps.Core
 
         public MobileServiceManager(IKernel container, int maxAttemptsToSave, int timeToTokenExpiration)
         {
-            m_userRepository = container.Resolve<UserRepository>();
+            m_usersRepository = container.Resolve<UsersRepository>();
             m_synchronizedObjectRepository = container.Resolve<SynchronizedObjectRepository>();
             m_institutionRepository = container.Resolve<InstitutionRepository>();
             m_groupRepository = container.Resolve<GroupRepository>();
@@ -69,7 +69,7 @@ namespace ITJakub.MobileApps.Core
         public void AddUserToInstitution(string enterCode, string userId)
         {
             var institution = m_institutionRepository.FindByEnterCode(enterCode);
-            var user = m_userRepository.FindById(long.Parse(userId));
+            var user = m_usersRepository.FindById(long.Parse(userId));
             user.Institution = institution;
             m_groupRepository.Update(user);
         }
@@ -83,7 +83,7 @@ namespace ITJakub.MobileApps.Core
             deUser.CommunicationToken = Guid.NewGuid().ToString();
             try
             {
-                m_userRepository.Create(deUser);
+                m_usersRepository.Create(deUser);
             }
             catch (CreateEntityFailedException)
             {
@@ -94,17 +94,17 @@ namespace ITJakub.MobileApps.Core
         public LoginUserResponse LoginUser(UserLogin userLogin)
         {
             m_authenticationManager.AuthenticateByProvider(userLogin.Email, userLogin.AccessToken, userLogin.AuthenticationProvider); //validate user's e-mail via authentication provider 
-            var user = m_userRepository.FindByEmailAndProvider(userLogin.Email, (byte) userLogin.AuthenticationProvider); //TODO if e-mail was valid for provider, check if user exists (was registered with this e-mail and provider)
+            var user = m_usersRepository.FindByEmailAndProvider(userLogin.Email, (byte) userLogin.AuthenticationProvider); //TODO if e-mail was valid for provider, check if user exists (was registered with this e-mail and provider)
             user.AuthenticationProviderToken = userLogin.AccessToken; //actualize access token
             user.CommunicationToken = Guid.NewGuid().ToString(); //on every login generate new token
             user.CommunicationTokenCreateTime = DateTime.UtcNow;
-            m_userRepository.Update(user);
+            m_usersRepository.Update(user);
             return new LoginUserResponse() {CommunicationToken = user.CommunicationToken, EstimatedExpirationTime = user.CommunicationTokenCreateTime.Add(m_timeToTokenExpiration)};
         }
 
         public UserDetails GetUserDetails(string userId)
         {
-            var user = m_userRepository.LoadUserWithDetails(long.Parse(userId));
+            var user = m_usersRepository.LoadUserWithDetails(long.Parse(userId));
             return AutoMapper.Mapper.Map<UserDetails>(user);
         }
 
@@ -123,7 +123,7 @@ namespace ITJakub.MobileApps.Core
         public void CreateTaskForApplication(string applicationId, string userId, Task apptask)
         {
             var application = m_applicationRepository.FindById(long.Parse(applicationId));
-            var user = m_userRepository.FindById(long.Parse(userId));
+            var user = m_usersRepository.FindById(long.Parse(userId));
             var deTask = AutoMapper.Mapper.Map<DE.Task>(apptask);
             deTask.Application = application;
             deTask.Author = user;
@@ -134,7 +134,7 @@ namespace ITJakub.MobileApps.Core
 
         public CreateGroupResponse CreateGroup(string userId, Group group)
         {
-            var user = m_userRepository.FindById(long.Parse(userId));
+            var user = m_usersRepository.FindById(long.Parse(userId));
             var deGroup = AutoMapper.Mapper.Map<DE.Group>(group) ?? new DE.Group();
             deGroup.Author = user;
             deGroup.CreateTime = DateTime.UtcNow;
@@ -158,7 +158,7 @@ namespace ITJakub.MobileApps.Core
         public void AssignTaskToGroup(string groupId, string taskId, string userId)
         {
             var group = m_groupRepository.FindById(long.Parse(groupId));
-            var user = m_userRepository.FindById(long.Parse(userId));
+            var user = m_usersRepository.FindById(long.Parse(userId));
             if (!user.Equals(group.Author)) return;
             var task = m_taskRepository.FindById(long.Parse(taskId));
             group.Task = task;
@@ -168,7 +168,7 @@ namespace ITJakub.MobileApps.Core
         public void AddUserToGroup(string enterCode, string userId)
         {
             var group = m_groupRepository.FindByEnterCode(enterCode);
-            var user = m_userRepository.FindById(long.Parse(userId));
+            var user = m_usersRepository.FindById(long.Parse(userId));
             group.Members.Add(user);
             m_groupRepository.Update(group);
         }
@@ -196,7 +196,7 @@ namespace ITJakub.MobileApps.Core
         public void CreateSynchronizedObject(string groupId, string applicationId, string userId, SynchronizedObject synchronizedObject)
         {
             var application = m_applicationRepository.FindById(long.Parse(applicationId));
-            var user = m_userRepository.FindById(long.Parse(userId));
+            var user = m_usersRepository.FindById(long.Parse(userId));
             var group = m_groupRepository.FindById(long.Parse(userId));
             var deSyncObject = AutoMapper.Mapper.Map<DE.SynchronizedObject>(synchronizedObject);
             deSyncObject.Application = application;
