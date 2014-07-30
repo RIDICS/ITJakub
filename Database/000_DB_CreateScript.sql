@@ -52,6 +52,7 @@ CREATE TABLE [User](
     [AuthenticationProvider] [tinyint] NOT NULL,
     [AuthenticationProviderToken] [varchar] (255) NOT NULL,
     [CommunicationToken] [varchar] (255),
+    [CommunicationTokenCreateTime] [datetime],
     [InstitutionId] [bigint],
     [CreateTime] [datetime] NOT NULL,
     CONSTRAINT [Uniq_User] UNIQUE ([Email],[AuthenticationProvider]),
