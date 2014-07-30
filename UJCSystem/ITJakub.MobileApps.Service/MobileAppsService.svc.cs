@@ -33,9 +33,9 @@ namespace ITJakub.MobileApps.Service
             m_manager.CreateUser(authenticationProvider, authenticationProviderToken, user);
         }
 
-        public LoginUserResponse LoginUser(string authenticationProvider, string authenticationProviderToken)
+        public LoginUserResponse LoginUser(UserLogin userLogin)
         {
-            return m_manager.LoginUser(authenticationProvider, authenticationProviderToken);
+            return m_manager.LoginUser(userLogin);
         }
 
         public UserDetails GetUserDetails(string userId)

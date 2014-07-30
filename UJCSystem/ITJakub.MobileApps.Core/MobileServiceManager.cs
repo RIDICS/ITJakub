@@ -21,8 +21,10 @@ namespace ITJakub.MobileApps.Core
         private readonly AzureTableTaskDao m_azureTableTaskDao;
         private readonly AzureTableSynchronizedObjectDao m_azureTableSynchronizedObjectDao;
         private readonly int m_maxAttemptsToSave;
+        private readonly TimeSpan m_timeToTokenExpiration;
+        private readonly AuthenticationManager m_authenticationManager;
 
-        public MobileServiceManager(IKernel container, int maxAttemptsToSave)
+        public MobileServiceManager(IKernel container, int maxAttemptsToSave, int timeToTokenExpiration)
         {
             m_userRepository = container.Resolve<UserRepository>();
             m_synchronizedObjectRepository = container.Resolve<SynchronizedObjectRepository>();
@@ -32,7 +34,9 @@ namespace ITJakub.MobileApps.Core
             m_applicationRepository = container.Resolve<ApplicationRepository>();
             m_azureTableTaskDao = container.Resolve<AzureTableTaskDao>();
             m_azureTableSynchronizedObjectDao = container.Resolve<AzureTableSynchronizedObjectDao>();
+            m_authenticationManager = container.Resolve<AuthenticationManager>();
             m_maxAttemptsToSave = maxAttemptsToSave;
+            m_timeToTokenExpiration = new TimeSpan(0, 0, timeToTokenExpiration);
         }
 
         public void CreateInstitution(Institution institution)
@@ -74,9 +78,9 @@ namespace ITJakub.MobileApps.Core
         {
             var deUser = AutoMapper.Mapper.Map<DE.User>(user);
             deUser.CreateTime = DateTime.UtcNow;
-            deUser.AuthenticationProvider = (byte) Enum.Parse(typeof (AuthenticationProvider), authenticationProvider.ToLower());
+            deUser.AuthenticationProvider = (byte) Enum.Parse(typeof (AuthenticationProviders), authenticationProvider.ToLower());
             deUser.AuthenticationProviderToken = authenticationProviderToken;
-            deUser.CommunicationToken = Guid.NewGuid().ToString(); //TODO change to encode some user profile values to token
+            deUser.CommunicationToken = Guid.NewGuid().ToString();
             try
             {
                 m_userRepository.Create(deUser);
@@ -87,10 +91,15 @@ namespace ITJakub.MobileApps.Core
             }
         }
 
-        public LoginUserResponse LoginUser(string authenticationProvider, string authenticationProviderToken)
+        public LoginUserResponse LoginUser(UserLogin userLogin)
         {
-            var provider = (byte) Enum.Parse(typeof (AuthenticationProvider), authenticationProvider.ToLower());
-            return new LoginUserResponse() {CommunicationToken = m_userRepository.GetCommunicationToken(provider, authenticationProviderToken)};
+            m_authenticationManager.AuthenticateByProvider(userLogin.Email, userLogin.AccessToken, userLogin.AuthenticationProvider); //validate user's e-mail via authentication provider 
+            var user = m_userRepository.FindByEmailAndProvider(userLogin.Email, (byte) userLogin.AuthenticationProvider); //TODO if e-mail was valid for provider, check if user exists (was registered with this e-mail and provider)
+            user.AuthenticationProviderToken = userLogin.AccessToken; //actualize access token
+            user.CommunicationToken = Guid.NewGuid().ToString(); //on every login generate new token
+            user.CommunicationTokenCreateTime = DateTime.UtcNow;
+            m_userRepository.Update(user);
+            return new LoginUserResponse() {CommunicationToken = user.CommunicationToken, EstimatedExpirationTime = user.CommunicationTokenCreateTime.Add(m_timeToTokenExpiration)};
         }
 
         public UserDetails GetUserDetails(string userId)

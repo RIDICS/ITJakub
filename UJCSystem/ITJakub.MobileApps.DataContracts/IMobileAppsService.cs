@@ -44,7 +44,7 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "users/create?authprovider={authenticationProvider}&token={authenticationProviderToken}")]
+            UriTemplate = "users/create?authprovider={authenticationProvider}&token={accessToken}")]
         void CreateUser(string authenticationProvider, string authenticationProviderToken, User user);
 
         [OperationContract]
@@ -52,8 +52,8 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "users/login?authprovider={authenticationProvider}&token={authenticationProviderToken}")]
-        LoginUserResponse LoginUser(string authenticationProvider, string authenticationProviderToken);
+            UriTemplate = "users/login")]
+        LoginUserResponse LoginUser(UserLogin userLogin);
 
 
         [OperationContract]

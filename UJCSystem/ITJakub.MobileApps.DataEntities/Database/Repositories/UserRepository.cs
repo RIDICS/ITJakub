@@ -56,5 +56,30 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 throw new CreateEntityFailedException();
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual User FindByEmailAndProvider(string email, byte authenticationProvider)
+        {
+            using (var session = GetSession())
+            {
+                return session.CreateCriteria<User>()
+                    .Add(Restrictions.Eq("Email", email))
+                    .Add(Restrictions.Eq("AuthenticationProvider", authenticationProvider))
+                    .UniqueResult<User>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual bool IsCommunicationTokenValid(string communicationToken, TimeSpan expirationTime)
+        {
+            using (var session = GetSession())
+            {
+                var user= session.CreateCriteria<User>()
+                    .Add(Restrictions.Eq("CommunicationToken", communicationToken))
+                    .UniqueResult<User>();
+                if (user == null) return false;
+                return user.CommunicationTokenCreateTime.Add(expirationTime) <= DateTime.UtcNow;
+            }
+        }
     }
 }

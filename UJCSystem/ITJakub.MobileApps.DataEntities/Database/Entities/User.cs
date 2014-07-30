@@ -15,14 +15,19 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual byte AuthenticationProvider { get; set; }
         public virtual string AuthenticationProviderToken { get; set; }
         public virtual string CommunicationToken { get; set; }
-        public virtual DateTime CreateTime { get; set; }
+        public virtual DateTime CreateTime { get; set; }    //DateTime of user registration
+        public virtual DateTime CommunicationTokenCreateTime { get; set; } //TODO add to DB
 
 
         public virtual IList<Group> CreatedGroups { get; set; }     //Groups made by this user
         public virtual IList<SynchronizedObject> CreatedSynchronizedObjects { get; set; } //Sync objects made by this user
         public virtual IList<Task> CreatedTasks { get; set; }   //Tasks made by this user
 
-        public virtual IList<Group> MemberOfGroups { get; set; } //Groups where is this user as a member
+        public virtual IList<Group> MemberOfGroups { get; set; }
+    
+
+
+//Groups where is this user as a member
 
         public virtual bool Equals(User other)
         {

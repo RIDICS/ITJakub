@@ -70,7 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticationProvider.cs" />
+    <Compile Include="AuthenticationManager.cs" />
     <Compile Include="AutoMapperProfiles\GroupDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
     <Compile Include="AutoMapperProfiles\InstitutionDetailsProfile.cs" />
