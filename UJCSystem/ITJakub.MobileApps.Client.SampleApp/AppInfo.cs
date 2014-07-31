@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Shared;
 
@@ -15,7 +14,7 @@ namespace ITJakub.MobileApps.Client.SampleApp
 
         public override ApplicationBaseViewModel ApplicationViewModel
         {
-            get { return new SampleViewModel(); }
+            get { return new SampleViewModel(new SampleDataService(ApplicationCommunication)); }
         }
 
         public override Type ApplicationDataTemplate

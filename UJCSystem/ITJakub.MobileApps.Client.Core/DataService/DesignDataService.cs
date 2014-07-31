@@ -10,7 +10,12 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public class DesignDataService : IDataService
     {
-        public void LoginAsync(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
+        public void Login(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateUser(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
         {
             throw new NotImplementedException();
         }

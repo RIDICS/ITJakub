@@ -1,7 +1,7 @@
 ﻿<Page
     x:Name="PageRoot"
-    x:Class="ITJakub.MobileApps.Client.MainApp.View.LoginView"
-    DataContext="{Binding LoginViewModel, Source={StaticResource Locator}}"
+    x:Class="ITJakub.MobileApps.Client.MainApp.View.RegistrationView"
+    DataContext="{Binding RegistrationViewModel, Source={StaticResource Locator}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -46,7 +46,7 @@
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
                     AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock Text="Přihlášení" 
+            <TextBlock Text="Registrace uživatele" 
                        Style="{StaticResource HeaderTextBlockStyle}" 
                        Grid.Column="1" 
                        IsHitTestVisible="false" 
@@ -58,7 +58,7 @@
 
         <TextBlock Grid.Row="1"
                    Style="{StaticResource SubheaderTextBlockStyle}"
-                   Text="Zvolte si službu, pomocí které jste provedli registraci."
+                   Text="Zvolte si službu, pomocí které se budete přihlašovat."
                    Margin="120 0 0 0"/>
         
         <ListView Grid.Row="1"
@@ -68,7 +68,7 @@
                   Style="{StaticResource HorizontalListView}"
                   HorizontalAlignment="Center"
                   x:Name="MenuListView"
-                  IsEnabled="{Binding LoggingIn, Converter={StaticResource BooleanNegationConverter}}">
+                  IsEnabled="{Binding RegistrationInProgress, Converter={StaticResource BooleanNegationConverter}}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical"
@@ -109,21 +109,11 @@
                           Margin="20"
                           Foreground="Black"
                           IsActive="True"/>
-            <TextBlock Text="Přihlašování"
+            <TextBlock Text="Registrace"
                        Foreground="Black"
                        VerticalAlignment="Center"
                        FontSize="30"/>
         </StackPanel>
         
-        <Button Grid.Row="2"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Content="Registrovat se"
-                Background="#3468CD"
-                Width="200"
-                Height="50"
-                BorderThickness="0"
-                Command="{Binding RegistrationCommand}"
-                />
     </Grid>
 </Page>

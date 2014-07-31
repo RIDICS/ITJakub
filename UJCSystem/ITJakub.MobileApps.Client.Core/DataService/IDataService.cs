@@ -10,7 +10,8 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public interface IDataService
     {
-        void LoginAsync(LoginProvider loginProvider, Action<UserInfo, Exception> callback);
+        void Login(LoginProvider loginProvider, Action<UserInfo, Exception> callback);
+        void CreateUser(LoginProvider loginProvider, Action<UserInfo, Exception> callback);
         void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback);
         void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback);
         void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback);

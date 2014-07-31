@@ -115,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationManager.cs" />
+    <Compile Include="Manager\FacebookManager.cs" />
+    <Compile Include="Manager\GoogleManager.cs" />
+    <Compile Include="Manager\LiveIdManager.cs" />
     <Compile Include="Service References\Service\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

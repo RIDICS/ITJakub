@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.ServiceModel;
+using System.Collections.ObjectModel;
+using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.DataContracts;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 
@@ -11,7 +13,6 @@ namespace ITJakub.MobileApps.Client.Core
         private static readonly SynchronizeManager m_instance = new SynchronizeManager();
         private readonly CommunicationManager m_communicationManager = new CommunicationManager();
 
-
         private SynchronizeManager()
         {
         }
@@ -21,36 +22,64 @@ namespace ITJakub.MobileApps.Client.Core
             get { return m_instance; }
         }
 
+        public string UserId { get; set; }
+        public string GroupId { get; set; }
+
         public void SendObject(ApplicationType applicationType, string objectType, string objectValue)
         {
-            m_communicationManager.SendObject(); //TODO komu, jak, atd...
+            m_communicationManager.SendObject(applicationType, GroupId, UserId, objectType, objectValue);
         }
 
-        public List<string> GetSynchronizedObjects(ApplicationType applicationType, DateTime from,
+        public ObservableCollection<ObjectDetails> GetSynchronizedObjects(ApplicationType applicationType, DateTime since,
             string objectType = null)
         {
-            return m_communicationManager.GetObjects(); //Jake, prokoho, atd...
+            var dateTimeString = since.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
+            var x = m_communicationManager.GetObjects(applicationType, GroupId, objectType, dateTimeString);
+            var list = new ObservableCollection<ObjectDetails>();
+            foreach (var item in x)
+            {
+                list.Add(new ObjectDetails
+                {
+                    Author = new AuthorInfo
+                    {
+                        Email = item.Author.Email,
+                        FirstName = item.Author.FirstName,
+                        LastName = item.Author.LastName
+                    },
+                    CreateTime = item.CreateTime,
+                    Data = item.SynchronizedObject.Data,
+                    Id = item.Id
+                });
+            }
+            return list;
         }
     }
 
 
     public class CommunicationManager
     {
-        private ClientBase<object> m_client;
+        private readonly MobileAppsServiceClient m_client;
 
         public CommunicationManager()
         {
-            //m_client = new ClientBase<object>(); //TODO swap for service reference            
+            m_client = new MobileAppsServiceClient();
         }
 
-        public void SendObject()
+        public async void SendObject(ApplicationType applicationType, string groupId, string userId, string objectType, string objectValue)
         {
-            throw new NotImplementedException();
+            var applicationId = ((int) applicationType).ToString();
+            var synchronizedObject = new SynchronizedObject
+            {
+                ObjectType = objectType,
+                Data = objectValue
+            };
+            await m_client.CreateSynchronizedObjectAsync(groupId, applicationId, userId, synchronizedObject);
         }
 
-        public List<string> GetObjects()
+        public IEnumerable<SynchronizedObjectDetails> GetObjects(ApplicationType applicationType, string groupId, string objectType, string since)
         {
-            throw new NotImplementedException();
+            var applicationId = ((int) applicationType).ToString();
+            return m_client.GetSynchronizedObjectsAsync(groupId, applicationId, objectType, since).Result;
         }
     }
 }

@@ -10,7 +10,6 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public class DataService : IDataService
     {
-        private readonly LoginManager m_loginManager;
         private readonly ApplicationManager m_applicationManager;
         private SynchronizeManager m_synchronizeManager;
         private MobileAppsServiceClient m_serviceClient;
@@ -18,7 +17,6 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         public DataService()
         {
             m_serviceClient = new MobileAppsServiceClient();
-            m_loginManager = new LoginManager();
             m_applicationManager = new ApplicationManager();
             m_synchronizeManager = SynchronizeManager.Instance;
         }
@@ -31,6 +29,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         public void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback)
         {
             //TODO load messages from server
+            //var messageList = m_synchronizeManager.GetSynchronizedObjects(ApplicationType.Chat, new DateTime(), "ChatMessage");
             callback(new ObservableCollection<MessageViewModel>(), null);
         }
 
@@ -74,26 +73,16 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             callback(list, null);
         }
 
-        public async void LoginAsync(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
+        public void Login(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
         {
-            UserInfo userInfo = null;
-            switch (loginProvider)
-            {
-                case LoginProvider.LiveId:
-                    userInfo = await m_loginManager.LoginLiveId();
-                    break;
-                case LoginProvider.Facebook:
-                    userInfo = await m_loginManager.LoginFacebookAsync();
-                    break;
-                case LoginProvider.Google:
-                    userInfo = await m_loginManager.LoginGoogle();
-                    break;
-            }
+            var loginManager = LoginManager.CreateLoginManager(loginProvider);
+            loginManager.Login(callback);
+        }
 
-            if (userInfo != null)
-            {
-                callback(userInfo, null);
-            }
+        public void CreateUser(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
+        {
+            var loginManager = LoginManager.CreateLoginManager(loginProvider);
+            loginManager.Login(callback);
         }
     }
 }

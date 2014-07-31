@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using ITJakub.MobileApps.Client.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Shared.Communication
 {
@@ -9,7 +10,7 @@ namespace ITJakub.MobileApps.Client.Shared.Communication
         void SendObject(ApplicationType applicationType, string objectType, string objectValue);
 
 
-        List<string> GetSynchronizedObjects(ApplicationType applicationType, DateTime from,string objectType = null);
+        ObservableCollection<ObjectDetails> GetSynchronizedObjects(ApplicationType applicationType, DateTime from, string objectType = null);
 
         //todo more required methods
 

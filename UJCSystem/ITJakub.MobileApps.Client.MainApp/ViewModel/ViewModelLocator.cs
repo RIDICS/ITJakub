@@ -47,6 +47,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             SimpleIoc.Default.Register<INavigationService, NavigationService>();
             SimpleIoc.Default.Register<LoginViewModel>();
+            SimpleIoc.Default.Register<RegistrationViewModel>();
             SimpleIoc.Default.Register<ChatViewModel>();
             SimpleIoc.Default.Register<GroupListViewModel>();
             SimpleIoc.Default.Register<ApplicationHostViewModel>();
@@ -60,6 +61,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 return ServiceLocator.Current.GetInstance<LoginViewModel>();
             }
+        }
+
+        public RegistrationViewModel RegistrationViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<RegistrationViewModel>(); }
         }
 
         public ChatViewModel ChatViewModel
