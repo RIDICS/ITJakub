@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Castle.MicroKernel;
+using ITJakub.MobileApps.Core.Authentication;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
@@ -24,7 +25,7 @@ namespace ITJakub.MobileApps.Core
         private readonly TimeSpan m_timeToTokenExpiration;
         private readonly AuthenticationManager m_authenticationManager;
 
-        public MobileServiceManager(IKernel container, int maxAttemptsToSave, int timeToTokenExpiration)
+        public MobileServiceManager(IKernel container, int maxAttemptsToSave, TimeSpan timeToTokenExpiration)
         {
             m_usersRepository = container.Resolve<UsersRepository>();
             m_synchronizedObjectRepository = container.Resolve<SynchronizedObjectRepository>();
@@ -36,7 +37,7 @@ namespace ITJakub.MobileApps.Core
             m_azureTableSynchronizedObjectDao = container.Resolve<AzureTableSynchronizedObjectDao>();
             m_authenticationManager = container.Resolve<AuthenticationManager>();
             m_maxAttemptsToSave = maxAttemptsToSave;
-            m_timeToTokenExpiration = new TimeSpan(0, 0, timeToTokenExpiration);
+            m_timeToTokenExpiration = timeToTokenExpiration;
         }
 
         public void CreateInstitution(Institution institution)
@@ -95,7 +96,7 @@ namespace ITJakub.MobileApps.Core
         {
             m_authenticationManager.AuthenticateByProvider(userLogin.Email, userLogin.AccessToken, userLogin.AuthenticationProvider); //validate user's e-mail via authentication provider 
             var user = m_usersRepository.FindByEmailAndProvider(userLogin.Email, (byte) userLogin.AuthenticationProvider); //TODO if e-mail was valid for provider, check if user exists (was registered with this e-mail and provider)
-            user.AuthenticationProviderToken = userLogin.AccessToken; //actualize access token
+            if (!userLogin.AuthenticationProvider.Equals(AuthenticationProviders.ItJakub))user.AuthenticationProviderToken = userLogin.AccessToken; //actualize access token
             user.CommunicationToken = Guid.NewGuid().ToString(); //on every login generate new token
             user.CommunicationTokenCreateTime = DateTime.UtcNow;
             m_usersRepository.Update(user);

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationProviders.cs" />
+    <Compile Include="AuthException.cs" />
     <Compile Include="CreateGroupResponse.cs" />
     <Compile Include="LoginUserResponse.cs" />
     <Compile Include="Task.cs" />

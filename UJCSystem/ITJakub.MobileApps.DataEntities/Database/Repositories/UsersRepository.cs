@@ -81,5 +81,18 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 return user.CommunicationTokenCreateTime.Add(expirationTime) <= DateTime.UtcNow;
             }
         }
+
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual User FindByAuthenticationProviderToken(string token)
+        {
+            using (var session = GetSession())
+            {
+                return session.CreateCriteria<User>()
+                    .Add(Restrictions.Eq("AuthenticationProviderToken", token))
+                    .UniqueResult<User>();
+            }
+
+        }
     }
 }
