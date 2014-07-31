@@ -1,62 +1,40 @@
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
-using ITJakub.MobileApps.Client.MainApp.View;
+using ITJakub.MobileApps.Client.Core.Manager;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
+    /// This class contains properties that a View can data bind to.
     /// <para>
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class LoginViewModel : ViewModelBase
+    public class RegistrationViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private readonly RelayCommand<ItemClickEventArgs> m_itemClickCommand;
+        private RelayCommand<ItemClickEventArgs> m_itemClickCommand;
         private Visibility m_loginDialogVisibility;
-        private bool m_loggingIn;
-        private RelayCommand m_registrationCommand;
+        private bool m_registrationInProgress;
 
         /// <summary>
-        /// Initializes a new instance of the LoginViewModel class.
+        /// Initializes a new instance of the RegistrationViewModel class.
         /// </summary>
-        public LoginViewModel(IDataService dataService, INavigationService navigationService)
+        public RegistrationViewModel(IDataService dataService, INavigationService navigationService)
         {
-            ////if (IsInDesignMode)
-            ////{
-            ////    // Code runs in Blend --> create design time data.
-            ////}
-            ////else
-            ////{
-            ////    // Code runs "for real"
-            ////}
-
             m_dataService = dataService;
             m_navigationService = navigationService;
-            LoggingIn = false;
+            RegistrationInProgress = false;
             m_itemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
-            m_registrationCommand = new RelayCommand(() => m_navigationService.Navigate(typeof(RegistrationView)));
         }
 
         public RelayCommand<ItemClickEventArgs> ItemClickCommand
         {
             get { return m_itemClickCommand; }
-        }
-
-        public RelayCommand RegistrationCommand
-        {
-            get { return m_registrationCommand; }
         }
 
         public Visibility LoginDialogVisibility
@@ -69,12 +47,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public bool LoggingIn
+        public bool RegistrationInProgress
         {
-            get { return m_loggingIn; }
+            get { return m_registrationInProgress; }
             set
             {
-                m_loggingIn = value;
+                m_registrationInProgress = value;
                 LoginDialogVisibility = value ? Visibility.Visible : Visibility.Collapsed;
                 RaisePropertyChanged();
             }
@@ -86,14 +64,19 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             if (item == null)
                 return;
 
-            LoggingIn = true;
-            m_dataService.Login(item.LoginProvider, (info, exception) =>
+            Register(item.LoginProvider);
+        }
+
+        private void Register(LoginProvider loginProvider)
+        {
+            RegistrationInProgress = true;
+            m_dataService.CreateUser(loginProvider, (info, exception) =>
             {
-                LoggingIn = false;
+                RegistrationInProgress = false;
                 if (exception != null)
                     return;
                 if (info.Success)
-                    m_navigationService.Navigate(typeof(GroupListView));
+                    m_navigationService.GoBack();
             });
         }
     }

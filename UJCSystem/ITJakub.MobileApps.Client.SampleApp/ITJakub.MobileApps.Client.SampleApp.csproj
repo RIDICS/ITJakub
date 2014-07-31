@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleDataService.cs" />
     <Compile Include="SampleView.xaml.cs">
       <DependentUpon>SampleView.xaml</DependentUpon>
     </Compile>

@@ -108,6 +108,8 @@
     <Compile Include="ApplicationType.cs" />
     <Compile Include="Communication\ApplicationCommunicationManager.cs" />
     <Compile Include="Communication\ISynchronizeCommunication.cs" />
+    <Compile Include="Data\AuthorInfo.cs" />
+    <Compile Include="Data\ObjectDetails.cs" />
     <Compile Include="MobileApplicationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
