@@ -41,9 +41,9 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
             {
                 return base.Create(instance);
             }
-            catch (DataException)
+            catch (DataException ex)
             {
-                throw new CreateEntityFailedException();
+                throw new CreateEntityFailedException(ex.Message, ex.InnerException);
             }
         }
     }

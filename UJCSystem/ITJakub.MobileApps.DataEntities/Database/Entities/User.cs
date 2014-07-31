@@ -17,6 +17,8 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual string CommunicationToken { get; set; }
         public virtual DateTime CreateTime { get; set; }    //DateTime of user registration
         public virtual DateTime CommunicationTokenCreateTime { get; set; } //TODO add to DB
+        public virtual string PasswordHash { get; set; }
+        public virtual string Salt { get; set; }
 
 
         public virtual IList<Group> CreatedGroups { get; set; }     //Groups made by this user
@@ -24,7 +26,6 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
         public virtual IList<Task> CreatedTasks { get; set; }   //Tasks made by this user
 
         public virtual IList<Group> MemberOfGroups { get; set; }
-    
 
 
 //Groups where is this user as a member

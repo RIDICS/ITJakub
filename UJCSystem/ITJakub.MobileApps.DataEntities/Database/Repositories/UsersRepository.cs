@@ -51,9 +51,9 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
             {
                 return base.Create(instance);
             }
-            catch (DataException)
+            catch (DataException ex)
             {
-                throw new CreateEntityFailedException();
+                throw new CreateEntityFailedException(ex.Message,ex.InnerException);
             }
         }
 
@@ -70,15 +70,13 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual bool IsCommunicationTokenValid(string communicationToken, TimeSpan expirationTime)
+        public virtual User GetUserByCommunicationToken(string communicationToken)
         {
             using (var session = GetSession())
             {
-                var user= session.CreateCriteria<User>()
+                return session.CreateCriteria<User>()
                     .Add(Restrictions.Eq("CommunicationToken", communicationToken))
                     .UniqueResult<User>();
-                if (user == null) return false;
-                return user.CommunicationTokenCreateTime.Add(expirationTime) <= DateTime.UtcNow;
             }
         }
 

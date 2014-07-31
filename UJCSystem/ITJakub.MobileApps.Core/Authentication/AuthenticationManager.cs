@@ -1,5 +1,4 @@
-﻿using System;
-using ITJakub.MobileApps.DataContracts;
+﻿using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
 
 namespace ITJakub.MobileApps.Core.Authentication
@@ -7,27 +6,28 @@ namespace ITJakub.MobileApps.Core.Authentication
     public class AuthenticationManager
     {
         private readonly AuthProviderDirector m_authDirector;
+        private readonly CommunicationTokenManager m_communicationTokenManager;
         private readonly UsersRepository m_usersRepository;
-        private readonly TimeSpan m_timeToTokenExpiration;
 
-        public AuthenticationManager(AuthProviderDirector authDirector, UsersRepository usersRepository, TimeSpan timeToTokenExpiration)
+        public AuthenticationManager(AuthProviderDirector authDirector, UsersRepository usersRepository, CommunicationTokenManager communicationTokenManager)
         {
             m_authDirector = authDirector;
             m_usersRepository = usersRepository;
-            m_timeToTokenExpiration = timeToTokenExpiration;
+            m_communicationTokenManager = communicationTokenManager;
         }
 
 
         public void AuthenticateByCommunicationToken(string communicationToken)
         {
-            if (!m_usersRepository.IsCommunicationTokenValid(communicationToken, m_timeToTokenExpiration))
+            var user = m_usersRepository.GetUserByCommunicationToken(communicationToken);
+            if (user == null || !m_communicationTokenManager.IsCommunicationTokenActive(user.CommunicationTokenCreateTime))
                 throw new AuthException("Recieved token expired or is not valid. Login again please...");
         }
 
-        public void AuthenticateByProvider(string email, string accessToken, AuthenticationProviders authenticationProvider)
+        public void AuthenticateByProvider(string email, string authenticationToken, AuthenticationProviders authenticationProvider)
         {
-            var providerEmail = m_authDirector.GetProvider(authenticationProvider).GetEmail(accessToken).ToLower();
-            if (!email.ToLower().Equals(providerEmail)) throw new AuthException("Users e-mail is not valid.");
+            if (!m_authDirector.GetProvider(authenticationProvider).Authenticate(authenticationToken, email))
+                throw new AuthException("Users e-mail is not valid.");
         }
     }
 }

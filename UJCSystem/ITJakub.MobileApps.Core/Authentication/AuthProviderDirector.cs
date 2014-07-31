@@ -25,7 +25,8 @@ namespace ITJakub.MobileApps.Core.Authentication
 
         public IAuthProvider GetProvider(AuthenticationProviders providerType)
         {
-            if(!m_authProviders.ContainsKey(providerType)) throw new ArgumentException(string.Format("This type: '{0}' of provider does not exist!",providerType));
+            if(!m_authProviders.ContainsKey(providerType)) 
+                throw new ArgumentException(string.Format("This type: '{0}' of provider does not exist!",providerType));
             return m_authProviders[providerType];
         }
     }

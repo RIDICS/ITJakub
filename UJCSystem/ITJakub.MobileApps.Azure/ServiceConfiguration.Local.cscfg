@@ -4,6 +4,7 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=mobileazuretables;AccountKey=bNfxZTdWNCFclatzPO9/g1ak2BTrxz+RQGcGnHGw+2WVNqialU3GfmZeehKpiBVQlx3SxTvE1A1TW4f2yUkXQQ==" />
+      <Setting name="azureTableConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

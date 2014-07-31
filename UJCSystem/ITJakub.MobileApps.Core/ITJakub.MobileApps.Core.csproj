@@ -118,10 +118,12 @@
     <Compile Include="AutoMapperProfiles\UserBasicDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
+    <Compile Include="CommunicationTokenManager.cs" />
     <Compile Include="EnterCodeGenerator.cs" />
     <Compile Include="Authentication\IAuthProvider.cs" />
     <Compile Include="MobileServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.MobileApps.Core.Container.Config">

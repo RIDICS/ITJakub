@@ -3,6 +3,7 @@
 namespace ITJakub.MobileApps.DataContracts
 {
     [DataContract]
+    [KnownType(typeof(UserWithSalt))]
     public class User
     {
         [DataMember]
@@ -13,5 +14,15 @@ namespace ITJakub.MobileApps.DataContracts
 
         [DataMember]
         public string Email { get; set; }
+    }
+
+    [DataContract]
+    public class UserWithSalt : User
+    {
+        [DataMember]
+        public string Salt { get; set; }
+
+        [DataMember]
+        public string PasswordHash { get; set; }
     }
 }

@@ -3,12 +3,13 @@ using DotNetOpenAuth.FacebookOAuth2;
 using DotNetOpenAuth.GoogleOAuth2;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
+using Microsoft.SqlServer.Server;
 
 namespace ITJakub.MobileApps.Core.Authentication
 {
     public interface IAuthProvider
     {
-        string GetEmail(string accessToken);
+        bool Authenticate(string accessToken, string email);
         AuthenticationProviders ProviderType { get; }
     }
 
@@ -20,10 +21,10 @@ namespace ITJakub.MobileApps.Core.Authentication
         {
         }
 
-        public string GetEmail(string accessToken)
+        public bool Authenticate(string accessToken, string email)
         {
             var data = base.GetUserData(accessToken);
-            return data["email"];
+            return data["email"].Equals(email);
         }
 
         public AuthenticationProviders ProviderType
@@ -40,10 +41,10 @@ namespace ITJakub.MobileApps.Core.Authentication
         }
 
 
-        public string GetEmail(string accessToken)
+        public bool Authenticate(string accessToken, string email)
         {
             var data = base.GetUserData(accessToken);
-            return data["email"];
+            return data["email"].Equals(email);
         }
 
         public AuthenticationProviders ProviderType
@@ -61,10 +62,10 @@ namespace ITJakub.MobileApps.Core.Authentication
             m_usersRepository = usersRepository;
         }
 
-        public string GetEmail(string accessToken)
+        public bool Authenticate(string passwordHash, string email)
         {
-            var user = m_usersRepository.FindByAuthenticationProviderToken(accessToken);
-            return user.Email;
+            var user = m_usersRepository.FindByEmailAndProvider(email,(byte) AuthenticationProviders.ItJakub);
+            return user.PasswordHash.Equals(passwordHash);
         }
 
         public AuthenticationProviders ProviderType
@@ -75,7 +76,7 @@ namespace ITJakub.MobileApps.Core.Authentication
 
     public class LiveIdAuthProvider : IAuthProvider
     {
-        public string GetEmail(string accessToken)
+        public bool Authenticate(string accessToken, string email)
         {
             throw new NotImplementedException();
         }
