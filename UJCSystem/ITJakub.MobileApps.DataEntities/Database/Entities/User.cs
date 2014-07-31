@@ -22,7 +22,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
 
 
         public virtual IList<Group> CreatedGroups { get; set; }     //Groups made by this user
-        public virtual IList<SynchronizedObject> CreatedSynchronizedObjects { get; set; } //Sync objects made by this user
+        protected virtual IList<SynchronizedObject> CreatedSynchronizedObjects { get; set; } //Sync objects made by this user
         public virtual IList<Task> CreatedTasks { get; set; }   //Tasks made by this user
 
         public virtual IList<Group> MemberOfGroups { get; set; }

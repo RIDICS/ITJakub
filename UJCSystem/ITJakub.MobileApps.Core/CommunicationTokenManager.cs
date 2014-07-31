@@ -23,7 +23,7 @@ namespace ITJakub.MobileApps.Core
 
         public bool IsCommunicationTokenActive(DateTime communicationTokenCreateTime)
         {
-            return GetExpirationTime(communicationTokenCreateTime) < DateTime.UtcNow;
+            return GetExpirationTime(communicationTokenCreateTime) >= DateTime.UtcNow;
         }
     }
 }

@@ -65,6 +65,9 @@ CREATE TABLE [User](
 CREATE TABLE [Group](
     [Id] [bigint] IDENTITY(1,1) NOT NULL,    
     [AuthorId] [bigint] NOT NULL,
+    [Name] [varchar] (100) NOT NULL,
+    [IsActive] [bit] NOT NULL,
+    [Evaluation] [varchar] (255) NULL,
     [TaskId] [bigint] NULL,
     [CreateTime] [datetime] NOT NULL,
     [EnterCode] [varchar] (100) NOT NULL UNIQUE,

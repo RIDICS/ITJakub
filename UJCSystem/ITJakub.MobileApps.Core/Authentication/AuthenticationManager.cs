@@ -1,4 +1,6 @@
-﻿using ITJakub.MobileApps.DataContracts;
+﻿using System.Net;
+using System.ServiceModel.Web;
+using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
 
 namespace ITJakub.MobileApps.Core.Authentication
@@ -21,13 +23,13 @@ namespace ITJakub.MobileApps.Core.Authentication
         {
             var user = m_usersRepository.GetUserByCommunicationToken(communicationToken);
             if (user == null || !m_communicationTokenManager.IsCommunicationTokenActive(user.CommunicationTokenCreateTime))
-                throw new AuthException("Recieved token expired or is not valid. Login again please...");
+                throw new WebFaultException(HttpStatusCode.Unauthorized) { Source = "Recieved token expired or is not valid. Login again please..." }; 
         }
 
         public void AuthenticateByProvider(string email, string authenticationToken, AuthenticationProviders authenticationProvider)
         {
             if (!m_authDirector.GetProvider(authenticationProvider).Authenticate(authenticationToken, email))
-                throw new AuthException("Users e-mail is not valid.");
+                throw new WebFaultException(HttpStatusCode.Unauthorized) { Source = "Users e-mail is not valid." };
         }
     }
 }

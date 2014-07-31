@@ -8,14 +8,17 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
     {
         public Group() { }
         public virtual long Id { get; set; }
+        public virtual string Name { get; set; }
         public virtual User Author { get; set; }
         public virtual Task Task { get; set; }
         public virtual DateTime CreateTime { get; set; }
         public virtual string EnterCode { get; set; }
+        public virtual bool IsActive { get; set; }
+        public virtual string Evaluation { get; set; }
 
         public virtual IList<SynchronizedObject> SynchronizedObjects { get; set; }
         public virtual IList<User> Members { get; set; }
-
+ 
 
 
         public virtual bool Equals(Group other)

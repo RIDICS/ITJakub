@@ -80,12 +80,14 @@ namespace ITJakub.MobileApps.Core
             m_userManager.CreateAccount(authenticationProvider,authenticationProviderToken,user);
         }
 
+      
         public LoginUserResponse LoginUser(UserLogin userLogin)
         {
             m_authenticationManager.AuthenticateByProvider(userLogin.Email, userLogin.AuthenticationToken, userLogin.AuthenticationProvider); //validate user's e-mail via authentication provider 
             return m_userManager.Login(userLogin);
         }
 
+        [Obsolete("Have bad auto-mapper mapping")]
         public UserDetails GetUserDetails(string userId)
         {
             var user = m_usersRepository.LoadUserWithDetails(long.Parse(userId));
@@ -116,20 +118,18 @@ namespace ITJakub.MobileApps.Core
             m_azureTableTaskDao.Create(new TaskEntity(taskId.ToString(), applicationId, apptask.Data));
         }
 
-        public CreateGroupResponse CreateGroup(string userId, Group group)
+        public CreateGroupResponse CreateGroup(string userId, string groupName)
         {
             var user = m_usersRepository.FindById(long.Parse(userId));
-            var deGroup = AutoMapper.Mapper.Map<DE.Group>(group) ?? new DE.Group();
-            deGroup.Author = user;
-            deGroup.CreateTime = DateTime.UtcNow;
+            var deGroup=new DE.Group {Author = user, CreateTime = DateTime.UtcNow, Name= groupName};
             var attempt = 0;
             while (attempt < m_maxAttemptsToSave)
             {
                 try
                 {
                     deGroup.EnterCode = EnterCodeGenerator.GenerateCode();
-                    var gid = m_groupRepository.Create(deGroup);
-                    return new CreateGroupResponse() {EnterCode = m_groupRepository.FindById(gid).EnterCode};
+                    m_groupRepository.Create(deGroup);
+                    return new CreateGroupResponse { EnterCode = deGroup.EnterCode };
                 }
                 catch (CreateEntityFailedException)
                 {
