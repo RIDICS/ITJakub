@@ -121,7 +121,7 @@ namespace ITJakub.MobileApps.Core
         public CreateGroupResponse CreateGroup(string userId, string groupName)
         {
             var user = m_usersRepository.FindById(long.Parse(userId));
-            var deGroup=new DE.Group {Author = user, CreateTime = DateTime.UtcNow, Name= groupName};
+            var deGroup=new DE.Group {Author = user, CreateTime = DateTime.UtcNow, Name= groupName, IsActive = true};
             var attempt = 0;
             while (attempt < m_maxAttemptsToSave)
             {

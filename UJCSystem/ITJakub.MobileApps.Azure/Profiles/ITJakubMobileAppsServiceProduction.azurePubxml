@@ -13,10 +13,12 @@
     <AzureHostedServiceName>itjakubmobileappsservice</AzureHostedServiceName>
     <AzureEnableIntelliTrace>False</AzureEnableIntelliTrace>
     <AzureEnableProfiling>False</AzureEnableProfiling>
-    <AzureServiceConfiguration>Local</AzureServiceConfiguration>
+    <AzureServiceConfiguration>Cloud</AzureServiceConfiguration>
     <AzureSolutionConfiguration>Debug</AzureSolutionConfiguration>
     <AzureStorageAccountLabel>mobileazuretables</AzureStorageAccountLabel>
     <AzureStorageAccountName>mobileazuretables</AzureStorageAccountName>
     <AzureAppendTimestampToDeploymentLabel>True</AzureAppendTimestampToDeploymentLabel>
+    <EnableRemoteDebugger>True</EnableRemoteDebugger>
+    <RemoteDebuggerConnectorCertificateThumbprint>67EEC998F6782161F866D914931FACEC3D774DB8</RemoteDebuggerConnectorCertificateThumbprint>
   </PropertyGroup>
 </Project>
