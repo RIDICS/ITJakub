@@ -122,7 +122,6 @@
     <Compile Include="AutoMapperProfiles\SynchronizedObjectProfile.cs" />
     <Compile Include="AutoMapperProfiles\TaskDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\TaskProfile.cs" />
-    <Compile Include="AutoMapperProfiles\UserBasicDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="CommunicationTokenManager.cs" />

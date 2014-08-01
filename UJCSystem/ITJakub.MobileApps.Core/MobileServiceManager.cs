@@ -87,11 +87,37 @@ namespace ITJakub.MobileApps.Core
             return m_userManager.Login(userLogin);
         }
 
-        [Obsolete("Have bad auto-mapper mapping")]
+      
         public UserDetails GetUserDetails(string userId)
         {
             var user = m_usersRepository.LoadUserWithDetails(long.Parse(userId));
             return AutoMapper.Mapper.Map<UserDetails>(user);
+        }
+
+        public IEnumerable<TaskDetails> GetTasksByUser(string userId)
+        {
+            var author = m_usersRepository.FindById(long.Parse(userId));
+            var tasks = m_taskRepository.LoadTasksWithDetailsByAuthor(author);
+            foreach (var task in tasks)
+            {
+                var taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(task.Id.ToString(), task.Application.Id.ToString());
+                if (taskEntity != null) task.Data = taskEntity.Data;
+            }
+            return AutoMapper.Mapper.Map<IList<TaskDetails>>(tasks);
+        }
+
+        public IEnumerable<GroupDetails> GetGroupsByUser(string userId)
+        {
+            var author = m_usersRepository.FindById(long.Parse(userId));
+            var groups = m_groupRepository.LoadGroupsWithDetailsByAuthor(author);
+            return AutoMapper.Mapper.Map<IList<GroupDetails>>(groups);
+        }
+
+        public IEnumerable<GroupDetails> GetMembershipsForUser(string userId)
+        {
+            var member = m_usersRepository.FindById(long.Parse(userId));
+            var groups = m_groupRepository.LoadGroupsWithDetailsByMember(member);
+            return AutoMapper.Mapper.Map<IList<GroupDetails>>(groups);
         }
 
         public IEnumerable<TaskDetails> GetTasksForApplication(string applicationId)

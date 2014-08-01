@@ -58,7 +58,6 @@
     <Compile Include="SynchronizedObjectDetails.cs" />
     <Compile Include="TaskDetails.cs" />
     <Compile Include="User.cs" />
-    <Compile Include="UserBasicDetails.cs" />
     <Compile Include="UserDetails.cs" />
     <Compile Include="UserLogin.cs" />
   </ItemGroup>

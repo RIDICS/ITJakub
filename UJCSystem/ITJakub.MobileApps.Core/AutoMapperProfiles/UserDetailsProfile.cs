@@ -8,7 +8,7 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<DE.User, UserDetails>().ForMember(userDetails => userDetails.User, opt => opt.MapFrom(deUser => Mapper.Map<User>(deUser))).ForMember(userDetails => userDetails.MemberOfGroups, opt => opt.MapFrom(deUser=> Mapper.Map<Group>(deUser.MemberOfGroups)));
+            CreateMap<DE.User, UserDetails>().ForMember(userDetails => userDetails.User, opt => opt.MapFrom(deUser => Mapper.Map<User>(deUser)));
         }
     }
 }

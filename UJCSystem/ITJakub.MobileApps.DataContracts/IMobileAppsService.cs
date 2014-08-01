@@ -12,8 +12,8 @@ namespace ITJakub.MobileApps.DataContracts
             BodyStyle = WebMessageBodyStyle.Wrapped,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "users/create?authprovider={authenticationProvider}&token={accessToken}")]
-        void CreateUser(string authenticationProvider, string accessToken, User user);
+            UriTemplate = "users/create?authprovider={authenticationProvider}&token={authenticationProviderToken}")]
+        void CreateUser(string authenticationProvider, string authenticationProviderToken, User user);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -66,6 +66,47 @@ namespace ITJakub.MobileApps.DataContracts
             UriTemplate = "users/{userId}")]
         [AuthorizedMethod]
         UserDetails GetUserDetails(string userId);
+
+        /// <summary>
+        ///     Returns collection of task made by user
+        /// </summary>
+        /// <returns></returns>
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "users/{userId}/tasks")]
+        [AuthorizedMethod]
+        IEnumerable<TaskDetails> GetTasksByUser(string userId);
+
+
+        /// <summary>
+        ///     Returns collection of groups made by user
+        /// </summary>
+        /// <returns></returns>
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "users/{userId}/groups")]
+        [AuthorizedMethod]
+        IEnumerable<GroupDetails> GetGroupsByUser(string userId);
+
+        /// <summary>
+        ///     Returns collection of groups where user belongs to
+        /// </summary>
+        /// <returns></returns>
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "users/{userId}/memberships")]
+        [AuthorizedMethod]
+        IEnumerable<GroupDetails> GetMembershipsForUser(string userId);
+
 
         /// <summary>
         ///     Returns predefined collection of task for specified application

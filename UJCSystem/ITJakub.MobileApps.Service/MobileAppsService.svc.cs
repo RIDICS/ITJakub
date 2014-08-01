@@ -43,6 +43,21 @@ namespace ITJakub.MobileApps.Service
             return m_manager.GetUserDetails(userId);
         }
 
+        public IEnumerable<TaskDetails> GetTasksByUser(string userId)
+        {
+            return m_manager.GetTasksByUser(userId);
+        }
+
+        public IEnumerable<GroupDetails> GetGroupsByUser(string userId)
+        {
+            return m_manager.GetGroupsByUser(userId);
+        }
+
+        public IEnumerable<GroupDetails> GetMembershipsForUser(string userId)
+        {
+            return m_manager.GetMembershipsForUser(userId);
+        }
+
         public IEnumerable<TaskDetails> GetTasksForApplication(string applicationId)
         {
             return m_manager.GetTasksForApplication(applicationId);

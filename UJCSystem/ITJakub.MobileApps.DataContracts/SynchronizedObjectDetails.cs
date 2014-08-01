@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.DataContracts
 
 
         [DataMember]
-        public User Author { get; set; }
+        public UserDetails Author { get; set; }
 
         [DataMember]
         public DateTime CreateTime { get; set; }

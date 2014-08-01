@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
@@ -23,6 +24,20 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 return
                     session.CreateCriteria<Task>()
                         .Add(Restrictions.Eq("Application", application))
+                        .SetFetchMode("Groups", FetchMode.Join)
+                        .SetFetchMode("Author", FetchMode.Join)
+                        .List<Task>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Task> LoadTasksWithDetailsByAuthor(User author)
+        {
+            using (var session = GetSession())
+            {
+                return
+                    session.CreateCriteria<Task>()
+                        .Add(Restrictions.Eq("Author", author))
                         .SetFetchMode("Groups", FetchMode.Join)
                         .SetFetchMode("Author", FetchMode.Join)
                         .List<Task>();
