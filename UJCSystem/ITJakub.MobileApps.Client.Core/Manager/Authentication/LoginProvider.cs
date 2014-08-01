@@ -1,4 +1,4 @@
-﻿namespace ITJakub.MobileApps.Client.Core.Manager
+﻿namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
     public enum LoginProvider
     {

@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 
-namespace ITJakub.MobileApps.Client.Core.Manager
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
-    public class LiveIdManager : LoginManager
+    public class LiveIdManager : IAuthProvider
     {
         //TODO register this application in Windows Store developer account and test this method
         /*

@@ -1,6 +1,6 @@
 using System;
 
-namespace ITJakub.MobileApps.Client.Core.Manager
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
     public class LoginResult
     {

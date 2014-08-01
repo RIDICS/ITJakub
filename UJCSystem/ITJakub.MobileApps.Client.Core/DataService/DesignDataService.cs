@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Core.Manager;
+using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared;
 
@@ -36,6 +37,11 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         }
 
         public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetApplicationByTypes(IEnumerable<ApplicationType> types, Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
             throw new NotImplementedException();
         }

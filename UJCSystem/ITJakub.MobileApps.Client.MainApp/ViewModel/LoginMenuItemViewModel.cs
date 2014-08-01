@@ -1,5 +1,6 @@
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Core.Manager;
+using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {

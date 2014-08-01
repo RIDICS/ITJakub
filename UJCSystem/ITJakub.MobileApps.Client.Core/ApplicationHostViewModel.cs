@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Shared;
@@ -23,16 +24,22 @@ namespace ITJakub.MobileApps.Client.Core
             m_dataService = dataService;
         }
 
+        //TODO tak tohle je humus volat z callbehindu
         public void LoadInitData(ApplicationType type)
         {
-            m_dataService.GetApplication(type, (application, exception) =>
+            m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, (applications, exception) =>
             {
                 if (exception != null)
                     return;
 
+
+                var application = applications[type];
                 ApplicationViewModel = application.ApplicationViewModel;
                 ApplicationName = application.Name;
                 IsChatSupported = application.IsChatSupported;
+
+                var chat = applications[ApplicationType.Chat];
+                ChatApplicationViewModel = chat.ApplicationViewModel;
             });
         }
 

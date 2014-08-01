@@ -21,7 +21,8 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
 
         public void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback)
         {
-            throw new NotImplementedException();
+            //read from syncservice
+            callback(new ObservableCollection<MessageViewModel>(), null);
         }
     }
 }

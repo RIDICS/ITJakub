@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.Core
@@ -36,6 +37,11 @@ namespace ITJakub.MobileApps.Client.Core
         public ApplicationBase GetApplication(ApplicationType type)
         {
             return m_loader.GetApplicationByType(type);
+        }
+
+        public Dictionary<ApplicationType, ApplicationBase> GetAllApplicationsByTypes(IEnumerable<ApplicationType> types)
+        {
+            return types.ToDictionary(type => type, GetApplication);
         }
     }
 }

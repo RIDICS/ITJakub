@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using Task = System.Threading.Tasks.Task;
@@ -21,7 +22,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
 
         private async Task LoginOauthAsync(LoginProvider loginProvider)
         {
-            var loginManager = LoginManager.CreateLoginManager(loginProvider);
+            var loginManager = IAuthProvider.CreateLoginManager(loginProvider);
             UserInfo = await loginManager.LoginAsync();
         }
 

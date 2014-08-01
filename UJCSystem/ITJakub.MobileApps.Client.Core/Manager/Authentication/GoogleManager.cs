@@ -10,9 +10,9 @@ using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.DataContracts.Json;
 using Newtonsoft.Json;
 
-namespace ITJakub.MobileApps.Client.Core.Manager
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
-    public class GoogleManager : LoginManager
+    public class GoogleManager : IAuthProvider
     {
         private const string ClientId = "***REMOVED***";
         private const string ClientSecret = "***REMOVED***";

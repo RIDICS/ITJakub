@@ -5,9 +5,9 @@ using Windows.Security.Authentication.Web;
 using Facebook;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 
-namespace ITJakub.MobileApps.Client.Core.Manager
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
-    public class FacebookManager : LoginManager
+    public class FacebookManager : IAuthProvider
     {
         private const long ClientId = ***REMOVED***;
 

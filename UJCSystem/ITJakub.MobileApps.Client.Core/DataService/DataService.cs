@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager;
+using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared;
 
@@ -36,6 +37,12 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         {
             var application = m_applicationManager.GetApplication(type);
             callback(application, null);
+        }
+
+        public void GetApplicationByTypes(IEnumerable<ApplicationType> types, Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
+        {
+            var applications = m_applicationManager.GetAllApplicationsByTypes(types);
+            callback(applications, null);
         }
 
         public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)

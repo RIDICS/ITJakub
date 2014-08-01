@@ -116,10 +116,11 @@
   <ItemGroup>
     <Compile Include="ApplicationManager.cs" />
     <Compile Include="Error\ClientCommunicationException.cs" />
-    <Compile Include="Manager\FacebookManager.cs" />
-    <Compile Include="Manager\GoogleManager.cs" />
-    <Compile Include="Manager\LiveIdManager.cs" />
-    <Compile Include="Manager\LoginResult.cs" />
+    <Compile Include="Manager\Authentication\FacebookManager.cs" />
+    <Compile Include="Manager\Authentication\GoogleManager.cs" />
+    <Compile Include="Manager\Authentication\ITJakubManager.cs" />
+    <Compile Include="Manager\Authentication\LiveIdManager.cs" />
+    <Compile Include="Manager\Authentication\LoginResult.cs" />
     <Compile Include="Manager\MobileAppsServiceManager.cs" />
     <Compile Include="Manager\UserManager.cs" />
     <Compile Include="Error\UserNotRegisteredException.cs" />
@@ -139,8 +140,8 @@
     <Compile Include="DataService\IDataService.cs" />
     <Compile Include="DataService\INavigationService.cs" />
     <Compile Include="DataService\NavigationService.cs" />
-    <Compile Include="Manager\LoginManager.cs" />
-    <Compile Include="Manager\LoginProvider.cs" />
+    <Compile Include="Manager\Authentication\IAuthProvider.cs" />
+    <Compile Include="Manager\Authentication\LoginProvider.cs" />
     <Compile Include="Manager\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AppInfoViewModel.cs" />
