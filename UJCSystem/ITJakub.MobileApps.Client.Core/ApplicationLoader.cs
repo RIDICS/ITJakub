@@ -17,11 +17,13 @@ namespace ITJakub.MobileApps.Client.Core
             LoadAllDiffingWrappers(ApplicationConfigLoader.Instance.CurrentConfig.ApplicationAssemblies, SynchronizeManager.Instance);
         }
 
-        private static readonly ApplicationLoader m_instance = new ApplicationLoader();
+
+        private static readonly Lazy<ApplicationLoader> m_instance = new Lazy<ApplicationLoader>(() => new ApplicationLoader());
+
 
         public static ApplicationLoader Instance
         {
-            get { return m_instance; }
+            get { return m_instance.Value; }
         }
 
 
