@@ -30,42 +30,6 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             throw new NotImplementedException();
         }
 
-        public void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback)
-        {
-            var messages = new ObservableCollection<MessageViewModel>
-            {
-                new MessageViewModel
-                {
-                    Content = "Lorem ipsum dolor sit amet",
-                    DateTime = DateTime.Now,
-                    Name = "User A",
-                    IsMyMessage = false
-                },
-                new MessageViewModel
-                {
-                    Content = "consectetur adipiscing elit",
-                    DateTime = DateTime.Now,
-                    Name = "User B",
-                    IsMyMessage = true
-                },
-                new MessageViewModel
-                {
-                    Content = "Vestibulum commodo interdum nunc",
-                    DateTime = DateTime.Now,
-                    Name = "User C",
-                    IsMyMessage = false
-                },
-                new MessageViewModel
-                {
-                    Content = "a lobortis odio semper non.",
-                    DateTime = DateTime.Now,
-                    Name = "User D",
-                    IsMyMessage = false
-                },
-            };
-            callback(messages, null);
-        }
-
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
             throw new NotImplementedException();

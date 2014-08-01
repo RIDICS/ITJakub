@@ -20,8 +20,8 @@
         <CommandBar IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
             <AppBarToggleButton Icon="Comment" 
                                 Label="Chat" 
-                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}"
-                                x:Name="ChatButton"/>
+                                IsEnabled="{Binding IsChatSupported}"
+                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}"/>
         </CommandBar>
     </Page.BottomAppBar>
 
@@ -72,10 +72,14 @@
             <ContentControl Grid.Column="0" 
                             Content="{Binding ApplicationViewModel}" 
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"/>
+            <ContentControl Grid.Column="1"
+                            Visibility="{Binding IsChatDisplayed}"
+                            Content="{Binding ChatApplicationViewModel}"
+                            ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"/>
             
-            <chat:ChatControl Grid.Column="1"
+            <!--<chat:ChatControl Grid.Column="1"
                               Width="350"
-                              Visibility="{Binding ElementName=ChatButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                              Visibility="{Binding ElementName=ChatButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
         </Grid>
     </Grid>
 </Page>

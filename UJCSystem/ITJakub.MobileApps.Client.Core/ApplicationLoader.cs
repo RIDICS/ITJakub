@@ -38,10 +38,9 @@ namespace ITJakub.MobileApps.Client.Core
                     var mobileApplicationAttribute = type.GetCustomAttributes(typeof(MobileApplicationAttribute), false).FirstOrDefault() as MobileApplicationAttribute;
                     if (mobileApplicationAttribute != null)
                     {
-                        var applicationBase = Activator.CreateInstance(type.AsType()) as ApplicationBase;
+                        var applicationBase = Activator.CreateInstance(type.AsType(), applicationCommunication) as ApplicationBase;
                         if (applicationBase != null)
                         {
-                            applicationBase.ApplicationCommunication = applicationCommunication;
                             m_applications.Add(mobileApplicationAttribute.ApplicationType, applicationBase);
                         }
                         else

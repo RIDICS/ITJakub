@@ -102,14 +102,17 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <Page Include="ChatControl.xaml">
+    <Page Include="View\ChatView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChatControl.xaml.cs">
-      <DependentUpon>ChatControl.xaml</DependentUpon>
+    <Compile Include="AppInfo.cs" />
+    <Compile Include="DataService\IChatDataService.cs" />
+    <Compile Include="ViewModel\MessageViewModel.cs" />
+    <Compile Include="View\ChatView.xaml.cs">
+      <DependentUpon>ChatView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\MessageDateTimeToStringConverter.cs" />
     <Compile Include="Converter\MyMessageToAlignmentConverter.cs" />
@@ -122,10 +125,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.MobileApps.Client.Core\ITJakub.MobileApps.Client.Core.csproj">
-      <Project>{A6182390-8F74-4DE0-8F37-974D9321FB74}</Project>
-      <Name>ITJakub.MobileApps.Client.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.Client.Shared\ITJakub.MobileApps.Client.Shared.csproj">
       <Project>{2009029f-a9b8-4a44-ac3d-a05c1e65e1e1}</Project>
       <Name>ITJakub.MobileApps.Client.Shared</Name>

@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ITJakub.MobileApps.Client.Chat.ChatControl"
+    x:Class="ITJakub.MobileApps.Client.Chat.View.ChatView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,8 @@
     d:DesignHeight="300"
     d:DesignWidth="400"
     xmlns:converter="using:ITJakub.MobileApps.Client.Chat.Converter"
-    DataContext="{Binding ChatViewModel, Source={StaticResource Locator}}">
+    xmlns:chat="using:ITJakub.MobileApps.Client.Chat.ViewModel"
+    d:DataContext="{d:DesignInstance Type=chat:ChatViewModel }">
     
     <UserControl.Resources>
         <converter:MyMessageToAlignmentConverter x:Key="MyMessageToAlignmentConverter"/>

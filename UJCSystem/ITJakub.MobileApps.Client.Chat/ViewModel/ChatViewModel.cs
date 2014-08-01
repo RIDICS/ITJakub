@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using ITJakub.MobileApps.Client.Core.DataService;
-using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.Chat.DataService;
+using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.Chat.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class ChatViewModel : ViewModelBase
+    public class ChatViewModel : ApplicationBaseViewModel
     {
-        private readonly IDataService m_dataService;
+        private readonly IChatDataService m_dataService;
         private readonly RelayCommand m_sendCommand;
         private string m_message;
         private ObservableCollection<MessageViewModel> m_messageHistory;
@@ -23,7 +16,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
         /// <summary>
         /// Initializes a new instance of the ChatViewModel class.
         /// </summary>
-        public ChatViewModel(IDataService dataService)
+        public ChatViewModel(IChatDataService dataService)
         {
             m_dataService = dataService;
             m_sendCommand = new RelayCommand(SendMessage);
@@ -76,20 +69,11 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
                 return;
 
             //TODO send message to server and remove this method
-            MessageHistory.Add(new MessageViewModel
-            {
-                Content = Message,
-                DateTime = DateTime.Now,
-                Name = "Já",
-                IsMyMessage = true
-            });
-            MessageHistory.Add(new MessageViewModel
-            {
-                Content = "Reply",
-                DateTime = DateTime.Now,
-                Name = "User",
-                IsMyMessage = false
-            });
+            //MessageHistory.Add(new MessageViewModel
+            //{
+            //    Text = Message,
+            //    SendTime = DateTime.Now,
+            //});
 
             Message = string.Empty;
         }

@@ -10,9 +10,12 @@ namespace ITJakub.MobileApps.Client.Core
         private readonly IDataService m_dataService;
         private string m_applicationName;
         private ApplicationBaseViewModel m_applicationViewModel;
+        private ApplicationBaseViewModel m_chatViewModel;
+
         private bool m_isChatDisplayed;
         private bool m_isChatSupported;
         private bool m_isCommandBarOpen;
+        
 
 
         public ApplicationHostViewModel(IDataService dataService)
@@ -29,6 +32,7 @@ namespace ITJakub.MobileApps.Client.Core
 
                 ApplicationViewModel = application.ApplicationViewModel;
                 ApplicationName = application.Name;
+                IsChatSupported = application.IsChatSupported;
             });
         }
 
@@ -49,6 +53,12 @@ namespace ITJakub.MobileApps.Client.Core
                 m_applicationViewModel = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public ApplicationBaseViewModel ChatApplicationViewModel
+        {
+            get { return m_chatViewModel; }
+            set { m_chatViewModel = value;RaisePropertyChanged(); }
         }
 
         public bool IsChatSupported

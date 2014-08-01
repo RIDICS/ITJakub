@@ -1,35 +1,41 @@
 ﻿using System;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Chat.DataService;
+using ITJakub.MobileApps.Client.Chat.View;
+using ITJakub.MobileApps.Client.Chat.ViewModel;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 
-namespace ITJakub.MobileApps.Client.SampleApp
+namespace ITJakub.MobileApps.Client.Chat
 {
-    [MobileApplication(ApplicationType.SampleApp)]
+    [MobileApplication(ApplicationType.Chat)]
     public class AppInfo : ApplicationBase
     {
         public AppInfo(ISynchronizeCommunication applicationCommunication) : base(applicationCommunication)
         {
+            DataService = new ChatDataService(applicationCommunication);
         }
 
         public override string Name
         {
-            get { return "Sample application name"; }
+            get { return "Chat"; }
         }
 
         public override ApplicationBaseViewModel ApplicationViewModel
         {
-            get { return new SampleViewModel(new SampleDataService(ApplicationCommunication)); }
+            get { return new ChatViewModel(DataService); }
         }
+
+        private IChatDataService DataService { get; set; }
 
         public override Type ApplicationDataTemplate
         {
-            get { return typeof (SampleView); }
+            get { return typeof (ChatView); }
         }
 
         public override ApplicationRoleType ApplicationRoleType
         {
-            get { return ApplicationRoleType.MainApp; }
+            get { return ApplicationRoleType.SupportApp;}
         }
 
         public override bool IsChatSupported
@@ -49,4 +55,6 @@ namespace ITJakub.MobileApps.Client.SampleApp
 
     
     }
+
+   
 }

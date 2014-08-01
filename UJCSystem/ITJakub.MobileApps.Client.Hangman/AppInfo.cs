@@ -1,12 +1,17 @@
 ﻿using System;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.Communication;
 
 namespace ITJakub.MobileApps.Client.Hangman
 {
     [MobileApplication(ApplicationType.Hangman)]
     public class AppInfo : ApplicationBase
     {
+        public AppInfo(ISynchronizeCommunication applicationCommunication) : base(applicationCommunication)
+        {
+        }
+
         public override string Name
         {
             get { return "Šibenice"; }
@@ -20,6 +25,11 @@ namespace ITJakub.MobileApps.Client.Hangman
         public override Type ApplicationDataTemplate
         {
             get { return typeof (HangmanView); }
+        }
+
+        public override ApplicationRoleType ApplicationRoleType
+        {
+            get { return ApplicationRoleType.MainApp;}
         }
 
         public override bool IsChatSupported
