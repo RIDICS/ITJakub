@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using Task = System.Threading.Tasks.Task;
 
@@ -49,15 +48,17 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             if (!UserInfo.Success)
                 return UserInfo;
 
-
-
-            await m_manager.CreateUser(loginProvider, UserInfo);//CreateAcc in Manage
-
+            await m_manager.CreateUser(loginProvider, UserInfo);
             await LoginItJakub(loginProvider);
 
             return UserInfo;
         }
 
-        
+        public void LogOut()
+        {
+            UserInfo = null;
+            EstimatedExpirationTime = new DateTime();
+            CommunicationToken = null;
+        }
     }
 }

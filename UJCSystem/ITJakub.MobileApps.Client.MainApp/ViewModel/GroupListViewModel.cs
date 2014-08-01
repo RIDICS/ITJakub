@@ -243,6 +243,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LogOut()
         {
+            m_dataService.LogOut();
             m_navigationService.GoHome();
         }
     }

@@ -25,6 +25,11 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             throw new NotImplementedException();
         }
 
+        public void LogOut()
+        {
+            throw new NotImplementedException();
+        }
+
         public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
         {
             throw new NotImplementedException();

@@ -108,5 +108,10 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         {
             return m_userManager.UserInfo;
         }
+
+        public void LogOut()
+        {
+            m_userManager.LogOut();
+        }
     }
 }
