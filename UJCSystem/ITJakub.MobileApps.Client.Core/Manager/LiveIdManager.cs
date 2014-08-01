@@ -1,4 +1,4 @@
-using System;
+using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Core.Manager
@@ -81,17 +81,20 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         }
         */
 
-        public override void Login(Action<UserInfo, Exception> callback)
+        public override Task<UserInfo> LoginAsync()
         {
-            var userInfo = new UserInfo
+            return new Task<UserInfo>(() =>
             {
-                Success = true,
-                FirstName = "Mocked",
-                LastName = "User",
-                AccessToken = "Aaaaaaaaa",
-                Email = "email@example.com"
-            };
-            callback(userInfo, null);
+                var userInfo = new UserInfo
+                {
+                    Success = true,
+                    FirstName = "Mocked",
+                    LastName = "User",
+                    AccessToken = "Aaaaaaaaa",
+                    Email = "email@example.com"
+                };
+                return userInfo;
+            });
         }
     }
 }

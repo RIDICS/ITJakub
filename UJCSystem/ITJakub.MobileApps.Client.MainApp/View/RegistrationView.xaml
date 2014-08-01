@@ -45,7 +45,8 @@
                     VerticalAlignment="Top"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
-                    AutomationProperties.ItemType="Navigation Button"/>
+                    AutomationProperties.ItemType="Navigation Button"
+                    IsEnabled="{Binding RegistrationInProgress, Converter={StaticResource BooleanNegationConverter}}"/>
             <TextBlock Text="Registrace uživatele" 
                        Style="{StaticResource HeaderTextBlockStyle}" 
                        Grid.Column="1" 
@@ -59,10 +60,10 @@
         <TextBlock Grid.Row="1"
                    Style="{StaticResource SubheaderTextBlockStyle}"
                    Text="Zvolte si službu, pomocí které se budete přihlašovat."
-                   Margin="120 0 0 0"/>
+                   Margin="120 0 20 0"/>
         
         <ListView Grid.Row="1"
-                  Padding="15 0 0 0"
+                  Padding="15 40 0 40"
                   SelectionMode="None"
                   IsItemClickEnabled="True"
                   Style="{StaticResource HorizontalListView}"

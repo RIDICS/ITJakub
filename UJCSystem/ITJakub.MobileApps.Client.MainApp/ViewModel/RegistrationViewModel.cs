@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.Manager;
+using ITJakub.MobileApps.Client.MainApp.View;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -76,7 +77,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (exception != null)
                     return;
                 if (info.Success)
-                    m_navigationService.GoBack();
+                    m_navigationService.Navigate(typeof(GroupListView));
             });
         }
     }

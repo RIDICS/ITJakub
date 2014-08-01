@@ -3,6 +3,7 @@ using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using ITJakub.MobileApps.Client.MainApp.Common;
+using ITJakub.MobileApps.Client.MainApp.ViewModel;
 
 namespace ITJakub.MobileApps.Client.MainApp.View
 {
@@ -73,6 +74,11 @@ namespace ITJakub.MobileApps.Client.MainApp.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            var dataContext = DataContext as GroupListViewModel;
+            if (dataContext != null)
+            {
+                dataContext.LoadData();
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

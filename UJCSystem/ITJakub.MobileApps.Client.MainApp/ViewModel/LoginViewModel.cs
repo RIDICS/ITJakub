@@ -1,8 +1,11 @@
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
+using ITJakub.MobileApps.Client.Core.Error;
+using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.MainApp.View;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -86,12 +89,21 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             if (item == null)
                 return;
 
+            Login(item.LoginProvider);
+        }
+
+        private void Login(LoginProvider loginProvider)
+        {
             LoggingIn = true;
-            m_dataService.Login(item.LoginProvider, (info, exception) =>
+            m_dataService.Login(loginProvider, (info, exception) =>
             {
                 LoggingIn = false;
                 if (exception != null)
+                {
+                    if (exception is UserNotRegisteredException)
+                        new MessageDialog("Pro pøihlášení do aplikace je nutné se nejdøíve registrovat.", "Uživatel není registrován").ShowAsync();
                     return;
+                }
                 if (info.Success)
                     m_navigationService.Navigate(typeof(GroupListView));
             });

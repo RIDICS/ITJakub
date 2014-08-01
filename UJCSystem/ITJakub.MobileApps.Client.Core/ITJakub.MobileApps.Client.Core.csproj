@@ -115,9 +115,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationManager.cs" />
+    <Compile Include="Error\ClientCommunicationException.cs" />
     <Compile Include="Manager\FacebookManager.cs" />
     <Compile Include="Manager\GoogleManager.cs" />
     <Compile Include="Manager\LiveIdManager.cs" />
+    <Compile Include="Manager\LoginResult.cs" />
+    <Compile Include="Manager\MobileAppsServiceManager.cs" />
+    <Compile Include="Manager\UserManager.cs" />
+    <Compile Include="Error\UserNotRegisteredException.cs" />
     <Compile Include="Service References\Service\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -184,16 +189,6 @@
     <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.UserDetails.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\Service\MobileAppsService.wsdl" />
-    <None Include="Service References\Service\MobileAppsService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\Service\MobileAppsService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\Service\MobileAppsService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -202,20 +197,31 @@
     <WCFMetadataStorage Include="Service References\Service\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Service\MobileAppsService.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\Service\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\Service\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\Service\MobileAppsService1.wsdl" />
+    <None Include="Service References\Service\MobileAppsService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Service\MobileAppsService31.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Service\MobileAppsService32.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\Service\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Service\MobileAppsService1.disco" />
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

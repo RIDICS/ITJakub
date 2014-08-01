@@ -23,12 +23,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         private const string TokenInfoUrl = "https://www.googleapis.com/oauth2/v1/tokeninfo?id_token={0}";
         private const string UserInfoUrl = "https://www.googleapis.com/plus/v1/people/me";
 
-        public override void Login(Action<UserInfo, Exception> callback)
-        {
-            AuthenticateAsync(callback);
-        }
-
-        private async void AuthenticateAsync(Action<UserInfo, Exception> callback)
+        public override async Task<UserInfo> LoginAsync()
         {
             var startUri = new Uri(string.Format(StartUri, ClientId, RedirectUri));
             var endUri = new Uri(EndUri);
@@ -53,23 +48,20 @@ namespace ITJakub.MobileApps.Client.Core.Manager
                         // HTTP error. 
                         // resultSring = webAuthenticationResult.ResponseErrorDetail.ToString();
                         userInfo.Success = false;
-                        callback(userInfo, null);
-                        return;
+                        return userInfo;
                     default:
                         // Other error.
                         // resultSring = webAuthenticationResult.ResponseData;
                         userInfo.Success = false;
-                        callback(userInfo, null);
-                        return;
+                        return userInfo;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Authentication failed. Handle parameter, SSL/TLS, and Network Unavailable errors here. 
                 // resultSring = ex.Message;
                 userInfo.Success = false;
-                callback(userInfo, null);
-                return;
+                return userInfo;
             }
 
 
@@ -77,7 +69,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             userInfo.AccessToken = googleTokens.AccessToken;
 
             await GetGoogleUserInfoAsync(userInfo, googleTokens);
-            callback(userInfo, null);
+            return userInfo;
         }
 
         private async Task<GoogleToken> GetGoogleTokensAsync(string authenticationResponse)

@@ -158,8 +158,7 @@
                     FontSize="30"
                     FontWeight="Normal"
                     Margin="0 0 70 40"
-                    VerticalAlignment="Bottom"
-                    Content="Jméno Příjmení">
+                    VerticalAlignment="Bottom">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Odhlásit se"
@@ -167,6 +166,10 @@
                                         Command="{Binding LogOutCommand}"/>
                     </MenuFlyout>
                 </Button.Flyout>
+                <TextBlock>
+                    <Run Text="{Binding FirstName}"/>
+                    <Run Text="{Binding LastName}"/>
+                </TextBlock>
             </Button>
         </Grid>
         

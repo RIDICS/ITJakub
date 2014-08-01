@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
 using Facebook;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -10,12 +11,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
     {
         private const long ClientId = ***REMOVED***;
 
-        public override void Login(Action<UserInfo, Exception> callback)
-        {
-            AuthenticateAsync(callback);
-        }
-
-        private async void AuthenticateAsync(Action<UserInfo, Exception> callback)
+        public override async Task<UserInfo> LoginAsync()
         {
             var fbClient = new FacebookClient();
             var loginUrl = fbClient.GetLoginUrl(new
@@ -30,7 +26,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             var webAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl);
             var userInfo = GetUserInfoFromResponse(fbClient, webAuthenticationResult);
 
-            callback(userInfo, null);
+            return userInfo;
         }
 
         private UserInfo GetUserInfoFromResponse(FacebookClient fbClient, WebAuthenticationResult webAuthenticationResult)

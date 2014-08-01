@@ -1,10 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://127.0.0.1:22771/MobileAppsService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" />
+  <xs:import schemaLocation="http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" />
+  <xs:element name="CreateUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="authenticationProvider" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accessToken" nillable="true" type="xs:string" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="user" nillable="true" type="q1:User" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateUserResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LoginUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="userLogin" nillable="true" type="q2:UserLogin" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LoginUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="LoginUserResult" nillable="true" type="q3:LoginUserResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="CreateInstitution">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="institution" nillable="true" type="q1:Institution" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="institution" nillable="true" type="q4:Institution" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -23,7 +51,7 @@
   <xs:element name="GetInstitutionDetailsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="GetInstitutionDetailsResult" nillable="true" type="q2:InstitutionDetails" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="GetInstitutionDetailsResult" nillable="true" type="q5:InstitutionDetails" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -40,35 +68,6 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="CreateUser">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="authenticationProvider" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="authenticationProviderToken" nillable="true" type="xs:string" />
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="user" nillable="true" type="q3:User" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="CreateUserResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="LoginUser">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="authenticationProvider" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="authenticationProviderToken" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="LoginUserResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="LoginUserResult" nillable="true" type="q4:LoginUserResponse" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="GetUserDetails">
     <xs:complexType>
       <xs:sequence>
@@ -79,7 +78,7 @@
   <xs:element name="GetUserDetailsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="GetUserDetailsResult" nillable="true" type="q5:UserDetails" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="GetUserDetailsResult" nillable="true" type="q6:UserDetails" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -93,7 +92,7 @@
   <xs:element name="GetTasksForApplicationResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="GetTasksForApplicationResult" nillable="true" type="q6:ArrayOfTaskDetails" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="GetTasksForApplicationResult" nillable="true" type="q7:ArrayOfTaskDetails" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -102,7 +101,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="applicationId" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string" />
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="task" nillable="true" type="q7:Task" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="task" nillable="true" type="q8:Task" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -115,7 +114,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string" />
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" minOccurs="0" name="group" nillable="true" type="q8:Group" />
+        <xs:element minOccurs="0" name="groupName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

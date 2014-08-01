@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager;
-using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared;
 
@@ -12,13 +12,14 @@ namespace ITJakub.MobileApps.Client.Core.DataService
     {
         private readonly ApplicationManager m_applicationManager;
         private SynchronizeManager m_synchronizeManager;
-        private MobileAppsServiceClient m_serviceClient;
+        private readonly UserManager m_userManager;
 
         public DataService()
         {
-            m_serviceClient = new MobileAppsServiceClient();
+            var manager = new MobileAppsServiceManager();
             m_applicationManager = new ApplicationManager();
             m_synchronizeManager = SynchronizeManager.Instance;
+            m_userManager = new UserManager(manager);
         }
 
         public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
@@ -73,16 +74,39 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             callback(list, null);
         }
 
-        public void Login(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
+        public async void Login(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
         {
-            var loginManager = LoginManager.CreateLoginManager(loginProvider);
-            loginManager.Login(callback);
+            try
+            {
+                var userInfo = await m_userManager.LoginAsync(loginProvider);
+                callback(userInfo, null);
+            }
+            catch (UserNotRegisteredException exception)
+            {
+                callback(null, exception);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
         }
 
-        public void CreateUser(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
+        public async void CreateUser(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
         {
-            var loginManager = LoginManager.CreateLoginManager(loginProvider);
-            loginManager.Login(callback);
+            try
+            {
+                var userInfo = await m_userManager.CreateUserAsync(loginProvider);
+                callback(userInfo, null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
+
+        public UserInfo GetUserInfo()
+        {
+            return m_userManager.UserInfo;
         }
     }
 }

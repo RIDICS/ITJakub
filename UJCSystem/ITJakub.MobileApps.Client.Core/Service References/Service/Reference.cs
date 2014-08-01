@@ -17,6 +17,225 @@ namespace ITJakub.MobileApps.Client.Core.Service {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ITJakub.MobileApps.Client.Core.Service.UserWithSalt))]
+    public partial class User : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private string EmailField;
+        
+        private string FirstNameField;
+        
+        private string LastNameField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Email {
+            get {
+                return this.EmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FirstName {
+            get {
+                return this.FirstNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
+                    this.FirstNameField = value;
+                    this.RaisePropertyChanged("FirstName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LastName {
+            get {
+                return this.LastNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
+                    this.LastNameField = value;
+                    this.RaisePropertyChanged("LastName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UserWithSalt", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
+    public partial class UserWithSalt : ITJakub.MobileApps.Client.Core.Service.User {
+        
+        private string PasswordHashField;
+        
+        private string SaltField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PasswordHash {
+            get {
+                return this.PasswordHashField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PasswordHashField, value) != true)) {
+                    this.PasswordHashField = value;
+                    this.RaisePropertyChanged("PasswordHash");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Salt {
+            get {
+                return this.SaltField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SaltField, value) != true)) {
+                    this.SaltField = value;
+                    this.RaisePropertyChanged("Salt");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UserLogin", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
+    public partial class UserLogin : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private ITJakub.MobileApps.Client.Core.Service.AuthenticationProviders AuthenticationProviderField;
+        
+        private string AuthenticationTokenField;
+        
+        private string EmailField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ITJakub.MobileApps.Client.Core.Service.AuthenticationProviders AuthenticationProvider {
+            get {
+                return this.AuthenticationProviderField;
+            }
+            set {
+                if ((this.AuthenticationProviderField.Equals(value) != true)) {
+                    this.AuthenticationProviderField = value;
+                    this.RaisePropertyChanged("AuthenticationProvider");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AuthenticationToken {
+            get {
+                return this.AuthenticationTokenField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AuthenticationTokenField, value) != true)) {
+                    this.AuthenticationTokenField = value;
+                    this.RaisePropertyChanged("AuthenticationToken");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Email {
+            get {
+                return this.EmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AuthenticationProviders", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
+    public enum AuthenticationProviders : byte {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ItJakub = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Google = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Facebook = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LiveId = 3,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoginUserResponse", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
+    public partial class LoginUserResponse : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private string CommunicationTokenField;
+        
+        private System.DateTime EstimatedExpirationTimeField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CommunicationToken {
+            get {
+                return this.CommunicationTokenField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CommunicationTokenField, value) != true)) {
+                    this.CommunicationTokenField = value;
+                    this.RaisePropertyChanged("CommunicationToken");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime EstimatedExpirationTime {
+            get {
+                return this.EstimatedExpirationTimeField;
+            }
+            set {
+                if ((this.EstimatedExpirationTimeField.Equals(value) != true)) {
+                    this.EstimatedExpirationTimeField = value;
+                    this.RaisePropertyChanged("EstimatedExpirationTime");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Institution", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
     public partial class Institution : object, System.ComponentModel.INotifyPropertyChanged {
         
@@ -151,96 +370,6 @@ namespace ITJakub.MobileApps.Client.Core.Service {
                 if ((object.ReferenceEquals(this.UserField, value) != true)) {
                     this.UserField = value;
                     this.RaisePropertyChanged("User");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
-    public partial class User : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private string EmailField;
-        
-        private string FirstNameField;
-        
-        private string LastNameField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email {
-            get {
-                return this.EmailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
-                    this.EmailField = value;
-                    this.RaisePropertyChanged("Email");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FirstName {
-            get {
-                return this.FirstNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
-                    this.FirstNameField = value;
-                    this.RaisePropertyChanged("FirstName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string LastName {
-            get {
-                return this.LastNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
-                    this.LastNameField = value;
-                    this.RaisePropertyChanged("LastName");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LoginUserResponse", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
-    public partial class LoginUserResponse : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private string CommunicationTokenField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string CommunicationToken {
-            get {
-                return this.CommunicationTokenField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CommunicationTokenField, value) != true)) {
-                    this.CommunicationTokenField = value;
-                    this.RaisePropertyChanged("CommunicationToken");
                 }
             }
         }
@@ -724,6 +853,12 @@ namespace ITJakub.MobileApps.Client.Core.Service {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="Service.IMobileAppsService")]
     public interface IMobileAppsService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/CreateUser", ReplyAction="http://tempuri.org/IMobileAppsService/CreateUserResponse")]
+        System.Threading.Tasks.Task CreateUserAsync(string authenticationProvider, string accessToken, ITJakub.MobileApps.Client.Core.Service.User user);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/LoginUser", ReplyAction="http://tempuri.org/IMobileAppsService/LoginUserResponse")]
+        System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.LoginUserResponse> LoginUserAsync(ITJakub.MobileApps.Client.Core.Service.UserLogin userLogin);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/CreateInstitution", ReplyAction="http://tempuri.org/IMobileAppsService/CreateInstitutionResponse")]
         System.Threading.Tasks.Task CreateInstitutionAsync(ITJakub.MobileApps.Client.Core.Service.Institution institution);
         
@@ -732,12 +867,6 @@ namespace ITJakub.MobileApps.Client.Core.Service {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/AddUserToInstitution", ReplyAction="http://tempuri.org/IMobileAppsService/AddUserToInstitutionResponse")]
         System.Threading.Tasks.Task AddUserToInstitutionAsync(string enterCode, string userId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/CreateUser", ReplyAction="http://tempuri.org/IMobileAppsService/CreateUserResponse")]
-        System.Threading.Tasks.Task CreateUserAsync(string authenticationProvider, string authenticationProviderToken, ITJakub.MobileApps.Client.Core.Service.User user);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/LoginUser", ReplyAction="http://tempuri.org/IMobileAppsService/LoginUserResponse")]
-        System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.LoginUserResponse> LoginUserAsync(string authenticationProvider, string authenticationProviderToken);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/GetUserDetails", ReplyAction="http://tempuri.org/IMobileAppsService/GetUserDetailsResponse")]
         System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.UserDetails> GetUserDetailsAsync(string userId);
@@ -749,7 +878,7 @@ namespace ITJakub.MobileApps.Client.Core.Service {
         System.Threading.Tasks.Task CreateTaskForApplicationAsync(string applicationId, string userId, ITJakub.MobileApps.Client.Core.Service.Task task);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/CreateGroup", ReplyAction="http://tempuri.org/IMobileAppsService/CreateGroupResponse")]
-        System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.CreateGroupResponse> CreateGroupAsync(string userId, ITJakub.MobileApps.Client.Core.Service.Group group);
+        System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.CreateGroupResponse> CreateGroupAsync(string userId, string groupName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/AssignTaskToGroup", ReplyAction="http://tempuri.org/IMobileAppsService/AssignTaskToGroupResponse")]
         System.Threading.Tasks.Task AssignTaskToGroupAsync(string groupId, string taskId, string userId);
@@ -810,6 +939,14 @@ namespace ITJakub.MobileApps.Client.Core.Service {
                 base(binding, remoteAddress) {
         }
         
+        public System.Threading.Tasks.Task CreateUserAsync(string authenticationProvider, string accessToken, ITJakub.MobileApps.Client.Core.Service.User user) {
+            return base.Channel.CreateUserAsync(authenticationProvider, accessToken, user);
+        }
+        
+        public System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.LoginUserResponse> LoginUserAsync(ITJakub.MobileApps.Client.Core.Service.UserLogin userLogin) {
+            return base.Channel.LoginUserAsync(userLogin);
+        }
+        
         public System.Threading.Tasks.Task CreateInstitutionAsync(ITJakub.MobileApps.Client.Core.Service.Institution institution) {
             return base.Channel.CreateInstitutionAsync(institution);
         }
@@ -820,14 +957,6 @@ namespace ITJakub.MobileApps.Client.Core.Service {
         
         public System.Threading.Tasks.Task AddUserToInstitutionAsync(string enterCode, string userId) {
             return base.Channel.AddUserToInstitutionAsync(enterCode, userId);
-        }
-        
-        public System.Threading.Tasks.Task CreateUserAsync(string authenticationProvider, string authenticationProviderToken, ITJakub.MobileApps.Client.Core.Service.User user) {
-            return base.Channel.CreateUserAsync(authenticationProvider, authenticationProviderToken, user);
-        }
-        
-        public System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.LoginUserResponse> LoginUserAsync(string authenticationProvider, string authenticationProviderToken) {
-            return base.Channel.LoginUserAsync(authenticationProvider, authenticationProviderToken);
         }
         
         public System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.UserDetails> GetUserDetailsAsync(string userId) {
@@ -842,8 +971,8 @@ namespace ITJakub.MobileApps.Client.Core.Service {
             return base.Channel.CreateTaskForApplicationAsync(applicationId, userId, task);
         }
         
-        public System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.CreateGroupResponse> CreateGroupAsync(string userId, ITJakub.MobileApps.Client.Core.Service.Group group) {
-            return base.Channel.CreateGroupAsync(userId, group);
+        public System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.CreateGroupResponse> CreateGroupAsync(string userId, string groupName) {
+            return base.Channel.CreateGroupAsync(userId, groupName);
         }
         
         public System.Threading.Tasks.Task AssignTaskToGroupAsync(string groupId, string taskId, string userId) {
@@ -888,7 +1017,7 @@ namespace ITJakub.MobileApps.Client.Core.Service {
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration) {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IMobileAppsService)) {
-                return new System.ServiceModel.EndpointAddress("http://127.0.0.1:22771/MobileAppsService.svc");
+                return new System.ServiceModel.EndpointAddress("http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

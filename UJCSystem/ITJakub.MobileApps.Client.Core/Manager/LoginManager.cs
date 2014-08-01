@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Core.Manager
@@ -20,6 +20,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             }
         }
 
-        public abstract void Login(Action<UserInfo, Exception> callback);
+        public abstract Task<UserInfo> LoginAsync();
     }
 }

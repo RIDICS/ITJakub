@@ -34,6 +34,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private string m_deleteMessage;
         private RelayCommand m_logOutCommand;
         private Visibility m_noGroupVisibility;
+        private string m_firstName;
+        private string m_lastName;
 
         /// <summary>
         /// Initializes a new instance of the GroupListViewModel class.
@@ -46,7 +48,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             NoGroupVisibility = Visibility.Collapsed;
             
             InitCommands();
-            LoadGroupList();
+            LoadData();
 
             //TODO load correct information
             m_isTeacher = true;
@@ -191,7 +193,27 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        private void LoadGroupList()
+        public string FirstName
+        {
+            get { return m_firstName; }
+            set
+            {
+                m_firstName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string LastName
+        {
+            get { return m_lastName; }
+            set
+            {
+                m_lastName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public void LoadData()
         {
             m_dataService.GetGroupList((groupList, exception) =>
             {
@@ -200,6 +222,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupList = groupList;
                 NoGroupVisibility = groupList.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             });
+            var userInfo = m_dataService.GetUserInfo();
+            FirstName = userInfo.FirstName;
+            LastName = userInfo.LastName;
         }
 
         private void GroupClick(ItemClickEventArgs args)
