@@ -27,13 +27,6 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             m_applicationManager.GetAllApplicationViewModels(callback);
         }
 
-        public void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback)
-        {
-            //TODO load messages from server
-            //var messageList = m_synchronizeManager.GetSynchronizedObjects(ApplicationType.Chat, new DateTime(), "ChatMessage");
-            callback(new ObservableCollection<MessageViewModel>(), null);
-        }
-
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
             m_applicationManager.GetAllApplications(callback);

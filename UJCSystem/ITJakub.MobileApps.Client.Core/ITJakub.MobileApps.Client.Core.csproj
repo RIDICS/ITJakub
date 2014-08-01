@@ -145,7 +145,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AppInfoViewModel.cs" />
     <Compile Include="ViewModel\GroupInfoViewModel.cs" />
-    <Compile Include="ViewModel\MessageViewModel.cs" />
     <Compile Include="ViewModel\UserInfo.cs" />
   </ItemGroup>
   <ItemGroup>

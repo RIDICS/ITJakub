@@ -7,13 +7,21 @@ namespace ITJakub.MobileApps.Client.Shared
 {
     public abstract class ApplicationBase
     {
-        public ISynchronizeCommunication ApplicationCommunication { get; set; }
+        protected ApplicationBase(ISynchronizeCommunication applicationCommunication)
+        {
+            ApplicationCommunication = applicationCommunication;
+        }
+
+
+        public ISynchronizeCommunication ApplicationCommunication { get; private set; }
 
         public abstract string Name { get; }
 
         public abstract ApplicationBaseViewModel ApplicationViewModel { get; }
 
         public abstract Type ApplicationDataTemplate { get; }
+
+        public abstract ApplicationRoleType ApplicationRoleType { get; }
 
         public abstract bool IsChatSupported { get; }
 
@@ -28,5 +36,11 @@ namespace ITJakub.MobileApps.Client.Shared
         {
             get { return new Uri(string.Format("ms-appx:///{0}/", AssemblyName)); }
         }
+    }
+
+    public enum ApplicationRoleType
+    {
+        MainApp,
+        SupportApp,
     }
 }

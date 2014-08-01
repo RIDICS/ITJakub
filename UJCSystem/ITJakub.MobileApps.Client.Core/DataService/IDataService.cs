@@ -15,7 +15,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         UserInfo GetUserInfo();
         void LogOut();
         void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback);
-        void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback);
+        
         void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback);
         void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback);
         void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback);

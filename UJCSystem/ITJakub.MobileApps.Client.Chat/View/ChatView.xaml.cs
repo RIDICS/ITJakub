@@ -7,13 +7,13 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
 using ITJakub.MobileApps.Client.Chat.ViewModel;
 
-namespace ITJakub.MobileApps.Client.Chat
+namespace ITJakub.MobileApps.Client.Chat.View
 {
-    public sealed partial class ChatControl
+    public sealed partial class ChatView
     {
         private ChatViewModel m_viewModel;
 
-        public ChatControl()
+        public ChatView()
         {
             InitializeComponent();
             m_viewModel = DataContext as ChatViewModel;

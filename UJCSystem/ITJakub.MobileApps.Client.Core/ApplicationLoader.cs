@@ -17,11 +17,13 @@ namespace ITJakub.MobileApps.Client.Core
             LoadAllDiffingWrappers(ApplicationConfigLoader.Instance.CurrentConfig.ApplicationAssemblies, SynchronizeManager.Instance);
         }
 
-        private static readonly ApplicationLoader m_instance = new ApplicationLoader();
+
+        private static readonly Lazy<ApplicationLoader> m_instance = new Lazy<ApplicationLoader>(() => new ApplicationLoader());
+
 
         public static ApplicationLoader Instance
         {
-            get { return m_instance; }
+            get { return m_instance.Value; }
         }
 
 
@@ -36,10 +38,9 @@ namespace ITJakub.MobileApps.Client.Core
                     var mobileApplicationAttribute = type.GetCustomAttributes(typeof(MobileApplicationAttribute), false).FirstOrDefault() as MobileApplicationAttribute;
                     if (mobileApplicationAttribute != null)
                     {
-                        var applicationBase = Activator.CreateInstance(type.AsType()) as ApplicationBase;
+                        var applicationBase = Activator.CreateInstance(type.AsType(), applicationCommunication) as ApplicationBase;
                         if (applicationBase != null)
                         {
-                            applicationBase.ApplicationCommunication = applicationCommunication;
                             m_applications.Add(mobileApplicationAttribute.ApplicationType, applicationBase);
                         }
                         else
