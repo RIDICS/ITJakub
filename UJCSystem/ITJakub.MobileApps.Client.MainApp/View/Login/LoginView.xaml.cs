@@ -1,19 +1,14 @@
 ﻿// The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
 
-using System;
-using System.Collections.ObjectModel;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.MainApp.Common;
-using ITJakub.MobileApps.Client.MainApp.ViewModel;
 
-namespace ITJakub.MobileApps.Client.MainApp.View
+namespace ITJakub.MobileApps.Client.MainApp.View.Login
 {
     /// <summary>
     /// A page that displays a grouped collection of items.
     /// </summary>
-    public sealed partial class RegistrationView
+    public sealed partial class LoginView
     {
         private NavigationHelper navigationHelper;
 
@@ -26,37 +21,13 @@ namespace ITJakub.MobileApps.Client.MainApp.View
             get { return navigationHelper; }
         }
 
-        public RegistrationView()
+        public LoginView()
         {
             InitializeComponent();
-            InitMenu();
             navigationHelper = new NavigationHelper(this);
         }
 
-        private void InitMenu()
-        {
-            MenuListView.ItemsSource = new ObservableCollection<LoginMenuItemViewModel>
-            {
-                new LoginMenuItemViewModel
-                {
-                    LoginProvider = LoginProvider.LiveId,
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/windows8-128.png")),
-                    Name = "Live ID"
-                },
-                new LoginMenuItemViewModel
-                {
-                    LoginProvider = LoginProvider.Facebook,
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/facebook-128.png")),
-                    Name = "Facebook"
-                },
-                new LoginMenuItemViewModel
-                {
-                    LoginProvider = LoginProvider.Google,
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/google_plus-128.png")),
-                    Name = "Google"
-                }
-            };
-        }
+       
 
 
         #region NavigationHelper registration

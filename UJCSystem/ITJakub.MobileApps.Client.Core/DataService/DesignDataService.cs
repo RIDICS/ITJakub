@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
-using ITJakub.MobileApps.Client.Core.Manager;
+using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public class DesignDataService : IDataService
     {
-        public void Login(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
+        public void Login(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback)
         {
             throw new NotImplementedException();
         }
 
-        public void CreateUser(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
+        public void CreateUser(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback)
         {
             throw new NotImplementedException();
         }
@@ -69,6 +70,28 @@ namespace ITJakub.MobileApps.Client.Core.DataService
                 },
             };
             callback(result, null);
+        }
+
+        public void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback)
+        {
+            callback(new List<LoginProviderViewModel>
+            {
+                new LoginProviderViewModel
+                {
+                    LoginProviderType = LoginProviderType.LiveId,
+                    Name = "Live ID"
+                },
+                new LoginProviderViewModel
+                {
+                    LoginProviderType = LoginProviderType.Facebook,                    
+                    Name = "Facebook"
+                },
+                new LoginProviderViewModel
+                {
+                    LoginProviderType = LoginProviderType.Google,
+                    Name = "Google"
+                }
+            }, null);
         }
     }
 }

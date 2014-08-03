@@ -69,11 +69,11 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
                 return;
 
             //TODO send message to server and remove this method
-            //MessageHistory.Add(new MessageViewModel
-            //{
-            //    Text = Message,
-            //    SendTime = DateTime.Now,
-            //});
+            MessageHistory.Add(new MessageViewModel
+            {
+                Text = Message,
+                SendTime = DateTime.Now,
+            });
 
             Message = string.Empty;
         }

@@ -5,13 +5,13 @@ using Windows.Security.Authentication.Web;
 using Facebook;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 
-namespace ITJakub.MobileApps.Client.Core.Manager
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
-    public class FacebookManager : LoginManager
+    public class FacebookProvider : ILoginProvider
     {
         private const long ClientId = ***REMOVED***;
 
-        public override async Task<UserInfo> LoginAsync()
+        public async Task<UserInfo> LoginAsync()
         {
             var fbClient = new FacebookClient();
             var loginUrl = fbClient.GetLoginUrl(new
@@ -28,6 +28,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager
 
             return userInfo;
         }
+
+        public string AccountName { get { return "Facebook"; } }
+        public LoginProviderType ProviderType { get { return LoginProviderType.Facebook; } }
 
         private UserInfo GetUserInfoFromResponse(FacebookClient fbClient, WebAuthenticationResult webAuthenticationResult)
         {

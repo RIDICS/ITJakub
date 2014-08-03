@@ -1,10 +1,14 @@
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 
-namespace ITJakub.MobileApps.Client.Core.Manager
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
-    public class LiveIdManager : LoginManager
+    public class LiveIdProvider : ILoginProvider
     {
+
+        public string AccountName { get { return "Live Id"; } }
+        public LoginProviderType ProviderType { get { return LoginProviderType.LiveId; } }
+
         //TODO register this application in Windows Store developer account and test this method
         /*
         public async Task<UserInfo> LoginLiveId()
@@ -81,7 +85,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         }
         */
 
-        public override Task<UserInfo> LoginAsync()
+        public Task<UserInfo> LoginAsync()
         {
             return new Task<UserInfo>(() =>
             {

@@ -10,9 +10,9 @@ using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.DataContracts.Json;
 using Newtonsoft.Json;
 
-namespace ITJakub.MobileApps.Client.Core.Manager
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
-    public class GoogleManager : LoginManager
+    public class GoogleProvider : ILoginProvider
     {
         private const string ClientId = "***REMOVED***";
         private const string ClientSecret = "***REMOVED***";
@@ -23,7 +23,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         private const string TokenInfoUrl = "https://www.googleapis.com/oauth2/v1/tokeninfo?id_token={0}";
         private const string UserInfoUrl = "https://www.googleapis.com/plus/v1/people/me";
 
-        public override async Task<UserInfo> LoginAsync()
+        public string AccountName { get { return "Google"; } }
+        public LoginProviderType ProviderType { get { return LoginProviderType.Google; } }
+        public async Task<UserInfo> LoginAsync()
         {
             var startUri = new Uri(string.Format(StartUri, ClientId, RedirectUri));
             var endUri = new Uri(EndUri);

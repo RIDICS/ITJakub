@@ -21,7 +21,14 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
 
         public void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback)
         {
-            throw new NotImplementedException();
+            var observableCollection = new ObservableCollection<MessageViewModel>
+            {
+                new MessageViewModel {Author = "ME", Text = "TestovaciText1", SendTime = new DateTime(2000, 1, 1)},
+                new MessageViewModel {Author = "SomebodyElse", Text = "TestovaciText2", SendTime = new DateTime(2000, 1, 12)},
+
+            };
+            callback(observableCollection, null);
+            //throw new NotImplementedException();
         }
     }
 }

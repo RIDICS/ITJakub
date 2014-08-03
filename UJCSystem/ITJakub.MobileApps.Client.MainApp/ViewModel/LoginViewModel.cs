@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -5,62 +6,51 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.Error;
-using ITJakub.MobileApps.Client.Core.Manager;
+using ITJakub.MobileApps.Client.Core.Manager.Authentication;
+using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.MainApp.View;
+using ITJakub.MobileApps.Client.MainApp.View.Login;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class LoginViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private readonly RelayCommand<ItemClickEventArgs> m_itemClickCommand;
         private Visibility m_loginDialogVisibility;
         private bool m_loggingIn;
-        private RelayCommand m_registrationCommand;
 
-        /// <summary>
-        /// Initializes a new instance of the LoginViewModel class.
-        /// </summary>
         public LoginViewModel(IDataService dataService, INavigationService navigationService)
-        {
-            ////if (IsInDesignMode)
-            ////{
-            ////    // Code runs in Blend --> create design time data.
-            ////}
-            ////else
-            ////{
-            ////    // Code runs "for real"
-            ////}
-
+        {      
             m_dataService = dataService;
             m_navigationService = navigationService;
             LoggingIn = false;
-            m_itemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
-            m_registrationCommand = new RelayCommand(() => m_navigationService.Navigate(typeof(RegistrationView)));
+            LoadInitData();
+            ItemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
+            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate(typeof(RegistrationView)));
         }
 
-        public RelayCommand<ItemClickEventArgs> ItemClickCommand
+        private void LoadInitData()
         {
-            get { return m_itemClickCommand; }
+            LoginProviders = new ObservableCollection<LoginProviderViewModel>();
+            m_dataService.GetLoginProviders((loginproviders, exception) =>
+            {
+                if (exception != null)
+                    return;
+
+                foreach (LoginProviderViewModel loginProvider in loginproviders)
+                {
+                    LoginProviders.Add(loginProvider);
+                }
+            });
         }
 
-        public RelayCommand RegistrationCommand
-        {
-            get { return m_registrationCommand; }
-        }
+
+        public ObservableCollection<LoginProviderViewModel> LoginProviders { get; set; }
+
+        public RelayCommand<ItemClickEventArgs> ItemClickCommand { get; private set; }
+
+        public RelayCommand RegistrationCommand { get; private set; }
 
         public Visibility LoginDialogVisibility
         {
@@ -85,17 +75,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void ItemClick(ItemClickEventArgs args)
         {
-            var item = args.ClickedItem as LoginMenuItemViewModel;
+            var item = args.ClickedItem as LoginProviderViewModel;
             if (item == null)
                 return;
 
-            Login(item.LoginProvider);
+            Login(item.LoginProviderType);
         }
 
-        private void Login(LoginProvider loginProvider)
+        private void Login(LoginProviderType loginProviderType)
         {
             LoggingIn = true;
-            m_dataService.Login(loginProvider, (info, exception) =>
+            m_dataService.Login(loginProviderType, (info, exception) =>
             {
                 LoggingIn = false;
                 if (exception != null)

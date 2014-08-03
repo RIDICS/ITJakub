@@ -25,6 +25,15 @@ namespace ITJakub.MobileApps.Client.Core
 
         public void LoadInitData(ApplicationType type)
         {
+
+            //TODO load by multiple types together 
+            m_dataService.GetApplication(ApplicationType.Chat, (application, exception) =>
+            {
+                if(exception!= null)
+                    return;
+
+                ChatApplicationViewModel = application.ApplicationViewModel;
+            });
             m_dataService.GetApplication(type, (application, exception) =>
             {
                 if (exception != null)

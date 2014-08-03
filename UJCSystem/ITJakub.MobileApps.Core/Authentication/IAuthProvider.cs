@@ -3,7 +3,6 @@ using DotNetOpenAuth.FacebookOAuth2;
 using DotNetOpenAuth.GoogleOAuth2;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
-using Microsoft.SqlServer.Server;
 
 namespace ITJakub.MobileApps.Core.Authentication
 {
