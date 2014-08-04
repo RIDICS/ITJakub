@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
@@ -53,7 +55,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
             }
             catch (DataException ex)
             {
-                throw new CreateEntityFailedException(ex.Message,ex.InnerException);
+                throw new CreateEntityFailedException(ex.Message, ex.InnerException);
             }
         }
 
@@ -90,7 +92,20 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                     .Add(Restrictions.Eq("AuthenticationProviderToken", token))
                     .UniqueResult<User>();
             }
+        }
 
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Group> LoadGroupsWithDetailsByMember(long userId)
+        {
+            using (var session = GetSession())
+            {
+                var user = session.CreateCriteria<User>()
+                    .Add(Restrictions.Eq(Projections.Id(), userId))
+                    .SetFetchMode("MemberOfGroups", FetchMode.Join)
+                    .SetFetchMode("MemberOfGroups.Members", FetchMode.Select)
+                    .UniqueResult<User>();
+                return user.MemberOfGroups;
+            }
         }
     }
 }
