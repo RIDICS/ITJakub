@@ -7,12 +7,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:common="using:ITJakub.MobileApps.Client.MainApp.Common"
+    xmlns:login="using:ITJakub.MobileApps.Client.MainApp.View.Login"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d">
 
     <Page.Resources>
         <common:BooleanNegationConverter x:Key="BooleanNegationConverter"/>
+        <login:LoginProviderToIconConverter x:Key="LoginProviderToIconConverter"/>
     </Page.Resources>
     
     <!--
@@ -68,13 +70,13 @@
                   IsItemClickEnabled="True"
                   Style="{StaticResource HorizontalListView}"
                   HorizontalAlignment="Center"
-                  x:Name="MenuListView"
+                  ItemsSource="{Binding LoginProviders}"
                   IsEnabled="{Binding RegistrationInProgress, Converter={StaticResource BooleanNegationConverter}}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical"
                                 Width="200">
-                        <Image Source="{Binding Icon}"
+                        <Image Source="{Binding LoginProviderType, Converter={StaticResource LoginProviderToIconConverter}}"
                                Width="128"
                                Height="128"
                                Margin="35"/>

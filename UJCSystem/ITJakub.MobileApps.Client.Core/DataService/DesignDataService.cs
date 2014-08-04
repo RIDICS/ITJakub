@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
-<<<<<<< HEAD
-using ITJakub.MobileApps.Client.Core.Manager;
-=======
->>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
@@ -26,6 +22,11 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         }
 
         public UserInfo GetUserInfo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LogOut()
         {
             throw new NotImplementedException();
         }

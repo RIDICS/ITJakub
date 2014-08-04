@@ -87,7 +87,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
         public Task<UserInfo> LoginAsync()
         {
-            return new Task<UserInfo>(() =>
+            var task = new Task<UserInfo>(() =>
             {
                 var userInfo = new UserInfo
                 {
@@ -99,6 +99,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
                 };
                 return userInfo;
             });
+            task.Start();
+            return task;
         }
     }
 }

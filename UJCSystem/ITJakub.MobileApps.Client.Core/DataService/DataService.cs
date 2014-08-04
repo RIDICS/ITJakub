@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Core.Error;
-using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
@@ -14,13 +13,11 @@ namespace ITJakub.MobileApps.Client.Core.DataService
     {
         private readonly ApplicationManager m_applicationManager;
         //private SynchronizeManager m_synchronizeManager;
-        private readonly UserManager m_userManager;
         private readonly AuthenticationManager m_authenticationManager;
 
-        public DataService(AuthenticationManager authenticationManager, UserManager userManager, ApplicationManager applicationManager)
+        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager)
         {
             m_authenticationManager = authenticationManager;
-            m_userManager = userManager;
             m_applicationManager = applicationManager;
         }
 
@@ -114,13 +111,10 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         {
             return m_authenticationManager.UserInfo;
         }
-<<<<<<< HEAD
-=======
 
         public void LogOut()
         {
             m_authenticationManager.LogOut();
         }
->>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
     }
 }

@@ -32,7 +32,7 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Login
                 case LoginProviderType.LiveId:
                     return new BitmapImage(new Uri("ms-appx:///Icon/windows8-128.png"));
                 default:
-                    return new BitmapImage(new Uri("ms-appx:///Icon/windows8-128.png"));
+                    return new BitmapImage(new Uri("ms-appx:///Icon/login-128.png"));
             }
         }
     }

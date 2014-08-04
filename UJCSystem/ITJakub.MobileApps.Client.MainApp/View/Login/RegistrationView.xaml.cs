@@ -1,16 +1,6 @@
 ﻿// The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
 
-using System;
-using System.Collections.ObjectModel;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-<<<<<<< HEAD:UJCSystem/ITJakub.MobileApps.Client.MainApp/View/RegistrationView.xaml.cs
-using ITJakub.MobileApps.Client.Core.Manager;
-using ITJakub.MobileApps.Client.Core.Manager.Authentication;
-=======
-using ITJakub.MobileApps.Client.Core.Manager.Authentication;
-using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
->>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba:UJCSystem/ITJakub.MobileApps.Client.MainApp/View/Login/RegistrationView.xaml.cs
 using ITJakub.MobileApps.Client.MainApp.Common;
 
 namespace ITJakub.MobileApps.Client.MainApp.View.Login

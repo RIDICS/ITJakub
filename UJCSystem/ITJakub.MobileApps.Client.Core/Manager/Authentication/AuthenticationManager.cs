@@ -41,14 +41,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             callback(viewModels, null);
         }
 
-        private async Task LoginOauthAsync(LoginProviderType loginProviderType)
-        {
-            var loginManager = m_loginProviders[loginProviderType];
-            UserInfo =  await loginManager.LoginAsync();
-
-        }
-
-        private async Task LoginItJakub(LoginProviderType loginProviderType)
+        private async Task LoginItJakubAsync(LoginProviderType loginProviderType)
         {
             LoginResult result = await m_manager.LoginUserAsync(loginProviderType, UserInfo.Email, UserInfo.AccessToken);
             CommunicationToken = result.CommunicationToken;
@@ -60,23 +53,24 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             var info = await m_loginProviders[loginProviderType].LoginAsync();
             UserInfo = info;
 
-            //await LoginOauthAsync(loginProviderType);
-            if (!UserInfo.Success)
+            if (!info.Success)
                 return UserInfo;
 
-            //await LoginItJakub(loginProviderType);
+            //await LoginItJakubAsync(loginProviderType);
 
             return UserInfo;
         }
 
         public async Task<UserInfo> CreateUserAsync(LoginProviderType loginProviderType)
         {
-            await LoginOauthAsync(loginProviderType);
-            if (!UserInfo.Success)
+            var info = await m_loginProviders[loginProviderType].LoginAsync();
+            UserInfo = info;
+
+            if (!info.Success)
                 return UserInfo;
 
-            await m_manager.CreateUser(loginProviderType, UserInfo);
-            await LoginItJakub(loginProviderType);
+            await m_manager.CreateUser(loginProviderType, info);
+            await LoginItJakubAsync(loginProviderType);
 
             return UserInfo;
         }

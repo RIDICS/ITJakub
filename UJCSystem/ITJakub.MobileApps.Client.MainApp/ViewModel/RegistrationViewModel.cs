@@ -1,14 +1,11 @@
-﻿using Windows.UI.Xaml;
+﻿using System.Collections.ObjectModel;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
-using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
-<<<<<<< HEAD
-=======
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
->>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
 using ITJakub.MobileApps.Client.MainApp.View;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -36,6 +33,18 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService = navigationService;
             RegistrationInProgress = false;
             m_itemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
+            LoadInitData();
+        }
+
+        private void LoadInitData()
+        {
+            m_dataService.GetLoginProviders((list, exception) =>
+            {
+                if (exception != null)
+                    return;
+
+                LoginProviders = new ObservableCollection<LoginProviderViewModel>(list);
+            });
         }
 
         public RelayCommand<ItemClickEventArgs> ItemClickCommand
@@ -63,6 +72,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        public ObservableCollection<LoginProviderViewModel> LoginProviders { get; set; }
 
         private void ItemClick(ItemClickEventArgs args)
         {

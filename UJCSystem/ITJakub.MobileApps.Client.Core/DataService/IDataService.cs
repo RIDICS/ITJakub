@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
@@ -15,6 +14,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         void Login(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback);
         void CreateUser(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback);
         UserInfo GetUserInfo();
+        void LogOut();
         void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback);
         
         void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback);
