@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
+<<<<<<< HEAD
+using ITJakub.MobileApps.Client.Core.Manager;
+=======
+>>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
@@ -26,11 +30,6 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             throw new NotImplementedException();
         }
 
-        public void LogOut()
-        {
-            throw new NotImplementedException();
-        }
-
         public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
         {
             throw new NotImplementedException();
@@ -42,6 +41,11 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         }
 
         public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetApplicationByTypes(IEnumerable<ApplicationType> types, Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
             throw new NotImplementedException();
         }

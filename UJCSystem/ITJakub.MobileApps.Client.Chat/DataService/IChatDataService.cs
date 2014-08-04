@@ -21,6 +21,10 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
 
         public void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback)
         {
+<<<<<<< HEAD
+            //read from syncservice
+            callback(new ObservableCollection<MessageViewModel>(), null);
+=======
             var observableCollection = new ObservableCollection<MessageViewModel>
             {
                 new MessageViewModel {Author = "ME", Text = "TestovaciText1", SendTime = new DateTime(2000, 1, 1)},
@@ -29,6 +33,7 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
             };
             callback(observableCollection, null);
             //throw new NotImplementedException();
+>>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
         }
     }
 }

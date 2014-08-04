@@ -1,6 +1,11 @@
 ﻿// The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
 
 using Windows.UI.Xaml.Navigation;
+<<<<<<< HEAD:UJCSystem/ITJakub.MobileApps.Client.MainApp/View/LoginView.xaml.cs
+using ITJakub.MobileApps.Client.Core.Manager;
+using ITJakub.MobileApps.Client.Core.Manager.Authentication;
+=======
+>>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba:UJCSystem/ITJakub.MobileApps.Client.MainApp/View/Login/LoginView.xaml.cs
 using ITJakub.MobileApps.Client.MainApp.Common;
 
 namespace ITJakub.MobileApps.Client.MainApp.View.Login

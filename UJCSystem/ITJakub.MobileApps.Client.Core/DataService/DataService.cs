@@ -40,6 +40,12 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             callback(application, null);
         }
 
+        public void GetApplicationByTypes(IEnumerable<ApplicationType> types, Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
+        {
+            var applications = m_applicationManager.GetAllApplicationsByTypes(types);
+            callback(applications, null);
+        }
+
         public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
             //TODO load group list from server
@@ -108,10 +114,13 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         {
             return m_authenticationManager.UserInfo;
         }
+<<<<<<< HEAD
+=======
 
         public void LogOut()
         {
             m_authenticationManager.LogOut();
         }
+>>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
     }
 }

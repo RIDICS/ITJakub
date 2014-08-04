@@ -5,7 +5,10 @@ using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
+<<<<<<< HEAD
+=======
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
+>>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
 using ITJakub.MobileApps.Client.MainApp.View;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
