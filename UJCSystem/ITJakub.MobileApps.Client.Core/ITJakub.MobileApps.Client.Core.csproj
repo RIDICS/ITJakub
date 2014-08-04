@@ -117,6 +117,11 @@
     <Compile Include="ApplicationManager.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Error\ClientCommunicationException.cs" />
+    <Compile Include="Manager\Authentication\AuthenticationBroker\FlexibleWebAuthenticationBroker.cs" />
+    <Compile Include="Manager\Authentication\AuthenticationBroker\FlexibleWebAuthenticationResult.cs" />
+    <Compile Include="Manager\Authentication\AuthenticationBroker\FlexibleWebAuthView.xaml.cs">
+      <DependentUpon>FlexibleWebAuthView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Manager\Authentication\AuthenticationManager.cs" />
     <Compile Include="Manager\Authentication\FacebookProvider.cs" />
     <Compile Include="Manager\Authentication\GoogleProvider.cs" />
@@ -229,7 +234,12 @@
   <ItemGroup>
     <None Include="Service References\Service\MobileAppsService1.disco" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Manager\Authentication\AuthenticationBroker\FlexibleWebAuthView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
