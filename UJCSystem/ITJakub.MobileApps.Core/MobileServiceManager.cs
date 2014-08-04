@@ -115,8 +115,7 @@ namespace ITJakub.MobileApps.Core
 
         public IEnumerable<GroupDetails> GetMembershipsForUser(string userId)
         {
-            var member = m_usersRepository.FindById(long.Parse(userId));
-            var groups = m_groupRepository.LoadGroupsWithDetailsByMember(member);
+            var groups = m_usersRepository.LoadGroupsWithDetailsByMember(long.Parse(userId));
             return AutoMapper.Mapper.Map<IList<GroupDetails>>(groups);
         }
 

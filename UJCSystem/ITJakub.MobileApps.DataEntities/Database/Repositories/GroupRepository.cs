@@ -70,25 +70,5 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                         .List<Group>();
             }
         }
-
-        [Transaction(TransactionMode.Requires)]
-        public virtual IList<Group> LoadGroupsWithDetailsByMember(User member)
-        {
-            using (var session = GetSession())
-            {
-                //return
-                //    session.CreateCriteria<Group>()
-                //        .SetFetchMode("Members", FetchMode.Join)
-                //        .CreateAlias("Members", "Members")
-                //        .Add(Restrictions.In("Members.UserId", member.Id))
-                //        .SetFetchMode("Author", FetchMode.Join)
-                //        .List<Group>();
-
-                return session.QueryOver<Group>().
-                            Right.JoinQueryOver<User>(x => x.Members)
-                           .Where(u => u.Id == member.Id)
-                           .List();
-            }
-        }
     }
 }
