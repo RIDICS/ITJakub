@@ -21,14 +21,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="MobileAppsService3.xsd" MetadataType="Schema" ID="12428971-774e-4f74-b3af-db75d891ee99" SourceId="1" SourceUrl="http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc?xsd=xsd0" />
-    <MetadataFile FileName="MobileAppsService1.wsdl" MetadataType="Wsdl" ID="5ca68bff-f6a6-4d4e-a14f-9f37fbce2a19" SourceId="1" SourceUrl="http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc?wsdl" />
-    <MetadataFile FileName="MobileAppsService31.xsd" MetadataType="Schema" ID="be122575-568f-4bac-a8fb-29012606602d" SourceId="1" SourceUrl="http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc?xsd=xsd2" />
-    <MetadataFile FileName="MobileAppsService32.xsd" MetadataType="Schema" ID="97c11cb8-7a52-44bd-b796-0fcdeb09f84a" SourceId="1" SourceUrl="http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc?xsd=xsd1" />
-    <MetadataFile FileName="MobileAppsService1.disco" MetadataType="Disco" ID="d286879a-9b88-4088-aeb3-49d2dbae2336" SourceId="1" SourceUrl="http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc?disco" />
+    <MetadataFile FileName="MobileAppsService.xsd" MetadataType="Schema" ID="8db7b887-d6e1-4d4f-977a-d1c3cc23f3c6" SourceId="1" SourceUrl="http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc?xsd=xsd0" />
+    <MetadataFile FileName="MobileAppsService.wsdl" MetadataType="Wsdl" ID="66f160fe-7031-414f-8215-47675865e9fe" SourceId="1" SourceUrl="http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc?wsdl" />
+    <MetadataFile FileName="MobileAppsService1.xsd" MetadataType="Schema" ID="de8d6aab-7711-42cd-b3be-97149ab953d3" SourceId="1" SourceUrl="http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MobileAppsService.disco" MetadataType="Disco" ID="975eff32-1579-4961-9bef-f17ae4a8b899" SourceId="1" SourceUrl="http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc?disco" />
+    <MetadataFile FileName="MobileAppsService2.xsd" MetadataType="Schema" ID="35df002f-cdc6-4607-8dfe-c525610807f9" SourceId="1" SourceUrl="http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

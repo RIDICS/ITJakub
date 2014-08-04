@@ -34,17 +34,17 @@ namespace ITJakub.MobileApps.Client.Core
             string objectType = null)
         {
             var dateTimeString = since.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
-            var x = m_communicationManager.GetObjects(applicationType, GroupId, objectType, dateTimeString);
+            var synchronizedObjects = m_communicationManager.GetObjects(applicationType, GroupId, objectType, dateTimeString);
             var list = new ObservableCollection<ObjectDetails>();
-            foreach (var item in x)
+            foreach (var item in synchronizedObjects)
             {
                 list.Add(new ObjectDetails
                 {
                     Author = new AuthorInfo
                     {
-                        Email = item.Author.Email,
-                        FirstName = item.Author.FirstName,
-                        LastName = item.Author.LastName
+                        Email = item.Author.User.Email,
+                        FirstName = item.Author.User.FirstName,
+                        LastName = item.Author.User.LastName
                     },
                     CreateTime = item.CreateTime,
                     Data = item.SynchronizedObject.Data,

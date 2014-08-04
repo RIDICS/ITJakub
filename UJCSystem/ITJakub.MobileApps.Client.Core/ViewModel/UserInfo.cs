@@ -7,5 +7,8 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        
+        //TODO HACK
+        public string UserId { get { return "1"; } }
     }
 }

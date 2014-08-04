@@ -19,6 +19,6 @@
     <AzureStorageAccountName>mobileazuretables</AzureStorageAccountName>
     <AzureAppendTimestampToDeploymentLabel>True</AzureAppendTimestampToDeploymentLabel>
     <EnableRemoteDebugger>True</EnableRemoteDebugger>
-    <RemoteDebuggerConnectorCertificateThumbprint>67EEC998F6782161F866D914931FACEC3D774DB8</RemoteDebuggerConnectorCertificateThumbprint>
+    <RemoteDebuggerConnectorCertificateThumbprint>FDBC2C585A0FDAEBB982F730F07AC5AD2205184C</RemoteDebuggerConnectorCertificateThumbprint>
   </PropertyGroup>
 </Project>

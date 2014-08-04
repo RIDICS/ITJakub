@@ -235,12 +235,15 @@
   <ItemGroup>
     <None Include="Service References\Service\MobileAppsService.disco" />
   </ItemGroup>
+<<<<<<< HEAD
   <ItemGroup>
     <Page Include="Manager\Authentication\AuthenticationBroker\FlexibleWebAuthView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+=======
+>>>>>>> 94eb1bcb146b6fcefe6c9d05a30c5451bde8c85f
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

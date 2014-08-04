@@ -53,6 +53,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.DataContracts", "ITJakub.MobileApps.Client.DataContracts\ITJakub.MobileApps.Client.DataContracts.csproj", "{A6F66019-70E7-4177-9389-554D1E73C437}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.Core", "ITJakub.MobileApps.Client.Core\ITJakub.MobileApps.Client.Core.csproj", "{A6182390-8F74-4DE0-8F37-974D9321FB74}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F1034DE9-E00B-4EC6-8F87-45F25B45A67D} = {F1034DE9-E00B-4EC6-8F87-45F25B45A67D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.MainApp", "ITJakub.MobileApps.Client.MainApp\ITJakub.MobileApps.Client.MainApp.csproj", "{D2F6CC21-5137-4353-B861-1FF505B34CB2}"
 EndProject

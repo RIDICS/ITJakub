@@ -43,6 +43,7 @@ namespace ITJakub.MobileApps.Client.Core
             RegisterLoginProviders(container);
             container.RegisterType<ApplicationManager>();
             container.RegisterType<AuthenticationManager>();
+            container.RegisterType<MobileAppsServiceManager>();
 
 
             //container.RegisterTypes(AllClasses.FromApplication())
