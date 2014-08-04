@@ -18,13 +18,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             m_serviceClient = new MobileAppsServiceClient();
         }
 
-        public async Task<LoginResult> LoginUserAsync(LoginProvider loginProvider, string email, string accessToken)
+        public async Task<LoginResult> LoginUserAsync(LoginProviderType loginProviderType, string email, string accessToken)
         {
             try
             {
                 var response = await m_serviceClient.LoginUserAsync(new UserLogin
                 {
-                    AuthenticationProvider = ConvertLoginToAuthenticationProvider(loginProvider),
+                    AuthenticationProvider = ConvertLoginToAuthenticationProvider(loginProviderType),
                     AuthenticationToken = accessToken,
                     Email = email
                 });
@@ -53,11 +53,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             }
         }
 
-        public async Task CreateUser(LoginProvider loginProvider, UserInfo userInfo)
+        public async Task CreateUser(LoginProviderType loginProviderType, UserInfo userInfo)
         {
             try
             {
-                var authenticationProvider = ConvertLoginProviderToString(loginProvider);
+                var authenticationProvider = ConvertLoginProviderToString(loginProviderType);
 
                 await m_serviceClient.CreateUserAsync(authenticationProvider, userInfo.AccessToken, new User
                 {
@@ -84,18 +84,18 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             }
         }
 
-        private AuthenticationProviders ConvertLoginToAuthenticationProvider(LoginProvider loginProvider)
+        private AuthenticationProviders ConvertLoginToAuthenticationProvider(LoginProviderType loginProviderType)
         {
             AuthenticationProviders provider;
-            switch (loginProvider)
+            switch (loginProviderType)
             {
-                case LoginProvider.LiveId:
+                case LoginProviderType.LiveId:
                     provider = AuthenticationProviders.LiveId;
                     break;
-                case LoginProvider.Google:
+                case LoginProviderType.Google:
                     provider = AuthenticationProviders.Google;
                     break;
-                case LoginProvider.Facebook:
+                case LoginProviderType.Facebook:
                     provider = AuthenticationProviders.Facebook;
                     break;
                 default:
@@ -105,9 +105,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             return provider;
         }
 
-        private string ConvertLoginProviderToString(LoginProvider loginProvider)
+        private string ConvertLoginProviderToString(LoginProviderType loginProviderType)
         {
-            var provider = ConvertLoginToAuthenticationProvider(loginProvider);
+            var provider = ConvertLoginToAuthenticationProvider(loginProviderType);
             return ((byte)provider).ToString();
         }
     }

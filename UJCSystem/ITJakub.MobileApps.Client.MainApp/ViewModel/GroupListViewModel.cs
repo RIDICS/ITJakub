@@ -10,35 +10,35 @@ using ITJakub.MobileApps.Client.MainApp.View;
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
+    ///     This class contains properties that a View can data bind to.
+    ///     <para>
+    ///         See http://www.galasoft.ch/mvvm
+    ///     </para>
     /// </summary>
     public class GroupListViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
+        private readonly bool m_isTeacher;
         private readonly INavigationService m_navigationService;
-        private ObservableCollection<GroupInfoViewModel> m_groupList;
-        private RelayCommand<ItemClickEventArgs> m_groupClickCommand;
+        private bool m_commandBarOpen;
+        private RelayCommand m_connectCommand;
+        private RelayCommand m_connectToGroupCommand;
+        private string m_connectToGroupNumber;
         private RelayCommand m_createNewGroupCommand;
         private RelayCommand m_deleteGroupCommand;
-        private RelayCommand m_refreshListCommand;
-        private string m_connectToGroupNumber;
-        private RelayCommand m_connectToGroupCommand;
-        private string m_newGroupName;
-        private bool m_commandBarOpen;
-        private GroupInfoViewModel m_selectedGroup;
-        private RelayCommand m_connectCommand;
-        private bool m_isTeacher;
         private string m_deleteMessage;
-        private RelayCommand m_logOutCommand;
-        private Visibility m_noGroupVisibility;
         private string m_firstName;
+        private RelayCommand<ItemClickEventArgs> m_groupClickCommand;
+        private ObservableCollection<GroupInfoViewModel> m_groupList;
         private string m_lastName;
+        private RelayCommand m_logOutCommand;
+        private string m_newGroupName;
+        private Visibility m_noGroupVisibility;
+        private RelayCommand m_refreshListCommand;
+        private GroupInfoViewModel m_selectedGroup;
 
         /// <summary>
-        /// Initializes a new instance of the GroupListViewModel class.
+        ///     Initializes a new instance of the GroupListViewModel class.
         /// </summary>
         public GroupListViewModel(IDataService dataService, INavigationService navigationService)
         {
@@ -46,19 +46,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService = navigationService;
             GroupList = new ObservableCollection<GroupInfoViewModel>();
             NoGroupVisibility = Visibility.Collapsed;
-            
+
             InitCommands();
             LoadData();
 
             //TODO load correct information
             m_isTeacher = true;
-        }
-
-        private void InitCommands()
-        {
-            m_groupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
-            m_connectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
-            m_logOutCommand = new RelayCommand(LogOut);
         }
 
         public ObservableCollection<GroupInfoViewModel> GroupList
@@ -121,7 +114,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             get { return m_commandBarOpen; }
             set
             {
-                m_commandBarOpen = value; 
+                m_commandBarOpen = value;
                 RaisePropertyChanged();
             }
         }
@@ -148,17 +141,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         public Visibility ConnectButtonVisibility
         {
-            get
-            {
-                return SelectedGroup != null ? Visibility.Visible : Visibility.Collapsed;
-            }
+            get { return SelectedGroup != null ? Visibility.Visible : Visibility.Collapsed; }
         }
 
         public Visibility TeachersSecondaryButtonVisibility
         {
             get
             {
-                var isVisible = m_isTeacher && SelectedGroup != null;
+                bool isVisible = m_isTeacher && SelectedGroup != null;
                 return isVisible ? Visibility.Visible : Visibility.Collapsed;
             }
         }
@@ -213,6 +203,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        private void InitCommands()
+        {
+            m_groupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
+            m_connectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
+            m_logOutCommand = new RelayCommand(LogOut);
+        }
+
         public void LoadData()
         {
             m_dataService.GetGroupList((groupList, exception) =>
@@ -222,7 +219,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupList = groupList;
                 NoGroupVisibility = groupList.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             });
-            var userInfo = m_dataService.GetUserInfo();
+            UserInfo userInfo = m_dataService.GetUserInfo();
             FirstName = userInfo.FirstName;
             LastName = userInfo.LastName;
         }

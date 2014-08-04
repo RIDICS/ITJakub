@@ -5,6 +5,7 @@ using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.Core.DataService
@@ -12,15 +13,15 @@ namespace ITJakub.MobileApps.Client.Core.DataService
     public class DataService : IDataService
     {
         private readonly ApplicationManager m_applicationManager;
-        private SynchronizeManager m_synchronizeManager;
+        //private SynchronizeManager m_synchronizeManager;
         private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
 
-        public DataService()
+        public DataService(AuthenticationManager authenticationManager, UserManager userManager, ApplicationManager applicationManager)
         {
-            var manager = new MobileAppsServiceManager();
-            m_applicationManager = new ApplicationManager();
-            m_synchronizeManager = SynchronizeManager.Instance;
-            m_userManager = new UserManager(manager);
+            m_authenticationManager = authenticationManager;
+            m_userManager = userManager;
+            m_applicationManager = applicationManager;
         }
 
         public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
@@ -74,11 +75,16 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             callback(list, null);
         }
 
-        public async void Login(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
+        public void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback)
+        {
+            m_authenticationManager.GetAllLoginProviderViewModels(callback);
+        }
+
+        public async void Login(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback)
         {
             try
             {
-                var userInfo = await m_userManager.LoginAsync(loginProvider);
+                var userInfo = await m_authenticationManager.LoginAsync(loginProviderType);
                 callback(userInfo, null);
             }
             catch (UserNotRegisteredException exception)
@@ -91,11 +97,11 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             }
         }
 
-        public async void CreateUser(LoginProvider loginProvider, Action<UserInfo, Exception> callback)
+        public async void CreateUser(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback)
         {
             try
             {
-                var userInfo = await m_userManager.CreateUserAsync(loginProvider);
+                var userInfo = await m_authenticationManager.CreateUserAsync(loginProviderType);
                 callback(userInfo, null);
             }
             catch (ClientCommunicationException exception)
@@ -106,7 +112,15 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 
         public UserInfo GetUserInfo()
         {
-            return m_userManager.UserInfo;
+            return m_authenticationManager.UserInfo;
         }
+<<<<<<< HEAD
+=======
+
+        public void LogOut()
+        {
+            m_authenticationManager.LogOut();
+        }
+>>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
     }
 }

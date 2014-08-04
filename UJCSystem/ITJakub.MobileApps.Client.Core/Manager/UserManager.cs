@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
+<<<<<<< HEAD
 using ITJakub.MobileApps.Client.Core.Service;
+=======
+>>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using Task = System.Threading.Tasks.Task;
 
@@ -9,6 +12,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
 {
     public class UserManager
     {
+<<<<<<< HEAD
         private readonly MobileAppsServiceManager m_manager;
 
         public UserManager(MobileAppsServiceManager manager)
@@ -59,6 +63,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             return UserInfo;
         }
 
+=======
+>>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
         
     }
 }

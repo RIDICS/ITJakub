@@ -5,6 +5,10 @@ using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
+<<<<<<< HEAD
+=======
+using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
+>>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba
 using ITJakub.MobileApps.Client.MainApp.View;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -62,17 +66,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void ItemClick(ItemClickEventArgs args)
         {
-            var item = args.ClickedItem as LoginMenuItemViewModel;
+            var item = args.ClickedItem as LoginProviderViewModel;
             if (item == null)
                 return;
 
-            Register(item.LoginProvider);
+            Register(item.LoginProviderType);
         }
 
-        private void Register(LoginProvider loginProvider)
+        private void Register(LoginProviderType loginProviderType)
         {
             RegistrationInProgress = true;
-            m_dataService.CreateUser(loginProvider, (info, exception) =>
+            m_dataService.CreateUser(loginProviderType, (info, exception) =>
             {
                 RegistrationInProgress = false;
                 if (exception != null)

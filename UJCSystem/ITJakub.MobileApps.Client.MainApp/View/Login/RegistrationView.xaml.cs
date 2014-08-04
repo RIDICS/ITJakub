@@ -4,17 +4,21 @@ using System;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+<<<<<<< HEAD:UJCSystem/ITJakub.MobileApps.Client.MainApp/View/RegistrationView.xaml.cs
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
+=======
+using ITJakub.MobileApps.Client.Core.Manager.Authentication;
+using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
+>>>>>>> 76f07b70317554fb477fd5225878b9cf1ddc05ba:UJCSystem/ITJakub.MobileApps.Client.MainApp/View/Login/RegistrationView.xaml.cs
 using ITJakub.MobileApps.Client.MainApp.Common;
-using ITJakub.MobileApps.Client.MainApp.ViewModel;
 
-namespace ITJakub.MobileApps.Client.MainApp.View
+namespace ITJakub.MobileApps.Client.MainApp.View.Login
 {
     /// <summary>
     /// A page that displays a grouped collection of items.
     /// </summary>
-    public sealed partial class LoginView
+    public sealed partial class RegistrationView
     {
         private NavigationHelper navigationHelper;
 
@@ -27,37 +31,13 @@ namespace ITJakub.MobileApps.Client.MainApp.View
             get { return navigationHelper; }
         }
 
-        public LoginView()
+        public RegistrationView()
         {
             InitializeComponent();
-            InitMenu();
             navigationHelper = new NavigationHelper(this);
         }
 
-        private void InitMenu()
-        {
-            MenuListView.ItemsSource = new ObservableCollection<LoginMenuItemViewModel>
-            {
-                new LoginMenuItemViewModel
-                {
-                    LoginProvider = LoginProvider.LiveId,
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/windows8-128.png")),
-                    Name = "Live ID"
-                },
-                new LoginMenuItemViewModel
-                {
-                    LoginProvider = LoginProvider.Facebook,
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/facebook-128.png")),
-                    Name = "Facebook"
-                },
-                new LoginMenuItemViewModel
-                {
-                    LoginProvider = LoginProvider.Google,
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/google_plus-128.png")),
-                    Name = "Google"
-                }
-            };
-        }
+        
 
 
         #region NavigationHelper registration
