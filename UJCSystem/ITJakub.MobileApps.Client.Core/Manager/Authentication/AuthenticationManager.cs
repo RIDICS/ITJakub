@@ -20,6 +20,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             m_manager = container.Resolve<MobileAppsServiceManager>();
             LoadLoginProviders(Container.Current.ResolveAll<ILoginProvider>());
+
+            //TODO HACK for debug
+            CommunicationToken = "ab617d8f-b6bc-44c3-87a9-e38f808039af";
         }
 
         public UserInfo UserInfo { get; private set; }

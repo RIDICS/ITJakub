@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Core.Error;
+using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
@@ -12,13 +13,15 @@ namespace ITJakub.MobileApps.Client.Core.DataService
     public class DataService : IDataService
     {
         private readonly ApplicationManager m_applicationManager;
+        private readonly MobileAppsServiceManager m_serviceManager;
         //private SynchronizeManager m_synchronizeManager;
         private readonly AuthenticationManager m_authenticationManager;
 
-        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager)
+        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager, MobileAppsServiceManager serviceManager)
         {
             m_authenticationManager = authenticationManager;
             m_applicationManager = applicationManager;
+            m_serviceManager = serviceManager;
         }
 
         public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
@@ -43,32 +46,33 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             callback(applications, null);
         }
 
-        public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        public async void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
+            var list = await m_serviceManager.GetGroupListAsync(m_authenticationManager.CommunicationToken, m_authenticationManager.UserInfo.UserId);
             //TODO load group list from server
-            var list = new ObservableCollection<GroupInfoViewModel>
-            {
-                new GroupInfoViewModel
-                {
-                    ApplicationType = ApplicationType.SampleApp,
-                    GroupCode = "123546",
-                    MemberCount = 5,
-                    GroupName = "Group A"
-                },
-                new GroupInfoViewModel
-                {
-                    ApplicationType = ApplicationType.Hangman,
-                    GroupCode = "123546",
-                    MemberCount = 5,
-                    GroupName = "Group B"
-                },
-            };
-            foreach (var group in list)
-            {
-                var application = m_applicationManager.GetApplication(group.ApplicationType);
-                group.Icon = application.Icon;
-                group.ApplicationName = application.Name;
-            }
+            //var list = new ObservableCollection<GroupInfoViewModel>
+            //{
+            //    new GroupInfoViewModel
+            //    {
+            //        ApplicationType = ApplicationType.SampleApp,
+            //        GroupCode = "123546",
+            //        MemberCount = 5,
+            //        GroupName = "Group A"
+            //    },
+            //    new GroupInfoViewModel
+            //    {
+            //        ApplicationType = ApplicationType.Hangman,
+            //        GroupCode = "123546",
+            //        MemberCount = 5,
+            //        GroupName = "Group B"
+            //    },
+            //};
+            //foreach (var group in list)
+            //{
+            //    var application = m_applicationManager.GetApplication(group.ApplicationType);
+            //    group.Icon = application.Icon;
+            //    group.ApplicationName = application.Name;
+            //}
             callback(list, null);
         }
 

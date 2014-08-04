@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -34,7 +36,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (exception != null)
                     return;
                 AppList.Clear();
-                foreach (var applicationKeyValue in applications)
+                foreach (var applicationKeyValue in applications.Where(pair => pair.Value.ApplicationRoleType == ApplicationRoleType.MainApp))
                 {
                     AppList.Add(new AppInfoViewModel
                     {

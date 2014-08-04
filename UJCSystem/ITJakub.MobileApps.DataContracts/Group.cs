@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace ITJakub.MobileApps.DataContracts
 {
@@ -7,6 +6,6 @@ namespace ITJakub.MobileApps.DataContracts
     public class Group
     {
         [DataMember]
-        public IEnumerable<UserDetails> Members { get; set; }
+        public string Name { get; set; }
     }
 }

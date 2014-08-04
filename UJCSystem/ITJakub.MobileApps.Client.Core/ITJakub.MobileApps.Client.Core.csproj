@@ -123,6 +123,7 @@
     <Compile Include="Manager\Authentication\ItJakubProvider.cs" />
     <Compile Include="Manager\Authentication\LiveIdProvider.cs" />
     <Compile Include="Manager\Authentication\LoginResult.cs" />
+    <Compile Include="Manager\ClientMessageInspector.cs" />
     <Compile Include="Manager\MobileAppsServiceManager.cs" />
     <Compile Include="Error\UserNotRegisteredException.cs" />
     <Compile Include="Service References\Service\Reference.cs">
@@ -211,14 +212,14 @@
     <None Include="Service References\Service\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Service\MobileAppsService1.wsdl" />
-    <None Include="Service References\Service\MobileAppsService3.xsd">
+    <None Include="Service References\Service\MobileAppsService.wsdl" />
+    <None Include="Service References\Service\MobileAppsService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\Service\MobileAppsService31.xsd">
+    <None Include="Service References\Service\MobileAppsService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\Service\MobileAppsService32.xsd">
+    <None Include="Service References\Service\MobileAppsService2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\Service\Reference.svcmap">
@@ -227,9 +228,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Service\MobileAppsService1.disco" />
+    <None Include="Service References\Service\MobileAppsService.disco" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

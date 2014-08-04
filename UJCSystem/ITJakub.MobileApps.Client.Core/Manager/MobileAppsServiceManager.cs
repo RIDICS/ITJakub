@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Net;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
@@ -109,6 +112,26 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         {
             var provider = ConvertLoginToAuthenticationProvider(loginProviderType);
             return ((byte)provider).ToString();
+        }
+
+        public async Task<ObservableCollection<GroupInfoViewModel>> GetGroupListAsync(string communicationToken, string userId)
+        {
+            //using(new OperationContextScope(m_serviceClient.InnerChannel))  
+            //{
+            //    var request = new HttpRequestMessageProperty();
+            //    request.Headers["Communication_Token"] = communicationToken;
+            //    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = request;
+                var response = await m_serviceClient.GetMembershipsForUserAsync(userId);
+                var list = new ObservableCollection<GroupInfoViewModel>();
+                foreach (var groupDetails in response)
+                {
+                    list.Add(new GroupInfoViewModel
+                    {
+                        GroupName = groupDetails.Group.Name
+                    });
+                }
+                return list;
+            //}
         }
     }
 }
