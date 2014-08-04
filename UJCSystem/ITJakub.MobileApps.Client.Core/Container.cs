@@ -53,6 +53,7 @@ namespace ITJakub.MobileApps.Client.Core
             container.RegisterType<ILoginProvider, FacebookProvider>(WithName.TypeName(typeof(FacebookProvider)));
             container.RegisterType<ILoginProvider, GoogleProvider>(WithName.TypeName(typeof(GoogleProvider)));
             container.RegisterType<ILoginProvider, LiveIdProvider>(WithName.TypeName(typeof(LiveIdProvider)));
+            container.RegisterType<ILoginProvider, ItJakubProvider>(WithName.TypeName(typeof(ItJakubProvider)));
 
             //container.RegisterTypes(
             //    AllClasses.FromApplication().Where(x => x.GetTypeInfo().IsSubclassOf(typeof(ILoginProvider))),

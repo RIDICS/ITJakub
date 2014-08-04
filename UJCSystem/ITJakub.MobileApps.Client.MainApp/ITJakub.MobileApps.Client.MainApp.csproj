@@ -150,6 +150,7 @@
     <Content Include="Icon\google_plus-128.png" />
     <Content Include="Icon\license.txt" />
     <Content Include="Icon\login-128.png" />
+    <Content Include="Icon\LogoMobileApps_128x128.png" />
     <Content Include="Icon\windows8-128.png" />
     <None Include="Common\ReadMe.txt" />
     <Content Include="Fonts\LiveSymbol.ttf" />

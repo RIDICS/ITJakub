@@ -31,6 +31,8 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Login
                     return new BitmapImage(new Uri("ms-appx:///Icon/google_plus-128.png"));
                 case LoginProviderType.LiveId:
                     return new BitmapImage(new Uri("ms-appx:///Icon/windows8-128.png"));
+                case LoginProviderType.ItJakub:
+                    return new BitmapImage(new Uri("ms-appx:///Icon/LogoMobileApps_128x128.png"));
                 default:
                     return new BitmapImage(new Uri("ms-appx:///Icon/login-128.png"));
             }

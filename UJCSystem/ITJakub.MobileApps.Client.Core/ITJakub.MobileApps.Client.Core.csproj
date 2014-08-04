@@ -120,6 +120,7 @@
     <Compile Include="Manager\Authentication\AuthenticationManager.cs" />
     <Compile Include="Manager\Authentication\FacebookProvider.cs" />
     <Compile Include="Manager\Authentication\GoogleProvider.cs" />
+    <Compile Include="Manager\Authentication\ItJakubProvider.cs" />
     <Compile Include="Manager\Authentication\LiveIdProvider.cs" />
     <Compile Include="Manager\Authentication\LoginResult.cs" />
     <Compile Include="Manager\MobileAppsServiceManager.cs" />

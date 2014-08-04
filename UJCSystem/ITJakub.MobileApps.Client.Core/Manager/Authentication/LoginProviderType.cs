@@ -4,6 +4,7 @@
     {
         LiveId,
         Facebook,
-        Google
+        Google,
+        ItJakub
     }
 }
