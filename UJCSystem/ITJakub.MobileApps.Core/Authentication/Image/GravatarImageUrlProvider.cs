@@ -15,7 +15,7 @@ namespace ITJakub.MobileApps.Core.Authentication.Image
 
         public string GetImageUrl(string email)
         {
-            return string.Concat(m_baseUrl,ComputeHash(email.Trim().ToLower()).ToLower());
+            return string.Format(m_baseUrl,ComputeHash(email.Trim().ToLower()).ToLower());
         }
 
         private static string ComputeHash(string input)

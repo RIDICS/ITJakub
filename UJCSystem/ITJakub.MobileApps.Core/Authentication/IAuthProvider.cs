@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DotNetOpenAuth.FacebookOAuth2;
 using DotNetOpenAuth.GoogleOAuth2;
+using ITJakub.MobileApps.Core.Authentication.Image;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
 using User = ITJakub.MobileApps.DataEntities.Database.Entities.User;
@@ -17,18 +18,18 @@ namespace ITJakub.MobileApps.Core.Authentication
 
     public class GoogleAuthProvider : GoogleOAuth2Client, IAuthProvider
     {
-        private readonly string m_imageUrlStringFormat;
+        private const string PictureKey = "picture";
+        private const string EmailKey = "email";
 
-        public GoogleAuthProvider(string clientId = "none", string clientSecret = "none", string imageUrlStringFormat = null)
+        public GoogleAuthProvider(string clientId = "none", string clientSecret = "none")
             : base(clientId, clientSecret)
         {
-            m_imageUrlStringFormat = imageUrlStringFormat;
         }
 
         public AuthenticateResultInfo Authenticate(string accessToken, string email)
         {
             IDictionary<string, string> data = base.GetUserData(accessToken);
-            bool authResult = data["email"].Equals(email);
+            bool authResult = data[EmailKey].Equals(email);
             var result = new AuthenticateResultInfo
             {
                 Result = authResult ? AuthResultType.Success : AuthResultType.Failed,
@@ -36,7 +37,7 @@ namespace ITJakub.MobileApps.Core.Authentication
             if (!authResult)
                 return result;
 
-            result.UserImageLocation = GetImageLocation(data["userId"]);
+            result.UserImageLocation = GetImageLocation(data);
 
             return result;
         }
@@ -46,27 +47,29 @@ namespace ITJakub.MobileApps.Core.Authentication
             get { return AuthenticationProviders.Google; }
         }
 
-        private string GetImageLocation(string userId)
+        private string GetImageLocation(IDictionary<string, string> userId)
         {
-            return m_imageUrlStringFormat != null ? string.Format(m_imageUrlStringFormat, userId) : null;
+            if (userId.ContainsKey(PictureKey))
+                return userId[PictureKey];
+            return null;
         }
     }
 
     public class FacebookAuthProvider : FacebookOAuth2Client, IAuthProvider
     {
-        private readonly string m_imageUrlStringFormat;
+        private const string PictureKey = "picture";
+        private const string EmailKey = "email";
 
-        public FacebookAuthProvider(string clientId = "none", string clientSecret = "none", string imageUrlStringFormat = null)
+        public FacebookAuthProvider(string clientId = "none", string clientSecret = "none")
             : base(clientId, clientSecret)
         {
-            m_imageUrlStringFormat = imageUrlStringFormat;
         }
 
 
         public AuthenticateResultInfo Authenticate(string accessToken, string email)
         {
             IDictionary<string, string> data = base.GetUserData(accessToken);
-            bool authResult = data["email"].Equals(email);
+            bool authResult = data[EmailKey].Equals(email);
             var result = new AuthenticateResultInfo
             {
                 Result = authResult ? AuthResultType.Success : AuthResultType.Failed,
@@ -74,7 +77,7 @@ namespace ITJakub.MobileApps.Core.Authentication
             if (!authResult)
                 return result;
 
-            result.UserImageLocation = GetImageLocation(data["userId"]);
+            result.UserImageLocation = GetImageLocation(data);
             return result;
         }
 
@@ -83,19 +86,23 @@ namespace ITJakub.MobileApps.Core.Authentication
             get { return AuthenticationProviders.Facebook; }
         }
 
-        private string GetImageLocation(string userId)
+        private string GetImageLocation(IDictionary<string, string> userId)
         {
-            return m_imageUrlStringFormat != null ? string.Format(m_imageUrlStringFormat, userId) : null;
+            if (userId.ContainsKey(PictureKey))
+                return userId[PictureKey];
+            return null;
         }
     }
 
     public class ItJakubAuthProvider : IAuthProvider
     {
         private readonly UsersRepository m_usersRepository;
+        private readonly GravatarImageUrlProvider m_imageUrlProvider;
 
-        public ItJakubAuthProvider(UsersRepository usersRepository)
+        public ItJakubAuthProvider(UsersRepository usersRepository, GravatarImageUrlProvider imageUrlProvider)
         {
             m_usersRepository = usersRepository;
+            m_imageUrlProvider = imageUrlProvider;
         }
 
         public AuthenticationProviders ProviderType
@@ -120,7 +127,7 @@ namespace ITJakub.MobileApps.Core.Authentication
 
         private string GetImageLocation(string email)
         {
-            return null;
+            return m_imageUrlProvider.GetImageUrl(email);
         }
     }
 
