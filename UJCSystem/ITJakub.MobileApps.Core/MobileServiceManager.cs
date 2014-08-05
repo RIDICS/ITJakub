@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.Core.Authentication;
+using ITJakub.MobileApps.Core.Authentication.Image;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
