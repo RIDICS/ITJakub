@@ -19,17 +19,19 @@ namespace ITJakub.MobileApps.Core.Authentication
         }
 
 
-        public void AuthenticateByCommunicationToken(string communicationToken)
+        public void AuthenticateByCommunicationToken(string communicationToken, Role minRoleAllowed = Role.Student)
         {
             var user = m_usersRepository.GetUserByCommunicationToken(communicationToken);
             if (user == null || !m_communicationTokenManager.IsCommunicationTokenActive(user.CommunicationTokenCreateTime))
-                throw new WebFaultException(HttpStatusCode.Unauthorized) { Source = "Recieved token expired or is not valid. Login again please..." }; 
+                throw new WebFaultException(HttpStatusCode.Unauthorized) {Source = "Recieved token expired or is not valid. Login again please..."};
+            if (minRoleAllowed.Equals(Role.Teacher) && user.Institution == null)
+                throw new WebFaultException(HttpStatusCode.Unauthorized) {Source = "You don't have enough privileges ..."};
         }
 
         public void AuthenticateByProvider(string email, string authenticationToken, AuthenticationProviders authenticationProvider)
         {
             if (!m_authDirector.GetProvider(authenticationProvider).Authenticate(authenticationToken, email))
-                throw new WebFaultException(HttpStatusCode.Unauthorized) { Source = "Users e-mail is not valid." };
+                throw new WebFaultException(HttpStatusCode.Unauthorized) {Source = "Users e-mail is not valid."};
         }
     }
 }

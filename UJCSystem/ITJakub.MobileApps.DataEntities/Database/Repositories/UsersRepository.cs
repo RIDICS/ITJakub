@@ -14,7 +14,8 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
     [Transactional]
     public class UsersRepository : NHibernateTransactionalDao<User>
     {
-        public UsersRepository(ISessionManager sessManager) : base(sessManager)
+        public UsersRepository(ISessionManager sessManager)
+            : base(sessManager)
         {
         }
 
@@ -102,7 +103,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 var user = session.CreateCriteria<User>()
                     .Add(Restrictions.Eq(Projections.Id(), userId))
                     .SetFetchMode("MemberOfGroups", FetchMode.Join)
-                    .SetFetchMode("MemberOfGroups.Members", FetchMode.Select)
+                    .SetFetchMode("MemberOfGroups.Members", FetchMode.Join)
                     .UniqueResult<User>();
                 return user.MemberOfGroups;
             }
