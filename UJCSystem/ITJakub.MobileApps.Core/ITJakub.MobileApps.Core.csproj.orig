@@ -126,8 +126,11 @@
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\AuthInterceptor.cs" />
     <Compile Include="Authentication\AuthProviderDirector.cs" />
+<<<<<<< HEAD
     <Compile Include="Authentication\AuthenticateResultInfo.cs" />
+=======
     <Compile Include="Authentication\Image\GravatarImageUrlProvider.cs" />
+>>>>>>> 7937299cbe128e3bd82f86d38e70aeea1b5ced39
     <Compile Include="AutoMapperProfiles\GroupDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
     <Compile Include="AutoMapperProfiles\InstitutionDetailsProfile.cs" />
