@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.Core.Authentication;
+using ITJakub.MobileApps.Core.Authentication.Image;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
@@ -84,6 +85,7 @@ namespace ITJakub.MobileApps.Core
         public LoginUserResponse LoginUser(UserLogin userLogin)
         {
             m_authenticationManager.AuthenticateByProvider(userLogin.Email, userLogin.AuthenticationToken, userLogin.AuthenticationProvider); //validate user's e-mail via authentication provider 
+            //TODO download image
             return m_userManager.Login(userLogin);
         }
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -115,13 +115,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationManager.cs" />
+    <Compile Include="Manager\Authentication\AuthenticationBroker\WebAuthViewModel.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Error\ClientCommunicationException.cs" />
-    <Compile Include="Manager\Authentication\AuthenticationBroker\FlexibleWebAuthenticationBroker.cs" />
-    <Compile Include="Manager\Authentication\AuthenticationBroker\FlexibleWebAuthenticationResult.cs" />
-    <Compile Include="Manager\Authentication\AuthenticationBroker\FlexibleWebAuthView.xaml.cs">
-      <DependentUpon>FlexibleWebAuthView.xaml</DependentUpon>
+    <Compile Include="Manager\Authentication\AuthenticationBroker\CustomWebAuthenticationBroker.cs" />
+    <Compile Include="Manager\Authentication\AuthenticationBroker\AuthBrokerResult.cs" />
+    <Compile Include="Manager\Authentication\AuthenticationBroker\WebAuthView.xaml.cs">
+      <DependentUpon>WebAuthView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Manager\Authentication\AuthenticationBroker\Messages\AuthBrokerNavigateUriMessage.cs" />
+    <Compile Include="Manager\Authentication\AuthenticationBroker\Messages\AuthBrokerUriChangedMessage.cs" />
+    <Compile Include="Manager\Authentication\AuthenticationBroker\Messages\AuthBrokerCanceledMessage.cs" />
     <Compile Include="Manager\Authentication\AuthenticationManager.cs" />
     <Compile Include="Manager\Authentication\FacebookProvider.cs" />
     <Compile Include="Manager\Authentication\GoogleProvider.cs" />
@@ -234,10 +238,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Manager\Authentication\AuthenticationBroker\FlexibleWebAuthView.xaml">
+    <Page Include="Manager\Authentication\AuthenticationBroker\WebAuthView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\Service\MobileAppsService1.disco" />

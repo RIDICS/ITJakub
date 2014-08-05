@@ -2,7 +2,7 @@
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker
 {
-    public class FlexibleWebAuthenticationResult
+    public class AuthBrokerResult
     {
         public string ResponseData { get; set; }
         public WebAuthenticationStatus ResponseStatus { get; set; }
