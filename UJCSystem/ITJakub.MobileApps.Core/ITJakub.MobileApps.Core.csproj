@@ -126,6 +126,7 @@
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\AuthInterceptor.cs" />
     <Compile Include="Authentication\AuthProviderDirector.cs" />
+    <Compile Include="Authentication\AuthenticateResultInfo.cs" />
     <Compile Include="AutoMapperProfiles\GroupDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
     <Compile Include="AutoMapperProfiles\InstitutionDetailsProfile.cs" />

@@ -84,6 +84,7 @@ namespace ITJakub.MobileApps.Core
         public LoginUserResponse LoginUser(UserLogin userLogin)
         {
             m_authenticationManager.AuthenticateByProvider(userLogin.Email, userLogin.AuthenticationToken, userLogin.AuthenticationProvider); //validate user's e-mail via authentication provider 
+            //TODO download image
             return m_userManager.Login(userLogin);
         }
 

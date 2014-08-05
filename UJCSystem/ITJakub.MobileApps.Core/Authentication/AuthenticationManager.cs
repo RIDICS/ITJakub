@@ -30,7 +30,8 @@ namespace ITJakub.MobileApps.Core.Authentication
 
         public void AuthenticateByProvider(string email, string authenticationToken, AuthenticationProviders authenticationProvider)
         {
-            if (!m_authDirector.GetProvider(authenticationProvider).Authenticate(authenticationToken, email))
+            var authenticateResult = m_authDirector.GetProvider(authenticationProvider).Authenticate(authenticationToken, email);
+            if (authenticateResult== null || authenticateResult.Result == AuthResultType.Failed)
                 throw new WebFaultException(HttpStatusCode.Unauthorized) {Source = "Users e-mail is not valid."};
         }
     }
