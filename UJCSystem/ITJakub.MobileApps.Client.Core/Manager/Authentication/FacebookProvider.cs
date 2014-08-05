@@ -17,7 +17,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         public async Task<UserInfo> LoginAsync()
         {
             var fbClient = new FacebookClient();
-            //var redirectUri = new Uri(WebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri);
+            //var redirectUri = new Uri(CustomWebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri);
             var redirectUri = new Uri(RedirectUri);
             Uri loginUrl = fbClient.GetLoginUrl(new
             {
@@ -29,8 +29,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             });
 
             //WebAuthenticationResult webAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl);
-            FlexibleWebAuthenticationResult webAuthenticationResult =
-                await FlexibleWebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl, redirectUri);
+            AuthBrokerResult webAuthenticationResult =
+                await CustomWebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl, redirectUri);
             UserInfo userInfo = GetUserInfoFromResponse(fbClient, webAuthenticationResult);
 
             return userInfo;
@@ -78,7 +78,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             return userInfo;
         }
 
-        private UserInfo GetUserInfoFromResponse(FacebookClient fbClient, FlexibleWebAuthenticationResult webAuthenticationResult)
+        private UserInfo GetUserInfoFromResponse(FacebookClient fbClient, AuthBrokerResult webAuthenticationResult)
         {
             var userInfo = new UserInfo();
 
