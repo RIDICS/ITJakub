@@ -54,7 +54,7 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "institutions/enter?code={enterCode}&user={userId}")]
-        [AuthorizedMethod(Role.Student)]
+        [AuthorizedMethod(Role.Student,"userId")]
         void AddUserToInstitution(string enterCode, string userId);
 
 
@@ -132,7 +132,7 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "tasks/create?app={applicationId}&author={userId}")]
-        [AuthorizedMethod(Role.Teacher)]
+        [AuthorizedMethod(Role.Teacher, "userId")]
         void CreateTaskForApplication(string applicationId, string userId, Task task);
 
 
@@ -148,7 +148,7 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "groups/create?author={userId}&name={groupName}")]
-        [AuthorizedMethod(Role.Teacher)]
+        [AuthorizedMethod(Role.Teacher, "userId")]
         CreateGroupResponse CreateGroup(string userId, string groupName);
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "groups/{groupId}/assign?task={taskId}&user={userId}")]
-        [AuthorizedMethod(Role.Teacher)]
+        [AuthorizedMethod(Role.Teacher, "userId")]
         void AssignTaskToGroup(string groupId, string taskId, string userId);
 
 
@@ -180,7 +180,7 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "groups/enter?code={enterCode}&user={userId}")]
-        [AuthorizedMethod(Role.Student)]
+        [AuthorizedMethod(Role.Student, "userId")]
         void AddUserToGroup(string enterCode, string userId);
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace ITJakub.MobileApps.DataContracts
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "syncobjects/create?group={groupId}&app={applicationId}&author={userId}")]
-        [AuthorizedMethod(Role.Student)]
+        [AuthorizedMethod(Role.Student, "userId")]
         void CreateSynchronizedObject(string groupId, string applicationId, string userId, SynchronizedObject synchronizedObject);
     }
 }
