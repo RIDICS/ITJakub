@@ -62,7 +62,7 @@ namespace ITJakub.MobileApps.Core
             user.CommunicationToken = m_tokenManager.CreateNewToken(); //on every login generate new token
             user.CommunicationTokenCreateTime = DateTime.UtcNow;
             m_userRepository.Update(user);
-            return new LoginUserResponse {CommunicationToken = user.CommunicationToken, EstimatedExpirationTime = m_tokenManager.GetExpirationTime(user.CommunicationTokenCreateTime)};
+            return new LoginUserResponse {UserId = user.Id, CommunicationToken = user.CommunicationToken, EstimatedExpirationTime = m_tokenManager.GetExpirationTime(user.CommunicationTokenCreateTime)};
         }
 
         public void CreateAccount(string authenticationProvider, string authenticationProviderToken, User user)
