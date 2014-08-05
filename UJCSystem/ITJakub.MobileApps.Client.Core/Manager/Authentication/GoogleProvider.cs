@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Security.Authentication.Web;
 using Windows.Web.Http;
+using Windows.Web.Http.Filters;
 using Windows.Web.Http.Headers;
+using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.DataContracts.Json;
 using Newtonsoft.Json;
@@ -34,7 +36,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
             try
             {
-                var webAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(
+                var webAuthenticationResult = await CustomWebAuthenticationBroker.AuthenticateAsync(
                     WebAuthenticationOptions.UseTitle,
                     startUri,
                     endUri);

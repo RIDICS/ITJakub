@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using Microsoft.Practices.Unity;
