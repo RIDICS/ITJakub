@@ -33,9 +33,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private string m_lastName;
         private RelayCommand m_logOutCommand;
         private string m_newGroupName;
-        private Visibility m_noGroupVisibility;
+        private bool m_noGroupExist;
         private RelayCommand m_refreshListCommand;
         private GroupInfoViewModel m_selectedGroup;
+        private bool m_loading;
 
         /// <summary>
         ///     Initializes a new instance of the GroupListViewModel class.
@@ -45,7 +46,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_dataService = dataService;
             m_navigationService = navigationService;
             GroupList = new ObservableCollection<GroupInfoViewModel>();
-            NoGroupVisibility = Visibility.Collapsed;
+            NoGroupExist = false;
 
             InitCommands();
             LoadData();
@@ -173,12 +174,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             get { return m_logOutCommand; }
         }
 
-        public Visibility NoGroupVisibility
+        public bool NoGroupExist
         {
-            get { return m_noGroupVisibility; }
+            get { return m_noGroupExist; }
             set
             {
-                m_noGroupVisibility = value;
+                m_noGroupExist = value;
                 RaisePropertyChanged();
             }
         }
@@ -203,6 +204,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        public bool Loading
+        {
+            get { return m_loading; }
+            set
+            {
+                m_loading = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private void InitCommands()
         {
             m_groupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
@@ -212,12 +223,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         public void LoadData()
         {
+            Loading = true;
             m_dataService.GetGroupList((groupList, exception) =>
             {
+                Loading = false;
                 if (exception != null)
                     return;
                 GroupList = groupList;
-                NoGroupVisibility = groupList.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+                NoGroupExist = groupList.Count == 0;
             });
             UserInfo userInfo = m_dataService.GetUserInfo();
             FirstName = userInfo.FirstName;

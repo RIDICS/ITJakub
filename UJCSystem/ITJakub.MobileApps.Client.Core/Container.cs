@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using Microsoft.Practices.Unity;
@@ -43,7 +41,7 @@ namespace ITJakub.MobileApps.Client.Core
             RegisterLoginProviders(container);
             container.RegisterType<ApplicationManager>();
             container.RegisterType<AuthenticationManager>();
-            container.RegisterType<MobileAppsServiceManager>();
+            container.RegisterType<MobileAppsServiceManager>(WithLifetime.ContainerControlled(typeof(MobileAppsServiceManager)));
 
 
             //container.RegisterTypes(AllClasses.FromApplication())

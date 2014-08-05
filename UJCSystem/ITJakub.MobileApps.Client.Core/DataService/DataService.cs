@@ -48,7 +48,16 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 
         public async void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
-            var list = await m_serviceManager.GetGroupListAsync(m_authenticationManager.CommunicationToken, m_authenticationManager.UserInfo.UserId);
+            try
+            {
+                var list = await m_serviceManager.GetGroupListAsync(m_authenticationManager.UserInfo.UserId.ToString());
+                callback(list, null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+
             //TODO load group list from server
             //var list = new ObservableCollection<GroupInfoViewModel>
             //{
@@ -73,7 +82,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             //    group.Icon = application.Icon;
             //    group.ApplicationName = application.Name;
             //}
-            callback(list, null);
+            
         }
 
         public void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback)

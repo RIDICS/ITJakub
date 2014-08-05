@@ -11,5 +11,6 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public ApplicationType ApplicationType { get; set; }
         public BitmapImage Icon { get; set; }
         public string ApplicationName { get; set; }
+        public long GroupId { get; set; }
     }
 }

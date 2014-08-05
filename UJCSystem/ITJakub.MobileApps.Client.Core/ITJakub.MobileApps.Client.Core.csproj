@@ -133,6 +133,7 @@
     <Compile Include="Manager\Authentication\LiveIdProvider.cs" />
     <Compile Include="Manager\Authentication\LoginResult.cs" />
     <Compile Include="Manager\ClientMessageInspector.cs" />
+    <Compile Include="Manager\CustomEndpointBehavior.cs" />
     <Compile Include="Manager\MobileAppsServiceManager.cs" />
     <Compile Include="Error\UserNotRegisteredException.cs" />
     <Compile Include="Service References\Service\Reference.cs">
@@ -221,23 +222,20 @@
     <None Include="Service References\Service\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Service\MobileAppsService.wsdl" />
-    <None Include="Service References\Service\MobileAppsService.xsd">
+    <None Include="Service References\Service\MobileAppsService1.wsdl" />
+    <None Include="Service References\Service\MobileAppsService3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\Service\MobileAppsService1.xsd">
+    <None Include="Service References\Service\MobileAppsService31.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\Service\MobileAppsService2.xsd">
+    <None Include="Service References\Service\MobileAppsService32.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\Service\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\Service\MobileAppsService.disco" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Manager\Authentication\AuthenticationBroker\WebAuthView.xaml">
@@ -249,6 +247,9 @@
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
       <Name>Behaviors SDK %28XAML%29</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Service\MobileAppsService1.disco" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

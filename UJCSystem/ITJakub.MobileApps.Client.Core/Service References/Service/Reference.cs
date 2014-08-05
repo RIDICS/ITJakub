@@ -198,6 +198,8 @@ namespace ITJakub.MobileApps.Client.Core.Service {
         
         private System.DateTime EstimatedExpirationTimeField;
         
+        private long UserIdField;
+        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string CommunicationToken {
             get {
@@ -220,6 +222,19 @@ namespace ITJakub.MobileApps.Client.Core.Service {
                 if ((this.EstimatedExpirationTimeField.Equals(value) != true)) {
                     this.EstimatedExpirationTimeField = value;
                     this.RaisePropertyChanged("EstimatedExpirationTime");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long UserId {
+            get {
+                return this.UserIdField;
+            }
+            set {
+                if ((this.UserIdField.Equals(value) != true)) {
+                    this.UserIdField = value;
+                    this.RaisePropertyChanged("UserId");
                 }
             }
         }
@@ -978,7 +993,7 @@ namespace ITJakub.MobileApps.Client.Core.Service {
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration) {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IMobileAppsService)) {
-                return new System.ServiceModel.EndpointAddress("http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc");
+                return new System.ServiceModel.EndpointAddress("http://127.0.0.1:81/MobileAppsService.svc");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

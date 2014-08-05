@@ -11,28 +11,14 @@
               <binding name="BasicHttpBinding_IMobileAppsService" sendTimeout="00:05:00" />
             </basicHttpBinding>
           </bindings>
-          <behaviors>
-            <endpointBehaviors>
-              <behavior name="clientInspectorsAdded">
-                <clientInterceptors />
-              </behavior>
-            </endpointBehaviors>
-          </behaviors>
-          <extensions>
-            <behaviorExtensions>
-              <add
-                name="clientInterceptors"
-                type="Microsoft.WCF.Documentation.InspectorInserter, HostApplication, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"/>
-            </behaviorExtensions>
-          </extensions>
           <client>
             <!--<endpoint address="http://127.0.0.1:22771/MobileAppsService.svc"
                 binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IMobileAppsService"
                 contract="IMobileAppsService" />-->
             <endpoint address="http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc/"
-                            binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IMobileAppsService"
-                            contract="IMobileAppsService"
-                       behaviorConfiguration="clientInspectorsAdded" />
+                      binding="basicHttpBinding" 
+                      bindingConfiguration="BasicHttpBinding_IMobileAppsService"
+                      contract="IMobileAppsService" />
 
           </client>
         </system.serviceModel>
