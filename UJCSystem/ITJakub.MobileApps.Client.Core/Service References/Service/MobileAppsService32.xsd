@@ -45,6 +45,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="CommunicationToken" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="EstimatedExpirationTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="UserId" type="xs:long" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LoginUserResponse" nillable="true" type="tns:LoginUserResponse" />

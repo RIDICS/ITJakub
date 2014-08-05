@@ -1,3 +1,5 @@
+using System;
+
 namespace ITJakub.MobileApps.Client.Core.ViewModel
 {
     public class UserInfo
@@ -7,8 +9,9 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        
-        //TODO HACK
-        public string UserId { get { return "1"; } }
+
+        public long UserId { get; set; }
+        public string CommunicationToken { get; set; }
+        public DateTime EstimatedExpirationTime { get; set; }
     }
 }

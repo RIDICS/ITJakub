@@ -9,6 +9,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager
     /// </summary>
     public class ClientMessageInspector : IClientMessageInspector
     {
+        public string CommunicationToken { get; set; }
+
         /// <summary>
         /// Enables inspection or modification of a message before a request message is sent to a service.
         /// </summary>
@@ -24,7 +26,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         {
             HttpRequestMessageProperty property = new HttpRequestMessageProperty();
 
-            property.Headers["Communication_Token"] = "ab617d8f-b6bc-44c3-87a9-e38f808039af";
+            property.Headers["Communication_Token"] = CommunicationToken;
             request.Properties.Add(HttpRequestMessageProperty.Name, property);
 
             return null;
@@ -35,7 +37,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         /// </summary>
         /// <param name="reply">The message to be transformed into types and handed back to the client application.</param>
         /// <param name="correlationState">Correlation state data.</param>
-        public void AfterReceiveReply(ref System.ServiceModel.Channels.Message reply, object correlationState)
+        public void AfterReceiveReply(ref Message reply, object correlationState)
         {
             // Nothing special here
         }

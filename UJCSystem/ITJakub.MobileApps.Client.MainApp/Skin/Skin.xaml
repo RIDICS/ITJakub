@@ -4,9 +4,11 @@
 
     <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FF4183FF"/>
 
-    <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="#0048D1"></SolidColorBrush>
-    <SolidColorBrush x:Key="AppBarBorderThemeBrush" Color="WhiteSmoke"></SolidColorBrush>
-    
+    <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="#0048D1"/>
+    <SolidColorBrush x:Key="AppBarBorderThemeBrush" Color="WhiteSmoke"/>
+
+    <SolidColorBrush x:Key="ProgressBarIndeterminateForegroundThemeBrush" Color="White"/>
+
 
     <Style x:Key="HorizontalListView" TargetType="ListView">
         <Setter Property="VerticalAlignment" Value="Center" />

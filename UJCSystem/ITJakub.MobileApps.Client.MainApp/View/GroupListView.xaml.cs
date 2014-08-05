@@ -74,11 +74,6 @@ namespace ITJakub.MobileApps.Client.MainApp.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            var dataContext = DataContext as GroupListViewModel;
-            if (dataContext != null)
-            {
-                dataContext.LoadData();
-            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

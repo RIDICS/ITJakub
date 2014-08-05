@@ -8,9 +8,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:common="using:ITJakub.MobileApps.Client.MainApp.Common"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <common:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
     
     <Page.BottomAppBar>
@@ -171,6 +173,12 @@
                     <Run Text="{Binding LastName}"/>
                 </TextBlock>
             </Button>
+            
+            <ProgressBar Grid.Column="0"
+                         Grid.ColumnSpan="3"
+                         VerticalAlignment="Top"
+                         IsIndeterminate="True"
+                         Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
         
         <GridView Grid.Row="1"
@@ -226,6 +234,6 @@
                    Text="Nejsou dostupné žádné skupiny."
                    Style="{StaticResource SubheaderTextBlockStyle}"
                    Margin="120 20 0 0"
-                   Visibility="{Binding NoGroupVisibility}"/>
+                   Visibility="{Binding NoGroupExist, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </Page>

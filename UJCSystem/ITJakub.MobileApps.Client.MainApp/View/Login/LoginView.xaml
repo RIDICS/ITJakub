@@ -125,6 +125,7 @@
                 Content="Registrovat se"
                 Background="#3468CD"
                 BorderThickness="0"
+                IsEnabled="{Binding LoggingIn, Converter={StaticResource BooleanNegationConverter}}"
                 Command="{Binding RegistrationCommand}" />
     </Grid>
 </Page>
