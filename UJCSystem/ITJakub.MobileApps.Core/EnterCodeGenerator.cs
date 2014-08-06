@@ -3,22 +3,28 @@ using System.Linq;
 
 namespace ITJakub.MobileApps.Core
 {
-    public static class EnterCodeGenerator
+    public class EnterCodeGenerator
     {
-        private const string EnabledChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        private readonly int m_codeLength;
+        private readonly string m_enabledChars;
+        private const string DefaultEnabledChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         private const int DefaultCodeLength = 10;
 
-
-        public static string GenerateCode()
+        public EnterCodeGenerator(int codeLength=DefaultCodeLength, string enabledChars=DefaultEnabledChars)
         {
-            var random = new Random();
-            return new string(Enumerable.Repeat(EnabledChars, DefaultCodeLength).Select(s => s[random.Next(s.Length)]).ToArray());
+            m_codeLength = codeLength;
+            m_enabledChars = enabledChars;
         }
 
-        public static string GenerateCode(int length)
+        public string GenerateCode()
+        {
+            return GenerateCode(m_codeLength);
+        }
+
+        private string GenerateCode(int length)
         {
             var random = new Random();
-            return new string(Enumerable.Repeat(EnabledChars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+            return new string(Enumerable.Repeat(m_enabledChars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

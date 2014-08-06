@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.Core.Authentication;
-using ITJakub.MobileApps.Core.Authentication.Image;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
@@ -25,6 +24,7 @@ namespace ITJakub.MobileApps.Core
         private readonly int m_maxAttemptsToSave;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserManager m_userManager;
+        private readonly EnterCodeGenerator m_enterCodeGenerator;
 
         public MobileServiceManager(IKernel container, int maxAttemptsToSave)
         {
@@ -38,6 +38,7 @@ namespace ITJakub.MobileApps.Core
             m_azureTableSynchronizedObjectDao = container.Resolve<AzureTableSynchronizedObjectDao>();
             m_authenticationManager = container.Resolve<AuthenticationManager>();
             m_userManager = container.Resolve<UserManager>();
+            m_enterCodeGenerator = container.Resolve<EnterCodeGenerator>();
             m_maxAttemptsToSave = maxAttemptsToSave;
         }
 
@@ -50,7 +51,7 @@ namespace ITJakub.MobileApps.Core
             {
                 try
                 {
-                    deInstitution.EnterCode = EnterCodeGenerator.GenerateCode();
+                    deInstitution.EnterCode = m_enterCodeGenerator.GenerateCode();
                     m_institutionRepository.Create(deInstitution);
                     return;
                 }
@@ -154,7 +155,7 @@ namespace ITJakub.MobileApps.Core
             {
                 try
                 {
-                    deGroup.EnterCode = EnterCodeGenerator.GenerateCode();
+                    deGroup.EnterCode = m_enterCodeGenerator.GenerateCode();
                     m_groupRepository.Create(deGroup);
                     return new CreateGroupResponse { EnterCode = deGroup.EnterCode };
                 }

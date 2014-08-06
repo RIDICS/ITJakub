@@ -28,17 +28,14 @@ namespace ITJakub.MobileApps.Core.Authentication
 
         public AuthenticateResultInfo Authenticate(string accessToken, string email)
         {
-            IDictionary<string, string> data = base.GetUserData(accessToken);
-            bool authResult = data[EmailKey].Equals(email);
+            IDictionary<string, string> userData = base.GetUserData(accessToken);
+            bool authSucceeded = userData[EmailKey].Equals(email);
             var result = new AuthenticateResultInfo
             {
-                Result = authResult ? AuthResultType.Success : AuthResultType.Failed,
+                Result = authSucceeded ? AuthResultType.Success : AuthResultType.Failed,
             };
-            if (!authResult)
-                return result;
-
-            result.UserImageLocation = GetImageLocation(data);
-
+            if (authSucceeded)
+                result.UserImageLocation = GetImageLocation(userData);
             return result;
         }
 
@@ -47,11 +44,9 @@ namespace ITJakub.MobileApps.Core.Authentication
             get { return AuthenticationProviders.Google; }
         }
 
-        private string GetImageLocation(IDictionary<string, string> userId)
+        private string GetImageLocation(IDictionary<string, string> userData)
         {
-            if (userId.ContainsKey(PictureKey))
-                return userId[PictureKey];
-            return null;
+            return userData.ContainsKey(PictureKey) ? userData[PictureKey] : null;
         }
     }
 
@@ -69,15 +64,13 @@ namespace ITJakub.MobileApps.Core.Authentication
         public AuthenticateResultInfo Authenticate(string accessToken, string email)
         {
             IDictionary<string, string> data = base.GetUserData(accessToken);
-            bool authResult = data[EmailKey].Equals(email);
+            bool authSucceeded = data[EmailKey].Equals(email);
             var result = new AuthenticateResultInfo
             {
-                Result = authResult ? AuthResultType.Success : AuthResultType.Failed,
+                Result = authSucceeded ? AuthResultType.Success : AuthResultType.Failed,
             };
-            if (!authResult)
-                return result;
-
-            result.UserImageLocation = GetImageLocation(data);
+            if (authSucceeded)
+                result.UserImageLocation = GetImageLocation(data);
             return result;
         }
 
@@ -88,16 +81,14 @@ namespace ITJakub.MobileApps.Core.Authentication
 
         private string GetImageLocation(IDictionary<string, string> userId)
         {
-            if (userId.ContainsKey(PictureKey))
-                return userId[PictureKey];
-            return null;
+            return userId.ContainsKey(PictureKey) ? userId[PictureKey] : null;
         }
     }
 
     public class ItJakubAuthProvider : IAuthProvider
     {
-        private readonly UsersRepository m_usersRepository;
         private readonly GravatarImageUrlProvider m_imageUrlProvider;
+        private readonly UsersRepository m_usersRepository;
 
         public ItJakubAuthProvider(UsersRepository usersRepository, GravatarImageUrlProvider imageUrlProvider)
         {
@@ -113,15 +104,13 @@ namespace ITJakub.MobileApps.Core.Authentication
         public AuthenticateResultInfo Authenticate(string passwordHash, string email)
         {
             User user = m_usersRepository.FindByEmailAndProvider(email, (byte) AuthenticationProviders.ItJakub);
-            bool authResult = user.PasswordHash.Equals(passwordHash);
+            bool authSucceeded = user.PasswordHash.Equals(passwordHash);
             var result = new AuthenticateResultInfo
             {
-                Result = authResult ? AuthResultType.Success : AuthResultType.Failed,
+                Result = authSucceeded ? AuthResultType.Success : AuthResultType.Failed,
             };
-            if (!authResult)
-                return result;
-
-            result.UserImageLocation = GetImageLocation(email);
+            if (authSucceeded)
+                result.UserImageLocation = GetImageLocation(email);
             return result;
         }
 
