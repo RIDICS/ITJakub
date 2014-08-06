@@ -68,9 +68,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         {
             try
             {
-                var authenticationProvider = ConvertLoginProviderToString(loginProviderType);
+                var authenticationProvider = ConvertLoginToAuthenticationProvider(loginProviderType);
 
-                await m_serviceClient.CreateUserAsync(authenticationProvider, userInfo.AccessToken, new User
+                await m_serviceClient.CreateUserAsync(userInfo.AccessToken,authenticationProvider, new User
                 {
                     Email = userInfo.Email,
                     FirstName = userInfo.FirstName,

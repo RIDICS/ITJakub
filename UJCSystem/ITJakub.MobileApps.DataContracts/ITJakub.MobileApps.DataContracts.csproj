@@ -47,6 +47,7 @@
     <Compile Include="AuthorizedMethodAttribute.cs" />
     <Compile Include="CreateGroupResponse.cs" />
     <Compile Include="LoginUserResponse.cs" />
+    <Compile Include="UserRole.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="GroupDetails.cs" />
     <Compile Include="InstitutionDetails.cs" />

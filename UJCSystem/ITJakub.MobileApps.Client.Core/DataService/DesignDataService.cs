@@ -21,10 +21,11 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             throw new NotImplementedException();
         }
 
-        public UserInfo GetUserInfo()
+        public void GetUserInfo(Action<UserInfo, Exception> callback)
         {
             throw new NotImplementedException();
         }
+
 
         public void LogOut()
         {

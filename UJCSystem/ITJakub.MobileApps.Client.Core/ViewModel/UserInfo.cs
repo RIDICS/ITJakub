@@ -9,7 +9,6 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-
         public long UserId { get; set; }
         public string CommunicationToken { get; set; }
         public DateTime EstimatedExpirationTime { get; set; }

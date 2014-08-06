@@ -46,7 +46,7 @@ namespace ITJakub.MobileApps.Core.Authentication
             return userIdentificator;
         }
 
-        private Role GetMinRoleAllowed(IInvocation invocation)
+        private UserRole GetMinRoleAllowed(IInvocation invocation)
         {
             return m_cachedMethods[invocation.Method.MethodHandle].AuthAttribute.MinRoleAllowed;
         }

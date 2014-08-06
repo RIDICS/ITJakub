@@ -110,6 +110,7 @@
     <Compile Include="Common\BooleanNegationConverter.cs" />
     <Compile Include="ViewModel\ApplicationSelectionViewModel.cs" />
     <Compile Include="ViewModel\EditGroupViewModel.cs" />
+    <Compile Include="ViewModel\Login\UserMenu\UserMenuViewModel.cs" />
     <Compile Include="ViewModel\RegistrationViewModel.cs" />
     <Compile Include="View\ApplicationSelectionView.xaml.cs">
       <DependentUpon>ApplicationSelectionView.xaml</DependentUpon>
@@ -137,6 +138,9 @@
     <Compile Include="DataModel\SampleDataSource.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
+    <Compile Include="View\Login\UserMenu\UserMenu.xaml.cs">
+      <DependentUpon>UserMenu.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -196,6 +200,10 @@
     <Page Include="View\Login\LoginView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Login\UserMenu\UserMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

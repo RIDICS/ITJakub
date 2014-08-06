@@ -1,7 +1,9 @@
 ﻿using System.Net;
 using System.ServiceModel.Web;
+using ITJakub.MobileApps.Core.Authentication.Providers;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
+using User = ITJakub.MobileApps.DataEntities.Database.Entities.User;
 
 namespace ITJakub.MobileApps.Core.Authentication
 {
@@ -11,7 +13,8 @@ namespace ITJakub.MobileApps.Core.Authentication
         private readonly CommunicationTokenManager m_communicationTokenManager;
         private readonly UsersRepository m_usersRepository;
 
-        public AuthenticationManager(AuthProviderDirector authDirector, UsersRepository usersRepository, CommunicationTokenManager communicationTokenManager)
+        public AuthenticationManager(AuthProviderDirector authDirector, UsersRepository usersRepository,
+            CommunicationTokenManager communicationTokenManager)
         {
             m_authDirector = authDirector;
             m_usersRepository = usersRepository;
@@ -19,22 +22,49 @@ namespace ITJakub.MobileApps.Core.Authentication
         }
 
 
-        public void AuthenticateByCommunicationToken(string communicationToken, Role minRoleAllowed = Role.Student, long? requiredUserId = null)
+        public void AuthenticateByCommunicationToken(string communicationToken, UserRole minRoleAllowed = UserRole.Student,
+            long? requiredUserId = null)
         {
-            var user = m_usersRepository.GetUserByCommunicationToken(communicationToken);
+            User user = m_usersRepository.GetUserByCommunicationToken(communicationToken);
+
             if (user == null || !m_communicationTokenManager.IsCommunicationTokenActive(user.CommunicationTokenCreateTime))
-                throw new WebFaultException(HttpStatusCode.Unauthorized) {Source = "Recieved token expired or is not valid. Login again please..."};
-            if (minRoleAllowed.Equals(Role.Teacher) && user.Institution == null)
-                throw new WebFaultException(HttpStatusCode.Unauthorized) {Source = "You don't have enough privileges ..."};
-            if (requiredUserId!=null && !user.Id.Equals(requiredUserId))
-                throw new WebFaultException(HttpStatusCode.Unauthorized) {Source = "Recieved token does not belong to recieved user identificator ..."};
+                throw new WebFaultException(HttpStatusCode.Unauthorized)
+                {
+                    Source = "Recieved token expired or is not valid."
+                };
+
+            if (minRoleAllowed.Equals(UserRole.Teacher) && user.Institution == null)
+                throw new WebFaultException(HttpStatusCode.Unauthorized)
+                {
+                    Source = "You don't have enough privileges"
+                };
+
+            if (requiredUserId != null && !user.Id.Equals(requiredUserId))
+                throw new WebFaultException(HttpStatusCode.Unauthorized)
+                {
+                    Source = "Recieved token does not belong to recieved user identificator"
+                };
         }
 
-        public void AuthenticateByProvider(string email, string authenticationToken, AuthenticationProviders authenticationProvider)
+        public void AuthenticateByProvider(UserLogin userLoginInfo, User dbUser)
         {
-            var authenticateResult = m_authDirector.GetProvider(authenticationProvider).Authenticate(authenticationToken, email);
-            if (authenticateResult== null || authenticateResult.Result == AuthResultType.Failed)
-                throw new WebFaultException(HttpStatusCode.Unauthorized) {Source = "Users e-mail is not valid."};
+            IAuthProvider authProvider = m_authDirector.GetProvider(userLoginInfo.AuthenticationProvider);
+            AuthenticateResultInfo authResult = authProvider.Authenticate(userLoginInfo, dbUser);
+
+            if (authResult != null && dbUser.AvatarUrl != authResult.UserImageLocation)
+            {
+                dbUser.AvatarUrl = authResult.UserImageLocation;
+            }
+
+            if (authProvider.IsExternalProvider)
+                dbUser.AuthenticationProviderToken = userLoginInfo.AuthenticationToken;
+
+
+            if (authResult == null || authResult.Result == AuthResultType.Failed)
+                throw new WebFaultException(HttpStatusCode.Unauthorized)
+                {
+                    Source = "Users e-mail is not valid."
+                };
         }
     }
 }

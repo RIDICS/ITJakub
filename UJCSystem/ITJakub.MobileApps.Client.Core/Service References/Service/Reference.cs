@@ -15,6 +15,23 @@ namespace ITJakub.MobileApps.Client.Core.Service {
     using System.Runtime.Serialization;
     
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AuthenticationProviders", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
+    public enum AuthenticationProviders : byte {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ItJakub = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Google = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Facebook = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LiveId = 3,
+    }
+    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
@@ -172,23 +189,6 @@ namespace ITJakub.MobileApps.Client.Core.Service {
         }
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AuthenticationProviders", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
-    public enum AuthenticationProviders : byte {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ItJakub = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Google = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Facebook = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        LiveId = 3,
-    }
-    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LoginUserResponse", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
@@ -198,7 +198,11 @@ namespace ITJakub.MobileApps.Client.Core.Service {
         
         private System.DateTime EstimatedExpirationTimeField;
         
+        private string ProfilePictureUrlField;
+        
         private long UserIdField;
+        
+        private ITJakub.MobileApps.Client.Core.Service.UserRole UserRoleField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string CommunicationToken {
@@ -227,6 +231,19 @@ namespace ITJakub.MobileApps.Client.Core.Service {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ProfilePictureUrl {
+            get {
+                return this.ProfilePictureUrlField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ProfilePictureUrlField, value) != true)) {
+                    this.ProfilePictureUrlField = value;
+                    this.RaisePropertyChanged("ProfilePictureUrl");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public long UserId {
             get {
                 return this.UserIdField;
@@ -239,6 +256,19 @@ namespace ITJakub.MobileApps.Client.Core.Service {
             }
         }
         
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ITJakub.MobileApps.Client.Core.Service.UserRole UserRole {
+            get {
+                return this.UserRoleField;
+            }
+            set {
+                if ((this.UserRoleField.Equals(value) != true)) {
+                    this.UserRoleField = value;
+                    this.RaisePropertyChanged("UserRole");
+                }
+            }
+        }
+        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -247,6 +277,17 @@ namespace ITJakub.MobileApps.Client.Core.Service {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UserRole", Namespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts")]
+    public enum UserRole : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Student = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Teacher = 1,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -809,7 +850,7 @@ namespace ITJakub.MobileApps.Client.Core.Service {
     public interface IMobileAppsService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/CreateUser", ReplyAction="http://tempuri.org/IMobileAppsService/CreateUserResponse")]
-        System.Threading.Tasks.Task CreateUserAsync(string authenticationProvider, string authenticationProviderToken, ITJakub.MobileApps.Client.Core.Service.User user);
+        System.Threading.Tasks.Task CreateUserAsync(string authenticationProviderToken, ITJakub.MobileApps.Client.Core.Service.AuthenticationProviders authenticationProvider, ITJakub.MobileApps.Client.Core.Service.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMobileAppsService/LoginUser", ReplyAction="http://tempuri.org/IMobileAppsService/LoginUserResponse")]
         System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.LoginUserResponse> LoginUserAsync(ITJakub.MobileApps.Client.Core.Service.UserLogin userLogin);
@@ -903,8 +944,8 @@ namespace ITJakub.MobileApps.Client.Core.Service {
                 base(binding, remoteAddress) {
         }
         
-        public System.Threading.Tasks.Task CreateUserAsync(string authenticationProvider, string authenticationProviderToken, ITJakub.MobileApps.Client.Core.Service.User user) {
-            return base.Channel.CreateUserAsync(authenticationProvider, authenticationProviderToken, user);
+        public System.Threading.Tasks.Task CreateUserAsync(string authenticationProviderToken, ITJakub.MobileApps.Client.Core.Service.AuthenticationProviders authenticationProvider, ITJakub.MobileApps.Client.Core.Service.User user) {
+            return base.Channel.CreateUserAsync(authenticationProviderToken, authenticationProvider, user);
         }
         
         public System.Threading.Tasks.Task<ITJakub.MobileApps.Client.Core.Service.LoginUserResponse> LoginUserAsync(ITJakub.MobileApps.Client.Core.Service.UserLogin userLogin) {
@@ -993,7 +1034,7 @@ namespace ITJakub.MobileApps.Client.Core.Service {
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration) {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IMobileAppsService)) {
-                return new System.ServiceModel.EndpointAddress("http://127.0.0.1:81/MobileAppsService.svc");
+                return new System.ServiceModel.EndpointAddress("http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

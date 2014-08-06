@@ -184,25 +184,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public string FirstName
-        {
-            get { return m_firstName; }
-            set
-            {
-                m_firstName = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string LastName
-        {
-            get { return m_lastName; }
-            set
-            {
-                m_lastName = value;
-                RaisePropertyChanged();
-            }
-        }
+    
 
         public bool Loading
         {
@@ -232,9 +214,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupList = groupList;
                 NoGroupExist = groupList.Count == 0;
             });
-            UserInfo userInfo = m_dataService.GetUserInfo();
-            FirstName = userInfo.FirstName;
-            LastName = userInfo.LastName;
+            //UserInfo userInfo = m_dataService.GetUserInfo();
+            //FirstName = userInfo.FirstName;
+            //LastName = userInfo.LastName;
         }
 
         private void GroupClick(ItemClickEventArgs args)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.DataContracts;
 
-namespace ITJakub.MobileApps.Core.Authentication
+namespace ITJakub.MobileApps.Core.Authentication.Providers
 {
     public class AuthProviderDirector
     {
@@ -27,6 +27,7 @@ namespace ITJakub.MobileApps.Core.Authentication
         {
             if(!m_authProviders.ContainsKey(providerType)) 
                 throw new ArgumentException(string.Format("This type: '{0}' of provider does not exist!",providerType));
+
             return m_authProviders[providerType];
         }
     }

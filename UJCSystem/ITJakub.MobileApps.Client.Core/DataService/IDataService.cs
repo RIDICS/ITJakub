@@ -13,7 +13,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
     {
         void Login(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback);
         void CreateUser(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback);
-        UserInfo GetUserInfo();
+        void GetUserInfo(Action<UserInfo, Exception> callback);
         void LogOut();
         void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback);
         

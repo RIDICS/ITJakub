@@ -22,6 +22,10 @@
     
     <property name="Email">
       <column name="Email" sql-type="varchar" not-null="true" unique="true" />
+    </property>   
+    
+    <property name="AvatarUrl">
+      <column name="AvatarUrl" sql-type="varchar" not-null="false" />
     </property>
     
     <property name="AuthenticationProvider">

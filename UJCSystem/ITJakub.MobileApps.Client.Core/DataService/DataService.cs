@@ -111,7 +111,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         {
             try
             {
-                var userInfo = await m_authenticationManager.CreateUserAsync(loginProviderType);
+                var userInfo = await m_authenticationManager.CreateUserAsync(loginProviderType);///TODO spravit bug... registrace a login nemohou jet naraz v ruznych vlaknech, protoze pak to obcas spadne na user not authorized exception
                 callback(userInfo, null);
             }
             catch (ClientCommunicationException exception)
@@ -120,9 +120,9 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             }
         }
 
-        public UserInfo GetUserInfo()
+        public void GetUserInfo(Action<UserInfo, Exception> callback)
         {
-            return m_authenticationManager.UserInfo;
+            callback(m_authenticationManager.UserInfo, null);
         }
 
         public void LogOut()
