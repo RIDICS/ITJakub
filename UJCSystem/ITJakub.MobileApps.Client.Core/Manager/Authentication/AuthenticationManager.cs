@@ -46,6 +46,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             UserInfo.EstimatedExpirationTime = result.EstimatedExpirationTime;
             UserInfo.UserId = result.UserId;
             UserInfo.UserAvatar = result.UserAvatarUrl;
+            UserInfo.IsTeacher = result.IsTeacher;
             m_serviceManager.UpdateCommunicationToken(result.CommunicationToken);
         }
 

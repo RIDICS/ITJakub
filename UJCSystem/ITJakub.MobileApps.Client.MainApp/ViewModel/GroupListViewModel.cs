@@ -1,9 +1,12 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
+using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
 
@@ -18,18 +21,18 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     public class GroupListViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
-        private readonly bool m_isTeacher;
+        private bool m_isTeacher;
         private readonly INavigationService m_navigationService;
         private bool m_commandBarOpen;
         private RelayCommand m_connectCommand;
         private RelayCommand m_connectToGroupCommand;
-        private string m_connectToGroupNumber;
+        private string m_connectToGroupCode;
         private RelayCommand m_createNewGroupCommand;
         private RelayCommand m_deleteGroupCommand;
         private string m_deleteMessage;
         private string m_firstName;
         private RelayCommand<ItemClickEventArgs> m_groupClickCommand;
-        private ObservableCollection<GroupInfoViewModel> m_groupList;
+        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
         private string m_lastName;
         private RelayCommand m_logOutCommand;
         private string m_newGroupName;
@@ -45,7 +48,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
-            GroupList = new ObservableCollection<GroupInfoViewModel>();
+            GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>();
             NoGroupExist = false;
 
             InitCommands();
@@ -55,13 +58,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_isTeacher = true;
         }
 
-        public ObservableCollection<GroupInfoViewModel> GroupList
+        public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> GroupList
         {
             get { return m_groupList; }
             set
             {
                 m_groupList = value;
-                RaisePropertyChanged(() => GroupList);
+                RaisePropertyChanged();
             }
         }
 
@@ -85,13 +88,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             get { return m_refreshListCommand; }
         }
 
-        public string ConnectToGroupNumber
+        public string ConnectToGroupCode
         {
-            get { return m_connectToGroupNumber; }
+            get { return m_connectToGroupCode; }
             set
             {
-                m_connectToGroupNumber = value;
-                RaisePropertyChanged(() => ConnectToGroupNumber);
+                m_connectToGroupCode = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -106,7 +109,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             set
             {
                 m_newGroupName = value;
-                RaisePropertyChanged(() => NewGroupName);
+                RaisePropertyChanged();
             }
         }
 
@@ -201,9 +204,33 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_groupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
             m_connectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
             m_logOutCommand = new RelayCommand(LogOut);
+            m_createNewGroupCommand = new RelayCommand(CreateNewGroup);
+            m_refreshListCommand = new RelayCommand(LoadData);
+            m_connectToGroupCommand = new RelayCommand(ConnectToGroup);
         }
 
-        public void LoadData()
+        private void ConnectToGroup()
+        {
+            m_dataService.ConnectToGroup(ConnectToGroupCode, exception =>
+            {
+                if (exception != null)
+                    return;
+                new MessageDialog("Připojeno").ShowAsync();
+            });
+        }
+
+        private void CreateNewGroup()
+        {
+            m_dataService.CreateNewGroup(NewGroupName, (result, exception) =>
+            {
+                if (exception != null)
+                    return;
+                new MessageDialog(result.EnterCode, "Nová skupina vytvořena").ShowAsync();
+                NewGroupName = string.Empty;
+            });
+        }
+
+        private void LoadData()
         {
             Loading = true;
             m_dataService.GetGroupList((groupList, exception) =>
@@ -211,12 +238,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 Loading = false;
                 if (exception != null)
                     return;
-                GroupList = groupList;
+                var groupedList = groupList.GroupBy(group => group.GroupType).OrderBy(group => group.Key);
+                GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
                 NoGroupExist = groupList.Count == 0;
             });
             //UserInfo userInfo = m_dataService.GetUserInfo();
             //FirstName = userInfo.FirstName;
             //LastName = userInfo.LastName;
+            //m_isTeacher = userInfo.IsTeacher;
         }
 
         private void GroupClick(ItemClickEventArgs args)

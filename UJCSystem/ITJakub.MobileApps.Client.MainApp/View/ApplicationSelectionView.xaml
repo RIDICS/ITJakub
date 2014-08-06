@@ -8,8 +8,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:common="using:ITJakub.MobileApps.Client.MainApp.Common"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <CollectionViewSource x:Name="AppList" IsSourceGrouped="True" Source="{Binding AppList}"/>
+        <common:ApplicationCategoryToNameConverter x:Key="ApplicationCategoryToNameConverter"/>
+    </Page.Resources>
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -49,22 +54,23 @@
                        Margin="0,0,30,40"/>
         </Grid>
         
-        <ListView Grid.Row="1"
+        <GridView Grid.Row="1"
                   SelectionMode="None"
                   IsItemClickEnabled="True"
-                  Style="{StaticResource HorizontalListView}"
-                  ItemsSource="{Binding AppList}"
+                  ItemsSource="{Binding Source={StaticResource AppList}}"
                   HorizontalAlignment="Center">
-            <ListView.ItemTemplate>
+            <GridView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical"
-                                Width="200">
+                                Width="200"
+                                Background="#22FFFFFF">
                         <Image Source="{Binding Icon}"
                                Width="128"
                                Height="128"
-                               Margin="35"/>
+                               Margin="20"/>
                         <Grid Background="#3468CD"
-                              Height="50">
+                              Height="50"
+                              Margin="5">
                             <TextBlock Text="{Binding Name}"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
@@ -72,13 +78,31 @@
                         </Grid>
                     </StackPanel>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            </GridView.ItemTemplate>
+
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid GroupPadding="0 0 70 0"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+
+            <GridView.GroupStyle>
+                <GroupStyle HidesIfEmpty="True">
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Key, Converter={StaticResource ApplicationCategoryToNameConverter}}"
+                                       Style="{StaticResource SubheaderTextBlockStyle}"
+                                       Margin="0 0 0 10"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </GridView.GroupStyle>
 
             <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="ItemClick">
                     <core:InvokeCommandAction Command="{Binding AppClickCommand}"/>
                 </core:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
-        </ListView>
+        </GridView>
     </Grid>
 </Page>

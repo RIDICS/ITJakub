@@ -2,6 +2,7 @@
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.SampleApp
 {
@@ -30,6 +31,11 @@ namespace ITJakub.MobileApps.Client.SampleApp
         public override ApplicationRoleType ApplicationRoleType
         {
             get { return ApplicationRoleType.MainApp; }
+        }
+
+        public override ApplicationCategory ApplicationCategory
+        {
+            get { return ApplicationCategory.Education; }
         }
 
         public override bool IsChatSupported

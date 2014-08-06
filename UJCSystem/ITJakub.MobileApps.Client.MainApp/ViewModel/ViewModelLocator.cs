@@ -88,5 +88,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get { return Container.Current.Resolve<EditGroupViewModel>(); }
         }
+
+        public GroupPageViewModel GroupPageViewModel
+        {
+            get { return Container.Current.Resolve<GroupPageViewModel>(); }
+        }
     }
 }

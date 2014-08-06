@@ -5,6 +5,7 @@ using ITJakub.MobileApps.Client.Chat.View;
 using ITJakub.MobileApps.Client.Chat.ViewModel;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Chat
 {
@@ -36,6 +37,11 @@ namespace ITJakub.MobileApps.Client.Chat
         public override ApplicationRoleType ApplicationRoleType
         {
             get { return ApplicationRoleType.SupportApp;}
+        }
+
+        public override ApplicationCategory ApplicationCategory
+        {
+            get { return ApplicationCategory.Other; }
         }
 
         public override bool IsChatSupported

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Core
 {

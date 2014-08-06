@@ -5,6 +5,7 @@ using System.Reflection;
 using ITJakub.MobileApps.Client.Core.Configuration;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Core
 {

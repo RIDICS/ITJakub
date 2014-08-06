@@ -7,6 +7,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         public string CommunicationToken { get; set; }
         public DateTime EstimatedExpirationTime { get; set; }
         public long UserId { get; set; }
+
         public string UserAvatarUrl { get; set; }
+
+        public bool IsTeacher { get; set; }
     }
 }

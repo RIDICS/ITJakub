@@ -1,4 +1,4 @@
-﻿namespace ITJakub.MobileApps.Client.Shared
+﻿namespace ITJakub.MobileApps.Client.Shared.Enum
 {
     public enum ApplicationType
     {

@@ -14,5 +14,6 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public string CommunicationToken { get; set; }
         public DateTime EstimatedExpirationTime { get; set; }
         public ImageSource UserAvatar { get; set; }
+        public bool IsTeacher { get; set; }
     }
 }

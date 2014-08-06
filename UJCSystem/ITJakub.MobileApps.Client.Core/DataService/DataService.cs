@@ -7,6 +7,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Core.DataService
 {
@@ -50,7 +51,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         {
             try
             {
-                var list = await m_serviceManager.GetGroupListAsync(m_authenticationManager.UserInfo.UserId.ToString());
+                var list = await m_serviceManager.GetGroupListAsync(m_authenticationManager.UserInfo.UserId);
                 callback(list, null);
             }
             catch (ClientCommunicationException exception)
@@ -88,6 +89,32 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         public void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback)
         {
             m_authenticationManager.GetAllLoginProviderViewModels(callback);
+        }
+
+        public async void CreateNewGroup(string groupName, Action<CreateGroupResult, Exception> callback)
+        {
+            try
+            {
+                var result = await m_serviceManager.CreateGroupAsync(m_authenticationManager.UserInfo.UserId, groupName);
+                callback(result, null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
+
+        public async void ConnectToGroup(string code, Action<Exception> callback)
+        {
+            try
+            {
+                await m_serviceManager.AddUserToGroupAsync(code, m_authenticationManager.UserInfo.UserId);
+                callback(null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
         }
 
         public async void Login(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback)
