@@ -125,9 +125,13 @@
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\AuthInterceptor.cs" />
-    <Compile Include="Authentication\AuthProviderDirector.cs" />
+    <Compile Include="Authentication\Providers\AuthProviderDirector.cs" />
     <Compile Include="Authentication\AuthenticateResultInfo.cs" />
     <Compile Include="Authentication\Image\GravatarImageUrlProvider.cs" />
+    <Compile Include="Authentication\Providers\FacebookAuthProvider.cs" />
+    <Compile Include="Authentication\Providers\GoogleAuthProvider.cs" />
+    <Compile Include="Authentication\Providers\ItJakubAuthProvider.cs" />
+    <Compile Include="Authentication\Providers\LiveIdAuthProvider.cs" />
     <Compile Include="AutoMapperProfiles\GroupDetailsProfile.cs" />
     <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
     <Compile Include="AutoMapperProfiles\InstitutionDetailsProfile.cs" />
@@ -140,7 +144,7 @@
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="CommunicationTokenManager.cs" />
     <Compile Include="EnterCodeGenerator.cs" />
-    <Compile Include="Authentication\IAuthProvider.cs" />
+    <Compile Include="Authentication\Providers\IAuthProvider.cs" />
     <Compile Include="MobileServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManager.cs" />
@@ -148,6 +152,7 @@
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.MobileApps.Core.Container.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

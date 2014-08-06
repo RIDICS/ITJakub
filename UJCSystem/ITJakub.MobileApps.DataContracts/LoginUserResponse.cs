@@ -10,9 +10,15 @@ namespace ITJakub.MobileApps.DataContracts
         public long UserId { get; set; }
 
         [DataMember]
+        public UserRole UserRole { get; set; }
+
+        [DataMember]
         public string CommunicationToken { get; set; }
 
         [DataMember]
         public DateTime EstimatedExpirationTime { get; set; }
+
+        [DataMember]
+        public string ProfilePictureUrl{ get; set; }
     }
 }

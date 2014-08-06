@@ -28,9 +28,9 @@ namespace ITJakub.MobileApps.Service
             m_manager.AddUserToInstitution(enterCode,userId);
         }
 
-        public void CreateUser(string authenticationProvider, string authenticationProviderToken, User user)
+        public void CreateUser(string authenticationProviderToken, AuthenticationProviders authenticationProvider, User user)
         {
-            m_manager.CreateUser(authenticationProvider, authenticationProviderToken, user);
+            m_manager.CreateUser(authenticationProviderToken, authenticationProvider, user);
         }
 
         public LoginUserResponse LoginUser(UserLogin userLogin)

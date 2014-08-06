@@ -1,5 +1,7 @@
 using System;
+using System.ServiceModel.Web;
 using AutoMapper;
+using ITJakub.MobileApps.Core.Authentication;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
@@ -8,13 +10,15 @@ namespace ITJakub.MobileApps.Core
 {
     public class UserManager
     {
-        private readonly UsersRepository m_userRepository;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly CommunicationTokenManager m_tokenManager;
+        private readonly UsersRepository m_userRepository;
 
-        public UserManager(UsersRepository userRepository,CommunicationTokenManager tokenManager)
+        public UserManager(UsersRepository userRepository, CommunicationTokenManager tokenManager, AuthenticationManager authenticationManager)
         {
             m_userRepository = userRepository;
             m_tokenManager = tokenManager;
+            m_authenticationManager = authenticationManager;
         }
 
         public void CreateRemoteUserAccount(User user, AuthenticationProviders authProvider, string authenticationProviderToken)
@@ -57,21 +61,45 @@ namespace ITJakub.MobileApps.Core
 
         public LoginUserResponse Login(UserLogin userLogin)
         {
-            DataEntities.Database.Entities.User user = m_userRepository.FindByEmailAndProvider(userLogin.Email, (byte) userLogin.AuthenticationProvider);
-            if (!userLogin.AuthenticationProvider.Equals(AuthenticationProviders.ItJakub)) user.AuthenticationProviderToken = userLogin.AuthenticationToken; //actualize access token
-            user.CommunicationToken = m_tokenManager.CreateNewToken(); //on every login generate new token
-            user.CommunicationTokenCreateTime = DateTime.UtcNow;
-            m_userRepository.Update(user);
-            return new LoginUserResponse {UserId = user.Id, CommunicationToken = user.CommunicationToken, EstimatedExpirationTime = m_tokenManager.GetExpirationTime(user.CommunicationTokenCreateTime)};
+            var user = m_userRepository.FindByEmailAndProvider(userLogin.Email,
+                (byte) userLogin.AuthenticationProvider);
+            var now = DateTime.UtcNow;
+            try
+            {
+                m_authenticationManager.AuthenticateByProvider(userLogin, user);
+
+                user.CommunicationToken = m_tokenManager.CreateNewToken(); //on every login generate new token
+                user.CommunicationTokenCreateTime = now;
+
+                m_userRepository.Update(user);
+
+                return new LoginUserResponse
+                {
+                    UserId = user.Id,
+                    CommunicationToken = user.CommunicationToken,
+                    EstimatedExpirationTime = m_tokenManager.GetExpirationTime(user.CommunicationTokenCreateTime),
+                    ProfilePictureUrl = user.AvatarUrl,
+                    UserRole = GetUserRoleForUser(user)
+                };
+            }
+            catch (WebFaultException)
+            {
+                throw;
+            }
         }
 
-        public void CreateAccount(string authenticationProvider, string authenticationProviderToken, User user)
+        public void CreateAccount(string authenticationProviderToken, AuthenticationProviders authenticationProvider, User user)
         {
-            var authProvider = (AuthenticationProviders) Enum.Parse(typeof (AuthenticationProviders), authenticationProvider);
-            if (authProvider.Equals(AuthenticationProviders.ItJakub))
+            var authProvider = authenticationProvider;
+            if (authProvider == AuthenticationProviders.ItJakub)
                 CreateLocalUserAccount((UserWithSalt) user);
             else
                 CreateRemoteUserAccount(user, authProvider, authenticationProviderToken);
+        }
+
+        private UserRole GetUserRoleForUser(DataEntities.Database.Entities.User user)
+        {
+            return user.Institution == null ? UserRole.Student : UserRole.Teacher;
         }
     }
 }

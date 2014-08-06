@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Castle.MicroKernel;
-using ITJakub.MobileApps.Core.Authentication;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
@@ -21,8 +20,7 @@ namespace ITJakub.MobileApps.Core
         private readonly ApplicationRepository m_applicationRepository;
         private readonly AzureTableTaskDao m_azureTableTaskDao;
         private readonly AzureTableSynchronizedObjectDao m_azureTableSynchronizedObjectDao;
-        private readonly int m_maxAttemptsToSave;
-        private readonly AuthenticationManager m_authenticationManager;
+        private readonly int m_maxAttemptsToSave;        
         private readonly UserManager m_userManager;
         private readonly EnterCodeGenerator m_enterCodeGenerator;
 
@@ -36,7 +34,6 @@ namespace ITJakub.MobileApps.Core
             m_applicationRepository = container.Resolve<ApplicationRepository>();
             m_azureTableTaskDao = container.Resolve<AzureTableTaskDao>();
             m_azureTableSynchronizedObjectDao = container.Resolve<AzureTableSynchronizedObjectDao>();
-            m_authenticationManager = container.Resolve<AuthenticationManager>();
             m_userManager = container.Resolve<UserManager>();
             m_enterCodeGenerator = container.Resolve<EnterCodeGenerator>();
             m_maxAttemptsToSave = maxAttemptsToSave;
@@ -77,16 +74,14 @@ namespace ITJakub.MobileApps.Core
             m_groupRepository.Update(user);
         }
 
-        public void CreateUser(string authenticationProvider, string authenticationProviderToken, User user)
+      
+        public void CreateUser(string authenticationProviderToken, AuthenticationProviders authenticationProvider, User user)
         {
-            m_userManager.CreateAccount(authenticationProvider,authenticationProviderToken,user);
+            m_userManager.CreateAccount(authenticationProviderToken, authenticationProvider, user);
         }
 
-      
         public LoginUserResponse LoginUser(UserLogin userLogin)
         {
-            m_authenticationManager.AuthenticateByProvider(userLogin.Email, userLogin.AuthenticationToken, userLogin.AuthenticationProvider); //validate user's e-mail via authentication provider 
-            //TODO download image
             return m_userManager.Login(userLogin);
         }
 

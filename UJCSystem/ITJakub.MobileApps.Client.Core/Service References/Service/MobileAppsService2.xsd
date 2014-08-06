@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ITJakub.MobileApps.DataContracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="AuthenticationProviders">
+    <xs:annotation>
+      <xs:appinfo>
+        <ActualType Name="unsignedByte" Namespace="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ItJakub" />
+      <xs:enumeration value="Google" />
+      <xs:enumeration value="Facebook" />
+      <xs:enumeration value="LiveId" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AuthenticationProviders" nillable="true" type="tns:AuthenticationProviders" />
   <xs:complexType name="User">
     <xs:sequence>
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
@@ -27,28 +41,23 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="UserLogin" nillable="true" type="tns:UserLogin" />
-  <xs:simpleType name="AuthenticationProviders">
-    <xs:annotation>
-      <xs:appinfo>
-        <ActualType Name="unsignedByte" Namespace="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
-      </xs:appinfo>
-    </xs:annotation>
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="ItJakub" />
-      <xs:enumeration value="Google" />
-      <xs:enumeration value="Facebook" />
-      <xs:enumeration value="LiveId" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="AuthenticationProviders" nillable="true" type="tns:AuthenticationProviders" />
   <xs:complexType name="LoginUserResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="CommunicationToken" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="EstimatedExpirationTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ProfilePictureUrl" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="UserId" type="xs:long" />
+      <xs:element minOccurs="0" name="UserRole" type="tns:UserRole" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LoginUserResponse" nillable="true" type="tns:LoginUserResponse" />
+  <xs:simpleType name="UserRole">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Student" />
+      <xs:enumeration value="Teacher" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="UserRole" nillable="true" type="tns:UserRole" />
   <xs:complexType name="Institution">
     <xs:sequence>
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
