@@ -42,7 +42,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager
                 {
                     CommunicationToken = response.CommunicationToken,
                     EstimatedExpirationTime = response.EstimatedExpirationTime,
-                    UserId = response.UserId
+                    UserId = response.UserId,
+                    UserAvatarUrl = response.ProfilePictureUrl,
+
                 };
                 return loginResult;
             }

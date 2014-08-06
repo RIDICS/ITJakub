@@ -14,7 +14,7 @@
                     FontSize="30"
                     FontWeight="Normal"
                     Margin="0 0 70 40"
-                    VerticalAlignment="Bottom"> 
+                    VerticalAlignment="Bottom">
             <Button.Flyout>
                 <MenuFlyout>
                     <MenuFlyoutItem Text="Odhlásit se"
@@ -22,10 +22,19 @@
                                         Command="{Binding LogOutCommand}"/>
                 </MenuFlyout>
             </Button.Flyout>
-            <TextBlock>
+            <Grid VerticalAlignment="Center">
+                <Ellipse Width="40" Height="40">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding UserAvatar}" Stretch="None"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+                
+                <TextBlock Margin="10,0,0,0">
                     <Run Text="{Binding FirstName}"/>
                     <Run Text="{Binding LastName}"/>
-            </TextBlock>
+                </TextBlock>
+            </Grid>
+            
         </Button>
     </Grid>
 </UserControl>

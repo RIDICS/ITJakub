@@ -18,6 +18,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         public AuthenticationManager(IUnityContainer container)
         {
             m_serviceManager = container.Resolve<MobileAppsServiceManager>();
+            m_userAvatarManager = container.Resolve<UserAvatarManager>();
             LoadLoginProviders(Container.Current.ResolveAll<ILoginProvider>());
         }
 
@@ -44,18 +45,19 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             UserInfo.CommunicationToken = result.CommunicationToken;
             UserInfo.EstimatedExpirationTime = result.EstimatedExpirationTime;
             UserInfo.UserId = result.UserId;
+            UserInfo.UserAvatar = result.UserAvatarUrl;
             m_serviceManager.UpdateCommunicationToken(result.CommunicationToken);
         }
 
         public async Task<UserInfo> LoginAsync(LoginProviderType loginProviderType)
         {
-            var info = await m_loginProviders[loginProviderType].LoginAsync();
+            UserInfo info = await m_loginProviders[loginProviderType].LoginAsync();
             UserInfo = info;
 
             if (!info.Success)
                 return UserInfo;
 
-            //await LoginItJakubAsync(loginProviderType);
+            await LoginItJakubAsync(loginProviderType);
             //TODO HACK for debug
             UserInfo.CommunicationToken = "bfde29d1-d17e-45c2-b9a5-dbfe25be5128";
             UserInfo.UserId = 1;
@@ -72,7 +74,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             if (!info.Success)
                 return UserInfo;
 
-            await m_serviceManager.CreateUser(loginProviderType, info);
+            await m_serviceManager.CreateUser(loginProviderType, info);//ZAROVEN create user a zaroven login ? tak to fungovat nebude....
             await LoginItJakubAsync(loginProviderType);
 
             return UserInfo;
@@ -80,8 +82,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
         public void LogOut()
         {
-            UserInfo.AccessToken = string.Empty;
-            UserInfo.CommunicationToken = string.Empty;
+            UserInfo.AccessToken = string.Empty;//WTF tyhle radky ?
+            UserInfo.CommunicationToken = string.Empty;//WTF tyhle radky ?
             UserInfo = null;
             m_serviceManager.UpdateCommunicationToken(string.Empty);
         }

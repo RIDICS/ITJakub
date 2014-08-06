@@ -57,7 +57,7 @@ CREATE TABLE [User](
     [Salt] [varchar] (50)  NULL,
     [InstitutionId] [bigint] NULL,
     [CreateTime] [datetime] NOT NULL,
-    [AvatarUrl] [varchar] NULL,
+    [AvatarUrl] [varchar] (255) NULL,
     CONSTRAINT [Uniq_User] UNIQUE ([Email],[AuthenticationProvider]),
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 )

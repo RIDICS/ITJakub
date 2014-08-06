@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Windows.UI.Xaml.Media;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
 
@@ -9,6 +10,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
         private readonly IDataService m_dataService;
         private string m_lastName;
         private string m_firstName;
+        private ImageSource m_userAvatar;
 
         public UserMenuViewModel(IDataService dataService)
         {
@@ -27,6 +29,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
                     return;
                 FirstName = userInfo.FirstName;
                 LastName = userInfo.LastName;
+                UserAvatar = userInfo.UserAvatar;
             });
         }
 
@@ -53,6 +56,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
                 m_lastName = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public ImageSource UserAvatar
+        {
+            get { return m_userAvatar; }
+            set { m_userAvatar = value; RaisePropertyChanged();}
         }
     }
 }
