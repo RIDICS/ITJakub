@@ -74,7 +74,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             if (!info.Success)
                 return UserInfo;
 
-            await m_serviceManager.CreateUser(loginProviderType, info);//ZAROVEN create user a zaroven login ? tak to fungovat nebude....
+            await m_serviceManager.CreateUser(loginProviderType, info);//TODO ZAROVEN create user a zaroven login ? tak to fungovat nebude....
             await LoginItJakubAsync(loginProviderType);
 
             return UserInfo;
@@ -82,8 +82,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
         public void LogOut()
         {
-            UserInfo.AccessToken = string.Empty;//WTF tyhle radky ?
-            UserInfo.CommunicationToken = string.Empty;//WTF tyhle radky ?
+            UserInfo.AccessToken = string.Empty;// TODO WTF tyhle radky ?
+            UserInfo.CommunicationToken = string.Empty;// TODO WTF tyhle radky ?
             UserInfo = null;
             m_serviceManager.UpdateCommunicationToken(string.Empty);
         }
