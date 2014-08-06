@@ -1,10 +1,12 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -18,7 +20,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private ObservableCollection<AppInfoViewModel> m_appList;
+        private ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>> m_appList;
         private readonly RelayCommand<ItemClickEventArgs> m_appClickCommand;
 
         /// <summary>
@@ -28,7 +30,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
-            AppList = new ObservableCollection<AppInfoViewModel>();
+            AppList = new ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>>();
             LoadAppList();
             m_appClickCommand = new RelayCommand<ItemClickEventArgs>(AppClick);
         }
@@ -37,20 +39,19 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_dataService.GetAllApplications((applications, exception) =>
             {
-                AppList.Clear();
-                foreach (var applicationKeyValue in applications)
+                var appList = applications.Select(applicationKeyValue => new AppInfoViewModel
                 {
-                    AppList.Add(new AppInfoViewModel
-                    {
-                        Name = applicationKeyValue.Value.Name,
-                        ApplicationType = applicationKeyValue.Key,
-                        Icon = applicationKeyValue.Value.Icon
-                    });
-                }
+                    Name = applicationKeyValue.Value.Name,
+                    ApplicationType = applicationKeyValue.Key,
+                    Icon = applicationKeyValue.Value.Icon,
+                    ApplicationCategory = applicationKeyValue.Value.ApplicationCategory
+                }).GroupBy(appViewModel => appViewModel.ApplicationCategory).OrderBy(appViewModel => appViewModel.Key);
+
+                AppList = new ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>>(appList);
             });
         }
 
-        public ObservableCollection<AppInfoViewModel> AppList
+        public ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>> AppList
         {
             get { return m_appList; }
             set

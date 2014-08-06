@@ -1,4 +1,5 @@
 ﻿using System;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Shared
 {

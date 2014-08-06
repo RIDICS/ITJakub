@@ -4,6 +4,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
+using ITJakub.MobileApps.Client.Core.Manager.Converter;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using Task = System.Threading.Tasks.Task;
@@ -13,7 +14,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
     public class MobileAppsServiceManager
     {
         private readonly MobileAppsServiceClient m_serviceClient;
-        private ClientMessageInspector m_clientMessageInspector;
+        private readonly ClientMessageInspector m_clientMessageInspector;
 
         public MobileAppsServiceManager()
         {
@@ -32,9 +33,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         {
             try
             {
+                var authenticationProvider = LoginProviderConverter.LoginToAuthenticationProvider(loginProviderType);
                 var response = await m_serviceClient.LoginUserAsync(new UserLogin
                 {
-                    AuthenticationProvider = ConvertLoginToAuthenticationProvider(loginProviderType),
+                    AuthenticationProvider = authenticationProvider,
                     AuthenticationToken = accessToken,
                     Email = email
                 });
@@ -68,9 +70,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         {
             try
             {
-                var authenticationProvider = ConvertLoginProviderToString(loginProviderType);
+                var authenticationProvider = LoginProviderConverter.LoginToAuthenticationProvider(loginProviderType);
+                var providerString = ((byte) authenticationProvider).ToString();
 
-                await m_serviceClient.CreateUserAsync(authenticationProvider, userInfo.AccessToken, new User
+                await m_serviceClient.CreateUserAsync(providerString, userInfo.AccessToken, new User
                 {
                     Email = userInfo.Email,
                     FirstName = userInfo.FirstName,
@@ -95,37 +98,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             }
         }
 
-        private AuthenticationProviders ConvertLoginToAuthenticationProvider(LoginProviderType loginProviderType)
-        {
-            AuthenticationProviders provider;
-            switch (loginProviderType)
-            {
-                case LoginProviderType.LiveId:
-                    provider = AuthenticationProviders.LiveId;
-                    break;
-                case LoginProviderType.Google:
-                    provider = AuthenticationProviders.Google;
-                    break;
-                case LoginProviderType.Facebook:
-                    provider = AuthenticationProviders.Facebook;
-                    break;
-                default:
-                    provider = AuthenticationProviders.ItJakub;
-                    break;
-            }
-            return provider;
-        }
-
-        private string ConvertLoginProviderToString(LoginProviderType loginProviderType)
-        {
-            var provider = ConvertLoginToAuthenticationProvider(loginProviderType);
-            return ((byte)provider).ToString();
-        }
-
-        public async Task<ObservableCollection<GroupInfoViewModel>> GetGroupListAsync(string userId)
+        public async Task<ObservableCollection<GroupInfoViewModel>> GetGroupListAsync(long userId)
         {
             try {
-                var response = await m_serviceClient.GetMembershipsForUserAsync(userId);
+                var response = await m_serviceClient.GetMembershipsForUserAsync(userId.ToString());
                 var list = new ObservableCollection<GroupInfoViewModel>();
                 foreach (var groupDetails in response)
                 {
@@ -134,9 +110,74 @@ namespace ITJakub.MobileApps.Client.Core.Manager
                         GroupName = groupDetails.Group.Name,
                         MemberCount = groupDetails.Members.Count,
                         GroupId = groupDetails.Id,
+                        GroupType = GroupType.Member
+                    });
+                }
+                response = await m_serviceClient.GetGroupsByUserAsync(userId.ToString());
+                foreach (var groupDetails in response)
+                {
+                    list.Add(new GroupInfoViewModel
+                    {
+                        GroupName = groupDetails.Group.Name,
+                        MemberCount = groupDetails.Members.Count,
+                        GroupId = groupDetails.Id,
+                        GroupType = GroupType.Owner
                     });
                 }
                 return list;
+            }
+            catch (FaultException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (CommunicationException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (TimeoutException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (ObjectDisposedException)
+            {
+                throw new ClientCommunicationException();
+            }
+        }
+
+        public async Task<CreateGroupResult> CreateGroupAsync(long userId, string groupName)
+        {
+            try
+            {
+                var response = await m_serviceClient.CreateGroupAsync(userId.ToString(), groupName);
+                var result = new CreateGroupResult
+                {
+                    EnterCode = response.EnterCode
+                };
+                return result;
+            }
+            catch (FaultException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (CommunicationException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (TimeoutException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (ObjectDisposedException)
+            {
+                throw new ClientCommunicationException();
+            }
+        }
+
+        public async Task AddUserToGroupAsync(string code, long userId)
+        {
+            try
+            {
+                await m_serviceClient.AddUserToGroupAsync(code, userId.ToString());
             }
             catch (FaultException)
             {

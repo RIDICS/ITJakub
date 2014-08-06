@@ -44,6 +44,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             UserInfo.CommunicationToken = result.CommunicationToken;
             UserInfo.EstimatedExpirationTime = result.EstimatedExpirationTime;
             UserInfo.UserId = result.UserId;
+            UserInfo.IsTeacher = result.IsTeacher;
             m_serviceManager.UpdateCommunicationToken(result.CommunicationToken);
         }
 
@@ -58,7 +59,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             //await LoginItJakubAsync(loginProviderType);
             //TODO HACK for debug
             UserInfo.CommunicationToken = "bfde29d1-d17e-45c2-b9a5-dbfe25be5128";
-            UserInfo.UserId = 1;
+            UserInfo.UserId = 2;
             m_serviceManager.UpdateCommunicationToken(UserInfo.CommunicationToken);
 
             return UserInfo;

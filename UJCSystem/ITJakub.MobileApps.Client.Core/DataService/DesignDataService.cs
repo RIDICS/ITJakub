@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Core.DataService
 {
@@ -97,6 +99,16 @@ namespace ITJakub.MobileApps.Client.Core.DataService
                     Name = "Google"
                 }
             }, null);
+        }
+
+        public void CreateNewGroup(string groupName, Action<CreateGroupResult, Exception> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ConnectToGroup(string code, Action<Exception> callback)
+        {
+            throw new NotImplementedException();
         }
     }
 }

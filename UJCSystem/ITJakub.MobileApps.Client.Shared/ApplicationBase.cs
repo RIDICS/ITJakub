@@ -2,6 +2,7 @@
 using System.Reflection;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Shared
 {
@@ -23,6 +24,8 @@ namespace ITJakub.MobileApps.Client.Shared
 
         public abstract ApplicationRoleType ApplicationRoleType { get; }
 
+        public abstract ApplicationCategory ApplicationCategory { get; }
+
         public abstract bool IsChatSupported { get; }
 
         public abstract BitmapImage Icon { get; }
@@ -36,11 +39,5 @@ namespace ITJakub.MobileApps.Client.Shared
         {
             get { return new Uri(string.Format("ms-appx:///{0}/", AssemblyName)); }
         }
-    }
-
-    public enum ApplicationRoleType
-    {
-        MainApp,
-        SupportApp,
     }
 }

@@ -107,9 +107,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\ApplicationCategoryToNameConverter.cs" />
     <Compile Include="Common\BooleanNegationConverter.cs" />
+    <Compile Include="Common\GroupTypeToNameConverter.cs" />
     <Compile Include="ViewModel\ApplicationSelectionViewModel.cs" />
     <Compile Include="ViewModel\EditGroupViewModel.cs" />
+    <Compile Include="ViewModel\GroupPageViewModel.cs" />
     <Compile Include="ViewModel\RegistrationViewModel.cs" />
     <Compile Include="View\ApplicationSelectionView.xaml.cs">
       <DependentUpon>ApplicationSelectionView.xaml</DependentUpon>
@@ -125,6 +128,9 @@
     </Compile>
     <Compile Include="View\GroupListView.xaml.cs">
       <DependentUpon>GroupListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GroupPageView.xaml.cs">
+      <DependentUpon>GroupPageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Login\LoginProviderToIconConverter.cs" />
     <Compile Include="View\Login\RegistrationView.xaml.cs">
@@ -186,6 +192,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\GroupListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GroupPageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

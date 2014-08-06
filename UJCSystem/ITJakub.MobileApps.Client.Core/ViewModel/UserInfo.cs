@@ -13,5 +13,6 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public long UserId { get; set; }
         public string CommunicationToken { get; set; }
         public DateTime EstimatedExpirationTime { get; set; }
+        public bool IsTeacher { get; set; }
     }
 }

@@ -13,6 +13,8 @@
 
     <Page.Resources>
         <common:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <common:GroupTypeToNameConverter x:Key="GroupTypeToNameConverter" />
+        <CollectionViewSource x:Name="GroupList" Source="{Binding GroupList}" IsSourceGrouped="True"/>
     </Page.Resources>
     
     <Page.BottomAppBar>
@@ -30,7 +32,8 @@
                             <TextBlock FontSize="15"
                                        Text="Zadejte číslo skupiny"/>
                             <TextBox Width="250"
-                                     Text="{Binding ConnectToGroupNumber, Mode=TwoWay}"/>
+                                     Margin="0 5 0 5"
+                                     Text="{Binding ConnectToGroupCode, Mode=TwoWay}"/>
                             <Button HorizontalAlignment="Right" 
                                     Content="Připojit se"
                                     Command="{Binding ConnectToGroupCommand}"/>
@@ -48,33 +51,8 @@
                             <TextBlock FontSize="15"
                                        Text="Zadejte název skupiny:"/>
                             <TextBox Width="250"
-                                     Text="{Binding NewGroupName, Mode=TwoWay}"/>
-                            <TextBlock FontSize="15"
-                                       Margin="0 10 0 0"
-                                       Text="Vyberte aplikaci:"/>
-                            <ListView SelectionMode="Single"
-                                      MinHeight="100"
-                                      MaxHeight="200"
-                                      DataContext="{Binding EditGroupViewModel, Source={StaticResource Locator}}"
-                                      ItemsSource="{Binding AppList}"
-                                      SelectedItem="{Binding SelectedGroup}">
-                                
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Grid Background="DarkGray">
-                                                <Image Width="32"
-                                                       Height="32"
-                                                       Margin="2"
-                                                       Source="{Binding Icon}"/>
-                                            </Grid>
-                                            <TextBlock Text="{Binding Name}"
-                                                       VerticalAlignment="Center"
-                                                       Margin="4 0 0 0"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                                     Text="{Binding NewGroupName, Mode=TwoWay}"
+                                     Margin="0 5 0 5"/>
                             <Button HorizontalAlignment="Right" 
                                     Content="Vytvořit"
                                     Command="{Binding CreateNewGroupCommand}"/>
@@ -185,7 +163,7 @@
                   IsItemClickEnabled="True"
                   SelectionMode="Single"
                   Padding="110,0,50,100"
-                  ItemsSource="{Binding GroupList}"
+                  ItemsSource="{Binding Source={StaticResource GroupList}}"
                   SelectedItem="{Binding SelectedGroup, Mode=TwoWay}">
             
             <interactivity:Interaction.Behaviors>
@@ -195,7 +173,7 @@
             </interactivity:Interaction.Behaviors>
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VariableSizedWrapGrid Orientation="Vertical" />
+                    <ItemsWrapGrid GroupPadding="0 0 70 0" />
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
             <GridView.ItemTemplate>
@@ -228,6 +206,17 @@
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>
+
+            <GridView.GroupStyle>
+                <GroupStyle HidesIfEmpty="True">
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Key, Converter={StaticResource GroupTypeToNameConverter}}" 
+                                       Style="{StaticResource SubheaderTextBlockStyle}"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </GridView.GroupStyle>
         </GridView>
         
         <TextBlock Grid.Row="1"

@@ -133,7 +133,10 @@
     <Compile Include="Manager\Authentication\LiveIdProvider.cs" />
     <Compile Include="Manager\Authentication\LoginResult.cs" />
     <Compile Include="Manager\ClientMessageInspector.cs" />
+    <Compile Include="Manager\CreateGroupResult.cs" />
     <Compile Include="Manager\CustomEndpointBehavior.cs" />
+    <Compile Include="Manager\Converter\LoginProviderConverter.cs" />
+    <Compile Include="Manager\GroupType.cs" />
     <Compile Include="Manager\MobileAppsServiceManager.cs" />
     <Compile Include="Error\UserNotRegisteredException.cs" />
     <Compile Include="Service References\Service\Reference.cs">

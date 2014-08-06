@@ -1,21 +1,39 @@
-﻿using System;
+﻿using ITJakub.MobileApps.Client.MainApp.Common;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using ITJakub.MobileApps.Client.Core;
-using ITJakub.MobileApps.Client.MainApp.Common;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
-using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.View
 {
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class ApplicationHostView
+    public sealed partial class GroupPageView : Page
     {
 
         private NavigationHelper navigationHelper;
+        private ObservableDictionary defaultViewModel = new ObservableDictionary();
+
+        /// <summary>
+        /// This can be changed to a strongly typed view model.
+        /// </summary>
+        public ObservableDictionary DefaultViewModel
+        {
+            get { return this.defaultViewModel; }
+        }
 
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
@@ -23,16 +41,16 @@ namespace ITJakub.MobileApps.Client.MainApp.View
         /// </summary>
         public NavigationHelper NavigationHelper
         {
-            get { return navigationHelper; }
+            get { return this.navigationHelper; }
         }
 
 
-        public ApplicationHostView()
+        public GroupPageView()
         {
-            InitializeComponent();
-            navigationHelper = new NavigationHelper(this);
-            navigationHelper.LoadState += navigationHelper_LoadState;
-            navigationHelper.SaveState += navigationHelper_SaveState;
+            this.InitializeComponent();
+            this.navigationHelper = new NavigationHelper(this);
+            this.navigationHelper.LoadState += navigationHelper_LoadState;
+            this.navigationHelper.SaveState += navigationHelper_SaveState;
         }
 
         /// <summary>
@@ -76,14 +94,6 @@ namespace ITJakub.MobileApps.Client.MainApp.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            if (e.Parameter is ApplicationType)
-            {
-                var selectedApplication = (ApplicationType) e.Parameter;
-                var viewModel = DataContext as ApplicationHostViewModel;
-                if (viewModel == null)
-                    return;
-                viewModel.LoadInitData(selectedApplication);
-            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
