@@ -10,7 +10,7 @@ using NHibernate.Exceptions;
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
     [Transactional]
-    public class GroupRepository : NHibernateTransactionalDao<Group>
+    public class GroupRepository : NHibernateTransactionalDao
     {
         public GroupRepository(ISessionManager sessManager) : base(sessManager)
         {
@@ -19,7 +19,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual Group LoadGroupWithDetails(long id)
         {
-            using (var session = GetSession())
+            using (ISession session = GetSession())
             {
                 return
                     session.CreateCriteria<Group>()
@@ -33,7 +33,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual Group FindByEnterCode(string enterCode)
         {
-            using (var session = GetSession())
+            using (ISession session = GetSession())
             {
                 return
                     session.CreateCriteria<Group>()
@@ -46,7 +46,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 
 
         [Transaction(TransactionMode.Requires)]
-        public override object Create(Group group)
+        public virtual  object Create(Group group)
         {
             try
             {
@@ -59,15 +59,33 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<Group> LoadGroupsWithDetailsByAuthor(User author)
+        public virtual IList<Group> LoadGroupsWithDetailsByAuthorId(long ownerId)
         {
-            using (var session = GetSession())
+            using (ISession session = GetSession())
             {
+                var user = Load<User>(ownerId);
                 return
                     session.CreateCriteria<Group>()
-                        .Add(Restrictions.Eq("Author", author))
+                        .Add(Restrictions.Eq("Author", user))
                         .SetFetchMode("Members", FetchMode.Join)
                         .List<Group>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual void AssignTaskToGroup(string groupId, string taskId, string userId)
+        {
+            using (ISession session = GetSession())
+            {
+                var group = FindById<Group>(long.Parse(groupId));
+                var user = Load<User>(long.Parse(userId));
+                
+                if (!user.Equals(group.Author)) 
+                    return;
+
+                var task = FindById<Task>(long.Parse(taskId));
+                group.Task = task;
+                Update(group);
             }
         }
     }

@@ -106,8 +106,7 @@ namespace ITJakub.MobileApps.Core
 
         public IEnumerable<GroupDetails> GetGroupsByUser(string userId)
         {
-            var author = m_usersRepository.FindById(long.Parse(userId));
-            var groups = m_groupRepository.LoadGroupsWithDetailsByAuthor(author);
+            var groups = m_groupRepository.LoadGroupsWithDetailsByAuthorId(long.Parse(userId));
             return AutoMapper.Mapper.Map<IList<GroupDetails>>(groups);
         }
 
@@ -164,12 +163,7 @@ namespace ITJakub.MobileApps.Core
 
         public void AssignTaskToGroup(string groupId, string taskId, string userId)
         {
-            var group = m_groupRepository.FindById(long.Parse(groupId));
-            var user = m_usersRepository.FindById(long.Parse(userId));
-            if (!user.Equals(group.Author)) return;
-            var task = m_taskRepository.FindById(long.Parse(taskId));
-            group.Task = task;
-            m_groupRepository.Update(group);
+            m_groupRepository.AssignTaskToGroup(groupId, taskId, userId);
         }
 
         public void AddUserToGroup(string enterCode, string userId)
@@ -188,7 +182,7 @@ namespace ITJakub.MobileApps.Core
 
         public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string applicationId, string objectType, string since)
         {
-            var group = m_groupRepository.FindById(long.Parse(groupId));
+            var group = m_groupRepository.FindById<DE.Group>(long.Parse(groupId));//TODO fix not single transcation operation
             var application = m_applicationRepository.FindById(long.Parse(applicationId));
             var sinceTime = DateTime.Parse(since);
             var syncObjs = m_synchronizedObjectRepository.LoadSyncObjectsWithDetails(group, application, objectType, sinceTime);
@@ -202,9 +196,9 @@ namespace ITJakub.MobileApps.Core
 
         public void CreateSynchronizedObject(string groupId, string applicationId, string userId, SynchronizedObject synchronizedObject)
         {
-            var application = m_applicationRepository.FindById(long.Parse(applicationId));
+            var application = m_applicationRepository.FindById(long.Parse(applicationId));//TODO fix not single transcation operation
             var user = m_usersRepository.FindById(long.Parse(userId));
-            var group = m_groupRepository.FindById(long.Parse(userId));
+            var group = m_groupRepository.FindById<DE.Group>(long.Parse(userId));
             var deSyncObject = AutoMapper.Mapper.Map<DE.SynchronizedObject>(synchronizedObject);
             deSyncObject.Application = application;
             deSyncObject.Author = user;
