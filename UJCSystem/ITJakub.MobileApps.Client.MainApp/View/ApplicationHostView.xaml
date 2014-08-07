@@ -71,11 +71,13 @@
 
             <ContentControl Grid.Column="0" 
                             Content="{Binding ApplicationViewModel}" 
-                            ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"/>
+                            ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
+                            VerticalContentAlignment="Stretch"/>
             <ContentControl Grid.Column="1"
-                            Visibility="{Binding IsChatDisplayed}"
+                            Visibility="{Binding IsChatDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Content="{Binding ChatApplicationViewModel}"
-                            ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"/>
+                            ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
+                            VerticalContentAlignment="Stretch"/>
             
             <!--<chat:ChatControl Grid.Column="1"
                               Width="350"

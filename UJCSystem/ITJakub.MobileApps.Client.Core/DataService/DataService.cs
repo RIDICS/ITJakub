@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
@@ -17,14 +16,13 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         private readonly ApplicationManager m_applicationManager;
         //private SynchronizeManager m_synchronizeManager;
         private readonly AuthenticationManager m_authenticationManager;
-        private readonly MobileAppsServiceManager m_serviceManager;
-        private GroupManager m_groupManager;
+        private readonly GroupManager m_groupManager;
 
-        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager, MobileAppsServiceManager serviceManager)
+        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager, GroupManager groupManager)
         {
             m_authenticationManager = authenticationManager;
             m_applicationManager = applicationManager;
-            m_serviceManager = serviceManager;
+            m_groupManager = groupManager;
         }
 
         public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
@@ -49,7 +47,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             callback(applications, null);
         }
 
-        public async void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
             m_groupManager.GetGroupForCurrentUser(callback);
         }
@@ -59,12 +57,12 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             m_authenticationManager.GetAllLoginProviderViewModels(callback);
         }
 
-        public async void CreateNewGroup(string groupName, Action<CreateGroupResult, Exception> callback)
+        public void CreateNewGroup(string groupName, Action<CreateGroupResult, Exception> callback)
         {
             m_groupManager.CreateNewGroup(groupName, callback);
         }
 
-        public async void ConnectToGroup(string code, Action<Exception> callback)
+        public void ConnectToGroup(string code, Action<Exception> callback)
         {
             m_groupManager.ConnectToGroup(code, callback);
           

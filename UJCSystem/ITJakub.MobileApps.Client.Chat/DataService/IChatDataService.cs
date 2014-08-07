@@ -23,8 +23,8 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
         {
             var observableCollection = new ObservableCollection<MessageViewModel>
             {
-                new MessageViewModel {Author = "ME", Text = "TestovaciText1", SendTime = new DateTime(2000, 1, 1)},
-                new MessageViewModel {Author = "SomebodyElse", Text = "TestovaciText2", SendTime = new DateTime(2000, 1, 12)},
+                new MessageViewModel {Author = "ME", Text = "TestovaciText1", SendTime = new DateTime(2000, 1, 1), IsMyMessage = true},
+                new MessageViewModel {Author = "SomebodyElse", Text = "TestovaciText2", SendTime = new DateTime(2000, 1, 12), IsMyMessage = false},
 
             };
             callback(observableCollection, null);

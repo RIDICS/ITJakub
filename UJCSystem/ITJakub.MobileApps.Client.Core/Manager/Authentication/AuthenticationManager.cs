@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders;
@@ -41,7 +40,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             callback(viewModels, null);
         }
 
-        private async Task LoginItJakubAsync(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback)
+        private async Task LoginItJakubAsync(LoginProviderType loginProviderType)
         {
             LoginResult result = await m_serviceManager.LoginUserAsync(loginProviderType, UserLoginInfo.Email, UserLoginInfo.AccessToken);
             UserLoginInfo.CommunicationToken = result.CommunicationToken;
@@ -53,7 +52,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             m_serviceManager.UpdateCommunicationToken(result.CommunicationToken);
         }
 
-        private async Task<UserLoginSkeleton> LoginAsync(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback)
+        private async Task<UserLoginSkeleton> LoginAsync(LoginProviderType loginProviderType)
         {
             UserLoginSkeleton loginSkeleton = await m_loginProviders[loginProviderType].LoginAsync();
             UserLoginInfo = loginSkeleton;
@@ -61,14 +60,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             if (!loginSkeleton.Success)
                 return UserLoginInfo;
 
-            await LoginItJakubAsync(loginProviderType, callback);
+            await LoginItJakubAsync(loginProviderType);
 
             m_serviceManager.UpdateCommunicationToken(UserLoginInfo.CommunicationToken);
 
             return UserLoginInfo;
         }
 
-        private async Task<UserLoginSkeleton> CreateUserAsync(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback)
+        private async Task<UserLoginSkeleton> CreateUserAsync(LoginProviderType loginProviderType)
         {
             UserLoginSkeleton loginSkeleton = await m_loginProviders[loginProviderType].LoginAsync();
             UserLoginInfo = loginSkeleton;
@@ -76,16 +75,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             if (!loginSkeleton.Success)
                 return UserLoginInfo;
 
-            await m_serviceManager.CreateUser(loginProviderType, loginSkeleton); //TODO ZAROVEN create user a zaroven login ? tak to fungovat nebude....
-            await LoginItJakubAsync(loginProviderType, callback);
+            await m_serviceManager.CreateUserAsync(loginProviderType, loginSkeleton); //TODO ZAROVEN create user a zaroven login ? tak to fungovat nebude....
+            await LoginItJakubAsync(loginProviderType);
 
             return UserLoginInfo;
         }
 
         public void LogOut()
         {
-            UserLoginInfo.AccessToken = string.Empty; // TODO WTF tyhle radky ?
-            UserLoginInfo.CommunicationToken = string.Empty; // TODO WTF tyhle radky ?
             UserLoginInfo = null;
             m_serviceManager.UpdateCommunicationToken(string.Empty);
         }
@@ -94,7 +91,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             try
             {
-                UserLoginSkeleton userDetail = await LoginAsync(loginProviderType, callback);
+                UserLoginSkeleton userDetail = await LoginAsync(loginProviderType);
+                callback(userDetail, null);
             }
             catch (UserNotRegisteredException exception)
             {
@@ -110,7 +108,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             try
             {
-                UserLoginSkeleton userLoginSkeleton = await CreateUserAsync(loginProviderType, callback);//TODO spravit bug... registrace a login nemohou jet naraz v ruznych vlaknech, protoze pak to obcas spadne na user not authorized exception
+                UserLoginSkeleton userLoginSkeleton = await CreateUserAsync(loginProviderType);//TODO spravit bug... registrace a login nemohou jet naraz v ruznych vlaknech, protoze pak to obcas spadne na user not authorized exception
                 callback(userLoginSkeleton, null);
             }
             catch (ClientCommunicationException exception)

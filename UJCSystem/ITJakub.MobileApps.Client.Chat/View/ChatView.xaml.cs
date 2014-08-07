@@ -16,6 +16,11 @@ namespace ITJakub.MobileApps.Client.Chat.View
         public ChatView()
         {
             InitializeComponent();
+            Init();
+        }
+
+        private void Init()
+        {
             m_viewModel = DataContext as ChatViewModel;
             if (m_viewModel != null)
             {
@@ -44,7 +49,7 @@ namespace ITJakub.MobileApps.Client.Chat.View
                 return;
 
             if (m_viewModel == null)
-                return;
+                Init();
 
             m_viewModel.Message = MessageBox.Text;
             m_viewModel.SendCommand.Execute(null);

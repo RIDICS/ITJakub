@@ -42,5 +42,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             get { return m_sendTime; }
             set { m_sendTime = value; RaisePropertyChanged();}
         }
+
+        public bool IsMyMessage { get; set; }
     }
 }

@@ -42,7 +42,7 @@ namespace ITJakub.MobileApps.Client.Core
 
             RegisterLoginProviders(container);
             container.RegisterType<ApplicationManager>();
-            container.RegisterType<AuthenticationManager>();
+            container.RegisterType<AuthenticationManager>(WithLifetime.ContainerControlled(typeof(AuthenticationManager)));
             container.RegisterType<MobileAppsServiceManager>(WithLifetime.ContainerControlled(typeof(MobileAppsServiceManager)));
             container.RegisterType<UserAvatarCache>(WithLifetime.ContainerControlled(typeof(UserAvatarCache)));
             container.RegisterType<GroupManager>(WithLifetime.ContainerControlled(typeof(GroupManager)));
