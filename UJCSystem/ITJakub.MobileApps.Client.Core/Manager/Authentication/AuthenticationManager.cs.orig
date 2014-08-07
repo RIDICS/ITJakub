@@ -77,7 +77,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             if (!loginSkeleton.Success)
                 return UserLoginInfo;
 
+<<<<<<< HEAD
             await m_serviceManager.CreateUser(loginProviderType, loginSkeleton); //TODO ZAROVEN create user a zaroven login ? tak to fungovat nebude....
+=======
+            await m_serviceManager.CreateUserAsync(loginProviderType, loginSkeleton); //TODO ZAROVEN create user a zaroven login ? tak to fungovat nebude....
+>>>>>>> f04d5e82f4909e7526451ede16208a655d1a867c
             await LoginItJakubAsync(loginProviderType);
 
             return UserLoginInfo;
@@ -94,7 +98,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             try
             {
                 UserLoginSkeleton userDetail = await LoginAsync(loginProviderType);
+<<<<<<< HEAD
                 callback(UserLoginInfo.Success, null);
+=======
+                callback(userDetail, null);
+>>>>>>> f04d5e82f4909e7526451ede16208a655d1a867c
             }
             catch (UserNotRegisteredException exception)
             {
@@ -111,7 +119,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             try
             {
                 UserLoginSkeleton userLoginSkeleton = await CreateUserAsync(loginProviderType);//TODO spravit bug... registrace a login nemohou jet naraz v ruznych vlaknech, protoze pak to obcas spadne na user not authorized exception
+<<<<<<< HEAD
                 callback(UserLoginInfo.Success, null);
+=======
+                callback(userLoginSkeleton, null);
+>>>>>>> f04d5e82f4909e7526451ede16208a655d1a867c
             }
             catch (ClientCommunicationException exception)
             {

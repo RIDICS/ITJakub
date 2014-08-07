@@ -38,13 +38,13 @@
                                         Margin="10 3 10 3">
                                 
                                 <TextBlock>
-                                    <Run Text="{Binding Name}"
+                                    <Run Text="{Binding Author}"
                                          FontWeight="Bold"/>
                                     <Run Text=" " />
-                                    <Run Text="{Binding DateTime, Converter={StaticResource MessageDateTimeToStringConverter}}"
+                                    <Run Text="{Binding SendTime, Converter={StaticResource MessageDateTimeToStringConverter}}"
                                          FontSize="12"/>
                                 </TextBlock>
-                                <TextBlock Text="{Binding Content}"
+                                <TextBlock Text="{Binding Text}"
                                            TextWrapping="Wrap"/>
                             </StackPanel>
                         </Grid>

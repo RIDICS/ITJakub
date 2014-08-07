@@ -7,6 +7,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Converter;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.Shared.Enum;
 using Task = System.Threading.Tasks.Task;
 
 namespace ITJakub.MobileApps.Client.Core.Manager
@@ -68,7 +69,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             }
         }
 
-        public async Task CreateUser(LoginProviderType loginProviderType, UserLoginSkeleton userLoginSkeleton)
+        public async Task CreateUserAsync(LoginProviderType loginProviderType, UserLoginSkeleton userLoginSkeleton)
         {
             try
             {
@@ -122,7 +123,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager
                         GroupName = groupDetails.Group.Name,
                         MemberCount = groupDetails.Members.Count,
                         GroupId = groupDetails.Id,
-                        GroupType = GroupType.Owner
+                        GroupType = GroupType.Owner,
+                        //TODO Hack for debug
+                        ApplicationType = ApplicationType.SampleApp
                     });
                 }
                 return list;

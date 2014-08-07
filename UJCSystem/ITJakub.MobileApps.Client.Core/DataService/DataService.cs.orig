@@ -17,6 +17,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         //private SynchronizeManager m_synchronizeManager;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly GroupManager m_groupManager;
+<<<<<<< HEAD
         private readonly MobileAppsServiceManager m_serviceManager;
 
         public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager, MobileAppsServiceManager serviceManager,
@@ -24,7 +25,14 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         {
             m_authenticationManager = authenticationManager;
             m_applicationManager = applicationManager;
-            m_groupManager = groupManager;
+            m_serviceManager = serviceManager;
+=======
+
+        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager, GroupManager groupManager)
+        {
+            m_authenticationManager = authenticationManager;
+            m_applicationManager = applicationManager;
+>>>>>>> f04d5e82f4909e7526451ede16208a655d1a867c
             m_groupManager = groupManager;
         }
 

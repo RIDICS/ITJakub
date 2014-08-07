@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+Ôªøusing System.Collections.ObjectModel;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -91,7 +91,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (exception != null)
                 {
                     if (exception is UserNotRegisteredException)
-                        new MessageDialog("Pro p¯ihl·öenÌ do aplikace je nutnÈ se nejd¯Ìve registrovat.", "Uûivatel nenÌ registrov·n").ShowAsync();
+                        new MessageDialog("Pro p≈ôihl√°≈°en√≠ do aplikace je nutn√© se nejd≈ô√≠ve registrovat.", "U≈æivatel nen√≠ registrov√°n").ShowAsync();
                     return;
                 }
 
