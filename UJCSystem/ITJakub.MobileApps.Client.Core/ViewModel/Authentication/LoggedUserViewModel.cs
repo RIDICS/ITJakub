@@ -3,7 +3,7 @@ using GalaSoft.MvvmLight;
 
 namespace ITJakub.MobileApps.Client.Core.ViewModel.Authentication
 {
-    public class LogedUserViewModel:ViewModelBase
+    public class LoggedUserViewModel:ViewModelBase
     {
         private string m_firstName;
         private string m_lastName;
@@ -26,5 +26,11 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel.Authentication
             get { return m_userAvatar; }
             set { m_userAvatar = value; RaisePropertyChanged();}
         }
+    }
+
+
+    public class LoginResultViewModel : ViewModelBase
+    {
+        
     }
 }

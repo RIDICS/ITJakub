@@ -1,4 +1,5 @@
 USE [ITJakubMobileAppsDB]
+SET XACT_ABORT ON
 BEGIN TRAN
 
 INSERT INTO [dbo].[Application]

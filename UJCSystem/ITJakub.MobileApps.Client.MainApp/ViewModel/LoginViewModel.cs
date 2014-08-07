@@ -85,7 +85,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private void Login(LoginProviderType loginProviderType)
         {
             LoggingIn = true;
-            m_dataService.Login(loginProviderType, (info, exception) =>
+            m_dataService.Login(loginProviderType, (loginResult, exception) =>
             {
                 LoggingIn = false;
                 if (exception != null)
@@ -94,11 +94,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                         new MessageDialog("Pro pøihlášení do aplikace je nutné se nejdøíve registrovat.", "Uživatel není registrován").ShowAsync();
                     return;
                 }
-                if (info != null)
-                {
-                    if (info.Success)
-                        m_navigationService.Navigate(typeof (GroupListView));
-                }
+
+                if (loginResult)
+                    m_navigationService.Navigate(typeof (GroupListView));
             });
         }
     }

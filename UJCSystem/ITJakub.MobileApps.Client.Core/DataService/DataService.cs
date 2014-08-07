@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
@@ -17,14 +16,16 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         private readonly ApplicationManager m_applicationManager;
         //private SynchronizeManager m_synchronizeManager;
         private readonly AuthenticationManager m_authenticationManager;
+        private readonly GroupManager m_groupManager;
         private readonly MobileAppsServiceManager m_serviceManager;
-        private GroupManager m_groupManager;
 
-        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager, MobileAppsServiceManager serviceManager)
+        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager, MobileAppsServiceManager serviceManager,
+            GroupManager groupManager)
         {
             m_authenticationManager = authenticationManager;
             m_applicationManager = applicationManager;
             m_serviceManager = serviceManager;
+            m_groupManager = groupManager;
         }
 
         public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
@@ -67,20 +68,20 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         public async void ConnectToGroup(string code, Action<Exception> callback)
         {
             m_groupManager.ConnectToGroup(code, callback);
-          
         }
 
-        public void Login(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback)
+        public void Login(LoginProviderType loginProviderType, Action<bool, Exception> callback)
         {
             m_authenticationManager.LoginByProvider(loginProviderType, callback);
         }
 
-        public void CreateUser(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback)
+        public void CreateUser(LoginProviderType loginProviderType, Action<bool, Exception> callback)
         {
             m_authenticationManager.CreateUserByLoginProvider(loginProviderType, callback);
         }
 
-        public void GetLogedUserInfo(Action<LogedUserViewModel, Exception> callback)
+
+        public void GetLogedUserInfo(Action<LoggedUserViewModel, Exception> callback)
         {
             m_authenticationManager.GetLogedUserInfo(callback);
         }

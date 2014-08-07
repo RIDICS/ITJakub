@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
-using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Groups

@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
+using ITJakub.MobileApps.Client.Core.Service;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
 {
@@ -11,10 +12,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
         private string m_lastName;
         private string m_firstName;
         private ImageSource m_userAvatar;
+        private readonly NavigationService m_navigationService;
 
-        public UserMenuViewModel(IDataService dataService)
+        public UserMenuViewModel(IDataService dataService, NavigationService navigationService)
         {
             m_dataService = dataService;
+            m_navigationService = navigationService;
             InitializeCommands();
             LoadInitData();
         }
@@ -27,6 +30,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
             {
                 if (exception != null)
                     return;
+                
+
                 FirstName = userInfo.FirstName;
                 LastName = userInfo.LastName;
                 UserAvatar = userInfo.UserAvatar;
@@ -35,6 +40,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
 
         private void InitializeCommands()
         {
+            LogOutCommand = new RelayCommand(() => { m_dataService.LogOut(); m_navigationService.GoHome(); });
         }
 
 

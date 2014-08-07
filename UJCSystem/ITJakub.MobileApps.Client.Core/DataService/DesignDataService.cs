@@ -13,7 +13,13 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public class DesignDataService : IDataService
     {
-        public void Login(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback)
+
+        public void Login(LoginProviderType loginProviderType, Action<bool, Exception> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateUser(LoginProviderType loginProviderType, Action<bool, Exception> callback)
         {
             throw new NotImplementedException();
         }
@@ -23,9 +29,9 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             throw new NotImplementedException();
         }
 
-        public void GetLogedUserInfo(Action<LogedUserViewModel, Exception> callback)
+        public void GetLogedUserInfo(Action<LoggedUserViewModel, Exception> callback)
         {
-            callback(new LogedUserViewModel {FirstName = "Test", LastName = "Testovaci"}, null);
+            callback(new LoggedUserViewModel {FirstName = "Test", LastName = "Testovaci"}, null);
         }
 
 

@@ -12,7 +12,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
 {
     public class UserAvatarCache
     {
-        private const int AvatarImageSize = 40;
+        private const int AvatarImageSize = 50;
         private const uint BoundLocation = (uint)AvatarImageSize/2;
         private readonly Dictionary<long, UserAvatar> m_cache = new Dictionary<long, UserAvatar>();
 
@@ -57,8 +57,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager
                 enc.BitmapTransform.ScaledHeight = AvatarImageSize;
                 enc.BitmapTransform.ScaledWidth = AvatarImageSize;
 
-                var bounds = new BitmapBounds { Height = BoundLocation, Width = BoundLocation, X = BoundLocation, Y = BoundLocation };
-                enc.BitmapTransform.Bounds = bounds;
+                //var bounds = new BitmapBounds { Height = BoundLocation, Width = BoundLocation, X = BoundLocation, Y = BoundLocation };
+                //enc.BitmapTransform.Bounds = bounds;
 
                 await enc.FlushAsync();
 

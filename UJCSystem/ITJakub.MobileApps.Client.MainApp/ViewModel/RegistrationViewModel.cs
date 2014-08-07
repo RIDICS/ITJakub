@@ -87,12 +87,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private void Register(LoginProviderType loginProviderType)
         {
             RegistrationInProgress = true;
-            m_dataService.CreateUser(loginProviderType, (info, exception) =>
+            m_dataService.CreateUser(loginProviderType, (createUserResult, exception) =>
             {
                 RegistrationInProgress = false;
                 if (exception != null)
                     return;
-                if (info.Success)
+
+                if (createUserResult)
                     m_navigationService.Navigate(typeof(GroupListView));
             });
         }
