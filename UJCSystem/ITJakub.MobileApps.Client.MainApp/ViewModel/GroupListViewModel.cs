@@ -242,10 +242,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
                 NoGroupExist = groupList.Count == 0;
             });
-            //UserInfo userInfo = m_dataService.GetUserInfo();
-            //FirstName = userInfo.FirstName;
-            //LastName = userInfo.LastName;
-            //m_isTeacher = userInfo.IsTeacher;
+            //UserLoginSkeleton UserLoginSkeleton = m_dataService.GetLogedUserInfo();
+            //FirstName = UserLoginSkeleton.FirstName;
+            //LastName = UserLoginSkeleton.LastName;
+            //m_isTeacher = UserLoginSkeleton.IsTeacher;
         }
 
         private void GroupClick(ItemClickEventArgs args)

@@ -13,9 +13,9 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public interface IDataService
     {
-        void Login(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback);
-        void CreateUser(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback);
-        void GetUserInfo(Action<UserInfo, Exception> callback);
+        void Login(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback);
+        void CreateUser(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback);
+        void GetLogedUserInfo(Action<LogedUserViewModel, Exception> callback);
         void LogOut();
         void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback);
         

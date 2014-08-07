@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 
-namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
     public class LiveIdProvider : ILoginProvider
     {
@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
         //TODO register this application in Windows Store developer account and test this method
         /*
-        public async Task<UserInfo> LoginLiveId()
+        public async Task<UserLoginSkeleton> LoginLiveId()
         {
             const bool signIn = false;
             try
@@ -49,7 +49,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
                         // Create a client session to get the profile data.
                         var connect = new LiveConnectClient(LCAuth.Session);
 
-                        // Get the profile info of the user.
+                        // Get the profile loginSkeleton of the user.
                         var operationResult = await connect.GetAsync("me");
                         dynamic result = operationResult.Result;
                         if (result != null)
@@ -85,11 +85,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         }
         */
 
-        public Task<UserInfo> LoginAsync()
+        public Task<UserLoginSkeleton> LoginAsync()
         {
-            var task = new Task<UserInfo>(() =>
+            var task = new Task<UserLoginSkeleton>(() =>
             {
-                var userInfo = new UserInfo
+                var userInfo = new UserLoginSkeleton
                 {
                     Success = true,
                     FirstName = "Mocked",
