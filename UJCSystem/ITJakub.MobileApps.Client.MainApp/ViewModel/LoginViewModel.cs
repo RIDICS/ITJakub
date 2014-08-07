@@ -17,32 +17,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private Visibility m_loginDialogVisibility;
         private bool m_loggingIn;
+        private Visibility m_loginDialogVisibility;
 
         public LoginViewModel(IDataService dataService, INavigationService navigationService)
-        {      
+        {
             m_dataService = dataService;
             m_navigationService = navigationService;
             LoggingIn = false;
             LoadInitData();
             ItemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
-            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate(typeof(RegistrationView)));
-        }
-
-        private void LoadInitData()
-        {
-            LoginProviders = new ObservableCollection<LoginProviderViewModel>();
-            m_dataService.GetLoginProviders((loginproviders, exception) =>
-            {
-                if (exception != null)
-                    return;
-
-                foreach (LoginProviderViewModel loginProvider in loginproviders)
-                {
-                    LoginProviders.Add(loginProvider);
-                }
-            });
+            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate(typeof (RegistrationView)));
         }
 
 
@@ -73,6 +58,21 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        private void LoadInitData()
+        {
+            LoginProviders = new ObservableCollection<LoginProviderViewModel>();
+            m_dataService.GetLoginProviders((loginproviders, exception) =>
+            {
+                if (exception != null)
+                    return;
+
+                foreach (LoginProviderViewModel loginProvider in loginproviders)
+                {
+                    LoginProviders.Add(loginProvider);
+                }
+            });
+        }
+
         private void ItemClick(ItemClickEventArgs args)
         {
             var item = args.ClickedItem as LoginProviderViewModel;
@@ -94,8 +94,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                         new MessageDialog("Pro pøihlášení do aplikace je nutné se nejdøíve registrovat.", "Uživatel není registrován").ShowAsync();
                     return;
                 }
-                if (info.Success)
-                    m_navigationService.Navigate(typeof(GroupListView));
+                if (info != null)
+                {
+                    if (info.Success)
+                        m_navigationService.Navigate(typeof (GroupListView));
+                }
             });
         }
     }

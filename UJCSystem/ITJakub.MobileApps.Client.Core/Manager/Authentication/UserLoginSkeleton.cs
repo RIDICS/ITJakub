@@ -1,9 +1,9 @@
 using System;
 using Windows.UI.Xaml.Media;
 
-namespace ITJakub.MobileApps.Client.Core.ViewModel
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
-    public class UserInfo
+    public class UserLoginSkeleton
     {
         public bool Success { get; set; }
         public string AccessToken { get; set; }

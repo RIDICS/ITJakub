@@ -1,4 +1,3 @@
-using Windows.UI.Xaml.Media;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 
 namespace ITJakub.MobileApps.Client.Core.ViewModel.Authentication

@@ -13,19 +13,19 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public class DesignDataService : IDataService
     {
-        public void Login(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback)
+        public void Login(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback)
         {
             throw new NotImplementedException();
         }
 
-        public void CreateUser(LoginProviderType loginProviderType, Action<UserInfo, Exception> callback)
+        public void CreateUser(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback)
         {
             throw new NotImplementedException();
         }
 
-        public void GetUserInfo(Action<UserInfo, Exception> callback)
+        public void GetLogedUserInfo(Action<LogedUserViewModel, Exception> callback)
         {
-            throw new NotImplementedException();
+            callback(new LogedUserViewModel {FirstName = "Test", LastName = "Testovaci"}, null);
         }
 
 
@@ -91,7 +91,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
                 },
                 new LoginProviderViewModel
                 {
-                    LoginProviderType = LoginProviderType.Facebook,                    
+                    LoginProviderType = LoginProviderType.Facebook,
                     Name = "Facebook"
                 },
                 new LoginProviderViewModel
@@ -108,6 +108,11 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         }
 
         public void ConnectToGroup(string code, Action<Exception> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetLogedUserInfo(Action<UserLoginSkeleton, Exception> callback)
         {
             throw new NotImplementedException();
         }

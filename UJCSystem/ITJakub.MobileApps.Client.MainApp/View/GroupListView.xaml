@@ -121,7 +121,7 @@
             <Button Margin="0,0,0,0"
                     Command="{Binding NavigationHelper.GoBackCommand, ElementName=PageRoot}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
                     VerticalContentAlignment="Center"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"

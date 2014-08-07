@@ -68,17 +68,17 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             }
         }
 
-        public async Task CreateUser(LoginProviderType loginProviderType, UserInfo userInfo)
+        public async Task CreateUser(LoginProviderType loginProviderType, UserLoginSkeleton userLoginSkeleton)
         {
             try
             {
                 var authenticationProvider = LoginProviderConverter.LoginToAuthenticationProvider(loginProviderType);
 
-                await m_serviceClient.CreateUserAsync(userInfo.AccessToken, authenticationProvider, new User
+                await m_serviceClient.CreateUserAsync(userLoginSkeleton.AccessToken, authenticationProvider, new User
                 {
-                    Email = userInfo.Email,
-                    FirstName = userInfo.FirstName,
-                    LastName = userInfo.LastName
+                    Email = userLoginSkeleton.Email,
+                    FirstName = userLoginSkeleton.FirstName,
+                    LastName = userLoginSkeleton.LastName
                 });
             }
             catch (FaultException)

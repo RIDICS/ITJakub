@@ -6,7 +6,7 @@ using Facebook;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 
-namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
     public class FacebookProvider : ILoginProvider
     {
@@ -14,10 +14,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         //Standard redirect uri for desktop/non-web based apps
         private const string RedirectUri = "https://www.facebook.com/connect/login_success.html";
 
-        public async Task<UserInfo> LoginAsync()
+        public async Task<UserLoginSkeleton> LoginAsync()
         {
             var fbClient = new FacebookClient();
-            //var redirectUri = new Uri(CustomWebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri);
             var redirectUri = new Uri(RedirectUri);
             Uri loginUrl = fbClient.GetLoginUrl(new
             {
@@ -27,13 +26,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
                 display = "popup",
                 response_type = "token"
             });
-
-            //WebAuthenticationResult webAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl);
+            
             AuthBrokerResult webAuthenticationResult =
                 await CustomWebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl, redirectUri);
-            UserInfo userInfo = GetUserInfoFromResponse(fbClient, webAuthenticationResult);
+            UserLoginSkeleton userLoginSkeleton = GetUserInfoFromResponse(fbClient, webAuthenticationResult);
 
-            return userInfo;
+            return userLoginSkeleton;
         }
 
         public string AccountName
@@ -46,9 +44,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             get { return LoginProviderType.Facebook; }
         }
 
-        private UserInfo GetUserInfoFromResponse(FacebookClient fbClient, WebAuthenticationResult webAuthenticationResult)
+        private UserLoginSkeleton GetUserInfoFromResponse(FacebookClient fbClient, WebAuthenticationResult webAuthenticationResult)
         {
-            var userInfo = new UserInfo();
+            var userInfo = new UserLoginSkeleton();
 
             switch (webAuthenticationResult.ResponseStatus)
             {
@@ -78,9 +76,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             return userInfo;
         }
 
-        private UserInfo GetUserInfoFromResponse(FacebookClient fbClient, AuthBrokerResult webAuthenticationResult)
+        private UserLoginSkeleton GetUserInfoFromResponse(FacebookClient fbClient, AuthBrokerResult webAuthenticationResult)
         {
-            var userInfo = new UserInfo();
+            var userInfo = new UserLoginSkeleton();
 
             switch (webAuthenticationResult.ResponseStatus)
             {
@@ -110,15 +108,15 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             return userInfo;
         }
 
-        private void FillUserDetailInfo(UserInfo userInfo, string accessToken)
+        private void FillUserDetailInfo(UserLoginSkeleton userLoginSkeleton, string accessToken)
         {
             var fbClient = new FacebookClient(accessToken);
             object user = fbClient.GetTaskAsync("/me").Result;
             var result = (IDictionary<string, object>) user;
 
-            userInfo.Email = result["email"].ToString();
-            userInfo.FirstName = result["first_name"].ToString();
-            userInfo.LastName = result["last_name"].ToString();
+            userLoginSkeleton.Email = result["email"].ToString();
+            userLoginSkeleton.FirstName = result["first_name"].ToString();
+            userLoginSkeleton.LastName = result["last_name"].ToString();
         }
     }
 }

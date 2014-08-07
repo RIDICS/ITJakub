@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Security.Authentication.Web;
 using Windows.Web.Http;
-using Windows.Web.Http.Filters;
 using Windows.Web.Http.Headers;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.DataContracts.Json;
 using Newtonsoft.Json;
 
-namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
     public class GoogleProvider : ILoginProvider
     {
@@ -27,11 +26,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
         public string AccountName { get { return "Google"; } }
         public LoginProviderType ProviderType { get { return LoginProviderType.Google; } }
-        public async Task<UserInfo> LoginAsync()
+        public async Task<UserLoginSkeleton> LoginAsync()
         {
             var startUri = new Uri(string.Format(StartUri, ClientId, RedirectUri));
             var endUri = new Uri(EndUri);
-            var userInfo = new UserInfo();
+            var userInfo = new UserLoginSkeleton();
             string resultSring;
 
             try
@@ -110,7 +109,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             return JsonConvert.DeserializeObject<GoogleToken>(info.Content.ToString());
         }
 
-        private async Task GetGoogleUserInfoAsync(UserInfo userInfo, GoogleToken googleTokens)
+        private async Task GetGoogleUserInfoAsync(UserLoginSkeleton userLoginSkeleton, GoogleToken googleTokens)
         {
             var client = new HttpClient();
 
@@ -118,15 +117,15 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             var tokenInfo = await client.GetAsync(new Uri(String.Format(TokenInfoUrl, googleTokens.IdToken)));
             var idToken = JsonConvert.DeserializeObject<GoogleIdToken>(tokenInfo.Content.ToString());
 
-            userInfo.Email = idToken.Email;
+            userLoginSkeleton.Email = idToken.Email;
 
             // Get name
             client.DefaultRequestHeaders.Authorization = new HttpCredentialsHeaderValue("OAuth", googleTokens.AccessToken);
             var userInfoResponse = await client.GetAsync(new Uri(UserInfoUrl));
             var googleUserInfo = JsonConvert.DeserializeObject<GoogleUserInfo>(userInfoResponse.Content.ToString());
 
-            userInfo.FirstName = googleUserInfo.Name.GivenName;
-            userInfo.LastName = googleUserInfo.Name.FamilyName;
+            userLoginSkeleton.FirstName = googleUserInfo.Name.GivenName;
+            userLoginSkeleton.LastName = googleUserInfo.Name.FamilyName;
         }
 
     }
