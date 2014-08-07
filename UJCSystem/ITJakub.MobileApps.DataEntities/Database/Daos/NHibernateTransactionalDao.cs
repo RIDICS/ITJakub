@@ -66,6 +66,21 @@ namespace ITJakub.MobileApps.DataEntities.Database.Daos
                     throw new DataException(string.Format("Get by id operation failed for type:{0}", type.Name), ex);
                 }
             }
+        }  
+        
+        public virtual T FindById<T>(object id)
+        {
+            using (ISession session = GetSession())
+            {
+                try
+                {
+                    return (T) session.Get(typeof(T), id);
+                }
+                catch (Exception ex)
+                {
+                    throw new DataException(string.Format("Get by id operation failed for type:{0}", typeof(T).Name), ex);
+                }
+            }
         }
 
         public virtual object Load(Type type, object id)
@@ -83,6 +98,24 @@ namespace ITJakub.MobileApps.DataEntities.Database.Daos
                 catch (Exception ex)
                 {
                     throw new DataException(string.Format("Load by id operation failed for type:{0}", type.Name), ex);
+                }
+            }
+        }   
+        public virtual T Load<T>(object id)
+        {
+            using (ISession session = GetSession())
+            {
+                try
+                {
+                    return (T)session.Load(typeof(T), id);
+                }
+                catch (ObjectNotFoundException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    throw new DataException(string.Format("Load by id operation failed for type:{0}", typeof(T).Name), ex);
                 }
             }
         }
