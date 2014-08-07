@@ -52,7 +52,7 @@
                                        Text="Zadejte název skupiny:"/>
                             <TextBox Width="250"
                                      Text="{Binding NewGroupName, Mode=TwoWay}"
-                                     Margin="0 5 0 5"/>
+                                     Margin="0,5,0,5"/>
                             <Button HorizontalAlignment="Right" 
                                     Content="Vytvořit"
                                     Command="{Binding CreateNewGroupCommand}"/>
@@ -85,7 +85,7 @@
                                     <Run Text="&quot;." />
                                 </TextBlock>
                                 <Button HorizontalAlignment="Right"
-                                    Margin="0 10 0 0"
+                                    Margin="0,10,0,0"
                                     Content="Odstranit"/>
                             </StackPanel>
                         </Flyout>
@@ -118,15 +118,16 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Margin="0,0,0,0"
+            <Button 
                     Command="{Binding NavigationHelper.GoBackCommand, ElementName=PageRoot}"
-                    Style="{StaticResource NavigationBackButtonNormalStyle}"
+                    Style="{StaticResource NavigationBackButtonNormalStyle}"  
                     VerticalAlignment="Center"
-                    VerticalContentAlignment="Center"
+                    Margin="10,0,0,0"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
                     AutomationProperties.ItemType="Navigation Button"
                     IsEnabled="False"/>
+            
             <TextBlock Text="Seznam dostupných skupin"
                        Style="{StaticResource HeaderTextBlockStyle}"
                        Grid.Column="1"
@@ -173,7 +174,7 @@
             </interactivity:Interaction.Behaviors>
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <ItemsWrapGrid GroupPadding="0 0 70 0" />
+                    <ItemsWrapGrid GroupPadding="0,0,70,0" />
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
             <GridView.ItemTemplate>
@@ -186,7 +187,7 @@
                                Source="{Binding Icon}"/>
                         <StackPanel Orientation="Vertical"
                                     Width="270"
-                                    Margin="10 0 0 0">
+                                    Margin="10,0,0,0">
                             <TextBlock Text="{Binding GroupName}"
                                        FontWeight="Bold"/>
                             <TextBlock Foreground="{StaticResource ApplicationForegroundThemeBrush}">
@@ -222,7 +223,7 @@
         <TextBlock Grid.Row="1"
                    Text="Nejsou dostupné žádné skupiny."
                    Style="{StaticResource SubheaderTextBlockStyle}"
-                   Margin="120 20 0 0"
+                   Margin="120,20,0,0"
                    Visibility="{Binding NoGroupExist, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </Page>

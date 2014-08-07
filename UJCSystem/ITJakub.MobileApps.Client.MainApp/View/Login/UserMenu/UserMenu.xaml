@@ -9,7 +9,7 @@
     d:DesignHeight="40"
     d:DesignWidth="180"
     d:DataContext="{d:DesignInstance Type= userMenu:UserMenuViewModel}">
-    <Grid>
+    <Grid Background="#22000000">
         <Button Style="{StaticResource TextBlockButtonStyle}"
                     FontSize="30"
                     FontWeight="Normal"
@@ -22,14 +22,20 @@
                                         Command="{Binding LogOutCommand}"/>
                 </MenuFlyout>
             </Button.Flyout>
-            <Grid VerticalAlignment="Center">
-                <Ellipse Width="40" Height="40">
+            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="40"/>
+                    <ColumnDefinition Width="auto" MinWidth="40"/>
+                </Grid.ColumnDefinitions>
+                
+                <Ellipse Grid.Column="0" Width="40" Height="40">
                     <Ellipse.Fill>
                         <ImageBrush ImageSource="{Binding UserAvatar}" Stretch="None"/>
                     </Ellipse.Fill>
                 </Ellipse>
                 
-                <TextBlock Margin="10,0,0,0">
+                <TextBlock Grid.Column="1" Margin="10,0,0,0">
                     <Run Text="{Binding FirstName}"/>
                     <Run Text="{Binding LastName}"/>
                 </TextBlock>
