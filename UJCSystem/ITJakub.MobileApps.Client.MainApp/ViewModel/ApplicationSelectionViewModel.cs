@@ -3,9 +3,11 @@ using System.Linq;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -71,7 +73,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             var selectedApp = args.ClickedItem as AppInfoViewModel;
             if (selectedApp == null)
                 return;
-            m_navigationService.Navigate(typeof (ApplicationHostView), selectedApp.ApplicationType);
+            m_navigationService.Navigate(typeof (ApplicationHostView));
+            Messenger.Default.Send(new LoadApplicationMessage{ApplicationType = selectedApp.ApplicationType});
         }
     }
 }

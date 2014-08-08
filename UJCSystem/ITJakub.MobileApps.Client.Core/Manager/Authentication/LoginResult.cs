@@ -10,6 +10,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
         public string UserAvatarUrl { get; set; }
 
-        public bool IsTeacher { get; set; }
+        public UserRole UserRole { get; set; }
     }
 }

@@ -41,7 +41,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             try
             {
-                 var userId = m_authManager.GetCurrentUserId();
+                var userId = m_authManager.GetCurrentUserId();
                 if (!userId.HasValue)
                 {
                     callback(null, new ArgumentException("No logged user"));

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ITJakub.MobileApps.Client.DataContracts
+namespace ITJakub.MobileApps.Client.Shared.Data
 {
     public class ObjectDetails
     {

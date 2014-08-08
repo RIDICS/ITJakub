@@ -2,7 +2,7 @@ using System;
 using Windows.UI.Xaml.Data;
 using ITJakub.MobileApps.Client.Core.Manager;
 
-namespace ITJakub.MobileApps.Client.MainApp.Common
+namespace ITJakub.MobileApps.Client.MainApp.View.Converter
 {
     public class GroupTypeToNameConverter : IValueConverter
     {

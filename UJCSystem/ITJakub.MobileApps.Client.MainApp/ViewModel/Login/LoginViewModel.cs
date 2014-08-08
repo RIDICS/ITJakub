@@ -11,7 +11,7 @@ using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.View.Login;
 
-namespace ITJakub.MobileApps.Client.MainApp.ViewModel
+namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
 {
     public class LoginViewModel : ViewModelBase
     {

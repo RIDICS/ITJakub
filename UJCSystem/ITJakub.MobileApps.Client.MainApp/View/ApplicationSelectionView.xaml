@@ -8,12 +8,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:common="using:ITJakub.MobileApps.Client.MainApp.Common"
+    xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
         <CollectionViewSource x:Name="AppList" IsSourceGrouped="True" Source="{Binding AppList}"/>
-        <common:ApplicationCategoryToNameConverter x:Key="ApplicationCategoryToNameConverter"/>
+        <converter:ApplicationCategoryToNameConverter x:Key="ApplicationCategoryToNameConverter"/>
     </Page.Resources>
 
     <!--

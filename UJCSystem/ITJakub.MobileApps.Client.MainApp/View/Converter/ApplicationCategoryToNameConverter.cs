@@ -2,7 +2,7 @@ using System;
 using Windows.UI.Xaml.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
-namespace ITJakub.MobileApps.Client.MainApp.Common
+namespace ITJakub.MobileApps.Client.MainApp.View.Converter
 {
     public class ApplicationCategoryToNameConverter : IValueConverter
     {

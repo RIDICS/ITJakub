@@ -2,7 +2,6 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.DataService;
-using ITJakub.MobileApps.Client.Core.Service;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
 {
@@ -26,7 +25,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
 
         private void LoadInitData()
         {
-            m_dataService.GetLogedUserInfo((userInfo, exception) =>
+            m_dataService.GetLoggedUserInfo((userInfo, exception) =>
             {
                 if (exception != null)
                     return;

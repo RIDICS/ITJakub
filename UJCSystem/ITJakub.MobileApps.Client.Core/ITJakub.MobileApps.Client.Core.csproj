@@ -131,6 +131,7 @@
     <Compile Include="Manager\Authentication\AuthenticationProviders\GoogleProvider.cs" />
     <Compile Include="Manager\Authentication\AuthenticationProviders\ItJakubProvider.cs" />
     <Compile Include="Manager\Authentication\AuthenticationProviders\LiveIdProvider.cs" />
+    <Compile Include="Manager\Converter\UserRoleConverter.cs" />
     <Compile Include="Manager\Groups\GroupManager.cs" />
     <Compile Include="Manager\Authentication\LoginResult.cs" />
     <Compile Include="Manager\UserAvatarCache.cs" />
@@ -148,7 +149,6 @@
     </Compile>
     <Compile Include="SynchronizeManager.cs" />
     <Compile Include="Configuration\ApplicationConfig.cs" />
-    <Compile Include="ApplicationHostViewModel.cs" />
     <Compile Include="ApplicationLoader.cs" />
     <Compile Include="ApplicationTemplateSelector.cs" />
     <Compile Include="Configuration\ApplicationConfigLoader.cs" />

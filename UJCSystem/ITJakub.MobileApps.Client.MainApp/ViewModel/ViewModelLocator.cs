@@ -17,6 +17,7 @@ using System.Reflection;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Core;
 using ITJakub.MobileApps.Client.Core.DataService;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.Login;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using Microsoft.Practices.Unity;
 
@@ -83,11 +84,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public ApplicationSelectionViewModel ApplicationSelectionViewModel
         {
             get { return Container.Current.Resolve<ApplicationSelectionViewModel>(); }
-        }
-
-        public EditGroupViewModel EditGroupViewModel
-        {
-            get { return Container.Current.Resolve<EditGroupViewModel>(); }
         }
 
         public GroupPageViewModel GroupPageViewModel

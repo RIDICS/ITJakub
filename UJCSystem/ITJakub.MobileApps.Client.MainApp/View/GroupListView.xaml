@@ -6,15 +6,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:common="using:ITJakub.MobileApps.Client.MainApp.Common"
     xmlns:userMenu="using:ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu"
+    xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     x:Name="PageRoot"
     DataContext="{Binding GroupListViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <common:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <common:GroupTypeToNameConverter x:Key="GroupTypeToNameConverter" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:GroupTypeToNameConverter x:Key="GroupTypeToNameConverter" />
         <CollectionViewSource x:Name="GroupList" Source="{Binding GroupList}" IsSourceGrouped="True" />
     </Page.Resources>
 
@@ -31,13 +31,15 @@
                     <Flyout>
                         <StackPanel Orientation="Vertical">
                             <TextBlock FontSize="15"
-                                       Text="Zadejte číslo skupiny" />
+                                       Text="Zadejte číslo skupiny:" />
                             <TextBox Width="250"
                                      Margin="0 5 0 5"
-                                     Text="{Binding ConnectToGroupCode, Mode=TwoWay}" />
+                                     Text="{Binding ConnectToGroupCode, Mode=TwoWay}"
+                                     KeyUp="ConnectToGroupTextBox_OnKeyUp" />
                             <Button HorizontalAlignment="Right"
                                     Content="Připojit se"
-                                    Command="{Binding ConnectToGroupCommand}" />
+                                    Command="{Binding ConnectToGroupCommand}"
+                                    x:Name="ConnectToGroupButton"/>
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>
@@ -53,10 +55,12 @@
                                        Text="Zadejte název skupiny:" />
                             <TextBox Width="250"
                                      Margin="0,5,0,5"
-                                     Text="{Binding NewGroupName, Mode=TwoWay}" />
+                                     Text="{Binding NewGroupName, Mode=TwoWay}"
+                                     KeyUp="CreateGroupTextBox_OnKeyUp"/>
                             <Button HorizontalAlignment="Right"
                                     Content="Vytvořit"
-                                    Command="{Binding CreateNewGroupCommand}" />
+                                    Command="{Binding CreateNewGroupCommand}"
+                                    x:Name="CreateGroupButton"/>
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>
@@ -121,7 +125,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button
-                Margin="10,0,0,0"
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Command="{Binding NavigationHelper.GoBackCommand, ElementName=PageRoot}"
                 Style="{StaticResource NavigationBackButtonNormalStyle}"
@@ -138,7 +142,7 @@
                        TextWrapping="NoWrap" />
             <userMenu:UserMenu Grid.Column="2"
                                VerticalAlignment="Center"
-                                Margin="0,0,30,0"/>
+                               Margin="0,0,30,0"/>
 
             <ProgressBar Grid.Column="0"
                          Grid.ColumnSpan="3"
@@ -148,7 +152,7 @@
         </Grid>
 
         <GridView Grid.Row="1"
-                  Padding="110,0,50,100"
+                  Padding="120,0,50,100"
                   IsItemClickEnabled="True"
                   SelectionMode="Single"
                   ItemsSource="{Binding Source={StaticResource GroupList}}"

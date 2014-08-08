@@ -1,11 +1,9 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using ITJakub.MobileApps.Client.Core;
 using ITJakub.MobileApps.Client.MainApp.Common;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
-using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.View
 {
@@ -76,14 +74,6 @@ namespace ITJakub.MobileApps.Client.MainApp.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            if (e.Parameter is ApplicationType)
-            {
-                var selectedApplication = (ApplicationType) e.Parameter;
-                var viewModel = DataContext as ApplicationHostViewModel;
-                if (viewModel == null)
-                    return;
-                viewModel.LoadInitData(selectedApplication);
-            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using ITJakub.MobileApps.Client.Core.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {

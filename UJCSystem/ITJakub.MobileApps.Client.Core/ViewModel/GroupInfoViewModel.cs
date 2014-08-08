@@ -1,6 +1,5 @@
 ﻿using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Core.Manager;
-using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Core.ViewModel

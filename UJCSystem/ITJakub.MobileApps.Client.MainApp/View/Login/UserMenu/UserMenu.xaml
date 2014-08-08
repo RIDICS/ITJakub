@@ -11,9 +11,9 @@
     <Grid>
         <Button HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Style="{StaticResource TextBlockButtonStyle}"
                 FontSize="25"
-                FontWeight="Normal">
+                FontWeight="Normal"
+                BorderThickness="0">
             <Button.Flyout>
                 <MenuFlyout>
                     <MenuFlyoutItem Text="Odhlásit se"

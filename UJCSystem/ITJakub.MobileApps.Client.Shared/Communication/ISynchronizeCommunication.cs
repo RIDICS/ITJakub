@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using ITJakub.MobileApps.Client.DataContracts;
+using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Shared.Communication

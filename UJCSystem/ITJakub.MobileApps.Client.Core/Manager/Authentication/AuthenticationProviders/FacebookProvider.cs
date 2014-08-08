@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
 using Facebook;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker;
-using ITJakub.MobileApps.Client.Core.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
@@ -26,9 +25,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
                 display = "popup",
                 response_type = "token"
             });
-            
-            AuthBrokerResult webAuthenticationResult =
-                await CustomWebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl, redirectUri);
+
+            //TODO switch to CustomWebAuthenticationBroker
+            var webAuthenticationResult =
+                await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl, redirectUri);
             UserLoginSkeleton userLoginSkeleton = GetUserInfoFromResponse(fbClient, webAuthenticationResult);
 
             return userLoginSkeleton;
@@ -46,34 +46,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
 
         private UserLoginSkeleton GetUserInfoFromResponse(FacebookClient fbClient, WebAuthenticationResult webAuthenticationResult)
         {
-            var userInfo = new UserLoginSkeleton();
-
-            switch (webAuthenticationResult.ResponseStatus)
+            var authBrokerResult = new AuthBrokerResult
             {
-                case WebAuthenticationStatus.Success:
-                    var callbackUri = new Uri(webAuthenticationResult.ResponseData);
-                    FacebookOAuthResult facebookOAuthResult = fbClient.ParseOAuthCallbackUrl(callbackUri);
-
-                    // Retrieve the Access Token. You can now interact with Facebook on behalf of the user
-                    // using the Access Token.
-                    string accessToken = facebookOAuthResult.AccessToken;
-
-                    userInfo.Success = true;
-                    userInfo.AccessToken = accessToken;
-                    FillUserDetailInfo(userInfo, accessToken);
-                    break;
-
-                case WebAuthenticationStatus.ErrorHttp:
-                    // handle authentication failure
-                    userInfo.Success = false;
-                    break;
-
-                default:
-                    // The user canceled the authentication
-                    userInfo.Success = false;
-                    break;
-            }
-            return userInfo;
+                ResponseData = webAuthenticationResult.ResponseData,
+                ResponseStatus = webAuthenticationResult.ResponseStatus
+            };
+            return GetUserInfoFromResponse(fbClient, authBrokerResult);
         }
 
         private UserLoginSkeleton GetUserInfoFromResponse(FacebookClient fbClient, AuthBrokerResult webAuthenticationResult)

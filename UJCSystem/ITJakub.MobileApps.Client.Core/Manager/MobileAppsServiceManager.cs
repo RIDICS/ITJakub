@@ -47,7 +47,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
                     EstimatedExpirationTime = response.EstimatedExpirationTime,
                     UserId = response.UserId,
                     UserAvatarUrl = response.ProfilePictureUrl,
-
+                    UserRole = UserRoleConverter.ConvertToLocal(response.UserRole)
                 };
                 return loginResult;
             }

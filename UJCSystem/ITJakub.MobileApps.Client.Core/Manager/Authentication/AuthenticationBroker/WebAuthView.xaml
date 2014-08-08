@@ -5,16 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:authBroker="using:ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker"
-    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
+    RequestedTheme="Light"
     d:DataContext="{d:DesignInstance Type=authBroker:WebAuthViewModel }">
 
     <Grid>
         <Grid Margin="0,100,0,100">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60" />
-                <RowDefinition Height="20" />
+                <RowDefinition Height="0" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -23,15 +22,17 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="1" Grid.Row="0" Background="#FF000044">
+            <Grid Grid.Column="1" Grid.Row="0" Background="#FFDDDDDD">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" VerticalAlignment="Center" IsEnabled="True"
-                        Command="{Binding CancelCommand}" Style="{StaticResource NavigationBackButtonNormalStyle}" />
-                <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="Přihlašte se prosím" FontSize="18" />
+                        Command="{Binding CancelCommand}" Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="Přihlašte se prosím"
+                           FontSize="26" Margin="0,5,0,0"/>
             </Grid>
 
             <Grid Grid.Column="1" Grid.Row="1" Background="White" />

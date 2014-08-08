@@ -29,7 +29,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             throw new NotImplementedException();
         }
 
-        public void GetLogedUserInfo(Action<LoggedUserViewModel, Exception> callback)
+        public void GetLoggedUserInfo(Action<LoggedUserViewModel, Exception> callback)
         {
             callback(new LoggedUserViewModel {FirstName = "Test", LastName = "Testovaci"}, null);
         }

@@ -1,5 +1,6 @@
 ﻿using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
+using ITJakub.MobileApps.Client.Core.Manager;
 
 namespace ITJakub.MobileApps.Client.Core.ViewModel.Authentication
 {
@@ -26,11 +27,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel.Authentication
             get { return m_userAvatar; }
             set { m_userAvatar = value; RaisePropertyChanged();}
         }
-    }
 
-
-    public class LoginResultViewModel : ViewModelBase
-    {
-        
+        public UserRole UserRole { get; set; }
     }
 }

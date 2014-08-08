@@ -5,10 +5,12 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -21,7 +23,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     public class GroupListViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
-        private bool m_isTeacher;
+        private UserRole m_userRole;
         private readonly INavigationService m_navigationService;
         private bool m_commandBarOpen;
         private RelayCommand m_connectCommand;
@@ -30,11 +32,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private RelayCommand m_createNewGroupCommand;
         private RelayCommand m_deleteGroupCommand;
         private string m_deleteMessage;
-        private string m_firstName;
         private RelayCommand<ItemClickEventArgs> m_groupClickCommand;
         private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
-        private string m_lastName;
-        private RelayCommand m_logOutCommand;
         private string m_newGroupName;
         private bool m_noGroupExist;
         private RelayCommand m_refreshListCommand;
@@ -50,12 +49,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService = navigationService;
             GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>();
             NoGroupExist = false;
+            m_userRole = UserRole.Student;
 
             InitCommands();
             LoadData();
-
-            //TODO load correct information
-            m_isTeacher = true;
         }
 
         public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> GroupList
@@ -152,14 +149,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get
             {
-                bool isVisible = m_isTeacher && SelectedGroup != null;
+                bool isVisible = m_userRole == UserRole.Teacher && SelectedGroup != null;
                 return isVisible ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
         public Visibility TeachersButtonVisibility
         {
-            get { return m_isTeacher ? Visibility.Visible : Visibility.Collapsed; }
+            get { return m_userRole == UserRole.Teacher ? Visibility.Visible : Visibility.Collapsed; }
         }
 
         public string DeleteMessage
@@ -172,11 +169,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public RelayCommand LogOutCommand
-        {
-            get { return m_logOutCommand; }
-        }
-
         public bool NoGroupExist
         {
             get { return m_noGroupExist; }
@@ -186,8 +178,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged();
             }
         }
-
-    
 
         public bool Loading
         {
@@ -203,7 +193,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_groupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
             m_connectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
-            m_logOutCommand = new RelayCommand(LogOut);
             m_createNewGroupCommand = new RelayCommand(CreateNewGroup);
             m_refreshListCommand = new RelayCommand(LoadData);
             m_connectToGroupCommand = new RelayCommand(ConnectToGroup);
@@ -211,22 +200,30 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void ConnectToGroup()
         {
+            if (ConnectToGroupCode == string.Empty)
+                return;
+
             m_dataService.ConnectToGroup(ConnectToGroupCode, exception =>
             {
                 if (exception != null)
                     return;
                 new MessageDialog("Připojeno").ShowAsync();
+                LoadData();
             });
         }
 
         private void CreateNewGroup()
         {
+            if (NewGroupName == string.Empty)
+                return;
+
             m_dataService.CreateNewGroup(NewGroupName, (result, exception) =>
             {
                 if (exception != null)
                     return;
                 new MessageDialog(result.EnterCode, "Nová skupina vytvořena").ShowAsync();
                 NewGroupName = string.Empty;
+                LoadData();
             });
         }
 
@@ -242,10 +239,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
                 NoGroupExist = groupList.Count == 0;
             });
-            //UserLoginSkeleton UserLoginSkeleton = m_dataService.GetLogedUserInfo();
-            //FirstName = UserLoginSkeleton.FirstName;
-            //LastName = UserLoginSkeleton.LastName;
-            //m_isTeacher = UserLoginSkeleton.IsTeacher;
+            m_dataService.GetLoggedUserInfo((info, exception) =>
+            {
+                if (exception != null)
+                    return;
+                m_userRole = info.UserRole;
+                m_userRole = UserRole.Teacher;  //TODO for debug
+                RaisePropertyChanged(() => TeachersButtonVisibility);
+                RaisePropertyChanged(() => TeachersSecondaryButtonVisibility);
+            });
         }
 
         private void GroupClick(ItemClickEventArgs args)
@@ -258,14 +260,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             if (group != null)
             {
-                m_navigationService.Navigate(typeof (ApplicationHostView), group.ApplicationType);
+                m_navigationService.Navigate(typeof (ApplicationHostView));
+                Messenger.Default.Send(new LoadApplicationMessage {ApplicationType = group.ApplicationType});
             }
-        }
-
-        private void LogOut()
-        {
-            m_dataService.LogOut();
-            m_navigationService.GoHome();
         }
     }
 }

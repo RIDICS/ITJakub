@@ -4,16 +4,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:common="using:ITJakub.MobileApps.Client.MainApp.Common"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:login="using:ITJakub.MobileApps.Client.MainApp.View.Login"
+    xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     x:Name="PageRoot"
     DataContext="{Binding LoginViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <common:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <login:LoginProviderToIconConverter x:Key="LoginProviderToIcon" />
     </Page.Resources>
 

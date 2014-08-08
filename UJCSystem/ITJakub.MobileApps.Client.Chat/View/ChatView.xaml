@@ -63,12 +63,14 @@
             <TextBox Grid.Column="0" 
                      Text="{Binding Message, Mode=TwoWay}"
                      KeyUp="MessageBox_OnKeyUp"
-                     x:Name="MessageBox"/>
+                     x:Name="MessageBox"
+                     />
             
             <Button Grid.Column="1"
                     Content="Odeslat"
                     Command="{Binding SendCommand}"
-                    Click="SendButton_OnClick" />
+                    Click="SendButton_OnClick"
+                    x:Name="SendButton" />
         </Grid>
     </Grid>
     

@@ -17,14 +17,12 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         //private SynchronizeManager m_synchronizeManager;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly GroupManager m_groupManager;
-        private readonly MobileAppsServiceManager m_serviceManager;
 
-        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager, MobileAppsServiceManager serviceManager,
+        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager,
             GroupManager groupManager)
         {
             m_authenticationManager = authenticationManager;
             m_applicationManager = applicationManager;
-            m_groupManager = groupManager;
             m_groupManager = groupManager;
         }
 
@@ -80,10 +78,9 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             m_authenticationManager.CreateUserByLoginProvider(loginProviderType, callback);
         }
 
-
-        public void GetLogedUserInfo(Action<LoggedUserViewModel, Exception> callback)
+        public void GetLoggedUserInfo(Action<LoggedUserViewModel, Exception> callback)
         {
-            m_authenticationManager.GetLogedUserInfo(callback);
+            m_authenticationManager.GetLoggedUserInfo(callback);
         }
 
         public void LogOut()

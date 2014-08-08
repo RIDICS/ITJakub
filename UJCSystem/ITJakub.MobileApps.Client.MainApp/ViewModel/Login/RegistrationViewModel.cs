@@ -8,7 +8,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.MainApp.View;
 
-namespace ITJakub.MobileApps.Client.MainApp.ViewModel
+namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

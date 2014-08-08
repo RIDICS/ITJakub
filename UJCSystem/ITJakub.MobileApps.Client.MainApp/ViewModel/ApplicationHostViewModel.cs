@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.DataService;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
-namespace ITJakub.MobileApps.Client.Core
+namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     public class ApplicationHostViewModel : ViewModelBase
     {
@@ -17,23 +18,23 @@ namespace ITJakub.MobileApps.Client.Core
         private bool m_isChatDisplayed;
         private bool m_isChatSupported;
         private bool m_isCommandBarOpen;
-        
-
 
         public ApplicationHostViewModel(IDataService dataService)
         {
             m_dataService = dataService;
+            Messenger.Default.Register<LoadApplicationMessage>(this, message =>
+            {
+                LoadApplications(message.ApplicationType);
+                Messenger.Default.Unregister<LoadApplicationMessage>(this);
+            });
         }
 
-        //TODO tak tohle je humus volat z callbehindu
-        public void LoadInitData(ApplicationType type)
+        private void LoadApplications(ApplicationType type)
         {
-
             m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, (applications, exception) =>
             {
                 if (exception != null)
                     return;
-
 
                 var application = applications[type];
                 ApplicationViewModel = application.ApplicationViewModel;
