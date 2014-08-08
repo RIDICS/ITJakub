@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities;
@@ -12,17 +13,17 @@ namespace ITJakub.MobileApps.Core
 {
     public class MobileServiceManager : IMobileAppsService
     {
-        private readonly UsersRepository m_usersRepository;
-        private readonly SynchronizedObjectRepository m_synchronizedObjectRepository;
-        private readonly InstitutionRepository m_institutionRepository;
-        private readonly GroupRepository m_groupRepository;
-        private readonly TaskRepository m_taskRepository;
         private readonly ApplicationRepository m_applicationRepository;
-        private readonly AzureTableTaskDao m_azureTableTaskDao;
         private readonly AzureTableSynchronizedObjectDao m_azureTableSynchronizedObjectDao;
-        private readonly int m_maxAttemptsToSave;        
-        private readonly UserManager m_userManager;
+        private readonly AzureTableTaskDao m_azureTableTaskDao;
         private readonly EnterCodeGenerator m_enterCodeGenerator;
+        private readonly GroupRepository m_groupRepository;
+        private readonly InstitutionRepository m_institutionRepository;
+        private readonly int m_maxAttemptsToSave;
+        private readonly SynchronizedObjectRepository m_synchronizedObjectRepository;
+        private readonly TaskRepository m_taskRepository;
+        private readonly UserManager m_userManager;
+        private readonly UsersRepository m_usersRepository;
 
         public MobileServiceManager(IKernel container, int maxAttemptsToSave)
         {
@@ -41,9 +42,9 @@ namespace ITJakub.MobileApps.Core
 
         public void CreateInstitution(Institution institution)
         {
-            var deInstitution = AutoMapper.Mapper.Map<DE.Institution>(institution);
+            var deInstitution = Mapper.Map<DE.Institution>(institution);
             deInstitution.CreateTime = DateTime.UtcNow;
-            var attempt = 0;
+            int attempt = 0;
             while (attempt < m_maxAttemptsToSave)
             {
                 try
@@ -62,22 +63,22 @@ namespace ITJakub.MobileApps.Core
 
         public InstitutionDetails GetInstitutionDetails(string institutionId)
         {
-            var institution = m_institutionRepository.LoadInstitutionWithDetails(long.Parse(institutionId));
-            return AutoMapper.Mapper.Map<InstitutionDetails>(institution);
+            DE.Institution institution = m_institutionRepository.LoadInstitutionWithDetails(long.Parse(institutionId));
+            return Mapper.Map<InstitutionDetails>(institution);
         }
 
         public void AddUserToInstitution(string enterCode, string userId)
         {
-            var institution = m_institutionRepository.FindByEnterCode(enterCode);
-            var user = m_usersRepository.FindById(long.Parse(userId));
+            DE.Institution institution = m_institutionRepository.FindByEnterCode(enterCode);
+            DE.User user = m_usersRepository.FindById(long.Parse(userId));
             user.Institution = institution;
             m_groupRepository.Update(user);
         }
 
-      
-        public void CreateUser(string authenticationProviderToken, AuthenticationProviders authenticationProvider, User user)
+
+        public void CreateUser(string authenticationProviderToken, AuthenticationProviders authenticationProvider, UserDetailContract userDetailContract)
         {
-            m_userManager.CreateAccount(authenticationProviderToken, authenticationProvider, user);
+            m_userManager.CreateAccount(authenticationProviderToken, authenticationProvider, userDetailContract);
         }
 
         public LoginUserResponse LoginUser(UserLogin userLogin)
@@ -85,73 +86,79 @@ namespace ITJakub.MobileApps.Core
             return m_userManager.Login(userLogin);
         }
 
-      
+
         public UserDetails GetUserDetails(string userId)
         {
-            var user = m_usersRepository.LoadUserWithDetails(long.Parse(userId));
-            return AutoMapper.Mapper.Map<UserDetails>(user);
+            DE.User user = m_usersRepository.LoadUserWithDetails(long.Parse(userId));
+            return Mapper.Map<UserDetails>(user);
         }
 
         public IEnumerable<TaskDetails> GetTasksByUser(string userId)
         {
-            var author = m_usersRepository.FindById(long.Parse(userId));
-            var tasks = m_taskRepository.LoadTasksWithDetailsByAuthor(author);
-            foreach (var task in tasks)
+            DE.User author = m_usersRepository.FindById(long.Parse(userId));
+            IList<DE.Task> tasks = m_taskRepository.LoadTasksWithDetailsByAuthor(author);
+            foreach (DE.Task task in tasks)
             {
-                var taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(task.Id.ToString(), task.Application.Id.ToString());
+                TaskEntity taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(task.Id.ToString(), task.Application.Id.ToString());
                 if (taskEntity != null) task.Data = taskEntity.Data;
             }
-            return AutoMapper.Mapper.Map<IList<TaskDetails>>(tasks);
+            return Mapper.Map<IList<TaskDetails>>(tasks);
         }
 
-        public IEnumerable<GroupDetails> GetGroupsByUser(string userId)
+        public IEnumerable<GroupDetail> GetGroupsByUser(string userId)
         {
-            var groups = m_groupRepository.LoadGroupsWithDetailsByAuthorId(long.Parse(userId));
-            return AutoMapper.Mapper.Map<IList<GroupDetails>>(groups);
+            IList<DE.Group> groups = m_groupRepository.LoadGroupsWithDetailsByAuthorId(long.Parse(userId));
+            return Mapper.Map<IList<GroupDetail>>(groups);
         }
 
-        public IEnumerable<GroupDetails> GetMembershipsForUser(string userId)
+        public IEnumerable<GroupDetail> GetGroupListForUser(string userId)
         {
-            var groups = m_usersRepository.LoadGroupsWithDetailsByMember(long.Parse(userId));
-            return AutoMapper.Mapper.Map<IList<GroupDetails>>(groups);
+            var userWithGroup = m_usersRepository.LoadGroupsForUser(long.Parse(userId));
+            var memberOfGroups = userWithGroup.MemberOfGroups;
+            var ownedGroups = userWithGroup.CreatedGroups;
+
+            var result = new List<GroupDetail>();
+            result.AddRange(Mapper.Map<IEnumerable<GroupDetail>>(memberOfGroups));
+            result.AddRange(Mapper.Map<IEnumerable<OwnedGroupDetail>>(ownedGroups));
+            return result;
         }
 
         public IEnumerable<TaskDetails> GetTasksForApplication(string applicationId)
         {
-            var application = m_applicationRepository.FindById(long.Parse(applicationId));
-            var tasks = m_taskRepository.LoadTasksWithDetailsByApplication(application);
-            foreach (var task in tasks) //TODO try to find some better way how to fill Data property
+            DE.Application application = m_applicationRepository.FindById(long.Parse(applicationId));
+            IList<DE.Task> tasks = m_taskRepository.LoadTasksWithDetailsByApplication(application);
+            foreach (DE.Task task in tasks) //TODO try to find some better way how to fill Data property
             {
-                var taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(task.Id.ToString(), task.Application.Id.ToString());
+                TaskEntity taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(task.Id.ToString(), task.Application.Id.ToString());
                 if (taskEntity != null) task.Data = taskEntity.Data;
             }
-            return AutoMapper.Mapper.Map<IList<TaskDetails>>(tasks);
+            return Mapper.Map<IList<TaskDetails>>(tasks);
         }
 
         public void CreateTaskForApplication(string applicationId, string userId, Task apptask)
         {
-            var application = m_applicationRepository.FindById(long.Parse(applicationId));
-            var user = m_usersRepository.FindById(long.Parse(userId));
-            var deTask = AutoMapper.Mapper.Map<DE.Task>(apptask);
+            DE.Application application = m_applicationRepository.FindById(long.Parse(applicationId));
+            DE.User user = m_usersRepository.FindById(long.Parse(userId));
+            var deTask = Mapper.Map<DE.Task>(apptask);
             deTask.Application = application;
             deTask.Author = user;
             deTask.CreateTime = DateTime.UtcNow;
-            var taskId = m_taskRepository.Create(deTask);
+            object taskId = m_taskRepository.Create(deTask);
             m_azureTableTaskDao.Create(new TaskEntity(taskId.ToString(), applicationId, apptask.Data));
         }
 
         public CreateGroupResponse CreateGroup(string userId, string groupName)
         {
-            var user = m_usersRepository.FindById(long.Parse(userId));
-            var deGroup=new DE.Group {Author = user, CreateTime = DateTime.UtcNow, Name= groupName, IsActive = true};
-            var attempt = 0;
+            DE.User user = m_usersRepository.FindById(long.Parse(userId));
+            var deGroup = new DE.Group {Author = user, CreateTime = DateTime.UtcNow, Name = groupName, IsActive = true};
+            int attempt = 0;
             while (attempt < m_maxAttemptsToSave)
             {
                 try
                 {
                     deGroup.EnterCode = m_enterCodeGenerator.GenerateCode();
                     m_groupRepository.Create(deGroup);
-                    return new CreateGroupResponse { EnterCode = deGroup.EnterCode };
+                    return new CreateGroupResponse {EnterCode = deGroup.EnterCode};
                 }
                 catch (CreateEntityFailedException)
                 {
@@ -168,43 +175,45 @@ namespace ITJakub.MobileApps.Core
 
         public void AddUserToGroup(string enterCode, string userId)
         {
-            var group = m_groupRepository.FindByEnterCode(enterCode);
-            var user = m_usersRepository.FindById(long.Parse(userId));
+            DE.Group group = m_groupRepository.FindByEnterCode(enterCode);
+            DE.User user = m_usersRepository.FindById(long.Parse(userId));
             group.Members.Add(user);
             m_groupRepository.Update(group);
         }
 
-        public GroupDetails GetGroupDetails(string groupId)
+        public GroupDetail GetGroupDetails(string groupId)
         {
-            var group = m_groupRepository.LoadGroupWithDetails(long.Parse(groupId));
-            return AutoMapper.Mapper.Map<GroupDetails>(group);
+            DE.Group group = m_groupRepository.LoadGroupWithDetails(long.Parse(groupId));
+            return Mapper.Map<GroupDetail>(group);
         }
 
         public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string applicationId, string objectType, string since)
         {
-            var group = m_groupRepository.FindById<DE.Group>(long.Parse(groupId));//TODO fix not single transcation operation
-            var application = m_applicationRepository.FindById(long.Parse(applicationId));
-            var sinceTime = DateTime.Parse(since);
-            var syncObjs = m_synchronizedObjectRepository.LoadSyncObjectsWithDetails(group, application, objectType, sinceTime);
-            foreach (var syncObj in syncObjs) //TODO try to find some better way how to fill Data property
+            var group = m_groupRepository.FindById<DE.Group>(long.Parse(groupId)); //TODO fix not single transcation operation
+            DE.Application application = m_applicationRepository.FindById(long.Parse(applicationId));
+            DateTime sinceTime = DateTime.Parse(since);
+            IList<DE.SynchronizedObject> syncObjs = m_synchronizedObjectRepository.LoadSyncObjectsWithDetails(group, application, objectType,
+                sinceTime);
+            foreach (DE.SynchronizedObject syncObj in syncObjs) //TODO try to find some better way how to fill Data property
             {
-                var syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.Id.ToString(), syncObj.Group.Id.ToString());
+                SynchronizedObjectEntity syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.Id.ToString(),
+                    syncObj.Group.Id.ToString());
                 if (syncObjEntity != null) syncObj.Data = syncObjEntity.Data;
             }
-            return AutoMapper.Mapper.Map<IList<SynchronizedObjectDetails>>(syncObjs);
+            return Mapper.Map<IList<SynchronizedObjectDetails>>(syncObjs);
         }
 
         public void CreateSynchronizedObject(string groupId, string applicationId, string userId, SynchronizedObject synchronizedObject)
         {
-            var application = m_applicationRepository.FindById(long.Parse(applicationId));//TODO fix not single transcation operation
-            var user = m_usersRepository.FindById(long.Parse(userId));
+            DE.Application application = m_applicationRepository.FindById(long.Parse(applicationId)); //TODO fix not single transcation operation
+            DE.User user = m_usersRepository.FindById(long.Parse(userId));
             var group = m_groupRepository.FindById<DE.Group>(long.Parse(userId));
-            var deSyncObject = AutoMapper.Mapper.Map<DE.SynchronizedObject>(synchronizedObject);
+            var deSyncObject = Mapper.Map<DE.SynchronizedObject>(synchronizedObject);
             deSyncObject.Application = application;
             deSyncObject.Author = user;
             deSyncObject.Group = group;
             deSyncObject.CreateTime = DateTime.UtcNow;
-            var syncObjId = m_synchronizedObjectRepository.Create(deSyncObject);
+            object syncObjId = m_synchronizedObjectRepository.Create(deSyncObject);
             m_azureTableSynchronizedObjectDao.Create(new SynchronizedObjectEntity(syncObjId.ToString(), groupId, synchronizedObject.Data));
         }
     }

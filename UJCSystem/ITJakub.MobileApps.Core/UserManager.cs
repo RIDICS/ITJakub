@@ -21,9 +21,9 @@ namespace ITJakub.MobileApps.Core
             m_authenticationManager = authenticationManager;
         }
 
-        public void CreateRemoteUserAccount(User user, AuthenticationProviders authProvider, string authenticationProviderToken)
+        public void CreateRemoteUserAccount(UserDetailContract userDetailContract, AuthenticationProviders authProvider, string authenticationProviderToken)
         {
-            DataEntities.Database.Entities.User deUser = CreateUserSkeleton(user, authProvider);
+            DataEntities.Database.Entities.User deUser = CreateUserSkeleton(userDetailContract, authProvider);
             deUser.AuthenticationProviderToken = authenticationProviderToken;
             try
             {
@@ -34,11 +34,11 @@ namespace ITJakub.MobileApps.Core
             }
         }
 
-        public void CreateLocalUserAccount(UserWithSalt user)
+        public void CreateLocalUserAccount(UserDetailContractWithSalt userDetailContract)
         {
-            DataEntities.Database.Entities.User deUser = CreateUserSkeleton(user, AuthenticationProviders.ItJakub);
-            deUser.PasswordHash = user.PasswordHash;
-            deUser.Salt = user.Salt;
+            DataEntities.Database.Entities.User deUser = CreateUserSkeleton(userDetailContract, AuthenticationProviders.ItJakub);
+            deUser.PasswordHash = userDetailContract.PasswordHash;
+            deUser.Salt = userDetailContract.Salt;
             try
             {
                 m_userRepository.Create(deUser);
@@ -49,9 +49,9 @@ namespace ITJakub.MobileApps.Core
         }
 
 
-        private DataEntities.Database.Entities.User CreateUserSkeleton(User user, AuthenticationProviders provider)
+        private DataEntities.Database.Entities.User CreateUserSkeleton(UserDetailContract userDetailContract, AuthenticationProviders provider)
         {
-            var deUser = Mapper.Map<DataEntities.Database.Entities.User>(user);
+            var deUser = Mapper.Map<DataEntities.Database.Entities.User>(userDetailContract);
             deUser.CreateTime = DateTime.UtcNow;
             deUser.AuthenticationProvider = (byte) provider;
             deUser.CommunicationToken = m_tokenManager.CreateNewToken();
@@ -88,13 +88,13 @@ namespace ITJakub.MobileApps.Core
             }
         }
 
-        public void CreateAccount(string authenticationProviderToken, AuthenticationProviders authenticationProvider, User user)
+        public void CreateAccount(string authenticationProviderToken, AuthenticationProviders authenticationProvider, UserDetailContract userDetailContract)
         {
             var authProvider = authenticationProvider;
             if (authProvider == AuthenticationProviders.ItJakub)
-                CreateLocalUserAccount((UserWithSalt) user);
+                CreateLocalUserAccount((UserDetailContractWithSalt) userDetailContract);
             else
-                CreateRemoteUserAccount(user, authProvider, authenticationProviderToken);
+                CreateRemoteUserAccount(userDetailContract, authProvider, authenticationProviderToken);
         }
 
         private UserRole GetUserRoleForUser(DataEntities.Database.Entities.User user)

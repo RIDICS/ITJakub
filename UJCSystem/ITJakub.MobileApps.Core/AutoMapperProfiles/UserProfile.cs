@@ -8,7 +8,7 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<User, DE.User>().ReverseMap();
+            CreateMap<UserDetailContract, DE.User>().ReverseMap();
         }
     }
 }

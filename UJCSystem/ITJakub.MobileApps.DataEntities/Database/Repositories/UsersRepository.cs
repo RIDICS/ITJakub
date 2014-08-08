@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Castle.Facilities.NHibernateIntegration;
+﻿using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
@@ -96,16 +93,18 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<Group> LoadGroupsWithDetailsByMember(long userId)
+        public virtual User LoadGroupsForUser(long userId)
         {
             using (var session = GetSession())
             {
-                var user = session.CreateCriteria<User>()
+                User user = session.CreateCriteria<User>()
                     .Add(Restrictions.Eq(Projections.Id(), userId))
                     .SetFetchMode("MemberOfGroups", FetchMode.Join)
                     .SetFetchMode("MemberOfGroups.Members", FetchMode.Join)
+                    .SetFetchMode("CreatedGroups", FetchMode.Join)
+                    .SetFetchMode("CreatedGroups.Members", FetchMode.Join)
                     .UniqueResult<User>();
-                return user.MemberOfGroups;
+                return user;
             }
         }
     }

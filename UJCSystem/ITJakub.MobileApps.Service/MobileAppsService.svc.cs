@@ -28,9 +28,9 @@ namespace ITJakub.MobileApps.Service
             m_manager.AddUserToInstitution(enterCode,userId);
         }
 
-        public void CreateUser(string authenticationProviderToken, AuthenticationProviders authenticationProvider, User user)
+        public void CreateUser(string authenticationProviderToken, AuthenticationProviders authenticationProvider, UserDetailContract userDetailContract)
         {
-            m_manager.CreateUser(authenticationProviderToken, authenticationProvider, user);
+            m_manager.CreateUser(authenticationProviderToken, authenticationProvider, userDetailContract);
         }
 
         public LoginUserResponse LoginUser(UserLogin userLogin)
@@ -48,14 +48,14 @@ namespace ITJakub.MobileApps.Service
             return m_manager.GetTasksByUser(userId);
         }
 
-        public IEnumerable<GroupDetails> GetGroupsByUser(string userId)
+        public IEnumerable<GroupDetail> GetGroupsByUser(string userId)
         {
             return m_manager.GetGroupsByUser(userId);
         }
 
-        public IEnumerable<GroupDetails> GetMembershipsForUser(string userId)
+        public IEnumerable<GroupDetail> GetGroupListForUser(string userId)
         {
-            return m_manager.GetMembershipsForUser(userId);
+            return m_manager.GetGroupListForUser(userId);
         }
 
         public IEnumerable<TaskDetails> GetTasksForApplication(string applicationId)
@@ -83,7 +83,7 @@ namespace ITJakub.MobileApps.Service
             m_manager.AddUserToGroup(enterCode, userId);
         }
 
-        public GroupDetails GetGroupDetails(string groupId)
+        public GroupDetail GetGroupDetails(string groupId)
         {
             return m_manager.GetGroupDetails(groupId);
         }

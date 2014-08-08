@@ -15,7 +15,7 @@
     <AssemblyName>ITJakub.MobileApps.Service</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -152,10 +152,6 @@
       <Project>{3e038d2a-cad9-4d45-afff-688eb1bb5aa2}</Project>
       <Name>ITJakub.MobileApps.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj">
-      <Project>{C079C465-CBDE-47D2-963F-ADF59E8CB90E}</Project>
-      <Name>ITJakub.MobileApps.DataContracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.DataEntities\ITJakub.MobileApps.DataEntities.csproj">
       <Project>{8e467186-0805-4652-9319-98f6619492f8}</Project>
       <Name>ITJakub.MobileApps.DataEntities</Name>
@@ -176,7 +172,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>22771</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/ITJakub.MobileApps.Service</IISUrl>
+          <IISUrl>http://localhost:22771/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
