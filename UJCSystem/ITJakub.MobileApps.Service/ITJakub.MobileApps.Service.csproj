@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ITJakub.MobileApps.Service</RootNamespace>
     <AssemblyName>ITJakub.MobileApps.Service</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -94,6 +95,7 @@
     <Reference Include="NHibernate">
       <HintPath>..\..\Libs\Nhibernate\lib\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Spatial, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.6.0\lib\net40\System.Spatial.dll</HintPath>
@@ -103,7 +105,6 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
@@ -151,6 +152,10 @@
     <ProjectReference Include="..\ITJakub.MobileApps.Core\ITJakub.MobileApps.Core.csproj">
       <Project>{3e038d2a-cad9-4d45-afff-688eb1bb5aa2}</Project>
       <Name>ITJakub.MobileApps.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj">
+      <Project>{90f9d8dd-05d5-401f-8939-bd619adf5cdd}</Project>
+      <Name>ITJakub.MobileApps.DataContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.DataEntities\ITJakub.MobileApps.DataEntities.csproj">
       <Project>{8e467186-0805-4652-9319-98f6619492f8}</Project>

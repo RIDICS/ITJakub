@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ITJakub.MobileApps.Core</RootNamespace>
     <AssemblyName>ITJakub.MobileApps.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -132,16 +133,7 @@
     <Compile Include="Authentication\Providers\GoogleAuthProvider.cs" />
     <Compile Include="Authentication\Providers\ItJakubAuthProvider.cs" />
     <Compile Include="Authentication\Providers\LiveIdAuthProvider.cs" />
-    <Compile Include="AutoMapperProfiles\GroupDetailsProfile.cs" />
-    <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
-    <Compile Include="AutoMapperProfiles\InstitutionDetailsProfile.cs" />
-    <Compile Include="AutoMapperProfiles\InstitutionProfile.cs" />
-    <Compile Include="AutoMapperProfiles\SynchronizedObjectDetailsProfile.cs" />
-    <Compile Include="AutoMapperProfiles\SynchronizedObjectProfile.cs" />
-    <Compile Include="AutoMapperProfiles\TaskDetailsProfile.cs" />
-    <Compile Include="AutoMapperProfiles\TaskProfile.cs" />
-    <Compile Include="AutoMapperProfiles\UserDetailsProfile.cs" />
-    <Compile Include="AutoMapperProfiles\UserProfile.cs" />
+    <Compile Include="AutoMapperProfiles\UserDetailContractProfile.cs" />
     <Compile Include="CommunicationTokenManager.cs" />
     <Compile Include="EnterCodeGenerator.cs" />
     <Compile Include="Authentication\Providers\IAuthProvider.cs" />
@@ -156,6 +148,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj">
+      <Project>{90f9d8dd-05d5-401f-8939-bd619adf5cdd}</Project>
+      <Name>ITJakub.MobileApps.DataContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.DataEntities\ITJakub.MobileApps.DataEntities.csproj">
       <Project>{8e467186-0805-4652-9319-98f6619492f8}</Project>
       <Name>ITJakub.MobileApps.DataEntities</Name>

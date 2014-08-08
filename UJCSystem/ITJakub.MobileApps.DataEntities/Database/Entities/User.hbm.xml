@@ -49,7 +49,7 @@
       <column name="PasswordHash" sql-type="varchar" />
     </property>
 
-    <property name="Salt">
+    <property name="PasswordSalt">
       <column name="Salt" sql-type="varchar" />
     </property>
 

@@ -58,7 +58,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual User FindByEmailAndProvider(string email, byte authenticationProvider)
+        public virtual User FindByEmailAndProvider(string email, AuthenticationProviders authenticationProvider)
         {
             using (var session = GetSession())
             {

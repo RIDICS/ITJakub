@@ -3,7 +3,7 @@
 namespace ITJakub.MobileApps.DataContracts
 {
     [DataContract]
-    public enum AuthenticationProviders : byte
+    public enum AuthProvidersContract : byte
     {
         [EnumMember]
         ItJakub = 0,

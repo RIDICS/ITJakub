@@ -37,12 +37,14 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticationProviders.cs" />
+    <Compile Include="AuthProvidersContract.cs" />
     <Compile Include="AuthorizedMethodAttribute.cs" />
     <Compile Include="IMobileAppsService.cs" />
+    <Compile Include="LoginUserResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserDetailContract.cs" />
     <Compile Include="UserLogin.cs" />
-    <Compile Include="UserRole.cs" />
+    <Compile Include="UserRoleContract.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,17 +6,17 @@ namespace ITJakub.MobileApps.DataContracts
     public class AuthorizedMethodAttribute : Attribute
     {
         private readonly string m_userIdParameterName;
-        private readonly UserRole m_userRole;
+        private readonly UserRoleContract m_userRoleContract;
 
-        public AuthorizedMethodAttribute(UserRole minRoleAllowed, string userIdParameterName=null)
+        public AuthorizedMethodAttribute(UserRoleContract minRoleContractAllowed, string userIdParameterName=null)
         {
             m_userIdParameterName = userIdParameterName;
-            m_userRole = minRoleAllowed;
+            m_userRoleContract = minRoleContractAllowed;
         }
 
-        public UserRole MinRoleAllowed
+        public UserRoleContract MinRoleContractAllowed
         {
-            get { return m_userRole; }
+            get { return m_userRoleContract; }
         }
 
         public string UserIdParameterName

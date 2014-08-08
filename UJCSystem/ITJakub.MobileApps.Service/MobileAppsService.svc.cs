@@ -1,101 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System.Reflection;
+using System.ServiceModel.Web;
+using ITJakub.MobileApps.Core;
 using ITJakub.MobileApps.DataContracts;
+using log4net;
 
 namespace ITJakub.MobileApps.Service
 {
     public class MobileAppsService : IMobileAppsService
     {
-        private readonly IMobileAppsService m_manager;
+        private readonly IMobileAppsService m_serviceManager;
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public MobileAppsService()
         {
-            m_manager = Container.Current.Resolve<IMobileAppsService>();
+            m_serviceManager = Container.Current.Resolve<IMobileAppsService>();
         }
 
-
-        public void CreateInstitution(Institution institution)
+        public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
         {
-            m_manager.CreateInstitution(institution);
+            try
+            {
+                m_serviceManager.CreateUser(providerContract, providerToken, userDetail);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
         }
 
-        public InstitutionDetails GetInstitutionDetails(string institutionId)
+        public LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
         {
-            return m_manager.GetInstitutionDetails(institutionId);
-        }
+            try
+            {
+                return m_serviceManager.LoginUser(providerContract, providerToken, email);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
 
-        public void AddUserToInstitution(string enterCode, string userId)
-        {
-            m_manager.AddUserToInstitution(enterCode,userId);
-        }
-
-        public void CreateUser(string authenticationProviderToken, AuthenticationProviders authenticationProvider, UserDetailContract userDetailContract)
-        {
-            m_manager.CreateUser(authenticationProviderToken, authenticationProvider, userDetailContract);
-        }
-
-        public LoginUserResponse LoginUser(UserLogin userLogin)
-        {
-            return m_manager.LoginUser(userLogin);
-        }
-
-        public UserDetails GetUserDetails(string userId)
-        {
-            return m_manager.GetUserDetails(userId);
-        }
-
-        public IEnumerable<TaskDetails> GetTasksByUser(string userId)
-        {
-            return m_manager.GetTasksByUser(userId);
-        }
-
-        public IEnumerable<GroupDetail> GetGroupsByUser(string userId)
-        {
-            return m_manager.GetGroupsByUser(userId);
-        }
-
-        public IEnumerable<GroupDetail> GetGroupListForUser(string userId)
-        {
-            return m_manager.GetGroupListForUser(userId);
-        }
-
-        public IEnumerable<TaskDetails> GetTasksForApplication(string applicationId)
-        {
-            return m_manager.GetTasksForApplication(applicationId);
-        }
-
-        public void CreateTaskForApplication(string applicationId, string userId, Task task)
-        {
-            m_manager.CreateTaskForApplication(applicationId, userId, task);
-        }
-
-        public CreateGroupResponse CreateGroup(string userId, string groupName)
-        {
-            return m_manager.CreateGroup(userId, groupName);
-        }
-
-        public void AssignTaskToGroup(string groupId, string taskId, string userId)
-        {
-            m_manager.AssignTaskToGroup(groupId, taskId, userId);
-        }
-
-        public void AddUserToGroup(string enterCode, string userId)
-        {
-            m_manager.AddUserToGroup(enterCode, userId);
-        }
-
-        public GroupDetail GetGroupDetails(string groupId)
-        {
-            return m_manager.GetGroupDetails(groupId);
-        }
-
-        public IEnumerable<SynchronizedObjectDetails> GetSynchronizedObjects(string groupId, string applicationId, string objectType, string since)
-        {
-            return m_manager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
-        }
-
-        public void CreateSynchronizedObject(string groupId, string applicationId, string userId, SynchronizedObject synchronizedObject)
-        {
-            m_manager.CreateSynchronizedObject(groupId, applicationId, userId, synchronizedObject);
+                throw;
+            }
         }
     }
 }

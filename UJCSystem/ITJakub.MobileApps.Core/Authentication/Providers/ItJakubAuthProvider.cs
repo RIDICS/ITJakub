@@ -21,19 +21,14 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
             get { return false; }
         }
 
-        public AuthenticationProviders ProviderType
+        public AuthProvidersContract ProviderContractType
         {
-            get { return AuthenticationProviders.ItJakub; }
+            get { return AuthProvidersContract.ItJakub; }
         }
 
-        public AuthenticateResultInfo Authenticate(UserLogin userLogin, User dbUser)
+        public AuthenticateResultInfo Authenticate(string passwordHash, string email)
         {
-            return Authenticate(userLogin.AuthenticationToken, dbUser.Email);
-        }
-
-        private AuthenticateResultInfo Authenticate(string passwordHash, string email)
-        {
-            User user = m_usersRepository.FindByEmailAndProvider(email, (byte) AuthenticationProviders.ItJakub);
+            User user = m_usersRepository.FindByEmailAndProvider(email, (byte) AuthProvidersContract.ItJakub);
             bool authSucceeded = user.PasswordHash.Equals(passwordHash);
             var result = new AuthenticateResultInfo
             {

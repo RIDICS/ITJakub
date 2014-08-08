@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
+﻿using System.ServiceModel;
 
 namespace ITJakub.MobileApps.DataContracts
 {
@@ -9,7 +6,10 @@ namespace ITJakub.MobileApps.DataContracts
     public interface IMobileAppsService
     {
         [OperationContract]
+        void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail);
 
+        [OperationContract]
+        LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email);
 
     }
 }

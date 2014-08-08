@@ -1,9 +1,8 @@
 using System;
-using System.ServiceModel.Web;
 using AutoMapper;
 using ITJakub.MobileApps.Core.Authentication;
 using ITJakub.MobileApps.DataContracts;
-using ITJakub.MobileApps.DataEntities;
+using ITJakub.MobileApps.DataEntities.Database.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
 
 namespace ITJakub.MobileApps.Core
@@ -20,86 +19,50 @@ namespace ITJakub.MobileApps.Core
             m_tokenManager = tokenManager;
             m_authenticationManager = authenticationManager;
         }
-
-        public void CreateRemoteUserAccount(UserDetailContract userDetailContract, AuthenticationProviders authProvider, string authenticationProviderToken)
+        public void CreateUser(AuthProvidersContract provider, string providerToken, UserDetailContract userDetail)
         {
-            DataEntities.Database.Entities.User deUser = CreateUserSkeleton(userDetailContract, authProvider);
-            deUser.AuthenticationProviderToken = authenticationProviderToken;
-            try
+            DateTime now = DateTime.UtcNow;
+            User user = Mapper.Map<UserDetailContract, User>(userDetail);
+            user.AuthenticationProvider = Mapper.Map<AuthProvidersContract, AuthenticationProviders>(provider);
+            user.CreateTime = now;
+            user.CommunicationToken = m_tokenManager.CreateNewToken();
+            user.CommunicationTokenCreateTime = now;
+
+
+            if (provider != AuthProvidersContract.ItJakub)
             {
-                m_userRepository.Create(deUser);
+                m_authenticationManager.AuthenticateUserAccount(provider, providerToken, user);
             }
-            catch (CreateEntityFailedException)
-            {
-            }
+
+
+            m_userRepository.Create(user);
         }
 
-        public void CreateLocalUserAccount(UserDetailContractWithSalt userDetailContract)
+        public LoginUserResponse LoginUser(AuthProvidersContract provider, string providerToken, string email)
         {
-            DataEntities.Database.Entities.User deUser = CreateUserSkeleton(userDetailContract, AuthenticationProviders.ItJakub);
-            deUser.PasswordHash = userDetailContract.PasswordHash;
-            deUser.Salt = userDetailContract.Salt;
-            try
+            AuthenticationProviders providerType = Mapper.Map<AuthProvidersContract, AuthenticationProviders>(provider);
+            User user = m_userRepository.FindByEmailAndProvider(email, providerType);
+            DateTime now = DateTime.UtcNow;
+            m_authenticationManager.AuthenticateUserAccount(provider, providerToken, user);
+
+            user.CommunicationToken = m_tokenManager.CreateNewToken(); //on every login generate new token
+            user.CommunicationTokenCreateTime = now;
+
+            m_userRepository.Update(user);
+
+            return new LoginUserResponse
             {
-                m_userRepository.Create(deUser);
-            }
-            catch (CreateEntityFailedException)
-            {
-            }
+                UserId = user.Id,
+                CommunicationToken = user.CommunicationToken,
+                EstimatedExpirationTime = m_tokenManager.GetExpirationTime(user.CommunicationTokenCreateTime),
+                ProfilePictureUrl = user.AvatarUrl,
+                UserRole = GetUserRoleForUser(user)
+            };
         }
 
-
-        private DataEntities.Database.Entities.User CreateUserSkeleton(UserDetailContract userDetailContract, AuthenticationProviders provider)
+        private UserRoleContract GetUserRoleForUser(User user)
         {
-            var deUser = Mapper.Map<DataEntities.Database.Entities.User>(userDetailContract);
-            deUser.CreateTime = DateTime.UtcNow;
-            deUser.AuthenticationProvider = (byte) provider;
-            deUser.CommunicationToken = m_tokenManager.CreateNewToken();
-            deUser.CommunicationTokenCreateTime = deUser.CreateTime;
-            return deUser;
-        }
-
-        public LoginUserResponse Login(UserLogin userLogin)
-        {
-            var user = m_userRepository.FindByEmailAndProvider(userLogin.Email,
-                (byte) userLogin.AuthenticationProvider);
-            var now = DateTime.UtcNow;
-            try
-            {
-                m_authenticationManager.AuthenticateByProvider(userLogin, user);
-
-                user.CommunicationToken = m_tokenManager.CreateNewToken(); //on every login generate new token
-                user.CommunicationTokenCreateTime = now;
-
-                m_userRepository.Update(user);
-
-                return new LoginUserResponse
-                {
-                    UserId = user.Id,
-                    CommunicationToken = user.CommunicationToken,
-                    EstimatedExpirationTime = m_tokenManager.GetExpirationTime(user.CommunicationTokenCreateTime),
-                    ProfilePictureUrl = user.AvatarUrl,
-                    UserRole = GetUserRoleForUser(user)
-                };
-            }
-            catch (WebFaultException)
-            {
-                throw;
-            }
-        }
-
-        public void CreateAccount(string authenticationProviderToken, AuthenticationProviders authenticationProvider, UserDetailContract userDetailContract)
-        {
-            var authProvider = authenticationProvider;
-            if (authProvider == AuthenticationProviders.ItJakub)
-                CreateLocalUserAccount((UserDetailContractWithSalt) userDetailContract);
-            else
-                CreateRemoteUserAccount(userDetailContract, authProvider, authenticationProviderToken);
-        }
-
-        private UserRole GetUserRoleForUser(DataEntities.Database.Entities.User user)
-        {
-            return user.Institution == null ? UserRole.Student : UserRole.Teacher;
+            return user.Institution == null ? UserRoleContract.Student : UserRoleContract.Teacher;
         }
     }
 }
