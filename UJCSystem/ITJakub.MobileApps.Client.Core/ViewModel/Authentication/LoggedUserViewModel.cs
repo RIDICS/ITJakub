@@ -27,10 +27,4 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel.Authentication
             set { m_userAvatar = value; RaisePropertyChanged();}
         }
     }
-
-
-    public class LoginResultViewModel : ViewModelBase
-    {
-        
-    }
 }

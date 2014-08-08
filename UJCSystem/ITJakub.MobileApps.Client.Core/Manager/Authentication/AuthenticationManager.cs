@@ -77,7 +77,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             if (!loginSkeleton.Success)
                 return UserLoginInfo;
 
-            await m_serviceManager.CreateUser(loginProviderType, loginSkeleton); //TODO ZAROVEN create user a zaroven login ? tak to fungovat nebude....
+            await m_serviceManager.CreateUserAsync(loginProviderType, loginSkeleton); //TODO ZAROVEN create user a zaroven login ? tak to fungovat nebude....
             await LoginItJakubAsync(loginProviderType);
 
             return UserLoginInfo;
