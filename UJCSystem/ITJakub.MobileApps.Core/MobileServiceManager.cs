@@ -10,7 +10,10 @@
 //using DE = ITJakub.MobileApps.DataEntities.Database.Entities;
 
 using Castle.MicroKernel;
+using ITJakub.MobileApps.Core.Groups;
+using ITJakub.MobileApps.Core.Users;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Core
 {
@@ -18,11 +21,14 @@ namespace ITJakub.MobileApps.Core
     {
         private readonly UserManager m_userManager;
         private int m_maxAttemptsToSave;
+        private GroupManager m_groupManager;
 
         public MobileServiceManager(IKernel container, int maxAttemptsToSave)
         {
             m_maxAttemptsToSave = maxAttemptsToSave;
             m_userManager = container.Resolve<UserManager>();
+            m_groupManager = container.Resolve<GroupManager>();
+
         }
 
         public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
@@ -33,6 +39,12 @@ namespace ITJakub.MobileApps.Core
         public LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
         {
             return m_userManager.LoginUser(providerContract, providerToken, email);
+        }
+
+
+        public UserGroupsContract GetGroupsByUser(long userId)
+        {
+            return m_groupManager.GetGroupByUser(userId);
         }
     }
 }

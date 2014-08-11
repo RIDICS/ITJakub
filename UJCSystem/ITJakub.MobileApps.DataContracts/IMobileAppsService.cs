@@ -1,4 +1,5 @@
 ﻿using System.ServiceModel;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.DataContracts
 {
@@ -11,5 +12,7 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email);
 
+        [OperationContract]
+        UserGroupsContract GetGroupsByUser(long userId);
     }
 }

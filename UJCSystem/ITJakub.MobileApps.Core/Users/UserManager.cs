@@ -5,7 +5,7 @@ using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
 
-namespace ITJakub.MobileApps.Core
+namespace ITJakub.MobileApps.Core.Users
 {
     public class UserManager
     {
@@ -27,7 +27,6 @@ namespace ITJakub.MobileApps.Core
             user.CreateTime = now;
             user.CommunicationToken = m_tokenManager.CreateNewToken();
             user.CommunicationTokenCreateTime = now;
-
 
             if (provider != AuthProvidersContract.ItJakub)
             {

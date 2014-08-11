@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using DotNetOpenAuth.FacebookOAuth2;
 using ITJakub.MobileApps.DataContracts;
-using User = ITJakub.MobileApps.DataEntities.Database.Entities.User;
 
 namespace ITJakub.MobileApps.Core.Authentication.Providers
 {

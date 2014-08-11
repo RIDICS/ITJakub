@@ -2,6 +2,7 @@
 using System.ServiceModel.Web;
 using ITJakub.MobileApps.Core;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 using log4net;
 
 namespace ITJakub.MobileApps.Service
@@ -36,6 +37,21 @@ namespace ITJakub.MobileApps.Service
             try
             {
                 return m_serviceManager.LoginUser(providerContract, providerToken, email);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public UserGroupsContract GetGroupsByUser(long userId)
+        {
+            try
+            {
+                return m_serviceManager.GetGroupsByUser(userId);
             }
             catch (WebFaultException ex)
             {

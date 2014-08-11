@@ -133,13 +133,15 @@
     <Compile Include="Authentication\Providers\GoogleAuthProvider.cs" />
     <Compile Include="Authentication\Providers\ItJakubAuthProvider.cs" />
     <Compile Include="Authentication\Providers\LiveIdAuthProvider.cs" />
+    <Compile Include="AutoMapperProfiles\GroupDetailContract.cs" />
     <Compile Include="AutoMapperProfiles\UserDetailContractProfile.cs" />
     <Compile Include="CommunicationTokenManager.cs" />
     <Compile Include="EnterCodeGenerator.cs" />
     <Compile Include="Authentication\Providers\IAuthProvider.cs" />
+    <Compile Include="Groups\GroupManager.cs" />
     <Compile Include="MobileServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserManager.cs" />
+    <Compile Include="Users\UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.MobileApps.Core.Container.Config">

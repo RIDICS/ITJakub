@@ -1,10 +1,14 @@
-﻿using Castle.Facilities.NHibernateIntegration;
+﻿using System.Linq;
+using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Exceptions;
+using NHibernate.Linq;
+using NHibernate.SqlCommand;
+using NHibernate.Transform;
 
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
@@ -103,8 +107,33 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                     .SetFetchMode("MemberOfGroups.Members", FetchMode.Join)
                     .SetFetchMode("CreatedGroups", FetchMode.Join)
                     .SetFetchMode("CreatedGroups.Members", FetchMode.Join)
+
                     .UniqueResult<User>();
                 return user;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual User GetUserWithGroups(long userId)
+        {
+            using (var session = GetSession())
+            {
+
+                //var userCrit = session.Query<User>().Where(x => x.Id == userId).ToFuture();
+
+                //var groups = session.QueryOver<Group>()
+
+                var u1 = session.CreateCriteria<User>()
+                    .Add(Restrictions.Eq(Projections.Id(), userId))
+                    .SetFetchMode("CreatedGroups", FetchMode.Eager)
+                    .Future<User>();
+
+
+                var u2 = session.CreateCriteria<User>()
+                    .Add(Restrictions.Eq(Projections.Id(), userId))
+                    .SetFetchMode("MemberOfGroups", FetchMode.Eager)
+                    .Future<User>();
+                return u2.ToList().FirstOrDefault();
             }
         }
     }
