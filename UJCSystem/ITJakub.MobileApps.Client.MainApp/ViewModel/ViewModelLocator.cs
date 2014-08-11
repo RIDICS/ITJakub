@@ -52,13 +52,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 WithLifetime.Transient
                 );
             Container.Current.RegisterType<INavigationService, NavigationService>();
-            //SimpleIoc.Default.Register<LoginViewModel>();
-            //SimpleIoc.Default.Register<RegistrationViewModel>();
-            //SimpleIoc.Default.Register<ChatViewModel>();
-            //SimpleIoc.Default.Register<GroupListViewModel>();
-            //SimpleIoc.Default.Register<ApplicationHostViewModel>();
-            //SimpleIoc.Default.Register<ApplicationSelectionViewModel>();
-            //SimpleIoc.Default.Register<EditGroupViewModel>();
         }
 
         public LoginViewModel LoginViewModel
@@ -94,6 +87,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public UserMenuViewModel UserMenuViewModel
         {
             get { return Container.Current.Resolve<UserMenuViewModel>(); }
+        }
+
+        public SelectTaskViewModel SelectTaskViewModel
+        {
+            get { return Container.Current.Resolve<SelectTaskViewModel>(); }
         }
     }
 }

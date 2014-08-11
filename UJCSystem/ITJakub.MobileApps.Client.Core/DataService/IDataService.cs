@@ -24,6 +24,8 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 
         void GetApplicationByTypes(IEnumerable<ApplicationType> types, Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback);
         void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback);
+        void GetGroupMembers(long groupId, Action<ObservableCollection<GroupMemberViewModel>, Exception> callback);
+        void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback);
         void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback);
         void CreateNewGroup(string groupName, Action<CreateGroupResult, Exception> callback);
         void ConnectToGroup(string code, Action<Exception> callback);

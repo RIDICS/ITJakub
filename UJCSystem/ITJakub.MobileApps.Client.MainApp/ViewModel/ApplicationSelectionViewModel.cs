@@ -73,8 +73,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             var selectedApp = args.ClickedItem as AppInfoViewModel;
             if (selectedApp == null)
                 return;
-            m_navigationService.Navigate(typeof (ApplicationHostView));
-            Messenger.Default.Send(new LoadApplicationMessage{ApplicationType = selectedApp.ApplicationType});
+            //TODO submit app selection
+            //m_navigationService.Navigate(typeof (ApplicationHostView));
+            //Messenger.Default.Send(new OpenGroupMessage{ApplicationType = selectedApp.ApplicationType});
         }
     }
 }

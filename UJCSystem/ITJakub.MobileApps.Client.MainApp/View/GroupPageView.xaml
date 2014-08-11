@@ -51,5 +51,72 @@
                 <Run Text="{Binding GroupName}" />
             </TextBlock>
         </Grid>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Vertical"
+                        Margin="120,0,0,0"
+                        Grid.Column="0">
+                <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">
+                    <Run Text="Kód skupiny:"/>
+                    <Run Text="{Binding GroupCode}"/>
+                </TextBlock>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,15,0,10">
+                    <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">
+                        <Run Text="Aplikace:"/>
+                        <Run Text="{Binding GroupCode}"/>
+                    </TextBlock>
+                    <Button Content="Změnit"
+                            Margin="40,0,0,0"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" >
+                        <Run Text="Zadání:"/>
+                        <Run Text="{Binding GroupCode}"/>
+                    </TextBlock>
+                    <Button Content="Změnit"
+                            Margin="40,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+            
+            <Grid Grid.Column="1"
+                  Margin="0,0,120,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                
+                <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
+                           Text="Seznam členů:"
+                           Grid.Row="0"/>
+                
+                <ListView IsItemClickEnabled="False"
+                          SelectionMode="None"
+                          Grid.Row="1"
+                          ItemsSource="{Binding MemberList}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="30"
+                                       Height="30"
+                                       Source="{Binding UserAvatar}" />
+                                <TextBlock VerticalAlignment="Center">
+                                    <Run Text="{Binding FirstName}"/>
+                                    <Run Text="{Binding LastName}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Grid>
+
     </Grid>
 </Page>

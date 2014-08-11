@@ -166,6 +166,7 @@
     <Compile Include="ViewModel\Authentication\LoginProviderViewModel.cs" />
     <Compile Include="ViewModel\GroupInfoViewModel.cs" />
     <Compile Include="Manager\Authentication\UserLoginSkeleton.cs" />
+    <Compile Include="ViewModel\GroupMemberViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Facebook">

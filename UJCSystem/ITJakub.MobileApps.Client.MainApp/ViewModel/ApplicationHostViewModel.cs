@@ -22,10 +22,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public ApplicationHostViewModel(IDataService dataService)
         {
             m_dataService = dataService;
-            Messenger.Default.Register<LoadApplicationMessage>(this, message =>
+            Messenger.Default.Register<OpenGroupMessage>(this, message =>
             {
-                LoadApplications(message.ApplicationType);
-                Messenger.Default.Unregister<LoadApplicationMessage>(this);
+                LoadApplications(message.Group.ApplicationType);
+                Messenger.Default.Unregister<OpenGroupMessage>(this);
             });
         }
 

@@ -238,6 +238,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 var groupedList = groupList.GroupBy(group => group.GroupType).OrderBy(group => group.Key);
                 GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
                 NoGroupExist = groupList.Count == 0;
+                
+                foreach (var group in groupList)
+                {
+                    LoadGroupMembers(group);
+                }
             });
             m_dataService.GetLoggedUserInfo((info, exception) =>
             {
@@ -247,6 +252,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_userRole = UserRole.Teacher;  //TODO for debug
                 RaisePropertyChanged(() => TeachersButtonVisibility);
                 RaisePropertyChanged(() => TeachersSecondaryButtonVisibility);
+            });
+        }
+
+        private void LoadGroupMembers(GroupInfoViewModel group)
+        {
+            m_dataService.GetGroupMembers(group.GroupId, (members, exception) =>
+            {
+                if (exception != null)
+                    return;
+
+                group.Members = members;
             });
         }
 
@@ -260,8 +276,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             if (group != null)
             {
-                m_navigationService.Navigate(typeof (ApplicationHostView));
-                Messenger.Default.Send(new LoadApplicationMessage {ApplicationType = group.ApplicationType});
+                var viewType = group.GroupType == GroupType.Member
+                    ? typeof (ApplicationHostView)
+                    : typeof (GroupPageView);
+                m_navigationService.Navigate(viewType);
+                Messenger.Default.Send(new OpenGroupMessage {Group = group});
             }
         }
     }

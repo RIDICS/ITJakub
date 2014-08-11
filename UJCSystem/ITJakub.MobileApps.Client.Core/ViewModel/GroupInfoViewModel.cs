@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml.Media.Imaging;
+﻿using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
@@ -14,5 +15,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public string ApplicationName { get; set; }
         public long GroupId { get; set; }
         public GroupType GroupType { get; set; }
+
+        public ObservableCollection<GroupMemberViewModel> Members { get; set; }
     }
 }

@@ -1,5 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.DataService;
+using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -14,6 +18,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private string m_groupName;
+        private string m_groupCode;
+        private ObservableCollection<GroupMemberViewModel> m_memberList;
 
         /// <summary>
         /// Initializes a new instance of the GroupPageViewModel class.
@@ -22,6 +28,23 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            Messenger.Default.Register<OpenGroupMessage>(this, message =>
+            {
+                LoadData(message.Group.GroupId);
+                Messenger.Default.Unregister<OpenGroupMessage>(this);
+            });
+        }
+
+        private void LoadData(long groupId)
+        {
+            m_dataService.GetGroupDetails(groupId, (group, exception) =>
+            {
+                if (exception != null)
+                    return;
+
+                GroupName = group.GroupName;
+                MemberList = group.Members;
+            });
         }
 
         public string GroupName
@@ -32,6 +55,18 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_groupName = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public string GroupCode
+        {
+            get { return m_groupCode; }
+            set { m_groupCode = value; RaisePropertyChanged(); }
+        }
+
+        public ObservableCollection<GroupMemberViewModel> MemberList
+        {
+            get { return m_memberList; }
+            set { m_memberList = value; RaisePropertyChanged(); }
         }
     }
 }

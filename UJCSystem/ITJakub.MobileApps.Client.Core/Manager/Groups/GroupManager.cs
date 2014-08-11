@@ -78,5 +78,18 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 callback(exception);
             }
         }
+
+        public async void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
+        {
+            try
+            {
+                var result = await m_serviceManager.GetGroupDetailsAsync(groupId);
+                callback(result, null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
     }
 }

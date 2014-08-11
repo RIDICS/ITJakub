@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
@@ -84,6 +85,27 @@ namespace ITJakub.MobileApps.Client.Core.DataService
                 },
             };
             callback(result, null);
+        }
+
+        public void GetGroupMembers(long groupId, Action<ObservableCollection<GroupMemberViewModel>, Exception> callback)
+        {
+            var group = new GroupMemberViewModel
+            {
+                FirstName = "FirstName",
+                LastName = "LastName",
+                UserAvatar = new BitmapImage(new Uri("ms-appx:///Icon/facebook-128.png"))
+            };
+            var groupList = new ObservableCollection<GroupMemberViewModel>();
+            for (int i = 0; i < 15; i++)
+            {
+                groupList.Add(group);
+            }
+            callback(groupList, null);
+        }
+
+        public void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
+        {
+            throw new NotImplementedException();
         }
 
         public void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback)

@@ -53,6 +53,17 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             m_groupManager.GetGroupForCurrentUser(callback);
         }
 
+        public void GetGroupMembers(long groupId, Action<ObservableCollection<GroupMemberViewModel>, Exception> callback)
+        {
+            //TODO load from server
+            new DesignDataService().GetGroupMembers(groupId, callback);
+        }
+
+        public void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
+        {
+            m_groupManager.GetGroupDetails(groupId, callback);
+        }
+
         public void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback)
         {
             m_authenticationManager.GetAllLoginProviderViewModels(callback);

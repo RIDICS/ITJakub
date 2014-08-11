@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Error;
@@ -182,6 +183,44 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             try
             {
                 await m_serviceClient.AddUserToGroupAsync(code, userId.ToString());
+            }
+            catch (FaultException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (CommunicationException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (TimeoutException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (ObjectDisposedException)
+            {
+                throw new ClientCommunicationException();
+            }
+        }
+
+        public async Task<GroupInfoViewModel> GetGroupDetailsAsync(long groupId)
+        {
+            try
+            {
+                var result = await m_serviceClient.GetGroupDetailsAsync(groupId.ToString());
+                var group = new GroupInfoViewModel
+                {
+                    GroupId = result.Id,
+                    GroupName = result.Group.Name,
+                    MemberCount = result.Members.Count,
+                    Members =
+                        new ObservableCollection<GroupMemberViewModel>(
+                            result.Members.Select(details => new GroupMemberViewModel
+                            {
+                                FirstName = details.User.FirstName,
+                                LastName = details.User.LastName
+                            }))
+                };
+                return group;
             }
             catch (FaultException)
             {
