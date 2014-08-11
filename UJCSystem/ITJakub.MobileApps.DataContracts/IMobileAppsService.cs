@@ -14,5 +14,8 @@ namespace ITJakub.MobileApps.DataContracts
 
         [OperationContract]
         UserGroupsContract GetGroupsByUser(long userId);
+
+        [OperationContract]
+        CreateGroupResponse CreateGroup(long userId , string groupName);
     }
 }

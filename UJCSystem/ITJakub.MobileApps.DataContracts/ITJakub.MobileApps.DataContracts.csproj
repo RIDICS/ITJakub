@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="AuthProvidersContract.cs" />
     <Compile Include="AuthorizedMethodAttribute.cs" />
+    <Compile Include="Groups\CreateGroupResponse.cs" />
     <Compile Include="Groups\GroupDetailContract.cs" />
     <Compile Include="IMobileAppsService.cs" />
     <Compile Include="LoginUserResponse.cs" />

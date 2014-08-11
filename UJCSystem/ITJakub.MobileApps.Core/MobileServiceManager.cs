@@ -20,12 +20,11 @@ namespace ITJakub.MobileApps.Core
     public class MobileServiceManager : IMobileAppsService
     {
         private readonly UserManager m_userManager;
-        private int m_maxAttemptsToSave;
-        private GroupManager m_groupManager;
+        private readonly GroupManager m_groupManager;
 
-        public MobileServiceManager(IKernel container, int maxAttemptsToSave)
+        public MobileServiceManager(IKernel container)
         {
-            m_maxAttemptsToSave = maxAttemptsToSave;
+
             m_userManager = container.Resolve<UserManager>();
             m_groupManager = container.Resolve<GroupManager>();
 
@@ -45,6 +44,11 @@ namespace ITJakub.MobileApps.Core
         public UserGroupsContract GetGroupsByUser(long userId)
         {
             return m_groupManager.GetGroupByUser(userId);
+        }
+
+        public CreateGroupResponse CreateGroup(long userId, string groupName)
+        {
+            return m_groupManager.CreateGroup(userId, groupName);
         }
     }
 }

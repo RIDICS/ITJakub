@@ -61,5 +61,20 @@ namespace ITJakub.MobileApps.Service
                 throw;
             }
         }
+
+        public CreateGroupResponse CreateGroup(long userId, string groupName)
+        {
+            try
+            {
+                return m_serviceManager.CreateGroup(userId, groupName);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
     }
 }
