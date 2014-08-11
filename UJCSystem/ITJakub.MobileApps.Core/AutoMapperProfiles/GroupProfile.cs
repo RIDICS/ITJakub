@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Groups;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
 
 namespace ITJakub.MobileApps.Core.AutoMapperProfiles
 {
-    public class UserDetailContractProfile : Profile
+    public class GroupProfile : Profile
     {
         protected override void Configure()
         {

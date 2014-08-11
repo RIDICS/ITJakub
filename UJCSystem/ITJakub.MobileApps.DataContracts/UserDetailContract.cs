@@ -3,7 +3,8 @@
 namespace ITJakub.MobileApps.DataContracts
 {
     [DataContract]
-    [KnownType(typeof(PasswordUserDetailContract))]
+    [KnownType(typeof (PasswordUserDetailContract))]
+    [KnownType(typeof (GroupMemberContract))]
     public class UserDetailContract
     {
         [DataMember]
@@ -24,5 +25,16 @@ namespace ITJakub.MobileApps.DataContracts
 
         [DataMember]
         public string PasswordSalt { get; set; }
+    }
+
+
+    [DataContract]
+    public class GroupMemberContract : UserDetailContract
+    {
+        [DataMember]
+        public long Id { get; set; }
+
+        [DataMember]
+        public string AvatarUrl { get; set; }
     }
 }

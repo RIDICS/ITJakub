@@ -9,7 +9,6 @@ namespace ITJakub.MobileApps.DataContracts.Groups
         [DataMember]
         public List<GroupDetailContract> MemberOfGroup { get; set; }
 
-
         [DataMember]
         public List<OwnedDetailGroupContract> OwnedGroups { get; set; }
     }

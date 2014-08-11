@@ -137,8 +137,8 @@
     <Compile Include="Authentication\Providers\GoogleAuthProvider.cs" />
     <Compile Include="Authentication\Providers\ItJakubAuthProvider.cs" />
     <Compile Include="Authentication\Providers\LiveIdAuthProvider.cs" />
-    <Compile Include="AutoMapperProfiles\GroupDetailContract.cs" />
-    <Compile Include="AutoMapperProfiles\UserDetailContractProfile.cs" />
+    <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
+    <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="CommunicationTokenManager.cs" />
     <Compile Include="EnterCodeGenerator.cs" />
     <Compile Include="Authentication\Providers\IAuthProvider.cs" />

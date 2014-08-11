@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
@@ -6,9 +7,6 @@ using ITJakub.MobileApps.DataEntities.Database.Entities;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Exceptions;
-using NHibernate.Linq;
-using NHibernate.SqlCommand;
-using NHibernate.Transform;
 
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
@@ -23,7 +21,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual User LoadUserWithDetails(long id)
         {
-            using (var session = GetSession())
+            using (ISession session = GetSession())
             {
                 return
                     session.CreateCriteria<User>()
@@ -38,7 +36,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual string GetCommunicationToken(byte authenticationProvider, string authenticationProviderToken)
         {
-            using (var session = GetSession())
+            using (ISession session = GetSession())
             {
                 var user = session.CreateCriteria<User>()
                     .Add(Restrictions.Eq("AuthenticationProvider", authenticationProvider))
@@ -64,7 +62,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual User FindByEmailAndProvider(string email, AuthenticationProviders authenticationProvider)
         {
-            using (var session = GetSession())
+            using (ISession session = GetSession())
             {
                 return session.CreateCriteria<User>()
                     .Add(Restrictions.Eq("Email", email))
@@ -76,7 +74,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual User GetUserByCommunicationToken(string communicationToken)
         {
-            using (var session = GetSession())
+            using (ISession session = GetSession())
             {
                 return session.CreateCriteria<User>()
                     .Add(Restrictions.Eq("CommunicationToken", communicationToken))
@@ -88,7 +86,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual User FindByAuthenticationProviderToken(string token)
         {
-            using (var session = GetSession())
+            using (ISession session = GetSession())
             {
                 return session.CreateCriteria<User>()
                     .Add(Restrictions.Eq("AuthenticationProviderToken", token))
@@ -99,15 +97,14 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual User LoadGroupsForUser(long userId)
         {
-            using (var session = GetSession())
+            using (ISession session = GetSession())
             {
-                User user = session.CreateCriteria<User>()
+                var user = session.CreateCriteria<User>()
                     .Add(Restrictions.Eq(Projections.Id(), userId))
                     .SetFetchMode("MemberOfGroups", FetchMode.Join)
                     .SetFetchMode("MemberOfGroups.Members", FetchMode.Join)
                     .SetFetchMode("CreatedGroups", FetchMode.Join)
                     .SetFetchMode("CreatedGroups.Members", FetchMode.Join)
-
                     .UniqueResult<User>();
                 return user;
             }
@@ -116,24 +113,31 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual User GetUserWithGroups(long userId)
         {
-            using (var session = GetSession())
+            using (ISession session = GetSession())
             {
-
-                //var userCrit = session.Query<User>().Where(x => x.Id == userId).ToFuture();
-
-                //var groups = session.QueryOver<Group>()
-
-                var u1 = session.CreateCriteria<User>()
+                IEnumerable<User> u1 = session.CreateCriteria<User>()
                     .Add(Restrictions.Eq(Projections.Id(), userId))
                     .SetFetchMode("CreatedGroups", FetchMode.Eager)
                     .Future<User>();
 
+                var group = session.CreateCriteria<Group>()
+                    .Add(Restrictions.Eq("Author.Id", userId))
+                    .SetFetchMode("Members", FetchMode.Join)
+                    .Future<Group>();
 
-                var u2 = session.CreateCriteria<User>()
+                session.CreateCriteria<User>()
                     .Add(Restrictions.Eq(Projections.Id(), userId))
                     .SetFetchMode("MemberOfGroups", FetchMode.Eager)
                     .Future<User>();
-                return u2.ToList().FirstOrDefault();
+
+                 var memberOfGroup = session.CreateCriteria<Group>()
+                    .CreateAlias("Members", "m")
+                    .Add(Restrictions.Eq("m.Id", userId))
+                    .SetFetchMode("Members", FetchMode.Join)
+                    .Future<Group>();
+
+
+                return u1.ToList().FirstOrDefault();
             }
         }
     }

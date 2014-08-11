@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.MobileApps.DataContracts.Groups
@@ -15,6 +16,9 @@ namespace ITJakub.MobileApps.DataContracts.Groups
 
         [DataMember]
         public bool IsActive { get; set; }
+
+        [DataMember]
+        public List<GroupMemberContract> Members { get; set; }
     }
 
     [DataContract]

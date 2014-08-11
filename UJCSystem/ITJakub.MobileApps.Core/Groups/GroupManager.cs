@@ -42,7 +42,9 @@ namespace ITJakub.MobileApps.Core.Groups
         public CreateGroupResponse CreateGroup(long userId, string groupName)
         {
             User user = m_usersRepository.Load(userId);
+            
             var group = new Group {Author = user, CreateTime = DateTime.UtcNow, Name = groupName, IsActive = true};
+
             int attempt = 0;
             while (attempt < MaxAttemptsToSave)
             {
