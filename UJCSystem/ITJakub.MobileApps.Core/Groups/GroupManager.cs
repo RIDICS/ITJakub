@@ -22,7 +22,7 @@ namespace ITJakub.MobileApps.Core.Groups
             var result = new UserGroupsContract
             {
                 MemberOfGroup = Mapper.Map<IEnumerable<Group>, List<GroupDetailContract>>(user.MemberOfGroups),
-                OwnedGroups = Mapper.Map<IEnumerable<Group>, List<GroupDetailContract>>(user.CreatedGroups)
+                OwnedGroups = Mapper.Map<IEnumerable<Group>, List<OwnedDetailGroupContract>>(user.CreatedGroups)
             };
 
             return result;

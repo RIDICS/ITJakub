@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace ITJakub.MobileApps.DataContracts.Groups
 {
     [DataContract]
-    [KnownType(typeof(OwnedGroupContract))]
+    [KnownType(typeof(OwnedDetailGroupContract))]
     public class GroupDetailContract
     {
         [DataMember]
@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.DataContracts.Groups
     }
 
     [DataContract]
-    public class OwnedGroupContract : GroupDetailContract
+    public class OwnedDetailGroupContract : GroupDetailContract
     {
         [DataMember]
         public string EnterCode { get; set; }
