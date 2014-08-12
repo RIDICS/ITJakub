@@ -107,12 +107,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ErrorBar.cs" />
+    <Compile Include="View\ErrorBar.cs" />
     <Compile Include="Common\RelayCommand.cs" />
-    <Compile Include="ErrorBarView.xaml.cs">
+    <Compile Include="View\ErrorBarView.xaml.cs">
       <DependentUpon>ErrorBarView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ErrorBarViewModel.cs" />
+    <Compile Include="ViewModel\ErrorBarViewModel.cs" />
     <Compile Include="ViewModel\ApplicationHostViewModel.cs" />
     <Compile Include="ViewModel\Message\OpenGroupMessage.cs" />
     <Compile Include="ViewModel\SelectTaskViewModel.cs" />
@@ -190,7 +190,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="ErrorBarView.xaml">
+    <Page Include="View\ErrorBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

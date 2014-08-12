@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Converter;
+using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using Task = System.Threading.Tasks.Task;
 
-namespace ITJakub.MobileApps.Client.Core.Manager
+namespace ITJakub.MobileApps.Client.Core.Manager.Communication
 {
     public class MobileAppsServiceManager
     {
@@ -221,6 +224,76 @@ namespace ITJakub.MobileApps.Client.Core.Manager
                             }))
                 };
                 return group;
+            }
+            catch (FaultException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (CommunicationException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (TimeoutException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (ObjectDisposedException)
+            {
+                throw new ClientCommunicationException();
+            }
+        }
+
+        public async Task SendSynchronizedObjectAsync(ApplicationType applicationType, long groupId, long userId, string objectType, string objectValue)
+        {
+            try
+            {
+                var applicationId = ApplicationTypeConverter.ConvertToString(applicationType);
+                var synchronizedObject = new SynchronizedObject
+                {
+                    ObjectType = objectType,
+                    Data = objectValue
+                };
+                await m_serviceClient.CreateSynchronizedObjectAsync(groupId.ToString(), applicationId, userId.ToString(), synchronizedObject);
+            }
+            catch (FaultException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (CommunicationException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (TimeoutException)
+            {
+                throw new ClientCommunicationException();
+            }
+            catch (ObjectDisposedException)
+            {
+                throw new ClientCommunicationException();
+            }
+        }
+
+        public async Task<IEnumerable<ObjectDetails>> GetSynchronizedObjectsAsync(ApplicationType applicationType, long groupId, string objectType, DateTime since)
+        {
+            try
+            {
+                var applicationId = ApplicationTypeConverter.ConvertToString(applicationType);
+                var dateTimeString = since.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
+                var objectList = await m_serviceClient.GetSynchronizedObjectsAsync(groupId.ToString(), applicationId, objectType, dateTimeString);
+                var outputList = objectList.Select(objectDetails => new ObjectDetails
+                {
+                    Author = new AuthorInfo
+                    {
+                        Email = objectDetails.Author.User.Email,
+                        FirstName = objectDetails.Author.User.FirstName,
+                        LastName = objectDetails.Author.User.LastName,
+                        Id = objectDetails.Author.Id
+                    },
+                    CreateTime = objectDetails.CreateTime,
+                    Data = objectDetails.SynchronizedObject.Data,
+                    Id = objectDetails.Id
+                });
+                return outputList;
             }
             catch (FaultException)
             {

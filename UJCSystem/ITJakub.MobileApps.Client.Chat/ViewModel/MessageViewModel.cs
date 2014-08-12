@@ -1,12 +1,13 @@
 ﻿using System;
 using Windows.UI;
 using GalaSoft.MvvmLight;
+using ITJakub.MobileApps.Client.Shared.Data;
 
 namespace ITJakub.MobileApps.Client.Chat.ViewModel
 {
     public class MessageViewModel : ViewModelBase
     {
-        private string m_author;
+        private AuthorInfo m_author;
         private string m_text;
         private Color m_messageBackground;
         private DateTime m_sendTime;
@@ -21,7 +22,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             }
         }
 
-        public string Author
+        public AuthorInfo Author
         {
             get { return m_author; }
             set

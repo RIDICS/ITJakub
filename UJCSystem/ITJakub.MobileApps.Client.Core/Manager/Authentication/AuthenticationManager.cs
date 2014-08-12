@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ITJakub.MobileApps.Client.Core.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders;
+using ITJakub.MobileApps.Client.Core.Manager.Communication;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using Microsoft.Practices.Unity;
 using Task = System.Threading.Tasks.Task;
 

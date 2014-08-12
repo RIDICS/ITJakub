@@ -27,7 +27,8 @@
                   ItemsSource="{Binding MessageHistory}"
                   x:Name="MessageHistoryListView"
                   RequestedTheme="Light" 
-                  Padding="5">
+                  Padding="5"
+                  MinWidth="350">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="320">
@@ -38,7 +39,9 @@
                                         Margin="10 3 10 3">
                                 
                                 <TextBlock>
-                                    <Run Text="{Binding Author}"
+                                    <Run Text="{Binding Author.FirstName}"
+                                         FontWeight="Bold"/>
+                                    <Run Text="{Binding Author.LastName}"
                                          FontWeight="Bold"/>
                                     <Run Text=" " />
                                     <Run Text="{Binding SendTime, Converter={StaticResource MessageDateTimeToStringConverter}}"

@@ -3,7 +3,7 @@ using Windows.UI.Xaml;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace ITJakub.MobileApps.Client.MainApp
+namespace ITJakub.MobileApps.Client.MainApp.View
 {
     public sealed partial class ErrorBarView
     {

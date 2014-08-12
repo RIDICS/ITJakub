@@ -1,6 +1,6 @@
-using System;
+ï»¿using System;
 using Windows.UI.Xaml.Data;
-using ITJakub.MobileApps.Client.Core.Manager;
+using ITJakub.MobileApps.Client.Core.Manager.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.View.Converter
 {
@@ -15,7 +15,7 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Converter
             switch (groupType)
             {
                 case GroupType.Member:
-                    return "Èlenství ve skupinách:";
+                    return "ÄŒlenstvÃ­ ve skupinÃ¡ch:";
                 case GroupType.Owner:
                     return "Moje skupiny:";
                 default:

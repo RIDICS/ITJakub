@@ -2,6 +2,7 @@
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders;
+using ITJakub.MobileApps.Client.Core.Manager.Communication;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using Microsoft.Practices.Unity;
 

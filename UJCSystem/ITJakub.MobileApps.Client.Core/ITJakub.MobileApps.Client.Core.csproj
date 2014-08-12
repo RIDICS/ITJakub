@@ -117,7 +117,6 @@
     <Compile Include="ApplicationManager.cs" />
     <Compile Include="Manager\Authentication\AuthenticationBroker\WebAuthViewModel.cs" />
     <Compile Include="Container.cs" />
-    <Compile Include="Error\ClientCommunicationException.cs" />
     <Compile Include="Manager\Authentication\AuthenticationBroker\CustomWebAuthenticationBroker.cs" />
     <Compile Include="Manager\Authentication\AuthenticationBroker\AuthBrokerResult.cs" />
     <Compile Include="Manager\Authentication\AuthenticationBroker\WebAuthView.xaml.cs">
@@ -131,17 +130,18 @@
     <Compile Include="Manager\Authentication\AuthenticationProviders\GoogleProvider.cs" />
     <Compile Include="Manager\Authentication\AuthenticationProviders\ItJakubProvider.cs" />
     <Compile Include="Manager\Authentication\AuthenticationProviders\LiveIdProvider.cs" />
+    <Compile Include="Manager\Converter\ApplicationTypeConverter.cs" />
     <Compile Include="Manager\Converter\UserRoleConverter.cs" />
     <Compile Include="Manager\Groups\GroupManager.cs" />
     <Compile Include="Manager\Authentication\LoginResult.cs" />
     <Compile Include="Manager\UserAvatarCache.cs" />
-    <Compile Include="Manager\ClientMessageInspector.cs" />
-    <Compile Include="Manager\CreateGroupResult.cs" />
-    <Compile Include="Manager\CustomEndpointBehavior.cs" />
+    <Compile Include="Manager\Communication\ClientMessageInspector.cs" />
+    <Compile Include="Manager\Groups\CreateGroupResult.cs" />
+    <Compile Include="Manager\Communication\CustomEndpointBehavior.cs" />
     <Compile Include="Manager\Converter\LoginProviderConverter.cs" />
-    <Compile Include="Manager\GroupType.cs" />
-    <Compile Include="Manager\MobileAppsServiceManager.cs" />
-    <Compile Include="Error\UserNotRegisteredException.cs" />
+    <Compile Include="Manager\Groups\GroupType.cs" />
+    <Compile Include="Manager\Communication\MobileAppsServiceManager.cs" />
+    <Compile Include="Manager\Communication\UserNotRegisteredException.cs" />
     <Compile Include="Service References\Service\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

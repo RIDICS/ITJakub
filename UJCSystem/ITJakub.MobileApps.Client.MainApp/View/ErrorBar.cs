@@ -1,8 +1,9 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls.Primitives;
 using GalaSoft.MvvmLight.Messaging;
+using ITJakub.MobileApps.Client.MainApp.ViewModel;
 
-namespace ITJakub.MobileApps.Client.MainApp
+namespace ITJakub.MobileApps.Client.MainApp.View
 {
     public class ErrorBar
     {

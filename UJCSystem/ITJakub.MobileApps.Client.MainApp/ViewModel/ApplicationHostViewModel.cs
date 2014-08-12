@@ -24,7 +24,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_dataService = dataService;
             Messenger.Default.Register<OpenGroupMessage>(this, message =>
             {
-                LoadApplications(message.Group.ApplicationType);
+                var applicationType = message.Group.ApplicationType;
+                //TODO for debug
+                if (applicationType == ApplicationType.Unknown)
+                    applicationType = ApplicationType.SampleApp;
+                LoadApplications(applicationType);
                 Messenger.Default.Unregister<OpenGroupMessage>(this);
             });
         }

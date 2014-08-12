@@ -68,13 +68,15 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             if (Message == string.Empty)
                 return;
 
-            //TODO send message to server and remove this method
-            MessageHistory.Add(new MessageViewModel
+            m_dataService.SendMessage(Message, exception =>
             {
-                Text = Message,
-                SendTime = DateTime.Now,
-            });
+                if (exception != null)
+                    return;
 
+                //TODO load only new messages
+                Initialize();
+            });
+            
             Message = string.Empty;
         }
     }

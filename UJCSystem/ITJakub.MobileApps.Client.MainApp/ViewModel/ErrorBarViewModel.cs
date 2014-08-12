@@ -1,10 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using ITJakub.MobileApps.Client.Core.Service;
 using Task = System.Threading.Tasks.Task;
 
-namespace ITJakub.MobileApps.Client.MainApp
+namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
