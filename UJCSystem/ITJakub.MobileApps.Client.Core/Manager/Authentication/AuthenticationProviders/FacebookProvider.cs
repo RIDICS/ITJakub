@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
 using Facebook;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
@@ -39,9 +40,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
             get { return "Facebook"; }
         }
 
-        public LoginProviderType ProviderType
+        public AuthProvidersContract ProviderType
         {
-            get { return LoginProviderType.Facebook; }
+            get { return AuthProvidersContract.Facebook; }
         }
 
         private UserLoginSkeleton GetUserInfoFromResponse(FacebookClient fbClient, WebAuthenticationResult webAuthenticationResult)

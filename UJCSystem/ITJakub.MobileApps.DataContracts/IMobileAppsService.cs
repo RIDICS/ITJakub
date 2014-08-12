@@ -1,4 +1,5 @@
 ﻿using System.ServiceModel;
+using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.DataContracts
@@ -19,5 +20,13 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
         CreateGroupResponse CreateGroup(long userId , string groupName);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Student)]
+        void AddUserToGroup(string groupAccessCode, long userId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Student)]
+        void CreateSynchronizedObject(int applicationId, long groupId, long userId, SynchronizedObjectContract synchronizedObject);
     }
 }

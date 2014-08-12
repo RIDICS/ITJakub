@@ -113,6 +113,10 @@
       <Project>{2009029F-A9B8-4A44-AC3D-A05C1E65E1E1}</Project>
       <Name>ITJakub.MobileApps.Client.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj">
+      <Project>{90f9d8dd-05d5-401f-8939-bd619adf5cdd}</Project>
+      <Name>ITJakub.MobileApps.DataContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationManager.cs" />
@@ -131,23 +135,17 @@
     <Compile Include="Manager\Authentication\AuthenticationProviders\GoogleProvider.cs" />
     <Compile Include="Manager\Authentication\AuthenticationProviders\ItJakubProvider.cs" />
     <Compile Include="Manager\Authentication\AuthenticationProviders\LiveIdProvider.cs" />
-    <Compile Include="Manager\Converter\ApplicationTypeConverter.cs" />
-    <Compile Include="Manager\Converter\UserRoleConverter.cs" />
+    <Compile Include="Manager\Communication\Client\MobileAppsServiceClient.cs" />
+    <Compile Include="Manager\Communication\Client\EndpointConfiguration.cs" />
     <Compile Include="Manager\Groups\GroupManager.cs" />
     <Compile Include="Manager\Authentication\LoginResult.cs" />
     <Compile Include="Manager\UserAvatarCache.cs" />
     <Compile Include="Manager\Communication\ClientMessageInspector.cs" />
     <Compile Include="Manager\Groups\CreateGroupResult.cs" />
     <Compile Include="Manager\Communication\CustomEndpointBehavior.cs" />
-    <Compile Include="Manager\Converter\LoginProviderConverter.cs" />
     <Compile Include="Manager\Groups\GroupType.cs" />
     <Compile Include="Manager\Communication\MobileAppsServiceManager.cs" />
     <Compile Include="Manager\Communication\UserNotRegisteredException.cs" />
-    <Compile Include="Service References\Service\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="SynchronizeManager.cs" />
     <Compile Include="Configuration\ApplicationConfig.cs" />
     <Compile Include="ApplicationLoader.cs" />
@@ -159,7 +157,6 @@
     <Compile Include="DataService\INavigationService.cs" />
     <Compile Include="DataService\NavigationService.cs" />
     <Compile Include="Manager\Authentication\AuthenticationProviders\ILoginProvider.cs" />
-    <Compile Include="Manager\Authentication\LoginProviderType.cs" />
     <Compile Include="Manager\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AppInfoViewModel.cs" />
@@ -194,56 +191,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Properties\ServiceReferences.Designer.ClientConfig" />
-    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.CreateGroupResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.GroupDetails.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.InstitutionDetails.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.LoginUserResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.SynchronizedObjectDetails.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.TaskDetails.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\Service\ITJakub.MobileApps.Client.Core.Service.UserDetails.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\Service\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\Service\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\Service\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\Service\MobileAppsService.wsdl" />
-    <None Include="Service References\Service\MobileAppsService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\Service\MobileAppsService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\Service\MobileAppsService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\Service\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Manager\Authentication\AuthenticationBroker\WebAuthView.xaml">
@@ -255,9 +205,6 @@
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
       <Name>Behaviors SDK %28XAML%29</Name>
     </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\Service\MobileAppsService.disco" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

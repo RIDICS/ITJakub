@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.Storage.Table;
+﻿using System;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace ITJakub.MobileApps.DataEntities.AzureTables.Entities
 {
@@ -10,23 +11,23 @@ namespace ITJakub.MobileApps.DataEntities.AzureTables.Entities
 
         public SynchronizedObjectEntity(string id, string groupId, string data)
         {
-            this.PartitionKey = groupId;
-            this.RowKey = id;
-            this.Data = data;
+            PartitionKey = groupId;
+            RowKey = id;
+            Data = data;
         }
 
         [IgnoreProperty]
-        public string GroupId
+        public long GroupId
         {
-            get { return this.PartitionKey; }
+            get { return Convert.ToInt64(PartitionKey); }
         }
 
         [IgnoreProperty]
-        public string Id
+        public long Id
         {
-            get { return this.RowKey; }
+            get { return Convert.ToInt64(RowKey); }
         }
 
-        public string Data { get;  set; }
+        public string Data { get; set; }
     }
 }

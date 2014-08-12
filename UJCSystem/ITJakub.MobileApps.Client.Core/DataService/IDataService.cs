@@ -8,14 +8,15 @@ using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.DataContracts;
 
 
 namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public interface IDataService
     {
-        void Login(LoginProviderType loginProviderType, Action<bool, Exception> callback);
-        void CreateUser(LoginProviderType loginProviderType, Action<bool, Exception> callback);
+        void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback);
+        void CreateUser(AuthProvidersContract loginProviderType, Action<bool, Exception> callback);
         void GetLoggedUserInfo(Action<LoggedUserViewModel, Exception> callback);
         void LogOut();
         void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback);

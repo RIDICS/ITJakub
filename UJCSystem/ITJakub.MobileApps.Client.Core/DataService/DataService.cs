@@ -8,6 +8,7 @@ using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.DataService
 {
@@ -79,12 +80,12 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             m_groupManager.ConnectToGroup(code, callback);
         }
 
-        public void Login(LoginProviderType loginProviderType, Action<bool, Exception> callback)
+        public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {
             m_authenticationManager.LoginByProvider(loginProviderType, callback);
         }
 
-        public void CreateUser(LoginProviderType loginProviderType, Action<bool, Exception> callback)
+        public void CreateUser(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {
             m_authenticationManager.CreateUserByLoginProvider(loginProviderType, callback);
         }

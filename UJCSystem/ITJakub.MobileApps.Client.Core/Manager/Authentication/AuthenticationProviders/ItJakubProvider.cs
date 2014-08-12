@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
@@ -10,6 +11,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         }
 
         public string AccountName { get { return "It Jakub"; } }
-        public LoginProviderType ProviderType { get{return LoginProviderType.ItJakub;} }
+        public AuthProvidersContract ProviderType { get { return AuthProvidersContract.ItJakub; } }
     }
 }

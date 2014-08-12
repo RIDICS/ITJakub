@@ -8,6 +8,7 @@ using Windows.Web.Http;
 using Windows.Web.Http.Headers;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker;
 using ITJakub.MobileApps.Client.DataContracts.Json;
+using ITJakub.MobileApps.DataContracts;
 using Newtonsoft.Json;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
@@ -24,7 +25,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         private const string UserInfoUrl = "https://www.googleapis.com/plus/v1/people/me";
 
         public string AccountName { get { return "Google"; } }
-        public LoginProviderType ProviderType { get { return LoginProviderType.Google; } }
+        public AuthProvidersContract ProviderType { get { return AuthProvidersContract.Google; } }
         public async Task<UserLoginSkeleton> LoginAsync()
         {
             var startUri = new Uri(string.Format(StartUri, ClientId, RedirectUri));

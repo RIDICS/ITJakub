@@ -41,7 +41,7 @@ namespace ITJakub.MobileApps.Core.Groups
 
         public CreateGroupResponse CreateGroup(long userId, string groupName)
         {
-            User user = m_usersRepository.Load(userId);
+            User user = m_usersRepository.Load<User>(userId);
             
             var group = new Group {Author = user, CreateTime = DateTime.UtcNow, Name = groupName, IsActive = true};
 
@@ -68,6 +68,14 @@ namespace ITJakub.MobileApps.Core.Groups
                 m_log.ErrorFormat("Cannot create group, Maximum attemts to save exceeded");
 
             return null;
+        }
+
+        public void AddUserToGroup(string groupAccessCode, long userId)
+        {
+           Group group = m_usersRepository.FindByEnterCode(groupAccessCode);
+          var user = m_usersRepository.Load<User>(userId);
+            group.Members.Add(user);
+            m_usersRepository.Update(group);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
@@ -10,6 +11,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
         public string UserAvatarUrl { get; set; }
 
-        public UserRole UserRole { get; set; }
+        public UserRoleContract UserRole { get; set; }
     }
 }

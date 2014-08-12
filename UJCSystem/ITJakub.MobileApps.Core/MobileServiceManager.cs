@@ -10,9 +10,11 @@
 //using DE = ITJakub.MobileApps.DataEntities.Database.Entities;
 
 using Castle.MicroKernel;
+using ITJakub.MobileApps.Core.Applications;
 using ITJakub.MobileApps.Core.Groups;
 using ITJakub.MobileApps.Core.Users;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Core
@@ -21,13 +23,14 @@ namespace ITJakub.MobileApps.Core
     {
         private readonly UserManager m_userManager;
         private readonly GroupManager m_groupManager;
+        private readonly ApplicationManager m_applicationManager;
 
         public MobileServiceManager(IKernel container)
         {
 
             m_userManager = container.Resolve<UserManager>();
             m_groupManager = container.Resolve<GroupManager>();
-
+            m_applicationManager = container.Resolve<ApplicationManager>();
         }
 
         public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
@@ -49,6 +52,17 @@ namespace ITJakub.MobileApps.Core
         public CreateGroupResponse CreateGroup(long userId, string groupName)
         {
             return m_groupManager.CreateGroup(userId, groupName);
+        }
+
+        public void AddUserToGroup(string groupAccessCode, long userId)
+        {
+            m_groupManager.AddUserToGroup(groupAccessCode, userId);
+        }
+
+        public void CreateSynchronizedObject(int applicationId, long groupId, long userId,
+            SynchronizedObjectContract synchronizedObject)
+        {
+            m_applicationManager.CreateSynchronizedObject(applicationId, groupId, userId, synchronizedObject);
         }
     }
 }

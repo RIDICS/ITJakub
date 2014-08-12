@@ -11,7 +11,7 @@ using NHibernate.Exceptions;
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
     [Transactional]
-    public class UsersRepository : NHibernateTransactionalDao<User>
+    public class UsersRepository : NHibernateTransactionalDao
     {
         public UsersRepository(ISessionManager sessManager)
             : base(sessManager)
@@ -47,7 +47,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public override object Create(User instance)
+        public override object Create(object instance)
         {
             try
             {
@@ -138,6 +138,19 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 
 
                 return u1.ToList().FirstOrDefault();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Group FindByEnterCode(string enterCode)
+        {
+            using (ISession session = GetSession())
+            {
+                return
+                    session.CreateCriteria<Group>()
+                        .Add(Restrictions.Eq("EnterCode", enterCode))
+                        .SetFetchMode("Members", FetchMode.Join)
+                        .UniqueResult<Group>();
             }
         }
     }

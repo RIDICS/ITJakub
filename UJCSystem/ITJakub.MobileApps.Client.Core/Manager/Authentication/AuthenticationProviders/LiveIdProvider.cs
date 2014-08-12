@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
@@ -6,7 +7,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
     {
 
         public string AccountName { get { return "Live Id"; } }
-        public LoginProviderType ProviderType { get { return LoginProviderType.LiveId; } }
+        public AuthProvidersContract ProviderType { get { return AuthProvidersContract.LiveId; } }
 
         //TODO register this application in Windows Store developer account and test this method
         /*

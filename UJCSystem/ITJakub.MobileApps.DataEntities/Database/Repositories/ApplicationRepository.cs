@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
@@ -11,7 +12,16 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         public ApplicationRepository(ISessionManager sessManager)
             : base(sessManager)
         {
+            
         }
 
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Application> GetAllApplication()
+        {
+            using (var session = GetSession())
+            {
+                return session.CreateCriteria<Application>().List<Application>();
+            }
+        }
     }
 }

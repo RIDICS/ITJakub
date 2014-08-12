@@ -7,6 +7,7 @@ using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.MainApp.View;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
 {
@@ -84,7 +85,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
             Register(item.LoginProviderType);
         }
 
-        private void Register(LoginProviderType loginProviderType)
+        private void Register(AuthProvidersContract loginProviderType)
         {
             RegistrationInProgress = true;
             m_dataService.CreateUser(loginProviderType, (createUserResult, exception) =>

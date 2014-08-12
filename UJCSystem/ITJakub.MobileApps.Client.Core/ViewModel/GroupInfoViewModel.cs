@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -17,5 +18,6 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public GroupType GroupType { get; set; }
 
         public ObservableCollection<GroupMemberViewModel> Members { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }

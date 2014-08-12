@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
-using ITJakub.MobileApps.Client.Core.Manager.Converter;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
-using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Applications;
 using Task = System.Threading.Tasks.Task;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Communication
 {
+    //TODO zbytecna trida - presunout do Manageru
     public class MobileAppsServiceManager
     {
         private readonly MobileAppsServiceClient m_serviceClient;
@@ -34,24 +35,18 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication
             m_clientMessageInspector.CommunicationToken = communicationToken;
         }
 
-        public async Task<LoginResult> LoginUserAsync(LoginProviderType loginProviderType, string email, string accessToken)
+        public async Task<LoginResult> LoginUserAsync(AuthProvidersContract loginProviderType, string email, string accessToken)
         {
             try
             {
-                var authenticationProvider = LoginProviderConverter.LoginToAuthenticationProvider(loginProviderType);
-                var response = await m_serviceClient.LoginUserAsync(new UserLogin
-                {
-                    AuthenticationProvider = authenticationProvider,
-                    AuthenticationToken = accessToken,
-                    Email = email
-                });
+                var response = m_serviceClient.LoginUser(loginProviderType, accessToken, email);
                 var loginResult = new LoginResult
                 {
                     CommunicationToken = response.CommunicationToken,
                     EstimatedExpirationTime = response.EstimatedExpirationTime,
                     UserId = response.UserId,
                     UserAvatarUrl = response.ProfilePictureUrl,
-                    UserRole = UserRoleConverter.ConvertToLocal(response.UserRole)
+                    UserRole = response.UserRole
                 };
                 return loginResult;
             }
@@ -73,19 +68,18 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication
             }
         }
 
-        public async Task CreateUserAsync(LoginProviderType loginProviderType, UserLoginSkeleton userLoginSkeleton)
+        public async Task CreateUserAsync(AuthProvidersContract loginProviderType, UserLoginSkeleton userLoginSkeleton)
         {
             try
             {
-                var authenticationProvider = LoginProviderConverter.LoginToAuthenticationProvider(loginProviderType);
-
-                await m_serviceClient.CreateUserAsync(userLoginSkeleton.AccessToken, authenticationProvider, new User
+                m_serviceClient.CreateUser(loginProviderType,userLoginSkeleton.AccessToken, new UserDetailContract
                 {
                     Email = userLoginSkeleton.Email,
                     FirstName = userLoginSkeleton.FirstName,
                     LastName = userLoginSkeleton.LastName
                 });
             }
+                //TODO move all exceptions to Client
             catch (FaultException)
             {
                 throw new ClientCommunicationException();
@@ -106,28 +100,32 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication
 
         public async Task<ObservableCollection<GroupInfoViewModel>> GetGroupListAsync(long userId)
         {
-            try {
-                var response = await m_serviceClient.GetMembershipsForUserAsync(userId.ToString());
+            try
+            {
+                var response = m_serviceClient.GetGroupsByUser(userId);
                 var list = new ObservableCollection<GroupInfoViewModel>();
-                foreach (var groupDetails in response)
+                
+                foreach (var groupDetails in response.MemberOfGroup)
                 {
                     list.Add(new GroupInfoViewModel
                     {
-                        GroupName = groupDetails.Group.Name,
+                        GroupName = groupDetails.Name,
                         MemberCount = groupDetails.Members.Count,
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Member
                     });
                 }
-                response = await m_serviceClient.GetGroupsByUserAsync(userId.ToString());
-                foreach (var groupDetails in response)
+
+                foreach (var groupDetails in response.OwnedGroups)
                 {
                     list.Add(new GroupInfoViewModel
                     {
-                        GroupName = groupDetails.Group.Name,
+                        GroupName = groupDetails.Name,
                         MemberCount = groupDetails.Members.Count,
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Owner,
+                        GroupCode = groupDetails.EnterCode,
+                        CreateTime = groupDetails.CreateTime,
                         //TODO Hack for debug
                         ApplicationType = ApplicationType.SampleApp
                     });
@@ -156,7 +154,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication
         {
             try
             {
-                var response = await m_serviceClient.CreateGroupAsync(userId.ToString(), groupName);
+                var response = m_serviceClient.CreateGroup(userId, groupName);
                 var result = new CreateGroupResult
                 {
                     EnterCode = response.EnterCode
@@ -185,7 +183,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication
         {
             try
             {
-                await m_serviceClient.AddUserToGroupAsync(code, userId.ToString());
+                m_serviceClient.AddUserToGroup(code, userId);
             }
             catch (FaultException)
             {
@@ -209,21 +207,22 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication
         {
             try
             {
-                var result = await m_serviceClient.GetGroupDetailsAsync(groupId.ToString());
-                var group = new GroupInfoViewModel
-                {
-                    GroupId = result.Id,
-                    GroupName = result.Group.Name,
-                    MemberCount = result.Members.Count,
-                    Members =
-                        new ObservableCollection<GroupMemberViewModel>(
-                            result.Members.Select(details => new GroupMemberViewModel
-                            {
-                                FirstName = details.User.FirstName,
-                                LastName = details.User.LastName
-                            }))
-                };
-                return group;
+                //var result = await m_serviceClient.GetGroupDetailsAsync(groupId.ToString());
+                //var group = new GroupInfoViewModel
+                //{
+                //    GroupId = result.Id,
+                //    GroupName = result.Group.Name,
+                //    MemberCount = result.Members.Count,
+                //    Members =
+                //        new ObservableCollection<GroupMemberViewModel>(
+                //            result.Members.Select(details => new GroupMemberViewModel
+                //            {
+                //                FirstName = details.User.FirstName,
+                //                LastName = details.User.LastName
+                //            }))
+                //};
+                //return group;
+                return new GroupInfoViewModel();
             }
             catch (FaultException)
             {
@@ -247,13 +246,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication
         {
             try
             {
-                var applicationId = ApplicationTypeConverter.ConvertToString(applicationType);
-                var synchronizedObject = new SynchronizedObject
+                var applicationId = applicationType.ToString();
+                
+                var synchronizedObject = new SynchronizedObjectContract
                 {
                     ObjectType = objectType,
                     Data = objectValue
                 };
-                await m_serviceClient.CreateSynchronizedObjectAsync(groupId.ToString(), applicationId, userId.ToString(), synchronizedObject);
+                m_serviceClient.CreateSynchronizedObject(1, groupId, userId, synchronizedObject);
             }
             catch (FaultException)
             {
@@ -277,23 +277,24 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication
         {
             try
             {
-                var applicationId = ApplicationTypeConverter.ConvertToString(applicationType);
-                var dateTimeString = since.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
-                var objectList = await m_serviceClient.GetSynchronizedObjectsAsync(groupId.ToString(), applicationId, objectType, dateTimeString);
-                var outputList = objectList.Select(objectDetails => new ObjectDetails
-                {
-                    Author = new AuthorInfo
-                    {
-                        Email = objectDetails.Author.User.Email,
-                        FirstName = objectDetails.Author.User.FirstName,
-                        LastName = objectDetails.Author.User.LastName,
-                        Id = objectDetails.Author.Id
-                    },
-                    CreateTime = objectDetails.CreateTime,
-                    Data = objectDetails.SynchronizedObject.Data,
-                    Id = objectDetails.Id
-                });
-                return outputList;
+                //var applicationId = ApplicationTypeConverter.ConvertToString(applicationType);
+                //var dateTimeString = since.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
+                //var objectList = await m_serviceClient.GetSynchronizedObjectsAsync(groupId.ToString(), applicationId, objectType, dateTimeString);
+                //var outputList = objectList.Select(objectDetails => new ObjectDetails
+                //{
+                //    Author = new AuthorInfo
+                //    {
+                //        Email = objectDetails.Author.User.Email,
+                //        FirstName = objectDetails.Author.User.FirstName,
+                //        LastName = objectDetails.Author.User.LastName,
+                //        Id = objectDetails.Author.Id
+                //    },
+                //    CreateTime = objectDetails.CreateTime,
+                //    Data = objectDetails.SynchronizedObject.Data,
+                //    Id = objectDetails.Id
+                //});
+                //return outputList;
+                return new ObservableCollection<ObjectDetails>();
             }
             catch (FaultException)
             {

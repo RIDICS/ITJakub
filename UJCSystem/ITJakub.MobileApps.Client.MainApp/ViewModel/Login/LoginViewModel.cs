@@ -10,6 +10,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Communication;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.View.Login;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
 {
@@ -82,7 +83,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
             Login(item.LoginProviderType);
         }
 
-        private void Login(LoginProviderType loginProviderType)
+        private void Login(AuthProvidersContract loginProviderType)
         {
             LoggingIn = true;
             m_dataService.Login(loginProviderType, (loginResult, exception) =>

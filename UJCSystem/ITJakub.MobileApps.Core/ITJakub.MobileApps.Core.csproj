@@ -128,6 +128,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Applications\ApplicationManager.cs" />
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\AuthInterceptor.cs" />
     <Compile Include="Authentication\Providers\AuthProviderDirector.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Authentication\Providers\ItJakubAuthProvider.cs" />
     <Compile Include="Authentication\Providers\LiveIdAuthProvider.cs" />
     <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
+    <Compile Include="AutoMapperProfiles\SynchronizedObjectProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="CommunicationTokenManager.cs" />
     <Compile Include="EnterCodeGenerator.cs" />

@@ -2,6 +2,7 @@
 using System.ServiceModel.Web;
 using ITJakub.MobileApps.Core;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
 using log4net;
 
@@ -67,6 +68,37 @@ namespace ITJakub.MobileApps.Service
             try
             {
                 return m_serviceManager.CreateGroup(userId, groupName);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public void AddUserToGroup(string groupAccessCode, long userId)
+        {
+            try
+            {
+                m_serviceManager.AddUserToGroup(groupAccessCode, userId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public void CreateSynchronizedObject(int applicationId, long groupId, long userId,
+            SynchronizedObjectContract synchronizedObject)
+        {
+            try
+            {
+                m_serviceManager.CreateSynchronizedObject(applicationId, groupId, userId, synchronizedObject);
             }
             catch (WebFaultException ex)
             {

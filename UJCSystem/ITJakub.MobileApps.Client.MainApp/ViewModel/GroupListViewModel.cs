@@ -12,6 +12,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -24,7 +25,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     public class GroupListViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
-        private UserRole m_userRole;
+        private UserRoleContract m_userRole;
         private readonly INavigationService m_navigationService;
         private bool m_commandBarOpen;
         private RelayCommand m_connectCommand;
@@ -50,7 +51,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService = navigationService;
             GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>();
             NoGroupExist = false;
-            m_userRole = UserRole.Student;
+            m_userRole = UserRoleContract.Student;
 
             InitCommands();
             LoadData();
@@ -150,14 +151,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get
             {
-                bool isVisible = m_userRole == UserRole.Teacher && SelectedGroup != null;
+                bool isVisible = m_userRole == UserRoleContract.Teacher && SelectedGroup != null;
                 return isVisible ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
         public Visibility TeachersButtonVisibility
         {
-            get { return m_userRole == UserRole.Teacher ? Visibility.Visible : Visibility.Collapsed; }
+            get { return m_userRole == UserRoleContract.Teacher ? Visibility.Visible : Visibility.Collapsed; }
         }
 
         public string DeleteMessage
@@ -250,7 +251,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (exception != null)
                     return;
                 m_userRole = info.UserRole;
-                m_userRole = UserRole.Teacher;  //TODO for debug
+                m_userRole = UserRoleContract.Teacher;  //TODO for debug
                 RaisePropertyChanged(() => TeachersButtonVisibility);
                 RaisePropertyChanged(() => TeachersSecondaryButtonVisibility);
             });

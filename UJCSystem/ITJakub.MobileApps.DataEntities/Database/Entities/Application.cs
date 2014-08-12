@@ -7,7 +7,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
     public class Application:IEquatable<Application>
     {
         public Application() { }
-        public virtual long Id { get; set; }
+        public virtual int Id { get; set; }
         public virtual string Name { get; set; }
 
         public virtual IList<Task> Tasks { get; set; }

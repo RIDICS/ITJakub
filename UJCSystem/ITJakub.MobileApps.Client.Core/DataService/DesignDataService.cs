@@ -10,23 +10,24 @@ using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public class DesignDataService : IDataService
     {
 
-        public void Login(LoginProviderType loginProviderType, Action<bool, Exception> callback)
+        public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {
             throw new NotImplementedException();
         }
 
-        public void CreateUser(LoginProviderType loginProviderType, Action<bool, Exception> callback)
+        public void CreateUser(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {
             throw new NotImplementedException();
         }
 
-        public void CreateUser(LoginProviderType loginProviderType, Action<UserLoginSkeleton, Exception> callback)
+        public void CreateUser(AuthProvidersContract loginProviderType, Action<UserLoginSkeleton, Exception> callback)
         {
             throw new NotImplementedException();
         }
@@ -115,17 +116,17 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             {
                 new LoginProviderViewModel
                 {
-                    LoginProviderType = LoginProviderType.LiveId,
+                    LoginProviderType = AuthProvidersContract.LiveId,
                     Name = "Live ID"
                 },
                 new LoginProviderViewModel
                 {
-                    LoginProviderType = LoginProviderType.Facebook,
+                    LoginProviderType = AuthProvidersContract.Facebook,
                     Name = "Facebook"
                 },
                 new LoginProviderViewModel
                 {
-                    LoginProviderType = LoginProviderType.Google,
+                    LoginProviderType = AuthProvidersContract.Google,
                     Name = "Google"
                 }
             }, null);
