@@ -7,7 +7,7 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
 {
     public class AuthProviderDirector
     {
-        private readonly Dictionary<AuthenticationProviders,IAuthProvider> m_authProviders=new Dictionary<AuthenticationProviders, IAuthProvider>();
+        private readonly Dictionary<AuthProvidersContract,IAuthProvider> m_authProviders=new Dictionary<AuthProvidersContract, IAuthProvider>();
 
         public AuthProviderDirector(IKernel container)
         {
@@ -19,16 +19,16 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
         {
             foreach (var provider in providers)
             {
-                m_authProviders.Add(provider.ProviderType,provider);
+                m_authProviders.Add(provider.ProviderContractType,provider);
             }
         }
 
-        public IAuthProvider GetProvider(AuthenticationProviders providerType)
+        public IAuthProvider GetProvider(AuthProvidersContract providerContractType)
         {
-            if(!m_authProviders.ContainsKey(providerType)) 
-                throw new ArgumentException(string.Format("This type: '{0}' of provider does not exist!",providerType));
+            if(!m_authProviders.ContainsKey(providerContractType)) 
+                throw new ArgumentException(string.Format("This type: '{0}' of providerContract does not exist!",providerContractType));
 
-            return m_authProviders[providerType];
+            return m_authProviders[providerContractType];
         }
     }
 }

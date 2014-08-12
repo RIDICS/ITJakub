@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ITJakub.MobileApps.DataContracts;
-using DE = ITJakub.MobileApps.DataEntities.Database.Entities;
+using ITJakub.MobileApps.DataEntities.Database.Entities;
 
 namespace ITJakub.MobileApps.Core.AutoMapperProfiles
 {
@@ -8,7 +8,12 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<User, DE.User>().ReverseMap();
+            CreateMap<UserDetailContract, User>()
+                .Include<PasswordUserDetailContract, User>()
+                .Include<GroupMemberContract, User>();
+
+            CreateMap<PasswordUserDetailContract, User>();
+            CreateMap<GroupMemberContract, User>().ReverseMap();
         }
     }
 }

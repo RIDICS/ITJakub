@@ -6,12 +6,8 @@ namespace ITJakub.MobileApps.DataContracts
     public class UserLogin
     {
         [DataMember]
-        public  AuthenticationProviders AuthenticationProvider { get; set; }
+        public  AuthProvidersContract AuthProviderContract { get; set; }
 
-
-        /// <summary>
-        /// For third party accessToken, for own service PasswordHash
-        /// </summary>
         [DataMember]
         public string AuthenticationToken { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using ITJakub.MobileApps.DataContracts;
-using DE = ITJakub.MobileApps.DataEntities.Database.Entities;
+using ITJakub.MobileApps.DataContracts.Groups;
+using ITJakub.MobileApps.DataEntities.Database.Entities;
 
 namespace ITJakub.MobileApps.Core.AutoMapperProfiles
 {
@@ -8,7 +8,10 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<Group, DE.Group>().ReverseMap();
+            CreateMap<Group, GroupDetailContract>()
+                .Include<Group, OwnedDetailGroupContract>();
+
+            CreateMap<Group, OwnedDetailGroupContract>();
         }
     }
 }

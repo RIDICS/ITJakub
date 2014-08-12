@@ -6,9 +6,9 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
 {
     public class LiveIdAuthProvider : IAuthProvider
     {
-        public AuthenticationProviders ProviderType
+        public AuthProvidersContract ProviderContractType
         {
-            get { return AuthenticationProviders.LiveId; }
+            get { return AuthProvidersContract.LiveId; }
         }
 
         public bool IsExternalProvider
@@ -16,14 +16,11 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
             get { return true; }
         }
 
-        private AuthenticateResultInfo Authenticate(string accessToken, string email)
+        public AuthenticateResultInfo Authenticate(string accessToken, string email)
         {
             throw new NotImplementedException();
         }
 
-        public AuthenticateResultInfo Authenticate(UserLogin userLogin, User dbUser)
-        {
-            return Authenticate(userLogin.AuthenticationToken, dbUser.Email);
-        }
+        
     }
 }

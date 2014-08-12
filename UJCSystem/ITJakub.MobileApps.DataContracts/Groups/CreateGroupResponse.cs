@@ -1,7 +1,6 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace ITJakub.MobileApps.DataContracts
+namespace ITJakub.MobileApps.DataContracts.Groups
 {
     [DataContract]
     public class CreateGroupResponse

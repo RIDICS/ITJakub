@@ -3,7 +3,7 @@
 namespace ITJakub.MobileApps.DataContracts
 {
     [DataContract]
-    public enum UserRole
+    public enum UserRoleContract
     {
         [EnumMember]
         Student,

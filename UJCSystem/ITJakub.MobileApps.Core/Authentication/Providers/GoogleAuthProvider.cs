@@ -20,7 +20,7 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
             get { return true; }
         }
 
-        private AuthenticateResultInfo Authenticate(string accessToken, string email)
+        public AuthenticateResultInfo Authenticate(string accessToken, string email)
         {
             IDictionary<string, string> userData = base.GetUserData(accessToken);
             bool authSucceeded = userData[EmailKey].Equals(email);
@@ -33,14 +33,10 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
             return result;
         }
 
-        public AuthenticateResultInfo Authenticate(UserLogin userLogin, User dbUser)
+      
+        public AuthProvidersContract ProviderContractType
         {
-            return Authenticate(userLogin.AuthenticationToken, dbUser.Email);
-        }
-
-        public AuthenticationProviders ProviderType
-        {
-            get { return AuthenticationProviders.Google; }
+            get { return AuthProvidersContract.Google; }
         }
 
         private string GetImageLocation(IDictionary<string, string> userData)

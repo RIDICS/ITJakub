@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using DotNetOpenAuth.FacebookOAuth2;
 using ITJakub.MobileApps.DataContracts;
-using User = ITJakub.MobileApps.DataEntities.Database.Entities.User;
 
 namespace ITJakub.MobileApps.Core.Authentication.Providers
 {
@@ -20,7 +19,7 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
             get { return true; }
         }
 
-        private AuthenticateResultInfo Authenticate(string accessToken, string email)
+        public AuthenticateResultInfo Authenticate(string accessToken, string email)
         {
             IDictionary<string, string> data = base.GetUserData(accessToken);
             bool authSucceeded = data[EmailKey].Equals(email);
@@ -33,14 +32,10 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
             return result;
         }
 
-        public AuthenticateResultInfo Authenticate(UserLogin userLogin, User dbUser)
-        {
-            return Authenticate(userLogin.AuthenticationToken, dbUser.Email);
-        }
 
-        public AuthenticationProviders ProviderType
+        public AuthProvidersContract ProviderContractType
         {
-            get { return AuthenticationProviders.Facebook; }
+            get { return AuthProvidersContract.Facebook; }
         }
 
         private string GetImageLocation(IDictionary<string, string> userId)
