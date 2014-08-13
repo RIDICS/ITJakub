@@ -29,5 +29,15 @@ namespace ITJakub.MobileApps.Client.Hangman
                 RaisePropertyChanged();
             }
         }
+
+        public override void InitializeCommunication()
+        {
+            //TODO init communication and start timers
+        }
+
+        public override void StopTimers()
+        {
+            //TODO stop timers
+        }
     }
 }

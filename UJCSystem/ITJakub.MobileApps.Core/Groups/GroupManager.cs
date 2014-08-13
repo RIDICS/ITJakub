@@ -72,8 +72,8 @@ namespace ITJakub.MobileApps.Core.Groups
 
         public void AddUserToGroup(string groupAccessCode, long userId)
         {
-           Group group = m_usersRepository.FindByEnterCode(groupAccessCode);
-          var user = m_usersRepository.Load<User>(userId);
+            Group group = m_usersRepository.FindByEnterCode(groupAccessCode);
+            var user = m_usersRepository.Load<User>(userId);
             group.Members.Add(user);
             m_usersRepository.Update(group);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
@@ -273,28 +274,29 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication
             }
         }
 
-        public async Task<IEnumerable<ObjectDetails>> GetSynchronizedObjectsAsync(ApplicationType applicationType, long groupId, string objectType, DateTime since)
+        public async Task<IEnumerable<ObjectDetails>> GetSynchronizedObjectsAsync(ApplicationType applicationType, long groupId, long userId, string objectType, DateTime since)
         {
             try
             {
+                var objectList = m_serviceClient.GetSynchronizedObjects(groupId, 1, objectType, since);
                 //var applicationId = ApplicationTypeConverter.ConvertToString(applicationType);
                 //var dateTimeString = since.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
                 //var objectList = await m_serviceClient.GetSynchronizedObjectsAsync(groupId.ToString(), applicationId, objectType, dateTimeString);
-                //var outputList = objectList.Select(objectDetails => new ObjectDetails
-                //{
-                //    Author = new AuthorInfo
-                //    {
-                //        Email = objectDetails.Author.User.Email,
-                //        FirstName = objectDetails.Author.User.FirstName,
-                //        LastName = objectDetails.Author.User.LastName,
-                //        Id = objectDetails.Author.Id
-                //    },
-                //    CreateTime = objectDetails.CreateTime,
-                //    Data = objectDetails.SynchronizedObject.Data,
-                //    Id = objectDetails.Id
-                //});
-                //return outputList;
-                return new ObservableCollection<ObjectDetails>();
+                var outputList = objectList.Select(objectDetails => new ObjectDetails
+                {
+                    Author = new AuthorInfo
+                    {
+
+                        Email = objectDetails.Author.Email,
+                        FirstName = objectDetails.Author.FirstName,
+                        LastName = objectDetails.Author.LastName,
+                        Id = objectDetails.Author.Id,
+                        IsMe = (userId == objectDetails.Author.Id)
+                    },
+                    CreateTime = objectDetails.CreateTime,
+                    Data = objectDetails.Data
+                });
+                return outputList;
             }
             catch (FaultException)
             {

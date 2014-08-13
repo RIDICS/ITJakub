@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Applications\SynchronizedObjectContract.cs" />
+    <Compile Include="Applications\SynchronizedObjectResponseContract.cs" />
     <Compile Include="AuthProvidersContract.cs" />
     <Compile Include="AuthorizedMethodAttribute.cs" />
     <Compile Include="Groups\CreateGroupResponse.cs" />

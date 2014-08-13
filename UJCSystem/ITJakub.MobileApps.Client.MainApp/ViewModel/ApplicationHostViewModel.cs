@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
@@ -11,6 +12,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     public class ApplicationHostViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
+        private readonly INavigationService m_navigationService;
         private string m_applicationName;
         private ApplicationBaseViewModel m_applicationViewModel;
         private ApplicationBaseViewModel m_chatViewModel;
@@ -19,9 +21,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_isChatSupported;
         private bool m_isCommandBarOpen;
 
-        public ApplicationHostViewModel(IDataService dataService)
+        public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
+            m_navigationService = navigationService;
+            GoBackCommand = new RelayCommand(GoBack);
             Messenger.Default.Register<OpenGroupMessage>(this, message =>
             {
                 var applicationType = message.Group.ApplicationType;
@@ -33,6 +37,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
         }
 
+        private void GoBack()
+        {
+            ChatApplicationViewModel.StopTimers();
+            ApplicationViewModel.StopTimers();
+
+            if (m_navigationService.CanGoBack)
+                m_navigationService.GoBack();
+        }
+
         private void LoadApplications(ApplicationType type)
         {
             m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, (applications, exception) =>
@@ -42,11 +55,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
                 var application = applications[type];
                 ApplicationViewModel = application.ApplicationViewModel;
+                ApplicationViewModel.InitializeCommunication();
                 ApplicationName = application.Name;
                 IsChatSupported = application.IsChatSupported;
 
                 var chat = applications[ApplicationType.Chat];
                 ChatApplicationViewModel = chat.ApplicationViewModel;
+                ChatApplicationViewModel.InitializeCommunication();
             });
         }
 
@@ -63,7 +78,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public ApplicationBaseViewModel ApplicationViewModel
         {
             get { return m_applicationViewModel; }
-            set { 
+            set 
+            { 
                 m_applicationViewModel = value;
                 RaisePropertyChanged();
             }
@@ -106,5 +122,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        public RelayCommand GoBackCommand { get; private set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Chat.DataService;
 using ITJakub.MobileApps.Client.Shared;
@@ -12,6 +13,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
         private readonly RelayCommand m_sendCommand;
         private string m_message;
         private ObservableCollection<MessageViewModel> m_messageHistory;
+        private DispatcherTimer m_timer;
 
         /// <summary>
         /// Initializes a new instance of the ChatViewModel class.
@@ -20,21 +22,27 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
         {
             m_dataService = dataService;
             m_sendCommand = new RelayCommand(SendMessage);
+
             MessageHistory = new ObservableCollection<MessageViewModel>();
-            Initialize();
         }
 
-        private void Initialize()
+        public override void InitializeCommunication()
         {
             MessageHistory.Clear();
+            m_timer = new DispatcherTimer();
+            m_timer.Interval = new TimeSpan(0, 0, 0, 1);
+            m_timer.Tick += LoadNewMessages;
+
             m_dataService.GetAllChatMessages((messages, exception) =>
             {
                 if (exception != null)
                     return;
+
                 foreach(var message in messages)
                 {
                     MessageHistory.Add(message);
                 }
+                m_timer.Start();
             });
         }
 
@@ -73,11 +81,31 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
                 if (exception != null)
                     return;
 
-                //TODO load only new messages
-                Initialize();
+                //TODO if refresh interval is long then LoadNewMessages immediately
             });
             
             Message = string.Empty;
+        }
+
+        private void LoadNewMessages(object sender, object o)
+        {
+            var since = MessageHistory[MessageHistory.Count - 1].SendTime;
+            m_dataService.GetChatMessages(since, (messages, exception) =>
+            {
+                if (exception != null)
+                    return;
+
+                foreach (var message in messages)
+                {
+                    MessageHistory.Add(message);
+                }
+            });
+        }
+
+        public override void StopTimers()
+        {
+            m_timer.Stop();
+            m_timer.Tick -= LoadNewMessages;
         }
     }
 }

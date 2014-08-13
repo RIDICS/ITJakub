@@ -48,7 +48,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Command="{Binding NavigationHelper.GoBackCommand, ElementName=PageRoot}"
+            <Button Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"

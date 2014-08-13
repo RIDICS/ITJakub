@@ -36,7 +36,7 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
                 var messages = objects.Select(objectDetails => new MessageViewModel
                 {
                     Author = objectDetails.Author,
-                    IsMyMessage = false, //TODO load correct
+                    IsMyMessage = objectDetails.Author.IsMe,
                     SendTime = objectDetails.CreateTime,
                     Text = JsonConvert.DeserializeObject<ChatMessage>(objectDetails.Data).Text
                 });

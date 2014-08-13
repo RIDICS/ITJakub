@@ -4,5 +4,7 @@ namespace ITJakub.MobileApps.Client.Shared
 {
     public abstract class ApplicationBaseViewModel : ViewModelBase
     {
+        public abstract void InitializeCommunication();
+        public abstract void StopTimers();
     }
 }

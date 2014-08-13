@@ -15,6 +15,9 @@ namespace ITJakub.MobileApps.DataContracts
 
         [DataMember]
         public string LastName { get; set; }
+
+        [DataMember]
+        public long Id { get; set; }
     }
 
     [DataContract]
@@ -31,9 +34,6 @@ namespace ITJakub.MobileApps.DataContracts
     [DataContract]
     public class GroupMemberContract : UserDetailContract
     {
-        [DataMember]
-        public long Id { get; set; }
-
         [DataMember]
         public string AvatarUrl { get; set; }
     }

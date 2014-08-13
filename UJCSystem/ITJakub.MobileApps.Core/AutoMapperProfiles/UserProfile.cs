@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
         {
             CreateMap<UserDetailContract, User>()
                 .Include<PasswordUserDetailContract, User>()
-                .Include<GroupMemberContract, User>();
+                .Include<GroupMemberContract, User>().ReverseMap();
 
             CreateMap<PasswordUserDetailContract, User>();
             CreateMap<GroupMemberContract, User>().ReverseMap();

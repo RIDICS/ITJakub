@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using AutoMapper;
 using ITJakub.MobileApps.DataContracts.Applications;
@@ -28,7 +29,7 @@ namespace ITJakub.MobileApps.Core.Applications
         {
             var now = DateTime.UtcNow;
 
-            var application = m_applicationRepository.Load(applicationId);                
+            var application = m_applicationRepository.Load<Application>(applicationId);                
             var user = m_usersRepository.Load<User>(userId);
             var group = m_usersRepository.Load<Group>(groupId);
             SynchronizedObject deSyncObject = Mapper.Map<SynchronizedObject>(synchronizedObject);
@@ -40,6 +41,20 @@ namespace ITJakub.MobileApps.Core.Applications
             object syncObjId = m_applicationRepository.Create(deSyncObject);
             m_azureTableSynchronizedObjectDao.Create(new SynchronizedObjectEntity(syncObjId.ToString(), Convert.ToString(groupId), synchronizedObject.Data));
          
+        }
+
+        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
+        {
+            var syncObjs = m_applicationRepository.GetSynchronizedObjects(groupId, applicationId, objectType, since);
+            
+            foreach (SynchronizedObject syncObj in syncObjs) //TODO try to find some better way how to fill Data property
+            {
+                SynchronizedObjectEntity syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.Id.ToString(),
+                    syncObj.Group.Id.ToString());
+                if (syncObjEntity != null) 
+                    syncObj.Data = syncObjEntity.Data;
+            }
+            return Mapper.Map<IList<SynchronizedObjectResponseContract>>(syncObjs);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Xml;
@@ -82,6 +83,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
         public void CreateSynchronizedObject(int applicationId, long groupId, long userId, SynchronizedObjectContract synchronizedObject)
         {
             Channel.CreateSynchronizedObject(applicationId, groupId, userId, synchronizedObject);
+        }
+
+        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
+        {
+            return Channel.GetSynchronizedObjects(groupId, applicationId, objectType, since);
         }
     }
 }

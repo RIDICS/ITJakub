@@ -9,6 +9,8 @@
 //using ITJakub.MobileApps.DataEntities.Database.Repositories;
 //using DE = ITJakub.MobileApps.DataEntities.Database.Entities;
 
+using System;
+using System.Collections.Generic;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.Core.Applications;
 using ITJakub.MobileApps.Core.Groups;
@@ -63,6 +65,11 @@ namespace ITJakub.MobileApps.Core
             SynchronizedObjectContract synchronizedObject)
         {
             m_applicationManager.CreateSynchronizedObject(applicationId, groupId, userId, synchronizedObject);
+        }
+
+        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
+        {
+            return m_applicationManager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
         }
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -47,7 +46,7 @@ namespace ITJakub.MobileApps.Client.Core
             if (!userId.HasValue)
                 throw new ArgumentException("No logged user");
 
-            return m_serviceManager.GetSynchronizedObjectsAsync(applicationType, GroupId, objectType, since);
+            return m_serviceManager.GetSynchronizedObjectsAsync(applicationType, GroupId, userId.Value, objectType, since);
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.ServiceModel.Web;
-using ITJakub.MobileApps.Core;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
@@ -99,6 +100,21 @@ namespace ITJakub.MobileApps.Service
             try
             {
                 m_serviceManager.CreateSynchronizedObject(applicationId, groupId, userId, synchronizedObject);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
+        {
+            try
+            {
+                return m_serviceManager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
             }
             catch (WebFaultException ex)
             {

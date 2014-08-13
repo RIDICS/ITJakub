@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.Client.SampleApp
         {
             m_dataService = sampleDataService;
             
-            //TODO tady nacist data pro aplikaci z dataservice apod.
+            //tady nacist data pro aplikaci z dataservice apod.
             TestString = "Testovaci string z viewModelu aplikace";
             LoadData();
         }
@@ -28,6 +28,16 @@ namespace ITJakub.MobileApps.Client.SampleApp
         {
             get { return m_testString; }
             set { m_testString = value; RaisePropertyChanged();}
+        }
+
+        public override void InitializeCommunication()
+        {
+            //Load data from server and start DispatcherTimer
+        }
+
+        public override void StopTimers()
+        {
+            //Stop all running DispatcherTimer
         }
     }
 }

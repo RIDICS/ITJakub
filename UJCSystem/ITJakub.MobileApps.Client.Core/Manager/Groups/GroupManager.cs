@@ -12,6 +12,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         private readonly MobileAppsServiceManager m_serviceManager;
         private readonly AuthenticationManager m_authManager;
 
+        public long? CurrentGroupId { get; set; }
+
         public GroupManager(MobileAppsServiceManager serviceManager, AuthenticationManager authManager)
         {
             m_serviceManager = serviceManager;
