@@ -7,6 +7,7 @@ using ITJakub.MobileApps.DataEntities.Database.Entities;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Exceptions;
+using NHibernate.SqlCommand;
 
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
@@ -130,8 +131,8 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                     .SetFetchMode("MemberOfGroups", FetchMode.Eager)
                     .Future<User>();
 
-                 var memberOfGroup = session.CreateCriteria<Group>()
-                    .CreateAlias("Members", "m")
+                var memberOfGroup = session.CreateCriteria<Group>()
+                    .CreateAlias("Members", "m", JoinType.LeftOuterJoin)
                     .Add(Restrictions.Eq("m.Id", userId))
                     .SetFetchMode("Members", FetchMode.Join)
                     .Future<Group>();
