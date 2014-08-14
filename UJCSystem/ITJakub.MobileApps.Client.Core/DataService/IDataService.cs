@@ -9,6 +9,7 @@ using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 
 namespace ITJakub.MobileApps.Client.Core.DataService
@@ -29,7 +30,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         void GetGroupMembers(long groupId, Action<ObservableCollection<GroupMemberViewModel>, Exception> callback);
         void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback);
         void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback);
-        void CreateNewGroup(string groupName, Action<CreateGroupResult, Exception> callback);
+        void CreateNewGroup(string groupName, Action<CreateGroupResponse, Exception> callback);
         void ConnectToGroup(string code, Action<Exception> callback);
     }
 }

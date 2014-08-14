@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using AutoMapper;
 using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
@@ -55,6 +54,12 @@ namespace ITJakub.MobileApps.Core.Applications
                     syncObj.Data = syncObjEntity.Data;
             }
             return Mapper.Map<IList<SynchronizedObjectResponseContract>>(syncObjs);
+        }
+
+        public IList<ApplicationContract> GetAllApplication()
+        {
+            var apps = m_applicationRepository.GetAllApplication();
+            return Mapper.Map<IList<ApplicationContract>>(apps);
         }
     }
 }

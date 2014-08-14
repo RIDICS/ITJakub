@@ -3,6 +3,7 @@ using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders;
 using ITJakub.MobileApps.Client.Core.Manager.Communication;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using Microsoft.Practices.Unity;
 
@@ -42,9 +43,9 @@ namespace ITJakub.MobileApps.Client.Core
 
 
             RegisterLoginProviders(container);
-            container.RegisterType<ApplicationManager>();
+            container.RegisterType<ApplicationManager>(WithLifetime.ContainerControlled(typeof(ApplicationManager)));
             container.RegisterType<AuthenticationManager>(WithLifetime.ContainerControlled(typeof(AuthenticationManager)));
-            container.RegisterType<MobileAppsServiceManager>(WithLifetime.ContainerControlled(typeof(MobileAppsServiceManager)));
+            container.RegisterType<MobileAppsServiceClient>(WithLifetime.ContainerControlled(typeof(MobileAppsServiceClient)));
             container.RegisterType<UserAvatarCache>(WithLifetime.ContainerControlled(typeof(UserAvatarCache)));
             container.RegisterType<GroupManager>(WithLifetime.ContainerControlled(typeof(GroupManager)));
 

@@ -34,5 +34,8 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
         IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since);
+
+        [OperationContract]
+        IList<ApplicationContract> GetAllApplication();
     }
 }

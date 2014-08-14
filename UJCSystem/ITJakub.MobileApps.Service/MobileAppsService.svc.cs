@@ -124,5 +124,20 @@ namespace ITJakub.MobileApps.Service
                 throw;
             }
         }
+
+        public IList<ApplicationContract> GetAllApplication()
+        {
+            try
+            {
+                return m_serviceManager.GetAllApplication();
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
     }
 }

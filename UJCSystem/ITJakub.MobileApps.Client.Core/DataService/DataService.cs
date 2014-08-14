@@ -9,13 +9,13 @@ using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.Core.DataService
 {
     public class DataService : IDataService
     {
         private readonly ApplicationManager m_applicationManager;
-        //private SynchronizeManager m_synchronizeManager;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly GroupManager m_groupManager;
 
@@ -70,7 +70,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             m_authenticationManager.GetAllLoginProviderViewModels(callback);
         }
 
-        public void CreateNewGroup(string groupName, Action<CreateGroupResult, Exception> callback)
+        public void CreateNewGroup(string groupName, Action<CreateGroupResponse, Exception> callback)
         {
             m_groupManager.CreateNewGroup(groupName, callback);
         }

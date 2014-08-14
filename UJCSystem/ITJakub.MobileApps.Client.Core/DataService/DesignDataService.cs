@@ -11,6 +11,7 @@ using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.Core.DataService
 {
@@ -132,7 +133,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             }, null);
         }
 
-        public void CreateNewGroup(string groupName, Action<CreateGroupResult, Exception> callback)
+        public void CreateNewGroup(string groupName, Action<CreateGroupResponse, Exception> callback)
         {
             throw new NotImplementedException();
         }

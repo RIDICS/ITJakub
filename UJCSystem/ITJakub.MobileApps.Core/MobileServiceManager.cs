@@ -71,6 +71,11 @@ namespace ITJakub.MobileApps.Core
         {
             return m_applicationManager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
         }
+
+        public IList<ApplicationContract> GetAllApplication()
+        {
+            return m_applicationManager.GetAllApplication();
+        }
     }
 }
 //    {

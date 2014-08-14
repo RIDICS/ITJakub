@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders;
 using ITJakub.MobileApps.Client.Core.Manager.Communication;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
@@ -16,14 +17,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
     {
         private readonly Dictionary<AuthProvidersContract, ILoginProvider> m_loginProviders = new Dictionary<AuthProvidersContract, ILoginProvider>();
 
-        private readonly MobileAppsServiceManager m_serviceManager;
         private readonly UserAvatarCache m_userAvatarCache;
+        private readonly MobileAppsServiceClient m_serviceClient;
 
         private UserLoginSkeleton UserLoginInfo { get; set; }
 
         public AuthenticationManager(IUnityContainer container)
         {
-            m_serviceManager = container.Resolve<MobileAppsServiceManager>();
+            m_serviceClient = container.Resolve<MobileAppsServiceClient>();
             m_userAvatarCache = container.Resolve<UserAvatarCache>();
             LoadLoginProviders(Container.Current.ResolveAll<ILoginProvider>());
         }
@@ -45,14 +46,15 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
         private async Task LoginItJakubAsync(AuthProvidersContract loginProviderType)
         {
-            LoginResult result = await m_serviceManager.LoginUserAsync(loginProviderType, UserLoginInfo.Email, UserLoginInfo.AccessToken);
-            UserLoginInfo.CommunicationToken = result.CommunicationToken;
-            UserLoginInfo.EstimatedExpirationTime = result.EstimatedExpirationTime;
-            UserLoginInfo.UserId = result.UserId;
-            UserLoginInfo.UserRole = result.UserRole;
+            var response = await m_serviceClient.LoginUserAsync(loginProviderType, UserLoginInfo.AccessToken, UserLoginInfo.Email);
+            
+            UserLoginInfo.CommunicationToken = response.CommunicationToken;
+            UserLoginInfo.EstimatedExpirationTime = response.EstimatedExpirationTime;
+            UserLoginInfo.UserId = response.UserId;
+            UserLoginInfo.UserRole = response.UserRole;
 
-            m_userAvatarCache.AddAvatarUrl(result.UserId, result.UserAvatarUrl);
-            m_serviceManager.UpdateCommunicationToken(result.CommunicationToken);
+            m_userAvatarCache.AddAvatarUrl(response.UserId, response.ProfilePictureUrl);
+            m_serviceClient.UpdateCommunicationToken(response.CommunicationToken);
         }
 
         private async Task<UserLoginSkeleton> LoginAsync(AuthProvidersContract loginProviderType)
@@ -65,8 +67,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
             await LoginItJakubAsync(loginProviderType);
 
-            m_serviceManager.UpdateCommunicationToken(UserLoginInfo.CommunicationToken);
-
             return UserLoginInfo;
         }
 
@@ -78,7 +78,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             if (!loginSkeleton.Success)
                 return UserLoginInfo;
 
-            await m_serviceManager.CreateUserAsync(loginProviderType, loginSkeleton); //TODO ZAROVEN create user a zaroven login ? tak to fungovat nebude....
+            await m_serviceClient.CreateUserAsync(loginProviderType, loginSkeleton.AccessToken, new UserDetailContract
+            {
+                Email = loginSkeleton.Email,
+                FirstName = loginSkeleton.FirstName,
+                LastName = loginSkeleton.LastName
+            });
+
             await LoginItJakubAsync(loginProviderType);
 
             return UserLoginInfo;
@@ -87,7 +93,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         public void LogOut()
         {
             UserLoginInfo = null;
-            m_serviceManager.UpdateCommunicationToken(string.Empty);
+            m_serviceClient.UpdateCommunicationToken(string.Empty);
         }
 
         public async void LoginByProvider(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)

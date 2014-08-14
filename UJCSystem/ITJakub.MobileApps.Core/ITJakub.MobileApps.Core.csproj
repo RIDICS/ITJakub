@@ -138,6 +138,7 @@
     <Compile Include="Authentication\Providers\GoogleAuthProvider.cs" />
     <Compile Include="Authentication\Providers\ItJakubAuthProvider.cs" />
     <Compile Include="Authentication\Providers\LiveIdAuthProvider.cs" />
+    <Compile Include="AutoMapperProfiles\ApplicationProfile.cs" />
     <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
     <Compile Include="AutoMapperProfiles\SynchronizedObjectProfile.cs" />
     <Compile Include="AutoMapperProfiles\SynchronizedObjectResponseProfile.cs" />

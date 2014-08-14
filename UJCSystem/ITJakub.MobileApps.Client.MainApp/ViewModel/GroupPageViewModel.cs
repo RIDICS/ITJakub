@@ -30,21 +30,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService = navigationService;
             Messenger.Default.Register<OpenGroupMessage>(this, message =>
             {
-                LoadData(message.Group.GroupId);
+                LoadData(message.Group);
                 Messenger.Default.Unregister<OpenGroupMessage>(this);
             });
         }
 
-        private void LoadData(long groupId)
+        private void LoadData(GroupInfoViewModel group)
         {
-            m_dataService.GetGroupDetails(groupId, (group, exception) =>
-            {
-                if (exception != null)
-                    return;
+            GroupName = group.GroupName;
+            GroupCode = group.GroupCode;
 
-                GroupName = group.GroupName;
-                MemberList = group.Members;
-            });
         }
 
         public string GroupName
