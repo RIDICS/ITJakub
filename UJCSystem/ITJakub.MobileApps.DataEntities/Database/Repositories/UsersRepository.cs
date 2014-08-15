@@ -154,5 +154,17 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                         .UniqueResult<Group>();
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Group GetGroupDetails(long groupId)
+        {
+            using (var session = GetSession())
+            {
+                return session.CreateCriteria<Group>()
+                    .Add(Restrictions.Eq(Projections.Id(), groupId))
+                    .SetFetchMode("Members", FetchMode.Join)
+                    .UniqueResult<Group>();
+            }
+        }
     }
 }

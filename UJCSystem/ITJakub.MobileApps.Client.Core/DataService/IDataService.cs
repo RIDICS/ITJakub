@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ITJakub.MobileApps.Client.Core.Manager;
-using ITJakub.MobileApps.Client.Core.Manager.Authentication;
-using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
@@ -27,10 +24,11 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 
         void GetApplicationByTypes(IEnumerable<ApplicationType> types, Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback);
         void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback);
-        void GetGroupMembers(long groupId, Action<ObservableCollection<GroupMemberViewModel>, Exception> callback);
-        void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback);
+        void OpenGroupAndGetDetails(long groupId, Action<GroupInfoViewModel, Exception> callback);
         void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback);
         void CreateNewGroup(string groupName, Action<CreateGroupResponse, Exception> callback);
         void ConnectToGroup(string code, Action<Exception> callback);
+        void LoadGroupMemberAvatars(IList<GroupMemberViewModel> groupMember);
+        void UpdateGroupMembers(GroupInfoViewModel group);
     }
 }

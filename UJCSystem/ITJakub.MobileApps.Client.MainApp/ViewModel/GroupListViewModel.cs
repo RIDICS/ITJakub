@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -7,7 +8,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.DataService;
-using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
@@ -41,6 +41,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private RelayCommand m_refreshListCommand;
         private GroupInfoViewModel m_selectedGroup;
         private bool m_loading;
+        private ObservableCollection<GroupInfoViewModel> m_groups;
 
         /// <summary>
         ///     Initializes a new instance of the GroupListViewModel class.
@@ -237,13 +238,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 Loading = false;
                 if (exception != null)
                     return;
+                m_groups = groupList;
                 var groupedList = groupList.GroupBy(group => group.GroupType).OrderBy(group => group.Key);
                 GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
                 NoGroupExist = groupList.Count == 0;
-                
+
                 foreach (var group in groupList)
                 {
-                    LoadGroupMembers(group);
+                    LoadGroupMemberAvatars(group.Members);
                 }
             });
             m_dataService.GetLoggedUserInfo((info, exception) =>
@@ -257,15 +259,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
         }
 
-        private void LoadGroupMembers(GroupInfoViewModel group)
+        private void LoadGroupMemberAvatars(IList<GroupMemberViewModel> members)
         {
-            m_dataService.GetGroupMembers(group.GroupId, (members, exception) =>
-            {
-                if (exception != null)
-                    return;
+            m_dataService.LoadGroupMemberAvatars(members);
+        }
 
-                group.Members = members;
-            });
+        private void UpdateGroupMembers()
+        {
+            foreach (var group in m_groups)
+            {
+                m_dataService.UpdateGroupMembers(group);
+            }
         }
 
         private void GroupClick(ItemClickEventArgs args)

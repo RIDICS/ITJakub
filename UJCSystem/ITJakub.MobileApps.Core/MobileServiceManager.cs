@@ -76,6 +76,21 @@ namespace ITJakub.MobileApps.Core
         {
             return m_applicationManager.GetAllApplication();
         }
+
+        public GroupDetailContract GetGroupDetails(long groupId)
+        {
+            return m_groupManager.GetGroupDetails(groupId);
+        }
+
+        public IList<GroupMemberContract> GetGroupMembers(long groupId)
+        {
+            return m_groupManager.GetGroupMembers(groupId);
+        }
+
+        public IList<long> GetGroupMemberIds(long groupId)
+        {
+            return m_groupManager.GetGroupMemberIds(groupId);
+        }
     }
 }
 //    {

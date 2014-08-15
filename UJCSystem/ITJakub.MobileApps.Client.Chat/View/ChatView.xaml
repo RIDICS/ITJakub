@@ -57,7 +57,7 @@
         </ListView>
         
         <Grid Row="1"
-              Margin="5 0 5 5">
+              Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />

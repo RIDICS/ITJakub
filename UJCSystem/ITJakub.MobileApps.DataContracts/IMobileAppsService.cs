@@ -37,5 +37,17 @@ namespace ITJakub.MobileApps.DataContracts
 
         [OperationContract]
         IList<ApplicationContract> GetAllApplication();
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Student)]
+        GroupDetailContract GetGroupDetails(long groupId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Student)]
+        IList<GroupMemberContract> GetGroupMembers(long groupId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Student)]
+        IList<long> GetGroupMemberIds(long groupId);
     }
 }

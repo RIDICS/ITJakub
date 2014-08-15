@@ -19,8 +19,18 @@ namespace ITJakub.MobileApps.Client.Chat.View
 
         private void Init()
         {
-            if (MessageHistoryListView.Items != null) 
-                MessageHistoryListView.Items.VectorChanged += ScrollToBottom;
+            var items = MessageHistoryListView.Items;
+            if (items == null) 
+                return;
+
+            items.VectorChanged += ScrollToBottom;
+            ScrollToBottom();
+        }
+
+        private async void ScrollToBottom()
+        {
+            await Task.Delay(100);
+            ScrollToBottom(MessageHistoryListView.Items, null);
         }
 
         private async void ScrollToBottom(IObservableVector<object> sender, IVectorChangedEventArgs @event)

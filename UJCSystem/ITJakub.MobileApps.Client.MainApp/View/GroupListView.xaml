@@ -194,6 +194,7 @@
                                       IsItemClickEnabled="False"
                                       Margin="0,0,10,0"
                                       Style="{StaticResource HorizontalListViewNoSpace}"
+                                      Height="32"
                                       IsHitTestVisible="False"
                                       IsSwipeEnabled="False"
                                       IsTapEnabled="False">

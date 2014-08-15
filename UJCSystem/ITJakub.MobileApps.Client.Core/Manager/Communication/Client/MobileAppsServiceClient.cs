@@ -244,6 +244,60 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
+        public Task<GroupDetailContract> GetGroupDetails(long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetGroupDetails(groupId);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
+        public Task<IList<long>> GetGroupMemberIdsAsync(long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetGroupMemberIds(groupId);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
         #region enpoint settings
         private static Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {
@@ -281,5 +335,32 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             return GetEndpointAddress(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
         }
         #endregion
+
+        public Task<IList<GroupMemberContract>> GetGroupMembersAsync(long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetGroupMembers(groupId);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
     }
 }

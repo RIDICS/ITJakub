@@ -170,6 +170,7 @@
     <Content Include="Icon\license.txt" />
     <Content Include="Icon\login-128.png" />
     <Content Include="Icon\LogoMobileApps_128x128.png" />
+    <Content Include="Icon\user-32.png" />
     <Content Include="Icon\windows8-128.png" />
     <None Include="Common\ReadMe.txt" />
     <None Include="ITJakub.MobileApps.MainApp_TemporaryKey.pfx" />

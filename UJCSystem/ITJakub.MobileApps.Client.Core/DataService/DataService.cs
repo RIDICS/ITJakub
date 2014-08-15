@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -54,15 +53,9 @@ namespace ITJakub.MobileApps.Client.Core.DataService
             m_groupManager.GetGroupForCurrentUser(callback);
         }
 
-        public void GetGroupMembers(long groupId, Action<ObservableCollection<GroupMemberViewModel>, Exception> callback)
+        public void OpenGroupAndGetDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
         {
-            //TODO load from server
-            new DesignDataService().GetGroupMembers(groupId, callback);
-        }
-
-        public void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
-        {
-            m_groupManager.GetGroupDetails(groupId, callback);
+            m_groupManager.OpenGroupAndGetDetails(groupId, callback);
         }
 
         public void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback)
@@ -78,6 +71,16 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         public void ConnectToGroup(string code, Action<Exception> callback)
         {
             m_groupManager.ConnectToGroup(code, callback);
+        }
+
+        public void LoadGroupMemberAvatars(IList<GroupMemberViewModel> groupMember)
+        {
+            m_groupManager.LoadGroupMemberAvatars(groupMember);
+        }
+
+        public void UpdateGroupMembers(GroupInfoViewModel group)
+        {
+            m_groupManager.UpdateGroupMembers(group);
         }
 
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)

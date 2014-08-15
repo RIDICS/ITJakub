@@ -15,7 +15,10 @@ namespace ITJakub.MobileApps.Client.Chat.Converter
 
             var dateTime = (DateTime) value;
             dateTime = dateTime.ToLocalTime();
-            return dateTime.ToString("H:mm:ss");
+
+            if (dateTime.CompareTo(DateTime.Today) > 0)
+                return dateTime.ToString("H:mm:ss");
+            return dateTime.ToString("d.M.yyyy H:mm");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

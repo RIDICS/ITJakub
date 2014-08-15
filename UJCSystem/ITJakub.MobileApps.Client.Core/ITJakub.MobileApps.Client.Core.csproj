@@ -119,6 +119,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Manager\Application\ApplicationIdManager.cs" />
     <Compile Include="ApplicationManager.cs" />
     <Compile Include="Manager\Authentication\AuthenticationBroker\WebAuthViewModel.cs" />
     <Compile Include="Container.cs" />

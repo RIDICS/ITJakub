@@ -139,5 +139,50 @@ namespace ITJakub.MobileApps.Service
                 throw;
             }
         }
+
+        public GroupDetailContract GetGroupDetails(long groupId)
+        {
+            try
+            {
+                return m_serviceManager.GetGroupDetails(groupId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public IList<GroupMemberContract> GetGroupMembers(long groupId)
+        {
+            try
+            {
+                return m_serviceManager.GetGroupMembers(groupId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public IList<long> GetGroupMemberIds(long groupId)
+        {
+            try
+            {
+                return m_serviceManager.GetGroupMemberIds(groupId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
     }
 }

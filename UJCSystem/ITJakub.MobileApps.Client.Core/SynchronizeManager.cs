@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
+using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -17,21 +19,22 @@ namespace ITJakub.MobileApps.Client.Core
     {
         private static readonly SynchronizeManager m_instance = new SynchronizeManager();
         private readonly AuthenticationManager m_authenticationManager;
-        private MobileAppsServiceClient m_serviceClient;
+        private readonly MobileAppsServiceClient m_serviceClient;
+        private readonly ApplicationIdManager m_applicationIdManager;
+        private readonly GroupManager m_groupManager;
 
         private SynchronizeManager()
         {
             m_authenticationManager = Container.Current.Resolve<AuthenticationManager>();
             m_serviceClient = Container.Current.Resolve<MobileAppsServiceClient>();
+            m_applicationIdManager = Container.Current.Resolve<ApplicationIdManager>();
+            m_groupManager = Container.Current.Resolve<GroupManager>();
         }
 
         public static SynchronizeManager Instance
         {
             get { return m_instance; }
         }
-
-        //TODO get correct groupId
-        private long GroupId { get { return 1; } }
 
         public async Task SendObjectAsync(ApplicationType applicationType, string objectType, string objectValue)
         {
@@ -44,8 +47,10 @@ namespace ITJakub.MobileApps.Client.Core
                 ObjectType = objectType,
                 Data = objectValue
             };
-            //TODO get correct GroupId and ApplicationId
-            await m_serviceClient.CreateSynchronizedObjectAsync(1, GroupId, userId.Value, synchronizedObject);
+            
+            var appId = await m_applicationIdManager.GetApplicationIdAsync(applicationType);
+            var groupId = m_groupManager.CurrentGroupId;
+            await m_serviceClient.CreateSynchronizedObjectAsync(appId, groupId, userId.Value, synchronizedObject);
         }
 
         public async Task<IEnumerable<ObjectDetails>> GetObjectsAsync(ApplicationType applicationType, DateTime since, string objectType = null)
@@ -54,9 +59,10 @@ namespace ITJakub.MobileApps.Client.Core
             if (!userId.HasValue)
                 throw new ArgumentException("No logged user");
 
-            var objectList = await m_serviceClient.GetSynchronizedObjectsAsync(GroupId, 1, objectType, since);
+            var appId = await m_applicationIdManager.GetApplicationIdAsync(applicationType);
+            var groupId = m_groupManager.CurrentGroupId;
+            var objectList = await m_serviceClient.GetSynchronizedObjectsAsync(groupId, appId, objectType, since);
 
-            //TODO melo by jit vracet primo object list ale neda mi to informaci jestli to je muj objekt
             var outputList = objectList.Select(objectDetails => new ObjectDetails
             {
                 Author = new AuthorInfo
@@ -70,7 +76,7 @@ namespace ITJakub.MobileApps.Client.Core
                 },
                 CreateTime = objectDetails.CreateTime,
                 Data = objectDetails.Data
-            });
+            }).OrderBy(objectDetails => objectDetails.CreateTime);
             return outputList;
         }
     }

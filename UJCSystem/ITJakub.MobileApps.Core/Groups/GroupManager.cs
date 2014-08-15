@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AutoMapper;
+using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Groups;
 using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
@@ -76,6 +78,25 @@ namespace ITJakub.MobileApps.Core.Groups
             var user = m_usersRepository.Load<User>(userId);
             group.Members.Add(user);
             m_usersRepository.Update(group);
+        }
+
+        public GroupDetailContract GetGroupDetails(long groupId)
+        {
+            var group = m_usersRepository.GetGroupDetails(groupId);
+            var groupContract = Mapper.Map<Group, GroupDetailContract>(group);
+            return groupContract;
+        }
+
+        public IList<GroupMemberContract> GetGroupMembers(long groupId)
+        {
+            var group = m_usersRepository.GetGroupDetails(groupId);
+            return Mapper.Map<IList<User>, IList<GroupMemberContract>>(group.Members);
+        }
+
+        public IList<long> GetGroupMemberIds(long groupId)
+        {
+            var group = m_usersRepository.GetGroupDetails(groupId);
+            return group.Members.Select(user => user.Id).ToList();
         }
     }
 }
