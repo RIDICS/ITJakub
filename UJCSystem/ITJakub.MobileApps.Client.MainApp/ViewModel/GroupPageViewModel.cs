@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -20,6 +22,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private string m_groupName;
         private string m_groupCode;
         private ObservableCollection<GroupMemberViewModel> m_memberList;
+        private DateTime m_createTime;
 
         /// <summary>
         /// Initializes a new instance of the GroupPageViewModel class.
@@ -33,13 +36,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 LoadData(message.Group);
                 Messenger.Default.Unregister<OpenGroupMessage>(this);
             });
+            GoBackCommand = new RelayCommand(() => m_navigationService.GoBack());
         }
 
         private void LoadData(GroupInfoViewModel group)
         {
             GroupName = group.GroupName;
             GroupCode = group.GroupCode;
-
+            CreateTime = group.CreateTime;
+            MemberList = group.Members;
         }
 
         public string GroupName
@@ -62,6 +67,18 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get { return m_memberList; }
             set { m_memberList = value; RaisePropertyChanged(); }
+        }
+
+        public RelayCommand GoBackCommand { get; private set; }
+
+        public DateTime CreateTime
+        {
+            get { return m_createTime; }
+            set
+            {
+                m_createTime = value;
+                RaisePropertyChanged();
+            }
         }
     }
 }

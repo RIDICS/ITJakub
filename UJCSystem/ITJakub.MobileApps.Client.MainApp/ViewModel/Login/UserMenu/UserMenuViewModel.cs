@@ -1,6 +1,7 @@
 ﻿using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.DataService;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
@@ -39,7 +40,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
 
         private void InitializeCommands()
         {
-            LogOutCommand = new RelayCommand(() => { m_dataService.LogOut(); m_navigationService.GoHome(); });
+            LogOutCommand = new RelayCommand(() =>
+            {
+                m_dataService.LogOut();
+                m_navigationService.GoHome();
+                Messenger.Default.Send(new LogOutMessage());
+            });
         }
 
 

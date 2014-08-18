@@ -171,34 +171,42 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             member.UserAvatar = await m_userAvatarCache.GetUserAvatar(member.Id);
         }
 
-        public async void UpdateGroupMembers(GroupInfoViewModel group)
+        public async void UpdateGroupNewMembers(GroupInfoViewModel group)
         {
-            var oldMembersId = new HashSet<long>(group.Members.Select(member => member.Id));
             var newMembersId = await m_serviceClient.GetGroupMemberIdsAsync(group.GroupId);
-            if (oldMembersId.Count != newMembersId.Count)
+            if (group.Members.Count != newMembersId.Count)
             {
-                //TODO load group details
+                UpdateGroupMembers(group);
                 return;
             }
+            var oldMembersId = new HashSet<long>(group.Members.Select(member => member.Id));
             foreach (var newMemberId in newMembersId)
             {
                 if (!oldMembersId.Contains(newMemberId))
                 {
-                    //TODO load group details
+                    UpdateGroupMembers(group);
+                    return;
                 }
             }
         }
 
-        private async void UpdateGroupMembers2(GroupInfoViewModel group)
+        private async void UpdateGroupMembers(GroupInfoViewModel group)
         {
             var members = await m_serviceClient.GetGroupMembersAsync(group.GroupId);
-            group.Members = new ObservableCollection<GroupMemberViewModel>(members.Select(groupContract => new GroupMemberViewModel
+            group.Members.Clear();
+            group.MemberCount = members.Count;
+            foreach (var groupMemberContract in members)
             {
-                FirstName = groupContract.FirstName,
-                LastName = groupContract.LastName,
-                Id = groupContract.Id,
-                UserAvatar = m_defaultUserAvatar
-            }));
+                group.Members.Add(new GroupMemberViewModel
+                {
+                    FirstName = groupMemberContract.FirstName,
+                    LastName = groupMemberContract.LastName,
+                    Id = groupMemberContract.Id,
+                    UserAvatar = m_defaultUserAvatar
+                });
+                m_userAvatarCache.AddAvatarUrl(groupMemberContract.Id, groupMemberContract.AvatarUrl);
+            }
+            LoadGroupMemberAvatars(group.Members);
         }
     }
 }

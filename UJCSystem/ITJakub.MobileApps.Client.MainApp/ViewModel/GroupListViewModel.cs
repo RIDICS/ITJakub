@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Popups;
@@ -11,6 +12,7 @@ using ITJakub.MobileApps.Client.Core.DataService;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.DataContracts;
 
@@ -42,6 +44,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private GroupInfoViewModel m_selectedGroup;
         private bool m_loading;
         private ObservableCollection<GroupInfoViewModel> m_groups;
+        private DispatcherTimer m_timer;
 
         /// <summary>
         ///     Initializes a new instance of the GroupListViewModel class.
@@ -53,6 +56,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>();
             NoGroupExist = false;
             m_userRole = UserRoleContract.Student;
+            m_timer = new DispatcherTimer();
+            m_timer.Interval = new TimeSpan(0,0,7);
+            m_timer.Tick += RefreshMembers;
+            Messenger.Default.Register<LogOutMessage>(this, message =>
+            {
+                m_timer.Stop();
+                Messenger.Default.Unregister(this);
+            });
 
             InitCommands();
             LoadData();
@@ -247,6 +258,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 {
                     LoadGroupMemberAvatars(group.Members);
                 }
+                m_timer.Start();
             });
             m_dataService.GetLoggedUserInfo((info, exception) =>
             {
@@ -264,14 +276,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_dataService.LoadGroupMemberAvatars(members);
         }
 
-        private void UpdateGroupMembers()
-        {
-            foreach (var group in m_groups)
-            {
-                m_dataService.UpdateGroupMembers(group);
-            }
-        }
-
         private void GroupClick(ItemClickEventArgs args)
         {
             var group = args.ClickedItem as GroupInfoViewModel;
@@ -286,7 +290,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     ? typeof (ApplicationHostView)
                     : typeof (GroupPageView);
                 m_navigationService.Navigate(viewType);
+                m_timer.Stop();
+                Messenger.Default.Unregister(this);
                 Messenger.Default.Send(new OpenGroupMessage {Group = group});
+            }
+        }
+
+        private void RefreshMembers(object sender, object o)
+        {
+            foreach (var groupInfoViewModel in m_groups)
+            {
+                m_dataService.UpdateGroupMembers(groupInfoViewModel);
             }
         }
     }

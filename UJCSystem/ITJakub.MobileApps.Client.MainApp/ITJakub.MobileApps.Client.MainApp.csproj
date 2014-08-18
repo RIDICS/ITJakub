@@ -107,6 +107,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
+    <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
     <Compile Include="View\ErrorBar.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="View\ErrorBarView.xaml.cs">
@@ -167,6 +169,7 @@
     </Content>
     <Content Include="Icon\facebook-128.png" />
     <Content Include="Icon\google_plus-128.png" />
+    <Content Include="Icon\group-64.png" />
     <Content Include="Icon\license.txt" />
     <Content Include="Icon\login-128.png" />
     <Content Include="Icon\LogoMobileApps_128x128.png" />

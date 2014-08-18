@@ -80,7 +80,7 @@ namespace ITJakub.MobileApps.Client.Core.DataService
 
         public void UpdateGroupMembers(GroupInfoViewModel group)
         {
-            m_groupManager.UpdateGroupMembers(group);
+            m_groupManager.UpdateGroupNewMembers(group);
         }
 
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)

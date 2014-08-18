@@ -48,10 +48,12 @@ namespace ITJakub.MobileApps.Client.Core.DataService
         {
             var frame = ((Frame)Window.Current.Content);
 
-            while (frame.CanGoBack)
-            {
-                frame.GoBack();
-            }
+            if (frame.BackStackDepth == 0)
+                return;
+
+            Type rootPageType = frame.BackStack[0].SourcePageType;
+            frame.Navigate(rootPageType);
+            frame.BackStack.Clear();
         }
 
         public virtual void Navigate(Type sourcePageType)

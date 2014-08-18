@@ -10,7 +10,7 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     x:Name="PageRoot"
     DataContext="{Binding GroupListViewModel, Source={StaticResource Locator}}"
-    mc:Ignorable="d">
+    mc:Ignorable="d" >
 
     <Page.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -25,6 +25,10 @@
                           Label="Aktualizovat seznam"
                           Command="{Binding RefreshListCommand}" />
 
+            <AppBarButton Icon="Bullets"
+                          Label="Editor zadání"
+                          Visibility="{Binding TeachersButtonVisibility}" />
+            
             <AppBarButton Icon="Forward"
                           Label="Připojit se k nové skupině">
                 <AppBarButton.Flyout>
@@ -68,12 +72,9 @@
 
             <CommandBar.SecondaryCommands>
                 <AppBarButton Icon="Forward"
-                              Label="Připojit se"
+                              Label="Otevřít"
                               Command="{Binding ConnectCommand}"
                               Visibility="{Binding ConnectButtonVisibility}" />
-                <AppBarButton Icon="Edit"
-                              Label="Upravit"
-                              Visibility="{Binding TeachersSecondaryButtonVisibility}" />
                 <AppBarButton Icon="Delete"
                               Label="Odstranit"
                               Command="{Binding DeleteGroupCommand}"
@@ -142,7 +143,7 @@
                        TextWrapping="NoWrap" />
             <userMenu:UserMenu Grid.Column="2"
                                VerticalAlignment="Center"
-                               Margin="0,0,30,0"/>
+                               Margin="0,0,30,0" />
 
             <ProgressBar Grid.Column="0"
                          Grid.ColumnSpan="3"
@@ -214,14 +215,42 @@
                             
                             <Button.Flyout>
                                 <Flyout>
-                                    <StackPanel>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="450" />
+                                        </Grid.RowDefinitions>
+                                        
                                         <TextBlock Text="Seznam členů skupiny:"
                                                    FontWeight="Bold"
-                                                   FontSize="16"/>
+                                                   FontSize="16"
+                                                   Grid.Row="1"/>
+                                        
+                                        <SearchBox Grid.Row="0"
+                                                   HorizontalAlignment="Right"
+                                                   Width="170"
+                                                   Margin="0,0,0,10"
+                                                   SearchHistoryEnabled="False"
+                                                   QueryText="{Binding SearchText, Mode=TwoWay}" >
+                                            <interactivity:Interaction.Behaviors>
+                                                <core:EventTriggerBehavior EventName="QueryChanged">
+                                                    <core:InvokeCommandAction Command="{Binding SearchCommand}" />
+                                                </core:EventTriggerBehavior>
+                                            </interactivity:Interaction.Behaviors>
+                                        </SearchBox>
+                                        
+                                        <TextBlock Text="V této skupině nejsou žádní členové."
+                                                   Visibility="{Binding NoMembersVisibility}"
+                                                   HorizontalAlignment="Center"
+                                                   Grid.Row="2"
+                                                   Margin="0,15,0,0"/>
+                                        
                                         <ListView SelectionMode="None"
-                                                  ItemsSource="{Binding Members}"
+                                                  ItemsSource="{Binding FilteredMembers}"
                                                   Width="300"
-                                                  Height="500">
+                                                  VerticalAlignment="Stretch"
+                                                  Grid.Row="2">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -237,7 +266,7 @@
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>
-                                    </StackPanel>
+                                    </Grid>
                                 </Flyout>
                             </Button.Flyout>
                         </Button>

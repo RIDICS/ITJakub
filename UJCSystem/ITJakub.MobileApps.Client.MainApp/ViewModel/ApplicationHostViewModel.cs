@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.DataService;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -35,12 +36,19 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 LoadApplications(applicationType);
                 Messenger.Default.Unregister<OpenGroupMessage>(this);
             });
+            Messenger.Default.Register<LogOutMessage>(this, message =>
+            {
+                ChatApplicationViewModel.StopTimers();
+                ApplicationViewModel.StopTimers();
+                Messenger.Default.Unregister(this);
+            });
         }
 
         private void GoBack()
         {
             ChatApplicationViewModel.StopTimers();
             ApplicationViewModel.StopTimers();
+            Messenger.Default.Unregister(this);
 
             if (m_navigationService.CanGoBack)
                 m_navigationService.GoBack();
