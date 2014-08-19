@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
@@ -8,6 +7,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Exceptions;
 using NHibernate.SqlCommand;
+using NHibernate.Transform;
 
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
@@ -116,29 +116,39 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
             using (ISession session = GetSession())
             {
-                IEnumerable<User> u1 = session.CreateCriteria<User>()
-                    .Add(Restrictions.Eq(Projections.Id(), userId))
-                    .SetFetchMode("CreatedGroups", FetchMode.Eager)
-                    .Future<User>();
+                Group createdGroupAlias = null;
+                User createdGroupMemberAlias = null;
+                
+                var u1 = session.QueryOver<User>()
+                     .JoinAlias(x => x.CreatedGroups, () => createdGroupAlias, JoinType.LeftOuterJoin)
+                    .JoinAlias(() => createdGroupAlias.Members, () => createdGroupMemberAlias, JoinType.LeftOuterJoin)
+                    .Where(Restrictions.Eq(Projections.Property<User>(u => u.Id), userId))
+                    .Fetch(user => user.CreatedGroups).Eager.TransformUsing(Transformers.DistinctRootEntity).Future<User>();
 
-                var group = session.CreateCriteria<Group>()
-                    .Add(Restrictions.Eq("Author.Id", userId))
-                    .SetFetchMode("Members", FetchMode.Join)
-                    .Future<Group>();
+                //var group =
+                //    session.QueryOver<Group>()
+                //        .Where(Restrictions.Eq(Projections.Property<Group>(g => g.Author.Id), userId))
+                //        .Fetch(x => x.Members).Eager.TransformUsing(Transformers.DistinctRootEntity).Future();
 
-                session.CreateCriteria<User>()
-                    .Add(Restrictions.Eq(Projections.Id(), userId))
-                    .SetFetchMode("MemberOfGroups", FetchMode.Eager)
-                    .Future<User>();
+                
+                var u2 = session.QueryOver<User>()
+                    .Where(x => x.Id == userId)
+                    .JoinQueryOver<Group>(x => x.MemberOfGroups).TransformUsing(Transformers.DistinctRootEntity).Future();
 
-                var memberOfGroup = session.CreateCriteria<Group>()
-                    .CreateAlias("Members", "m", JoinType.LeftOuterJoin)
-                    .Add(Restrictions.Eq("m.Id", userId))
-                    .SetFetchMode("Members", FetchMode.Join)
-                    .Future<Group>();
+                var groupIds =
+                    QueryOver.Of<Group>()
+                        .Right.JoinQueryOver<User>(x => x.Members).Where(user => user.Id == userId).Select(x => x.Id);
 
 
-                return u1.ToList().FirstOrDefault();
+                var groupWithMembers = session.QueryOver<Group>()
+                    .WithSubquery
+                    .WhereProperty(x => x.Id).In(groupIds)
+                    .JoinQueryOver<User>(x => x.Members, JoinType.LeftOuterJoin).TransformUsing(Transformers.DistinctRootEntity)
+                    .Future();
+
+                var result = u2.Single();
+                result.MemberOfGroups = groupWithMembers.ToList();
+                return result;
             }
         }
 

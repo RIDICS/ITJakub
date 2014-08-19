@@ -4,6 +4,7 @@ using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Chat.DataService;
 using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.Helpers;
 
 namespace ITJakub.MobileApps.Client.Chat.ViewModel
 {
@@ -23,7 +24,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             m_dataService = dataService;
             m_sendCommand = new RelayCommand(SendMessage);
 
-            MessageHistory = new ObservableCollection<MessageViewModel>();
+            MessageHistory = new AsyncObservableCollection<MessageViewModel>();
         }
 
         public override void InitializeCommunication()
@@ -89,7 +90,10 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
 
         private void LoadNewMessages(object sender, object o)
         {
-            var since = MessageHistory[MessageHistory.Count - 1].SendTime;
+            var since = MessageHistory.Count > 0
+                ? MessageHistory[MessageHistory.Count - 1].SendTime
+                : new DateTime(1970, 1, 1);
+
             m_dataService.GetChatMessages(since, (messages, exception) =>
             {
                 if (exception != null)

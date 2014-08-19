@@ -39,6 +39,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                         .Add(Restrictions.Eq("Group", group))
                         .Add(Restrictions.Eq("ObjectType", objectType))
                         .Add(Restrictions.Gt("CreateTime", since))
+                        .AddOrder(Order.Asc("CreateTime"))
                         .SetFetchMode("Author", FetchMode.Join)
                         .List<SynchronizedObject>();
             }

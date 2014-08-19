@@ -14,18 +14,22 @@ namespace ITJakub.MobileApps.Core.Applications
         private readonly ApplicationRepository m_applicationRepository;
         private readonly AzureTableSynchronizedObjectDao m_azureTableSynchronizedObjectDao;
         private readonly UsersRepository m_usersRepository;
+        private readonly AzureTableIdGenerator m_idGenerator;
 
-        public ApplicationManager(ApplicationRepository applicationRepository, UsersRepository usersRepository,
-            AzureTableSynchronizedObjectDao azureTableSynchronizedObjectDao)
+        public ApplicationManager(ApplicationRepository applicationRepository, UsersRepository usersRepository, AzureTableSynchronizedObjectDao azureTableSynchronizedObjectDao, AzureTableIdGenerator idGenerator)
         {
             m_applicationRepository = applicationRepository;
             m_usersRepository = usersRepository;
             m_azureTableSynchronizedObjectDao = azureTableSynchronizedObjectDao;
+            m_idGenerator = idGenerator;
         }
 
         public void CreateSynchronizedObject(int applicationId, long groupId, long userId,
             SynchronizedObjectContract synchronizedObject)
         {
+            var syncObjectEntity = new SynchronizedObjectEntity(m_idGenerator.GetNewId(), Convert.ToString(groupId), synchronizedObject.Data);
+            m_azureTableSynchronizedObjectDao.Create(syncObjectEntity);
+
             var now = DateTime.UtcNow;
 
             var application = m_applicationRepository.Load<Application>(applicationId);                
@@ -36,10 +40,9 @@ namespace ITJakub.MobileApps.Core.Applications
             deSyncObject.Author = user;
             deSyncObject.Group = group;
             deSyncObject.CreateTime = now;
+            deSyncObject.RowKey = syncObjectEntity.RowKey;
 
-            object syncObjId = m_applicationRepository.Create(deSyncObject);
-            m_azureTableSynchronizedObjectDao.Create(new SynchronizedObjectEntity(syncObjId.ToString(), Convert.ToString(groupId), synchronizedObject.Data));
-         
+            m_applicationRepository.Create(deSyncObject);
         }
 
         public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
@@ -48,10 +51,13 @@ namespace ITJakub.MobileApps.Core.Applications
             
             foreach (SynchronizedObject syncObj in syncObjs) //TODO try to find some better way how to fill Data property
             {
-                SynchronizedObjectEntity syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.Id.ToString(),
-                    syncObj.Group.Id.ToString());
-                if (syncObjEntity != null) 
+                SynchronizedObjectEntity syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.RowKey,
+                    Convert.ToString(syncObj.Group.Id));
+                if (syncObjEntity != null && syncObjEntity.Data != null)
                     syncObj.Data = syncObjEntity.Data;
+                else
+                    throw new ArgumentException("TEST");
+
             }
             return Mapper.Map<IList<SynchronizedObjectResponseContract>>(syncObjs);
         }

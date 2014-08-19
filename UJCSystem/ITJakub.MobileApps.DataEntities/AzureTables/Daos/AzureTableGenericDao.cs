@@ -56,7 +56,7 @@ namespace ITJakub.MobileApps.DataEntities.AzureTables.Daos
 
         public T FindByRowAndPartitionKey(string rowKey, string partitionKey)
         {
-            var retrieveOperation = TableOperation.Retrieve<T>(partitionKey, rowKey);
+            var retrieveOperation = TableOperation.Retrieve<T>(partitionKey, rowKey);            
             return (T) m_table.Execute(retrieveOperation).Result;
         }
     }

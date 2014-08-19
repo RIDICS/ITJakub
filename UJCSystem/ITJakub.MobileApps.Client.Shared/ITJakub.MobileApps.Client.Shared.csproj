@@ -112,6 +112,7 @@
     <Compile Include="Communication\ISynchronizeCommunication.cs" />
     <Compile Include="Data\AuthorInfo.cs" />
     <Compile Include="Data\ObjectDetails.cs" />
+    <Compile Include="Helpers\AsyncObservableCollection.cs" />
     <Compile Include="MobileApplicationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

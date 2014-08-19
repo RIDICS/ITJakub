@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Applications\ApplicationManager.cs" />
+    <Compile Include="Applications\AzureTableIdGenerator.cs" />
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\AuthInterceptor.cs" />
     <Compile Include="Authentication\Providers\AuthProviderDirector.cs" />
@@ -158,6 +159,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj">
       <Project>{90f9d8dd-05d5-401f-8939-bd619adf5cdd}</Project>
       <Name>ITJakub.MobileApps.DataContracts</Name>
@@ -167,11 +172,6 @@
       <Name>ITJakub.MobileApps.DataEntities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

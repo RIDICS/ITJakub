@@ -76,7 +76,7 @@ namespace ITJakub.MobileApps.Client.Core
                 },
                 CreateTime = objectDetails.CreateTime,
                 Data = objectDetails.Data
-            }).OrderBy(objectDetails => objectDetails.CreateTime);
+            });
             return outputList;
         }
     }

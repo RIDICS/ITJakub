@@ -16,18 +16,6 @@ namespace ITJakub.MobileApps.DataEntities.AzureTables.Entities
             Data = data;
         }
 
-        [IgnoreProperty]
-        public long GroupId
-        {
-            get { return Convert.ToInt64(PartitionKey); }
-        }
-
-        [IgnoreProperty]
-        public long Id
-        {
-            get { return Convert.ToInt64(RowKey); }
-        }
-
         public string Data { get; set; }
     }
 }
