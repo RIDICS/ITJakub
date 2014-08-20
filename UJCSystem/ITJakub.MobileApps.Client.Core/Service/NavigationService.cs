@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace ITJakub.MobileApps.Client.Core.DataService
+namespace ITJakub.MobileApps.Client.Core.Service
 {
     public class NavigationService : INavigationService
     {

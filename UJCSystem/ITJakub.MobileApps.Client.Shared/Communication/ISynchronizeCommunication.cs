@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.Client.Shared.Communication
     {
         Task SendObjectAsync(ApplicationType applicationType, string objectType, string objectValue);
 
-        Task<IEnumerable<ObjectDetails>> GetObjectsAsync(ApplicationType applicationType, DateTime since, string objectType = null);
+        Task<IList<ObjectDetails>> GetObjectsAsync(ApplicationType applicationType, DateTime since, string objectType = null);
 
         //todo more required methods
     }

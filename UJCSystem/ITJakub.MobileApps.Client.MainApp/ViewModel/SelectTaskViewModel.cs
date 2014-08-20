@@ -1,5 +1,5 @@
 using GalaSoft.MvvmLight;
-using ITJakub.MobileApps.Client.Core.DataService;
+using ITJakub.MobileApps.Client.Core.Service;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {

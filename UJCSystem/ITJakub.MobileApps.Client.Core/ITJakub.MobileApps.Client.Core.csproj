@@ -119,6 +119,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service\Polling\IPollingService.cs" />
+    <Compile Include="Service\Polling\IPollingTimer.cs" />
+    <Compile Include="Service\Polling\ITimerService.cs" />
+    <Compile Include="Service\Polling\PollingBackgroundTimer.cs" />
+    <Compile Include="Service\Polling\PollingDispatcherTimer.cs" />
+    <Compile Include="Service\Polling\PollingInterval.cs" />
+    <Compile Include="Service\Polling\PollingService.cs" />
+    <Compile Include="Service\Polling\TimerService.cs" />
     <Compile Include="Manager\Application\ApplicationIdManager.cs" />
     <Compile Include="ApplicationManager.cs" />
     <Compile Include="Manager\Authentication\AuthenticationBroker\WebAuthViewModel.cs" />
@@ -150,11 +158,11 @@
     <Compile Include="ApplicationLoader.cs" />
     <Compile Include="ApplicationTemplateSelector.cs" />
     <Compile Include="Configuration\ApplicationConfigLoader.cs" />
-    <Compile Include="DataService\DataService.cs" />
-    <Compile Include="DataService\DesignDataService.cs" />
-    <Compile Include="DataService\IDataService.cs" />
-    <Compile Include="DataService\INavigationService.cs" />
-    <Compile Include="DataService\NavigationService.cs" />
+    <Compile Include="Service\DataService.cs" />
+    <Compile Include="Service\DesignDataService.cs" />
+    <Compile Include="Service\IDataService.cs" />
+    <Compile Include="Service\INavigationService.cs" />
+    <Compile Include="Service\NavigationService.cs" />
     <Compile Include="Manager\Authentication\AuthenticationProviders\ILoginProvider.cs" />
     <Compile Include="Manager\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -191,9 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Manager\Authentication\AuthenticationBroker\WebAuthView.xaml">

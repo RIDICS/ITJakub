@@ -136,7 +136,8 @@
                                 <Image Width="30"
                                        Height="30"
                                        Source="{Binding UserAvatar}" />
-                                <TextBlock VerticalAlignment="Center">
+                                <TextBlock VerticalAlignment="Center"
+                                           Margin="5,0,0,0">
                                     <Run Text="{Binding FirstName}"/>
                                     <Run Text="{Binding LastName}"/>
                                 </TextBlock>

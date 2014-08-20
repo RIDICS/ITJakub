@@ -116,37 +116,32 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
             using (ISession session = GetSession())
             {
-                Group createdGroupAlias = null;
-                User createdGroupMemberAlias = null;
+                session.QueryOver<Group>()
+                    .Where(group => group.Author.Id == userId)
+                    .JoinQueryOver<User>(group => group.Members, JoinType.LeftOuterJoin)
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .List();
                 
                 var u1 = session.QueryOver<User>()
-                     .JoinAlias(x => x.CreatedGroups, () => createdGroupAlias, JoinType.LeftOuterJoin)
-                    .JoinAlias(() => createdGroupAlias.Members, () => createdGroupMemberAlias, JoinType.LeftOuterJoin)
-                    .Where(Restrictions.Eq(Projections.Property<User>(u => u.Id), userId))
-                    .Fetch(user => user.CreatedGroups).Eager.TransformUsing(Transformers.DistinctRootEntity).Future<User>();
-
-                //var group =
-                //    session.QueryOver<Group>()
-                //        .Where(Restrictions.Eq(Projections.Property<Group>(g => g.Author.Id), userId))
-                //        .Fetch(x => x.Members).Eager.TransformUsing(Transformers.DistinctRootEntity).Future();
-
-                
-                var u2 = session.QueryOver<User>()
                     .Where(x => x.Id == userId)
-                    .JoinQueryOver<Group>(x => x.MemberOfGroups).TransformUsing(Transformers.DistinctRootEntity).Future();
+                    .Fetch(x => x.CreatedGroups).Eager
+                    .JoinQueryOver<Group>(x => x.MemberOfGroups, JoinType.LeftOuterJoin)
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .Future();
 
-                var groupIds =
-                    QueryOver.Of<Group>()
-                        .Right.JoinQueryOver<User>(x => x.Members).Where(user => user.Id == userId).Select(x => x.Id);
-
+                var groupIds = QueryOver.Of<Group>()
+                    .Right.JoinQueryOver<User>(x => x.Members)
+                    .Where(user => user.Id == userId)
+                    .Select(x => x.Id);
 
                 var groupWithMembers = session.QueryOver<Group>()
                     .WithSubquery
                     .WhereProperty(x => x.Id).In(groupIds)
-                    .JoinQueryOver<User>(x => x.Members, JoinType.LeftOuterJoin).TransformUsing(Transformers.DistinctRootEntity)
+                    .JoinQueryOver<User>(x => x.Members, JoinType.LeftOuterJoin)
+                    .TransformUsing(Transformers.DistinctRootEntity)
                     .Future();
 
-                var result = u2.Single();
+                var result = u1.Single();
                 result.MemberOfGroups = groupWithMembers.ToList();
                 return result;
             }

@@ -53,7 +53,7 @@ namespace ITJakub.MobileApps.Client.Core
             await m_serviceClient.CreateSynchronizedObjectAsync(appId, groupId, userId.Value, synchronizedObject);
         }
 
-        public async Task<IEnumerable<ObjectDetails>> GetObjectsAsync(ApplicationType applicationType, DateTime since, string objectType = null)
+        public async Task<IList<ObjectDetails>> GetObjectsAsync(ApplicationType applicationType, DateTime since, string objectType = null)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
             if (!userId.HasValue)
@@ -77,7 +77,7 @@ namespace ITJakub.MobileApps.Client.Core
                 CreateTime = objectDetails.CreateTime,
                 Data = objectDetails.Data
             });
-            return outputList;
+            return outputList.ToList();
         }
     }
 }

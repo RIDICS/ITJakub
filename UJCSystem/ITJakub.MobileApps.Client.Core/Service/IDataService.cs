@@ -8,8 +8,7 @@ using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Groups;
 
-
-namespace ITJakub.MobileApps.Client.Core.DataService
+namespace ITJakub.MobileApps.Client.Core.Service
 {
     public interface IDataService
     {

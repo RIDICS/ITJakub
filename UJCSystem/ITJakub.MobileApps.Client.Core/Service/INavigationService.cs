@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ITJakub.MobileApps.Client.Core.DataService
+namespace ITJakub.MobileApps.Client.Core.Service
 {
     public interface INavigationService
     {
