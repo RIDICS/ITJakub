@@ -6,7 +6,6 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
-using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
@@ -23,7 +22,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>> m_appList;
-        private readonly RelayCommand<ItemClickEventArgs> m_appClickCommand;
 
         /// <summary>
         /// Initializes a new instance of the ApplicationSelectionViewModel class.
@@ -34,7 +32,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService = navigationService;
             AppList = new ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>>();
             LoadAppList();
-            m_appClickCommand = new RelayCommand<ItemClickEventArgs>(AppClick);
+
+            AppClickCommand = new RelayCommand<ItemClickEventArgs>(AppClick);
+            GoBackCommand = new RelayCommand(() => m_navigationService.GoBack());
         }
 
         private void LoadAppList()
@@ -63,19 +63,21 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public RelayCommand<ItemClickEventArgs> AppClickCommand
-        {
-            get { return m_appClickCommand; }
-        }
+        public RelayCommand<ItemClickEventArgs> AppClickCommand { get; private set; }
+
+        public RelayCommand GoBackCommand { get; private set; }
 
         private void AppClick(ItemClickEventArgs args)
         {
             var selectedApp = args.ClickedItem as AppInfoViewModel;
             if (selectedApp == null)
                 return;
-            //TODO submit app selection
-            //m_navigationService.Navigate(typeof (ApplicationHostView));
-            //Messenger.Default.Send(new OpenGroupMessage{ApplicationType = selectedApp.ApplicationType});
+
+            m_navigationService.GoBack();
+            Messenger.Default.Send(new ApplicationSelectedMessage
+            {
+                AppInfo = selectedApp
+            });
         }
     }
 }

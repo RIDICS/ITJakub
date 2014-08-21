@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -23,6 +24,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private string m_groupCode;
         private ObservableCollection<GroupMemberViewModel> m_memberList;
         private DateTime m_createTime;
+        private AppInfoViewModel m_selectedApplicationInfo;
+        private GroupInfoViewModel m_groupInfo;
 
         /// <summary>
         /// Initializes a new instance of the GroupPageViewModel class.
@@ -36,15 +39,34 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 LoadData(message.Group);
                 Messenger.Default.Unregister<OpenGroupMessage>(this);
             });
+
+            InitCommands();
+        }
+
+        private void InitCommands()
+        {
             GoBackCommand = new RelayCommand(() => m_navigationService.GoBack());
+            SelectAppCommand = new RelayCommand(SelectApplication);
+            SelectTaskCommand = new RelayCommand(SelectTask);
         }
 
         private void LoadData(GroupInfoViewModel group)
         {
-            GroupName = group.GroupName;
+            GroupInfo = group;
+            //GroupName = group.GroupName;
             GroupCode = group.GroupCode;
             CreateTime = group.CreateTime;
             MemberList = group.Members;
+        }
+
+        public GroupInfoViewModel GroupInfo
+        {
+            get { return m_groupInfo; }
+            set
+            {
+                m_groupInfo = value;
+                RaisePropertyChanged();
+            }
         }
 
         public string GroupName
@@ -69,8 +91,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             set { m_memberList = value; RaisePropertyChanged(); }
         }
 
-        public RelayCommand GoBackCommand { get; private set; }
-
         public DateTime CreateTime
         {
             get { return m_createTime; }
@@ -79,6 +99,42 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_createTime = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public AppInfoViewModel SelectedApplicationInfo
+        {
+            get { return m_selectedApplicationInfo; }
+            set
+            {
+                m_selectedApplicationInfo = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string SearchText { get; set; }
+
+        public RelayCommand GoBackCommand { get; private set; }
+
+        public RelayCommand SelectAppCommand { get; private set; }
+
+        public RelayCommand SelectTaskCommand { get; private set; }
+
+        public RelayCommand SearchCommand { get; set; }
+        
+
+        private void SelectApplication()
+        {
+            m_navigationService.Navigate(typeof(ApplicationSelectionView));
+            Messenger.Default.Register<ApplicationSelectedMessage>(this, message =>
+            {
+                SelectedApplicationInfo = message.AppInfo;
+                Messenger.Default.Unregister<ApplicationSelectedMessage>(this);
+            });
+        }
+
+        private void SelectTask()
+        {
+            throw new NotImplementedException();
         }
     }
 }

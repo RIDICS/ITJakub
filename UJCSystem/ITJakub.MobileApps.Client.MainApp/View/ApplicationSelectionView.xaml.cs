@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.Client.MainApp.View
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class ApplicationSelection
+    public sealed partial class ApplicationSelectionView
     {
 
         private NavigationHelper navigationHelper;
@@ -25,7 +25,7 @@ namespace ITJakub.MobileApps.Client.MainApp.View
         }
 
 
-        public ApplicationSelection()
+        public ApplicationSelectionView()
         {
             InitializeComponent();
             navigationHelper = new NavigationHelper(this);

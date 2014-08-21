@@ -50,7 +50,7 @@
                        VerticalAlignment="Bottom"
                        Margin="0,0,30,40">
                 <Run Text="Skupina:" />
-                <Run Text="{Binding GroupName}" />
+                <Run Text="{Binding GroupInfo.GroupName}" />
             </TextBlock>
         </Grid>
         
@@ -78,10 +78,11 @@
                             Margin="0,15,0,10">
                     <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">
                         <Run Text="Aplikace:"/>
-                        <Run Text="{Binding GroupCode}"/>
+                        <Run Text="{Binding SelectedApplicationInfo.Name}"/>
                     </TextBlock>
                     <Button Content="Změnit"
-                            Margin="40,0,0,0"/>
+                            Margin="40,0,0,0"
+                            Command="{Binding SelectAppCommand}" />
                 </StackPanel>
                 
                 <StackPanel Orientation="Horizontal">
@@ -90,7 +91,8 @@
                         <Run Text="{Binding GroupCode}"/>
                     </TextBlock>
                     <Button Content="Změnit"
-                            Margin="40,0,0,0"/>
+                            Margin="40,0,0,0"
+                            Command="{Binding SelectTaskCommand}" />
                 </StackPanel>
             </StackPanel>
             

@@ -108,6 +108,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
+    <Compile Include="ViewModel\Message\ApplicationSelectedMessage.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
     <Compile Include="View\ErrorBar.cs" />
     <Compile Include="Common\RelayCommand.cs" />

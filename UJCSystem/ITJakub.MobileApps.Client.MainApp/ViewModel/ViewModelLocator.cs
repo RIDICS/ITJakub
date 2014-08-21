@@ -51,7 +51,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 WithName.Default, 
                 WithLifetime.Transient
                 );
-            Container.Current.RegisterType<INavigationService, NavigationService>();
+            Container.Current.RegisterType<INavigationService, NavigationService>(WithLifetime.ContainerControlled(typeof(NavigationService)));
         }
 
         public LoginViewModel LoginViewModel
