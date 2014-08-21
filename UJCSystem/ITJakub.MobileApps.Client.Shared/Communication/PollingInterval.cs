@@ -1,4 +1,4 @@
-namespace ITJakub.MobileApps.Client.Core.Service.Polling
+namespace ITJakub.MobileApps.Client.Shared.Communication
 {
     public enum PollingInterval
     {

@@ -79,5 +79,10 @@ namespace ITJakub.MobileApps.Client.Core
             });
             return outputList.ToList();
         }
+
+        public IPollingService GetPollingService()
+        {
+            return Container.Current.Resolve<IPollingService>();
+        }
     }
 }

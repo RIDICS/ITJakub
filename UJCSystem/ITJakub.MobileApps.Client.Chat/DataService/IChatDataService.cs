@@ -10,6 +10,8 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
         void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback);
         void GetChatMessages(DateTime since, Action<ObservableCollection<MessageViewModel>, Exception> callback);
         void SendMessage(string message, Action<Exception> callback);
+        void StartChatMessagesPolling(Action<ObservableCollection<MessageViewModel>, Exception> callback);
+        void StopPolling();
     }
 
     public class ChatDataService : IChatDataService
@@ -34,6 +36,16 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
         public void SendMessage(string message, Action<Exception> callback)
         {
             m_chatManager.SendMessage(message, callback);
+        }
+
+        public void StartChatMessagesPolling(Action<ObservableCollection<MessageViewModel>, Exception> callback)
+        {
+            m_chatManager.StartChatMessagesPolling(callback);
+        }
+
+        public void StopPolling()
+        {
+            m_chatManager.StopPolling();
         }
     }
 }

@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Windows.System.Threading;
+using ITJakub.MobileApps.Client.Shared.Communication;
 
 namespace ITJakub.MobileApps.Client.Core.Service.Polling
 {
@@ -8,7 +11,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
     {
         private readonly IList<Action> m_actions;
         private ThreadPoolTimer m_timer;
-        private TimeSpan m_timeSpan;
+        private readonly TimeSpan m_timeSpan;
 
         public PollingBackgroundTimer(PollingInterval interval)
         {
@@ -18,24 +21,51 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
 
         public void Register(Action action)
         {
-            m_actions.Add(action);
+            lock (this)
+            {
+                m_actions.Add(action);
 
-            if (m_timer == null)
-                ThreadPoolTimer.CreateTimer(OnTimerTick, m_timeSpan);
+                if (m_timer == null)
+                    m_timer = ThreadPoolTimer.CreateTimer(OnTimerTick, m_timeSpan);
+            }
         }
 
         public void Unregister(Action action)
         {
-            m_actions.Remove(action);
+            lock (this)
+            {
+                m_actions.Remove(action);   
+            }
         }
 
         private void OnTimerTick(ThreadPoolTimer timer)
         {
             if (m_actions.Count == 0)
-                return;
+            {
+                lock (this)
+                {
+                    if (m_actions.Count == 0)
+                    {
+                        m_timer = null;
+                        return;   
+                    }
+                }
+            }
 
-            foreach (var action in m_actions)
-                action();
+            var actions = new List<Action>(m_actions);
+            var remainingActions = actions.Count;
+
+            foreach (var action in actions)
+            {
+                var task = new Task(action);
+                task.ContinueWith(task1 =>
+                {
+                    Interlocked.Decrement(ref remainingActions);
+                    if (remainingActions == 0)
+                        m_timer = ThreadPoolTimer.CreateTimer(OnTimerTick, m_timeSpan);
+                });
+                task.Start();
+            }
         }
     }
 }

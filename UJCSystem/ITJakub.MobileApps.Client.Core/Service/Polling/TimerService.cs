@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.MobileApps.Client.Shared.Communication;
 
 namespace ITJakub.MobileApps.Client.Core.Service.Polling
 {
@@ -16,7 +17,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
         {
             if (!m_pollingTimers.ContainsKey(interval))
             {
-                m_pollingTimers.Add(interval, new PollingDispatcherTimer(interval));
+                m_pollingTimers.Add(interval, new PollingBackgroundTimer(interval));
             }
             
             m_pollingTimers[interval].Register(action);

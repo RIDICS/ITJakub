@@ -38,16 +38,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
             Messenger.Default.Register<LogOutMessage>(this, message =>
             {
-                ChatApplicationViewModel.StopTimers();
-                ApplicationViewModel.StopTimers();
+                ChatApplicationViewModel.StopCommunication();
+                ApplicationViewModel.StopCommunication();
                 Messenger.Default.Unregister(this);
             });
         }
 
         private void GoBack()
         {
-            ChatApplicationViewModel.StopTimers();
-            ApplicationViewModel.StopTimers();
+            ChatApplicationViewModel.StopCommunication();
+            ApplicationViewModel.StopCommunication();
             Messenger.Default.Unregister(this);
 
             if (m_navigationService.CanGoBack)

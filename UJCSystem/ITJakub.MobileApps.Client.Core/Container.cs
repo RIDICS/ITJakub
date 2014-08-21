@@ -5,6 +5,8 @@ using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
+using ITJakub.MobileApps.Client.Core.Service.Polling;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using Microsoft.Practices.Unity;
 
 namespace ITJakub.MobileApps.Client.Core
@@ -49,6 +51,7 @@ namespace ITJakub.MobileApps.Client.Core
             container.RegisterType<UserAvatarCache>(WithLifetime.ContainerControlled(typeof(UserAvatarCache)));
             container.RegisterType<GroupManager>(WithLifetime.ContainerControlled(typeof(GroupManager)));
             container.RegisterType<ApplicationIdManager>(WithLifetime.ContainerControlled(typeof (ApplicationIdManager)));
+            container.RegisterType<IPollingService,PollingService>(WithLifetime.ContainerControlled(typeof (PollingService)));
 
 
             //container.RegisterTypes(AllClasses.FromApplication())
