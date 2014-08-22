@@ -12,6 +12,8 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
                 .Include<Group, OwnedDetailGroupContract>();
 
             CreateMap<Group, OwnedDetailGroupContract>();
+
+            CreateMap<Group, GroupDetailsUpdateContract>();
         }
     }
 }

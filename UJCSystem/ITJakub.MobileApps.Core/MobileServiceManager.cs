@@ -14,10 +14,12 @@ using System.Collections.Generic;
 using Castle.MicroKernel;
 using ITJakub.MobileApps.Core.Applications;
 using ITJakub.MobileApps.Core.Groups;
+using ITJakub.MobileApps.Core.Tasks;
 using ITJakub.MobileApps.Core.Users;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
+using ITJakub.MobileApps.DataContracts.Tasks;
 
 namespace ITJakub.MobileApps.Core
 {
@@ -26,6 +28,7 @@ namespace ITJakub.MobileApps.Core
         private readonly UserManager m_userManager;
         private readonly GroupManager m_groupManager;
         private readonly ApplicationManager m_applicationManager;
+        private readonly TaskManager m_taskManager;
 
         public MobileServiceManager(IKernel container)
         {
@@ -33,6 +36,7 @@ namespace ITJakub.MobileApps.Core
             m_userManager = container.Resolve<UserManager>();
             m_groupManager = container.Resolve<GroupManager>();
             m_applicationManager = container.Resolve<ApplicationManager>();
+            m_taskManager = container.Resolve<TaskManager>();
         }
 
         public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
@@ -90,6 +94,26 @@ namespace ITJakub.MobileApps.Core
         public IList<long> GetGroupMemberIds(long groupId)
         {
             return m_groupManager.GetGroupMemberIds(groupId);
+        }
+
+        public IList<GroupDetailsUpdateContract> GetGroupsUpdate(IList<OldGroupDetailsContract> groups)
+        {
+            return m_groupManager.GetGroupsUpdate(groups);
+        }
+
+        public void AssignTaskToGroup(long groupId, long taskId)
+        {
+            m_groupManager.AssignTaskToGroup(groupId, taskId);
+        }
+
+        public IList<TaskContract> GetTasksByApplication(int applicationId)
+        {
+            return m_taskManager.GetTasksByApplication(applicationId);
+        }
+
+        public void CreateTask(long userId, int applicationId, string name, string data)
+        {
+            m_taskManager.CreateTask(userId, applicationId, name, data);
         }
     }
 }

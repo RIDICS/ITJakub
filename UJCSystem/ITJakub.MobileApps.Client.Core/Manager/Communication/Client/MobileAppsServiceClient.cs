@@ -8,11 +8,14 @@ using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
+using ITJakub.MobileApps.DataContracts.Tasks;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
 {
     public class MobileAppsServiceClient : ClientBase<IMobileAppsService>
     {
+        private const string EndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
+
         private readonly ClientMessageInspector m_clientMessageInspector;
 
         public MobileAppsServiceClient() : base(GetDefaultBinding(), GetDefaultEndpointAddress())
@@ -298,44 +301,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
-        #region enpoint settings
-        private static Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
-        {
-            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBindingIMobileAppsService))
-            {
-                var result = new BasicHttpBinding();
-                result.MaxBufferSize = int.MaxValue;
-                result.ReaderQuotas = XmlDictionaryReaderQuotas.Max;
-                result.MaxReceivedMessageSize = int.MaxValue;
-                result.AllowCookies = true;
-                return result;
-            }
-            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",
-                endpointConfiguration));
-        }
-
-        private static EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
-        {
-            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBindingIMobileAppsService))
-            {
-                return new EndpointAddress("http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc");
-            }
-            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",
-                endpointConfiguration));
-        }
-
-        private static Binding GetDefaultBinding()
-        {
-            return
-                GetBindingForEndpoint(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
-        }
-
-        private static EndpointAddress GetDefaultEndpointAddress()
-        {
-            return GetEndpointAddress(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
-        }
-        #endregion
-
         public Task<IList<GroupMemberContract>> GetGroupMembersAsync(long groupId)
         {
             return Task.Run(() =>
@@ -362,5 +327,125 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
             });
         }
+
+        public Task AssignTaskToGroupAsync(long groupId, long taskId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    Channel.AssignTaskToGroup(groupId, taskId);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
+        public Task<IList<TaskContract>> GetTasksByApplicationAsync(int applicationId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetTasksByApplication(applicationId);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
+        public Task CreateTaskAsync(long userId, int applicationId, string name, string data)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    Channel.CreateTask(userId, applicationId, name, data);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
+        #region enpoint settings
+        private static Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
+        {
+            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBindingIMobileAppsService))
+            {
+                var result = new BasicHttpBinding();
+                result.MaxBufferSize = int.MaxValue;
+                result.ReaderQuotas = XmlDictionaryReaderQuotas.Max;
+                result.MaxReceivedMessageSize = int.MaxValue;
+                result.AllowCookies = true;
+                return result;
+            }
+            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",
+                endpointConfiguration));
+        }
+
+        private static EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
+        {
+            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBindingIMobileAppsService))
+            {
+                return new EndpointAddress(EndpointAddress);
+            }
+            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",
+                endpointConfiguration));
+        }
+
+        private static Binding GetDefaultBinding()
+        {
+            return
+                GetBindingForEndpoint(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
+        }
+
+        private static EndpointAddress GetDefaultEndpointAddress()
+        {
+            return GetEndpointAddress(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
+        }
+        #endregion
+
     }
 }

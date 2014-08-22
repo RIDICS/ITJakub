@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
@@ -148,6 +149,19 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual IList<Group> GetGroupMembers(IEnumerable<long> groupIds)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<Group>()
+                    .WhereRestrictionOn(group => group.Id).IsIn(groupIds.ToList())
+                    .JoinQueryOver<User>(group => group.Members, JoinType.LeftOuterJoin)
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .List();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual Group FindByEnterCode(string enterCode)
         {
             using (ISession session = GetSession())
@@ -169,6 +183,34 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                     .Add(Restrictions.Eq(Projections.Id(), groupId))
                     .SetFetchMode("Members", FetchMode.Join)
                     .UniqueResult<Group>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Task> GetTasksByApplication(int applicationId)
+        {
+            using (var session = GetSession())
+            {
+                var application = Load<Application>(applicationId);
+
+                return session.CreateCriteria<Task>()
+                    .Add(Restrictions.Eq("Application", application))
+                    .SetFetchMode("Author", FetchMode.Join)
+                    .List<Task>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Task> GetTasksByAuthor(long authorId)
+        {
+            using (var session = GetSession())
+            {
+                var author = Load<User>(authorId);
+
+                return session.CreateCriteria<Task>()
+                    .Add(Restrictions.Eq("Author", author))
+                    .SetFetchMode("Author", FetchMode.Join)
+                    .List<Task>();
             }
         }
     }

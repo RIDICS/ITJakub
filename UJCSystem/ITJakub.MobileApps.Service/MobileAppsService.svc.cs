@@ -5,6 +5,7 @@ using System.ServiceModel.Web;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
+using ITJakub.MobileApps.DataContracts.Tasks;
 using log4net;
 
 namespace ITJakub.MobileApps.Service
@@ -175,6 +176,66 @@ namespace ITJakub.MobileApps.Service
             try
             {
                 return m_serviceManager.GetGroupMemberIds(groupId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public IList<GroupDetailsUpdateContract> GetGroupsUpdate(IList<OldGroupDetailsContract> groups)
+        {
+            try
+            {
+                return m_serviceManager.GetGroupsUpdate(groups);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public void AssignTaskToGroup(long groupId, long taskId)
+        {
+            try
+            {
+                m_serviceManager.AssignTaskToGroup(groupId, taskId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public IList<TaskContract> GetTasksByApplication(int applicationId)
+        {
+            try
+            {
+                return m_serviceManager.GetTasksByApplication(applicationId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public void CreateTask(long userId, int applicationId, string name, string data)
+        {
+            try
+            {
+                m_serviceManager.CreateTask(userId, applicationId, name, data);
             }
             catch (WebFaultException ex)
             {

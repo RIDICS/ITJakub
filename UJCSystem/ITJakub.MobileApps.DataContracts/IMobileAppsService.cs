@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
+using ITJakub.MobileApps.DataContracts.Tasks;
 
 namespace ITJakub.MobileApps.DataContracts
 {
@@ -49,5 +50,21 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
         IList<long> GetGroupMemberIds(long groupId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Student)]
+        IList<GroupDetailsUpdateContract> GetGroupsUpdate(IList<OldGroupDetailsContract> groups);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        void AssignTaskToGroup(long groupId, long taskId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        IList<TaskContract> GetTasksByApplication(int applicationId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        void CreateTask(long userId, int applicationId, string name, string data);
     }
 }

@@ -98,5 +98,31 @@ namespace ITJakub.MobileApps.Core.Groups
             var group = m_usersRepository.GetGroupDetails(groupId);
             return group.Members.Select(user => user.Id).ToList();
         }
+
+        public IList<GroupDetailsUpdateContract> GetGroupsUpdate(IList<OldGroupDetailsContract> oldGroups)
+        {
+            var groupsInfo = m_usersRepository.GetGroupMembers(oldGroups.Select(contract => contract.Id));
+            var groupList = Mapper.Map<IList<Group>, IList<GroupDetailsUpdateContract>>(groupsInfo);
+
+            foreach (var groupInfo in groupList)
+            {
+                var groupId = groupInfo.Id;
+                var oldGroupInfo = oldGroups.Single(group => group.Id == groupId);
+                groupInfo.Members =
+                    groupInfo.Members.Where(member => !oldGroupInfo.MemberIds.Contains(member.Id))
+                        .ToList();
+            }
+
+            return groupList.Where(group => group.Members.Count > 0).ToList();
+        }
+
+        public void AssignTaskToGroup(long groupId, long taskId)
+        {
+            var task = m_usersRepository.Load<Task>(taskId);
+            var group = m_usersRepository.FindById<Group>(groupId);
+            group.Task = task;
+
+            m_usersRepository.Update(group);
+        }
     }
 }

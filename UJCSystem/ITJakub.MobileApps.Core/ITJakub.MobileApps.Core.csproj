@@ -143,6 +143,7 @@
     <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
     <Compile Include="AutoMapperProfiles\SynchronizedObjectProfile.cs" />
     <Compile Include="AutoMapperProfiles\SynchronizedObjectResponseProfile.cs" />
+    <Compile Include="AutoMapperProfiles\TaskProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="CommunicationTokenManager.cs" />
     <Compile Include="EnterCodeGenerator.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Groups\GroupManager.cs" />
     <Compile Include="MobileServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\TaskManager.cs" />
     <Compile Include="Users\UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
