@@ -2,7 +2,7 @@
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Message
 {
-    public class ApplicationSelectedMessage
+    public class SelectedApplicationMessage
     {
         public AppInfoViewModel AppInfo { get; set; }
     }

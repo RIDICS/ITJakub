@@ -11,7 +11,9 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter"/>
+        <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </Page.Resources>
 
     <!--
@@ -42,7 +44,8 @@
                     VerticalAlignment="Top"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
-                    AutomationProperties.ItemType="Navigation Button"/>
+                    AutomationProperties.ItemType="Navigation Button"
+                    IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}" />
             <TextBlock Style="{StaticResource HeaderTextBlockStyle}"
                        Grid.Column="1"
                        IsHitTestVisible="false"
@@ -65,13 +68,13 @@
                         Grid.Column="0">
                 <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">
                     <Run Text="Kód skupiny:"/>
-                    <Run Text="{Binding GroupCode}"/>
+                    <Run Text="{Binding GroupInfo.GroupCode}"/>
                 </TextBlock>
 
                 <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
                            Margin="0,15,0,0">
                     <Run Text="Čas založení:"/>
-                    <Run Text="{Binding CreateTime, Converter={StaticResource DateTimeToStringConverter}}"/>
+                    <Run Text="{Binding GroupInfo.CreateTime, Converter={StaticResource DateTimeToStringConverter}}"/>
                 </TextBlock>
                 
                 <StackPanel Orientation="Horizontal"
@@ -82,22 +85,60 @@
                     </TextBlock>
                     <Button Content="Změnit"
                             Margin="40,0,0,0"
+                            IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}"
                             Command="{Binding SelectAppCommand}" />
                 </StackPanel>
                 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,40">
                     <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" >
                         <Run Text="Zadání:"/>
-                        <Run Text="{Binding GroupCode}"/>
+                        <Run Text="{Binding SelectedTaskViewModel.Name}"/>
                     </TextBlock>
                     <Button Content="Změnit"
                             Margin="40,0,0,0"
+                            IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}"
                             Command="{Binding SelectTaskCommand}" />
                 </StackPanel>
+
+                <TextBlock Text="Není zvoleno žádné zadání."
+                           FontSize="16"
+                           Margin="0,5,50,0"
+                           HorizontalAlignment="Center"
+                           Foreground="Tomato"
+                           FontWeight="Bold"
+                           Visibility="{Binding TaskNotSelectedError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <Button Content="Uložit zvolené zadání"
+                        Margin="0,0,50,0"
+                        FontSize="18"
+                        Width="300"
+                        HorizontalAlignment="Center"
+                        IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}"
+                        Command="{Binding SaveTaskCommand}" />
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,5,50,0"
+                            Visibility="{Binding Saving, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ProgressRing IsActive="True"
+                                  Width="24"
+                                  Height="24"/>
+                    <TextBlock Text="Ukládání"
+                               FontSize="16"
+                               Margin="5,0,30,0"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock Text="Uloženo"
+                           FontSize="16"
+                           Margin="0,5,50,0"
+                           HorizontalAlignment="Center"
+                           Foreground="Gold"
+                           Visibility="{Binding TaskSaved, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StackPanel>
             
             <Grid Grid.Column="1"
-                  Margin="0,0,120,0">
+                  Margin="0,0,120,0"
+                  DataContext="{Binding GroupInfo}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -110,8 +151,9 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
-                           Text="Seznam členů:"
-                           Grid.Column="0"/>
+                               Grid.Column="0">
+                        <Run Text="Seznam členů ("/><Run Text="{Binding MemberCount}"/><Run Text="):" />
+                    </TextBlock>
 
                     <SearchBox Grid.Column="1"
                                HorizontalAlignment="Right"
@@ -131,7 +173,7 @@
                 <ListView IsItemClickEnabled="False"
                           SelectionMode="None"
                           Grid.Row="1"
-                          ItemsSource="{Binding MemberList}">
+                          ItemsSource="{Binding FilteredMembers}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -147,6 +189,13 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+
+                <TextBlock Text="V této skupině nejsou žádní členové."
+                           Visibility="{Binding NoMembersVisibility}"
+                           Grid.Row="1"
+                           FontSize="15"
+                           FontWeight="Light"
+                           Margin="50,15,0,0" />
             </Grid>
         </Grid>
 

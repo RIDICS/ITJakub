@@ -15,6 +15,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
     {
         private ObservableCollection<GroupMemberViewModel> m_members;
         private int m_memberCount;
+        private string m_searchText;
 
         public GroupInfoViewModel()
         {
@@ -31,9 +32,18 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public long GroupId { get; set; }
         public GroupType GroupType { get; set; }
         public DateTime CreateTime { get; set; }
-        public string SearchText { get; set; }
 
         public RelayCommand SearchCommand { get; private set; }
+
+        public string SearchText
+        {
+            get { return m_searchText; }
+            set
+            {
+                m_searchText = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public int MemberCount
         {

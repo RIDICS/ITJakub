@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
+using ITJakub.MobileApps.Client.Core.Manager.Tasks;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Groups;
+using Microsoft.Practices.Unity;
 
 namespace ITJakub.MobileApps.Client.Core.Service
 {
@@ -17,13 +19,14 @@ namespace ITJakub.MobileApps.Client.Core.Service
         private readonly ApplicationManager m_applicationManager;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly GroupManager m_groupManager;
+        private readonly TaskManager m_taskManager;
 
-        public DataService(AuthenticationManager authenticationManager, ApplicationManager applicationManager,
-            GroupManager groupManager)
+        public DataService(IUnityContainer container)
         {
-            m_authenticationManager = authenticationManager;
-            m_applicationManager = applicationManager;
-            m_groupManager = groupManager;
+            m_authenticationManager = container.Resolve<AuthenticationManager>();
+            m_applicationManager = container.Resolve<ApplicationManager>();
+            m_groupManager = container.Resolve<GroupManager>();
+            m_taskManager = container.Resolve<TaskManager>();
         }
 
         public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
@@ -81,6 +84,16 @@ namespace ITJakub.MobileApps.Client.Core.Service
         public void UpdateGroupMembers(GroupInfoViewModel group)
         {
             m_groupManager.UpdateGroupNewMembers(group);
+        }
+
+        public void GetTasksByApplication(ApplicationType application, Action<ObservableCollection<TaskViewModel>, Exception> callback)
+        {
+            m_taskManager.GetTasksByApplication(application, callback);
+        }
+
+        public void AssignTaskToGroup(long groupId, long taskId, Action<Exception> callback)
+        {
+            m_taskManager.AssignTaskToGroup(groupId, taskId, callback);
         }
 
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)

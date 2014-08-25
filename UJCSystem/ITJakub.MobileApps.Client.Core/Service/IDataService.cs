@@ -29,5 +29,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
         void ConnectToGroup(string code, Action<Exception> callback);
         void LoadGroupMemberAvatars(IList<GroupMemberViewModel> groupMember);
         void UpdateGroupMembers(GroupInfoViewModel group);
+
+        void GetTasksByApplication(ApplicationType application, Action<ObservableCollection<TaskViewModel>, Exception> callback);
+        void AssignTaskToGroup(long groupId, long taskId, Action<Exception> callback);
     }
 }

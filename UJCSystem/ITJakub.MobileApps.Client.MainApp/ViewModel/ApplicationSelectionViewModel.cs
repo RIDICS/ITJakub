@@ -74,7 +74,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 return;
 
             m_navigationService.GoBack();
-            Messenger.Default.Send(new ApplicationSelectedMessage
+            Messenger.Default.Send(new SelectedApplicationMessage
             {
                 AppInfo = selectedApp
             });

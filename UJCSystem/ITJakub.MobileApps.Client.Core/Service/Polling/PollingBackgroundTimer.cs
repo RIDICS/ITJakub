@@ -60,9 +60,12 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
                 var task = new Task(action);
                 task.ContinueWith(task1 =>
                 {
-                    Interlocked.Decrement(ref remainingActions);
-                    if (remainingActions == 0)
-                        m_timer = ThreadPoolTimer.CreateTimer(OnTimerTick, m_timeSpan);
+                    lock (this)
+                    {
+                        remainingActions--;
+                        if (remainingActions == 0)
+                            m_timer = ThreadPoolTimer.CreateTimer(OnTimerTick, m_timeSpan);
+                    }
                 });
                 task.Start();
             }

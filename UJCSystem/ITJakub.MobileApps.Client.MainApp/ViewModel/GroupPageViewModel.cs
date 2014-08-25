@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Service;
@@ -20,12 +18,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private string m_groupName;
-        private string m_groupCode;
-        private ObservableCollection<GroupMemberViewModel> m_memberList;
-        private DateTime m_createTime;
         private AppInfoViewModel m_selectedApplicationInfo;
         private GroupInfoViewModel m_groupInfo;
+        private TaskViewModel m_selectedTaskViewModel;
+        private bool m_saving;
+        private bool m_taskSaved;
+        private bool m_taskNotSelectedError;
 
         /// <summary>
         /// Initializes a new instance of the GroupPageViewModel class.
@@ -41,22 +39,25 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
 
             InitCommands();
+            //TODO polling group members
         }
 
         private void InitCommands()
         {
-            GoBackCommand = new RelayCommand(() => m_navigationService.GoBack());
+            GoBackCommand = new RelayCommand(() =>
+            {
+                Messenger.Default.Unregister(this);
+                m_navigationService.GoBack();
+            });
             SelectAppCommand = new RelayCommand(SelectApplication);
             SelectTaskCommand = new RelayCommand(SelectTask);
+            SaveTaskCommand = new RelayCommand(SaveTask);
         }
 
         private void LoadData(GroupInfoViewModel group)
         {
             GroupInfo = group;
-            //GroupName = group.GroupName;
-            GroupCode = group.GroupCode;
-            CreateTime = group.CreateTime;
-            MemberList = group.Members;
+            //TODO load current task
         }
 
         public GroupInfoViewModel GroupInfo
@@ -65,38 +66,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             set
             {
                 m_groupInfo = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string GroupName
-        {
-            get { return m_groupName; }
-            set
-            {
-                m_groupName = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string GroupCode
-        {
-            get { return m_groupCode; }
-            set { m_groupCode = value; RaisePropertyChanged(); }
-        }
-
-        public ObservableCollection<GroupMemberViewModel> MemberList
-        {
-            get { return m_memberList; }
-            set { m_memberList = value; RaisePropertyChanged(); }
-        }
-
-        public DateTime CreateTime
-        {
-            get { return m_createTime; }
-            set
-            {
-                m_createTime = value;
                 RaisePropertyChanged();
             }
         }
@@ -111,7 +80,45 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public string SearchText { get; set; }
+        public TaskViewModel SelectedTaskViewModel
+        {
+            get { return m_selectedTaskViewModel; }
+            set
+            {
+                m_selectedTaskViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool Saving
+        {
+            get { return m_saving; }
+            set
+            {
+                m_saving = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool TaskSaved
+        {
+            get { return m_taskSaved; }
+            set
+            {
+                m_taskSaved = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool TaskNotSelectedError
+        {
+            get { return m_taskNotSelectedError; }
+            set
+            {
+                m_taskNotSelectedError = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public RelayCommand GoBackCommand { get; private set; }
 
@@ -119,22 +126,79 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         public RelayCommand SelectTaskCommand { get; private set; }
 
-        public RelayCommand SearchCommand { get; set; }
-        
+        public RelayCommand SaveTaskCommand { get; private set; }
 
         private void SelectApplication()
         {
+            SelectedTaskViewModel = null;
+            HideInfoAndErrors();
+            
             m_navigationService.Navigate(typeof(ApplicationSelectionView));
-            Messenger.Default.Register<ApplicationSelectedMessage>(this, message =>
+            Messenger.Default.Register<SelectedApplicationMessage>(this, message =>
             {
                 SelectedApplicationInfo = message.AppInfo;
-                Messenger.Default.Unregister<ApplicationSelectedMessage>(this);
+                Messenger.Default.Unregister<SelectedApplicationMessage>(this);
             });
         }
 
         private void SelectTask()
         {
-            throw new NotImplementedException();
+            HideInfoAndErrors();
+            if (SelectedApplicationInfo == null)
+            {
+                SelectAppAndTask();
+                return;
+            }
+
+            m_navigationService.Navigate(typeof(SelectTaskView));
+            Messenger.Default.Send(new SelectedApplicationMessage
+            {
+                AppInfo = SelectedApplicationInfo
+            });
+            Messenger.Default.Register<SelectedTaskMessage>(this, message =>
+            {
+                SelectedTaskViewModel = message.TaskInfo;
+                Messenger.Default.Unregister<SelectTaskView>(this);
+            });
+        }
+
+        private void SelectAppAndTask()
+        {
+            m_navigationService.Navigate(typeof(ApplicationSelectionView));
+            Messenger.Default.Register<SelectedApplicationMessage>(this, message =>
+            {
+                SelectedApplicationInfo = message.AppInfo;
+                Messenger.Default.Unregister<SelectedApplicationMessage>(this);
+                SelectTask();
+            });
+        }
+
+        private void HideInfoAndErrors()
+        {
+            TaskSaved = false;
+            TaskNotSelectedError = false;
+            Saving = false;
+        }
+
+        private void SaveTask()
+        {
+            HideInfoAndErrors();
+
+            if (SelectedTaskViewModel == null)
+            {
+                TaskNotSelectedError = true;
+                return;
+            }
+
+            Saving = true;
+            m_dataService.AssignTaskToGroup(m_groupInfo.GroupId, m_selectedTaskViewModel.Id, exception =>
+            {
+                Saving = false;
+                if (exception != null)
+                    return;
+
+                TaskSaved = true;
+            });
         }
     }
 }

@@ -55,5 +55,18 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                 callback(null, exception);
             }
         }
+
+        public async void AssignTaskToGroup(long groupId, long taskId, Action<Exception> callback)
+        {
+            try
+            {
+                await m_client.AssignTaskToGroupAsync(groupId, taskId);
+                callback(null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
+        }
     }
 }

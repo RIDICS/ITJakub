@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls.Primitives;
 using GalaSoft.MvvmLight.Messaging;
@@ -17,6 +18,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
 
         private string m_responseData;
         private WebAuthenticationStatus m_responseStatus;
+        private WebAuthView m_webAuthView;
 
         private CustomWebAuthenticationBroker(WebAuthenticationOptions options, Uri startUri, Uri endUri)
         {
@@ -103,14 +105,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
                     Width = Width,
                     Height = Window.Current.Bounds.Height
                 };
+                InputPane.GetForCurrentView().Showing += KeyboardShowing;
+                InputPane.GetForCurrentView().Hiding += KeyboardHiding;
 
-                var f = new WebAuthView(viewModel)
+                m_webAuthView = new WebAuthView(viewModel)
                 {
                     Width = Window.Current.Bounds.Width,
                     Height = Window.Current.Bounds.Height
                 };
 
-                m_authenticationPopup.Child = f;
+                m_authenticationPopup.Child = m_webAuthView;
                 m_authenticationPopup.IsOpen = true;
                 m_responseStatus = WebAuthenticationStatus.Success;
                 m_responseData = string.Empty;
@@ -131,8 +135,19 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
             }
         }
 
+        private void KeyboardHiding(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            m_authenticationPopup.VerticalOffset = 0;
+            m_webAuthView.Height = Window.Current.Bounds.Height;
+        }
 
+        private void KeyboardShowing(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            m_authenticationPopup.VerticalOffset -= 100;
+            m_webAuthView.Height = m_webAuthView.Height - args.OccludedRect.Height + 200;
+        }
       
+
 
         private void Dispose(bool disposing)
         {
@@ -142,6 +157,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
             if (disposing)
             {
                 UnregisterFromMessages();
+                InputPane.GetForCurrentView().Hiding -= KeyboardHiding;
+                InputPane.GetForCurrentView().Showing -= KeyboardShowing;
             }
             m_disposed = true;
         }

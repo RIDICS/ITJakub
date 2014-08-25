@@ -9,7 +9,7 @@
     RequestedTheme="Light"
     d:DataContext="{d:DesignInstance Type=authBroker:WebAuthViewModel }">
 
-    <Grid>
+    <Grid Background="#70000000">
         <Grid Margin="0,100,0,100">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60" />

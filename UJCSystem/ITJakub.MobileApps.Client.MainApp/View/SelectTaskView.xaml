@@ -1,14 +1,19 @@
 ﻿<Page
-    x:Name="PageRoot"
     x:Class="ITJakub.MobileApps.Client.MainApp.View.SelectTaskView"
     DataContext="{Binding SelectTaskViewModel, Source={StaticResource Locator}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <CollectionViewSource x:Name="TaskList" Source="{Binding TaskList}" IsSourceGrouped="False"/>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
     </Page.Resources>
 
     <Page.BottomAppBar>
@@ -38,26 +43,103 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Command="{Binding NavigationHelper.GoBackCommand, ElementName=PageRoot}"
+            
+            <Button Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
-                    AutomationProperties.ItemType="Navigation Button"/>
+                    AutomationProperties.ItemType="Navigation Button" />
+            
             <TextBlock Text="Výběr zadání"
                        Style="{StaticResource HeaderTextBlockStyle}"
                        Grid.Column="1" 
                        IsHitTestVisible="false"
                        TextWrapping="NoWrap"
                        VerticalAlignment="Center" />
-            <SearchBox Grid.Column="2"
+            
+            <TextBlock Grid.Column="2"
+                       Style="{StaticResource SubheaderTextBlockStyle}"
+                       VerticalAlignment="Center"
+                       Margin="30,0,0,0">
+                <Run Text="pro aplikaci" />
+                <Run Text="{Binding SelectedApplication.Name}" />
+            </TextBlock>
+            
+            <SearchBox Grid.Column="3"
                        VerticalAlignment="Center"
                        Margin="0,0,40,0"
-                       Width="250"/>
+                       Width="250" />
+
+            <ProgressBar VerticalAlignment="Top"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="4"
+                         IsIndeterminate="True"
+                         Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
+
+        <GridView Grid.Row="1"
+                  Padding="120,0,50,100"
+                  IsItemClickEnabled="True"
+                  SelectionMode="None"
+                  ItemsSource="{Binding Source={StaticResource TaskList}}" >
+
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="ItemClick">
+                    <core:InvokeCommandAction Command="{Binding TaskClickCommand}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid GroupPadding="0,0,70,0" />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Background="White"
+                              Width="48"
+                              Height="48"
+                              HorizontalAlignment="Center" />
+                        <StackPanel Orientation="Vertical"
+                                    Margin="5,0,0,0">
+                            <TextBlock Text="{Binding Name}"
+                                       FontWeight="Bold" />
+                            <TextBlock>
+                                <Run Text="Autor:" />
+                                <Run Text="{Binding Author.FirstName}" />
+                                <Run Text="{Binding Author.LastName}" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Text="Vytvořeno:" />
+                                <Run Text="{Binding CreateTime, Converter={StaticResource DateTimeToStringConverter}}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+
+            <!--<GridView.GroupStyle>
+                <GroupStyle HidesIfEmpty="True">
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Key, Converter={StaticResource GroupTypeToNameConverter}}"
+                                       Style="{StaticResource SubheaderTextBlockStyle}" />
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </GridView.GroupStyle>-->
+        </GridView>
+
+        <TextBlock Grid.Row="1"
+                   Margin="120,20,0,0"
+                   Text="Pro zvolenou aplikaci nejsou dostupná žádná zadání."
+                   Style="{StaticResource SubheaderTextBlockStyle}"
+                   Visibility="{Binding NoTaskExists, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Page>

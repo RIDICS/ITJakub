@@ -222,10 +222,11 @@
                                             <RowDefinition Height="450" />
                                         </Grid.RowDefinitions>
                                         
-                                        <TextBlock Text="Seznam členů skupiny:"
-                                                   FontWeight="Bold"
+                                        <TextBlock FontWeight="Bold"
                                                    FontSize="16"
-                                                   Grid.Row="1"/>
+                                                   Grid.Row="1">
+                                            <Run Text="Seznam členů skupiny ("/><Run Text="{Binding MemberCount}"/><Run Text="):" />
+                                        </TextBlock>
                                         
                                         <SearchBox Grid.Row="0"
                                                    HorizontalAlignment="Right"
