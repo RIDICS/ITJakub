@@ -1,5 +1,6 @@
 using System;
 using ITJakub.MobileApps.Client.Shared.Data;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Core.ViewModel
 {
@@ -10,5 +11,6 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public DateTime CreateTime { get; set; }
         public string Data { get; set; }
         public AuthorInfo Author { get; set; }
+        public ApplicationType Application { get; set; }
     }
 }

@@ -1,19 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.Core.Service.Polling;
+using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     public class ApplicationHostViewModel : ViewModelBase
     {
+        private const PollingInterval TaskPollingInterval = PollingInterval.Medium;
+
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
+        private readonly IMainPollingService m_pollingService;
         private string m_applicationName;
         private ApplicationBaseViewModel m_applicationViewModel;
         private ApplicationBaseViewModel m_chatViewModel;
@@ -21,40 +29,67 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_isChatDisplayed;
         private bool m_isChatSupported;
         private bool m_isCommandBarOpen;
+        private bool m_waitingForTask;
 
-        public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService)
+        public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_pollingService = pollingService;
             GoBackCommand = new RelayCommand(GoBack);
+
             Messenger.Default.Register<OpenGroupMessage>(this, message =>
             {
-                var applicationType = message.Group.ApplicationType;
-                //TODO for debug
-                if (applicationType == ApplicationType.Unknown)
-                    applicationType = ApplicationType.SampleApp;
-                LoadApplications(applicationType);
+                WaitingForTask = true;
+                m_pollingService.RegisterForGetTaskByGroup(TaskPollingInterval, message.Group.GroupId, LoadTask);
                 Messenger.Default.Unregister<OpenGroupMessage>(this);
             });
-            Messenger.Default.Register<LogOutMessage>(this, message =>
-            {
+
+            Messenger.Default.Register<LogOutMessage>(this, message => StopCommunication());
+        }
+
+        private void StopCommunication()
+        {
+            WaitingForTask = false;
+            m_pollingService.UnregisterForTaskByGroup(TaskPollingInterval, LoadTask);
+            Messenger.Default.Unregister(this);
+
+            if (ChatApplicationViewModel != null)
                 ChatApplicationViewModel.StopCommunication();
+            
+            if (ApplicationViewModel != null)
                 ApplicationViewModel.StopCommunication();
-                Messenger.Default.Unregister(this);
-            });
         }
 
         private void GoBack()
         {
-            ChatApplicationViewModel.StopCommunication();
-            ApplicationViewModel.StopCommunication();
-            Messenger.Default.Unregister(this);
+            StopCommunication();
 
             if (m_navigationService.CanGoBack)
                 m_navigationService.GoBack();
         }
 
-        private void LoadApplications(ApplicationType type)
+        private void LoadTask(TaskViewModel task, Exception exception)
+        {
+            if (exception != null)
+                return;
+
+            if (task == null || task.Data == null)
+                return;
+
+            m_pollingService.UnregisterForTaskByGroup(TaskPollingInterval, LoadTask);
+
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                if (!WaitingForTask)
+                    return;
+
+                WaitingForTask = false;
+                LoadApplications(task.Application, task.Data);
+            });
+        }
+
+        private void LoadApplications(ApplicationType type, string taskData)
         {
             m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, (applications, exception) =>
             {
@@ -63,6 +98,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
                 var application = applications[type];
                 ApplicationViewModel = application.ApplicationViewModel;
+                ApplicationViewModel.SetTask(taskData);
                 ApplicationViewModel.InitializeCommunication();
                 ApplicationName = application.Name;
                 IsChatSupported = application.IsChatSupported;
@@ -127,6 +163,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             set
             {
                 m_isCommandBarOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool WaitingForTask
+        {
+            get { return m_waitingForTask; }
+            set
+            {
+                m_waitingForTask = value;
                 RaisePropertyChanged();
             }
         }

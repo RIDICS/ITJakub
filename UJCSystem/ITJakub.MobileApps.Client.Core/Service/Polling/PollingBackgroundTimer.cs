@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Windows.System.Threading;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -26,7 +25,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
                 m_actions.Add(action);
 
                 if (m_timer == null)
-                    m_timer = ThreadPoolTimer.CreateTimer(OnTimerTick, m_timeSpan);
+                    m_timer = ThreadPoolTimer.CreateTimer(OnTimerTick, new TimeSpan(0));
             }
         }
 

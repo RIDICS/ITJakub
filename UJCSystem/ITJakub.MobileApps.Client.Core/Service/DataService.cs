@@ -96,6 +96,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_taskManager.AssignTaskToGroup(groupId, taskId, callback);
         }
 
+        public void GetTaskForGroup(long groupId, Action<TaskViewModel, Exception> callback)
+        {
+            m_taskManager.GetTaskForGroupAsync(groupId, callback);
+        }
+
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {
             m_authenticationManager.LoginByProvider(loginProviderType, callback);

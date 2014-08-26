@@ -1,26 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Windows.UI.Core;
 using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Core.Manager.Tasks;
+using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Core.Service.Polling
 {
-    public class PollingService : IPollingService
+    public class PollingService : IPollingService, IMainPollingService
     {
         private readonly ISynchronizeCommunication m_synchronizeManager;
-        private readonly TimerService m_timerService;
+        private readonly ITimerService m_timerService;
+        private readonly TaskManager m_taskManager;
 
         //Mapping from callback for synchronized objects to generic action (for using TimerService)
         private readonly Dictionary<Action<IList<ObjectDetails>, Exception>, Action> m_registeredForSynchronizedObjects;
+        
+        private readonly Dictionary<object, Action> m_registeredActions;
 
-        public PollingService(TimerService timerService)
+        public PollingService(ITimerService timerService, TaskManager taskManager)
         {
             m_timerService = timerService;
+            m_taskManager = taskManager;
             m_synchronizeManager = SynchronizeManager.Instance;
+            m_registeredActions = new Dictionary<object, Action>();
             m_registeredForSynchronizedObjects = new Dictionary<Action<IList<ObjectDetails>, Exception>, Action>();
         }
 
@@ -72,6 +78,23 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             {
                 DispatcherHelper.CheckBeginInvokeOnUI(() => parameters.Callback(null, exception));
             }
+        }
+
+        public void RegisterForGetTaskByGroup(PollingInterval interval, long groupId, Action<TaskViewModel,Exception> callback)
+        {
+            Action newAction = () => m_taskManager.GetTaskForGroupAsync(groupId, callback).GetAwaiter().GetResult();
+            m_timerService.Register(interval, newAction);
+            m_registeredActions.Add(callback, newAction);
+        }
+
+        public void UnregisterForTaskByGroup(PollingInterval interval, Action<TaskViewModel, Exception> action)
+        {
+            if (!m_registeredActions.ContainsKey(action))
+                return;
+
+            var registeredAction = m_registeredActions[action];
+            m_timerService.Unregister(interval, registeredAction);
+            m_registeredActions.Remove(action);
         }
 
         private class PollingObjectsParameters

@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Manager\Tasks\TaskManager.cs" />
+    <Compile Include="Service\Polling\IMainPollingService.cs" />
     <Compile Include="ViewModel\TaskViewModel.cs" />
     <Compile Include="Service\Polling\IPollingTimer.cs" />
     <Compile Include="Service\Polling\ITimerService.cs" />

@@ -106,7 +106,7 @@ namespace ITJakub.MobileApps.Core
             m_groupManager.AssignTaskToGroup(groupId, taskId);
         }
 
-        public IList<TaskContract> GetTasksByApplication(int applicationId)
+        public IList<TaskDetailContract> GetTasksByApplication(int applicationId)
         {
             return m_taskManager.GetTasksByApplication(applicationId);
         }
@@ -114,6 +114,11 @@ namespace ITJakub.MobileApps.Core
         public void CreateTask(long userId, int applicationId, string name, string data)
         {
             m_taskManager.CreateTask(userId, applicationId, name, data);
+        }
+
+        public TaskContract GetTaskForGroup(long groupId)
+        {
+            return m_taskManager.GetTaskForGroup(groupId);
         }
     }
 }

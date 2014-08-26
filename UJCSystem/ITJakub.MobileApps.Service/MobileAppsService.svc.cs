@@ -216,7 +216,7 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
-        public IList<TaskContract> GetTasksByApplication(int applicationId)
+        public IList<TaskDetailContract> GetTasksByApplication(int applicationId)
         {
             try
             {
@@ -236,6 +236,21 @@ namespace ITJakub.MobileApps.Service
             try
             {
                 m_serviceManager.CreateTask(userId, applicationId, name, data);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public TaskContract GetTaskForGroup(long groupId)
+        {
+            try
+            {
+                return m_serviceManager.GetTaskForGroup(groupId);
             }
             catch (WebFaultException ex)
             {

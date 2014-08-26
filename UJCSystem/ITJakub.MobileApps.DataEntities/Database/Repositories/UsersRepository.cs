@@ -196,6 +196,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 return session.CreateCriteria<Task>()
                     .Add(Restrictions.Eq("Application", application))
                     .SetFetchMode("Author", FetchMode.Join)
+                    .AddOrder(new Order("CreateTime", false))
                     .List<Task>();
             }
         }
@@ -211,6 +212,20 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                     .Add(Restrictions.Eq("Author", author))
                     .SetFetchMode("Author", FetchMode.Join)
                     .List<Task>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Group GetGroupWithTask(long groupId)
+        {
+            using (var session = GetSession())
+            {
+                var group = session.QueryOver<Group>()
+                    .Where(x => x.Id == groupId)
+                    .Fetch(x => x.Task).Eager
+                    .SingleOrDefault();
+
+                return group;
             }
         }
     }

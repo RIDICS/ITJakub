@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
@@ -9,33 +8,58 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Application
     public class ApplicationIdManager
     {
         private readonly MobileAppsServiceClient m_serviceClient;
-        private Dictionary<string, int> m_applicationIds;
+        private Dictionary<ApplicationType, int> m_applicationTypeToId;
+        private Dictionary<int, ApplicationType> m_applicaitonIdToType; 
 
         public ApplicationIdManager(MobileAppsServiceClient serviceClient)
         {
             m_serviceClient = serviceClient;
         }
 
-        private async Task LoadAllApplicationId()
+        private void LoadAllApplicationId()
         {
-            var appList = await m_serviceClient.GetAllApplication();
-            m_applicationIds = new Dictionary<string, int>();
+            var appList = m_serviceClient.GetAllApplication().Result;
+            
+            m_applicationTypeToId = new Dictionary<ApplicationType, int>();
+            m_applicaitonIdToType = new Dictionary<int, ApplicationType>();
+
             foreach (var application in appList)
             {
-                m_applicationIds[application.Name] = application.Id;
+                var applicationType = ConvertStringToAppType(application.Name);
+                if (applicationType == ApplicationType.Unknown)
+                    continue;
+
+                m_applicationTypeToId[applicationType] = application.Id;
+                m_applicaitonIdToType[application.Id] = applicationType;
             }
         }
 
-        public async Task<int> GetApplicationIdAsync(ApplicationType applicationType)
+        private ApplicationType ConvertStringToAppType(string applicationName)
         {
-            if (m_applicationIds == null)
-                await LoadAllApplicationId();
+            ApplicationType appType;
+            return Enum.TryParse(applicationName, true, out appType) ? appType : ApplicationType.Unknown;
+        }
 
-            var applicationName = applicationType.ToString();
-            if (m_applicationIds.ContainsKey(applicationName))
-                return m_applicationIds[applicationName];
+        public int GetApplicationId(ApplicationType applicationType)
+        {
+            if (m_applicationTypeToId == null)
+                LoadAllApplicationId();
 
-            throw new ArgumentException("Server doesn't know this application.");
+            if (m_applicationTypeToId.ContainsKey(applicationType))
+                return m_applicationTypeToId[applicationType];
+
+            throw new ArgumentException("Server doesn't know this application type.");
+        }
+
+        public ApplicationType GetApplicationType(int applicationId)
+        {
+            if (m_applicaitonIdToType == null)
+                LoadAllApplicationId();
+
+            if (m_applicaitonIdToType.ContainsKey(applicationId))
+                return m_applicaitonIdToType[applicationId];
+
+            throw new ArgumentException("Server doesn't know this application ID.");
         }
     }
 }

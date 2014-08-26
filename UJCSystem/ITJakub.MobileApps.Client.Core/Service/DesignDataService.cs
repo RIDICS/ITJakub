@@ -150,5 +150,13 @@ namespace ITJakub.MobileApps.Client.Core.Service
         {
             callback(null);
         }
+
+        public void GetTaskForGroup(long groupId, Action<TaskViewModel, Exception> callback)
+        {
+            callback(new TaskViewModel
+            {
+                Application = ApplicationType.SampleApp
+            }, null);
+        }
     }
 }

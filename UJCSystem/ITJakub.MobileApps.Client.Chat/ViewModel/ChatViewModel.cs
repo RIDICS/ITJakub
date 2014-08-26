@@ -40,6 +40,8 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             });
         }
 
+        public override void SetTask(string data) { }
+
         public RelayCommand SendCommand
         {
             get { return m_sendCommand; }

@@ -355,7 +355,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
-        public Task<IList<TaskContract>> GetTasksByApplicationAsync(int applicationId)
+        public Task<IList<TaskDetailContract>> GetTasksByApplicationAsync(int applicationId)
         {
             return Task.Run(() =>
             {
@@ -447,5 +447,31 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
         }
         #endregion
 
+        public Task<TaskContract> GetTaskForGroup(long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetTaskForGroup(groupId);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
     }
 }

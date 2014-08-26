@@ -35,6 +35,11 @@ namespace ITJakub.MobileApps.Client.Hangman
             //TODO init communication and start timers
         }
 
+        public override void SetTask(string data)
+        {
+            //TODO get task
+        }
+
         public override void StopCommunication()
         {
             //TODO stop timers

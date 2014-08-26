@@ -35,6 +35,11 @@ namespace ITJakub.MobileApps.Client.SampleApp
             //Load data from server and start DispatcherTimer
         }
 
+        public override void SetTask(string data)
+        {
+            //Get task data
+        }
+
         public override void StopCommunication()
         {
             //Stop all running DispatcherTimer

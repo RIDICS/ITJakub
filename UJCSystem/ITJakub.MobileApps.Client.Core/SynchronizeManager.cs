@@ -48,7 +48,7 @@ namespace ITJakub.MobileApps.Client.Core
                 Data = objectValue
             };
             
-            var appId = await m_applicationIdManager.GetApplicationIdAsync(applicationType);
+            var appId = m_applicationIdManager.GetApplicationId(applicationType);
             var groupId = m_groupManager.CurrentGroupId;
             await m_serviceClient.CreateSynchronizedObjectAsync(appId, groupId, userId.Value, synchronizedObject);
         }
@@ -59,7 +59,7 @@ namespace ITJakub.MobileApps.Client.Core
             if (!userId.HasValue)
                 throw new ArgumentException("No logged user");
 
-            var appId = await m_applicationIdManager.GetApplicationIdAsync(applicationType);
+            var appId = m_applicationIdManager.GetApplicationId(applicationType);
             var groupId = m_groupManager.CurrentGroupId;
             var objectList = await m_serviceClient.GetSynchronizedObjectsAsync(groupId, appId, objectType, since);
 

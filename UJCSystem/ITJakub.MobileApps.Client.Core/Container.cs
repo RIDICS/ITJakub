@@ -53,7 +53,9 @@ namespace ITJakub.MobileApps.Client.Core
             container.RegisterType<GroupManager>(WithLifetime.ContainerControlled(typeof(GroupManager)));
             container.RegisterType<ApplicationIdManager>(WithLifetime.ContainerControlled(typeof (ApplicationIdManager)));
             container.RegisterType<TaskManager>(WithLifetime.ContainerControlled(typeof (TaskManager)));
-            container.RegisterType<IPollingService,PollingService>(WithLifetime.ContainerControlled(typeof (PollingService)));
+            container.RegisterType<ITimerService, TimerService>(WithLifetime.ContainerControlled(typeof (TimerService)));
+            container.RegisterType<IPollingService, PollingService>(WithLifetime.ContainerControlled(typeof (PollingService)));
+            container.RegisterType<IMainPollingService, PollingService>(WithLifetime.ContainerControlled(typeof (PollingService)));
 
 
             //container.RegisterTypes(AllClasses.FromApplication())

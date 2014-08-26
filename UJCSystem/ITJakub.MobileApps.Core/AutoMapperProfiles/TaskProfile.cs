@@ -8,7 +8,12 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<Task, TaskContract>();
+            CreateMap<Task, TaskContract>()
+                .ForMember(taskContract => taskContract.ApplicationId,
+                    expression => expression.MapFrom(task => task.Application.Id))
+                .Include<Task, TaskDetailContract>();
+
+            CreateMap<Task, TaskDetailContract>();
         }
     }
 }

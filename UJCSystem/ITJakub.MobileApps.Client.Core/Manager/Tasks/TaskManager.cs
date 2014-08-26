@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
@@ -30,12 +31,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
             {
                 var currentUserId = m_authenticationManager.GetCurrentUserId();
                 var userId = currentUserId.HasValue ? currentUserId.Value : 0;
-                var applicationId = await m_applicationIdManager.GetApplicationIdAsync(application);
+                var applicationId = m_applicationIdManager.GetApplicationId(application);
 
                 var taskList = await m_client.GetTasksByApplicationAsync(applicationId);
                 var tasks = new ObservableCollection<TaskViewModel>(taskList.Select(task => new TaskViewModel
                 {
                     Id = task.Id,
+                    Application = m_applicationIdManager.GetApplicationType(task.ApplicationId),
                     Name = task.Name,
                     CreateTime = task.CreateTime,
                     Data = task.Data,
@@ -66,6 +68,28 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
             catch (ClientCommunicationException exception)
             {
                 callback(exception);
+            }
+        }
+
+        public async Task GetTaskForGroupAsync(long groupId, Action<TaskViewModel, Exception> callback)
+        {
+            try
+            {
+                var result = await m_client.GetTaskForGroup(groupId);
+                if (result == null)
+                    return;
+
+                var task = new TaskViewModel
+                {
+                    Application = m_applicationIdManager.GetApplicationType(result.ApplicationId),
+                    Id = result.Id,
+                    Data = result.Data
+                };
+                callback(task, null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
             }
         }
     }

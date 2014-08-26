@@ -40,7 +40,7 @@ namespace ITJakub.MobileApps.Core.Tasks
             m_azureTableTaskDao.Create(taskEntity);
         }
 
-        public IList<TaskContract> GetTasksByApplication(int applicationId)
+        public IList<TaskDetailContract> GetTasksByApplication(int applicationId)
         {
             var tasks = m_usersRepository.GetTasksByApplication(applicationId);
 
@@ -50,7 +50,26 @@ namespace ITJakub.MobileApps.Core.Tasks
                 if (taskEntity != null)
                     task.Data = taskEntity.Data;
             }
-            return Mapper.Map<IList<TaskContract>>(tasks);
+            return Mapper.Map<IList<TaskDetailContract>>(tasks);
+        }
+
+        public TaskContract GetTaskForGroup(long groupId)
+        {
+            var group = m_usersRepository.GetGroupWithTask(groupId);
+            if (group == null)
+                return null;
+
+            var task = Mapper.Map<Task, TaskContract>(group.Task);
+            if (task == null)
+                return null;
+
+            var taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(Convert.ToString(task.Id),
+                Convert.ToString(group.Task.Application.Id));
+
+            if (taskEntity != null)
+                task.Data = taskEntity.Data;
+
+            return task;
         }
     }
 }
