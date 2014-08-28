@@ -108,6 +108,8 @@
     <Compile Include="Communication\ClientCommunicationException.cs" />
     <Compile Include="Communication\IPollingService.cs" />
     <Compile Include="Communication\PollingInterval.cs" />
+    <Compile Include="Converter\BooleanNegationConverter.cs" />
+    <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Enum\ApplicationCategory.cs" />
     <Compile Include="Enum\ApplicationRoleType.cs" />
     <Compile Include="Enum\ApplicationType.cs" />

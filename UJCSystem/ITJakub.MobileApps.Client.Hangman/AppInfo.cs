@@ -1,5 +1,8 @@
 ﻿using System;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Hangman.DataService;
+using ITJakub.MobileApps.Client.Hangman.View;
+using ITJakub.MobileApps.Client.Hangman.ViewModel;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -9,8 +12,11 @@ namespace ITJakub.MobileApps.Client.Hangman
     [MobileApplication(ApplicationType.Hangman)]
     public class AppInfo : ApplicationBase
     {
+        private readonly HangmanDataService m_dataService;
+
         public AppInfo(ISynchronizeCommunication applicationCommunication) : base(applicationCommunication)
         {
+            m_dataService = new HangmanDataService(applicationCommunication);
         }
 
         public override string Name
@@ -20,7 +26,7 @@ namespace ITJakub.MobileApps.Client.Hangman
 
         public override ApplicationBaseViewModel ApplicationViewModel
         {
-            get { return new HangmanViewModel(); }
+            get { return new HangmanViewModel(m_dataService); }
         }
 
         public override Type ApplicationDataTemplate
@@ -40,7 +46,7 @@ namespace ITJakub.MobileApps.Client.Hangman
 
         public override bool IsChatSupported
         {
-            get { return false; }
+            get { return true; }
         }
 
         public override BitmapImage Icon

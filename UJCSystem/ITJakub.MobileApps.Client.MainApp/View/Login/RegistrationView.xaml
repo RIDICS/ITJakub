@@ -10,10 +10,11 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter"/>
+        <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter"/>
         <login:LoginProviderToIconConverter x:Key="LoginProviderToIconConverter"/>
     </Page.Resources>
     

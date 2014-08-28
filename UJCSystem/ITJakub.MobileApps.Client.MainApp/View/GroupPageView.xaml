@@ -8,12 +8,13 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
-        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </Page.Resources>
 
     <!--

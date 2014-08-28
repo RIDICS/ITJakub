@@ -8,11 +8,12 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
         <CollectionViewSource x:Name="TaskList" Source="{Binding TaskList}" IsSourceGrouped="False"/>
-        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
     </Page.Resources>
 

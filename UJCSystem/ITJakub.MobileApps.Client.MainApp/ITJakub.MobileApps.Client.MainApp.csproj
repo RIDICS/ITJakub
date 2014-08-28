@@ -121,7 +121,6 @@
     <Compile Include="ViewModel\Message\OpenGroupMessage.cs" />
     <Compile Include="ViewModel\SelectTaskViewModel.cs" />
     <Compile Include="View\Converter\ApplicationCategoryToNameConverter.cs" />
-    <Compile Include="View\Converter\BooleanNegationConverter.cs" />
     <Compile Include="View\Converter\GroupTypeToNameConverter.cs" />
     <Compile Include="ViewModel\ApplicationSelectionViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\UserMenuViewModel.cs" />
@@ -130,7 +129,6 @@
     <Compile Include="View\ApplicationSelectionView.xaml.cs">
       <DependentUpon>ApplicationSelectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="ViewModel\GroupListViewModel.cs" />

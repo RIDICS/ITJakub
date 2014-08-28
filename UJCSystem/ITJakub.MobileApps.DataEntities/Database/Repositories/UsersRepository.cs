@@ -117,6 +117,12 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
             using (ISession session = GetSession())
             {
+                session.QueryOver<User>()
+                    .Where(x => x.Id == userId)
+                    .Fetch(x => x.CreatedGroups).Eager
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .Future();
+
                 session.QueryOver<Group>()
                     .Where(group => group.Author.Id == userId)
                     .JoinQueryOver<User>(group => group.Members, JoinType.LeftOuterJoin)
@@ -125,7 +131,6 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 
                 var u1 = session.QueryOver<User>()
                     .Where(x => x.Id == userId)
-                    .Fetch(x => x.CreatedGroups).Eager
                     .JoinQueryOver<Group>(x => x.MemberOfGroups, JoinType.LeftOuterJoin)
                     .TransformUsing(Transformers.DistinctRootEntity)
                     .Future();

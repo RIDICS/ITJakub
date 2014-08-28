@@ -8,12 +8,13 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:userMenu="using:ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu"
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     x:Name="PageRoot"
     DataContext="{Binding GroupListViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d" >
 
     <Page.Resources>
-        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:GroupTypeToNameConverter x:Key="GroupTypeToNameConverter" />
         <CollectionViewSource x:Name="GroupList" Source="{Binding GroupList}" IsSourceGrouped="True" />
     </Page.Resources>
@@ -214,12 +215,12 @@
                             <SymbolIcon Symbol="List" />
                             
                             <Button.Flyout>
-                                <Flyout>
-                                    <Grid>
+                                <Flyout Placement="Right">
+                                    <Grid MinHeight="250">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="450" />
+                                            <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         
                                         <TextBlock FontWeight="Bold"

@@ -7,11 +7,12 @@
     xmlns:core="using:ITJakub.MobileApps.Client.Core"
     xmlns:userMenu="using:ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu"
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     DataContext="{Binding ApplicationHostViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <core:ApplicationTemplateSelector  x:Key="ApplicationTemplateSelector" />
     </Page.Resources>
     
@@ -95,12 +96,14 @@
             <ContentControl Grid.Column="0" 
                             Content="{Binding ApplicationViewModel}" 
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
-                            VerticalContentAlignment="Stretch"/>
+                            VerticalContentAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch" />
             <ContentControl Grid.Column="1"
                             Visibility="{Binding IsChatDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Content="{Binding ChatApplicationViewModel}"
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
-                            VerticalContentAlignment="Stretch"/>
+                            VerticalContentAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch" />
         </Grid>
     </Grid>
 </Page>

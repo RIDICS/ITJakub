@@ -1,0 +1,112 @@
+﻿<UserControl
+    x:Class="ITJakub.MobileApps.Client.Hangman.View.HangmanView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="using:ITJakub.MobileApps.Client.Hangman.View"
+    xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=viewModel:HangmanViewModel }">
+    
+    <UserControl.Resources>
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter"/>
+    </UserControl.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+           
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200" />
+                <RowDefinition Height="100" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <view:WordControl Word="{Binding WordToGuess}"
+                              HorizontalAlignment="Center" />
+            
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                
+                <TextBox VerticalAlignment="Stretch"
+                         HorizontalAlignment="Left"
+                         MaxLength="1"
+                         Margin="0,0,20,0"
+                         FontSize="20"
+                         FontWeight="Bold"
+                         TextAlignment="Center"
+                         Text="{Binding Letter, Mode=TwoWay}"
+                         KeyUp="LetterTextBox_OnKeyUp" />
+                
+                <Button Content="Hádat písmeno"
+                        FontSize="20"
+                        Command="{Binding GuessCommand}"
+                        x:Name="GuessButton"
+                        IsEnabled="{Binding GameOver, Converter={StaticResource BooleanNegationConverter}}" />
+                
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <TextBlock Text="Historie hádání:"
+                       FontSize="20"
+                       FontWeight="Light"
+                       Margin="0,10,0,10"
+                       Grid.Row="0" />
+            
+            <ListView Grid.Row="1"
+                      SelectionMode="None"
+                      IsItemClickEnabled="False"
+                      ItemsSource="{Binding GuessHistory}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Width="20"
+                                  Height="20"
+                                  Margin="0,0,5,0"
+                                  Background="White" >
+                                <TextBlock FontSize="17"
+                                           Text="{Binding Letter}"
+                                           Foreground="Black"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Grid>
+                            
+                            <TextBlock FontSize="15"
+                                       Foreground="White">
+                                <Run Text="{Binding Author.FirstName}" />
+                                <Run Text="{Binding Author.LastName}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <ListViewItemPresenter ContentMargin="0,0,0,0" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Grid>
+    </Grid>
+</UserControl>
