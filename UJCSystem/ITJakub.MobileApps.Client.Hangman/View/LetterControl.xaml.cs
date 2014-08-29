@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Hangman.View
         }
 
         public static readonly DependencyProperty LetterProperty = DependencyProperty.Register("Letter", typeof (char),
-            typeof (LetterControl), new PropertyMetadata('.', LetterPropertyChanged));
+            typeof (LetterControl), new PropertyMetadata(0, LetterPropertyChanged));
         
         private static void LetterPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {

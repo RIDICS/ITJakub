@@ -7,6 +7,7 @@
     xmlns:view="using:ITJakub.MobileApps.Client.Hangman.View"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanViewModel }">
     
@@ -21,6 +22,12 @@
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
+
+        <Viewbox Grid.Column="0"
+                 Margin="25"
+                 VerticalAlignment="Top">
+            <view:HangmanPictureControl Lives="{Binding Lives}" />
+        </Viewbox>
            
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -30,7 +37,8 @@
             </Grid.RowDefinitions>
 
             <view:WordControl Word="{Binding WordToGuess}"
-                              HorizontalAlignment="Center" />
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
             
             <StackPanel Orientation="Horizontal"
                         Grid.Row="1"
@@ -45,7 +53,8 @@
                          FontWeight="Bold"
                          TextAlignment="Center"
                          Text="{Binding Letter, Mode=TwoWay}"
-                         KeyUp="LetterTextBox_OnKeyUp" />
+                         KeyUp="LetterTextBox_OnKeyUp"
+                         IsTextPredictionEnabled="False" />
                 
                 <Button Content="Hádat písmeno"
                         FontSize="20"
@@ -68,11 +77,10 @@
                        Margin="0,10,0,10"
                        Grid.Row="0" />
             
-            <ListView Grid.Row="1"
-                      SelectionMode="None"
+            <control:AutoScrollListView Grid.Row="1"
                       IsItemClickEnabled="False"
                       ItemsSource="{Binding GuessHistory}" >
-                <ListView.ItemTemplate>
+                <control:AutoScrollListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <Grid Width="20"
@@ -93,9 +101,9 @@
                             </TextBlock>
                         </StackPanel>
                     </DataTemplate>
-                </ListView.ItemTemplate>
+                </control:AutoScrollListView.ItemTemplate>
                 
-                <ListView.ItemContainerStyle>
+                <control:AutoScrollListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Template">
                             <Setter.Value>
@@ -105,8 +113,8 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
+                </control:AutoScrollListView.ItemContainerStyle>
+            </control:AutoScrollListView>
         </Grid>
     </Grid>
 </UserControl>

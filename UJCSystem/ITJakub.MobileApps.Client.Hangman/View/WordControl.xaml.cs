@@ -1,6 +1,8 @@
 ﻿// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
+using System.Collections.Generic;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace ITJakub.MobileApps.Client.Hangman.View
 {
@@ -10,7 +12,6 @@ namespace ITJakub.MobileApps.Client.Hangman.View
         {
             InitializeComponent();
         }
-        //TODO wrap words
 
         public string Word
         {
@@ -27,11 +28,29 @@ namespace ITJakub.MobileApps.Client.Hangman.View
             if (wordControl == null)
                 return;
 
-            wordControl.WrapGrid.Children.Clear();
-            foreach (var letter in newWord)
+            CreateSubviews(wordControl, newWord);
+        }
+
+        private static void CreateSubviews(WordControl wordControl, string sentence)
+        {
+            wordControl.WrapPanel.Children.Clear();
+            var words = sentence.Split(' ');
+
+            foreach (var word in words)
             {
-                var letterControl = new LetterControl {Letter = letter};
-                wordControl.WrapGrid.Children.Add(letterControl);
+                var stackPanel = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    Margin = new Thickness(20,0,20,10)
+                };
+
+                foreach (var letter in word)
+                {
+                    var letterControl = new LetterControl { Letter = letter };
+                    stackPanel.Children.Add(letterControl);
+                }
+
+                wordControl.WrapPanel.Children.Add(stackPanel);
             }
         }
     }

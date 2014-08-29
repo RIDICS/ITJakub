@@ -9,6 +9,7 @@
     d:DesignWidth="400"
     xmlns:converter="using:ITJakub.MobileApps.Client.Chat.Converter"
     xmlns:chat="using:ITJakub.MobileApps.Client.Chat.ViewModel"
+    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     d:DataContext="{d:DesignInstance Type=chat:ChatViewModel }">
     
     <UserControl.Resources>
@@ -22,14 +23,14 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListView Grid.Row="0"
-                  SelectionMode="None"
-                  ItemsSource="{Binding MessageHistory}"
-                  x:Name="MessageHistoryListView"
-                  RequestedTheme="Light" 
-                  Padding="5"
-                  MinWidth="350">
-            <ListView.ItemTemplate>
+        <control:AutoScrollListView Grid.Row="0"
+                                    ItemsSource="{Binding MessageHistory}"
+                                    x:Name="MessageHistoryListView"
+                                    RequestedTheme="Light" 
+                                    Padding="5"
+                                    MinWidth="350">
+            
+            <control:AutoScrollListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="320">
                         <Grid Background="#EEEEEE"
@@ -53,8 +54,8 @@
                         </Grid>
                     </Grid>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </control:AutoScrollListView.ItemTemplate>
+        </control:AutoScrollListView>
         
         <Grid Row="1"
               Margin="5">

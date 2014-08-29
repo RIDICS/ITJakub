@@ -118,6 +118,9 @@
     <Compile Include="DataService\HangmanTask.cs" />
     <Compile Include="ViewModel\TaskInfoViewModel.cs" />
     <Compile Include="ViewModel\GuessViewModel.cs" />
+    <Compile Include="View\HangmanPictureControl.xaml.cs">
+      <DependentUpon>HangmanPictureControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\HangmanView.xaml.cs">
       <DependentUpon>HangmanView.xaml</DependentUpon>
     </Compile>
@@ -131,6 +134,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\HangmanPictureControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\HangmanView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

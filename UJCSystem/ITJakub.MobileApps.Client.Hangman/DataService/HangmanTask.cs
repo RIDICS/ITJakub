@@ -4,11 +4,12 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 {
     public class HangmanTask
     {
-        private const int FullLiveCount = 10;
+        private const int FullLiveCount = 11;
 
         private readonly string m_word;
         private readonly HashSet<char> m_guessedLetters;
-        private readonly char[] m_guessed;
+        private char[] m_guessed;
+        private int m_lives;
 
         public HangmanTask(string word)
         {
@@ -21,7 +22,16 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 m_guessed[i] = word[i] == ' ' ? ' ' : (char)0;
         }
 
-        public int Lives { get; private set; }
+        public int Lives
+        {
+            get { return m_lives; }
+            private set
+            {
+                m_lives = value;
+                if (m_lives == 0)
+                    m_guessed = m_word.ToCharArray();
+            }
+        }
 
         public string GuessedLetters
         {
@@ -30,7 +40,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         public void Guess(char letter)
         {
-            if (m_guessedLetters.Contains(letter))
+            if (m_guessedLetters.Contains(letter) || Lives == 0)
                 return;
 
             m_guessedLetters.Add(letter);

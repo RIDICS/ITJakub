@@ -17,6 +17,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private string m_wordToGuess;
         private string m_letter;
         private bool m_gameOver;
+        private int m_lives;
 
         /// <summary>
         /// Initializes a new instance of the HangmanViewModel class.
@@ -63,6 +64,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
+        public int Lives
+        {
+            get { return m_lives; }
+            set
+            {
+                m_lives = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public override void InitializeCommunication()
         {
             m_dataService.StartPollingLetters((guesses, taskInfo, exception) =>
@@ -93,12 +104,12 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         {
             WordToGuess = taskInfo.Word;
             GameOver = taskInfo.Lives == 0;
-            //TODO set lives to Hangman image
+            Lives = taskInfo.Lives;
         }
 
         private void Guess()
         {
-            if (Letter == string.Empty || Letter == " ")
+            if (Letter == string.Empty || Letter == " " || GameOver)
                 return;
 
             //TODO show correct letter immediately
