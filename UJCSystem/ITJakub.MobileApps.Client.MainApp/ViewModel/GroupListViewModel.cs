@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Popups;
@@ -10,10 +9,12 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -26,42 +27,38 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     /// </summary>
     public class GroupListViewModel : ViewModelBase
     {
+        private const PollingInterval UpdatePollingInterval = PollingInterval.Medium;
+
         private readonly IDataService m_dataService;
-        private UserRoleContract m_userRole;
         private readonly INavigationService m_navigationService;
+        private readonly IMainPollingService m_pollingService;
+        
+        private UserRoleContract m_userRole;
         private bool m_commandBarOpen;
-        private RelayCommand m_connectCommand;
-        private RelayCommand m_connectToGroupCommand;
         private string m_connectToGroupCode;
-        private RelayCommand m_createNewGroupCommand;
-        private RelayCommand m_deleteGroupCommand;
         private string m_deleteMessage;
-        private RelayCommand<ItemClickEventArgs> m_groupClickCommand;
         private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
         private string m_newGroupName;
         private bool m_noGroupExist;
-        private RelayCommand m_refreshListCommand;
         private GroupInfoViewModel m_selectedGroup;
         private bool m_loading;
         private ObservableCollection<GroupInfoViewModel> m_groups;
-        private DispatcherTimer m_timer;
 
         /// <summary>
         ///     Initializes a new instance of the GroupListViewModel class.
         /// </summary>
-        public GroupListViewModel(IDataService dataService, INavigationService navigationService)
+        public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_pollingService = pollingService;
             GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>();
             NoGroupExist = false;
             m_userRole = UserRoleContract.Student;
-            m_timer = new DispatcherTimer();
-            m_timer.Interval = new TimeSpan(0,0,7);
-            m_timer.Tick += RefreshMembers;
+            
             Messenger.Default.Register<LogOutMessage>(this, message =>
             {
-                m_timer.Stop();
+                m_pollingService.UnregisterAll();
                 Messenger.Default.Unregister(this);
             });
 
@@ -79,25 +76,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public RelayCommand<ItemClickEventArgs> GroupClickCommand
-        {
-            get { return m_groupClickCommand; }
-        }
+        public RelayCommand<ItemClickEventArgs> GroupClickCommand { get; private set; }
 
-        public RelayCommand CreateNewGroupCommand
-        {
-            get { return m_createNewGroupCommand; }
-        }
+        public RelayCommand CreateNewGroupCommand { get; private set; }
 
-        public RelayCommand DeleteGroupCommand
-        {
-            get { return m_deleteGroupCommand; }
-        }
+        public RelayCommand DeleteGroupCommand { get; private set; }
 
-        public RelayCommand RefreshListCommand
-        {
-            get { return m_refreshListCommand; }
-        }
+        public RelayCommand RefreshListCommand { get; private set; }
+
+        public RelayCommand ConnectToGroupCommand { get; private set; }
+
+        public RelayCommand ConnectCommand { get; private set; }
 
         public string ConnectToGroupCode
         {
@@ -107,11 +96,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_connectToGroupCode = value;
                 RaisePropertyChanged();
             }
-        }
-
-        public RelayCommand ConnectToGroupCommand
-        {
-            get { return m_connectToGroupCommand; }
         }
 
         public string NewGroupName
@@ -147,11 +131,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (value != null)
                     DeleteMessage = string.Format("Chystáte se odstranit skupinu \"{0}\"", value.GroupName);
             }
-        }
-
-        public RelayCommand ConnectCommand
-        {
-            get { return m_connectCommand; }
         }
 
         public Visibility ConnectButtonVisibility
@@ -205,11 +184,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void InitCommands()
         {
-            m_groupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
-            m_connectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
-            m_createNewGroupCommand = new RelayCommand(CreateNewGroup);
-            m_refreshListCommand = new RelayCommand(LoadData);
-            m_connectToGroupCommand = new RelayCommand(ConnectToGroup);
+            GroupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
+            ConnectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
+            CreateNewGroupCommand = new RelayCommand(CreateNewGroup);
+            RefreshListCommand = new RelayCommand(LoadData);
+            ConnectToGroupCommand = new RelayCommand(ConnectToGroup);
         }
 
         private void ConnectToGroup()
@@ -221,6 +200,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 if (exception != null)
                     return;
+
                 new MessageDialog("Připojeno").ShowAsync();
                 LoadData();
             });
@@ -235,6 +215,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 if (exception != null)
                     return;
+
                 new MessageDialog(result.EnterCode, "Nová skupina vytvořena").ShowAsync();
                 NewGroupName = string.Empty;
                 LoadData();
@@ -243,23 +224,23 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LoadData()
         {
+            m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
             Loading = true;
+
             m_dataService.GetGroupList((groupList, exception) =>
             {
                 Loading = false;
                 if (exception != null)
                     return;
+
                 m_groups = groupList;
                 var groupedList = groupList.GroupBy(group => group.GroupType).OrderBy(group => group.Key);
                 GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
                 NoGroupExist = groupList.Count == 0;
 
-                foreach (var group in groupList)
-                {
-                    LoadGroupMemberAvatars(group.Members);
-                }
-                m_timer.Start();
+                m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_groups, GroupUpdate);
             });
+
             m_dataService.GetLoggedUserInfo((info, exception) =>
             {
                 if (exception != null)
@@ -271,9 +252,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
         }
 
-        private void LoadGroupMemberAvatars(IList<GroupMemberViewModel> members)
+        private void GroupUpdate(Exception exception)
         {
-            m_dataService.LoadGroupMemberAvatars(members);
+            if (exception != null)
+                return;
         }
 
         private void GroupClick(ItemClickEventArgs args)
@@ -286,21 +268,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             if (group != null)
             {
+                m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
+
                 var viewType = group.GroupType == GroupType.Member
                     ? typeof (ApplicationHostView)
                     : typeof (GroupPageView);
                 m_navigationService.Navigate(viewType);
-                m_timer.Stop();
                 Messenger.Default.Unregister(this);
                 Messenger.Default.Send(new OpenGroupMessage {Group = group});
-            }
-        }
-
-        private void RefreshMembers(object sender, object o)
-        {
-            foreach (var groupInfoViewModel in m_groups)
-            {
-                m_dataService.UpdateGroupMembers(groupInfoViewModel);
             }
         }
     }

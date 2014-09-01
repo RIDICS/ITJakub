@@ -32,11 +32,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         public void LogOut() { }
 
-        public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
-        {
-            throw new NotImplementedException();
-        }
-
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
             throw new NotImplementedException();
@@ -58,12 +53,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             {
                 new GroupInfoViewModel
                 {
-                    ApplicationType = ApplicationType.SampleApp,
                     GroupCode = "123546",
                     MemberCount = 5,
                     GroupName = "Group A",
                     Icon = new BitmapImage(new Uri("ms-appx:///Icon/facebook-128.png")),
-                    ApplicationName = "Hangman",
+                    Task = new TaskViewModel {Application = ApplicationType.Hangman},
                     Members = new ObservableCollection<GroupMemberViewModel>
                     {
                         new GroupMemberViewModel
@@ -76,12 +70,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
                 },
                 new GroupInfoViewModel
                 {
-                    ApplicationType = ApplicationType.Hangman,
                     GroupCode = "123546",
                     MemberCount = 5,
                     GroupName = "Group B",
                     Icon = new BitmapImage(new Uri("ms-appx:///Icon/facebook-128.png")),
-                    ApplicationName = "Hangman"
+                    Task = new TaskViewModel{Application = ApplicationType.SampleApp}
                 },
             };
             callback(result, null);
@@ -123,10 +116,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
         {
             callback(null);
         }
-
-        public void LoadGroupMemberAvatars(IList<GroupMemberViewModel> groupMember) { }
-
-        public void UpdateGroupMembers(GroupInfoViewModel group) { }
 
         public void GetTasksByApplication(ApplicationType application, Action<ObservableCollection<TaskViewModel>, Exception> callback)
         {

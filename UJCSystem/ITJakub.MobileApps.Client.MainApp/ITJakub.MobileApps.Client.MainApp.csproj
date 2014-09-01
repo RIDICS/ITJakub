@@ -110,7 +110,9 @@
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
     <Compile Include="ViewModel\Message\SelectedApplicationMessage.cs" />
     <Compile Include="ViewModel\Message\SelectedTaskMessage.cs" />
+    <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
+    <Compile Include="View\Converter\NotChosenStringConverter.cs" />
     <Compile Include="View\ErrorBar.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="View\ErrorBarView.xaml.cs">

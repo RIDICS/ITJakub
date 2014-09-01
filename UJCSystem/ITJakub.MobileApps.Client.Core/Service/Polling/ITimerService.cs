@@ -7,5 +7,6 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
     {
         void Register(PollingInterval interval, Action action);
         void Unregister(PollingInterval interval, Action action);
+        void UnregisterAll();
     }
 }

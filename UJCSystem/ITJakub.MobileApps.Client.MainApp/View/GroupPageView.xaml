@@ -13,6 +13,8 @@
 
     <Page.Resources>
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
+        <converter:NotChosenStringConverter x:Key="NotChosenStringConverter" />
+        <converter:ApplicationTypeToNameConverter x:Key="ApplicationTypeToNameConverter" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </Page.Resources>
@@ -56,6 +58,11 @@
                 <Run Text="Skupina:" />
                 <Run Text="{Binding GroupInfo.GroupName}" />
             </TextBlock>
+            
+            <ProgressBar Grid.Column="0"
+                         Grid.ColumnSpan="2"
+                         VerticalAlignment="Top"
+                         Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
         
         <Grid Grid.Row="1">
@@ -82,44 +89,24 @@
                             Margin="0,15,0,10">
                     <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">
                         <Run Text="Aplikace:"/>
-                        <Run Text="{Binding SelectedApplicationInfo.Name}"/>
+                        <Run Text="{Binding SelectedApplicationInfo.ApplicationType, Converter={StaticResource ApplicationTypeToNameConverter}}"/>
                     </TextBlock>
-                    <Button Content="Změnit"
-                            Margin="40,0,0,0"
-                            IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}"
-                            Command="{Binding SelectAppCommand}" />
                 </StackPanel>
                 
                 <StackPanel Orientation="Horizontal"
-                            Margin="0,0,0,40">
+                            Margin="0,0,0,15">
                     <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" >
                         <Run Text="Zadání:"/>
-                        <Run Text="{Binding SelectedTaskViewModel.Name}"/>
+                        <Run Text="{Binding SelectedTaskViewModel.Name, Converter={StaticResource NotChosenStringConverter}}"/>
                     </TextBlock>
                     <Button Content="Změnit"
                             Margin="40,0,0,0"
                             IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}"
-                            Command="{Binding SelectTaskCommand}" />
+                            Command="{Binding SelectAppAndTaskCommand}" />
                 </StackPanel>
 
-                <TextBlock Text="Není zvoleno žádné zadání."
-                           FontSize="16"
-                           Margin="0,5,50,0"
-                           HorizontalAlignment="Center"
-                           Foreground="Tomato"
-                           FontWeight="Bold"
-                           Visibility="{Binding TaskNotSelectedError, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-                <Button Content="Uložit zvolené zadání"
-                        Margin="0,0,50,0"
-                        FontSize="18"
-                        Width="300"
-                        HorizontalAlignment="Center"
-                        IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}"
-                        Command="{Binding SaveTaskCommand}" />
                 <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            Margin="0,5,50,0"
+                            Margin="100,0,0,0"
                             Visibility="{Binding Saving, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <ProgressRing IsActive="True"
                                   Width="24"
@@ -131,11 +118,11 @@
                 </StackPanel>
                 <TextBlock Text="Uloženo"
                            FontSize="16"
-                           Margin="0,5,50,0"
-                           HorizontalAlignment="Center"
+                           Margin="100,0,0,0"
                            Foreground="Gold"
                            Visibility="{Binding TaskSaved, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StackPanel>
+            
             
             <Grid Grid.Column="1"
                   Margin="0,0,120,0"

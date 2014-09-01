@@ -87,6 +87,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 }
 
                 ProcessTaskInfo(taskInfo);
+                SetDataLoaded();
             });
         }
 

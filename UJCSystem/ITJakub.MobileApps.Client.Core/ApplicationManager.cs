@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -16,33 +15,22 @@ namespace ITJakub.MobileApps.Client.Core
             m_loader = ApplicationLoader.Instance;
         }
 
-        public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
-        {
-            var apps = m_loader.GetAllApplications();
-            var result = new ObservableCollection<ApplicationBaseViewModel>();
-
-            foreach (var applicationBase in apps)
-            {
-                result.Add(applicationBase.Value.ApplicationViewModel);
-            }
-
-            callback(result, null);
-        }
-
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
             var result = m_loader.GetAllApplications();
             callback(result, null);
         }
 
-        public ApplicationBase GetApplication(ApplicationType type)
+        public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
         {
-            return m_loader.GetApplicationByType(type);
+            var appInfo = m_loader.GetApplicationByType(type);
+            callback(appInfo, null);
         }
 
-        public Dictionary<ApplicationType, ApplicationBase> GetAllApplicationsByTypes(IEnumerable<ApplicationType> types)
+        public void GetAllApplicationsByTypes(IEnumerable<ApplicationType> types, Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
-            return types.ToDictionary(type => type, GetApplication);
+            var appInfoDictionary = types.ToDictionary(type => type, type => m_loader.GetApplicationByType(type));
+            callback(appInfoDictionary, null);
         }
     }
 }

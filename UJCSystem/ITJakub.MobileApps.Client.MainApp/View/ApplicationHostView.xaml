@@ -6,14 +6,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:core="using:ITJakub.MobileApps.Client.Core"
     xmlns:userMenu="using:ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu"
-    xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
-    xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     DataContext="{Binding ApplicationHostViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <core:ApplicationTemplateSelector  x:Key="ApplicationTemplateSelector" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <core:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
     </Page.Resources>
     
     <Page.BottomAppBar>
@@ -66,27 +65,6 @@
                                Margin="0,0,30,0"/>
         </Grid>
 
-        <StackPanel Grid.Row="1"
-                    MinWidth="400"
-                    MinHeight="100"
-                    Margin="0,0,0,70"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal"
-                    Background="White"
-                    Visibility="{Binding WaitingForTask, Converter={StaticResource BooleanToVisibilityConverter}}">
-
-            <ProgressRing Width="40"
-                          Height="40"
-                          Margin="20"
-                          Foreground="Black"
-                          IsActive="True" />
-            <TextBlock VerticalAlignment="Center"
-                       Text="Čekání na zadání"
-                       Foreground="Black"
-                       FontSize="30" />
-        </StackPanel>
-
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -104,6 +82,31 @@
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
                             VerticalContentAlignment="Stretch"
                             HorizontalContentAlignment="Stretch" />
+        </Grid>
+
+        <Grid Grid.Row="1"
+              Background="#11000000"
+              Visibility="{Binding Waiting, Converter={StaticResource BooleanToVisibilityConverter}}">
+            
+            <StackPanel MinWidth="400"
+                        MinHeight="100"
+                        Margin="0,0,0,70"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Background="White">
+
+                <ProgressRing Width="40"
+                              Height="40"
+                              Margin="20"
+                              Foreground="Black"
+                              IsActive="True" />
+                
+                <TextBlock VerticalAlignment="Center"
+                           Text="Čekání na zadání"
+                           Foreground="Black"
+                           FontSize="30" />
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

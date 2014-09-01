@@ -156,36 +156,6 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
-        public IList<GroupMemberContract> GetGroupMembers(long groupId)
-        {
-            try
-            {
-                return m_serviceManager.GetGroupMembers(groupId);
-            }
-            catch (WebFaultException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat(ex.Message);
-
-                throw;
-            }
-        }
-
-        public IList<long> GetGroupMemberIds(long groupId)
-        {
-            try
-            {
-                return m_serviceManager.GetGroupMemberIds(groupId);
-            }
-            catch (WebFaultException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat(ex.Message);
-
-                throw;
-            }
-        }
-
         public IList<GroupDetailsUpdateContract> GetGroupsUpdate(IList<OldGroupDetailsContract> groups)
         {
             try

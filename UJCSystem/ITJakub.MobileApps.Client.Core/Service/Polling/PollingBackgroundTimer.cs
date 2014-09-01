@@ -37,6 +37,14 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             }
         }
 
+        public void UnregisterAll()
+        {
+            lock (this)
+            {
+                m_actions.Clear();
+            }
+        }
+
         private void OnTimerTick(ThreadPoolTimer timer)
         {
             if (m_actions.Count == 0)

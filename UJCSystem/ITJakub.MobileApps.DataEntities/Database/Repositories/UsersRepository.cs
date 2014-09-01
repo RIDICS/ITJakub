@@ -187,6 +187,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 return session.CreateCriteria<Group>()
                     .Add(Restrictions.Eq(Projections.Id(), groupId))
                     .SetFetchMode("Members", FetchMode.Join)
+                    .SetFetchMode("Task", FetchMode.Join)
                     .UniqueResult<Group>();
             }
         }

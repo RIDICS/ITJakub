@@ -8,10 +8,11 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<Group, GroupDetailContract>()
-                .Include<Group, OwnedDetailGroupContract>();
+            CreateMap<Group, GroupInfoContract>()
+                .Include<Group, OwnedGroupInfoContract>();
 
-            CreateMap<Group, OwnedDetailGroupContract>();
+            CreateMap<Group, OwnedGroupInfoContract>();
+            CreateMap<Group, GroupDetailContract>();
 
             CreateMap<Group, GroupDetailsUpdateContract>();
         }

@@ -23,7 +23,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private TaskViewModel m_selectedTaskViewModel;
         private bool m_saving;
         private bool m_taskSaved;
-        private bool m_taskNotSelectedError;
+        private bool m_loading;
 
         /// <summary>
         /// Initializes a new instance of the GroupPageViewModel class.
@@ -38,6 +38,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 Messenger.Default.Unregister<OpenGroupMessage>(this);
             });
 
+            SelectedApplicationInfo = new AppInfoViewModel();
+            SelectedTaskViewModel = new TaskViewModel();
+
             InitCommands();
             //TODO polling group members
         }
@@ -49,15 +52,25 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 Messenger.Default.Unregister(this);
                 m_navigationService.GoBack();
             });
-            SelectAppCommand = new RelayCommand(SelectApplication);
-            SelectTaskCommand = new RelayCommand(SelectTask);
-            SaveTaskCommand = new RelayCommand(SaveTask);
+
+            SelectAppAndTaskCommand = new RelayCommand(SelectAppAndTask);
         }
 
         private void LoadData(GroupInfoViewModel group)
         {
             GroupInfo = group;
-            //TODO load current task
+
+            Loading = true;
+            m_dataService.OpenGroupAndGetDetails(group.GroupId, (groupInfo, exception) =>
+            {
+                Loading = false;
+                if (exception != null)
+                    return;
+
+                GroupInfo = groupInfo;
+                SelectedTaskViewModel = groupInfo.Task;
+                SelectedApplicationInfo = new AppInfoViewModel{ApplicationType = groupInfo.Task.Application};
+            });
         }
 
         public GroupInfoViewModel GroupInfo
@@ -110,88 +123,52 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public bool TaskNotSelectedError
+        public bool Loading
         {
-            get { return m_taskNotSelectedError; }
+            get { return m_loading; }
             set
             {
-                m_taskNotSelectedError = value;
+                m_loading = value;
                 RaisePropertyChanged();
             }
         }
 
         public RelayCommand GoBackCommand { get; private set; }
 
-        public RelayCommand SelectAppCommand { get; private set; }
-
-        public RelayCommand SelectTaskCommand { get; private set; }
-
-        public RelayCommand SaveTaskCommand { get; private set; }
-
-        private void SelectApplication()
-        {
-            SelectedTaskViewModel = null;
-            HideInfoAndErrors();
-            
-            m_navigationService.Navigate(typeof(ApplicationSelectionView));
-            Messenger.Default.Register<SelectedApplicationMessage>(this, message =>
-            {
-                SelectedApplicationInfo = message.AppInfo;
-                Messenger.Default.Unregister<SelectedApplicationMessage>(this);
-            });
-        }
-
-        private void SelectTask()
-        {
-            HideInfoAndErrors();
-            if (SelectedApplicationInfo == null)
-            {
-                SelectAppAndTask();
-                return;
-            }
-
-            m_navigationService.Navigate(typeof(SelectTaskView));
-            Messenger.Default.Send(new SelectedApplicationMessage
-            {
-                AppInfo = SelectedApplicationInfo
-            });
-            Messenger.Default.Register<SelectedTaskMessage>(this, message =>
-            {
-                SelectedTaskViewModel = message.TaskInfo;
-                Messenger.Default.Unregister<SelectTaskView>(this);
-            });
-        }
+        public RelayCommand SelectAppAndTaskCommand { get; private set; }
 
         private void SelectAppAndTask()
         {
+            Saving = false;
+            TaskSaved = false;
+
             m_navigationService.Navigate(typeof(ApplicationSelectionView));
             Messenger.Default.Register<SelectedApplicationMessage>(this, message =>
             {
-                SelectedApplicationInfo = message.AppInfo;
                 Messenger.Default.Unregister<SelectedApplicationMessage>(this);
-                SelectTask();
+                SelectedApplicationInfo = message.AppInfo;
+                SelectTask(message.AppInfo);
             });
         }
 
-        private void HideInfoAndErrors()
+        private void SelectTask(AppInfoViewModel application)
         {
-            TaskSaved = false;
-            TaskNotSelectedError = false;
-            Saving = false;
+            m_navigationService.Navigate(typeof(SelectTaskView));
+
+            Messenger.Default.Send(new SelectedApplicationMessage {AppInfo = application});
+
+            Messenger.Default.Register<SelectedTaskMessage>(this, message =>
+            {
+                Messenger.Default.Unregister<SelectTaskView>(this);
+                SelectedTaskViewModel = message.TaskInfo;
+                SaveTask(message.TaskInfo);
+            });
         }
 
-        private void SaveTask()
+        private void SaveTask(TaskViewModel task)
         {
-            HideInfoAndErrors();
-
-            if (SelectedTaskViewModel == null)
-            {
-                TaskNotSelectedError = true;
-                return;
-            }
-
             Saving = true;
-            m_dataService.AssignTaskToGroup(m_groupInfo.GroupId, m_selectedTaskViewModel.Id, exception =>
+            m_dataService.AssignTaskToGroup(m_groupInfo.GroupId, task.Id, exception =>
             {
                 Saving = false;
                 if (exception != null)

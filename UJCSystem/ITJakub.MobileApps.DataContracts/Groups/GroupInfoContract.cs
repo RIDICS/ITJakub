@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using ITJakub.MobileApps.DataContracts.Tasks;
 
 namespace ITJakub.MobileApps.DataContracts.Groups
 {
     [DataContract]
-    [KnownType(typeof(OwnedDetailGroupContract))]
-    public class GroupDetailContract
+    [KnownType(typeof(OwnedGroupInfoContract))]
+    [KnownType(typeof(GroupDetailContract))]
+    public class GroupInfoContract
     {
         [DataMember]
         public long Id { get; set; }
@@ -22,12 +24,19 @@ namespace ITJakub.MobileApps.DataContracts.Groups
     }
 
     [DataContract]
-    public class OwnedDetailGroupContract : GroupDetailContract
+    public class OwnedGroupInfoContract : GroupInfoContract
     {
         [DataMember]
         public string EnterCode { get; set; }
 
         [DataMember]
         public DateTime CreateTime { get; set; }
+    }
+
+    [DataContract]
+    public class GroupDetailContract : OwnedGroupInfoContract
+    {
+        [DataMember]
+        public TaskDetailContract Task { get; set; }
     }
 }

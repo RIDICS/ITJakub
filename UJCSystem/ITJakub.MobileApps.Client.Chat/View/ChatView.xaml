@@ -10,11 +10,13 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.Chat.Converter"
     xmlns:chat="using:ITJakub.MobileApps.Client.Chat.ViewModel"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     d:DataContext="{d:DesignInstance Type=chat:ChatViewModel }">
     
     <UserControl.Resources>
         <converter:MyMessageToAlignmentConverter x:Key="MyMessageToAlignmentConverter"/>
         <converter:MessageDateTimeToStringConverter x:Key="MessageDateTimeToStringConverter"/>
+        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     
     <Grid Background="#88000000">
@@ -25,7 +27,6 @@
 
         <control:AutoScrollListView Grid.Row="0"
                                     ItemsSource="{Binding MessageHistory}"
-                                    x:Name="MessageHistoryListView"
                                     RequestedTheme="Light" 
                                     Padding="5"
                                     MinWidth="350">
@@ -56,6 +57,11 @@
                 </DataTemplate>
             </control:AutoScrollListView.ItemTemplate>
         </control:AutoScrollListView>
+        
+        <ProgressBar Grid.Row="0"
+                     VerticalAlignment="Top"
+                     IsIndeterminate="True"
+                     Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         
         <Grid Row="1"
               Margin="5">

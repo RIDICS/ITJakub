@@ -29,11 +29,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_taskManager = container.Resolve<TaskManager>();
         }
 
-        public void GetAllApplicationViewModels(Action<ObservableCollection<ApplicationBaseViewModel>, Exception> callback)
-        {
-            m_applicationManager.GetAllApplicationViewModels(callback);
-        }
-
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
             m_applicationManager.GetAllApplications(callback);
@@ -41,14 +36,12 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
         {
-            ApplicationBase application = m_applicationManager.GetApplication(type);
-            callback(application, null);
+            m_applicationManager.GetApplication(type, callback);
         }
 
         public void GetApplicationByTypes(IEnumerable<ApplicationType> types, Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
-            Dictionary<ApplicationType, ApplicationBase> applications = m_applicationManager.GetAllApplicationsByTypes(types);
-            callback(applications, null);
+            m_applicationManager.GetAllApplicationsByTypes(types, callback);
         }
 
         public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
@@ -74,16 +67,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
         public void ConnectToGroup(string code, Action<Exception> callback)
         {
             m_groupManager.ConnectToGroup(code, callback);
-        }
-
-        public void LoadGroupMemberAvatars(IList<GroupMemberViewModel> groupMember)
-        {
-            m_groupManager.LoadGroupMemberAvatars(groupMember);
-        }
-
-        public void UpdateGroupMembers(GroupInfoViewModel group)
-        {
-            m_groupManager.UpdateGroupNewMembers(group);
         }
 
         public void GetTasksByApplication(ApplicationType application, Action<ObservableCollection<TaskViewModel>, Exception> callback)

@@ -30,6 +30,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_isChatSupported;
         private bool m_isCommandBarOpen;
         private bool m_waitingForTask;
+        private bool m_waitingForData;
 
         public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -51,7 +52,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private void StopCommunication()
         {
             WaitingForTask = false;
-            m_pollingService.UnregisterForTaskByGroup(TaskPollingInterval, LoadTask);
+            WaitingForData = false;
+            m_pollingService.Unregister(TaskPollingInterval, LoadTask);
             Messenger.Default.Unregister(this);
 
             if (ChatApplicationViewModel != null)
@@ -77,7 +79,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             if (task == null || task.Data == null)
                 return;
 
-            m_pollingService.UnregisterForTaskByGroup(TaskPollingInterval, LoadTask);
+            m_pollingService.Unregister(TaskPollingInterval, LoadTask);
 
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
@@ -91,6 +93,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LoadApplications(ApplicationType type, string taskData)
         {
+            WaitingForData = true;
             m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, (applications, exception) =>
             {
                 if (exception != null)
@@ -98,6 +101,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
                 var application = applications[type];
                 ApplicationViewModel = application.ApplicationViewModel;
+                ApplicationViewModel.DataLoadedCallback = () => WaitingForData = false;
                 ApplicationViewModel.SetTask(taskData);
                 ApplicationViewModel.InitializeCommunication();
                 ApplicationName = application.Name;
@@ -174,7 +178,24 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 m_waitingForTask = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(() => Waiting);
             }
+        }
+
+        public bool WaitingForData
+        {
+            get { return m_waitingForData; }
+            set
+            {
+                m_waitingForData = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => Waiting);
+            }
+        }
+
+        public bool Waiting
+        {
+            get { return m_waitingForTask || m_waitingForData; }
         }
 
         public RelayCommand GoBackCommand { get; private set; }

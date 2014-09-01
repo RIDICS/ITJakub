@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
-using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Groups;
 using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
@@ -34,8 +33,8 @@ namespace ITJakub.MobileApps.Core.Groups
 
             var result = new UserGroupsContract
             {
-                MemberOfGroup = Mapper.Map<IEnumerable<Group>, List<GroupDetailContract>>(user.MemberOfGroups),
-                OwnedGroups = Mapper.Map<IEnumerable<Group>, List<OwnedDetailGroupContract>>(user.CreatedGroups)
+                MemberOfGroup = Mapper.Map<IEnumerable<Group>, List<GroupInfoContract>>(user.MemberOfGroups),
+                OwnedGroups = Mapper.Map<IEnumerable<Group>, List<OwnedGroupInfoContract>>(user.CreatedGroups)
             };
 
             return result;
@@ -87,18 +86,6 @@ namespace ITJakub.MobileApps.Core.Groups
             return groupContract;
         }
 
-        public IList<GroupMemberContract> GetGroupMembers(long groupId)
-        {
-            var group = m_usersRepository.GetGroupDetails(groupId);
-            return Mapper.Map<IList<User>, IList<GroupMemberContract>>(group.Members);
-        }
-
-        public IList<long> GetGroupMemberIds(long groupId)
-        {
-            var group = m_usersRepository.GetGroupDetails(groupId);
-            return group.Members.Select(user => user.Id).ToList();
-        }
-
         public IList<GroupDetailsUpdateContract> GetGroupsUpdate(IList<OldGroupDetailsContract> oldGroups)
         {
             var groupsInfo = m_usersRepository.GetGroupMembers(oldGroups.Select(contract => contract.Id));
@@ -107,7 +94,7 @@ namespace ITJakub.MobileApps.Core.Groups
             foreach (var groupInfo in groupList)
             {
                 var groupId = groupInfo.Id;
-                var oldGroupInfo = oldGroups.Single(group => group.Id == groupId);
+                var oldGroupInfo = oldGroups.First(group => group.Id == groupId);
                 groupInfo.Members =
                     groupInfo.Members.Where(member => !oldGroupInfo.MemberIds.Contains(member.Id))
                         .ToList();

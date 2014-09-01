@@ -12,6 +12,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
         private readonly RelayCommand m_sendCommand;
         private string m_message;
         private ObservableCollection<MessageViewModel> m_messageHistory;
+        private bool m_loading;
 
         /// <summary>
         /// Initializes a new instance of the ChatViewModel class.
@@ -26,7 +27,8 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
 
         public override void InitializeCommunication()
         {
-            MessageHistory.Clear();
+            Loading = true;
+            DataLoadedCallback = () => Loading = false;
 
             m_dataService.StartChatMessagesPolling((messages, exception) =>
             {
@@ -37,6 +39,8 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
                 {
                     MessageHistory.Add(message);
                 }
+
+                SetDataLoaded();
             });
         }
 
@@ -64,6 +68,16 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             {
                 m_messageHistory = value;
                 RaisePropertyChanged(() => MessageHistory);
+            }
+        }
+
+        public bool Loading
+        {
+            get { return m_loading; }
+            set
+            {
+                m_loading = value;
+                RaisePropertyChanged();
             }
         }
 

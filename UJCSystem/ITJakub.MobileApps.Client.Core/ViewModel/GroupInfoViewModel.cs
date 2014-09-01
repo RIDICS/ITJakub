@@ -7,7 +7,6 @@ using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
-using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Core.ViewModel
 {
@@ -19,19 +18,19 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
 
         public GroupInfoViewModel()
         {
-            SetDefaultApplication();
+            Icon = new BitmapImage(new Uri("ms-appx:///Icon/group-64.png"));
+
             SearchText = string.Empty;
             SearchCommand = new RelayCommand(() => RaisePropertyChanged(() => FilteredMembers));
         }
 
         public string GroupName { get; set; }
         public string GroupCode { get; set; }
-        public ApplicationType ApplicationType { get; set; }
         public BitmapImage Icon { get; set; }
-        public string ApplicationName { get; set; }
         public long GroupId { get; set; }
         public GroupType GroupType { get; set; }
         public DateTime CreateTime { get; set; }
+        public TaskViewModel Task { get; set; }
 
         public RelayCommand SearchCommand { get; private set; }
 
@@ -82,13 +81,6 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public Visibility NoMembersVisibility
         {
             get { return m_memberCount == 0 ? Visibility.Visible : Visibility.Collapsed; }
-        }
-
-        private void SetDefaultApplication()
-        {
-            ApplicationType = ApplicationType.Unknown;
-            Icon = new BitmapImage(new Uri("ms-appx:///Icon/group-64.png"));
-            ApplicationName = "(Není zvoleno)";
         }
     }
 }

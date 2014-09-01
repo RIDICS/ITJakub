@@ -273,61 +273,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
             });
         }
-
-        public Task<IList<long>> GetGroupMemberIdsAsync(long groupId)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    return Channel.GetGroupMemberIds(groupId);
-                }
-                catch (FaultException)
-                {
-                    throw new ClientCommunicationException();
-                }
-                catch (CommunicationException)
-                {
-                    throw new ClientCommunicationException();
-                }
-                catch (TimeoutException)
-                {
-                    throw new ClientCommunicationException();
-                }
-                catch (ObjectDisposedException)
-                {
-                    throw new ClientCommunicationException();
-                }
-            });
-        }
-
-        public Task<IList<GroupMemberContract>> GetGroupMembersAsync(long groupId)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    return Channel.GetGroupMembers(groupId);
-                }
-                catch (FaultException)
-                {
-                    throw new ClientCommunicationException();
-                }
-                catch (CommunicationException)
-                {
-                    throw new ClientCommunicationException();
-                }
-                catch (TimeoutException)
-                {
-                    throw new ClientCommunicationException();
-                }
-                catch (ObjectDisposedException)
-                {
-                    throw new ClientCommunicationException();
-                }
-            });
-        }
-
+        
         public Task AssignTaskToGroupAsync(long groupId, long taskId)
         {
             return Task.Run(() =>
@@ -409,6 +355,60 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
+        public Task<TaskContract> GetTaskForGroup(long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetTaskForGroup(groupId);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
+        public Task<IList<GroupDetailsUpdateContract>> GetGroupsUpdate(IList<OldGroupDetailsContract> groups)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetGroupsUpdate(groups);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
         #region enpoint settings
         private static Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {
@@ -447,31 +447,5 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
         }
         #endregion
 
-        public Task<TaskContract> GetTaskForGroup(long groupId)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    return Channel.GetTaskForGroup(groupId);
-                }
-                catch (FaultException)
-                {
-                    throw new ClientCommunicationException();
-                }
-                catch (CommunicationException)
-                {
-                    throw new ClientCommunicationException();
-                }
-                catch (TimeoutException)
-                {
-                    throw new ClientCommunicationException();
-                }
-                catch (ObjectDisposedException)
-                {
-                    throw new ClientCommunicationException();
-                }
-            });
-        }
     }
 }

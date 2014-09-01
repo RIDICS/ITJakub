@@ -30,5 +30,13 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
 
             m_pollingTimers[interval].Unregister(action);
         }
+
+        public void UnregisterAll()
+        {
+            foreach (var pollingTimer in m_pollingTimers)
+            {
+                pollingTimer.Value.UnregisterAll();
+            }
+        }
     }
 }

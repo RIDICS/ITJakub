@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
+using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
-using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Groups;
+using Microsoft.Practices.Unity;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 {
@@ -19,14 +22,17 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         private readonly AuthenticationManager m_authManager;
         private readonly UserAvatarCache m_userAvatarCache;
         private readonly BitmapImage m_defaultUserAvatar;
+        private readonly ApplicationIdManager m_applicationIdManager;
 
         public long CurrentGroupId { get; private set; }
 
-        public GroupManager(MobileAppsServiceClient serviceClient, AuthenticationManager authManager, UserAvatarCache userAvatarCache)
+        public GroupManager(IUnityContainer container)
         {
-            m_serviceClient = serviceClient;
-            m_authManager = authManager;
-            m_userAvatarCache = userAvatarCache;
+            m_serviceClient = container.Resolve<MobileAppsServiceClient>();
+            m_authManager = container.Resolve<AuthenticationManager>();
+            m_userAvatarCache = container.Resolve<UserAvatarCache>();
+            m_applicationIdManager = container.Resolve<ApplicationIdManager>();
+
             m_defaultUserAvatar = new BitmapImage(new Uri("ms-appx:///Icon/user-32.png"));
 
             //TODO for debug
@@ -52,12 +58,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     var newGroup = new GroupInfoViewModel
                     {
                         GroupName = groupDetails.Name,
-                        MemberCount = groupDetails.Members.Count,
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Member,
                         Members = new ObservableCollection<GroupMemberViewModel>(),
-                        //TODO Hack for debug
-                        ApplicationType = ApplicationType.SampleApp
+                        Task = new TaskViewModel()
                     };
                     FillGroupMembers(newGroup, groupDetails.Members);
                     list.Add(newGroup);
@@ -68,12 +72,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     var newGroup = new GroupInfoViewModel
                     {
                         GroupName = groupDetails.Name,
-                        MemberCount = groupDetails.Members.Count,
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Owner,
                         GroupCode = groupDetails.EnterCode,
                         CreateTime = groupDetails.CreateTime,
-                        Members = new ObservableCollection<GroupMemberViewModel>()
+                        Members = new ObservableCollection<GroupMemberViewModel>(),
+                        Task = new TaskViewModel()
                     };
                     FillGroupMembers(newGroup, groupDetails.Members);
                     list.Add(newGroup);
@@ -91,14 +95,19 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             foreach (var member in members)
             {
-                group.Members.Add(new GroupMemberViewModel
+                var memberViewModel = new GroupMemberViewModel
                 {
                     FirstName = member.FirstName,
                     LastName = member.LastName,
                     Id = member.Id,
                     UserAvatar = m_defaultUserAvatar
-                });
+                };
+
+                group.Members.Add(memberViewModel);
+                group.MemberCount = group.Members.Count;
+
                 m_userAvatarCache.AddAvatarUrl(member.Id, member.AvatarUrl);
+                LoadMemberAvatar(memberViewModel);
             }
         }
 
@@ -149,20 +158,29 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             try
             {
                 CurrentGroupId = groupId;
-                await m_serviceClient.GetGroupDetails(groupId);
-                callback(new GroupInfoViewModel(), null);
+                var result = await m_serviceClient.GetGroupDetails(groupId);
+                var group = new GroupInfoViewModel
+                {
+                    GroupId = result.Id,
+                    Members = new ObservableCollection<GroupMemberViewModel>(),
+                    GroupName = result.Name,
+                    CreateTime = result.CreateTime,
+                    GroupCode = result.EnterCode,
+                    Task = new TaskViewModel
+                    {
+                        Application = m_applicationIdManager.GetApplicationType(result.Task.ApplicationId),
+                        Id = result.Task.Id,
+                        Name = result.Task.Name,
+                        CreateTime = result.Task.CreateTime
+                    }
+                };
+                
+                FillGroupMembers(group, result.Members);
+                callback(group, null);
             }
             catch (ClientCommunicationException exception)
             {
                 callback(null, exception);
-            }
-        }
-
-        public void LoadGroupMemberAvatars(IList<GroupMemberViewModel> groupMembers)
-        {
-            foreach (var member in groupMembers)
-            {
-                LoadMemberAvatar(member);
             }
         }
 
@@ -171,42 +189,32 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             member.UserAvatar = await m_userAvatarCache.GetUserAvatar(member.Id);
         }
 
-        public async void UpdateGroupNewMembers(GroupInfoViewModel group)
+        public async Task UpdateGroupsMembersAsync(IList<GroupInfoViewModel> groups, Action<Exception> callback)
         {
-            var newMembersId = await m_serviceClient.GetGroupMemberIdsAsync(group.GroupId);
-            if (group.Members.Count != newMembersId.Count)
+            try
             {
-                UpdateGroupMembers(group);
-                return;
-            }
-            var oldMembersId = new HashSet<long>(group.Members.Select(member => member.Id));
-            foreach (var newMemberId in newMembersId)
-            {
-                if (!oldMembersId.Contains(newMemberId))
+                var oldGroupInfo = groups.Select(group => new OldGroupDetailsContract
                 {
-                    UpdateGroupMembers(group);
-                    return;
-                }
-            }
-        }
+                    Id = group.GroupId,
+                    MemberIds = group.Members.Select(x => x.Id).ToList()
+                }).ToList();
 
-        private async void UpdateGroupMembers(GroupInfoViewModel group)
-        {
-            var members = await m_serviceClient.GetGroupMembersAsync(group.GroupId);
-            group.Members.Clear();
-            group.MemberCount = members.Count;
-            foreach (var groupMemberContract in members)
-            {
-                group.Members.Add(new GroupMemberViewModel
+                var result = await m_serviceClient.GetGroupsUpdate(oldGroupInfo);
+                var groupUpdate = new Dictionary<long, GroupDetailsUpdateContract>(result.Count);
+
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
                 {
-                    FirstName = groupMemberContract.FirstName,
-                    LastName = groupMemberContract.LastName,
-                    Id = groupMemberContract.Id,
-                    UserAvatar = m_defaultUserAvatar
+                    foreach (var group in groups.Where(group => groupUpdate.ContainsKey(group.GroupId)))
+                    {
+                        FillGroupMembers(group, groupUpdate[group.GroupId].Members);
+                    }
+                    callback(null);
                 });
-                m_userAvatarCache.AddAvatarUrl(groupMemberContract.Id, groupMemberContract.AvatarUrl);
             }
-            LoadGroupMemberAvatars(group.Members);
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
         }
     }
 }
