@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
@@ -60,10 +61,19 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
             get { return m_members; }
             set
             {
+                if (m_members != null)
+                    m_members.CollectionChanged -= MembersChanged;
+
                 m_members = value;
+                m_members.CollectionChanged += MembersChanged;
                 RaisePropertyChanged();
                 RaisePropertyChanged(() => FilteredMembers);
             }
+        }
+
+        private void MembersChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            RaisePropertyChanged(() => FilteredMembers);
         }
 
         public IEnumerable<GroupMemberViewModel> FilteredMembers

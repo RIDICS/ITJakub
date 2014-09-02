@@ -1,8 +1,7 @@
 ﻿// The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 using System;
-using Windows.System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using ITJakub.MobileApps.Client.MainApp.Common;
 
@@ -84,28 +83,14 @@ namespace ITJakub.MobileApps.Client.MainApp.View
 
         #endregion
 
-        private void TextBoxEnterPressed(VirtualKey key, TextBox textBox, Button button)
+        private void ConnectToGroupButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (key != VirtualKey.Enter)
-                return;
-
-            var binding = textBox.GetBindingExpression(TextBox.TextProperty);
-            if (binding != null)
-                binding.UpdateSource();
-
-            var command = button.Command;
-            if (command != null && command.CanExecute(null))
-                command.Execute(null);
+            ConnectToGroupFlyout.Hide();
         }
 
-        private void ConnectToGroupTextBox_OnKeyUp(object sender, KeyRoutedEventArgs e)
+        private void CreateGroupButton_OnClick(object sender, RoutedEventArgs e)
         {
-            TextBoxEnterPressed(e.Key, (TextBox)sender, ConnectToGroupButton);
-        }
-
-        private void CreateGroupTextBox_OnKeyUp(object sender, KeyRoutedEventArgs e)
-        {
-            TextBoxEnterPressed(e.Key, (TextBox)sender, CreateGroupButton);
+            CreateNewGroupFlyout.Hide();
         }
     }
 }

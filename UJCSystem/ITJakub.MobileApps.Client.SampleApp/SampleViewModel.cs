@@ -11,17 +11,7 @@ namespace ITJakub.MobileApps.Client.SampleApp
         {
             m_dataService = sampleDataService;
             
-            //tady nacist data pro aplikaci z dataservice apod.
             TestString = "Testovaci string z viewModelu aplikace";
-            LoadData();
-        }
-
-        private void LoadData()
-        {
-            m_dataService.GetData((exception, data) =>
-            {
-                TestString = data;
-            });
         }
 
         public string TestString
@@ -32,7 +22,22 @@ namespace ITJakub.MobileApps.Client.SampleApp
 
         public override void InitializeCommunication()
         {
-            //Load data from server and start DispatcherTimer
+            //Load data from server and use IPollingService for getting synchronized objects
+            m_dataService.GetData((data, exception) =>
+            {
+                TestString = data;
+            });
+
+            m_dataService.StartObjectPolling((list, exception) =>
+            {
+                if (exception != null)
+                    return;
+
+                //Process new synchronized objects
+
+                //Call method SetDataLoaded to disappear loading dialog
+                SetDataLoaded();
+            });
         }
 
         public override void SetTask(string data)
@@ -42,7 +47,7 @@ namespace ITJakub.MobileApps.Client.SampleApp
 
         public override void StopCommunication()
         {
-            //Stop all running DispatcherTimer
+            //Stop all running timers and polling requests in IPollingService
         }
     }
 }

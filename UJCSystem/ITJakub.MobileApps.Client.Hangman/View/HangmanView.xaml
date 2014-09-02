@@ -26,7 +26,7 @@
         <Viewbox Grid.Column="0"
                  Margin="25"
                  VerticalAlignment="Top">
-            <view:HangmanPictureControl Lives="{Binding Lives}" />
+            <view:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}" />
         </Viewbox>
            
         <Grid Grid.Column="1">
@@ -45,7 +45,8 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
                 
-                <TextBox VerticalAlignment="Stretch"
+                <control:SubmitTextBox
+                         VerticalAlignment="Stretch"
                          HorizontalAlignment="Left"
                          MaxLength="1"
                          Margin="0,0,20,0"
@@ -53,13 +54,13 @@
                          FontWeight="Bold"
                          TextAlignment="Center"
                          Text="{Binding Letter, Mode=TwoWay}"
-                         KeyUp="LetterTextBox_OnKeyUp"
+                         EnterCommand="{Binding GuessCommand}"
+                         IsEnabled="{Binding GameOver, Converter={StaticResource BooleanNegationConverter}}"
                          IsTextPredictionEnabled="False" />
                 
                 <Button Content="Hádat písmeno"
                         FontSize="20"
                         Command="{Binding GuessCommand}"
-                        x:Name="GuessButton"
                         IsEnabled="{Binding GameOver, Converter={StaticResource BooleanNegationConverter}}" />
                 
             </StackPanel>

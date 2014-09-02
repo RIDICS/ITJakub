@@ -29,6 +29,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         void GetTasksByApplication(ApplicationType application, Action<ObservableCollection<TaskViewModel>, Exception> callback);
         void AssignTaskToGroup(long groupId, long taskId, Action<Exception> callback);
-        void GetTaskForGroup(long groupId, Action<TaskViewModel, Exception> callback);
+        void OpenGroup(long groupId);
     }
 }

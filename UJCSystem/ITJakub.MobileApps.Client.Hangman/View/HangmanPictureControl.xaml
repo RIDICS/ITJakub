@@ -4,13 +4,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d"
     d:DesignHeight="400"
-    d:DesignWidth="200">
+    d:DesignWidth="200"
+    d:DataContext="{d:DesignInstance Type=viewModel:HangmanPictureViewModel}">
     
     <UserControl.Resources>
         <SolidColorBrush x:Key="GibbetBrush" Color="Black" />
         <SolidColorBrush x:Key="Hangman" Color="NavajoWhite" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     
     <Canvas Width="200"
@@ -22,7 +26,7 @@
               X2="30"
               Y1="350"
               Y2="27"
-              x:Name="Construction1" />
+              Visibility="{Binding Construction1Visible, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <Line Stroke="{StaticResource GibbetBrush}"
               StrokeThickness="7"
@@ -30,7 +34,7 @@
               X2="170"
               Y1="30"
               Y2="30"
-              x:Name="Construction2" />
+              Visibility="{Binding Construction2Visible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
         <Line Stroke="{StaticResource GibbetBrush}"
               StrokeThickness="7"
@@ -38,7 +42,7 @@
               X2="70"
               Y1="70"
               Y2="30"
-              x:Name="Construction3" />
+              Visibility="{Binding Construction3Visible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
         <Line Stroke="{StaticResource GibbetBrush}"
               StrokeThickness="2"
@@ -46,12 +50,12 @@
               X2="150"
               Y1="30"
               Y2="80"
-              x:Name="Rope" />
+              Visibility="{Binding RopeVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
         <Path Stroke="{StaticResource GibbetBrush}"
               StrokeThickness="7"
               Data="M 3,370 S 25,330 70,370"
-              x:Name="Base" />
+              Visibility="{Binding BaseVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
         <!--Head-->
         <Ellipse Fill="{StaticResource Hangman}"
@@ -59,7 +63,7 @@
                  Height="40"
                  Canvas.Left="130"
                  Canvas.Top="80"
-                 x:Name="Head" />
+                 Visibility="{Binding HeadVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
         <Ellipse Stroke="Blue"
                  StrokeThickness="2"
@@ -67,7 +71,7 @@
                  Height="7"
                  Canvas.Left="138"
                  Canvas.Top="90"
-                 x:Name="LeftEye" />
+                 Visibility="{Binding FaceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <Ellipse Stroke="Blue"
                  StrokeThickness="2"
@@ -75,7 +79,7 @@
                  Height="7"
                  Canvas.Left="152"
                  Canvas.Top="90"
-                 x:Name="RightEye" />
+                 Visibility="{Binding FaceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
         <Line Stroke="Black"
               StrokeThickness="1"
@@ -83,7 +87,7 @@
               X2="155"
               Y1="110"
               Y2="109"
-              x:Name="Mouth"/>
+              Visibility="{Binding FaceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <!--Body-->
         <Line Stroke="{StaticResource Hangman}"
@@ -92,7 +96,7 @@
               X2="150"
               Y1="115"
               Y2="222"
-              x:Name="Body" />
+              Visibility="{Binding BodyVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <!--Left arm-->
         <Line Stroke="{StaticResource Hangman}"
@@ -101,7 +105,7 @@
               X2="120"
               Y1="140"
               Y2="170"
-              x:Name="LeftArm" />
+              Visibility="{Binding LeftArmVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <!--Right arm-->
         <Line Stroke="{StaticResource Hangman}"
@@ -110,7 +114,7 @@
               X2="180"
               Y1="140"
               Y2="170"
-              x:Name="RightArm" />
+              Visibility="{Binding RightArmVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <!--Left leg-->
         <Line Stroke="{StaticResource Hangman}"
@@ -119,7 +123,7 @@
               X2="120"
               Y1="220"
               Y2="270"
-              x:Name="LeftLeg" />
+              Visibility="{Binding LeftLegVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <!--Right leg-->
         <Line Stroke="{StaticResource Hangman}"
@@ -128,7 +132,7 @@
               X2="180"
               Y1="220"
               Y2="270"
-              x:Name="RightLeg" />
+              Visibility="{Binding RightLegVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
     </Canvas>
 </UserControl>

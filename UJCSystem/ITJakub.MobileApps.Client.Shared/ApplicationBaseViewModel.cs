@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.Client.Shared
         public abstract void SetTask(string data);
         public abstract void StopCommunication();
 
-        public Action DataLoadedCallback { get; set; }
+        public Action DataLoadedCallback { private get; set; }
 
         protected void SetDataLoaded()
         {

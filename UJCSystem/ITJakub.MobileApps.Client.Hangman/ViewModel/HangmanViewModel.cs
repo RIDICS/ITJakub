@@ -28,9 +28,14 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             m_dataService = dataService;
             GuessHistory = new ObservableCollection<GuessViewModel>();
             GuessCommand = new RelayCommand(Guess);
+            HangmanPictureViewModel = new HangmanPictureViewModel();
         }
 
         public ObservableCollection<GuessViewModel> GuessHistory { get; set; }
+
+        public HangmanPictureViewModel HangmanPictureViewModel { get; set; }
+
+        public RelayCommand GuessCommand { get; private set; }
 
         public string Letter
         {
@@ -52,8 +57,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
-        public RelayCommand GuessCommand { get; private set; }
-
         public bool GameOver
         {
             get { return m_gameOver; }
@@ -71,6 +74,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             {
                 m_lives = value;
                 RaisePropertyChanged();
+                HangmanPictureViewModel.Lives = m_lives;
             }
         }
 

@@ -15,6 +15,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         }
 
         void GoBack();
+        void GoBackUsingCache();
         void GoForward();
         void GoHome();
         void Navigate(Type sourcePageType);

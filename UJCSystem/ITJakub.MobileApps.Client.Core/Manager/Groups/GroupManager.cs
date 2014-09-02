@@ -34,9 +34,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             m_applicationIdManager = container.Resolve<ApplicationIdManager>();
 
             m_defaultUserAvatar = new BitmapImage(new Uri("ms-appx:///Icon/user-32.png"));
-
-            //TODO for debug
-            CurrentGroupId = 1;
         }
 
         public async void GetGroupForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
@@ -200,7 +197,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 }).ToList();
 
                 var result = await m_serviceClient.GetGroupsUpdate(oldGroupInfo);
-                var groupUpdate = new Dictionary<long, GroupDetailsUpdateContract>(result.Count);
+                var groupUpdate = result.ToDictionary(group => group.Id, group => group);
 
                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
                 {
@@ -215,6 +212,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             {
                 callback(exception);
             }
+        }
+
+        public void OpenGroup(long groupId)
+        {
+            CurrentGroupId = groupId;
         }
     }
 }

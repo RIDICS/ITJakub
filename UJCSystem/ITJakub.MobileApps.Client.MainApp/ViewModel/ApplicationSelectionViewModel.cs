@@ -34,7 +34,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             LoadAppList();
 
             AppClickCommand = new RelayCommand<ItemClickEventArgs>(AppClick);
-            GoBackCommand = new RelayCommand(() => m_navigationService.GoBack());
+            GoBackCommand = new RelayCommand(() => m_navigationService.GoBackUsingCache());
         }
 
         private void LoadAppList()

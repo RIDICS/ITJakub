@@ -70,17 +70,16 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             
-            <TextBox Grid.Column="0" 
+            <control:SubmitTextBox Grid.Column="0" 
                      Text="{Binding Message, Mode=TwoWay}"
-                     KeyUp="MessageBox_OnKeyUp"
+                     EnterCommand="{Binding SendCommand}"
                      x:Name="MessageBox"
                      />
             
             <Button Grid.Column="1"
                     Content="Odeslat"
                     Command="{Binding SendCommand}"
-                    Click="SendButton_OnClick"
-                    x:Name="SendButton" />
+                    Click="SendButton_OnClick" />
         </Grid>
     </Grid>
     

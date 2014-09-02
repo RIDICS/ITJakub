@@ -1,10 +1,13 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
+using ITJakub.MobileApps.Client.Shared.Communication;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -16,8 +19,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     /// </summary>
     public class GroupPageViewModel : ViewModelBase
     {
+        private const PollingInterval MembersPollingInterval = PollingInterval.Medium;
+
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
+        private readonly IMainPollingService m_pollingService;
         private AppInfoViewModel m_selectedApplicationInfo;
         private GroupInfoViewModel m_groupInfo;
         private TaskViewModel m_selectedTaskViewModel;
@@ -28,10 +34,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         /// <summary>
         /// Initializes a new instance of the GroupPageViewModel class.
         /// </summary>
-        public GroupPageViewModel(IDataService dataService, INavigationService navigationService)
+        public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_pollingService = pollingService;
             Messenger.Default.Register<OpenGroupMessage>(this, message =>
             {
                 LoadData(message.Group);
@@ -42,13 +49,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             SelectedTaskViewModel = new TaskViewModel();
 
             InitCommands();
-            //TODO polling group members
         }
 
         private void InitCommands()
         {
             GoBackCommand = new RelayCommand(() =>
             {
+                m_pollingService.Unregister(MembersPollingInterval, UpdateMembers);
                 Messenger.Default.Unregister(this);
                 m_navigationService.GoBack();
             });
@@ -70,7 +77,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupInfo = groupInfo;
                 SelectedTaskViewModel = groupInfo.Task;
                 SelectedApplicationInfo = new AppInfoViewModel{ApplicationType = groupInfo.Task.Application};
+
+                m_pollingService.RegisterForGroupsUpdate(MembersPollingInterval, new[] {GroupInfo}, UpdateMembers);
             });
+        }
+
+        private void UpdateMembers(Exception exception)
+        {
         }
 
         public GroupInfoViewModel GroupInfo
