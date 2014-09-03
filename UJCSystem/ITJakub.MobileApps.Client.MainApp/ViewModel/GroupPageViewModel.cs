@@ -8,6 +8,7 @@ using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -75,9 +76,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     return;
 
                 GroupInfo = groupInfo;
-                SelectedTaskViewModel = groupInfo.Task;
-                SelectedApplicationInfo = new AppInfoViewModel{ApplicationType = groupInfo.Task.Application};
-
+                if (groupInfo.Task == null)
+                {
+                    SelectedTaskViewModel = new TaskViewModel();
+                    SelectedApplicationInfo = new AppInfoViewModel {ApplicationType = ApplicationType.Unknown};
+                }
+                else
+                {
+                    SelectedTaskViewModel = groupInfo.Task;
+                    SelectedApplicationInfo = new AppInfoViewModel {ApplicationType = groupInfo.Task.Application};
+                }
+                
                 m_pollingService.RegisterForGroupsUpdate(MembersPollingInterval, new[] {GroupInfo}, UpdateMembers);
             });
         }

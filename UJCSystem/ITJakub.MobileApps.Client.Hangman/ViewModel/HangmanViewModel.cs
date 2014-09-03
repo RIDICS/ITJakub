@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Windows.UI.Popups;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Hangman.DataService;
 using ITJakub.MobileApps.Client.Shared;
@@ -18,6 +19,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private string m_letter;
         private bool m_gameOver;
         private int m_lives;
+        private bool m_win;
 
         /// <summary>
         /// Initializes a new instance of the HangmanViewModel class.
@@ -78,6 +80,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
+        public bool Win
+        {
+            get { return m_win; }
+            set
+            {
+                m_win = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public override void InitializeCommunication()
         {
             m_dataService.StartPollingLetters((guesses, taskInfo, exception) =>
@@ -110,8 +122,17 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             WordToGuess = taskInfo.Word;
             GameOver = taskInfo.Lives == 0;
             Lives = taskInfo.Lives;
-        }
 
+            if (taskInfo.Win)
+            {
+                // TODO show correct message
+                Win = true;
+                GameOver = true;
+            }
+
+            // TODO if is new word, clear guess history
+        }
+        
         private void Guess()
         {
             if (Letter == string.Empty || Letter == " " || GameOver)

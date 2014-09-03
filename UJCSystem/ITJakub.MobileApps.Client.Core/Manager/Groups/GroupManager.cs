@@ -163,14 +163,19 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     GroupName = result.Name,
                     CreateTime = result.CreateTime,
                     GroupCode = result.EnterCode,
-                    Task = new TaskViewModel
-                    {
-                        Application = m_applicationIdManager.GetApplicationType(result.Task.ApplicationId),
-                        Id = result.Task.Id,
-                        Name = result.Task.Name,
-                        CreateTime = result.Task.CreateTime
-                    }
                 };
+
+                var task = result.Task;
+                if (task != null)
+                {
+                    group.Task = new TaskViewModel
+                    {
+                        Application = m_applicationIdManager.GetApplicationType(task.ApplicationId),
+                        Id = task.Id,
+                        Name = task.Name,
+                        CreateTime = task.CreateTime
+                    };
+                }
                 
                 FillGroupMembers(group, result.Members);
                 callback(group, null);
