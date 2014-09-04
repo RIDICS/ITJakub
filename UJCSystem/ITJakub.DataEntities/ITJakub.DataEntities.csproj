@@ -30,29 +30,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core">
-      <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Core.dll</HintPath>
+    <Reference Include="Castle.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Facilities.AutoTx">
-      <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Facilities.AutoTx.dll</HintPath>
+    <Reference Include="Castle.Facilities.AutoTx, Version=3.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Facilities.AutoTx.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Facilities.Logging">
-      <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Facilities.Logging.dll</HintPath>
+    <Reference Include="Castle.Facilities.NHibernateIntegration, Version=3.3.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Facilities.NHibernateIntegration.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Facilities.NHibernateIntegration">
-      <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Facilities.NHibernateIntegration.dll</HintPath>
+    <Reference Include="Castle.Services.Transaction, Version=3.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Services.Transaction.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Services.Transaction">
-      <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Services.Transaction.dll</HintPath>
+    <Reference Include="Castle.Windsor, Version=3.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Windsor">
-      <HintPath>..\..\Libs\Castle.NhibernateIntegration(Modified to work with Castle 3.x)\Castle.Windsor.dll</HintPath>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\Libs\log4net-1.2.11\4.0\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\log4net1.2.12\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\Libs\Nhibernate\lib\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

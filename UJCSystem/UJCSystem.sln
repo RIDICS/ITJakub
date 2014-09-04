@@ -67,13 +67,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Configuration", "ITJakub.MobileApps.Configuration\ITJakub.MobileApps.Configuration.csproj", "{7A5C997B-0795-43AA-9C21-C65D8A25821C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A9354BBF-68D1-497A-979C-4D677868DD6A}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.DataContracts", "ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj", "{90F9D8DD-05D5-401F-8939-BD619ADF5CDD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Web.Hub", "ITJakub.Web.Hub\ITJakub.Web.Hub.csproj", "{B9B8EC15-8ABF-4FB0-B660-589AFE66B412}"
