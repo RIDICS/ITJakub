@@ -41,6 +41,16 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
             if (frame.CanGoBack)
             {
+                frame.GoBack();
+            }
+        }
+
+        public void GoBackUsingCache()
+        {
+            var frame = ((Frame)Window.Current.Content);
+
+            if (frame.CanGoBack)
+            {
                 if (frame.Content != null)
                 {
                     var currentPageEntry = new PageStackEntry(frame.Content.GetType(), m_currentParameter, null);

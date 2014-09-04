@@ -36,7 +36,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void InitCommands()
         {
-            GoBackCommand = new RelayCommand(() => m_navigationService.GoBack());
+            GoBackCommand = new RelayCommand(() => m_navigationService.GoBackUsingCache());
             TaskClickCommand = new RelayCommand<ItemClickEventArgs>(TaskClick);
         }
 

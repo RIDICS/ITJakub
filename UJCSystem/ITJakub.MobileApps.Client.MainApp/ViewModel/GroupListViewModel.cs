@@ -204,6 +204,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 new MessageDialog("Připojeno").ShowAsync();
                 LoadData();
             });
+            ConnectToGroupCode = string.Empty;
         }
 
         private void CreateNewGroup()
@@ -220,6 +221,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 NewGroupName = string.Empty;
                 LoadData();
             });
+            NewGroupName = string.Empty;
         }
 
         private void LoadData()
@@ -268,6 +270,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             if (group != null)
             {
+                m_dataService.OpenGroup(group.GroupId);
                 m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
 
                 var viewType = group.GroupType == GroupType.Member

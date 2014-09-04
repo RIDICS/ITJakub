@@ -66,9 +66,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private void GoBack()
         {
             StopCommunication();
-
-            if (m_navigationService.CanGoBack)
-                m_navigationService.GoBack();
+            m_navigationService.GoBack();
         }
 
         private void LoadTask(TaskViewModel task, Exception exception)

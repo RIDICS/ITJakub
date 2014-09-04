@@ -48,14 +48,20 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             var newLetters = new ObservableCollection<GuessViewModel>();
             foreach (var objectDetails in newObjects)
             {
-                var letter = JsonConvert.DeserializeObject<GuessLetter>(objectDetails.Data).Letter;
+                var guessLetterObject = JsonConvert.DeserializeObject<GuessLetter>(objectDetails.Data);
                 var viewModel = new GuessViewModel
                 {
                     Author = objectDetails.Author,
-                    Letter = letter
+                    Letter = guessLetterObject.Letter
                 };
                 newLetters.Add(viewModel);
-                m_task.Guess(letter);
+                m_task.Guess(guessLetterObject);
+
+                if (m_task.IsNewWord)
+                {
+                    m_pollingCallback(newLetters, GetCurrentTaskInfo(), null);
+                    newLetters.Clear();
+                }
             }
 
             m_pollingCallback(newLetters, GetCurrentTaskInfo(), null);
@@ -63,7 +69,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         public async void GuessLetter(char letter, Action<Exception> callback)
         {
-            var dataContract = new GuessLetter {Letter = Char.ToUpper(letter)};
+            var dataContract = new GuessLetter
+            {
+                Letter = Char.ToUpper(letter),
+                WordOrder = m_task.WordOrder
+            };
             var serializedObject = JsonConvert.SerializeObject(dataContract);
             try
             {
@@ -81,7 +91,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public void SetTask(string data, Action<TaskInfoViewModel> callback)
         {
             var task = JsonConvert.DeserializeObject<HangmanTaskContract>(data);
-            m_task = new HangmanTask(task.Word.ToUpper());
+            m_task = new HangmanTask(task.Words);
 
             var taskInfo = GetCurrentTaskInfo();
 
@@ -93,7 +103,10 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             return new TaskInfoViewModel
             {
                 Word = m_task.GuessedLetters,
-                Lives = m_task.Lives
+                Lives = m_task.Lives,
+                Win = m_task.Win,
+                WordGuessed = m_task.WordOrder,
+                IsNewWord = m_task.IsNewWord
             };
         }
 

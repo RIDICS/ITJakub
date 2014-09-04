@@ -9,6 +9,7 @@
     xmlns:userMenu="using:ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu"
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     x:Name="PageRoot"
     DataContext="{Binding GroupListViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d" >
@@ -34,18 +35,19 @@
             <AppBarButton Icon="Forward"
                           Label="Připojit se k nové skupině">
                 <AppBarButton.Flyout>
-                    <Flyout>
+                    <Flyout x:Name="ConnectToGroupFlyout">
                         <StackPanel Orientation="Vertical">
                             <TextBlock FontSize="15"
                                        Text="Zadejte číslo skupiny:" />
-                            <TextBox Width="250"
+                            <control:SubmitTextBox
+                                     Width="250"
                                      Margin="0 5 0 5"
                                      Text="{Binding ConnectToGroupCode, Mode=TwoWay}"
-                                     KeyUp="ConnectToGroupTextBox_OnKeyUp" />
+                                     EnterCommand="{Binding ConnectToGroupCommand}" />
                             <Button HorizontalAlignment="Right"
                                     Content="Připojit se"
                                     Command="{Binding ConnectToGroupCommand}"
-                                    x:Name="ConnectToGroupButton"/>
+                                    Click="ConnectToGroupButton_OnClick" />
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>
@@ -55,18 +57,19 @@
                           Label="Vytvořit skupinu"
                           Visibility="{Binding TeachersButtonVisibility}">
                 <AppBarButton.Flyout>
-                    <Flyout>
+                    <Flyout x:Name="CreateNewGroupFlyout">
                         <StackPanel Orientation="Vertical">
                             <TextBlock FontSize="15"
                                        Text="Zadejte název skupiny:" />
-                            <TextBox Width="250"
+                            <control:SubmitTextBox
+                                     Width="250"
                                      Margin="0,5,0,5"
                                      Text="{Binding NewGroupName, Mode=TwoWay}"
-                                     KeyUp="CreateGroupTextBox_OnKeyUp"/>
+                                     EnterCommand="{Binding CreateNewGroupCommand}" />
                             <Button HorizontalAlignment="Right"
                                     Content="Vytvořit"
                                     Command="{Binding CreateNewGroupCommand}"
-                                    x:Name="CreateGroupButton"/>
+                                    Click="CreateGroupButton_OnClick" />
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>

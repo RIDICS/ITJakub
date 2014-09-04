@@ -4,7 +4,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataContract
 {
     public class HangmanTaskContract
     {
-        [JsonProperty("Word")]
-        public string Word { get; set; }
+        [JsonProperty("Words")]
+        public string[] Words { get; set; }
     }
 }

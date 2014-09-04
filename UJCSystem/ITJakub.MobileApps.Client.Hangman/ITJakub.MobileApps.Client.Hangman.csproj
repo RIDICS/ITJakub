@@ -116,6 +116,7 @@
     <Compile Include="DataService\GuessManager.cs" />
     <Compile Include="DataService\HangmanDataService.cs" />
     <Compile Include="DataService\HangmanTask.cs" />
+    <Compile Include="ViewModel\HangmanPictureViewModel.cs" />
     <Compile Include="ViewModel\TaskInfoViewModel.cs" />
     <Compile Include="ViewModel\GuessViewModel.cs" />
     <Compile Include="View\HangmanPictureControl.xaml.cs">

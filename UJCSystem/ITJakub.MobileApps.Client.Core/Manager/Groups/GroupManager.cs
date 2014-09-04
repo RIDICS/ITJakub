@@ -34,9 +34,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             m_applicationIdManager = container.Resolve<ApplicationIdManager>();
 
             m_defaultUserAvatar = new BitmapImage(new Uri("ms-appx:///Icon/user-32.png"));
-
-            //TODO for debug
-            CurrentGroupId = 1;
         }
 
         public async void GetGroupForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
@@ -166,14 +163,19 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     GroupName = result.Name,
                     CreateTime = result.CreateTime,
                     GroupCode = result.EnterCode,
-                    Task = new TaskViewModel
-                    {
-                        Application = m_applicationIdManager.GetApplicationType(result.Task.ApplicationId),
-                        Id = result.Task.Id,
-                        Name = result.Task.Name,
-                        CreateTime = result.Task.CreateTime
-                    }
                 };
+
+                var task = result.Task;
+                if (task != null)
+                {
+                    group.Task = new TaskViewModel
+                    {
+                        Application = m_applicationIdManager.GetApplicationType(task.ApplicationId),
+                        Id = task.Id,
+                        Name = task.Name,
+                        CreateTime = task.CreateTime
+                    };
+                }
                 
                 FillGroupMembers(group, result.Members);
                 callback(group, null);
@@ -200,7 +202,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 }).ToList();
 
                 var result = await m_serviceClient.GetGroupsUpdate(oldGroupInfo);
-                var groupUpdate = new Dictionary<long, GroupDetailsUpdateContract>(result.Count);
+                var groupUpdate = result.ToDictionary(group => group.Id, group => group);
 
                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
                 {
@@ -215,6 +217,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             {
                 callback(exception);
             }
+        }
+
+        public void OpenGroup(long groupId)
+        {
+            CurrentGroupId = groupId;
         }
     }
 }

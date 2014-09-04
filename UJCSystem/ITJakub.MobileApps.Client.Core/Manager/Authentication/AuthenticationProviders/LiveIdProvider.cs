@@ -1,12 +1,17 @@
+using System;
 using System.Threading.Tasks;
+using Windows.Security.Authentication.Web;
 using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
     public class LiveIdProvider : ILoginProvider
     {
+        private const string ClientId = "***REMOVED***";
+        private const string ClientSecret = "***REMOVED***";
+        private const string StartUri = "https://login.live.com/oauth20_authorize.srf?client_id={0}&scope=wl.basic&response_type=token&redirect_uri={1}";
 
-        public string AccountName { get { return "Live Id"; } }
+        public string AccountName { get { return "Live ID"; } }
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.LiveId; } }
 
         //TODO register this application in Windows Store developer account and test this method
@@ -85,22 +90,22 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         }
         */
 
-        public Task<UserLoginSkeleton> LoginAsync()
+        public async Task<UserLoginSkeleton> LoginAsync()
         {
-            var task = new Task<UserLoginSkeleton>(() =>
+            var endUriString = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri;
+            var startUriString = string.Format(StartUri, ClientId, endUriString);
+            var webAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, new Uri(startUriString),
+                WebAuthenticationBroker.GetCurrentApplicationCallbackUri());
+
+
+            return new UserLoginSkeleton
             {
-                var userInfo = new UserLoginSkeleton
-                {
-                    Success = true,
-                    FirstName = "Mocked",
-                    LastName = "User",
-                    AccessToken = "Aaaaaaaaa",
-                    Email = "email@example.com"
-                };
-                return userInfo;
-            });
-            task.Start();
-            return task;
+                Success = true,
+                FirstName = "Mocked",
+                LastName = "User",
+                AccessToken = "Aaaaaaaaa",
+                Email = "email@example.com"
+            };
         }
     }
 }

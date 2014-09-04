@@ -110,6 +110,7 @@
     <Compile Include="Communication\PollingInterval.cs" />
     <Compile Include="Control\AlignableWrapPanel.cs" />
     <Compile Include="Control\AutoScrollListView.cs" />
+    <Compile Include="Control\SubmitTextBox.cs" />
     <Compile Include="Converter\BooleanNegationConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Enum\ApplicationCategory.cs" />
