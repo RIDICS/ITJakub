@@ -1,0 +1,46 @@
+﻿<UserControl
+    x:Class="ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu.UserMenu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
+    mc:Ignorable="d"
+    d:DesignHeight="40"
+    d:DesignWidth="180"
+    DataContext="{Binding UserMenuViewModel, Source={StaticResource Locator}}">
+    <Grid>
+        <Button HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="25"
+                FontWeight="Normal"
+                BorderThickness="0">
+            <Button.Flyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem Text="Odhlásit se"
+                                    FontSize="15"
+                                    Command="{Binding LogOutCommand}" />
+                </MenuFlyout>
+            </Button.Flyout>
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="40" />
+                    <ColumnDefinition Width="auto" MinWidth="40" />
+                </Grid.ColumnDefinitions>
+
+                <Ellipse Grid.Column="0" Width="30" Height="30">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding UserAvatar}" Stretch="UniformToFill" />
+                    </Ellipse.Fill>
+                </Ellipse>
+
+
+                <TextBlock Grid.Column="1" Margin="2,0,0,0">
+                    <Run Text="{Binding FirstName}" />
+                    <Run Text="{Binding LastName}" />
+                </TextBlock>
+            </Grid>
+
+        </Button>
+    </Grid>
+</UserControl>

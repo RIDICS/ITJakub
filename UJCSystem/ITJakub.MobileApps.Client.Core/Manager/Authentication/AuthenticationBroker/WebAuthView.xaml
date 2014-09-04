@@ -1,0 +1,58 @@
+﻿<Page
+    x:Class="ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker.WebAuthView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:authBroker="using:ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker"
+    mc:Ignorable="d"
+    RequestedTheme="Light"
+    d:DataContext="{d:DesignInstance Type=authBroker:WebAuthViewModel }">
+
+    <Grid Background="#70000000">
+        <Grid Margin="0,100,0,100">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="0" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="800" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="1" Grid.Row="0" Background="#FFDDDDDD">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" VerticalAlignment="Center" IsEnabled="True"
+                        Command="{Binding CancelCommand}" Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="Přihlašte se prosím"
+                           FontSize="26" Margin="0,5,0,0"/>
+            </Grid>
+
+            <Grid Grid.Column="1" Grid.Row="1" Background="White" />
+
+            <Grid Grid.Column="1" Grid.Row="2" Background="White">
+                <WebView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                         Source="{Binding BrowserUri, Mode=TwoWay}" Name="Wv" LoadCompleted="wv_LoadCompleted" NavigationFailed="wv_NavigationFailed">
+
+                    <!--<interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="LoadCompleted">
+                            <core:InvokeCommandAction Command="{Binding LoadAddresCompletedCommand}" />
+                        </core:EventTriggerBehavior>
+                        <core:EventTriggerBehavior EventName="NavigationFailed">
+                            <core:InvokeCommandAction Command="{Binding NavigationFailedCommand}"/>
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>-->
+                </WebView>
+
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Page>

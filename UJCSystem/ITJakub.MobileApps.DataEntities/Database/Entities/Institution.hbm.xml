@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.MobileApps.DataEntities" namespace="ITJakub.MobileApps.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Institution" table="[Institution]" lazy="true" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    <property name="Name">
+      <column name="Name" sql-type="varchar" not-null="true" />
+    </property>
+    <property name="CreateTime">
+      <column name="CreateTime" sql-type="datetime" not-null="true" />
+    </property>
+    <property name="EnterCode">
+      <column name="EnterCode" sql-type="varchar" not-null="true" />
+    </property>
+    <bag name="Members">
+      <key column="InstitutionId" />
+      <one-to-many class="User" />
+    </bag>
+  </class>
+</hibernate-mapping>
