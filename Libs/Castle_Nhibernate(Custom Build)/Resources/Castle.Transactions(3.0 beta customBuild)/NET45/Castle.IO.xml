@@ -1,0 +1,1891 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Castle.IO</name>
+    </assembly>
+    <members>
+        <member name="T:Castle.IO.CommonExtensions">
+            <summary>
+            	Common extensions among <see cref="T:Castle.IO.IFile"/> and <see cref="T:Castle.IO.IDirectory"/>.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.IDirectoryAdapter">
+            <summary>
+            	Directory helper. Use this instead of Directory in order to gain
+            	transparent interop with transactions (when you want them, as marked by the [Transaction] attribute).
+            </summary>
+        </member>
+        <member name="M:Castle.IO.IDirectoryAdapter.Create(System.String)">
+            <summary>
+            	Creates a directory at the path given.
+            	Contrary to the Win32 API, doesn't throw if the directory already
+            	exists, but instead returns true. The 'safe' value to get returned 
+            	for be interopable with other path/dirutil implementations would
+            	hence be false (i.e. that the directory didn't already exist).
+            </summary>
+            <param name = "path">The path to create the directory at.</param>
+            <return>
+            	True if the directory already existed, False otherwise.
+            </return>
+        </member>
+        <member name="M:Castle.IO.IDirectoryAdapter.Exists(System.String)">
+            <summary>
+            	Checks whether the path exists.
+            </summary>
+            <param name = "path">Path to check.</param>
+            <returns>True if it exists, false otherwise.</returns>
+        </member>
+        <member name="M:Castle.IO.IDirectoryAdapter.Delete(System.String)">
+            <summary>
+            	Deletes a folder recursively.
+            </summary>
+            <param name = "path"></param>
+        </member>
+        <member name="M:Castle.IO.IDirectoryAdapter.Delete(System.String,System.Boolean)">
+            <summary>
+            	Deletes an empty directory. Non-empty directories will cause false
+            	to be returned.
+            </summary>
+            <param name="path">The path to the folder to delete.</param>
+            <param name="recursively">
+            	Whether to delete recursively or not.
+            	When recursive, we delete all subfolders and files in the given
+            	directory as well. If not recursive sub-directories and files will not
+            	be deleted.
+            </param>
+            <returns>Whether the delete was successful (i.e. the directory existed and was deleted).</returns>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:Castle.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	<paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> refers to a directory that is read-only.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> is a file.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> refers to a directory that is not empty and recursively=true wasn't passed.
+            	<para>
+            		-or-    
+            	</para>
+            	<paramref name="path"/> refers to a directory that is in use.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.IDirectoryAdapter.GetFullPath(System.String)">
+            <summary>
+            	Gets the full path of the specified directory.
+            </summary>
+            <param name = "relativePath">The relative path.</param>
+            <returns>A string with the full path.</returns>
+        </member>
+        <member name="M:Castle.IO.IDirectoryAdapter.MapPath(System.String)">
+            <summary>
+            	Gets the MapPath of the path. 
+             
+            	This will be relative to the root web directory if we're in a 
+            	web site and otherwise to the executing assembly.
+            </summary>
+            <param name = "path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IDirectoryAdapter.Move(System.String,System.String)">
+            <summary>
+            	Moves the directory from the original path to the new path.
+            </summary>
+            <param name = "originalPath">Path from</param>
+            <param name = "newPath">Path to</param>
+        </member>
+        <member name="M:Castle.IO.IDirectoryAdapter.Move(System.String,System.String,System.Boolean)">
+            <summary>
+            	<see cref="M:Castle.IO.IDirectoryAdapter.Move(System.String,System.String)"/>. overwrite should be true if you wish to overwrite the target if it exists.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.IFileAdapter">
+            <summary>
+             File helper wrapper interface.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.IFileAdapter.Create(System.String)">
+            <summary>
+             Creates a new file.
+            </summary>
+            <param name="path">The path, where to create the file.</param>
+            <returns>A handle pointing to the file.</returns>
+        </member>
+        <member name="M:Castle.IO.IFileAdapter.Exists(System.String)">
+            <summary>
+             Returns whether the specified file exists or not.
+            </summary>
+            <param name="filePath">The file path.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IFileAdapter.Delete(System.String)">
+            <summary>
+            Delete the file at the given path.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Castle.IO.IFileAdapter.Open(System.String,System.IO.FileMode)">
+            <summary>
+            Opens a file with RW access.
+            </summary>
+            <param name="filePath"></param>
+            <param name="mode">The file mode, which specifies </param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IFileAdapter.CreateText(System.String)">
+            <summary>
+            Creates or opens a file for writing UTF-8 encoded text.
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IFileAdapter.Move(System.String,System.String)">
+            <summary>
+             Moves a file from one path to another.
+             
+             These should all be equivalent:
+             <code>
+             Move("b/a.txt", "c/a.txt")
+             Move("b/a.txt", "c") // given c either is a directory or doesn't exist, otherwise it overwrites the file c
+             Move("b/a.txt", "c/") // c must be a directory and might or might not exist. If it doesn't exist it will be created.
+             </code>
+            </summary>
+            <param name="originalFilePath">
+             The original file path. It can't be null nor can it point to a directory.
+             </param>
+             ///<param name="newFilePath">The new location of the file.</param>
+        </member>
+        <member name="T:Castle.IO.IMapPath">
+            <summary>
+            	Small interface for the map path functionality.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.IMapPath.MapPath(System.String)">
+            <summary>
+            	Gets the absolute path given a string formatted
+            	as a map path, for example:
+            	"~/plugins" or "plugins/integrated" or "C:\a\b\c.txt" or "\\?\C:\a\b"
+            	would all be valid map paths.
+            </summary>
+            <param name = "path"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Castle.IO.FileExtensions">
+            <summary>
+            Extensions for <see cref="T:Castle.IO.IFile"/>
+            </summary>
+        </member>
+        <member name="M:Castle.IO.FileExtensions.ReadAllText(Castle.IO.IFile)">
+            <summary>
+            </summary>
+            <param name="file">Invokee, the file that is to be fully read.</param>
+            <returns>All of the file contents as a string. If the current position is at the end of the stream, returns the empty string("").</returns>
+            <exception cref="T:System.OutOfMemoryException">There is insufficient memory to allocate a buffer for the returned string.</exception>
+            <exception cref="T:System.IO.IOException">An IO error occrs</exception>
+        </member>
+        <member name="M:Castle.IO.FileExtensions.WriteStream(System.String,System.IO.Stream)">
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Castle.IO.FileExtensions.ReadAllText(System.String,System.Text.Encoding)">
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Castle.IO.FileExtensions.ReadAllLines(System.String)">
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Castle.IO.FileExtensions.ReadAllLinesEnumerable(System.String)">
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="T:Castle.IO.IFileSystem">
+            <summary>
+            Interface denoting a file system. This is the core abstraction of Castle IO; providing 
+            file systems that work across platforms.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.IFileSystem.GetDirectory(System.String)">
+            <summary>
+            Creates a new dictory pointer given a directory path. This path may be relative, absolute or UNC.
+            </summary>
+            <param name="directoryPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IFileSystem.GetDirectory(Castle.IO.Path)">
+            <summary>
+            Gets 
+            </summary>
+            <param name="directoryPath"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Castle.IO.IDirectory">
+            <summary>
+            	A directory pointer. It might point to an existing directory or 
+            	be merely a handle that points to a directory that could be.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.IFileSystemItem.Delete">
+            <summary>
+            	Deletes the item from the file system.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.IFileSystemItem.CopyTo(Castle.IO.IFileSystemItem)">
+            <summary>
+            	Copies the callee to the file system item passed as parameter,
+            	and overwrites it if it already exists.
+            </summary>
+            <param name = "item">The target of the copy. Targets that work:
+            	<list>
+            		<item>Directory -> Directory, OK</item>
+            		<item>Directory -> File, Exception</item>
+            		<item>File -> File, OK</item>
+            		<item>File -> Directory, OK</item>
+            	</list>
+            </param>
+        </member>
+        <member name="P:Castle.IO.IFileSystemItem.Parent">
+            <summary>
+            Gets the parent of this item; null if there is no parent.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.IDirectory.GetDirectory(System.String)">
+            <summary>
+            </summary>
+            <param name = "directoryName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IDirectory.GetFile(System.String)">
+            <summary>
+            </summary>
+            <param name = "fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IDirectory.Files">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IDirectory.Directories">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IDirectory.Files(System.String,Castle.IO.SearchScope)">
+            <summary>
+            </summary>
+            <param name = "filter"></param>
+            <param name = "scope"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IDirectory.Directories(System.String,Castle.IO.SearchScope)">
+            <summary>
+            </summary>
+            <param name = "filter"></param>
+            <param name = "scope"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IDirectory.LinkTo(Castle.IO.Path)">
+            <summary>
+            	TODO: Creates a symlink/hardlink/whatever --- specify this further.
+            </summary>
+            <param name = "path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.IDirectory.FileChanges(System.String,System.Boolean,System.Action{Castle.IO.IFile},System.Action{Castle.IO.IFile},System.Action{Castle.IO.IFile},System.Action{Castle.IO.IFile})">
+            <summary>
+            </summary>
+            <param name = "filter"></param>
+            <param name = "includeSubdirectories"></param>
+            <param name = "created"></param>
+            <param name = "modified"></param>
+            <param name = "deleted"></param>
+            <param name = "renamed"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Castle.IO.IDirectory.IsHardLink">
+            <summary>
+            	Gets whether this directory pointer is a hard link.
+            </summary>
+        </member>
+        <member name="P:Castle.IO.IDirectory.Target">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Castle.IO.IFile">
+            <summary>
+            	Interface representation of a file.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.IFile.GetSize">
+            <summary>
+            	Gets the size of the file.
+            </summary>
+            <exception cref="T:System.IO.IOException">A device or hard drive was not ready.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">The file was not found on the file system.</exception>
+        </member>
+        <member name="M:Castle.IO.IFile.GetLastModifiedTimeUtc">
+            <summary>
+            	Gets the last modified date of the file.
+            </summary>
+            <exception cref="T:System.IO.IOException">
+            	If the file was not found.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.IFile.Open(System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare)">
+            <summary>
+            	Open a file handle.
+            </summary>
+            <param name = "fileMode"></param>
+            <param name = "fileAccess"></param>
+            <param name = "fileShare"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Castle.IO.IFile.NameWithoutExtension">
+            <summary>
+            	Gets the name of the file without an extension.
+            </summary>
+        </member>
+        <member name="P:Castle.IO.IFile.Extension">
+            <summary>
+            	Gets the extension, if any, of the file.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.ITemporaryFile">
+            <summary>
+            	A temporary file should be deterministically deleted on dispose, but for all other intents 
+            	and purposes be a real file.
+            </summary>
+        </member>
+        <member name="P:Castle.IO.FileSystems.Local.LocalFileSystem.Instance">
+            <summary>
+            Gets an instance of the local file system. This property
+            is a singleton.
+            </summary>
+            <exception cref="T:System.PlatformNotSupportedException">
+            If your platform isn't supported by this API.
+            Currently Windows, OSX and Unix platforms are supported.
+            </exception>
+        </member>
+        <member name="T:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint">
+            <summary>
+            	Provides access to NTFS junction points in .Net.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.ERROR_NOT_A_REPARSE_POINT">
+            <summary>
+            	The file or directory is not a reparse point.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.ERROR_REPARSE_ATTRIBUTE_CONFLICT">
+            <summary>
+            	The reparse point attribute cannot be set because it conflicts with an existing attribute.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.ERROR_INVALID_REPARSE_DATA">
+            <summary>
+            	The data present in the reparse point buffer is invalid.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.ERROR_REPARSE_TAG_INVALID">
+            <summary>
+            	The tag present in the reparse point buffer is invalid.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.ERROR_REPARSE_TAG_MISMATCH">
+            <summary>
+            	There is a mismatch between the tag specified in the request and the tag present in the reparse point.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.FSCTL_SET_REPARSE_POINT">
+            <summary>
+            	Command to set the reparse point data block.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.FSCTL_GET_REPARSE_POINT">
+            <summary>
+            	Command to get the reparse point data block.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.FSCTL_DELETE_REPARSE_POINT">
+            <summary>
+            	Command to delete the reparse point data base.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.IO_REPARSE_TAG_MOUNT_POINT">
+            <summary>
+            	Reparse point tag used to identify mount points and junction points.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.NonInterpretedPathPrefix">
+            <summary>
+            	This prefix indicates to NTFS that the path is to be treated as a non-interpreted
+            	path in the virtual file system.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.Create(Castle.IO.IDirectory,System.String,System.Boolean)">
+            <summary>
+            	Creates a junction point from the specified directory to the specified target directory.
+            </summary>
+            <remarks>
+            	Only works on NTFS.
+            </remarks>
+            <param name="junctionPoint">The junction point path</param>
+            <param name="targetDir">The target directory</param>
+            <param name="overwrite">If true overwrites an existing reparse point or empty directory</param>
+            <exception cref="T:System.IO.IOException">Thrown when the junction point could not be created or when
+            	an existing directory was found and <paramref name="overwrite"/> if false</exception>
+        </member>
+        <member name="M:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.Delete(System.String)">
+            <summary>
+            	Deletes a junction point at the specified source directory along with the directory itself.
+            	Does nothing if the junction point does not exist.
+            </summary>
+            <remarks>
+            	Only works on NTFS.
+            </remarks>
+            <param name = "junctionPoint">The junction point path</param>
+        </member>
+        <member name="M:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.Exists(System.String)">
+            <summary>
+            	Determines whether the specified path exists and refers to a junction point.
+            </summary>
+            <param name="path">The junction point path</param>
+            <returns>True if the specified path represents a junction point</returns>
+            <exception cref="T:System.IO.IOException">Thrown if the specified path is invalid
+            	or some other error occurs</exception>
+        </member>
+        <member name="M:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.GetTarget(System.String)">
+            <summary>
+            	Gets the target of the specified junction point.
+            </summary>
+            <remarks>
+            	Only works on NTFS.
+            </remarks>
+            <param name="junctionPoint">The junction point path</param>
+            <returns>The target of the junction point</returns>
+            <exception cref="T:System.IO.IOException">Thrown when the specified path does not
+            	exist, is invalid, is not a junction point, or some other error occurs</exception>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.REPARSE_DATA_BUFFER.ReparseTag">
+            <summary>
+            	Reparse point tag. Must be a Microsoft reparse point tag.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.REPARSE_DATA_BUFFER.ReparseDataLength">
+            <summary>
+            	Size, in bytes, of the data after the Reserved member. This can be calculated by:
+            	(4 * sizeof(ushort)) + SubstituteNameLength + PrintNameLength + 
+            	(namesAreNullTerminated ? 2 * sizeof(char) : 0);
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.REPARSE_DATA_BUFFER.Reserved">
+            <summary>
+            	Reserved; do not use.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.REPARSE_DATA_BUFFER.SubstituteNameOffset">
+            <summary>
+            	Offset, in bytes, of the substitute name string in the PathBuffer array.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.REPARSE_DATA_BUFFER.SubstituteNameLength">
+            <summary>
+            	Length, in bytes, of the substitute name string. If this string is null-terminated,
+            	SubstituteNameLength does not include space for the null character.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.REPARSE_DATA_BUFFER.PrintNameOffset">
+            <summary>
+            	Offset, in bytes, of the print name string in the PathBuffer array.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.REPARSE_DATA_BUFFER.PrintNameLength">
+            <summary>
+            	Length, in bytes, of the print name string. If this string is null-terminated,
+            	PrintNameLength does not include space for the null character.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.JunctionPoint.REPARSE_DATA_BUFFER.PathBuffer">
+            <summary>
+            	A buffer containing the unicode-encoded path string. The path string contains
+            	the substitute name string and print name string.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.FileSystems.Local.Win32.Interop.MoveFileFlags">
+            <summary>
+            	This enumeration states options for moving a file.
+            	http://msdn.microsoft.com/en-us/library/aa365241%28VS.85%29.aspx
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.MoveFileFlags.CopyAllowed">
+            <summary>
+            	If the file is to be moved to a different volume, the function simulates the move by using the CopyFile  and DeleteFile  functions.
+            	This value cannot be used with MOVEFILE_DELAY_UNTIL_REBOOT.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.MoveFileFlags.CreateHardlink">
+            <summary>
+            	Reserved for future use.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.MoveFileFlags.DelayUntilReboot">
+            <summary>
+            	The system does not move the file until the operating system is restarted. The system moves the file immediately after AUTOCHK is executed, but before creating any paging files. Consequently, this parameter enables the function to delete paging files from previous startups.
+            	This value can only be used if the process is in the context of a user who belongs to the administrators group or the LocalSystem account.
+            	This value cannot be used with MOVEFILE_COPY_ALLOWED.
+            	The write operation to the registry value as detailed in the Remarks section is what is transacted. The file move is finished when the computer restarts, after the transaction is complete.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.MoveFileFlags.ReplaceExisting">
+            <summary>
+            	If a file named lpNewFileName exists, the function replaces its contents with the contents of the lpExistingFileName file.
+            	This value cannot be used if lpNewFileName or lpExistingFileName names a directory.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.MoveFileFlags.WriteThrough">
+            <summary>
+            	A call to MoveFileTransacted means that the move file operation is complete when the commit operation is completed. This flag is unnecessary; there are no negative affects if this flag is specified, other than an operation slowdown. The function does not return until the file has actually been moved on the disk.
+            	Setting this value guarantees that a move performed as a copy and delete operation is flushed to disk before the function returns. The flush occurs at the end of the copy operation.
+            	This value has no effect if MOVEFILE_DELAY_UNTIL_REBOOT is set.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileOptions.FILE_ATTRIBUTE_READONLY">
+            <summary>
+            	The file is read only. Applications can read the file, but cannot write to or delete it.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileOptions.FILE_ATTRIBUTE_HIDDEN">
+            <summary>
+            	The file is hidden. Do not include it in an ordinary directory listing.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileOptions.FILE_ATTRIBUTE_SYSTEM">
+            <summary>
+            	The file is part of or used exclusively by an operating system.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileOptions.FILE_ATTRIBUTE_ARCHIVE">
+            <summary>
+            	The file should be archived. Applications use this attribute to mark files for backup or removal.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileOptions.FILE_ATTRIBUTE_NORMAL">
+            <summary>
+            	The file does not have other attributes set. This attribute is valid only if used alone.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileOptions.FILE_ATTRIBUTE_TEMPORARY">
+            <summary>
+            	The file is being used for temporary storage.
+            	For more information, see the Caching Behavior section of this topic.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileOptions.FILE_ATTRIBUTE_OFFLINE">
+            <summary>
+            	The data of a file is not immediately available. This attribute indicates that file data is physically moved to offline storage. This attribute is used by Remote Storage, the hierarchical storage management software. Applications should not arbitrarily change this attribute.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileOptions.FILE_ATTRIBUTE_ENCRYPTED">
+            <summary>
+            	<para>
+            		The file or directory is encrypted. For a file, this means that all data in the file is encrypted. For a directory, this means that encryption is the default for newly created files and subdirectories. For more information, see File Encryption.
+            	</para><para>
+            	       	This flag has no effect if FILE_ATTRIBUTE_SYSTEM is also specified.
+            	       </para>
+            </summary>
+        </member>
+        <member name="T:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileShare">
+            <summary>
+            	The sharing mode of an object, which can be read, write, both, delete, all of these, or none (refer to the following table).
+            	If this parameter is zero and CreateFileTransacted succeeds, the object cannot be shared and cannot be opened again until the handle is closed. For more information, see the Remarks section of this topic.
+            	You cannot request a sharing mode that conflicts with the access mode that is specified in an open request that has an open handle, because that would result in the following sharing violation: ERROR_SHARING_VIOLATION. For more information, see Creating and Opening Files.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileShare.None">
+            <summary>
+            	Disables subsequent open operations on an object to request any type of access to that object.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileShare.Read">
+            <summary>
+            	Enables subsequent open operations on an object to request read access.
+            	Otherwise, other processes cannot open the object if they request read access.
+            	If this flag is not specified, but the object has been opened for read access, the function fails.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileShare.Write">
+            <summary>
+            	Enables subsequent open operations on an object to request write access.
+            	Otherwise, other processes cannot open the object if they request write access.
+            	If this flag is not specified, but the object has been opened for write access or has a file mapping with write access, the function fails.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.FileSystems.Local.Win32.Interop.NativeFileShare.Delete">
+            <summary>
+            	Enables subsequent open operations on an object to request delete access.
+            	Otherwise, other processes cannot open the object if they request delete access.
+            	If this flag is not specified, but the object has been opened for delete access, the function fails.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.FileSystems.Local.Win32.Interop.SECURITY_ATTRIBUTES">
+            <summary>
+            	Attributes for security interop.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.Contracts.IDirectoryContract">
+            <summary>
+            Contract for the IDirectory handle
+            </summary>
+        </member>
+        <member name="T:Castle.IO.Contracts.IFileSystemContract">
+            <summary>
+            Contract class for <see cref="T:Castle.IO.IFileSystem"/>.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.Internal.Directory">
+            <summary>
+            	Utility class for directories.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.Internal.Directory.Exists(System.String)">
+            <summary>
+            	Returns whether the given paths exists.
+            </summary>
+            <param name = "path"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Castle.IO.Internal.LongPathDirectory">
+            <summary>
+            	Provides methods for creating, deleting, moving and enumerating directories and 
+            	subdirectories with long paths, that is, paths that exceed 259 characters.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathDirectory.Create(System.String)">
+            <summary>
+            	Creates the specified directory.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the directory to create.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	<paramref name="path"/> contains one or more directories that could not be
+            	found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> is a file.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+            <remarks>
+            	Note: Unlike <see cref="M:System.IO.Directory.CreateDirectory(System.String)"/>, this method only creates 
+            	the last directory in <paramref name="path"/>.
+            </remarks>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathDirectory.Delete(System.String)">
+            <summary>
+            	Deletes the specified empty directory.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the directory to delete.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	<paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> refers to a directory that is read-only.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> is a file.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> refers to a directory that is not empty.
+            	<para>
+            		-or-    
+            	</para>
+            	<paramref name="path"/> refers to a directory that is in use.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathDirectory.Delete(System.String,System.Boolean)">
+            <summary>
+            	Deletes files from the given path.
+            </summary>
+            <param name="path">The path to delete files from.</param>
+            <param name="recursively">Whether to recurse through the directory and find all child directories and files
+            	and delete those</param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	<paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> refers to a directory that is read-only.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> is a file.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> refers to a directory that is not empty.
+            	<para>
+            		-or-    
+            	</para>
+            	<paramref name="path"/> refers to a directory that is in use.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathDirectory.Exists(System.String)">
+            <summary>
+            	Returns a value indicating whether the specified path refers to an existing directory.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path to check.
+            </param>
+            <returns>
+            	<see langword="true"/> if <paramref name="path"/> refers to an existing directory; 
+            	otherwise, <see langword="false"/>.
+            </returns>
+            <remarks>
+            	Note that this method will return false if any error occurs while trying to determine 
+            	if the specified directory exists. This includes situations that would normally result in 
+            	thrown exceptions including (but not limited to); passing in a directory name with invalid 
+            	or too many characters, an I/O error such as a failing or missing disk, or if the caller
+            	does not have Windows or Code Access Security (CAS) permissions to to read the directory.
+            </remarks>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathDirectory.EnumerateDirectories(System.String)">
+            <summary>
+            	Returns a enumerable containing the directory names of the specified directory.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <returns>
+            	A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the directory names within <paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	<paramref name="path"/> contains one or more directories that could not be
+            	found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> is a file.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathDirectory.EnumerateDirectories(System.String,System.String)">
+            <summary>
+            	Returns a enumerable containing the directory names of the specified directory that 
+            	match the specified search pattern.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <param name="searchPattern">
+            	A <see cref="T:System.String"/> containing search pattern to match against the names of the 
+            	directories in <paramref name="path"/>, otherwise, <see langword="null"/> or an empty 
+            	string ("") to use the default search pattern, "*".
+            </param>
+            <returns>
+            	A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the directory names within <paramref name="path"/>
+            	that match <paramref name="searchPattern"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	<paramref name="path"/> contains one or more directories that could not be
+            	found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> is a file.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathDirectory.EnumerateFiles(System.String)">
+            <summary>
+            	Returns a enumerable containing the file names of the specified directory.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <returns>
+            	A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the file names within <paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	<paramref name="path"/> contains one or more directories that could not be
+            	found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> is a file.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathDirectory.EnumerateFiles(System.String,System.String)">
+            <summary>
+            	Returns a enumerable containing the file names of the specified directory that 
+            	match the specified search pattern.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <param name="searchPattern">
+            	A <see cref="T:System.String"/> containing search pattern to match against the names of the 
+            	files in <paramref name="path"/>, otherwise, <see langword="null"/> or an empty 
+            	string ("") to use the default search pattern, "*".
+            </param>
+            <returns>
+            	A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the file names within <paramref name="path"/>
+            	that match <paramref name="searchPattern"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	<paramref name="path"/> contains one or more directories that could not be
+            	found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> is a file.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathDirectory.EnumerateFileSystemEntries(System.String)">
+            <summary>
+            	Returns a enumerable containing the file and directory names of the specified directory.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <returns>
+            	A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the file and directory names within 
+            	<paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	<paramref name="path"/> contains one or more directories that could not be
+            	found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> is a file.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathDirectory.EnumerateFileSystemEntries(System.String,System.String)">
+            <summary>
+            	Returns a enumerable containing the file and directory names of the specified directory 
+            	that match the specified search pattern.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <param name="searchPattern">
+            	A <see cref="T:System.String"/> containing search pattern to match against the names of the 
+            	files and directories in <paramref name="path"/>, otherwise, <see langword="null"/> 
+            	or an empty string ("") to use the default search pattern, "*".
+            </param>
+            <returns>
+            	A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the file and directory names within 
+            	<paramref name="path"/>that match <paramref name="searchPattern"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	<paramref name="path"/> contains one or more directories that could not be
+            	found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> is a file.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="T:Castle.IO.Internal.LongPathFile">
+            <summary>
+            	Provides static methods for creating, copying, deleting, moving, and opening of files
+            	with long paths, that is, paths that exceed 259 characters.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathFile.Exists(System.String)">
+            <summary>
+            	Returns a value indicating whether the specified path refers to an existing file.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path to check.
+            </param>
+            <returns>
+            	<see langword="true"/> if <paramref name="path"/> refers to an existing file; 
+            	otherwise, <see langword="false"/>.
+            </returns>
+            <remarks>
+            	Note that this method will return false if any error occurs while trying to determine 
+            	if the specified file exists. This includes situations that would normally result in 
+            	thrown exceptions including (but not limited to); passing in a file name with invalid 
+            	or too many characters, an I/O error such as a failing or missing disk, or if the caller
+            	does not have Windows or Code Access Security (CAS) permissions to to read the file.
+            </remarks>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathFile.Delete(System.String)">
+            <summary>
+            	Deletes the specified file.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the file to delete.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.FileNotFoundException">
+            	<paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	One or more directories in <paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> refers to a file that is read-only.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> is a directory.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> refers to a file that is in use.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathFile.Move(System.String,System.String)">
+            <summary>
+            	Moves the specified file to a new location.
+            </summary>
+            <param name="sourcePath">
+            	A <see cref="T:System.String"/> containing the path of the file to move.
+            </param>
+            <param name="destinationPath">
+            	A <see cref="T:System.String"/> containing the new path of the file.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is 
+            	<see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is 
+            	an empty string (""), contains only white space, or contains one or more 
+            	invalid characters as defined in <see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> 
+            	contains one or more components that exceed the drive-defined maximum length. 
+            	For example, on Windows-based platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> 
+            	exceeds the system-defined maximum length. For example, on Windows-based platforms, 
+            	paths must not exceed 32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.FileNotFoundException">
+            	<paramref name="sourcePath"/> could not be found.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	One or more directories in <paramref name="sourcePath"/> and/or 
+            	<paramref name="destinationPath"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="destinationPath"/> refers to a file that already exists.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is a 
+            	directory.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="sourcePath"/> refers to a file that is in use.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> specifies 
+            	a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathFile.Copy(System.String,System.String,System.Boolean)">
+            <summary>
+            	Copies the specified file to a specified new file, indicating whether to overwrite an existing file.
+            </summary>
+            <param name="sourcePath">
+            	A <see cref="T:System.String"/> containing the path of the file to copy.
+            </param>
+            <param name="destinationPath">
+            	A <see cref="T:System.String"/> containing the new path of the file.
+            </param>
+            <param name="overwrite">
+            	<see langword="true"/> if <paramref name="destinationPath"/> should be overwritten 
+            	if it refers to an existing file, otherwise, <see langword="false"/>.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is 
+            	<see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is 
+            	an empty string (""), contains only white space, or contains one or more 
+            	invalid characters as defined in <see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> 
+            	contains one or more components that exceed the drive-defined maximum length. 
+            	For example, on Windows-based platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> 
+            	exceeds the system-defined maximum length. For example, on Windows-based platforms, 
+            	paths must not exceed 32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.FileNotFoundException">
+            	<paramref name="sourcePath"/> could not be found.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	One or more directories in <paramref name="sourcePath"/> and/or 
+            	<paramref name="destinationPath"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="overwrite"/> is true and <paramref name="destinationPath"/> refers to a 
+            	file that is read-only.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="overwrite"/> is false and <paramref name="destinationPath"/> refers to 
+            	a file that already exists.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is a 
+            	directory.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="overwrite"/> is true and <paramref name="destinationPath"/> refers to 
+            	a file that already exists and is in use.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="sourcePath"/> refers to a file that is in use.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> specifies 
+            	a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathFile.Open(System.String,System.IO.FileMode,System.IO.FileAccess)">
+            <summary>
+            	Opens the specified file.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the file to open.
+            </param>
+            <param name="access">
+            	One of the <see cref="T:System.IO.FileAccess"/> value that specifies the operations that can be 
+            	performed on the file. 
+            </param>
+            <param name="mode">
+            	One of the <see cref="T:System.IO.FileMode"/> values that specifies whether a file is created
+            	if one does not exist, and determines whether the contents of existing files are 
+            	retained or overwritten.
+            </param>
+            <returns>
+            	A <see cref="T:System.IO.FileStream"/> that provides access to the file specified in 
+            	<paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	One or more directories in <paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> refers to a file that is read-only and <paramref name="access"/>
+            	is not <see cref="F:System.IO.FileAccess.Read"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> is a directory.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> refers to a file that is in use.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathFile.Open(System.String,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare)">
+            <summary>
+            	Opens the specified file.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the file to open.
+            </param>
+            <param name="access">
+            	One of the <see cref="T:System.IO.FileAccess"/> value that specifies the operations that can be 
+            	performed on the file. 
+            </param>
+            <param name="mode">
+            	One of the <see cref="T:System.IO.FileMode"/> values that specifies whether a file is created
+            	if one does not exist, and determines whether the contents of existing files are 
+            	retained or overwritten.
+            </param>
+            <param name="share">
+            	One of the <see cref="T:System.IO.FileShare"/> values specifying the type of access other threads 
+            	have to the file. 
+            </param>
+            <returns>
+            	A <see cref="T:System.IO.FileStream"/> that provides access to the file specified in 
+            	<paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	One or more directories in <paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> refers to a file that is read-only and <paramref name="access"/>
+            	is not <see cref="F:System.IO.FileAccess.Read"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> is a directory.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> refers to a file that is in use.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Castle.IO.Internal.LongPathFile.Open(System.String,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare,System.Int32,System.IO.FileOptions)">
+            <summary>
+            	Opens the specified file.
+            </summary>
+            <param name="path">
+            	A <see cref="T:System.String"/> containing the path of the file to open.
+            </param>
+            <param name="access">
+            	One of the <see cref="T:System.IO.FileAccess"/> value that specifies the operations that can be 
+            	performed on the file. 
+            </param>
+            <param name="mode">
+            	One of the <see cref="T:System.IO.FileMode"/> values that specifies whether a file is created
+            	if one does not exist, and determines whether the contents of existing files are 
+            	retained or overwritten.
+            </param>
+            <param name="share">
+            	One of the <see cref="T:System.IO.FileShare"/> values specifying the type of access other threads 
+            	have to the file. 
+            </param>
+            <param name="bufferSize">
+            	An <see cref="T:System.Int32"/> containing the number of bytes to buffer for reads and writes
+            	to the file, or 0 to specifiy the default buffer size, 1024.
+            </param>
+            <param name="options">
+            	One or more of the <see cref="T:System.IO.FileOptions"/> values that describes how to create or 
+            	overwrite the file.
+            </param>
+            <returns>
+            	A <see cref="T:System.IO.FileStream"/> that provides access to the file specified in 
+            	<paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="path"/> is an empty string (""), contains only white 
+            	space, or contains one or more invalid characters as defined in 
+            	<see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> contains one or more components that exceed
+            	the drive-defined maximum length. For example, on Windows-based 
+            	platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            	<paramref name="bufferSize"/> is less than 0.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            	<paramref name="path"/> exceeds the system-defined maximum length. 
+            	For example, on Windows-based platforms, paths must not exceed 
+            	32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            	One or more directories in <paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            	The caller does not have the required access permissions.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> refers to a file that is read-only and <paramref name="access"/>
+            	is not <see cref="F:System.IO.FileAccess.Read"/>.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> is a directory.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+            	<paramref name="path"/> refers to a file that is in use.
+            	<para>
+            		-or-
+            	</para>
+            	<paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="T:Castle.IO.Internal.MapPathImpl">
+            <summary>
+            	An implementation of the MapPath which seems to be working well with
+            	both testfixtures and online. Consumed by <see cref="T:Castle.IO.IDirectoryAdapter"/>
+            	(or any other object wanting the functionality).
+            </summary>
+        </member>
+        <member name="M:Castle.IO.Internal.MapPathImpl.#ctor">
+            <summary>
+            	Default c'tor.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.Internal.MapPathImpl.#ctor(System.Func{System.String,System.String})">
+            <summary>
+            	Function may be null.
+            </summary>
+            <param name = "function"></param>
+        </member>
+        <member name="M:Castle.IO.Internal.MapPathImpl.MapPath(System.String)">
+            <summary>
+            	Gets the absolute path given a string formatted
+            	as a map path, for example:
+            	"~/plugins" or "plugins/integrated" or "C:\a\b\c.txt" or "\\?\C:\a\b"
+            	would all be valid map paths.
+            </summary>
+            <param name = "path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.FileSystems.Local.Win32.Interop.NativeMethods.FindNextFile(Castle.IO.SafeFindHandle,Castle.IO.FileSystems.Local.Win32.Interop.WIN32_FIND_DATA@)">
+            <summary>
+            	Continues a file search from a previous call to the FindFirstFile or FindFirstFileEx function.
+            	If there is a transaction bound to the file enumeration handle, then the files that are returned are subject to transaction isolation rules.
+            </summary>
+            <remarks>
+            	http://msdn.microsoft.com/en-us/library/aa364428%28v=VS.85%29.aspx
+            </remarks>
+            <param name = "hFindFile">The search handle returned by a previous call to the FindFirstFile or FindFirstFileEx function.</param>
+            <param name = "lpFindFileData">    A pointer to the WIN32_FIND_DATA structure that receives information about the found file or subdirectory.
+            	The structure can be used in subsequent calls to FindNextFile to indicate from which file to continue the search.
+            </param>
+            <returns>If the function succeeds, the return value is nonzero and the lpFindFileData parameter contains information about the next file or directory found.
+            	If the function fails, the return value is zero and the contents of lpFindFileData are indeterminate. To get extended error information, call the GetLastError function.
+            	If the function fails because no more matching files can be found, the GetLastError function returns ERROR_NO_MORE_FILES.</returns>
+        </member>
+        <member name="T:Castle.IO.Path">
+            <summary>
+            	Utility class meant to replace the <see cref="T:System.IO.Path"/> class completely. This class handles these types of paths:
+            	<list>
+            		<item>UNC network paths: \\server\folder</item>
+            		<item>UNC-specified network paths: \\?\UNC\server\folder</item>
+            		<item>IPv4 network paths: \\192.168.3.22\folder</item>
+            		<item>IPv4 network paths: \\[2001:34:23:55::34]\folder</item>
+            		<item>Rooted paths: /dev/cdrom0</item>
+            		<item>Rooted paths: C:\folder</item>
+            		<item>UNC-rooted paths: \\?\C:\folder\file</item>
+            		<item>Fully expanded IPv6 paths</item>
+            	</list>
+            </summary>
+            <summary>
+            	Immutable value object for dealing with paths. A path as an object,
+            	is the idea.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.Path.IsPathRooted(System.String)">
+            <summary>
+            	Returns whether the path is rooted. An empty string isn't.
+            </summary>
+            <param name="path">Gets whether the path is rooted or relative.</param>
+            <returns>Whether the path is rooted or not.</returns>
+            <exception cref="T:System.ArgumentNullException">If the passed argument is null.</exception>
+        </member>
+        <member name="M:Castle.IO.Path.GetPathRoot(System.String)">
+            <summary>
+            	Gets the path root, i.e. e.g. \\?\C:\ if the passed argument is \\?\C:\a\b\c.abc.
+            </summary>
+            <param name = "path">The path to get the root for.</param>
+            <returns>The string denoting the root.</returns>
+        </member>
+        <member name="M:Castle.IO.Path.GetPathWithoutRoot(System.String)">
+            <summary>
+            	Gets a path without root.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Castle.IO.Path.NormDirSepChars(System.String)">
+            <summary>
+            	Normalize all the directory separation chars.
+            	Also removes empty space in beginning and end of string.
+            </summary>
+            <param name="pathWithAlternatingChars"></param>
+            <returns>The directory string path with all occurrances of the alternating chars
+            	replaced for that specified in <see cref="F:System.IO.Path.DirectorySeparatorChar"/></returns>
+        </member>
+        <member name="M:Castle.IO.Path.GetPathInfo(System.String)">
+            <summary>
+            	Gets path info (drive and non root path)
+            </summary>
+            <param name="path">The path to get the info from.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Castle.IO.Path.GetFullPath(System.String)">
+            <summary>
+            	Gets the full path for a given path.
+            </summary>
+            <param name="path"></param>
+            <returns>The full path string</returns>
+            <exception cref="T:System.ArgumentNullException">if path is null</exception>
+        </member>
+        <member name="M:Castle.IO.Path.GetPathWithoutLastBit(System.String)">
+            <summary>
+            	Removes the last directory/file off the path.
+            
+            Example input/output: "/a/b/c" -> "/a/b"; 
+            "\\?\C:\folderA\folder\B\C\d.txt" -> "\\?\C:\folderA\folder\B\C"
+            "\a\" -> "\";
+            "C:\a\b" -> "C:\a";
+            "C:\a\b\" -> "C:\a"
+            </summary>
+            <param name = "path">The path string to modify</param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.IO.Path.MakeRelative(Castle.IO.Path)">
+            <summary>
+            	Yields a new path instance from the current data object
+            	and the object passed as the parameter 'path'.
+            </summary>
+            <param name = "toBasePath">The path to make the invokee relative to.</param>
+            <returns>A new path that is relative to the passed path.</returns>
+        </member>
+        <member name="P:Castle.IO.Path.DriveAndDirectory">
+            <summary>
+            	Gets the drive + directory path. If the given path ends with a slash,
+            	the last bit is also included in this property, otherwise, not.
+            </summary>
+        </member>
+        <member name="P:Castle.IO.Path.IsDirectoryPath">
+            <summary>
+            	Gets whether it's garantueed that the path is a directory (it is of its
+            	last character is a directory separator character).
+            </summary>
+        </member>
+        <member name="P:Castle.IO.Path.Info">
+            <summary>
+            Gets the underlying path info structure. With this you can get a lot
+            more sematic information about the path.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.PathInfo">
+            <summary>
+            	Immutable path data holder and value object that overrides Equals,
+            	implements IEquatable and overrides the == and != operators.
+            	
+            	Invariant: no fields nor properties are null after c'tor.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.PathInfo.IsParentOf(Castle.IO.PathInfo)">
+            <summary>
+            	Returns whether the current PathInfo is a valid parent of the child path info
+            	passed as argument.
+            </summary>
+            <param name="child">The path info to verify</param>
+            <returns>Whether it is true that the current path info is a parent of child.</returns>
+            <exception cref="T:System.NotSupportedException">If this instance of path info and child aren't rooted.</exception>
+        </member>
+        <member name="M:Castle.IO.PathInfo.RemoveParameterFromRoot(Castle.IO.PathInfo)">
+            <summary>
+            	Removes the path info passes as a parameter from the current root. Only works for two rooted paths with same root.
+            	Does NOT cover all edge cases, please verify its intended results yourself.
+            	<example>
+            	</example>
+            </summary>
+            <param name = "other"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Castle.IO.PathInfo.Root">
+            <summary>
+            	Examples of return values:
+            	<list>
+            		<item>\\?\UNC\C:\</item>
+            		<item>\\?\UNC\servername\</item>
+            		<item>\\192.168.0.2\</item>
+            		<item>C:\</item>
+            	</list>
+            
+            	Definition: Returns part of the string that is in itself uniquely from the currently 
+            	executing CLR.
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.UNCPrefix">
+            <summary>
+            	Examples of return values:
+            	<list>
+            		<item></item>
+            	</list>
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.UNCLiteral">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.Drive">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.DriveLetter">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.Server">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.IPv4">
+            <summary>
+            	Gets the IPv4 IP-address if any. <see cref="F:System.Net.IPAddress.None"/>
+            	if none was found.
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.IPv6">
+            <summary>
+            	Gets the IPv6 IP-address if any. <see cref="F:System.Net.IPAddress.None"/>
+            	if non was found.
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.ServerName">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.Device">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.DevicePrefix">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.DeviceName">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.DeviceGuid">
+            <summary>
+            	Gets the device GUID in the form
+            	<code>{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}</code>
+            	i.e. 8-4-4-4-12 hex digits with curly brackets.
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.NonRootPath">
+            <summary>
+            	Gets a the part of the path that starts when the root ends.
+            	The root in turn is any UNC-prefix plus device, drive, server or ip-prefix.
+            	This string may not start with neither of '\' or '/'.
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.RelDrive">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.FolderAndFiles">
+            <summary>
+            	The only time when this differs from <see cref="P:Castle.IO.PathInfo.NonRootPath"/>
+            	is when a path like this is used:
+            	<code>C:../parent/a.txt</code>, otherwise, for all paths,
+            	this property equals <see cref="P:Castle.IO.PathInfo.NonRootPath"/>.
+            </summary>
+        </member>
+        <member name="P:Castle.IO.PathInfo.IsRooted">
+            <summary>
+            	Returns whether <see cref="P:Castle.IO.PathInfo.Root"/> is not an empty string.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.PathType">
+            <summary>
+            The typed of path parsed out of the path string.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.PathType.Device">
+            <summary>
+            The path is a Win32 device path.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.PathType.Server">
+            <summary>
+            The path is a server UNC path
+            </summary>
+        </member>
+        <member name="F:Castle.IO.PathType.IPv4">
+            <summary>
+            The path is one for an IPv4 server.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.PathType.IPv6">
+            <summary>
+            The path is one for an IPv6 server.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.PathType.Drive">
+            <summary>
+            The path is for a drive (normal case).
+            </summary>
+        </member>
+        <member name="F:Castle.IO.PathType.Relative">
+            <summary>
+            The path is a relative path.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.SafeFindHandle">
+            <summary>
+            	A find handle to use when searching files with the Win32 API.
+            </summary>
+        </member>
+        <member name="T:Castle.IO.SearchScope">
+            <summary>
+            Specifies under what scope the search/lookup should happen.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.SearchScope.CurrentOnly">
+            <summary>
+            Only search the current folder.
+            </summary>
+        </member>
+        <member name="F:Castle.IO.SearchScope.SubFolders">
+            <summary>
+            Search both the folder and all other folders.
+            </summary>
+        </member>
+        <member name="M:Castle.IO.Extensions.StringExtensions.Combine(System.String,System.String[])">
+            <summary>
+            	Combines an input path and a path together
+            	using System.IO.Path.Combine and returns the result.
+            </summary>
+        </member>
+    </members>
+</doc>
