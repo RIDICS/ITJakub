@@ -1,4 +1,2 @@
-﻿window.onload = function () {
-    alert("hello from editions!");
-};
+﻿//window.onload = () => { alert("hello from editions!"); }
 //# sourceMappingURL=itjakub.editions.js.map
