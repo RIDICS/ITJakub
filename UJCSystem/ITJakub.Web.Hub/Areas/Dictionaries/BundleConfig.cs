@@ -6,10 +6,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries
     {
         internal static void RegisterBundles(BundleCollection bundles)
         {
-            //add bundles
-            //bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-            //        "~/Scripts/bootstrap.js",
-            //        "~/Scripts/respond.js"));
+            bundles.Add(new ScriptBundle("~/itjakub/dictionaries/javascript").Include(
+               "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.js"));
+
+            bundles.Add(new StyleBundle("~/itjakub/dictionaries/css").Include(
+                "~/Areas/Dictionaries/Content/itjakub.dictionaries.css"));
         }
     }
 }
