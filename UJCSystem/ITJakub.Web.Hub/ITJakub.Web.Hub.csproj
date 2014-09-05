@@ -194,6 +194,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="Content\itjakub.css">
       <DependentUpon>itjakub.less</DependentUpon>
     </Content>

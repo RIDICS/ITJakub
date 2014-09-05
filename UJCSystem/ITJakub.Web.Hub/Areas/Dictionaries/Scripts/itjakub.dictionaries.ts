@@ -1,1 +1,1 @@
-﻿window.onload = () => { alert("hello from dictionaries!"); }
+﻿//window.onload = () => { alert("hello from dictionaries!"); }

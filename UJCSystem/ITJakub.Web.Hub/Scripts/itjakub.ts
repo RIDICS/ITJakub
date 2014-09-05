@@ -1,1 +1,1 @@
-﻿window.onload = () => { alert("hello from typescript!"); }
+﻿//window.onload = () => { alert("hello from typescript!"); }

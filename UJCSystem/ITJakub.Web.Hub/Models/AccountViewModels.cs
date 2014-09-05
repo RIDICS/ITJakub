@@ -55,10 +55,10 @@ namespace ITJakub.Web.Hub.Models
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Heslo")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Zapamatovat si mě")]
         public bool RememberMe { get; set; }
     }
 
