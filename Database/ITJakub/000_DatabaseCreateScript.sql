@@ -69,6 +69,7 @@ BEGIN TRAN
 	   [Guid] [varchar] (50) NOT NULL,
 	   [Author] int NULL CONSTRAINT [FK_Book(Author)_Author(Id)] FOREIGN KEY REFERENCES [Author] (Id),
 	   [Name] varchar (MAX) NULL,
+	   [Category] int NULL CONSTRAINT [FK_Book(Category)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
     )
 
     CREATE TABLE [Bookmark]
