@@ -7,10 +7,15 @@ namespace ITJakub.MobileApps.DataContracts
     {
         [EnumMember]
         ItJakub = 0,
+
+
         [EnumMember]
-        Google = 1,
+        Facebook = 1,
+
+
         [EnumMember]
-        Facebook = 2,
+        Google = 2,
+        
         [EnumMember]
         LiveId = 3
     }
