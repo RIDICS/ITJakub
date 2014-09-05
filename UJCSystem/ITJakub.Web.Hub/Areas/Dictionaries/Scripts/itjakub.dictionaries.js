@@ -1,1 +1,4 @@
-﻿//# sourceMappingURL=itjakub.dictionaries.js.map
+﻿window.onload = function () {
+    alert("hello from dictionaries!");
+};
+//# sourceMappingURL=itjakub.dictionaries.js.map
