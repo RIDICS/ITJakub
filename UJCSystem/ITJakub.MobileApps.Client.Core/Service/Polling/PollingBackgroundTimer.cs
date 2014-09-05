@@ -33,7 +33,8 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
         {
             lock (this)
             {
-                m_actions.Remove(action);   
+                m_actions.Remove(action);
+                StopTimer();
             }
         }
 
@@ -42,6 +43,16 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             lock (this)
             {
                 m_actions.Clear();
+                StopTimer();
+            }
+        }
+
+        private void StopTimer()
+        {
+            if (m_actions.Count == 0 && m_timer != null)
+            {
+                m_timer.Cancel();
+                m_timer = null;
             }
         }
 

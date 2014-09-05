@@ -2,7 +2,7 @@
 
 namespace ITJakub.MobileApps.Client.Hangman.DataContract
 {
-    public class GuessLetter
+    public class GuessLetterContract
     {
         [JsonProperty("Letter")]
         public char Letter { get; set; }

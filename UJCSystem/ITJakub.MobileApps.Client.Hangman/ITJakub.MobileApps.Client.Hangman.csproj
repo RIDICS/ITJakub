@@ -111,14 +111,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
-    <Compile Include="DataContract\GuessLetter.cs" />
+    <Compile Include="DataContract\GuessLetterContract.cs" />
     <Compile Include="DataContract\HangmanTaskContract.cs" />
+    <Compile Include="DataContract\ProgressInfoContract.cs" />
+    <Compile Include="DataService\CooperationGuessManager.cs" />
     <Compile Include="DataService\GuessManager.cs" />
     <Compile Include="DataService\HangmanDataService.cs" />
     <Compile Include="DataService\HangmanTask.cs" />
+    <Compile Include="DataService\VersusGuessManager.cs" />
     <Compile Include="ViewModel\HangmanPictureViewModel.cs" />
+    <Compile Include="ViewModel\ProgressInfoViewModel.cs" />
     <Compile Include="ViewModel\TaskInfoViewModel.cs" />
     <Compile Include="ViewModel\GuessViewModel.cs" />
+    <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
     <Compile Include="View\HangmanPictureControl.xaml.cs">
       <DependentUpon>HangmanPictureControl.xaml</DependentUpon>
     </Compile>

@@ -8,20 +8,23 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
     public interface IHangmanDataService
     {
         void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskInfoViewModel, Exception> callback);
-        void StopPollingLetters();
-        void GuessLetter(char letter, Action<Exception> callback);
-        void SetTaskAndGetWord(string data, Action<TaskInfoViewModel> callback);
+        void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback);
+        void StopPolling();
+        void GuessLetter(char letter, Action<TaskInfoViewModel, Exception> callback);
+        void SetTaskAndGetWord(string data, string appMode, Action<TaskSettingsViewModel, TaskInfoViewModel> callback);
     }
 
     public class HangmanDataService : IHangmanDataService
     {
         private readonly ISynchronizeCommunication m_applicationCommunication;
-        private readonly GuessManager m_guessManager;
+        private GuessManager m_guessManager;
 
         public HangmanDataService(ISynchronizeCommunication applicationCommunication)
         {
             m_applicationCommunication = applicationCommunication;
-            m_guessManager = new GuessManager(applicationCommunication, applicationCommunication.GetPollingService());
+
+            // manager with default mode
+            m_guessManager = GuessManager.GetInstance(string.Empty, applicationCommunication);
         }
 
         public void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskInfoViewModel, Exception> callback)
@@ -29,18 +32,24 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             m_guessManager.StartPollingLetters(callback);
         }
 
-        public void StopPollingLetters()
+        public void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback)
         {
-            m_guessManager.StopPollingLetters();
+            m_guessManager.StartPollingProgress(callback);
         }
 
-        public void GuessLetter(char letter, Action<Exception> callback)
+        public void StopPolling()
+        {
+            m_guessManager.StopPolling();
+        }
+
+        public void GuessLetter(char letter, Action<TaskInfoViewModel, Exception> callback)
         {
             m_guessManager.GuessLetter(letter, callback);
         }
 
-        public void SetTaskAndGetWord(string data, Action<TaskInfoViewModel> callback)
+        public void SetTaskAndGetWord(string data, string appMode, Action<TaskSettingsViewModel, TaskInfoViewModel> callback)
         {
+            m_guessManager = GuessManager.GetInstance(appMode, m_applicationCommunication);
             m_guessManager.SetTask(data, callback);
         }
     }
