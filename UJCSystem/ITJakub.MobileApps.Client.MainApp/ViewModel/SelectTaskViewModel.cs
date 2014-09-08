@@ -95,7 +95,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             var task = args.ClickedItem as TaskViewModel;
             if (task != null)
             {
-                m_navigationService.GoBack();
+                m_navigationService.GoBackUsingCache();
                 Messenger.Default.Send(new SelectedTaskMessage {TaskInfo = task});
             }
         }

@@ -124,6 +124,7 @@
     <Compile Include="ViewModel\TaskInfoViewModel.cs" />
     <Compile Include="ViewModel\GuessViewModel.cs" />
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
+    <Compile Include="ViewModel\WordViewModel.cs" />
     <Compile Include="View\HangmanPictureControl.xaml.cs">
       <DependentUpon>HangmanPictureControl.xaml</DependentUpon>
     </Compile>
@@ -131,13 +132,10 @@
       <DependentUpon>HangmanView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\HangmanViewModel.cs" />
-    <Compile Include="View\LetterControl.xaml.cs">
-      <DependentUpon>LetterControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\WordControl.xaml.cs">
       <DependentUpon>WordControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="View\HangmanPictureControl.xaml">
@@ -145,10 +143,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\HangmanView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\LetterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

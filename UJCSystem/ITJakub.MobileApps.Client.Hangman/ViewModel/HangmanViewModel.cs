@@ -24,6 +24,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private bool m_opponentProgressVisible;
         private bool m_guessHistoryVisible;
         private int m_guessedLetterCount;
+        private WordViewModel m_wordViewModel;
 
         /// <summary>
         /// Initializes a new instance of the HangmanViewModel class.
@@ -36,6 +37,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             OpponentProgress = new ObservableCollection<ProgressInfoViewModel>();
             GuessCommand = new RelayCommand(Guess);
             HangmanPictureViewModel = new HangmanPictureViewModel();
+            WordViewModel = new WordViewModel();
         }
 
         public ObservableCollection<GuessViewModel> GuessHistory { get; set; }
@@ -52,16 +54,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             set
             {
                 m_letter = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string WordToGuess
-        {
-            get { return m_wordToGuess; }
-            set
-            {
-                m_wordToGuess = value;
                 RaisePropertyChanged();
             }
         }
@@ -127,6 +119,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
+        public WordViewModel WordViewModel
+        {
+            get { return m_wordViewModel; }
+            set
+            {
+                m_wordViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public override void InitializeCommunication()
         {
             m_dataService.StartPollingLetters((guesses, taskInfo, exception) =>
@@ -170,7 +172,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         private void ProcessTaskInfo(TaskInfoViewModel taskInfo)
         {
-            WordToGuess = taskInfo.Word;
+            WordViewModel.Word = taskInfo.Word;
             GameOver = taskInfo.Lives == 0;
             Lives = taskInfo.Lives;
             GuessedLetterCount = taskInfo.GuessedLetterCount;

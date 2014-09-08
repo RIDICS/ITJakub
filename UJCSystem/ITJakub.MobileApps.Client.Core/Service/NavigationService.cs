@@ -41,6 +41,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
             if (frame.CanGoBack)
             {
+                m_frameContentCache.Pop();
                 frame.GoBack();
             }
         }
