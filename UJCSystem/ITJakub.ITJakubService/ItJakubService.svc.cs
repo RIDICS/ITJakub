@@ -5,6 +5,7 @@ using ITJakub.Contracts;
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core;
+using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService
 {
@@ -70,6 +71,16 @@ namespace ITJakub.ITJakubService
         public SearchResult GetBookById(string id)
         {
             return m_serviceManager.GetBookById(id);
+        }
+
+        public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
+        {
+            throw new System.NotImplementedException();
         }
     }
 

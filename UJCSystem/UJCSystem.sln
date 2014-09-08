@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.Clients", "ITJakub.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.SearchService", "ITJakub.SearchService", "{03208FD7-4079-4AE7-8BC9-643C06A89967}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Contracts", "ITJakub.Contracts\ITJakub.Contracts.csproj", "{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Shared.Contracts", "ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj", "{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jewelery", "Jewelery\Jewelery.csproj", "{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}"
 EndProject
@@ -70,6 +70,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.DataContracts", "ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj", "{90F9D8DD-05D5-401F-8939-BD619ADF5CDD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Web.Hub", "ITJakub.Web.Hub\ITJakub.Web.Hub.csproj", "{B9B8EC15-8ABF-4FB0-B660-589AFE66B412}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.ITJakubService.DataContracts", "ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj", "{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -466,6 +468,20 @@ Global
 		{B9B8EC15-8ABF-4FB0-B660-589AFE66B412}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B9B8EC15-8ABF-4FB0-B660-589AFE66B412}.Release|x64.ActiveCfg = Release|Any CPU
 		{B9B8EC15-8ABF-4FB0-B660-589AFE66B412}.Release|x86.ActiveCfg = Release|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Release|x64.ActiveCfg = Release|Any CPU
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -492,6 +508,7 @@ Global
 		{7A5C997B-0795-43AA-9C21-C65D8A25821C} = {E8C06B28-1F1A-4283-B17F-3E648D91C879}
 		{90F9D8DD-05D5-401F-8939-BD619ADF5CDD} = {E8C06B28-1F1A-4283-B17F-3E648D91C879}
 		{B9B8EC15-8ABF-4FB0-B660-589AFE66B412} = {53A1BA5E-DF69-4655-AB7B-3BBF58B426FD}
+		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi

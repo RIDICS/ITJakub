@@ -80,9 +80,9 @@
     <EmbeddedResource Include="ITJakub.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.Contracts\ITJakub.Contracts.csproj">
+    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
-      <Name>ITJakub.Contracts</Name>
+      <Name>ITJakub.Shared.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Xml\ITJakub.Xml.csproj">
       <Project>{C5A88432-F387-4732-9548-12BBFC4019EB}</Project>
