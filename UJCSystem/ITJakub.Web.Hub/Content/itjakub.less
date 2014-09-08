@@ -1,4 +1,8 @@
-﻿.white-link {
+﻿@background-color:#84CED7;
+@icon-chevron: url("Images/glyphicons_chevron.png");
+@icon-chevron-green: url("Images/glyphicons_chevron_green.png");
+
+.white-link {
     color:white;
     text-decoration: none;
 }
@@ -22,11 +26,11 @@ a,a:visited {
 }
 
 .styled-background{
-    background-color:#84CED7;
+    background-color:@background-color;
 }
 
 body {
-    padding-top: 125px;
+    padding-top: 145px;
     background-color:#E5E5E5;
   }
 
@@ -71,9 +75,10 @@ a.main_logo_href{
     height:65px;
 }
 
-.main-plugins-menu{
+.main-plugins-menu{    
     margin:auto; 
     margin-top: 65px;
+    padding:0;
     background-color: white;
     max-width:1100px;
     height: 60px;
@@ -81,22 +86,59 @@ a.main_logo_href{
 }
 
 
+.main-plugins-submenu{
+    margin:auto; 
+    margin-top: 125px;
+    padding:0;
+    background-color: white;
+    max-width:1100px;
+    height: 20px;
+    width: 100%;
+}
+
+.main-plugins-submenu ul {        
+    list-style-type: none;
+    margin:0;
+    padding:0;
+}
+
+.main-plugins-submenu a:hover {
+    .black-link;
+}
+
+.main-plugins-submenu a{
+    .white-link;     
+}
+
+.main-plugins-submenu li  {    
+    .styled-background;
+     display:inline;
+     margin:0;
+}
+
+
 .main-plugins-menu button {  
      font-size   : 16px;
      border  : none;
-     background  : none;
-     margin-left:5px;
      /*display: inline;*/
-     background-image: url("Images/glyphicons_chevron.png");
+     background-image: @icon-chevron;
      background-size: 10px;
      background-repeat: no-repeat;
      background-position: bottom; 
+     background-color: white; 
      height: 100%;
      padding-bottom:2px;
+     outline: none;
+}
+
+
+button.main-plugins-menu-active {
+    background: @background-color @icon-chevron no-repeat bottom;
+    background-size: 10px; 
 }
 
 .main-plugins-menu button:hover{
-     background-image: url("Images/glyphicons_chevron_green.png");
+     background-image: @icon-chevron-green;
      .hovered-link;    
 }
 
