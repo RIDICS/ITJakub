@@ -23,7 +23,7 @@ a:visited {
   background-color: #84CED7;
 }
 body {
-  padding-top: 135px;
+  padding-top: 125px;
   background-color: #E5E5E5;
 }
 .body-content {
@@ -65,37 +65,29 @@ a.main_logo_href {
 }
 .main-plugins-menu {
   margin: auto;
-  margin-top: 70px;
+  margin-top: 65px;
   background-color: white;
   max-width: 1100px;
   height: 60px;
+  width: 100%;
 }
-.main-plugins-menu ul {
-  list-style-type: none;
-  padding: 0px;
-  margin: 0px;
-}
-.main-plugins-menu li {
-  display: inline;
-  margin: 5px;
+.main-plugins-menu button {
+  font-size: 16px;
+  border: none;
+  background: none;
+  margin-left: 5px;
+  /*display: inline;*/
   background-image: url("Images/glyphicons_chevron.png");
   background-size: 10px;
   background-repeat: no-repeat;
   background-position: bottom;
-  padding-bottom: 15px;
+  height: 100%;
+  padding-bottom: 2px;
 }
-.main-plugins-menu li:hover {
+.main-plugins-menu button:hover {
   background-image: url("Images/glyphicons_chevron_green.png");
-}
-.main-plugins-menu li:hover a {
   color: #AFDEE4;
   text-decoration: none;
-}
-.main-plugins-menu a {
-  color: black;
-  text-decoration: none;
-  margin: 5px;
-  font-size: large;
 }
 .main-navbar-container {
   margin-left: 2px;
