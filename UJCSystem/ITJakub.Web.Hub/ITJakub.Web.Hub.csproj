@@ -205,6 +205,12 @@
     <Content Include="Content\itjakub.css">
       <DependentUpon>itjakub.less</DependentUpon>
     </Content>
+    <Content Include="Content\ItJakub.MainMenu.css">
+      <DependentUpon>ItJakub.MainMenu.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ItJakub.MainMenu.min.css">
+      <DependentUpon>ItJakub.MainMenu.css</DependentUpon>
+    </Content>
     <Content Include="Content\itjakub.min.css">
       <DependentUpon>itjakub.css</DependentUpon>
     </Content>
@@ -304,6 +310,10 @@
     <Content Include="Areas\Editions\Content\itjakub.editions.less" />
     <Content Include="Areas\Editions\Content\itjakub.editions.css.map">
       <DependentUpon>itjakub.editions.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ItJakub.MainMenu.less" />
+    <Content Include="Content\ItJakub.MainMenu.css.map">
+      <DependentUpon>ItJakub.MainMenu.css</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

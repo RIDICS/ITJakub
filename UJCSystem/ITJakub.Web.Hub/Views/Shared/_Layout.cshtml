@@ -9,30 +9,58 @@
         @Styles.Render("~/itjakub/css")
         @RenderSection("styles", false)
     </head>
-    <body>
-        <div class="navbar navbar-inverse navbar-fixed-top navbar-top">
-            <div class="container main-navbar-container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-                        <img src="@Url.Content("~/Content/Images/logo.png")" alt="main_logo" class="main_logo" />   @*TODO make logo small as this size*@
-                        <h3>Vokabulář webový</h3>
-                    </a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    @Html.Partial("_LoginPartial")
+<body>
+
+    <div class="container body-content">
+        
+        @*top fixed part*@
+        <div class="navbar navbar-inverse navbar-fixed-top header-content">
+            <div class="">
+                <div class="main-navbar-container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+
+                        <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
+                            <img src="@Url.Content("~/Content/Images/logo.png")" alt="main_logo" class="main_logo" />   @*TODO make logo small as this size*@
+                            <div class="main_logo_text">
+                                <h1>Vokabulář</h1>
+                                <h2>webový</h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        @Html.Partial("_LoginPartial")
+                    </div>
                 </div>
             </div>
+
+
+            <div class="navbar-fixed-top main-plugins-menu">
+                <ul>
+                    <li><a href="#">Menu1</a></li>
+                    <li><a href="#">Menu2</a></li>
+                    <li><a href="#">Menu3</a></li>
+                    <li>
+                        <a href="#">Menu4</a>
+                        <ul>
+                            <li><a href="#">SubMenu1</a></li>
+                            <li><a href="#">SubMenu2</a></li>
+                            <li><a href="#">SubMenu3</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class=" navbar-fixed-top main-plugins-menu">
-                <button onclick="window.location.href = '/Dictionaries'">Slovníky</button>
-                <button onclick="window.location.href = '/Editions'">Edice</button>
-        </div>
-        <div class="container body-content">
+
+
+
+
+        @*main page content*@
+        <div class="container module-content">
             @RenderBody()
             <hr />
             <footer>
@@ -40,9 +68,13 @@
             </footer>
         </div>
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @Scripts.Render("~/itjakub/javascript")
-        @RenderSection("scripts", false)
-    </body>
+
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/itjakub/javascript")
+    @RenderSection("scripts", false)
+</body>
 </html>
