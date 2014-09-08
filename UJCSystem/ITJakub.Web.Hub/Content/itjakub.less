@@ -27,7 +27,7 @@ a,a:visited {
 
 
 body {
-    padding-top: 150px;
+    padding-top: 135px;
     background-color:#E5E5E5;
   }
 
@@ -69,26 +69,46 @@ a.main_logo_href{
 .navbar-top {
     margin:auto; 
     max-width:1100px;
+    height:65px;
 }
 
 .main-plugins-menu{
     margin:auto; 
+    margin-top: 70px;
+    background-color: white;
     max-width:1100px;
+    height: 60px;
 }
 
-.main-plugins-menu li{
-     list-style:none;
+.main-plugins-menu ul{
      list-style-type:none;
-     display:inline;
-     margin : 10px;
+     padding: 0px;
+     margin: 0px;
+}
+
+.main-plugins-menu li {  
+     display: inline;
+     margin : 5px;
+     background-image: url("Images/glyphicons_chevron.png");
+     background-size: 10px;
+     background-repeat: no-repeat;
+     background-position: bottom; 
+     padding-bottom: 15px;
+}
+
+.main-plugins-menu li:hover{
+     background-image: url("Images/glyphicons_chevron_green.png");
+}
+
+.main-plugins-menu li:hover a{
+     .hovered-link;
 }
 
 .main-plugins-menu a{
     .black-link;
-}
-
-.main-plugins-menu a:hover{
-    .hovered-link;
+    margin : 5px;
+    font-size: large;
+    
 }
 
 .main-navbar-container{
@@ -111,5 +131,4 @@ a.main_logo_href{
     list-style:none;
     margin-top: 20px;
 }
-
 
