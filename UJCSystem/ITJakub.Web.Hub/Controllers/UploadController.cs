@@ -22,6 +22,7 @@ namespace ITJakub.Web.Hub.Controllers
                 if (file == null || file.ContentLength == 0) continue;
 
                 string pathString = Path.Combine("D:\\", "UploadedFiles");
+
                 
                 if (!Directory.Exists(pathString))
                     Directory.CreateDirectory(pathString);
