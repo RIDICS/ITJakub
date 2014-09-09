@@ -138,6 +138,14 @@
 #cssmenu .has-sub ul li.last > a {
   border-bottom: 0;
 }
+#dropzoneForm {
+  background: white;
+  border: black dashed 3px;
+  width: 500px;
+  text-align: center;
+  color: black;
+  margin: auto;
+}
 .white-link {
   color: white;
   text-decoration: none;
