@@ -39,21 +39,52 @@
             </div>
 
 
-            <div class="navbar-fixed-top main-plugins-menu">
+            @*<div id="cssmenu" class="navbar-fixed-top main-plugins-menu">
                 <ul>
-                    <li><a href="#">Menu1</a></li>
-                    <li><a href="#">Menu2</a></li>
-                    <li><a href="#">Menu3</a></li>
-                    <li>
-                        <a href="#">Menu4</a>
+                    <li><a href="#"><span>Menu1</span></a></li>
+                    <li><a href="#"><span>Menu2</span></a></li>
+                    <li class="active"><a href="#"><span>Menu3</span></a></li>
+                    <li class='active has-sub last'>
+                        <a href="#"><span>Menu4</span></a>
                         <ul>
-                            <li><a href="#">SubMenu1</a></li>
-                            <li><a href="#">SubMenu2</a></li>
-                            <li><a href="#">SubMenu3</a></li>
+                            <li><a href="#"><span>SubMenu1</span></a></li>
+                            <li><a href="#"><span>SubMenu2</span></a></li>
+                            <li><a href="#"><span>SubMenu3</span></a></li>
                         </ul>
                     </li>
                 </ul>
+            </div>*@
+            
+            
+            <div id="cssmenu" class="main-plugins-menu">
+                <ul>
+                    <li><a href='#'><span>Menu1</span></a></li>
+                    <li class='active has-sub'>
+                        <a href='#'><span>Menu2</span></a>
+                        <ul>
+                            <li class='has-sub'>
+                                <a href='#'><span>Product 1</span></a>
+                                <ul>
+                                    <li><a href='#'><span>Sub Product</span></a></li>
+                                    <li class='last'><a href='#'><span>Sub Product</span></a></li>
+                                </ul>
+                            </li>
+                            <li class='has-sub'>
+                                <a href='#'><span>Product 2</span></a>
+                                <ul>
+                                    <li><a href='#'><span>Sub Product</span></a></li>
+                                    <li class='last'><a href='#'><span>Sub Product</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href='#'><span>About</span></a></li>
+                    <li class='last'><a href='#'><span>Contact</span></a></li>
+                </ul>
             </div>
+            
+            
+
         </div>
 
 
