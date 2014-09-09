@@ -18,6 +18,9 @@ else
     <ul class="navbar-right navbar-login">
         <li>@*@Html.ActionLink("Zaregistrovat se", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })*@</li>
         <li>
+            @Html.ActionLink("Upload", "Upload", "Upload", new { area = "" }, new { id = "uploadLink" })
+        </li> 
+        <li>
             @Html.ActionLink("Přihlášení", "Login", "Account", new { area = "" }, new { id = "loginLink" })
             @*<div style="display: inline">
                 <span class="glyphicon glyphicon-stop" style="display: list-item;"></span>
