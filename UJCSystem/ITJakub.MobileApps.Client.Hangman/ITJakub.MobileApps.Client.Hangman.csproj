@@ -119,12 +119,14 @@
     <Compile Include="DataService\HangmanDataService.cs" />
     <Compile Include="DataService\HangmanTask.cs" />
     <Compile Include="DataService\VersusGuessManager.cs" />
+    <Compile Include="ViewModel\KeyboardViewModel.cs" />
     <Compile Include="ViewModel\HangmanPictureViewModel.cs" />
     <Compile Include="ViewModel\ProgressInfoViewModel.cs" />
     <Compile Include="ViewModel\TaskInfoViewModel.cs" />
     <Compile Include="ViewModel\GuessViewModel.cs" />
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
     <Compile Include="ViewModel\WordViewModel.cs" />
+    <Compile Include="View\GuessedLettersTextConverter.cs" />
     <Compile Include="View\HangmanPictureControl.xaml.cs">
       <DependentUpon>HangmanPictureControl.xaml</DependentUpon>
     </Compile>
@@ -132,6 +134,9 @@
       <DependentUpon>HangmanView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\HangmanViewModel.cs" />
+    <Compile Include="View\KeyboardControl.xaml.cs">
+      <DependentUpon>KeyboardControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WordControl.xaml.cs">
       <DependentUpon>WordControl.xaml</DependentUpon>
     </Compile>
@@ -145,6 +150,15 @@
     <Page Include="View\HangmanView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\KeyboardControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="View\WordControl.xaml">
       <SubType>Designer</SubType>

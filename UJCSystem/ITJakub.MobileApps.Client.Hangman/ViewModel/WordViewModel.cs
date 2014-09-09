@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         public WordViewModel()
         {
-            SpreadWord("Nějaké slovo");
+            SpreadWord(string.Empty);
         }
 
         private void SpreadWord(string word)

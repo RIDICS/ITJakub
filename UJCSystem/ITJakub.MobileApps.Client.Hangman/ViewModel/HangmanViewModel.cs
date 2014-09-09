@@ -4,6 +4,7 @@ using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Hangman.DataService;
 using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.Data;
 
 namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 {
@@ -16,15 +17,12 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
     public class HangmanViewModel : ApplicationBaseViewModel
     {
         private readonly IHangmanDataService m_dataService;
-        private string m_wordToGuess;
-        private string m_letter;
         private bool m_gameOver;
         private int m_lives;
         private bool m_win;
         private bool m_opponentProgressVisible;
         private bool m_guessHistoryVisible;
         private int m_guessedLetterCount;
-        private WordViewModel m_wordViewModel;
 
         /// <summary>
         /// Initializes a new instance of the HangmanViewModel class.
@@ -35,9 +33,11 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             m_dataService = dataService;
             GuessHistory = new ObservableCollection<GuessViewModel>();
             OpponentProgress = new ObservableCollection<ProgressInfoViewModel>();
-            GuessCommand = new RelayCommand(Guess);
             HangmanPictureViewModel = new HangmanPictureViewModel();
             WordViewModel = new WordViewModel();
+            KeyboardViewModel = new KeyboardViewModel();
+
+            KeyboardViewModel.ClickCommand = new RelayCommand<char>(Guess);
         }
 
         public ObservableCollection<GuessViewModel> GuessHistory { get; set; }
@@ -46,17 +46,9 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         public HangmanPictureViewModel HangmanPictureViewModel { get; set; }
 
-        public RelayCommand GuessCommand { get; private set; }
+        public WordViewModel WordViewModel { get; set; }
 
-        public string Letter
-        {
-            get { return m_letter; }
-            set
-            {
-                m_letter = value;
-                RaisePropertyChanged();
-            }
-        }
+        public KeyboardViewModel KeyboardViewModel { get; set; }
 
         public bool GameOver
         {
@@ -119,16 +111,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
-        public WordViewModel WordViewModel
-        {
-            get { return m_wordViewModel; }
-            set
-            {
-                m_wordViewModel = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public override void InitializeCommunication()
         {
             m_dataService.StartPollingLetters((guesses, taskInfo, exception) =>
@@ -136,11 +118,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 if (exception != null)
                     return;
 
-                foreach (var guessViewModel in guesses)
-                {
-                    GuessHistory.Add(guessViewModel);
-                }
-
+                ProcessNewLetters(guesses);
                 ProcessTaskInfo(taskInfo);
                 SetDataLoaded();
             });
@@ -170,6 +148,31 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             m_dataService.StopPolling();
         }
 
+        private void ProcessNewLetters(IEnumerable<GuessViewModel> guesses)
+        {
+            var wordIndex = 0;
+            var lastViewModel = GuessHistory.LastOrDefault();
+            if (lastViewModel != null)
+                wordIndex = lastViewModel.WordOrder;
+
+            foreach (var guessViewModel in guesses)
+            {
+                if (guessViewModel.WordOrder > wordIndex)
+                {
+                    GuessHistory.Add(new GuessViewModel
+                    {
+                        Letter = '-',
+                        WordOrder = wordIndex,
+                        Author = new AuthorInfo()
+                    });
+                    wordIndex = guessViewModel.WordOrder;
+                }
+
+                GuessHistory.Add(guessViewModel);
+                KeyboardViewModel.DeactivateKey(guessViewModel.Letter);
+            }
+        }
+
         private void ProcessTaskInfo(TaskInfoViewModel taskInfo)
         {
             WordViewModel.Word = taskInfo.Word;
@@ -184,7 +187,10 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 GameOver = true;
             }
 
-            // TODO if is new word, clear guess history
+            if (taskInfo.IsNewWord)
+            {
+                KeyboardViewModel.ReactivateAllKeys();
+            }
         }
 
         private void ProcessOpponentProgress(IEnumerable<ProgressInfoViewModel> progressUpdate)
@@ -207,21 +213,20 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 }
             }
         }
-        
-        private void Guess()
+
+        private void Guess(char letter)
         {
-            if (Letter == string.Empty || Letter == " " || GameOver)
+            if (GameOver)
                 return;
 
-            m_dataService.GuessLetter(Letter[0], (taskInfo, exception) =>
+            KeyboardViewModel.DeactivateKey(letter);
+            m_dataService.GuessLetter(letter, (taskInfo, exception) =>
             {
                 if (exception != null)
                     return;
 
                 ProcessTaskInfo(taskInfo);
             });
-
-            Letter = string.Empty;
         }
     }
 }

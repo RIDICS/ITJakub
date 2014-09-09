@@ -57,13 +57,14 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         public override void GuessLetter(char letter, Action<TaskInfoViewModel, Exception> callback)
         {
+            var wordOrder = MyTask.WordOrder;
             MyTask.Guess(letter);
             
             var taskInfo = GetCurrentTaskInfo();
             callback(taskInfo, null);
 
             SendProgressInfo(callback);
-            SendLetterInfo(letter, callback);
+            SendLetterInfo(letter, wordOrder, callback);
         }
 
         private async void SendProgressInfo(Action<TaskInfoViewModel, Exception> callback)
@@ -85,12 +86,12 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
         }
 
-        private async void SendLetterInfo(char letter, Action<TaskInfoViewModel, Exception> callback)
+        private async void SendLetterInfo(char letter, int wordOrder, Action<TaskInfoViewModel, Exception> callback)
         {
             var guessLetterContract = new GuessLetterContract
             {
                 Letter = letter,
-                WordOrder = MyTask.WordOrder
+                WordOrder = wordOrder
             };
             var serializedGuessLetter = JsonConvert.SerializeObject(guessLetterContract);
 
@@ -106,15 +107,37 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         private async void GetGuessHistory(Action<ObservableCollection<GuessViewModel>, TaskInfoViewModel, Exception> callback)
         {
-            var result = await m_synchronizeCommunication.GetObjectsAsync(ApplicationType.Hangman, new DateTime(1970, 1, 1), LetterObjectType);
-            var myObjects = result.Where(details => details.Author.IsMe);
-
-            foreach (var details in myObjects)
+            try
             {
-                var guessLetterContract = JsonConvert.DeserializeObject<GuessLetterContract>(details.Data);
-                MyTask.Guess(guessLetterContract);
+                var result = await m_synchronizeCommunication.GetObjectsAsync(ApplicationType.Hangman, new DateTime(1970, 1, 1), LetterObjectType);
+                var myObjects = result.Where(details => details.Author.IsMe);
+
+                var list = new ObservableCollection<GuessViewModel>();
+
+                foreach (var details in myObjects)
+                {
+                    var guessLetterContract = JsonConvert.DeserializeObject<GuessLetterContract>(details.Data);
+                    MyTask.Guess(guessLetterContract);
+
+                    list.Add(new GuessViewModel
+                    {
+                        Author = details.Author,
+                        Letter = Char.ToUpper(guessLetterContract.Letter),
+                        WordOrder = guessLetterContract.WordOrder
+                    });
+
+                    if (MyTask.IsNewWord)
+                    {
+                        callback(list, GetCurrentTaskInfo(), null);
+                        list = new ObservableCollection<GuessViewModel>();
+                    }
+                }
+                callback(list, GetCurrentTaskInfo(), null);
             }
-            callback(new ObservableCollection<GuessViewModel>(), GetCurrentTaskInfo(), null);
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, null, exception);
+            }
         }
 
         private void ProcessNewProgressUpdate(IList<ObjectDetails> objectList, Exception exception)

@@ -110,7 +110,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public void Guess(GuessLetterContract guessLetterObject)
         {
             // If user guessing letter in old word (word has been guessed)
-            if (guessLetterObject.WordOrder > m_currentWordIndex)
+            if (guessLetterObject.WordOrder < m_currentWordIndex)
                 return;
 
             Guess(guessLetterObject.Letter);

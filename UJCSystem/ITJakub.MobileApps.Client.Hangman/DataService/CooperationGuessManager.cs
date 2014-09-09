@@ -66,7 +66,8 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 var viewModel = new GuessViewModel
                 {
                     Author = objectDetails.Author,
-                    Letter = Char.ToUpper(guessLetterObject.Letter)
+                    Letter = Char.ToUpper(guessLetterObject.Letter),
+                    WordOrder = guessLetterObject.WordOrder
                 };
                 newLetters.Add(viewModel);
                 MyTask.Guess(guessLetterObject);
@@ -84,20 +85,19 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public override async void GuessLetter(char letter, Action<TaskInfoViewModel, Exception> callback)
         {
             // TODO test if it works in multiplayer
+            var wordOrder = MyTask.WordOrder;
             MyTask.Guess(letter);
             callback(GetCurrentTaskInfo(), null);
 
             var dataContract = new GuessLetterContract
             {
                 Letter = letter,
-                WordOrder = MyTask.WordOrder
+                WordOrder = wordOrder
             };
             var serializedObject = JsonConvert.SerializeObject(dataContract);
             try
             {
-                await
-                    m_synchronizeCommunication.SendObjectAsync(ApplicationType.Hangman, GuessObjectType,
-                        serializedObject);
+                await m_synchronizeCommunication.SendObjectAsync(ApplicationType.Hangman, GuessObjectType, serializedObject);
             }
             catch (ClientCommunicationException exception)
             {
