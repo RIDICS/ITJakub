@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
 
-namespace ITJakub.MobileApps.Client.Hangman.View
+namespace ITJakub.MobileApps.Client.Hangman.View.Converter
 {
     public class GuessedLettersTextConverter : IValueConverter
     {

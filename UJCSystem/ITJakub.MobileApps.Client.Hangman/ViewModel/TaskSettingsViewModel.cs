@@ -5,5 +5,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         public bool GuessHistoryVisible { get; set; }
 
         public bool OpponentProgressVisible { get; set; }
+
+        public char[] SpecialLetters { get; set; }
     }
 }

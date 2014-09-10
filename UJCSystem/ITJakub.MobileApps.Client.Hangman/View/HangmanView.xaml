@@ -8,12 +8,13 @@
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Hangman.View.Converter"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanViewModel }">
     
     <UserControl.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <view:GuessedLettersTextConverter x:Key="GuessedLettersTextConverter"/>
+        <converter1:GuessedLettersTextConverter x:Key="GuessedLettersTextConverter"/>
     </UserControl.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

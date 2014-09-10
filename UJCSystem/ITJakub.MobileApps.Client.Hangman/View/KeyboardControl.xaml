@@ -17,7 +17,9 @@
     </UserControl.Resources>
     
     <Grid>
-        <ItemsControl ItemsSource="{Binding Keys}">
+        <ItemsControl ItemsSource="{Binding Keys}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <control:AlignableWrapPanel HorizontalContentAlignment="Center" />

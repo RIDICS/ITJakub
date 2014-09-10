@@ -33,7 +33,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             {
                 return new TaskSettingsViewModel
                 {
-                    GuessHistoryVisible = true,
+                    GuessHistoryVisible = false,
                     OpponentProgressVisible = true
                 };
             }
@@ -156,7 +156,8 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 {
                     LetterCount = progressUpdate.LetterCount,
                     Lives = progressUpdate.Lives,
-                    UserInfo = objectDetails.Author
+                    UserInfo = objectDetails.Author,
+                    Time = objectDetails.CreateTime
                 };
                 updateList.Add(viewModel);
             }

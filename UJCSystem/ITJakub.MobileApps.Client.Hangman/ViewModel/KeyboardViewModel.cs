@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,14 +9,18 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 {
     public class KeyboardViewModel : ViewModelBase
     {
+        private readonly List<KeyViewModel> m_basicKeys;
+
         public KeyboardViewModel()
         {
-            Keys = new ObservableCollection<KeyViewModel>();
+            m_basicKeys = new List<KeyViewModel>();
 
             for (char letter = 'A'; letter <= 'Z'; letter++)
             {
-                Keys.Add(new KeyViewModel(letter));
+                m_basicKeys.Add(new KeyViewModel(letter));
             }
+
+            Keys = new ObservableCollection<KeyViewModel>(m_basicKeys);
         }
 
         public ObservableCollection<KeyViewModel> Keys { get; set; }
@@ -45,6 +50,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             foreach (var keyViewModel in Keys)
             {
                 keyViewModel.IsEnabled = true;
+            }
+        }
+
+        public void SetSpecialLetters(IEnumerable<char> letters)
+        {
+            Keys = new ObservableCollection<KeyViewModel>(m_basicKeys);
+            
+            foreach (var capitalLetter in letters.Select(Char.ToUpper).Where(letter => letter < 'A' || letter > 'Z').Distinct())
+            {
+                Keys.Add(new KeyViewModel(capitalLetter));
             }
         }
     }

@@ -52,11 +52,19 @@
               Y2="80"
               Visibility="{Binding RopeVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
-        <Path Stroke="{StaticResource GibbetBrush}"
+        <!--<Path Stroke="{StaticResource GibbetBrush}"
               StrokeThickness="7"
               Data="M 3,370 S 25,330 70,370"
+              Visibility="{Binding BaseVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />-->
+
+        <Line Stroke="{StaticResource GibbetBrush}"
+              StrokeThickness="7"
+              X1="3"
+              X2="90"
+              Y1="350"
+              Y2="350"
               Visibility="{Binding BaseVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        
+
         <!--Head-->
         <Ellipse Fill="{StaticResource Hangman}"
                  Width="40"

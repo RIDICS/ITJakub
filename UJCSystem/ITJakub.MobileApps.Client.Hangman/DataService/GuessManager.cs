@@ -42,7 +42,10 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             var task = JsonConvert.DeserializeObject<HangmanTaskContract>(data);
             MyTask = new HangmanTask(task.Words);
 
-            callback(TaskSettings, GetCurrentTaskInfo());
+            var taskSettings = TaskSettings;
+            taskSettings.SpecialLetters = task.SpecialLetters;
+
+            callback(taskSettings, GetCurrentTaskInfo());
         }
 
         protected TaskInfoViewModel GetCurrentTaskInfo()

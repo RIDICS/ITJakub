@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback);
         void StopPolling();
         void GuessLetter(char letter, Action<TaskInfoViewModel, Exception> callback);
-        void SetTaskAndGetWord(string data, string appMode, Action<TaskSettingsViewModel, TaskInfoViewModel> callback);
+        void SetTaskAndGetConfiguration(string data, string appMode, Action<TaskSettingsViewModel, TaskInfoViewModel> callback);
     }
 
     public class HangmanDataService : IHangmanDataService
@@ -47,7 +47,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             m_guessManager.GuessLetter(letter, callback);
         }
 
-        public void SetTaskAndGetWord(string data, string appMode, Action<TaskSettingsViewModel, TaskInfoViewModel> callback)
+        public void SetTaskAndGetConfiguration(string data, string appMode, Action<TaskSettingsViewModel, TaskInfoViewModel> callback)
         {
             m_guessManager = GuessManager.GetInstance(appMode, m_applicationCommunication);
             m_guessManager.SetTask(data, callback);

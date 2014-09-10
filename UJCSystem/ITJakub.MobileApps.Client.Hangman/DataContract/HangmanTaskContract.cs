@@ -6,5 +6,8 @@ namespace ITJakub.MobileApps.Client.Hangman.DataContract
     {
         [JsonProperty("Words")]
         public string[] Words { get; set; }
+
+        [JsonProperty("SpecialLetters")]
+        public char[] SpecialLetters { get; set; }
     }
 }

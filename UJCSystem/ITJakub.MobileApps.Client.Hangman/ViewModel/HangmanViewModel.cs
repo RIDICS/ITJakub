@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Hangman.DataService;
+using ITJakub.MobileApps.Client.Hangman.ViewModel.Comparer;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Data;
 
@@ -135,8 +136,11 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         public override void SetTask(string data)
         {
             // TODO get correct application mode from method parameter
-            m_dataService.SetTaskAndGetWord(data, GuessManager.VersusMode, (taskSettings, taskInfo) =>
+            m_dataService.SetTaskAndGetConfiguration(data, GuessManager.VersusMode, (taskSettings, taskInfo) =>
             {
+                if (taskSettings.SpecialLetters != null)
+                    KeyboardViewModel.SetSpecialLetters(taskSettings.SpecialLetters);
+
                 GuessHistoryVisible = taskSettings.GuessHistoryVisible;
                 OpponentProgressVisible = taskSettings.OpponentProgressVisible;
                 ProcessTaskInfo(taskInfo);
@@ -193,7 +197,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
-        private void ProcessOpponentProgress(IEnumerable<ProgressInfoViewModel> progressUpdate)
+        private void ProcessOpponentProgress(ICollection<ProgressInfoViewModel> progressUpdate)
         {
             foreach (var progressInfo in progressUpdate)
             {
@@ -206,11 +210,17 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 {
                     viewModel.Lives = progressInfo.Lives;
                     viewModel.LetterCount = progressInfo.LetterCount;
+                    viewModel.Time = progressInfo.Time;
                 }
                 else
                 {
+                    progressInfo.FirstUpdateTime = progressInfo.Time;
                     OpponentProgress.Add(progressInfo);
                 }
+            }
+            if (progressUpdate.Count > 0)
+            {
+                OpponentProgress = new ObservableCollection<ProgressInfoViewModel>(OpponentProgress.OrderBy(progress => progress, new PlayerProgressComparer()));
             }
         }
 

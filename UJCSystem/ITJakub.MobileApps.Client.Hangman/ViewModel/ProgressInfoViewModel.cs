@@ -1,3 +1,4 @@
+using System;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Shared.Data;
 
@@ -37,5 +38,9 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         public AuthorInfo UserInfo { get; set; }
 
         public HangmanPictureViewModel PictureViewModel { get; private set; }
+
+        public DateTime Time { get; set; }
+
+        public DateTime FirstUpdateTime { get; set; }
     }
 }
