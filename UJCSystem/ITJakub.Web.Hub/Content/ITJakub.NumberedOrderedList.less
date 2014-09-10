@@ -1,0 +1,36 @@
+﻿@import "ITJakub.DefaultTheme.less";
+
+ol.numbered {
+    counter-reset:li; /* Initiate a counter */
+    margin:0 0 0 45px; /*top right bottom left*/
+}
+ol.numbered > li {
+    position:relative; /* Create a positioning context */
+    margin:0 0 30px 2em; /* Give each list item a left margin to make room for the numbers */
+    padding:3px 8px; /* Add some spacing around the content */
+    list-style:none; /* Disable the normal item numbering */
+}
+ol.numbered > li:before {
+    content:counter(li); /* Use the counter as content */
+    counter-increment:li; /* Increment the counter by 1 */
+    /* Position and style the number */
+    position:absolute;
+    top:-2px;
+    left:-2em;
+    font-size:15px;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    border-radius:4px;
+    width:2em;
+    /* Some space between the number and the content in browsers that support
+       generated content but not positioning it (Camino 2 is one example) */
+    margin-right:8px;
+    padding:4px;
+    color:white;
+    background:@item-background-color;
+    font-weight:bold;
+    text-align:center;
+}

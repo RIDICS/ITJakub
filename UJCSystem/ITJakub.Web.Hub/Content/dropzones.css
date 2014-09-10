@@ -1,4 +1,20 @@
-﻿#dropzoneForm {
+﻿#dropzoneFileForm {
+  background: white;
+  border: black dashed 3px;
+  width: 500px;
+  text-align: center;
+  color: black;
+  margin: auto;
+}
+#dropzoneFrontImageForm {
+  background: white;
+  border: black dashed 3px;
+  width: 500px;
+  text-align: center;
+  color: black;
+  margin: auto;
+}
+#dropzoneImagesForm {
   background: white;
   border: black dashed 3px;
   width: 500px;

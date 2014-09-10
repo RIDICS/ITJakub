@@ -138,7 +138,7 @@
 #cssmenu .has-sub ul li.last > a {
   border-bottom: 0;
 }
-#dropzoneForm {
+#dropzoneFileForm {
   background: white;
   border: black dashed 3px;
   width: 500px;
@@ -146,12 +146,70 @@
   color: black;
   margin: auto;
 }
+#dropzoneFrontImageForm {
+  background: white;
+  border: black dashed 3px;
+  width: 500px;
+  text-align: center;
+  color: black;
+  margin: auto;
+}
+#dropzoneImagesForm {
+  background: white;
+  border: black dashed 3px;
+  width: 500px;
+  text-align: center;
+  color: black;
+  margin: auto;
+}
+ol.numbered {
+  counter-reset: li;
+  /* Initiate a counter */
+  margin: 0 0 0 45px;
+  /*top right bottom left*/
+}
+ol.numbered > li {
+  position: relative;
+  /* Create a positioning context */
+  margin: 0 0 30px 2em;
+  /* Give each list item a left margin to make room for the numbers */
+  padding: 3px 8px;
+  /* Add some spacing around the content */
+  list-style: none;
+  /* Disable the normal item numbering */
+}
+ol.numbered > li:before {
+  content: counter(li);
+  /* Use the counter as content */
+  counter-increment: li;
+  /* Increment the counter by 1 */
+  /* Position and style the number */
+  position: absolute;
+  top: -2px;
+  left: -2em;
+  font-size: 15px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  width: 2em;
+  /* Some space between the number and the content in browsers that support
+       generated content but not positioning it (Camino 2 is one example) */
+  margin-right: 8px;
+  padding: 4px;
+  color: white;
+  background: #84ced7;
+  font-weight: bold;
+  text-align: center;
+}
 .white-link {
   color: white;
   text-decoration: none;
 }
 .hovered-link {
-  color: #AFDEE4;
+  color: #afdee4;
   text-decoration: none;
 }
 .black-link {
@@ -159,7 +217,7 @@
   text-decoration: none;
 }
 a:hover {
-  color: #AFDEE4;
+  color: #afdee4;
   text-decoration: none;
 }
 a,
@@ -171,7 +229,7 @@ a:visited {
   background-color: #84ced7;
 }
 body {
-  background-color: #E5E5E5;
+  background-color: #e5e5e5;
 }
 .container {
   width: 1100px;
@@ -191,7 +249,7 @@ body {
   text-decoration: none;
 }
 .body-content a:hover {
-  color: #AFDEE4;
+  color: #afdee4;
   text-decoration: none;
 }
 .module-content {
@@ -250,7 +308,7 @@ a.main_logo_href img {
   text-decoration: none;
 }
 .main-navbar-container a:hover {
-  color: #AFDEE4;
+  color: #afdee4;
   text-decoration: none;
 }
 .navbar-login li,
