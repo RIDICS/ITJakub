@@ -119,7 +119,7 @@
     <Compile Include="DataService\HangmanDataService.cs" />
     <Compile Include="DataService\HangmanTask.cs" />
     <Compile Include="DataService\VersusGuessManager.cs" />
-    <Compile Include="GameOverViewModel.cs" />
+    <Compile Include="ViewModel\GameOverViewModel.cs" />
     <Compile Include="ViewModel\KeyboardViewModel.cs" />
     <Compile Include="ViewModel\HangmanPictureViewModel.cs" />
     <Compile Include="ViewModel\Comparer\PlayerProgressComparer.cs" />
@@ -128,6 +128,7 @@
     <Compile Include="ViewModel\GuessViewModel.cs" />
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
     <Compile Include="ViewModel\WordViewModel.cs" />
+    <Compile Include="View\Converter\HighlightMeConverter.cs" />
     <Compile Include="View\GameOverControl.xaml.cs">
       <DependentUpon>GameOverControl.xaml</DependentUpon>
     </Compile>
@@ -184,8 +185,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Icon\hearts-26.png" />
     <Content Include="Icon\license.txt" />
+    <Content Include="Icon\olympic_medal-26.png" />
     <Content Include="Icon\scythe-128.png" />
+    <Content Include="Icon\time-26.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

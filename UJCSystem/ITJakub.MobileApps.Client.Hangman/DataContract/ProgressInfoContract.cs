@@ -9,5 +9,8 @@ namespace ITJakub.MobileApps.Client.Hangman.DataContract
 
         [JsonProperty("LetterCount")]
         public int LetterCount { get; set; }
+
+        [JsonProperty("Win")]
+        public bool Win { get; set; }
     }
 }

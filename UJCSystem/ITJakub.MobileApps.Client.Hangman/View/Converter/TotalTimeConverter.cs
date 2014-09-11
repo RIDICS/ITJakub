@@ -1,5 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
+using ITJakub.MobileApps.Client.Hangman.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Hangman.View.Converter
 {
@@ -10,8 +11,12 @@ namespace ITJakub.MobileApps.Client.Hangman.View.Converter
             if (targetType != typeof(string))
                 throw new InvalidOperationException("The target must be a string");
 
-            var lastTime = (DateTime) value;
-            var firstTime = (DateTime) parameter;
+            var progressInfo = value as ProgressInfoViewModel;
+            if (progressInfo == null)
+                return string.Empty;
+
+            var lastTime = progressInfo.Time;
+            var firstTime = progressInfo.FirstUpdateTime;
             var time = lastTime - firstTime;
 
             return string.Format("{0}:{1:00}:{2:00}", (int)time.TotalHours, time.Minutes, time.Seconds);

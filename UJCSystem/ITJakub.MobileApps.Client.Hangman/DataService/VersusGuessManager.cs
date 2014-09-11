@@ -72,7 +72,8 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             var progressUpdate = new ProgressInfoContract
             {
                 LetterCount = MyTask.GuessedLetterCount,
-                Lives = MyTask.Lives
+                Lives = MyTask.Lives,
+                Win = MyTask.Win
             };
             var serializedProgressInfo = JsonConvert.SerializeObject(progressUpdate);
 
@@ -156,6 +157,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 {
                     LetterCount = progressUpdate.LetterCount,
                     Lives = progressUpdate.Lives,
+                    Win = progressUpdate.Win,
                     UserInfo = objectDetails.Author,
                     Time = objectDetails.CreateTime
                 };

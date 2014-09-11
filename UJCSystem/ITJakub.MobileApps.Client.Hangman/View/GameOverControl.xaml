@@ -2,24 +2,26 @@
     x:Class="ITJakub.MobileApps.Client.Hangman.View.GameOverControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:ITJakub.MobileApps.Client.Hangman.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:hangman="using:ITJakub.MobileApps.Client.Hangman"
     xmlns:converter="using:ITJakub.MobileApps.Client.Hangman.View.Converter"
+    xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d"
     d:DesignHeight="600"
     d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance Type=hangman:GameOverViewModel}">
+    d:DataContext="{d:DesignInstance Type=viewModel:GameOverViewModel}">
     
     <UserControl.Resources>
         <converter:TotalTimeConverter x:Key="TotalTimeConverter" />
+        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:HighlightMeConverter x:Key="HighlightMeConverter" />
     </UserControl.Resources>
     
     <Grid Background="#22000000">
         <Grid VerticalAlignment="Stretch"
               HorizontalAlignment="Center"
-              Width="400"
+              Width="500"
               Margin="0,20,0,100"
               Background="White"
               RequestedTheme="Light">
@@ -35,7 +37,7 @@
                        FontWeight="Bold"
                        Foreground="LimeGreen"
                        Text="Výhra!"
-                       Visibility="Collapsed" />
+                       Visibility="{Binding Win, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
             <TextBlock Grid.Row="0"
                        TextAlignment="Center"
@@ -43,35 +45,66 @@
                        FontSize="40"
                        FontWeight="Bold"
                        Foreground="Brown"
-                       Text="Prohra!" />
+                       Text="Prohra!"
+                       Visibility="{Binding Loss, Converter={StaticResource BooleanToVisibilityConverter}}" />
             
             <TextBlock Grid.Row="1"
-                       FontSize="16"
-                       Margin="10"
-                       Text="Tabulka pořadí:"/>
+                       FontSize="18"
+                       Margin="20,0,10,10"
+                       FontStyle="Italic"
+                       Text="Tabulka pořadí:"
+                       Visibility="{Binding ShowTable, Converter={StaticResource BooleanToVisibilityConverter}}" />
             
             <ListView Grid.Row="1"
                       Margin="10,30,10,10"
                       ItemsSource="{Binding PlayerRanking}"
-                      SelectionMode="None">
+                      SelectionMode="None"
+                      Visibility="{Binding ShowTable, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Grid Background="White">
+                            <Grid Background="LightGray"
+                                  MinWidth="45">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <Image Source="../Icon/olympic_medal-26.png"
+                                       Grid.Column="0"
+                                       Visibility="{Binding Win, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 <TextBlock Text="{Binding LetterCount}"
+                                           Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
                                            FontFamily="Segoe Print"
-                                           FontSize="16"/>
+                                           FontSize="16"
+                                           Margin="3,0,3,3" />
                             </Grid>
-                            <Grid Background="Red">
+                            <StackPanel Orientation="Horizontal"
+                                        Background="Red"
+                                        Width="50"
+                                        Margin="5,0,0,0">
+                                <Image Source="../Icon/hearts-26.png" />
                                 <TextBlock Text="{Binding Lives}"
+                                           VerticalAlignment="Center"
                                            Foreground="White"
-                                           FontSize="16"/>
-                            </Grid>
-                            <Grid Background="LightGray">
-                                <TextBlock Text="{Binding Time, Converter={StaticResource TotalTimeConverter}, ConverterParameter={Binding FirstUpdateTime}}"
-                                           FontSize="16"/>
-                            </Grid>
-                            <TextBlock FontSize="16">
+                                           FontSize="16"
+                                           Margin="3" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Background="LightBlue"
+                                        Margin="5,0,0,0">
+                                <Image Source="../Icon/time-26.png" />
+                                <TextBlock Text="{Binding Converter={StaticResource TotalTimeConverter}}"
+                                           VerticalAlignment="Center"
+                                           FontSize="16"
+                                           Margin="3" />
+                            </StackPanel>
+                            <TextBlock FontSize="16"
+                                       VerticalAlignment="Center"
+                                       Margin="5,0,0,0"
+                                       FontWeight="{Binding UserInfo.IsMe, Converter={StaticResource HighlightMeConverter}}">
                                 <Run Text="{Binding UserInfo.FirstName}" />
                                 <Run Text="{Binding UserInfo.LastName}" />
                             </TextBlock>

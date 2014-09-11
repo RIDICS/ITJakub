@@ -8,6 +8,8 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
     {
         private int m_lives;
         private int m_letterCount;
+        private bool m_win;
+        private DateTime m_time;
 
         public ProgressInfoViewModel()
         {
@@ -35,11 +37,29 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
+        public bool Win
+        {
+            get { return m_win; }
+            set
+            {
+                m_win = value;
+                RaisePropertyChanged();
+            }
+        }
+        
+        public DateTime Time
+        {
+            get { return m_time; }
+            set
+            {
+                m_time = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public AuthorInfo UserInfo { get; set; }
 
         public HangmanPictureViewModel PictureViewModel { get; private set; }
-
-        public DateTime Time { get; set; }
 
         public DateTime FirstUpdateTime { get; set; }
     }

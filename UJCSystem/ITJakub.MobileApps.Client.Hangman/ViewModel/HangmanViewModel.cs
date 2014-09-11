@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Hangman.DataService;
-using ITJakub.MobileApps.Client.Hangman.ViewModel.Comparer;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Data;
 
@@ -18,9 +17,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
     public class HangmanViewModel : ApplicationBaseViewModel
     {
         private readonly IHangmanDataService m_dataService;
-        private bool m_gameOver;
         private int m_lives;
-        private bool m_win;
         private bool m_opponentProgressVisible;
         private bool m_guessHistoryVisible;
         private int m_guessedLetterCount;
@@ -37,13 +34,12 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             HangmanPictureViewModel = new HangmanPictureViewModel();
             WordViewModel = new WordViewModel();
             KeyboardViewModel = new KeyboardViewModel();
+            GameOverViewModel = new GameOverViewModel();
 
             KeyboardViewModel.ClickCommand = new RelayCommand<char>(Guess);
         }
 
         public ObservableCollection<GuessViewModel> GuessHistory { get; set; }
-
-        public ObservableCollection<ProgressInfoViewModel> OpponentProgress { get; set; }
 
         public HangmanPictureViewModel HangmanPictureViewModel { get; set; }
 
@@ -51,15 +47,9 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         public KeyboardViewModel KeyboardViewModel { get; set; }
 
-        public bool GameOver
-        {
-            get { return m_gameOver; }
-            set
-            {
-                m_gameOver = value;
-                RaisePropertyChanged();
-            }
-        }
+        public GameOverViewModel GameOverViewModel { get; set; }
+
+        public ObservableCollection<ProgressInfoViewModel> OpponentProgress { get; set; }
 
         public int Lives
         {
@@ -78,16 +68,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             set
             {
                 m_guessedLetterCount = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool Win
-        {
-            get { return m_win; }
-            set
-            {
-                m_win = value;
                 RaisePropertyChanged();
             }
         }
@@ -180,15 +160,13 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private void ProcessTaskInfo(TaskInfoViewModel taskInfo)
         {
             WordViewModel.Word = taskInfo.Word;
-            GameOver = taskInfo.Lives == 0;
+            GameOverViewModel.Loss = taskInfo.Lives == 0;
             Lives = taskInfo.Lives;
             GuessedLetterCount = taskInfo.GuessedLetterCount;
 
             if (taskInfo.Win)
             {
-                // TODO show correct message
-                Win = true;
-                GameOver = true;
+                GameOverViewModel.Win = true;
             }
 
             if (taskInfo.IsNewWord)
@@ -202,7 +180,10 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             foreach (var progressInfo in progressUpdate)
             {
                 if (progressInfo.UserInfo.IsMe)
+                {
+                    GameOverViewModel.UpdateMyProgress(progressInfo);
                     continue;
+                }
 
                 var viewModel = OpponentProgress.SingleOrDefault(model => model.UserInfo.Id == progressInfo.UserInfo.Id);
 
@@ -210,23 +191,25 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 {
                     viewModel.Lives = progressInfo.Lives;
                     viewModel.LetterCount = progressInfo.LetterCount;
+                    viewModel.Win = progressInfo.Win;
                     viewModel.Time = progressInfo.Time;
                 }
                 else
                 {
                     progressInfo.FirstUpdateTime = progressInfo.Time;
                     OpponentProgress.Add(progressInfo);
+                    GameOverViewModel.AddPlayerViewModel(progressInfo);
                 }
             }
             if (progressUpdate.Count > 0)
             {
-                OpponentProgress = new ObservableCollection<ProgressInfoViewModel>(OpponentProgress.OrderBy(progress => progress, new PlayerProgressComparer()));
+                GameOverViewModel.UpdatePlayerPositions();
             }
         }
 
         private void Guess(char letter)
         {
-            if (GameOver)
+            if (GameOverViewModel.GameOver)
                 return;
 
             KeyboardViewModel.DeactivateKey(letter);
