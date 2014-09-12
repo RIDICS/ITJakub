@@ -39,6 +39,7 @@
     <Compile Include="Json\GoogleIdToken.cs" />
     <Compile Include="Json\GoogleToken.cs" />
     <Compile Include="Json\GoogleUserInfo.cs" />
+    <Compile Include="Json\LiveIdUserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

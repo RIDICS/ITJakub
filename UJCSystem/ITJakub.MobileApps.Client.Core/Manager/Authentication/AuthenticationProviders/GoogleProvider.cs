@@ -26,6 +26,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
 
         public string AccountName { get { return "Google"; } }
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.Google; } }
+
         public async Task<UserLoginSkeleton> LoginAsync()
         {
             var startUri = new Uri(string.Format(StartUri, ClientId, RedirectUri));

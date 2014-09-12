@@ -81,7 +81,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
                     lock (this)
                     {
                         remainingActions--;
-                        if (remainingActions == 0)
+                        if (remainingActions == 0 && m_timer != null)
                             m_timer = ThreadPoolTimer.CreateTimer(OnTimerTick, m_timeSpan);
                     }
                 });

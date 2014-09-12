@@ -14,6 +14,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         //Standard redirect uri for desktop/non-web based apps
         private const string RedirectUri = "https://www.facebook.com/connect/login_success.html";
 
+        public string AccountName
+        {
+            get { return "Facebook"; }
+        }
+
+        public AuthProvidersContract ProviderType
+        {
+            get { return AuthProvidersContract.Facebook; }
+        }
+
         public async Task<UserLoginSkeleton> LoginAsync()
         {
             var fbClient = new FacebookClient();
@@ -33,16 +43,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
             UserLoginSkeleton userLoginSkeleton = GetUserInfoFromResponse(fbClient, webAuthenticationResult);
 
             return userLoginSkeleton;
-        }
-
-        public string AccountName
-        {
-            get { return "Facebook"; }
-        }
-
-        public AuthProvidersContract ProviderType
-        {
-            get { return AuthProvidersContract.Facebook; }
         }
 
         private UserLoginSkeleton GetUserInfoFromResponse(FacebookClient fbClient, WebAuthenticationResult webAuthenticationResult)

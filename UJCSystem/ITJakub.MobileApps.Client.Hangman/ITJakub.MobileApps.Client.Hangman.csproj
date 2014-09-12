@@ -129,6 +129,7 @@
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
     <Compile Include="ViewModel\WordViewModel.cs" />
     <Compile Include="View\Converter\HighlightMeConverter.cs" />
+    <Compile Include="View\Converter\WinToColorConverter.cs" />
     <Compile Include="View\GameOverControl.xaml.cs">
       <DependentUpon>GameOverControl.xaml</DependentUpon>
     </Compile>
