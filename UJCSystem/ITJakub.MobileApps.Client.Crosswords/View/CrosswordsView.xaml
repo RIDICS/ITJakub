@@ -1,0 +1,17 @@
+﻿<UserControl
+    x:Class="ITJakub.MobileApps.Client.Crosswords.View.CrosswordsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="using:ITJakub.MobileApps.Client.Crosswords.ViewModel"
+    xmlns:view="using:ITJakub.MobileApps.Client.Crosswords.View"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    d:DataContext="{d:DesignInstance d:Type=viewModel:CrosswordsViewModel}">
+    
+    <Grid>
+        <view:SimpleCrosswordsControl DataContext="{Binding SimpleCrosswordsViewModel}"/>
+    </Grid>
+</UserControl>

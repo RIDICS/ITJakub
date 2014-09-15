@@ -47,7 +47,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     ApplicationType = applicationKeyValue.Key,
                     Icon = applicationKeyValue.Value.Icon,
                     ApplicationCategory = applicationKeyValue.Value.ApplicationCategory
-                }).GroupBy(appViewModel => appViewModel.ApplicationCategory).OrderBy(appViewModel => appViewModel.Key);
+                }).OrderBy(appViewModel => appViewModel.Name)
+                    .GroupBy(appViewModel => appViewModel.ApplicationCategory)
+                    .OrderBy(appViewModel => appViewModel.Key);
 
                 AppList = new ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>>(appList);
             });

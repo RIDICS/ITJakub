@@ -7,7 +7,6 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:login="using:ITJakub.MobileApps.Client.MainApp.View.Login"
-    xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     x:Name="PageRoot"
     DataContext="{Binding LoginViewModel, Source={StaticResource Locator}}"

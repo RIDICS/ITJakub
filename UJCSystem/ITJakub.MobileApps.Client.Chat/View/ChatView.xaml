@@ -64,7 +64,8 @@
                      Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         
         <Grid Row="1"
-              Margin="5">
+              Margin="5"
+              Width="350">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
