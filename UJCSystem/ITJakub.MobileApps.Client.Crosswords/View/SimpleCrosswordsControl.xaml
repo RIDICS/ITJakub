@@ -4,80 +4,146 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:crosswords="using:ITJakub.MobileApps.Client.Crosswords"
     xmlns:view="using:ITJakub.MobileApps.Client.Crosswords.View"
+    xmlns:viewModel="using:ITJakub.MobileApps.Client.Crosswords.ViewModel"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
-    d:DataContext="{d:DesignInstance d:Type=crosswords:SimpleCrosswordsViewModel}">
+    d:DataContext="{d:DesignInstance d:Type=viewModel:SimpleCrosswordsViewModel}">
     
     <UserControl.Resources>
-        <view:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter"/>
-        <view:AnswerPositionToBackgroundConverter x:Key="AnswerPositionToBackgroundConverter" />
+        <view:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter" />
+        <view:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter" />
+        <Color x:Key="AnswerCellBackgroundColor">SandyBrown</Color>
+        <Color x:Key="FilledCellBackgroundColor">DarkRed</Color>
     </UserControl.Resources>
     
-    <ItemsControl ItemsSource="{Binding Crossword}">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Button Padding="0"
-                        Margin="0,-3,0,-3"
-                        BorderBrush="Transparent"
-                        BorderThickness="0"
-                        FontWeight="Normal"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left">
-                    <Button.Flyout>
-                        <Flyout Placement="Bottom">
-                            <TextBox Text="{Binding Word, Mode=TwoWay}"
-                                     Width="200"
-                                     MaxLength="{Binding Letters.Count}"
-                                     KeyUp="WordTextBox_OnKeyUp"/>
-                        </Flyout>
-                    </Button.Flyout>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Crossword}"
+                          Margin="5"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Padding="0"
+                                Margin="0,-3,0,-3"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                FontWeight="Normal"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left">
+                            <Button.Flyout>
+                                <Flyout Placement="Bottom">
+                                    <TextBox Text="{Binding Word, Mode=TwoWay}"
+                                             Width="200"
+                                             MaxLength="{Binding Letters.Count}"
+                                             KeyUp="WordTextBox_OnKeyUp" />
+                                </Flyout>
+                            </Button.Flyout>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
                     
-                        <TextBlock Grid.Column="0"
-                                   FontSize="16"
-                                   Margin="20,0,10,0"
-                                   TextWrapping="WrapWholeWords"
-                                   TextTrimming="CharacterEllipsis"
-                                   MaxLines="2"
-                                   VerticalAlignment="Center"
-                                   Text="{Binding Label}" />
+                                <TextBlock Grid.Column="0"
+                                           FontSize="16"
+                                           Margin="20,0,10,0"
+                                           TextWrapping="WrapWholeWords"
+                                           TextTrimming="CharacterEllipsis"
+                                           MaxLines="2"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Label}" />
                     
-                        <ItemsControl Grid.Column="1"
-                                      Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=48}"
-                                      ItemsSource="{Binding Letters}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Width="50"
-                                            Height="50"
-                                            BorderBrush="Black"
-                                            BorderThickness="2"
-                                            Margin="-1"
-                                            Background="{Binding IsPartOfAnswer, Converter={StaticResource AnswerPositionToBackgroundConverter}}">
-                                        <TextBlock VerticalAlignment="Center"
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="20"
-                                                   FontFamily="Segoe Print"
-                                                   FontWeight="Bold"
-                                                   Text="{Binding Letter}" />
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Grid>
-                </Button>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+                                <ItemsControl Grid.Column="1"
+                                              Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=48}"
+                                              ItemsSource="{Binding Letters}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Width="50"
+                                                    Height="50"
+                                                    BorderBrush="Black"
+                                                    BorderThickness="2"
+                                                    Margin="-1"
+                                                    Background="{Binding IsPartOfAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource AnswerCellBackgroundColor}}">
+                                                <TextBlock VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"
+                                                           FontSize="20"
+                                                           FontFamily="Segoe Print"
+                                                           FontWeight="Bold"
+                                                           Text="{Binding Letter}" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        
+        <GridView Grid.Row="1"
+                  Height="200"
+                  ItemsSource="{Binding OpponentProgress}">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Border Height="170"
+                            Width="130"
+                            BorderThickness="2"
+                            BorderBrush="#22FFFFFF">
+                        <Grid>
+                            <ItemsControl ItemsSource="{Binding Rows}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ItemsControl ItemsSource="{Binding Filled}"
+                                                      Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=9}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Width="10"
+                                                            Height="10"
+                                                            BorderBrush="Black"
+                                                            BorderThickness="1"
+                                                            Margin="-0.5"
+                                                            Background="{Binding Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource FilledCellBackgroundColor}}">
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Bottom"
+                                       TextWrapping="NoWrap"
+                                       TextTrimming="CharacterEllipsis"
+                                       FontSize="14">
+                                <Run Text="{Binding UserInfo.FirstName}" />
+                                <Run Text="{Binding UserInfo.LastName}" />
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
 </UserControl>

@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         {
             m_dataService = dataService;
 
-            SimpleCrosswordsViewModel = new SimpleCrosswordsViewModel();
+            SimpleCrosswordsViewModel = new SimpleCrosswordsViewModel(dataService);
         }
 
         public SimpleCrosswordsViewModel SimpleCrosswordsViewModel { get; set; }
@@ -19,11 +19,15 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         public override void InitializeCommunication()
         {
             //TODO start polling
+            SetDataLoaded();
         }
 
         public override void SetTask(string data)
         {
-            SetDataLoaded();
+            m_dataService.SetTaskAndGetConfiguration(data, crosswordRowViewModels =>
+            {
+                SimpleCrosswordsViewModel.Crossword = crosswordRowViewModels;
+            });
         }
 
         public override void StopCommunication()
