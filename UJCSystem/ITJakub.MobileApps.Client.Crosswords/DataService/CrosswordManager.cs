@@ -1,21 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using ITJakub.MobileApps.Client.Crosswords.DataContract;
 using ITJakub.MobileApps.Client.Crosswords.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.Data;
+using ITJakub.MobileApps.Client.Shared.Enum;
 using Newtonsoft.Json;
 
 namespace ITJakub.MobileApps.Client.Crosswords.DataService
 {
     public class CrosswordManager
     {
+        private const string ProgressMessage = "ProgressMessage";
+        private const PollingInterval ProgressPollingInterval = PollingInterval.Medium;
+
         private readonly ISynchronizeCommunication m_applicationCommunication;
+        private readonly IPollingService m_pollingService;
         private CrosswordTask m_task;
+        private Action<List<ProgressUpdateViewModel>, Exception> m_pollingCallback;
 
         public CrosswordManager(ISynchronizeCommunication applicationCommunication)
         {
             m_applicationCommunication = applicationCommunication;
+            m_pollingService = m_applicationCommunication.GetPollingService();
         }
 
         public void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback)
@@ -35,9 +43,63 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
         public void FillWord(int rowIndex, string word, Action<bool, Exception> callback)
         {
             m_task.FillWord(rowIndex, word);
-            callback(m_task.IsRowFilledCorrectly(rowIndex), null);
+            var isFilledCorrectly = m_task.IsRowFilledCorrectly(rowIndex);
 
-            //TODO send synchronized object to server
+            callback(isFilledCorrectly, null);
+
+            var messageProgress = new ProgressInfoContract
+            {
+                FilledWord = word,
+                RowIndex = rowIndex,
+                IsCorrect = isFilledCorrectly
+            };
+
+            try
+            {
+                m_applicationCommunication.SendObjectAsync(ApplicationType.Crosswords, ProgressMessage, JsonConvert.SerializeObject(messageProgress));
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(false, exception);
+            }
+        }
+
+        public void StartPollingProgress(Action<List<ProgressUpdateViewModel>, Exception> callback)
+        {
+            m_pollingCallback = callback;
+            m_pollingService.RegisterForSynchronizedObjects(ProgressPollingInterval, ApplicationType.Crosswords, ProgressMessage, ProgressUpdate);
+        }
+
+        private void ProgressUpdate(IList<ObjectDetails> objectList, Exception exception)
+        {
+            if (exception != null)
+            {
+                m_pollingCallback(null, exception);
+                return;
+            }
+
+            var progressUpdateList = new List<ProgressUpdateViewModel>();
+            foreach (var objectDetails in objectList)
+            {
+                var updateContract = JsonConvert.DeserializeObject<ProgressInfoContract>(objectDetails.Data);
+                var update = new ProgressUpdateViewModel
+                {
+                    FilledWord = updateContract.FilledWord,
+                    RowIndex = updateContract.RowIndex,
+                    IsCorrect = updateContract.IsCorrect,
+                    UserInfo = objectDetails.Author
+                };
+                progressUpdateList.Add(update);
+
+                if (objectDetails.Author.IsMe)
+                    m_task.FillWord(updateContract.RowIndex, updateContract.FilledWord);
+            }
+            m_pollingCallback(progressUpdateList, null);
+        }
+
+        public void StopPolling()
+        {
+            m_pollingService.UnregisterForSynchronizedObjects(ProgressPollingInterval, ProgressUpdate);
         }
     }
 }

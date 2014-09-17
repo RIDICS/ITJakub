@@ -15,7 +15,9 @@
         <view:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter" />
         <view:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter" />
         <Color x:Key="AnswerCellBackgroundColor">SandyBrown</Color>
+        <Color x:Key="TransparentAnswerCellBackgroundColor">#BBF4A460</Color>
         <Color x:Key="FilledCellBackgroundColor">DarkRed</Color>
+        <Color x:Key="CorrectCellBackgroundColor">LimeGreen</Color>
     </UserControl.Resources>
     
     <Grid>
@@ -110,7 +112,8 @@
                                           VerticalAlignment="Center">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <ItemsControl ItemsSource="{Binding Filled}"
+                                        <ItemsControl x:Name="RowItemsControl"
+                                                      ItemsSource="{Binding Cells}"
                                                       Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=9}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
@@ -124,7 +127,10 @@
                                                             BorderBrush="Black"
                                                             BorderThickness="1"
                                                             Margin="-0.5"
-                                                            Background="{Binding Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource FilledCellBackgroundColor}}">
+                                                            Background="{Binding IsFilled, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource FilledCellBackgroundColor}}">
+                                                        <Grid Background="{Binding ElementName=RowItemsControl, Path=DataContext.IsCorrect, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource CorrectCellBackgroundColor}}">
+                                                            <Grid Background="{Binding IsPartOfAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource TransparentAnswerCellBackgroundColor}}"/>
+                                                        </Grid>
                                                     </Border>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>

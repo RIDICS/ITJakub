@@ -18,8 +18,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public override void InitializeCommunication()
         {
-            //TODO start polling
-            SetDataLoaded();
+            m_dataService.StartPollingProgress((list, exception) =>
+            {
+                if (exception != null)
+                    return;
+
+                SimpleCrosswordsViewModel.UpdateProgress(list);
+                SetDataLoaded();
+            });
         }
 
         public override void SetTask(string data)
@@ -32,7 +38,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public override void StopCommunication()
         {
-            //TODO stop polling
+            m_dataService.StopPolling();
         }
     }
 }

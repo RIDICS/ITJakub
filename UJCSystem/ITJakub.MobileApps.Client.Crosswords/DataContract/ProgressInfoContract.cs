@@ -7,8 +7,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataContract
         [JsonProperty("RowIndex")]
         public int RowIndex { get; set; }
 
-        [JsonProperty("FilledCharacters")]
-        public int FilledCharacters { get; set; }
+        [JsonProperty("FilledWord")]
+        public string FilledWord { get; set; }
 
         [JsonProperty("IsCorrect")]
         public bool IsCorrect { get; set; }

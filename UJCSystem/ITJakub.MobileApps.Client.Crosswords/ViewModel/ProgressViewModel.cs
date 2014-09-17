@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Shared.Data;
 
 namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
@@ -12,22 +13,24 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
     public class RowProgressViewModel
     {
-        private int m_answerPosition;
         private int m_filledLength;
 
-        public RowProgressViewModel(int wordLength, int startPosition, int answerColumn)
+        public RowProgressViewModel(int wordLength, int startPosition, int answerPosition)
         {
-            Filled = new ObservableCollection<bool>();
+            Cells = new CellViewModel[wordLength];
             StartPosition = startPosition;
-            m_answerPosition = answerColumn - startPosition;
-            
-            for (int i = 0; i < wordLength; i++)
-                Filled.Add(false);
+
+            for (int i = 0; i < Cells.Length; i++)
+            {
+                Cells[i] = new CellViewModel();
+            }
+
+            Cells[answerPosition].IsPartOfAnswer = true;
         }
 
-        public int StartPosition { get; set; }
+        public CellViewModel[] Cells { get; set; }
 
-        public ObservableCollection<bool> Filled { get; set; }
+        public int StartPosition { get; set; }
 
         public bool IsCorrect { get; set; }
 
@@ -38,9 +41,26 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             {
                 m_filledLength = value;
                 for (int i = 0; i < m_filledLength; i++)
-                    Filled[i] = true;
-                for (int i = m_filledLength; i < Filled.Count; i++)
-                    Filled[i] = false;
+                    Cells[i].IsFilled = true;
+                for (int i = m_filledLength; i < Cells.Length; i++)
+                    Cells[i].IsFilled = false;
+            }
+        }
+
+        public class CellViewModel : ViewModelBase
+        {
+            private bool m_isFilled;
+
+            public bool IsPartOfAnswer { get; set; }
+
+            public bool IsFilled
+            {
+                get { return m_isFilled; }
+                set
+                {
+                    m_isFilled = value;
+                    RaisePropertyChanged();
+                }
             }
         }
     }

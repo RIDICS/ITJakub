@@ -7,14 +7,13 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     public class CrosswordRowViewModel : ViewModelBase
     {
         private string m_word;
-        private readonly int m_answerPosition;
 
         public CrosswordRowViewModel(string label, int wordLength, int startPosition, int answerColumn, int rowIndex)
         {
             Label = label;
             StartPosition = startPosition;
             RowIndex = rowIndex;
-            m_answerPosition = answerColumn - startPosition;
+            AnswerPosition = answerColumn - startPosition;
             CreateCells(wordLength);
         }
 
@@ -32,13 +31,20 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             set
             {
                 m_word = value.ToUpper();
-                RaisePropertyChanged();
                 UpdateCells(m_word);
                 FillWordAction(this);
             }
         }
 
         public Action<CrosswordRowViewModel> FillWordAction { get; set; }
+        
+        public int AnswerPosition { get; private set; }
+
+        public void UpdateWord(string word)
+        {
+            m_word = word.ToUpper();
+            UpdateCells(m_word);
+        }
 
         private void UpdateCells(string word)
         {
@@ -65,7 +71,24 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 Letters.Add(new CellViewModel());
             }
             
-            Letters[m_answerPosition].IsPartOfAnswer = true;
+            Letters[AnswerPosition].IsPartOfAnswer = true;
+        }
+
+        public class CellViewModel : ViewModelBase
+        {
+            private char m_letter;
+
+            public char Letter
+            {
+                get { return m_letter; }
+                set
+                {
+                    m_letter = value;
+                    RaisePropertyChanged();
+                }
+            }
+
+            public bool IsPartOfAnswer { get; set; }
         }
     }
 }

@@ -115,18 +115,18 @@
     <Compile Include="DataContract\ProgressInfoContract.cs" />
     <Compile Include="DataService\CrosswordManager.cs" />
     <Compile Include="DataService\CrosswordTask.cs" />
-    <Compile Include="ViewModel\CellViewModel.cs" />
     <Compile Include="ViewModel\CrosswordRowViewModel.cs" />
+    <Compile Include="ViewModel\ProgressUpdateViewModel.cs" />
     <Compile Include="ViewModel\ProgressViewModel.cs" />
     <Compile Include="ViewModel\SimpleCrosswordsViewModel.cs" />
     <Compile Include="ViewModel\CrosswordsViewModel.cs" />
     <Compile Include="DataService\ICrosswordsDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\BooleanToBackgroundConverter.cs" />
+    <Compile Include="View\Converter\BooleanToBackgroundConverter.cs" />
     <Compile Include="View\CrosswordsView.xaml.cs">
       <DependentUpon>CrosswordsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\StartPositionToMarginConverter.cs" />
+    <Compile Include="View\Converter\StartPositionToMarginConverter.cs" />
     <Compile Include="View\SimpleCrosswordsControl.xaml.cs">
       <DependentUpon>SimpleCrosswordsControl.xaml</DependentUpon>
     </Compile>
