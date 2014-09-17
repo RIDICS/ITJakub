@@ -12,12 +12,19 @@
     d:DataContext="{d:DesignInstance d:Type=viewModel:SimpleCrosswordsViewModel}">
     
     <UserControl.Resources>
-        <view:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter" />
-        <view:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter" />
-        <Color x:Key="AnswerCellBackgroundColor">SandyBrown</Color>
-        <Color x:Key="TransparentAnswerCellBackgroundColor">#BBF4A460</Color>
-        <Color x:Key="FilledCellBackgroundColor">DarkRed</Color>
-        <Color x:Key="CorrectCellBackgroundColor">LimeGreen</Color>
+        <ResourceDictionary>
+            <view:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter" />
+            <view:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter" />
+            <Color x:Key="AnswerCellBackgroundColor">SandyBrown</Color>
+            <Color x:Key="TransparentAnswerCellBackgroundColor">#BBF4A460</Color>
+            <Color x:Key="FilledCellBackgroundColor">DarkRed</Color>
+            <Color x:Key="CorrectCellBackgroundColor">LimeGreen</Color>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+        
     </UserControl.Resources>
     
     <Grid>
@@ -151,5 +158,9 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
+        
+        <view:CrosswordTextBoxControl Grid.Row="0" Width="200" Height="40"
+                                      Style="{StaticResource CrosswordTextBoxStyle}"
+                                      VerticalAlignment="Bottom" />
     </Grid>
 </UserControl>

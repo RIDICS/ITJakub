@@ -127,6 +127,7 @@
       <DependentUpon>CrosswordsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Converter\StartPositionToMarginConverter.cs" />
+    <Compile Include="View\CrosswordTextBoxControl.cs" />
     <Compile Include="View\SimpleCrosswordsControl.xaml.cs">
       <DependentUpon>SimpleCrosswordsControl.xaml</DependentUpon>
     </Compile>
@@ -153,6 +154,10 @@
     <Content Include="Icon\license.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\CrosswordsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
