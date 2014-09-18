@@ -25,7 +25,7 @@
 *.unsuccessfulbuild
 *.[Dd]otSettings
 ipch/
-obj/
+[Oo]bj/
 [Bb]in
 [Dd]ebug*/
 [Rr]elease*/
