@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Net.Mime;
 using System.Web;
 using System.Web.Mvc;
 
@@ -6,6 +7,7 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public class UploadController : Controller
     {
+        private readonly ItJakubServiceClient m_serviceClient;
         // GET: Upload
          [AllowAnonymous]
         public ActionResult Upload()
@@ -16,21 +18,27 @@ namespace ITJakub.Web.Hub.Controllers
         //Dropzone upload method
         public ActionResult UploadFile()
         {
-            foreach (string fileName in Request.Files)
+            if (Request.Files.Count == 1)
             {
-                HttpPostedFileBase file = Request.Files[fileName];
-                if (file == null || file.ContentLength == 0) continue;
+                HttpPostedFileBase file = Request.Files[0];
+                if (file != null && file.ContentLength != 0)
+                {
+                    m_serviceClient.ProcessUploadedFile(file.FileName, file.InputStream);
+                    return Json(new {});
+                }
+            }
 
-                string pathString = Path.Combine("D:\\", "UploadedFiles");
+            return Json(new {Error="Some error occured in uploading file"});
+
+
+                //string pathString = Path.Combine("D:\\", "UploadedFiles");
 
                 
-                if (!Directory.Exists(pathString))
-                    Directory.CreateDirectory(pathString);
+                //if (!Directory.Exists(pathString))
+                //    Directory.CreateDirectory(pathString);
 
-                string path = string.Format("{0}\\{1}", pathString, file.FileName);
-                file.SaveAs(path);
-            }
-            return Json(new {});
+                //string path = string.Format("{0}\\{1}", pathString, file.FileName);
+;
         }
 
         public ActionResult UploadFrontImage()

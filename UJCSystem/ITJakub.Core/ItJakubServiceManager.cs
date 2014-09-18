@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core.Database;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Xml.XMLOperations;
 
 namespace ITJakub.Core
@@ -119,6 +121,31 @@ namespace ITJakub.Core
         public SearchResult GetBookById(string id)
         {
             return m_searchClient.GetBookById(id);
+        }
+
+        public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ProcessedFileInfoContract ProcessUploadedFile(string filename, Stream dataStream)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SaveFrontImageForFile(string fileGuid, Stream dataStream)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SaveImagesForFile(string fileGuid, Stream dataStream)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

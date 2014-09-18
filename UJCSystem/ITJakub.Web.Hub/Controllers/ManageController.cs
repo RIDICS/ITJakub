@@ -60,15 +60,6 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         //
-        // GET: /Manage/RemoveLogin
-        public ActionResult RemoveLogin()
-        {
-            var linkedAccounts = UserManager.GetLogins(User.Identity.GetUserId());
-            ViewBag.ShowRemoveButton = HasPassword() || linkedAccounts.Count > 1;
-            return View(linkedAccounts);
-        }
-
-        //
         // POST: /Manage/RemoveLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
