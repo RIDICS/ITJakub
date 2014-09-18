@@ -1,21 +1,19 @@
 ﻿using System;
-using Windows.UI;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 
 namespace ITJakub.MobileApps.Client.Crosswords.View.Converter
 {
-    public class BooleanToBackgroundConverter : IValueConverter
+    public class LengthToWidthConverter :IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (targetType != typeof(Brush))
-                throw new InvalidOperationException("The target must be a Brush");
+            if (targetType != typeof(double))
+                throw new InvalidOperationException("The target must be a double");
 
-            var isTrue = (bool) value;
-            var color = parameter != null ? (Color) parameter : Colors.SandyBrown;
+            var integer = (int) value;
+            var multiplier = int.Parse(parameter.ToString());
 
-            return isTrue ? new SolidColorBrush(color) : new SolidColorBrush();
+            return integer*multiplier + 10;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

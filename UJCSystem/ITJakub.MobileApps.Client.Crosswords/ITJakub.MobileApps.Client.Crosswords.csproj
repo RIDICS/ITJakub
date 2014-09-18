@@ -123,6 +123,7 @@
     <Compile Include="DataService\ICrosswordsDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\Converter\BooleanToBackgroundConverter.cs" />
+    <Compile Include="View\Converter\LengthToWidthConverter.cs" />
     <Compile Include="View\CrosswordsView.xaml.cs">
       <DependentUpon>CrosswordsView.xaml</DependentUpon>
     </Compile>
@@ -154,7 +155,7 @@
     <Content Include="Icon\license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="View\Themes\Generic.xaml">
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

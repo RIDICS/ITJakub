@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-namespace ITJakub.MobileApps.Client.Crosswords.View
+namespace ITJakub.MobileApps.Client.Crosswords.View.Converter
 {
     public class StartPositionToMarginConverter : IValueConverter
     {

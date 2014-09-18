@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="using:ITJakub.MobileApps.Client.Crosswords.View"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Crosswords.ViewModel"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Crosswords.View.Converter"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
@@ -13,18 +14,14 @@
     
     <UserControl.Resources>
         <ResourceDictionary>
-            <view:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter" />
-            <view:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter" />
+            <converter:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter" />
+            <converter:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter" />
+            <converter:LengthToWidthConverter x:Key="LengthToWidthConverter" />
             <Color x:Key="AnswerCellBackgroundColor">SandyBrown</Color>
             <Color x:Key="TransparentAnswerCellBackgroundColor">#BBF4A460</Color>
             <Color x:Key="FilledCellBackgroundColor">DarkRed</Color>
             <Color x:Key="CorrectCellBackgroundColor">LimeGreen</Color>
-            
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Themes/Generic.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-        
+        </ResourceDictionary>        
     </UserControl.Resources>
     
     <Grid>
@@ -87,16 +84,27 @@
                                                     BorderThickness="2"
                                                     Margin="-1"
                                                     Background="{Binding IsPartOfAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource AnswerCellBackgroundColor}}">
-                                                <TextBlock VerticalAlignment="Center"
+                                                <!--<TextBlock VerticalAlignment="Center"
                                                            HorizontalAlignment="Center"
                                                            FontSize="20"
                                                            FontFamily="Segoe Print"
                                                            FontWeight="Bold"
-                                                           Text="{Binding Letter}" />
+                                                           Text="{Binding Letter}" />-->
                                             </Border>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
+                                <Grid Grid.Column="1"
+                                      Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=48}">
+                                    <view:CrosswordTextBoxControl FontSize="20"
+                                                                  Height="50"
+                                                                  Foreground="White"
+                                                                  FontFamily="Segoe Print"
+                                                                  FontWeight="Bold"
+                                                                  Margin="0,-1,0,-1"
+                                                                  MaxLength="{Binding Letters.Count}"
+                                                                  Width="{Binding Letters.Count, Converter={StaticResource LengthToWidthConverter}, ConverterParameter=48}" />
+                                </Grid>
                             </Grid>
                         </Button>
                     </DataTemplate>
@@ -158,9 +166,6 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
-        
-        <view:CrosswordTextBoxControl Grid.Row="0" Width="200" Height="40"
-                                      Style="{StaticResource CrosswordTextBoxStyle}"
-                                      VerticalAlignment="Bottom" />
+
     </Grid>
 </UserControl>

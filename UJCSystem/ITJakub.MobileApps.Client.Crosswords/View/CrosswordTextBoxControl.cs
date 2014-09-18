@@ -1,7 +1,9 @@
-﻿using Windows.UI.Xaml;
+﻿using Windows.System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 // The Templated Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234235
+using Windows.UI.Xaml.Input;
 
 namespace ITJakub.MobileApps.Client.Crosswords.View
 {
@@ -9,18 +11,28 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
     {
         public CrosswordTextBoxControl()
         {
-            //DefaultStyleKey = typeof(CrosswordTextBoxControl);
+            DefaultStyleKey = typeof(CrosswordTextBoxControl);
             SelectionChanged += OnSelectionChanged;
         }
 
         private void OnSelectionChanged(object sender, RoutedEventArgs e)
         {
-            CursorMargin = new Thickness(20 * SelectionStart, 0, 0, 0);
+            CursorMargin = new Thickness((Height-2) * SelectionStart - 1, 0, 0, 0);
+        }
+
+        protected override void OnKeyDown(KeyRoutedEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e.Key == VirtualKey.Insert)
+            {
+                e.Handled = true;
+                return;
+            }
         }
 
         public Thickness CursorMargin
         {
-            get { return (Thickness)GetValue(CursorMarginProperty); }
+            get { return (Thickness) GetValue(CursorMarginProperty); }
             set { SetValue(CursorMarginProperty, value); }
         }
 
