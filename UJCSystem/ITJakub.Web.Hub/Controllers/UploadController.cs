@@ -23,22 +23,12 @@ namespace ITJakub.Web.Hub.Controllers
                 HttpPostedFileBase file = Request.Files[0];
                 if (file != null && file.ContentLength != 0)
                 {
-                    m_serviceClient.ProcessUploadedFile(file.FileName, file.InputStream);
+                    m_serviceClient.ProcessUploadedFile(file.InputStream);
                     return Json(new {});
                 }
             }
 
-            return Json(new {Error="Some error occured in uploading file"});
-
-
-                //string pathString = Path.Combine("D:\\", "UploadedFiles");
-
-                
-                //if (!Directory.Exists(pathString))
-                //    Directory.CreateDirectory(pathString);
-
-                //string path = string.Format("{0}\\{1}", pathString, file.FileName);
-;
+            return Json(new {Error="Some error occured in uploading file"});;
         }
 
         public ActionResult UploadFrontImage()

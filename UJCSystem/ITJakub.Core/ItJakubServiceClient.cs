@@ -257,11 +257,11 @@ namespace ITJakub.Core
             }
         }
 
-        public ProcessedFileInfoContract ProcessUploadedFile(string filename, Stream dataStream)
+        public ProcessedFileInfoContract ProcessUploadedFile(Stream dataStream)
         {
             try
             {
-                return Channel.ProcessUploadedFile(filename, dataStream);
+                return Channel.ProcessUploadedFile(dataStream);
             }
             catch (CommunicationException ex)
             {
@@ -277,11 +277,11 @@ namespace ITJakub.Core
             }
         }
 
-        public void SaveFrontImageForFile(string fileGuid, Stream dataStream)
+        public void SaveFrontImageForFile(Stream dataStream)
         {
             try
             {
-                Channel.SaveFrontImageForFile(fileGuid, dataStream);
+                Channel.SaveFrontImageForFile(dataStream);
             }
             catch (CommunicationException ex)
             {
@@ -297,11 +297,11 @@ namespace ITJakub.Core
             }
         }
 
-        public void SaveImagesForFile(string fileGuid, Stream dataStream)
+        public void SaveImagesForFile(Stream dataStream)
         {
             try
             {
-                Channel.SaveImagesForFile(fileGuid, dataStream);
+                Channel.SaveImagesForFile(dataStream);
             }
             catch (CommunicationException ex)
             {

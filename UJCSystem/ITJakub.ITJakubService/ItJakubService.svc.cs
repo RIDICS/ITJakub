@@ -6,6 +6,7 @@ using ITJakub.Contracts;
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core;
+using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService
@@ -84,19 +85,19 @@ namespace ITJakub.ITJakubService
             m_serviceManager.LoginUser(providerContract, providerToken, email);
         }
 
-        public ProcessedFileInfoContract ProcessUploadedFile(string filename, Stream dataStream)
+        public ProcessedFileInfoContract ProcessUploadedFile(Stream dataStream)
         {
-            return m_serviceManager.ProcessUploadedFile(filename, dataStream);
+            return m_serviceManager.ProcessUploadedFile(dataStream);
         }
 
-        public void SaveFrontImageForFile(string fileGuid, Stream dataStream)
+        public void SaveFrontImageForFile(Stream dataStream)
         {
-            m_serviceManager.SaveFrontImageForFile(fileGuid, dataStream);
+            m_serviceManager.SaveFrontImageForFile(dataStream);
         }
 
-        public void SaveImagesForFile(string fileGuid, Stream dataStream)
+        public void SaveImagesForFile(Stream dataStream)
         {
-            m_serviceManager.SaveImagesForFile(fileGuid, dataStream);
+            m_serviceManager.SaveImagesForFile(dataStream);
         }
     }
 

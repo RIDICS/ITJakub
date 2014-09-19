@@ -52,13 +52,13 @@ namespace ITJakub.ITJakubService.DataContracts
         void LoginUser(AuthProvidersContract providerContract, string providerToken, string email);
 
         [OperationContract]
-        ProcessedFileInfoContract ProcessUploadedFile(string filename, Stream dataStream);
+        ProcessedFileInfoContract ProcessUploadedFile(Stream dataStream);
 
         [OperationContract]
-        void SaveFrontImageForFile(string fileGuid, Stream dataStream);
+        void SaveFrontImageForFile(Stream dataStream);
 
         [OperationContract]
-        void SaveImagesForFile(string fileGuid, Stream dataStream);
+        void SaveImagesForFile(Stream dataStream);
 
     }
 }
