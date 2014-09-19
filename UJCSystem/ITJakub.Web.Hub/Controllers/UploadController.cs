@@ -7,7 +7,7 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public class UploadController : Controller
     {
-        private readonly ItJakubServiceClient m_serviceClient;
+        private readonly ItJakubServiceClient m_serviceClient=new ItJakubServiceClient();
         // GET: Upload
          [AllowAnonymous]
         public ActionResult Upload()
