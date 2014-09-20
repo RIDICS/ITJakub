@@ -23,8 +23,8 @@ namespace ITJakub.Web.Hub.Controllers
                 HttpPostedFileBase file = Request.Files[0];
                 if (file != null && file.ContentLength != 0)
                 {
-                    m_serviceClient.ProcessUploadedFile(file.InputStream);
-                    return Json(new {});
+                    var fileInfo=m_serviceClient.ProcessUploadedFile(file.InputStream);
+                    return Json(new {FileInfo = fileInfo});
                 }
             }
 

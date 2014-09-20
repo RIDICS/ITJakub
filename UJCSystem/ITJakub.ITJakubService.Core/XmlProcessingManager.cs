@@ -1,6 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService.Core
@@ -8,13 +9,25 @@ namespace ITJakub.ITJakubService.Core
     public class XmlProcessingManager
     {
         private const string HeaderElement = "teiHeader";
+        private readonly XNamespace m_teiNamespace = "http://www.tei-c.org/ns/1.0";
 
-        public ProcessedFileInfoContract GetInfoFromHeader(XmlDocument header)
+        public ProcessedFileInfoContract GetInfoFromHeader(XDocument header)
         {
-            throw new NotImplementedException();
+            return new ProcessedFileInfoContract
+            {
+                Guid = header.Root.Element(m_teiNamespace + "fileDesc").Attribute("n").Value,
+                Name = string.Join(" ", header.Root.Descendants(m_teiNamespace + "title").First()
+                    .Descendants(m_teiNamespace + "w")
+                    .Select(x => x.Value)
+                    .ToArray()),
+                Author = string.Join(" ", header.Root.Descendants(m_teiNamespace + "author").First()
+                    .Descendants(m_teiNamespace + "w")
+                    .Select(x => x.Value)
+                    .ToArray())
+            };
         }
 
-        public XmlDocument ParseHeader(FileStream fileStream)
+        public XDocument ParseHeader(FileStream fileStream)
         {
             var xmlTextReader = new XmlTextReader(fileStream)
             {
@@ -27,9 +40,7 @@ namespace ITJakub.ITJakubService.Core
                     xmlTextReader.LocalName == HeaderElement &&
                     xmlTextReader.IsStartElement())
                 {
-                    var header = new XmlDocument();
-                    header.LoadXml(xmlTextReader.ReadOuterXml());
-                    return header;
+                    return XDocument.Parse(xmlTextReader.ReadOuterXml());
                 }
             }
             return null;
