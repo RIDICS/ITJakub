@@ -337,6 +337,7 @@
     <Content Include="Content\ITJakub.PluginMenu.css.map">
       <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
     </Content>
+    <Content Include="Scripts\dropzones.js" />
     <Content Include="Scripts\dropzone\css\basic.css" />
     <Content Include="Scripts\dropzone\css\dropzone.css" />
     <Content Include="Scripts\dropzone\css\stylus\dropzone.styl" />

@@ -2,13 +2,16 @@
 @{
     ViewBag.Title = "Indexs";
 }
-
+@section scripts{
+    @Scripts.Render("~/Scripts/dropzones.js")
+}
+                
 <h2>Nahrání díla</h2>
 <ol class="numbered">
     <li>
        <p> Pro nahrání díla klikněte na formulář a proveďtě výběr nebo je na formlulář přetáhněte.</p>
 
-        <form action="~/Upload/UploadFile" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneFileForm">
+        <form action="~/Upload/UploadFile" method="post" enctype="multipart/form-data" id="dropzoneFileForm">
             <div class="fallback">
                 <input name="file" type="file" />
                 <input type="submit" value="Upload" />
@@ -18,7 +21,7 @@
     <li>
         <p>Nahrajte obrázek úvodní strany díla.</p>
 
-        <form action="~/Upload/UploadFrontImage" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneFrontImageForm">
+        <form action="~/Upload/UploadFrontImage" method="post" enctype="multipart/form-data" id="dropzoneFrontImageForm">
             <div class="fallback">
                 <input name="file" type="file"/>
                 <input type="submit" value="Upload" />
@@ -28,7 +31,7 @@
     <li>
         <p>Nahrajte ostatní obrázky díla.</p>
 
-        <form action="~/Upload/UploadImages" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneImagesForm">
+        <form action="~/Upload/UploadImages" method="post" enctype="multipart/form-data" id="dropzoneImagesForm">
             <div class="fallback">
                 <input name="file" type="file" multiple />
                 <input type="submit" value="Upload" />
