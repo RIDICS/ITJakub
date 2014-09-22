@@ -21,7 +21,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public string Label { get; private set; }
 
-        public ObservableCollection<CellViewModel> Letters { get; private set; }
+        public ObservableCollection<CellViewModel> Cells { get; private set; }
 
         public int StartPosition { get; private set; }
 
@@ -31,8 +31,9 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             set
             {
                 m_word = value.ToUpper();
-                UpdateCells(m_word);
+                //UpdateCells(m_word);
                 FillWordAction(this);
+                RaisePropertyChanged();
             }
         }
 
@@ -43,50 +44,51 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         public void UpdateWord(string word)
         {
             m_word = word.ToUpper();
-            UpdateCells(m_word);
+            RaisePropertyChanged(() => Word);
+            //UpdateCells(m_word);
         }
 
-        private void UpdateCells(string word)
-        {
-            if (word.Length > Letters.Count)
-                return;
+        //private void UpdateCells(string word)
+        //{
+        //    if (word.Length > Cells.Count)
+        //        return;
 
-            var newLetters = word.ToCharArray();
+        //    //var newLetters = word.ToCharArray();
 
-            for (int i = 0; i < newLetters.Length; i++)
-            {
-                Letters[i].Letter = newLetters[i];
-            }
-            for (int i = word.Length; i < Letters.Count; i++)
-            {
-                Letters[i].Letter = ' ';
-            }
-        }
+        //    //for (int i = 0; i < newLetters.Length; i++)
+        //    //{
+        //    //    Cells[i].Letter = newLetters[i];
+        //    //}
+        //    //for (int i = word.Length; i < Cells.Count; i++)
+        //    //{
+        //    //    Cells[i].Letter = ' ';
+        //    //}
+        //}
 
         private void CreateCells(int cellCount)
         {
-            Letters = new ObservableCollection<CellViewModel>();
+            Cells = new ObservableCollection<CellViewModel>();
             for (int i = 0; i < cellCount; i++)
             {
-                Letters.Add(new CellViewModel());
+                Cells.Add(new CellViewModel());
             }
             
-            Letters[AnswerPosition].IsPartOfAnswer = true;
+            Cells[AnswerPosition].IsPartOfAnswer = true;
         }
 
         public class CellViewModel : ViewModelBase
         {
-            private char m_letter;
+            //private char m_letter;
 
-            public char Letter
-            {
-                get { return m_letter; }
-                set
-                {
-                    m_letter = value;
-                    RaisePropertyChanged();
-                }
-            }
+            //public char Letter
+            //{
+            //    get { return m_letter; }
+            //    set
+            //    {
+            //        m_letter = value;
+            //        RaisePropertyChanged();
+            //    }
+            //}
 
             public bool IsPartOfAnswer { get; set; }
         }

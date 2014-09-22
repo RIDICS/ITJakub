@@ -4,6 +4,7 @@
     xmlns:view="using:ITJakub.MobileApps.Client.Crosswords.View">
 
     <Style TargetType="view:CrosswordTextBoxControl">
+        <Setter Property="Height" Value="20" />
         <Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}" />
         <Setter Property="MinHeight" Value="{ThemeResource TextControlThemeMinHeight}" />
         <Setter Property="Foreground" Value="{ThemeResource TextBoxForegroundThemeBrush}" />

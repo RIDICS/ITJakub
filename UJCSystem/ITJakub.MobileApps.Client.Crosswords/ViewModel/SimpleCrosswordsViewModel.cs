@@ -76,7 +76,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     if (viewModel == null)
                     {
                         var rowProgressViewModels = Crossword.Select(model =>
-                            new RowProgressViewModel(model.Letters.Count, model.StartPosition, model.AnswerPosition));
+                            new RowProgressViewModel(model.Cells.Count, model.StartPosition, model.AnswerPosition));
                         
                         viewModel = new ProgressViewModel
                         {

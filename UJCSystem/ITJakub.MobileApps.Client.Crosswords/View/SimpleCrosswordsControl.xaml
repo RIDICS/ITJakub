@@ -45,14 +45,14 @@
                                 FontWeight="Normal"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Left">
-                            <Button.Flyout>
+                            <!--<Button.Flyout>
                                 <Flyout Placement="Bottom">
                                     <TextBox Text="{Binding Word, Mode=TwoWay}"
                                              Width="200"
-                                             MaxLength="{Binding Letters.Count}"
+                                             MaxLength="{Binding Cells.Count}"
                                              KeyUp="WordTextBox_OnKeyUp" />
                                 </Flyout>
-                            </Button.Flyout>
+                            </Button.Flyout>-->
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="200" />
@@ -70,7 +70,7 @@
                     
                                 <ItemsControl Grid.Column="1"
                                               Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=48}"
-                                              ItemsSource="{Binding Letters}">
+                                              ItemsSource="{Binding Cells}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Orientation="Horizontal" />
@@ -83,15 +83,8 @@
                                                     BorderBrush="Black"
                                                     BorderThickness="2"
                                                     Margin="-1"
-                                                    Background="{Binding IsPartOfAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource AnswerCellBackgroundColor}}">
-                                                <!--<TextBlock VerticalAlignment="Center"
-                                                           HorizontalAlignment="Center"
-                                                           FontSize="20"
-                                                           FontFamily="Segoe Print"
-                                                           FontWeight="Bold"
-                                                           Text="{Binding Letter}" />-->
-                                            </Border>
-                                        </DataTemplate>
+                                                    Background="{Binding IsPartOfAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource AnswerCellBackgroundColor}}" />
+                                    </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                                 <Grid Grid.Column="1"
@@ -102,8 +95,9 @@
                                                                   FontFamily="Segoe Print"
                                                                   FontWeight="Bold"
                                                                   Margin="0,-1,0,-1"
-                                                                  MaxLength="{Binding Letters.Count}"
-                                                                  Width="{Binding Letters.Count, Converter={StaticResource LengthToWidthConverter}, ConverterParameter=48}" />
+                                                                  MaxLength="{Binding Cells.Count}"
+                                                                  Width="{Binding Cells.Count, Converter={StaticResource LengthToWidthConverter}, ConverterParameter=48}"
+                                                                  Text="{Binding Word, Mode=TwoWay}" />
                                 </Grid>
                             </Grid>
                         </Button>
