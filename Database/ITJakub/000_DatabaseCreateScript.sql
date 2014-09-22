@@ -81,6 +81,16 @@ BEGIN TRAN
 
 
 
+    CREATE TABLE [Image]
+    (
+	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Image(Id)] PRIMARY KEY CLUSTERED,
+	   [FileName] varchar(255) NOT NULL,
+	   [ImageType] smallint NOT NULL,
+	   [Book] bigint NOT NULL CONSTRAINT [FK_Image(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book](Id)
+    )
+
+
+
 
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)
