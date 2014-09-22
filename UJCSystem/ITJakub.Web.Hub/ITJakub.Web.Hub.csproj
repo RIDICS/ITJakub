@@ -48,10 +48,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net1.2.12\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -178,6 +182,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ItJakubServiceClient.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -332,6 +337,7 @@
     <Content Include="Content\ITJakub.PluginMenu.css.map">
       <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
     </Content>
+    <Content Include="Scripts\dropzones.js" />
     <Content Include="Scripts\dropzone\css\basic.css" />
     <Content Include="Scripts\dropzone\css\dropzone.css" />
     <Content Include="Scripts\dropzone\css\stylus\dropzone.styl" />
@@ -420,6 +426,16 @@
     <TypeScriptCompile Include="Scripts\itjakub.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">
+      <Project>{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}</Project>
+      <Name>ITJakub.ITJakubService.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
+      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
+      <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

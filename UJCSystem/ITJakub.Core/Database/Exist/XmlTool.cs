@@ -146,6 +146,7 @@ namespace ITJakub.Core.Database.Exist
 
         public static string ParseTeiTitle(XmlNode titleNode, string titleNodeName, XmlNamespaceManager nManager)
         {
+            if(titleNode == null) return null;
             XmlNode teiTitleNod = titleNode.SelectSingleNode(string.Format(".//tei:{0}", titleNodeName), nManager);//TODO multiple titles possible ?
             if (teiTitleNod != null)
             {

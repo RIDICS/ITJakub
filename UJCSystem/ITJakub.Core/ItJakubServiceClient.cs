@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.ServiceModel;
-using ITJakub.Contracts;
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
+using ITJakub.ITJakubService.DataContracts;
 using log4net;
 
 namespace ITJakub.Core
@@ -212,6 +213,106 @@ namespace ITJakub.Core
             {
                 if (m_log.IsErrorEnabled)
                     m_log.ErrorFormat("GetBookById timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
+        {
+            try
+            {
+                Channel.CreateUser(providerContract, providerToken, userDetail);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("CreateUser failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("CreateUser timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public void LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
+        {
+            try
+            {
+                Channel.LoginUser(providerContract, providerToken, email);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("LoginUser failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("LoginUser timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public ProcessedFileInfoContract ProcessUploadedFile(Stream dataStream)
+        {
+            try
+            {
+                return Channel.ProcessUploadedFile(dataStream);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("ProcessUploadedFile failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("ProcessUploadedFile timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public void SaveFrontImageForFile(Stream dataStream)
+        {
+            try
+            {
+                Channel.SaveFrontImageForFile(dataStream);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SaveFrontImageForFile failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SaveFrontImageForFile timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public void SaveImagesForFile(Stream dataStream)
+        {
+            try
+            {
+                Channel.SaveImagesForFile(dataStream);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SaveImagesForFile failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SaveImagesForFile timeouted with: {0}", ex);
                 throw;
             }
         }

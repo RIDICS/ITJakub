@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.ServiceModel;
 using Castle.Windsor;
 using ITJakub.Contracts;
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core;
+using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService
@@ -75,12 +77,27 @@ namespace ITJakub.ITJakubService
 
         public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
         {
-            throw new System.NotImplementedException();
+            m_serviceManager.CreateUser(providerContract, providerToken, userDetail);
         }
 
         public void LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
         {
-            throw new System.NotImplementedException();
+            m_serviceManager.LoginUser(providerContract, providerToken, email);
+        }
+
+        public ProcessedFileInfoContract ProcessUploadedFile(Stream dataStream)
+        {
+            return m_serviceManager.ProcessUploadedFile(dataStream);
+        }
+
+        public void SaveFrontImageForFile(Stream dataStream)
+        {
+            m_serviceManager.SaveFrontImageForFile(dataStream);
+        }
+
+        public void SaveImagesForFile(Stream dataStream)
+        {
+            m_serviceManager.SaveImagesForFile(dataStream);
         }
     }
 

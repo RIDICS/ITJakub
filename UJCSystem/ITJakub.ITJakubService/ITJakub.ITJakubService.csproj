@@ -101,6 +101,7 @@
     <Compile Include="ITJakubService.svc.cs">
       <DependentUpon>ITJakubService.svc</DependentUpon>
     </Compile>
+    <Compile Include="ItJakubServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -108,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="ITJakub.ITJakubService.Container.Config" />
+    <EmbeddedResource Include="ITJakub.ITJakubService.Container.Config" />
     <Content Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -122,6 +123,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.ITJakubService.Core\ITJakub.ITJakubService.Core.csproj">
+      <Project>{904E449B-6F51-46C7-A730-4F4C992BDDC8}</Project>
+      <Name>ITJakub.ITJakubService.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">
       <Project>{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}</Project>
       <Name>ITJakub.ITJakubService.DataContracts</Name>

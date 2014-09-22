@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using ITJakub.Contracts.Categories;
@@ -50,9 +51,14 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         void LoginUser(AuthProvidersContract providerContract, string providerToken, string email);
 
+        [OperationContract]
+        ProcessedFileInfoContract ProcessUploadedFile(Stream dataStream);
+
+        [OperationContract]
+        void SaveFrontImageForFile(Stream dataStream);
+
+        [OperationContract]
+        void SaveImagesForFile(Stream dataStream);
 
     }
-
-
-   
 }

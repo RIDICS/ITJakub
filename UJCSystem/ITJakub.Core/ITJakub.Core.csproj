@@ -68,7 +68,6 @@
     <Compile Include="Database\ReleationDatabaseMock.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ItJakubServiceClient.cs" />
-    <Compile Include="ItJakubServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Searching\CriteriumCompilers\CriteriumCompilerAttribute.cs" />
     <Compile Include="Searching\CriteriumCompilers\CriteriumCompilerBase.cs" />
@@ -80,6 +79,10 @@
     <EmbeddedResource Include="ITJakub.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">
+      <Project>{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}</Project>
+      <Name>ITJakub.ITJakubService.DataContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
