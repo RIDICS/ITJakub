@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.ServiceModel;
 using Castle.Windsor;
 using ITJakub.Contracts.Categories;
@@ -87,14 +88,19 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.ProcessUploadedFile(dataStream);
         }
 
-        public void SaveFrontImageForFile(Stream dataStream)
+        public void SaveFrontImageForFile(UploadImageContract uploadImageContract)
         {
-            m_serviceManager.SaveFrontImageForFile(dataStream);
+            m_serviceManager.SaveFrontImageForFile(uploadImageContract);
         }
 
-        public void SaveImagesForFile(Stream dataStream)
+        public void SavePageImageForFile(UploadImageContract uploadImageContract)
         {
-            m_serviceManager.SaveImagesForFile(dataStream);
+            m_serviceManager.SavePageImageForFile(uploadImageContract);
+        }
+        
+        public void SaveFileMetadata(string fileGuid, string name, string author)
+        {
+            m_serviceManager.SaveFileMetadata(fileGuid, name, author);
         }
     }
 

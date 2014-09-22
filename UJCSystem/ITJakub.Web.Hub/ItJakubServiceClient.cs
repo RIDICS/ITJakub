@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.ServiceModel;
 using ITJakub.Contracts.Categories;
@@ -277,11 +278,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void SaveFrontImageForFile(Stream dataStream)
+        public void SaveFrontImageForFile(UploadImageContract uploadImageContract)
         {
             try
             {
-               Channel.SaveFrontImageForFile(dataStream);
+                Channel.SaveFrontImageForFile(uploadImageContract);
             }
             catch (CommunicationException ex)
             {
@@ -297,22 +298,42 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void SaveImagesForFile(Stream dataStream)
+        public void SavePageImageForFile(UploadImageContract uploadImageContract)
         {
             try
             {
-                Channel.SaveImagesForFile(dataStream);
+                Channel.SavePageImageForFile(uploadImageContract);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SaveImagesForFile failed with: {0}", ex);
+                    m_log.ErrorFormat("SavePageImageForFile failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SaveImagesForFile timeouted with: {0}", ex);
+                    m_log.ErrorFormat("SavePageImageForFile timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public void SaveFileMetadata(string fileGuid, string name, string author)
+        {
+            try
+            {
+                Channel.SaveFileMetadata(fileGuid, name, author);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SaveFileMetadata failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SaveFileMetadata timeouted with: {0}", ex);
                 throw;
             }
         }

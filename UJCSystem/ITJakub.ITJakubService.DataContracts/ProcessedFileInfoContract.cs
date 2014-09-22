@@ -2,7 +2,6 @@
 
 namespace ITJakub.ITJakubService.DataContracts
 {
-    //TODO change members according to info in header element of xml file
     [DataContract]
     public class ProcessedFileInfoContract
     {

@@ -142,14 +142,19 @@ namespace ITJakub.ITJakubService
             return m_uploadManager.ProcessUploadedFile(dataStream);
         }
 
-        public void SaveFrontImageForFile(Stream dataStream)
+        public void SaveFrontImageForFile(UploadImageContract uploadImageContract)
         {
-            m_uploadManager.SaveFrontImageForFile(dataStream);
+            m_uploadManager.SaveFrontImageForFile(uploadImageContract);
         }
 
-        public void SaveImagesForFile(Stream dataStream)
+        public void SavePageImageForFile(UploadImageContract uploadImageContract)
         {
-            m_uploadManager.SaveImagesForFile(dataStream);
+            m_uploadManager.SavePageImageForFile(uploadImageContract);
+        }
+
+        public void SaveFileMetadata(string fileGuid, string name, string author)
+        {
+            m_uploadManager.SaveFileMetadata(fileGuid, name, author);
         }
     }
 }

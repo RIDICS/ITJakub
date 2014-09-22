@@ -55,10 +55,12 @@ namespace ITJakub.ITJakubService.DataContracts
         ProcessedFileInfoContract ProcessUploadedFile(Stream dataStream);
 
         [OperationContract]
-        void SaveFrontImageForFile(Stream dataStream);
+        void SaveFrontImageForFile(UploadImageContract uploadImageContract);
 
         [OperationContract]
-        void SaveImagesForFile(Stream dataStream);
+        void SavePageImageForFile(UploadImageContract uploadImageContract);
 
+        [OperationContract]
+        void SaveFileMetadata(string fileGuid, string name, string author);
     }
 }

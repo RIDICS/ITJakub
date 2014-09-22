@@ -13,30 +13,48 @@
         maxFilesize: 100, // MB
         maxFiles: 1,
         success: function(file, response) {
-            alert("front image uploaded");
+            if (response.Error) {
+                alert(response.Error);
+            }
+        },
+        sending: function(file, xhr, formData) {
+            formData.append('fileGuid', getUploladingFileGuid());
         }
+
     });
 
     $("#dropzoneImagesForm").dropzone({
         url: '/Upload/UploadImages',
         maxFilesize: 100, // MB
         success: function(file, response) {
-            alert("image uploaded");
+            if (response.Error) {
+                alert(response.Error);
+            }
+        },
+        sending: function(file, xhr, formData) {
+            formData.append('fileGuid', getUploladingFileGuid());
         }
     });
 
 });
 
+function getUploladingFileGuid() {
+    return $('ol.upload-file').attr('data-file-guid');
+}
 
 $("#fileMetadataForm").submit(function() {
+    var formData = $("#fileMetadataForm").serializeArray();
+    formData.push({name: "fileGuid", value: getUploladingFileGuid()});
     $.ajax({
         type: "POST",
         url: "/Upload/UploadMetadata",
-        data: $("#fileMetadataForm").serialize(),
-        success: function(data) {
+        data: formData,
+        success: function(response) {
+            if (response.Error) {
+                alert(response.Error);
+            }
         }
     });
-
     return false; // prevent submit of the form.
 });
 

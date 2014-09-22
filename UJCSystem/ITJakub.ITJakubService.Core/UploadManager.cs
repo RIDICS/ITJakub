@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Xml;
+using System.Xml.Linq;
 using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService.Core
@@ -26,21 +26,26 @@ namespace ITJakub.ITJakubService.Core
 
         private ProcessedFileInfoContract GetFileInfoFromTempFile(string fileName)
         {
-            using (var fileStream = m_localFilesystemManager.OpenTempFile(fileName))
+            using (FileStream fileStream = m_localFilesystemManager.OpenTempFile(fileName))
             {
-                var fileHeader = m_xmlProcessingManager.ParseHeader(fileStream);
+                XDocument fileHeader = m_xmlProcessingManager.ParseHeader(fileStream);
                 return m_xmlProcessingManager.GetInfoFromHeader(fileHeader);
             }
         }
 
-        public void SaveFrontImageForFile(Stream dataStream)
+        public void SaveFrontImageForFile(UploadImageContract uploadImageContract)
         {
-            throw new System.NotImplementedException();
+            m_localFilesystemManager.SaveFrontImage(uploadImageContract.FileGuid, uploadImageContract.Name, uploadImageContract.Data);
         }
 
-        public void SaveImagesForFile(Stream dataStream)
+        public void SavePageImageForFile(UploadImageContract uploadImageContract)
         {
-            throw new System.NotImplementedException();
+            m_localFilesystemManager.SaveImage(uploadImageContract.FileGuid, uploadImageContract.Name, uploadImageContract.Data);
+        }
+
+        public void SaveFileMetadata(string fileGuid, string name, string author)
+        {
+            throw new NotImplementedException(); //TODO save to relational DB here and move file to existDB here
         }
     }
 }
