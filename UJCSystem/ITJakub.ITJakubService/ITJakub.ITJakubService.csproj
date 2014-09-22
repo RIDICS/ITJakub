@@ -123,6 +123,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
+      <Project>{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}</Project>
+      <Name>ITJakub.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.ITJakubService.Core\ITJakub.ITJakubService.Core.csproj">
       <Project>{904E449B-6F51-46C7-A730-4F4C992BDDC8}</Project>
       <Name>ITJakub.ITJakubService.Core</Name>
@@ -134,10 +138,6 @@
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
-      <Project>{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}</Project>
-      <Name>ITJakub.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
       <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>

@@ -2,11 +2,8 @@
 using System.IO;
 using System.ServiceModel;
 using Castle.Windsor;
-using ITJakub.Contracts;
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
-using ITJakub.Core;
-using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService

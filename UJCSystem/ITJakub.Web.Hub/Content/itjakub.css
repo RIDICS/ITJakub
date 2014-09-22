@@ -180,6 +180,7 @@ ol.numbered > li {
   /* Add some spacing around the content */
   list-style: none;
   /* Disable the normal item numbering */
+  width: 100%;
 }
 ol.numbered > li:before {
   content: counter(li);
@@ -320,5 +321,14 @@ ul {
   margin-left: 5px;
   list-style: none;
   margin-top: 20px;
+}
+.file-upload-metadata label,
+.file-upload-metadata input[type='submit'] {
+  margin-right: 5px;
+  margin-top: 10px;
+}
+.file-upload-metadata input[type='text'] {
+  display: block;
+  width: 100%;
 }
 /*# sourceMappingURL=itjakub.css.map */

@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Net.Mime;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -28,45 +26,38 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            return Json(new {Error="Some error occured in uploading file"});;
+            return Json(new {Error="Some error occured in uploading file"});
         }
 
         public ActionResult UploadFrontImage()
         {
-            foreach (string fileName in Request.Files)
+            if (Request.Files.Count == 1)
             {
-                HttpPostedFileBase file = Request.Files[fileName];
-                if (file == null || file.ContentLength == 0) continue;
-
-                string pathString = Path.Combine("D:\\", "UploadedFiles");
-
-
-                if (!Directory.Exists(pathString))
-                    Directory.CreateDirectory(pathString);
-
-                string path = string.Format("{0}\\{1}", pathString, file.FileName);
-                file.SaveAs(path);
+                HttpPostedFileBase file = Request.Files[0];
+                if (file != null && file.ContentLength != 0)
+                {
+                    m_serviceClient.SaveFrontImageForFile(file.InputStream);
+                    return Json(new {});
+                }
             }
-            return Json(new { });
+
+            return Json(new { Error = "Some error occured in uploading front image" });
         }
 
         public ActionResult UploadImages()
         {
-            foreach (string fileName in Request.Files)
+
+            for (int i = 0; i < Request.Files.Count; i++)
             {
-                HttpPostedFileBase file = Request.Files[fileName];
-                if (file == null || file.ContentLength == 0) continue;
-
-                string pathString = Path.Combine("D:\\", "UploadedFiles");
-
-
-                if (!Directory.Exists(pathString))
-                    Directory.CreateDirectory(pathString);
-
-                string path = string.Format("{0}\\{1}", pathString, file.FileName);
-                file.SaveAs(path);
+                HttpPostedFileBase file = Request.Files[i];
+                if (file != null && file.ContentLength != 0)
+                {
+                    m_serviceClient.SaveImagesForFile(file.InputStream);
+                    return Json(new { });
+                }
             }
-            return Json(new { });
+
+            return Json(new { Error = "Some error occured in uploading other images" });
         }
     }
 }
