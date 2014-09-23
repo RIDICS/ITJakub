@@ -59,7 +59,7 @@ BEGIN TRAN
     (
        [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Category(Id)] PRIMARY KEY CLUSTERED,
 	  [Name] varchar(150) NOT NULL,
-	  [ParrentCategory] int NULL CONSTRAINT [FK_Category(ParrentCategory)_Category(Id)] FOREIGN KEY REFERENCES [Category] (Id)
+	  [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [Category] (Id)
     )
 
 

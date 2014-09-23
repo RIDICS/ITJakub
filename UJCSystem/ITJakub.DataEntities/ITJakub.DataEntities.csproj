@@ -70,12 +70,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Class1.cs" />
+    <Compile Include="Entities\Author.cs" />
+    <Compile Include="Entities\AuthorInfo.cs" />
+    <Compile Include="Entities\Book.cs" />
+    <Compile Include="Entities\Bookmark.cs" />
+    <Compile Include="Entities\Category.cs" />
+    <Compile Include="Entities\Image.cs" />
+    <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\NHibernateTransactionalDao.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.DataEntities.Container.Config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Entities\Author.hbm.xml" />
+    <EmbeddedResource Include="Entities\AuthorInfo.hbm.xml" />
+    <EmbeddedResource Include="Entities\Book.hbm.xml" />
+    <EmbeddedResource Include="Entities\Bookmark.hbm.xml" />
+    <EmbeddedResource Include="Entities\Category.hbm.xml" />
+    <EmbeddedResource Include="Entities\Image.hbm.xml" />
+    <EmbeddedResource Include="Entities\User.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

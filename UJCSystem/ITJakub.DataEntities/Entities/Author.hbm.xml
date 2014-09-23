@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Author" table="Author" lazy="true" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    <bag name="AuthorInfos" inverse="true">
+      <key column="Author" />
+      <one-to-many class="AuthorInfo" />
+    </bag>
+    <bag name="Books" inverse="true">
+      <key column="Author" />
+      <one-to-many class="Book" />
+    </bag>
+  </class>
+</hibernate-mapping>
