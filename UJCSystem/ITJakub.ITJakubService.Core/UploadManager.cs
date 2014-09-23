@@ -42,10 +42,5 @@ namespace ITJakub.ITJakubService.Core
         {
             m_localFilesystemManager.SaveImage(uploadImageContract.FileGuid, uploadImageContract.Name, uploadImageContract.Data);
         }
-
-        public void SaveFileMetadata(string fileGuid, string name, string author)
-        {
-            throw new NotImplementedException(); //TODO save to relational DB here and move file to existDB here
-        }
     }
 }

@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountingManager.cs" />
+    <Compile Include="BookManager.cs" />
     <Compile Include="LocalFilesystemManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UploadManager.cs" />
@@ -49,6 +50,10 @@
     <EmbeddedResource Include="ITJakub.ITJakubService.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
+      <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
+      <Name>ITJakub.DataEntities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">
       <Project>{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}</Project>
       <Name>ITJakub.ITJakubService.DataContracts</Name>

@@ -15,13 +15,15 @@ namespace ITJakub.ITJakubService
         private readonly SearchServiceClient m_searchClient;
         private readonly AccountingManager m_accountingManager;
         private readonly UploadManager m_uploadManager;
+        private readonly BookManager m_bookManager;
 
 
-        public ItJakubServiceManager(SearchServiceClient searchClient, ReleationDatabaseMock releationDatabaseMock, AccountingManager accountingManager, UploadManager uploadManager)
+        public ItJakubServiceManager(SearchServiceClient searchClient, ReleationDatabaseMock releationDatabaseMock, AccountingManager accountingManager, UploadManager uploadManager, BookManager bookManager)
         {
             m_searchClient = searchClient;
             m_accountingManager = accountingManager;
             m_uploadManager = uploadManager;
+            m_bookManager = bookManager;
             m_releationDatabaseMock = releationDatabaseMock;
         }
 
@@ -154,7 +156,7 @@ namespace ITJakub.ITJakubService
 
         public void SaveFileMetadata(string fileGuid, string name, string author)
         {
-            m_uploadManager.SaveFileMetadata(fileGuid, name, author);
+            m_bookManager.CreateBook(fileGuid, name, author);
         }
     }
 }

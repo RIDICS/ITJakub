@@ -70,30 +70,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Author.cs" />
-    <Compile Include="Entities\AuthorInfo.cs" />
-    <Compile Include="Entities\Book.cs" />
-    <Compile Include="Entities\Bookmark.cs" />
-    <Compile Include="Entities\BookVersion.cs" />
-    <Compile Include="Entities\Category.cs" />
-    <Compile Include="Entities\Image.cs" />
-    <Compile Include="Entities\User.cs" />
+    <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
+    <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
+    <Compile Include="Database\Entities\Author.cs" />
+    <Compile Include="Database\Entities\AuthorInfo.cs" />
+    <Compile Include="Database\Entities\Book.cs" />
+    <Compile Include="Database\Entities\Bookmark.cs" />
+    <Compile Include="Database\Entities\BookVersion.cs" />
+    <Compile Include="Database\Entities\Category.cs" />
+    <Compile Include="Database\Entities\Image.cs" />
+    <Compile Include="Database\Entities\User.cs" />
+    <Compile Include="Database\Repositories\BookRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\NHibernateTransactionalDao.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.DataEntities.Container.Config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Entities\Author.hbm.xml" />
-    <EmbeddedResource Include="Entities\AuthorInfo.hbm.xml" />
-    <EmbeddedResource Include="Entities\Book.hbm.xml" />
-    <EmbeddedResource Include="Entities\Bookmark.hbm.xml" />
-    <EmbeddedResource Include="Entities\BookVersion.hbm.xml" />
-    <EmbeddedResource Include="Entities\Category.hbm.xml" />
-    <EmbeddedResource Include="Entities\Image.hbm.xml" />
-    <EmbeddedResource Include="Entities\User.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Author.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Database\Entities\AuthorInfo.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Book.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Bookmark.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\BookVersion.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Category.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Image.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\User.hbm.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
