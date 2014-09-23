@@ -33,7 +33,9 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             for (int i = 0; i < taskContract.RowList.Count; i++)
             {
                 var row = taskContract.RowList[i];
-                crosswordRows.Add(new CrosswordRowViewModel(row.Label, row.Answer.Length, row.StartPosition, taskContract.AnswerPosition, i));
+                crosswordRows.Add(row.Answer != null
+                    ? new CrosswordRowViewModel(row.Label, row.Answer.Length, row.StartPosition, taskContract.AnswerPosition, i)
+                    : new CrosswordRowViewModel());
             }
             m_task = new CrosswordTask(taskContract);
 

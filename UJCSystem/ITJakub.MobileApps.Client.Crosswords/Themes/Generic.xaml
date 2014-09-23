@@ -23,9 +23,10 @@
                 <ControlTemplate TargetType="view:CrosswordTextBoxControl">
                     <Grid>
                         <Grid.Resources>
-                            <SolidColorBrush x:Key="FocusBackgroundColorBrush" Color="#20FFFFFF" />
+                            <SolidColorBrush x:Key="FocusBackgroundColorBrush" Color="#40FFFFFF" />
+                            <SolidColorBrush x:Key="PointOverBackgroundColorBrush" Color="#20FFFFFF" />
                             <SolidColorBrush x:Key="BackgroundColorBrush" Color="Transparent" />
-                            <SolidColorBrush x:Key="SelectionColorBrush" Color="#60008000" />
+                            <SolidColorBrush x:Key="SelectionColorBrush" Color="#80808000" />
                         </Grid.Resources>
                         
                         <VisualStateManager.VisualStateGroups>
@@ -70,6 +71,11 @@
                                                      Storyboard.TargetProperty="Opacity"
                                                      Duration="0"
                                                      To="{ThemeResource TextControlPointerOverBackgroundThemeOpacity}" />-->
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundElement"
+                                                                       Storyboard.TargetProperty="Background"
+                                                                       Duration="0">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PointOverBackgroundColorBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Focused">
@@ -93,18 +99,11 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        
                         <Border x:Name="BackgroundElement"
                                 Background="{TemplateBinding Background}"
-                                Margin="{TemplateBinding Padding}"
-                                Grid.ColumnSpan="2" />
+                                Margin="{TemplateBinding Padding}" />
                         
-                        <ItemsControl Grid.Column="0"
-                                      x:Name="ContentElement"
+                        <ItemsControl x:Name="ContentElement"
                                       Height="{TemplateBinding Height}"
                                       ItemsSource="{TemplateBinding Text}">
                             <ItemsControl.ItemsPanel>
@@ -127,14 +126,13 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                         
-                        <Border Grid.Column="0"
-                                x:Name="CursorElement"
+                        <Border x:Name="CursorElement"
                                 Width="{TemplateBinding Height}"
                                 Height="{TemplateBinding Height}"
                                 Background="{StaticResource SelectionColorBrush}"
                                 Visibility="Collapsed"
                                 HorizontalAlignment="Left"
-                                Margin="{TemplateBinding CursorMargin}"/>
+                                Margin="{TemplateBinding CursorMargin}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

@@ -15,6 +15,11 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     {
         private int m_filledLength;
 
+        public RowProgressViewModel()
+        {
+            
+        }
+
         public RowProgressViewModel(int wordLength, int startPosition, int answerPosition)
         {
             Cells = new CellViewModel[wordLength];

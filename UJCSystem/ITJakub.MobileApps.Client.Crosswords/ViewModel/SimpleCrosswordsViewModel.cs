@@ -48,11 +48,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 if (exception != null)
                     return;
 
-                if (isCorrect)
-                {
-                    //TODO better way to display correct answer
-                    //new MessageDialog("vyplneno spravne").ShowAsync();
-                }
+                rowViewModel.IsCorrect = isCorrect;
             });
         }
 
@@ -68,6 +64,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
                     var rowViewModel = Crossword[progressUpdate.RowIndex];
                     rowViewModel.UpdateWord(progressUpdate.FilledWord);
+                    rowViewModel.IsCorrect = progressUpdate.IsCorrect;
                 }
                 else
                 {
@@ -75,8 +72,9 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     var viewModel = OpponentProgress.SingleOrDefault(model => model.UserInfo.Id == progressUpdate.UserInfo.Id);
                     if (viewModel == null)
                     {
-                        var rowProgressViewModels = Crossword.Select(model =>
-                            new RowProgressViewModel(model.Cells.Count, model.StartPosition, model.AnswerPosition));
+                        var rowProgressViewModels = Crossword.Select(model => model.Cells != null
+                            ? new RowProgressViewModel(model.Cells.Count, model.StartPosition, model.AnswerPosition)
+                            : new RowProgressViewModel());
                         
                         viewModel = new ProgressViewModel
                         {

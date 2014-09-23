@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
 
         public CrosswordTask(CrosswordTaskContract taskContract)
         {
-            m_correctAnswers = new List<string>(taskContract.RowList.Select(row => row.Answer.ToUpper()));
+            m_correctAnswers = new List<string>(taskContract.RowList.Select(row => row.Answer != null ? row.Answer.ToUpper() : null));
             m_userAnswers = new string[m_correctAnswers.Count];
         }
 

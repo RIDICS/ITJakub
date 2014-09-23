@@ -7,6 +7,12 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     public class CrosswordRowViewModel : ViewModelBase
     {
         private string m_word;
+        private bool? m_isCorrect;
+
+        public CrosswordRowViewModel()
+        {
+            
+        }
 
         public CrosswordRowViewModel(string label, int wordLength, int startPosition, int answerColumn, int rowIndex)
         {
@@ -31,9 +37,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             set
             {
                 m_word = value.ToUpper();
-                //UpdateCells(m_word);
                 FillWordAction(this);
-                RaisePropertyChanged();
             }
         }
 
@@ -41,29 +45,21 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         
         public int AnswerPosition { get; private set; }
 
+        public bool? IsCorrect
+        {
+            get { return m_isCorrect; }
+            set
+            {
+                m_isCorrect = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public void UpdateWord(string word)
         {
             m_word = word.ToUpper();
             RaisePropertyChanged(() => Word);
-            //UpdateCells(m_word);
         }
-
-        //private void UpdateCells(string word)
-        //{
-        //    if (word.Length > Cells.Count)
-        //        return;
-
-        //    //var newLetters = word.ToCharArray();
-
-        //    //for (int i = 0; i < newLetters.Length; i++)
-        //    //{
-        //    //    Cells[i].Letter = newLetters[i];
-        //    //}
-        //    //for (int i = word.Length; i < Cells.Count; i++)
-        //    //{
-        //    //    Cells[i].Letter = ' ';
-        //    //}
-        //}
 
         private void CreateCells(int cellCount)
         {
@@ -78,18 +74,6 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public class CellViewModel : ViewModelBase
         {
-            //private char m_letter;
-
-            //public char Letter
-            //{
-            //    get { return m_letter; }
-            //    set
-            //    {
-            //        m_letter = value;
-            //        RaisePropertyChanged();
-            //    }
-            //}
-
             public bool IsPartOfAnswer { get; set; }
         }
     }

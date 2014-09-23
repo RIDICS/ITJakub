@@ -13,8 +13,9 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
         {
             DefaultStyleKey = typeof(CrosswordTextBoxControl);
             SelectionChanged += OnSelectionChanged;
+            TextChanged += OnTextChanged;
         }
-        
+
         private void OnSelectionChanged(object sender, RoutedEventArgs e)
         {
             // Move cursor to correct position
@@ -22,6 +23,17 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
 
             // Select character (Overwrite mode simulation)
             SelectionLength = Text.Length == 0 ? 0 : 1;
+        }
+
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var uppercaseText = Text.ToUpper();
+            if (uppercaseText == Text)
+                return;
+
+            var selectionStart = SelectionStart;
+            Text = uppercaseText;
+            SelectionStart = selectionStart;
         }
 
         protected override void OnKeyDown(KeyRoutedEventArgs e)
@@ -46,8 +58,18 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
             base.OnTapped(e);
             var tapPosition = e.GetPosition(this);
             var cursorPosition = tapPosition.X / (Height - 2);
-            SelectionStart = (int) cursorPosition;
+            SelectionStart = (int)cursorPosition;
+            
             e.Handled = true;
+        }
+
+        protected override void OnKeyUp(KeyRoutedEventArgs e)
+        {
+            base.OnKeyUp(e);
+            if (e.Key == VirtualKey.Enter)
+            {
+                FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
+            }
         }
 
         public Thickness CursorMargin
@@ -57,6 +79,6 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
         }
 
         public static readonly DependencyProperty CursorMarginProperty = DependencyProperty.Register("CursorMargin",
-            typeof(Thickness), typeof(CrosswordTextBoxControl), new PropertyMetadata(new Thickness(0)));
+            typeof(Thickness), typeof(CrosswordTextBoxControl), new PropertyMetadata(new Thickness(-1,0,0,0)));
     }
 }
