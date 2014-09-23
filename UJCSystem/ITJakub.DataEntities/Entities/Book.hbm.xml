@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="Book" table="Book" lazy="true" >
+  <class name="Book" table="[Book]" lazy="true" >
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    <many-to-one name="Author">
-      <column name="Author" sql-type="int" not-null="false" />
-    </many-to-one>
     <many-to-one name="Category">
       <column name="Category" sql-type="int" not-null="false" />
     </many-to-one>
     <property name="Guid">
       <column name="Guid" sql-type="varchar" not-null="true" />
     </property>
-    <property name="Name">
-      <column name="Name" sql-type="varchar" not-null="false" />
-    </property>
     <bag name="Bookmarks" inverse="true">
       <key column="Book" />
       <one-to-many class="Bookmark" />
+    </bag>
+    <bag name="BookVersions" inverse="true">
+      <key column="Book" />
+      <one-to-many class="BookVersion" />
     </bag>
     <bag name="Images" inverse="true">
       <key column="Book" />

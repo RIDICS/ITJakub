@@ -74,6 +74,7 @@
     <Compile Include="Entities\AuthorInfo.cs" />
     <Compile Include="Entities\Book.cs" />
     <Compile Include="Entities\Bookmark.cs" />
+    <Compile Include="Entities\BookVersion.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Image.cs" />
     <Compile Include="Entities\User.cs" />
@@ -88,6 +89,7 @@
     <EmbeddedResource Include="Entities\AuthorInfo.hbm.xml" />
     <EmbeddedResource Include="Entities\Book.hbm.xml" />
     <EmbeddedResource Include="Entities\Bookmark.hbm.xml" />
+    <EmbeddedResource Include="Entities\BookVersion.hbm.xml" />
     <EmbeddedResource Include="Entities\Category.hbm.xml" />
     <EmbeddedResource Include="Entities\Image.hbm.xml" />
     <EmbeddedResource Include="Entities\User.hbm.xml" />

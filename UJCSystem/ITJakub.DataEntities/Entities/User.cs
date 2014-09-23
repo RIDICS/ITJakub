@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ITJakub.DataEntities.Entities
 {
@@ -16,6 +17,7 @@ namespace ITJakub.DataEntities.Entities
         public virtual string Salt { get; set; }
         public virtual DateTime CreateTime { get; set; }
         public virtual string AvatarUrl { get; set; }
+        public virtual IList<Bookmark> Bookmarks { get; set; }
 
         public bool Equals(User other)
         {

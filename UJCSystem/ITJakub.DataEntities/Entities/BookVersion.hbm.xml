@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="BookVersion" table="[BookVersion]" lazy="true" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    <many-to-one name="Book">
+      <column name="Book" sql-type="bigint" not-null="true" />
+    </many-to-one>
+    <property name="Guid">
+      <column name="Guid" sql-type="varchar" not-null="true" />
+    </property>
+    <property name="Name">
+      <column name="Name" sql-type="varchar" not-null="false" />
+    </property>
+    <property name="CreateTime">
+      <column name="CreateTime" sql-type="datetime" not-null="true" />
+    </property>
+    <property name="Description">
+      <column name="Description" sql-type="varchar" not-null="false" />
+    </property>
+    <bag name="Authors" table="[BookVersion_Author]" lazy="true">
+      <key column="BookVersion" />
+      <many-to-many class="Author" column="Author" />
+    </bag>
+  </class>
+</hibernate-mapping>

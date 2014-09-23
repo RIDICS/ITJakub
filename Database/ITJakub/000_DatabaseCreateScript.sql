@@ -22,7 +22,7 @@ BEGIN TRAN
 		[UpgradeUser] varchar(150) NOT NULL default SYSTEM_USER,		
 	)
 
-    CREATE TABLE [User]
+    CREATE TABLE [dbo].[User]
     (
 	   [Id] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_User(Id)] PRIMARY KEY CLUSTERED,
 	   [FirstName] [varchar] (50) NOT NULL,
@@ -41,47 +41,60 @@ BEGIN TRAN
 
 
 
-    CREATE TABLE [Author]
+    CREATE TABLE [dbo].[Author]
     (
 	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Author(Id)] PRIMARY KEY CLUSTERED
     )
 
-    CREATE TABLE [AuthorInfo]
+    CREATE TABLE [dbo].[AuthorInfo]
     (
 	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_AuthorInfo(Id)] PRIMARY KEY CLUSTERED,
-	   [Author] int NOT NULL CONSTRAINT [FK_AuthorInfo(Author)_Author(Id)] FOREIGN KEY REFERENCES [Author] (Id),
+	   [Author] int NOT NULL CONSTRAINT [FK_AuthorInfo(Author)_Author(Id)] FOREIGN KEY REFERENCES [dbo].[Author] (Id),
 	   [Text] varchar(50) NOT NULL,
 	   [TextType] int NOT NULL,
     )
 
 
-    CREATE TABLE [Category]
+    CREATE TABLE [dbo].[Category]
     (
        [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Category(Id)] PRIMARY KEY CLUSTERED,
 	  [Name] varchar(150) NOT NULL,
-	  [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [Category] (Id)
+	  [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
     )
 
-
-    CREATE TABLE [Book]
+    CREATE TABLE [dbo].[Book]
     (
 	   [Id] [bigint] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Book(Id)] PRIMARY KEY CLUSTERED,
 	   [Guid] [varchar] (50) NOT NULL,
-	   [Author] int NULL CONSTRAINT [FK_Book(Author)_Author(Id)] FOREIGN KEY REFERENCES [Author] (Id),
-	   [Name] varchar (MAX) NULL,
 	   [Category] int NULL CONSTRAINT [FK_Book(Category)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
     )
 
-    CREATE TABLE [Bookmark]
+    CREATE TABLE [dbo].[Bookmark]
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Bookmark(Id)] PRIMARY KEY CLUSTERED,
+	   [User] int NOT NULL CONSTRAINT [FK_Bookmark(Book)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 	   [Book] bigint NOT NULL CONSTRAINT [FK_Bookmark(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book](Id),
 	   [Page] varchar(50) NOT NULL
     )
 
+    CREATE TABLE [dbo].[BookVersion]
+    (
+	   [Id] [bigint] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookVersion(Id)] PRIMARY KEY CLUSTERED,
+	   [Guid] [varchar] (50) NOT NULL,
+	   [Name] varchar (MAX) NULL,
+	   [CreateTime][datetime] NOT NULL,
+	   [Description] varchar(MAX) NULL,
+	   [Book] bigint NOT NULL CONSTRAINT [FK_BookVersion(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book] (Id)
+    )
+    
+    CREATE TABLE [dbo].[BookVersion_Author]
+    (
+	   [Author] int NOT NULL CONSTRAINT [FK_BookVersion_Author(Author)_Author(Id)] FOREIGN KEY REFERENCES [dbo].[Author] (Id),
+	   [BookVersion] bigint NOT NULL CONSTRAINT [FK_BookVersion_Author(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion](Id),
+	   CONSTRAINT [PK_BookVersion_Author(Author)_BookVersion_Author(Book)] PRIMARY KEY ([Author], [BookVersion])
+    )
 
-
-    CREATE TABLE [Image]
+    CREATE TABLE [dbo].[Image]
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Image(Id)] PRIMARY KEY CLUSTERED,
 	   [FileName] varchar(255) NOT NULL,

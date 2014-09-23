@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="Bookmark" table="Bookmark" lazy="true" >
+  <class name="Bookmark" table="[Bookmark]" lazy="true" >
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
+    <many-to-one name="User">
+      <column name="User" sql-type="int" not-null="true" />
+    </many-to-one>
     <many-to-one name="Book">
       <column name="Book" sql-type="bigint" not-null="true" />
     </many-to-one>

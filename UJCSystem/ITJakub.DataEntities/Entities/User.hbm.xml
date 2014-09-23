@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="User" table="User" lazy="true" >
+  <class name="User" table="[User]" lazy="true" >
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
@@ -37,5 +37,9 @@
     <property name="AvatarUrl">
       <column name="AvatarUrl" sql-type="varchar" not-null="false" />
     </property>
+    <bag name="Bookmarks" inverse="true">
+      <key column="User" />
+      <one-to-many class="Bookmark" />
+    </bag>
   </class>
 </hibernate-mapping>

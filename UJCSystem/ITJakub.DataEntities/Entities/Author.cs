@@ -7,7 +7,7 @@ namespace ITJakub.DataEntities.Entities
     {
         public virtual int Id { get; set; }
         public virtual IList<AuthorInfo> AuthorInfos { get; set; }
-        public virtual IList<Book> Books { get; set; }
+        public virtual IList<BookVersion> BookVersions { get; set; }
 
         public bool Equals(Author other)
         {
