@@ -1,15 +1,16 @@
 using System;
+using System.Collections.Generic;
 
-namespace ITJakub.DataEntities.Entities
+namespace ITJakub.DataEntities.Database.Entities
 {
-    public class Bookmark : IEquatable<Bookmark>
+    public class Category : IEquatable<Category>
     {
-        public virtual long Id { get; set; }
-        public virtual User User { get; set; }
-        public virtual Book Book { get; set; }
-        public virtual string Page { get; set; }
+        public virtual int Id { get; set; }
+        public virtual Category ParentCategory { get; set; }
+        public virtual string Name { get; set; }
+        public virtual IList<Book> Books { get; set; }
 
-        public bool Equals(Bookmark other)
+        public bool Equals(Category other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -21,12 +22,12 @@ namespace ITJakub.DataEntities.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Bookmark) obj);
+            return Equals((Category) obj);
         }
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return Id;
         }
     }
 }

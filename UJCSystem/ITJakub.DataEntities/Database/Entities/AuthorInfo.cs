@@ -1,15 +1,15 @@
 using System;
 
-namespace ITJakub.DataEntities.Entities
+namespace ITJakub.DataEntities.Database.Entities
 {
-    public class Image : IEquatable<Image>
+    public class AuthorInfo : IEquatable<AuthorInfo>
     {
-        public virtual long Id { get; set; }
-        public virtual Book Book { get; set; }
-        public virtual string FileName { get; set; }
-        public virtual short ImageType { get; set; }
+        public virtual int Id { get; set; }
+        public virtual Author Author { get; set; }
+        public virtual string Text { get; set; }
+        public virtual int TextType { get; set; }
 
-        public bool Equals(Image other)
+        public bool Equals(AuthorInfo other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -21,12 +21,12 @@ namespace ITJakub.DataEntities.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Image) obj);
+            return Equals((AuthorInfo) obj);
         }
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return Id;
         }
     }
 }

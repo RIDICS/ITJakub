@@ -80,7 +80,7 @@ BEGIN TRAN
     CREATE TABLE [dbo].[BookVersion]
     (
 	   [Id] [bigint] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookVersion(Id)] PRIMARY KEY CLUSTERED,
-	   [Guid] [varchar] (50) NOT NULL,
+	   [VersionId] [varchar] (50) NOT NULL,
 	   [Name] varchar (MAX) NULL,
 	   [CreateTime][datetime] NOT NULL,
 	   [Description] varchar(MAX) NULL,

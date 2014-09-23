@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ITJakub.DataEntities.Entities
+namespace ITJakub.DataEntities.Database.Entities
 {
     public class User : IEquatable<User>
     {
