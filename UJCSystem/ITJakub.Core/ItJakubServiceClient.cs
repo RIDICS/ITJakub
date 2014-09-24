@@ -257,7 +257,7 @@ namespace ITJakub.Core
             }
         }
 
-        public ProcessedFileInfoContract ProcessUploadedFile(Stream dataStream)
+        public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract dataStream)
         {
             try
             {

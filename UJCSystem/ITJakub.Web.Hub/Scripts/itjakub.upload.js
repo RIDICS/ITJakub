@@ -3,9 +3,31 @@
         url: '/Upload/UploadFile',
         maxFilesize: 10000, // MB
         maxFiles: 1,
-        success: function(file, response) {
-            fillFileMetadataForm(response);
+        uploadMultiple: true,
+        autoProcessQueue: false,
+        previewsContainer: "#dropzoneFileFormPreview",
+        acceptedFiles: '.doc,.docx',
+        dictInvalidFileType: 'Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc nebo .docx',
+        //success: function(file, response) {
+        //    saveFileGuidToPage(response.FileInfo.FileGuid);
+        //    saveVersionGuidToPage(response.FileInfo.VersionGuid);
+        //},
+
+        init: function() {
+            var fileDropzone = this;
+
+            this.element.querySelector("input[type=submit]").addEventListener("click", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fileDropzone.processQueue();
+            });
+        },
+        successmultiple : function (files, response) {
+                alert("okejd");
+                saveFileGuidToPage(response.FileInfo.FileGuid);
+                saveVersionGuidToPage(response.FileInfo.VersionGuid);
         }
+        
     });
 
     $("#dropzoneFrontImageForm").dropzone({
@@ -62,16 +84,6 @@ $("#fileMetadataForm").submit(function() {
 function fillFileMetadataForm(data) {
     var form = document.getElementById("fileMetadataForm");
 
-    //for (var index = 0; index < data.FileInfo.Name.size(); ++index) {
-    //    console.log(a[index]);
-    //    var authorInput = document.createElement('input');
-    //    authorInput.setAttribute('type', 'text');
-    //    authorInput.setAttribute('placeholder', 'Author');
-    //    authorInput.setAttribute('name', 'author');
-    //    authorInput.setAttribute('value', a[index]);
-    //    form.appendChild(authorInput);
-    //}
-
     var labelNameInput = document.createElement('label');
     labelNameInput.setAttribute('for', 'nameInput');
     labelNameInput.innerHTML = 'Název díla:';
@@ -104,6 +116,20 @@ function fillFileMetadataForm(data) {
     form.appendChild(labelAuthorInput);
     form.appendChild(authorInput);
     form.appendChild(submit);
+}
 
-    $('ol.upload-file').attr('data-file-guid', data.FileInfo.Guid);
+function saveFileGuidToPage(fileGuid) {
+    $('ol.upload-file').attr('data-file-guid', fileGuid);
+}
+
+function saveVersionGuidToPage(versionGuid) {
+    $('ol.upload-file').attr('data-version-guid', versionGuid);
+}
+
+function getFileGuidFromPage() {
+    $('ol.upload-file').attr('data-file-guid');
+}
+
+function getVersionGuidFromPage() {
+    $('ol.upload-file').attr('data-version-guid');
 }

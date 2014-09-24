@@ -80,6 +80,7 @@
     <Compile Include="Database\Entities\Category.cs" />
     <Compile Include="Database\Entities\Image.cs" />
     <Compile Include="Database\Entities\User.cs" />
+    <Compile Include="Database\Repositories\AuthorRepository.cs" />
     <Compile Include="Database\Repositories\BookRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

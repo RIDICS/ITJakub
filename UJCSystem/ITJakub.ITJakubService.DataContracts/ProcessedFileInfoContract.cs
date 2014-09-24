@@ -1,17 +1,17 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ServiceModel;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
-    [DataContract]
+    [MessageContract]
     public class ProcessedFileInfoContract
     {
-        [DataMember]
+        [MessageBodyMember]
         public string Guid { get; set; }
 
-        [DataMember]
+        [MessageBodyMember]
         public string Name { get; set; }
 
-        [DataMember]
+        [MessageBodyMember]
         public string Author { get; set; }
     }
 }
