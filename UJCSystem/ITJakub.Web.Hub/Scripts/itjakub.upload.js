@@ -22,10 +22,9 @@
                 fileDropzone.processQueue();
             });
 
-            this.on("addedfile", function (file) {
-                if (this.getQueuedFiles().length > 0 || this.getUploadingFiles().length > 0) {
-                    var _this = this;
-                    _this.removeFile(file);
+            this.on("addedfile", function () {
+                if (this.files[1] != null) {
+                    this.removeFile(this.files[0]);
                 }
             });
 
