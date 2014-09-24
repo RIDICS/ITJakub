@@ -16,9 +16,9 @@ namespace ITJakub.ITJakubService.Core
             m_xmlProcessingManager = xmlProcessingManager;
         }
 
-        public ProcessedFileInfoContract ProcessUploadedFile(Stream dataStream)
+        public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract uploadFileContract)
         {
-            string tempName = m_localFilesystemManager.SaveTempFile(dataStream);
+            string tempName = m_localFilesystemManager.SaveTempFile(uploadFileContract.Data);
             ProcessedFileInfoContract fileInfo = GetFileInfoFromTempFile(tempName);
             m_localFilesystemManager.RenameTempFile(tempName, fileInfo.Guid);
             return fileInfo;

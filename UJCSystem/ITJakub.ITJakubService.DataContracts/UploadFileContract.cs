@@ -4,13 +4,10 @@ using System.ServiceModel;
 namespace ITJakub.ITJakubService.DataContracts
 {
     [MessageContract]
-    public class UploadImageContract
+    public class UploadFileContract
     {
         [MessageHeader]
-        public string FileGuid { get; set; }
-
-        [MessageHeader]
-        public string Name { get; set; }
+        public string ChangeMessage { get; set; }
 
         [MessageBodyMember]
         public Stream Data { get; set; }

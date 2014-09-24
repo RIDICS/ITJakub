@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.IO;
+using System.Web;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts;
 
@@ -16,14 +17,18 @@ namespace ITJakub.Web.Hub.Controllers
 
 
         //Dropzone upload method
-        public ActionResult UploadFile()
+        public ActionResult UploadFile(string changeMessage)
         {
             if (Request.Files.Count == 1)
             {
                 HttpPostedFileBase file = Request.Files[0];
                 if (file != null && file.ContentLength != 0)
                 {
-                    ProcessedFileInfoContract fileInfo = m_serviceClient.ProcessUploadedFile(file.InputStream);
+                    ProcessedFileInfoContract fileInfo = m_serviceClient.ProcessUploadedFile(new UploadFileContract
+                    {
+                        ChangeMessage= changeMessage,
+                        Data = file.InputStream
+                    });
                     return Json(new {FileInfo = fileInfo});
                 }
             }
@@ -31,11 +36,11 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(new {Error = "Some error occured in uploading file"});
         }
 
-        public ActionResult UploadMetadata(string fileGuid, string name, string author)
-        {
-            m_serviceClient.SaveFileMetadata(fileGuid, name, author);
-            return Json(new {});
-        }
+        //public ActionResult UploadMetadata(string fileGuid, string name, string author)
+        //{
+        //    m_serviceClient.SaveFileMetadata(fileGuid, name, author);
+        //    return Json(new {});
+        //}
 
         public ActionResult UploadFrontImage(string fileGuid)
         {
@@ -75,4 +80,5 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(new {});
         }
     }
+
 }

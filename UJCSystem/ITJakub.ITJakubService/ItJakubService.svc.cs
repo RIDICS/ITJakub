@@ -83,9 +83,9 @@ namespace ITJakub.ITJakubService
             m_serviceManager.LoginUser(providerContract, providerToken, email);
         }
 
-        public ProcessedFileInfoContract ProcessUploadedFile(Stream dataStream)
+        public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract uploadFileContract)
         {
-            return m_serviceManager.ProcessUploadedFile(dataStream);
+            return m_serviceManager.ProcessUploadedFile(uploadFileContract);
         }
 
         public void SaveFrontImageForFile(UploadImageContract uploadImageContract)

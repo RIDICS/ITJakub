@@ -15,11 +15,11 @@ BEGIN TRAN
 --create table for storing database version
 	CREATE TABLE [dbo].[DatabaseVersion] 
 	(
-		[Id] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_DatabaseVersion(Id)] PRIMARY KEY CLUSTERED,
-		[DatabaseVersion] varchar(50) NOT NULL,
-		[SolutionVersion] varchar(50) NULL,
-		[UpgradeDate] [datetime] NOT NULL DEFAULT GETDATE(),
-		[UpgradeUser] varchar(150) NOT NULL default SYSTEM_USER,		
+	   [Id] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_DatabaseVersion(Id)] PRIMARY KEY CLUSTERED,
+	   [DatabaseVersion] varchar(50) NOT NULL,
+	   [SolutionVersion] varchar(50) NULL,
+	   [UpgradeDate] [datetime] NOT NULL DEFAULT GETDATE(),
+	   [UpgradeUser] varchar(150) NOT NULL default SYSTEM_USER,		
 	)
 
     CREATE TABLE [dbo].[User]
@@ -57,16 +57,23 @@ BEGIN TRAN
 
     CREATE TABLE [dbo].[Category]
     (
-       [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Category(Id)] PRIMARY KEY CLUSTERED,
-	  [Name] varchar(150) NOT NULL,
-	  [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
+        [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Category(Id)] PRIMARY KEY CLUSTERED,
+	   [Name] varchar(150) NOT NULL,
+	   [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
+    )
+    
+    CREATE TABLE [dbo].[BookType]
+    (
+	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookType(Id)] PRIMARY KEY CLUSTERED,
+	   [Type] varchar(50) NOT NULL
     )
 
     CREATE TABLE [dbo].[Book]
     (
 	   [Id] [bigint] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Book(Id)] PRIMARY KEY CLUSTERED,
 	   [Guid] [varchar] (50) NOT NULL,
-	   [Category] int NULL CONSTRAINT [FK_Book(Category)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
+	   [Category] int NULL CONSTRAINT [FK_Book(Category)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id),
+	   [BookType] int NULL CONSTRAINT [FK_Book(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id)
     )
 
     CREATE TABLE [dbo].[Bookmark]
@@ -77,6 +84,14 @@ BEGIN TRAN
 	   [Page] varchar(50) NOT NULL
     )
 
+    CREATE TABLE [dbo].[Transformation]
+    (
+	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Transformation(Id)] PRIMARY KEY CLUSTERED,
+	   [ResultType] smallint NOT NULL,	    
+	   [BookType] int  NULL CONSTRAINT [FK_Transformation(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
+	   [IsDefault] bit NOT NULL
+    )
+
     CREATE TABLE [dbo].[BookVersion]
     (
 	   [Id] [bigint] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookVersion(Id)] PRIMARY KEY CLUSTERED,
@@ -84,7 +99,8 @@ BEGIN TRAN
 	   [Name] varchar (MAX) NULL,
 	   [CreateTime][datetime] NOT NULL,
 	   [Description] varchar(MAX) NULL,
-	   [Book] bigint NOT NULL CONSTRAINT [FK_BookVersion(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book] (Id)
+	   [Book] bigint NOT NULL CONSTRAINT [FK_BookVersion(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book] (Id),
+	   [Transformation] int NULL CONSTRAINT [FK_BookVersion(Book)_Transformation(Id)] FOREIGN KEY REFERENCES [dbo].[Transformation] (Id)
     )
     
     CREATE TABLE [dbo].[BookVersion_Author]
@@ -101,6 +117,9 @@ BEGIN TRAN
 	   [ImageType] smallint NOT NULL,
 	   [Book] bigint NOT NULL CONSTRAINT [FK_Image(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book](Id)
     )
+
+
+
 
 
 
