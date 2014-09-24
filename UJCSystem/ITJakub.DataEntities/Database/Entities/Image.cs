@@ -9,7 +9,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string FileName { get; set; }
         public virtual short ImageType { get; set; }
 
-        public bool Equals(Image other)
+        public virtual bool Equals(Image other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

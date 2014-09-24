@@ -13,7 +13,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string Description { get; set; }
         public virtual IList<Author> Authors { get; set; }
 
-        public bool Equals(BookVersion other)
+        public virtual bool Equals(BookVersion other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

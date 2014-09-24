@@ -19,7 +19,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string AvatarUrl { get; set; }
         public virtual IList<Bookmark> Bookmarks { get; set; }
 
-        public bool Equals(User other)
+        public virtual bool Equals(User other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

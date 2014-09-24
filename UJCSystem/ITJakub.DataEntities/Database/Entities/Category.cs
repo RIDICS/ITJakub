@@ -10,7 +10,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string Name { get; set; }
         public virtual IList<Book> Books { get; set; }
 
-        public bool Equals(Category other)
+        public virtual bool Equals(Category other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

@@ -12,7 +12,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual IList<BookVersion> BookVersions { get; set; }
         public virtual IList<Image> Images { get; set; }
 
-        public bool Equals(Book other)
+        public virtual bool Equals(Book other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

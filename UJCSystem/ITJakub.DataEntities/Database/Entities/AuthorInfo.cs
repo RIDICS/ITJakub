@@ -9,7 +9,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string Text { get; set; }
         public virtual int TextType { get; set; }
 
-        public bool Equals(AuthorInfo other)
+        public virtual bool Equals(AuthorInfo other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

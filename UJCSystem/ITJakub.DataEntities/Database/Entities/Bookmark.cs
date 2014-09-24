@@ -9,7 +9,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual Book Book { get; set; }
         public virtual string Page { get; set; }
 
-        public bool Equals(Bookmark other)
+        public virtual bool Equals(Bookmark other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

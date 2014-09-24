@@ -9,7 +9,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual IList<AuthorInfo> AuthorInfos { get; set; }
         public virtual IList<BookVersion> BookVersions { get; set; }
 
-        public bool Equals(Author other)
+        public virtual bool Equals(Author other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -21,7 +21,7 @@ namespace ITJakub.DataEntities.Database.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Author) obj);
+            return Equals((Author)obj);
         }
 
         public override int GetHashCode()
