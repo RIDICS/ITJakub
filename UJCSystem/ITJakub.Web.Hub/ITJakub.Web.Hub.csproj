@@ -348,6 +348,9 @@
     </Content>
     <Content Include="Content\ITJakub.DefaultTheme.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
+      <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />

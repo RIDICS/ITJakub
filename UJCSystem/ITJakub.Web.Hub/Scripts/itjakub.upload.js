@@ -1,17 +1,17 @@
-﻿$(document).ready(function() {
+﻿$(document).ready(function () {
+
+    Dropzone.autoDiscover = false; // otherwise will be initialized twice
+
     $("#dropzoneFileForm").dropzone({
         url: '/Upload/UploadFile',
         maxFilesize: 10000, // MB
         maxFiles: 1,
         uploadMultiple: true,
+        clickable: true,
         autoProcessQueue: false,
         previewsContainer: "#dropzoneFileFormPreview",
         acceptedFiles: '.doc,.docx',
         dictInvalidFileType: 'Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc nebo .docx',
-        //success: function(file, response) {
-        //    saveFileGuidToPage(response.FileInfo.FileGuid);
-        //    saveVersionGuidToPage(response.FileInfo.VersionGuid);
-        //},
 
         init: function() {
             var fileDropzone = this;
@@ -21,13 +21,27 @@
                 e.stopPropagation();
                 fileDropzone.processQueue();
             });
-        },
-        successmultiple : function (files, response) {
+
+            this.on("addedfile", function (file) {
+                if (this.getQueuedFiles().length > 0 || this.getUploadingFiles().length > 0) {
+                    var _this = this;
+                    _this.removeFile(file);
+                }
+            });
+
+            this.on("drop", function (event) {
+                if (this.getQueuedFiles().length == 0 && this.getUploadingFiles().length == 0) {
+                    var _this = this;
+                    _this.removeAllFiles();
+                }
+            });
+
+            this.on("successmultiple", function(files, response) {
                 alert("okejd");
                 saveFileGuidToPage(response.FileInfo.FileGuid);
                 saveVersionGuidToPage(response.FileInfo.VersionGuid);
+            });
         }
-        
     });
 
     $("#dropzoneFrontImageForm").dropzone({
