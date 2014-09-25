@@ -8,7 +8,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual long Id { get; set; }
         public virtual string Guid { get; set; }
         public virtual Category Category { get; set; }
-        public virtual Booktype BookType { get; set; }
+        public virtual BookType BookType { get; set; }
         public virtual IList<Bookmark> Bookmarks { get; set; }
         public virtual IList<BookVersion> BookVersions { get; set; }
         public virtual IList<Image> Images { get; set; }

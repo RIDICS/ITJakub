@@ -36,9 +36,8 @@
             });
 
             this.on("successmultiple", function(files, response) {
-                alert("okejd");
                 saveFileGuidToPage(response.FileInfo.FileGuid);
-                saveVersionGuidToPage(response.FileInfo.VersionGuid);
+                saveVersionIdToPage(response.FileInfo.VersionId);
             });
         }
     });
@@ -47,13 +46,15 @@
         url: '/Upload/UploadFrontImage',
         maxFilesize: 100, // MB
         maxFiles: 1,
+        acceptedFiles: '.png,.jpg,.gif,.bmp',
+        dictInvalidFileType: 'Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .png, .jpg, .gif nebo .bmp',
         success: function(file, response) {
             if (response.Error) {
                 alert(response.Error);
             }
         },
         sending: function(file, xhr, formData) {
-            formData.append('fileGuid', getUploladingFileGuid());
+            formData.append('fileGuid', getFileGuidFromPage());
         }
 
     });
@@ -61,88 +62,85 @@
     $("#dropzoneImagesForm").dropzone({
         url: '/Upload/UploadImages',
         maxFilesize: 100, // MB
+        acceptedFiles: '.png,.jpg,.gif,.bmp',
+        dictInvalidFileType: 'Tento format neni podporovany. Vyberte prosim jine soubory s priponou .png, .jpg, .gif nebo .bmp',
         success: function(file, response) {
             if (response.Error) {
                 alert(response.Error);
             }
         },
         sending: function(file, xhr, formData) {
-            formData.append('fileGuid', getUploladingFileGuid());
+            formData.append('fileGuid', getFileGuidFromPage());
         }
     });
 
 });
-
-function getUploladingFileGuid() {
-    return $('ol.upload-file').attr('data-file-guid');
-}
-
-$("#fileMetadataForm").submit(function() {
-    var formData = $("#fileMetadataForm").serializeArray();
-    formData.push({name: "fileGuid", value: getUploladingFileGuid()});
-    $.ajax({
-        type: "POST",
-        url: "/Upload/UploadMetadata",
-        data: formData,
-        success: function(response) {
-            if (response.Error) {
-                alert(response.Error);
-            }
-        }
-    });
-    return false; // prevent submit of the form.
-});
-
-
-function fillFileMetadataForm(data) {
-    var form = document.getElementById("fileMetadataForm");
-
-    var labelNameInput = document.createElement('label');
-    labelNameInput.setAttribute('for', 'nameInput');
-    labelNameInput.innerHTML = 'Název díla:';
-
-    var nameInput = document.createElement('input');
-    nameInput.setAttribute('type', 'text');
-    nameInput.setAttribute('placeholder', 'Název díla:');
-    nameInput.setAttribute('name', 'name');
-    nameInput.setAttribute('id', 'nameInput');
-    nameInput.setAttribute('value', data.FileInfo.Name);
-
-    var labelAuthorInput = document.createElement('label');
-    labelAuthorInput.setAttribute('for', 'authorInput');
-    labelAuthorInput.innerHTML = 'Jméno autora:';
-
-    var authorInput = document.createElement('input');
-    authorInput.setAttribute('type', 'text');
-    authorInput.setAttribute('placeholder', 'Autor');
-    authorInput.setAttribute('name', 'author');
-    authorInput.setAttribute('id', 'authorInput');
-    authorInput.setAttribute('value', data.FileInfo.Author);
-
-
-    var submit = document.createElement('input');
-    submit.setAttribute('type', 'submit');
-    submit.setAttribute('value', 'Potvrdit');
-
-    form.appendChild(labelNameInput);
-    form.appendChild(nameInput);
-    form.appendChild(labelAuthorInput);
-    form.appendChild(authorInput);
-    form.appendChild(submit);
-}
 
 function saveFileGuidToPage(fileGuid) {
     $('ol.upload-file').attr('data-file-guid', fileGuid);
 }
 
-function saveVersionGuidToPage(versionGuid) {
-    $('ol.upload-file').attr('data-version-guid', versionGuid);
+function saveVersionIdToPage(versionId) {
+    $('ol.upload-file').attr('data-version-id', versionId);
 }
 
 function getFileGuidFromPage() {
     $('ol.upload-file').attr('data-file-guid');
 }
 
-function getVersionGuidFromPage() {
-    $('ol.upload-file').attr('data-version-guid');
+function getVersionIdFromPage() {
+    $('ol.upload-file').attr('data-version-id');
 }
+
+//function fillFileMetadataForm(data) {
+//    var form = document.getElementById("fileMetadataForm");
+
+//    var labelNameInput = document.createElement('label');
+//    labelNameInput.setAttribute('for', 'nameInput');
+//    labelNameInput.innerHTML = 'Název díla:';
+
+//    var nameInput = document.createElement('input');
+//    nameInput.setAttribute('type', 'text');
+//    nameInput.setAttribute('placeholder', 'Název díla:');
+//    nameInput.setAttribute('name', 'name');
+//    nameInput.setAttribute('id', 'nameInput');
+//    nameInput.setAttribute('value', data.FileInfo.Name);
+
+//    var labelAuthorInput = document.createElement('label');
+//    labelAuthorInput.setAttribute('for', 'authorInput');
+//    labelAuthorInput.innerHTML = 'Jméno autora:';
+
+//    var authorInput = document.createElement('input');
+//    authorInput.setAttribute('type', 'text');
+//    authorInput.setAttribute('placeholder', 'Autor');
+//    authorInput.setAttribute('name', 'author');
+//    authorInput.setAttribute('id', 'authorInput');
+//    authorInput.setAttribute('value', data.FileInfo.Author);
+
+
+//    var submit = document.createElement('input');
+//    submit.setAttribute('type', 'submit');
+//    submit.setAttribute('value', 'Potvrdit');
+
+//    form.appendChild(labelNameInput);
+//    form.appendChild(nameInput);
+//    form.appendChild(labelAuthorInput);
+//    form.appendChild(authorInput);
+//    form.appendChild(submit);
+//}
+
+//$("#fileMetadataForm").submit(function () {
+//    var formData = $("#fileMetadataForm").serializeArray();
+//    formData.push({ name: "fileGuid", value: getUploladingFileGuid() });
+//    $.ajax({
+//        type: "POST",
+//        url: "/Upload/UploadMetadata",
+//        data: formData,
+//        success: function (response) {
+//            if (response.Error) {
+//                alert(response.Error);
+//            }
+//        }
+//    });
+//    return false; // prevent submit of the form.
+//});

@@ -15,7 +15,7 @@ namespace ITJakub.ITJakubService.Core
         {
             return new ProcessedFileInfoContract
             {
-                Guid = header.Root.Element(m_teiNamespace + "fileDesc").Attribute("n").Value,
+                FileGuid = header.Root.Element(m_teiNamespace + "fileDesc").Attribute("n").Value,
                 Name = string.Join(" ", header.Root.Descendants(m_teiNamespace + "title").First()
                     .Descendants(m_teiNamespace + "w")
                     .Select(x => x.Value)
@@ -23,7 +23,7 @@ namespace ITJakub.ITJakubService.Core
                 Author = string.Join(" ", header.Root.Descendants(m_teiNamespace + "author").First()
                     .Descendants(m_teiNamespace + "w")
                     .Select(x => x.Value)
-                    .ToArray())
+                    .ToArray()) //TODO rewrite for list of authors
             };
         }
 

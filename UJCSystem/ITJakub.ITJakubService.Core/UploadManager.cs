@@ -18,10 +18,11 @@ namespace ITJakub.ITJakubService.Core
 
         public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract uploadFileContract)
         {
-            string tempName = m_localFilesystemManager.SaveTempFile(uploadFileContract.Data); 
+            string tempName = m_localFilesystemManager.SaveTempFile(uploadFileContract.Data);
+            return new ProcessedFileInfoContract(){FileGuid = "ABCDEFG", VersionId = "XYZ"}; //TODO just for testing purposes
             //TODO call program for converting docx to xml here
             ProcessedFileInfoContract fileInfo = GetFileInfoFromTempFile(tempName);
-            m_localFilesystemManager.RenameTempFile(tempName, fileInfo.Guid);
+            m_localFilesystemManager.RenameTempFile(tempName, fileInfo.FileGuid);
             return fileInfo;
         }
 

@@ -143,7 +143,7 @@
   background-image: none;
   border: black dashed 3px;
   width: 300px;
-  height: 150px;
+  height: 110px;
   text-align: center;
   color: black;
   margin: auto;
@@ -153,7 +153,7 @@
   display: none;
 }
 #dropzoneFileFormPreview {
-  height: 100px;
+  height: 330px;
 }
 .dz-clickable {
   cursor: pointer;

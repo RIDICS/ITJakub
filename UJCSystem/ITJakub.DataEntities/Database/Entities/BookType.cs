@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace ITJakub.DataEntities.Database.Entities {
     
-    public class Booktype : IEquatable<Booktype> {
+    public class BookType : IEquatable<BookType> {
         public virtual int Id { get; set; }
         public virtual string Type { get; set; }
         public virtual IList<Book> Books { get; set; }
         public virtual IList<Transformation> Transformations { get; set; }
 
-        public bool Equals(Booktype other)
+        public virtual bool Equals(BookType other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -21,7 +21,7 @@ namespace ITJakub.DataEntities.Database.Entities {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Booktype) obj);
+            return Equals((BookType) obj);
         }
 
         public override int GetHashCode()

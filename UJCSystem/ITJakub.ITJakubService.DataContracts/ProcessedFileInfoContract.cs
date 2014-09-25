@@ -6,7 +6,10 @@ namespace ITJakub.ITJakubService.DataContracts
     public class ProcessedFileInfoContract
     {
         [MessageBodyMember]
-        public string Guid { get; set; }
+        public string FileGuid { get; set; }
+
+        [MessageBodyMember]
+        public string VersionId { get; set; }
 
         [MessageBodyMember]
         public string Name { get; set; }
