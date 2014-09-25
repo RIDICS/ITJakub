@@ -30,11 +30,12 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
         {
             var taskContract = JsonConvert.DeserializeObject<CrosswordTaskContract>(data);
             var crosswordRows = new ObservableCollection<CrosswordRowViewModel>();
-            for (int i = 0; i < taskContract.RowList.Count; i++)
+
+            var rowIndex = 0;
+            foreach (var row in taskContract.RowList)
             {
-                var row = taskContract.RowList[i];
                 crosswordRows.Add(row.Answer != null
-                    ? new CrosswordRowViewModel(row.Label, row.Answer.Length, row.StartPosition, taskContract.AnswerPosition, i)
+                    ? new CrosswordRowViewModel(row.Label, row.Answer.Length, row.StartPosition, taskContract.AnswerPosition, rowIndex++)
                     : new CrosswordRowViewModel());
             }
             m_task = new CrosswordTask(taskContract);
@@ -42,12 +43,17 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             callback(crosswordRows);
         }
 
-        public void FillWord(int rowIndex, string word, Action<bool, Exception> callback)
+        public void FillWord(int rowIndex, string word, Action<GameInfoViewModel, Exception> callback)
         {
             m_task.FillWord(rowIndex, word);
             var isFilledCorrectly = m_task.IsRowFilledCorrectly(rowIndex);
+            var gameInfo = new GameInfoViewModel
+            {
+                Win = m_task.Win,
+                WordFilledCorrectly = isFilledCorrectly
+            };
 
-            callback(isFilledCorrectly, null);
+            callback(gameInfo, null);
 
             var messageProgress = new ProgressInfoContract
             {
@@ -62,7 +68,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             }
             catch (ClientCommunicationException exception)
             {
-                callback(false, exception);
+                callback(null, exception);
             }
         }
 
@@ -89,6 +95,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
                     FilledWord = updateContract.FilledWord,
                     RowIndex = updateContract.RowIndex,
                     IsCorrect = updateContract.IsCorrect,
+                    Time = objectDetails.CreateTime,
                     UserInfo = objectDetails.Author
                 };
                 progressUpdateList.Add(update);
@@ -102,6 +109,11 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
         public void StopPolling()
         {
             m_pollingService.UnregisterForSynchronizedObjects(ProgressPollingInterval, ProgressUpdate);
+        }
+
+        public void IsWin(Action<bool> callback)
+        {
+            callback(m_task.Win);
         }
     }
 }

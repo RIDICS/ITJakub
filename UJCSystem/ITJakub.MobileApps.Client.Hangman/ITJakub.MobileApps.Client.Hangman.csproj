@@ -128,7 +128,7 @@
     <Compile Include="ViewModel\GuessViewModel.cs" />
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
     <Compile Include="ViewModel\WordViewModel.cs" />
-    <Compile Include="View\Converter\HighlightMeConverter.cs" />
+    <Compile Include="View\Converter\TotalTimeConverter.cs" />
     <Compile Include="View\Converter\WinToColorConverter.cs" />
     <Compile Include="View\GameOverControl.xaml.cs">
       <DependentUpon>GameOverControl.xaml</DependentUpon>
@@ -144,7 +144,6 @@
     <Compile Include="View\KeyboardControl.xaml.cs">
       <DependentUpon>KeyboardControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Converter\TotalTimeConverter.cs" />
     <Compile Include="View\WordControl.xaml.cs">
       <DependentUpon>WordControl.xaml</DependentUpon>
     </Compile>

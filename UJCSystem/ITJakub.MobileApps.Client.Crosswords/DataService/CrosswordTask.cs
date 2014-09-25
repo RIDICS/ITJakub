@@ -7,22 +7,28 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
     public class CrosswordTask
     {
         private readonly List<string> m_correctAnswers;
-        private readonly string[] m_userAnswers;
+        private readonly bool[] m_correctllyFilledRows;
 
         public CrosswordTask(CrosswordTaskContract taskContract)
         {
-            m_correctAnswers = new List<string>(taskContract.RowList.Select(row => row.Answer != null ? row.Answer.ToUpper() : null));
-            m_userAnswers = new string[m_correctAnswers.Count];
+            m_correctAnswers = new List<string>(taskContract.RowList.Where(row => row.Answer != null).Select(row => row.Answer.ToUpper()));
+            m_correctllyFilledRows = new bool[m_correctAnswers.Count];
+            Win = false;
         }
 
         public void FillWord(int rowIndex, string word)
         {
-            m_userAnswers[rowIndex] = word.ToUpper();
+            var uppercaseWord = word.ToUpper();
+            m_correctllyFilledRows[rowIndex] = uppercaseWord == m_correctAnswers[rowIndex];
+
+            Win = m_correctllyFilledRows.All(isCorrect => isCorrect);
         }
 
         public bool IsRowFilledCorrectly(int rowIndex)
         {
-            return m_userAnswers[rowIndex] == m_correctAnswers[rowIndex];
+            return m_correctllyFilledRows[rowIndex];
         }
+
+        public bool Win { get; private set; }
     }
 }

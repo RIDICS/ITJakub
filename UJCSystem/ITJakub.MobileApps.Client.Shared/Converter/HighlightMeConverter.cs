@@ -2,7 +2,7 @@
 using Windows.UI.Text;
 using Windows.UI.Xaml.Data;
 
-namespace ITJakub.MobileApps.Client.Hangman.View.Converter
+namespace ITJakub.MobileApps.Client.Shared.Converter
 {
     public class HighlightMeConverter : IValueConverter
     {

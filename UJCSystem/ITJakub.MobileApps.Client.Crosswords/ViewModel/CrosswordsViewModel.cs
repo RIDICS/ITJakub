@@ -24,6 +24,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     return;
 
                 SimpleCrosswordsViewModel.UpdateProgress(list);
+                m_dataService.GetIsWin(isWin => SimpleCrosswordsViewModel.SetWin(isWin));
                 SetDataLoaded();
             });
         }

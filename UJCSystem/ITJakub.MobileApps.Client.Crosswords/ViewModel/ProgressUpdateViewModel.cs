@@ -1,4 +1,5 @@
-﻿using ITJakub.MobileApps.Client.Shared.Data;
+﻿using System;
+using ITJakub.MobileApps.Client.Shared.Data;
 
 namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 {
@@ -11,5 +12,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         public bool IsCorrect { get; set; }
 
         public AuthorInfo UserInfo { get; set; }
+
+        public DateTime Time { get; set; }
     }
 }

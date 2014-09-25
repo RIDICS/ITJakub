@@ -28,11 +28,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 m_crossword = value;
                 RaisePropertyChanged();
                 SetSubmitCallbacks(m_crossword);
+                PlayerRankingViewModel = new PlayerRankingViewModel(m_crossword.Count(row => row.Cells != null));
             }
         }
-
+        
         public ObservableCollection<ProgressViewModel> OpponentProgress { get; set; }
 
+        public PlayerRankingViewModel PlayerRankingViewModel { get; set; }
+        
         private void SetSubmitCallbacks(IEnumerable<CrosswordRowViewModel> crosswordRows)
         {
             foreach (CrosswordRowViewModel rowViewModel in crosswordRows)
@@ -43,12 +46,13 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         private void SubmitAction(CrosswordRowViewModel rowViewModel)
         {
-            m_dataService.FillWord(rowViewModel.RowIndex, rowViewModel.Word, (isCorrect, exception) =>
+            m_dataService.FillWord(rowViewModel.RowIndex, rowViewModel.Word, (gameInfo, exception) =>
             {
                 if (exception != null)
                     return;
 
-                rowViewModel.IsCorrect = isCorrect;
+                rowViewModel.IsCorrect = gameInfo.WordFilledCorrectly;
+                PlayerRankingViewModel.Win = gameInfo.Win;
             });
         }
 
@@ -56,13 +60,15 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         {
             foreach (var progressUpdate in list)
             {
+                PlayerRankingViewModel.UpdatePlayerRank(progressUpdate);
+
                 if (progressUpdate.UserInfo.IsMe)
                 {
                     // Load my progress history (only first load)
                     if (!m_firstUpdate)
                         continue;
 
-                    var rowViewModel = Crossword[progressUpdate.RowIndex];
+                    var rowViewModel = Crossword.First(row => row.RowIndex == progressUpdate.RowIndex);
                     rowViewModel.UpdateWord(progressUpdate.FilledWord);
                     rowViewModel.IsCorrect = progressUpdate.IsCorrect;
                 }
@@ -84,12 +90,18 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
                         OpponentProgress.Add(viewModel);
                     }
-                    var rowViewModel = viewModel.Rows[progressUpdate.RowIndex];
+                    var rowViewModel = viewModel.Rows[progressUpdate.RowIndex]; // TODO index in array is different than RowIndex
                     rowViewModel.FilledLength = progressUpdate.FilledWord.Length;
                     rowViewModel.IsCorrect = progressUpdate.IsCorrect;
                 }
             }
             m_firstUpdate = false;
+        }
+
+        public void SetWin(bool isWin)
+        {
+            if (PlayerRankingViewModel != null)
+                PlayerRankingViewModel.Win = isWin;
         }
     }
 }

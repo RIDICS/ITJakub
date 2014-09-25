@@ -115,6 +115,8 @@
     <Compile Include="DataContract\ProgressInfoContract.cs" />
     <Compile Include="DataService\CrosswordManager.cs" />
     <Compile Include="DataService\CrosswordTask.cs" />
+    <Compile Include="ViewModel\GameInfoViewModel.cs" />
+    <Compile Include="ViewModel\PlayerRankViewModel.cs" />
     <Compile Include="ViewModel\CrosswordRowViewModel.cs" />
     <Compile Include="ViewModel\ProgressUpdateViewModel.cs" />
     <Compile Include="ViewModel\ProgressViewModel.cs" />
@@ -131,6 +133,9 @@
     </Compile>
     <Compile Include="View\Converter\StartPositionToMarginConverter.cs" />
     <Compile Include="View\CrosswordTextBoxControl.cs" />
+    <Compile Include="View\PlayerRankingControl.xaml.cs">
+      <DependentUpon>PlayerRankingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SimpleCrosswordsControl.xaml.cs">
       <DependentUpon>SimpleCrosswordsControl.xaml</DependentUpon>
     </Compile>
@@ -155,6 +160,8 @@
   <ItemGroup>
     <Content Include="Icon\gantt_chart-128.png" />
     <Content Include="Icon\license.txt" />
+    <Content Include="Icon\olympic_medal-26.png" />
+    <Content Include="Icon\time-26.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
@@ -162,6 +169,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\CrosswordsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PlayerRankingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
