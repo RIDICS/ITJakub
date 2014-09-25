@@ -7,6 +7,9 @@
     <many-to-one name="Book">
       <column name="Book" sql-type="bigint" not-null="true" />
     </many-to-one>
+    <many-to-one name="Transformation">
+      <column name="Transformation" sql-type="int" not-null="false" />
+    </many-to-one>
     <property name="VersionId">
       <column name="VersionId" sql-type="varchar" not-null="true" />
     </property>

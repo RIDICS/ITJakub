@@ -7,6 +7,7 @@ namespace ITJakub.DataEntities.Database.Entities
     {
         public virtual long Id { get; set; }
         public virtual Book Book { get; set; }
+        public virtual Transformation Transformation { get; set; }
         public virtual string VersionId { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime CreateTime { get; set; }

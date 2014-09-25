@@ -7,7 +7,7 @@
         maxFilesize: 10000, // MB
         maxFiles: 1,
         uploadMultiple: true,
-        clickable: true,
+        clickable: "#dropzoneFileFormPreview",
         autoProcessQueue: false,
         previewsContainer: "#dropzoneFileFormPreview",
         acceptedFiles: '.doc,.docx',

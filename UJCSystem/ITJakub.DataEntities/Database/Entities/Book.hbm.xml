@@ -7,6 +7,9 @@
     <many-to-one name="Category">
       <column name="Category" sql-type="int" not-null="false" />
     </many-to-one>
+    <many-to-one name="BookType">
+      <column name="BookType" sql-type="int" not-null="false" />
+    </many-to-one>
     <property name="Guid">
       <column name="Guid" sql-type="varchar" not-null="true" />
     </property>

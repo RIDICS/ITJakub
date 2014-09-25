@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Transformation" table="[Transformation]" lazy="true" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    <many-to-one name="BookType">
+      <column name="BookType" sql-type="int" not-null="false" />
+    </many-to-one>
+    <property name="ResultType">
+      <column name="ResultType" sql-type="smallint" not-null="true" />
+    </property>
+    <property name="IsDefault">
+      <column name="IsDefault" sql-type="bit" not-null="true" />
+    </property>
+    <bag name="BookVersions" inverse="true">
+      <key column="Transformation" />
+      <one-to-many class="BookVersion" />
+    </bag>
+  </class>
+</hibernate-mapping>

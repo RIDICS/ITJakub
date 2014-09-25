@@ -18,7 +18,8 @@ namespace ITJakub.ITJakubService.Core
 
         public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract uploadFileContract)
         {
-            string tempName = m_localFilesystemManager.SaveTempFile(uploadFileContract.Data);
+            string tempName = m_localFilesystemManager.SaveTempFile(uploadFileContract.Data); 
+            //TODO call program for converting docx to xml here
             ProcessedFileInfoContract fileInfo = GetFileInfoFromTempFile(tempName);
             m_localFilesystemManager.RenameTempFile(tempName, fileInfo.Guid);
             return fileInfo;

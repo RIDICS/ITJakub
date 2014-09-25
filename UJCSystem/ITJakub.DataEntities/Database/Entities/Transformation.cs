@@ -1,19 +1,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace ITJakub.DataEntities.Database.Entities
-{
-    public class Book : IEquatable<Book>
-    {
-        public virtual long Id { get; set; }
-        public virtual string Guid { get; set; }
-        public virtual Category Category { get; set; }
-        public virtual Booktype BookType { get; set; }
-        public virtual IList<Bookmark> Bookmarks { get; set; }
-        public virtual IList<BookVersion> BookVersions { get; set; }
-        public virtual IList<Image> Images { get; set; }
+namespace ITJakub.DataEntities.Database.Entities {
+    
+    public class Transformation : IEquatable<Transformation> {
 
-        public virtual bool Equals(Book other)
+        public virtual int Id { get; set; }
+        public virtual Booktype BookType { get; set; }
+        public virtual short ResultType { get; set; }
+        public virtual bool IsDefault { get; set; }
+        public virtual IList<BookVersion> BookVersions { get; set; }
+
+        public bool Equals(Transformation other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -24,13 +22,13 @@ namespace ITJakub.DataEntities.Database.Entities
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
-            return Equals((Book) obj);
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Transformation) obj);
         }
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return Id;
         }
     }
 }

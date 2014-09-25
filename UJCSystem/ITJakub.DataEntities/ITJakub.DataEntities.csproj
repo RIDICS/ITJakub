@@ -76,9 +76,11 @@
     <Compile Include="Database\Entities\AuthorInfo.cs" />
     <Compile Include="Database\Entities\Book.cs" />
     <Compile Include="Database\Entities\Bookmark.cs" />
+    <Compile Include="Database\Entities\BookType.cs" />
     <Compile Include="Database\Entities\BookVersion.cs" />
     <Compile Include="Database\Entities\Category.cs" />
     <Compile Include="Database\Entities\Image.cs" />
+    <Compile Include="Database\Entities\Transformation.cs" />
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Repositories\AuthorRepository.cs" />
     <Compile Include="Database\Repositories\BookRepository.cs" />
@@ -99,7 +101,10 @@
     <EmbeddedResource Include="Database\Entities\Image.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\User.hbm.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\BookType.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Transformation.hbm.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
