@@ -28,8 +28,8 @@
             <p> Vyberte autora:</p>
             <div id="authorstabledivHeader">
                 <label for="searchInput">Filtr:</label>
-                <input id="searchInput" value="Type To Filter" disabled="disabled">
-                <button type="button" id="addAuthorButton" class="btn btn-default" style="float:right">Přidat autora</button>
+                <input id="searchInput" value="Type To Filter">
+                <button type="button" id="addAuthorButton" class="btn btn-default" style="float: right">Přidat autora</button>
             </div>
             <div id="authorsTableDiv">
                 <table class="table table-hover" id="authorsTable">
@@ -163,27 +163,25 @@
 
 <!-- Modal -->
 
-<div class="modal fade" id="addAuthorModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="addAuthorModal" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 9999">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form>
                     <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="button" id="show_first"
-                                    class="btn btn-info" data-dismiss="modal" aria-hidden="true">
-                                First
-                            </button>
-                            <button type="button" id="show_second"
-                                    class="btn btn-info" data-dismiss="modal" aria-hidden="true">
-                                Second
-                            </button>
-                            <button type="button" id="show_third"
-                                    class="btn btn-info" data-dismiss="modal" aria-hidden="true">
-                                Third
-                            </button>
-                        </div>
+                        <label>Text části jména:</label>
+                        <input type="text" class="form-control" placeholder="cast jmena">
                     </div>
+                    <div class="form-group">
+                        <label>Typ části jména:</label>
+                    <select class="form-control">
+                        <option value="one">Křestní</option>
+                        <option value="two">Příjmení</option>
+                        <option value="three">Rodné místo</option>
+                        <option value="four">Střední jméno</option>
+                    </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Vytvořit autora</button>
                 </form>
             </div>
         </div>
