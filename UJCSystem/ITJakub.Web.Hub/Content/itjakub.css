@@ -253,6 +253,7 @@ body {
 .container {
   width: 1100px;
   margin: 0 0 0 0;
+  background-color: white;
 }
 .navbar {
   position: fixed;
@@ -345,5 +346,9 @@ ul {
 .file-upload-metadata input[type='text'] {
   display: block;
   width: 100%;
+}
+#authorsTableDiv {
+  height: 200px;
+  overflow-y: auto;
 }
 /*# sourceMappingURL=itjakub.css.map */

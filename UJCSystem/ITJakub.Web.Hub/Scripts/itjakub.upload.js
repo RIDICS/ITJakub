@@ -144,3 +144,16 @@ function getVersionIdFromPage() {
 //    });
 //    return false; // prevent submit of the form.
 //});
+
+
+$(document).ready(function () {
+    $('#authorsTable tr')
+    .click(function (event) {
+        var _this = this;
+        $(_this).toggleClass('selected');
+        if (event.target.type !== 'checkbox') {
+            var checkbox = $(_this).find(':checkbox');
+            $(checkbox).attr('checked', !$(checkbox).is(':checked'));
+        }
+    });
+});
