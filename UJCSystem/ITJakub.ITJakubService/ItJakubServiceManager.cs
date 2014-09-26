@@ -4,8 +4,10 @@ using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
 using ITJakub.Core;
 using ITJakub.Core.Database;
+using ITJakub.DataEntities.Database.Entities;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
+using Book = ITJakub.Contracts.Categories.Book;
 
 namespace ITJakub.ITJakubService
 {
@@ -16,14 +18,16 @@ namespace ITJakub.ITJakubService
         private readonly AccountingManager m_accountingManager;
         private readonly UploadManager m_uploadManager;
         private readonly BookManager m_bookManager;
+        private readonly AuthorManager m_authorManager;
 
 
-        public ItJakubServiceManager(SearchServiceClient searchClient, ReleationDatabaseMock releationDatabaseMock, AccountingManager accountingManager, UploadManager uploadManager, BookManager bookManager)
+        public ItJakubServiceManager(SearchServiceClient searchClient, ReleationDatabaseMock releationDatabaseMock, AccountingManager accountingManager, UploadManager uploadManager, BookManager bookManager, AuthorManager authorManager)
         {
             m_searchClient = searchClient;
             m_accountingManager = accountingManager;
             m_uploadManager = uploadManager;
             m_bookManager = bookManager;
+            m_authorManager = authorManager;
             m_releationDatabaseMock = releationDatabaseMock;
         }
 
@@ -157,6 +161,11 @@ namespace ITJakub.ITJakubService
         public void SaveFileMetadata(string fileGuid, string name, string author)
         {
             m_bookManager.CreateBook(fileGuid, name, author);
+        }
+
+        public IEnumerable<AuthorDetailContract> GetAllAuthors()
+        {
+            return m_authorManager.GetAllAuthors();
         }
     }
 }

@@ -102,6 +102,11 @@ namespace ITJakub.ITJakubService
         {
             m_serviceManager.SaveFileMetadata(fileGuid, name, author);
         }
+
+        public IEnumerable<AuthorDetailContract> GetAllAuthors()
+        {
+            return m_serviceManager.GetAllAuthors();
+        }
     }
 
     [ServiceContract]

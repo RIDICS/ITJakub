@@ -336,5 +336,25 @@ namespace ITJakub.Core
                 throw;
             }
         }
+
+        public IEnumerable<AuthorDetailContract> GetAllAuthors()
+        {
+            try
+            {
+                return Channel.GetAllAuthors();
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetAllAuthors failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetAllAuthors timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

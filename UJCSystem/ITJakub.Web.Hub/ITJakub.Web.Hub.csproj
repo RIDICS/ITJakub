@@ -176,6 +176,7 @@
     <Compile Include="Areas\Editions\Controllers\EditionsController.cs" />
     <Compile Include="Areas\Editions\EditionsAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
@@ -415,6 +416,7 @@
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
     <Folder Include="Areas\Editions\Models\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
+    <Folder Include="Views\Author\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

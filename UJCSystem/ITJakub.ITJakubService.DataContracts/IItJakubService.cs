@@ -62,5 +62,8 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         void SaveFileMetadata(string fileGuid, string name, string author);
+
+        [OperationContract]
+        IEnumerable<AuthorDetailContract> GetAllAuthors();
     }
 }
