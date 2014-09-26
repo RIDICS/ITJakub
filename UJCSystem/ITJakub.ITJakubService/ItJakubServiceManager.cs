@@ -167,5 +167,10 @@ namespace ITJakub.ITJakubService
         {
             return m_authorManager.GetAllAuthors();
         }
+
+        public int CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)
+        {
+            return m_authorManager.CreateAuthor(authorInfos);
+        }
     }
 }

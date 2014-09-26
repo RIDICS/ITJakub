@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization;
 using System.ServiceModel;
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
@@ -10,13 +8,14 @@ namespace ITJakub.ITJakubService.DataContracts
     [ServiceContract]
     public interface IItJakubService
     {
-
         #region Prototype1 Operations
+
         [OperationContract]
         KeyWordsResponse GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds);
 
         [OperationContract]
-        List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord, List<string> categorieIds, List<string> booksIds);
+        List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord, List<string> categorieIds,
+            List<string> booksIds);
 
         [OperationContract]
         List<SearchResultWithHtmlContext> GetResultsByBooks(string book, string keyWord);
@@ -44,7 +43,6 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
-        
         [OperationContract]
         void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail);
 
@@ -65,5 +63,8 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IEnumerable<AuthorDetailContract> GetAllAuthors();
+
+        [OperationContract]
+        int CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos);
     }
 }

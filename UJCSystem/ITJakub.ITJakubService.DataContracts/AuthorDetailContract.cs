@@ -17,9 +17,7 @@ namespace ITJakub.ITJakubService.DataContracts
     public class AuthorInfoContract
     {
         [DataMember]
-        public int Id { get; set; }
-        [DataMember]
-        public  string Text { get; set; }
+        public string Text { get; set; }
         [DataMember]
         public  int TextType { get; set; } //TODO should be enum
     }

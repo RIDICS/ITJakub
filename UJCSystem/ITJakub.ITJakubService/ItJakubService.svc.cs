@@ -5,6 +5,7 @@ using System.ServiceModel;
 using Castle.Windsor;
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
+using ITJakub.DataEntities.Database.Entities;
 using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService
@@ -106,6 +107,11 @@ namespace ITJakub.ITJakubService
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
         {
             return m_serviceManager.GetAllAuthors();
+        }
+
+        public int CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)
+        {
+            return m_serviceManager.CreateAuthor(authorInfos);
         }
     }
 

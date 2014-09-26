@@ -1,5 +1,6 @@
-﻿using System.Web.Helpers;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -9,8 +10,14 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetAllAuthors()
         {
-            var authors = m_serviceClient.GetAllAuthors();
-            return Json(new { Authors = authors });
+            IEnumerable<AuthorDetailContract> authors = m_serviceClient.GetAllAuthors();
+            return Json(new {Authors = authors});
+        }
+
+        public ActionResult CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)
+        {
+            int authorId = m_serviceClient.CreateAuthor(authorInfos);
+            return Json(new {AuthorId = authorId});
         }
     }
 }

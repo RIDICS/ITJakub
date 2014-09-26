@@ -357,5 +357,25 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public int CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)
+        {
+            try
+            {
+                return Channel.CreateAuthor(authorInfos);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("CreateAuthor failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("CreateAuthor timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

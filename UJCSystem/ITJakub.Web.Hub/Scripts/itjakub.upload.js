@@ -186,7 +186,15 @@ $("#searchInput").keyup(function () {
 
 $('#addAuthorButton')
    .click(function (event) {
-       $('#addAuthorModal').modal('show');
+       //$('#addAuthorModal').modal('show');
+       var data = { authorInfos: [{ Text: 'Honza', TextType: 1 }, { Text: 'M', TextType: 2 }] };
+       $.ajax({
+           url: '/Author/CreateAuthor',
+           type: 'POST',
+           data: JSON.stringify(data),
+           dataType: 'json',
+           contentType: 'application/json'
+       });
    });
 
 $('#authorsTable tr')
@@ -198,3 +206,4 @@ $('#authorsTable tr')
            $(checkbox).attr('checked', !$(checkbox).is(':checked'));
        }
    });
+
