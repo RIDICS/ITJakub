@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
+using AutoMapper;
 using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
 using log4net.Config;
@@ -34,6 +35,13 @@ namespace ITJakub.ITJakubService
         {
             //configure log4net
             XmlConfigurator.Configure(new FileInfo("log4net.config"));
+            //configure AutoMapper
+            ConfigureAutoMapper();
+        }
+
+        private void ConfigureAutoMapper()
+        {
+            foreach (var profile in ResolveAll<Profile>()) Mapper.AddProfile(profile);
         }
 
         static string GetAssembly()

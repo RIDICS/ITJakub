@@ -9,6 +9,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<AuthorDetailContract, Author>();
+            CreateMap<AuthorInfoContract, AuthorInfo>();
         }
     }
 }

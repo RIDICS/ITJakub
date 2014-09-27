@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
@@ -23,7 +24,7 @@ namespace ITJakub.ITJakubService.Core
 
         public int CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)
         {
-            var infos = Mapper.Map<IList<AuthorInfo>>(authorInfos);
+            var infos = Mapper.Map<IEnumerable<AuthorInfoContract>,IList<AuthorInfo>>(authorInfos);
             return m_authorRepository.CreateAuthor(infos);
         }
     }
