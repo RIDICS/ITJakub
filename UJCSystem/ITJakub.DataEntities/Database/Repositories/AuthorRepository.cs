@@ -20,7 +20,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (ISession session = GetSession())
             {
-                return session.QueryOver<Author>().List<Author>();
+                return session.QueryOver<Author>().Fetch(author => author.AuthorInfos).Eager.List<Author>();
             }
         }
 

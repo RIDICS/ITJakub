@@ -11,7 +11,7 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult GetAllAuthors()
         {
             IEnumerable<AuthorDetailContract> authors = m_serviceClient.GetAllAuthors();
-            return Json(new {Authors = authors});
+            return Json(new { Authors = authors }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
@@ -19,7 +18,7 @@ namespace ITJakub.ITJakubService.Core
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
         {
             var authors = m_authorRepository.GetAllAuthors();
-            return Mapper.Map<IList<AuthorDetailContract>>(authors);
+            return Mapper.Map<IList<Author>,IList<AuthorDetailContract>>(authors);
         }
 
         public int CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)

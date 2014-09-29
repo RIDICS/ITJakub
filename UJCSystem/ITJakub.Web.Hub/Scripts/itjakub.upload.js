@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(function() {
 
     Dropzone.autoDiscover = false; // otherwise will be initialized twice
 
@@ -22,13 +22,13 @@
                 fileDropzone.processQueue();
             });
 
-            this.on("addedfile", function () {
+            this.on("addedfile", function() {
                 if (this.files[1] != null) {
                     this.removeFile(this.files[0]);
                 }
             });
 
-            this.on("drop", function (event) {
+            this.on("drop", function(event) {
                 if (this.getQueuedFiles().length == 0 && this.getUploadingFiles().length == 0) {
                     var _this = this;
                     _this.removeAllFiles();
@@ -72,6 +72,14 @@
         sending: function(file, xhr, formData) {
             formData.append('fileGuid', getFileGuidFromPage());
         }
+    });
+
+    //fill authors table
+    $.get('/Author/GetAllAuthors', function(result) {
+        $.each(result.Authors, function(index, author) {
+            alert(index + ": " + author);
+            addAuthorToTable(author.Id, index);
+        });
     });
 
 });
@@ -146,11 +154,7 @@ function getVersionIdFromPage() {
 //});
 
 
-//$(document).ready(function () {
-   
-//});
-
-$("#searchInput").keyup(function () {
+$("#searchInput").keyup(function() {
     //split the current value of searchInput
     var data = this.value.split(" ");
     //create a jquery object of the rows
@@ -163,18 +167,18 @@ $("#searchInput").keyup(function () {
     jo.hide();
 
     //Recusively filter the jquery object to get results.
-    jo.filter(function (i, v) {
-        var $t = $(this);
-        for (var d = 0; d < data.length; ++d) {
-            if ($t.is(":contains('" + data[d] + "')")) {
-                return true;
+    jo.filter(function(i, v) {
+            var $t = $(this);
+            for (var d = 0; d < data.length; ++d) {
+                if ($t.is(":contains('" + data[d] + "')")) {
+                    return true;
+                }
             }
-        }
-        return false;
-    })
-    //show the rows that match.
-    .show();
-}).focus(function () {
+            return false;
+        })
+        //show the rows that match.
+        .show();
+}).focus(function() {
     this.value = "";
     $(this).css({
         "color": "black"
@@ -185,25 +189,56 @@ $("#searchInput").keyup(function () {
 });
 
 $('#addAuthorButton')
-   .click(function (event) {
-       //$('#addAuthorModal').modal('show');
-       var data = { authorInfos: [{ Text: 'Honza', TextType: 1 }, { Text: 'M', TextType: 2 }] };
-       $.ajax({
-           url: '/Author/CreateAuthor',
-           type: 'POST',
-           data: JSON.stringify(data),
-           dataType: 'json',
-           contentType: 'application/json'
-       });
-   });
+    .click(function(event) {
+        $('#addAuthorModal').modal('show');
+    });
 
-$('#authorsTable tr')
-   .click(function (event) {
-       var _this = this;
-       $(_this).toggleClass('selected');
-       if (event.target.type !== 'checkbox') {
-           var checkbox = $(_this).find(':checkbox');
-           $(checkbox).attr('checked', !$(checkbox).is(':checked'));
-       }
-   });
+$('#createAuthorForm').submit(function () {
+    var formData = $("#createAuthorForm").serializeArray();
+    var authorId = createAuthor(formData);
+    var authorName = "mockupName";
+    addAuthorToTable(authorId, authorName);
+    return false; // prevent submit of the form.
+});
 
+//$('#authorsTable tr')
+//   .click(function (event) {
+//       var _this = this;
+//       $(_this).toggleClass('selected');
+//       if (event.target.type !== 'checkbox') {
+//           var checkbox = $(_this).find(':checkbox');
+//           $(checkbox).attr('checked', !$(checkbox).is(':checked'));
+//       }
+//   });
+
+function createAuthor(data) {
+    //var data = { authorInfos: [{ Text: 'Honza', TextType: 1 }, { Text: 'M', TextType: 2 }] };
+    $.ajax({
+        url: '/Author/CreateAuthor',
+        type: 'POST',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json',
+        success : function(response) {
+            return response.AuthorId;
+        }
+    });
+}
+
+
+function addAuthorToTable(authorId, authorName) {
+    alert("adding author: " + authorId + " name: " + authorName);
+    var tr = document.createElement('tr');
+    var checkboxTd = document.createElement('td');
+    var checkbox = document.createElement('input');
+    checkbox.type = "checkbox";
+    checkbox.name = "author";
+    checkbox.value = authorId;
+    var nameTd = document.createElement('td');
+    nameTd.appendChild(document.createTextNode(authorName));
+
+    checkboxTd.appendChild(checkbox);
+    tr.appendChild(checkboxTd);
+    tr.appendChild(nameTd);
+    document.getElementById('authorsTableBody').appendChild(tr);
+}
