@@ -4,7 +4,7 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    <bag name="AuthorInfos" inverse="true">
+    <bag name="AuthorInfos" inverse="true" cascade="all" lazy="false">
       <key column="Author" />
       <one-to-many class="AuthorInfo" />
     </bag>
