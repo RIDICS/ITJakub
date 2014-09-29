@@ -77,7 +77,6 @@
     //fill authors table
     $.get('/Author/GetAllAuthors', function(result) {
         $.each(result.Authors, function(index, author) {
-            alert(index + ": " + author);
             addAuthorToTable(author.Id, index);
         });
     });
@@ -193,11 +192,10 @@ $('#addAuthorButton')
         $('#addAuthorModal').modal('show');
     });
 
-$('#createAuthorForm').submit(function () {
-    var formData = $("#createAuthorForm").serializeArray();
-    var authorId = createAuthor(formData);
-    var authorName = "mockupName";
-    addAuthorToTable(authorId, authorName);
+$('#createAuthorForm').submit(function() {
+    var formData = $("#createAuthorForm").serializeObject();
+    createAuthor(formData);
+    $('#addAuthorModal').modal('hide');
     return false; // prevent submit of the form.
 });
 
@@ -213,21 +211,25 @@ $('#createAuthorForm').submit(function () {
 
 function createAuthor(data) {
     //var data = { authorInfos: [{ Text: 'Honza', TextType: 1 }, { Text: 'M', TextType: 2 }] };
+    var authorName = "mockupName";
+    console.log({ authorInfos: data });
+    console.log(data);
     $.ajax({
         url: '/Author/CreateAuthor',
         type: 'POST',
-        data: JSON.stringify(data),
+        data: JSON.stringify({ authorInfos: data }),
         dataType: 'json',
+        async: false,
         contentType: 'application/json',
-        success : function(response) {
-            return response.AuthorId;
+        success: function(response) {
+            addAuthorToTable(response.AuthorId, authorName);
         }
     });
 }
 
 
 function addAuthorToTable(authorId, authorName) {
-    alert("adding author: " + authorId + " name: " + authorName);
+    //alert("adding author: " + authorId + " name: " + authorName);
     var tr = document.createElement('tr');
     var checkboxTd = document.createElement('td');
     var checkbox = document.createElement('input');
@@ -242,3 +244,10 @@ function addAuthorToTable(authorId, authorName) {
     tr.appendChild(nameTd);
     document.getElementById('authorsTableBody').appendChild(tr);
 }
+
+$('#addAuthorInfo')
+    .click(function (event) {
+        var authorInfo = document.createElement("div");
+        authorInfo.innerHTML='<div class="form-group author-info" ><label>Text části jména:</label><input type="text" name="Text" class="form-control" placeholder="cast jmena"><label>Typ části jména:</label><select class="form-control" name="TextType"><option value="one">Křestní</option><option value="two">Příjmení</option><option value="three">Rodné místo</option><option value="four">Střední jméno</option></select></div>'; //TODO rewrite to javascript
+        $(authorInfo).insertBefore($("#createAuthorForm button").first());
+});

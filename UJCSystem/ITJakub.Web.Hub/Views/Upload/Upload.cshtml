@@ -40,6 +40,7 @@
                     </tbody>
                 </table>
             </div>
+            <input type="submit" value="Potvrdit" class="btn btn-primary" />
         </form>
     </li>
     <li>
@@ -72,20 +73,20 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form id="createAuthorForm">
-                    <div class="form-group">
-                        <label>Text části jména:</label>
-                        <input type="text" class="form-control" placeholder="cast jmena">
-                    </div>
-                    <div class="form-group">
-                        <label>Typ části jména:</label>
-                        <select class="form-control">
-                            <option value="one">Křestní</option>
-                            <option value="two">Příjmení</option>
-                            <option value="three">Rodné místo</option>
-                            <option value="four">Střední jméno</option>
-                        </select>
+                    <div class="form-group author-info" >
+                            <label>Text části jména:</label>
+                            <input type="text" name="Text" class="form-control" placeholder="cast jmena">
+                            <label>Typ části jména:</label>
+                            <select class="form-control" name="TextType">
+                                <option value="one">Křestní</option>
+                                <option value="two">Příjmení</option>
+                                <option value="three">Rodné místo</option>
+                                <option value="four">Střední jméno</option>
+                            </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Vytvořit autora</button>
+                    <button class="btn btn-default" data-dismiss="modal" data-target="#addAuthorModal">Zrušit</button>
+                    <button id="addAuthorInfo" class="btn btn-default" type="button">Přidat další</button>
                 </form>
             </div>
         </div>
