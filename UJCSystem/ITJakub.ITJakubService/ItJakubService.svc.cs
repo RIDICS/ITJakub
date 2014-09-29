@@ -1,18 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.ServiceModel;
 using Castle.Windsor;
 using ITJakub.Contracts.Categories;
 using ITJakub.Contracts.Searching;
-using ITJakub.DataEntities.Database.Entities;
 using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService
 {
     public class ItJakubService : IItJakubServiceLocal
     {
-
         private readonly WindsorContainer m_container;
         private readonly ItJakubServiceManager m_serviceManager;
 
@@ -28,7 +24,8 @@ namespace ITJakub.ITJakubService
         }
 
 
-        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord, List<string> categorieIds, List<string> booksIds)
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord, List<string> categorieIds,
+            List<string> booksIds)
         {
             return m_serviceManager.GetContextForKeyWord(keyWord, categorieIds, booksIds);
         }
@@ -74,7 +71,8 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.GetBookById(id);
         }
 
-        public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
+        public void CreateUser(AuthProvidersContract providerContract, string providerToken,
+            UserDetailContract userDetail)
         {
             m_serviceManager.CreateUser(providerContract, providerToken, userDetail);
         }
@@ -98,7 +96,7 @@ namespace ITJakub.ITJakubService
         {
             m_serviceManager.SavePageImageForFile(uploadImageContract);
         }
-        
+
         public void SaveFileMetadata(string fileGuid, string name, string author)
         {
             m_serviceManager.SaveFileMetadata(fileGuid, name, author);
@@ -113,10 +111,15 @@ namespace ITJakub.ITJakubService
         {
             return m_serviceManager.CreateAuthor(authorInfos);
         }
+
+        public void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)
+        {
+            m_serviceManager.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
+        }
     }
 
     [ServiceContract]
-    public interface IItJakubServiceLocal:IItJakubService
+    public interface IItJakubServiceLocal : IItJakubService
     {
     }
 }

@@ -1,4 +1,4 @@
-﻿using ITJakub.DataEntities.Database.Entities;
+﻿using System.Collections.Generic;
 using ITJakub.DataEntities.Database.Repositories;
 
 namespace ITJakub.ITJakubService.Core
@@ -15,6 +15,11 @@ namespace ITJakub.ITJakubService.Core
         public void CreateBook(string bookGuid, string name, string author)
         {
             m_bookRepository.CreateBook(bookGuid, name, author);
+        }
+
+        public void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)
+        {
+            m_bookRepository.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
         }
     }
 }

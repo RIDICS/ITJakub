@@ -92,12 +92,34 @@ function saveVersionIdToPage(versionId) {
 }
 
 function getFileGuidFromPage() {
-    $('ol.upload-file').attr('data-file-guid');
+    return $('ol.upload-file').attr('data-file-guid');
 }
 
 function getVersionIdFromPage() {
-    $('ol.upload-file').attr('data-version-id');
+    return $('ol.upload-file').attr('data-version-id');
 }
+
+$('#fileMetadataForm').submit(function () {
+    var authorIds = [];
+    $.each($('#authorsTableBody input:checked'), function (index, checked) {
+        authorIds.push($(checked).val());
+    });
+    var formData = [];
+    formData.push({ name: "bookGuid", value: getFileGuidFromPage() });
+    formData.push({ name: "bookVersionGuid", value: getVersionIdFromPage() });
+    formData.push({ authorIds: authorIds });
+        $.ajax({
+            type: "POST",
+            url: "/Author/AssignAuthorsToBook",
+            data: formData,
+            success: function (response) {
+                if (response.Error) {
+                    alert(response.Error);
+                }
+            }
+        });
+    return false;
+});
 
 //function fillFileMetadataForm(data) {
 //    var form = document.getElementById("fileMetadataForm");

@@ -19,5 +19,11 @@ namespace ITJakub.Web.Hub.Controllers
             int authorId = m_serviceClient.CreateAuthor(authorInfos);
             return Json(new {AuthorId = authorId});
         }
+
+        public ActionResult AssignAuthorsToBook(string bookGuid, string bookVersionGuid, int[] authorIds)
+        {
+            m_serviceClient.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
+            return Json(new { });
+        }
     }
 }

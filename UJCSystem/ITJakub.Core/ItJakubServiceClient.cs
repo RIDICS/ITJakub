@@ -376,5 +376,25 @@ namespace ITJakub.Core
                 throw;
             }
         }
+
+        public void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)
+        {
+            try
+            {
+                Channel.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AssignAuthorsToBook failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AssignAuthorsToBook timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

@@ -172,5 +172,10 @@ namespace ITJakub.ITJakubService
         {
             return m_authorManager.CreateAuthor(authorInfos);
         }
+
+        public void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)
+        {
+            m_bookManager.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
+        }
     }
 }
