@@ -104,17 +104,17 @@ $('#fileMetadataForm').submit(function () {
     $.each($('#authorsTableBody input:checked'), function (index, checked) {
         authorIds.push($(checked).val());
     });
-    var formData = [];
-    formData.push({ name: "bookGuid", value: getFileGuidFromPage() });
-    formData.push({ name: "bookVersionGuid", value: getVersionIdFromPage() });
-    formData.push({ authorIds: authorIds });
         $.ajax({
             type: "POST",
             url: "/Author/AssignAuthorsToBook",
-            data: formData,
+            data: JSON.stringify({ 'bookGuid': getFileGuidFromPage(), 'bookVersionGuid': getVersionIdFromPage(), 'authorIds': authorIds }),
+            dataType: 'json',
+            contentType: 'application/json',
             success: function (response) {
                 if (response.Error) {
                     alert(response.Error);
+                } else {
+                    alert("uzivatele byli prirazeni");//TODO tell in better way that authors were assigned
                 }
             }
         });

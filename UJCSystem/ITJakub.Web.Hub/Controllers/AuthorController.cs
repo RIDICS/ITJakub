@@ -22,6 +22,10 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult AssignAuthorsToBook(string bookGuid, string bookVersionGuid, int[] authorIds)
         {
+            if (bookGuid == null || bookVersionGuid == null)
+            {
+                return Json(new {Error = "Cannot assigns author(s) to book. BookGuid and BookversionId could not be empty"});
+            }
             m_serviceClient.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
             return Json(new { });
         }
