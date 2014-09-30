@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Shared.Data;
@@ -14,16 +15,17 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     public class RowProgressViewModel
     {
         private int m_filledLength;
+        private DateTime m_time;
 
         public RowProgressViewModel()
         {
-            
         }
 
-        public RowProgressViewModel(int wordLength, int startPosition, int answerPosition)
+        public RowProgressViewModel(int rowIndex, int wordLength, int startPosition, int answerPosition)
         {
             Cells = new CellViewModel[wordLength];
             StartPosition = startPosition;
+            RowIndex = rowIndex;
 
             for (int i = 0; i < Cells.Length; i++)
             {
@@ -32,6 +34,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
             Cells[answerPosition].IsPartOfAnswer = true;
         }
+
+        public int RowIndex { get; private set; }
 
         public CellViewModel[] Cells { get; set; }
 

@@ -14,6 +14,7 @@
     <UserControl.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:HighlightMeConverter x:Key="HighlightMeConverter" />
+        <converter:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter" />
     </UserControl.Resources>
     <Grid Background="#22000000">
         <Grid VerticalAlignment="Stretch"
@@ -64,11 +65,10 @@
                                         Background="LightBlue"
                                         Margin="5,0,0,0">
                                 <Image Source="../Icon/time-26.png" />
-                                <!--TODO display time-->
-                                <!--<TextBlock Text="{Binding Converter={StaticResource TotalTimeConverter}}"
+                                <TextBlock Text="{Binding GameTime, Converter={StaticResource TimeSpanToStringConverter}}"
                                            VerticalAlignment="Center"
                                            FontSize="16"
-                                           Margin="3" />-->
+                                           Margin="3" />
                             </StackPanel>
                             <TextBlock FontSize="16"
                                        VerticalAlignment="Center"

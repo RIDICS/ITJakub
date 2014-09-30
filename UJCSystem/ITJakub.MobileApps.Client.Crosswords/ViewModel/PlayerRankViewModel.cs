@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
+using ITJakub.MobileApps.Client.Crosswords.ViewModel.Comparer;
 using ITJakub.MobileApps.Client.Shared.Data;
 
 namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
@@ -10,6 +11,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     {
         private readonly int m_crosswordRowCount;
         private bool m_win;
+        private ObservableCollection<PlayerRankViewModel> m_playerRanking;
 
         public PlayerRankingViewModel(int crosswordRowCount)
         {
@@ -17,7 +19,15 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             PlayerRanking = new ObservableCollection<PlayerRankViewModel>();
         }
 
-        public ObservableCollection<PlayerRankViewModel> PlayerRanking { get; private set; }
+        public ObservableCollection<PlayerRankViewModel> PlayerRanking
+        {
+            get { return m_playerRanking; }
+            private set
+            {
+                m_playerRanking = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public bool Win
         {
@@ -42,6 +52,11 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             playerRank.UpdateRowInfo(progressUpdate.RowIndex, progressUpdate.IsCorrect);
             playerRank.UpdateTime(progressUpdate.Time);
         }
+
+        public void UpdatePlayerOrder()
+        {
+            PlayerRanking = new ObservableCollection<PlayerRankViewModel>(PlayerRanking.OrderBy(player => player, new PlayerRankComparer()));
+        }
     }
 
     public class PlayerRankViewModel : ViewModelBase
@@ -49,6 +64,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         private readonly DateTime m_firstTime;
         private readonly bool[] m_correctAnswers;
         private bool m_win;
+        private int m_letterCount;
 
         public PlayerRankViewModel(int crosswordRowCount, AuthorInfo userInfo, DateTime firstTime)
         {
@@ -71,9 +87,20 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             }
         }
 
+        public int LetterCount
+        {
+            get { return m_letterCount; }
+            private set
+            {
+                m_letterCount = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public void UpdateRowInfo(int row, bool isCorrect)
         {
             m_correctAnswers[row] = isCorrect;
+            LetterCount = m_correctAnswers.Count(b => b);
             Win = m_correctAnswers.All(correctAnswer => correctAnswer);
         }
 

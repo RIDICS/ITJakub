@@ -56,7 +56,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             });
         }
 
-        public void UpdateProgress(IEnumerable<ProgressUpdateViewModel> list)
+        public void UpdateProgress(IList<ProgressUpdateViewModel> list)
         {
             foreach (var progressUpdate in list)
             {
@@ -79,7 +79,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     if (viewModel == null)
                     {
                         var rowProgressViewModels = Crossword.Select(model => model.Cells != null
-                            ? new RowProgressViewModel(model.Cells.Count, model.StartPosition, model.AnswerPosition)
+                            ? new RowProgressViewModel(model.RowIndex, model.Cells.Count, model.StartPosition, model.AnswerPosition)
                             : new RowProgressViewModel());
                         
                         viewModel = new ProgressViewModel
@@ -90,12 +90,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
                         OpponentProgress.Add(viewModel);
                     }
-                    var rowViewModel = viewModel.Rows[progressUpdate.RowIndex]; // TODO index in array is different than RowIndex
+                    var rowViewModel = viewModel.Rows.First(row => row.RowIndex == progressUpdate.RowIndex);
                     rowViewModel.FilledLength = progressUpdate.FilledWord.Length;
                     rowViewModel.IsCorrect = progressUpdate.IsCorrect;
                 }
             }
             m_firstUpdate = false;
+            if (list.Count > 0)
+                PlayerRankingViewModel.UpdatePlayerOrder();
         }
 
         public void SetWin(bool isWin)

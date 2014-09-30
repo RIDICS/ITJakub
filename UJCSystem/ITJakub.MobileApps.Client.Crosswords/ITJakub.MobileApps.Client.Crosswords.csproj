@@ -116,6 +116,7 @@
     <Compile Include="DataService\CrosswordManager.cs" />
     <Compile Include="DataService\CrosswordTask.cs" />
     <Compile Include="ViewModel\GameInfoViewModel.cs" />
+    <Compile Include="ViewModel\Comparer\PlayerRankComparer.cs" />
     <Compile Include="ViewModel\PlayerRankViewModel.cs" />
     <Compile Include="ViewModel\CrosswordRowViewModel.cs" />
     <Compile Include="ViewModel\ProgressUpdateViewModel.cs" />
