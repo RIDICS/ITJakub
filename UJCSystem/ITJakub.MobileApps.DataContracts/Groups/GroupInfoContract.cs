@@ -17,7 +17,7 @@ namespace ITJakub.MobileApps.DataContracts.Groups
         public string Name { get; set; }
 
         [DataMember]
-        public bool IsActive { get; set; }
+        public GroupStateContract State { get; set; }
 
         [DataMember]
         public List<GroupMemberContract> Members { get; set; }

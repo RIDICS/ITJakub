@@ -17,9 +17,9 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
 
         public virtual string EnterCode { get; set; }
 
-        public virtual bool IsActive { get; set; }
-
         public virtual string Evaluation { get; set; }
+
+        public virtual GroupState State { get; set; }
 
         public virtual IList<SynchronizedObject> SynchronizedObjects { get; set; }
 

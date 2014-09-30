@@ -37,11 +37,13 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationNotRunningFault.cs" />
     <Compile Include="Applications\ApplicationContract.cs" />
     <Compile Include="Applications\SynchronizedObjectContract.cs" />
     <Compile Include="Applications\SynchronizedObjectResponseContract.cs" />
     <Compile Include="AuthProvidersContract.cs" />
     <Compile Include="AuthorizedMethodAttribute.cs" />
+    <Compile Include="Groups\GroupStateContract.cs" />
     <Compile Include="Groups\GroupDetailsUpdateContract.cs" />
     <Compile Include="Groups\CreateGroupResponse.cs" />
     <Compile Include="Groups\GroupInfoContract.cs" />

@@ -16,6 +16,7 @@
 
     <Page.Resources>
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <converter:GroupTypeToNameConverter x:Key="GroupTypeToNameConverter" />
         <converter:ApplicationTypeToNameConverter x:Key="ApplicationTypeToNameConverter" />
         <CollectionViewSource x:Name="GroupList" Source="{Binding GroupList}" IsSourceGrouped="True" />
@@ -35,19 +36,44 @@
             <AppBarButton Icon="Forward"
                           Label="Připojit se k nové skupině">
                 <AppBarButton.Flyout>
-                    <Flyout x:Name="ConnectToGroupFlyout">
-                        <StackPanel Orientation="Vertical">
+                    <Flyout control:FlyoutHelpers.IsOpen="{Binding ConnectToGroupViewModel.IsFlyoutOpen, Mode=TwoWay}">
+                        <StackPanel DataContext="{Binding ConnectToGroupViewModel}"
+                                    Orientation="Vertical">
                             <TextBlock FontSize="15"
                                        Text="Zadejte číslo skupiny:" />
                             <control:SubmitTextBox
                                      Width="250"
-                                     Margin="0 5 0 5"
+                                     Margin="0,5,0,2"
                                      Text="{Binding ConnectToGroupCode, Mode=TwoWay}"
                                      EnterCommand="{Binding ConnectToGroupCommand}" />
-                            <Button HorizontalAlignment="Right"
-                                    Content="Připojit se"
-                                    Command="{Binding ConnectToGroupCommand}"
-                                    Click="ConnectToGroupButton_OnClick" />
+                            <TextBlock Foreground="DarkRed"
+                                       FontSize="15"
+                                       Text="Zadaný kód skupiny neexistuje."
+                                       Visibility="{Binding ShowCodeNotExistError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <Grid Margin="0,3,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <ProgressRing IsActive="{Binding InProgress}"
+                                              Foreground="Gray"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="Připojování"
+                                           FontSize="15"
+                                           Foreground="Gray"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding InProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                           Margin="5,0,0,0" />
+                                
+                                <Button Grid.Column="2"
+                                        HorizontalAlignment="Right"
+                                        Content="Připojit se"
+                                        Command="{Binding ConnectToGroupCommand}"
+                                        IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}" />
+                            </Grid>
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>

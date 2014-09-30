@@ -230,5 +230,20 @@ namespace ITJakub.MobileApps.Service
                 throw;
             }
         }
+
+        public void UpdateGroupState(long groupId, GroupStateContract state)
+        {
+            try
+            {
+                m_serviceManager.UpdateGroupState(groupId, state);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
     }
 }

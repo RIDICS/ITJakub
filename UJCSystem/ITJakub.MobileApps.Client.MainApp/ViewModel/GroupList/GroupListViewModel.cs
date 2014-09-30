@@ -17,7 +17,7 @@ using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 
-namespace ITJakub.MobileApps.Client.MainApp.ViewModel
+namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 {
     /// <summary>
     ///     This class contains properties that a View can data bind to.
@@ -35,7 +35,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         
         private UserRoleContract m_userRole;
         private bool m_commandBarOpen;
-        private string m_connectToGroupCode;
         private string m_deleteMessage;
         private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
         private string m_newGroupName;
@@ -62,6 +61,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 Messenger.Default.Unregister(this);
             });
 
+            InitViewModels();
             InitCommands();
             LoadData();
         }
@@ -84,19 +84,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         public RelayCommand RefreshListCommand { get; private set; }
 
-        public RelayCommand ConnectToGroupCommand { get; private set; }
-
         public RelayCommand ConnectCommand { get; private set; }
-
-        public string ConnectToGroupCode
-        {
-            get { return m_connectToGroupCode; }
-            set
-            {
-                m_connectToGroupCode = value;
-                RaisePropertyChanged();
-            }
-        }
 
         public string NewGroupName
         {
@@ -182,29 +170,19 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        public ConnectToGroupViewModel ConnectToGroupViewModel { get; set; }
+
         private void InitCommands()
         {
             GroupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
             ConnectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
             CreateNewGroupCommand = new RelayCommand(CreateNewGroup);
             RefreshListCommand = new RelayCommand(LoadData);
-            ConnectToGroupCommand = new RelayCommand(ConnectToGroup);
         }
 
-        private void ConnectToGroup()
+        private void InitViewModels()
         {
-            if (ConnectToGroupCode == string.Empty)
-                return;
-
-            m_dataService.ConnectToGroup(ConnectToGroupCode, exception =>
-            {
-                if (exception != null)
-                    return;
-
-                new MessageDialog("Připojeno").ShowAsync();
-                LoadData();
-            });
-            ConnectToGroupCode = string.Empty;
+            ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, LoadData);
         }
 
         private void CreateNewGroup()

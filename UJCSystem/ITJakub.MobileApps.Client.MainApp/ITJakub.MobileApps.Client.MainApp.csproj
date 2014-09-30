@@ -107,6 +107,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\GroupList\ConnectToGroupViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
     <Compile Include="ViewModel\Message\SelectedApplicationMessage.cs" />
     <Compile Include="ViewModel\Message\SelectedTaskMessage.cs" />
@@ -133,7 +134,7 @@
     </Compile>
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="ViewModel\GroupListViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\GroupListViewModel.cs" />
     <Compile Include="ViewModel\Login\LoginViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ApplicationHostView.xaml.cs">

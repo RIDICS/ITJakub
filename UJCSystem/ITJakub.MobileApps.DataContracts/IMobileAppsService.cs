@@ -62,5 +62,9 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
         TaskContract GetTaskForGroup(long groupId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        void UpdateGroupState(long groupId, GroupStateContract state);
     }
 }

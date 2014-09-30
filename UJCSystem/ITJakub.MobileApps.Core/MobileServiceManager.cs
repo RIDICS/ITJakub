@@ -110,6 +110,11 @@ namespace ITJakub.MobileApps.Core
         {
             return m_taskManager.GetTaskForGroup(groupId);
         }
+
+        public void UpdateGroupState(long groupId, GroupStateContract state)
+        {
+            m_groupManager.UpdateGroupState(groupId, state);
+        }
     }
 }
 //    {

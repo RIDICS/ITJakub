@@ -15,6 +15,8 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
             CreateMap<Group, GroupDetailContract>();
 
             CreateMap<Group, GroupDetailsUpdateContract>();
+
+            CreateMap<GroupStateContract, GroupState>();
         }
     }
 }

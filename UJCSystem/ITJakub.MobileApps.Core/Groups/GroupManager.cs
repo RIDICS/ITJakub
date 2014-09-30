@@ -44,7 +44,7 @@ namespace ITJakub.MobileApps.Core.Groups
         {
             User user = m_usersRepository.Load<User>(userId);
             
-            var group = new Group {Author = user, CreateTime = DateTime.UtcNow, Name = groupName, IsActive = true};
+            var group = new Group {Author = user, CreateTime = DateTime.UtcNow, Name = groupName, State = GroupState.Created};
 
             int attempt = 0;
             while (attempt < MaxAttemptsToSave)
@@ -74,6 +74,12 @@ namespace ITJakub.MobileApps.Core.Groups
         public void AddUserToGroup(string groupAccessCode, long userId)
         {
             Group group = m_usersRepository.FindByEnterCode(groupAccessCode);
+            if (group.State == GroupState.Created || group.State == GroupState.Closed)
+            {
+                // TODO fault
+                return;
+            }
+
             var user = m_usersRepository.Load<User>(userId);
             group.Members.Add(user);
             m_usersRepository.Update(group);
@@ -105,11 +111,23 @@ namespace ITJakub.MobileApps.Core.Groups
 
         public void AssignTaskToGroup(long groupId, long taskId)
         {
-            var task = m_usersRepository.Load<Task>(taskId);
             var group = m_usersRepository.FindById<Group>(groupId);
+            var task = m_usersRepository.Load<Task>(taskId);
             group.Task = task;
 
             m_usersRepository.Update(group);
+        }
+
+        public void UpdateGroupState(long groupId, GroupStateContract state)
+        {
+            var group = m_usersRepository.FindById<Group>(groupId);
+            var newState = Mapper.Map<GroupStateContract, GroupState>(state);
+
+            if (newState > group.State || (newState == GroupState.Running && group.State == GroupState.Paused))
+            {
+                group.State = newState;
+                m_usersRepository.Update(group);
+            }
         }
     }
 }

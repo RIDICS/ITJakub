@@ -83,11 +83,6 @@ namespace ITJakub.MobileApps.Client.MainApp.View
 
         #endregion
 
-        private void ConnectToGroupButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            ConnectToGroupFlyout.Hide();
-        }
-
         private void CreateGroupButton_OnClick(object sender, RoutedEventArgs e)
         {
             CreateNewGroupFlyout.Hide();

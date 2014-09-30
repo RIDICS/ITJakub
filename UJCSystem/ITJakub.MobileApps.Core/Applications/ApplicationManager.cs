@@ -32,9 +32,15 @@ namespace ITJakub.MobileApps.Core.Applications
 
             var now = DateTime.UtcNow;
 
+            var group = m_usersRepository.FindById<Group>(groupId);
+            if (group.State != GroupState.Running)
+            {
+                // TODO throw FaultException
+            }
+
             var application = m_applicationRepository.Load<Application>(applicationId);                
             var user = m_usersRepository.Load<User>(userId);
-            var group = m_usersRepository.Load<Group>(groupId);
+            
             SynchronizedObject deSyncObject = Mapper.Map<SynchronizedObject>(synchronizedObject);
             deSyncObject.Application = application;
             deSyncObject.Author = user;

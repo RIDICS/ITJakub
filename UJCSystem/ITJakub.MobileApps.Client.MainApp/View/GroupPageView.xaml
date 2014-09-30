@@ -122,12 +122,33 @@
                            Foreground="Gold"
                            Visibility="{Binding TaskSaved, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <ToggleSwitch Header="Stav skupiny"
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">
+                        <Run Text="Stav skupiny:" />
+                        <Run Text=" TODO"
+                             Foreground="Yellow"/>
+                    </TextBlock>
+                
+                
+                    <Button Content="Změnit"
+                            Margin="40,0,0,0">
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Přijímání členů" IsEnabled="True" />
+                                <MenuFlyoutItem Text="Čekání na spuštění" IsEnabled="True" />
+                                <MenuFlyoutItem Text="Spustit" IsEnabled="True" />
+                                <MenuFlyoutItem Text="Pozastavit"  IsEnabled="False"/>
+                                <MenuFlyoutItem Text="Ukončit" IsEnabled="True" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+                <!--<ToggleSwitch Header="Stav skupiny"
                               FontSize="20"
                               OnContent="Aktivní"
                               OffContent="Neaktivní"
                               Margin="-7,50,0,0">
-                </ToggleSwitch>
+                </ToggleSwitch>-->
             </StackPanel>
             
             

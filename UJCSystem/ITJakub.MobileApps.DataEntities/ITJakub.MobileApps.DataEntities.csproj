@@ -94,6 +94,7 @@
     <Compile Include="AzureTables\Entities\SynchronizedObjectEntity.cs" />
     <Compile Include="AzureTables\Entities\TaskEntity.cs" />
     <Compile Include="Database\Entities\AuthenticationProvider.cs" />
+    <Compile Include="Database\Entities\GroupState.cs" />
     <Compile Include="Database\Repositories\ApplicationRepository.cs" />
     <Compile Include="Database\Repositories\TaskRepository.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />

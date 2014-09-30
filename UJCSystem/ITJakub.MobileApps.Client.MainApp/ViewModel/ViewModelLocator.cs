@@ -17,6 +17,7 @@ using System.Reflection;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Core;
 using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using Microsoft.Practices.Unity;

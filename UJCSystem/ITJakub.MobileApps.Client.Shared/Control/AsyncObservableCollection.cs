@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading;
 
-namespace ITJakub.MobileApps.Client.Shared.Helpers
+namespace ITJakub.MobileApps.Client.Shared.Control
 {
     public class AsyncObservableCollection<T> : ObservableCollection<T>
     {

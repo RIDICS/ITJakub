@@ -2,7 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Chat.DataService;
 using ITJakub.MobileApps.Client.Shared;
-using ITJakub.MobileApps.Client.Shared.Helpers;
+using ITJakub.MobileApps.Client.Shared.Control;
 
 namespace ITJakub.MobileApps.Client.Chat.ViewModel
 {
