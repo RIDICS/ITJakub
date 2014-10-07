@@ -245,5 +245,20 @@ namespace ITJakub.MobileApps.Service
                 throw;
             }
         }
+
+        public void RemoveGroup(long groupId)
+        {
+            try
+            {
+                m_serviceManager.RemoveGroup(groupId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
     }
 }

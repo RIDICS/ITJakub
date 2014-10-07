@@ -30,10 +30,12 @@ namespace ITJakub.MobileApps.DataContracts
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
+        [FaultContract(typeof(ApplicationNotRunningFault))]
         void CreateSynchronizedObject(int applicationId, long groupId, long userId, SynchronizedObjectContract synchronizedObject);
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
+        [FaultContract(typeof(ApplicationNotRunningFault))]
         IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since);
 
         [OperationContract]
@@ -66,5 +68,9 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
         void UpdateGroupState(long groupId, GroupStateContract state);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        void RemoveGroup(long groupId);
     }
 }

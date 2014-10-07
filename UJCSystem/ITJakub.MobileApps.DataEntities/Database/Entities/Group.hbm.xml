@@ -36,12 +36,12 @@
       <column name="State" sql-type="smallint" not-null="true" />
     </property>
 
-    <bag name="SynchronizedObjects" lazy="true">
+    <bag name="SynchronizedObjects" lazy="true" inverse="true" cascade="all-delete-orphan">
       <key column="GroupId" />
       <one-to-many class="SynchronizedObject" />
     </bag>
 
-    <bag name="Members" table="UserToGroup" cascade="all-delete-orphan" lazy="true">
+    <bag name="Members" table="UserToGroup" cascade="save-update" lazy="true">
       <key column="GroupId" />
       <many-to-many class="User" column="UserId" />
     </bag>

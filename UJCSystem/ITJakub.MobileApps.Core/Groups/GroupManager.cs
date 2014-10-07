@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
+using ITJakub.MobileApps.Core.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
 using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
@@ -15,14 +16,16 @@ namespace ITJakub.MobileApps.Core.Groups
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly EnterCodeGenerator m_enterCodeGenerator;
+        private readonly ApplicationManager m_applicationManager;
         private readonly UsersRepository m_usersRepository;
 
 
-        public GroupManager(UsersRepository usersRepository, EnterCodeGenerator enterCodeGenerator, int maxAttemptsToSave)
+        public GroupManager(UsersRepository usersRepository, EnterCodeGenerator enterCodeGenerator, ApplicationManager applicationManager, int maxAttemptsToSave)
         {
             MaxAttemptsToSave = maxAttemptsToSave;
             m_usersRepository = usersRepository;
             m_enterCodeGenerator = enterCodeGenerator;
+            m_applicationManager = applicationManager;
         }
 
         private int MaxAttemptsToSave { get; set; }
@@ -128,6 +131,16 @@ namespace ITJakub.MobileApps.Core.Groups
                 group.State = newState;
                 m_usersRepository.Update(group);
             }
+        }
+
+        public void RemoveGroup(long groupId)
+        {
+            var group = m_usersRepository.FindById<Group>(groupId);
+            if (group.State != GroupState.Closed)
+                return;
+
+            var rowKeys = m_usersRepository.GetRowKeysAndRemoveGroup(groupId);
+            m_applicationManager.DeleteSynchronizedObjects(groupId, rowKeys);
         }
     }
 }

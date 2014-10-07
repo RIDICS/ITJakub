@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using AutoMapper;
+using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
+using ITJakub.MobileApps.DataContracts.Groups;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
 using ITJakub.MobileApps.DataEntities.AzureTables.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
@@ -35,7 +38,7 @@ namespace ITJakub.MobileApps.Core.Applications
             var group = m_usersRepository.FindById<Group>(groupId);
             if (group.State != GroupState.Running)
             {
-                // TODO throw FaultException
+                throw new FaultException<ApplicationNotRunningFault>(new ApplicationNotRunningFault(), "Application is not in the Running state.");
             }
 
             var application = m_applicationRepository.Load<Application>(applicationId);                
@@ -53,18 +56,22 @@ namespace ITJakub.MobileApps.Core.Applications
 
         public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
         {
+            var group = m_usersRepository.FindById<Group>(groupId);
+            if (group.State >= GroupState.Paused)
+            {
+                throw new FaultException<ApplicationNotRunningFault>(new ApplicationNotRunningFault(), "Application is paused or closed.");
+            }
+
             var syncObjs = m_applicationRepository.GetSynchronizedObjects(groupId, applicationId, objectType, since);
-            
+
             foreach (SynchronizedObject syncObj in syncObjs) //TODO try to find some better way how to fill Data property
             {
                 SynchronizedObjectEntity syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.RowKey,
                     Convert.ToString(syncObj.Group.Id));
-                if (syncObjEntity != null && syncObjEntity.Data != null)
-                    syncObj.Data = syncObjEntity.Data;
-                else
-                    throw new ArgumentException("TEST");
 
+                syncObj.Data = syncObjEntity.Data;
             }
+
             return Mapper.Map<IList<SynchronizedObjectResponseContract>>(syncObjs);
         }
 
@@ -72,6 +79,14 @@ namespace ITJakub.MobileApps.Core.Applications
         {
             var apps = m_applicationRepository.GetAllApplication();
             return Mapper.Map<IList<ApplicationContract>>(apps);
+        }
+
+        public void DeleteSynchronizedObjects(long groupId, IEnumerable<string> rowKeys)
+        {
+            foreach (var rowKey in rowKeys)
+            {
+                m_azureTableSynchronizedObjectDao.Delete(rowKey, Convert.ToString(groupId));
+            }
         }
     }
 }

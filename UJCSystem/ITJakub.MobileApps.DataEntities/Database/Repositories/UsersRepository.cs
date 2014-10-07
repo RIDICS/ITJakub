@@ -234,5 +234,19 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 return group;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IEnumerable<string> GetRowKeysAndRemoveGroup(long groupId)
+        {
+            using (var session = GetSession())
+            {
+                var group = session.Get<Group>(groupId);
+                var rowKeys = group.SynchronizedObjects.Select(o => o.RowKey);
+
+                session.Delete(group);
+
+                return rowKeys;
+            }
+        }
     }
 }

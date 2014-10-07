@@ -115,6 +115,11 @@ namespace ITJakub.MobileApps.Core
         {
             m_groupManager.UpdateGroupState(groupId, state);
         }
+
+        public void RemoveGroup(long groupId)
+        {
+            m_groupManager.RemoveGroup(groupId);
+        }
     }
 }
 //    {
