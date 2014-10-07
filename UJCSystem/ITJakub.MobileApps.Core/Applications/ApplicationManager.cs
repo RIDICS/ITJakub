@@ -4,7 +4,6 @@ using System.ServiceModel;
 using AutoMapper;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
-using ITJakub.MobileApps.DataContracts.Groups;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
 using ITJakub.MobileApps.DataEntities.AzureTables.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Entities;

@@ -16,6 +16,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         private ObservableCollection<GroupMemberViewModel> m_members;
         private int m_memberCount;
         private string m_searchText;
+        private GroupState m_state;
 
         public GroupInfoViewModel()
         {
@@ -91,6 +92,16 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public Visibility NoMembersVisibility
         {
             get { return m_memberCount == 0 ? Visibility.Visible : Visibility.Collapsed; }
+        }
+
+        public GroupState State
+        {
+            get { return m_state; }
+            set
+            {
+                m_state = value;
+                RaisePropertyChanged();
+            }
         }
     }
 }

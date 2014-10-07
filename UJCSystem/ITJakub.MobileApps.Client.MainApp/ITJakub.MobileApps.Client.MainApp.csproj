@@ -113,6 +113,7 @@
     <Compile Include="ViewModel\Message\SelectedTaskMessage.cs" />
     <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
+    <Compile Include="View\Converter\GroupStateToNameConverter.cs" />
     <Compile Include="View\Converter\NotChosenStringConverter.cs" />
     <Compile Include="View\ErrorBar.cs" />
     <Compile Include="Common\RelayCommand.cs" />

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -48,6 +50,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             SelectedApplicationInfo = new AppInfoViewModel();
             SelectedTaskViewModel = new TaskViewModel();
+            GroupStates = new ObservableCollection<GroupStateViewModel>();
 
             InitCommands();
         }
@@ -62,6 +65,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
 
             SelectAppAndTaskCommand = new RelayCommand(SelectAppAndTask);
+            RemoveGroupCommand = new RelayCommand(RemoveGroup);
         }
 
         private void LoadData(GroupInfoViewModel group)
@@ -86,9 +90,25 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     SelectedTaskViewModel = groupInfo.Task;
                     SelectedApplicationInfo = new AppInfoViewModel {ApplicationType = groupInfo.Task.Application};
                 }
-                
+
+                GroupStateUpdated(groupInfo.State);
                 m_pollingService.RegisterForGroupsUpdate(MembersPollingInterval, new[] {GroupInfo}, UpdateMembers);
             });
+        }
+
+        private void GroupStateUpdated(GroupState state)
+        {
+            if (GroupStates.Count == 0)
+            {
+                for (var i = GroupState.AcceptMembers; i <= GroupState.Closed; i++)
+                {
+                    GroupStates.Add(new GroupStateViewModel(i));
+                }
+            }
+            foreach (var groupStateViewModel in GroupStates)
+            {
+                groupStateViewModel.IsEnabled = state < groupStateViewModel.GroupState || (state == GroupState.Paused && groupStateViewModel.GroupState == GroupState.Running);
+            }
         }
 
         private void UpdateMembers(Exception exception)
@@ -154,10 +174,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged();
             }
         }
+        
+        public ObservableCollection<GroupStateViewModel> GroupStates { get; private set; }
 
         public RelayCommand GoBackCommand { get; private set; }
 
         public RelayCommand SelectAppAndTaskCommand { get; private set; }
+
+        public RelayCommand RemoveGroupCommand { get; private set; }
 
         private void SelectAppAndTask()
         {
@@ -198,6 +222,53 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
                 TaskSaved = true;
             });
+        }
+        
+        private void RemoveGroup()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class GroupStateViewModel : ViewModelBase
+    {
+        private bool m_isEnabled;
+        private bool m_isFlyoutOpen;
+
+        public GroupStateViewModel(GroupState state)
+        {
+            GroupState = state;
+            ChangeStateCommand = new RelayCommand(ChangeState);
+        }
+
+        public GroupState GroupState { get; set; }
+
+        public bool IsEnabled
+        {
+            get { return m_isEnabled; }
+            set
+            {
+                m_isEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public RelayCommand ChangeStateCommand { get; private set; }
+
+        public bool IsFlyoutOpen
+        {
+            get { return m_isFlyoutOpen; }
+            set
+            {
+                m_isFlyoutOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private void ChangeState()
+        {
+            IsFlyoutOpen = false;
+            // TODO delegate action for save state
         }
     }
 }

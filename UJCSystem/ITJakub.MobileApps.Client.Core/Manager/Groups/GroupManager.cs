@@ -163,6 +163,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     GroupName = result.Name,
                     CreateTime = result.CreateTime,
                     GroupCode = result.EnterCode,
+                    State = (GroupState) result.State,
                 };
 
                 var task = result.Task;
