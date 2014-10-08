@@ -224,5 +224,31 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             CurrentGroupId = groupId;
         }
+        
+        public async void UpdateGroupState(long groupId, GroupState newState, Action<Exception> callback)
+        {
+            try
+            {
+                await m_serviceClient.UpdateGroupState(groupId, (GroupStateContract) newState);
+                callback(null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
+        }
+
+        public async void RemoveGroup(long groupId, Action<Exception> callback)
+        {
+            try
+            {
+                await m_serviceClient.RemoveGroup(groupId);
+                callback(null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
+        }
     }
 }

@@ -30,9 +30,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private AppInfoViewModel m_selectedApplicationInfo;
         private GroupInfoViewModel m_groupInfo;
         private TaskViewModel m_selectedTaskViewModel;
-        private bool m_saving;
+        private bool m_changingTask;
         private bool m_taskSaved;
         private bool m_loading;
+        private bool m_changingState;
+        private bool m_removing;
+        private bool m_isRemoveFlyoutOpen;
+        private bool m_savingState;
 
         /// <summary>
         /// Initializes a new instance of the GroupPageViewModel class.
@@ -96,19 +100,26 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
         }
 
-        private void GroupStateUpdated(GroupState state)
+        private void GroupStateUpdated(GroupState stateUpdate)
         {
             if (GroupStates.Count == 0)
             {
                 for (var i = GroupState.AcceptMembers; i <= GroupState.Closed; i++)
                 {
-                    GroupStates.Add(new GroupStateViewModel(i));
+                    GroupStates.Add(new GroupStateViewModel(i, ChangeGroupState));
                 }
             }
             foreach (var groupStateViewModel in GroupStates)
             {
-                groupStateViewModel.IsEnabled = state < groupStateViewModel.GroupState || (state == GroupState.Paused && groupStateViewModel.GroupState == GroupState.Running);
+                if (GroupInfo.Task == null && groupStateViewModel.GroupState > GroupState.AcceptMembers)
+                    groupStateViewModel.IsEnabled = false;
+                else
+                    groupStateViewModel.IsEnabled = stateUpdate < groupStateViewModel.GroupState || (stateUpdate == GroupState.Paused && groupStateViewModel.GroupState == GroupState.Running);
             }
+
+            GroupInfo.State = stateUpdate;
+            RaisePropertyChanged(() => CanChangeTask);
+            RaisePropertyChanged(() => CanRemoveGroup);
         }
 
         private void UpdateMembers(Exception exception)
@@ -145,12 +156,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public bool Saving
+        public bool ChangingTask
         {
-            get { return m_saving; }
+            get { return m_changingTask; }
             set
             {
-                m_saving = value;
+                m_changingTask = value;
+                ChangingState = m_changingTask;
                 RaisePropertyChanged();
             }
         }
@@ -174,7 +186,59 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        public bool ChangingState
+        {
+            get { return m_changingState; }
+            set
+            {
+                m_changingState = value;
+                RaisePropertyChanged();
+            }
+        }
         
+        public bool Removing
+        {
+            get { return m_removing; }
+            set
+            {
+                m_removing = value;
+                ChangingState = m_removing;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool SavingState
+        {
+            get { return m_savingState; }
+            set
+            {
+                m_savingState = value;
+                ChangingState = m_savingState;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsRemoveFlyoutOpen
+        {
+            get { return m_isRemoveFlyoutOpen; }
+            set
+            {
+                m_isRemoveFlyoutOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool CanChangeTask
+        {
+            get { return GroupInfo.State < GroupState.Running; }
+        }
+
+        public bool CanRemoveGroup
+        {
+            get { return GroupInfo.State == GroupState.Created || GroupInfo.State == GroupState.Closed; }
+        }
+
         public ObservableCollection<GroupStateViewModel> GroupStates { get; private set; }
 
         public RelayCommand GoBackCommand { get; private set; }
@@ -182,10 +246,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public RelayCommand SelectAppAndTaskCommand { get; private set; }
 
         public RelayCommand RemoveGroupCommand { get; private set; }
-
+        
         private void SelectAppAndTask()
         {
-            Saving = false;
+            ChangingTask = false;
             TaskSaved = false;
 
             m_navigationService.Navigate(typeof(ApplicationSelectionView));
@@ -213,30 +277,58 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void SaveTask(TaskViewModel task)
         {
-            Saving = true;
+            TaskSaved = false;
+            ChangingTask = true;
             m_dataService.AssignTaskToGroup(m_groupInfo.GroupId, task.Id, exception =>
             {
-                Saving = false;
+                ChangingTask = false;
                 if (exception != null)
                     return;
 
                 TaskSaved = true;
+                GroupInfo.Task = task;
+                GroupStateUpdated(GroupInfo.State);
             });
         }
-        
+
+        private void ChangeGroupState(GroupState newState)
+        {
+            SavingState = true;
+            m_dataService.UpdateGroupState(GroupInfo.GroupId, newState, exception =>
+            {
+                SavingState = false;
+                if (exception != null)
+                    return;
+
+                GroupStateUpdated(newState);
+            });
+        }
+
         private void RemoveGroup()
         {
-            throw new NotImplementedException();
+            IsRemoveFlyoutOpen = false;
+
+            Removing = true;
+            m_dataService.RemoveGroup(GroupInfo.GroupId, exception =>
+            {
+                Removing = false;
+                if (exception != null)
+                    return;
+
+                m_navigationService.GoBack();
+            });
         }
     }
 
     public class GroupStateViewModel : ViewModelBase
     {
+        private readonly Action<GroupState> m_changeStateAction;
         private bool m_isEnabled;
         private bool m_isFlyoutOpen;
 
-        public GroupStateViewModel(GroupState state)
+        public GroupStateViewModel(GroupState state, Action<GroupState> changeStateAction)
         {
+            m_changeStateAction = changeStateAction;
             GroupState = state;
             ChangeStateCommand = new RelayCommand(ChangeState);
         }
@@ -265,10 +357,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        public bool CanChangeBack
+        {
+            get { return GroupState == GroupState.Paused; }
+        }
+
         private void ChangeState()
         {
             IsFlyoutOpen = false;
-            // TODO delegate action for save state
+            m_changeStateAction(GroupState);
         }
     }
 }

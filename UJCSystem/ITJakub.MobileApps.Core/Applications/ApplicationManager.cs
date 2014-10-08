@@ -29,16 +29,16 @@ namespace ITJakub.MobileApps.Core.Applications
         public void CreateSynchronizedObject(int applicationId, long groupId, long userId,
             SynchronizedObjectContract synchronizedObject)
         {
-            var syncObjectEntity = new SynchronizedObjectEntity(m_idGenerator.GetNewId(), Convert.ToString(groupId), synchronizedObject.Data);
-            m_azureTableSynchronizedObjectDao.Create(syncObjectEntity);
-
-            var now = DateTime.UtcNow;
-
             var group = m_usersRepository.FindById<Group>(groupId);
             if (group.State != GroupState.Running)
             {
                 throw new FaultException<ApplicationNotRunningFault>(new ApplicationNotRunningFault(), "Application is not in the Running state.");
             }
+
+            var syncObjectEntity = new SynchronizedObjectEntity(m_idGenerator.GetNewId(), Convert.ToString(groupId), synchronizedObject.Data);
+            m_azureTableSynchronizedObjectDao.Create(syncObjectEntity);
+
+            var now = DateTime.UtcNow;
 
             var application = m_applicationRepository.Load<Application>(applicationId);                
             var user = m_usersRepository.Load<User>(userId);

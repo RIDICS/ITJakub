@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
@@ -141,5 +142,9 @@ namespace ITJakub.MobileApps.Client.Core.Service
         }
 
         public void OpenGroup(long groupId) { }
+
+        public void UpdateGroupState(long groupId, GroupState newState, Action<Exception> callback) { }
+
+        public void RemoveGroup(long groupId, Action<Exception> callback) { }
     }
 }

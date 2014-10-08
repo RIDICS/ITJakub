@@ -136,7 +136,7 @@ namespace ITJakub.MobileApps.Core.Groups
         public void RemoveGroup(long groupId)
         {
             var group = m_usersRepository.FindById<Group>(groupId);
-            if (group.State != GroupState.Closed)
+            if (group.State != GroupState.Closed && group.State != GroupState.Created)
                 return;
 
             var rowKeys = m_usersRepository.GetRowKeysAndRemoveGroup(groupId);

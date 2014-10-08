@@ -84,6 +84,16 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_groupManager.OpenGroup(groupId);
         }
 
+        public void UpdateGroupState(long groupId, GroupState newState, Action<Exception> callback)
+        {
+            m_groupManager.UpdateGroupState(groupId, newState, callback);
+        }
+
+        public void RemoveGroup(long groupId, Action<Exception> callback)
+        {
+            m_groupManager.RemoveGroup(groupId, callback);
+        }
+
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {
             m_authenticationManager.LoginByProvider(loginProviderType, callback);

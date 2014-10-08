@@ -410,6 +410,60 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
+        public Task UpdateGroupState(long groupId, GroupStateContract state)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    Channel.UpdateGroupState(groupId, state);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
+        public Task RemoveGroup(long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    Channel.RemoveGroup(groupId);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
         #region enpoint settings
         private static Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {

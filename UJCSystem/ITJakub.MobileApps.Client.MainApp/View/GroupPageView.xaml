@@ -17,11 +17,14 @@
         <converter:NotChosenStringConverter x:Key="NotChosenStringConverter" />
         <converter:ApplicationTypeToNameConverter x:Key="ApplicationTypeToNameConverter" />
         <converter:GroupStateToNameConverter x:Key="GroupStateToNameConverter" />
+        <converter:BooleanToColorConverter x:Key="BooleanToColorConverter" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <Style x:Key="MyLabelStyle" BasedOn="{StaticResource SubheaderTextBlockStyle}" TargetType="TextBlock">
             <Setter Property="Margin" Value="0,0,0,15" />
         </Style>
+        <x:Double x:Key="ArrowThickness">2</x:Double>
+        <SolidColorBrush x:Key="ArrowColor" Color="Black" />
     </Page.Resources>
 
     <!--
@@ -53,7 +56,7 @@
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
                     AutomationProperties.ItemType="Navigation Button"
-                    IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}" />
+                    IsEnabled="{Binding ChangingTask, Converter={StaticResource BooleanNegationConverter}}" />
             <TextBlock Style="{StaticResource HeaderTextBlockStyle}"
                        Grid.Column="1"
                        IsHitTestVisible="false"
@@ -95,31 +98,33 @@
                 </TextBlock>
 
                 <TextBlock Style="{StaticResource MyLabelStyle}">
-                        <Run Text="Zadání:" />
-                        <Run Text="{Binding SelectedTaskViewModel.Name, Converter={StaticResource NotChosenStringConverter}}" />
+                    <Run Text="Zadání:" />
+                    <Run Text="{Binding SelectedTaskViewModel.Name, Converter={StaticResource NotChosenStringConverter}}" />
                 </TextBlock>
                 
                 <StackPanel Orientation="Horizontal"
-                            Margin="90,-5,0,5">
+                            Margin="90,-5,0,5"
+                            Visibility="{Binding CanChangeTask, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Button Content="Změnit zadání"
-                            IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}"
+                            IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}"
                             Command="{Binding SelectAppAndTaskCommand}" />
                     <ProgressRing IsActive="True"
                                   Width="30"
                                   Height="30"
                                   Margin="10,0,5,0"
                                   Foreground="Gold"
-                                  Visibility="{Binding Saving, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                  Visibility="{Binding ChangingTask, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <TextBlock Text="Ukládání"
                                FontSize="20"
                                Foreground="Gold"
                                VerticalAlignment="Center"
-                               Visibility="{Binding Saving, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                               Visibility="{Binding ChangingTask, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <TextBlock Text="Uloženo"
-                           FontSize="20"
-                           Margin="100,0,0,0"
-                           Foreground="Gold"
-                           Visibility="{Binding TaskSaved, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                               FontSize="20"
+                               Margin="10,0,0,0"
+                               Foreground="Gold"
+                               VerticalAlignment="Center"
+                               Visibility="{Binding TaskSaved, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </StackPanel>
 
                 <TextBlock Style="{StaticResource MyLabelStyle}"
@@ -130,25 +135,72 @@
                 </TextBlock>
 
                 <StackPanel Orientation="Vertical"
-                            Margin="90,-10,0,0">
+                            Margin="0,-10,0,0">
                     <TextBlock Text="Změnit na:"
                                Style="{StaticResource MyLabelStyle}"
+                               HorizontalAlignment="Center"
                                FontSize="20" />
                 
-                    <ItemsControl ItemsSource="{Binding GroupStates}">
+                    <ItemsControl ItemsSource="{Binding GroupStates}"
+                                  IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    
-                                    <Button Content="{Binding GroupState, Converter={StaticResource GroupStateToNameConverter}}"
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Canvas Grid.Row="0"
+                                            Height="15"
+                                            Width="10"
+                                            HorizontalAlignment="Center">
+                                        <Line X1="5"
+                                              Y1="0"
+                                              X2="5"
+                                              Y2="15"
+                                              StrokeThickness="{StaticResource ArrowThickness}"
+                                              Stroke="{StaticResource ArrowColor}" />
+                                        <Line X1="5"
+                                              Y1="15"
+                                              X2="0"
+                                              Y2="10"
+                                              StrokeThickness="{StaticResource ArrowThickness}"
+                                              Stroke="{StaticResource ArrowColor}" />
+                                        <Line X1="5"
+                                              Y1="15"
+                                              X2="10"
+                                              Y2="10"
+                                              StrokeThickness="{StaticResource ArrowThickness}"
+                                              Stroke="{StaticResource ArrowColor}" />
+
+                                        <Line X1="5"
+                                              Y1="0"
+                                              X2="0"
+                                              Y2="5"
+                                              StrokeThickness="{StaticResource ArrowThickness}"
+                                              Stroke="{StaticResource ArrowColor}"
+                                              Visibility="{Binding CanChangeBack, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <Line X1="5"
+                                              Y1="0"
+                                              X2="10"
+                                              Y2="5"
+                                              StrokeThickness="{StaticResource ArrowThickness}"
+                                              Stroke="{StaticResource ArrowColor}"
+                                              Visibility="{Binding CanChangeBack, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </Canvas>
+
+                                    <Button Grid.Row="1"
+                                            Content="{Binding GroupState, Converter={StaticResource GroupStateToNameConverter}}"
                                             Width="220"
-                                            IsEnabled="{Binding IsEnabled}">
+                                            HorizontalAlignment="Center"
+                                            Style="{StaticResource EllipseButtonStyle}"
+                                            IsEnabled="{Binding IsEnabled}"
+                                            Foreground="{Binding IsFlyoutOpen, Converter={StaticResource BooleanToColorConverter}}"
+                                            x:Name="ChangeGroupStateButton">
                                         <Button.Flyout>
-                                            <Flyout control:FlyoutHelpers.IsOpen="{Binding IsFlyoutOpen}">
+                                            <Flyout control:FlyoutHelpers.IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}"
+                                                    control:FlyoutHelpers.Parent="{Binding ElementName=ChangeGroupStateButton}">
                                                 <StackPanel Orientation="Vertical"
                                                             Width="300">
                                                     <TextBlock Text="Chystáte se změnit stav skupiny. Tato akce je nevratná (kromě přepínání mezi stavy Spuštěno a Pozastaveno)."
@@ -156,87 +208,76 @@
                                                                FontSize="14" />
                                                     <Button Content="Změnit"
                                                             HorizontalAlignment="Right"
-                                                            Command="{Binding ChangeStateCommand}"
-                                                            CommandParameter="{Binding GroupState}" />
+                                                            Command="{Binding ChangeStateCommand}" />
                                                 </StackPanel>
                                             </Flyout>
                                         </Button.Flyout>
                                     </Button>
-                                    <Canvas Grid.Column="1">
-                                        <Ellipse Width="20" 
-                                                 Height="20"
-                                                 Fill="Black"
-                                                 Canvas.Top="10"
-                                                 Canvas.Left="10"/>
-                                        <Line X1="20"
-                                              Y1="0"
-                                              X2="20"
-                                              Y2="39"
-                                              Stroke="Black"/>
-                                        <Line X1="20"
-                                              Y1="10"
-                                              X2="15"
-                                              Y2="5"
-                                              Stroke="Black"/>
-                                        <Line X1="20"
-                                              Y1="10"
-                                              X2="25"
-                                              Y2="5"
-                                              Stroke="Black"/>
-                                    </Canvas>
+                                    
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        
-                        <Button Content="Odstranit skupinu"
-                                Width="220">
-                            <Button.Flyout>
-                                <Flyout>
-                                    <StackPanel Orientation="Vertical"
-                                                Width="300">
-                                        <TextBlock Text="Chystáte se odstranit skupinu. Tato akce smaže také všechny výsledky."
-                                                   TextWrapping="Wrap"
-                                                   FontSize="14" />
-                                        <Button Content="Odstranit"
-                                                HorizontalAlignment="Right"
-                                                Command="{Binding RemoveGroupCommand}" />
-                                    </StackPanel>
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                        
-                        <Canvas Grid.Column="1">
-                            <Ellipse Width="20" 
-                                     Height="20"
-                                     Fill="Black"
-                                     Canvas.Top="10"
-                                     Canvas.Left="10"/>
-                            <Line X1="20"
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Canvas Grid.Row="0"
+                                Height="15"
+                                Width="10"
+                                HorizontalAlignment="Center">
+                            <Line X1="5"
                                   Y1="0"
-                                  X2="20"
+                                  X2="5"
+                                  Y2="15"
+                                  StrokeThickness="{StaticResource ArrowThickness}"
+                                  Stroke="{StaticResource ArrowColor}" />
+                            <Line X1="5"
+                                  Y1="15"
+                                  X2="0"
                                   Y2="10"
-                                  Stroke="Black"/>
-                            <Line X1="20"
-                                  Y1="10"
-                                  X2="15"
-                                  Y2="5"
-                                  Stroke="Black"/>
-                            <Line X1="20"
-                                  Y1="10"
-                                  X2="25"
-                                  Y2="5"
-                                  Stroke="Black"/>
+                                  StrokeThickness="{StaticResource ArrowThickness}"
+                                  Stroke="{StaticResource ArrowColor}" />
+                            <Line X1="5"
+                                  Y1="15"
+                                  X2="10"
+                                  Y2="10"
+                                  StrokeThickness="{StaticResource ArrowThickness}"
+                                  Stroke="{StaticResource ArrowColor}" />
                         </Canvas>
+
+                        <ContentControl Grid.Row="1"
+                                        HorizontalAlignment="Center"
+                                        IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}">
+                            <Button Content="Odstranit skupinu"
+                                    Width="220"
+                                    Style="{StaticResource EllipseButtonStyle}"
+                                    IsEnabled="{Binding CanRemoveGroup}"
+                                    x:Name="RemoveGroupButton">
+                                <Button.Flyout>
+                                    <Flyout control:FlyoutHelpers.IsOpen="{Binding IsRemoveFlyoutOpen, Mode=TwoWay}"
+                                            control:FlyoutHelpers.Parent="{Binding ElementName=RemoveGroupButton}">
+                                        <StackPanel Orientation="Vertical"
+                                                    Width="300">
+                                            <TextBlock Text="Chystáte se odstranit skupinu. Tato akce smaže také všechny výsledky."
+                                                       TextWrapping="Wrap"
+                                                       FontSize="14" />
+                                            <Button Content="Odstranit"
+                                                    HorizontalAlignment="Right"
+                                                    Command="{Binding RemoveGroupCommand}" />
+                                        </StackPanel>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                        </ContentControl>
                     </Grid>
                     
-                    <Grid>
+                    <Grid HorizontalAlignment="Center"
+                          Margin="0,10,0,0"
+                          Visibility="{Binding SavingState, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
@@ -245,10 +286,29 @@
                         <ProgressRing IsActive="True"
                                       Width="30"
                                       Height="30"
-                                      Margin="10,0,5,0"
+                                      Margin="0,0,5,0"
                                       Foreground="Gold" />
                         <TextBlock Grid.Column="1"
                                    Text="Ukládání"
+                                   FontSize="20"
+                                   Foreground="Gold"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid HorizontalAlignment="Center"
+                          Margin="0,10,0,0"
+                          Visibility="{Binding Removing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ProgressRing IsActive="True"
+                                      Width="30"
+                                      Height="30"
+                                      Margin="0,0,5,0"
+                                      Foreground="Gold" />
+                        <TextBlock Grid.Column="1"
+                                   Text="Odstraňování skupiny"
                                    FontSize="20"
                                    Foreground="Gold"
                                    VerticalAlignment="Center" />
