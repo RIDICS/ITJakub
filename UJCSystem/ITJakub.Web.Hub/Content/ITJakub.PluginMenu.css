@@ -1,17 +1,34 @@
-﻿#main-plugins-menu ul,
-#main-plugins-menu li,
-#main-plugins-menu span,
+﻿#main-plugins-menu span,
 #main-plugins-menu a {
   margin: 0;
   padding: 0;
   position: relative;
   display: block;
 }
+#main-plugins-menu li {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+#main-plugins-menu .has-sub {
+  position: relative;
+}
+#main-plugins-menu .has-sub.active {
+  position: static;
+}
+/*#main-plugins-menu ul li.active ul.has-sub{
+  position : static;
+}
+
+#main-plugins-menu ul li.active ul.has-sub li{
+  position : static;
+}*/
 #main-plugins-menu {
   line-height: 1;
   background: white;
   /*border-bottom: 2px solid #0fa1e0;*/
-  width: auto;
+  width: 100%;
+  position: absolute;
 }
 #main-plugins-menu:after,
 #main-plugins-menu ul:after {
@@ -29,6 +46,9 @@
 }
 #main-plugins-menu ul {
   list-style: none;
+  margin: 0;
+  padding: 0;
+  display: block;
 }
 #main-plugins-menu > ul > li {
   display: inline-block;
@@ -74,8 +94,8 @@
 #main-plugins-menu > ul > li > ul > li.active > a {
   color: black;
 }
-#main-plugins-menu .has-sub {
-  z-index: 1;
+#main-plugins-menu > ul > li:hover {
+  z-index: 10;
 }
 #main-plugins-menu .has-sub:hover > ul {
   display: block;
@@ -140,13 +160,17 @@
 #main-plugins-menu .has-sub ul li.last > a {
   border-bottom: 0;
 }
+#main-plugins-menu ul > li > ul {
+  position: relative;
+}
+#main-plugins-menu ul > li > ul > li {
+  position: relative;
+}
 #main-plugins-menu ul > li.active > ul {
   display: inline;
   position: absolute;
   float: left;
   width: 1100px;
-  margin-left: 0;
-  margin-right: 0;
 }
 #main-plugins-menu ul > li.active > ul > li {
   position: relative;

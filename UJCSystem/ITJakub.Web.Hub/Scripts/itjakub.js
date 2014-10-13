@@ -3,6 +3,9 @@ $('#main-plugins-menu').find('li').click(function (event) {
     $('#main-plugins-menu').find('li').removeClass('active');
     $(this).addClass('active');
     $(this).parents('li').addClass('active');
+
+    //var submenu = $('#main-plugins-menu').find('li.active').parent('ul.has-sub');
+    //$(submenu).css('margin-left', mrg + 'px');
     event.stopPropagation();
 });
 //# sourceMappingURL=itjakub.js.map
