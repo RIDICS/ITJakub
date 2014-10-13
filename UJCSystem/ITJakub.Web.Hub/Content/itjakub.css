@@ -1,26 +1,26 @@
 ﻿/*@import "ItJakub.MainMenu.less";*/
-#cssmenu ul,
-#cssmenu li,
-#cssmenu span,
-#cssmenu a {
+#main-plugins-menu ul,
+#main-plugins-menu li,
+#main-plugins-menu span,
+#main-plugins-menu a {
   margin: 0;
   padding: 0;
   position: relative;
   display: block;
 }
-#cssmenu {
+#main-plugins-menu {
   line-height: 1;
   background: white;
-  border-bottom: 2px solid #0fa1e0;
+  /*border-bottom: 2px solid #0fa1e0;*/
   width: auto;
 }
-#cssmenu:after,
-#cssmenu ul:after {
+#main-plugins-menu:after,
+#main-plugins-menu ul:after {
   content: '';
   display: block;
   clear: both;
 }
-#cssmenu a {
+#main-plugins-menu a {
   background: white;
   color: black;
   display: block;
@@ -28,34 +28,34 @@
   padding: 19px 20px;
   text-decoration: none;
 }
-#cssmenu ul {
+#main-plugins-menu ul {
   list-style: none;
 }
-#cssmenu > ul > li {
+#main-plugins-menu > ul > li {
   display: inline-block;
   float: left;
   margin: 0;
 }
-#cssmenu.align-center {
+#main-plugins-menu.align-center {
   text-align: center;
 }
-#cssmenu.align-center > ul > li {
+#main-plugins-menu.align-center > ul > li {
   float: none;
 }
-#cssmenu.align-center ul ul {
+#main-plugins-menu.align-center ul ul {
   text-align: left;
 }
-#cssmenu.align-right > ul {
+#main-plugins-menu.align-right > ul {
   float: right;
 }
-#cssmenu.align-right ul ul {
+#main-plugins-menu.align-right ul ul {
   text-align: right;
 }
-#cssmenu > ul > li > a {
+#main-plugins-menu > ul > li > a {
   color: black;
   font-size: 12px;
 }
-#cssmenu > ul > li:hover:after {
+#main-plugins-menu > ul > li:hover:after {
   content: '';
   display: block;
   width: 0;
@@ -65,37 +65,39 @@
   bottom: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 10px solid #0fa1e0;
+  /*border-bottom: 10px solid #0fa1e0;*/
   margin-left: -10px;
 }
-#cssmenu > ul > li.active > a,
-#cssmenu > ul > li:hover > a {
-  color: black;
-  background: #31b7f1;
+#main-plugins-menu > ul > li.active > a,
+#main-plugins-menu > ul > li:hover > a {
+  color: #84ced7;
 }
-#cssmenu .has-sub {
+#main-plugins-menu > ul > li > ul > li.active > a {
+  color: black;
+}
+#main-plugins-menu .has-sub {
   z-index: 1;
 }
-#cssmenu .has-sub:hover > ul {
+#main-plugins-menu .has-sub:hover > ul {
   display: block;
 }
-#cssmenu .has-sub ul {
+#main-plugins-menu .has-sub ul {
   display: none;
   position: absolute;
   width: 200px;
   top: 100%;
   left: 0;
 }
-#cssmenu.align-right .has-sub ul {
+#main-plugins-menu.align-right .has-sub ul {
   left: auto;
   right: 0;
 }
-#cssmenu .has-sub ul li {
+#main-plugins-menu .has-sub ul li {
   *margin-bottom: -1px;
 }
-#cssmenu .has-sub ul li a {
-  background: #0fa1e0;
-  border-bottom: 1px dotted #31b7f1;
+#main-plugins-menu .has-sub ul li a {
+  background: #84ced7;
+  /*border-bottom: 1px dotted #31b7f1;*/
   font-size: 11px;
   filter: none;
   display: block;
@@ -103,40 +105,54 @@
   padding: 10px;
   color: #ffffff;
 }
-#cssmenu .has-sub ul li:hover a {
-  background: #0c7fb0;
+#main-plugins-menu .has-sub ul li:hover a {
+  /*background: @item-background-color;*/
+  color: black;
 }
-#cssmenu ul ul li:hover > a {
+#main-plugins-menu ul ul li:hover > a {
   color: #ffffff;
 }
-#cssmenu .has-sub .has-sub:hover > ul {
+#main-plugins-menu .has-sub .has-sub:hover > ul {
   display: block;
 }
-#cssmenu .has-sub .has-sub ul {
+#main-plugins-menu .has-sub .has-sub ul {
   display: none;
   position: absolute;
   left: 100%;
   top: 0;
 }
-#cssmenu.align-right .has-sub .has-sub ul,
-#cssmenu.align-right ul ul ul {
+#main-plugins-menu.align-right .has-sub .has-sub ul,
+#main-plugins-menu.align-right ul ul ul {
   left: auto;
   right: 100%;
 }
-#cssmenu .has-sub .has-sub ul li a {
-  background: #0c7fb0;
-  border-bottom: 1px dotted #31b7f1;
+#main-plugins-menu .has-sub .has-sub ul li a {
+  /*background: #0c7fb0;*/
+  /*border-bottom: 1px dotted #31b7f1;*/
 }
-#cssmenu .has-sub .has-sub ul li a:hover {
-  background: #0a6d98;
+#main-plugins-menu .has-sub .has-sub ul li a:hover {
+  color: #0a6d98;
 }
-#cssmenu ul ul li.last > a,
-#cssmenu ul ul li:last-child > a,
-#cssmenu ul ul ul li.last > a,
-#cssmenu ul ul ul li:last-child > a,
-#cssmenu .has-sub ul li:last-child > a,
-#cssmenu .has-sub ul li.last > a {
+#main-plugins-menu ul ul li.last > a,
+#main-plugins-menu ul ul li:last-child > a,
+#main-plugins-menu ul ul ul li.last > a,
+#main-plugins-menu ul ul ul li:last-child > a,
+#main-plugins-menu .has-sub ul li:last-child > a,
+#main-plugins-menu .has-sub ul li.last > a {
   border-bottom: 0;
+}
+#main-plugins-menu ul > li.active > ul {
+  display: inline;
+  position: absolute;
+  float: left;
+  width: 1100px;
+  margin-left: 0;
+  margin-right: 0;
+}
+#main-plugins-menu ul > li.active > ul > li {
+  position: relative;
+  display: inline;
+  float: left;
 }
 #dropzoneFileForm {
   background: white;

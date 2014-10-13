@@ -10,37 +10,37 @@
         @Styles.Render("~/itjakub/css")
         @RenderSection("styles", false)
     </head>
-<body>
+    <body>
 
-    <div class="container page-body-content">
+        <div class="container page-body-content">
         
-        @*top fixed part*@
-        <div class="navbar navbar-inverse navbar-fixed-top header-content">
-            <div class="">
-                <div class="main-navbar-container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
+            @*top fixed part*@
+            <div class="navbar navbar-inverse navbar-fixed-top header-content">
+                <div class="">
+                    <div class="main-navbar-container">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
 
-                        <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-                            <img src="@Url.Content("~/Content/Images/logo.png")" alt="main_logo" class="main_logo" />   @*TODO make logo small as this size*@
-                            <div class="main_logo_text">
-                                <h1>Vokabulář</h1>
-                                <h2>webový</h2>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="navbar-collapse collapse">
-                        @Html.Partial("_LoginPartial")
+                            <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
+                                <img src="@Url.Content("~/Content/Images/logo.png")" alt="main_logo" class="main_logo" />   @*TODO make logo small as this size*@
+                                <div class="main_logo_text">
+                                    <h1>Vokabulář</h1>
+                                    <h2>webový</h2>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="navbar-collapse collapse">
+                            @Html.Partial("_LoginPartial")
+                        </div>
                     </div>
                 </div>
-            </div>
 
 
-            @*<div id="cssmenu" class="navbar-fixed-top main-plugins-menu">
+                @*<div id="cssmenu" class="navbar-fixed-top main-plugins-menu">
                 <ul>
                     <li><a href="#"><span>Menu1</span></a></li>
                     <li><a href="#"><span>Menu2</span></a></li>
@@ -57,57 +57,82 @@
             </div>*@
             
             
-            <div id="cssmenu" class="main-plugins-menu">
-                <ul>
-                    <li><a href='#'><span>Menu1</span></a></li>
-                    <li class='active has-sub'>
-                        <a href='#'><span>Menu2</span></a>
-                        <ul>
-                            <li class='has-sub'>
-                                <a href='#'><span>Product 1</span></a>
-                                <ul>
-                                    <li><a href='#'><span>Sub Product</span></a></li>
-                                    <li class='last'><a href='#'><span>Sub Product</span></a></li>
-                                </ul>
-                            </li>
-                            <li class='has-sub'>
-                                <a href='#'><span>Product 2</span></a>
-                                <ul>
-                                    <li><a href='#'><span>Sub Product</span></a></li>
-                                    <li class='last'><a href='#'><span>Sub Product</span></a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href='#'><span>About</span></a></li>
-                    <li class='last'><a href='#'><span>Contact</span></a></li>
-                </ul>
+                <div id="main-plugins-menu" class="main-plugins-menu">
+                    <ul>
+                        <li class='has-sub'>
+                            <a href='#'><span>Slovníky</span></a>
+                            <ul>
+                                <li>
+                                    <a href='#'><span>Vyhledávání</span></a>
+                                </li>
+                                <li>
+                                    <a href='#'><span>Listování hesly</span></a>
+                                </li>
+                                <li>
+                                    <a href='#'><span>Seznam slovníků</span></a>
+                                </li>
+                                <li>
+                                    <a href='#'><span>Informace</span></a>
+                                </li>
+                                <li>
+                                    <a href='#'><span>Podmínky užití</span></a>
+                                </li>
+                                <li>
+                                    <a href='#'><span>Připomínky</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class='has-sub'>
+                            <a href='#'><span>Edice</span></a>
+                            <ul>
+                                <li>
+                                    <a href='#'><span>Úvodní informace</span></a>
+                                </li>
+                                <li>
+                                    <a href='#'><span>Vyhledávání</span></a>
+                                </li>
+                                <li>
+                                    <a href='#'><span>Listování</span></a>
+                                </li>
+                                <li>
+                                    <a href='#'><span>Podmínky užití</span></a>
+                                </li>
+                                <li>
+                                    <a href='#'><span>Připomínky</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href='#'><span>Staročeská textová banka</span></a></li>
+                        <li><a href='#'><span>Staré mluvnice</span></a></li>
+                        <li><a href='#'><span>Odborná literatura</span></a></li>
+                        <li class='last'><a href='#'><span>Kartotéky excerpce</span></a></li>
+                    </ul>
+                </div>
+            
+            
+
             </div>
-            
-            
+
+
+
+
+            @*main page content*@
+            <div class="container module-content">
+                @RenderBody()
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                </footer>
+            </div>
+
 
         </div>
 
 
-
-
-        @*main page content*@
-        <div class="container module-content">
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-            </footer>
-        </div>
-
-
-    </div>
-
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/itjakub/javascript")
-    @Scripts.Render("~/bundles/dropzonescripts")
-    @RenderSection("scripts", false)
-</body>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/itjakub/javascript")
+        @Scripts.Render("~/bundles/dropzonescripts")
+        @RenderSection("scripts", false)
+    </body>
 </html>
