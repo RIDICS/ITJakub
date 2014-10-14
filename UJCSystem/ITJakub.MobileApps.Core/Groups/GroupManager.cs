@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.ServiceModel;
 using AutoMapper;
 using ITJakub.MobileApps.Core.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
@@ -141,6 +142,15 @@ namespace ITJakub.MobileApps.Core.Groups
 
             var rowKeys = m_usersRepository.GetRowKeysAndRemoveGroup(groupId);
             m_applicationManager.DeleteSynchronizedObjects(groupId, rowKeys);
+        }
+
+        public GroupStateContract GetGroupState(long groupId)
+        {
+            var group = m_usersRepository.FindById<Group>(groupId);
+            if (group == null || group.State == GroupState.Created)
+                throw new FaultException("Group not found.");
+
+            return Mapper.Map<GroupState,GroupStateContract>(group.State);
         }
     }
 }

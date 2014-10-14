@@ -250,5 +250,18 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 callback(exception);
             }
         }
+
+        public async Task GetGroupStateAsync(long groupId, Action<GroupState, Exception> callback)
+        {
+            try
+            {
+                var state = await m_serviceClient.GetGroupState(groupId);
+                callback((GroupState) state, null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(GroupState.Closed, exception);
+            }
+        }
     }
 }

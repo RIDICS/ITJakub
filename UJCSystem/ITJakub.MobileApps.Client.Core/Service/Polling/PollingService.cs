@@ -84,9 +84,9 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             }
         }
 
-        public void RegisterForGetTaskByGroup(PollingInterval interval, long groupId, Action<TaskViewModel,Exception> callback)
+        public void RegisterForGetGroupState(PollingInterval interval, long groupId, Action<GroupState,Exception> callback)
         {
-            Action newAction = () => m_taskManager.GetTaskForGroupAsync(groupId, callback).GetAwaiter().GetResult();
+            Action newAction = () => m_groupManager.GetGroupStateAsync(groupId, callback).GetAwaiter().GetResult();
             m_timerService.Register(interval, newAction);
             m_registeredActions.Add(callback, newAction);
         }
@@ -108,7 +108,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             m_registeredActions.Remove(action);
         }
 
-        public void Unregister(PollingInterval interval, Action<TaskViewModel, Exception> action)
+        public void Unregister(PollingInterval interval, Action<GroupState, Exception> action)
         {
             UnregisterGenericAction(interval, action);
         }

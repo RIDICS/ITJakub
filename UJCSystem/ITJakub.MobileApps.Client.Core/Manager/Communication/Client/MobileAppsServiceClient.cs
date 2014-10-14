@@ -4,6 +4,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using System.Xml;
+using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
@@ -444,6 +445,32 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 try
                 {
                     Channel.RemoveGroup(groupId);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+        public Task<GroupStateContract> GetGroupState(long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetGroupState(groupId);
                 }
                 catch (FaultException)
                 {

@@ -71,7 +71,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
             }
         }
 
-        public async Task GetTaskForGroupAsync(long groupId, Action<TaskViewModel, Exception> callback)
+        public async void GetTaskForGroup(long groupId, Action<TaskViewModel, Exception> callback)
         {
             try
             {

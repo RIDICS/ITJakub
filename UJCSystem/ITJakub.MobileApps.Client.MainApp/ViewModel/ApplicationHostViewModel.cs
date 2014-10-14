@@ -4,9 +4,9 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
-using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared;
@@ -17,7 +17,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     public class ApplicationHostViewModel : ViewModelBase
     {
-        private const PollingInterval TaskPollingInterval = PollingInterval.Medium;
+        private const PollingInterval GroupStatePollingInterval = PollingInterval.Medium;
 
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
@@ -29,8 +29,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_isChatDisplayed;
         private bool m_isChatSupported;
         private bool m_isCommandBarOpen;
-        private bool m_waitingForTask;
+        private bool m_waitingForStart;
         private bool m_waitingForData;
+        private bool m_taskLoaded;
+        private long m_groupId;
+        private bool m_paused;
 
         public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -38,11 +41,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService = navigationService;
             m_pollingService = pollingService;
             GoBackCommand = new RelayCommand(GoBack);
+            m_taskLoaded = false;
 
             Messenger.Default.Register<OpenGroupMessage>(this, message =>
             {
-                WaitingForTask = true;
-                m_pollingService.RegisterForGetTaskByGroup(TaskPollingInterval, message.Group.GroupId, LoadTask);
+                WaitingForStart = true;
+                WaitingForData = true;
+                m_groupId = message.Group.GroupId;
+                m_pollingService.RegisterForGetGroupState(GroupStatePollingInterval, message.Group.GroupId, GroupStateUpdate);
                 Messenger.Default.Unregister<OpenGroupMessage>(this);
             });
 
@@ -51,9 +57,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void StopCommunication()
         {
-            WaitingForTask = false;
+            WaitingForStart = false;
             WaitingForData = false;
-            m_pollingService.Unregister(TaskPollingInterval, LoadTask);
+            m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
             Messenger.Default.Unregister(this);
 
             if (ChatApplicationViewModel != null)
@@ -69,23 +75,35 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService.GoBack();
         }
 
-        private void LoadTask(TaskViewModel task, Exception exception)
+        private void GroupStateUpdate(GroupState state, Exception exception)
         {
             if (exception != null)
                 return;
 
-            if (task == null || task.Data == null)
-                return;
-
-            m_pollingService.Unregister(TaskPollingInterval, LoadTask);
-
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                if (!WaitingForTask)
+                if (state >= GroupState.WaitingForStart && !m_taskLoaded)
+                {
+                    LoadTask();
+                }
+
+                if (state >= GroupState.Running)
+                {
+                    m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
+                    WaitingForStart = false;
+                }
+            });
+        }
+
+        private void LoadTask()
+        {
+            m_dataService.GetTaskForGroup(m_groupId, (task, exception) =>
+            {
+                if (exception != null)
                     return;
 
-                WaitingForTask = false;
                 LoadApplications(task.Application, task.Data);
+                m_taskLoaded = true;
             });
         }
 
@@ -169,12 +187,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public bool WaitingForTask
+        public bool WaitingForStart
         {
-            get { return m_waitingForTask; }
+            get { return m_waitingForStart; }
             set
             {
-                m_waitingForTask = value;
+                m_waitingForStart = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(() => Waiting);
             }
@@ -191,9 +209,20 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        public bool Paused
+        {
+            get { return m_paused; }
+            set
+            {
+                m_paused = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => Waiting);
+            }
+        }
+
         public bool Waiting
         {
-            get { return m_waitingForTask || m_waitingForData; }
+            get { return m_waitingForStart || m_waitingForData; }
         }
 
         public RelayCommand GoBackCommand { get; private set; }

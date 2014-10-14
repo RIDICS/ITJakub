@@ -69,6 +69,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_groupManager.ConnectToGroup(code, callback);
         }
 
+        public void GetTaskForGroup(long groupId, Action<TaskViewModel, Exception> callback)
+        {
+            m_taskManager.GetTaskForGroup(groupId, callback);
+        }
+
         public void GetTasksByApplication(ApplicationType application, Action<ObservableCollection<TaskViewModel>, Exception> callback)
         {
             m_taskManager.GetTasksByApplication(application, callback);

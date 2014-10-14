@@ -18,7 +18,6 @@
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <converter:GroupTypeToNameConverter x:Key="GroupTypeToNameConverter" />
-        <converter:ApplicationTypeToNameConverter x:Key="ApplicationTypeToNameConverter" />
         <CollectionViewSource x:Name="GroupList" Source="{Binding GroupList}" IsSourceGrouped="True" />
     </Page.Resources>
 
@@ -245,10 +244,10 @@
                                     Orientation="Vertical">
                             <TextBlock Text="{Binding GroupName}"
                                        FontWeight="Bold" />
-                            <TextBlock Foreground="{StaticResource ApplicationForegroundThemeBrush}">
+                            <!--<TextBlock Foreground="{StaticResource ApplicationForegroundThemeBrush}">
                                 <Run Text="Aplikace: " />
                                 <Run Text="{Binding Task.Application, Converter={StaticResource ApplicationTypeToNameConverter}}" />
-                            </TextBlock>
+                            </TextBlock>-->
                             <TextBlock>
                                 <Run Text="Počet členů: " />
                                 <Run Text="{Binding MemberCount}" />
