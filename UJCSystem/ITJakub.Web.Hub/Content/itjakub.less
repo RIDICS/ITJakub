@@ -36,11 +36,6 @@ body {
     background-color:@background-color;
   }
 
-.container{
-    width: @max-body-width;
-    margin:0 0 0 0;
-    background-color: white;    
-}
 
 .navbar{
     width: 1100px;
@@ -48,6 +43,8 @@ body {
 }
 
 .page-body-content{
+    width: @max-body-width;
+    margin:0 0 0 0;
     margin:auto;   
 }
 
@@ -61,7 +58,7 @@ body {
 
 .module-content{
     width:100%;
-    margin:125px 0 0 0;    
+    margin:80px 0 0 0;    
 }
 
 .main_logo {
@@ -156,4 +153,72 @@ a.main_logo_href img{
 
 #authorsTableDivHeader{
     margin: 5px;
+}
+
+.content-container {
+    background-color: white;
+    padding: 5px;
+}
+
+.centered {
+    align-content: center;
+    vertical-align: central;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+div.container{
+    padding:0;
+}
+
+.left-panel {
+    float: left;
+    padding-left: 0;
+    padding-right: 0;
+    margin-right: 0.5%;
+    width: 49.5%;
+    height: 100%;
+}
+
+.right-panel {
+    float: left;
+    margin-left: 0.5%;
+    padding-right: 0;
+    padding-left: 0;
+    width: 49.5%;
+    height: 100%;
+}
+
+.news {
+  background-image: url('Images/news_background.png');
+  background-size: 60px 60px;
+  background-position: left top;
+  background-repeat: no-repeat;
+  height: 100%;
+  width:100%;
+}
+
+.news > h1 {        
+    font-family: "Times New Roman";
+    font-size: 28px;
+    font-weight: bold;
+    margin-left: 45%;
+    margin-top:0;
+    margin-bottom: 60px;
+}
+
+.news .message {
+    margin: 15px;
+    margin-bottom: 25px;
+    margin-left:25px;
+    margin-top: 20px;
+}
+
+.news .message > h2 {
+    font-family: "Times New Roman";
+    font-size: 17px;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 10px;
 }

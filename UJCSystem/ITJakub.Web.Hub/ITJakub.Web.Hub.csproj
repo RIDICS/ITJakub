@@ -215,6 +215,8 @@
     <Content Include="Content\Images\glyphicons_chevron.png" />
     <Content Include="Content\Images\glyphicons_chevron_green.png" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\mlceni.jpg" />
+    <Content Include="Content\Images\news_background.png" />
     <Content Include="Content\itjakub.css">
       <DependentUpon>itjakub.less</DependentUpon>
     </Content>
