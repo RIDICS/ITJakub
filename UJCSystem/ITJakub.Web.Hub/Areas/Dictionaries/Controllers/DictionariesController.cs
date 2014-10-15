@@ -10,5 +10,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             return View();
         }
+
+        public ActionResult Search()
+        {
+            return View();
+        }
     }
 }

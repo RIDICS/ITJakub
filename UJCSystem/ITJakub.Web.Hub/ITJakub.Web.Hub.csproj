@@ -350,6 +350,7 @@
       <DependentUpon>dropzones.css</DependentUpon>
     </Content>
     <Content Include="Content\ITJakub.DefaultTheme.less" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>

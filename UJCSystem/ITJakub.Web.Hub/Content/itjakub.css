@@ -172,6 +172,8 @@
   position: absolute;
   float: left;
   width: 1100px;
+  /*background-color: @background-color;
+   padding-bottom: 5px;*/
 }
 #main-plugins-menu ul > li.active > ul > li {
   position: relative;
@@ -223,19 +225,17 @@
 ol.numbered {
   counter-reset: li;
   /* Initiate a counter */
-  margin: 0 0 0 45px;
-  /*top right bottom left*/
+  padding: 25px 5px 5px 25px;
 }
 ol.numbered > li {
   position: relative;
   /* Create a positioning context */
-  margin: 0 0 30px 2em;
-  /* Give each list item a left margin to make room for the numbers */
-  padding: 3px 8px;
+  margin-left: 15px;
+  padding: 3px 8px 30px 15px;
   /* Add some spacing around the content */
   list-style: none;
   /* Disable the normal item numbering */
-  width: 100%;
+  width: 95%;
 }
 ol.numbered > li:before {
   content: counter(li);
@@ -307,7 +307,7 @@ body {
   text-decoration: none;
 }
 .module-content {
-  margin: 80px 0 0 0;
+  margin: 90px 0 0 0;
 }
 .main_logo {
   margin: 10px;
@@ -450,8 +450,9 @@ div.container {
   margin-bottom: 10px;
 }
 .searchbar {
-  margin-left: 0!important;
-  margin-right: 0!important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 5px;
 }
 .searchbar-inputs {
   display: block;
@@ -471,5 +472,8 @@ div.container {
   border-radius: 0;
   background-color: #84ced7;
   color: white;
+}
+.top-offset-without-submenu {
+  margin: -25px 0 0 0;
 }
 /*# sourceMappingURL=itjakub.css.map */

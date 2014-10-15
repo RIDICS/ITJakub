@@ -2,14 +2,14 @@
 
 ol.numbered {
     counter-reset:li; /* Initiate a counter */
-    margin:0 0 0 45px; /*top right bottom left*/
+    padding: 25px 5px 5px 25px;
 }
 ol.numbered > li {
     position:relative; /* Create a positioning context */
-    margin:0 0 30px 2em; /* Give each list item a left margin to make room for the numbers */
-    padding:3px 8px; /* Add some spacing around the content */
+    margin-left:15px;
+    padding:3px 8px 30px 15px; /* Add some spacing around the content */
     list-style:none; /* Disable the normal item numbering */
-    width:100%;
+    width:95%;
 }
 ol.numbered > li:before {
     content:counter(li); /* Use the counter as content */

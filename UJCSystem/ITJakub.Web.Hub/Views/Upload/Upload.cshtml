@@ -4,76 +4,75 @@
 @section scripts{
     @Scripts.Render("~/Scripts/itjakub.upload.js")
 }
-                
-<h2>Nahrání díla</h2>
-<ol class="numbered upload-file">
-    <li>
-        <p> Pro nahrání díla klikněte na formulář a proveďtě výběr nebo je na formlulář přetáhněte.</p>
+<div class="content-container top-offset-without-submenu">
+    <h2>Nahrání díla</h2>
+    <ol class="numbered upload-file">
+        <li>
+            <p> Pro nahrání díla klikněte na formulář a proveďtě výběr nebo je na formlulář přetáhněte.</p>
 
-        <form action="~/Upload/UploadFile" method="post" class="dropzone" enctype="multipart/form-data" id="dropzoneFileForm">
-            <div id="dropzoneFileFormPreview"></div>
-            <div class="fallback">
-                <input name="file" type="file" />
-            </div>
-            <div class="additionalData">
-                <input type="text" name="changeMessage" placeholder="Poznámky k verzi" />
-                <input type="submit" value="Odeslat"/>
-            </div>
-        </form>
-    </li>
-    <li>
-        <p> Vyplňte informace o díle.</p>
-       
-        <form method="post" enctype="multipart/form-data" id="fileMetadataForm" class="file-upload-metadata">
-            <p> Vyberte autora:</p>
-            <div id="authorstabledivHeader">
-                <label for="searchInput">Filtr:</label>
-                <input id="searchInput" value="Type To Filter">
-                <button type="button" id="addAuthorButton" class="btn btn-default" style="float: right">Přidat autora</button>
-            </div>
-            <div id="authorsTableDiv">
-                <table class="table table-hover" id="authorsTable">
-                    @*<thead>
-                        <tr></tr>
-                    </thead>*@
-                    <tbody id="authorsTableBody">
-                    </tbody>
-                </table>
-            </div>
-            <input type="submit" value="Potvrdit" class="btn btn-primary" />
-        </form>
-    </li>
-    <li>
-        <p>Nahrajte obrázek úvodní strany díla.</p>
+            <form action="~/Upload/UploadFile" method="post" class="dropzone" enctype="multipart/form-data" id="dropzoneFileForm">
+                <div id="dropzoneFileFormPreview"></div>
+                <div class="fallback">
+                    <input name="file" type="file" />
+                </div>
+                <div class="additionalData">
+                    <input type="text" name="changeMessage" placeholder="Poznámky k verzi" />
+                    <input type="submit" value="Odeslat" />
+                </div>
+            </form>
+        </li>
+        <li>
+            <p> Vyplňte informace o díle.</p>
 
-        <form action="~/Upload/UploadFrontImage" method="post" enctype="multipart/form-data" id="dropzoneFrontImageForm">
-            <div class="fallback">
-                <input name="file" type="file"/>
-                <input type="submit" value="Upload" />
-            </div>
-        </form>
-    </li>
-    <li>
-        <p>Nahrajte ostatní obrázky díla.</p>
+            <form method="post" enctype="multipart/form-data" id="fileMetadataForm" class="file-upload-metadata">
+                <p> Vyberte autora:</p>
+                <div id="authorstabledivHeader">
+                    <label for="searchInput">Filtr:</label>
+                    <input id="searchInput" value="Type To Filter">
+                    <button type="button" id="addAuthorButton" class="btn btn-default" style="float: right">Přidat autora</button>
+                </div>
+                <div id="authorsTableDiv">
+                    <table class="table table-hover" id="authorsTable">
+                        @*<thead>
+                                <tr></tr>
+                            </thead>*@
+                        <tbody id="authorsTableBody"></tbody>
+                    </table>
+                </div>
+                <input type="submit" value="Potvrdit" class="btn btn-primary" />
+            </form>
+        </li>
+        <li>
+            <p>Nahrajte obrázek úvodní strany díla.</p>
 
-        <form action="~/Upload/UploadImages" method="post" enctype="multipart/form-data" id="dropzoneImagesForm">
-            <div class="fallback">
-                <input name="file" type="file" multiple />
-                <input type="submit" value="Upload" />
-            </div>
-        </form>
-    </li>
-</ol>
+            <form action="~/Upload/UploadFrontImage" method="post" enctype="multipart/form-data" id="dropzoneFrontImageForm">
+                <div class="fallback">
+                    <input name="file" type="file" />
+                    <input type="submit" value="Upload" />
+                </div>
+            </form>
+        </li>
+        <li>
+            <p>Nahrajte ostatní obrázky díla.</p>
+
+            <form action="~/Upload/UploadImages" method="post" enctype="multipart/form-data" id="dropzoneImagesForm">
+                <div class="fallback">
+                    <input name="file" type="file" multiple />
+                    <input type="submit" value="Upload" />
+                </div>
+            </form>
+        </li>
+    </ol>
 
 
-<!-- Modal -->
+    <!-- Modal -->
 
-<div class="modal fade" id="addAuthorModal" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 9999">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form id="createAuthorForm">
-                    <div class="form-group author-info" >
+    <div class="modal fade" id="addAuthorModal" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 9999">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="createAuthorForm">
+                        <div class="form-group author-info">
                             <label>Text části jména:</label>
                             <input type="text" name="Text" class="form-control" placeholder="cast jmena">
                             <label>Typ části jména:</label>
@@ -86,11 +85,12 @@
                                 <option value="6">Číslovka</option>
                                 <option value="0">Jiné</option>
                             </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Vytvořit autora</button>
-                    <button class="btn btn-default" data-dismiss="modal" data-target="#addAuthorModal">Zrušit</button>
-                    <button id="addAuthorInfo" class="btn btn-default" type="button">Přidat další</button>
-                </form>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Vytvořit autora</button>
+                        <button class="btn btn-default" data-dismiss="modal" data-target="#addAuthorModal">Zrušit</button>
+                        <button id="addAuthorInfo" class="btn btn-default" type="button">Přidat další</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
