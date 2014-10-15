@@ -6,6 +6,11 @@
   position: relative;
   display: block;
 }
+#main-plugins-menu > ul > li > a > span {
+  text-align: center;
+  vertical-align: middle;
+  height: 40px;
+}
 #main-plugins-menu li {
   margin: 0;
   padding: 0;
@@ -55,6 +60,8 @@
   display: inline-block;
   float: left;
   margin: 0;
+  max-width: 135px;
+  height: 100%;
 }
 #main-plugins-menu.align-center {
   text-align: center;
@@ -73,7 +80,13 @@
 }
 #main-plugins-menu > ul > li > a {
   color: black;
-  font-size: 12px;
+  font-size: 15px;
+  background-image: url('Images/glyphicons_chevron.png');
+  background-position: center 90%;
+  background-repeat: no-repeat;
+  background-size: 10px;
+  padding-bottom: 20px;
+  vertical-align: middle;
 }
 #main-plugins-menu > ul > li:hover:after {
   content: '';
@@ -89,8 +102,14 @@
   margin-left: -10px;
 }
 #main-plugins-menu > ul > li.active > a,
+#main-plugins-menu > ul > li.active:hover > a {
+  background-color: #84ced7;
+  color: black;
+  background-image: url('Images/glyphicons_chevron.png');
+}
 #main-plugins-menu > ul > li:hover > a {
   color: #84ced7;
+  background-image: url('Images/glyphicons_chevron_green.png');
 }
 #main-plugins-menu > ul > li > ul > li.active > a {
   color: black;
@@ -307,7 +326,7 @@ body {
   text-decoration: none;
 }
 .module-content {
-  margin: 90px 0 0 0;
+  margin: 120px 0 0 0;
 }
 .main_logo {
   margin: 10px;
