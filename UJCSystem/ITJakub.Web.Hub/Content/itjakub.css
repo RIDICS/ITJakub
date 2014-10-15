@@ -296,7 +296,6 @@ body {
 }
 .page-body-content {
   width: 1100px;
-  margin: 0 0 0 0;
   margin: auto;
 }
 .page-body-content a {
@@ -308,7 +307,6 @@ body {
   text-decoration: none;
 }
 .module-content {
-  width: 100%;
   margin: 80px 0 0 0;
 }
 .main_logo {
@@ -403,6 +401,8 @@ ul {
 }
 div.container {
   padding: 0;
+  width: 100%;
+  max-width: 1100px;
 }
 .left-panel {
   float: left;
@@ -448,5 +448,28 @@ div.container {
   font-weight: bold;
   margin: 0;
   margin-bottom: 10px;
+}
+.searchbar {
+  margin-left: 0!important;
+  margin-right: 0!important;
+}
+.searchbar-inputs {
+  display: block;
+  overflow: hidden;
+  padding-right: 10px;
+}
+.searchbar-input {
+  border-radius: 0;
+  margin: 0;
+  width: 100%;
+}
+.searchbar-buttons {
+  float: right;
+  /*width:16%;*/
+}
+.searchbar-button {
+  border-radius: 0;
+  background-color: #84ced7;
+  color: white;
 }
 /*# sourceMappingURL=itjakub.css.map */
