@@ -63,13 +63,13 @@
                             <a href='@Url.Action("Search", "Dictionaries", new { area = "Dictionaries" })'><span>Slovníky</span></a>
                             <ul>
                                 <li>
-                                    <a href='#'><span>Vyhledávání</span></a>
+                                    <a href='@Url.Action("Search", "Dictionaries", new { area = "Dictionaries" })'><span>Vyhledávání</span></a>
                                 </li>
                                 <li>
-                                    <a href='#'><span>Listování hesly</span></a>
+                                    <a href='@Url.Action("Passwords", "Dictionaries", new { area = "Dictionaries" })'><span>Listování hesly</span></a>
                                 </li>
                                 <li>
-                                    <a href='#'><span>Seznam slovníků</span></a>
+                                    <a href='@Url.Action("List", "Dictionaries", new { area = "Dictionaries" })'><span>Seznam slovníků</span></a>
                                 </li>
                                 <li>
                                     <a href='#'><span>Informace</span></a>

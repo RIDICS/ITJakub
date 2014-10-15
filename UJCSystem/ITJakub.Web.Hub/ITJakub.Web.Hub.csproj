@@ -351,6 +351,8 @@
     </Content>
     <Content Include="Content\ITJakub.DefaultTheme.less" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\List.cshtml" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\Passwords.cshtml" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>

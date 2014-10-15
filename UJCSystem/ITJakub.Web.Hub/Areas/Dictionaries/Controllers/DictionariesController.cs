@@ -15,5 +15,15 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             return View();
         }
+
+        public ActionResult List()
+        {
+            return View();
+        }
+
+        public ActionResult Passwords()
+        {
+            return View();
+        }
     }
 }
