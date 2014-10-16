@@ -220,11 +220,11 @@
     <Content Include="Content\itjakub.css">
       <DependentUpon>itjakub.less</DependentUpon>
     </Content>
-    <Content Include="Content\ItJakub.MainMenu.css">
-      <DependentUpon>ItJakub.MainMenu.less</DependentUpon>
+    <Content Include="Content\ItJakub.MainMenu - Copy.css">
+      <DependentUpon>ItJakub.ListItem.less</DependentUpon>
     </Content>
-    <Content Include="Content\ItJakub.MainMenu.min.css">
-      <DependentUpon>ItJakub.MainMenu.css</DependentUpon>
+    <Content Include="Content\ItJakub.MainMenu - Copy.min.css">
+      <DependentUpon>ItJakub.MainMenu - Copy.css</DependentUpon>
     </Content>
     <Content Include="Content\itjakub.min.css">
       <DependentUpon>itjakub.css</DependentUpon>
@@ -332,10 +332,6 @@
     <Content Include="Areas\Editions\Content\itjakub.editions.css.map">
       <DependentUpon>itjakub.editions.css</DependentUpon>
     </Content>
-    <Content Include="Content\ItJakub.MainMenu.less" />
-    <Content Include="Content\ItJakub.MainMenu.css.map">
-      <DependentUpon>ItJakub.MainMenu.css</DependentUpon>
-    </Content>
     <Content Include="Content\ITJakub.PluginMenu.less" />
     <Content Include="Content\ITJakub.PluginMenu.css.map">
       <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
@@ -353,6 +349,14 @@
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\List.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Passwords.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\Search.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\Information.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\TermsOfUse.cshtml" />
+    <Content Include="Content\ItJakub.ListItem.less" />
+    <Content Include="Content\ItJakub.MainMenu - Copy.css.map">
+      <DependentUpon>ItJakub.MainMenu - Copy.css</DependentUpon>
+    </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>

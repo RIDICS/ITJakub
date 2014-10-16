@@ -1,4 +1,33 @@
-﻿/*@import "ItJakub.MainMenu.less";*/
+﻿ul.listing {
+  width: 80%;
+}
+ul.listing li.list-item {
+  /*border: 1px solid black;*/
+  background-color: white;
+  margin-top: 10px;
+}
+ul.listing li.list-item .left-panel {
+  float: left;
+  width: 100px;
+  padding: 2px;
+  height: 150px;
+}
+ul.listing li.list-item .middle-panel {
+  padding: 5px;
+  height: 150px;
+}
+ul.listing li.list-item .right-panel {
+  float: right;
+  width: 100px;
+  background-color: #84ced7;
+  height: 150px;
+}
+ul.listing li.list-item .hidden-content {
+  clear: both;
+  width: 100%;
+  padding: 2px;
+  display: none;
+}
 #main-plugins-menu span,
 #main-plugins-menu a {
   margin: 0;

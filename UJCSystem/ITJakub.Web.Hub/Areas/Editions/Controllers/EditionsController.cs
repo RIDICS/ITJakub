@@ -10,5 +10,25 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             return View();
         }
+
+        public ActionResult Search()
+        {
+            return View();
+        }
+
+        public ActionResult Listing()
+        {
+            return View();
+        }
+
+        public ActionResult Information()
+        {
+            return View();
+        }
+
+        public ActionResult TermsOfUse()
+        {
+            return View();
+        }
     }
 }
