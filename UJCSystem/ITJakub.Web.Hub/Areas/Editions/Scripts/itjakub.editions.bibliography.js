@@ -31,6 +31,7 @@
     BibliographyModul.prototype.makeBibliography = function (bibItem) {
         var liElement = document.createElement('li');
         $(liElement).addClass('list-item');
+        $(liElement).attr("data-bookId", bibItem.BookId);
 
         var visibleContent = document.createElement('div');
         $(visibleContent).addClass('visible-content');
@@ -44,6 +45,8 @@
         var spanBook = document.createElement('span');
         $(spanBook).addClass('glyphicon glyphicon-book');
         bookButton.appendChild(spanBook);
+        $(bookButton).click(function (event) {
+        }); //TODO fill click action
         rightPanel.appendChild(bookButton);
 
         var infoButton = document.createElement('button');
@@ -52,6 +55,8 @@
         var spanInfo = document.createElement('span');
         $(spanInfo).addClass('glyphicon glyphicon-info-sign');
         infoButton.appendChild(spanInfo);
+        $(infoButton).click(function (event) {
+        }); //TODO fill click action
         rightPanel.appendChild(infoButton);
 
         var showContentButton = document.createElement('button');
@@ -79,22 +84,59 @@
             $(this).hide();
         });
         rightPanel.appendChild(hideContentButton);
-
         visibleContent.appendChild(rightPanel);
 
         var middlePanel = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
-        middlePanel.innerHTML = "Fusce tellus odio, dapibus id fermentum quis, suscipit id erat.Aliquam ante.Vestibulum fermentum tortor id mi.Sed convallis magna eu sem.Curabitur ligula sapien, pulvinar a vestibulum quis, facilisis vel sapien.Nullam faucibus mi quis velit.Nunc tincidunt ante vitae massa.Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim ipsum id lacus.Etiam bibendum elit eget erat.";
+        var middlePanelHeading = document.createElement('div');
+        $(middlePanelHeading).addClass('heading');
+        middlePanelHeading.innerHTML = bibItem.Name;
+        middlePanel.appendChild(middlePanelHeading);
+        var middlePanelBody = document.createElement('div');
+        $(middlePanelBody).addClass('body');
+        middlePanelBody.innerHTML = bibItem.Body;
+        middlePanel.appendChild(middlePanelBody);
         visibleContent.appendChild(middlePanel);
 
         $(liElement).append(visibleContent);
 
         var hiddenContent = document.createElement('div');
         $(hiddenContent).addClass('hidden-content');
-        hiddenContent.innerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.Maecenas aliquet accumsan leo.Donec quis nibh at felis congue commodo.Phasellus et lorem id felis nonummy placerat.Quisque porta.Vivamus porttitor turpis ac leo.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.Fusce tellus.Nunc dapibus tortor vel mi dapibus sollicitudin.Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Quisque porta.Nullam at arcu a est sollicitudin euismod.Donec ipsum massa, ullamcorper in, auctor et, scelerisque sed, est.Integer vulputate sem a nibh rutrum consequat.Aliquam erat volutpat.Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor.Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo.Mauris tincidunt sem sed arcu.Etiam neque.";
+        var tableDiv = document.createElement('div');
+        $(tableDiv).addClass('table');
+
+        this.appendTableRow("Editor", bibItem.Editor, tableDiv);
+        this.appendTableRow("Předloha", bibItem.Pattern, tableDiv);
+        this.appendTableRow("Zkratka památky", bibItem.RelicAbbreviation, tableDiv);
+        this.appendTableRow("Zkratka pramene", bibItem.SourceAbbreviation, tableDiv);
+        this.appendTableRow("Literární druh", bibItem.LiteraryType, tableDiv);
+        this.appendTableRow("Literární žánr", bibItem.LiteraryGenre, tableDiv);
+        this.appendTableRow("Poslední úprava edice", bibItem.LastEditation, tableDiv);
+
+        //TODO add Edicni poznamka anchor and copyright to hiddenContent here
+        hiddenContent.appendChild(tableDiv);
+
         $(liElement).append(hiddenContent);
 
         return liElement;
+    };
+
+    BibliographyModul.prototype.appendTableRow = function (label, value, tableDiv) {
+        var rowDiv = document.createElement('div');
+        $(rowDiv).addClass('row');
+        var labelDiv = document.createElement('div');
+        $(labelDiv).addClass('cell label');
+        labelDiv.innerHTML = label;
+        rowDiv.appendChild(labelDiv);
+        var valueDiv = document.createElement('div');
+        $(valueDiv).addClass('cell');
+        if (!value || value.length === 0) {
+            valueDiv.innerHTML = "&lt;nezadáno&gt;";
+        } else {
+            valueDiv.innerHTML = value;
+        }
+        rowDiv.appendChild(valueDiv);
+        tableDiv.appendChild(rowDiv);
     };
     BibliographyModul._instance = null;
     return BibliographyModul;
