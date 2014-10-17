@@ -2,11 +2,28 @@
     ViewBag.Title = "Search";
 }
 
+@section styles{
+    @Styles.Render("~/itjakub/editions/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/editions/javascript")
+}
+
+<script src="/Areas/Editions/Scripts/itjakub.editions.bibliography.js"></script>
+
 <div class="content-container">
     <h2>Vyhledavani</h2>
+    <button id="fillBibList10"> Search mocked bibliographies (10)</button>
+    <button id="fillBibList3"> Search mocked bibliographies (3)</button>
+    <button id="fillBibList1000"> Search mocked bibliographies (1000)</button>
 </div>
 
-<ul class="listing">
+<div id="bibliographyList">
+    
+</div>
+
+
+@*<ul class="listing">
     <li class="list-item">
         <div class="visible-content">
             <div class="right-panel">
@@ -125,4 +142,4 @@
                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas aliquet accumsan leo. Donec quis nibh at felis congue commodo. Phasellus et lorem id felis nonummy placerat. Quisque porta. Vivamus porttitor turpis ac leo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Fusce tellus. Nunc dapibus tortor vel mi dapibus sollicitudin. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque porta. Nullam at arcu a est sollicitudin euismod. Donec ipsum massa, ullamcorper in, auctor et, scelerisque sed, est. Integer vulputate sem a nibh rutrum consequat. Aliquam erat volutpat. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo. Mauris tincidunt sem sed arcu. Etiam neque.
                        </div>
                    </li>
-</ul>
+</ul>*@

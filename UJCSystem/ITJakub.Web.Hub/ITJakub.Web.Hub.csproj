@@ -445,6 +445,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
+    <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.bibliography.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />

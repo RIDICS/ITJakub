@@ -17,6 +17,7 @@ $(document).ready(function () {
     $(liTargetingActualPage).parents('li').addClass('active');
 });
 
+//TODO methods below should be on typescript component for creating listings
 //list item showing hidden context
 $(document).ready(function () {
     $('ul.listing').find('li.list-item').find('.show-button').click(function (event) {
