@@ -1,0 +1,45 @@
+﻿ul.listing {
+  width: 80%;
+}
+ul.listing li.list-item {
+  /*border: 1px solid black;*/
+  background-color: white;
+  margin-top: 10px;
+}
+ul.listing li.list-item .left-panel {
+  float: left;
+  width: 100px;
+  padding: 2px;
+  height: 150px;
+}
+ul.listing li.list-item .middle-panel {
+  padding: 5px;
+  height: 150px;
+}
+ul.listing li.list-item .right-panel {
+  float: right;
+  width: 100px;
+  background-color: #84ced7;
+  height: 150px;
+  align-content: center;
+}
+ul.listing li.list-item .hidden-content {
+  border-top: 1px solid black;
+  clear: both;
+  width: 100%;
+  padding: 2px;
+  display: none;
+}
+.hide-button {
+  display: none;
+}
+ul.listing li.list-item .right-panel button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  outline: none!important;
+}
+ul.listing li.list-item .right-panel button > span {
+  font-size: 20px;
+}
+/*# sourceMappingURL=ItJakub.ListItem.css.map */

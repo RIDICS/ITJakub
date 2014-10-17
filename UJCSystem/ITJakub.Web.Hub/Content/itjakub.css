@@ -21,6 +21,7 @@ ul.listing li.list-item .right-panel {
   width: 100px;
   background-color: #84ced7;
   height: 150px;
+  align-content: center;
 }
 ul.listing li.list-item .hidden-content {
   border-top: 1px solid black;
@@ -31,6 +32,15 @@ ul.listing li.list-item .hidden-content {
 }
 .hide-button {
   display: none;
+}
+ul.listing li.list-item .right-panel button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  outline: none!important;
+}
+ul.listing li.list-item .right-panel button > span {
+  font-size: 20px;
 }
 #main-plugins-menu span,
 #main-plugins-menu a {
@@ -224,8 +234,8 @@ ul.listing li.list-item .hidden-content {
   position: absolute;
   float: left;
   width: 1100px;
-  /*background-color: @background-color;
-   padding-bottom: 5px;*/
+  background-color: #e5e5e5;
+  padding-bottom: 5px;
 }
 #main-plugins-menu ul > li.active > ul > li {
   position: relative;

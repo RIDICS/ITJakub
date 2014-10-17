@@ -16,7 +16,7 @@
     <AssemblyName>ITJakub.Web.Hub</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -220,6 +220,12 @@
     <Content Include="Content\itjakub.css">
       <DependentUpon>itjakub.less</DependentUpon>
     </Content>
+    <Content Include="Content\ItJakub.ListItem.css">
+      <DependentUpon>ItJakub.ListItem.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ItJakub.ListItem.min.css">
+      <DependentUpon>ItJakub.ListItem.css</DependentUpon>
+    </Content>
     <Content Include="Content\ItJakub.MainMenu - Copy.css">
       <DependentUpon>ItJakub.ListItem.less</DependentUpon>
     </Content>
@@ -357,6 +363,9 @@
     <Content Include="Content\ItJakub.MainMenu - Copy.css.map">
       <DependentUpon>ItJakub.MainMenu - Copy.css</DependentUpon>
     </Content>
+    <Content Include="Content\ItJakub.ListItem.css.map">
+      <DependentUpon>ItJakub.ListItem.css</DependentUpon>
+    </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
@@ -470,7 +479,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2637</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/ITJakub.Web.Hub</IISUrl>
+          <IISUrl>http://localhost:2637/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
