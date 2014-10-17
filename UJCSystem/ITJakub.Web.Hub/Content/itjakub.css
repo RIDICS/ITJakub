@@ -6,22 +6,28 @@ ul.listing li.list-item {
   background-color: white;
   margin-top: 10px;
 }
+ul.listing li.list-item .visible-content {
+  height: 120px;
+}
 ul.listing li.list-item .left-panel {
   float: left;
   width: 100px;
   padding: 2px;
-  height: 150px;
+  /*height: 120px;*/
 }
 ul.listing li.list-item .middle-panel {
   padding: 5px;
-  height: 150px;
+  overflow-y: auto;
+  max-height: 120px;
 }
 ul.listing li.list-item .right-panel {
   float: right;
   width: 100px;
   background-color: #84ced7;
-  height: 150px;
-  align-content: center;
+  /*height: 120px;*/
+  align-items: center;
+  text-align: center;
+  position: relative;
 }
 ul.listing li.list-item .hidden-content {
   border-top: 1px solid black;
@@ -29,15 +35,26 @@ ul.listing li.list-item .hidden-content {
   width: 100%;
   padding: 2px;
   display: none;
+  overflow-y: auto;
+  max-height: 200px;
 }
 .hide-button {
   display: none;
+}
+.hide-button,
+.show-button {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  margin-left: -20px;
+  /* half size of button + padding*/
 }
 ul.listing li.list-item .right-panel button {
   background-color: transparent;
   border: none;
   color: white;
   outline: none!important;
+  box-shadow: none !important;
 }
 ul.listing li.list-item .right-panel button > span {
   font-size: 20px;
