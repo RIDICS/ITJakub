@@ -9,24 +9,21 @@ namespace ITJakub.Web.Hub.Controllers
         // GET: Bibliographies
         public ActionResult Books(IEnumerable<string> bookIds)
         {
-            List<BookInfo> listBooks =
-                bookIds.Select(
-                    bookId =>
-                        new BookInfo
-                        {
-                            BookId = bookId,
-                            BookType = "Edition",
-                            Body = "here is body",
-                            Editor = "Alenka Cerna",
-                            Copyright = "alenka",
-                            LastEditation = "25.6.1989",
-                            LiteraryGenre = "proza",
-                            LiteraryType = "type",
-                            Name = "Rukopis kunhuta",
-                            Pattern = "Broucci",
-                            RelicAbbreviation = "a",
-                            SourceAbbreviation = ""
-                        }).ToList();
+            List<BookInfo> listBooks = new List<BookInfo>();
+
+            foreach (string bookId in bookIds)
+            {
+                var bookType = "Edition";
+                if (int.Parse(bookId)%2 == 0)
+                {
+                    bookType = "Dictionary";
+                }
+                if (int.Parse(bookId) % 3 == 0)
+                {
+                    bookType = "OldCzechTextBank";
+                }
+                listBooks.Add(new BookInfo{BookId = bookId,BookType = bookType,Body = "here is body",Editor = "Alenka Cerna",Copyright = "alenka",LastEditation = "25.6.1989",LiteraryGenre = "proza",LiteraryType = "type",Name = "Rukopis kunhuta",Pattern = "Broucci",RelicAbbreviation = "a",SourceAbbreviation = ""}); 
+            }
 
             return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);
         }
