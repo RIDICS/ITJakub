@@ -1,31 +1,65 @@
-﻿var BibliographyModul = (function () {
-    function BibliographyModul() {
-        this.bibliographyModulControllerUrl = "";
-        if (BibliographyModul._instance) {
-            throw new Error("Cannot instantiate...Use getInstance method instead");
-        }
-        BibliographyModul._instance = this;
+﻿var SearchModule = (function () {
+    function SearchModule() {
     }
-    BibliographyModul.getInstance = function () {
-        if (BibliographyModul._instance === null) {
-            BibliographyModul._instance = new BibliographyModul();
-        }
-        return BibliographyModul._instance;
+    SearchModule.prototype.getBookWithIds = function (bookIds, container) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: "/Bibliography/Books",
+            data: { bookIds: bookIds },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                BibliographyModule.getInstance().showBooks(response.books);
+            }
+        });
     };
 
-    BibliographyModul.prototype.showBibliographies = function (bookIds, container) {
+    SearchModule.prototype.getBookWithType = function (type, container) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: "/Bibliography/BooksWithType",
+            data: { type: type },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                BibliographyModule.getInstance().showBooks(response.books);
+            }
+        });
+    };
+    return SearchModule;
+})();
+
+var BibliographyModule = (function () {
+    function BibliographyModule() {
+        this.bibliographyModulControllerUrl = "";
+        if (BibliographyModule._instance) {
+            throw new Error("Cannot instantiate...Use getInstance method instead");
+        }
+        BibliographyModule._instance = this;
+    }
+    BibliographyModule.getInstance = function () {
+        if (BibliographyModule._instance === null) {
+            BibliographyModule._instance = new BibliographyModule();
+        }
+        return BibliographyModule._instance;
+    };
+
+    BibliographyModule.prototype.showBibliographiesByIds = function (bookIds, container) {
         var _this = this;
         $(container).empty();
         var rootElement = document.createElement('ul');
         $(rootElement).addClass('listing');
         $.ajax({
             type: "GET",
-            url: "/Editions/Bibliographies",
-            data: JSON.stringify({ 'bookIds': bookIds }),
+            traditional: true,
+            url: "/Bibliography/Books",
+            data: { bookIds: bookIds },
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                $.each(response, function (index, item) {
+                $.each(response.books, function (index, item) {
                     var bibliographyHtml = _this.makeBibliography(item);
                     rootElement.appendChild(bibliographyHtml);
                 });
@@ -34,7 +68,29 @@
         });
     };
 
-    BibliographyModul.prototype.makeBibliography = function (bibItem) {
+    BibliographyModule.prototype.showBibliographiesByType = function (type, container) {
+        var _this = this;
+        $(container).empty();
+        var rootElement = document.createElement('ul');
+        $(rootElement).addClass('listing');
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: "/Bibliography/BooksWithType",
+            data: { type: type },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $.each(response.books, function (index, item) {
+                    var bibliographyHtml = _this.makeBibliography(item);
+                    rootElement.appendChild(bibliographyHtml);
+                });
+                $(container).append(rootElement);
+            }
+        });
+    };
+
+    BibliographyModule.prototype.makeBibliography = function (bibItem) {
         var liElement = document.createElement('li');
         $(liElement).addClass('list-item');
         $(liElement).attr("data-bookId", bibItem.BookId);
@@ -127,7 +183,7 @@
         return liElement;
     };
 
-    BibliographyModul.prototype.appendTableRow = function (label, value, tableDiv) {
+    BibliographyModule.prototype.appendTableRow = function (label, value, tableDiv) {
         var rowDiv = document.createElement('div');
         $(rowDiv).addClass('row');
         var labelDiv = document.createElement('div');
@@ -144,7 +200,7 @@
         rowDiv.appendChild(valueDiv);
         tableDiv.appendChild(rowDiv);
     };
-    BibliographyModul._instance = null;
-    return BibliographyModul;
+    BibliographyModule._instance = null;
+    return BibliographyModule;
 })();
-//# sourceMappingURL=itjakub.editions.bibliography.js.map
+//# sourceMappingURL=itjakub.bibliography.js.map

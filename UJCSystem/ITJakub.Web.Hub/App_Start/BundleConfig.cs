@@ -26,7 +26,9 @@ namespace ITJakub.Web.Hub
                      "~/Scripts/dropzone/dropzone.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
-                "~/Scripts/itjakub.js"));
+                "~/Scripts/itjakub.js",
+                "~/Scripts/itjakub.plugins.search.js",
+                "~/Scripts/itjakub.plugins.bibliography.js"));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

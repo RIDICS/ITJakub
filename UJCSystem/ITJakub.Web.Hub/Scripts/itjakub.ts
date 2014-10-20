@@ -1,13 +1,5 @@
-﻿//window.onload = () => { alert("hello from typescript!"); }
-
-//$('#main-plugins-menu').find('li').click(function (event: Event) {
-//    $('#main-plugins-menu').find('li').removeClass('active');
-//    $(this).addClass('active');
-//    $(this).parents('li').addClass('active');
-//    //var submenu = $('#main-plugins-menu').find('li.active').parent('ul.has-sub');
-//    //$(submenu).css('margin-left', mrg + 'px');
-//    event.stopPropagation();
-//});
+﻿/// <reference path="itjakub.plugins.bibliography.ts"/>
+/// <reference path="itjakub.plugins.search.ts"/>
 
 //sets state to main plugins menu
 $(document).ready(function() {
@@ -37,5 +29,40 @@ $(document).ready(function () {
         $(this).parents('li.list-item').first().find('.hidden-content').hide("slow");
         $(this).siblings('.show-button').show();
         $(this).hide();
+    });
+});
+
+$(document).ready(function () {
+    var searchPlugin: SearchModule = new SearchModule();
+
+    $('#fillBibList10').click(function () {
+        var arrayOfIds: string[] = new Array();
+        for (var i = 0; i < 10; i++) {
+            arrayOfIds.push(i.toString());
+        }
+        searchPlugin.getBookWithIds(arrayOfIds, '#bibliographyList');
+    });
+
+    $('#fillBibList3').click(function () {
+        var arrayOfIds: string[] = new Array();
+        for (var i = 0; i < 3; i++) {
+            arrayOfIds.push(i.toString());
+        }
+        searchPlugin.getBookWithIds(arrayOfIds, '#bibliographyList');
+    });
+    $('#fillBibList1000').click(function () {
+        var arrayOfIds: string[] = new Array();
+        for (var i = 0; i < 1000; i++) {
+            arrayOfIds.push(i.toString());
+        }
+        searchPlugin.getBookWithIds(arrayOfIds, '#bibliographyList');
+    });
+
+
+    $('#fillBibListTypeEdition').click(function () {
+        searchPlugin.getBookWithType('Edition', '#bibliographyList');
+    });
+    $('#fillBibListTypeDictionary').click(function () {
+        searchPlugin.getBookWithType('Dictionary', '#bibliographyList');
     });
 });

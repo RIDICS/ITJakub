@@ -177,6 +177,7 @@
     <Compile Include="Areas\Editions\EditionsAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
@@ -435,6 +436,7 @@
     <Folder Include="Areas\Editions\Models\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
     <Folder Include="Views\Author\" />
+    <Folder Include="Views\Bibliography\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -445,7 +447,8 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
-    <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.bibliography.ts" />
+    <TypeScriptCompile Include="Scripts\itjakub.plugins.search.ts" />
+    <TypeScriptCompile Include="Scripts\itjakub.plugins.bibliography.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
