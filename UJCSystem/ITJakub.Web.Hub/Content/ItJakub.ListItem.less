@@ -5,7 +5,6 @@ ul.listing {
 }
 
 ul.listing li.list-item {
-    /*border: 1px solid black;*/
     background-color: white;
     margin-top : 10px;
 }
@@ -16,13 +15,15 @@ ul.listing li.list-item .visible-content{
 
 ul.listing li.list-item .left-panel {
     float: left;
-    width: 100px;
+    width: 10px;
     padding: 2px;
-    /*height: 120px;*/
+    align-items: center;
+    text-align: center;
+    position: relative;
 }
 
 ul.listing li.list-item .middle-panel {
-    padding: 10px 5px 10px 30px;
+    padding: 10px 5px 10px 15px;
     overflow-y: auto;
     max-height: 120px;
 }
@@ -40,7 +41,6 @@ ul.listing li.list-item .right-panel {
     float: right;
     width: 100px;
     background-color: @item-background-color;
-    /*height: 120px;*/
     align-items: center;
     text-align: center;
     position: relative;
@@ -76,6 +76,21 @@ ul.listing li.list-item .right-panel button{
     box-shadow:none !important;
 }
 
+ul.listing li.list-item .left-panel button, ul.listing li.list-item .left-panel input{
+    background-color: transparent;
+    border: none;
+    outline: none!important;
+    box-shadow:none !important;
+    padding: 0;
+    margin: 2px 1px 1px 2px;
+}
+
+
+ul.listing li.list-item .left-panel button> span{
+    font-size:14px;
+    margin: 0;
+    padding: 0;
+}
 
 ul.listing li.list-item .right-panel button> span{
     font-size:20px;

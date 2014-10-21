@@ -18,18 +18,18 @@ class BibliographyModule {
     }
 
 
-    public showBooks(books: BookInfo[], container: string) {
+    public showBooks(books: IBookInfo[], container: string) {
         $(container).empty();
         var rootElement: HTMLUListElement = document.createElement('ul');
         $(rootElement).addClass('listing');
-        $.each(books, (index, book: BookInfo) => {
+        $.each(books, (index, book: IBookInfo) => {
             var bibliographyHtml = this.makeBibliography(book);
             rootElement.appendChild(bibliographyHtml);
         });
         $(container).append(rootElement);
     }
 
-    private makeBibliography(bibItem: BookInfo): HTMLLIElement {
+    private makeBibliography(bibItem: IBookInfo): HTMLLIElement {
         var liElement: HTMLLIElement = document.createElement('li');
         $(liElement).addClass('list-item');
         $(liElement).attr("data-bookId", bibItem.BookId);
@@ -37,7 +37,7 @@ class BibliographyModule {
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
 
-        var bibFactory: BibliographyFactory = BibliographyFactoryResolver.getInstance().getFactoryForType(bibItem.BookType);
+        var bibFactory: IBibliographyFactory = BibliographyFactoryResolver.getInstance().getFactoryForType(bibItem.BookType);
 
         var panel = bibFactory.makeLeftPanel(bibItem);
         if (panel != null) visibleContent.appendChild(panel);
@@ -63,12 +63,14 @@ class BibliographyModule {
     }
 }
 
-class OldCzechTextBankFactory implements BibliographyFactory {
-    makeLeftPanel(bookInfo: BookInfo): HTMLDivElement {
-        return null;
+class OldCzechTextBankFactory implements IBibliographyFactory {
+    makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
+        var leftPanel: HTMLDivElement = document.createElement('div');
+        $(leftPanel).addClass('left-panel');
+        return leftPanel;
     }
 
-    makeRightPanel(bookInfo: BookInfo): HTMLDivElement {
+    makeRightPanel(bookInfo: IBookInfo): HTMLDivElement {
         var rightPanel: HTMLDivElement = document.createElement('div');
         $(rightPanel).addClass('right-panel');
 
@@ -112,7 +114,7 @@ class OldCzechTextBankFactory implements BibliographyFactory {
         return rightPanel;
     }
 
-    makeMiddlePanel(bookInfo: BookInfo): HTMLDivElement {
+    makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
         var middlePanel: HTMLDivElement = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
         var middlePanelHeading: HTMLDivElement = document.createElement('div');
@@ -126,7 +128,7 @@ class OldCzechTextBankFactory implements BibliographyFactory {
         return middlePanel;
     }
 
-    makeBottomPanel(bookInfo: BookInfo): HTMLDivElement {
+    makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
         var tableDiv: HTMLDivElement = document.createElement('div');
         $(tableDiv).addClass('table');
         this.appendTableRow("Editor", bookInfo.Editor, tableDiv);
@@ -162,15 +164,46 @@ class OldCzechTextBankFactory implements BibliographyFactory {
     }
 }
 
-class DictionaryFactory implements BibliographyFactory {
-    makeLeftPanel(bookInfo: BookInfo): HTMLDivElement {
+class DictionaryFactory implements IBibliographyFactory {
+
+    makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
         var leftPanel: HTMLDivElement = document.createElement('div');
         $(leftPanel).addClass('left-panel');
-        leftPanel.innerHTML = "checkbox and star"; //TODO
+
+        var inputCheckbox: HTMLInputElement = document.createElement('input');
+        inputCheckbox.type = "checkbox";
+        $(inputCheckbox).addClass('checkbox');
+        leftPanel.appendChild(inputCheckbox);
+
+        var starEmptyButton: HTMLButtonElement = document.createElement('button');
+        starEmptyButton.type = 'button';
+        $(starEmptyButton).addClass('btn btn-xs star-empty-button');
+        var spanEmptyStar: HTMLSpanElement = document.createElement('span');
+        $(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
+        starEmptyButton.appendChild(spanEmptyStar);
+        $(starEmptyButton).click(function (event) {
+            $(this).siblings('.star-button').show();
+            $(this).hide();
+        }); //TODO fill click action
+        leftPanel.appendChild(starEmptyButton);
+
+        var starButton: HTMLButtonElement = document.createElement('button');
+        starButton.type = 'button';
+        $(starButton).addClass('btn btn-xs star-button');
+        $(starButton).css('display', 'none');
+        var spanStar: HTMLSpanElement = document.createElement('span');
+        $(spanStar).addClass('glyphicon glyphicon-star');
+        starButton.appendChild(spanStar);
+        $(starButton).click(function (event) {
+            $(this).siblings('.star-empty-button').show();
+            $(this).hide();
+        }); //TODO fill click action
+        leftPanel.appendChild(starButton);
+
         return leftPanel;
     }
 
-    makeRightPanel(bookInfo: BookInfo): HTMLDivElement {
+    makeRightPanel(bookInfo: IBookInfo): HTMLDivElement {
         var rightPanel: HTMLDivElement = document.createElement('div');
         $(rightPanel).addClass('right-panel');
 
@@ -199,7 +232,7 @@ class DictionaryFactory implements BibliographyFactory {
         return rightPanel;
     }
 
-    makeMiddlePanel(bookInfo: BookInfo): HTMLDivElement {
+    makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
         var middlePanel: HTMLDivElement = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
         var middlePanelHeading: HTMLDivElement = document.createElement('div');
@@ -213,18 +246,20 @@ class DictionaryFactory implements BibliographyFactory {
         return middlePanel;
     }
 
-    makeBottomPanel(bookInfo: BookInfo): HTMLDivElement {
+    makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
         return null;
     }
 }
 
-class EditionFactory implements BibliographyFactory {
+class EditionFactory implements IBibliographyFactory {
 
-    makeLeftPanel(bookInfo: BookInfo): HTMLDivElement {
-        return null;
+    makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
+        var leftPanel: HTMLDivElement = document.createElement('div');
+        $(leftPanel).addClass('left-panel');
+        return leftPanel;
     }
 
-    makeRightPanel(bookInfo: BookInfo): HTMLDivElement {
+    makeRightPanel(bookInfo: IBookInfo): HTMLDivElement {
         var rightPanel: HTMLDivElement = document.createElement('div');
         $(rightPanel).addClass('right-panel');
 
@@ -280,7 +315,7 @@ class EditionFactory implements BibliographyFactory {
     }
 
 
-    makeMiddlePanel(bookInfo: BookInfo): HTMLDivElement {
+    makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
         var middlePanel: HTMLDivElement = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
         var middlePanelHeading: HTMLDivElement = document.createElement('div');
@@ -294,7 +329,7 @@ class EditionFactory implements BibliographyFactory {
         return middlePanel;
     }
 
-    makeBottomPanel(bookInfo: BookInfo): HTMLDivElement {
+    makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
         var tableDiv: HTMLDivElement = document.createElement('div');
         $(tableDiv).addClass('table');
         this.appendTableRow("Editor", bookInfo.Editor, tableDiv);
@@ -332,7 +367,7 @@ class EditionFactory implements BibliographyFactory {
 
 class BibliographyFactoryResolver {
     private static _instance: BibliographyFactoryResolver = null;
-    private m_factories: BibliographyFactory[];
+    private m_factories: IBibliographyFactory[];
 
 
     constructor() {
@@ -354,22 +389,22 @@ class BibliographyFactoryResolver {
         return BibliographyFactoryResolver._instance;
     }
 
-    public getFactoryForType(bookType: string): BibliographyFactory {
+    public getFactoryForType(bookType: string): IBibliographyFactory {
         return this.m_factories[bookType];
     }
 
 
 }
 
-interface BibliographyFactory {
+interface IBibliographyFactory {
 
-    makeLeftPanel(bookInfo: BookInfo): HTMLDivElement;
-    makeRightPanel(bookInfo: BookInfo): HTMLDivElement;
-    makeMiddlePanel(bookInfo: BookInfo): HTMLDivElement;
-    makeBottomPanel(bookInfo: BookInfo): HTMLDivElement;
+    makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement;
+    makeRightPanel(bookInfo: IBookInfo): HTMLDivElement;
+    makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement;
+    makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement;
 }
 
-interface BookInfo {
+interface IBookInfo {
     BookId: string;
     BookType: string;
     Name: string;

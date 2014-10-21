@@ -68,7 +68,9 @@ var OldCzechTextBankFactory = (function () {
     function OldCzechTextBankFactory() {
     }
     OldCzechTextBankFactory.prototype.makeLeftPanel = function (bookInfo) {
-        return null;
+        var leftPanel = document.createElement('div');
+        $(leftPanel).addClass('left-panel');
+        return leftPanel;
     };
 
     OldCzechTextBankFactory.prototype.makeRightPanel = function (bookInfo) {
@@ -170,7 +172,37 @@ var DictionaryFactory = (function () {
     DictionaryFactory.prototype.makeLeftPanel = function (bookInfo) {
         var leftPanel = document.createElement('div');
         $(leftPanel).addClass('left-panel');
-        leftPanel.innerHTML = "checkbox and star"; //TODO
+
+        var inputCheckbox = document.createElement('input');
+        inputCheckbox.type = "checkbox";
+        $(inputCheckbox).addClass('checkbox');
+        leftPanel.appendChild(inputCheckbox);
+
+        var starEmptyButton = document.createElement('button');
+        starEmptyButton.type = 'button';
+        $(starEmptyButton).addClass('btn btn-xs star-empty-button');
+        var spanEmptyStar = document.createElement('span');
+        $(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
+        starEmptyButton.appendChild(spanEmptyStar);
+        $(starEmptyButton).click(function (event) {
+            $(this).siblings('.star-button').show();
+            $(this).hide();
+        }); //TODO fill click action
+        leftPanel.appendChild(starEmptyButton);
+
+        var starButton = document.createElement('button');
+        starButton.type = 'button';
+        $(starButton).addClass('btn btn-xs star-button');
+        $(starButton).css('display', 'none');
+        var spanStar = document.createElement('span');
+        $(spanStar).addClass('glyphicon glyphicon-star');
+        starButton.appendChild(spanStar);
+        $(starButton).click(function (event) {
+            $(this).siblings('.star-empty-button').show();
+            $(this).hide();
+        }); //TODO fill click action
+        leftPanel.appendChild(starButton);
+
         return leftPanel;
     };
 
@@ -225,7 +257,9 @@ var EditionFactory = (function () {
     function EditionFactory() {
     }
     EditionFactory.prototype.makeLeftPanel = function (bookInfo) {
-        return null;
+        var leftPanel = document.createElement('div');
+        $(leftPanel).addClass('left-panel');
+        return leftPanel;
     };
 
     EditionFactory.prototype.makeRightPanel = function (bookInfo) {
