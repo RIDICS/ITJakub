@@ -65,4 +65,5 @@ $(document).ready(function () {
     $('#fillBibListTypeDictionary').click(function () {
         searchPlugin.getBookWithType('Dictionary', '#bibliographyList');
     });
+
 });

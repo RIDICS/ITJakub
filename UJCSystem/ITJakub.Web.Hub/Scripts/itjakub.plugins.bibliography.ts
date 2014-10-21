@@ -1,4 +1,5 @@
 ﻿
+
 class BibliographyModule {
     private static _instance: BibliographyModule = null;
     bibliographyModulControllerUrl: string = "";
@@ -37,7 +38,7 @@ class BibliographyModule {
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
 
-        var bibFactory: IBibliographyFactory = BibliographyFactoryResolver.getInstance().getFactoryForType(bibItem.BookType);
+        var bibFactory: BibliographyFactory = BibliographyFactoryResolver.getInstance().getFactoryForType(bibItem.BookType);
 
         var panel = bibFactory.makeLeftPanel(bibItem);
         if (panel != null) visibleContent.appendChild(panel);
@@ -63,11 +64,75 @@ class BibliographyModule {
     }
 }
 
-class OldCzechTextBankFactory implements IBibliographyFactory {
+class BibliographyFactory {
+    configuration: ConfigurationManager;
+
+    constructor(configuration) {
+        this.configuration = configuration;
+    }
+
     makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
         var leftPanel: HTMLDivElement = document.createElement('div');
         $(leftPanel).addClass('left-panel');
         return leftPanel;
+    }
+
+    makeRightPanel(bookInfo: IBookInfo): HTMLDivElement {
+        var rightPanel: HTMLDivElement = document.createElement('div');
+        $(rightPanel).addClass('right-panel');
+        return rightPanel;
+    }
+
+    makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
+        if (!this.configuration.containsMiddlePanel()) return null;
+
+        var middlePanel: HTMLDivElement = document.createElement('div');
+        $(middlePanel).addClass('middle-panel');
+
+
+        if (this.configuration.containsTitle()) {
+            var middlePanelHeading: HTMLDivElement = document.createElement('div');
+            $(middlePanelHeading).addClass('heading');
+            middlePanelHeading.innerHTML = this.configuration.getTitle(bookInfo);
+            middlePanel.appendChild(middlePanelHeading);
+        }
+        if (this.configuration.containsBody()) {
+            var middlePanelBody: HTMLDivElement = document.createElement('div');
+            $(middlePanelBody).addClass('body');
+            middlePanelBody.innerHTML = this.configuration.getBody(bookInfo);
+            middlePanel.appendChild(middlePanelBody);
+        }
+
+        if (this.configuration.containsCustomInMiddlePanel()) {
+            var customDiv: HTMLDivElement = document.createElement('div');
+            $(customDiv).addClass('custom');
+            customDiv.innerHTML = this.configuration.getCustomInMiddlePanel(bookInfo);
+            middlePanel.appendChild(customDiv);
+        }
+
+        return middlePanel;
+    }
+
+    makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
+        if (!this.configuration.containsBottomPanel()) return null;
+
+        var bottomPanel: HTMLDivElement = document.createElement('div');
+
+        if (this.configuration.containsCustomInBottomPanel()) {
+            var customDiv: HTMLDivElement = document.createElement('div');
+            $(customDiv).addClass('custom');
+            customDiv.innerHTML = this.configuration.getCustomInMiddlePanel(bookInfo);
+            bottomPanel.appendChild(customDiv);
+        }
+
+        return bottomPanel;
+    }
+}
+
+class OldCzechTextBankFactory extends BibliographyFactory {
+
+    constructor(configuration: ConfigurationManager) {
+        super(configuration);
     }
 
     makeRightPanel(bookInfo: IBookInfo): HTMLDivElement {
@@ -91,7 +156,7 @@ class OldCzechTextBankFactory implements IBibliographyFactory {
         var spanChevrDown: HTMLSpanElement = document.createElement('span');
         $(spanChevrDown).addClass('glyphicon glyphicon-chevron-down');
         showContentButton.appendChild(spanChevrDown);
-        $(showContentButton).click(function (event) {
+        $(showContentButton).click(function(event) {
             $(this).parents('li.list-item').first().find('.hidden-content').show("slow");
             $(this).siblings('.hide-button').show();
             $(this).hide();
@@ -104,7 +169,7 @@ class OldCzechTextBankFactory implements IBibliographyFactory {
         var spanChevrUp: HTMLSpanElement = document.createElement('span');
         $(spanChevrUp).addClass('glyphicon glyphicon-chevron-up');
         hideContentButton.appendChild(spanChevrUp);
-        $(hideContentButton).click(function (event) {
+        $(hideContentButton).click(function(event) {
             $(this).parents('li.list-item').first().find('.hidden-content').hide("slow");
             $(this).siblings('.show-button').show();
             $(this).hide();
@@ -141,7 +206,11 @@ class OldCzechTextBankFactory implements IBibliographyFactory {
     }
 }
 
-class DictionaryFactory implements IBibliographyFactory {
+class DictionaryFactory extends BibliographyFactory {
+
+    constructor(configuration: ConfigurationManager) {
+        super(configuration);
+    }
 
     makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
         var leftPanel: HTMLDivElement = document.createElement('div');
@@ -158,7 +227,7 @@ class DictionaryFactory implements IBibliographyFactory {
         var spanEmptyStar: HTMLSpanElement = document.createElement('span');
         $(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
         starEmptyButton.appendChild(spanEmptyStar);
-        $(starEmptyButton).click(function (event) {
+        $(starEmptyButton).click(function(event) {
             $(this).siblings('.star-button').show();
             $(this).hide();
         }); //TODO fill click action
@@ -171,7 +240,7 @@ class DictionaryFactory implements IBibliographyFactory {
         var spanStar: HTMLSpanElement = document.createElement('span');
         $(spanStar).addClass('glyphicon glyphicon-star');
         starButton.appendChild(spanStar);
-        $(starButton).click(function (event) {
+        $(starButton).click(function(event) {
             $(this).siblings('.star-empty-button').show();
             $(this).hide();
         }); //TODO fill click action
@@ -222,18 +291,13 @@ class DictionaryFactory implements IBibliographyFactory {
         middlePanel.appendChild(middlePanelBody);
         return middlePanel;
     }
-
-    makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
-        return null;
-    }
 }
 
-class EditionFactory implements IBibliographyFactory {
+class EditionFactory extends BibliographyFactory {
 
-    makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
-        var leftPanel: HTMLDivElement = document.createElement('div');
-        $(leftPanel).addClass('left-panel');
-        return leftPanel;
+
+    constructor(configuration: ConfigurationManager) {
+        super(configuration);
     }
 
     makeRightPanel(bookInfo: IBookInfo): HTMLDivElement {
@@ -292,19 +356,19 @@ class EditionFactory implements IBibliographyFactory {
     }
 
 
-    makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
-        var middlePanel: HTMLDivElement = document.createElement('div');
-        $(middlePanel).addClass('middle-panel');
-        var middlePanelHeading: HTMLDivElement = document.createElement('div');
-        $(middlePanelHeading).addClass('heading');
-        middlePanelHeading.innerHTML = bookInfo.Name;
-        middlePanel.appendChild(middlePanelHeading);
-        var middlePanelBody: HTMLDivElement = document.createElement('div');
-        $(middlePanelBody).addClass('body');
-        middlePanelBody.innerHTML = bookInfo.Body;
-        middlePanel.appendChild(middlePanelBody);
-        return middlePanel;
-    }
+    //makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
+    //    var middlePanel: HTMLDivElement = document.createElement('div');
+    //    $(middlePanel).addClass('middle-panel');
+    //    var middlePanelHeading: HTMLDivElement = document.createElement('div');
+    //    $(middlePanelHeading).addClass('heading');
+    //    middlePanelHeading.innerHTML = bookInfo.Name;
+    //    middlePanel.appendChild(middlePanelHeading);
+    //    var middlePanelBody: HTMLDivElement = document.createElement('div');
+    //    $(middlePanelBody).addClass('body');
+    //    middlePanelBody.innerHTML = bookInfo.Body;
+    //    middlePanel.appendChild(middlePanelBody);
+    //    return middlePanel;
+    //}
 
     makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
         var tableBuilder = new TableBuilder();
@@ -324,7 +388,7 @@ class EditionFactory implements IBibliographyFactory {
 
 class BibliographyFactoryResolver {
     private static _instance: BibliographyFactoryResolver = null;
-    private m_factories: IBibliographyFactory[];
+    private m_factories: BibliographyFactory[];
 
 
     constructor() {
@@ -333,9 +397,16 @@ class BibliographyFactoryResolver {
         }
         BibliographyFactoryResolver._instance = this;
         this.m_factories = new Array();
-        this.m_factories['Edition'] = new EditionFactory(); //TODO make enum bookType
-        this.m_factories['Dictionary'] = new DictionaryFactory();
-        this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory();
+        //TODO download config and parse here
+
+
+        var jsonConfig: string = '{"Edition" : {"middle-panel": { "title": "{Name}/{LiteraryType}", "body": "{Editor}" }, "bottom-panel" : { "custom" : "copy: {Copyright}" } }, "Dictionary" : {}, "OldCzechTextBank" : {} }';
+        var configObj = JSON.parse(jsonConfig);
+
+
+        this.m_factories['Edition'] = new EditionFactory(new ConfigurationManager(configObj["Edition"])); //TODO make enum bookType
+        this.m_factories['Dictionary'] = new DictionaryFactory(new ConfigurationManager(configObj["Dictionary"]));
+        this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new ConfigurationManager(configObj["OldCzechTextBank"]));
 
     }
 
@@ -346,19 +417,44 @@ class BibliographyFactoryResolver {
         return BibliographyFactoryResolver._instance;
     }
 
-    public getFactoryForType(bookType: string): IBibliographyFactory {
+    public getFactoryForType(bookType: string): BibliographyFactory {
         return this.m_factories[bookType];
     }
 
 
 }
 
-interface IBibliographyFactory {
 
-    makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement;
-    makeRightPanel(bookInfo: IBookInfo): HTMLDivElement;
-    makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement;
-    makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement;
+class ConfigurationManager {
+    config: Object;
+
+    constructor(config: Object) {
+        this.config = config;
+    }
+
+    containsMiddlePanel() { return typeof this.config["middle-panel"] !== 'undefined'; }
+
+    containsBottomPanel() { return typeof this.config["bottom-panel"] !== 'undefined'; }
+
+    containsCustomInMiddlePanel() { return typeof this.config['middle-panel']['custom'] !== 'undefined'; }
+
+    containsCustomInBottomPanel() { return typeof this.config['bottom-panel']['custom'] !== 'undefined'; }
+
+    containsBody() { return typeof this.config["middle-panel"]['body'] !== 'undefined'; }
+
+    containsTitle() { return typeof this.config["middle-panel"]['title'] !== 'undefined'; }
+
+    getTitle(bibItem: IBookInfo): string { return this.replaceVarNamesByValues(this.config['middle-panel']['title'], bibItem); }
+
+    getBody(bibItem: IBookInfo): string { return this.replaceVarNamesByValues(this.config['middle-panel']['body'], bibItem); }
+
+    getCustomInMiddlePanel(bibItem: IBookInfo): string { return this.replaceVarNamesByValues(this.config['bottom-panel']['custom'], bibItem); }
+
+    private replaceVarNamesByValues(valueString: string, bibItem: IBookInfo): string {
+        return valueString.replace(/{(.+?)}/g, (foundPattern, varName) => {
+            return bibItem[varName];
+        });
+    }
 }
 
 interface IBookInfo {
@@ -380,14 +476,14 @@ interface IBookInfo {
 
 
 class TableBuilder {
-    private m_tableDiv : HTMLDivElement;
+    private m_tableDiv: HTMLDivElement;
 
     constructor() {
         this.m_tableDiv = document.createElement('div');
         $(this.m_tableDiv).addClass('table');
     }
-    
-    public makeTableRow(label: string, value: string):void {
+
+    public makeTableRow(label: string, value: string): void {
         var rowDiv: HTMLDivElement = document.createElement('div');
         $(rowDiv).addClass('row');
         var labelDiv: HTMLDivElement = document.createElement('div');
@@ -409,5 +505,3 @@ class TableBuilder {
         return this.m_tableDiv;
     }
 }
-
-

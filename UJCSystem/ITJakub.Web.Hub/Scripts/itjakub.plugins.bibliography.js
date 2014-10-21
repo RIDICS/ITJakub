@@ -1,4 +1,10 @@
-﻿var BibliographyModule = (function () {
+﻿var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var BibliographyModule = (function () {
     function BibliographyModule() {
         this.bibliographyModulControllerUrl = "";
         if (BibliographyModule._instance) {
@@ -64,15 +70,75 @@
     return BibliographyModule;
 })();
 
-var OldCzechTextBankFactory = (function () {
-    function OldCzechTextBankFactory() {
+var BibliographyFactory = (function () {
+    function BibliographyFactory(configuration) {
+        this.configuration = configuration;
     }
-    OldCzechTextBankFactory.prototype.makeLeftPanel = function (bookInfo) {
+    BibliographyFactory.prototype.makeLeftPanel = function (bookInfo) {
         var leftPanel = document.createElement('div');
         $(leftPanel).addClass('left-panel');
         return leftPanel;
     };
 
+    BibliographyFactory.prototype.makeRightPanel = function (bookInfo) {
+        var rightPanel = document.createElement('div');
+        $(rightPanel).addClass('right-panel');
+        return rightPanel;
+    };
+
+    BibliographyFactory.prototype.makeMiddlePanel = function (bookInfo) {
+        if (!this.configuration.containsMiddlePanel())
+            return null;
+
+        var middlePanel = document.createElement('div');
+        $(middlePanel).addClass('middle-panel');
+
+        if (this.configuration.containsTitle()) {
+            var middlePanelHeading = document.createElement('div');
+            $(middlePanelHeading).addClass('heading');
+            middlePanelHeading.innerHTML = this.configuration.getTitle(bookInfo);
+            middlePanel.appendChild(middlePanelHeading);
+        }
+        if (this.configuration.containsBody()) {
+            var middlePanelBody = document.createElement('div');
+            $(middlePanelBody).addClass('body');
+            middlePanelBody.innerHTML = this.configuration.getBody(bookInfo);
+            middlePanel.appendChild(middlePanelBody);
+        }
+
+        if (this.configuration.containsCustomInMiddlePanel()) {
+            var customDiv = document.createElement('div');
+            $(customDiv).addClass('custom');
+            customDiv.innerHTML = this.configuration.getCustomInMiddlePanel(bookInfo);
+            middlePanel.appendChild(customDiv);
+        }
+
+        return middlePanel;
+    };
+
+    BibliographyFactory.prototype.makeBottomPanel = function (bookInfo) {
+        if (!this.configuration.containsBottomPanel())
+            return null;
+
+        var bottomPanel = document.createElement('div');
+
+        if (this.configuration.containsCustomInBottomPanel()) {
+            var customDiv = document.createElement('div');
+            $(customDiv).addClass('custom');
+            customDiv.innerHTML = this.configuration.getCustomInMiddlePanel(bookInfo);
+            bottomPanel.appendChild(customDiv);
+        }
+
+        return bottomPanel;
+    };
+    return BibliographyFactory;
+})();
+
+var OldCzechTextBankFactory = (function (_super) {
+    __extends(OldCzechTextBankFactory, _super);
+    function OldCzechTextBankFactory(configuration) {
+        _super.call(this, configuration);
+    }
     OldCzechTextBankFactory.prototype.makeRightPanel = function (bookInfo) {
         var rightPanel = document.createElement('div');
         $(rightPanel).addClass('right-panel');
@@ -142,10 +208,12 @@ var OldCzechTextBankFactory = (function () {
         return tableBuilder.build();
     };
     return OldCzechTextBankFactory;
-})();
+})(BibliographyFactory);
 
-var DictionaryFactory = (function () {
-    function DictionaryFactory() {
+var DictionaryFactory = (function (_super) {
+    __extends(DictionaryFactory, _super);
+    function DictionaryFactory(configuration) {
+        _super.call(this, configuration);
     }
     DictionaryFactory.prototype.makeLeftPanel = function (bookInfo) {
         var leftPanel = document.createElement('div');
@@ -224,22 +292,14 @@ var DictionaryFactory = (function () {
         middlePanel.appendChild(middlePanelBody);
         return middlePanel;
     };
-
-    DictionaryFactory.prototype.makeBottomPanel = function (bookInfo) {
-        return null;
-    };
     return DictionaryFactory;
-})();
+})(BibliographyFactory);
 
-var EditionFactory = (function () {
-    function EditionFactory() {
+var EditionFactory = (function (_super) {
+    __extends(EditionFactory, _super);
+    function EditionFactory(configuration) {
+        _super.call(this, configuration);
     }
-    EditionFactory.prototype.makeLeftPanel = function (bookInfo) {
-        var leftPanel = document.createElement('div');
-        $(leftPanel).addClass('left-panel');
-        return leftPanel;
-    };
-
     EditionFactory.prototype.makeRightPanel = function (bookInfo) {
         var rightPanel = document.createElement('div');
         $(rightPanel).addClass('right-panel');
@@ -293,20 +353,19 @@ var EditionFactory = (function () {
         return rightPanel;
     };
 
-    EditionFactory.prototype.makeMiddlePanel = function (bookInfo) {
-        var middlePanel = document.createElement('div');
-        $(middlePanel).addClass('middle-panel');
-        var middlePanelHeading = document.createElement('div');
-        $(middlePanelHeading).addClass('heading');
-        middlePanelHeading.innerHTML = bookInfo.Name;
-        middlePanel.appendChild(middlePanelHeading);
-        var middlePanelBody = document.createElement('div');
-        $(middlePanelBody).addClass('body');
-        middlePanelBody.innerHTML = bookInfo.Body;
-        middlePanel.appendChild(middlePanelBody);
-        return middlePanel;
-    };
-
+    //makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
+    //    var middlePanel: HTMLDivElement = document.createElement('div');
+    //    $(middlePanel).addClass('middle-panel');
+    //    var middlePanelHeading: HTMLDivElement = document.createElement('div');
+    //    $(middlePanelHeading).addClass('heading');
+    //    middlePanelHeading.innerHTML = bookInfo.Name;
+    //    middlePanel.appendChild(middlePanelHeading);
+    //    var middlePanelBody: HTMLDivElement = document.createElement('div');
+    //    $(middlePanelBody).addClass('body');
+    //    middlePanelBody.innerHTML = bookInfo.Body;
+    //    middlePanel.appendChild(middlePanelBody);
+    //    return middlePanel;
+    //}
     EditionFactory.prototype.makeBottomPanel = function (bookInfo) {
         var tableBuilder = new TableBuilder();
         tableBuilder.makeTableRow("Editor", bookInfo.Editor);
@@ -321,7 +380,7 @@ var EditionFactory = (function () {
         return tableBuilder.build();
     };
     return EditionFactory;
-})();
+})(BibliographyFactory);
 
 var BibliographyFactoryResolver = (function () {
     function BibliographyFactoryResolver() {
@@ -330,9 +389,14 @@ var BibliographyFactoryResolver = (function () {
         }
         BibliographyFactoryResolver._instance = this;
         this.m_factories = new Array();
-        this.m_factories['Edition'] = new EditionFactory(); //TODO make enum bookType
-        this.m_factories['Dictionary'] = new DictionaryFactory();
-        this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory();
+
+        //TODO download config and parse here
+        var jsonConfig = '{"Edition" : {"middle-panel": { "title": "{Name}/{LiteraryType}", "body": "{Editor}" }, "bottom-panel" : { "custom" : "copy: {Copyright}" } }, "Dictionary" : {}, "OldCzechTextBank" : {} }';
+        var configObj = JSON.parse(jsonConfig);
+
+        this.m_factories['Edition'] = new EditionFactory(new ConfigurationManager(configObj["Edition"])); //TODO make enum bookType
+        this.m_factories['Dictionary'] = new DictionaryFactory(new ConfigurationManager(configObj["Dictionary"]));
+        this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new ConfigurationManager(configObj["OldCzechTextBank"]));
     }
     BibliographyFactoryResolver.getInstance = function () {
         if (BibliographyFactoryResolver._instance === null) {
@@ -346,6 +410,54 @@ var BibliographyFactoryResolver = (function () {
     };
     BibliographyFactoryResolver._instance = null;
     return BibliographyFactoryResolver;
+})();
+
+var ConfigurationManager = (function () {
+    function ConfigurationManager(config) {
+        this.config = config;
+    }
+    ConfigurationManager.prototype.containsMiddlePanel = function () {
+        return typeof this.config["middle-panel"] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.containsBottomPanel = function () {
+        return typeof this.config["bottom-panel"] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.containsCustomInMiddlePanel = function () {
+        return typeof this.config['middle-panel']['custom'] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.containsCustomInBottomPanel = function () {
+        return typeof this.config['bottom-panel']['custom'] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.containsBody = function () {
+        return typeof this.config["middle-panel"]['body'] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.containsTitle = function () {
+        return typeof this.config["middle-panel"]['title'] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.getTitle = function (bibItem) {
+        return this.replaceVarNamesByValues(this.config['middle-panel']['title'], bibItem);
+    };
+
+    ConfigurationManager.prototype.getBody = function (bibItem) {
+        return this.replaceVarNamesByValues(this.config['middle-panel']['body'], bibItem);
+    };
+
+    ConfigurationManager.prototype.getCustomInMiddlePanel = function (bibItem) {
+        return this.replaceVarNamesByValues(this.config['bottom-panel']['custom'], bibItem);
+    };
+
+    ConfigurationManager.prototype.replaceVarNamesByValues = function (valueString, bibItem) {
+        return valueString.replace(/{(.+?)}/g, function (foundPattern, varName) {
+            return bibItem[varName];
+        });
+    };
+    return ConfigurationManager;
 })();
 
 var TableBuilder = (function () {
