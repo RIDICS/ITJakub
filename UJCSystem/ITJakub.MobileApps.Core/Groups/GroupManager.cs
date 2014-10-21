@@ -116,6 +116,9 @@ namespace ITJakub.MobileApps.Core.Groups
         public void AssignTaskToGroup(long groupId, long taskId)
         {
             var group = m_usersRepository.FindById<Group>(groupId);
+            if (group.State >= GroupState.Running)
+                throw new FaultException("Can not change task. Group has been already started.");
+
             var task = m_usersRepository.Load<Task>(taskId);
             group.Task = task;
 
