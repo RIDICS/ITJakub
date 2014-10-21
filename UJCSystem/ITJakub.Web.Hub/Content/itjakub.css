@@ -2,7 +2,6 @@
   width: 80%;
 }
 ul.listing li.list-item {
-  /*border: 1px solid black;*/
   background-color: white;
   margin-top: 10px;
 }
@@ -16,7 +15,6 @@ ul.listing li.list-item .left-panel {
   align-items: center;
   text-align: center;
   position: relative;
-  /*height: 120px;*/
 }
 ul.listing li.list-item .middle-panel {
   padding: 10px 5px 10px 15px;
@@ -32,7 +30,6 @@ ul.listing li.list-item .right-panel {
   float: right;
   width: 100px;
   background-color: #84ced7;
-  /*height: 120px;*/
   align-items: center;
   text-align: center;
   position: relative;

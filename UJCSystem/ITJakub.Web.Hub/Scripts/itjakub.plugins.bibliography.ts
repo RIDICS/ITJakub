@@ -129,38 +129,15 @@ class OldCzechTextBankFactory implements IBibliographyFactory {
     }
 
     makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
-        var tableDiv: HTMLDivElement = document.createElement('div');
-        $(tableDiv).addClass('table');
-        this.appendTableRow("Editor", bookInfo.Editor, tableDiv);
-        this.appendTableRow("Předloha", bookInfo.Pattern, tableDiv);
-        this.appendTableRow("Zkratka památky", bookInfo.RelicAbbreviation, tableDiv);
-        this.appendTableRow("Zkratka pramene", bookInfo.SourceAbbreviation, tableDiv);
-        this.appendTableRow("Literární druh", bookInfo.LiteraryType, tableDiv);
-        this.appendTableRow("Literární žánr", bookInfo.LiteraryGenre, tableDiv);
-        this.appendTableRow("Poslední úprava edice", bookInfo.LastEditation, tableDiv);
-
-        //TODO add Edicni poznamka anchor and copyright to hiddenContent here
-
-        return tableDiv;
-    }
-
-    //TODO make makeTable Helper or table builder
-    private appendTableRow(label: string, value: string, tableDiv: HTMLDivElement) {
-        var rowDiv: HTMLDivElement = document.createElement('div');
-        $(rowDiv).addClass('row');
-        var labelDiv: HTMLDivElement = document.createElement('div');
-        $(labelDiv).addClass('cell label');
-        labelDiv.innerHTML = label;
-        rowDiv.appendChild(labelDiv);
-        var valueDiv: HTMLDivElement = document.createElement('div');
-        $(valueDiv).addClass('cell');
-        if (!value || value.length === 0) {
-            valueDiv.innerHTML = "&lt;nezadáno&gt;";
-        } else {
-            valueDiv.innerHTML = value;
-        }
-        rowDiv.appendChild(valueDiv);
-        tableDiv.appendChild(rowDiv);
+        var tableBuilder = new TableBuilder();
+        tableBuilder.makeTableRow("Editor", bookInfo.Editor);
+        tableBuilder.makeTableRow("Předloha", bookInfo.Pattern);
+        tableBuilder.makeTableRow("Zkratka památky", bookInfo.RelicAbbreviation);
+        tableBuilder.makeTableRow("Zkratka pramene", bookInfo.SourceAbbreviation);
+        tableBuilder.makeTableRow("Literární druh", bookInfo.LiteraryType);
+        tableBuilder.makeTableRow("Literární žánr", bookInfo.LiteraryGenre);
+        tableBuilder.makeTableRow("Poslední úprava edice", bookInfo.LastEditation);
+        return tableBuilder.build();
     }
 }
 
@@ -330,38 +307,18 @@ class EditionFactory implements IBibliographyFactory {
     }
 
     makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
-        var tableDiv: HTMLDivElement = document.createElement('div');
-        $(tableDiv).addClass('table');
-        this.appendTableRow("Editor", bookInfo.Editor, tableDiv);
-        this.appendTableRow("Předloha", bookInfo.Pattern, tableDiv);
-        this.appendTableRow("Zkratka památky", bookInfo.RelicAbbreviation, tableDiv);
-        this.appendTableRow("Zkratka pramene", bookInfo.SourceAbbreviation, tableDiv);
-        this.appendTableRow("Literární druh", bookInfo.LiteraryType, tableDiv);
-        this.appendTableRow("Literární žánr", bookInfo.LiteraryGenre, tableDiv);
-        this.appendTableRow("Poslední úprava edice", bookInfo.LastEditation, tableDiv);
+        var tableBuilder = new TableBuilder();
+        tableBuilder.makeTableRow("Editor", bookInfo.Editor);
+        tableBuilder.makeTableRow("Předloha", bookInfo.Pattern);
+        tableBuilder.makeTableRow("Zkratka památky", bookInfo.RelicAbbreviation);
+        tableBuilder.makeTableRow("Zkratka pramene", bookInfo.SourceAbbreviation);
+        tableBuilder.makeTableRow("Literární druh", bookInfo.LiteraryType);
+        tableBuilder.makeTableRow("Literární žánr", bookInfo.LiteraryGenre);
+        tableBuilder.makeTableRow("Poslední úprava edice", bookInfo.LastEditation);
 
         //TODO add Edicni poznamka anchor and copyright to hiddenContent here
 
-        return tableDiv;
-    }
-
-    //TODO make makeTable Helper
-    private appendTableRow(label: string, value: string, tableDiv: HTMLDivElement) {
-        var rowDiv: HTMLDivElement = document.createElement('div');
-        $(rowDiv).addClass('row');
-        var labelDiv: HTMLDivElement = document.createElement('div');
-        $(labelDiv).addClass('cell label');
-        labelDiv.innerHTML = label;
-        rowDiv.appendChild(labelDiv);
-        var valueDiv: HTMLDivElement = document.createElement('div');
-        $(valueDiv).addClass('cell');
-        if (!value || value.length === 0) {
-            valueDiv.innerHTML = "&lt;nezadáno&gt;";
-        } else {
-            valueDiv.innerHTML = value;
-        }
-        rowDiv.appendChild(valueDiv);
-        tableDiv.appendChild(rowDiv);
+        return tableBuilder.build();
     }
 }
 
@@ -420,3 +377,37 @@ interface IBookInfo {
     Copyright: string;
 
 }
+
+
+class TableBuilder {
+    private m_tableDiv : HTMLDivElement;
+
+    constructor() {
+        this.m_tableDiv = document.createElement('div');
+        $(this.m_tableDiv).addClass('table');
+    }
+    
+    public makeTableRow(label: string, value: string):void {
+        var rowDiv: HTMLDivElement = document.createElement('div');
+        $(rowDiv).addClass('row');
+        var labelDiv: HTMLDivElement = document.createElement('div');
+        $(labelDiv).addClass('cell label');
+        labelDiv.innerHTML = label;
+        rowDiv.appendChild(labelDiv);
+        var valueDiv: HTMLDivElement = document.createElement('div');
+        $(valueDiv).addClass('cell');
+        if (!value || value.length === 0) {
+            valueDiv.innerHTML = "&lt;nezadáno&gt;";
+        } else {
+            valueDiv.innerHTML = value;
+        }
+        rowDiv.appendChild(valueDiv);
+        this.m_tableDiv.appendChild(rowDiv);
+    }
+
+    public build(): HTMLDivElement {
+        return this.m_tableDiv;
+    }
+}
+
+
