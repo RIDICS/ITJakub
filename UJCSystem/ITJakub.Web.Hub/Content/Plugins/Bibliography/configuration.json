@@ -1,17 +1,35 @@
 ﻿{
     "Edition": {
         "middle-panel": {
-            "title": "Nazev: {Name}, typ:{LiteraryType}",
-            "body": "{Editor}"
+            "title": "Nazev: {Name} {$editor} ,{$litType}", //variable starts with dollar sign
+            "body": "{$editionTable}",
+            "variables": {
+                "$litType": {
+                    "type": "array",
+                    "pattern": "[{LiteraryType}]", //pattern for each item
+                    "delimeter": "; "
+                },
+                "$editor": {
+                    "type": "primitive",
+                    "pattern": ",{Editor}",
+                    "printIfNullValue": true,
+                    "replaceNullValueBy": ""
+                },
+                "$editionTable": {
+                    "type": "table",
+                    "printRowIfNullValue": true,
+                    "replaceNullValueBy": "&lt;Nezadáno&gt;", //special characters needs to be escaped
+                    "rows": [ { "label": "Editor", "value": "{Editor}" }, { "label": "Předloha", "value": "{Pattern}" }, { "label": "Zkratka památky", "value": "{RelicAbbreviation}" } ]
+                }
+            },
+            "bottom-panel": {
+                "custom": "copy: {Copyright}"
+            }
         },
-        "bottom-panel": {
-            "custom": "copy: {Copyright}"
+
+        "Dictionary": {
+        },
+
+        "OldCzechTextBank": {
         }
-    },
-
-    "Dictionary": {
-    },
-
-    "OldCzechTextBank": {
     }
-}
