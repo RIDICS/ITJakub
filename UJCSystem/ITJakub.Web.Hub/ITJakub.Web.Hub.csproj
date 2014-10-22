@@ -177,6 +177,7 @@
     <Compile Include="Areas\Editions\EditionsAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
+    <Compile Include="Controllers\Plugins\Bibliography\BibliographyController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -218,19 +219,25 @@
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\mlceni.jpg" />
     <Content Include="Content\Images\news_background.png" />
+    <Content Include="Content\Plugins\Bibliography\ItJakub.Bibliography.css">
+      <DependentUpon>ITJakub.Bibliography.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\Bibliography\ItJakub.Bibliography.min.css">
+      <DependentUpon>ItJakub.Bibliography.css</DependentUpon>
+    </Content>
     <Content Include="Content\itjakub.css">
-      <DependentUpon>itjakub.less</DependentUpon>
+      <DependentUpon>ITJakub.less</DependentUpon>
     </Content>
-    <Content Include="Content\ItJakub.ListItem.css">
-      <DependentUpon>ItJakub.ListItem.less</DependentUpon>
+    <Content Include="Content\Plugins\Bibliography\ItJakub.ListItem.css">
+      <DependentUpon>ITJakub.Bibliography.less</DependentUpon>
     </Content>
-    <Content Include="Content\ItJakub.ListItem.min.css">
+    <Content Include="Content\Plugins\Bibliography\ItJakub.ListItem.min.css">
       <DependentUpon>ItJakub.ListItem.css</DependentUpon>
     </Content>
-    <Content Include="Content\ItJakub.MainMenu - Copy.css">
-      <DependentUpon>ItJakub.ListItem.less</DependentUpon>
+    <Content Include="Content\Plugins\Bibliography\ItJakub.MainMenu - Copy.css">
+      <DependentUpon>ITJakub.Bibliography.less</DependentUpon>
     </Content>
-    <Content Include="Content\ItJakub.MainMenu - Copy.min.css">
+    <Content Include="Content\Plugins\Bibliography\ItJakub.MainMenu - Copy.min.css">
       <DependentUpon>ItJakub.MainMenu - Copy.css</DependentUpon>
     </Content>
     <Content Include="Content\itjakub.min.css">
@@ -328,7 +335,7 @@
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.less" />
-    <Content Include="Content\itjakub.less" />
+    <Content Include="Content\ITJakub.less" />
     <Content Include="Content\itjakub.css.map">
       <DependentUpon>itjakub.css</DependentUpon>
     </Content>
@@ -360,12 +367,15 @@
     <Content Include="Areas\Editions\Views\Editions\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\TermsOfUse.cshtml" />
-    <Content Include="Content\ItJakub.ListItem.less" />
-    <Content Include="Content\ItJakub.MainMenu - Copy.css.map">
+    <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.less" />
+    <Content Include="Content\Plugins\Bibliography\ItJakub.MainMenu - Copy.css.map">
       <DependentUpon>ItJakub.MainMenu - Copy.css</DependentUpon>
     </Content>
-    <Content Include="Content\ItJakub.ListItem.css.map">
+    <Content Include="Content\Plugins\Bibliography\ItJakub.ListItem.css.map">
       <DependentUpon>ItJakub.ListItem.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\Bibliography\ItJakub.Bibliography.css.map">
+      <DependentUpon>ItJakub.Bibliography.css</DependentUpon>
     </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
@@ -447,8 +457,8 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
-    <TypeScriptCompile Include="Scripts\itjakub.plugins.search.ts" />
-    <TypeScriptCompile Include="Scripts\itjakub.plugins.bibliography.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Search\itjakub.plugins.search.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />

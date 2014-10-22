@@ -1,5 +1,5 @@
-﻿/// <reference path="itjakub.plugins.bibliography.ts"/>
-/// <reference path="itjakub.plugins.search.ts"/>
+﻿/// <reference path="Plugins/Bibliography/itjakub.plugins.bibliography.ts"/>
+/// <reference path="Plugins/Search/itjakub.plugins.search.ts"/>
 
 //sets state to main plugins menu
 $(document).ready(function() {

@@ -27,8 +27,8 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
-                "~/Scripts/itjakub.plugins.search.js",
-                "~/Scripts/itjakub.plugins.bibliography.js"));
+                "~/Scripts/Plugins/Search/itjakub.plugins.search.js",
+                "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.js"));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
@@ -40,7 +40,7 @@ namespace ITJakub.Web.Hub
                      "~/Scripts/dropzone/css/dropzone.css"));
 
             bundles.Add(new StyleBundle("~/itjakub/css").Include(
-                "~/Content/itjakub.css"));
+                "~/Content/ITJakub.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
