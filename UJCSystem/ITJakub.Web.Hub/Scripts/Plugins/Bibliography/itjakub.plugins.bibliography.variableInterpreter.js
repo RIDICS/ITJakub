@@ -131,7 +131,7 @@
             }
         });
 
-        return tableBuilder.build();
+        return tableBuilder.build().outerHTML;
     };
     return VariableInterpreter;
 })();

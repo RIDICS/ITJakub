@@ -21,7 +21,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                 {
                     bookType = "OldCzechTextBank";
                 }
-                listBooks.Add(new BookInfo{BookId = bookId,BookType = bookType,Body = "here is body",Editor = "Alenka Cerna",Copyright = "alenka",LastEditation = "25.6.1989",LiteraryGenre = "proza",LiteraryType = "type",Name = "Rukopis kunhuta",Pattern = "Broucci",RelicAbbreviation = "a",SourceAbbreviation = "", Pages = new List<Page>(){new Page(){Start = "0", End = "4"}, new Page(){Start = "15", End = "45"}, new Page(){Start = "200"}}}); 
+                listBooks.Add(new BookInfo{BookId = bookId,BookType = bookType,Body = "here is body",Editor = "Alenka Cerna",Copyright = "alenka",LastEditation = "25.6.1989",LiteraryGenre = "proza",LiteraryType = "type",Name = "Rukopis kunhuta",Pattern = "Broucci",RelicAbbreviation = "relAbr",SourceAbbreviation = "sourceAbr", Pages = new List<Page>(){new Page(){Start = "0", End = "4"}, new Page(){Start = "15", End = "45"}, new Page(){Start = "200"}}}); 
             }
 
             return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);

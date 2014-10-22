@@ -128,7 +128,7 @@ class VariableInterpreter {
             }
         });
 
-        return <string><any>tableBuilder.build();
+        return tableBuilder.build().outerHTML;
     }
 }
 

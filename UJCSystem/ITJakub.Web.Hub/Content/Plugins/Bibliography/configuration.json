@@ -32,7 +32,7 @@
                     "type": "table",
                     "printRowIfNullValue": true,
                     "replaceNullValueBy": "&lt;Nezadáno&gt;", 
-                    "rows": [ { "label": "Editor", "pattern": "{$editor}" }, { "label": "Předloha", "pattern": "{Pattern}" }, { "label": "Zkratka památky", "pattern": "{RelicAbbreviation}" } ]
+                    "rows": [ { "label": "Editor", "pattern": "{Editor}" }, { "label": "Předloha", "pattern": "{Pattern}" }, { "label": "Zkratka památky", "pattern": "{RelicAbbreviation}" } ]
                 }
             }
         },
