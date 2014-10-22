@@ -423,6 +423,7 @@ var BibliographyFactoryResolver = (function () {
 var ConfigurationManager = (function () {
     function ConfigurationManager(config) {
         this.config = config;
+        this.varInterpreter = new VariableInterpreter();
     }
     ConfigurationManager.prototype.containsMiddlePanel = function () {
         return typeof this.config["middle-panel"] !== 'undefined';
@@ -449,23 +450,27 @@ var ConfigurationManager = (function () {
     };
 
     ConfigurationManager.prototype.getTitle = function (bibItem) {
-        return this.replaceVarNamesByValues(this.config['middle-panel']['title'], bibItem);
+        return this.varInterpreter.interpret(this.config['middle-panel']['title'], this.config['middle-panel']['variables'], bibItem);
     };
 
     ConfigurationManager.prototype.getBody = function (bibItem) {
-        return this.replaceVarNamesByValues(this.config['middle-panel']['body'], bibItem);
+        return this.varInterpreter.interpret(this.config['middle-panel']['body'], this.config['middle-panel']['variables'], bibItem);
     };
 
     ConfigurationManager.prototype.getCustomInMiddlePanel = function (bibItem) {
-        return this.replaceVarNamesByValues(this.config['bottom-panel']['custom'], bibItem);
+        return this.varInterpreter.interpret(this.config['middle-panel']['custom'], this.config['middle-panel']['variables'], bibItem);
     };
 
-    ConfigurationManager.prototype.replaceVarNamesByValues = function (valueString, bibItem) {
-        return valueString.replace(/{(.+?)}/g, function (foundPattern, varName) {
-            return bibItem[varName];
-        });
+    ConfigurationManager.prototype.getCustomInBottomPanel = function (bibItem) {
+        return this.varInterpreter.interpret(this.config['bottom-panel']['custom'], this.config['bottom-panel']['variables'], bibItem);
     };
     return ConfigurationManager;
+})();
+
+var Page = (function () {
+    function Page() {
+    }
+    return Page;
 })();
 
 var TableBuilder = (function () {

@@ -2,11 +2,12 @@
     "Edition": {
         "middle-panel": {
             "title": "Nazev: {Name} {$editor} ,{$litType}", //variable starts with dollar sign
-            "body": "{$editionTable}",
+            "body": "{$editionTable} {$pages}",
             "variables": {
                 "$litType": {
                     "type": "array",
-                    "pattern": "[{LiteraryType}]", //pattern for each item
+                    "itemType": "LiteraryType",
+                    "pattern": "[{item.start}-{item.end}]", //pattern for each item
                     "delimeter": "; "
                 },
                 "$editor": {
@@ -19,17 +20,19 @@
                     "type": "table",
                     "printRowIfNullValue": true,
                     "replaceNullValueBy": "&lt;Nezadáno&gt;", //special characters needs to be escaped
-                    "rows": [ { "label": "Editor", "value": "{Editor}" }, { "label": "Předloha", "value": "{Pattern}" }, { "label": "Zkratka památky", "value": "{RelicAbbreviation}" } ]
+                    "rows": [ { "label": "Editor", "value": "{$editor}" }, { "label": "Předloha", "value": "{Pattern}" }, { "label": "Zkratka památky", "value": "{RelicAbbreviation}" } ]
                 }
-            },
-            "bottom-panel": {
-                "custom": "copy: {Copyright}"
             }
         },
-
-        "Dictionary": {
-        },
-
-        "OldCzechTextBank": {
+        "bottom-panel": {
+            "custom": "copy: {Copyright}"
         }
+    },
+
+    "Dictionary": {
+    },
+
+    "OldCzechTextBank": {
     }
+
+}

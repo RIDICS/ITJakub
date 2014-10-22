@@ -433,9 +433,11 @@ class BibliographyFactoryResolver {
 
 class ConfigurationManager {
     config: Object;
+    varInterpreter: VariableInterpreter;
 
     constructor(config: Object) {
         this.config = config;
+        this.varInterpreter = new VariableInterpreter();
     }
 
     containsMiddlePanel() { return typeof this.config["middle-panel"] !== 'undefined'; }
@@ -450,17 +452,13 @@ class ConfigurationManager {
 
     containsTitle() { return typeof this.config["middle-panel"]['title'] !== 'undefined'; }
 
-    getTitle(bibItem: IBookInfo): string { return this.replaceVarNamesByValues(this.config['middle-panel']['title'], bibItem); }
+    getTitle(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['title'], this.config['middle-panel']['variables'], bibItem); }
 
-    getBody(bibItem: IBookInfo): string { return this.replaceVarNamesByValues(this.config['middle-panel']['body'], bibItem); }
+    getBody(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['body'], this.config['middle-panel']['variables'], bibItem); }
 
-    getCustomInMiddlePanel(bibItem: IBookInfo): string { return this.replaceVarNamesByValues(this.config['bottom-panel']['custom'], bibItem); }
+    getCustomInMiddlePanel(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['custom'], this.config['middle-panel']['variables'], bibItem); }
 
-    private replaceVarNamesByValues(valueString: string, bibItem: IBookInfo): string {
-        return valueString.replace(/{(.+?)}/g, (foundPattern, varName) => {
-            return bibItem[varName];
-        });
-    }
+    getCustomInBottomPanel(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['bottom-panel']['custom'], this.config['bottom-panel']['variables'], bibItem); }
 }
 
 interface IBookInfo {
@@ -477,7 +475,13 @@ interface IBookInfo {
     LastEditation: string;
     EditationNote: string; //anchor href?
     Copyright: string;
+    Pages: Page[];
 
+}
+
+class Page {
+    start: number;
+    end: number;
 }
 
 
