@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
 {

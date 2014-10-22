@@ -1,14 +1,14 @@
 ﻿{
     "Edition": {
         "middle-panel": {
-            "title": "Nazev: {Name} {$editor} ,{$litType}", //variable starts with dollar sign
-            "body": "{$editionTable} {$pages}",
+            "title": "Nazev: {Name}{$editor} {$litType}", 
+            "body": "{$editionTable}",
             "variables": {
                 "$litType": {
-                    "type": "array",            //could be used only on javascript array object
-                    "scope": "LiteraryType", //change scope from bibItem to its child
-                    "pattern": "[{$LiteraryTypeStart}{$LiteraryTypeEnd}]", //pattern for each item,changes scope to item
-                    "delimeter": "; "
+                    "type": "array",           
+                    "scope": "Pages", 
+                    "pattern": "<a href='urlHere'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>", 
+                    "delimeter": " , "
                 },
                 "$LiteraryTypeStart": {
                     "type": "primitive",
@@ -24,14 +24,14 @@
                 },
                 "$editor": {
                     "type": "primitive",
-                    "pattern": ",{Editor}",
+                    "pattern": ", {Editor}",
                     "printIfNullValue": true,
                     "replaceNullValueBy": ""
                 },
                 "$editionTable": {
                     "type": "table",
                     "printRowIfNullValue": true,
-                    "replaceNullValueBy": "&lt;Nezadáno&gt;", //special characters needs to be escaped
+                    "replaceNullValueBy": "&lt;Nezadáno&gt;", 
                     "rows": [ { "label": "Editor", "pattern": "{$editor}" }, { "label": "Předloha", "pattern": "{Pattern}" }, { "label": "Zkratka památky", "pattern": "{RelicAbbreviation}" } ]
                 }
             }

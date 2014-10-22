@@ -2,6 +2,10 @@
     function VariableInterpreter() {
     }
     VariableInterpreter.prototype.interpret = function (valueString, variables, bibItem) {
+        if (typeof valueString === 'undefined' || typeof bibItem === 'undefined') {
+            console.log("VariabeInterpreter: cannot interpret undefined type");
+            return "";
+        }
         return this.interpretPattern(valueString, variables, bibItem, true, "");
     };
 
@@ -92,10 +96,11 @@
         }
         var value = "";
         $.each(actualScopedObject, function (index, item) {
-            value += _this.interpretPattern(pattern, variables, item, true, "");
+            var itemValue = _this.interpretPattern(pattern, variables, item, true, "");
             if (index > 0) {
-                value = delimeter + value;
+                itemValue = delimeter + itemValue;
             }
+            value += itemValue;
         });
 
         return value;

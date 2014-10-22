@@ -3,6 +3,10 @@ class VariableInterpreter {
 
 
     public interpret(valueString: string, variables: Object, bibItem: IBookInfo): string {
+        if (typeof valueString === 'undefined' || typeof bibItem === 'undefined') {
+            console.log("VariabeInterpreter: cannot interpret undefined type");
+            return "";
+        }
         return this.interpretPattern(valueString, variables, bibItem, true, "");
     }
 
@@ -89,10 +93,11 @@ class VariableInterpreter {
         }
         var value: string = "";
         $.each(actualScopedObject, (index, item) => {
-            value += this.interpretPattern(pattern, variables, item, true, "");
+            var itemValue = this.interpretPattern(pattern, variables, item, true, "");
             if (index > 0) {
-                value = delimeter + value;
+                itemValue = delimeter + itemValue;
             }
+            value += itemValue;
         });
 
         return value;

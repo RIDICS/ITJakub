@@ -1,4 +1,4 @@
-﻿
+﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts"/>
 
 class BibliographyModule {
     private static _instance: BibliographyModule = null;
@@ -420,11 +420,11 @@ interface IBookInfo {
     LastEditation: string;
     EditationNote: string; //anchor href?
     Copyright: string;
-    Pages: Page[];
+    Pages: IPage[];
 
 }
 
-class Page {
-    start: number;
-    end: number;
+interface IPage {
+    Start: number;
+    End: number;
 }

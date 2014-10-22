@@ -1,4 +1,5 @@
-﻿var __extends = this.__extends || function (d, b) {
+﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts"/>
+var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -398,11 +399,5 @@ var ConfigurationManager = (function () {
         return this.varInterpreter.interpret(this.config['bottom-panel']['custom'], this.config['bottom-panel']['variables'], bibItem);
     };
     return ConfigurationManager;
-})();
-
-var Page = (function () {
-    function Page() {
-    }
-    return Page;
 })();
 //# sourceMappingURL=itjakub.plugins.bibliography.js.map
