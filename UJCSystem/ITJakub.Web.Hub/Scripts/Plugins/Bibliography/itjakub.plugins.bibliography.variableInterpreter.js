@@ -9,6 +9,20 @@
         return this.interpretPattern(valueString, variables, bibItem, true, "");
     };
 
+    VariableInterpreter.prototype.changeScope = function (actualScope, newScopeName) {
+        var newScope = actualScope[newScopeName];
+        this.setParentScope(newScope, actualScope);
+        return newScope;
+    };
+
+    VariableInterpreter.prototype.setParentScope = function (scope, parentScope) {
+        scope['parentScope'] = parentScope;
+    };
+
+    VariableInterpreter.prototype.getParentScope = function (scope) {
+        return scope['parentScope'];
+    };
+
     VariableInterpreter.prototype.interpretPattern = function (pattern, variables, actualScopeObject, continueOnNullValue, replacementForNullValue) {
         var _this = this;
         var foundNullValue;
@@ -19,7 +33,7 @@
             if (varName.indexOf("$") === 0) {
                 result = _this.interpretConfigurationVariable(varName, variables, actualScopeObject);
             } else {
-                result = actualScopeObject[varName];
+                result = actualScopeObject[varName]; //TODO if result is undefined bubble up in scope via call tempScope = this.getParentScope(actualScopeObject)
             }
 
             if (typeof result !== 'undefined' && result !== null && result.length > 0) {
@@ -75,7 +89,7 @@
         var scope = interpretedVariable["scope"];
         var actualScopedObject = scopedObject;
         if (typeof scope !== 'undefined') {
-            actualScopedObject = actualScopedObject[scope];
+            actualScopedObject = this.changeScope(actualScopedObject, scope);
         }
         var value = this.interpretPattern(pattern, variables, actualScopedObject, printIfNull, replacementForNullValue);
         if ((value === null || value.length <= 0) && !printIfNull) {
@@ -92,10 +106,11 @@
         var scope = interpretedVariable["scope"];
         var actualScopedObject = scopedObject;
         if (typeof scope !== 'undefined') {
-            actualScopedObject = actualScopedObject[scope];
+            actualScopedObject = this.changeScope(actualScopedObject, scope);
         }
         var value = "";
         $.each(actualScopedObject, function (index, item) {
+            _this.setParentScope(item, actualScopedObject);
             var itemValue = _this.interpretPattern(pattern, variables, item, true, "");
             if (index > 0) {
                 itemValue = delimeter + itemValue;
@@ -114,7 +129,7 @@
         var scope = interpretedVariable["scope"];
         var actualScopedObject = scopedObject;
         if (typeof scope !== 'undefined') {
-            actualScopedObject = actualScopedObject[scope];
+            actualScopedObject = this.changeScope(actualScopedObject, scope);
         }
         var tableBuilder = new TableBuilder();
 
