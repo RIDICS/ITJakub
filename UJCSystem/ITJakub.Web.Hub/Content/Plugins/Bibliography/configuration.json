@@ -1,0 +1,17 @@
+﻿{
+    "Edition": {
+        "middle-panel": {
+            "title": "Nazev: {Name}, typ:{LiteraryType}",
+            "body": "{Editor}"
+        },
+        "bottom-panel": {
+            "custom": "copy: {Copyright}"
+        }
+    },
+
+    "Dictionary": {
+    },
+
+    "OldCzechTextBank": {
+    }
+}

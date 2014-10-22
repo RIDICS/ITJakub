@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.IO;
+using System.Web.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
 {
@@ -7,8 +8,8 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
         // GET: Bibliography
         public ActionResult GetConfiguration()
         {
-
-            return Json(new { configuration = "" }, JsonRequestBehavior.AllowGet);
+            string fullPath = Server.MapPath("~/Content/Plugins/Bibliography/configuration.json");
+            return File(fullPath, "application/json", fullPath);
         }
     }
 }

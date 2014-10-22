@@ -396,14 +396,20 @@ class BibliographyFactoryResolver {
             throw new Error("Cannot instantiate...Use getInstance method instead");
         }
         BibliographyFactoryResolver._instance = this;
+        var configObj;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            async: false,
+            url: "/Bibliography/GetConfiguration",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                configObj = response;
+            }
+        });
+
         this.m_factories = new Array();
-        //TODO download config and parse here
-
-
-        var jsonConfig: string = '{"Edition" : {"middle-panel": { "title": "{Name}/{LiteraryType}", "body": "{Editor}" }, "bottom-panel" : { "custom" : "copy: {Copyright}" } }, "Dictionary" : {}, "OldCzechTextBank" : {} }';
-        var configObj = JSON.parse(jsonConfig);
-
-
         this.m_factories['Edition'] = new EditionFactory(new ConfigurationManager(configObj["Edition"])); //TODO make enum bookType
         this.m_factories['Dictionary'] = new DictionaryFactory(new ConfigurationManager(configObj["Dictionary"]));
         this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new ConfigurationManager(configObj["OldCzechTextBank"]));

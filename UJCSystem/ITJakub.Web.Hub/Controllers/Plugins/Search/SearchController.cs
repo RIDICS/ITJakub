@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
-namespace ITJakub.Web.Hub.Controllers
+namespace ITJakub.Web.Hub.Controllers.Plugins.Search
 {
     public class SearchController : Controller
     {
