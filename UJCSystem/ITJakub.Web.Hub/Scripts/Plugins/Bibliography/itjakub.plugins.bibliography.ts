@@ -178,32 +178,6 @@ class OldCzechTextBankFactory extends BibliographyFactory {
 
         return rightPanel;
     }
-
-    makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
-        var middlePanel: HTMLDivElement = document.createElement('div');
-        $(middlePanel).addClass('middle-panel');
-        var middlePanelHeading: HTMLDivElement = document.createElement('div');
-        $(middlePanelHeading).addClass('heading');
-        middlePanelHeading.innerHTML = bookInfo.Name;
-        middlePanel.appendChild(middlePanelHeading);
-        var middlePanelBody: HTMLDivElement = document.createElement('div');
-        $(middlePanelBody).addClass('body');
-        middlePanelBody.innerHTML = bookInfo.Body;
-        middlePanel.appendChild(middlePanelBody);
-        return middlePanel;
-    }
-
-    makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
-        var tableBuilder = new TableBuilder();
-        tableBuilder.makeTableRow("Editor", bookInfo.Editor);
-        tableBuilder.makeTableRow("Předloha", bookInfo.Pattern);
-        tableBuilder.makeTableRow("Zkratka památky", bookInfo.RelicAbbreviation);
-        tableBuilder.makeTableRow("Zkratka pramene", bookInfo.SourceAbbreviation);
-        tableBuilder.makeTableRow("Literární druh", bookInfo.LiteraryType);
-        tableBuilder.makeTableRow("Literární žánr", bookInfo.LiteraryGenre);
-        tableBuilder.makeTableRow("Poslední úprava edice", bookInfo.LastEditation);
-        return tableBuilder.build();
-    }
 }
 
 class DictionaryFactory extends BibliographyFactory {
@@ -277,20 +251,6 @@ class DictionaryFactory extends BibliographyFactory {
 
         return rightPanel;
     }
-
-    makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
-        var middlePanel: HTMLDivElement = document.createElement('div');
-        $(middlePanel).addClass('middle-panel');
-        var middlePanelHeading: HTMLDivElement = document.createElement('div');
-        $(middlePanelHeading).addClass('heading');
-        middlePanelHeading.innerHTML = bookInfo.Name;
-        middlePanel.appendChild(middlePanelHeading);
-        var middlePanelBody: HTMLDivElement = document.createElement('div');
-        $(middlePanelBody).addClass('body');
-        middlePanelBody.innerHTML = bookInfo.Body;
-        middlePanel.appendChild(middlePanelBody);
-        return middlePanel;
-    }
 }
 
 class EditionFactory extends BibliographyFactory {
@@ -355,35 +315,20 @@ class EditionFactory extends BibliographyFactory {
         return rightPanel;
     }
 
+    //makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
+    //    var tableBuilder = new TableBuilder();
+    //    tableBuilder.makeTableRow("Editor", bookInfo.Editor);
+    //    tableBuilder.makeTableRow("Předloha", bookInfo.Pattern);
+    //    tableBuilder.makeTableRow("Zkratka památky", bookInfo.RelicAbbreviation);
+    //    tableBuilder.makeTableRow("Zkratka pramene", bookInfo.SourceAbbreviation);
+    //    tableBuilder.makeTableRow("Literární druh", bookInfo.LiteraryType);
+    //    tableBuilder.makeTableRow("Literární žánr", bookInfo.LiteraryGenre);
+    //    tableBuilder.makeTableRow("Poslední úprava edice", bookInfo.LastEditation);
 
-    //makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
-    //    var middlePanel: HTMLDivElement = document.createElement('div');
-    //    $(middlePanel).addClass('middle-panel');
-    //    var middlePanelHeading: HTMLDivElement = document.createElement('div');
-    //    $(middlePanelHeading).addClass('heading');
-    //    middlePanelHeading.innerHTML = bookInfo.Name;
-    //    middlePanel.appendChild(middlePanelHeading);
-    //    var middlePanelBody: HTMLDivElement = document.createElement('div');
-    //    $(middlePanelBody).addClass('body');
-    //    middlePanelBody.innerHTML = bookInfo.Body;
-    //    middlePanel.appendChild(middlePanelBody);
-    //    return middlePanel;
+    //    //TODO add Edicni poznamka anchor and copyright to hiddenContent here
+
+    //    return tableBuilder.build();
     //}
-
-    makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
-        var tableBuilder = new TableBuilder();
-        tableBuilder.makeTableRow("Editor", bookInfo.Editor);
-        tableBuilder.makeTableRow("Předloha", bookInfo.Pattern);
-        tableBuilder.makeTableRow("Zkratka památky", bookInfo.RelicAbbreviation);
-        tableBuilder.makeTableRow("Zkratka pramene", bookInfo.SourceAbbreviation);
-        tableBuilder.makeTableRow("Literární druh", bookInfo.LiteraryType);
-        tableBuilder.makeTableRow("Literární žánr", bookInfo.LiteraryGenre);
-        tableBuilder.makeTableRow("Poslední úprava edice", bookInfo.LastEditation);
-
-        //TODO add Edicni poznamka anchor and copyright to hiddenContent here
-
-        return tableBuilder.build();
-    }
 }
 
 class BibliographyFactoryResolver {
@@ -482,36 +427,4 @@ interface IBookInfo {
 class Page {
     start: number;
     end: number;
-}
-
-
-class TableBuilder {
-    private m_tableDiv: HTMLDivElement;
-
-    constructor() {
-        this.m_tableDiv = document.createElement('div');
-        $(this.m_tableDiv).addClass('table');
-    }
-
-    public makeTableRow(label: string, value: string): void {
-        var rowDiv: HTMLDivElement = document.createElement('div');
-        $(rowDiv).addClass('row');
-        var labelDiv: HTMLDivElement = document.createElement('div');
-        $(labelDiv).addClass('cell label');
-        labelDiv.innerHTML = label;
-        rowDiv.appendChild(labelDiv);
-        var valueDiv: HTMLDivElement = document.createElement('div');
-        $(valueDiv).addClass('cell');
-        if (!value || value.length === 0) {
-            valueDiv.innerHTML = "&lt;nezadáno&gt;";
-        } else {
-            valueDiv.innerHTML = value;
-        }
-        rowDiv.appendChild(valueDiv);
-        this.m_tableDiv.appendChild(rowDiv);
-    }
-
-    public build(): HTMLDivElement {
-        return this.m_tableDiv;
-    }
 }

@@ -5,10 +5,22 @@
             "body": "{$editionTable} {$pages}",
             "variables": {
                 "$litType": {
-                    "type": "array",
-                    "itemType": "LiteraryType",
-                    "pattern": "[{item.start}-{item.end}]", //pattern for each item
+                    "type": "array",            //could be used only on javascript array object
+                    "scope": "LiteraryType", //change scope from bibItem to its child
+                    "pattern": "[{$LiteraryTypeStart}{$LiteraryTypeEnd}]", //pattern for each item,changes scope to item
                     "delimeter": "; "
+                },
+                "$LiteraryTypeStart": {
+                    "type": "primitive",
+                    "pattern": "{Start}",
+                    "printIfNullValue": false,
+                    "replaceNullValueBy": ""
+                },
+                 "$LiteraryTypeEnd": {
+                    "type": "primitive",
+                    "pattern": "-{End}",
+                    "printIfNullValue": false,
+                    "replaceNullValueBy": ""
                 },
                 "$editor": {
                     "type": "primitive",
@@ -20,7 +32,7 @@
                     "type": "table",
                     "printRowIfNullValue": true,
                     "replaceNullValueBy": "&lt;Nezadáno&gt;", //special characters needs to be escaped
-                    "rows": [ { "label": "Editor", "value": "{$editor}" }, { "label": "Předloha", "value": "{Pattern}" }, { "label": "Zkratka památky", "value": "{RelicAbbreviation}" } ]
+                    "rows": [ { "label": "Editor", "pattern": "{$editor}" }, { "label": "Předloha", "pattern": "{Pattern}" }, { "label": "Zkratka památky", "pattern": "{RelicAbbreviation}" } ]
                 }
             }
         },
