@@ -2,9 +2,11 @@
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Books.Message;
 using ITJakub.MobileApps.Client.Books.Service;
 using ITJakub.MobileApps.Client.Books.View;
+using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.ViewModel
 {
@@ -15,44 +17,18 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private ObservableCollection<BookViewModel> m_bookList;
         private bool m_noBookFound;
         private bool m_loading;
-        private object m_searchFilterSelection;
 
         public SelectBookViewModel(DataService dataService, NavigationService navigationService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
 
-            GoBackCommand = new RelayCommand(navigationService.GoBack);
+            GoBackCommand = new RelayCommand(GoBack);
             BookClickCommand = new RelayCommand<ItemClickEventArgs>(BookClick);
-            BookList = new ObservableCollection<BookViewModel>
-            {
-                new BookViewModel
-                {
-                    Author = "Nějaký Autor",
-                    Name = "Úžasná kniha",
-                    Year = 1800
-                },
-                new BookViewModel
-                {
-                    Author = "Nějaký Autor",
-                    Name = "Úžasná kniha",
-                    Year = 1800
-                },
-                new BookViewModel
-                {
-                    Author = "Nějaký Autor",
-                    Name = "Úžasná kniha",
-                    Year = 1800
-                },
-                new BookViewModel
-                {
-                    Author = "Nějaký Autor",
-                    Name = "Úžasná kniha",
-                    Year = 1800
-                },
-            };
+
+            LoadData();
         }
-        
+
         public RelayCommand GoBackCommand { get; private set; }
         
         public RelayCommand<ItemClickEventArgs> BookClickCommand { get; private set; }
@@ -88,6 +64,25 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             }
         }
 
+        private void LoadData()
+        {
+            Loading = true;
+            m_dataService.GetBookList(CategoryContract.OldGrammar, (bookList, exception) =>
+            {
+                Loading = false;
+                if (exception != null)
+                    return;
+
+                BookList = bookList;
+            });
+        }
+
+        private void GoBack()
+        {
+            m_navigationService.GoBack();
+            Messenger.Default.Send(new SelectedPageMessage());
+        }
+
         private void BookClick(ItemClickEventArgs args)
         {
             var book = args.ClickedItem as BookViewModel;
@@ -95,7 +90,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 return;
             
             m_navigationService.Navigate(typeof(SelectPageView));
-            MessengerInstance.Send(new SelectedBookMessage {Book = book});
+            Messenger.Default.Send(new SelectedBookMessage {Book = book});
         }
     }
 }

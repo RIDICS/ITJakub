@@ -52,6 +52,7 @@
             
             <ProgressBar Grid.Column="0"
                          Grid.ColumnSpan="2"
+                         VerticalAlignment="Top"
                          IsIndeterminate="True"
                          Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
@@ -80,7 +81,7 @@
                     <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
                                FontSize="20">
                         <Run Text="Zvolená kniha: " />
-                        <Run Text="{Binding Book.Name}" />
+                        <Run Text="{Binding Book.Title}" />
                     </TextBlock>
                     
                     <Button Grid.Column="1"
@@ -115,25 +116,29 @@
                   Grid.Column="2"
                   Background="#30000000" />
             
-            <ListView Grid.Row="2"
+            <GridView Grid.Row="2"
                       Grid.Column="0"
                       SelectionMode="Single"
                       SelectedItem="{Binding SelectedPage, Mode=TwoWay}"
                       ItemsSource="{Binding PageList}"
-                      x:Name="PageListView">
-                <ListView.ItemsPanel>
+                      SelectedIndex="{Binding SelectedPageIndex}">
+                <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />
                     </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                <ListView.ItemTemplate>
+                </GridView.ItemsPanel>
+                <GridView.ItemTemplate>
                     <DataTemplate>
                         <Grid MinWidth="20">
-                            <TextBlock Text="40"></TextBlock>
+                            <TextBlock Text="40"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center">
+                                
+                            </TextBlock>
                         </Grid>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </GridView.ItemTemplate>
+            </GridView>
         </Grid>
     </Grid>
 </Page>

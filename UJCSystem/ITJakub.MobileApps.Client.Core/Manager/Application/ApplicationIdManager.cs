@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Application
 
         private void LoadAllApplicationId()
         {
-            var appList = m_serviceClient.GetAllApplication().Result;
+            var appList = m_serviceClient.GetAllApplicationAsync().Result;
             
             m_applicationTypeToId = new Dictionary<ApplicationType, int>();
             m_applicaitonIdToType = new Dictionary<int, ApplicationType>();

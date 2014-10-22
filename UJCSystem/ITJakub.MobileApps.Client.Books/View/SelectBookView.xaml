@@ -7,7 +7,6 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:converter="using:ITJakub.MobileApps.Client.Books.View.Converter"
-    xmlns:enum="using:ITJakub.MobileApps.Client.Books.Enum"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -98,6 +97,7 @@
             <ProgressBar Grid.Column="0"
                          Grid.ColumnSpan="4"
                          IsIndeterminate="True"
+                         VerticalAlignment="Top"
                          Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
         
@@ -106,7 +106,22 @@
                     Orientation="Horizontal">
             <ComboBox SelectedIndex="0"
                       Style="{StaticResource TextComboBoxStyle}"
-                      PlaceholderText="Śeřadit podle názvu">
+                      PlaceholderText="Mluvnice">
+                <ComboBoxItem>
+                    <TextBlock Text="Mluvnice" />
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <TextBlock Text="Slovníky" />
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <TextBlock Text="..." />
+                </ComboBoxItem>
+            </ComboBox>
+            
+            <ComboBox SelectedIndex="0"
+                      Margin="50,0,0,0"
+                      Style="{StaticResource TextComboBoxStyle}"
+                      PlaceholderText="Seřadit podle názvu">
                 <ComboBoxItem>
                     <TextBlock Text="Seřadit podle názvu" />
                 </ComboBoxItem>
@@ -177,8 +192,7 @@
                         
                         <StackPanel Grid.Column="1"
                                     Orientation="Vertical">
-                            <TextBlock Text="{Binding Name}"
-                                       FontSize="18"
+                            <TextBlock Text="{Binding Title}"
                                        FontWeight="Bold" />
                             <TextBlock Text="{Binding Author}" />
                             <TextBlock Text="{Binding Year}" />

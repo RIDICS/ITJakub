@@ -155,7 +155,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             try
             {
                 CurrentGroupId = groupId;
-                var result = await m_serviceClient.GetGroupDetails(groupId);
+                var result = await m_serviceClient.GetGroupDetailsAsync(groupId);
                 var group = new GroupInfoViewModel
                 {
                     GroupId = result.Id,
@@ -202,7 +202,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     MemberIds = group.Members.Select(x => x.Id).ToList()
                 }).ToList();
 
-                var result = await m_serviceClient.GetGroupsUpdate(oldGroupInfo);
+                var result = await m_serviceClient.GetGroupsUpdateAsync(oldGroupInfo);
                 var groupUpdate = result.ToDictionary(group => group.Id, group => group);
 
                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
@@ -229,7 +229,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             try
             {
-                await m_serviceClient.UpdateGroupState(groupId, (GroupStateContract) newState);
+                await m_serviceClient.UpdateGroupStateAsync(groupId, (GroupStateContract) newState);
                 callback(null);
             }
             catch (ClientCommunicationException exception)
@@ -242,7 +242,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             try
             {
-                await m_serviceClient.RemoveGroup(groupId);
+                await m_serviceClient.RemoveGroupAsync(groupId);
                 callback(null);
             }
             catch (ClientCommunicationException exception)
@@ -255,7 +255,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             try
             {
-                var state = await m_serviceClient.GetGroupState(groupId);
+                var state = await m_serviceClient.GetGroupStateAsync(groupId);
                 callback((GroupState) state, null);
             }
             catch (ClientCommunicationException exception)

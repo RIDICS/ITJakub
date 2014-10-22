@@ -29,6 +29,8 @@ namespace ITJakub.MobileApps.Client.Books
         {
             container.RegisterType<DataService>(WithLifetime.ContainerControlled(typeof (DataService)));
             container.RegisterType<NavigationService>(WithLifetime.ContainerControlled(typeof (NavigationService)));
+            container.RegisterType<ServiceClient,MockServiceClient>(WithLifetime.ContainerControlled(typeof (ServiceClient)));
+            container.RegisterType<BookManager>(WithLifetime.ContainerControlled(typeof (BookManager)));
         }
     }
 }

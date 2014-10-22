@@ -121,6 +121,11 @@
   <ItemGroup>
     <Compile Include="Book.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="Service\BookManager.cs" />
+    <Compile Include="Service\EndpointConfiguration.cs" />
+    <Compile Include="Service\MobileCommunicationException.cs" />
+    <Compile Include="Service\MockServiceClient.cs" />
+    <Compile Include="Service\ServiceClient.cs" />
     <Compile Include="ViewModel\BookPageViewModel.cs" />
     <Compile Include="Message\SelectedPageMessage.cs" />
     <Compile Include="Service\DataService.cs" />
@@ -171,7 +176,12 @@
     <Content Include="Icon\book-48.png" />
     <Content Include="Icon\license.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.MobileApps.MobileContracts\ITJakub.MobileApps.MobileContracts.csproj">
+      <Project>{67b4dda0-4340-4d05-9a22-831da43e70f8}</Project>
+      <Name>ITJakub.MobileApps.MobileContracts</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
       <Name>Behaviors SDK %28XAML%29</Name>

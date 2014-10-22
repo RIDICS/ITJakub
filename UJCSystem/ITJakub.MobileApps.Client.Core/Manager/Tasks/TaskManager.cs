@@ -75,7 +75,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
         {
             try
             {
-                var result = await m_client.GetTaskForGroup(groupId);
+                var result = await m_client.GetTaskForGroupAsync(groupId);
                 if (result == null)
                     return;
 

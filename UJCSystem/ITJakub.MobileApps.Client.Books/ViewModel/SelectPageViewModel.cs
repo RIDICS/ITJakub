@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Books.Message;
 using ITJakub.MobileApps.Client.Books.Service;
 
@@ -15,8 +15,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private BookViewModel m_book;
         private bool m_loading;
         private BookPageViewModel m_selectedPage;
-        private int m_selectedPageIndex;
         private int m_currentPageNumber;
+        private int m_selectedPageIndex;
 
         public SelectPageViewModel(DataService dataService, NavigationService navigationService)
         {
@@ -25,7 +25,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 
             GoBackCommand = new RelayCommand(navigationService.GoBack);
             SaveCommand = new RelayCommand(Save);
-            MessengerInstance.Register<SelectedBookMessage>(this, LoadData);
+            Messenger.Default.Register<SelectedBookMessage>(this, LoadData);
         }
         
         private void LoadData(SelectedBookMessage message)
@@ -83,6 +83,10 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             set
             {
                 m_pageList = value;
+
+                if (m_pageList.Count > 0)
+                    SelectedPageIndex = 0;
+
                 RaisePropertyChanged();
                 RaisePropertyChanged(() => PageCount);
             }
@@ -103,7 +107,11 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             get { return m_selectedPage; }
             set
             {
+                if (value == null)
+                    return;
+                
                 m_selectedPage = value;
+
                 RaisePropertyChanged();
                 CurrentPageNumber = m_pageList.IndexOf(m_selectedPage) + 1;
             }
@@ -124,10 +132,20 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             get { return m_pageList.Count; }
         }
 
+        public int SelectedPageIndex
+        {
+            get { return m_selectedPageIndex; }
+            set
+            {
+                m_selectedPageIndex = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private void Save()
         {
             m_navigationService.GoFromBookSelection();
-            MessengerInstance.Send(new SelectedPageMessage
+            Messenger.Default.Send(new SelectedPageMessage
             {
                 BookPage = SelectedPage
             });

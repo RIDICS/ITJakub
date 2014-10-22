@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Books.Message;
 using ITJakub.MobileApps.Client.Books.Service;
@@ -10,26 +10,34 @@ namespace ITJakub.MobileApps.Client.Books
 {
     public class Book
     {
-        private Action<BookPageViewModel> m_callback;
+        private readonly TaskCompletionSource<BookPageViewModel> m_taskCompletition;
         private readonly NavigationService m_navigationService;
 
-        public Book()
+        private Book()
         {
+            Messenger.Default.Register<SelectedPageMessage>(this, BookSelected);
+
+            m_taskCompletition = new TaskCompletionSource<BookPageViewModel>();
             m_navigationService = Container.Current.Resolve<NavigationService>();
         }
 
-        public void SelectBook(Action<BookPageViewModel> callback)
+        private async Task<BookPageViewModel> StartSelectingBookAsync()
         {
-            m_callback = callback;
-            Messenger.Default.Register<SelectedPageMessage>(this, BookSelected);
             m_navigationService.SetRootPage();
             m_navigationService.Navigate(typeof(SelectBookView));
-        }
+            return await m_taskCompletition.Task;
+        } 
 
         private void BookSelected(SelectedPageMessage message)
         {
             Messenger.Default.Unregister(this);
-            m_callback(message.BookPage);
+            m_taskCompletition.SetResult(message.BookPage);
         }
+
+        public static async Task<BookPageViewModel> SelectBookAsync()
+        {
+            var book = new Book();
+            return await book.StartSelectingBookAsync();
+        } 
     }
 }

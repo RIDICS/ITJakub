@@ -221,7 +221,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
-        public Task<IList<ApplicationContract>> GetAllApplication()
+        public Task<IList<ApplicationContract>> GetAllApplicationAsync()
         {
             return Task.Run(() =>
             {
@@ -248,7 +248,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
-        public Task<GroupDetailContract> GetGroupDetails(long groupId)
+        public Task<GroupDetailContract> GetGroupDetailsAsync(long groupId)
         {
             return Task.Run(() =>
             {
@@ -356,7 +356,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
-        public Task<TaskContract> GetTaskForGroup(long groupId)
+        public Task<TaskContract> GetTaskForGroupAsync(long groupId)
         {
             return Task.Run(() =>
             {
@@ -383,7 +383,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
-        public Task<IList<GroupDetailsUpdateContract>> GetGroupsUpdate(IList<OldGroupDetailsContract> groups)
+        public Task<IList<GroupDetailsUpdateContract>> GetGroupsUpdateAsync(IList<OldGroupDetailsContract> groups)
         {
             return Task.Run(() =>
             {
@@ -410,7 +410,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
-        public Task UpdateGroupState(long groupId, GroupStateContract state)
+        public Task UpdateGroupStateAsync(long groupId, GroupStateContract state)
         {
             return Task.Run(() =>
             {
@@ -437,7 +437,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
-        public Task RemoveGroup(long groupId)
+        public Task RemoveGroupAsync(long groupId)
         {
             return Task.Run(() =>
             {
@@ -463,7 +463,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
             });
         }
-        public Task<GroupStateContract> GetGroupState(long groupId)
+
+        public Task<GroupStateContract> GetGroupStateAsync(long groupId)
         {
             return Task.Run(() =>
             {
