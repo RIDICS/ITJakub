@@ -7,7 +7,7 @@ class VariableInterpreter {
             console.log("VariabeInterpreter: cannot interpret undefined type");
             return "";
         }
-        return this.interpretPattern(valueString, variables, bibItem, true, "");
+        return this.interpretPattern("bibItem", valueString, variables, bibItem, true, "");
     }
 
     private resolveScope(interpretedVariable: Object, scopedObject: Object): Object {
@@ -34,8 +34,8 @@ class VariableInterpreter {
     }
 
     private setParentScope(scope: Object, parentScope: Object) {
-        if (scope === 'undefined' || scope === null) {
-            console.log("cannot set parent scope to null scope");
+        if (typeof scope === 'undefined' || scope === null) {
+            console.log("cannot set parent scope to undefined or null scope");
             return;
         }
         scope['parentScope'] = parentScope;
@@ -49,7 +49,11 @@ class VariableInterpreter {
         return scope;
     }
 
-    private interpretPattern(pattern: string, variables: Object, actualScopeObject: Object, continueOnNullValue: boolean, replacementForNullValue: string): string {
+    private interpretPattern(interpretedVariableName: string, pattern: string, variables: Object, actualScopeObject: Object, continueOnNullValue: boolean, replacementForNullValue: string): string {
+        if (typeof actualScopeObject === 'undefined') {
+            console.error("'" + interpretedVariableName + "' has undefined scoped");
+            return "";
+        }
         var foundNullValue: boolean;
         var interpretedpattern = pattern.replace(/{(.+?)}/g, (foundPattern, varName: string) => {
             if (!continueOnNullValue && foundNullValue) return "";
@@ -69,11 +73,12 @@ class VariableInterpreter {
                 }
             }
 
-            result = String(result); //convert if typeof result was not string    
-            if (typeof result !== 'undefined' && result !== null && result.length > 0) {
-                return result;
+            if (typeof result !== 'undefined' && result !== null) {
+                result = String(result); //convert if typeof result was not string    
+                if (result.length > 0) {
+                    return result;
+                }
             }
-
             foundNullValue = true;
             if (!continueOnNullValue) return "";
             return replacementForNullValue;
@@ -85,42 +90,48 @@ class VariableInterpreter {
     }
 
     private interpretConfigurationVariable(varName: string, variables: Object, actualScopeObject: Object): string {
-        if (variables === 'undefined') {
+        if (typeof variables === 'undefined') {
             console.error("No variables are specified in bibliography configuration");
+            return "";
+        }
+        if (typeof actualScopeObject === 'undefined') {
+            console.log("Variable '" + varName + "' has null scope object");
             return "";
         }
 
         var interpretedVariable = variables[varName];
-        if (interpretedVariable === 'undefined') {
+        if (typeof interpretedVariable === 'undefined') {
             console.error("Variable with name " + varName + " is not specidfied in bibliography configuration");
             return "";
         }
 
         var typeOfVariable = interpretedVariable['type'];
-        if (typeOfVariable === "undefined") {
+        if (typeof typeOfVariable === "undefined") {
             console.error("Variable with name " + varName + " does not have specified type");
             return "";
         }
 
         switch (typeOfVariable) {
         case "basic":
-            return this.interpretBasic(interpretedVariable, variables, actualScopeObject);
+            return this.interpretBasic(varName, interpretedVariable, variables, actualScopeObject);
+        case "if":
+            return this.interpretIfStatement(varName, interpretedVariable, variables, actualScopeObject);
         case "array":
-            return this.interpretArray(interpretedVariable, variables, actualScopeObject);
+            return this.interpretArray(varName, interpretedVariable, variables, actualScopeObject);
         case "table":
-            return this.interpretTable(interpretedVariable, variables, actualScopeObject);
+            return this.interpretTable(varName, interpretedVariable, variables, actualScopeObject);
         default:
             console.error("Variable with name " + varName + " does not have correct type");
             return "";
         }
     }
 
-    interpretBasic(interpretedVariable: Object, variables: Object, scopedObject: Object): string {
+    private interpretBasic(varName: string, interpretedVariable: Object, variables: Object, scopedObject: Object): string {
         var printIfNull: boolean = interpretedVariable["printIfNullValue"];
         var replacementForNullValue: string = interpretedVariable["replaceNullValueBy"];
         var pattern: string = interpretedVariable["pattern"];
         var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
-        var value: string = this.interpretPattern(pattern, variables, actualScopedObject, printIfNull, replacementForNullValue);
+        var value: string = this.interpretPattern(varName, pattern, variables, actualScopedObject, printIfNull, replacementForNullValue);
         if ((value === null || value.length <= 0) && !printIfNull) {
             return "";
         } else {
@@ -128,14 +139,33 @@ class VariableInterpreter {
         }
     }
 
-    interpretArray(interpretedVariable: Object, variables: Object, scopedObject: Object): string {
+    private interpretIfStatement(varName: string, interpretedVariable: Object, variables: Object, scopedObject: Object): string {
+        var pattern: string = interpretedVariable["pattern"];
+        var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
+        var truePattern: string = interpretedVariable["onTrue"];
+        var falsePattern: string = interpretedVariable["onFalse"];
+        var patternResult = this.interpretPattern(varName, pattern, variables, actualScopedObject, true, "");
+        if (typeof patternResult === "undefined" || patternResult === null || patternResult === "" || patternResult === "false" || patternResult === "0") {
+            return this.interpretPattern(varName, falsePattern, variables, actualScopedObject, true, "");
+        }
+        return this.interpretPattern(varName, truePattern, variables, actualScopedObject, true, "");
+    }
+
+    private interpretArray(varName: string, interpretedVariable: Object, variables: Object, scopedObject: Object): string {
         var pattern: string = interpretedVariable["pattern"];
         var delimeter: string = interpretedVariable["delimeter"];
         var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
+        if (!$.isArray(actualScopedObject)) {
+            console.error("Variable with name " + varName + " must be scoped on array.");
+            return "";
+        }
         var value: string = "";
         $.each(actualScopedObject, (index: number, item: Object) => {
+            if (typeof item === 'undefined' || item === null) {
+                return true; //continue
+            }
             this.setParentScope(item, actualScopedObject);
-            var itemValue = this.interpretPattern(pattern, variables, item, true, "");
+            var itemValue = this.interpretPattern(varName, pattern, variables, item, true, "");
             if (index > 0) {
                 itemValue = delimeter + itemValue;
             }
@@ -146,7 +176,7 @@ class VariableInterpreter {
 
     }
 
-    interpretTable(interpretedVariable: Object, variables: Object, scopedObject: Object): string {
+    private interpretTable(varName: string, interpretedVariable: Object, variables: Object, scopedObject: Object): string {
         var printRowIfNullValue: boolean = interpretedVariable["printRowIfNullValue"];
         var replaceNullValueBy: string = interpretedVariable["replaceNullValueBy"];
         var rows: Array<Object> = interpretedVariable["rows"];
@@ -156,7 +186,7 @@ class VariableInterpreter {
         $.each(rows, (index, item) => {
             var label: string = item["label"];
             var pattern: string = item["pattern"];
-            var value: string = this.interpretPattern(pattern, variables, actualScopedObject, true, "");
+            var value: string = this.interpretPattern(varName, pattern, variables, actualScopedObject, true, "");
             if (typeof value !== 'undefined' && value !== null && value.length > 0) {
                 tableBuilder.makeTableRow(label, value);
             } else {

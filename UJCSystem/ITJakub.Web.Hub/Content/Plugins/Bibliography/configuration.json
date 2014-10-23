@@ -4,6 +4,12 @@
             "title": "{Name}",
             "body": "{$archive}{$sign}{$pages}{$century}",
             "variables": {
+                "$test": {
+                    "type": "if",
+                    "pattern": "{Century}",
+                    "onTrue": "{Editor}",
+                    "onFalse": "was false"
+                },
                 "$litType": {
                     "type": "array",
                     "scope": "Pages",

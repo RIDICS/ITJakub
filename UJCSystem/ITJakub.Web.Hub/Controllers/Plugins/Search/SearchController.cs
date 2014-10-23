@@ -48,9 +48,12 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                     Century = 13,
                     Sign = "VII G 17 d",
                     Archive = new Archive() { Name = "Narodni knihovna ceske republiky", City = "Praha", State = "Cesko"},
-                    Authors = new List<Author>() { new Author(){FirstName = "Josef", LastName = "Novak"}, new Author(){FirstName = "Jaroslav", LastName = "Tuhik"}},
+                    Authors = new List<Author>() { new Author() { FirstName = "Josef", LastName = "Novak" }, new Author() { FirstName = "Jaroslav", LastName = "Tuhik" } },
                     Description = "Elementa latinae, boemicae ac germanicae linugae",
-                    Year = 1532
+                    Year = 1532,
+                    TestValue = 0,
+                    TestValue2 = false,
+                    TestValue3 = true
                 });
             }
 
@@ -120,6 +123,9 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
         public Archive Archive { get; set; }
 
         public List<Page> Pages { get; set; }
+        public int TestValue { get; set; }
+        public bool TestValue2 { get; set; }
+        public bool TestValue3 { get; set; }
     }
 
     public class Page
