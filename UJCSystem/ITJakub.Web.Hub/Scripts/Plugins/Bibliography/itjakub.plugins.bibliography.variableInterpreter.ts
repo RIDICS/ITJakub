@@ -10,18 +10,39 @@ class VariableInterpreter {
         return this.interpretPattern(valueString, variables, bibItem, true, "");
     }
 
-    private changeScope(actualScope: Object, newScopeName: string):Object {
+    private resolveScope(interpretedVariable: Object, scopedObject: Object): Object {
+        var scope: string = interpretedVariable["scope"];
+        var actualScopedObject: Object = scopedObject;
+        if (typeof scope !== 'undefined') {
+            if (scope === "{$parent}") {
+                actualScopedObject = this.getParentScope(actualScopedObject);
+            } else {
+                actualScopedObject = this.changeToInnerScope(actualScopedObject, scope);
+            }
+        }
+        return actualScopedObject;
+    }
+
+    private changeToInnerScope(actualScope: Object, newScopeName: string):Object {
         var newScope: Object = actualScope[newScopeName];
         this.setParentScope(newScope, actualScope);
         return newScope;
+    }
+
+    private changeToOuterScope(actualScope: Object): Object {
+        return this.getParentScope(actualScope);
     }
 
     private setParentScope(scope: Object, parentScope: Object) {
         scope['parentScope'] = parentScope;
     }
 
-    private getParentScope(scope:Object):Object {
-        return scope['parentScope'];
+    private getParentScope(scope: Object): Object {
+        var parentScope = scope['parentScope'];
+        if (typeof parentScope !== 'undefined') {
+            return parentScope;
+        }
+        return scope;
     }
 
     private interpretPattern(pattern: string, variables: Object, actualScopeObject: Object, continueOnNullValue: boolean, replacementForNullValue: string): string {
@@ -30,9 +51,18 @@ class VariableInterpreter {
             if (!continueOnNullValue && foundNullValue) return "";
             var result: string;
             if (varName.indexOf("$") === 0) { //is config variable
-                result = this.interpretConfigurationVariable(varName, variables, actualScopeObject);
+                if (varName === "$this") {
+                    result = <string>actualScopeObject; //if config variable is this, return this as value (can be used for primitive types like array of numbers or strings)
+                }else {
+                    result = this.interpretConfigurationVariable(varName, variables, actualScopeObject);
+                }
             } else {
-                result = actualScopeObject[varName]; //TODO if result is undefined bubble up in scope via call tempScope = this.getParentScope(actualScopeObject)
+                result = actualScopeObject[varName]; 
+                var tmpScope = actualScopeObject;
+                while (typeof result === 'undefined' && this.getParentScope(tmpScope) !== tmpScope) { //if result is undefined bubble up to outer scope 
+                    tmpScope = this.getParentScope(tmpScope);
+                    result = tmpScope[varName];
+                }
             }
 
             if (typeof result !== 'undefined' && result !== null && result.length > 0) {
@@ -84,11 +114,7 @@ class VariableInterpreter {
         var printIfNull: boolean = interpretedVariable["printIfNullValue"];
         var replacementForNullValue: string = interpretedVariable["replaceNullValueBy"];
         var pattern: string = interpretedVariable["pattern"];
-        var scope: string = interpretedVariable["scope"];
-        var actualScopedObject: Object = scopedObject;
-        if (typeof scope !== 'undefined') {
-            actualScopedObject = this.changeScope(actualScopedObject,scope);
-        }
+        var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
         var value: string = this.interpretPattern(pattern, variables, actualScopedObject, printIfNull, replacementForNullValue);
         if ((value === null || value.length <= 0) && !printIfNull) {
             return "";
@@ -100,11 +126,7 @@ class VariableInterpreter {
     interpretArray(interpretedVariable: Object, variables: Object, scopedObject: Object): string {
         var pattern: string = interpretedVariable["pattern"];
         var delimeter: string = interpretedVariable["delimeter"];
-        var scope: string = interpretedVariable["scope"];
-        var actualScopedObject: Object = scopedObject;
-        if (typeof scope !== 'undefined') {
-            actualScopedObject = this.changeScope(actualScopedObject, scope);
-        }
+        var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
         var value: string = "";
         $.each(actualScopedObject, (index:number, item:Object) => {
             this.setParentScope(item, actualScopedObject);
@@ -123,11 +145,7 @@ class VariableInterpreter {
         var printRowIfNullValue: boolean = interpretedVariable["printRowIfNullValue"];
         var replaceNullValueBy: string = interpretedVariable["replaceNullValueBy"];
         var rows: Array<Object> = interpretedVariable["rows"];
-        var scope: string = interpretedVariable["scope"];
-        var actualScopedObject: Object = scopedObject;
-        if (typeof scope !== 'undefined') {
-            actualScopedObject = this.changeScope(actualScopedObject, scope);
-        }
+        var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
         var tableBuilder = new TableBuilder();
 
         $.each(rows, (index, item) => {

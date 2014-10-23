@@ -7,7 +7,7 @@
                 "$litType": {
                     "type": "array",           
                     "scope": "Pages", 
-                    "pattern": "<a href='urlHere'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>", 
+                    "pattern": "<a href='{BookId}'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>", 
                     "delimeter": " , "
                 },
                 "$LiteraryTypeStart": {
