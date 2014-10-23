@@ -34,6 +34,10 @@ class VariableInterpreter {
     }
 
     private setParentScope(scope: Object, parentScope: Object) {
+        if (scope === 'undefined' || scope === null) {
+            console.log("cannot set parent scope to null scope");
+            return;
+        }
         scope['parentScope'] = parentScope;
     }
 

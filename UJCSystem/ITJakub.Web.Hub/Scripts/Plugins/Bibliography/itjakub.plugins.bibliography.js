@@ -1,4 +1,4 @@
-﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts"/>
+﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -36,6 +36,7 @@ var BibliographyModule = (function () {
         var liElement = document.createElement('li');
         $(liElement).addClass('list-item');
         $(liElement).attr("data-bookId", bibItem.BookId);
+        $(liElement).attr("data-bookType", bibItem.BookType);
 
         var visibleContent = document.createElement('div');
         $(visibleContent).addClass('visible-content');
@@ -264,6 +265,77 @@ var DictionaryFactory = (function (_super) {
     return DictionaryFactory;
 })(BibliographyFactory);
 
+var CardFileFactory = (function (_super) {
+    __extends(CardFileFactory, _super);
+    function CardFileFactory(configuration) {
+        _super.call(this, configuration);
+    }
+    CardFileFactory.prototype.makeLeftPanel = function (bookInfo) {
+        var leftPanel = document.createElement('div');
+        $(leftPanel).addClass('left-panel');
+
+        var inputCheckbox = document.createElement('input');
+        inputCheckbox.type = "checkbox";
+        $(inputCheckbox).addClass('checkbox');
+        leftPanel.appendChild(inputCheckbox);
+
+        var starEmptyButton = document.createElement('button');
+        starEmptyButton.type = 'button';
+        $(starEmptyButton).addClass('btn btn-xs star-empty-button');
+        var spanEmptyStar = document.createElement('span');
+        $(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
+        starEmptyButton.appendChild(spanEmptyStar);
+        $(starEmptyButton).click(function (event) {
+            $(this).siblings('.star-button').show();
+            $(this).hide();
+        }); //TODO fill click action
+        leftPanel.appendChild(starEmptyButton);
+
+        var starButton = document.createElement('button');
+        starButton.type = 'button';
+        $(starButton).addClass('btn btn-xs star-button');
+        $(starButton).css('display', 'none');
+        var spanStar = document.createElement('span');
+        $(spanStar).addClass('glyphicon glyphicon-star');
+        starButton.appendChild(spanStar);
+        $(starButton).click(function (event) {
+            $(this).siblings('.star-empty-button').show();
+            $(this).hide();
+        }); //TODO fill click action
+        leftPanel.appendChild(starButton);
+
+        return leftPanel;
+    };
+
+    CardFileFactory.prototype.makeRightPanel = function (bookInfo) {
+        var rightPanel = document.createElement('div');
+        $(rightPanel).addClass('right-panel');
+
+        var bookButton = document.createElement('button');
+        bookButton.type = 'button';
+        $(bookButton).addClass('btn btn-sm book-button');
+        var spanBook = document.createElement('span');
+        $(spanBook).addClass('glyphicon glyphicon-book');
+        bookButton.appendChild(spanBook);
+        $(bookButton).click(function (event) {
+        }); //TODO fill click action
+        rightPanel.appendChild(bookButton);
+
+        var infoButton = document.createElement('button');
+        infoButton.type = 'button';
+        $(infoButton).addClass('btn btn-sm information-button');
+        var spanInfo = document.createElement('span');
+        $(spanInfo).addClass('glyphicon glyphicon-info-sign');
+        infoButton.appendChild(spanInfo);
+        $(infoButton).click(function (event) {
+        }); //TODO fill click action
+        rightPanel.appendChild(infoButton);
+
+        return rightPanel;
+    };
+    return CardFileFactory;
+})(BibliographyFactory);
+
 var EditionFactory = (function (_super) {
     __extends(EditionFactory, _super);
     function EditionFactory(configuration) {
@@ -347,6 +419,7 @@ var BibliographyFactoryResolver = (function () {
         this.m_factories['Edition'] = new EditionFactory(new ConfigurationManager(configObj["Edition"])); //TODO make enum bookType
         this.m_factories['Dictionary'] = new DictionaryFactory(new ConfigurationManager(configObj["Dictionary"]));
         this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new ConfigurationManager(configObj["OldCzechTextBank"]));
+        this.m_factories['CardFile'] = new CardFileFactory(new ConfigurationManager(configObj["CardFile"]));
     }
     BibliographyFactoryResolver.getInstance = function () {
         if (BibliographyFactoryResolver._instance === null) {

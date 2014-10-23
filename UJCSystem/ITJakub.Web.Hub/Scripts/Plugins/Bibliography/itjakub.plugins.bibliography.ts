@@ -1,4 +1,4 @@
-﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts"/>
+﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
 
 class BibliographyModule {
     private static _instance: BibliographyModule = null;
@@ -33,6 +33,7 @@ class BibliographyModule {
         var liElement: HTMLLIElement = document.createElement('li');
         $(liElement).addClass('list-item');
         $(liElement).attr("data-bookId", bibItem.BookId);
+        $(liElement).attr("data-bookType", bibItem.BookType);
 
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
@@ -260,6 +261,79 @@ class DictionaryFactory extends BibliographyFactory {
     }
 }
 
+class CardFileFactory extends BibliographyFactory {
+
+    constructor(configuration: ConfigurationManager) {
+        super(configuration);
+    }
+
+    makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
+        var leftPanel: HTMLDivElement = document.createElement('div');
+        $(leftPanel).addClass('left-panel');
+
+        var inputCheckbox: HTMLInputElement = document.createElement('input');
+        inputCheckbox.type = "checkbox";
+        $(inputCheckbox).addClass('checkbox');
+        leftPanel.appendChild(inputCheckbox);
+
+        var starEmptyButton: HTMLButtonElement = document.createElement('button');
+        starEmptyButton.type = 'button';
+        $(starEmptyButton).addClass('btn btn-xs star-empty-button');
+        var spanEmptyStar: HTMLSpanElement = document.createElement('span');
+        $(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
+        starEmptyButton.appendChild(spanEmptyStar);
+        $(starEmptyButton).click(function(event) {
+            $(this).siblings('.star-button').show();
+            $(this).hide();
+        }); //TODO fill click action
+        leftPanel.appendChild(starEmptyButton);
+
+        var starButton: HTMLButtonElement = document.createElement('button');
+        starButton.type = 'button';
+        $(starButton).addClass('btn btn-xs star-button');
+        $(starButton).css('display', 'none');
+        var spanStar: HTMLSpanElement = document.createElement('span');
+        $(spanStar).addClass('glyphicon glyphicon-star');
+        starButton.appendChild(spanStar);
+        $(starButton).click(function(event) {
+            $(this).siblings('.star-empty-button').show();
+            $(this).hide();
+        }); //TODO fill click action
+        leftPanel.appendChild(starButton);
+
+        return leftPanel;
+    }
+
+    makeRightPanel(bookInfo: IBookInfo): HTMLDivElement {
+        var rightPanel: HTMLDivElement = document.createElement('div');
+        $(rightPanel).addClass('right-panel');
+
+        var bookButton: HTMLButtonElement = document.createElement('button');
+        bookButton.type = 'button';
+        $(bookButton).addClass('btn btn-sm book-button');
+        var spanBook: HTMLSpanElement = document.createElement('span');
+        $(spanBook).addClass('glyphicon glyphicon-book');
+        bookButton.appendChild(spanBook);
+        $(bookButton).click((event) => {
+
+        }); //TODO fill click action
+        rightPanel.appendChild(bookButton);
+
+        var infoButton: HTMLButtonElement = document.createElement('button');
+        infoButton.type = 'button';
+        $(infoButton).addClass('btn btn-sm information-button');
+        var spanInfo: HTMLSpanElement = document.createElement('span');
+        $(spanInfo).addClass('glyphicon glyphicon-info-sign');
+        infoButton.appendChild(spanInfo);
+        $(infoButton).click((event) => {
+
+        }); //TODO fill click action
+        rightPanel.appendChild(infoButton);
+
+        return rightPanel;
+    }
+}
+
 class EditionFactory extends BibliographyFactory {
 
 
@@ -350,6 +424,7 @@ class BibliographyFactoryResolver {
         this.m_factories['Edition'] = new EditionFactory(new ConfigurationManager(configObj["Edition"])); //TODO make enum bookType
         this.m_factories['Dictionary'] = new DictionaryFactory(new ConfigurationManager(configObj["Dictionary"]));
         this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new ConfigurationManager(configObj["OldCzechTextBank"]));
+        this.m_factories['CardFile'] = new CardFileFactory(new ConfigurationManager(configObj["CardFile"]));
 
     }
 
@@ -400,14 +475,13 @@ class ConfigurationManager {
     getCustomInMiddlePanel(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['custom'], this.config['middle-panel']['variables'], bibItem); }
 
     getCustomInBottomPanel(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['bottom-panel']['custom'], this.config['bottom-panel']['variables'], bibItem); }
-    
+
 }
 
 interface IBookInfo {
     BookId: string;
     BookType: string;
     Name: string;
-    Body: string;
     Editor: string;
     Pattern: string;
     SourceAbbreviation: string;
@@ -418,9 +492,12 @@ interface IBookInfo {
     EditationNote: string; //anchor href?
     Copyright: string;
     Pages: IPage[];
-    Archive: Archive;
+    Archive: IArchive;
     Century: number;
     Sign: string;
+    Authors: IAuthor[];
+    Description: string;
+    Year: number;
 }
 
 interface IPage {
@@ -428,8 +505,13 @@ interface IPage {
     End: number;
 }
 
-interface Archive {
+interface IArchive {
     Name: string;
     City: string;
     State: string;
+}
+
+interface IAuthor {
+    FirstName: string;
+    LastName: string;
 }

@@ -21,11 +21,14 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                 {
                     bookType = "OldCzechTextBank";
                 }
+                if (int.Parse(bookId) % 4 == 0)
+                {
+                    bookType = "CardFile";
+                }
                 listBooks.Add(new BookInfo
                 {
                     BookId = bookId,
                     BookType = bookType,
-                    Body = "here is body",
                     Editor = "Alenka Cerna",
                     Copyright = "Černá, Alena M.,2013, oddělení vývoje jazyka UJC AV CR, v.v.i., 2013",
                     LastEditation = "25.6.1989",
@@ -34,7 +37,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                     Name = "Rukopis kunhuta",
                     Pattern = "Broucci",
                     RelicAbbreviation = "relAbr",
-                    SourceAbbreviation = "sourceAbr",
+                    SourceAbbreviation = "RK",
                     Pages =
                         new List<Page>
                         {
@@ -44,7 +47,10 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                         },
                     Century = 13,
                     Sign = "VII G 17 d",
-                    Archive = new Archive() { Name = "Narodni knihovna ceske republiky", City = "Praha", State = "Cesko"}
+                    Archive = new Archive() { Name = "Narodni knihovna ceske republiky", City = "Praha", State = "Cesko"},
+                    Authors = new List<Author>() { new Author(){FirstName = "Josef", LastName = "Novak"}, new Author(){FirstName = "Jaroslav", LastName = "Tuhik"}},
+                    Description = "Elementa latinae, boemicae ac germanicae linugae",
+                    Year = 1532
                 });
             }
 
@@ -61,16 +67,28 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                 {
                     BookId = type[i] + i.ToString(),
                     BookType = type,
-                    Body = "here is body",
                     Editor = "Alenka Cerna",
-                    Copyright = "alenka",
+                    Copyright = "Černá, Alena M.,2013, oddělení vývoje jazyka UJC AV CR, v.v.i., 2013",
                     LastEditation = "25.6.1989",
                     LiteraryGenre = "proza",
                     LiteraryType = "type",
                     Name = "Rukopis kunhuta",
                     Pattern = "Broucci",
-                    RelicAbbreviation = "a",
-                    SourceAbbreviation = ""
+                    RelicAbbreviation = "relAbr",
+                    SourceAbbreviation = "RK",
+                    Pages =
+                        new List<Page>
+                        {
+                            new Page {Start = "0", End = "4"},
+                            new Page {Start = "15", End = "45"},
+                            new Page {Start = "200"}
+                        },
+                    Century = 13,
+                    Sign = "VII G 17 d",
+                    Archive = new Archive() { Name = "Narodni knihovna ceske republiky", City = "Praha", State = "Cesko" },
+                    Authors = new List<Author>() { new Author() { FirstName = "Josef", LastName = "Novak" }, new Author() { FirstName = "Jaroslav", LastName = "Tuhik" } },
+                    Description = "Elementa latinae, boemicae ac germanicae linugae",
+                    Year = 1532
                 };
                 listBooks.Add(bookInfo);
             }
@@ -84,7 +102,6 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
         public string BookId { get; set; }
         public string BookType { get; set; }
         public string Name { get; set; }
-        public string Body { get; set; }
         public string Editor { get; set; }
         public string Pattern { get; set; }
         public string SourceAbbreviation { get; set; }
@@ -95,6 +112,10 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
         public string Copyright { get; set; }
         public int Century { get; set; }
         public string Sign { get; set; }
+        public string Description { get; set; }
+        public int Year { get; set; }
+
+        public List<Author> Authors { get; set; }
 
         public Archive Archive { get; set; }
 
@@ -105,6 +126,12 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
     {
         public string Start { get; set; }
         public string End { get; set; }
+    }
+
+    public class Author
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 
     public class Archive

@@ -33,6 +33,10 @@
     };
 
     VariableInterpreter.prototype.setParentScope = function (scope, parentScope) {
+        if (scope === 'undefined' || scope === null) {
+            console.log("cannot set parent scope to null scope");
+            return;
+        }
         scope['parentScope'] = parentScope;
     };
 

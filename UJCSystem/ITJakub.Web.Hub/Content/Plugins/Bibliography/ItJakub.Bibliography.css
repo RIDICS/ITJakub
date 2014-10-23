@@ -44,7 +44,7 @@ ul.bib-listing li.list-item .hidden-content {
   padding: 2px;
   display: none;
   overflow-y: auto;
-  max-height: 200px;
+  /*max-height: 200px;*/
 }
 ul.bib-listing li.list-item .hidden-content .bottom-panel .body {
   padding: 10px 5px 10px 30px;
