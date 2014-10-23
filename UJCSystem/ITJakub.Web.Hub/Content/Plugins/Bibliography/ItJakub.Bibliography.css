@@ -1,14 +1,17 @@
-﻿ul.listing {
+﻿ul.bib-listing {
   width: 80%;
 }
-ul.listing li.list-item {
+ul.bib-listing li.list-item {
   background-color: white;
   margin-top: 10px;
 }
-ul.listing li.list-item .visible-content {
+ul.bib-listing li.list-item a {
+  color: #84ced7;
+}
+ul.bib-listing li.list-item .visible-content {
   height: 120px;
 }
-ul.listing li.list-item .left-panel {
+ul.bib-listing li.list-item .left-panel {
   float: left;
   width: 10px;
   padding: 2px;
@@ -16,17 +19,17 @@ ul.listing li.list-item .left-panel {
   text-align: center;
   position: relative;
 }
-ul.listing li.list-item .middle-panel {
+ul.bib-listing li.list-item .middle-panel {
   padding: 10px 5px 10px 15px;
   overflow-y: auto;
   max-height: 120px;
 }
-ul.listing li.list-item .middle-panel .heading {
+ul.bib-listing li.list-item .middle-panel .heading {
   font-size: 24px;
   font-weight: 500;
   margin-bottom: 5px;
 }
-ul.listing li.list-item .right-panel {
+ul.bib-listing li.list-item .right-panel {
   float: right;
   width: 100px;
   background-color: #84ced7;
@@ -34,7 +37,7 @@ ul.listing li.list-item .right-panel {
   text-align: center;
   position: relative;
 }
-ul.listing li.list-item .hidden-content {
+ul.bib-listing li.list-item .hidden-content {
   border-top: 1px solid #e5e5e5;
   clear: both;
   width: 100%;
@@ -42,6 +45,9 @@ ul.listing li.list-item .hidden-content {
   display: none;
   overflow-y: auto;
   max-height: 200px;
+}
+ul.bib-listing li.list-item .hidden-content .bottom-panel .body {
+  padding: 10px 5px 10px 30px;
 }
 .hide-button {
   display: none;
@@ -54,14 +60,14 @@ ul.listing li.list-item .hidden-content {
   margin-left: -20px;
   /* half size of button + padding*/
 }
-ul.listing li.list-item .right-panel button {
+ul.bib-listing li.list-item .right-panel button {
   background-color: transparent;
   border: none;
   color: white;
   outline: none!important;
   box-shadow: none !important;
 }
-ul.listing li.list-item .left-panel button,
+ul.bib-listing li.list-item .left-panel button,
 ul.listing li.list-item .left-panel input {
   background-color: transparent;
   border: none;
@@ -70,30 +76,32 @@ ul.listing li.list-item .left-panel input {
   padding: 0;
   margin: 2px 1px 1px 2px;
 }
-ul.listing li.list-item .left-panel button > span {
+ul.bib-listing li.list-item .left-panel button > span {
   font-size: 14px;
   margin: 0;
   padding: 0;
 }
-ul.listing li.list-item .right-panel button > span {
+ul.bib-listing li.list-item .right-panel button > span {
   font-size: 20px;
 }
-ul.listing li.list-item .table {
+ul.bib-listing li.list-item .table {
   display: table;
-  width: 60%;
-  padding: 10px 5px 10px 30px;
+  width: 80%;
   line-height: 1.1;
+  margin-bottom: 0;
 }
-ul.listing li.list-item .row {
+ul.bib-listing li.list-item .bib-table-row {
   display: table-row;
 }
-ul.listing li.list-item .cell {
+ul.bib-listing li.list-item .bib-table-cell {
   display: table-cell;
   text-align: left;
+  padding-left: 20px;
 }
-ul.listing li.list-item .label {
+ul.bib-listing li.list-item .label {
   font-weight: bold;
   font-size: 100%;
   color: black;
+  padding-left: 0;
 }
-/*# sourceMappingURL=ItJakub.Bibliography.css.map */
+/*# sourceMappingURL=ITJakub.Bibliography.css.map */

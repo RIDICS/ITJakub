@@ -8,20 +8,44 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
         // GET: Bibliographies
         public ActionResult Books(IEnumerable<string> bookIds)
         {
-            List<BookInfo> listBooks = new List<BookInfo>();
+            var listBooks = new List<BookInfo>();
 
             foreach (string bookId in bookIds)
             {
-                var bookType = "Edition";
+                string bookType = "Edition";
                 if (int.Parse(bookId)%2 == 0)
                 {
                     bookType = "Dictionary";
                 }
-                if (int.Parse(bookId) % 3 == 0)
+                if (int.Parse(bookId)%3 == 0)
                 {
                     bookType = "OldCzechTextBank";
                 }
-                listBooks.Add(new BookInfo{BookId = bookId,BookType = bookType,Body = "here is body",Editor = "Alenka Cerna",Copyright = "alenka",LastEditation = "25.6.1989",LiteraryGenre = "proza",LiteraryType = "type",Name = "Rukopis kunhuta",Pattern = "Broucci",RelicAbbreviation = "relAbr",SourceAbbreviation = "sourceAbr", Pages = new List<Page>(){new Page(){Start = "0", End = "4"}, new Page(){Start = "15", End = "45"}, new Page(){Start = "200"}}}); 
+                listBooks.Add(new BookInfo
+                {
+                    BookId = bookId,
+                    BookType = bookType,
+                    Body = "here is body",
+                    Editor = "Alenka Cerna",
+                    Copyright = "Černá, Alena M.,2013, oddělení vývoje jazyka UJC AV CR, v.v.i., 2013",
+                    LastEditation = "25.6.1989",
+                    LiteraryGenre = "proza",
+                    LiteraryType = "type",
+                    Name = "Rukopis kunhuta",
+                    Pattern = "Broucci",
+                    RelicAbbreviation = "relAbr",
+                    SourceAbbreviation = "sourceAbr",
+                    Pages =
+                        new List<Page>
+                        {
+                            new Page {Start = "0", End = "4"},
+                            new Page {Start = "15", End = "45"},
+                            new Page {Start = "200"}
+                        },
+                    Century = 13,
+                    Sign = "VII G 17 d",
+                    Archive = new Archive() { Name = "Narodni knihovna ceske republiky", City = "Praha", State = "Cesko"}
+                });
             }
 
             return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);
@@ -69,6 +93,10 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
         public string LiteraryGenre { get; set; }
         public string LastEditation { get; set; }
         public string Copyright { get; set; }
+        public int Century { get; set; }
+        public string Sign { get; set; }
+
+        public Archive Archive { get; set; }
 
         public List<Page> Pages { get; set; }
     }
@@ -77,5 +105,12 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
     {
         public string Start { get; set; }
         public string End { get; set; }
+    }
+
+    public class Archive
+    {
+        public string Name { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
     }
 }

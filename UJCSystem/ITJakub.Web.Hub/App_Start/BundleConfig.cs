@@ -36,12 +36,11 @@ namespace ITJakub.Web.Hub
                 "~/Content/bootstrap.css",
                 "~/Content/site.css"));
 
+            bundles.Add(new StyleBundle("~/Content/itjakub").Include("~/Content/ITJakub.css"));
+
             bundles.Add(new StyleBundle("~/Content/dropzonescss").Include(
                      "~/Scripts/dropzone/css/basic.css",
                      "~/Scripts/dropzone/css/dropzone.css"));
-
-            bundles.Add(new StyleBundle("~/itjakub/css").Include(
-                "~/Content/ITJakub.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

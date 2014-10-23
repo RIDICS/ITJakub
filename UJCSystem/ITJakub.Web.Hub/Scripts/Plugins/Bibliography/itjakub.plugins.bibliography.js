@@ -24,7 +24,7 @@ var BibliographyModule = (function () {
         var _this = this;
         $(container).empty();
         var rootElement = document.createElement('ul');
-        $(rootElement).addClass('listing');
+        $(rootElement).addClass('bib-listing');
         $.each(books, function (index, book) {
             var bibliographyHtml = _this.makeBibliography(book);
             rootElement.appendChild(bibliographyHtml);
@@ -94,16 +94,16 @@ var BibliographyFactory = (function () {
         var middlePanel = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
 
-        if (this.configuration.containsTitle()) {
+        if (this.configuration.containsMiddlePanelTitle()) {
             var middlePanelHeading = document.createElement('div');
             $(middlePanelHeading).addClass('heading');
             middlePanelHeading.innerHTML = this.configuration.getTitle(bookInfo);
             middlePanel.appendChild(middlePanelHeading);
         }
-        if (this.configuration.containsBody()) {
+        if (this.configuration.containsMiddlePanelBody()) {
             var middlePanelBody = document.createElement('div');
             $(middlePanelBody).addClass('body');
-            middlePanelBody.innerHTML = this.configuration.getBody(bookInfo);
+            middlePanelBody.innerHTML = this.configuration.getMiddlePanelBody(bookInfo);
             middlePanel.appendChild(middlePanelBody);
         }
 
@@ -122,6 +122,14 @@ var BibliographyFactory = (function () {
             return null;
 
         var bottomPanel = document.createElement('div');
+        $(bottomPanel).addClass('bottom-panel');
+
+        if (this.configuration.containsBottomPanelBody()) {
+            var bottomPanelBody = document.createElement('div');
+            $(bottomPanelBody).addClass('body');
+            bottomPanelBody.innerHTML = this.configuration.getBottomPanelBody(bookInfo);
+            bottomPanel.appendChild(bottomPanelBody);
+        }
 
         if (this.configuration.containsCustomInBottomPanel()) {
             var customDiv = document.createElement('div');
@@ -375,11 +383,15 @@ var ConfigurationManager = (function () {
         return typeof this.config['bottom-panel']['custom'] !== 'undefined';
     };
 
-    ConfigurationManager.prototype.containsBody = function () {
+    ConfigurationManager.prototype.containsMiddlePanelBody = function () {
         return typeof this.config["middle-panel"]['body'] !== 'undefined';
     };
 
-    ConfigurationManager.prototype.containsTitle = function () {
+    ConfigurationManager.prototype.containsBottomPanelBody = function () {
+        return typeof this.config["bottom-panel"]['body'] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.containsMiddlePanelTitle = function () {
         return typeof this.config["middle-panel"]['title'] !== 'undefined';
     };
 
@@ -387,8 +399,12 @@ var ConfigurationManager = (function () {
         return this.varInterpreter.interpret(this.config['middle-panel']['title'], this.config['middle-panel']['variables'], bibItem);
     };
 
-    ConfigurationManager.prototype.getBody = function (bibItem) {
+    ConfigurationManager.prototype.getMiddlePanelBody = function (bibItem) {
         return this.varInterpreter.interpret(this.config['middle-panel']['body'], this.config['middle-panel']['variables'], bibItem);
+    };
+
+    ConfigurationManager.prototype.getBottomPanelBody = function (bibItem) {
+        return this.varInterpreter.interpret(this.config['bottom-panel']['body'], this.config['bottom-panel']['variables'], bibItem);
     };
 
     ConfigurationManager.prototype.getCustomInMiddlePanel = function (bibItem) {

@@ -207,49 +207,31 @@
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\dropzones.css">
-      <DependentUpon>dropzones.less</DependentUpon>
-    </Content>
-    <Content Include="Content\dropzones.min.css">
-      <DependentUpon>dropzones.css</DependentUpon>
-    </Content>
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\Images\glyphicons_chevron.png" />
     <Content Include="Content\Images\glyphicons_chevron_green.png" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\mlceni.jpg" />
     <Content Include="Content\Images\news_background.png" />
-    <Content Include="Content\Plugins\Bibliography\ItJakub.Bibliography.css">
-      <DependentUpon>ITJakub.Bibliography.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Plugins\Bibliography\ItJakub.Bibliography.min.css">
-      <DependentUpon>ItJakub.Bibliography.css</DependentUpon>
-    </Content>
-    <Content Include="Content\itjakub.css">
-      <DependentUpon>ITJakub.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Plugins\Bibliography\ItJakub.ListItem.css">
-      <DependentUpon>ITJakub.Bibliography.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Plugins\Bibliography\ItJakub.ListItem.min.css">
-      <DependentUpon>ItJakub.ListItem.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Plugins\Bibliography\ItJakub.MainMenu - Copy.css">
-      <DependentUpon>ITJakub.Bibliography.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Plugins\Bibliography\ItJakub.MainMenu - Copy.min.css">
-      <DependentUpon>ItJakub.MainMenu - Copy.css</DependentUpon>
-    </Content>
-    <Content Include="Content\itjakub.min.css">
-      <DependentUpon>itjakub.css</DependentUpon>
-    </Content>
-    <Content Include="Content\ITJakub.PluginMenu.css">
-      <DependentUpon>ITJakub.PluginMenu.less</DependentUpon>
-    </Content>
-    <Content Include="Content\ITJakub.PluginMenu.min.css">
-      <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
+    <Content Include="Content\ITJakub.css.map">
+      <DependentUpon>ITJakub.css</DependentUpon>
     </Content>
     <None Include="Content\Plugins\Bibliography\configuration.json" />
+    <Content Include="Content\ITJakub.css">
+      <DependentUpon>ITJakub.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.min.css">
+      <DependentUpon>ITJakub.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.css">
+      <DependentUpon>ITJakub.Bibliography.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.min.css">
+      <DependentUpon>ITJakub.Bibliography.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.min.css">
+      <DependentUpon>Site.css</DependentUpon>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -337,9 +319,6 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.less" />
     <Content Include="Content\ITJakub.less" />
-    <Content Include="Content\itjakub.css.map">
-      <DependentUpon>itjakub.css</DependentUpon>
-    </Content>
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.css.map">
       <DependentUpon>itjakub.dictionaries.css</DependentUpon>
     </Content>
@@ -348,18 +327,12 @@
       <DependentUpon>itjakub.editions.css</DependentUpon>
     </Content>
     <Content Include="Content\ITJakub.PluginMenu.less" />
-    <Content Include="Content\ITJakub.PluginMenu.css.map">
-      <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
-    </Content>
     <Content Include="Scripts\itjakub.upload.js" />
     <Content Include="Scripts\dropzone\css\basic.css" />
     <Content Include="Scripts\dropzone\css\dropzone.css" />
     <Content Include="Scripts\dropzone\css\stylus\dropzone.styl" />
     <Content Include="Scripts\dropzone\css\stylus\basic.styl" />
     <Content Include="Content\dropzones.less" />
-    <Content Include="Content\dropzones.css.map">
-      <DependentUpon>dropzones.css</DependentUpon>
-    </Content>
     <Content Include="Content\ITJakub.DefaultTheme.less" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\List.cshtml" />
@@ -369,18 +342,12 @@
     <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\TermsOfUse.cshtml" />
     <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.less" />
-    <Content Include="Content\Plugins\Bibliography\ItJakub.MainMenu - Copy.css.map">
-      <DependentUpon>ItJakub.MainMenu - Copy.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Plugins\Bibliography\ItJakub.ListItem.css.map">
-      <DependentUpon>ItJakub.ListItem.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Plugins\Bibliography\ItJakub.Bibliography.css.map">
-      <DependentUpon>ItJakub.Bibliography.css</DependentUpon>
-    </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.css.map">
+      <DependentUpon>ITJakub.Bibliography.css</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />

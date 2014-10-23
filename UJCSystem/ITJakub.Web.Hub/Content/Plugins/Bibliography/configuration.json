@@ -1,8 +1,8 @@
 ﻿{
     "Edition": {
         "middle-panel": {
-            "title": "Nazev: {Name}{$editor} {$litType}",
-            "body": "{Body}",
+            "title": "{Name}",
+            "body": "{$archive}{$sign}{$pages}{$century}",
             "variables": {
                 "$litType": {
                     "type": "array",
@@ -22,28 +22,38 @@
                     "printIfNullValue": false,
                     "replaceNullValueBy": ""
                 },
-                "$editor": {
+                "$sign": {
                     "type": "basic",
-                    "pattern": ", {Editor}",
-                    "printIfNullValue": true,
+                    "pattern": ", {Sign}",
+                    "printIfNullValue": false,
                     "replaceNullValueBy": ""
                 },
-                "$editionTable": {
-                    "type": "table",
-                    "printRowIfNullValue": true,
-                    "replaceNullValueBy": "&lt;Nezadáno&gt;",
-                    "rows": [ { "label": "Editor", "pattern": "{Editor}" }, { "label": "Předloha", "pattern": "{Pattern}" }, { "label": "Zkratka památky", "pattern": "{RelicAbbreviation}" } ]
-                }
+                "$archive": {
+                    "type": "basic",
+                    "scope":  "Archive",
+                    "pattern": " {Name} ({City}, {State})",
+                    "printIfNullValue": false
+                },
+                "$century": {
+                    "type": "basic",
+                    "pattern": ", {Century}. století",
+                    "printIfNullValue": false
+                },
+                "$pages": {
+                    "type": "basic",
+                    "pattern": ", 155v- 166v,//TODO Pages?//167v-258v ",
+                    "printIfNullValue": false
+                }               
             }
         },
         "bottom-panel": {
-            "custom": "{$editionTable}",
+            "body": "{$editionTable}<a href=''>Editační poznámka</a> <br> <a href=''>Copyright</a> {Copyright}",
             "variables": {
                 "$editionTable": {
                     "type": "table",
                     "printRowIfNullValue": true,
                     "replaceNullValueBy": "&lt;Nezadáno&gt;",
-                    "rows": [ { "label": "Editor", "pattern": "{Editor}" }, { "label": "Předloha", "pattern": "{Pattern}" }, { "label": "Zkratka památky", "pattern": "{RelicAbbreviation}" }, { "label": "Zkratka pramene", "pattern": "{SourceAbbreviation}" } , { "label": "Literární druh", "pattern": "{LiteraryType}" }, { "label": "Literární žánr", "pattern": "{LiteraryGenre}" }, { "label": "Poslední úprava edice", "pattern": "{LastEditation}" }]
+                    "rows": [ { "label": "Editor", "pattern": "{Editor}" }, { "label": "Předloha", "pattern": "{Pattern}" }, { "label": "Zkratka památky", "pattern": "{RelicAbbreviation}" }, { "label": "Zkratka pramene", "pattern": "{SourceAbbreviation}" }, { "label": "Literární druh", "pattern": "{LiteraryType}" }, { "label": "Literární žánr", "pattern": "{LiteraryGenre}" }, { "label": "Poslední úprava edice", "pattern": "{LastEditation}" } ]
                 }
             }
         }

@@ -21,7 +21,7 @@ class BibliographyModule {
     public showBooks(books: IBookInfo[], container: string) {
         $(container).empty();
         var rootElement: HTMLUListElement = document.createElement('ul');
-        $(rootElement).addClass('listing');
+        $(rootElement).addClass('bib-listing');
         $.each(books, (index, book: IBookInfo) => {
             var bibliographyHtml = this.makeBibliography(book);
             rootElement.appendChild(bibliographyHtml);
@@ -89,16 +89,16 @@ class BibliographyFactory {
         $(middlePanel).addClass('middle-panel');
 
 
-        if (this.configuration.containsTitle()) {
+        if (this.configuration.containsMiddlePanelTitle()) {
             var middlePanelHeading: HTMLDivElement = document.createElement('div');
             $(middlePanelHeading).addClass('heading');
             middlePanelHeading.innerHTML = this.configuration.getTitle(bookInfo);
             middlePanel.appendChild(middlePanelHeading);
         }
-        if (this.configuration.containsBody()) {
+        if (this.configuration.containsMiddlePanelBody()) {
             var middlePanelBody: HTMLDivElement = document.createElement('div');
             $(middlePanelBody).addClass('body');
-            middlePanelBody.innerHTML = this.configuration.getBody(bookInfo);
+            middlePanelBody.innerHTML = this.configuration.getMiddlePanelBody(bookInfo);
             middlePanel.appendChild(middlePanelBody);
         }
 
@@ -116,6 +116,14 @@ class BibliographyFactory {
         if (!this.configuration.containsBottomPanel()) return null;
 
         var bottomPanel: HTMLDivElement = document.createElement('div');
+        $(bottomPanel).addClass('bottom-panel');
+
+        if (this.configuration.containsBottomPanelBody()) {
+            var bottomPanelBody: HTMLDivElement = document.createElement('div');
+            $(bottomPanelBody).addClass('body');
+            bottomPanelBody.innerHTML = this.configuration.getBottomPanelBody(bookInfo);
+            bottomPanel.appendChild(bottomPanelBody);
+        }
 
         if (this.configuration.containsCustomInBottomPanel()) {
             var customDiv: HTMLDivElement = document.createElement('div');
@@ -377,17 +385,22 @@ class ConfigurationManager {
 
     containsCustomInBottomPanel() { return typeof this.config['bottom-panel']['custom'] !== 'undefined'; }
 
-    containsBody() { return typeof this.config["middle-panel"]['body'] !== 'undefined'; }
+    containsMiddlePanelBody() { return typeof this.config["middle-panel"]['body'] !== 'undefined'; }
 
-    containsTitle() { return typeof this.config["middle-panel"]['title'] !== 'undefined'; }
+    containsBottomPanelBody() { return typeof this.config["bottom-panel"]['body'] !== 'undefined'; }
+
+    containsMiddlePanelTitle() { return typeof this.config["middle-panel"]['title'] !== 'undefined'; }
 
     getTitle(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['title'], this.config['middle-panel']['variables'], bibItem); }
 
-    getBody(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['body'], this.config['middle-panel']['variables'], bibItem); }
+    getMiddlePanelBody(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['body'], this.config['middle-panel']['variables'], bibItem); }
+
+    getBottomPanelBody(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['bottom-panel']['body'], this.config['bottom-panel']['variables'], bibItem); }
 
     getCustomInMiddlePanel(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['custom'], this.config['middle-panel']['variables'], bibItem); }
 
     getCustomInBottomPanel(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['bottom-panel']['custom'], this.config['bottom-panel']['variables'], bibItem); }
+    
 }
 
 interface IBookInfo {
@@ -405,10 +418,18 @@ interface IBookInfo {
     EditationNote: string; //anchor href?
     Copyright: string;
     Pages: IPage[];
-
+    Archive: Archive;
+    Century: number;
+    Sign: string;
 }
 
 interface IPage {
     Start: number;
     End: number;
+}
+
+interface Archive {
+    Name: string;
+    City: string;
+    State: string;
 }

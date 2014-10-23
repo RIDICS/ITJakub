@@ -65,6 +65,7 @@ class VariableInterpreter {
                 }
             }
 
+            result = String(result); //convert if typeof result was not string    
             if (typeof result !== 'undefined' && result !== null && result.length > 0) {
                 return result;
             }
@@ -170,18 +171,18 @@ class TableBuilder {
 
     constructor() {
         this.m_tableDiv = document.createElement('div');
-        $(this.m_tableDiv).addClass('table');
+        $(this.m_tableDiv).addClass('bib-table');
     }
 
     public makeTableRow(label: string, value: string): void {
         var rowDiv: HTMLDivElement = document.createElement('div');
-        $(rowDiv).addClass('row');
+        $(rowDiv).addClass('bib-table-row');
         var labelDiv: HTMLDivElement = document.createElement('div');
-        $(labelDiv).addClass('cell label');
+        $(labelDiv).addClass('bib-table-cell label');
         labelDiv.innerHTML = label;
         rowDiv.appendChild(labelDiv);
         var valueDiv: HTMLDivElement = document.createElement('div');
-        $(valueDiv).addClass('cell');
+        $(valueDiv).addClass('bib-table-cell');
         valueDiv.innerHTML = value;
         rowDiv.appendChild(valueDiv);
         this.m_tableDiv.appendChild(rowDiv);

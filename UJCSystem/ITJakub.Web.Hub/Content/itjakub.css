@@ -1,100 +1,85 @@
-﻿ul.listing {
-  width: 80%;
-}
-ul.listing li.list-item {
-  background-color: white;
-  margin-top: 10px;
-}
-ul.listing li.list-item .visible-content {
-  height: 120px;
-}
-ul.listing li.list-item .left-panel {
-  float: left;
-  width: 10px;
-  padding: 2px;
-  align-items: center;
+﻿#dropzoneFileForm {
+  background: white;
+  background-image: none;
+  border: black dashed 3px;
+  width: 300px;
+  height: 110px;
   text-align: center;
-  position: relative;
-}
-ul.listing li.list-item .middle-panel {
-  padding: 10px 5px 10px 15px;
-  overflow-y: auto;
-  max-height: 120px;
-}
-ul.listing li.list-item .middle-panel .heading {
-  font-size: 24px;
-  font-weight: 500;
-  margin-bottom: 5px;
-}
-ul.listing li.list-item .right-panel {
-  float: right;
-  width: 100px;
-  background-color: #84ced7;
-  align-items: center;
-  text-align: center;
-  position: relative;
-}
-ul.listing li.list-item .hidden-content {
-  border-top: 1px solid #e5e5e5;
-  clear: both;
-  width: 100%;
-  padding: 2px;
-  display: none;
-  overflow-y: auto;
-  max-height: 200px;
-}
-.hide-button {
-  display: none;
-}
-.hide-button,
-.show-button {
-  position: absolute;
-  bottom: 5px;
-  left: 50%;
-  margin-left: -20px;
-  /* half size of button + padding*/
-}
-ul.listing li.list-item .right-panel button {
-  background-color: transparent;
-  border: none;
-  color: white;
-  outline: none!important;
-  box-shadow: none !important;
-}
-ul.listing li.list-item .left-panel button,
-ul.listing li.list-item .left-panel input {
-  background-color: transparent;
-  border: none;
-  outline: none!important;
-  box-shadow: none !important;
-  padding: 0;
-  margin: 2px 1px 1px 2px;
-}
-ul.listing li.list-item .left-panel button > span {
-  font-size: 14px;
-  margin: 0;
-  padding: 0;
-}
-ul.listing li.list-item .right-panel button > span {
-  font-size: 20px;
-}
-ul.listing li.list-item .table {
-  display: table;
-  width: 60%;
-  padding: 10px 5px 10px 30px;
-  line-height: 1.1;
-}
-ul.listing li.list-item .row {
-  display: table-row;
-}
-ul.listing li.list-item .cell {
-  display: table-cell;
-  text-align: left;
-}
-ul.listing li.list-item .label {
-  font-weight: bold;
-  font-size: 100%;
   color: black;
+  margin: auto;
+}
+#dropzoneFileForm .dz-default,
+#dropzoneFileForm .dz-message {
+  display: none;
+}
+#dropzoneFileFormPreview {
+  height: 330px;
+}
+.dz-clickable {
+  cursor: pointer;
+}
+#dropzoneFileForm div.additionalData {
+  margin-top: 10px;
+  overflow-y: visible;
+}
+#dropzoneFrontImageForm {
+  background: white;
+  border: black dashed 3px;
+  width: 300px;
+  height: 200px;
+  text-align: center;
+  color: black;
+  margin: auto;
+}
+#dropzoneImagesForm {
+  background: white;
+  border: black dashed 3px;
+  width: 300px;
+  height: 200px;
+  text-align: center;
+  color: black;
+  margin: auto;
+}
+ol.numbered {
+  counter-reset: li;
+  /* Initiate a counter */
+  padding: 25px 5px 5px 25px;
+}
+ol.numbered > li {
+  position: relative;
+  /* Create a positioning context */
+  margin-left: 15px;
+  padding: 3px 8px 30px 15px;
+  /* Add some spacing around the content */
+  list-style: none;
+  /* Disable the normal item numbering */
+  width: 95%;
+}
+ol.numbered > li:before {
+  content: counter(li);
+  /* Use the counter as content */
+  counter-increment: li;
+  /* Increment the counter by 1 */
+  /* Position and style the number */
+  position: absolute;
+  top: -2px;
+  left: -2em;
+  font-size: 15px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  width: 2em;
+  /* Some space between the number and the content in browsers that support
+       generated content but not positioning it (Camino 2 is one example) */
+  margin-right: 8px;
+  padding: 4px;
+  color: white;
+  background: #84ced7;
+  font-weight: bold;
+  text-align: center;
 }
 #main-plugins-menu span,
 #main-plugins-menu a {
@@ -296,88 +281,111 @@ ul.listing li.list-item .label {
   display: inline;
   float: left;
 }
-#dropzoneFileForm {
-  background: white;
-  background-image: none;
-  border: black dashed 3px;
-  width: 300px;
-  height: 110px;
-  text-align: center;
-  color: black;
-  margin: auto;
+ul.bib-listing {
+  width: 80%;
 }
-#dropzoneFileForm .dz-default,
-#dropzoneFileForm .dz-message {
+ul.bib-listing li.list-item {
+  background-color: white;
+  margin-top: 10px;
+}
+ul.bib-listing li.list-item a {
+  color: #84ced7;
+}
+ul.bib-listing li.list-item .visible-content {
+  height: 120px;
+}
+ul.bib-listing li.list-item .left-panel {
+  float: left;
+  width: 10px;
+  padding: 2px;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+ul.bib-listing li.list-item .middle-panel {
+  padding: 10px 5px 10px 15px;
+  overflow-y: auto;
+  max-height: 120px;
+}
+ul.bib-listing li.list-item .middle-panel .heading {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+ul.bib-listing li.list-item .right-panel {
+  float: right;
+  width: 100px;
+  background-color: #84ced7;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+ul.bib-listing li.list-item .hidden-content {
+  border-top: 1px solid #e5e5e5;
+  clear: both;
+  width: 100%;
+  padding: 2px;
+  display: none;
+  overflow-y: auto;
+  max-height: 200px;
+}
+ul.bib-listing li.list-item .hidden-content .bottom-panel .body {
+  padding: 10px 5px 10px 30px;
+}
+.hide-button {
   display: none;
 }
-#dropzoneFileFormPreview {
-  height: 330px;
-}
-.dz-clickable {
-  cursor: pointer;
-}
-#dropzoneFileForm div.additionalData {
-  margin-top: 10px;
-  overflow-y: visible;
-}
-#dropzoneFrontImageForm {
-  background: white;
-  border: black dashed 3px;
-  width: 300px;
-  height: 200px;
-  text-align: center;
-  color: black;
-  margin: auto;
-}
-#dropzoneImagesForm {
-  background: white;
-  border: black dashed 3px;
-  width: 300px;
-  height: 200px;
-  text-align: center;
-  color: black;
-  margin: auto;
-}
-ol.numbered {
-  counter-reset: li;
-  /* Initiate a counter */
-  padding: 25px 5px 5px 25px;
-}
-ol.numbered > li {
-  position: relative;
-  /* Create a positioning context */
-  margin-left: 15px;
-  padding: 3px 8px 30px 15px;
-  /* Add some spacing around the content */
-  list-style: none;
-  /* Disable the normal item numbering */
-  width: 95%;
-}
-ol.numbered > li:before {
-  content: counter(li);
-  /* Use the counter as content */
-  counter-increment: li;
-  /* Increment the counter by 1 */
-  /* Position and style the number */
+.hide-button,
+.show-button {
   position: absolute;
-  top: -2px;
-  left: -2em;
-  font-size: 15px;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  width: 2em;
-  /* Some space between the number and the content in browsers that support
-       generated content but not positioning it (Camino 2 is one example) */
-  margin-right: 8px;
-  padding: 4px;
+  bottom: 5px;
+  left: 50%;
+  margin-left: -20px;
+  /* half size of button + padding*/
+}
+ul.bib-listing li.list-item .right-panel button {
+  background-color: transparent;
+  border: none;
   color: white;
-  background: #84ced7;
+  outline: none!important;
+  box-shadow: none !important;
+}
+ul.bib-listing li.list-item .left-panel button,
+ul.listing li.list-item .left-panel input {
+  background-color: transparent;
+  border: none;
+  outline: none!important;
+  box-shadow: none !important;
+  padding: 0;
+  margin: 2px 1px 1px 2px;
+}
+ul.bib-listing li.list-item .left-panel button > span {
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+}
+ul.bib-listing li.list-item .right-panel button > span {
+  font-size: 20px;
+}
+ul.bib-listing li.list-item .table {
+  display: table;
+  width: 80%;
+  line-height: 1.1;
+  margin-bottom: 0;
+}
+ul.bib-listing li.list-item .bib-table-row {
+  display: table-row;
+}
+ul.bib-listing li.list-item .bib-table-cell {
+  display: table-cell;
+  text-align: left;
+  padding-left: 20px;
+}
+ul.bib-listing li.list-item .label {
   font-weight: bold;
-  text-align: center;
+  font-size: 100%;
+  color: black;
+  padding-left: 0;
 }
 .white-link {
   color: white;
@@ -592,4 +600,4 @@ div.container {
 .top-offset-without-submenu {
   margin: -25px 0 0 0;
 }
-/*# sourceMappingURL=itjakub.css.map */
+/*# sourceMappingURL=ITJakub.css.map */
