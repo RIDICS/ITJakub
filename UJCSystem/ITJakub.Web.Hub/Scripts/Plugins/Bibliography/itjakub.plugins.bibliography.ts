@@ -18,7 +18,6 @@ class BibliographyModule {
         return BibliographyModule._instance;
     }
 
-
     public showBooks(books: IBookInfo[], container: string) {
         $(container).empty();
         var rootElement: HTMLUListElement = document.createElement('ul');
@@ -121,7 +120,7 @@ class BibliographyFactory {
         if (this.configuration.containsCustomInBottomPanel()) {
             var customDiv: HTMLDivElement = document.createElement('div');
             $(customDiv).addClass('custom');
-            customDiv.innerHTML = this.configuration.getCustomInMiddlePanel(bookInfo);
+            customDiv.innerHTML = this.configuration.getCustomInBottomPanel(bookInfo);
             bottomPanel.appendChild(customDiv);
         }
 
@@ -314,21 +313,6 @@ class EditionFactory extends BibliographyFactory {
 
         return rightPanel;
     }
-
-    //makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
-    //    var tableBuilder = new TableBuilder();
-    //    tableBuilder.makeTableRow("Editor", bookInfo.Editor);
-    //    tableBuilder.makeTableRow("Předloha", bookInfo.Pattern);
-    //    tableBuilder.makeTableRow("Zkratka památky", bookInfo.RelicAbbreviation);
-    //    tableBuilder.makeTableRow("Zkratka pramene", bookInfo.SourceAbbreviation);
-    //    tableBuilder.makeTableRow("Literární druh", bookInfo.LiteraryType);
-    //    tableBuilder.makeTableRow("Literární žánr", bookInfo.LiteraryGenre);
-    //    tableBuilder.makeTableRow("Poslední úprava edice", bookInfo.LastEditation);
-
-    //    //TODO add Edicni poznamka anchor and copyright to hiddenContent here
-
-    //    return tableBuilder.build();
-    //}
 }
 
 class BibliographyFactoryResolver {

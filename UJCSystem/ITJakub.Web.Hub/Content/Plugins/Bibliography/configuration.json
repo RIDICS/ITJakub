@@ -1,29 +1,29 @@
 ﻿{
     "Edition": {
         "middle-panel": {
-            "title": "Nazev: {Name}{$editor} {$litType}", 
-            "body": "{$editionTable}",
+            "title": "Nazev: {Name}{$editor} {$litType}",
+            "body": "{Body}",
             "variables": {
                 "$litType": {
-                    "type": "array",           
-                    "scope": "Pages", 
-                    "pattern": "<a href='{BookId}'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>", 
+                    "type": "array",
+                    "scope": "Pages",
+                    "pattern": "<a href='{BookId}'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>",
                     "delimeter": " , "
                 },
                 "$LiteraryTypeStart": {
-                    "type": "primitive",
+                    "type": "basic",
                     "pattern": "{Start}",
                     "printIfNullValue": false,
                     "replaceNullValueBy": ""
                 },
-                 "$LiteraryTypeEnd": {
-                    "type": "primitive",
+                "$LiteraryTypeEnd": {
+                    "type": "basic",
                     "pattern": "-{End}",
                     "printIfNullValue": false,
                     "replaceNullValueBy": ""
                 },
                 "$editor": {
-                    "type": "primitive",
+                    "type": "basic",
                     "pattern": ", {Editor}",
                     "printIfNullValue": true,
                     "replaceNullValueBy": ""
@@ -31,13 +31,21 @@
                 "$editionTable": {
                     "type": "table",
                     "printRowIfNullValue": true,
-                    "replaceNullValueBy": "&lt;Nezadáno&gt;", 
+                    "replaceNullValueBy": "&lt;Nezadáno&gt;",
                     "rows": [ { "label": "Editor", "pattern": "{Editor}" }, { "label": "Předloha", "pattern": "{Pattern}" }, { "label": "Zkratka památky", "pattern": "{RelicAbbreviation}" } ]
                 }
             }
         },
         "bottom-panel": {
-            "custom": "copy: {Copyright}"
+            "custom": "{$editionTable}",
+            "variables": {
+                "$editionTable": {
+                    "type": "table",
+                    "printRowIfNullValue": true,
+                    "replaceNullValueBy": "&lt;Nezadáno&gt;",
+                    "rows": [ { "label": "Editor", "pattern": "{Editor}" }, { "label": "Předloha", "pattern": "{Pattern}" }, { "label": "Zkratka památky", "pattern": "{RelicAbbreviation}" }, { "label": "Zkratka pramene", "pattern": "{SourceAbbreviation}" } , { "label": "Literární druh", "pattern": "{LiteraryType}" }, { "label": "Literární žánr", "pattern": "{LiteraryGenre}" }, { "label": "Poslední úprava edice", "pattern": "{LastEditation}" }]
+                }
+            }
         }
     },
 

@@ -100,8 +100,8 @@
         }
 
         switch (typeOfVariable) {
-            case "primitive":
-                return this.interpretPrimitive(interpretedVariable, variables, actualScopeObject);
+            case "basic":
+                return this.interpretBasic(interpretedVariable, variables, actualScopeObject);
             case "array":
                 return this.interpretArray(interpretedVariable, variables, actualScopeObject);
             case "table":
@@ -112,7 +112,7 @@
         }
     };
 
-    VariableInterpreter.prototype.interpretPrimitive = function (interpretedVariable, variables, scopedObject) {
+    VariableInterpreter.prototype.interpretBasic = function (interpretedVariable, variables, scopedObject) {
         var printIfNull = interpretedVariable["printIfNullValue"];
         var replacementForNullValue = interpretedVariable["replaceNullValueBy"];
         var pattern = interpretedVariable["pattern"];

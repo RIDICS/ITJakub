@@ -126,7 +126,7 @@ var BibliographyFactory = (function () {
         if (this.configuration.containsCustomInBottomPanel()) {
             var customDiv = document.createElement('div');
             $(customDiv).addClass('custom');
-            customDiv.innerHTML = this.configuration.getCustomInMiddlePanel(bookInfo);
+            customDiv.innerHTML = this.configuration.getCustomInBottomPanel(bookInfo);
             bottomPanel.appendChild(customDiv);
         }
 
