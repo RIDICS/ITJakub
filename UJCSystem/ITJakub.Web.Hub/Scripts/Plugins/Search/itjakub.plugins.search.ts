@@ -1,12 +1,13 @@
 ﻿
 class SearchModule {
+    bibliographyModule: BibliographyModule;
 
-    constructor() {
-        
+    constructor(bibModule : BibliographyModule) {
+        this.bibliographyModule = bibModule;
     }
 
     //TODO just for test, books dtos should be returned in call filter method (not ids)
-    public getBookWithIds(bookIds: string[], container: string) {
+    public getBookWithIds(bookIds: string[]) {
         $.ajax({
             type: "GET",
             traditional: true,
@@ -15,12 +16,12 @@ class SearchModule {
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
-                BibliographyModule.getInstance().showBooks(response.books, container);
+                this.bibliographyModule.showBooks(response.books);
             }
         });
     }
 
-    public getBookWithType(type: string, container: string) {
+    public getBookWithType(type: string) {
         $.ajax({
             type: "GET",
             traditional: true,
@@ -29,7 +30,7 @@ class SearchModule {
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
-                BibliographyModule.getInstance().showBooks(response.books,container);
+                this.bibliographyModule.showBooks(response.books);
             }
         });
     }

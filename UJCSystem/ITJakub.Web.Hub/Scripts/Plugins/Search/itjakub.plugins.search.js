@@ -1,8 +1,10 @@
 ﻿var SearchModule = (function () {
-    function SearchModule() {
+    function SearchModule(bibModule) {
+        this.bibliographyModule = bibModule;
     }
     //TODO just for test, books dtos should be returned in call filter method (not ids)
-    SearchModule.prototype.getBookWithIds = function (bookIds, container) {
+    SearchModule.prototype.getBookWithIds = function (bookIds) {
+        var _this = this;
         $.ajax({
             type: "GET",
             traditional: true,
@@ -11,12 +13,13 @@
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                BibliographyModule.getInstance().showBooks(response.books, container);
+                _this.bibliographyModule.showBooks(response.books);
             }
         });
     };
 
-    SearchModule.prototype.getBookWithType = function (type, container) {
+    SearchModule.prototype.getBookWithType = function (type) {
+        var _this = this;
         $.ajax({
             type: "GET",
             traditional: true,
@@ -25,7 +28,7 @@
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                BibliographyModule.getInstance().showBooks(response.books, container);
+                _this.bibliographyModule.showBooks(response.books);
             }
         });
     };

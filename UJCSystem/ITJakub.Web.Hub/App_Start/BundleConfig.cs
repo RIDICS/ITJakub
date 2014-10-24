@@ -29,6 +29,7 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/itjakub.js",
                 "~/Scripts/Plugins/Search/itjakub.plugins.search.js",
                 "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js",
+                "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js",
                 "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.js"));
 
 
