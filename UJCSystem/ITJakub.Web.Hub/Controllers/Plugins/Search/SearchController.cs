@@ -13,19 +13,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
             foreach (string bookId in bookIds)
             {
                 string bookType = "Edition";
-                if (int.Parse(bookId)%2 == 0)
-                {
-                    bookType = "Dictionary";
-                }
-                if (int.Parse(bookId)%3 == 0)
-                {
-                    bookType = "OldCzechTextBank";
-                }
-                if (int.Parse(bookId) % 4 == 0)
-                {
-                    bookType = "CardFile";
-                }
-                listBooks.Add(new BookInfo
+                var bookInfo = new BookInfo
                 {
                     BookId = bookId,
                     BookType = bookType,
@@ -47,14 +35,35 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                         },
                     Century = 13,
                     Sign = "VII G 17 d",
-                    Archive = new Archive() { Name = "Narodni knihovna ceske republiky", City = "Praha", State = "Cesko"},
-                    Authors = new List<Author>() { new Author() { FirstName = "Josef", LastName = "Novak" }, new Author() { FirstName = "Jaroslav", LastName = "Tuhik" } },
+                    Archive = new Archive() {Name = "Narodni knihovna ceske republiky", City = "Praha", State = "Cesko"},
+                    Authors =
+                        new List<Author>()
+                        {
+                            new Author() {FirstName = "Josef", LastName = "Novak"},
+                            new Author() {FirstName = "Jaroslav", LastName = "Tuhik"}
+                        },
                     Description = "Elementa latinae, boemicae ac germanicae linugae",
                     Year = 1532,
                     TestValue = 0,
                     TestValue2 = false,
                     TestValue3 = true
-                });
+                };
+                if (int.Parse(bookId) % 2 == 0)
+                {
+                    bookInfo.BookType = "Dictionary";
+                    bookInfo.Name = "Slovnicek";
+                    bookInfo.Century = 5;
+                }
+                if (int.Parse(bookId) % 3 == 0)
+                {
+                    bookInfo.BookType = "OldCzechTextBank";
+                    bookInfo.Century = 1;
+                }
+                if (int.Parse(bookId) % 4 == 0)
+                {
+                    bookInfo.BookType = "CardFile";
+                }
+                listBooks.Add(bookInfo);
             }
 
             return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);

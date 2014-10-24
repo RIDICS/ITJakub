@@ -31,14 +31,28 @@ class BibliographyModule {
         var select: HTMLSelectElement = document.createElement('select');
         $(select).change(() => {
             var selectedOption = $(this.sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected");
-            var value = $(selectedOption).val();
-            alert(value);
+            var value:string = $(selectedOption).val();
+            var order = -1;
+            var comparator = (a: HTMLLIElement, b:HTMLLIElement) => {    //TODO resolve comparator based on value
+                var aa = $(a).data(value);
+                var bb = $(b).data(value);
+                return aa > bb ? 1 : -1;
+            };
+            this.sort(comparator, order);
         });
-        this.addOption(select, "Název", "Name");
-        this.addOption(select, "Autor", "Author");
-        this.addOption(select, "Datace", "Date"); //TODO add options to json config
+        this.addOption(select, "Název", "name");
+        this.addOption(select, "Id", "bookid");
+        this.addOption(select, "Datace", "century"); //TODO add options to json config
+        this.addOption(select, "Typ", "booktype"); 
         sortBarDiv.appendChild(select);
         return sortBarDiv;
+    }
+
+    private sort(comparator: (a: HTMLLIElement, b: HTMLLIElement) => number, order: number) {
+        var elems: Array<HTMLLIElement> = <Array<HTMLLIElement>><any>$(this.booksContainer).children('ul.bib-listing').children('li').detach();
+        var sortFunction = (a, b) => { return order * comparator(a, b); };
+        elems.sort(sortFunction);
+        $(this.booksContainer).children('ul.bib-listing').append(elems);
     }
 
     private addOption(selectbox: HTMLSelectElement, text: string, value: string) {
@@ -51,8 +65,16 @@ class BibliographyModule {
     private makeBibliography(bibItem: IBookInfo): HTMLLIElement {
         var liElement: HTMLLIElement = document.createElement('li');
         $(liElement).addClass('list-item');
-        $(liElement).attr("data-bookId", bibItem.BookId);
-        $(liElement).attr("data-bookType", bibItem.BookType);
+        $(liElement).attr("data-bookid", bibItem.BookId);
+        $(liElement).attr("data-booktype", bibItem.BookType);
+        $(liElement).attr("data-name", bibItem.Name);
+        $(liElement).attr("data-century", bibItem.Century);
+        //TODO toggle uncommented with commented code after testing
+        //$(liElement).data('bookid', bibItem.BookId);
+        //$(liElement).data('booktype', bibItem.BookType);
+        //$(liElement).data('name', bibItem.Name);
+        //$(liElement).data('century', bibItem.Century); //TODO add values for sorting
+
 
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
