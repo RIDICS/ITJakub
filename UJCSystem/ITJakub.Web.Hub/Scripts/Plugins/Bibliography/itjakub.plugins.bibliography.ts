@@ -106,6 +106,7 @@ class BibliographyModule {
 
 }
 
+//TODO should return config class for each panel where are specified confg methods (like containsTitle)
 class ConfigurationManager {
     config: Object;
     varInterpreter: VariableInterpreter;
@@ -119,6 +120,12 @@ class ConfigurationManager {
 
     containsBottomPanel() { return typeof this.config["bottom-panel"] !== 'undefined'; }
 
+    containsRightPanel() { return typeof this.config["right-panel"] !== 'undefined'; }
+
+    containsInfoButtonInRightPanel() { return typeof this.config["right-panel"]['info-button'] !== 'undefined'; }
+
+    containsReadButtonInRightPanel() { return typeof this.config["right-panel"]['read-button'] !== 'undefined'; }
+
     containsCustomInMiddlePanel() { return typeof this.config['middle-panel']['custom'] !== 'undefined'; }
 
     containsCustomInBottomPanel() { return typeof this.config['bottom-panel']['custom'] !== 'undefined'; }
@@ -128,6 +135,10 @@ class ConfigurationManager {
     containsBottomPanelBody() { return typeof this.config["bottom-panel"]['body'] !== 'undefined'; }
 
     containsMiddlePanelTitle() { return typeof this.config["middle-panel"]['title'] !== 'undefined'; }
+        
+    getRightPanelInfoButton(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['right-panel']["info-button"]["url"], this.config['right-panel']['variables'], bibItem); }
+
+    getRightPanelBookButton(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['right-panel']["read-button"]["url"], this.config['right-panel']['variables'], bibItem); }
 
     getTitle(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['title'], this.config['middle-panel']['variables'], bibItem); }
 

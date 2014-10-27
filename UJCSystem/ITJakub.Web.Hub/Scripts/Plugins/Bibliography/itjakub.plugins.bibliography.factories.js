@@ -54,8 +54,64 @@ var BibliographyFactory = (function () {
     };
 
     BibliographyFactory.prototype.makeRightPanel = function (bookInfo) {
+        var _this = this;
         var rightPanel = document.createElement('div');
         $(rightPanel).addClass('right-panel');
+
+        if (this.configuration.containsReadButtonInRightPanel()) {
+            var bookButton = document.createElement('button');
+            bookButton.type = 'button';
+            $(bookButton).addClass('btn btn-sm book-button');
+            var spanBook = document.createElement('span');
+            $(spanBook).addClass('glyphicon glyphicon-book');
+            bookButton.appendChild(spanBook);
+            $(bookButton).click(function (event) {
+                window.location.href = _this.configuration.getRightPanelBookButton(bookInfo);
+            });
+            rightPanel.appendChild(bookButton);
+        }
+
+        if (this.configuration.containsInfoButtonInRightPanel()) {
+            var infoButton = document.createElement('button');
+            infoButton.type = 'button';
+            $(infoButton).addClass('btn btn-sm information-button');
+            var spanInfo = document.createElement('span');
+            $(spanInfo).addClass('glyphicon glyphicon-info-sign');
+            infoButton.appendChild(spanInfo);
+            $(infoButton).click(function (event) {
+                window.location.href = _this.configuration.getRightPanelInfoButton(bookInfo);
+            });
+            rightPanel.appendChild(infoButton);
+        }
+
+        if (this.configuration.containsBottomPanel()) {
+            var showContentButton = document.createElement('button');
+            showContentButton.type = 'button';
+            $(showContentButton).addClass('btn btn-sm show-button');
+            var spanChevrDown = document.createElement('span');
+            $(spanChevrDown).addClass('glyphicon glyphicon-chevron-down');
+            showContentButton.appendChild(spanChevrDown);
+            $(showContentButton).click(function (event) {
+                $(this).parents('li.list-item').first().find('.hidden-content').show("slow");
+                $(this).siblings('.hide-button').show();
+                $(this).hide();
+            });
+            rightPanel.appendChild(showContentButton);
+
+            var hideContentButton = document.createElement('button');
+            hideContentButton.type = 'button';
+            $(hideContentButton).addClass('btn btn-sm hide-button');
+            var spanChevrUp = document.createElement('span');
+            $(spanChevrUp).addClass('glyphicon glyphicon-chevron-up');
+            hideContentButton.appendChild(spanChevrUp);
+            $(hideContentButton).click(function (event) {
+                $(this).parents('li.list-item').first().find('.hidden-content').hide("slow");
+                $(this).siblings('.show-button').show();
+                $(this).hide();
+            });
+            rightPanel.appendChild(hideContentButton);
+        }
+
         return rightPanel;
     };
 
@@ -120,48 +176,6 @@ var OldCzechTextBankFactory = (function (_super) {
     function OldCzechTextBankFactory(configuration) {
         _super.call(this, configuration);
     }
-    OldCzechTextBankFactory.prototype.makeRightPanel = function (bookInfo) {
-        var rightPanel = document.createElement('div');
-        $(rightPanel).addClass('right-panel');
-
-        var infoButton = document.createElement('button');
-        infoButton.type = 'button';
-        $(infoButton).addClass('btn btn-sm information-button');
-        var spanInfo = document.createElement('span');
-        $(spanInfo).addClass('glyphicon glyphicon-info-sign');
-        infoButton.appendChild(spanInfo);
-        $(infoButton).click(function (event) {
-        }); //TODO fill click action
-        rightPanel.appendChild(infoButton);
-
-        var showContentButton = document.createElement('button');
-        showContentButton.type = 'button';
-        $(showContentButton).addClass('btn btn-sm show-button');
-        var spanChevrDown = document.createElement('span');
-        $(spanChevrDown).addClass('glyphicon glyphicon-chevron-down');
-        showContentButton.appendChild(spanChevrDown);
-        $(showContentButton).click(function (event) {
-            $(this).parents('li.list-item').first().find('.hidden-content').show("slow");
-            $(this).siblings('.hide-button').show();
-            $(this).hide();
-        });
-        rightPanel.appendChild(showContentButton);
-
-        var hideContentButton = document.createElement('button');
-        hideContentButton.type = 'button';
-        $(hideContentButton).addClass('btn btn-sm hide-button');
-        var spanChevrUp = document.createElement('span');
-        $(spanChevrUp).addClass('glyphicon glyphicon-chevron-up');
-        hideContentButton.appendChild(spanChevrUp);
-        $(hideContentButton).click(function (event) {
-            $(this).parents('li.list-item').first().find('.hidden-content').hide("slow");
-            $(this).siblings('.show-button').show();
-            $(this).hide();
-        });
-        rightPanel.appendChild(hideContentButton);
-
-        return rightPanel;
-    };
     return OldCzechTextBankFactory;
 })(BibliographyFactory);
 
@@ -205,33 +219,6 @@ var DictionaryFactory = (function (_super) {
         leftPanel.appendChild(starButton);
 
         return leftPanel;
-    };
-
-    DictionaryFactory.prototype.makeRightPanel = function (bookInfo) {
-        var rightPanel = document.createElement('div');
-        $(rightPanel).addClass('right-panel');
-
-        var bookButton = document.createElement('button');
-        bookButton.type = 'button';
-        $(bookButton).addClass('btn btn-sm book-button');
-        var spanBook = document.createElement('span');
-        $(spanBook).addClass('glyphicon glyphicon-book');
-        bookButton.appendChild(spanBook);
-        $(bookButton).click(function (event) {
-        }); //TODO fill click action
-        rightPanel.appendChild(bookButton);
-
-        var infoButton = document.createElement('button');
-        infoButton.type = 'button';
-        $(infoButton).addClass('btn btn-sm information-button');
-        var spanInfo = document.createElement('span');
-        $(spanInfo).addClass('glyphicon glyphicon-info-sign');
-        infoButton.appendChild(spanInfo);
-        $(infoButton).click(function (event) {
-        }); //TODO fill click action
-        rightPanel.appendChild(infoButton);
-
-        return rightPanel;
     };
     return DictionaryFactory;
 })(BibliographyFactory);
@@ -277,33 +264,6 @@ var CardFileFactory = (function (_super) {
 
         return leftPanel;
     };
-
-    CardFileFactory.prototype.makeRightPanel = function (bookInfo) {
-        var rightPanel = document.createElement('div');
-        $(rightPanel).addClass('right-panel');
-
-        var bookButton = document.createElement('button');
-        bookButton.type = 'button';
-        $(bookButton).addClass('btn btn-sm book-button');
-        var spanBook = document.createElement('span');
-        $(spanBook).addClass('glyphicon glyphicon-book');
-        bookButton.appendChild(spanBook);
-        $(bookButton).click(function (event) {
-        }); //TODO fill click action
-        rightPanel.appendChild(bookButton);
-
-        var infoButton = document.createElement('button');
-        infoButton.type = 'button';
-        $(infoButton).addClass('btn btn-sm information-button');
-        var spanInfo = document.createElement('span');
-        $(spanInfo).addClass('glyphicon glyphicon-info-sign');
-        infoButton.appendChild(spanInfo);
-        $(infoButton).click(function (event) {
-        }); //TODO fill click action
-        rightPanel.appendChild(infoButton);
-
-        return rightPanel;
-    };
     return CardFileFactory;
 })(BibliographyFactory);
 
@@ -312,58 +272,6 @@ var EditionFactory = (function (_super) {
     function EditionFactory(configuration) {
         _super.call(this, configuration);
     }
-    EditionFactory.prototype.makeRightPanel = function (bookInfo) {
-        var rightPanel = document.createElement('div');
-        $(rightPanel).addClass('right-panel');
-
-        var bookButton = document.createElement('button');
-        bookButton.type = 'button';
-        $(bookButton).addClass('btn btn-sm book-button');
-        var spanBook = document.createElement('span');
-        $(spanBook).addClass('glyphicon glyphicon-book');
-        bookButton.appendChild(spanBook);
-        $(bookButton).click(function (event) {
-        }); //TODO fill click action
-        rightPanel.appendChild(bookButton);
-
-        var infoButton = document.createElement('button');
-        infoButton.type = 'button';
-        $(infoButton).addClass('btn btn-sm information-button');
-        var spanInfo = document.createElement('span');
-        $(spanInfo).addClass('glyphicon glyphicon-info-sign');
-        infoButton.appendChild(spanInfo);
-        $(infoButton).click(function (event) {
-        }); //TODO fill click action
-        rightPanel.appendChild(infoButton);
-
-        var showContentButton = document.createElement('button');
-        showContentButton.type = 'button';
-        $(showContentButton).addClass('btn btn-sm show-button');
-        var spanChevrDown = document.createElement('span');
-        $(spanChevrDown).addClass('glyphicon glyphicon-chevron-down');
-        showContentButton.appendChild(spanChevrDown);
-        $(showContentButton).click(function (event) {
-            $(this).parents('li.list-item').first().find('.hidden-content').show("slow");
-            $(this).siblings('.hide-button').show();
-            $(this).hide();
-        });
-        rightPanel.appendChild(showContentButton);
-
-        var hideContentButton = document.createElement('button');
-        hideContentButton.type = 'button';
-        $(hideContentButton).addClass('btn btn-sm hide-button');
-        var spanChevrUp = document.createElement('span');
-        $(spanChevrUp).addClass('glyphicon glyphicon-chevron-up');
-        hideContentButton.appendChild(spanChevrUp);
-        $(hideContentButton).click(function (event) {
-            $(this).parents('li.list-item').first().find('.hidden-content').hide("slow");
-            $(this).siblings('.show-button').show();
-            $(this).hide();
-        });
-        rightPanel.appendChild(hideContentButton);
-
-        return rightPanel;
-    };
     return EditionFactory;
 })(BibliographyFactory);
 //# sourceMappingURL=itjakub.plugins.bibliography.factories.js.map

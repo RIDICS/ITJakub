@@ -106,6 +106,7 @@ var BibliographyModule = (function () {
     return BibliographyModule;
 })();
 
+//TODO should return config class for each panel where are specified confg methods (like containsTitle)
 var ConfigurationManager = (function () {
     function ConfigurationManager(config) {
         this.config = config;
@@ -117,6 +118,18 @@ var ConfigurationManager = (function () {
 
     ConfigurationManager.prototype.containsBottomPanel = function () {
         return typeof this.config["bottom-panel"] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.containsRightPanel = function () {
+        return typeof this.config["right-panel"] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.containsInfoButtonInRightPanel = function () {
+        return typeof this.config["right-panel"]['info-button'] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.containsReadButtonInRightPanel = function () {
+        return typeof this.config["right-panel"]['read-button'] !== 'undefined';
     };
 
     ConfigurationManager.prototype.containsCustomInMiddlePanel = function () {
@@ -137,6 +150,14 @@ var ConfigurationManager = (function () {
 
     ConfigurationManager.prototype.containsMiddlePanelTitle = function () {
         return typeof this.config["middle-panel"]['title'] !== 'undefined';
+    };
+
+    ConfigurationManager.prototype.getRightPanelInfoButton = function (bibItem) {
+        return this.varInterpreter.interpret(this.config['right-panel']["info-button"]["url"], this.config['right-panel']['variables'], bibItem);
+    };
+
+    ConfigurationManager.prototype.getRightPanelBookButton = function (bibItem) {
+        return this.varInterpreter.interpret(this.config['right-panel']["read-button"]["url"], this.config['right-panel']['variables'], bibItem);
     };
 
     ConfigurationManager.prototype.getTitle = function (bibItem) {

@@ -70,6 +70,22 @@
                     ]
                 }
             }
+        },
+        "right-panel": {
+            "info-button": {
+                "url": "\\Editions\\info\\{BookId}"
+            },
+            "read-button": {
+                "url": "\\Editions\\read\\{$test}"
+            },
+            "variables": {
+                "$test": {
+                    "type": "basic",
+                    "pattern": "{Name}",
+                    "printIfNullValue": false
+                }
+            }
+
         }
     },
 
@@ -106,6 +122,22 @@
                     "printIfNullValue": false
                 }
             }
+        },
+        "right-panel": {
+            "info-button": {
+                "url": "\\Dictionary\\info\\{BookId}"
+            },
+            "read-button": {
+                "url": "\\Dictionary\\read\\{$test}"
+            },
+            "variables": {
+                "$test": {
+                    "type": "basic",
+                    "pattern": "{Name}",
+                    "printIfNullValue": false
+                }
+            }
+
         }
     },
 
@@ -174,6 +206,19 @@
                     ]
                 }
             }
+        },
+        "right-panel": {
+            "info-button": {
+                "url": "\\OldCzechTextBank\\info\\{BookId}"
+            },
+            "variables": {
+                "$test": {
+                    "type": "basic",
+                    "pattern": "{Name}",
+                    "printIfNullValue": false
+                }
+            }
+
         }
     },
     "CardFile": {
@@ -209,6 +254,22 @@
                     "printIfNullValue": false
                 }
             }
+        },
+        "right-panel": {
+            "info-button": {
+                "url": "\\CardFile\\info\\{BookId}"
+            },
+            "read-button": {
+                "url": "\\CardFile\\read\\{$test}"
+            },
+            "variables": {
+                "$test": {
+                    "type": "basic",
+                    "pattern": "{Name}",
+                    "printIfNullValue": false
+                }
+            }
+
         }
     },
     "BibliographyModule": {
