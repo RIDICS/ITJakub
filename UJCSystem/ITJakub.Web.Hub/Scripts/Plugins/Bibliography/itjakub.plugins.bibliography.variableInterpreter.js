@@ -127,6 +127,8 @@
         switch (typeOfVariable) {
             case "basic":
                 return this.interpretBasic(varName, interpretedVariable, variables, actualScopeObject);
+            case "replace":
+                return this.interpretReplace(varName, interpretedVariable, variables, actualScopeObject);
             case "if":
                 return this.interpretIfStatement(varName, interpretedVariable, variables, actualScopeObject);
             case "array":
@@ -150,6 +152,15 @@
         } else {
             return value;
         }
+    };
+
+    VariableInterpreter.prototype.interpretReplace = function (varName, interpretedVariable, variables, scopedObject) {
+        var replacing = interpretedVariable["replacing"];
+        var replacement = interpretedVariable["replacement"];
+        var pattern = interpretedVariable["pattern"];
+        var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
+        var value = this.interpretPattern(varName, pattern, variables, actualScopedObject, true, "");
+        return value.replace(new RegExp(replacing, 'g'), replacement);
     };
 
     VariableInterpreter.prototype.interpretIfStatement = function (varName, interpretedVariable, variables, scopedObject) {

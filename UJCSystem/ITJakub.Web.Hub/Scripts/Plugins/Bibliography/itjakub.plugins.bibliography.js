@@ -3,11 +3,11 @@
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
 var BibliographyModule = (function () {
     function BibliographyModule(booksContainer, sortBarContainer) {
-        var _this = this;
         this.booksContainer = booksContainer;
         this.sortBarContainer = sortBarContainer;
 
         //Download configuration
+        var configObj;
         $.ajax({
             type: "GET",
             traditional: true,
@@ -16,10 +16,10 @@ var BibliographyModule = (function () {
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                _this.configurationManager = new ConfigurationManager(response);
+                configObj = response;
             }
         });
-
+        this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
     }
     BibliographyModule.prototype.showBooks = function (books) {

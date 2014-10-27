@@ -63,6 +63,10 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                 {
                     bookInfo.BookType = "CardFile";
                 }
+                if (int.Parse(bookId) % 5 == 0)
+                {
+                    bookInfo.BookType = "UndefBokkType";
+                }
                 listBooks.Add(bookInfo);
             }
 

@@ -2,7 +2,7 @@
 class VariableInterpreter {
     private static _instance: VariableInterpreter = null;
 
-    constructor(){
+    constructor() {
         if (VariableInterpreter._instance) {
             throw new Error("Cannot instantiate...Use getInstance method instead");
         }
@@ -128,6 +128,8 @@ class VariableInterpreter {
         switch (typeOfVariable) {
         case "basic":
             return this.interpretBasic(varName, interpretedVariable, variables, actualScopeObject);
+        case "replace":
+            return this.interpretReplace(varName, interpretedVariable, variables, actualScopeObject);
         case "if":
             return this.interpretIfStatement(varName, interpretedVariable, variables, actualScopeObject);
         case "array":
@@ -151,6 +153,15 @@ class VariableInterpreter {
         } else {
             return value;
         }
+    }
+
+    private interpretReplace(varName: string, interpretedVariable: Object, variables: Object, scopedObject: Object): string {
+        var replacing: string = interpretedVariable["replacing"];
+        var replacement: string = interpretedVariable["replacement"];
+        var pattern: string = interpretedVariable["pattern"];
+        var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
+        var value: string = this.interpretPattern(varName, pattern, variables, actualScopedObject, true, "");
+        return value.replace(new RegExp(replacing, 'g'), replacement);
     }
 
     private interpretIfStatement(varName: string, interpretedVariable: Object, variables: Object, scopedObject: Object): string {

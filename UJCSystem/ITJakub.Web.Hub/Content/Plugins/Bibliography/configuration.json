@@ -272,8 +272,28 @@
 
         }
     },
-    "BibliographyModule": {
+    "Default": {
+        "middle-panel": {
+            "title": "{$withoutEmpty}",
+            "body": "{$authors}",
+            "variables": {
+                "$authors": {
+                    "type": "array",
+                    "scope": "Authors",
+                    "pattern": "{FirstName} {LastName}",
+                    "delimeter": ", "
+                },
+                "$withoutEmpty": {
+                    "type": "replace",
+                    "pattern": "{Name},,,,",
+                    "replacing": ",{2,}",
+                    "replacement": " "
+                }
+            }
+        },
+        "right-panel": {
 
+        }
     }
 
 }

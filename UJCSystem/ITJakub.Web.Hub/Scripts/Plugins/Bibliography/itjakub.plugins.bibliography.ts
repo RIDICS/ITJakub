@@ -14,6 +14,7 @@ class BibliographyModule {
         this.sortBarContainer = sortBarContainer;
 
         //Download configuration
+        var configObj;
         $.ajax({
             type: "GET",
             traditional: true,
@@ -22,10 +23,10 @@ class BibliographyModule {
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
-                this.configurationManager= new ConfigurationManager(response);
+                configObj = response;
             }
         });
-
+        this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
     }
 

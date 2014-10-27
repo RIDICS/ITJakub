@@ -8,11 +8,15 @@
         this.m_factories['Dictionary'] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
         this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new BookTypeConfiguration("OldCzechTextBank", booksConfigurations["OldCzechTextBank"]));
         this.m_factories['CardFile'] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
+        this.m_factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
 
     }
 
     public getFactoryForType(bookType: string): BibliographyFactory {
-        return this.m_factories[bookType];
+        if (typeof this.m_factories[bookType]!== 'undefined'){
+            return this.m_factories[bookType];
+        }
+        return this.m_factories['Default'];
     }
 
 
