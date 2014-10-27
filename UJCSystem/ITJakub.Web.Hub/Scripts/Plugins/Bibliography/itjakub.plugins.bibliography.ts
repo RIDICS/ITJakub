@@ -1,14 +1,32 @@
 ﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
+/// <reference path="itjakub.plugins.bibliography.configuration.ts" />
 
 class BibliographyModule {
 
     booksContainer: string;
     sortBarContainer: string
+    bibliographyFactoryResolver: BibliographyFactoryResolver;
+    configurationManager : ConfigurationManager;
 
     constructor(booksContainer: string, sortBarContainer: string) {
         this.booksContainer = booksContainer;
         this.sortBarContainer = sortBarContainer;
+
+        //Download configuration
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            async: false,
+            url: "/Bibliography/GetConfiguration",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                this.configurationManager= new ConfigurationManager(response);
+            }
+        });
+
+        this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
     }
 
     public showBooks(books: IBookInfo[]) {
@@ -79,7 +97,7 @@ class BibliographyModule {
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
 
-        var bibFactory: BibliographyFactory = BibliographyFactoryResolver.getInstance().getFactoryForType(bibItem.BookType);
+        var bibFactory: BibliographyFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
 
         var panel = bibFactory.makeLeftPanel(bibItem);
         if (panel != null) visibleContent.appendChild(panel);
@@ -106,51 +124,6 @@ class BibliographyModule {
 
 }
 
-//TODO should return config class for each panel where are specified confg methods (like containsTitle)
-class ConfigurationManager {
-    config: Object;
-    varInterpreter: VariableInterpreter;
-
-    constructor(config: Object) {
-        this.config = config;
-        this.varInterpreter = new VariableInterpreter();
-    }
-
-    containsMiddlePanel() { return typeof this.config["middle-panel"] !== 'undefined'; }
-
-    containsBottomPanel() { return typeof this.config["bottom-panel"] !== 'undefined'; }
-
-    containsRightPanel() { return typeof this.config["right-panel"] !== 'undefined'; }
-
-    containsInfoButtonInRightPanel() { return typeof this.config["right-panel"]['info-button'] !== 'undefined'; }
-
-    containsReadButtonInRightPanel() { return typeof this.config["right-panel"]['read-button'] !== 'undefined'; }
-
-    containsCustomInMiddlePanel() { return typeof this.config['middle-panel']['custom'] !== 'undefined'; }
-
-    containsCustomInBottomPanel() { return typeof this.config['bottom-panel']['custom'] !== 'undefined'; }
-
-    containsMiddlePanelBody() { return typeof this.config["middle-panel"]['body'] !== 'undefined'; }
-
-    containsBottomPanelBody() { return typeof this.config["bottom-panel"]['body'] !== 'undefined'; }
-
-    containsMiddlePanelTitle() { return typeof this.config["middle-panel"]['title'] !== 'undefined'; }
-        
-    getRightPanelInfoButton(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['right-panel']["info-button"]["url"], this.config['right-panel']['variables'], bibItem); }
-
-    getRightPanelBookButton(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['right-panel']["read-button"]["url"], this.config['right-panel']['variables'], bibItem); }
-
-    getTitle(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['title'], this.config['middle-panel']['variables'], bibItem); }
-
-    getMiddlePanelBody(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['body'], this.config['middle-panel']['variables'], bibItem); }
-
-    getBottomPanelBody(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['bottom-panel']['body'], this.config['bottom-panel']['variables'], bibItem); }
-
-    getCustomInMiddlePanel(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['middle-panel']['custom'], this.config['middle-panel']['variables'], bibItem); }
-
-    getCustomInBottomPanel(bibItem: IBookInfo): string { return this.varInterpreter.interpret(this.config['bottom-panel']['custom'], this.config['bottom-panel']['variables'], bibItem); }
-
-}
 
 interface IBookInfo {
     BookId: string;

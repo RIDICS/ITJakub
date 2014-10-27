@@ -1,6 +1,17 @@
 ﻿var VariableInterpreter = (function () {
     function VariableInterpreter() {
+        if (VariableInterpreter._instance) {
+            throw new Error("Cannot instantiate...Use getInstance method instead");
+        }
+        VariableInterpreter._instance = this;
     }
+    VariableInterpreter.getInstance = function () {
+        if (VariableInterpreter._instance === null) {
+            VariableInterpreter._instance = new VariableInterpreter();
+        }
+        return VariableInterpreter._instance;
+    };
+
     VariableInterpreter.prototype.interpret = function (valueString, variables, bibItem) {
         if (typeof valueString === 'undefined' || typeof bibItem === 'undefined') {
             console.log("VariabeInterpreter: cannot interpret undefined type");
@@ -201,6 +212,7 @@
 
         return tableBuilder.build().outerHTML;
     };
+    VariableInterpreter._instance = null;
     return VariableInterpreter;
 })();
 

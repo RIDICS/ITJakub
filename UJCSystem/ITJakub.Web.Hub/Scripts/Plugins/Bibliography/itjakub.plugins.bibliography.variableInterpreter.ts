@@ -1,6 +1,20 @@
 ﻿
 class VariableInterpreter {
+    private static _instance: VariableInterpreter = null;
 
+    constructor(){
+        if (VariableInterpreter._instance) {
+            throw new Error("Cannot instantiate...Use getInstance method instead");
+        }
+        VariableInterpreter._instance = this;
+    }
+
+    public static getInstance(): VariableInterpreter {
+        if (VariableInterpreter._instance === null) {
+            VariableInterpreter._instance = new VariableInterpreter();
+        }
+        return VariableInterpreter._instance;
+    }
 
     public interpret(valueString: string, variables: Object, bibItem: IBookInfo): string {
         if (typeof valueString === 'undefined' || typeof bibItem === 'undefined') {

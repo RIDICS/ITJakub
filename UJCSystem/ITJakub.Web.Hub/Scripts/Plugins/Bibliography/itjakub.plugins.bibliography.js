@@ -1,9 +1,26 @@
 ﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
+/// <reference path="itjakub.plugins.bibliography.configuration.ts" />
 var BibliographyModule = (function () {
     function BibliographyModule(booksContainer, sortBarContainer) {
+        var _this = this;
         this.booksContainer = booksContainer;
         this.sortBarContainer = sortBarContainer;
+
+        //Download configuration
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            async: false,
+            url: "/Bibliography/GetConfiguration",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                _this.configurationManager = new ConfigurationManager(response);
+            }
+        });
+
+        this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
     }
     BibliographyModule.prototype.showBooks = function (books) {
         var _this = this;
@@ -76,7 +93,7 @@ var BibliographyModule = (function () {
         var visibleContent = document.createElement('div');
         $(visibleContent).addClass('visible-content');
 
-        var bibFactory = BibliographyFactoryResolver.getInstance().getFactoryForType(bibItem.BookType);
+        var bibFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
 
         var panel = bibFactory.makeLeftPanel(bibItem);
         if (panel != null)
@@ -104,81 +121,5 @@ var BibliographyModule = (function () {
         return liElement;
     };
     return BibliographyModule;
-})();
-
-//TODO should return config class for each panel where are specified confg methods (like containsTitle)
-var ConfigurationManager = (function () {
-    function ConfigurationManager(config) {
-        this.config = config;
-        this.varInterpreter = new VariableInterpreter();
-    }
-    ConfigurationManager.prototype.containsMiddlePanel = function () {
-        return typeof this.config["middle-panel"] !== 'undefined';
-    };
-
-    ConfigurationManager.prototype.containsBottomPanel = function () {
-        return typeof this.config["bottom-panel"] !== 'undefined';
-    };
-
-    ConfigurationManager.prototype.containsRightPanel = function () {
-        return typeof this.config["right-panel"] !== 'undefined';
-    };
-
-    ConfigurationManager.prototype.containsInfoButtonInRightPanel = function () {
-        return typeof this.config["right-panel"]['info-button'] !== 'undefined';
-    };
-
-    ConfigurationManager.prototype.containsReadButtonInRightPanel = function () {
-        return typeof this.config["right-panel"]['read-button'] !== 'undefined';
-    };
-
-    ConfigurationManager.prototype.containsCustomInMiddlePanel = function () {
-        return typeof this.config['middle-panel']['custom'] !== 'undefined';
-    };
-
-    ConfigurationManager.prototype.containsCustomInBottomPanel = function () {
-        return typeof this.config['bottom-panel']['custom'] !== 'undefined';
-    };
-
-    ConfigurationManager.prototype.containsMiddlePanelBody = function () {
-        return typeof this.config["middle-panel"]['body'] !== 'undefined';
-    };
-
-    ConfigurationManager.prototype.containsBottomPanelBody = function () {
-        return typeof this.config["bottom-panel"]['body'] !== 'undefined';
-    };
-
-    ConfigurationManager.prototype.containsMiddlePanelTitle = function () {
-        return typeof this.config["middle-panel"]['title'] !== 'undefined';
-    };
-
-    ConfigurationManager.prototype.getRightPanelInfoButton = function (bibItem) {
-        return this.varInterpreter.interpret(this.config['right-panel']["info-button"]["url"], this.config['right-panel']['variables'], bibItem);
-    };
-
-    ConfigurationManager.prototype.getRightPanelBookButton = function (bibItem) {
-        return this.varInterpreter.interpret(this.config['right-panel']["read-button"]["url"], this.config['right-panel']['variables'], bibItem);
-    };
-
-    ConfigurationManager.prototype.getTitle = function (bibItem) {
-        return this.varInterpreter.interpret(this.config['middle-panel']['title'], this.config['middle-panel']['variables'], bibItem);
-    };
-
-    ConfigurationManager.prototype.getMiddlePanelBody = function (bibItem) {
-        return this.varInterpreter.interpret(this.config['middle-panel']['body'], this.config['middle-panel']['variables'], bibItem);
-    };
-
-    ConfigurationManager.prototype.getBottomPanelBody = function (bibItem) {
-        return this.varInterpreter.interpret(this.config['bottom-panel']['body'], this.config['bottom-panel']['variables'], bibItem);
-    };
-
-    ConfigurationManager.prototype.getCustomInMiddlePanel = function (bibItem) {
-        return this.varInterpreter.interpret(this.config['middle-panel']['custom'], this.config['middle-panel']['variables'], bibItem);
-    };
-
-    ConfigurationManager.prototype.getCustomInBottomPanel = function (bibItem) {
-        return this.varInterpreter.interpret(this.config['bottom-panel']['custom'], this.config['bottom-panel']['variables'], bibItem);
-    };
-    return ConfigurationManager;
 })();
 //# sourceMappingURL=itjakub.plugins.bibliography.js.map

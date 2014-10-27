@@ -5,41 +5,16 @@
     d.prototype = new __();
 };
 var BibliographyFactoryResolver = (function () {
-    function BibliographyFactoryResolver() {
-        if (BibliographyFactoryResolver._instance) {
-            throw new Error("Cannot instantiate...Use getInstance method instead");
-        }
-        BibliographyFactoryResolver._instance = this;
-        var configObj;
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            async: false,
-            url: "/Bibliography/GetConfiguration",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function (response) {
-                configObj = response;
-            }
-        });
-
+    function BibliographyFactoryResolver(booksConfigurations) {
         this.m_factories = new Array();
-        this.m_factories['Edition'] = new EditionFactory(new ConfigurationManager(configObj["Edition"])); //TODO make enum bookType
-        this.m_factories['Dictionary'] = new DictionaryFactory(new ConfigurationManager(configObj["Dictionary"]));
-        this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new ConfigurationManager(configObj["OldCzechTextBank"]));
-        this.m_factories['CardFile'] = new CardFileFactory(new ConfigurationManager(configObj["CardFile"]));
+        this.m_factories['Edition'] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
+        this.m_factories['Dictionary'] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
+        this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new BookTypeConfiguration("OldCzechTextBank", booksConfigurations["OldCzechTextBank"]));
+        this.m_factories['CardFile'] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
     }
-    BibliographyFactoryResolver.getInstance = function () {
-        if (BibliographyFactoryResolver._instance === null) {
-            BibliographyFactoryResolver._instance = new BibliographyFactoryResolver();
-        }
-        return BibliographyFactoryResolver._instance;
-    };
-
     BibliographyFactoryResolver.prototype.getFactoryForType = function (bookType) {
         return this.m_factories[bookType];
     };
-    BibliographyFactoryResolver._instance = null;
     return BibliographyFactoryResolver;
 })();
 
@@ -54,11 +29,14 @@ var BibliographyFactory = (function () {
     };
 
     BibliographyFactory.prototype.makeRightPanel = function (bookInfo) {
-        var _this = this;
+        if (!this.configuration.containsRightPanel())
+            return null;
+        var config = this.configuration.getRightPanelConfig();
+
         var rightPanel = document.createElement('div');
         $(rightPanel).addClass('right-panel');
 
-        if (this.configuration.containsReadButtonInRightPanel()) {
+        if (config.containsReadButton()) {
             var bookButton = document.createElement('button');
             bookButton.type = 'button';
             $(bookButton).addClass('btn btn-sm book-button');
@@ -66,12 +44,12 @@ var BibliographyFactory = (function () {
             $(spanBook).addClass('glyphicon glyphicon-book');
             bookButton.appendChild(spanBook);
             $(bookButton).click(function (event) {
-                window.location.href = _this.configuration.getRightPanelBookButton(bookInfo);
+                window.location.href = config.getReadButton(bookInfo);
             });
             rightPanel.appendChild(bookButton);
         }
 
-        if (this.configuration.containsInfoButtonInRightPanel()) {
+        if (config.containsInfoButton()) {
             var infoButton = document.createElement('button');
             infoButton.type = 'button';
             $(infoButton).addClass('btn btn-sm information-button');
@@ -79,7 +57,7 @@ var BibliographyFactory = (function () {
             $(spanInfo).addClass('glyphicon glyphicon-info-sign');
             infoButton.appendChild(spanInfo);
             $(infoButton).click(function (event) {
-                window.location.href = _this.configuration.getRightPanelInfoButton(bookInfo);
+                window.location.href = config.getInfoButton(bookInfo);
             });
             rightPanel.appendChild(infoButton);
         }
@@ -118,27 +96,28 @@ var BibliographyFactory = (function () {
     BibliographyFactory.prototype.makeMiddlePanel = function (bookInfo) {
         if (!this.configuration.containsMiddlePanel())
             return null;
+        var config = this.configuration.getMidllePanelConfig();
 
         var middlePanel = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
 
-        if (this.configuration.containsMiddlePanelTitle()) {
+        if (config.containsTitle()) {
             var middlePanelHeading = document.createElement('div');
             $(middlePanelHeading).addClass('heading');
-            middlePanelHeading.innerHTML = this.configuration.getTitle(bookInfo);
+            middlePanelHeading.innerHTML = config.getTitle(bookInfo);
             middlePanel.appendChild(middlePanelHeading);
         }
-        if (this.configuration.containsMiddlePanelBody()) {
+        if (config.containsBody()) {
             var middlePanelBody = document.createElement('div');
             $(middlePanelBody).addClass('body');
-            middlePanelBody.innerHTML = this.configuration.getMiddlePanelBody(bookInfo);
+            middlePanelBody.innerHTML = config.getBody(bookInfo);
             middlePanel.appendChild(middlePanelBody);
         }
 
-        if (this.configuration.containsCustomInMiddlePanel()) {
+        if (config.containsCustom()) {
             var customDiv = document.createElement('div');
             $(customDiv).addClass('custom');
-            customDiv.innerHTML = this.configuration.getCustomInMiddlePanel(bookInfo);
+            customDiv.innerHTML = config.getCustom(bookInfo);
             middlePanel.appendChild(customDiv);
         }
 
@@ -148,21 +127,22 @@ var BibliographyFactory = (function () {
     BibliographyFactory.prototype.makeBottomPanel = function (bookInfo) {
         if (!this.configuration.containsBottomPanel())
             return null;
+        var config = this.configuration.getBottomPanelConfig();
 
         var bottomPanel = document.createElement('div');
         $(bottomPanel).addClass('bottom-panel');
 
-        if (this.configuration.containsBottomPanelBody()) {
+        if (config.containsBody()) {
             var bottomPanelBody = document.createElement('div');
             $(bottomPanelBody).addClass('body');
-            bottomPanelBody.innerHTML = this.configuration.getBottomPanelBody(bookInfo);
+            bottomPanelBody.innerHTML = config.getBody(bookInfo);
             bottomPanel.appendChild(bottomPanelBody);
         }
 
-        if (this.configuration.containsCustomInBottomPanel()) {
+        if (config.containsCustom()) {
             var customDiv = document.createElement('div');
             $(customDiv).addClass('custom');
-            customDiv.innerHTML = this.configuration.getCustomInBottomPanel(bookInfo);
+            customDiv.innerHTML = config.getCustom(bookInfo);
             bottomPanel.appendChild(customDiv);
         }
 

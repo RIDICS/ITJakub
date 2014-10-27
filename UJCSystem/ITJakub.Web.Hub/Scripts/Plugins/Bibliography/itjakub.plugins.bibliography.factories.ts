@@ -1,39 +1,14 @@
 ﻿class BibliographyFactoryResolver {
-    private static _instance: BibliographyFactoryResolver = null;
     private m_factories: BibliographyFactory[];
 
 
-    constructor() {
-        if (BibliographyFactoryResolver._instance) {
-            throw new Error("Cannot instantiate...Use getInstance method instead");
-        }
-        BibliographyFactoryResolver._instance = this;
-        var configObj;
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            async: false,
-            url: "/Bibliography/GetConfiguration",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: (response) => {
-                configObj = response;
-            }
-        });
-
+    constructor(booksConfigurations: Object) {
         this.m_factories = new Array();
-        this.m_factories['Edition'] = new EditionFactory(new ConfigurationManager(configObj["Edition"])); //TODO make enum bookType
-        this.m_factories['Dictionary'] = new DictionaryFactory(new ConfigurationManager(configObj["Dictionary"]));
-        this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new ConfigurationManager(configObj["OldCzechTextBank"]));
-        this.m_factories['CardFile'] = new CardFileFactory(new ConfigurationManager(configObj["CardFile"]));
+        this.m_factories['Edition'] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
+        this.m_factories['Dictionary'] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
+        this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new BookTypeConfiguration("OldCzechTextBank", booksConfigurations["OldCzechTextBank"]));
+        this.m_factories['CardFile'] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
 
-    }
-
-    public static getInstance(): BibliographyFactoryResolver {
-        if (BibliographyFactoryResolver._instance === null) {
-            BibliographyFactoryResolver._instance = new BibliographyFactoryResolver();
-        }
-        return BibliographyFactoryResolver._instance;
     }
 
     public getFactoryForType(bookType: string): BibliographyFactory {
@@ -44,7 +19,7 @@
 }
 
 class BibliographyFactory {
-    configuration: ConfigurationManager;
+    configuration: BookTypeConfiguration;
 
     constructor(configuration) {
         this.configuration = configuration;
@@ -57,10 +32,13 @@ class BibliographyFactory {
     }
 
     makeRightPanel(bookInfo: IBookInfo): HTMLDivElement {
+        if (!this.configuration.containsRightPanel()) return null;
+        var config = this.configuration.getRightPanelConfig();
+
         var rightPanel: HTMLDivElement = document.createElement('div');
         $(rightPanel).addClass('right-panel');
 
-        if (this.configuration.containsReadButtonInRightPanel()) {
+        if (config.containsReadButton()) {
             var bookButton: HTMLButtonElement = document.createElement('button');
             bookButton.type = 'button';
             $(bookButton).addClass('btn btn-sm book-button');
@@ -68,12 +46,12 @@ class BibliographyFactory {
             $(spanBook).addClass('glyphicon glyphicon-book');
             bookButton.appendChild(spanBook);
             $(bookButton).click((event) => {
-                window.location.href = this.configuration.getRightPanelBookButton(bookInfo);
+                window.location.href = config.getReadButton(bookInfo);
             });
             rightPanel.appendChild(bookButton);
         }
 
-        if (this.configuration.containsInfoButtonInRightPanel()) {
+        if (config.containsInfoButton()) {
             var infoButton: HTMLButtonElement = document.createElement('button');
             infoButton.type = 'button';
             $(infoButton).addClass('btn btn-sm information-button');
@@ -81,7 +59,7 @@ class BibliographyFactory {
             $(spanInfo).addClass('glyphicon glyphicon-info-sign');
             infoButton.appendChild(spanInfo);
             $(infoButton).click((event) => {
-                window.location.href = this.configuration.getRightPanelInfoButton(bookInfo);
+                window.location.href = config.getInfoButton(bookInfo);
             });
             rightPanel.appendChild(infoButton);
         }
@@ -119,28 +97,29 @@ class BibliographyFactory {
 
     makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
         if (!this.configuration.containsMiddlePanel()) return null;
+        var config = this.configuration.getMidllePanelConfig();
 
         var middlePanel: HTMLDivElement = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
 
 
-        if (this.configuration.containsMiddlePanelTitle()) {
+        if (config.containsTitle()) {
             var middlePanelHeading: HTMLDivElement = document.createElement('div');
             $(middlePanelHeading).addClass('heading');
-            middlePanelHeading.innerHTML = this.configuration.getTitle(bookInfo);
+            middlePanelHeading.innerHTML = config.getTitle(bookInfo);
             middlePanel.appendChild(middlePanelHeading);
         }
-        if (this.configuration.containsMiddlePanelBody()) {
+        if (config.containsBody()) {
             var middlePanelBody: HTMLDivElement = document.createElement('div');
             $(middlePanelBody).addClass('body');
-            middlePanelBody.innerHTML = this.configuration.getMiddlePanelBody(bookInfo);
+            middlePanelBody.innerHTML = config.getBody(bookInfo);
             middlePanel.appendChild(middlePanelBody);
         }
 
-        if (this.configuration.containsCustomInMiddlePanel()) {
+        if (config.containsCustom()) {
             var customDiv: HTMLDivElement = document.createElement('div');
             $(customDiv).addClass('custom');
-            customDiv.innerHTML = this.configuration.getCustomInMiddlePanel(bookInfo);
+            customDiv.innerHTML = config.getCustom(bookInfo);
             middlePanel.appendChild(customDiv);
         }
 
@@ -149,21 +128,22 @@ class BibliographyFactory {
 
     makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
         if (!this.configuration.containsBottomPanel()) return null;
+        var config = this.configuration.getBottomPanelConfig();
 
         var bottomPanel: HTMLDivElement = document.createElement('div');
         $(bottomPanel).addClass('bottom-panel');
 
-        if (this.configuration.containsBottomPanelBody()) {
+        if (config.containsBody()) {
             var bottomPanelBody: HTMLDivElement = document.createElement('div');
             $(bottomPanelBody).addClass('body');
-            bottomPanelBody.innerHTML = this.configuration.getBottomPanelBody(bookInfo);
+            bottomPanelBody.innerHTML = config.getBody(bookInfo);
             bottomPanel.appendChild(bottomPanelBody);
         }
 
-        if (this.configuration.containsCustomInBottomPanel()) {
+        if (config.containsCustom()) {
             var customDiv: HTMLDivElement = document.createElement('div');
             $(customDiv).addClass('custom');
-            customDiv.innerHTML = this.configuration.getCustomInBottomPanel(bookInfo);
+            customDiv.innerHTML = config.getCustom(bookInfo);
             bottomPanel.appendChild(customDiv);
         }
 
@@ -173,14 +153,14 @@ class BibliographyFactory {
 
 class OldCzechTextBankFactory extends BibliographyFactory {
 
-    constructor(configuration: ConfigurationManager) {
+    constructor(configuration: BookTypeConfiguration) {
         super(configuration);
     }
 }
 
 class DictionaryFactory extends BibliographyFactory {
 
-    constructor(configuration: ConfigurationManager) {
+    constructor(configuration: BookTypeConfiguration) {
         super(configuration);
     }
 
@@ -224,7 +204,7 @@ class DictionaryFactory extends BibliographyFactory {
 
 class CardFileFactory extends BibliographyFactory {
 
-    constructor(configuration: ConfigurationManager) {
+    constructor(configuration: BookTypeConfiguration) {
         super(configuration);
     }
 
@@ -269,7 +249,7 @@ class CardFileFactory extends BibliographyFactory {
 class EditionFactory extends BibliographyFactory {
 
 
-    constructor(configuration: ConfigurationManager) {
+    constructor(configuration: BookTypeConfiguration) {
         super(configuration);
     }
 
