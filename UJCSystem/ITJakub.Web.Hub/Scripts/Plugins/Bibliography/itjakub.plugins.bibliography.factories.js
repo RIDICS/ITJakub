@@ -6,18 +6,18 @@
 };
 var BibliographyFactoryResolver = (function () {
     function BibliographyFactoryResolver(booksConfigurations) {
-        this.m_factories = new Array();
-        this.m_factories['Edition'] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
-        this.m_factories['Dictionary'] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
-        this.m_factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new BookTypeConfiguration("OldCzechTextBank", booksConfigurations["OldCzechTextBank"]));
-        this.m_factories['CardFile'] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
-        this.m_factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
+        this.factories = new Array();
+        this.factories['Edition'] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
+        this.factories['Dictionary'] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
+        this.factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new BookTypeConfiguration("OldCzechTextBank", booksConfigurations["OldCzechTextBank"]));
+        this.factories['CardFile'] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
+        this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
     }
     BibliographyFactoryResolver.prototype.getFactoryForType = function (bookType) {
-        if (typeof this.m_factories[bookType] !== 'undefined') {
-            return this.m_factories[bookType];
+        if (typeof this.factories[bookType] !== 'undefined') {
+            return this.factories[bookType];
         }
-        return this.m_factories['Default'];
+        return this.factories['Default'];
     };
     return BibliographyFactoryResolver;
 })();
@@ -67,31 +67,17 @@ var BibliographyFactory = (function () {
         }
 
         if (this.configuration.containsBottomPanel()) {
-            var showContentButton = document.createElement('button');
-            showContentButton.type = 'button';
-            $(showContentButton).addClass('btn btn-sm show-button');
+            var contentButton = document.createElement('button');
+            contentButton.type = 'button';
+            $(contentButton).addClass('btn btn-sm content-button');
             var spanChevrDown = document.createElement('span');
             $(spanChevrDown).addClass('glyphicon glyphicon-chevron-down');
-            showContentButton.appendChild(spanChevrDown);
-            $(showContentButton).click(function (event) {
-                $(this).parents('li.list-item').first().find('.hidden-content').show("slow");
-                $(this).siblings('.hide-button').show();
-                $(this).hide();
+            contentButton.appendChild(spanChevrDown);
+            $(contentButton).click(function (event) {
+                $(this).parents('li.list-item').first().find('.hidden-content').slideToggle("slow");
+                $(this).children('span').toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
             });
-            rightPanel.appendChild(showContentButton);
-
-            var hideContentButton = document.createElement('button');
-            hideContentButton.type = 'button';
-            $(hideContentButton).addClass('btn btn-sm hide-button');
-            var spanChevrUp = document.createElement('span');
-            $(spanChevrUp).addClass('glyphicon glyphicon-chevron-up');
-            hideContentButton.appendChild(spanChevrUp);
-            $(hideContentButton).click(function (event) {
-                $(this).parents('li.list-item').first().find('.hidden-content').hide("slow");
-                $(this).siblings('.show-button').show();
-                $(this).hide();
-            });
-            rightPanel.appendChild(hideContentButton);
+            rightPanel.appendChild(contentButton);
         }
 
         return rightPanel;

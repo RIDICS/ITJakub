@@ -49,11 +49,7 @@ ul.bib-listing li.list-item .hidden-content {
 ul.bib-listing li.list-item .hidden-content .bottom-panel .body {
   padding: 10px 5px 10px 30px;
 }
-.hide-button {
-  display: none;
-}
-.hide-button,
-.show-button {
+.content-button {
   position: absolute;
   bottom: 5px;
   left: 50%;
@@ -103,5 +99,11 @@ ul.bib-listing li.list-item .label {
   font-size: 100%;
   color: black;
   padding-left: 0;
+}
+.sort-button {
+  background-color: transparent;
+  border: none;
+  outline: none!important;
+  box-shadow: none !important;
 }
 /*# sourceMappingURL=ITJakub.Bibliography.css.map */

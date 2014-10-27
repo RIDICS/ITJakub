@@ -33,48 +33,8 @@ var BibliographyModule = (function () {
         });
         $(this.booksContainer).append(rootElement);
         $(this.sortBarContainer).empty();
-        var sortBarHtml = this.makeSortBar();
+        var sortBarHtml = new SortBar().makeSortBar(this.booksContainer, this.sortBarContainer);
         $(this.sortBarContainer).append(sortBarHtml);
-    };
-
-    BibliographyModule.prototype.makeSortBar = function () {
-        var _this = this;
-        var sortBarDiv = document.createElement('div');
-        $(sortBarDiv).addClass('bib-sortbar');
-        var select = document.createElement('select');
-        $(select).change(function () {
-            var selectedOption = $(_this.sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected");
-            var value = $(selectedOption).val();
-            var order = -1;
-            var comparator = function (a, b) {
-                var aa = $(a).data(value);
-                var bb = $(b).data(value);
-                return aa > bb ? 1 : -1;
-            };
-            _this.sort(comparator, order);
-        });
-        this.addOption(select, "Název", "name");
-        this.addOption(select, "Id", "bookid");
-        this.addOption(select, "Datace", "century"); //TODO add options to json config
-        this.addOption(select, "Typ", "booktype");
-        sortBarDiv.appendChild(select);
-        return sortBarDiv;
-    };
-
-    BibliographyModule.prototype.sort = function (comparator, order) {
-        var elems = $(this.booksContainer).children('ul.bib-listing').children('li').detach();
-        var sortFunction = function (a, b) {
-            return order * comparator(a, b);
-        };
-        elems.sort(sortFunction);
-        $(this.booksContainer).children('ul.bib-listing').append(elems);
-    };
-
-    BibliographyModule.prototype.addOption = function (selectbox, text, value) {
-        var option = document.createElement('option');
-        option.text = text;
-        option.value = value;
-        selectbox.appendChild(option);
     };
 
     BibliographyModule.prototype.makeBibliography = function (bibItem) {
