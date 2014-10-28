@@ -7,6 +7,7 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:converter="using:ITJakub.MobileApps.Client.Books.View.Converter"
+    xmlns:comboBoxItem="using:ITJakub.MobileApps.Client.Books.ViewModel.ComboBoxItem"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -62,8 +63,9 @@
             <TextBlock Grid.Column="2"
                        Style="{StaticResource SubheaderTextBlockStyle}"
                        VerticalAlignment="Bottom"
-                       Margin="0,0,0,40">
-                <Run Text="Výsledky vyhledávání pro &quot;" /><Run Text="x" /><Run Text="&quot;"/>
+                       Margin="0,0,0,40"
+                       Visibility="{Binding IsSearchResult, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Run Text="Výsledky vyhledávání pro &quot;" /><Run Text="{Binding SearchQuery}" /><Run Text="&quot;"/>
             </TextBlock>
             
             <Grid Grid.Column="3">
@@ -75,22 +77,27 @@
                 <SearchBox Grid.Row="0"
                            VerticalAlignment="Bottom"
                            Width="200"
-                           Margin="0,0,40,0"/>
+                           Margin="0,0,40,0"
+                           QueryText="{Binding SearchQuery, Mode=TwoWay}">
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="QuerySubmitted">
+                            <core:InvokeCommandAction Command="{Binding SearchCommand}" />
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
+                </SearchBox>
                 <ComboBox Grid.Row="1"
                           VerticalAlignment="Top"
                           HorizontalAlignment="Left"
                           Style="{StaticResource TextComboBoxStyle}"
-                          SelectedIndex="0"
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="Destination"
+                          SelectedValue="{Binding SearchDestination, Mode=TwoWay}"
+                          SelectedIndex="{Binding DefaultSelectionIndex}"
                           PlaceholderText="Názvy knih">
-                    <ComboBoxItem>
-                        <TextBlock Text="Názvy knih i autoři" />
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        <TextBlock Text="Názvy knih" />
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        <TextBlock Text="Autoři" />
-                    </ComboBoxItem>
+                    <comboBoxItem:SearchDestinationItem Name="Názvy knih"
+                                                        Destination="Title" />
+                    <comboBoxItem:SearchDestinationItem Name="Autoři"
+                                                        Destination="Author" />
                 </ComboBox>
             </Grid>
             
@@ -98,69 +105,81 @@
                          Grid.ColumnSpan="4"
                          IsIndeterminate="True"
                          VerticalAlignment="Top"
-                         Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                         Visibility="{Binding IsInProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
         
         <StackPanel Grid.Row="1"
                     Margin="120,0,0,0"
                     Orientation="Horizontal">
-            <ComboBox SelectedIndex="0"
-                      Style="{StaticResource TextComboBoxStyle}"
-                      PlaceholderText="Mluvnice">
-                <ComboBoxItem>
-                    <TextBlock Text="Mluvnice" />
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock Text="Slovníky" />
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock Text="..." />
-                </ComboBoxItem>
+            <ComboBox Style="{StaticResource TextComboBoxStyle}"
+                      PlaceholderText="Mluvnice"
+                      SelectedValuePath="Category"
+                      DisplayMemberPath="Name"
+                      SelectedValue="{Binding SelectedCategory, Mode=TwoWay}"
+                      SelectedIndex="{Binding DefaultSelectionIndex}">
+                <comboBoxItem:CategoryItem Name="Staročeská textová banka"
+                                        Category="OldBohemainTextBank" />
+                <comboBoxItem:CategoryItem Name="Mluvnice"
+                                        Category="OldGrammar" />
+                <comboBoxItem:CategoryItem Name="Edice"
+                                        Category="Edition" />
+                <comboBoxItem:CategoryItem Name="Slovníky"
+                                        Category="Dictionary" />
+                <comboBoxItem:CategoryItem Name="Odborná literatura"
+                                        Category="ProfessionalLiterature" />
             </ComboBox>
             
-            <ComboBox SelectedIndex="0"
-                      Margin="50,0,0,0"
+            <ComboBox Margin="50,0,0,0"
                       Style="{StaticResource TextComboBoxStyle}"
-                      PlaceholderText="Seřadit podle názvu">
-                <ComboBoxItem>
-                    <TextBlock Text="Seřadit podle názvu" />
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock Text="Seřadit podle autora" />
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock Text="Seřadit podle roku" />
-                </ComboBoxItem>
+                      PlaceholderText="Seřadit podle názvu"
+                      SelectedValuePath="Type"
+                      DisplayMemberPath="Name"
+                      SelectedValue="{Binding SelectedSortType, Mode=TwoWay}"
+                      SelectedIndex="{Binding DefaultSelectionIndex}">
+                <comboBoxItem:SortItem Name="Seřadit podle názvu"
+                                    Type="Name" />
+                <comboBoxItem:SortItem Name="Seřadit podle autora"
+                                    Type="Author" />
+                <comboBoxItem:SortItem Name="Seřadit podle roku"
+                                    Type="Year" />
             </ComboBox>
 
-            <ComboBox SelectedIndex="0"
-                      Margin="100,0,0,0"
+            <ComboBox Margin="100,0,0,0"
                       Style="{StaticResource TextComboBoxStyle}"
-                      PlaceholderText="Od roku 1900">
-                <ComboBoxItem>
-                    <TextBlock Text="Od libovolného roku" />
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock Text="Od roku 1500" />
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock Text="Od roku 1800" />
-                </ComboBoxItem>
+                      PlaceholderText="Od roku 1900"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Value"
+                      SelectedValue="{Binding FilterFromYear, Mode=TwoWay}"
+                      SelectedIndex="{Binding DefaultSelectionIndex}">
+                <comboBoxItem:FilterYearItem Name="Od libovolného roku"
+                                          Value="-1000000" />
+                <comboBoxItem:FilterYearItem Name="Od roku 1500"
+                                          Value="1500" />
+                <comboBoxItem:FilterYearItem Name="Od roku 1700"
+                                          Value="1700" />
+                <comboBoxItem:FilterYearItem Name="Od roku 1800"
+                                          Value="1800" />
+                <comboBoxItem:FilterYearItem Name="Od roku 1900"
+                                          Value="1900" />
             </ComboBox>
 
-            <ComboBox SelectedIndex="0"
-                      Margin="50,0,0,0"
+            <ComboBox Margin="50,0,0,0"
                       Style="{StaticResource TextComboBoxStyle}"
-                      PlaceholderText="Do roku 1900">
-                <ComboBoxItem>
-                    <TextBlock Text="Do libovolného roku" />
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock Text="Do roku 1500" />
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock Text="Do roku 1800" />
-                </ComboBoxItem>
+                      PlaceholderText="Do roku 1900"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Value"
+                      SelectedValue="{Binding FilterToYear, Mode=TwoWay}"
+                      SelectedIndex="{Binding DefaultSelectionIndex}">
+                <comboBoxItem:FilterYearItem Name="Do libovolného roku"
+                                          Value="1000000" />
+                <comboBoxItem:FilterYearItem Name="Do roku 1499"
+                                          Value="1499" />
+                <comboBoxItem:FilterYearItem Name="Do roku 1699"
+                                          Value="1699" />
+                <comboBoxItem:FilterYearItem Name="Do roku 1799"
+                                          Value="1799" />
+                <comboBoxItem:FilterYearItem Name="Do roku 1899"
+                                          Value="1899" />
             </ComboBox>
         </StackPanel>
         

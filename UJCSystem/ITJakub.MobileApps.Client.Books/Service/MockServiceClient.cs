@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
+using Windows.Storage;
 using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Service
@@ -16,7 +19,7 @@ namespace ITJakub.MobileApps.Client.Books.Service
             return Task.Run(async () =>
             {
                 
-                await Task.Delay(1000);
+                await Task.Delay(2000);
                 var list = new List<BookContract>
                 {
                     new BookContract
@@ -57,7 +60,7 @@ namespace ITJakub.MobileApps.Client.Books.Service
         {
             return Task.Run(async () =>
             {
-                await Task.Delay(1000);
+                await Task.Delay(2000);
                 IList<BookContract> list = new List<BookContract>
                 {
                     new BookContract
@@ -81,8 +84,9 @@ namespace ITJakub.MobileApps.Client.Books.Service
 
         public new Task<IList<string>> GetPageListAsync(string bookGuid)
         {
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
+                await Task.Delay(2000);
                 IList<string> list = new List<string>
                 {
                     "1L", "1R", "2L", "2R", "3L", "3R", "4L", "4R", "5L", "5R", "6L", "6R", "7L", "7R", "8L", "8R", "9L", "9R",
@@ -92,19 +96,32 @@ namespace ITJakub.MobileApps.Client.Books.Service
             });
         }
 
-        public new Stream GetPageAsRtf(string bookGuid, string pageId)
+        public new Task<Stream> GetPageAsRtfAsync(string bookGuid, string pageId)
         {
-            Stream stream = new MemoryStream();
-            StreamWriter writer = new StreamWriter(stream);
-            writer.Write(@"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard Toto je {\b tucny} text.\par}");
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
+            return Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+                Stream stream = new MemoryStream();
+                StreamWriter writer = new StreamWriter(stream);
+                writer.Write(@"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard Toto je {\b tucny} text.\par}");
+                writer.Flush();
+                stream.Position = 0;
+                return stream;
+            });
         }
 
-        public new Stream GetPagePhoto(string bookGuid, string pageId)
+        public new Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
         {
-            return null;
+            return Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+                
+                var assemblyName = GetType().GetTypeInfo().Assembly.GetName().Name;
+                var uri = new Uri(string.Format("ms-appx:///{0}/", assemblyName));
+
+                var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri(uri, "Icon/book-48.png"));
+                return await file.OpenStreamForReadAsync();
+            });
         }
     }
 }

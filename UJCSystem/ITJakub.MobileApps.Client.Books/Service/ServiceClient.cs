@@ -55,12 +55,12 @@ namespace ITJakub.MobileApps.Client.Books.Service
             return null;
         }
 
-        public Stream GetPageAsRtf(string bookGuid, string pageId)
+        public Task<Stream> GetPageAsRtfAsync(string bookGuid, string pageId)
         {
             return null;
         }
 
-        public Stream GetPagePhoto(string bookGuid, string pageId)
+        public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
         {
             return null;
         }
