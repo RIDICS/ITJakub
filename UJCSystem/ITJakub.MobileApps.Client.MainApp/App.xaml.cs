@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -8,6 +9,7 @@ using Windows.UI.Xaml.Navigation;
 // The Grid App template is documented at http://go.microsoft.com/fwlink/?LinkId=234226
 using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.MainApp.Common;
+using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.View.Login;
 
 namespace ITJakub.MobileApps.Client.MainApp
@@ -111,5 +113,24 @@ namespace ITJakub.MobileApps.Client.MainApp
             await SuspensionManager.SaveAsync();
             deferral.Complete();
         }
+
+        protected override void OnWindowCreated(WindowCreatedEventArgs args)
+        {
+            base.OnWindowCreated(args);
+            SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested;
+        }
+
+        private void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            //loader for getting string from string resources (e.g. used for app translation)
+            //var loader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+            args.Request.ApplicationCommands.Add(new SettingsCommand(
+                "About", "O aplikaci", handler =>
+                {
+                    var aboutSettingsFlyout = new AboutSettingsFlyout();
+                    aboutSettingsFlyout.Show();
+                }));
+        }
+
     }
 }

@@ -111,6 +111,9 @@
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
     <Compile Include="ViewModel\Message\SelectedApplicationMessage.cs" />
     <Compile Include="ViewModel\Message\SelectedTaskMessage.cs" />
+    <Compile Include="View\AboutSettingsFlyout.xaml.cs">
+      <DependentUpon>AboutSettingsFlyout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
     <Compile Include="View\Converter\GroupStateToNameConverter.cs" />
@@ -198,6 +201,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\AboutSettingsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ErrorBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
