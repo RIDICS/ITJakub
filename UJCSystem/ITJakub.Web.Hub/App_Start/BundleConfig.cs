@@ -10,6 +10,9 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Scripts/jquery-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
+            "~/Scripts/jquery-ui-{version}.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Scripts/jquery.validate*"));
 
@@ -28,6 +31,7 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
                 "~/Scripts/Plugins/Search/itjakub.plugins.search.js",
+                "~/Scripts/Plugins/Reader/itjakub.plugins.reader.js",
                 "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js",
                 "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js",
                 "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.sorting.js",
@@ -44,6 +48,9 @@ namespace ITJakub.Web.Hub
             bundles.Add(new StyleBundle("~/Content/dropzonescss").Include(
                      "~/Scripts/dropzone/css/basic.css",
                      "~/Scripts/dropzone/css/dropzone.css"));
+
+            bundles.Add(new StyleBundle("~/Content/jqueryuicss").Include(
+              "~/Content/themes/base/*.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

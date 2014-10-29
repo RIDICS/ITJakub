@@ -229,9 +229,54 @@
     <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.min.css">
       <DependentUpon>ITJakub.Bibliography.css</DependentUpon>
     </Content>
+    <Content Include="Content\Plugins\Reader\ItJakub.Bibliography.css">
+      <DependentUpon>ITJakub.Reader.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\Reader\ItJakub.Bibliography.min.css">
+      <DependentUpon>ItJakub.Bibliography.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\Reader\ITJakub.Reader.css">
+      <DependentUpon>ITJakub.Reader.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\Reader\ITJakub.Reader.min.css">
+      <DependentUpon>ITJakub.Reader.css</DependentUpon>
+    </Content>
     <Content Include="Content\Site.min.css">
       <DependentUpon>Site.css</DependentUpon>
     </Content>
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -349,6 +394,13 @@
     <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.css.map">
       <DependentUpon>ITJakub.Bibliography.css</DependentUpon>
     </Content>
+    <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />
+    <Content Include="Content\Plugins\Reader\ItJakub.Bibliography.css.map">
+      <DependentUpon>ItJakub.Bibliography.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\Reader\ITJakub.Reader.css.map">
+      <DependentUpon>ITJakub.Reader.css</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
@@ -359,6 +411,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.11.1.js" />
+    <Content Include="Scripts\jquery-ui.min-1.11.1.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -429,11 +483,13 @@
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.configuration.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.factories.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.variableInterpreter.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Reader\itjakub.plugins.reader.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Search\itjakub.plugins.search.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>
