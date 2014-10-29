@@ -307,6 +307,10 @@ ul.bib-listing li.list-item .middle-panel {
   overflow-y: auto;
   max-height: 120px;
 }
+ul.bib-listing li.list-item .middle-panel .short-info {
+  color: darkgray;
+  float: right;
+}
 ul.bib-listing li.list-item .middle-panel .heading {
   font-size: 24px;
   font-weight: 500;
@@ -602,4 +606,4 @@ div.container {
 .top-offset-without-submenu {
   margin: -25px 0 0 0;
 }
-/*# sourceMappingURL=itjakub.css.map */
+/*# sourceMappingURL=ITJakub.css.map */

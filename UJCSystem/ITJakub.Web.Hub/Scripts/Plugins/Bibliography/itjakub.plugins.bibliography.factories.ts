@@ -92,6 +92,12 @@ class BibliographyFactory {
         var middlePanel: HTMLDivElement = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
 
+        if (config.containsShortInfo()) {
+            var middlePanelShortInfo: HTMLDivElement = document.createElement('div');
+            $(middlePanelShortInfo).addClass('short-info');
+            middlePanelShortInfo.innerHTML = config.getShortInfo(bookInfo);
+            middlePanel.appendChild(middlePanelShortInfo);
+        }
 
         if (config.containsTitle()) {
             var middlePanelHeading: HTMLDivElement = document.createElement('div');

@@ -97,6 +97,9 @@ var MiddlePanelConfiguration = (function (_super) {
     MiddlePanelConfiguration.prototype.containsTitle = function () {
         return typeof this.configObject['title'] !== 'undefined';
     };
+    MiddlePanelConfiguration.prototype.containsShortInfo = function () {
+        return typeof this.configObject['short-info'] !== 'undefined';
+    };
     MiddlePanelConfiguration.prototype.containsCustom = function () {
         return typeof this.configObject['custom'] !== 'undefined';
     };
@@ -106,6 +109,9 @@ var MiddlePanelConfiguration = (function (_super) {
     };
     MiddlePanelConfiguration.prototype.getTitle = function (bibItem) {
         return this.interpret(this.configObject['title'], bibItem);
+    };
+    MiddlePanelConfiguration.prototype.getShortInfo = function (bibItem) {
+        return this.interpret(this.configObject['short-info'], bibItem);
     };
     MiddlePanelConfiguration.prototype.getBody = function (bibItem) {
         return this.interpret(this.configObject['body'], bibItem);

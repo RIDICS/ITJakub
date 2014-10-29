@@ -91,6 +91,13 @@ var BibliographyFactory = (function () {
         var middlePanel = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
 
+        if (config.containsShortInfo()) {
+            var middlePanelShortInfo = document.createElement('div');
+            $(middlePanelShortInfo).addClass('short-info');
+            middlePanelShortInfo.innerHTML = config.getShortInfo(bookInfo);
+            middlePanel.appendChild(middlePanelShortInfo);
+        }
+
         if (config.containsTitle()) {
             var middlePanelHeading = document.createElement('div');
             $(middlePanelHeading).addClass('heading');

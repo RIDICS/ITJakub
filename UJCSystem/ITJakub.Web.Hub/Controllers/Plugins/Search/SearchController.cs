@@ -50,9 +50,8 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                 };
                 if (int.Parse(bookId) % 2 == 0)
                 {
-                    bookInfo.BookType = "Dictionary";
-                    bookInfo.Name = "Slovnicek";
-                    bookInfo.Century = 5;
+                    bookInfo.BookType = "CardFile";
+
                 }
                 if (int.Parse(bookId) % 3 == 0)
                 {
@@ -61,7 +60,15 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                 }
                 if (int.Parse(bookId) % 4 == 0)
                 {
-                    bookInfo.BookType = "CardFile";
+                    bookInfo.BookType = "Dictionary";
+                    bookInfo.Name = "Slovnicek";
+                    bookInfo.Century = 5;
+                    bookInfo.Linked = true;
+
+                    if (int.Parse(bookId)%8 == 0)
+                    {
+                        bookInfo.Linked = false;
+                    }
                 }
                 if (int.Parse(bookId) % 5 == 0)
                 {
@@ -130,6 +137,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
         public string Sign { get; set; }
         public string Description { get; set; }
         public int Year { get; set; }
+        public bool Linked { get; set; }
 
         public List<Author> Authors { get; set; }
 

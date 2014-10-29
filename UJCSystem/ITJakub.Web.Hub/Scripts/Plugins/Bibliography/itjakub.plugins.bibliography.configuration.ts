@@ -80,10 +80,12 @@ class MiddlePanelConfiguration extends Configuration {
 
     containsBody() { return typeof this.configObject['body'] !== 'undefined'; }
     containsTitle() { return typeof this.configObject['title'] !== 'undefined'; }
+    containsShortInfo() { return typeof this.configObject['short-info'] !== 'undefined'; }
     containsCustom() { return typeof this.configObject['custom'] !== 'undefined'; }
 
     getCustom(bibItem: IBookInfo): string { return this.interpret(this.configObject['custom'], bibItem); }
     getTitle(bibItem: IBookInfo): string { return this.interpret(this.configObject['title'], bibItem); }
+    getShortInfo(bibItem: IBookInfo): string { return this.interpret(this.configObject['short-info'], bibItem); }
     getBody(bibItem: IBookInfo): string { return this.interpret(this.configObject['body'], bibItem); }
 }
 

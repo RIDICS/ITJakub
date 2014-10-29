@@ -24,6 +24,10 @@ ul.bib-listing li.list-item .middle-panel {
   overflow-y: auto;
   max-height: 120px;
 }
+ul.bib-listing li.list-item .middle-panel .short-info {
+  color: darkgray;
+  float: right;
+}
 ul.bib-listing li.list-item .middle-panel .heading {
   font-size: 24px;
   font-weight: 500;

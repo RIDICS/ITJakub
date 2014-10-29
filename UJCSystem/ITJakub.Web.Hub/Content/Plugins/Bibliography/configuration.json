@@ -91,9 +91,16 @@
 
     "Dictionary": {
         "middle-panel": {
+            "short-info": "{$linked}",
             "title": "{Name} {$srcAbbreHref}",
             "body": "{$authors}{$description}{$archive}{$year}",
             "variables": {
+                "$linked": {
+                    "type": "if",
+                    "pattern": "{Linked}",
+                    "onTrue": "zapojený slovník",
+                    "onFalse": "nezapojený slovník"
+                },
                 "$srcAbbreHref": {
                     "type": "basic",
                     "pattern": "<a href='#'>[{SourceAbbreviation}]</a>",
