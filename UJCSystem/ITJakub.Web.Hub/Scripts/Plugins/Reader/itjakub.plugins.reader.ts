@@ -1,4 +1,4 @@
-﻿
+﻿/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
 
 class ReaderModule {
 
@@ -26,10 +26,12 @@ class ReaderModule {
         var slider: HTMLDivElement = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
-            range: "min",
             min: 0,
-            max: 500,
-            values: 0
+            max: 100,
+            value: 0,
+            change: (event: Event, ui) => {
+                /* Update as desired. */
+            }
         });
 
         contorlsDiv.appendChild(slider);

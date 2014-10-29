@@ -1,4 +1,5 @@
-﻿var ReaderModule = (function () {
+﻿/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
+var ReaderModule = (function () {
     function ReaderModule(readerContainer) {
         this.readerContainer = readerContainer;
     }
@@ -20,10 +21,12 @@
         var slider = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
-            range: "min",
             min: 0,
-            max: 500,
-            values: 0
+            max: 100,
+            value: 0,
+            change: function (event, ui) {
+                /* Update as desired. */
+            }
         });
 
         contorlsDiv.appendChild(slider);
