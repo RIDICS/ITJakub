@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converter="using:ITJakub.MobileApps.Client.Books.View.Converter"
     xmlns:view="using:ITJakub.MobileApps.Client.Books.View"
+    xmlns:control="using:ITJakub.MobileApps.Client.Books.View.Control"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -104,17 +105,23 @@
                           Header="Zobrazit fotografii stránky"
                           OnContent="Ano"
                           OffContent="Ne" />
-            
-            <view:BindableRichEditBox Grid.Row="1"
-                         Grid.Column="0"
-                         Background="#50FFFFFF"
-                         BorderBrush="#30000000"
-                         IsReadOnly="True"
-                         DocumentRtf="{Binding SelectedPage.RtfText}" />
-            
+
+            <Border Grid.Row="1"
+                    Grid.Column="0"
+                    Background="#50FFFFFF"
+                    BorderBrush="#30000000"
+                    BorderThickness="2">
+                <control:BindableRichTextBlock XamlBlocks="{Binding SelectedPage.RtfText}" />
+            </Border>
+
             <Grid Grid.Row="1"
                   Grid.Column="2"
-                  Background="#30000000" />
+                  Background="#30000000">
+                <control:BindableRichEditBox DocumentRtf="{Binding DocumentRtf}"
+                                             x:Name="BindableRichEditBox" />
+                <Button Content="Button"
+                        Click="Button_OnClick"/>
+            </Grid>
             
             <GridView Grid.Row="2"
                       Grid.Column="0"

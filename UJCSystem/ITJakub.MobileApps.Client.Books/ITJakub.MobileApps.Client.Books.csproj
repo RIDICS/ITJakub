@@ -142,7 +142,8 @@
     <Compile Include="ViewModel\SelectPageViewModel.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SortItem.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\BindableRichEditBox.cs" />
+    <Compile Include="View\Control\BindableRichEditBox.cs" />
+    <Compile Include="View\Control\BindableRichTextBlock.cs" />
     <Compile Include="View\SelectBookView.xaml.cs">
       <DependentUpon>SelectBookView.xaml</DependentUpon>
     </Compile>

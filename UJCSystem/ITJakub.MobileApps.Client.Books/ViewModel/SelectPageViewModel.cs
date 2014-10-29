@@ -39,25 +39,25 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 new BookPageViewModel
                 {
                     BookInfo = Book,
-                    RtfText = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard Toto je {\b tucny} text.\par}",
+                    RtfText = @"<Paragraph><Span>This is <Bold>mixed content</Bold> with multiple text areas <Italic> and inlines</Italic>.</Span></Paragraph>",
                     PageId = "1L"
                 },
                 new BookPageViewModel
                 {
                     BookInfo = Book,
-                    RtfText = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard Toto je {\b tucny} text, druha strana.\par}",
+                    RtfText = @"<Paragraph><Span>This is <Bold>DRUHA</Bold> with multiple text areas <Italic> and inlines</Italic>.</Span></Paragraph>",
                     PageId = "1R"
                 },
                 new BookPageViewModel
                 {
                     BookInfo = Book,
-                    RtfText = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard Toto je {\b tucny} text, treti strana.\par}",
+                    RtfText = @"<Paragraph><Span>This is <Bold>TRETI</Bold> with multiple text areas <Italic> and inlines</Italic>.</Span></Paragraph>",
                     PageId = "2L"
                 },
                 new BookPageViewModel
                 {
                     BookInfo = Book,
-                    RtfText = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard Toto je {\b tucny} text, ctvrta strana.\par}",
+                    RtfText = @"<Paragraph><Span>This is <Bold>CTVRTA</Bold> with multiple text areas <Italic> and inlines</Italic>.</Span></Paragraph>",
                     PageId = "2R"
                 }
             };
@@ -140,6 +140,11 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 m_selectedPageIndex = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public string DocumentRtf
+        {
+            get { return @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard Toto je {\b tucny} text.\par}"; }
         }
 
         private void Save()

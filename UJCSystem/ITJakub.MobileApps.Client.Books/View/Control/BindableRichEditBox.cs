@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace ITJakub.MobileApps.Client.Books.View
+namespace ITJakub.MobileApps.Client.Books.View.Control
 {
     public class BindableRichEditBox : RichEditBox
     {
@@ -26,6 +26,10 @@ namespace ITJakub.MobileApps.Client.Books.View
             richEditBox.IsReadOnly = false;
             richEditBox.Document.SetText(TextSetOptions.FormatRtf, e.NewValue.ToString());
             richEditBox.IsReadOnly = oldIsReadonlyState;
+        }
+
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
         }
     }
 }
