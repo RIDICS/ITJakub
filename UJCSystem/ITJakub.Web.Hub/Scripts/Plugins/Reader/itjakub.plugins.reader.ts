@@ -245,8 +245,15 @@ class ReaderModule {
 
     addBookmark(actualPageIndex: number) {
         var slider = $(this.readerContainer).find('.slider');
-        var position = $(slider).slider().width() / this.pages.length - 1;
-        alert($(slider).slider().width());
+        var positionStep = $(slider).slider().width() / (this.pages.length - 1);
+        
+        var bookmarkSpan = document.createElement("span");
+        $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
+        var computedPosition = (positionStep * this.actualPageIndex) - 7; //TODO 7 is half of span widht, should be computed somehow
+        $(bookmarkSpan).css('left', computedPosition);
+        $(slider).append(bookmarkSpan);
+
+        //TODO populate request on service for adding bookmark to DB
 
     }
 }

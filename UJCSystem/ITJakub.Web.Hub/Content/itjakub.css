@@ -439,6 +439,12 @@ span.ui-slider-handle:focus {
   width: 100px;
   border: 1px solid lightgray;
   border-right: none;
+  outline: 0;
+}
+.bookmark {
+  color: red;
+  z-index: 1;
+  position: absolute;
 }
 .white-link {
   color: white;
