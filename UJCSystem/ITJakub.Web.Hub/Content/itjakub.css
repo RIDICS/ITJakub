@@ -412,8 +412,14 @@ span.ui-slider-handle:focus {
   opacity: 1;
   width: 100px;
   bottom: 120%;
-  color: black;
   margin-left: -3.5em;
+}
+.tooltip-inner {
+  background-color: #84ced7;
+  color: white;
+}
+.tooltip-arrow {
+  border-top-color: #84ced7 !important;
 }
 .white-link {
   color: white;

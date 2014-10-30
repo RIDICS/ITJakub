@@ -37,9 +37,10 @@ var ReaderModule = (function () {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
             },
             stop: function (event, ui) {
-                $(event.target).find('.ui-slider-handle').find('.slider-tip').hide();
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').fadeOut(1000);
             },
             slide: function (event, ui) {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
                 $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + _this.pages[ui.value]);
             },
@@ -66,7 +67,7 @@ var ReaderModule = (function () {
             $(event.target).find('.slider-tip').show();
         });
         $(sliderHandle).mouseout(function (event) {
-            $(event.target).find('.slider-tip').hide();
+            $(event.target).find('.slider-tip').fadeOut(1000);
         });
         controlsDiv.appendChild(slider);
 

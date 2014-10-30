@@ -47,9 +47,10 @@ class ReaderModule {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
             },
             stop: (event, ui) =>  {
-                $(event.target).find('.ui-slider-handle').find('.slider-tip').hide();
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').fadeOut(1000);
             },
             slide: (event, ui) => {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
                 $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[ui.value]);
                
@@ -77,7 +78,7 @@ class ReaderModule {
             $(event.target).find('.slider-tip').show();
         });
         $(sliderHandle).mouseout((event) => {
-            $(event.target).find('.slider-tip').hide();
+            $(event.target).find('.slider-tip').fadeOut(1000);
         });
         controlsDiv.appendChild(slider);
 
