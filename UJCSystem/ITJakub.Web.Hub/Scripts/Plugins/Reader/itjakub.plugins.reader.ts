@@ -172,8 +172,41 @@ class ReaderModule {
 
         pagingDiv.appendChild(paginationUl);
 
-        controlsDiv.appendChild(pagingDiv);
+        var bookmarkButton = document.createElement("button");
+        $(bookmarkButton).addClass('bookmark-button');
 
+        var bookmarkSpan = document.createElement("span");
+        $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark');
+        $(bookmarkButton).append(bookmarkSpan);
+
+        $(bookmarkButton).click((event: Event) => {
+            this.addBookmark(this.actualPageIndex);
+        });
+        pagingDiv.appendChild(bookmarkButton);
+
+        var commentButton = document.createElement("button");
+        $(commentButton).addClass('comment-button');
+
+        var commentSpan = document.createElement("span");
+        $(commentSpan).addClass('glyphicon glyphicon-comment');
+        $(commentButton).append(commentSpan);
+
+        $(commentButton).click((event: Event) => {
+        });
+        pagingDiv.appendChild(commentButton);
+
+        var contentButton = document.createElement("button");
+        $(contentButton).addClass('content-button');
+
+        var contentSpan = document.createElement("span");
+        $(contentSpan).addClass('glyphicon glyphicon-book');
+        $(contentButton).append(contentSpan);
+
+        $(contentButton).click((event: Event) => {
+        });
+        pagingDiv.appendChild(contentButton);
+
+        controlsDiv.appendChild(pagingDiv);
         return controlsDiv;
     }
 
@@ -207,6 +240,13 @@ class ReaderModule {
     displayPage(page: string) {
         $(this.readerContainer).find('div.reader-text').empty();
         $(this.readerContainer).find('div.reader-text').append(page);
+
+    }
+
+    addBookmark(actualPageIndex: number) {
+        var slider = $(this.readerContainer).find('.slider');
+        var position = $(slider).slider().width() / this.pages.length - 1;
+        alert($(slider).slider().width());
 
     }
 }

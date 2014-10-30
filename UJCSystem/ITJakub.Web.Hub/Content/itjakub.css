@@ -336,7 +336,7 @@ ul.bib-listing li.list-item .hidden-content {
 ul.bib-listing li.list-item .hidden-content .bottom-panel .body {
   padding: 10px 5px 10px 30px;
 }
-.content-button {
+ul.bib-listing li.list-item .right-panel .content-button {
   position: absolute;
   bottom: 5px;
   left: 50%;
@@ -387,7 +387,7 @@ ul.bib-listing li.list-item .label {
   color: black;
   padding-left: 0;
 }
-.sort-button {
+.bib-sortbar .sort-button {
   background-color: transparent;
   border: none;
   outline: none!important;

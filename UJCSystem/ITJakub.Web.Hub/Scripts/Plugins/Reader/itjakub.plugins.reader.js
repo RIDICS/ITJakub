@@ -163,8 +163,41 @@ var ReaderModule = (function () {
 
         pagingDiv.appendChild(paginationUl);
 
-        controlsDiv.appendChild(pagingDiv);
+        var bookmarkButton = document.createElement("button");
+        $(bookmarkButton).addClass('bookmark-button');
 
+        var bookmarkSpan = document.createElement("span");
+        $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark');
+        $(bookmarkButton).append(bookmarkSpan);
+
+        $(bookmarkButton).click(function (event) {
+            _this.addBookmark(_this.actualPageIndex);
+        });
+        pagingDiv.appendChild(bookmarkButton);
+
+        var commentButton = document.createElement("button");
+        $(commentButton).addClass('comment-button');
+
+        var commentSpan = document.createElement("span");
+        $(commentSpan).addClass('glyphicon glyphicon-comment');
+        $(commentButton).append(commentSpan);
+
+        $(commentButton).click(function (event) {
+        });
+        pagingDiv.appendChild(commentButton);
+
+        var contentButton = document.createElement("button");
+        $(contentButton).addClass('content-button');
+
+        var contentSpan = document.createElement("span");
+        $(contentSpan).addClass('glyphicon glyphicon-book');
+        $(contentButton).append(contentSpan);
+
+        $(contentButton).click(function (event) {
+        });
+        pagingDiv.appendChild(contentButton);
+
+        controlsDiv.appendChild(pagingDiv);
         return controlsDiv;
     };
 
@@ -198,6 +231,12 @@ var ReaderModule = (function () {
     ReaderModule.prototype.displayPage = function (page) {
         $(this.readerContainer).find('div.reader-text').empty();
         $(this.readerContainer).find('div.reader-text').append(page);
+    };
+
+    ReaderModule.prototype.addBookmark = function (actualPageIndex) {
+        var slider = $(this.readerContainer).find('.slider');
+        var position = $(slider).slider().width() / this.pages.length - 1;
+        alert($(slider).slider().width());
     };
     return ReaderModule;
 })();
