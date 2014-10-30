@@ -229,12 +229,6 @@
     <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.min.css">
       <DependentUpon>ITJakub.Bibliography.css</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\Reader\ItJakub.Bibliography.css">
-      <DependentUpon>ITJakub.Reader.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Plugins\Reader\ItJakub.Bibliography.min.css">
-      <DependentUpon>ItJakub.Bibliography.css</DependentUpon>
-    </Content>
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.css">
       <DependentUpon>ITJakub.Reader.less</DependentUpon>
     </Content>
@@ -395,9 +389,6 @@
       <DependentUpon>ITJakub.Bibliography.css</DependentUpon>
     </Content>
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />
-    <Content Include="Content\Plugins\Reader\ItJakub.Bibliography.css.map">
-      <DependentUpon>ItJakub.Bibliography.css</DependentUpon>
-    </Content>
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.css.map">
       <DependentUpon>ITJakub.Reader.css</DependentUpon>
     </Content>

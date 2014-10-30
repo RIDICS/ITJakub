@@ -393,6 +393,21 @@ ul.bib-listing li.list-item .label {
   outline: none!important;
   box-shadow: none !important;
 }
+.ui-slider {
+  background: #84ced7;
+  height: 5px;
+  width: 80%;
+  border: none;
+}
+.ui-slider > .ui-slider-handle {
+  background: gray;
+  border-radius: 50%;
+  border: none;
+  top: -0.5em;
+}
+span.ui-slider-handle:focus {
+  outline: 0;
+}
 .white-link {
   color: white;
   text-decoration: none;
