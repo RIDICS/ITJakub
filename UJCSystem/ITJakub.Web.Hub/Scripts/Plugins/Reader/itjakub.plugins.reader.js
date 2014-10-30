@@ -2,7 +2,7 @@
 var ReaderModule = (function () {
     function ReaderModule(readerContainer) {
         this.readerContainer = readerContainer;
-        this.actualPage = 0;
+        this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array();
         for (var i = 0; i < 15; i++) {
@@ -14,8 +14,14 @@ var ReaderModule = (function () {
         var readerDiv = document.createElement('div');
         $(readerDiv).addClass('reader');
 
+        var readerHeadDiv = document.createElement('div');
+        $(readerHeadDiv).addClass('reader-head content-container');
+        var title = this.makeTitle(book);
+        readerHeadDiv.appendChild(title);
+
         var controls = this.makeControls(book);
-        readerDiv.appendChild(controls);
+        readerHeadDiv.appendChild(controls);
+        readerDiv.appendChild(readerHeadDiv);
 
         var textArea = this.makeTextArea(book);
         readerDiv.appendChild(textArea);
@@ -23,10 +29,18 @@ var ReaderModule = (function () {
         $(this.readerContainer).append(readerDiv);
     };
 
+    ReaderModule.prototype.makeTitle = function (book) {
+        var titleDiv = document.createElement('div');
+        $(titleDiv).addClass('title');
+        titleDiv.innerHTML = "Stitny ze stitneho, Tomas : [Stitensky sbornik klementinsky]";
+        return titleDiv;
+    };
+
     ReaderModule.prototype.makeControls = function (book) {
         var _this = this;
         var controlsDiv = document.createElement('div');
-        $(controlsDiv).addClass('reader-controls');
+        $(controlsDiv).addClass('reader-controls content-container');
+
         var slider = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
@@ -45,7 +59,7 @@ var ReaderModule = (function () {
                 $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + _this.pages[ui.value]);
             },
             change: function (event, ui) {
-                _this.moveToPage(ui.value);
+                _this.moveToPageNumber(ui.value);
             }
         });
 
@@ -71,6 +85,86 @@ var ReaderModule = (function () {
         });
         controlsDiv.appendChild(slider);
 
+        var pagingDiv = document.createElement('div');
+        $(pagingDiv).addClass('paging');
+
+        var pageInputText = document.createElement("input");
+        pageInputText.setAttribute("type", "text");
+        pageInputText.setAttribute("id", "pageInputText");
+        $(pageInputText).addClass('page-input-text');
+        pagingDiv.appendChild(pageInputText);
+
+        var pageInputButton = document.createElement("button");
+        pageInputButton.innerHTML = "Přejít na stránku";
+        $(pageInputButton).addClass('page-input-button');
+        $(pageInputButton).click(function (event) {
+            _this.moveToPage($('#pageInputText').val());
+        });
+        pagingDiv.appendChild(pageInputButton);
+
+        var paginationUl = document.createElement('ul');
+        $(paginationUl).addClass('pagination pagination-sm');
+
+        var liElement = document.createElement('li');
+        var anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '|<';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '<<';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '<';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '1r';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '2r';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>>';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>|';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        pagingDiv.appendChild(paginationUl);
+
+        controlsDiv.appendChild(pagingDiv);
+
         return controlsDiv;
     };
 
@@ -80,9 +174,25 @@ var ReaderModule = (function () {
         return textAreaDiv;
     };
 
+    ReaderModule.prototype.moveToPageNumber = function (pageIndex) {
+        this.actualPageIndex = pageIndex;
+        this.displayPage(this.pages[pageIndex]);
+    };
+
     ReaderModule.prototype.moveToPage = function (page) {
-        this.actualPage = page;
-        this.displayPage(this.pages[page]);
+        var pageIndex = $.inArray(page, this.pages);
+        if (pageIndex >= 0) {
+            this.actualizeSlider(pageIndex);
+            this.moveToPageNumber(pageIndex);
+        } else {
+            //TODO tell user page not exist
+        }
+    };
+
+    ReaderModule.prototype.actualizeSlider = function (pageIndex) {
+        var slider = $(this.readerContainer).find('.slider');
+        $(slider).slider().slider('value', pageIndex);
+        $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex]);
     };
 
     ReaderModule.prototype.displayPage = function (page) {

@@ -1,22 +1,20 @@
 ﻿/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
 
 
-
-
 class ReaderModule {
 
     readerContainer: string;
     sliderOnPage: number;
-    actualPage: number;
+    actualPageIndex: number;
     pages: Array<string>;
 
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
-        this.actualPage = 0;
+        this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array<string>();
-        for (var i = 0; i < 15; i++) {  //TODO pages should be loaded by ajax
-            this.pages.push(i.toString()+"r");
+        for (var i = 0; i < 15; i++) { //TODO pages should be loaded by ajax
+            this.pages.push(i.toString() + "r");
         }
     }
 
@@ -25,8 +23,14 @@ class ReaderModule {
         var readerDiv: HTMLDivElement = document.createElement('div');
         $(readerDiv).addClass('reader');
 
+        var readerHeadDiv: HTMLDivElement = document.createElement('div');
+        $(readerHeadDiv).addClass('reader-head content-container');
+        var title = this.makeTitle(book);
+        readerHeadDiv.appendChild(title);
+
         var controls = this.makeControls(book);
-        readerDiv.appendChild(controls);
+        readerHeadDiv.appendChild(controls);
+        readerDiv.appendChild(readerHeadDiv);
 
         var textArea = this.makeTextArea(book);
         readerDiv.appendChild(textArea);
@@ -34,9 +38,17 @@ class ReaderModule {
         $(this.readerContainer).append(readerDiv);
     }
 
+    private makeTitle(book: IBookInfo): HTMLDivElement {
+        var titleDiv: HTMLDivElement = document.createElement('div');
+        $(titleDiv).addClass('title');
+        titleDiv.innerHTML = "Stitny ze stitneho, Tomas : [Stitensky sbornik klementinsky]";
+        return titleDiv;
+    }
+
     private makeControls(book: IBookInfo): HTMLDivElement {
         var controlsDiv: HTMLDivElement = document.createElement('div');
-        $(controlsDiv).addClass('reader-controls');
+        $(controlsDiv).addClass('reader-controls content-container');
+
         var slider: HTMLDivElement = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
@@ -46,17 +58,17 @@ class ReaderModule {
             start: (event, ui) => {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
             },
-            stop: (event, ui) =>  {
+            stop: (event, ui) => {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').fadeOut(1000);
             },
             slide: (event, ui) => {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
                 $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[ui.value]);
-               
+
             },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
-                this.moveToPage(ui.value);
+                this.moveToPageNumber(ui.value);
             }
         });
 
@@ -82,6 +94,86 @@ class ReaderModule {
         });
         controlsDiv.appendChild(slider);
 
+        var pagingDiv: HTMLDivElement = document.createElement('div');
+        $(pagingDiv).addClass('paging');
+
+        var pageInputText = document.createElement("input");
+        pageInputText.setAttribute("type", "text");
+        pageInputText.setAttribute("id", "pageInputText");
+        $(pageInputText).addClass('page-input-text');
+        pagingDiv.appendChild(pageInputText);
+
+        var pageInputButton = document.createElement("button");
+        pageInputButton.innerHTML = "Přejít na stránku";
+        $(pageInputButton).addClass('page-input-button');
+        $(pageInputButton).click((event: Event) => {
+            this.moveToPage($('#pageInputText').val());
+        });
+        pagingDiv.appendChild(pageInputButton);
+
+        var paginationUl: HTMLUListElement = document.createElement('ul');
+        $(paginationUl).addClass('pagination pagination-sm');
+
+        var liElement: HTMLLIElement = document.createElement('li');
+        var anchor: HTMLAnchorElement = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '|<';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '<<';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '<';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '1r';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '2r';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>>';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>|';
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        pagingDiv.appendChild(paginationUl);
+
+        controlsDiv.appendChild(pagingDiv);
+
         return controlsDiv;
     }
 
@@ -91,9 +183,25 @@ class ReaderModule {
         return textAreaDiv;
     }
 
-    moveToPage(page: number) {
-        this.actualPage = page;
-        this.displayPage(this.pages[page]);
+    moveToPageNumber(pageIndex: number) {
+        this.actualPageIndex = pageIndex;
+        this.displayPage(this.pages[pageIndex]);
+    }
+
+    moveToPage(page: string) {
+        var pageIndex: number = $.inArray(page, this.pages);
+        if (pageIndex >= 0) {
+            this.actualizeSlider(pageIndex);
+            this.moveToPageNumber(pageIndex);
+        } else {
+            //TODO tell user page not exist  
+        }
+    }
+
+    actualizeSlider(pageIndex: number) {
+        var slider = $(this.readerContainer).find('.slider');
+        $(slider).slider().slider('value', pageIndex);
+        $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex]);
     }
 
     displayPage(page: string) {

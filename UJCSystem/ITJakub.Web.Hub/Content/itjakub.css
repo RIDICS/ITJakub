@@ -396,7 +396,8 @@ ul.bib-listing li.list-item .label {
 .ui-slider {
   background: #84ced7;
   height: 5px;
-  width: 80%;
+  width: 95%;
+  margin-left: 2.5%;
   border: none;
 }
 .ui-slider > .ui-slider-handle {
@@ -420,6 +421,24 @@ span.ui-slider-handle:focus {
 }
 .tooltip-arrow {
   border-top-color: #84ced7 !important;
+}
+.title {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.page-input-button {
+  color: white;
+  background-color: #84ced7;
+  border: none;
+  outline: 0;
+  height: 25px;
+}
+.page-input-text {
+  height: 25px;
+  width: 100px;
+  border: 1px solid lightgray;
+  border-right: none;
 }
 .white-link {
   color: white;
@@ -634,4 +653,4 @@ div.container {
 .top-offset-without-submenu {
   margin: -25px 0 0 0;
 }
-/*# sourceMappingURL=ITJakub.css.map */
+/*# sourceMappingURL=itjakub.css.map */
