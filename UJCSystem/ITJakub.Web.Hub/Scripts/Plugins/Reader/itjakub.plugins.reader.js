@@ -3,9 +3,10 @@ var ReaderModule = (function () {
     function ReaderModule(readerContainer) {
         this.readerContainer = readerContainer;
         this.actualPage = 0;
+        this.sliderOnPage = 0;
         this.pages = new Array();
         for (var i = 0; i < 15; i++) {
-            this.pages.push("This is text of page " + i.toString());
+            this.pages.push(i.toString() + "r");
         }
     }
     ReaderModule.prototype.makeReader = function (book) {
@@ -24,23 +25,52 @@ var ReaderModule = (function () {
 
     ReaderModule.prototype.makeControls = function (book) {
         var _this = this;
-        var contorlsDiv = document.createElement('div');
-        $(contorlsDiv).addClass('reader-controls');
-
+        var controlsDiv = document.createElement('div');
+        $(controlsDiv).addClass('reader-controls');
         var slider = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
             min: 0,
             max: this.pages.length - 1,
             value: 0,
+            start: function (event, ui) {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
+            },
+            stop: function (event, ui) {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').hide();
+            },
+            slide: function (event, ui) {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
+                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + _this.pages[ui.value]);
+            },
             change: function (event, ui) {
                 _this.moveToPage(ui.value);
             }
         });
 
-        contorlsDiv.appendChild(slider);
+        var sliderTooltip = document.createElement('div');
+        $(sliderTooltip).addClass('tooltip top slider-tip');
+        var arrowTooltip = document.createElement('div');
+        $(arrowTooltip).addClass('tooltip-arrow');
+        sliderTooltip.appendChild(arrowTooltip);
 
-        return contorlsDiv;
+        var innerTooltip = document.createElement('div');
+        $(innerTooltip).addClass('tooltip-inner');
+        $(innerTooltip).html("Strana: " + this.pages[0]);
+        sliderTooltip.appendChild(innerTooltip);
+        $(sliderTooltip).hide();
+
+        var sliderHandle = $(slider).find('.ui-slider-handle');
+        $(sliderHandle).append(sliderTooltip);
+        $(sliderHandle).hover(function (event) {
+            $(event.target).find('.slider-tip').show();
+        });
+        $(sliderHandle).mouseout(function (event) {
+            $(event.target).find('.slider-tip').hide();
+        });
+        controlsDiv.appendChild(slider);
+
+        return controlsDiv;
     };
 
     ReaderModule.prototype.makeTextArea = function (book) {

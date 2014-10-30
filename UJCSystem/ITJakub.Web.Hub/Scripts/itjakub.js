@@ -4,7 +4,6 @@
 $(document).ready(function () {
     $('#main-plugins-menu').find('li').removeClass('active');
     var href = window.location.pathname;
-    console.log(href.toString());
     var liTargetingActualPage = $('#main-plugins-menu').find("a[href='" + href.toString() + "']").parent('li');
     $(liTargetingActualPage).addClass('active');
     $(liTargetingActualPage).parents('li').addClass('active');

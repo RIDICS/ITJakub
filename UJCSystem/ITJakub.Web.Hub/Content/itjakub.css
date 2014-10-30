@@ -408,6 +408,13 @@ ul.bib-listing li.list-item .label {
 span.ui-slider-handle:focus {
   outline: 0;
 }
+.slider-tip {
+  opacity: 1;
+  width: 100px;
+  bottom: 120%;
+  color: black;
+  margin-left: -3.5em;
+}
 .white-link {
   color: white;
   text-decoration: none;

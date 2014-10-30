@@ -1,17 +1,22 @@
 ﻿/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
 
+
+
+
 class ReaderModule {
 
     readerContainer: string;
+    sliderOnPage: number;
     actualPage: number;
     pages: Array<string>;
 
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
         this.actualPage = 0;
+        this.sliderOnPage = 0;
         this.pages = new Array<string>();
         for (var i = 0; i < 15; i++) {  //TODO pages should be loaded by ajax
-            this.pages.push("This is text of page " + i.toString());
+            this.pages.push(i.toString()+"r");
         }
     }
 
@@ -30,23 +35,53 @@ class ReaderModule {
     }
 
     private makeControls(book: IBookInfo): HTMLDivElement {
-        var contorlsDiv: HTMLDivElement = document.createElement('div');
-        $(contorlsDiv).addClass('reader-controls');
-
+        var controlsDiv: HTMLDivElement = document.createElement('div');
+        $(controlsDiv).addClass('reader-controls');
         var slider: HTMLDivElement = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
             min: 0,
-            max: this.pages.length-1,
+            max: this.pages.length - 1,
             value: 0,
+            start: (event, ui) => {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
+            },
+            stop: (event, ui) =>  {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').hide();
+            },
+            slide: (event, ui) => {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
+                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[ui.value]);
+               
+            },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
                 this.moveToPage(ui.value);
             }
         });
 
-        contorlsDiv.appendChild(slider);
+        var sliderTooltip: HTMLDivElement = document.createElement('div');
+        $(sliderTooltip).addClass('tooltip top slider-tip');
+        var arrowTooltip: HTMLDivElement = document.createElement('div');
+        $(arrowTooltip).addClass('tooltip-arrow');
+        sliderTooltip.appendChild(arrowTooltip);
 
-        return contorlsDiv;
+        var innerTooltip: HTMLDivElement = document.createElement('div');
+        $(innerTooltip).addClass('tooltip-inner');
+        $(innerTooltip).html("Strana: " + this.pages[0]);
+        sliderTooltip.appendChild(innerTooltip);
+        $(sliderTooltip).hide();
+
+        var sliderHandle = $(slider).find('.ui-slider-handle');
+        $(sliderHandle).append(sliderTooltip);
+        $(sliderHandle).hover((event) => {
+            $(event.target).find('.slider-tip').show();
+        });
+        $(sliderHandle).mouseout((event) => {
+            $(event.target).find('.slider-tip').hide();
+        });
+        controlsDiv.appendChild(slider);
+
+        return controlsDiv;
     }
 
     private makeTextArea(book: IBookInfo): HTMLDivElement {
