@@ -4,6 +4,14 @@
     position: relative;
 }
 
+.reader-controls {
+    height: 85px;
+}
+
+.reader-text-container {
+    width: 100%;
+}
+
 .reader-controls .ui-slider {
     background: @item-background-color;
     height: 5px;
@@ -80,13 +88,25 @@
     margin-bottom: 15px;
 }
 
+.reader-controls ul.pagination > li > a {
+    float: left;
+}
+
 .reader-controls ul.pagination > li.page-navigation > a {
     font-weight: bold;
 }
 
 .reader-controls ul.pagination > li > a {
+    padding: 5px 5px;
     font-size: 15px;
     border: none;
+    float:none;
+}
+
+.reader-controls ul.pagination > li.page-active > a {
+    font-weight: bold;
+    font-size: 17px;
+    color: @item-background-color;
 }
 
 .reader-controls ul.pagination > li > a:hover {

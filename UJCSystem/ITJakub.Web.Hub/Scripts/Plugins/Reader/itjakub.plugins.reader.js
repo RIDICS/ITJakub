@@ -2,6 +2,7 @@
 var ReaderModule = (function () {
     function ReaderModule(readerContainer) {
         this.readerContainer = readerContainer;
+        this.pagerDisplayPages = 5;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array();
@@ -167,27 +168,29 @@ var ReaderModule = (function () {
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
-        anchor = document.createElement('a');
-        anchor.href = '#';
-        anchor.innerHTML = '1r';
-        $(anchor).click(function (event) {
-            event.stopPropagation();
-            _this.moveToPage('1r');
-            return false;
-        });
-        liElement.appendChild(anchor);
+        $(liElement).addClass('more-pages more-pages-left');
+        liElement.innerHTML = '...';
         paginationUl.appendChild(liElement);
 
-        liElement = document.createElement('li');
-        anchor = document.createElement('a');
-        anchor.href = '#';
-        anchor.innerHTML = '2r';
-        $(anchor).click(function (event) {
-            event.stopPropagation();
-            _this.moveToPage('2r');
-            return false;
+        $.each(this.pages, function (index, page) {
+            liElement = document.createElement('li');
+            $(liElement).addClass('page');
+            $(liElement).data('page-index', index);
+            anchor = document.createElement('a');
+            anchor.href = '#';
+            anchor.innerHTML = page;
+            $(anchor).click(function (event) {
+                event.stopPropagation();
+                _this.moveToPage(page);
+                return false;
+            });
+            liElement.appendChild(anchor);
+            paginationUl.appendChild(liElement);
         });
-        liElement.appendChild(anchor);
+
+        liElement = document.createElement('li');
+        $(liElement).addClass('more-pages more-pages-right');
+        liElement.innerHTML = '...';
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
@@ -333,6 +336,43 @@ var ReaderModule = (function () {
     };
 
     ReaderModule.prototype.actualizePagination = function (pageIndex) {
+        var pager = $(this.readerContainer).find('ul.pagination');
+        pager.find('li.page-navigation').css('visibility', 'visible');
+        pager.find('li.more-pages').css('visibility', 'visible');
+        if (pageIndex == 0) {
+            pager.find('li.page-navigation-left').css('visibility', 'hidden');
+            pager.find('li.more-pages-left').css('visibility', 'hidden');
+        } else if (pageIndex == this.pages.length - 1) {
+            pager.find('li.page-navigation-right').css('visibility', 'hidden');
+            pager.find('li.more-pages-right').css('visibility', 'hidden');
+        }
+
+        var pages = $(pager).find('.page');
+        $(pages).css('display', 'none');
+        $(pages).removeClass('page-active');
+        var actualPage = $(pages).filter(function (index) {
+            return $(this).data("page-index") === pageIndex;
+        });
+
+        var displayPagesOnEachSide = (this.pagerDisplayPages - 1) / 2;
+        var displayOnRight = displayPagesOnEachSide;
+        var displayOnLeft = displayPagesOnEachSide;
+        var pagesOnLeft = pageIndex;
+        var pagesOnRight = this.pages.length - (pageIndex + 1);
+        if (pagesOnLeft <= displayOnLeft) {
+            displayOnRight += displayOnLeft - pagesOnLeft;
+            pager.find('li.more-pages-left').css('visibility', 'hidden');
+        } else if (pagesOnRight <= displayOnRight) {
+            displayOnLeft += displayOnRight - pagesOnRight;
+            pager.find('li.more-pages-right').css('visibility', 'hidden');
+        }
+
+        var displayedPages = $(pages).filter(function (index) {
+            var itemPageIndex = $(this).data("page-index");
+            return (itemPageIndex >= pageIndex - displayOnLeft && itemPageIndex <= pageIndex + displayOnRight);
+        });
+        $(displayedPages).css('display', 'inherit');
+        $(actualPage).addClass('page-active');
     };
 
     ReaderModule.prototype.displayPage = function (page) {
