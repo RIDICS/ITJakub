@@ -94,6 +94,7 @@ var ReaderModule = (function () {
         var sliderHandle = $(slider).find('.ui-slider-handle');
         $(sliderHandle).append(sliderTooltip);
         $(sliderHandle).hover(function (event) {
+            $(event.target).find('.slider-tip').stop(true, true);
             $(event.target).find('.slider-tip').show();
         });
         $(sliderHandle).mouseout(function (event) {
@@ -127,6 +128,7 @@ var ReaderModule = (function () {
         $(paginationUl).addClass('pagination pagination-sm');
 
         var liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-left');
         var anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '|<';
@@ -139,6 +141,7 @@ var ReaderModule = (function () {
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-left');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<<';
@@ -151,6 +154,7 @@ var ReaderModule = (function () {
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-left');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<';
@@ -187,6 +191,7 @@ var ReaderModule = (function () {
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>';
@@ -199,6 +204,7 @@ var ReaderModule = (function () {
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>>';
@@ -211,6 +217,7 @@ var ReaderModule = (function () {
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>|';

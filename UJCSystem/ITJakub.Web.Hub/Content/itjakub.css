@@ -517,6 +517,20 @@ ul.bib-listing li.list-item .label {
   margin-top: 20px;
   margin-left: 2.5%;
 }
+.reader-controls ul.pagination {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.reader-controls ul.pagination > li.page-navigation > a {
+  font-weight: bold;
+}
+.reader-controls ul.pagination > li > a {
+  font-size: 15px;
+  border: none;
+}
+.reader-controls ul.pagination > li > a:hover {
+  background: none;
+}
 .reader-controls .buttons {
   float: right;
 }
@@ -556,7 +570,7 @@ ul.bib-listing li.list-item .label {
   width: 60px;
   height: 60px;
   text-align: center;
-  vertical-align: central;
+  vertical-align: middle;
 }
 .reader-controls .fullscreen-button:hover {
   color: #84ced7;

@@ -3,6 +3,7 @@
 .reader {
     position: relative;
 }
+
 .reader-controls .ui-slider {
     background: @item-background-color;
     height: 5px;
@@ -74,6 +75,25 @@
     margin-left: 2.5%;
 }
 
+.reader-controls ul.pagination {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.reader-controls ul.pagination > li.page-navigation > a {
+    font-weight: bold;
+}
+
+.reader-controls ul.pagination > li > a {
+    font-size: 15px;
+    border: none;
+}
+
+.reader-controls ul.pagination > li > a:hover {
+    background: none;
+}
+
+
 .reader-controls .buttons {
     float: right;
 }
@@ -120,7 +140,7 @@
     width: 60px;
     height: 60px;
     text-align: center;
-    vertical-align: central;
+    vertical-align: middle;
 }
 
 .reader-controls .fullscreen-button:hover {
@@ -131,9 +151,9 @@
     margin-top: 1px;
     padding: 5px 30px 5px 30px;
     height: 700px;
-    overflow-y:auto;
+    overflow-y: auto;
 }
 
-.reader-text {    
+.reader-text {
     height: 50000px;
 }
