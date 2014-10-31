@@ -1,5 +1,8 @@
 ﻿@import "../../ITJakub.DefaultTheme.less";
 
+.reader {
+    position: relative;
+}
 .reader-controls .ui-slider {
     background: @item-background-color;
     height: 5px;
@@ -61,20 +64,21 @@
 }
 
 .reader-controls .paging {
-    margin-top:10px;
+    margin-top: 10px;
     text-align: center;
 }
 
 .reader-controls .page-input {
-    float:left;
+    float: left;
     margin-top: 20px;
     margin-left: 2.5%;
 }
+
 .reader-controls .buttons {
     float: right;
 }
 
-.reader-controls .buttons button{
+.reader-controls .buttons button {
     color: gray;
     background: none;
     border: none;
@@ -84,7 +88,7 @@
     font-size: 0.9em;
 }
 
-.reader-controls .buttons button:hover{
+.reader-controls .buttons button:hover {
     color: @item-background-color;
 }
 
@@ -100,6 +104,27 @@
     top: -2px;
     position: absolute;
     margin-left: -7px;
+}
+
+/*TODO move stop cotrols div command change positioning*/
+.reader-controls .fullscreen-button {
+    position: absolute;
+    margin-left: 99%;
+    margin-top: -47px;
+    background-color: white;
+    font-size: 2em;
+    color: lightgray;
+    border: none;
+    outline: 0;
+    padding: 10px;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    vertical-align: central;
+}
+
+.reader-controls .fullscreen-button:hover {
+    color: @item-background-color;
 }
 
 .reader-text {

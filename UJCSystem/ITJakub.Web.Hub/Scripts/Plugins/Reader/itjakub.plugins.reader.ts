@@ -51,6 +51,18 @@ class ReaderModule {
         var controlsDiv: HTMLDivElement = document.createElement('div');
         $(controlsDiv).addClass('reader-controls content-container');
 
+
+        var fullscreenButton = document.createElement("button");
+        $(fullscreenButton).addClass('fullscreen-button');
+
+        var fullscreenSpan = document.createElement("span");
+        $(fullscreenSpan).addClass('glyphicon glyphicon-fullscreen');
+        $(fullscreenButton).append(fullscreenSpan);
+        $(fullscreenButton).click((event) => {
+            //TODO change class to reader for absolute or fixed positioning and overlay other elements
+        });
+        controlsDiv.appendChild(fullscreenButton);
+
         var slider: HTMLDivElement = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
@@ -70,7 +82,10 @@ class ReaderModule {
 
             },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
-                this.moveToPageNumber(ui.value);
+                var pp = this.actualPageIndex;
+                if (this.actualPageIndex !== ui.value) {
+                    this.moveToPageNumber(ui.value);
+                }
             }
         });
 
@@ -125,6 +140,11 @@ class ReaderModule {
         var anchor: HTMLAnchorElement = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '|<';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(0);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -132,6 +152,11 @@ class ReaderModule {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<<';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.actualPageIndex - 5);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -139,6 +164,11 @@ class ReaderModule {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.actualPageIndex - 1);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -146,6 +176,11 @@ class ReaderModule {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '1r';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPage('1r');
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -153,6 +188,11 @@ class ReaderModule {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '2r';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPage('2r');
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -160,6 +200,11 @@ class ReaderModule {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.actualPageIndex + 1);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -167,6 +212,11 @@ class ReaderModule {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>>';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.actualPageIndex + 5);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -174,6 +224,11 @@ class ReaderModule {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>|';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.pages.length - 1);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -249,14 +304,19 @@ class ReaderModule {
     }
 
     moveToPageNumber(pageIndex: number) {
+        if (pageIndex < 0) {
+            pageIndex = 0;
+        } else if (pageIndex >= this.pages.length) {
+            pageIndex = this.pages.length - 1;
+        }
         this.actualPageIndex = pageIndex;
+        this.actualizeSlider(pageIndex);
         this.displayPage(this.pages[pageIndex]);
     }
 
     moveToPage(page: string) {
         var pageIndex: number = $.inArray(page, this.pages);
-        if (pageIndex >= 0) {
-            this.actualizeSlider(pageIndex);
+        if (pageIndex >= 0 && pageIndex < this.pages.length) {
             this.moveToPageNumber(pageIndex);
         } else {
             //TODO tell user page not exist  
@@ -271,8 +331,8 @@ class ReaderModule {
 
     displayPage(page: string) {
         $(this.readerContainer).find('div.reader-text').empty();
-                //TODO load page content here
-        $(this.readerContainer).find('div.reader-text').append(page+"<br>");
+        //TODO load page content here
+        $(this.readerContainer).find('div.reader-text').append(page + "<br>");
         $(this.readerContainer).find('div.reader-text').append("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at varius felis. Praesent scelerisque elit ac felis faucibus, sit amet condimentum sem ullamcorper. Vestibulum in bibendum turpis. Aenean a tempor nisl, in auctor mi. Donec aliquam, ex vestibulum pulvinar imperdiet, turpis lectus placerat massa, ut finibus sapien lectus nec erat. Vestibulum nibh ante, congue molestie dolor at, sodales mollis ligula. Nullam tempus dictum iaculis. Nam quam enim, vehicula nec sapien eu, egestas fringilla purus. Nulla nec lectus nec mi eleifend mollis non et velit. Integer volutpat, ex eu imperdiet suscipit, mauris nunc convallis mi, nec aliquet urna massa ut ante. Mauris leo justo, convallis ut sagittis vel, sagittis et massa. Nam vitae erat at dolor mollis consequat. Vestibulum vel leo non diam consectetur aliquet at vel tellus. Etiam semper sapien nec accumsan vulputate.Mauris rutrum metus dignissim, eleifend risus vel, bibendum ante.Nulla fringilla odio ac vulputate eleifend.Sed dapibus accumsan nunc.Duis ullamcorper sapien eget urna blandit scelerisque sit amet in ligula.Interdum et malesuada fames ac ante ipsum primis in faucibus.Integer nec tempus sapien, ac fringilla orci.Donec lobortis massa sit amet orci imperdiet eleifend.Cras tristique mi id justo vulputate iaculis.Sed porttitor gravida diam, vitae pulvinar lorem scelerisque at.Pellentesque sit amet cursus lorem.Maecenas commodo ornare est, vel sollicitudin felis condimentum ac.Quisque ac luctus lacus, quis tempus libero.Morbi leo arcu, finibus sed sodales eu, mattis non nibh.Cras lobortis laoreet mauris sed gravida.Nullam pellentesque elementum vulputate.Integer condimentum eros id eleifend posuere.Nam id turpis non purus consequat interdum.Maecenas fermentum bibendum nisl, quis mollis nibh semper at.Aenean sed semper tellus.In a libero at magna suscipit luctus ut eget eros.Cras a gravida felis, ut tempor augue.Vivamus eget mauris a ex blandit consectetur.Donec lobortis augue felis, quis malesuada orci luctus a.Ut ac quam ac massa vehicula fermentum eu eget lectus.Ut ac quam gravida urna ornare fermentum eget sed augue.Mauris dictum justo a condimentum gravida.Cras ac nulla id erat fermentum sodales ut eu turpis.Nunc ullamcorper eros vitae odio efficitur rutrum.Curabitur fringilla ex id nunc sodales imperdiet.Cras porta arcu ut dolor euismod pretium.Nulla mattis justo ac feugiat mollis.Proin at tortor ut justo egestas ultricies quis nec risus.Nulla facilisi.Nulla eu enim ut lorem aliquam maximus.Fusce suscipit odio quis lorem ultricies faucibus.");
     }
 
@@ -284,7 +344,7 @@ class ReaderModule {
         $(bookmarkSpan).data('page-name', this.pages[this.actualPageIndex]);
 
         var computedPosition = (positionStep * this.actualPageIndex);
-        $(bookmarkSpan).css('left', computedPosition+'%');
+        $(bookmarkSpan).css('left', computedPosition + '%');
 
         $(this.readerContainer).find('.slider').append(bookmarkSpan);
         //TODO populate request on service for adding bookmark to DB
@@ -311,7 +371,7 @@ class ReaderModule {
         $(targetBookmark).remove();
         //TODO populate request on service for removing bookmark from DB
         return true;
-        
+
 
     }
 }

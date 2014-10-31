@@ -9,45 +9,101 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
         public ActionResult Books(IEnumerable<string> bookIds)
         {
             var listBooks = new List<BookInfo>();
+            var bookInfo = new BookInfo()
+            {
+                BookId = "D122AA8E-BE32-4EAF-B274-011CBBD2A01B",
+                BookType = "Edition",
+                Editor = "Alena Černá",
+                Copyright = "Černá, Alena M.,2013, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v.v.i., 2012",
+                LastEditation = "",
+                LiteraryGenre = "próza",
+                LiteraryType = "próza",
+                Name = "Chirurgické lékařství",
+                Pattern = "ChL",
+                RelicAbbreviation = "LékChir",
+                SourceAbbreviation = "LékChir",
+                Pages =
+                    new List<Page>
+                        {
+                            new Page {Start = "0", End = "4"},
+                            new Page {Start = "15", End = "45"}
+                        },
+                Century = 16,
+                Sign = "XVII H 23",
+                Archive = new Archive() { Name = "Národní knihovna České republiky", City = "Praha", State = "Česko" },
+                Authors =
+                    new List<Author>()
+                        {
+                        },
+                Description = "",
+                Year = 2012
+            };
+            listBooks.Add(bookInfo);
 
+            bookInfo = new BookInfo()
+            {
+                BookId = "DB31F937-74B1-45A9-B976-8672FA1DC8C7",
+                BookType = "Edition",
+                Editor = "Alena Černá",
+                Copyright = "Černá, Alena M.,2013, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v.v.i., 2012",
+                LastEditation = "",
+                LiteraryGenre = "próza",
+                LiteraryType = "próza",
+                Name = "Knihy lékařské",
+                Pattern = "KL",
+                RelicAbbreviation = "LékJádro",
+                SourceAbbreviation = "LékJádroBrn",
+                Pages =
+                    new List<Page>
+                        {
+                            new Page {Start = "0", End = "4"}
+                        },
+                Century = 16,
+                Sign = "Rkp 156",
+                Archive = new Archive() { Name = "Muzejní archiv", City = "Brno", State = "Česko" },
+                Authors =
+                    new List<Author>()
+                    {
+                    },
+                Description = "",
+                Year = 2012
+            };
+            listBooks.Add(bookInfo);
             foreach (string bookId in bookIds)
             {
                 string bookType = "Edition";
-                var bookInfo = new BookInfo
-                {
-                    BookId = bookId,
-                    BookType = bookType,
-                    Editor = "Alenka Cerna",
-                    Copyright = "Černá, Alena M.,2013, oddělení vývoje jazyka UJC AV CR, v.v.i., 2013",
-                    LastEditation = "25.6.1989",
-                    LiteraryGenre = "proza",
-                    LiteraryType = "type",
-                    Name = "Rukopis kunhuta",
-                    Pattern = "Broucci",
-                    RelicAbbreviation = "relAbr",
-                    SourceAbbreviation = "RK",
-                    Pages =
-                        new List<Page>
+                bookInfo = new BookInfo
+               {
+                   BookId = bookId,
+                   BookType = bookType,
+                   Editor = "Alenka Cerna",
+                   Copyright = "Černá, Alena M.,2013, oddělení vývoje jazyka UJC AV CR, v.v.i., 2013",
+                   LastEditation = "25.6.1989",
+                   LiteraryGenre = "proza",
+                   LiteraryType = "type",
+                   Name = "Rukopis kunhuta",
+                   Pattern = "Broucci",
+                   RelicAbbreviation = "relAbr",
+                   SourceAbbreviation = "RK",
+                   Pages =
+                       new List<Page>
                         {
                             new Page {Start = "0", End = "4"},
                             new Page {Start = "15", End = "45"},
                             new Page {Start = "200"}
                         },
-                    Century = 13,
-                    Sign = "VII G 17 d",
-                    Archive = new Archive() {Name = "Narodni knihovna ceske republiky", City = "Praha", State = "Cesko"},
-                    Authors =
-                        new List<Author>()
+                   Century = 13,
+                   Sign = "VII G 17 d",
+                   Archive = new Archive() { Name = "Narodni knihovna ceske republiky", City = "Praha", State = "Cesko" },
+                   Authors =
+                       new List<Author>()
                         {
                             new Author() {FirstName = "Josef", LastName = "Novak"},
                             new Author() {FirstName = "Jaroslav", LastName = "Tuhik"}
                         },
-                    Description = "Elementa latinae, boemicae ac germanicae linugae",
-                    Year = 1532,
-                    TestValue = 0,
-                    TestValue2 = false,
-                    TestValue3 = true
-                };
+                   Description = "Elementa latinae, boemicae ac germanicae linugae",
+                   Year = 1532
+               };
                 if (int.Parse(bookId) % 2 == 0)
                 {
                     bookInfo.BookType = "CardFile";
@@ -65,7 +121,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                     bookInfo.Century = 5;
                     bookInfo.Linked = true;
 
-                    if (int.Parse(bookId)%8 == 0)
+                    if (int.Parse(bookId) % 8 == 0)
                     {
                         bookInfo.Linked = false;
                     }
@@ -144,9 +200,6 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
         public Archive Archive { get; set; }
 
         public List<Page> Pages { get; set; }
-        public int TestValue { get; set; }
-        public bool TestValue2 { get; set; }
-        public bool TestValue3 { get; set; }
     }
 
     public class Page

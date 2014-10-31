@@ -43,6 +43,17 @@ var ReaderModule = (function () {
         var controlsDiv = document.createElement('div');
         $(controlsDiv).addClass('reader-controls content-container');
 
+        var fullscreenButton = document.createElement("button");
+        $(fullscreenButton).addClass('fullscreen-button');
+
+        var fullscreenSpan = document.createElement("span");
+        $(fullscreenSpan).addClass('glyphicon glyphicon-fullscreen');
+        $(fullscreenButton).append(fullscreenSpan);
+        $(fullscreenButton).click(function (event) {
+            //TODO change class to reader for absolute or fixed positioning and overlay other elements
+        });
+        controlsDiv.appendChild(fullscreenButton);
+
         var slider = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
@@ -61,7 +72,10 @@ var ReaderModule = (function () {
                 $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + _this.pages[ui.value]);
             },
             change: function (event, ui) {
-                _this.moveToPageNumber(ui.value);
+                var pp = _this.actualPageIndex;
+                if (_this.actualPageIndex !== ui.value) {
+                    _this.moveToPageNumber(ui.value);
+                }
             }
         });
 
@@ -116,6 +130,11 @@ var ReaderModule = (function () {
         var anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '|<';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.moveToPageNumber(0);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -123,6 +142,11 @@ var ReaderModule = (function () {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<<';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.moveToPageNumber(_this.actualPageIndex - 5);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -130,6 +154,11 @@ var ReaderModule = (function () {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.moveToPageNumber(_this.actualPageIndex - 1);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -137,6 +166,11 @@ var ReaderModule = (function () {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '1r';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.moveToPage('1r');
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -144,6 +178,11 @@ var ReaderModule = (function () {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '2r';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.moveToPage('2r');
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -151,6 +190,11 @@ var ReaderModule = (function () {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.moveToPageNumber(_this.actualPageIndex + 1);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -158,6 +202,11 @@ var ReaderModule = (function () {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>>';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.moveToPageNumber(_this.actualPageIndex + 5);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -165,6 +214,11 @@ var ReaderModule = (function () {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>|';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.moveToPageNumber(_this.pages.length - 1);
+            return false;
+        });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
 
@@ -240,14 +294,19 @@ var ReaderModule = (function () {
     };
 
     ReaderModule.prototype.moveToPageNumber = function (pageIndex) {
+        if (pageIndex < 0) {
+            pageIndex = 0;
+        } else if (pageIndex >= this.pages.length) {
+            pageIndex = this.pages.length - 1;
+        }
         this.actualPageIndex = pageIndex;
+        this.actualizeSlider(pageIndex);
         this.displayPage(this.pages[pageIndex]);
     };
 
     ReaderModule.prototype.moveToPage = function (page) {
         var pageIndex = $.inArray(page, this.pages);
-        if (pageIndex >= 0) {
-            this.actualizeSlider(pageIndex);
+        if (pageIndex >= 0 && pageIndex < this.pages.length) {
             this.moveToPageNumber(pageIndex);
         } else {
             //TODO tell user page not exist

@@ -47,7 +47,7 @@
                 },
                 "$pages": {
                     "type": "basic",
-                    "pattern": ", 155v- 166v,//TODO Pages?//167v-258v ",
+                    "pattern": ", 5v- 6v, 11v-12v ",
                     "printIfNullValue": false
                 }
             }
