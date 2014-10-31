@@ -527,14 +527,23 @@ ul.bib-listing li.list-item .label {
   margin-top: 15px;
   margin-bottom: 15px;
 }
+.reader-controls ul.pagination > li {
+  width: 50px;
+  padding: 5px 5px;
+}
+.reader-controls ul.pagination > li.page-navigation {
+  padding: 5px;
+  width: 20px;
+}
 .reader-controls ul.pagination > li > a {
   float: left;
 }
 .reader-controls ul.pagination > li.page-navigation > a {
   font-weight: bold;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 .reader-controls ul.pagination > li > a {
-  padding: 5px 5px;
   font-size: 15px;
   border: none;
   float: none;
