@@ -172,6 +172,9 @@ class ReaderModule {
 
         pagingDiv.appendChild(paginationUl);
 
+        var buttonsDiv: HTMLDivElement = document.createElement("div");
+        $(buttonsDiv).addClass('buttons');
+
         var bookmarkButton = document.createElement("button");
         $(bookmarkButton).addClass('bookmark-button');
 
@@ -180,9 +183,11 @@ class ReaderModule {
         $(bookmarkButton).append(bookmarkSpan);
 
         $(bookmarkButton).click((event: Event) => {
-            this.addBookmark(this.actualPageIndex);
+            if (!this.removeBookmark()) {
+                this.addBookmark();
+            }
         });
-        pagingDiv.appendChild(bookmarkButton);
+        buttonsDiv.appendChild(bookmarkButton);
 
         var commentButton = document.createElement("button");
         $(commentButton).addClass('comment-button');
@@ -193,7 +198,7 @@ class ReaderModule {
 
         $(commentButton).click((event: Event) => {
         });
-        pagingDiv.appendChild(commentButton);
+        buttonsDiv.appendChild(commentButton);
 
         var contentButton = document.createElement("button");
         $(contentButton).addClass('content-button');
@@ -204,7 +209,9 @@ class ReaderModule {
 
         $(contentButton).click((event: Event) => {
         });
-        pagingDiv.appendChild(contentButton);
+        buttonsDiv.appendChild(contentButton);
+
+        pagingDiv.appendChild(buttonsDiv);
 
         controlsDiv.appendChild(pagingDiv);
         return controlsDiv;
@@ -243,17 +250,44 @@ class ReaderModule {
 
     }
 
-    addBookmark(actualPageIndex: number) {
+    addBookmark() {
         var slider = $(this.readerContainer).find('.slider');
         var positionStep = $(slider).slider().width() / (this.pages.length - 1);
-        
+
         var bookmarkSpan = document.createElement("span");
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
+        $(bookmarkSpan).data('page-index', this.actualPageIndex);
+        $(bookmarkSpan).data('page-name', this.pages[this.actualPageIndex]);
+
         var computedPosition = (positionStep * this.actualPageIndex) - 7; //TODO 7 is half of span widht, should be computed somehow
         $(bookmarkSpan).css('left', computedPosition);
-        $(slider).append(bookmarkSpan);
 
+        $(slider).append(bookmarkSpan);
         //TODO populate request on service for adding bookmark to DB
+
+    }
+
+    removeBookmark(): boolean {
+        var slider = $(this.readerContainer).find('.slider');
+        var bookmarks = $(slider).find('.bookmark');
+
+        if (typeof bookmarks === 'undefined' || bookmarks.length == 0) {
+            return false;
+        }
+
+        var actualPageName = this.pages[this.actualPageIndex];
+        var targetBookmark = $(bookmarks).filter(function(index) {
+            return $(this).data("page-name") === actualPageName;
+        });
+
+        if (typeof targetBookmark === 'undefined' || targetBookmark.length == 0) {
+            return false;
+        }
+
+        $(targetBookmark).remove();
+        //TODO populate request on service for removing bookmark from DB
+        return true;
+        
 
     }
 }

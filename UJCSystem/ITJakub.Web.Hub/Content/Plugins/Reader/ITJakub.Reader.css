@@ -1,30 +1,30 @@
-﻿.ui-slider {
+﻿.reader-controls .ui-slider {
   background: #84ced7;
   height: 5px;
   width: 95%;
   margin-left: 2.5%;
   border: none;
 }
-.ui-slider > .ui-slider-handle {
+.reader-controls .ui-slider > .ui-slider-handle {
   background: gray;
   border-radius: 50%;
   border: none;
   top: -0.5em;
 }
-span.ui-slider-handle:focus {
+.reader-controls span.ui-slider-handle:focus {
   outline: 0;
 }
-.slider-tip {
+.reader-controls .slider-tip {
   opacity: 1;
   width: 100px;
   bottom: 120%;
   margin-left: -3.5em;
 }
-.tooltip-inner {
+.reader-controls .tooltip-inner {
   background-color: #84ced7;
   color: white;
 }
-.tooltip-arrow {
+.reader-controls .tooltip-arrow {
   border-top-color: #84ced7 !important;
 }
 .title {
@@ -32,23 +32,42 @@ span.ui-slider-handle:focus {
   font-weight: 500;
   margin-bottom: 5px;
 }
-.page-input-button {
+.reader-controls .page-input-button {
   color: white;
   background-color: #84ced7;
   border: none;
   outline: 0;
   height: 25px;
 }
-.page-input-text {
+.reader-controls .page-input-text {
   height: 25px;
   width: 100px;
   border: 1px solid lightgray;
   border-right: none;
   outline: 0;
 }
-.bookmark {
+.reader-controls .paging {
+  margin-top: 10px;
+}
+.reader-controls .buttons {
+  float: right;
+}
+.reader-controls .buttons button {
+  color: gray;
+  background: none;
+  border: none;
+  outline: 0;
+}
+.reader-controls .buttons button:hover {
+  color: #84ced7;
+}
+.reader-controls .buttons span.glyphicon {
+  font-size: 2em;
+}
+.reader-controls .bookmark {
   color: red;
   z-index: 1;
+  top: -2px;
   position: absolute;
 }
 /*# sourceMappingURL=ITJakub.Reader.css.map */

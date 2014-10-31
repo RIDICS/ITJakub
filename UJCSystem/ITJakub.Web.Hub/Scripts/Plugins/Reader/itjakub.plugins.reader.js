@@ -163,6 +163,9 @@ var ReaderModule = (function () {
 
         pagingDiv.appendChild(paginationUl);
 
+        var buttonsDiv = document.createElement("div");
+        $(buttonsDiv).addClass('buttons');
+
         var bookmarkButton = document.createElement("button");
         $(bookmarkButton).addClass('bookmark-button');
 
@@ -171,9 +174,11 @@ var ReaderModule = (function () {
         $(bookmarkButton).append(bookmarkSpan);
 
         $(bookmarkButton).click(function (event) {
-            _this.addBookmark(_this.actualPageIndex);
+            if (!_this.removeBookmark()) {
+                _this.addBookmark();
+            }
         });
-        pagingDiv.appendChild(bookmarkButton);
+        buttonsDiv.appendChild(bookmarkButton);
 
         var commentButton = document.createElement("button");
         $(commentButton).addClass('comment-button');
@@ -184,7 +189,7 @@ var ReaderModule = (function () {
 
         $(commentButton).click(function (event) {
         });
-        pagingDiv.appendChild(commentButton);
+        buttonsDiv.appendChild(commentButton);
 
         var contentButton = document.createElement("button");
         $(contentButton).addClass('content-button');
@@ -195,7 +200,9 @@ var ReaderModule = (function () {
 
         $(contentButton).click(function (event) {
         });
-        pagingDiv.appendChild(contentButton);
+        buttonsDiv.appendChild(contentButton);
+
+        pagingDiv.appendChild(buttonsDiv);
 
         controlsDiv.appendChild(pagingDiv);
         return controlsDiv;
@@ -233,16 +240,43 @@ var ReaderModule = (function () {
         $(this.readerContainer).find('div.reader-text').append(page);
     };
 
-    ReaderModule.prototype.addBookmark = function (actualPageIndex) {
+    ReaderModule.prototype.addBookmark = function () {
         var slider = $(this.readerContainer).find('.slider');
         var positionStep = $(slider).slider().width() / (this.pages.length - 1);
 
         var bookmarkSpan = document.createElement("span");
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
+        $(bookmarkSpan).data('page-index', this.actualPageIndex);
+        $(bookmarkSpan).data('page-name', this.pages[this.actualPageIndex]);
+
         var computedPosition = (positionStep * this.actualPageIndex) - 7;
         $(bookmarkSpan).css('left', computedPosition);
+
         $(slider).append(bookmarkSpan);
         //TODO populate request on service for adding bookmark to DB
+    };
+
+    ReaderModule.prototype.removeBookmark = function () {
+        var slider = $(this.readerContainer).find('.slider');
+        var bookmarks = $(slider).find('.bookmark');
+
+        if (typeof bookmarks === 'undefined' || bookmarks.length == 0) {
+            return false;
+        }
+
+        var actualPageName = this.pages[this.actualPageIndex];
+        var targetBookmark = $(bookmarks).filter(function (index) {
+            return $(this).data("page-name") === actualPageName;
+        });
+
+        if (typeof targetBookmark === 'undefined' || targetBookmark.length == 0) {
+            return false;
+        }
+
+        $(targetBookmark).remove();
+
+        //TODO populate request on service for removing bookmark from DB
+        return true;
     };
     return ReaderModule;
 })();
