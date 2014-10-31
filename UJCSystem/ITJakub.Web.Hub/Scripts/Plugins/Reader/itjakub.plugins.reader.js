@@ -11,12 +11,36 @@ var ReaderModule = (function () {
         }
     }
     ReaderModule.prototype.makeReader = function (book) {
+        var _this = this;
         $(this.readerContainer).empty();
         var readerDiv = document.createElement('div');
         $(readerDiv).addClass('reader');
 
         var readerHeadDiv = document.createElement('div');
         $(readerHeadDiv).addClass('reader-head content-container');
+
+        var fullscreenButton = document.createElement("button");
+        $(fullscreenButton).addClass('fullscreen-button');
+
+        var fullscreenSpan = document.createElement("span");
+        $(fullscreenSpan).addClass('glyphicon glyphicon-fullscreen');
+        $(fullscreenButton).append(fullscreenSpan);
+        $(fullscreenButton).click(function (event) {
+            $(_this.readerContainer).find('.reader').addClass('fullscreen');
+        });
+        readerHeadDiv.appendChild(fullscreenButton);
+
+        var fullscreenCloseButton = document.createElement("button");
+        $(fullscreenCloseButton).addClass('fullscreen-close-button');
+
+        var closeSpan = document.createElement("span");
+        $(closeSpan).addClass('glyphicon glyphicon-remove');
+        $(fullscreenCloseButton).append(closeSpan);
+        $(fullscreenCloseButton).click(function (event) {
+            $(_this.readerContainer).find('.reader').removeClass('fullscreen');
+        });
+        readerHeadDiv.appendChild(fullscreenCloseButton);
+
         var title = this.makeTitle(book);
         readerHeadDiv.appendChild(title);
 
@@ -43,17 +67,6 @@ var ReaderModule = (function () {
         var _this = this;
         var controlsDiv = document.createElement('div');
         $(controlsDiv).addClass('reader-controls content-container');
-
-        var fullscreenButton = document.createElement("button");
-        $(fullscreenButton).addClass('fullscreen-button');
-
-        var fullscreenSpan = document.createElement("span");
-        $(fullscreenSpan).addClass('glyphicon glyphicon-fullscreen');
-        $(fullscreenButton).append(fullscreenSpan);
-        $(fullscreenButton).click(function (event) {
-            //TODO change class to reader for absolute or fixed positioning and overlay other elements
-        });
-        controlsDiv.appendChild(fullscreenButton);
 
         var slider = document.createElement('div');
         $(slider).addClass('slider');

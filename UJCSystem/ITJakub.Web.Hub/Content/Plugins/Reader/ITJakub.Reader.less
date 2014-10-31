@@ -10,6 +10,10 @@
 
 .reader-text-container {
     width: 100%;
+    margin-top: 1px;
+    padding: 5px 30px 5px 30px;
+    height: 700px;
+    overflow-y: auto;
 }
 
 .reader-controls .ui-slider {
@@ -108,10 +112,10 @@
     padding-right: 2px;
 }
 
-.reader-controls ul.pagination > li > a {    
+.reader-controls ul.pagination > li > a {
     font-size: 15px;
     border: none;
-    float:none;
+    float: none;
 }
 
 .reader-controls ul.pagination > li.page-active > a {
@@ -158,10 +162,10 @@
 }
 
 /*TODO move stop cotrols div command change positioning*/
-.reader-controls .fullscreen-button {
+.reader .fullscreen-button {
     position: absolute;
     margin-left: 99%;
-    margin-top: -49px;
+    margin-top: -5px;
     background-color: white;
     font-size: 2em;
     color: lightgray;
@@ -174,17 +178,41 @@
     vertical-align: middle;
 }
 
+.fullscreen .fullscreen-button {
+    display: none;
+}
+
+
 .reader-controls .fullscreen-button:hover {
     color: @item-background-color;
 }
 
-.reader-text-container {
-    margin-top: 1px;
-    padding: 5px 30px 5px 30px;
-    height: 700px;
-    overflow-y: auto;
-}
-
 .reader-text {
     height: 50000px;
+}
+
+.fullscreen {
+    position: fixed;
+    margin-top: 0;
+    padding-top: 0;
+    top: 0;
+    z-index: 9999;
+    background-color: @background-color;
+    max-width: @max-body-width;
+}
+
+.reader .fullscreen-close-button {
+    display: none;
+}
+
+.fullscreen .fullscreen-close-button {
+    float: right;
+    color: lightgray;
+    display: inline-block;
+    background-color: white;
+    border: none;
+    outline: 0;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
 }

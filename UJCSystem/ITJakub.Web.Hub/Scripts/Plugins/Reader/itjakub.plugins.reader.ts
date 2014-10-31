@@ -27,8 +27,34 @@ class ReaderModule {
 
         var readerHeadDiv: HTMLDivElement = document.createElement('div');
         $(readerHeadDiv).addClass('reader-head content-container');
+
+        var fullscreenButton = document.createElement("button");
+        $(fullscreenButton).addClass('fullscreen-button');
+
+        var fullscreenSpan = document.createElement("span");
+        $(fullscreenSpan).addClass('glyphicon glyphicon-fullscreen');
+        $(fullscreenButton).append(fullscreenSpan);
+        $(fullscreenButton).click((event) => {
+            $(this.readerContainer).find('.reader').addClass('fullscreen');
+        });
+        readerHeadDiv.appendChild(fullscreenButton);
+
+        var fullscreenCloseButton = document.createElement("button");
+        $(fullscreenCloseButton).addClass('fullscreen-close-button');
+
+        var closeSpan = document.createElement("span");
+        $(closeSpan).addClass('glyphicon glyphicon-remove');
+        $(fullscreenCloseButton).append(closeSpan);
+        $(fullscreenCloseButton).click((event) => {
+            $(this.readerContainer).find('.reader').removeClass('fullscreen');
+        });
+        readerHeadDiv.appendChild(fullscreenCloseButton);
+
+
         var title = this.makeTitle(book);
         readerHeadDiv.appendChild(title);
+
+      
 
         var controls = this.makeControls(book);
         readerHeadDiv.appendChild(controls);
@@ -52,19 +78,7 @@ class ReaderModule {
     private makeControls(book: IBookInfo): HTMLDivElement {
         var controlsDiv: HTMLDivElement = document.createElement('div');
         $(controlsDiv).addClass('reader-controls content-container');
-
-
-        var fullscreenButton = document.createElement("button");
-        $(fullscreenButton).addClass('fullscreen-button');
-
-        var fullscreenSpan = document.createElement("span");
-        $(fullscreenSpan).addClass('glyphicon glyphicon-fullscreen');
-        $(fullscreenButton).append(fullscreenSpan);
-        $(fullscreenButton).click((event) => {
-            //TODO change class to reader for absolute or fixed positioning and overlay other elements
-        });
-        controlsDiv.appendChild(fullscreenButton);
-
+        
         var slider: HTMLDivElement = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
