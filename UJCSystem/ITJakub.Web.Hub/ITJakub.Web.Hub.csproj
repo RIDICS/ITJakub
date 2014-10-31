@@ -219,6 +219,9 @@
     <Content Include="Content\ITJakub.DefaultTheme.css.map">
       <DependentUpon>ITJakub.DefaultTheme.css</DependentUpon>
     </Content>
+    <Content Include="Content\ITJakub.PluginMenu.css.map">
+      <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
+    </Content>
     <None Include="Content\Plugins\Bibliography\configuration.json" />
     <Content Include="Content\ITJakub.css">
       <DependentUpon>ITJakub.less</DependentUpon>
@@ -231,6 +234,12 @@
     </Content>
     <Content Include="Content\ITJakub.min.css">
       <DependentUpon>ITJakub.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.PluginMenu.css">
+      <DependentUpon>ITJakub.PluginMenu.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.PluginMenu.min.css">
+      <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
     </Content>
     <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.css">
       <DependentUpon>ITJakub.Bibliography.less</DependentUpon>

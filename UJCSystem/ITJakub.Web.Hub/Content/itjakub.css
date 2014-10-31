@@ -154,6 +154,7 @@ ol.numbered > li:before {
   text-align: center;
   vertical-align: middle;
   height: 40px;
+  display: table-cell;
 }
 #main-plugins-menu li {
   margin: 0;
@@ -191,7 +192,7 @@ ol.numbered > li:before {
   color: black;
   display: block;
   font-family: Helvetica, Arial, Verdana, sans-serif;
-  padding: 19px 20px;
+  padding: 10px 20px;
   text-decoration: none;
 }
 #main-plugins-menu ul {
@@ -229,7 +230,7 @@ ol.numbered > li:before {
   background-position: center 90%;
   background-repeat: no-repeat;
   background-size: 10px;
-  padding-bottom: 20px;
+  padding-bottom: 15px;
   vertical-align: middle;
 }
 #main-plugins-menu > ul > li:hover:after {
@@ -545,7 +546,7 @@ ul.bib-listing li.list-item .label {
 .reader-controls .fullscreen-button {
   position: absolute;
   margin-left: 99%;
-  margin-top: -47px;
+  margin-top: -49px;
   background-color: white;
   font-size: 2em;
   color: lightgray;
@@ -560,9 +561,14 @@ ul.bib-listing li.list-item .label {
 .reader-controls .fullscreen-button:hover {
   color: #84ced7;
 }
-.reader-text {
+.reader-text-container {
   margin-top: 1px;
   padding: 5px 30px 5px 30px;
+  height: 700px;
+  overflow-y: auto;
+}
+.reader-text {
+  height: 50000px;
 }
 .main_logo {
   margin: 10px;

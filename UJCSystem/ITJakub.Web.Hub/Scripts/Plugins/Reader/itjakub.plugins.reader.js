@@ -288,9 +288,14 @@ var ReaderModule = (function () {
     };
 
     ReaderModule.prototype.makeTextArea = function (book) {
+        var textContainerDiv = document.createElement('div');
+        $(textContainerDiv).addClass('reader-text-container content-container');
+
         var textAreaDiv = document.createElement('div');
-        $(textAreaDiv).addClass('reader-text content-container');
-        return textAreaDiv;
+        $(textAreaDiv).addClass('reader-text');
+
+        textContainerDiv.appendChild(textAreaDiv);
+        return textContainerDiv;
     };
 
     ReaderModule.prototype.moveToPageNumber = function (pageIndex) {
@@ -301,6 +306,7 @@ var ReaderModule = (function () {
         }
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
+        this.actualizePagination(pageIndex);
         this.displayPage(this.pages[pageIndex]);
     };
 
@@ -317,6 +323,9 @@ var ReaderModule = (function () {
         var slider = $(this.readerContainer).find('.slider');
         $(slider).slider().slider('value', pageIndex);
         $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex]);
+    };
+
+    ReaderModule.prototype.actualizePagination = function (pageIndex) {
     };
 
     ReaderModule.prototype.displayPage = function (page) {

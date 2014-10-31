@@ -150,7 +150,7 @@ div.container {
 .reader-controls .fullscreen-button {
   position: absolute;
   margin-left: 99%;
-  margin-top: -47px;
+  margin-top: -49px;
   background-color: white;
   font-size: 2em;
   color: lightgray;
@@ -165,8 +165,13 @@ div.container {
 .reader-controls .fullscreen-button:hover {
   color: #84ced7;
 }
-.reader-text {
+.reader-text-container {
   margin-top: 1px;
   padding: 5px 30px 5px 30px;
+  height: 700px;
+  overflow-y: auto;
+}
+.reader-text {
+  height: 50000px;
 }
 /*# sourceMappingURL=ITJakub.Reader.css.map */
