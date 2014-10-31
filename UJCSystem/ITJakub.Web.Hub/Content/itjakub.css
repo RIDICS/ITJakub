@@ -464,6 +464,7 @@ ul.bib-listing li.list-item .label {
   z-index: 1;
   top: -2px;
   position: absolute;
+  margin-left: -7px;
 }
 .white-link {
   color: white;
