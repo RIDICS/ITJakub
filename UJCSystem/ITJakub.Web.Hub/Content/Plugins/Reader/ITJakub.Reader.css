@@ -57,6 +57,9 @@
   background: none;
   border: none;
   outline: 0;
+  text-align: center;
+  width: 70px;
+  font-size: 0.9em;
 }
 .reader-controls .buttons button:hover {
   color: #84ced7;

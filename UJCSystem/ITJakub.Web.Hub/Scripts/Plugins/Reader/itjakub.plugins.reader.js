@@ -173,11 +173,17 @@ var ReaderModule = (function () {
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark');
         $(bookmarkButton).append(bookmarkSpan);
 
+        var bookmarkSpanText = document.createElement("span");
+        $(bookmarkSpanText).addClass('button-text');
+        $(bookmarkSpanText).append("Záložky");
+        $(bookmarkButton).append(bookmarkSpanText);
+
         $(bookmarkButton).click(function (event) {
             if (!_this.removeBookmark()) {
                 _this.addBookmark();
             }
         });
+
         buttonsDiv.appendChild(bookmarkButton);
 
         var commentButton = document.createElement("button");
@@ -187,8 +193,14 @@ var ReaderModule = (function () {
         $(commentSpan).addClass('glyphicon glyphicon-comment');
         $(commentButton).append(commentSpan);
 
+        var commentSpanText = document.createElement("span");
+        $(commentSpanText).addClass('button-text');
+        $(commentSpanText).append("Zobrazit komentář");
+        $(commentButton).append(commentSpanText);
+
         $(commentButton).click(function (event) {
         });
+
         buttonsDiv.appendChild(commentButton);
 
         var contentButton = document.createElement("button");
@@ -198,8 +210,14 @@ var ReaderModule = (function () {
         $(contentSpan).addClass('glyphicon glyphicon-book');
         $(contentButton).append(contentSpan);
 
+        var contentSpanText = document.createElement("span");
+        $(contentSpanText).addClass('button-text');
+        $(contentSpanText).append("Obsah");
+        $(contentButton).append(contentSpanText);
+
         $(contentButton).click(function (event) {
         });
+
         buttonsDiv.appendChild(contentButton);
 
         pagingDiv.appendChild(buttonsDiv);
