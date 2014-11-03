@@ -1,3 +1,4 @@
+
 USE ITJakubDB
 
 ALTER DATABASE ITJakubDB
@@ -43,16 +44,33 @@ BEGIN TRAN
 
     CREATE TABLE [dbo].[Author]
     (
-	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Author(Id)] PRIMARY KEY CLUSTERED
+	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Author(Id)] PRIMARY KEY CLUSTERED,
+	   [Name] varchar(100) NOT NULL
     )
 
-    CREATE TABLE [dbo].[AuthorInfo]
+
+    CREATE TABLE [dbo].[ResponsibleType] 
     (
-	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_AuthorInfo(Id)] PRIMARY KEY CLUSTERED,
-	   [Author] int NOT NULL CONSTRAINT [FK_AuthorInfo(Author)_Author(Id)] FOREIGN KEY REFERENCES [dbo].[Author] (Id),
-	   [Text] varchar(50) NOT NULL,
-	   [TextType] int NOT NULL,
+	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_ResponsibleType(Id)] PRIMARY KEY CLUSTERED,
+	   [Text] varchar(100) NOT NULL,
+	   [Type] smallint NULL
     )
+
+     CREATE TABLE [dbo].[Responsible]
+    (
+	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Responsible(Id)] PRIMARY KEY CLUSTERED,
+	   [Text] varchar(100) NOT NULL,
+	   [ResponsibleType] int NULL CONSTRAINT [FK_Responsible(ResponsibleType)_ResponsibleType(Id)] FOREIGN KEY REFERENCES [dbo].[ResponsibleType](Id)
+	   
+    )
+
+    CREATE TABLE [dbo].[Publisher] 
+    (
+	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Publisher(Id)] PRIMARY KEY CLUSTERED,
+	   [Text] varchar(100) NULL,
+	   [Email] varchar(100) NULL
+    )
+
 
 
     CREATE TABLE [dbo].[Category]
@@ -92,6 +110,8 @@ BEGIN TRAN
 	   [IsDefault] bit NOT NULL
     )
 
+
+
     CREATE TABLE [dbo].[BookVersion]
     (
 	   [Id] [bigint] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookVersion(Id)] PRIMARY KEY CLUSTERED,
@@ -100,7 +120,32 @@ BEGIN TRAN
 	   [CreateTime][datetime] NOT NULL,
 	   [Description] varchar(MAX) NULL,
 	   [Book] bigint NOT NULL CONSTRAINT [FK_BookVersion(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book] (Id),
-	   [Transformation] int NULL CONSTRAINT [FK_BookVersion(Book)_Transformation(Id)] FOREIGN KEY REFERENCES [dbo].[Transformation] (Id)
+	   [Transformation] int NULL CONSTRAINT [FK_BookVersion(Book)_Transformation(Id)] FOREIGN KEY REFERENCES [dbo].[Transformation] (Id),
+	   [Publisher] int NULL CONSTRAINT [FK_BookVersion(Publisher)_Publisher(Id)] FOREIGN KEY REFERENCES [dbo].[Publisher](Id),
+	   [PublishPlace] varchar(100) NULL,
+	   [PublishDate] varchar(50) NULL,
+	   [Copyright] varchar(MAX) NULL,
+	   [AvailabilityStatus] smallint NULL,
+	   [BiblText] varchar (MAX) NULL
+
+    )
+
+        CREATE TABLE [dbo].[BookBibl] 
+    (
+	   [Id] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookBibl(Id)] PRIMARY KEY CLUSTERED,
+	   [Text] varchar(50) NULL,
+	   [Type] varchar(50) NULL,
+	   [Subtype] varchar(50) NULL,
+	   [BiblType] smallint NULL,
+	   [BookVersion] bigint NOT NULL CONSTRAINT [FK_BookBibl(BookVersion)_BookVersion(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion](Id)
+
+    )
+
+        CREATE TABLE [dbo].[BookVersion_Responsible]
+    (
+	   [Responsible] int NOT NULL CONSTRAINT [FK_BookVersion_Responsible(Responsible)_Responsible(Id)] FOREIGN KEY REFERENCES [dbo].[Responsible] (Id),
+	   [BookVersion] bigint NOT NULL CONSTRAINT [FK_BookVersion_Responsible(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion](Id),
+	   CONSTRAINT [PK_BookVersion_Responsible(Responsible)_BookVersion_Responsible(Book)] PRIMARY KEY ([Responsible], [BookVersion])
     )
     
     CREATE TABLE [dbo].[BookVersion_Author]
