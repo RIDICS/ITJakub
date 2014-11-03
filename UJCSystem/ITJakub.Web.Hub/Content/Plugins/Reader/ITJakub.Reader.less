@@ -9,11 +9,12 @@
 }
 
 .reader-text-container {
-    width: 100%;
+    width: auto;
     margin-top: 1px;
     padding: 5px 30px 5px 30px;
     height: 700px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .reader-controls .ui-slider {
@@ -147,8 +148,6 @@
     color: @item-background-color;
 }
 
-
-
 .reader-controls .buttons span.glyphicon {
     font-size: 2em;
 }
@@ -178,17 +177,16 @@
     vertical-align: middle;
 }
 
+.reader button.fullscreen-button:hover, .fullscreen .fullscreen-close-button:hover {
+    color: @item-background-color;
+}
+
 .fullscreen .fullscreen-button {
     display: none;
 }
 
-
-.reader-controls .fullscreen-button:hover {
-    color: @item-background-color;
-}
-
 .reader-text {
-    height: 50000px;
+    height: auto;
 }
 
 .fullscreen {
@@ -215,4 +213,10 @@
     padding: 10px;
     text-align: center;
     vertical-align: middle;
+}
+
+.reader-text .page {
+    max-width: 100%;
+    height: auto;
+    min-height: 500px;
 }

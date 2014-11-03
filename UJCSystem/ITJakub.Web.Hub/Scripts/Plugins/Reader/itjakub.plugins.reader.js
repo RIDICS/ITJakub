@@ -53,7 +53,7 @@ var ReaderModule = (function () {
 
         $(this.readerContainer).append(readerDiv);
 
-        this.moveToPageNumber(0); //load first page
+        this.moveToPageNumber(0, true); //load first page and scroll to it
     };
 
     ReaderModule.prototype.makeTitle = function (book) {
@@ -86,9 +86,8 @@ var ReaderModule = (function () {
                 $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + _this.pages[ui.value]);
             },
             change: function (event, ui) {
-                var pp = _this.actualPageIndex;
                 if (_this.actualPageIndex !== ui.value) {
-                    _this.moveToPageNumber(ui.value);
+                    _this.moveToPageNumber(ui.value, true);
                 }
             }
         });
@@ -132,7 +131,7 @@ var ReaderModule = (function () {
         pageInputButton.innerHTML = "Přejít na stránku";
         $(pageInputButton).addClass('page-input-button');
         $(pageInputButton).click(function (event) {
-            _this.moveToPage($('#pageInputText').val());
+            _this.moveToPage($('#pageInputText').val(), true);
         });
         pageInputDiv.appendChild(pageInputButton);
 
@@ -148,7 +147,7 @@ var ReaderModule = (function () {
         anchor.innerHTML = '|<';
         $(anchor).click(function (event) {
             event.stopPropagation();
-            _this.moveToPageNumber(0);
+            _this.moveToPageNumber(0, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -161,7 +160,7 @@ var ReaderModule = (function () {
         anchor.innerHTML = '<<';
         $(anchor).click(function (event) {
             event.stopPropagation();
-            _this.moveToPageNumber(_this.actualPageIndex - 5);
+            _this.moveToPageNumber(_this.actualPageIndex - 5, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -174,7 +173,7 @@ var ReaderModule = (function () {
         anchor.innerHTML = '<';
         $(anchor).click(function (event) {
             event.stopPropagation();
-            _this.moveToPageNumber(_this.actualPageIndex - 1);
+            _this.moveToPageNumber(_this.actualPageIndex - 1, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -194,7 +193,7 @@ var ReaderModule = (function () {
             anchor.innerHTML = page;
             $(anchor).click(function (event) {
                 event.stopPropagation();
-                _this.moveToPage(page);
+                _this.moveToPage(page, true);
                 return false;
             });
             liElement.appendChild(anchor);
@@ -213,7 +212,7 @@ var ReaderModule = (function () {
         anchor.innerHTML = '>';
         $(anchor).click(function (event) {
             event.stopPropagation();
-            _this.moveToPageNumber(_this.actualPageIndex + 1);
+            _this.moveToPageNumber(_this.actualPageIndex + 1, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -226,7 +225,7 @@ var ReaderModule = (function () {
         anchor.innerHTML = '>>';
         $(anchor).click(function (event) {
             event.stopPropagation();
-            _this.moveToPageNumber(_this.actualPageIndex + 5);
+            _this.moveToPageNumber(_this.actualPageIndex + 5, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -239,7 +238,7 @@ var ReaderModule = (function () {
         anchor.innerHTML = '>|';
         $(anchor).click(function (event) {
             event.stopPropagation();
-            _this.moveToPageNumber(_this.pages.length - 1);
+            _this.moveToPageNumber(_this.pages.length - 1, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -311,17 +310,39 @@ var ReaderModule = (function () {
     };
 
     ReaderModule.prototype.makeTextArea = function (book) {
+        var _this = this;
         var textContainerDiv = document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container content-container');
+        $(textContainerDiv).scroll(function (event) {
+            var pages = $(_this.readerContainer).find('.reader-text-container').find('.page');
+            var minOffset = Number.MAX_VALUE;
+            var pageWithMinOffset;
+            $.each(pages, function (index, page) {
+                var pageOfsset = Math.abs($(page).offset().top);
+                if (minOffset > pageOfsset) {
+                    minOffset = pageOfsset;
+                    pageWithMinOffset = page;
+                }
+            });
+
+            _this.moveToPage($(pageWithMinOffset).data('page-name'), false);
+        });
 
         var textAreaDiv = document.createElement('div');
         $(textAreaDiv).addClass('reader-text');
+        for (var i = 0; i < this.pages.length; i++) {
+            var pageDiv = document.createElement('div');
+            $(pageDiv).addClass('page');
+            $(pageDiv).data('page-name', this.pages[i]);
+            pageDiv.id = 'page_' + this.pages[i];
+            textAreaDiv.appendChild(pageDiv);
+        }
 
         textContainerDiv.appendChild(textAreaDiv);
         return textContainerDiv;
     };
 
-    ReaderModule.prototype.moveToPageNumber = function (pageIndex) {
+    ReaderModule.prototype.moveToPageNumber = function (pageIndex, scrollTo) {
         if (pageIndex < 0) {
             pageIndex = 0;
         } else if (pageIndex >= this.pages.length) {
@@ -330,14 +351,15 @@ var ReaderModule = (function () {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
-        this.displayPage(this.pages[pageIndex]);
+        this.displayPage(this.pages[pageIndex], scrollTo);
     };
 
-    ReaderModule.prototype.moveToPage = function (page) {
+    ReaderModule.prototype.moveToPage = function (page, scrollTo) {
         var pageIndex = $.inArray(page, this.pages);
         if (pageIndex >= 0 && pageIndex < this.pages.length) {
-            this.moveToPageNumber(pageIndex);
+            this.moveToPageNumber(pageIndex, scrollTo);
         } else {
+            console.log("Page '" + page + "' does not exist");
             //TODO tell user page not exist
         }
     };
@@ -388,12 +410,21 @@ var ReaderModule = (function () {
         $(actualPage).addClass('page-active');
     };
 
-    ReaderModule.prototype.displayPage = function (page) {
-        $(this.readerContainer).find('div.reader-text').empty();
-
-        //TODO load page content here
-        $(this.readerContainer).find('div.reader-text').append(page + "<br>");
-        $(this.readerContainer).find('div.reader-text').append("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at varius felis. Praesent scelerisque elit ac felis faucibus, sit amet condimentum sem ullamcorper. Vestibulum in bibendum turpis. Aenean a tempor nisl, in auctor mi. Donec aliquam, ex vestibulum pulvinar imperdiet, turpis lectus placerat massa, ut finibus sapien lectus nec erat. Vestibulum nibh ante, congue molestie dolor at, sodales mollis ligula. Nullam tempus dictum iaculis. Nam quam enim, vehicula nec sapien eu, egestas fringilla purus. Nulla nec lectus nec mi eleifend mollis non et velit. Integer volutpat, ex eu imperdiet suscipit, mauris nunc convallis mi, nec aliquet urna massa ut ante. Mauris leo justo, convallis ut sagittis vel, sagittis et massa. Nam vitae erat at dolor mollis consequat. Vestibulum vel leo non diam consectetur aliquet at vel tellus. Etiam semper sapien nec accumsan vulputate.Mauris rutrum metus dignissim, eleifend risus vel, bibendum ante.Nulla fringilla odio ac vulputate eleifend.Sed dapibus accumsan nunc.Duis ullamcorper sapien eget urna blandit scelerisque sit amet in ligula.Interdum et malesuada fames ac ante ipsum primis in faucibus.Integer nec tempus sapien, ac fringilla orci.Donec lobortis massa sit amet orci imperdiet eleifend.Cras tristique mi id justo vulputate iaculis.Sed porttitor gravida diam, vitae pulvinar lorem scelerisque at.Pellentesque sit amet cursus lorem.Maecenas commodo ornare est, vel sollicitudin felis condimentum ac.Quisque ac luctus lacus, quis tempus libero.Morbi leo arcu, finibus sed sodales eu, mattis non nibh.Cras lobortis laoreet mauris sed gravida.Nullam pellentesque elementum vulputate.Integer condimentum eros id eleifend posuere.Nam id turpis non purus consequat interdum.Maecenas fermentum bibendum nisl, quis mollis nibh semper at.Aenean sed semper tellus.In a libero at magna suscipit luctus ut eget eros.Cras a gravida felis, ut tempor augue.Vivamus eget mauris a ex blandit consectetur.Donec lobortis augue felis, quis malesuada orci luctus a.Ut ac quam ac massa vehicula fermentum eu eget lectus.Ut ac quam gravida urna ornare fermentum eget sed augue.Mauris dictum justo a condimentum gravida.Cras ac nulla id erat fermentum sodales ut eu turpis.Nunc ullamcorper eros vitae odio efficitur rutrum.Curabitur fringilla ex id nunc sodales imperdiet.Cras porta arcu ut dolor euismod pretium.Nulla mattis justo ac feugiat mollis.Proin at tortor ut justo egestas ultricies quis nec risus.Nulla facilisi.Nulla eu enim ut lorem aliquam maximus.Fusce suscipit odio quis lorem ultricies faucibus.");
+    ReaderModule.prototype.displayPage = function (page, scrollTo) {
+        var pageDiv = $(this.readerContainer).find('div.reader-text').find('#page_' + page);
+        var pageLoaded = $(pageDiv).data('loaded');
+        if (typeof pageLoaded === 'undefined' || !pageLoaded) {
+            for (var i = 0; i < 30000; i++) {
+                $(pageDiv).append(' ' + page);
+            }
+            $(pageDiv).data('loaded', true);
+        }
+        if (scrollTo) {
+            var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
+            $(scrollableContainer).scrollTop(0);
+            var topOffset = $(pageDiv).offset().top;
+            $(scrollableContainer).scrollTop(topOffset);
+        }
     };
 
     ReaderModule.prototype.addBookmark = function () {

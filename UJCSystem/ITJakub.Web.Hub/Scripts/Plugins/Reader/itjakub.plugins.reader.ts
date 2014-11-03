@@ -18,6 +18,7 @@ class ReaderModule {
         for (var i = 0; i < 15; i++) { //TODO pages should be loaded by ajax
             this.pages.push(i.toString() + "r");
         }
+
     }
 
     public makeReader(book: IBookInfo) {
@@ -54,7 +55,6 @@ class ReaderModule {
         var title = this.makeTitle(book);
         readerHeadDiv.appendChild(title);
 
-      
 
         var controls = this.makeControls(book);
         readerHeadDiv.appendChild(controls);
@@ -65,7 +65,7 @@ class ReaderModule {
 
         $(this.readerContainer).append(readerDiv);
 
-        this.moveToPageNumber(0); //load first page
+        this.moveToPageNumber(0, true); //load first page and scroll to it
     }
 
     private makeTitle(book: IBookInfo): HTMLDivElement {
@@ -78,7 +78,7 @@ class ReaderModule {
     private makeControls(book: IBookInfo): HTMLDivElement {
         var controlsDiv: HTMLDivElement = document.createElement('div');
         $(controlsDiv).addClass('reader-controls content-container');
-        
+
         var slider: HTMLDivElement = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
@@ -98,9 +98,8 @@ class ReaderModule {
 
             },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
-                var pp = this.actualPageIndex;
                 if (this.actualPageIndex !== ui.value) {
-                    this.moveToPageNumber(ui.value);
+                    this.moveToPageNumber(ui.value, true);
                 }
             }
         });
@@ -144,7 +143,7 @@ class ReaderModule {
         pageInputButton.innerHTML = "Přejít na stránku";
         $(pageInputButton).addClass('page-input-button');
         $(pageInputButton).click((event: Event) => {
-            this.moveToPage($('#pageInputText').val());
+            this.moveToPage($('#pageInputText').val(), true);
         });
         pageInputDiv.appendChild(pageInputButton);
 
@@ -160,7 +159,7 @@ class ReaderModule {
         anchor.innerHTML = '|<';
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.moveToPageNumber(0);
+            this.moveToPageNumber(0, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -173,7 +172,7 @@ class ReaderModule {
         anchor.innerHTML = '<<';
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex - 5);
+            this.moveToPageNumber(this.actualPageIndex - 5, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -186,7 +185,7 @@ class ReaderModule {
         anchor.innerHTML = '<';
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex - 1);
+            this.moveToPageNumber(this.actualPageIndex - 1, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -206,7 +205,7 @@ class ReaderModule {
             anchor.innerHTML = page;
             $(anchor).click((event: Event) => {
                 event.stopPropagation();
-                this.moveToPage(page);
+                this.moveToPage(page, true);
                 return false;
             });
             liElement.appendChild(anchor);
@@ -225,7 +224,7 @@ class ReaderModule {
         anchor.innerHTML = '>';
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex + 1);
+            this.moveToPageNumber(this.actualPageIndex + 1, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -238,7 +237,7 @@ class ReaderModule {
         anchor.innerHTML = '>>';
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex + 5);
+            this.moveToPageNumber(this.actualPageIndex + 5, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -251,7 +250,7 @@ class ReaderModule {
         anchor.innerHTML = '>|';
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.moveToPageNumber(this.pages.length - 1);
+            this.moveToPageNumber(this.pages.length - 1, true);
             return false;
         });
         liElement.appendChild(anchor);
@@ -325,16 +324,36 @@ class ReaderModule {
     private makeTextArea(book: IBookInfo): HTMLDivElement {
         var textContainerDiv: HTMLDivElement = document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container content-container');
+        $(textContainerDiv).scroll((event: Event) => { //TODO make better scroll event
+            var pages = $(this.readerContainer).find('.reader-text-container').find('.page');
+            var minOffset = Number.MAX_VALUE;
+            var pageWithMinOffset;
+            $.each(pages, (index, page) => {
+                var pageOfsset = Math.abs($(page).offset().top);
+                if (minOffset > pageOfsset) {
+                    minOffset = pageOfsset;
+                    pageWithMinOffset = page;
+                }
+            });
 
+            this.moveToPage($(pageWithMinOffset).data('page-name'), false);
+        });
 
         var textAreaDiv: HTMLDivElement = document.createElement('div');
         $(textAreaDiv).addClass('reader-text');
+        for (var i = 0; i < this.pages.length; i++) {
+            var pageDiv: HTMLDivElement = document.createElement('div');
+            $(pageDiv).addClass('page');
+            $(pageDiv).data('page-name', this.pages[i]);
+            pageDiv.id = 'page_' + this.pages[i];
+            textAreaDiv.appendChild(pageDiv);
+        }
 
         textContainerDiv.appendChild(textAreaDiv);
         return textContainerDiv;
     }
 
-    moveToPageNumber(pageIndex: number) {
+    moveToPageNumber(pageIndex: number, scrollTo: boolean) {
         if (pageIndex < 0) {
             pageIndex = 0;
         } else if (pageIndex >= this.pages.length) {
@@ -343,14 +362,15 @@ class ReaderModule {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
-        this.displayPage(this.pages[pageIndex]);
+        this.displayPage(this.pages[pageIndex], scrollTo);
     }
 
-    moveToPage(page: string) {
+    moveToPage(page: string, scrollTo: boolean) {
         var pageIndex: number = $.inArray(page, this.pages);
         if (pageIndex >= 0 && pageIndex < this.pages.length) {
-            this.moveToPageNumber(pageIndex);
+            this.moveToPageNumber(pageIndex, scrollTo);
         } else {
+            console.log("Page '"+page+"' does not exist");
             //TODO tell user page not exist  
         }
     }
@@ -402,11 +422,22 @@ class ReaderModule {
 
     }
 
-    displayPage(page: string) {
-        $(this.readerContainer).find('div.reader-text').empty();
-        //TODO load page content here
-        $(this.readerContainer).find('div.reader-text').append(page + "<br>");
-        $(this.readerContainer).find('div.reader-text').append("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at varius felis. Praesent scelerisque elit ac felis faucibus, sit amet condimentum sem ullamcorper. Vestibulum in bibendum turpis. Aenean a tempor nisl, in auctor mi. Donec aliquam, ex vestibulum pulvinar imperdiet, turpis lectus placerat massa, ut finibus sapien lectus nec erat. Vestibulum nibh ante, congue molestie dolor at, sodales mollis ligula. Nullam tempus dictum iaculis. Nam quam enim, vehicula nec sapien eu, egestas fringilla purus. Nulla nec lectus nec mi eleifend mollis non et velit. Integer volutpat, ex eu imperdiet suscipit, mauris nunc convallis mi, nec aliquet urna massa ut ante. Mauris leo justo, convallis ut sagittis vel, sagittis et massa. Nam vitae erat at dolor mollis consequat. Vestibulum vel leo non diam consectetur aliquet at vel tellus. Etiam semper sapien nec accumsan vulputate.Mauris rutrum metus dignissim, eleifend risus vel, bibendum ante.Nulla fringilla odio ac vulputate eleifend.Sed dapibus accumsan nunc.Duis ullamcorper sapien eget urna blandit scelerisque sit amet in ligula.Interdum et malesuada fames ac ante ipsum primis in faucibus.Integer nec tempus sapien, ac fringilla orci.Donec lobortis massa sit amet orci imperdiet eleifend.Cras tristique mi id justo vulputate iaculis.Sed porttitor gravida diam, vitae pulvinar lorem scelerisque at.Pellentesque sit amet cursus lorem.Maecenas commodo ornare est, vel sollicitudin felis condimentum ac.Quisque ac luctus lacus, quis tempus libero.Morbi leo arcu, finibus sed sodales eu, mattis non nibh.Cras lobortis laoreet mauris sed gravida.Nullam pellentesque elementum vulputate.Integer condimentum eros id eleifend posuere.Nam id turpis non purus consequat interdum.Maecenas fermentum bibendum nisl, quis mollis nibh semper at.Aenean sed semper tellus.In a libero at magna suscipit luctus ut eget eros.Cras a gravida felis, ut tempor augue.Vivamus eget mauris a ex blandit consectetur.Donec lobortis augue felis, quis malesuada orci luctus a.Ut ac quam ac massa vehicula fermentum eu eget lectus.Ut ac quam gravida urna ornare fermentum eget sed augue.Mauris dictum justo a condimentum gravida.Cras ac nulla id erat fermentum sodales ut eu turpis.Nunc ullamcorper eros vitae odio efficitur rutrum.Curabitur fringilla ex id nunc sodales imperdiet.Cras porta arcu ut dolor euismod pretium.Nulla mattis justo ac feugiat mollis.Proin at tortor ut justo egestas ultricies quis nec risus.Nulla facilisi.Nulla eu enim ut lorem aliquam maximus.Fusce suscipit odio quis lorem ultricies faucibus.");
+    displayPage(page: string, scrollTo: boolean) {
+        var pageDiv = $(this.readerContainer).find('div.reader-text').find('#page_' + page);
+        var pageLoaded: boolean = $(pageDiv).data('loaded');
+        if (typeof pageLoaded === 'undefined' || !pageLoaded) {
+            //TODO load page content here
+            for (var i = 0; i < 30000; i++) {
+                $(pageDiv).append(' ' + page);
+            }
+            $(pageDiv).data('loaded', true);
+        }
+        if (scrollTo) {
+            var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
+            $(scrollableContainer).scrollTop(0);
+            var topOffset = $(pageDiv).offset().top;
+            $(scrollableContainer).scrollTop(topOffset);
+        }
     }
 
     addBookmark() {

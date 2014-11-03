@@ -463,11 +463,12 @@ ul.bib-listing li.list-item .label {
   height: 85px;
 }
 .reader-text-container {
-  width: 100%;
+  width: auto;
   margin-top: 1px;
   padding: 5px 30px 5px 30px;
   height: 700px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 .reader-controls .ui-slider {
   background: #84ced7;
@@ -601,14 +602,15 @@ ul.bib-listing li.list-item .label {
   text-align: center;
   vertical-align: middle;
 }
+.reader button.fullscreen-button:hover,
+.fullscreen .fullscreen-close-button:hover {
+  color: #84ced7;
+}
 .fullscreen .fullscreen-button {
   display: none;
 }
-.reader-controls .fullscreen-button:hover {
-  color: #84ced7;
-}
 .reader-text {
-  height: 50000px;
+  height: auto;
 }
 .fullscreen {
   position: fixed;
@@ -632,6 +634,11 @@ ul.bib-listing li.list-item .label {
   padding: 10px;
   text-align: center;
   vertical-align: middle;
+}
+.reader-text .page {
+  max-width: 100%;
+  height: auto;
+  min-height: 500px;
 }
 .main_logo {
   margin: 10px;
@@ -784,4 +791,4 @@ ul {
 .top-offset-without-submenu {
   margin: -25px 0 0 0;
 }
-/*# sourceMappingURL=ITJakub.css.map */
+/*# sourceMappingURL=itjakub.css.map */
