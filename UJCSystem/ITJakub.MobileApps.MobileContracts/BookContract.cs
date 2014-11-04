@@ -6,7 +6,7 @@ namespace ITJakub.MobileApps.MobileContracts
     public class BookContract
     {
         [DataMember]
-        public long Guid { get; set; }
+        public string Guid { get; set; }
 
         [DataMember]
         public string Title { get; set; }

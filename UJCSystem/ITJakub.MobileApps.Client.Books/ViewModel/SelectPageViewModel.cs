@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -17,6 +18,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private BookPageViewModel m_selectedPage;
         private int m_currentPageNumber;
         private int m_selectedPageIndex;
+        private ImageSource m_pagePhoto;
 
         public SelectPageViewModel(DataService dataService, NavigationService navigationService)
         {
@@ -33,34 +35,15 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             Book = message.Book;
             MessengerInstance.Unregister(this);
 
-
-            PageList = new ObservableCollection<BookPageViewModel>
+            Loading = true;
+            m_dataService.GetPageList(Book.Guid, (list, exception) =>
             {
-                new BookPageViewModel
-                {
-                    BookInfo = Book,
-                    RtfText = @"<Paragraph><Span>This is <Bold>mixed content</Bold> with multiple text areas <Italic> and inlines</Italic>.</Span></Paragraph>",
-                    PageId = "1L"
-                },
-                new BookPageViewModel
-                {
-                    BookInfo = Book,
-                    RtfText = @"<Paragraph><Span>This is <Bold>DRUHA</Bold> with multiple text areas <Italic> and inlines</Italic>.</Span></Paragraph>",
-                    PageId = "1R"
-                },
-                new BookPageViewModel
-                {
-                    BookInfo = Book,
-                    RtfText = @"<Paragraph><Span>This is <Bold>TRETI</Bold> with multiple text areas <Italic> and inlines</Italic>.</Span></Paragraph>",
-                    PageId = "2L"
-                },
-                new BookPageViewModel
-                {
-                    BookInfo = Book,
-                    RtfText = @"<Paragraph><Span>This is <Bold>CTVRTA</Bold> with multiple text areas <Italic> and inlines</Italic>.</Span></Paragraph>",
-                    PageId = "2R"
-                }
-            };
+                Loading = false;
+                if (exception != null)
+                    return;
+
+                PageList = list;
+            });
         }
 
         public RelayCommand GoBackCommand { get; private set; }
@@ -114,7 +97,47 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 
                 RaisePropertyChanged();
                 CurrentPageNumber = m_pageList.IndexOf(m_selectedPage) + 1;
+                OpenPage(m_selectedPage);
             }
+        }
+
+        private void OpenPage(BookPageViewModel page)
+        {
+            if (page.RtfText == null)
+            {
+                m_dataService.GetPageAsRtf(Book.Guid, page.PageId, (rtfText, exception) =>
+                {
+                    if (exception != null)
+                        return;
+
+                    page.RtfText = rtfText;
+                });    
+            }
+
+            RaisePropertyChanged(() => SelectedPage);
+            OpenPagePhoto(page);
+        }
+
+        private void OpenPagePhoto(BookPageViewModel page)
+        {
+            if (!IsShowPhotoEnabled)
+            {
+                PagePhoto = null;
+                return;
+            }
+
+            if (page.PagePhoto == null)
+            {
+                m_dataService.GetPagePhoto(Book.Guid, page.PageId, (image, exception) =>
+                {
+                    if (exception != null)
+                        return;
+
+                    page.PagePhoto = image;
+                });
+            }
+
+            PagePhoto = page.PagePhoto;
         }
 
         public int CurrentPageNumber
@@ -129,7 +152,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 
         public int PageCount
         {
-            get { return m_pageList.Count; }
+            get { return m_pageList != null ? m_pageList.Count : 0; }
         }
 
         public int SelectedPageIndex
@@ -147,9 +170,22 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             get { return @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard Toto je {\b tucny} text.\par}"; }
         }
 
+        public ImageSource PagePhoto
+        {
+            get { return m_pagePhoto; }
+            set
+            {
+                m_pagePhoto = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsShowPhotoEnabled { get; set; }
+
         private void Save()
         {
             m_navigationService.GoFromBookSelection();
+            SelectedPage.BookInfo = Book;
             Messenger.Default.Send(new SelectedPageMessage
             {
                 BookPage = SelectedPage

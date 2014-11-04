@@ -25,28 +25,28 @@ namespace ITJakub.MobileApps.Client.Books.Service
                     new BookContract
                     {
                         Author = "Jméno Příjmení",
-                        Guid = 1,
+                        Guid = "1",
                         Title = "Název knihy",
                         Year = 1800
                     },
                     new BookContract
                     {
                         Author = "Nějaký Autor",
-                        Guid = 1,
+                        Guid = "1",
                         Title = "Velmi dlouhý název knihy",
                         Year = 1870
                     },
                     new BookContract
                     {
                         Author = "Jméno Příjmení",
-                        Guid = 1,
+                        Guid = "1",
                         Title = "Název knihy",
                         Year = 1800
                     },
                     new BookContract
                     {
                         Author = "Jméno Příjmení",
-                        Guid = 1,
+                        Guid = "1",
                         Title = "Název knihy",
                         Year = 1800
                     },
@@ -66,14 +66,14 @@ namespace ITJakub.MobileApps.Client.Books.Service
                     new BookContract
                     {
                         Author = "Jméno Příjmení",
-                        Guid = 1,
+                        Guid = "1",
                         Title = "Název knihy " + query,
                         Year = 1800
                     },
                     new BookContract
                     {
                         Author = "Jméno Příjmení",
-                        Guid = 1,
+                        Guid = "1",
                         Title = "Název "+ query +" knihy",
                         Year = 1800
                     },

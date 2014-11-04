@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converter="using:ITJakub.MobileApps.Client.Books.View.Converter"
-    xmlns:view="using:ITJakub.MobileApps.Client.Books.View"
     xmlns:control="using:ITJakub.MobileApps.Client.Books.View.Control"
     mc:Ignorable="d">
 
@@ -93,7 +92,8 @@
 
                 <ProgressBar IsIndeterminate="False"
                              Value="{Binding CurrentPageNumber}"
-                             Maximum="{Binding PageCount}"/>
+                             Maximum="{Binding PageCount}"
+                             Minimum="1" />
 
                 <TextBlock Margin="0,0,0,4">
                     <Run Text="{Binding CurrentPageNumber}" /><Run Text=". strana z " /><Run Text="{Binding PageCount}" />
@@ -104,23 +104,24 @@
                           Grid.Column="2"
                           Header="Zobrazit fotografii stránky"
                           OnContent="Ano"
-                          OffContent="Ne" />
+                          OffContent="Ne"
+                          IsOn="{Binding IsShowPhotoEnabled, Mode=TwoWay}" />
 
             <Border Grid.Row="1"
                     Grid.Column="0"
                     Background="#50FFFFFF"
                     BorderBrush="#30000000"
                     BorderThickness="2">
-                <control:BindableRichTextBlock XamlBlocks="{Binding SelectedPage.RtfText}" />
+                <control:BindableRichEditBox DocumentRtf="{Binding SelectedPage.RtfText}" />
             </Border>
 
             <Grid Grid.Row="1"
                   Grid.Column="2"
                   Background="#30000000">
-                <control:BindableRichEditBox DocumentRtf="{Binding DocumentRtf}"
-                                             x:Name="BindableRichEditBox" />
-                <Button Content="Button"
-                        Click="Button_OnClick"/>
+                <Image VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Stretch="Uniform"
+                       Source="{Binding PagePhoto}"/>
             </Grid>
             
             <GridView Grid.Row="2"
@@ -128,7 +129,10 @@
                       SelectionMode="Single"
                       SelectedItem="{Binding SelectedPage, Mode=TwoWay}"
                       ItemsSource="{Binding PageList}"
-                      SelectedIndex="{Binding SelectedPageIndex}">
+                      SelectedIndex="{Binding SelectedPageIndex}"
+                      ItemContainerStyle="{StaticResource NoBorderGridViewItemStyle}"
+                      HorizontalContentAlignment="Center"
+                      HorizontalAlignment="Center">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />

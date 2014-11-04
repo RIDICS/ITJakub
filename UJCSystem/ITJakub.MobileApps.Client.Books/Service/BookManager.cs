@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Books.ViewModel;
 using ITJakub.MobileApps.MobileContracts;
 
@@ -25,7 +25,7 @@ namespace ITJakub.MobileApps.Client.Books.Service
                 var viewModelList = list.Select(contract => new BookViewModel
                 {
                     Author = contract.Author,
-                    Id = contract.Guid,
+                    Guid = contract.Guid,
                     Title = contract.Title,
                     Year = contract.Year
                 });
@@ -45,7 +45,7 @@ namespace ITJakub.MobileApps.Client.Books.Service
                 var viewModelList = list.Select(contract => new BookViewModel
                 {
                     Author = contract.Author,
-                    Id = contract.Guid,
+                    Guid = contract.Guid,
                     Title = contract.Title,
                     Year = contract.Year
                 });
@@ -57,12 +57,17 @@ namespace ITJakub.MobileApps.Client.Books.Service
             }
         }
 
-        public async void GetPageList(string bookGuid, Action<IList<string>, Exception> callback)
+        public async void GetPageList(string bookGuid, Action<ObservableCollection<BookPageViewModel>, Exception> callback)
         {
             try
             {
                 var list = await m_serviceClient.GetPageListAsync(bookGuid);
-                callback(list, null);
+                var viewModels = new ObservableCollection<BookPageViewModel>(list.Select(page => new BookPageViewModel
+                {
+                    PageId = page,
+                }));
+
+                callback(viewModels, null);
             }
             catch (MobileCommunicationException exception)
             {
@@ -70,12 +75,17 @@ namespace ITJakub.MobileApps.Client.Books.Service
             }
         }
 
-        public async void GetPageAsRtf(string bookGuid, string pageId, Action<Stream, Exception> callback)
+        public async void GetPageAsRtf(string bookGuid, string pageId, Action<string, Exception> callback)
         {
             try
             {
-                var pageStream = await m_serviceClient.GetPageAsRtfAsync(bookGuid, pageId);
-                callback(pageStream, null);
+                using (var pageStream = await m_serviceClient.GetPageAsRtfAsync(bookGuid, pageId))
+                using (var streamReader = new StreamReader(pageStream))
+                using (var memoryStream = new MemoryStream())
+                {
+                    var text = streamReader.ReadToEnd();
+                    callback(text, null);
+                }
             }
             catch (MobileCommunicationException exception)
             {
@@ -83,12 +93,21 @@ namespace ITJakub.MobileApps.Client.Books.Service
             }
         }
 
-        public async void GetPagePhoto(string bookGuid, string pageId, Action<Stream, Exception> callback)
+        public async void GetPagePhoto(string bookGuid, string pageId, Action<BitmapImage, Exception> callback)
         {
             try
             {
-                var photoStream = await m_serviceClient.GetPagePhotoAsync(bookGuid, pageId);
-                callback(photoStream, null);
+                using (var stream = await m_serviceClient.GetPagePhotoAsync(bookGuid, pageId))
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    memoryStream.Position = 0;
+
+                    var bitmapImage = new BitmapImage();
+                    bitmapImage.SetSource(memoryStream.AsRandomAccessStream());
+
+                    callback(bitmapImage, null);
+                }
             }
             catch (MobileCommunicationException exception)
             {

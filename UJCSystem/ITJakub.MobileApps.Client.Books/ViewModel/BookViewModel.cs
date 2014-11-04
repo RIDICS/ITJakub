@@ -2,7 +2,7 @@
 {
     public class BookViewModel
     {
-        public long Id { get; set; }
+        public string Guid { get; set; }
 
         public string Title { get; set; }
         
