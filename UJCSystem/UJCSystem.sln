@@ -79,6 +79,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.XmlProcessing", "IT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.XmlProcessingConsole", "ITJakub.XmlProcessingConsole\ITJakub.XmlProcessingConsole.csproj", "{7B79B90B-A7E1-4734-9E44-02AED11A7E75}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.FileProcessing", "ITJakub.FileProcessing", "{20AD4F4B-31EB-419D-A116-9AD3B206D874}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.FileProcessing.Service", "ITJakub.FileProcessing.Service\ITJakub.FileProcessing.Service.csproj", "{1F8CBB1C-5613-4E99-AD5D-F3469631363B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.FileProcessing.Core", "ITJakub.FileProcessing.Core\ITJakub.FileProcessing.Core.csproj", "{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -516,6 +522,34 @@ Global
 		{7B79B90B-A7E1-4734-9E44-02AED11A7E75}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7B79B90B-A7E1-4734-9E44-02AED11A7E75}.Release|x64.ActiveCfg = Release|Any CPU
 		{7B79B90B-A7E1-4734-9E44-02AED11A7E75}.Release|x86.ActiveCfg = Release|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Release|x64.ActiveCfg = Release|Any CPU
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B}.Release|x86.ActiveCfg = Release|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Release|x64.ActiveCfg = Release|Any CPU
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -545,6 +579,8 @@ Global
 		{8DDD85A2-4124-4470-9DA5-E18BCFE3D573} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
 		{904E449B-6F51-46C7-A730-4F4C992BDDC8} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
 		{7B79B90B-A7E1-4734-9E44-02AED11A7E75} = {930D6B28-5CCD-4445-B08C-61B39F848E16}
+		{1F8CBB1C-5613-4E99-AD5D-F3469631363B} = {20AD4F4B-31EB-419D-A116-9AD3B206D874}
+		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E} = {20AD4F4B-31EB-419D-A116-9AD3B206D874}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi

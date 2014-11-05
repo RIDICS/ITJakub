@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Services;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -32,13 +32,19 @@ namespace ITJakub.XmlProcessingConsole
 
         private Book GetBookInfo(XDocument document)
         {
-            var guid = document.Root.Attribute("n").Value;
-            return new Book {Guid = guid};
+            string guid = document.Root.Attribute("n").Value;
+            return new Book { Guid = guid };
         }
 
         private string GetBookVersionName(XDocument document)
         {
-            string name = string.Join(" ", document.Root.Descendants(AddNS(m_teiNamespace,"title")).FirstOrDefault()
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine(document);
+            string name = string.Join(" ", document.Root.Descendants(AddNS(m_teiNamespace, "title")).FirstOrDefault()
                 .Descendants(AddNS(m_teiNamespace, "w"))
                 .Select(x => x.Value)
                 .ToArray());
@@ -53,7 +59,8 @@ namespace ITJakub.XmlProcessingConsole
                 var author = new Author
                 {
                     Name =
-                        string.Join(" ", authorElement.Descendants(AddNS(m_teiNamespace, "w")).Select(x => x.Value).ToArray())
+                        string.Join(" ",
+                            authorElement.Descendants(AddNS(m_teiNamespace, "w")).Select(x => x.Value).ToArray())
                 };
                 authors.Add(author);
             }
@@ -81,22 +88,42 @@ namespace ITJakub.XmlProcessingConsole
                     xmlTextReader.LocalName == RootElement &&
                     xmlTextReader.IsStartElement())
                 {
+                    IDictionary<string, string> namespaces = xmlTextReader.GetNamespacesInScope(XmlNamespaceScope.Local);
+                    //rootElement = new XElement(xmlTextReader.Name, namespaces);
                     rootElement = new XElement(xmlTextReader.Name);
                     if (xmlTextReader.HasAttributes)
-                    {                       
+                    {
                         xmlTextReader.MoveToFirstAttribute();
                         while (xmlTextReader.MoveToNextAttribute())
                         {
-                            string attrName=xmlTextReader.Name;
-                            if (!attrName.Contains(":"))
+                            string attrName = xmlTextReader.Name;
+                            var attribute = (XAttribute) xmlTextReader;
+                            if (attrName.Equals("xmlns"))
                             {
-                                rootElement.Add(new XAttribute(attrName, xmlTextReader.Value));
+                                XNamespace xNamespace = xmlTextReader.Value;
+                                rootElement.SetAttributeValue("xmlns", xNamespace.NamespaceName);
+                                rootElement.Name = xNamespace + rootElement.Name.LocalName;
+                            }
+                            else if (xmlTextReader.IsNa)
+                            {
+                                string[] nmspaces = attrName.Split(':');
+                                XNamespace nspace;
+                                if (namespaces.ContainsKey(nmspaces[0]))
+                                {
+                                    nspace = namespaces[nmspaces[0]];
+                                } else if (nmspaces[0].Equals("xmlns"))
+                                {
+                                    nspace = namespaces[""];
+                                }
+                                else
+                                {
+                                    nspace = nmspaces[0];
+                                }
+                                rootElement.Add(new XAttribute(nspace + nmspaces[1], xmlTextReader.Value));
                             }
                             else
                             {
-                                var nmspace = attrName.Split(':');
-                                XNamespace nameSpace = nmspace[0];
-                                rootElement.Add(new XAttribute(nameSpace + nmspace[1], xmlTextReader.Value));
+                                rootElement.Add(new XAttribute(attrName, xmlTextReader.Value));
                             }
                         }
                         xmlTextReader.MoveToElement();
@@ -107,10 +134,10 @@ namespace ITJakub.XmlProcessingConsole
                     xmlTextReader.LocalName == HeaderElement &&
                     xmlTextReader.IsStartElement())
                 {
-                    var xdocument = new XDocument();
-                    if (rootElement == null) return xdocument; //TODO throw exception here
+                    if (rootElement == null) return null; //TODO throw exception here
+                    Console.WriteLine(rootElement);
                     rootElement.AddFirst(XElement.Parse(xmlTextReader.ReadOuterXml()));
-                    xdocument.Add(rootElement);
+                    var xdocument = new XDocument(rootElement);
                     return xdocument;
                 }
             }
