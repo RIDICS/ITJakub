@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Windsor.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,15 +46,22 @@
     <Compile Include="Processors\Header\EncodingDescProcessor.cs" />
     <Compile Include="Processors\Header\FileDescProcessor.cs" />
     <Compile Include="Processors\Header\ProfileDescProcessor.cs" />
+    <Compile Include="Processors\RootElementProcessor.cs" />
+    <Compile Include="Processors\Text\TextProcessor.cs" />
     <Compile Include="Processors\Header\TitleProcessor.cs" />
     <Compile Include="Processors\Header\TitleStmtProcessor.cs" />
     <Compile Include="Processors\ProcessorBase.cs" />
     <Compile Include="Processors\Header\TeiHeaderProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlPartType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Processors\Text\" />
+    <Content Include="ITJakub.FileProcessing.Core.Container.Config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
+      <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
+      <Name>ITJakub.DataEntities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

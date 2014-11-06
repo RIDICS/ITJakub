@@ -1,17 +1,23 @@
 using System.Xml;
+using Castle.MicroKernel;
+using ITJakub.DataEntities.Database.Entities;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
     public class TitleProcessor : ListProcessorBase
     {
+        public TitleProcessor(IKernel container) : base(container)
+        {
+        }
+
         protected override string NodeName
         {
             get { return "title"; }
         }
 
-        public override void Process(BookVersion bookVersion, XmlTextReader xmlReader)
+        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            string title = GetInnerContentAsString(xmlReader.ReadSubtree());
+            bookVersion.Name = GetInnerContentAsString(xmlReader.ReadSubtree());
         }
     }
 }

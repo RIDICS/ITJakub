@@ -1,39 +1,71 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
+using System.Xml.Xsl;
+using Castle.MicroKernel;
+using ITJakub.DataEntities.Database.Entities;
 
 namespace ITJakub.FileProcessing.Core.Processors
 {
     public abstract class ProcessorBase
     {
-        private readonly Dictionary<string, ProcessorBase> m_processors;
+        private bool m_initialized;
+        private Dictionary<string, ProcessorBase> m_processors;
 
 
-        protected ProcessorBase()
+        protected ProcessorBase(IKernel container)
         {
-            m_processors = GetProcessors();
+            Container = container;
         }
 
         protected abstract string NodeName { get; }
         protected abstract IEnumerable<ProcessorBase> SubProcessors { get; }
+        protected IKernel Container { get; private set; }
 
-        public virtual void Process(BookVersion bookVersion, XmlTextReader xmlReader)
+        public void Process(BookVersion bookVersion, XmlReader xmlReader)
+        {
+            if (!m_initialized)
+            {
+                Init();
+            }
+            ProcessElement(bookVersion, xmlReader);
+        }
+
+        protected virtual void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
             ProcessAttributes(bookVersion, xmlReader);
-            string nodeName = "aaa";
-            if (m_processors.ContainsKey(nodeName))
+            while (xmlReader.Read())
             {
-                m_processors[nodeName].Process(bookVersion, node.subTree());
+                if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
+                    m_processors.ContainsKey(xmlReader.LocalName))
+                {
+                    m_processors[xmlReader.LocalName].Process(bookVersion, xmlReader.ReadSubtree());
+                }
             }
         }
 
-        protected virtual void ProcessAttributes(BookVersion bookVersion, XmlTextReader xmlReader)
+        private void Init()
+        {
+            m_processors = GetProcessors();
+            m_initialized = true;
+        }
+
+        protected virtual void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
         {
         }
 
         protected string GetInnerContentAsString(XmlReader xmlReader)
         {
-            return "aaa"; //TODO read string from 'w', 'pc' and 'c' elements
+            return ""; //TODO remove
+            var stringWriter = new StringWriter();
+            using (XmlWriter xmlWriter = XmlWriter.Create(stringWriter))
+            {
+                var xslt = new XslCompiledTransform();
+                xslt.Load("xmlPath"); //TODO load xslt transformation for reading string from 'w', 'pc' and 'c' elements
+                xslt.Transform(xmlReader, xmlWriter);
+            }
+            return stringWriter.ToString();
         }
 
         private Dictionary<string, ProcessorBase> GetProcessors()
@@ -45,7 +77,11 @@ namespace ITJakub.FileProcessing.Core.Processors
 
     public abstract class ListProcessorBase : ProcessorBase
     {
-        protected sealed override IEnumerable<ProcessorBase> SubProcessors
+        protected ListProcessorBase(IKernel container) : base(container)
+        {
+        }
+
+        protected override sealed IEnumerable<ProcessorBase> SubProcessors
         {
             get { return new List<ProcessorBase>(); }
         }

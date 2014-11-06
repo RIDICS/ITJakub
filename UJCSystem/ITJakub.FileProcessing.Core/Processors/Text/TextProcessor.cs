@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
 
-namespace ITJakub.FileProcessing.Core.Processors.Header
+namespace ITJakub.FileProcessing.Core.Processors.Text
 {
-    public class TitleStmtProcessor : ProcessorBase
+    public class TextProcessor : ProcessorBase
     {
-        public TitleStmtProcessor(IKernel container) : base(container)
+        public TextProcessor(IKernel container) : base(container)
         {
         }
 
         protected override string NodeName
         {
-            get { return "titleStmt"; }
+            get { return "text"; }
         }
 
         protected override IEnumerable<ProcessorBase> SubProcessors
@@ -20,8 +20,6 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             {
                 return new List<ProcessorBase>
                 {
-                    Container.Resolve<TitleProcessor>(),
-                    Container.Resolve<AuthorProcessor>()
                 };
             }
         }

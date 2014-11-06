@@ -1,9 +1,14 @@
 using System.Collections.Generic;
+using Castle.MicroKernel;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
     public class ProfileDescProcessor : ProcessorBase
     {
+        public ProfileDescProcessor(IKernel container) : base(container)
+        {
+        }
+
         protected override string NodeName
         {
             get { return "profileDesc"; }
@@ -11,7 +16,7 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override IEnumerable<ProcessorBase> SubProcessors
         {
-            get { throw new System.NotImplementedException(); }
+            get { return new List<ProcessorBase>(); } //TODO
         }
     }
 }

@@ -6,8 +6,7 @@ namespace ITJakub.DataEntities.Database.Entities
     public class Author : IEquatable<Author>
     {
         public virtual int Id { get; set; }
-        public virtual IList<AuthorInfo> AuthorInfos { get; set; }
-        public virtual IList<BookVersion> BookVersions { get; set; }
+        public virtual string Name { get; set; }
 
         public virtual bool Equals(Author other)
         {

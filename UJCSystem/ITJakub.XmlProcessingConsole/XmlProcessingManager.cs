@@ -97,14 +97,13 @@ namespace ITJakub.XmlProcessingConsole
                         while (xmlTextReader.MoveToNextAttribute())
                         {
                             string attrName = xmlTextReader.Name;
-                            var attribute = (XAttribute) xmlTextReader;
                             if (attrName.Equals("xmlns"))
                             {
                                 XNamespace xNamespace = xmlTextReader.Value;
                                 rootElement.SetAttributeValue("xmlns", xNamespace.NamespaceName);
                                 rootElement.Name = xNamespace + rootElement.Name.LocalName;
                             }
-                            else if (xmlTextReader.IsNa)
+                            else if (attrName.Contains(':'))
                             {
                                 string[] nmspaces = attrName.Split(':');
                                 XNamespace nspace;
