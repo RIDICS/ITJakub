@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Xml.XMLOperations;
 
 namespace ITJakub.Core.Database.Exist.DAOs

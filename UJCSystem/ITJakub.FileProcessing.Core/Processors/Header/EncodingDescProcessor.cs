@@ -16,7 +16,7 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override IEnumerable<ProcessorBase> SubProcessors
         {
-            get { return new List<ProcessorBase>();  } //TODO
+            get { return new List<ProcessorBase>(); } //TODO
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ITJakub.Contracts;
-using ITJakub.Contracts.Categories;
-using ITJakub.Contracts.Searching;
 using ITJakub.Core.Database.Exist;
 using ITJakub.Core.Database.Exist.DAOs;
+using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching;
 
 namespace ITJakub.SearchService
 {

@@ -1,34 +1,35 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Xml.Linq;
+using ITJakub.FileStorage;
 using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService.Core
 {
     public class UploadManager
     {
-        private readonly LocalFilesystemManager m_localFilesystemManager;
+        private readonly FilesystemManager m_filesystemManager;
         private readonly XmlProcessingManager m_xmlProcessingManager;
 
-        public UploadManager(LocalFilesystemManager localFilesystemManager, XmlProcessingManager xmlProcessingManager)
+        public UploadManager(FilesystemManager filesystemManager, XmlProcessingManager xmlProcessingManager)
         {
-            m_localFilesystemManager = localFilesystemManager;
+            m_filesystemManager = filesystemManager;
             m_xmlProcessingManager = xmlProcessingManager;
         }
 
         public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract uploadFileContract)
         {
-            string tempName = m_localFilesystemManager.SaveTempFile(uploadFileContract.Data);
-            return new ProcessedFileInfoContract(){FileGuid = "ABCDEFG", VersionId = "XYZ"}; //TODO just for testing purposes
+            string tempName = m_filesystemManager.SaveTempFile(uploadFileContract.Data);
+            return new ProcessedFileInfoContract {FileGuid = "ABCDEFG", VersionId = "XYZ"};
+                //TODO just for testing purposes
             //TODO call program for converting docx to xml here
             ProcessedFileInfoContract fileInfo = GetFileInfoFromTempFile(tempName);
-            m_localFilesystemManager.RenameTempFile(tempName, fileInfo.FileGuid);
+            m_filesystemManager.RenameTempFile(tempName, fileInfo.FileGuid);
             return fileInfo;
         }
 
         private ProcessedFileInfoContract GetFileInfoFromTempFile(string fileName)
         {
-            using (FileStream fileStream = m_localFilesystemManager.OpenTempFile(fileName))
+            using (FileStream fileStream = m_filesystemManager.OpenTempFile(fileName))
             {
                 XDocument fileHeader = m_xmlProcessingManager.ParseHeader(fileStream);
                 return m_xmlProcessingManager.GetInfoFromHeader(fileHeader);
@@ -37,12 +38,14 @@ namespace ITJakub.ITJakubService.Core
 
         public void SaveFrontImageForFile(UploadImageContract uploadImageContract)
         {
-            m_localFilesystemManager.SaveFrontImage(uploadImageContract.FileGuid, uploadImageContract.Name, uploadImageContract.Data);
+            m_filesystemManager.SaveFrontImage(uploadImageContract.FileGuid, uploadImageContract.Name,
+                uploadImageContract.Data);
         }
 
         public void SavePageImageForFile(UploadImageContract uploadImageContract)
         {
-            m_localFilesystemManager.SaveImage(uploadImageContract.FileGuid, uploadImageContract.Name, uploadImageContract.Data);
+            m_filesystemManager.SaveImage(uploadImageContract.FileGuid, uploadImageContract.Name,
+                uploadImageContract.Data);
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using ITJakub.Contracts.Categories;
-using ITJakub.Contracts.Searching;
 using ITJakub.Core;
 using ITJakub.Core.Database;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
-using Book = ITJakub.Contracts.Categories.Book;
+using ITJakub.Shared.Contracts.Categories;
+using ITJakub.Shared.Contracts.Searching;
+using Book = ITJakub.Shared.Contracts.Categories.Book;
 
 namespace ITJakub.ITJakubService
 {

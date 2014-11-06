@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-using ITJakub.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching;
 
 namespace ITJakub.Core.Database.Exist
 {

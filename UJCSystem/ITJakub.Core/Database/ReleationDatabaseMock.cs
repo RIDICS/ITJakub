@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ITJakub.Contracts.Categories;
+using ITJakub.Shared.Contracts.Categories;
 using log4net;
 
 namespace ITJakub.Core.Database

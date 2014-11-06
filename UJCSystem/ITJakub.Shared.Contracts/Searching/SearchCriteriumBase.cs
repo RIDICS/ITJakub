@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ITJakub.Contracts.Searching
+namespace ITJakub.Shared.Contracts.Searching
 {
     [DataContract]
     [KnownType(typeof(AuthorSearchCriterium))]

@@ -4,13 +4,8 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    <bag name="AuthorInfos" inverse="true" cascade="all" lazy="false">
-      <key column="Author" />
-      <one-to-many class="AuthorInfo" />
-    </bag>
-    <bag name="BookVersions" table="[BookVersion_Author]" inverse="true" lazy="true">
-      <key column="Author" />
-      <many-to-many class="BookVersion" column="BookVersion" />
-    </bag>
+    <property name="Name">
+      <column name="Name" sql-type="varchar" not-null="true" />
+    </property>
   </class>
 </hibernate-mapping>

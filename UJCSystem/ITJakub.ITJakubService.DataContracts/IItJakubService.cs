@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-using ITJakub.Contracts.Categories;
-using ITJakub.Contracts.Searching;
+using ITJakub.Shared.Contracts.Categories;
+using ITJakub.Shared.Contracts.Searching;
 
 namespace ITJakub.ITJakubService.DataContracts
 {

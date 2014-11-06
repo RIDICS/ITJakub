@@ -8,11 +8,11 @@ using ITJakub.FileProcessing.Core.Processors.Text;
 
 namespace ITJakub.FileProcessing.Core.Processors
 {
-    public class RootElementProcessor : ProcessorBase
+    public class DocumentProcessor : ProcessorBase
     {
         private readonly BookRepository m_bookRepository;
 
-        public RootElementProcessor(BookRepository bookRepository, IKernel container) : base(container)
+        public DocumentProcessor(BookRepository bookRepository, IKernel container) : base(container)
         {
             m_bookRepository = bookRepository;
         }
@@ -22,10 +22,9 @@ namespace ITJakub.FileProcessing.Core.Processors
             get { return "TEI"; }
         }
 
-        protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
+        public string XmlRootName
         {
-            var bookGuid = xmlReader.GetAttribute("n");
-            bookVersion.Book = m_bookRepository.GetBookByGuid(bookGuid);
+            get { return NodeName; }
         }
 
 
@@ -39,6 +38,17 @@ namespace ITJakub.FileProcessing.Core.Processors
                     Container.Resolve<TextProcessor>(),
                 };
             }
+        }
+
+        protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
+        {
+            var bookGuid = xmlReader.GetAttribute("n");
+            var book = m_bookRepository.GetBookByGuid(bookGuid);
+            if (book == null)
+            {
+                book = new Book {Guid = bookGuid};
+            }
+            bookVersion.Book = book;
         }
     }
 }

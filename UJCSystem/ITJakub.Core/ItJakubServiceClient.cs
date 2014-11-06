@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.ServiceModel;
-using ITJakub.Contracts.Categories;
-using ITJakub.Contracts.Searching;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts.Categories;
+using ITJakub.Shared.Contracts.Searching;
 using log4net;
 
 namespace ITJakub.Core

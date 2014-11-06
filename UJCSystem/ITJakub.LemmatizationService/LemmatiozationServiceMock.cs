@@ -1,5 +1,5 @@
-﻿using ITJakub.Contracts;
-using ITJakub.Core;
+﻿using ITJakub.Core;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.LemmatizationService
 {

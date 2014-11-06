@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.ServiceModel;
-using ITJakub.Contracts;
-using ITJakub.Contracts.Categories;
-using ITJakub.Contracts.Searching;
 using ITJakub.Core.Searching;
+using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching;
 using log4net;
 
 namespace ITJakub.Core

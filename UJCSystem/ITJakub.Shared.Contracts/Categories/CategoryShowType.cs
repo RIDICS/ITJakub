@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ITJakub.Contracts.Categories
+namespace ITJakub.Shared.Contracts.Categories
 {
     [DataContract]
     public enum CategoryShowType

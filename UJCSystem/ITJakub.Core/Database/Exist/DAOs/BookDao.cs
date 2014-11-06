@@ -2,8 +2,7 @@
 using System.Text;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.Contracts.Categories;
-using ITJakub.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Xml.XMLOperations;
 using System.Linq;
 

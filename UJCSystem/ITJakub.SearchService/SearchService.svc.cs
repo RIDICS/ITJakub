@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-using ITJakub.Contracts;
-using ITJakub.Contracts.Categories;
-using ITJakub.Contracts.Searching;
+using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching;
 
 namespace ITJakub.SearchService
 {

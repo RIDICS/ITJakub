@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
-using ITJakub.Contracts;
 using ITJakub.Core;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.LemmatizationService
 {

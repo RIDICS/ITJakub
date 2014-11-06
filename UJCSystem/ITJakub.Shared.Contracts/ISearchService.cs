@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-using ITJakub.Contracts.Categories;
-using ITJakub.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching;
 
-namespace ITJakub.Contracts
+namespace ITJakub.Shared.Contracts
 {
     [ServiceContract]
     public interface ISearchService

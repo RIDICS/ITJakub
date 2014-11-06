@@ -1,33 +1,36 @@
 ﻿using System;
 using System.IO;
 
-namespace ITJakub.ITJakubService.Core
+namespace ITJakub.FileStorage
 {
-    public class LocalFilesystemManager
+    public class FilesystemManager
     {
         private const string FrontPageDirName = "FrontPage";
-        private readonly string m_imagesFolderPath;
+        private const string ImagesFolderName = "Images";
+        private const string TempFolderName = "Temp";
+        private readonly string m_path;
         private readonly string m_tempFolderPath;
 
-        public LocalFilesystemManager(string tempFolderPath, string imagesFolderPath)
+        public FilesystemManager(string path)
         {
-            m_tempFolderPath = tempFolderPath;
-            MakeDirectoriesIfNotExist(m_tempFolderPath);
-            m_imagesFolderPath = imagesFolderPath;
-            MakeDirectoriesIfNotExist(m_imagesFolderPath);
+            m_path = path;
+            m_tempFolderPath = Path.Combine(m_path, TempFolderName);
+            MakeDirectoryIfNotExist(m_tempFolderPath);
         }
 
-        private void MakeDirectoriesIfNotExist(string path)
+        //makes all directories in specified path
+        private void MakeDirectoryIfNotExist(string path)
         {
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
         }
 
-        private void SaveFile(string path, Stream data)
+        private void SaveFile(string guid, Stream data)
         {
+            string path = GetFilePath(guid);
             string parentDirName = Path.GetDirectoryName(path);
             if (parentDirName != null)
-                MakeDirectoriesIfNotExist(parentDirName);
+                MakeDirectoryIfNotExist(parentDirName);
             using (FileStream fileStream = File.Create(path))
             {
                 data.CopyTo(fileStream);
@@ -52,11 +55,6 @@ namespace ITJakub.ITJakubService.Core
             return File.Open(GetTempFilePath(fileName), FileMode.Open);
         }
 
-        private string GetTempFilePath(string fileName)
-        {
-            return Path.Combine(m_tempFolderPath, fileName);
-        }
-
         public void SaveImage(string fileGuid, string imageName, Stream dataStream)
         {
             string imagePath = GetImagePath(fileGuid, imageName);
@@ -69,14 +67,44 @@ namespace ITJakub.ITJakubService.Core
             SaveFile(imagePath, dataStream);
         }
 
+        private string GetTempFilePath(string fileGuid)
+        {
+            return Path.Combine(GetTempFileFolder(fileGuid), fileGuid);
+        }
+
+        private string GetFilePath(string fileGuid)
+        {
+            return Path.Combine(GetFileFolder(fileGuid), fileGuid);
+        }
+
         private string GetImagePath(string fileGuid, string imageName)
         {
-            return Path.Combine(m_imagesFolderPath, fileGuid, imageName);
+            return Path.Combine(GetImageFolder(fileGuid), imageName);
         }
 
         private string GetFrontImagePath(string fileGuid, string imageName)
         {
-            return Path.Combine(m_imagesFolderPath, fileGuid, FrontPageDirName, imageName);
+            return Path.Combine(GetFrontImageFolder(fileGuid), imageName);
+        }
+
+        private string GetTempFileFolder(string fileGuid)
+        {
+            return m_tempFolderPath;
+        }
+
+        private string GetFileFolder(string fileGuid)
+        {
+            return Path.Combine(m_path, fileGuid);
+        }
+
+        private string GetImageFolder(string fileGuid)
+        {
+            return Path.Combine(GetFileFolder(fileGuid), ImagesFolderName);
+        }
+
+        private string GetFrontImageFolder(string fileGuid)
+        {
+            return Path.Combine(GetImageFolder(fileGuid), FrontPageDirName);
         }
     }
 }
