@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
+using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
     public class EncodingDescProcessor : ProcessorBase
     {
-        public EncodingDescProcessor(IKernel container) : base(container)
+        public EncodingDescProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+            : base(xsltTransformationManager, container)
         {
         }
 

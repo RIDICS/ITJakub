@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
+using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
     public class TeiHeaderProcessor : ProcessorBase
     {
-        public TeiHeaderProcessor(IKernel container) : base(container)
+        public TeiHeaderProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+            : base(xsltTransformationManager, container)
         {
         }
 

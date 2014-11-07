@@ -14,21 +14,21 @@ namespace ITJakub.FileProcessing.Core
             m_documentProcessor = documentProcessor;
         }
 
-        public void TextXml()
+        public BookVersion GetXmlMetadata(FileStream xmlFileStream)
         {
             var bookVersion = new BookVersion();
-            FileStream xmlFileStream = File.Open("D:\\ITJakubTestXml\\Albrecht.xml", FileMode.Open);
             using (var xmlReader = new XmlTextReader(xmlFileStream) {WhitespaceHandling = WhitespaceHandling.None})
             {
                 while (xmlReader.Read())
                 {
                     if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
-                        m_documentProcessor.XmlRootName.Equals(xmlReader.LocalName))
+                        xmlReader.LocalName.Equals(m_documentProcessor.XmlRootName))
                     {
                         m_documentProcessor.Process(bookVersion, xmlReader);
                     }
                 }
             }
+            return bookVersion;
         }
     }
 }

@@ -5,6 +5,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.FileProcessing.Core.Processors.Header;
 using ITJakub.FileProcessing.Core.Processors.Text;
+using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors
 {
@@ -12,7 +13,8 @@ namespace ITJakub.FileProcessing.Core.Processors
     {
         private readonly BookRepository m_bookRepository;
 
-        public DocumentProcessor(BookRepository bookRepository, IKernel container) : base(container)
+        public DocumentProcessor(BookRepository bookRepository, XsltTransformationManager xsltTransformationManager, IKernel container)
+            : base(xsltTransformationManager, container)
         {
             m_bookRepository = bookRepository;
         }

@@ -1,3 +1,4 @@
+using System.IO;
 using ITJakub.FileProcessing.Core;
 
 namespace ITJakub.FileProcessing.Service
@@ -13,7 +14,8 @@ namespace ITJakub.FileProcessing.Service
 
         public void TestXml()
         {
-            m_xmlProcessingmanager.TextXml();
+            FileStream xmlFileStream = File.Open("D:\\ITJakubTestXml\\LekChir.xml", FileMode.Open);
+            var bookVersion = m_xmlProcessingmanager.GetXmlMetadata(xmlFileStream);
         }
     }
 }

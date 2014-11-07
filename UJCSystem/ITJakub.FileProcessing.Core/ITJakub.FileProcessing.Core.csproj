@@ -52,6 +52,7 @@
     <Compile Include="Processors\Header\TitleStmtProcessor.cs" />
     <Compile Include="Processors\ProcessorBase.cs" />
     <Compile Include="Processors\Header\TeiHeaderProcessor.cs" />
+    <Compile Include="XSLT\XsltTransformationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlProcessingManager.cs" />
   </ItemGroup>
@@ -63,6 +64,10 @@
       <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
       <Name>ITJakub.DataEntities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\CommonTEI.xsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

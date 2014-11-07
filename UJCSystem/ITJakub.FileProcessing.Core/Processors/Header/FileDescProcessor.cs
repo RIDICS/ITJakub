@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
+using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
     public class FileDescProcessor : ProcessorBase
     {
-        public FileDescProcessor(IKernel container) : base(container)
+        public FileDescProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+            : base(xsltTransformationManager, container)
         {
         }
 

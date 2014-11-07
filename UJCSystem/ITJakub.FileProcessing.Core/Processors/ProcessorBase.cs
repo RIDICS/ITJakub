@@ -1,21 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml;
-using System.Xml.Xsl;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors
 {
     public abstract class ProcessorBase
     {
+        private readonly XsltTransformationManager m_xsltTransformationManager;
         private bool m_initialized;
         private Dictionary<string, ProcessorBase> m_processors;
 
 
-        protected ProcessorBase(IKernel container)
+        protected ProcessorBase(XsltTransformationManager xsltTransformationManager, IKernel container)
         {
+            m_xsltTransformationManager = xsltTransformationManager;
             Container = container;
         }
 
@@ -57,15 +58,7 @@ namespace ITJakub.FileProcessing.Core.Processors
 
         protected string GetInnerContentAsString(XmlReader xmlReader)
         {
-            return ""; //TODO remove
-            var stringWriter = new StringWriter();
-            using (XmlWriter xmlWriter = XmlWriter.Create(stringWriter))
-            {
-                var xslt = new XslCompiledTransform();
-                xslt.Load("xmlPath"); //TODO load xslt transformation for reading string from 'w', 'pc' and 'c' elements
-                xslt.Transform(xmlReader, xmlWriter);
-            }
-            return stringWriter.ToString();
+            return m_xsltTransformationManager.TransformToString(xmlReader);
         }
 
         private Dictionary<string, ProcessorBase> GetProcessors()
@@ -77,7 +70,8 @@ namespace ITJakub.FileProcessing.Core.Processors
 
     public abstract class ListProcessorBase : ProcessorBase
     {
-        protected ListProcessorBase(IKernel container) : base(container)
+        protected ListProcessorBase(XsltTransformationManager xsltTransformationManager, IKernel container)
+            : base(xsltTransformationManager, container)
         {
         }
 

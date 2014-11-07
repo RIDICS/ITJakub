@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
     public class AuthorProcessor : ListProcessorBase
     {
-        public AuthorProcessor(IKernel container) : base(container)
+        public AuthorProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+            : base(xsltTransformationManager, container)
         {
         }
 
