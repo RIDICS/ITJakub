@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ITJakub.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.DataEntities.Database.Entities
 {
@@ -16,7 +17,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string PublishPlace { get; set; }
         public virtual string PublishDate { get; set; }
         public virtual string Copyright { get; set; }
-        public virtual short? AvailabilityStatus { get; set; } //TODO enum
+        public virtual AvailabilityStatusEnum AvailabilityStatus { get; set; }
         public virtual string BiblText { get; set; }
         public virtual IList<BookBibl> BookBibls { get; set; }
         public virtual IList<Author> Authors { get; set; }

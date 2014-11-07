@@ -7,7 +7,7 @@
     <property name="Text">
       <column name="Text" sql-type="varchar" not-null="true" />
     </property>
-    <property name="Type">
+    <property name="Type" type="short">
       <column name="Type" sql-type="smallint" not-null="false" />
     </property>
     <bag name="Responsibles" inverse="true">

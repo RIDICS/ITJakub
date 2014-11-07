@@ -1,4 +1,5 @@
 using System;
+using ITJakub.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.DataEntities.Database.Entities
 {
@@ -9,7 +10,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string Text { get; set; }
         public virtual string Type { get; set; }
         public virtual string SubType { get; set; }
-        public virtual short? BiblType { get; set; } //TODO enum
+        public virtual BiblTypeEnum BiblType { get; set; }
 
         public virtual bool Equals(BookBibl other)
         {

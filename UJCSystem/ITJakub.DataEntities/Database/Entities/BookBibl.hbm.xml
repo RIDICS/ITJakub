@@ -16,7 +16,7 @@
     <property name="SubType">
       <column name="Subtype" sql-type="varchar" not-null="false" />
     </property>
-    <property name="BiblType">
+    <property name="BiblType" type="short">
       <column name="BiblType" sql-type="smallint" not-null="false" />
     </property>
   </class>

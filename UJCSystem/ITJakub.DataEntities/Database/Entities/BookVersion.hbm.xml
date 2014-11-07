@@ -4,7 +4,7 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    <many-to-one name="Book">
+    <many-to-one name="Book" cascade="save-update">
       <column name="Book" sql-type="bigint" not-null="true" />
     </many-to-one>
     <many-to-one name="Transformation">
@@ -34,7 +34,7 @@
     <property name="Copyright">
       <column name="Copyright" sql-type="varchar" not-null="false" />
     </property>
-    <property name="AvailabilityStatus">
+    <property name="AvailabilityStatus" type="short">
       <column name="AvailabilityStatus" sql-type="smallint" not-null="false" />
     </property>
     <property name="BiblText">
