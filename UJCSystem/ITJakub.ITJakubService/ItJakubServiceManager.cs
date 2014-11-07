@@ -168,9 +168,9 @@ namespace ITJakub.ITJakubService
             return m_authorManager.GetAllAuthors();
         }
 
-        public int CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)
+        public int CreateAuthor(string name)
         {
-            return m_authorManager.CreateAuthor(authorInfos);
+            return m_authorManager.CreateAuthor(name);
         }
 
         public void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)

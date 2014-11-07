@@ -357,11 +357,11 @@ namespace ITJakub.Core
             }
         }
 
-        public int CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)
+        public int CreateAuthor(string name)
         {
             try
             {
-                return Channel.CreateAuthor(authorInfos);
+                return Channel.CreateAuthor(name);
             }
             catch (CommunicationException ex)
             {

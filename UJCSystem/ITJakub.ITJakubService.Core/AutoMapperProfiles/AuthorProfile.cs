@@ -9,7 +9,6 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<AuthorDetailContract, Author>().ReverseMap();
-            CreateMap<AuthorInfoContract, AuthorInfo>().ReverseMap();
         }
     }
 }

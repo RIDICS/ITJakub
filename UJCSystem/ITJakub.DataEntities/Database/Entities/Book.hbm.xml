@@ -17,7 +17,7 @@
       <key column="Book" />
       <one-to-many class="Bookmark" />
     </bag>
-    <bag name="BookVersions" inverse="true">
+    <bag name="BookVersions" cascade="all-delete-orphan" inverse="true">
       <key column="Book" />
       <one-to-many class="BookVersion" />
     </bag>

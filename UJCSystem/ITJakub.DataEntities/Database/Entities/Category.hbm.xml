@@ -14,5 +14,9 @@
       <key column="Category" />
       <one-to-many class="Book" />
     </bag>
+    <bag name="Categories" inverse="true">
+      <key column="ParentCategory" />
+      <one-to-many class="Category" />
+    </bag>
   </class>
 </hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="ResponsibleType" table="[ResponsibleType]" lazy="true" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    <property name="Text">
+      <column name="Text" sql-type="varchar" not-null="true" />
+    </property>
+    <property name="Type">
+      <column name="Type" sql-type="smallint" not-null="false" />
+    </property>
+    <bag name="Responsibles" inverse="true">
+      <key column="ResponsibleType" />
+      <one-to-many class="Responsible" />
+    </bag>
+  </class>
+</hibernate-mapping>

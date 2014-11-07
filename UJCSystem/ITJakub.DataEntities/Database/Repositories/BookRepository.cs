@@ -70,9 +70,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual void CreateBook(string bookGuid, string name, string author)
         {
-            DateTime createTime = DateTime.UtcNow; //TODO pull it to method parameter, parse from XML
-            string versionId = "versionId"; //TODO pull it to method parameter, parse from XML
-            string description = "my new document"; //TODO pull it to method parameter, parse from XML
+            DateTime createTime = DateTime.UtcNow;
             using (ISession session = GetSession())
             {
                 var bookId = (long) Create(new Book {Guid = bookGuid});
@@ -81,9 +79,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 {
                     Book = book,
                     Name = name,
-                    CreateTime = createTime,
-                    VersionId = versionId,
-                    Description = description
+                    CreateTime = createTime
                 });
             }
         }

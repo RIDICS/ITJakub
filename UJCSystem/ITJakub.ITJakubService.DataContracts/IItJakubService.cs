@@ -65,7 +65,7 @@ namespace ITJakub.ITJakubService.DataContracts
         IEnumerable<AuthorDetailContract> GetAllAuthors();
 
         [OperationContract]
-        int CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos);
+        int CreateAuthor(string name);
 
         [OperationContract]
         void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds);

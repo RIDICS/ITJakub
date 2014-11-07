@@ -1,15 +1,16 @@
 using System;
+using System.Collections.Generic;
 
 namespace ITJakub.DataEntities.Database.Entities
 {
-    public class AuthorInfo : IEquatable<AuthorInfo>
+    public class ResponsibleType : IEquatable<ResponsibleType>
     {
         public virtual int Id { get; set; }
-        public virtual Author Author { get; set; }
         public virtual string Text { get; set; }
-        public virtual int TextType { get; set; }
+        public virtual short? Type { get; set; } //TODO enum
+        public virtual IList<Responsible> Responsibles { get; set; }
 
-        public virtual bool Equals(AuthorInfo other)
+        public virtual bool Equals(ResponsibleType other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -21,7 +22,7 @@ namespace ITJakub.DataEntities.Database.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((AuthorInfo) obj);
+            return Equals((ResponsibleType) obj);
         }
 
         public override int GetHashCode()

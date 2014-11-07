@@ -14,9 +14,9 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(new { Authors = authors }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)
+        public ActionResult CreateAuthor(string name)
         {
-            int authorId = m_serviceClient.CreateAuthor(authorInfos);
+            int authorId = m_serviceClient.CreateAuthor(name);
             return Json(new {AuthorId = authorId});
         }
 

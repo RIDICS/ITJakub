@@ -1,5 +1,7 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
+
 
 namespace ITJakub.DataEntities.Database.Entities {
     

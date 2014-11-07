@@ -8,11 +8,19 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual long Id { get; set; }
         public virtual Book Book { get; set; }
         public virtual Transformation Transformation { get; set; }
+        public virtual Publisher Publisher { get; set; }
         public virtual string VersionId { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime CreateTime { get; set; }
         public virtual string Description { get; set; }
+        public virtual string PublishPlace { get; set; }
+        public virtual string PublishDate { get; set; }
+        public virtual string Copyright { get; set; }
+        public virtual short? AvailabilityStatus { get; set; } //TODO enum
+        public virtual string BiblText { get; set; }
+        public virtual IList<BookBibl> BookBibls { get; set; }
         public virtual IList<Author> Authors { get; set; }
+        public virtual IList<Responsible> Responsibles { get; set; }
 
         public virtual bool Equals(BookVersion other)
         {

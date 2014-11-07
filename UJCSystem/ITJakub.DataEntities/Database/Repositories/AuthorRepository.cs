@@ -25,18 +25,11 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int CreateAuthor(IEnumerable<AuthorInfo> authorInfos)
+        public virtual int CreateAuthor(string name)
         {
             using (ISession session = GetSession())
             {
-                var authorId = (int)Create(new Author());
-                var author = session.Load<Author>(authorId);
-                foreach (var authorInfo in authorInfos)
-                {
-                    authorInfo.Author = author;
-                    Create(authorInfo);
-                }
-                return authorId;
+                return (int)Create(new Author(){ Name = name});
             }
         }
     }

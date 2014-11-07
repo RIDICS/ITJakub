@@ -21,10 +21,9 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<Author>,IList<AuthorDetailContract>>(authors);
         }
 
-        public int CreateAuthor(IEnumerable<AuthorInfoContract> authorInfos)
+        public int CreateAuthor(string name)
         {
-            var infos = Mapper.Map<IEnumerable<AuthorInfoContract>,IList<AuthorInfo>>(authorInfos);
-            return m_authorRepository.CreateAuthor(infos);
+            return m_authorRepository.CreateAuthor(name);
         }
     }
 }
