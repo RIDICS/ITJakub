@@ -43,13 +43,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Processors\Header\AuthorProcessor.cs" />
+    <Compile Include="Processors\Header\AvailabilityProcessor.cs" />
+    <Compile Include="Processors\Header\BiblProcessor.cs" />
+    <Compile Include="Processors\Header\DateProcessor.cs" />
     <Compile Include="Processors\Header\EncodingDescProcessor.cs" />
+    <Compile Include="Processors\Header\ListBiblProcessor.cs" />
+    <Compile Include="Processors\Header\PublisherProcessor.cs" />
+    <Compile Include="Processors\Header\PubPlaceProcessor.cs" />
+    <Compile Include="Processors\Header\RespStmtProcessor.cs" />
+    <Compile Include="Processors\Header\SourceDescProcessor.cs" />
     <Compile Include="Processors\Header\FileDescProcessor.cs" />
     <Compile Include="Processors\Header\ProfileDescProcessor.cs" />
     <Compile Include="Processors\DocumentProcessor.cs" />
+    <Compile Include="Processors\Header\TitleStmtProcessor.cs" />
     <Compile Include="Processors\Text\TextProcessor.cs" />
     <Compile Include="Processors\Header\TitleProcessor.cs" />
-    <Compile Include="Processors\Header\TitleStmtProcessor.cs" />
+    <Compile Include="Processors\Header\PublicationStmtProcessor.cs" />
     <Compile Include="Processors\ProcessorBase.cs" />
     <Compile Include="Processors\Header\TeiHeaderProcessor.cs" />
     <Compile Include="XSLT\XsltTransformationManager.cs" />

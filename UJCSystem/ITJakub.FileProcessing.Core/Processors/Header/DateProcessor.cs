@@ -5,21 +5,21 @@ using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
-    public class TitleProcessor : ListProcessorBase
+    public class DateProcessor : ListProcessorBase
     {
-        public TitleProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+        public DateProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
         }
 
         protected override string NodeName
         {
-            get { return "title"; }
+            get { return "date"; }
         }
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            bookVersion.Name = GetInnerContentAsString(xmlReader); //TODO determine type attribute ( sub or main title)
+            bookVersion.PublishDate = GetInnerContentAsString(xmlReader);
         }
     }
 }
