@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
@@ -19,7 +21,25 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            throw new NotImplementedException();
+            if (!xmlReader.HasAttributes)
+            {
+                bookVersion.BiblText = GetInnerContentAsString(xmlReader);
+            }
+            else
+            {
+                var bookBibl = new BookBibl
+                {
+                    Type = xmlReader.GetAttribute("type"),
+                    SubType = xmlReader.GetAttribute("subtype"),
+                    BiblType = new BiblTypeEnum()
+                };
+               
+                bookBibl.Text = GetInnerContentAsString(xmlReader);
+
+
+                if (bookVersion.BookBibls == null) bookVersion.BookBibls = new List<BookBibl>();
+                bookVersion.BookBibls.Add(bookBibl);
+            }
         }
     }
 }

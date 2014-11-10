@@ -21,9 +21,7 @@
     </xsl:template>
     
     <xsl:template match="*[@rend]" priority="-1">
-        <span class="{@rend}">
             <xsl:apply-templates />
-        </span>
     </xsl:template>
     
     <xsl:template match="*[@rend='hidden']" priority="10">
@@ -33,4 +31,5 @@
     <xsl:template match="*[@type='hidden']" priority="10">
             <xsl:apply-templates />
     </xsl:template>
+  
 </xsl:stylesheet>

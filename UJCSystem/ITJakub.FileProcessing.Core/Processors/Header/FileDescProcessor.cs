@@ -22,7 +22,9 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             {
                 return new List<ProcessorBase>
                 {
-                    Container.Resolve<TitleStmtProcessor>()
+                    Container.Resolve<TitleStmtProcessor>(),
+                    Container.Resolve<PublicationStmtProcessor>(),
+                    Container.Resolve<SourceDescProcessor>(),
                 };
             }
         }
