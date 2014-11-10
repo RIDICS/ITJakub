@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
@@ -10,7 +9,8 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 {
     public class BiblProcessor : ListProcessorBase
     {
-        public BiblProcessor(XsltTransformationManager xsltTransformationManager, IKernel container) : base(xsltTransformationManager, container)
+        public BiblProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+            : base(xsltTransformationManager, container)
         {
         }
 
@@ -21,6 +21,8 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
+            xmlReader.Read();  //TODO check why is not passed bibl element directly
+
             if (!xmlReader.HasAttributes)
             {
                 bookVersion.BiblText = GetInnerContentAsString(xmlReader);
@@ -31,9 +33,9 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
                 {
                     Type = xmlReader.GetAttribute("type"),
                     SubType = xmlReader.GetAttribute("subtype"),
-                    BiblType = new BiblTypeEnum()
+                    BiblType = new BiblTypeEnum() //TODO tryparse enum
                 };
-               
+
                 bookBibl.Text = GetInnerContentAsString(xmlReader);
 
 

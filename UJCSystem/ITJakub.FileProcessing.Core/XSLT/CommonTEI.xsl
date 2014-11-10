@@ -8,19 +8,19 @@
     exclude-result-prefixes="xd tei nlp exist"
     version="1.0">
     
-    <xsl:template match="tei:w">
+    <xsl:template match="tei:w" priority="5">
             <xsl:apply-templates/>
     </xsl:template>
     
-    <xsl:template match="tei:pc">
+    <xsl:template match="tei:pc" priority="5">
             <xsl:apply-templates/>
     </xsl:template>
     
-    <xsl:template match="tei:c[@type='space']">
+    <xsl:template match="tei:c[@type='space']" priority="5">
         <xsl:text> </xsl:text>
     </xsl:template>
     
-    <xsl:template match="*[@rend]" priority="-1">
+    <xsl:template match="*[@rend]" priority="5">
             <xsl:apply-templates />
     </xsl:template>
     
@@ -31,5 +31,8 @@
     <xsl:template match="*[@type='hidden']" priority="10">
             <xsl:apply-templates />
     </xsl:template>
+
+  <xsl:template match="*/*">
+  </xsl:template>
   
 </xsl:stylesheet>
