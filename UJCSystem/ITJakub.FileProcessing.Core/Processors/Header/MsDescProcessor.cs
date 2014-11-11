@@ -4,16 +4,16 @@ using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
-    public class SourceDescProcessor : ProcessorBase
+    public class MsDescProcessor : ProcessorBase
     {
-        public SourceDescProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+        public MsDescProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
         }
 
         protected override string NodeName
         {
-            get { return "sourceDesc"; }
+            get { return "msDesc"; }
         }
 
         protected override IEnumerable<ProcessorBase> SubProcessors
@@ -22,9 +22,9 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             {
                 return new List<ProcessorBase>
                 {
-                    Container.Resolve<ListBiblProcessor>(),
-                    Container.Resolve<BiblProcessor>(),
-                    Container.Resolve<MsDescProcessor>(),
+                    Container.Resolve<MsIdentifierProcessor>(),
+                    Container.Resolve<MsContentsProcessor>(),
+                    Container.Resolve<HistoryProcessor>(),
                 };
             }
         }

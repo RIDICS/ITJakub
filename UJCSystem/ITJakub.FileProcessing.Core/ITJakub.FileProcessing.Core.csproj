@@ -47,7 +47,11 @@
     <Compile Include="Processors\Header\BiblProcessor.cs" />
     <Compile Include="Processors\Header\DateProcessor.cs" />
     <Compile Include="Processors\Header\EncodingDescProcessor.cs" />
+    <Compile Include="Processors\Header\HistoryProcessor.cs" />
     <Compile Include="Processors\Header\ListBiblProcessor.cs" />
+    <Compile Include="Processors\Header\MsContentsProcessor.cs" />
+    <Compile Include="Processors\Header\MsDescProcessor.cs" />
+    <Compile Include="Processors\Header\MsIdentifierProcessor.cs" />
     <Compile Include="Processors\Header\PublisherProcessor.cs" />
     <Compile Include="Processors\Header\PubPlaceProcessor.cs" />
     <Compile Include="Processors\Header\RespStmtProcessor.cs" />

@@ -27,6 +27,15 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual void Delete(BookVersion bookVersion)
+        {
+            using (ISession session = GetSession())
+            {
+                session.Delete(bookVersion);
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual BookVersion FindBookVersionByGuid(string bookVersionGuid)
         {
             using (ISession session = GetSession())
