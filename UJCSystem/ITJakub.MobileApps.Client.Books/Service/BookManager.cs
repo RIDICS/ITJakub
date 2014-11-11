@@ -81,7 +81,6 @@ namespace ITJakub.MobileApps.Client.Books.Service
             {
                 using (var pageStream = await m_serviceClient.GetPageAsRtfAsync(bookGuid, pageId))
                 using (var streamReader = new StreamReader(pageStream))
-                using (var memoryStream = new MemoryStream())
                 {
                     var text = streamReader.ReadToEnd();
                     callback(text, null);

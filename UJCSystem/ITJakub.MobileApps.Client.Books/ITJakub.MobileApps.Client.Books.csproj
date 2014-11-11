@@ -134,6 +134,7 @@
     <Compile Include="ViewModel\ComboBoxItem\CategoryItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\FilterYearItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SearchDestinationItem.cs" />
+    <Compile Include="Message\PageListMessage.cs" />
     <Compile Include="ViewModel\SelectBookViewModel.cs" />
     <Compile Include="Enum\SearchByType.cs" />
     <Compile Include="Enum\SortType.cs" />
@@ -144,6 +145,8 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Control\BindableRichEditBox.cs" />
     <Compile Include="View\Control\BindableRichTextBlock.cs" />
+    <Compile Include="View\Control\GridViewbehaviors.cs" />
+    <Compile Include="View\Converter\PageOrderToLabelConverter.cs" />
     <Compile Include="View\SelectBookView.xaml.cs">
       <DependentUpon>SelectBookView.xaml</DependentUpon>
     </Compile>

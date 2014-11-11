@@ -14,11 +14,16 @@
                 <ResourceDictionary Source="ResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converter:PageOrderToLabelConverter x:Key="PageOrderToLabelConverter" />
+            <x:Double x:Key="ProgressRingSize">50</x:Double>
         </ResourceDictionary>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
           DataContext="{Binding Source={StaticResource Locator}, Path=SelectPageViewModel}">
+        <Grid.Resources>
+            <CollectionViewSource x:Key="PageListSource" Source="{Binding PageList}" />
+        </Grid.Resources>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition />
@@ -72,7 +77,7 @@
             
             <StackPanel Orientation="Vertical"
                         VerticalAlignment="Bottom">
-                <Grid Margin="0,0,0,20">
+                <Grid Margin="0,0,0,5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
@@ -90,14 +95,16 @@
                             Command="{Binding SaveCommand}" />
                 </Grid>
 
-                <ProgressBar IsIndeterminate="False"
-                             Value="{Binding CurrentPageNumber}"
-                             Maximum="{Binding PageCount}"
-                             Minimum="1" />
-
-                <TextBlock Margin="0,0,0,4">
+                <TextBlock Margin="0,37,0,-60">
                     <Run Text="{Binding CurrentPageNumber}" /><Run Text=". strana z " /><Run Text="{Binding PageCount}" />
                 </TextBlock>
+                
+                <Slider Maximum="{Binding PageCount}"
+                        Minimum="{Binding FirstPage}"
+                        StepFrequency="1"
+                        Value="{Binding CurrentPageNumber, Mode=TwoWay}"
+                        ThumbToolTipValueConverter="{StaticResource PageOrderToLabelConverter}" />
+
             </StackPanel>
             
             <ToggleSwitch Grid.Row="0"
@@ -112,8 +119,17 @@
                     Background="#50FFFFFF"
                     BorderBrush="#30000000"
                     BorderThickness="2">
-                <control:BindableRichEditBox DocumentRtf="{Binding SelectedPage.RtfText}" />
+                <control:BindableRichEditBox DocumentRtf="{Binding SelectedPage.RtfText}"
+                                             IsReadOnly="False" />
             </Border>
+            <ProgressRing Grid.Row="1"
+                          Grid.Column="0"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          IsActive="{Binding LoadingPage}"
+                          Width="{StaticResource ProgressRingSize}"
+                          Height="{StaticResource ProgressRingSize}"
+                          Foreground="DarkBlue" />
 
             <Grid Grid.Row="1"
                   Grid.Column="2"
@@ -121,18 +137,24 @@
                 <Image VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Stretch="Uniform"
-                       Source="{Binding PagePhoto}"/>
+                       Source="{Binding PagePhoto}" />
+
+                <ProgressRing HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              IsActive="{Binding LoadingPhoto}"
+                              Width="{StaticResource ProgressRingSize}"
+                              Height="{StaticResource ProgressRingSize}" />
             </Grid>
             
             <GridView Grid.Row="2"
                       Grid.Column="0"
-                      SelectionMode="Single"
                       SelectedItem="{Binding SelectedPage, Mode=TwoWay}"
-                      ItemsSource="{Binding PageList}"
-                      SelectedIndex="{Binding SelectedPageIndex}"
+                      ItemsSource="{Binding Source={StaticResource PageListSource}}"
+                      SelectionMode="Single"
                       ItemContainerStyle="{StaticResource NoBorderGridViewItemStyle}"
                       HorizontalContentAlignment="Center"
-                      HorizontalAlignment="Center">
+                      HorizontalAlignment="Center"
+                      control:GridViewBehaviors.IsScrollToSelection="True">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />
@@ -141,7 +163,7 @@
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <Grid MinWidth="20">
-                            <TextBlock Text="40"
+                            <TextBlock Text="{Binding PageId}"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center">
                                 

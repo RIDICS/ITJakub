@@ -24,6 +24,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private ObservableCollection<BookViewModel> m_originalBookList;
         private CategoryContract m_selectedCategory;
         private SortByType m_selectedSortType;
+        private int m_filterFromYear;
+        private int m_filterToYear;
 
         public SelectBookViewModel(DataService dataService, NavigationService navigationService)
         {
@@ -121,9 +123,25 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             }
         }
 
-        public int FilterFromYear { get; set; }
+        public int FilterFromYear
+        {
+            get { return m_filterFromYear; }
+            set
+            {
+                m_filterFromYear = value;
+                Filter();
+            }
+        }
 
-        public int FilterToYear { get; set; }
+        public int FilterToYear
+        {
+            get { return m_filterToYear; }
+            set
+            {
+                m_filterToYear = value;
+                Filter();
+            }
+        }
 
         public SearchDestinationContract SearchDestination { get; set; }
 
@@ -213,8 +231,12 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 
         private void Filter()
         {
-            // TODO
-            BookList = m_originalBookList;
+            if (m_originalBookList == null)
+                return;
+
+            var filteredList = m_originalBookList.Where(book => FilterFromYear <= book.Year && book.Year <= FilterToYear);
+            m_bookList = new ObservableCollection<BookViewModel>(filteredList);
+
             Sort();
         }
     }
