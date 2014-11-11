@@ -28,7 +28,7 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
                     xmlReader.LocalName.Equals("resp"))
                 {
-                    xmlReader.Read();                   //read text value
+                    xmlReader.Read();                           //read text value
                     string value = xmlReader.Value;
                     responsible.ResponsibleType = new ResponsibleType
                     {

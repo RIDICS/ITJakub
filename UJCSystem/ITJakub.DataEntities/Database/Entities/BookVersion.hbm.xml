@@ -10,14 +10,17 @@
     <many-to-one name="Transformation">
       <column name="Transformation" sql-type="int" not-null="false" />
     </many-to-one>
-    <many-to-one name="Publisher">
+    <many-to-one name="Publisher" cascade="save-update">
       <column name="Publisher" sql-type="int" not-null="false" />
     </many-to-one>
     <property name="VersionId">
       <column name="VersionId" sql-type="varchar" not-null="true" />
     </property>
-    <property name="Name">
-      <column name="Name" sql-type="varchar" not-null="false" />
+    <property name="Title">
+      <column name="Title" sql-type="varchar" not-null="false" />
+    </property>
+    <property name="SubTitle">
+      <column name="SubTitle" sql-type="varchar" not-null="false" />
     </property>
     <property name="CreateTime">
       <column name="CreateTime" sql-type="datetime" not-null="true" />
@@ -40,7 +43,7 @@
     <property name="BiblText">
       <column name="BiblText" sql-type="varchar" not-null="false" />
     </property>
-    <bag name="BookBibls" inverse="true">
+    <bag name="BookBibls" cascade="save-update">
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>

@@ -68,7 +68,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual void CreateBook(string bookGuid, string name, string author)
+        public virtual void CreateBook(string bookGuid, string title, string author)
         {
             DateTime createTime = DateTime.UtcNow;
             using (ISession session = GetSession())
@@ -78,7 +78,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 Create(new BookVersion
                 {
                     Book = book,
-                    Name = name,
+                    Title = title,
                     CreateTime = createTime
                 });
             }

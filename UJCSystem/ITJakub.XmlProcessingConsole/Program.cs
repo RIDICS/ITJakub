@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace ITJakub.XmlProcessingConsole
 {
@@ -7,9 +6,9 @@ namespace ITJakub.XmlProcessingConsole
     {
         static void Main(string[] args)
         {
-            FileStream xmlFileStream = File.Open("D:\\ITJakubTestXml\\Albrecht.xml", FileMode.Open);
-            var xmlProcessingManager = new XmlProcessingManager();
-            var bookVerionn = xmlProcessingManager.GetMetadataFromXml(xmlFileStream);
+
+            var client = new ItJakubServiceClient();
+            client.TestXml();
             Console.WriteLine("XML sucessfully parsed!");
             Console.ReadKey();
         }

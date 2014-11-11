@@ -11,7 +11,8 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual Transformation Transformation { get; set; }
         public virtual Publisher Publisher { get; set; }
         public virtual string VersionId { get; set; }
-        public virtual string Name { get; set; }
+        public virtual string Title { get; set; }
+        public virtual string SubTitle { get; set; }
         public virtual DateTime CreateTime { get; set; }
         public virtual string Description { get; set; }
         public virtual string PublishPlace { get; set; }

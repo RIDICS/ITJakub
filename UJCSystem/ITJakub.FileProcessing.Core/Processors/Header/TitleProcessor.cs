@@ -19,7 +19,15 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            bookVersion.Name = GetInnerContentAsString(xmlReader); //TODO determine type attribute ( sub or main title)
+            string titleType = xmlReader.GetAttribute("type");
+            if (string.IsNullOrEmpty(titleType) || titleType.Equals("main"))
+            {
+                bookVersion.Title = GetInnerContentAsString(xmlReader);
+            }
+            else if (titleType.Equals("sub"))
+            {
+                bookVersion.SubTitle = GetInnerContentAsString(xmlReader);
+            } 
         }
     }
 }
