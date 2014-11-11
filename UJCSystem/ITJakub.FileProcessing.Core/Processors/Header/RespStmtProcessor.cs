@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
@@ -29,11 +28,13 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
                     xmlReader.LocalName.Equals("resp"))
                 {
-                    xmlReader.Read(); //read text value
-                    var value = xmlReader.Value;
-                    ResponsibleTypeEnum responsibleType;
-                    Enum.TryParse(value, true, out responsibleType);
-                    responsible.ResponsibleType = new ResponsibleType {Text = value, Type = responsibleType};
+                    xmlReader.Read();                   //read text value
+                    string value = xmlReader.Value;
+                    responsible.ResponsibleType = new ResponsibleType
+                    {
+                        Text = value,
+                        Type = ParseEnum<ResponsibleTypeEnum>(value)
+                    };
                 }
 
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&

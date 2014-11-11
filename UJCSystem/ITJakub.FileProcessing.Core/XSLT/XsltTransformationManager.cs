@@ -7,15 +7,15 @@ namespace ITJakub.FileProcessing.Core.XSLT
 {
     public class XsltTransformationManager
     {
-        private readonly XslCompiledTransform m_transformation;
+        private readonly XslCompiledTransform m_toStringTransformation;
 
-        public XsltTransformationManager()  //TODO refactor loading assembly
+        public XsltTransformationManager(string toStringXsltName)
         {
-            m_transformation = new XslCompiledTransform();
-            using (Stream strm = Assembly.GetExecutingAssembly().GetManifestResourceStream("ITJakub.FileProcessing.Core.XSLT.CommonTEI.xsl"))
+            m_toStringTransformation = new XslCompiledTransform();
+            using (Stream strm = Assembly.GetExecutingAssembly().GetManifestResourceStream(toStringXsltName))
             using (XmlReader reader = XmlReader.Create(strm))
             {
-                m_transformation.Load(reader);
+                m_toStringTransformation.Load(reader);
             }
         }
 
@@ -25,7 +25,7 @@ namespace ITJakub.FileProcessing.Core.XSLT
             var settings = new XmlWriterSettings { OmitXmlDeclaration = true, ConformanceLevel = ConformanceLevel.Fragment };
             using (XmlWriter xmlWriter = XmlWriter.Create(stringWriter, settings))
             {
-                m_transformation.Transform(xmlReader, null, xmlWriter);
+                m_toStringTransformation.Transform(xmlReader, null, xmlWriter);
             }
             return stringWriter.ToString();
         }

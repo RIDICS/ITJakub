@@ -21,8 +21,6 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            xmlReader.Read();  //TODO check why is not passed bibl element directly
-
             if (!xmlReader.HasAttributes)
             {
                 bookVersion.BiblText = GetInnerContentAsString(xmlReader);
@@ -33,9 +31,9 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
                 {
                     Type = xmlReader.GetAttribute("type"),
                     SubType = xmlReader.GetAttribute("subtype"),
-                    BiblType = new BiblTypeEnum() //TODO tryparse enum
                 };
 
+                bookBibl.BiblType = ParseEnum<BiblTypeEnum>(bookBibl.Type);
                 bookBibl.Text = GetInnerContentAsString(xmlReader);
 
 

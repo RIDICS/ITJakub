@@ -34,7 +34,7 @@
     <property name="Copyright">
       <column name="Copyright" sql-type="varchar" not-null="false" />
     </property>
-    <property name="AvailabilityStatus" type="short">
+    <property name="AvailabilityStatus">
       <column name="AvailabilityStatus" sql-type="smallint" not-null="false" />
     </property>
     <property name="BiblText">

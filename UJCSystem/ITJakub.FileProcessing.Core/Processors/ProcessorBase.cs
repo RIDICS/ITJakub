@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using Castle.MicroKernel;
@@ -41,10 +42,17 @@ namespace ITJakub.FileProcessing.Core.Processors
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
                     m_processors.ContainsKey(xmlReader.LocalName))
                 {
-                    m_processors[xmlReader.LocalName].Process(bookVersion, xmlReader.ReadSubtree());
+                    m_processors[xmlReader.LocalName].Process(bookVersion, GetSubtree(xmlReader));
                 }
             }
         }
+
+        private XmlReader GetSubtree(XmlReader xmlReader)
+        {
+            var subtree = xmlReader.ReadSubtree();
+            subtree.Read();
+            return subtree;
+        } 
 
         private void Init()
         {
@@ -59,6 +67,13 @@ namespace ITJakub.FileProcessing.Core.Processors
         protected string GetInnerContentAsString(XmlReader xmlReader)
         {
             return m_xsltTransformationManager.TransformToString(xmlReader);
+        }
+
+        protected T ParseEnum<T>(string value) where T : struct
+        {
+            T enumInstance;
+            Enum.TryParse(value, true, out enumInstance);
+            return enumInstance;
         }
 
         private Dictionary<string, ProcessorBase> GetProcessors()
