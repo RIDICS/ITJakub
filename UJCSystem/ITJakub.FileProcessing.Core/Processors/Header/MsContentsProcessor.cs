@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Castle.MicroKernel;
 using ITJakub.FileProcessing.Core.XSLT;
 
@@ -13,6 +14,17 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
         protected override string NodeName
         {
             get { return "msContents"; }
+        }
+
+        protected override IEnumerable<ProcessorBase> SubProcessors
+        {
+            get
+            {
+                return new List<ProcessorBase>
+                {
+                    Container.Resolve<MsItemProcessor>(),
+                };
+            }
         }
     }
 }
