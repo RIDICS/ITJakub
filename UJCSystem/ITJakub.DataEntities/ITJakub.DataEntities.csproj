@@ -73,6 +73,7 @@
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
     <Compile Include="Database\Entities\Author.cs" />
+    <Compile Include="Database\Entities\ManuscriptDescription.cs" />
     <Compile Include="Database\Entities\Enums\AvailabilityStatusEnum.cs" />
     <Compile Include="Database\Entities\Enums\BiblTypeEnum.cs" />
     <Compile Include="Database\Entities\Book.cs" />
@@ -123,7 +124,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\ResponsibleType.hbm.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\ManuscriptDescription.hbm.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

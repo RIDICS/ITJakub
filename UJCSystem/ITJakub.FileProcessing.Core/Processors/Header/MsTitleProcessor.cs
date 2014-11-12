@@ -19,7 +19,7 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            bookVersion.Manuscript.Title = GetInnerContentAsString(xmlReader);
+            bookVersion.ManuscriptDescription.Title = GetInnerContentAsString(xmlReader);
         }
     }
 }

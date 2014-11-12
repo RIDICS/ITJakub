@@ -1,19 +1,21 @@
+using System;
 using System.Collections.Generic;
 using Castle.MicroKernel;
+using ITJakub.DataEntities.Database.Entities;
 using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
-    public class FileDescProcessor : ProcessorBase
+    public class EditionStmtProcessor : ProcessorBase
     {
-        public FileDescProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+        public EditionStmtProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
         }
 
         protected override string NodeName
         {
-            get { return "fileDesc"; }
+            get { return "editionStmt"; }
         }
 
         protected override IEnumerable<ProcessorBase> SubProcessors
@@ -22,10 +24,8 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             {
                 return new List<ProcessorBase>
                 {
-                    Container.Resolve<TitleStmtProcessor>(),
-                    Container.Resolve<EditionStmtProcessor>(),
-                    Container.Resolve<PublicationStmtProcessor>(),
-                    Container.Resolve<SourceDescProcessor>(),
+                    Container.Resolve<EditionProcessor>(),
+                    Container.Resolve<RespStmtProcessor>(),
                 };
             }
         }

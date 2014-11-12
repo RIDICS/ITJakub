@@ -76,7 +76,8 @@ BEGIN TRAN
     CREATE TABLE [dbo].[Category]
     (
         [Id] int IDENTITY(1,1) CONSTRAINT [PK_Category(Id)] PRIMARY KEY CLUSTERED,
-	   [Name] varchar(150) NOT NULL,
+	   [Name] varchar(150) NOT NULL UNIQUE,
+	   [Description] varchar(150) NOT NULL,
 	   [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
     )
     
@@ -128,6 +129,19 @@ BEGIN TRAN
 	   [Copyright] varchar(MAX) NULL,
 	   [AvailabilityStatus] smallint NULL,
 	   [BiblText] varchar (MAX) NULL
+
+    )
+
+       CREATE TABLE [dbo].[ManuscriptDescription]
+    (
+	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ManuscriptDescription(Id)] PRIMARY KEY CLUSTERED,
+	   [BookVersion] bigint NULL CONSTRAINT [FK_ManuscriptDescription(BookVersion)_ManuscriptDescription(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion] (Id),
+	   [Title] varchar (MAX) NULL,
+	   [Idno] varchar (50) NULL,
+	   [Settlement] varchar (100) NULL,
+	   [Country] varchar (100) NULL,
+	   [Repository] varchar (50) NULL,
+	   [OriginDate] varchar (50) NULL   
 
     )
 

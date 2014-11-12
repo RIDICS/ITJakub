@@ -1,4 +1,3 @@
-using System;
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
@@ -20,7 +19,7 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            throw new NotImplementedException();
+            bookVersion.ManuscriptDescription.Country = GetInnerContentAsString(xmlReader);
         }
     
     }

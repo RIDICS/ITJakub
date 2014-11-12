@@ -20,7 +20,9 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            throw new NotImplementedException();
+            xmlReader.Read();                           //read text value
+            string value = xmlReader.Value;
+            bookVersion.ManuscriptDescription.Repository = value;
         }
     
     }

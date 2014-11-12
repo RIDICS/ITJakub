@@ -47,6 +47,8 @@
     <Compile Include="Processors\Header\BiblProcessor.cs" />
     <Compile Include="Processors\Header\CountryProcessor.cs" />
     <Compile Include="Processors\Header\DateProcessor.cs" />
+    <Compile Include="Processors\Header\EditionProcessor.cs" />
+    <Compile Include="Processors\Header\EditionStmtProcessor.cs" />
     <Compile Include="Processors\Header\EncodingDescProcessor.cs" />
     <Compile Include="Processors\Header\HistoryProcessor.cs" />
     <Compile Include="Processors\Header\IdnoProcessor.cs" />

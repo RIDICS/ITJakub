@@ -1,5 +1,3 @@
-using System;
-using System.Configuration;
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
@@ -7,24 +5,21 @@ using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
-    public class IdnoProcessor : ListProcessorBase
+    public class EditionProcessor: ListProcessorBase
     {
-        public IdnoProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+        public EditionProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
         }
 
         protected override string NodeName
         {
-            get { return "idno"; }
+            get { return "edition"; }
         }
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            xmlReader.Read();                           //read text value
-            string value = xmlReader.Value;
-            bookVersion.ManuscriptDescription.Idno = value;
+            //TODO load edition element content somewhere
         }
-    
     }
 }

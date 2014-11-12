@@ -36,6 +36,7 @@ namespace ITJakub.FileProcessing.Core.Processors
 
         protected virtual void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
+            PreprocessSetup(bookVersion);
             ProcessAttributes(bookVersion, xmlReader);
             while (xmlReader.Read())
             {
@@ -47,12 +48,16 @@ namespace ITJakub.FileProcessing.Core.Processors
             }
         }
 
+        protected virtual void PreprocessSetup(BookVersion bookVersion)
+        {
+        }
+
         private XmlReader GetSubtree(XmlReader xmlReader)
         {
-            var subtree = xmlReader.ReadSubtree();
+            XmlReader subtree = xmlReader.ReadSubtree();
             subtree.Read();
             return subtree;
-        } 
+        }
 
         private void Init()
         {
@@ -69,9 +74,9 @@ namespace ITJakub.FileProcessing.Core.Processors
             return m_xsltTransformationManager.TransformToString(xmlReader);
         }
 
-        protected T ParseEnum<T>(string value) where T : struct
+        protected TE ParseEnum<TE>(string value) where TE : struct
         {
-            T enumInstance;
+            TE enumInstance;
             Enum.TryParse(value, true, out enumInstance);
             return enumInstance;
         }
