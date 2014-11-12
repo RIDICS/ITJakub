@@ -26,14 +26,15 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             }   
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override ManuscriptDescription LoadInstance(BookVersion bookVersion)
         {
-            var manuscriptDesc = new ManuscriptDescription();
-            Process(manuscriptDesc, xmlReader);
-            bookVersion.ManuscriptDescriptions.Add(manuscriptDesc);
+            return new ManuscriptDescription();
         }
 
-
+        protected override void SaveInstance(ManuscriptDescription instance, BookVersion bookVersion)
+        {
+            bookVersion.ManuscriptDescriptions.Add(instance);
+        }
 
         protected override IEnumerable<ConcreteInstanceProcessorBase<ManuscriptDescription>> ConcreteSubProcessors
         {

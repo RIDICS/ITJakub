@@ -77,7 +77,7 @@ BEGIN TRAN
     (
         [Id] int IDENTITY(1,1) CONSTRAINT [PK_Category(Id)] PRIMARY KEY CLUSTERED,
 	   [XmlId] varchar(150) NOT NULL UNIQUE,
-	   [Description] varchar(150) NOT NULL,
+	   [Description] varchar(150) NULL,
 	   [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
     )
     

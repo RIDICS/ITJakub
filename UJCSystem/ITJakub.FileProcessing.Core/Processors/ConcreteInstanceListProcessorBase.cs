@@ -20,10 +20,14 @@ namespace ITJakub.FileProcessing.Core.Processors
             get { return new List<ConcreteInstanceProcessorBase<T>>(); }
         }
 
-        protected override sealed void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override sealed T LoadInstance(BookVersion bookVersion)
+        {
+           throw new NotSupportedException();
+        }
+
+        protected override sealed void SaveInstance(T instance, BookVersion bookVersion)
         {
             throw new NotSupportedException();
-            //processor for processing concrete subinstance cannot save to BookVersion instance
         }
     }
 }

@@ -47,6 +47,9 @@
     <Compile Include="Processors\Header\AuthorProcessor.cs" />
     <Compile Include="Processors\Header\AvailabilityProcessor.cs" />
     <Compile Include="Processors\Header\BiblProcessor.cs" />
+    <Compile Include="Processors\Header\CategoryDescriptionProcessor.cs" />
+    <Compile Include="Processors\Header\CategoryProcessor.cs" />
+    <Compile Include="Processors\Header\ClassDeclProcessor.cs" />
     <Compile Include="Processors\Header\CountryProcessor.cs" />
     <Compile Include="Processors\Header\DateProcessor.cs" />
     <Compile Include="Processors\Header\EditionProcessor.cs" />
@@ -71,6 +74,7 @@
     <Compile Include="Processors\Header\FileDescProcessor.cs" />
     <Compile Include="Processors\Header\ProfileDescProcessor.cs" />
     <Compile Include="Processors\DocumentProcessor.cs" />
+    <Compile Include="Processors\Header\TaxonomyProcessor.cs" />
     <Compile Include="Processors\Header\TitleStmtProcessor.cs" />
     <Compile Include="Processors\ListProcessorBase.cs" />
     <Compile Include="Processors\Text\TextProcessor.cs" />

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using Castle.MicroKernel;
+using ITJakub.DataEntities.Database.Entities;
 using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors
@@ -23,11 +24,27 @@ namespace ITJakub.FileProcessing.Core.Processors
             get { return new List<ProcessorBase>(); }
         }
 
-        protected virtual void PreprocessSetup(T bookVersion)
+        protected virtual void PreprocessSetup(T instance)
         {
         }
 
-        protected virtual void ProcessAttributes(T bookVersion, XmlReader xmlReader)
+        protected virtual void ProcessAttributes(T instance, XmlReader xmlReader)
+        {
+        }
+
+        protected override sealed void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        {
+            var instance = LoadInstance(bookVersion);
+            Process(instance, xmlReader);
+            SaveInstance(instance, bookVersion);
+        }
+
+        protected virtual T LoadInstance(BookVersion bookVersion)
+        {
+            return default(T);
+        }
+
+        protected virtual void SaveInstance(T instance, BookVersion bookVersion)
         {
         }
 
