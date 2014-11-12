@@ -31,13 +31,13 @@ namespace ITJakub.FileProcessing.Core.Processors
             {
                 Init();
             }
+            PreprocessSetup(bookVersion);
+            ProcessAttributes(bookVersion, xmlReader);
             ProcessElement(bookVersion, xmlReader);
         }
 
         protected virtual void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            PreprocessSetup(bookVersion);
-            ProcessAttributes(bookVersion, xmlReader);
             while (xmlReader.Read())
             {
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
@@ -52,7 +52,7 @@ namespace ITJakub.FileProcessing.Core.Processors
         {
         }
 
-        private XmlReader GetSubtree(XmlReader xmlReader)
+        protected XmlReader GetSubtree(XmlReader xmlReader)
         {
             XmlReader subtree = xmlReader.ReadSubtree();
             subtree.Read();
@@ -84,20 +84,6 @@ namespace ITJakub.FileProcessing.Core.Processors
         private Dictionary<string, ProcessorBase> GetProcessors()
         {
             return SubProcessors.ToDictionary(x => x.NodeName);
-        }
-    }
-
-
-    public abstract class ListProcessorBase : ProcessorBase
-    {
-        protected ListProcessorBase(XsltTransformationManager xsltTransformationManager, IKernel container)
-            : base(xsltTransformationManager, container)
-        {
-        }
-
-        protected override sealed IEnumerable<ProcessorBase> SubProcessors
-        {
-            get { return new List<ProcessorBase>(); }
         }
     }
 }

@@ -40,11 +40,10 @@
     <property name="AvailabilityStatus">
       <column name="AvailabilityStatus" sql-type="smallint" not-null="false" />
     </property>
-    <!--<one-to-one name="ManuscriptDescription" cascade="save-update" constrained="true" foreign-key="none" />-->
     <property name="BiblText">
       <column name="BiblText" sql-type="varchar" not-null="false" />
     </property>
-    <bag name="ManuscriptDescriptions" cascade="all-delete-orphans" lazy="true">
+    <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="ManuscriptDescription" column="ManuscriptDescriptions" />
     </bag>

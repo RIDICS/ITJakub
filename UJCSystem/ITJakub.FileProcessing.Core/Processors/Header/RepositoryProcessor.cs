@@ -6,7 +6,7 @@ using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
-    public class RepositoryProcessor : ListProcessorBase
+    public class RepositoryProcessor : ConcreteInstanceListProcessorBase<ManuscriptDescription>
     {
         public RepositoryProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -18,11 +18,11 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             get { return "repository"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(ManuscriptDescription msDesc, XmlReader xmlReader)
         {
             xmlReader.Read();                           //read text value
             string value = xmlReader.Value;
-            bookVersion.ManuscriptDescription.Repository = value;
+            msDesc.Repository = value;
         }
     
     }

@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
+using ITJakub.DataEntities.Database.Entities;
 using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
-    public class MsIdentifierProcessor : ProcessorBase
+    public class MsIdentifierProcessor : ConcreteInstanceProcessorBase<ManuscriptDescription>
     {
         public MsIdentifierProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -16,13 +17,14 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             get { return "msIdentifier"; }
         }
 
-        protected override IEnumerable<ProcessorBase> SubProcessors
+
+        protected override IEnumerable<ConcreteInstanceProcessorBase<ManuscriptDescription>> ConcreteSubProcessors
         {
             get
             {
-                return new List<ProcessorBase>
+                return new List<ConcreteInstanceProcessorBase<ManuscriptDescription>>
                 {
-                    Container.Resolve<CountryProcessor>(),
+                  Container.Resolve<CountryProcessor>(),
                     Container.Resolve<SettlementProcessor>(),
                     Container.Resolve<RepositoryProcessor>(),
                     Container.Resolve<IdnoProcessor>(),

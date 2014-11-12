@@ -7,8 +7,8 @@
     <many-to-one name="ParentCategory">
       <column name="ParentCategory" sql-type="int" not-null="false" />
     </many-to-one>
-    <property name="Name">
-      <column name="Name" sql-type="varchar" not-null="true" unique="true"/>
+    <property name="XmlId">
+      <column name="XmlId" sql-type="varchar" not-null="true" unique="true"/>
     </property>
     <property name="Description">
       <column name="Description" sql-type="varchar" not-null="true" />

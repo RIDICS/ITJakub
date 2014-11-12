@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Processors\ConcreteInstanceListProcessorBase.cs" />
+    <Compile Include="Processors\ConcreteInstanceProcessorBase.cs" />
     <Compile Include="Processors\Header\AuthorProcessor.cs" />
     <Compile Include="Processors\Header\AvailabilityProcessor.cs" />
     <Compile Include="Processors\Header\BiblProcessor.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="Processors\Header\ProfileDescProcessor.cs" />
     <Compile Include="Processors\DocumentProcessor.cs" />
     <Compile Include="Processors\Header\TitleStmtProcessor.cs" />
+    <Compile Include="Processors\ListProcessorBase.cs" />
     <Compile Include="Processors\Text\TextProcessor.cs" />
     <Compile Include="Processors\Header\TitleProcessor.cs" />
     <Compile Include="Processors\Header\PublicationStmtProcessor.cs" />

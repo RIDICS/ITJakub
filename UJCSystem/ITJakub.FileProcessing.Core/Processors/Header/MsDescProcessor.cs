@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
-    public class MsDescProcessor : ProcessorBase
+    public class MsDescProcessor : ConcreteInstanceProcessorBase<ManuscriptDescription>
     {
         public MsDescProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -19,17 +20,26 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override void PreprocessSetup(BookVersion bookVersion)
         {
-            if (bookVersion.ManuscriptDescription == null)
+            if (bookVersion.ManuscriptDescriptions == null)
             {
-                bookVersion.ManuscriptDescription = new ManuscriptDescription();
+                bookVersion.ManuscriptDescriptions = new List<ManuscriptDescription>();
             }   
         }
 
-        protected override IEnumerable<ProcessorBase> SubProcessors
+        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        {
+            var manuscriptDesc = new ManuscriptDescription();
+            Process(manuscriptDesc, xmlReader);
+            bookVersion.ManuscriptDescriptions.Add(manuscriptDesc);
+        }
+
+
+
+        protected override IEnumerable<ConcreteInstanceProcessorBase<ManuscriptDescription>> ConcreteSubProcessors
         {
             get
             {
-                return new List<ProcessorBase>
+                return new List<ConcreteInstanceProcessorBase<ManuscriptDescription>>
                 {
                     Container.Resolve<MsIdentifierProcessor>(),
                     Container.Resolve<MsContentsProcessor>(),

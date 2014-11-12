@@ -6,7 +6,7 @@ using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
-    public class SettlementProcessor : ListProcessorBase
+    public class SettlementProcessor : ConcreteInstanceListProcessorBase<ManuscriptDescription>
     {
         public SettlementProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -18,9 +18,9 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             get { return "settlement"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(ManuscriptDescription msDesc, XmlReader xmlReader)
         {
-            bookVersion.ManuscriptDescription.Settlement = GetInnerContentAsString(xmlReader);
+            msDesc.Settlement = GetInnerContentAsString(xmlReader);
         }
     
     }

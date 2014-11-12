@@ -5,7 +5,7 @@ using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
-    public class CountryProcessor : ListProcessorBase
+    public class CountryProcessor : ConcreteInstanceListProcessorBase<ManuscriptDescription>
     {
         public CountryProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -17,9 +17,9 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             get { return "contry"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(ManuscriptDescription msDesc, XmlReader xmlReader)
         {
-            bookVersion.ManuscriptDescription.Country = GetInnerContentAsString(xmlReader);
+            msDesc.Country = GetInnerContentAsString(xmlReader);
         }
     
     }

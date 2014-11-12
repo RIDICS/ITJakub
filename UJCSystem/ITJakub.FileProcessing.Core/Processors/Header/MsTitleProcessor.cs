@@ -5,7 +5,7 @@ using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
-    public class MsTitleProcessor : ListProcessorBase
+    public class MsTitleProcessor : ConcreteInstanceListProcessorBase<ManuscriptDescription>
     {
         public MsTitleProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -17,9 +17,9 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             get { return "title"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(ManuscriptDescription msDesc, XmlReader xmlReader)
         {
-            bookVersion.ManuscriptDescription.Title = GetInnerContentAsString(xmlReader);
+            msDesc.Title = GetInnerContentAsString(xmlReader);
         }
     }
 }
