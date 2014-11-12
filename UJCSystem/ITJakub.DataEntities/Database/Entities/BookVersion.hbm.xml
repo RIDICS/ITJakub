@@ -45,7 +45,7 @@
     </property>
     <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
-      <many-to-many class="ManuscriptDescription" column="ManuscriptDescriptions" />
+      <one-to-many class="ManuscriptDescription" />
     </bag>
     <bag name="BookBibls" cascade="all-delete-orphan">
       <key column="BookVersion" />
