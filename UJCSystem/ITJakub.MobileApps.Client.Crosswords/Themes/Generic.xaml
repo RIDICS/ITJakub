@@ -1,7 +1,8 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:view="using:ITJakub.MobileApps.Client.Crosswords.View">
+    xmlns:view="using:ITJakub.MobileApps.Client.Crosswords.View"
+    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control">
 
     <Style TargetType="view:CrosswordTextBoxControl">
         <Setter Property="Height" Value="20" />
@@ -96,14 +97,33 @@
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
+                                <VisualState x:Name="FlyoutOpenState">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CursorElement"
+                                                                       Storyboard.TargetProperty="Visibility"
+                                                                       Duration="0">
+                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                <DiscreteObjectKeyFrame.Value>
+                                                    <Visibility>Visible</Visibility>
+                                                </DiscreteObjectKeyFrame.Value>
+                                            </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+                        
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{TemplateBinding Width}" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
                         
                         <Border x:Name="BackgroundElement"
                                 Background="{TemplateBinding Background}"
                                 Margin="{TemplateBinding Padding}" />
                         
-                        <ItemsControl x:Name="ContentElement"
+                        <ItemsControl Grid.Column="0"
+                                      x:Name="ContentElement"
                                       Height="{TemplateBinding Height}"
                                       ItemsSource="{TemplateBinding Text}">
                             <ItemsControl.ItemsPanel>
@@ -126,13 +146,41 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                         
-                        <Border x:Name="CursorElement"
+                        <Border Grid.Column="0"
+                                x:Name="CursorElement"
                                 Width="{TemplateBinding Height}"
                                 Height="{TemplateBinding Height}"
                                 Background="{StaticResource SelectionColorBrush}"
                                 Visibility="Collapsed"
                                 HorizontalAlignment="Left"
                                 Margin="{TemplateBinding CursorMargin}" />
+                        
+                        <Button Grid.Column="1"
+                                x:Name="ShowKeyboardButton">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Keyboard" />
+                            </Button.Content>
+                            <Button.Flyout>
+                                <Flyout>
+                                    <ItemsControl MaxWidth="400">
+                                        <!--TODO bind KeyboardLetters to ItemsControl.ItemsSource-->
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <control:AlignableWrapPanel HorizontalContentAlignment="Center" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Content="{Binding}"
+                                                        Width="70"
+                                                        Height="60"
+                                                        FontSize="30" />
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

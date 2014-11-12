@@ -5,6 +5,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.View.Converter
 {
     public class LengthToWidthConverter :IValueConverter
     {
+        private const int KeyboardButtonWidth = 60;
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (targetType != typeof(double))
@@ -13,7 +15,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.View.Converter
             var integer = (int) value;
             var multiplier = int.Parse(parameter.ToString());
 
-            return integer*multiplier + 10;
+            return integer*multiplier + 10 + KeyboardButtonWidth;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
