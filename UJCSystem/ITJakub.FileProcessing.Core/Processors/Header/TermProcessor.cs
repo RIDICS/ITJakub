@@ -20,7 +20,8 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVerison, XmlReader xmlReader)
         {
-            var termn = GetInnerContentAsString(xmlReader);  //TODO save term
+            var term = GetInnerContentAsString(xmlReader);
+            bookVerison.Keywords.Add(new Keyword() {Text = term});
         }
     }
 }
