@@ -22,7 +22,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (ISession session = GetSession())
             {
                 bookVersion.CreateTime = DateTime.UtcNow;
-                return (long)session.Save(bookVersion);
+                return (long) session.Save(bookVersion);
             }
         }
 
@@ -44,6 +44,49 @@ namespace ITJakub.DataEntities.Database.Repositories
                     session.QueryOver<BookVersion>()
                         .Where(bookVersion => bookVersion.VersionId == bookVersionGuid)
                         .SingleOrDefault<BookVersion>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Publisher FindPublisherByText(string text)
+        {
+            using (ISession session = GetSession())
+            {
+                return
+                    session.QueryOver<Publisher>()
+                        .Where(publisher => publisher.Text == text)
+                        .SingleOrDefault<Publisher>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Responsible FindResponsible(string text, ResponsibleType type)
+        {
+            
+            using (ISession session = GetSession())
+            {
+                ResponsibleType responsibleType = FindResponsibleType(type) ?? type;
+                return
+                    session.QueryOver<Responsible>()
+                        .Where(
+                            responsible =>
+                                responsible.Text == text && responsible.ResponsibleType.Id == responsibleType.Id)
+                        .SingleOrDefault<Responsible>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual ResponsibleType FindResponsibleType(ResponsibleType responsibleType)
+        {
+            using (ISession session = GetSession())
+            {
+                return
+                    session.QueryOver<ResponsibleType>()
+                        .Where(
+                            respType =>
+                                respType.Text == responsibleType.Text ||
+                                respType.Type == responsibleType.Type)
+                        .SingleOrDefault<ResponsibleType>();
             }
         }
     }

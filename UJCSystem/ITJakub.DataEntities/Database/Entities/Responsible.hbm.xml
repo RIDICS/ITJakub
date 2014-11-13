@@ -4,7 +4,7 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    <many-to-one name="ResponsibleType" cascade="save-update">
+    <many-to-one name="ResponsibleType" cascade="save-update" lazy="false">
       <column name="ResponsibleType" sql-type="int" not-null="false" />
     </many-to-one>
     <property name="Text">

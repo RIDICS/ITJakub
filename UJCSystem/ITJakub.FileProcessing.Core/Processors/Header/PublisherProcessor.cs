@@ -1,15 +1,19 @@
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
     public class PublisherProcessor : ListProcessorBase
     {
-        public PublisherProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+        private readonly BookVersionRepository m_bookVersionRepository;
+
+        public PublisherProcessor(BookVersionRepository bookVersionRepository, XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
+            m_bookVersionRepository = bookVersionRepository;
         }
 
         protected override string NodeName
@@ -41,7 +45,7 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
                 publisher.Text = GetInnerContentAsString(tempReader);
             }
 
-
+            publisher = m_bookVersionRepository.FindPublisherByText(publisher.Text) ?? publisher;
             bookVersion.Publisher = publisher;
         }
     }

@@ -4,6 +4,7 @@ using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using NHibernate;
+using Remotion.Linq.Utilities;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -30,6 +31,17 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (ISession session = GetSession())
             {
                 return (int)Create(new Author(){ Name = name});
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Author FindByName(string name)
+        {
+            using (ISession session = GetSession())
+            {
+                return session.QueryOver<Author>()
+                    .Where(author => author.Name == name)
+                    .SingleOrDefault<Author>();
             }
         }
     }

@@ -3,20 +3,30 @@ using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.FileProcessing.Core.XSLT;
 
 namespace ITJakub.FileProcessing.Core.Processors.Header
 {
     public class RespStmtProcessor : ListProcessorBase
     {
-        public RespStmtProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+        private readonly BookVersionRepository m_bookVersionRepository;
+
+        public RespStmtProcessor(BookVersionRepository bookVersionRepository,
+            XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
+            m_bookVersionRepository = bookVersionRepository;
         }
 
         protected override string NodeName
         {
             get { return "respStmt"; }
+        }
+
+        protected override void PreprocessSetup(BookVersion bookVersion)
+        {
+            if (bookVersion.Responsibles == null) bookVersion.Responsibles = new List<Responsible>();
         }
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
@@ -28,7 +38,7 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
                     xmlReader.LocalName.Equals("resp"))
                 {
-                    xmlReader.Read();                           //read text value
+                    xmlReader.Read(); //read text value
                     string value = xmlReader.Value;
                     responsible.ResponsibleType = new ResponsibleType
                     {
@@ -44,7 +54,7 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
                 }
             }
 
-            if (bookVersion.Responsibles == null) bookVersion.Responsibles = new List<Responsible>();
+            responsible = m_bookVersionRepository.FindResponsible(responsible.Text, responsible.ResponsibleType) ?? responsible;
             bookVersion.Responsibles.Add(responsible);
         }
     }

@@ -45,11 +45,7 @@ namespace ITJakub.FileProcessing.Core.Processors
         protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
         {
             var bookGuid = xmlReader.GetAttribute("n");
-            var book = m_bookRepository.GetBookByGuid(bookGuid);
-            if (book == null)
-            {
-                book = new Book {Guid = bookGuid};
-            }
+            var book = m_bookRepository.GetBookByGuid(bookGuid) ?? new Book {Guid = bookGuid} ;
             bookVersion.Book = book;
         }
     }
