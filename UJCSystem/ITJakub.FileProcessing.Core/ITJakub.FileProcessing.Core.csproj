@@ -49,6 +49,7 @@
     <Compile Include="Processors\Header\BiblProcessor.cs" />
     <Compile Include="Processors\Header\CategoryDescriptionProcessor.cs" />
     <Compile Include="Processors\Header\CategoryProcessor.cs" />
+    <Compile Include="Processors\Header\CatRefProcessor.cs" />
     <Compile Include="Processors\Header\ClassDeclProcessor.cs" />
     <Compile Include="Processors\Header\CountryProcessor.cs" />
     <Compile Include="Processors\Header\DateProcessor.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Processors\Header\EncodingDescProcessor.cs" />
     <Compile Include="Processors\Header\HistoryProcessor.cs" />
     <Compile Include="Processors\Header\IdnoProcessor.cs" />
+    <Compile Include="Processors\Header\KeywordsProcessor.cs" />
     <Compile Include="Processors\Header\ListBiblProcessor.cs" />
     <Compile Include="Processors\Header\MsContentsProcessor.cs" />
     <Compile Include="Processors\Header\MsDescProcessor.cs" />
@@ -75,6 +77,8 @@
     <Compile Include="Processors\Header\ProfileDescProcessor.cs" />
     <Compile Include="Processors\DocumentProcessor.cs" />
     <Compile Include="Processors\Header\TaxonomyProcessor.cs" />
+    <Compile Include="Processors\Header\TermProcessor.cs" />
+    <Compile Include="Processors\Header\TextClassProcessor.cs" />
     <Compile Include="Processors\Header\TitleStmtProcessor.cs" />
     <Compile Include="Processors\ListProcessorBase.cs" />
     <Compile Include="Processors\Text\TextProcessor.cs" />

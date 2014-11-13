@@ -17,7 +17,7 @@ namespace ITJakub.FileProcessing.Service
 
         public void TestXml()
         {
-            FileStream xmlFileStream = File.Open("D:\\ITJakubTestXml\\Albrecht.xml", FileMode.Open);
+            FileStream xmlFileStream = File.Open("D:\\ITJakubTestXml\\LekJadroBrn.xml", FileMode.Open);
             var bookVersion = m_xmlProcessingmanager.GetXmlMetadata(xmlFileStream);
             bookVersion.VersionId = "verId"; //TODO get from xml in GetXmlMetadata
             var bookVersionId = m_bookVersionRepository.Create(bookVersion);
