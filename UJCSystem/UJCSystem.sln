@@ -82,6 +82,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.MobileContracts", "ITJakub.MobileApps.MobileContracts\ITJakub.MobileApps.MobileContracts.csproj", "{67B4DDA0-4340-4D05-9A22-831DA43E70F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.Fillwords", "ITJakub.MobileApps.Client.Fillwords\ITJakub.MobileApps.Client.Fillwords.csproj", "{8F75B6A6-735E-4DE1-B2AE-25002A327674}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -517,6 +519,26 @@ Global
 		{67B4DDA0-4340-4D05-9A22-831DA43E70F8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{67B4DDA0-4340-4D05-9A22-831DA43E70F8}.Release|x64.ActiveCfg = Release|Any CPU
 		{67B4DDA0-4340-4D05-9A22-831DA43E70F8}.Release|x86.ActiveCfg = Release|Any CPU
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Debug|ARM.ActiveCfg = Debug|ARM
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Debug|ARM.Build.0 = Debug|ARM
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Debug|x64.ActiveCfg = Debug|x64
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Debug|x64.Build.0 = Debug|x64
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Debug|x86.ActiveCfg = Debug|x86
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Debug|x86.Build.0 = Debug|x86
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Release|ARM.ActiveCfg = Release|ARM
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Release|ARM.Build.0 = Release|ARM
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Release|Mixed Platforms.Build.0 = Release|x86
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Release|x64.ActiveCfg = Release|x64
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Release|x64.Build.0 = Release|x64
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Release|x86.ActiveCfg = Release|x86
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -545,6 +567,7 @@ Global
 		{9754F9BD-7148-4600-8A98-C39B4073FE4D} = {2047D77A-D751-4729-860B-B17B4A1E0728}
 		{C30689FE-A72C-42EC-AAF3-63A08D019C2C} = {2047D77A-D751-4729-860B-B17B4A1E0728}
 		{67B4DDA0-4340-4D05-9A22-831DA43E70F8} = {600F24BC-C549-4154-852C-20426F962E25}
+		{8F75B6A6-735E-4DE1-B2AE-25002A327674} = {2047D77A-D751-4729-860B-B17B4A1E0728}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi

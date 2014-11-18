@@ -94,5 +94,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get { return Container.Current.Resolve<SelectTaskViewModel>(); }
         }
+
+        public EditorHostViewModel EditorHostViewModel
+        {
+            get { return Container.Current.Resolve<EditorHostViewModel>(); }
+        }
     }
 }

@@ -1,58 +1,58 @@
 ﻿using System;
 using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
-using ITJakub.MobileApps.Client.Chat.DataService;
-using ITJakub.MobileApps.Client.Chat.View;
-using ITJakub.MobileApps.Client.Chat.ViewModel;
+using ITJakub.MobileApps.Client.Fillwords.DataService;
+using ITJakub.MobileApps.Client.Fillwords.View;
+using ITJakub.MobileApps.Client.Fillwords.ViewModel;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
-namespace ITJakub.MobileApps.Client.Chat
+namespace ITJakub.MobileApps.Client.Fillwords
 {
-    [MobileApplication(ApplicationType.Chat)]
+    [MobileApplication(ApplicationType.Fillwords)]
     public class AppInfo : ApplicationBase
     {
+        private readonly FillwordsDataService m_dataService;
+
         public AppInfo(ISynchronizeCommunication applicationCommunication) : base(applicationCommunication)
         {
-            DataService = new ChatDataService(applicationCommunication);
+            m_dataService = new FillwordsDataService(applicationCommunication);
         }
 
         public override string Name
         {
-            get { return "Chat"; }
+            get { return "Doplňovačky"; }
         }
 
         public override ApplicationBaseViewModel ApplicationViewModel
         {
-            get { return new ChatViewModel(DataService); }
+            get { return new FillwordsViewModel(m_dataService); }
         }
-
-        private IChatDataService DataService { get; set; }
 
         public override Type ApplicationDataTemplate
         {
-            get { return typeof (ChatView); }
+            get { return typeof (FillwordsView); }
         }
 
         public override ViewModelBase EditorViewModel
         {
-            get { return null; }
+            get { return new EditorViewModel(m_dataService); }
         }
 
         public override Type EditorDataTemplate
         {
-            get { return null; }
+            get { return typeof (EditorView); }
         }
 
         public override ApplicationRoleType ApplicationRoleType
         {
-            get { return ApplicationRoleType.SupportApp;}
+            get { return ApplicationRoleType.MainApp; }
         }
 
         public override ApplicationCategory ApplicationCategory
         {
-            get { return ApplicationCategory.Other; }
+            get { return ApplicationCategory.Education; }
         }
 
         public override bool IsChatSupported
@@ -62,16 +62,7 @@ namespace ITJakub.MobileApps.Client.Chat
 
         public override BitmapImage Icon
         {
-            get
-            {
-                var uri = new Uri(BaseUri, "Icon/file-128.png");
-                var image = new BitmapImage(uri);
-                return image;
-            }
+            get { return new BitmapImage(new Uri(BaseUri, "Icon/pen-128.png")); }
         }
-
-    
     }
-
-   
 }

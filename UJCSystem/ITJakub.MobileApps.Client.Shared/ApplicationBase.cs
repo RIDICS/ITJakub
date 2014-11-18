@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Windows.UI.Xaml.Media.Imaging;
+using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
@@ -21,6 +22,10 @@ namespace ITJakub.MobileApps.Client.Shared
         public abstract ApplicationBaseViewModel ApplicationViewModel { get; }
 
         public abstract Type ApplicationDataTemplate { get; }
+
+        public abstract ViewModelBase EditorViewModel { get; }
+
+        public abstract Type EditorDataTemplate { get; }
 
         public abstract ApplicationRoleType ApplicationRoleType { get; }
 

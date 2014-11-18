@@ -6,6 +6,8 @@
         SampleApp,
         Chat,
         Hangman,
-        Crosswords
+        Crosswords,
+        Fillwords,
+        SynchronizedReading
     }
 }

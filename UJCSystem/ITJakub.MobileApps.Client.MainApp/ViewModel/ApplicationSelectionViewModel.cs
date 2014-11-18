@@ -41,7 +41,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_dataService.GetAllApplications((applications, exception) =>
             {
-                var appList = applications.Select(applicationKeyValue => new AppInfoViewModel
+                var appList = applications.Where(pair => pair.Value.ApplicationRoleType == ApplicationRoleType.MainApp)
+                    .Select(applicationKeyValue => new AppInfoViewModel
                 {
                     Name = applicationKeyValue.Value.Name,
                     ApplicationType = applicationKeyValue.Key,

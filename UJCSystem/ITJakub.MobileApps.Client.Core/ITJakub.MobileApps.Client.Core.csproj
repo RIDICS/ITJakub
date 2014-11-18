@@ -119,6 +119,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTemplateCreator.cs" />
+    <Compile Include="EditorTemplateSelector.cs" />
     <Compile Include="Manager\Groups\GroupState.cs" />
     <Compile Include="Manager\Tasks\TaskManager.cs" />
     <Compile Include="Service\Polling\IMainPollingService.cs" />

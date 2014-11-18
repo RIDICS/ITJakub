@@ -1,5 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Media.Imaging;
+using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -9,8 +10,11 @@ namespace ITJakub.MobileApps.Client.SampleApp
     [MobileApplication(ApplicationType.SampleApp)]
     public class AppInfo : ApplicationBase
     {
+        private readonly SampleDataService m_dataService;
+
         public AppInfo(ISynchronizeCommunication applicationCommunication) : base(applicationCommunication)
         {
+            m_dataService = new SampleDataService(ApplicationCommunication);
         }
 
         public override string Name
@@ -20,12 +24,22 @@ namespace ITJakub.MobileApps.Client.SampleApp
 
         public override ApplicationBaseViewModel ApplicationViewModel
         {
-            get { return new SampleViewModel(new SampleDataService(ApplicationCommunication)); }
+            get { return new SampleViewModel(m_dataService); }
         }
 
         public override Type ApplicationDataTemplate
         {
             get { return typeof (SampleView); }
+        }
+
+        public override ViewModelBase EditorViewModel
+        {
+            get { return new SampleEditorViewModel(m_dataService); }
+        }
+
+        public override Type EditorDataTemplate
+        {
+            get { return typeof (SampleEditorView); }
         }
 
         public override ApplicationRoleType ApplicationRoleType

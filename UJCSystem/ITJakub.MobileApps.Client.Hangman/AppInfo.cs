@@ -1,5 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Media.Imaging;
+using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Hangman.DataService;
 using ITJakub.MobileApps.Client.Hangman.View;
 using ITJakub.MobileApps.Client.Hangman.ViewModel;
@@ -32,6 +33,16 @@ namespace ITJakub.MobileApps.Client.Hangman
         public override Type ApplicationDataTemplate
         {
             get { return typeof (HangmanView); }
+        }
+
+        public override ViewModelBase EditorViewModel
+        {
+            get { return null; } // TODO editor
+        }
+
+        public override Type EditorDataTemplate
+        {
+            get { return null; }
         }
 
         public override ApplicationRoleType ApplicationRoleType

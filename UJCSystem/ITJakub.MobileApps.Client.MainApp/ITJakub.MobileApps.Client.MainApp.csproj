@@ -107,10 +107,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\EditorHostViewModel.cs" />
     <Compile Include="ViewModel\GroupList\ConnectToGroupViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
     <Compile Include="ViewModel\Message\SelectedApplicationMessage.cs" />
     <Compile Include="ViewModel\Message\SelectedTaskMessage.cs" />
+    <Compile Include="ViewModel\Message\OpenEditorMessage.cs" />
     <Compile Include="View\AboutSettingsFlyout.xaml.cs">
       <DependentUpon>AboutSettingsFlyout.xaml</DependentUpon>
     </Compile>
@@ -119,6 +121,9 @@
     <Compile Include="View\Converter\GroupStateToNameConverter.cs" />
     <Compile Include="View\Converter\NotChosenStringConverter.cs" />
     <Compile Include="View\Converter\BooleanToColorConverter.cs" />
+    <Compile Include="View\EditorHostView.xaml.cs">
+      <DependentUpon>EditorHostView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ErrorBar.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="View\ErrorBarView.xaml.cs">
@@ -202,6 +207,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="View\AboutSettingsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditorHostView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -292,6 +301,10 @@
     <ProjectReference Include="..\ITJakub.MobileApps.Client.Crosswords\ITJakub.MobileApps.Client.Crosswords.csproj">
       <Project>{9754f9bd-7148-4600-8a98-c39b4073fe4d}</Project>
       <Name>ITJakub.MobileApps.Client.Crosswords</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.Client.Fillwords\ITJakub.MobileApps.Client.Fillwords.csproj">
+      <Project>{8f75b6a6-735e-4de1-b2ae-25002a327674}</Project>
+      <Name>ITJakub.MobileApps.Client.Fillwords</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.Client.Hangman\ITJakub.MobileApps.Client.Hangman.csproj">
       <Project>{83410335-c9de-416f-8ab8-d94cb1933ffc}</Project>

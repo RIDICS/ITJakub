@@ -6,11 +6,11 @@ using Windows.UI.Xaml.Controls;
 
 namespace ITJakub.MobileApps.Client.Core
 {
-    public class ApplicationTemplateSelector : DataTemplateSelector
+    public class EditorTemplateSelector : DataTemplateSelector
     {
-        private readonly Dictionary<Type, DataTemplate> m_applicationTemplates = new Dictionary<Type, DataTemplate>();
+        private readonly Dictionary<Type, DataTemplate> m_editorTemplates = new Dictionary<Type, DataTemplate>();
 
-        public ApplicationTemplateSelector()
+        public EditorTemplateSelector()
         {
             LoadAllDataTemplates();
         }
@@ -19,16 +19,16 @@ namespace ITJakub.MobileApps.Client.Core
         {
             var templateCreator = new DataTemplateCreator();
             var apps = ApplicationLoader.Instance.GetAllApplications();
-            foreach (var app in apps.Select(keyValuePair => keyValuePair.Value))
+            foreach (var app in apps.Select(keyValuePair => keyValuePair.Value).Where(appInfo => appInfo.EditorDataTemplate != null))
             {
-                m_applicationTemplates.Add(app.ApplicationViewModel.GetType(), templateCreator.CreateDataTemplate(app.ApplicationDataTemplate));
+                m_editorTemplates.Add(app.EditorViewModel.GetType(), templateCreator.CreateDataTemplate(app.EditorDataTemplate));
             }
         }
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
-            if (item != null && m_applicationTemplates.ContainsKey(item.GetType()))
-                return m_applicationTemplates[item.GetType()];
+            if (item != null && m_editorTemplates.ContainsKey(item.GetType()))
+                return m_editorTemplates[item.GetType()];
 
             return base.SelectTemplateCore(item, container);
         }
