@@ -120,7 +120,7 @@
                     BorderBrush="#30000000"
                     BorderThickness="2">
                 <control:BindableRichEditBox DocumentRtf="{Binding SelectedPage.RtfText}"
-                                             IsReadOnly="False" />
+                                             IsReadOnly="True" />
             </Border>
             <ProgressRing Grid.Row="1"
                           Grid.Column="0"
