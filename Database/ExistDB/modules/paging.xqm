@@ -67,10 +67,8 @@ declare function vw:getPagesProcess(
     $display-root-namespace
     )
     let $result := util:parse($fragment)
-
-    return
     
-    <query-result 
+    let $resultXml :=  <query-result 
            xmlns:exist="http://exist.sourceforge.net/NS/exist"
            xmlns:tei="http://www.tei-c.org/ns/1.0"
            xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0"
@@ -79,7 +77,10 @@ declare function vw:getPagesProcess(
            {$result}
            </result>    
     </query-result>
-    
+
+    return
+    <div>
+    {transform:transform($resultXml,doc("/apps/jacob-test/transformations/pageToHtml.xsl"),() )} </div>    
 };
 
 declare function vw:getPageNamesList(
