@@ -23,33 +23,31 @@
         </xd:desc>
     </xd:doc>
     <xsl:template match="tei:pb">
-       <!-- <xsl:if test="not($simple)">
-            <xsl:element name="span">
-                <xsl:attribute name="class">
-                    <xsl:text>info</xsl:text>
+        <xsl:element name="span">
+            <xsl:attribute name="class">
+                <xsl:text>info</xsl:text>
+                <xsl:text> </xsl:text>
+                <xsl:text>pb</xsl:text>
+                    <!-- pokud má býz za foliací mezera, bude se pomocí stylu zobrazovat v textu, jinak bude foliace bez mezer -->
+                <xsl:if test="@rend='space'">
+                    <xsl:text> space</xsl:text>
+                </xsl:if>
+                <xsl:if test="@ed">
                     <xsl:text> </xsl:text>
-                    <xsl:text>pb</xsl:text>
-                    <!-\- pokud má býz za foliací mezera, bude se pomocí stylu zobrazovat v textu, jinka bude foliace bez mezerr -\->
-                    <xsl:if test="@rend='space'">
-                        <xsl:text> space</xsl:text>
-                    </xsl:if>
-                    <xsl:if test="@ed">
-                        <xsl:text> </xsl:text>
-                        <xsl:text>additional</xsl:text>
-                    </xsl:if>
-                </xsl:attribute>
-                <xsl:attribute name="title">
-                    <xsl:choose>
-                        <xsl:when test="@ed = 'edition'">číslo strany edice</xsl:when>
-                        <xsl:when test="@ed = 'print'">číslo strany tisku</xsl:when>
-                        <xsl:otherwise>číslo strany rukopisu</xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-                <xsl:text>[</xsl:text>
+                    <xsl:text>additional</xsl:text>
+                </xsl:if>
+            </xsl:attribute>
+            <xsl:attribute name="data-title">
+                <xsl:choose>
+                    <xsl:when test="@ed = 'edition'">číslo strany edice</xsl:when>
+                    <xsl:when test="@ed = 'print'">číslo strany tisku</xsl:when>
+                    <xsl:otherwise>číslo strany rukopisu</xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:attribute name="data-page-name">
                 <xsl:value-of select="@n"/>
-                <xsl:text>]</xsl:text>
-            </xsl:element>
-        </xsl:if>-->
+            </xsl:attribute>
+        </xsl:element>
     </xsl:template>
     <xsl:template match="*[@rend]" priority="-1">
         <span class="{@rend}">
