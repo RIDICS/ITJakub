@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight;
-using ITJakub.MobileApps.Client.Fillwords.DataService;
+﻿using ITJakub.MobileApps.Client.Fillwords.DataService;
 using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.Fillwords.ViewModel

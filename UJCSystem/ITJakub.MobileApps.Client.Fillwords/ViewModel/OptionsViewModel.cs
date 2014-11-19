@@ -7,6 +7,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
     {
         public int WordPosition { get; set; }
 
+        public int WordCount { get; set; }
+
         public ObservableCollection<OptionViewModel> List { get; set; } 
     }
 

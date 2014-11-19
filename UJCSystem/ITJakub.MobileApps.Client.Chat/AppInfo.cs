@@ -1,6 +1,5 @@
 ﻿using System;
 using Windows.UI.Xaml.Media.Imaging;
-using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Chat.DataService;
 using ITJakub.MobileApps.Client.Chat.View;
 using ITJakub.MobileApps.Client.Chat.ViewModel;
@@ -35,7 +34,7 @@ namespace ITJakub.MobileApps.Client.Chat
             get { return typeof (ChatView); }
         }
 
-        public override ViewModelBase EditorViewModel
+        public override EditorBaseViewModel EditorViewModel
         {
             get { return null; }
         }

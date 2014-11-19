@@ -1,8 +1,8 @@
-﻿using GalaSoft.MvvmLight;
+﻿using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.SampleApp
 {
-    public class SampleEditorViewModel : ViewModelBase
+    public class SampleEditorViewModel : EditorBaseViewModel
     {
         private string m_test;
 

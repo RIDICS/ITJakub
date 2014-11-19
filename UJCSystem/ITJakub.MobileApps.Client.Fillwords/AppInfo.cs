@@ -1,6 +1,5 @@
 ﻿using System;
 using Windows.UI.Xaml.Media.Imaging;
-using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
 using ITJakub.MobileApps.Client.Fillwords.View;
 using ITJakub.MobileApps.Client.Fillwords.ViewModel;
@@ -35,7 +34,7 @@ namespace ITJakub.MobileApps.Client.Fillwords
             get { return typeof (FillwordsView); }
         }
 
-        public override ViewModelBase EditorViewModel
+        public override EditorBaseViewModel EditorViewModel
         {
             get { return new EditorViewModel(m_dataService); }
         }

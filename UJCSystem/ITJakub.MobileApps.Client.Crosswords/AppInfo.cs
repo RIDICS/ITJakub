@@ -1,6 +1,5 @@
 ﻿using System;
 using Windows.UI.Xaml.Media.Imaging;
-using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Crosswords.DataService;
 using ITJakub.MobileApps.Client.Crosswords.View;
 using ITJakub.MobileApps.Client.Crosswords.ViewModel;
@@ -35,7 +34,7 @@ namespace ITJakub.MobileApps.Client.Crosswords
             get { return typeof (CrosswordsView); }
         }
 
-        public override ViewModelBase EditorViewModel
+        public override EditorBaseViewModel EditorViewModel
         {
             get { return null; } // TODO editor
         }

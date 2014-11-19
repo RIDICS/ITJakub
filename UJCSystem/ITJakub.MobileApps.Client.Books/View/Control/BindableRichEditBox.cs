@@ -7,6 +7,11 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
 {
     public class BindableRichEditBox : RichEditBox
     {
+        public BindableRichEditBox()
+        {
+            IsReadOnly = true;
+        }
+
         public string DocumentRtf
         {
             get { return (string) GetValue(DocumentRtfProperty); }
@@ -51,6 +56,10 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
 
         protected override void OnLostFocus(RoutedEventArgs e)
         {
+            string text;
+            Document.GetText(TextGetOptions.FormatRtf, out text);
+            if (!IsReadOnly && text != DocumentRtf)
+                DocumentRtf = text;
         }
     }
 }

@@ -15,15 +15,12 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
     {
         private ScrollViewer m_contentElement;
 
-        public EditorRichEditBox()
-        {
-            //TODO for test:
-            DocumentRtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard Toto je {\b tucny} text.\par}";
-        }
-
         protected override void OnTapped(TappedRoutedEventArgs e)
         {
             base.OnTapped(e);
+
+            if (IsEditingEnabled)
+                return;
 
             var point = e.GetPosition(this);
             var shiftedPoint = new Point(point.X, point.Y + m_contentElement.VerticalOffset);
@@ -34,7 +31,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
 
             Document.Selection.SetRange(textRange.StartPosition, textRange.EndPosition);
 
-            SelectedText = textRange.Text;
+            SelectedText = textRange.Text.Trim();
             if (WordOptionsList != null && WordOptionsList.ContainsKey(textRange.StartPosition))
             {
                 var key = textRange.StartPosition;
@@ -55,6 +52,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
             }
 
             Flyout.ShowAt(this);
+            IsFlyoutOpen = true;
         }
 
         protected override void OnApplyTemplate()
@@ -79,6 +77,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
             typeof (string), typeof (EditorRichEditBox), new PropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty IsFlyoutOpenProperty = DependencyProperty.Register("IsFlyoutOpen", typeof (bool), typeof (EditorRichEditBox), new PropertyMetadata(false, IsFlyoutOpenChanged));
+
+        public static readonly DependencyProperty IsEditingEnabledProperty = DependencyProperty.Register("IsEditingEnabled", typeof (bool), typeof (EditorRichEditBox), new PropertyMetadata(false, IsEditingEnabledChanged));
 
         public Dictionary<int, OptionsViewModel> WordOptionsList
         {
@@ -109,18 +109,33 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
             get { return (bool) GetValue(IsFlyoutOpenProperty); }
             set { SetValue(IsFlyoutOpenProperty, value); }
         }
-        
+
+        public bool IsEditingEnabled
+        {
+            get { return (bool) GetValue(IsEditingEnabledProperty); }
+            set { SetValue(IsEditingEnabledProperty, value); }
+        }
+
         private static void IsFlyoutOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var editBox = d as EditorRichEditBox;
             if (editBox == null)
                 return;
             
-            var newValue = (bool) e.NewValue;
-            if (!newValue)
+            var isOpen = (bool) e.NewValue;
+            if (!isOpen)
                 editBox.Flyout.Hide();
+        }
 
-            // TODO repair hiding flyout
+
+        private static void IsEditingEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var editBox = d as EditorRichEditBox;
+            if (editBox == null)
+                return;
+
+            var isEnabled = (bool)e.NewValue;
+            editBox.IsReadOnly = !isEnabled;
         }
     }
 }
