@@ -1,5 +1,4 @@
-﻿using System;
-using ITJakub.Core;
+﻿using ITJakub.ITJakubService.Core.SearchService;
 
 namespace ITJakub.XmlProcessingConsole
 {

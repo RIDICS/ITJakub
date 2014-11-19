@@ -2,8 +2,6 @@
 using System.ServiceModel;
 using Castle.Windsor;
 using ITJakub.ITJakubService.DataContracts;
-using ITJakub.Shared.Contracts.Categories;
-using ITJakub.Shared.Contracts.Searching;
 
 namespace ITJakub.ITJakubService
 {
@@ -17,60 +15,7 @@ namespace ITJakub.ITJakubService
             m_container = Container.Current;
             m_serviceManager = m_container.Resolve<ItJakubServiceManager>();
         }
-
-        public KeyWordsResponse GetAllExtendedTermsForKey(string key, List<string> categorieIds, List<string> booksIds)
-        {
-            return m_serviceManager.GetAllExtendedTermsForKey(key, categorieIds, booksIds);
-        }
-
-
-        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWord(string keyWord, List<string> categorieIds,
-            List<string> booksIds)
-        {
-            return m_serviceManager.GetContextForKeyWord(keyWord, categorieIds, booksIds);
-        }
-
-        public List<SearchResultWithHtmlContext> GetResultsByBooks(string book, string keyWord)
-        {
-            //TODO return m_serviceManager.GetResultsFromBook(book, keyWord);
-            return null;
-        }
-
-        public List<SelectionBase> GetCategoryChildrenById(string categoryId)
-        {
-            return m_serviceManager.GetCategoryChildrenById(categoryId);
-        }
-
-        public List<SelectionBase> GetRootCategories()
-        {
-            return m_serviceManager.GetRootCategories();
-        }
-
-        public IEnumerable<SearchResult> GetBooksBySearchTerm(string searchTerm)
-        {
-            return m_serviceManager.GetBookBySearchTerm(searchTerm);
-        }
-
-        public IEnumerable<SearchResult> GetBooksTitleByLetter(string letter)
-        {
-            return m_serviceManager.GetBooksTitleByLetter(letter);
-        }
-
-        public IEnumerable<SearchResult> GetSourcesAuthorByLetter(string letter)
-        {
-            return m_serviceManager.GetSourcesAuthorByLetter(letter);
-        }
-
-        public string GetContentByBookId(string id)
-        {
-            return m_serviceManager.GetContentByBookId(id);
-        }
-
-        public SearchResult GetBookById(string id)
-        {
-            return m_serviceManager.GetBookById(id);
-        }
-
+       
         public void CreateUser(AuthProvidersContract providerContract, string providerToken,
             UserDetailContract userDetail)
         {

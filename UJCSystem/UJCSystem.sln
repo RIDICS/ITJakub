@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MVCWebLayer", "MVCWebLayer\ITJakub.MVCWebLayer.csproj", "{45118A71-641D-4A5F-8E92-57B4972B19B5}"
 EndProject
@@ -15,8 +15,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.ITJakubService", "ITJakub.ITJakubService\ITJakub.ITJakubService.csproj", "{AF3E2B33-A604-4A22-BA84-68FF447E266C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.LemmatizationService", "ITJakub.LemmatizationService\ITJakub.LemmatizationService.csproj", "{6DF4DC1A-0BB9-4586-B427-651BD0BEF709}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Core", "ITJakub.Core\ITJakub.Core.csproj", "{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.MainService", "ITJakub.MainService", "{5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}"
 EndProject
@@ -86,6 +84,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.FileProcessing.Core", "ITJakub.FileProcessing.Core\ITJakub.FileProcessing.Core.csproj", "{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.FileStorage", "ITJakub.FileStorage\ITJakub.FileStorage.csproj", "{7D1C5F31-7EA6-478A-BC72-9ACE5C20B853}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.SearchService.Core", "ITJakub.SearchService.Core\ITJakub.SearchService.Core.csproj", "{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -171,20 +171,6 @@ Global
 		{6DF4DC1A-0BB9-4586-B427-651BD0BEF709}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6DF4DC1A-0BB9-4586-B427-651BD0BEF709}.Release|x64.ActiveCfg = Release|Any CPU
 		{6DF4DC1A-0BB9-4586-B427-651BD0BEF709}.Release|x86.ActiveCfg = Release|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Release|ARM.ActiveCfg = Release|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Release|x64.ActiveCfg = Release|Any CPU
-		{70D03DBB-CCF0-4A8F-A227-A9806FC5773D}.Release|x86.ActiveCfg = Release|Any CPU
 		{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -566,6 +552,20 @@ Global
 		{7D1C5F31-7EA6-478A-BC72-9ACE5C20B853}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7D1C5F31-7EA6-478A-BC72-9ACE5C20B853}.Release|x64.ActiveCfg = Release|Any CPU
 		{7D1C5F31-7EA6-478A-BC72-9ACE5C20B853}.Release|x86.ActiveCfg = Release|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Release|ARM.ActiveCfg = Release|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Release|x64.ActiveCfg = Release|Any CPU
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -597,6 +597,7 @@ Global
 		{7B79B90B-A7E1-4734-9E44-02AED11A7E75} = {930D6B28-5CCD-4445-B08C-61B39F848E16}
 		{1F8CBB1C-5613-4E99-AD5D-F3469631363B} = {20AD4F4B-31EB-419D-A116-9AD3B206D874}
 		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E} = {20AD4F4B-31EB-419D-A116-9AD3B206D874}
+		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A} = {03208FD7-4079-4AE7-8BC9-643C06A89967}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi

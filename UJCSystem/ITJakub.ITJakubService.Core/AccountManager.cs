@@ -3,7 +3,7 @@ using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService.Core
 {
-    public class AccountingManager
+    public class AccountManager
     {
         public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
         {
