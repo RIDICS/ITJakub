@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.ServiceModel;
-using ITJakub.Core.Searching;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
 using log4net;
@@ -135,7 +134,8 @@ namespace ITJakub.Core
             }
         }
 
-        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWordWithBooksRestriction(string keyWord, List<string> bookIds)
+        public List<SearchResultWithHtmlContext> GetHtmlContextForKeyWordWithBooksRestriction(string keyWord,
+            List<string> bookIds)
         {
             try
             {
@@ -272,6 +272,66 @@ namespace ITJakub.Core
             {
                 if (m_log.IsErrorEnabled)
                     m_log.ErrorFormat("Search timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public string GetBookPageByPosition(string documentId, int pagePosition)
+        {
+            try
+            {
+                return Channel.GetBookPageByPosition(documentId, pagePosition);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPageByPosition failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPageByPosition timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public string GetBookPageByName(string documentId, string pageName)
+        {
+            try
+            {
+                return Channel.GetBookPageByName(documentId, pageName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPageByName failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPageByName timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName)
+        {
+            try
+            {
+                return Channel.GetBookPagesByName(documentId, startPageName, endPageName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPagesByName failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPagesByName timeouted with: {0}", ex);
                 throw;
             }
         }

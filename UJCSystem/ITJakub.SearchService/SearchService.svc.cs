@@ -64,6 +64,21 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetBookById(id);
         }
 
+        public string GetBookPageByPosition(string documentId, int pagePosition)
+        {
+            return m_searchServiceManager.GetBookPageByPosition(documentId, pagePosition);
+        }
+
+        public string GetBookPageByName(string documentId, string pageName)
+        {
+            return m_searchServiceManager.GetBookPageByName(documentId, pageName);
+        }
+
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName)
+        {
+            return m_searchServiceManager.GetBookPagesByName(documentId, startPageName, endPageName);
+        }
+
         public string GetTitleById(string id)
         {
             return m_searchServiceManager.GetTitleById(id);

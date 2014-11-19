@@ -312,5 +312,25 @@ namespace ITJakub.Core.Database.Exist.DAOs
             }
             return null;
         }
+
+
+        public string GetPagesByName(string documentId, string start, string end)
+        {
+            var parameters = new Dictionary<string, object> {{"document", documentId}, {"start", start}, {"end", end}};
+            return ExistDao.RunStoredQuery("get-pages.xquery", parameters);
+        }
+
+        public string GetPageByName(string documentId, string pageName)
+        {
+            var parameters = new Dictionary<string, object> { { "document", documentId }, { "start", pageName }};
+            return ExistDao.RunStoredQuery("get-pages.xquery", parameters);
+            
+        }
+
+        public string GetPageByPositionFromStart(string documentId, int pagePosition)
+        {
+            var parameters = new Dictionary<string, object> { { "document", documentId }, { "page", pagePosition } };
+            return ExistDao.RunStoredQuery("get-pages.xquery", parameters);
+        }
     }
 }

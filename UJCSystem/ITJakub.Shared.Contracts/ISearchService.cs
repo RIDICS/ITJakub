@@ -45,5 +45,14 @@ namespace ITJakub.Shared.Contracts
 
         [OperationContract]
         SearchResult GetBookById(string id);
+
+        [OperationContract]
+        string GetBookPageByPosition(string documentId, int pagePosition);
+
+        [OperationContract]
+        string GetBookPageByName(string documentId, string pageName);
+
+        [OperationContract]
+        string GetBookPagesByName(string documentId, string startPageName, string endPageName);
     }
 }

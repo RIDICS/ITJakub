@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Web;
 using Jewelery;
 using log4net;
 
@@ -12,21 +14,25 @@ namespace ITJakub.Core.Database.Exist
 {
     public class ExistConnectionSettingsSkeleton
     {
-        public string BaseUri { get; private set; }
-        public string ViewsCollection { get; private set; }
-        public string ResourcesCollection { get; private set; }
-
-        public string DBUser { get; private set; }
-        public string DBPassword { get; private set; }
-
-        public ExistConnectionSettingsSkeleton(string baseUri, string viewsCollection, string resourcesCollection, string dbUser, string dbPassword)
+        public ExistConnectionSettingsSkeleton(string baseUri, string viewsCollection, string resourcesCollection,
+            string dbUser, string dbPassword, string xQueriesRelativeUri)
         {
             BaseUri = baseUri;
             ViewsCollection = viewsCollection;
             ResourcesCollection = resourcesCollection;
             DBUser = dbUser;
             DBPassword = dbPassword;
+            XQueriesRelativeUri = xQueriesRelativeUri;
         }
+
+        public string BaseUri { get; private set; }
+        public string ViewsCollection { get; private set; }
+        public string ResourcesCollection { get; private set; }
+
+        public string XQueriesRelativeUri { get; private set; }
+
+        public string DBUser { get; private set; }
+        public string DBPassword { get; private set; }
     }
 
     /// <summary>
@@ -34,13 +40,13 @@ namespace ITJakub.Core.Database.Exist
     /// </summary>
     public class ExistDao
     {
-        private readonly ExistConnectionSettingsSkeleton m_settings;
         private const int DBMaxResults = 99999;
 
         private const string Xsd1Name = "TEI_UJC_OVJ_Strict.xsd";
         private const string Xsd2Name = "xml.xsd";
 
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ExistConnectionSettingsSkeleton m_settings;
 
         public ExistDao(ExistConnectionSettingsSkeleton connectionSettings)
         {
@@ -73,6 +79,18 @@ namespace ITJakub.Core.Database.Exist
             return XmlTool.RemoveRootElement(str);
         }
 
+        public string RunStoredQuery(string queryName, Dictionary<string, object> parameters)
+        {
+            var relativeUri = m_settings.XQueriesRelativeUri + queryName;
+            if (parameters != null)
+            {
+                relativeUri+="?";
+                relativeUri = parameters.Keys.Aggregate(relativeUri, (current, paramName) => current + (paramName + "=" + parameters[paramName] + "&"));
+            }
+            byte[] respBytes = QueryDb("GET", relativeUri, null);
+            return Encoding.UTF8.GetString(respBytes);
+        }
+
         public void Delete(string name)
         {
             throw new NotImplementedException();
@@ -103,10 +121,10 @@ namespace ITJakub.Core.Database.Exist
             string qry = (content == null) ? "no-data" : Encoding.UTF8.GetString(content);
             Debug.WriteLine("Query: " + method + " " + m_settings.BaseUri + relativeUri + " { " + qry + " }");
 
-            var req = (HttpWebRequest)WebRequest.Create(m_settings.BaseUri + relativeUri);
+            var req = (HttpWebRequest) WebRequest.Create(m_settings.BaseUri + relativeUri);
 
             // authentication header
-            string auth = string.Format("{0}:{1}",m_settings.DBUser, m_settings.DBPassword);
+            string auth = string.Format("{0}:{1}", m_settings.DBUser, m_settings.DBPassword);
             auth = Convert.ToBase64String(Encoding.UTF8.GetBytes(auth));
             req.Headers[HttpRequestHeader.Authorization] = "Basic " + auth;
 
@@ -114,7 +132,8 @@ namespace ITJakub.Core.Database.Exist
             req.ContentType = "application/xml";
             if (content != null && content.Length > 0)
             {
-                using(Stream reqStream = req.GetRequestStream()){
+                using (Stream reqStream = req.GetRequestStream())
+                {
                     reqStream.Write(content, 0, content.Length);
                     reqStream.Close();
                 }
