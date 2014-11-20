@@ -25,6 +25,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual IList<Keyword> Keywords { get; set; }
         public virtual IList<Author> Authors { get; set; }
         public virtual IList<Responsible> Responsibles { get; set; }
+        public virtual IList<BookPage> BookPages { get; set; }
 
         public virtual bool Equals(BookVersion other)
         {

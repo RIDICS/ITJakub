@@ -44,21 +44,21 @@ BEGIN TRAN
 
     CREATE TABLE [dbo].[Author]
     (
-	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Author(Id)] PRIMARY KEY CLUSTERED,
+	   [Id] int IDENTITY(1,1) CONSTRAINT [PK_Author(Id)] PRIMARY KEY CLUSTERED,
 	   [Name] varchar(100) NOT NULL
     )
 
 
     CREATE TABLE [dbo].[ResponsibleType] 
     (
-	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_ResponsibleType(Id)] PRIMARY KEY CLUSTERED,
+	   [Id] int IDENTITY(1,1) CONSTRAINT [PK_ResponsibleType(Id)] PRIMARY KEY CLUSTERED,
 	   [Text] varchar(100) NOT NULL,
 	   [Type] smallint NULL
     )
 
      CREATE TABLE [dbo].[Responsible]
     (
-	   [Id] [int] IDENTITY(1,1) CONSTRAINT [PK_Responsible(Id)] PRIMARY KEY CLUSTERED,
+	   [Id] int IDENTITY(1,1) CONSTRAINT [PK_Responsible(Id)] PRIMARY KEY CLUSTERED,
 	   [Text] varchar(100) NOT NULL,
 	   [ResponsibleType] int NULL CONSTRAINT [FK_Responsible(ResponsibleType)_ResponsibleType(Id)] FOREIGN KEY REFERENCES [dbo].[ResponsibleType](Id)
 	   
@@ -132,6 +132,15 @@ BEGIN TRAN
 
     )
 
+    CREATE TABLE [dbo].[BookPage] 
+    (
+	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookPage(Id)] PRIMARY KEY CLUSTERED,
+	   [Text] varchar(50) NULL,
+	   [Position] int NOT NULL,
+	   [BookVersion] bigint NOT NULL CONSTRAINT [FK_BookPage(BookVersion)_BookVersion(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion](Id)
+
+    )
+
     CREATE TABLE [dbo].[ManuscriptDescription]
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ManuscriptDescription(Id)] PRIMARY KEY CLUSTERED,
@@ -147,7 +156,7 @@ BEGIN TRAN
 
     CREATE TABLE [dbo].[BookBibl] 
     (
-	   [Id] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookBibl(Id)] PRIMARY KEY CLUSTERED,
+	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookBibl(Id)] PRIMARY KEY CLUSTERED,
 	   [Text] varchar(50) NULL,
 	   [Type] varchar(50) NULL,
 	   [Subtype] varchar(50) NULL,

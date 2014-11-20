@@ -19,7 +19,6 @@ namespace ITJakub.FileProcessing.Service
         {
             FileStream xmlFileStream = File.Open("D:\\ITJakubTestXml\\CerKal.xml", FileMode.Open);
             var bookVersion = m_xmlProcessingmanager.GetXmlMetadata(xmlFileStream);
-            bookVersion.VersionId = "verId"; //TODO get from xml in GetXmlMetadata
             var bookVersionId = m_bookVersionRepository.Create(bookVersion);
         }
     }

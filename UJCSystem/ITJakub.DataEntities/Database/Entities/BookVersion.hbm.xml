@@ -55,12 +55,14 @@
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>
-
+    <bag name="BookPages" cascade="all-delete-orphan">
+      <key column="BookVersion" />
+      <one-to-many class="BookPage" />
+    </bag>
     <bag name="Authors" table="BookVersion_Author" cascade="save-update" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Author" column="Author" />
     </bag>
-
     <bag name="Responsibles" table="BookVersion_Responsible" cascade="save-update" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Responsible" column="Responsible" />
