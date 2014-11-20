@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml.Linq;
 using ITJakub.FileStorage;
 using ITJakub.ITJakubService.DataContracts;
@@ -8,12 +9,10 @@ namespace ITJakub.ITJakubService.Core
     public class UploadManager
     {
         private readonly FilesystemManager m_filesystemManager;
-        private readonly XmlProcessingManager m_xmlProcessingManager;
 
-        public UploadManager(FilesystemManager filesystemManager, XmlProcessingManager xmlProcessingManager)
+        public UploadManager(FilesystemManager filesystemManager)
         {
             m_filesystemManager = filesystemManager;
-            m_xmlProcessingManager = xmlProcessingManager;
         }
 
         public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract uploadFileContract)
@@ -29,11 +28,7 @@ namespace ITJakub.ITJakubService.Core
 
         private ProcessedFileInfoContract GetFileInfoFromTempFile(string fileName)
         {
-            using (FileStream fileStream = m_filesystemManager.OpenTempFile(fileName))
-            {
-                XDocument fileHeader = m_xmlProcessingManager.ParseHeader(fileStream);
-                return m_xmlProcessingManager.GetInfoFromHeader(fileHeader);
-            }
+            throw new NotImplementedException();
         }
 
         public void SaveFrontImageForFile(UploadImageContract uploadImageContract)

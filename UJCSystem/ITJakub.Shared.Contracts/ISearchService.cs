@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
 
 namespace ITJakub.Shared.Contracts
 {
@@ -13,5 +14,8 @@ namespace ITJakub.Shared.Contracts
 
         [OperationContract]
         string GetBookPagesByName(string documentId, string startPageName, string endPageName);
+
+        [OperationContract]
+        IList<BookPage> GetBookPageList(string documentId);
     }
 }

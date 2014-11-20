@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using Castle.Windsor;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.ITJakubService
 {
@@ -60,6 +61,26 @@ namespace ITJakub.ITJakubService
         public void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)
         {
             m_serviceManager.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
+        }
+
+        public string GetBookPageByName(string documentId, string pageName)
+        {
+            return m_serviceManager.GetBookPageByName(documentId, pageName);
+        }
+
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName)
+        {
+            return m_serviceManager.GetBookPagesByName(documentId, startPageName, endPageName);
+        }
+
+        public string GetBookPageByPosition(string documentId, int position)
+        {
+            return m_serviceManager.GetBookPageByPosition(documentId, position);
+        }
+
+        public IList<BookPage> GetBookPageList(string documentId)
+        {
+            return m_serviceManager.GetBookPageList(documentId);
         }
     }
 

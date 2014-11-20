@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.ITJakubService
 {
@@ -62,6 +63,26 @@ namespace ITJakub.ITJakubService
         public void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)
         {
             m_bookManager.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
+        }
+
+        public string GetBookPageByName(string documentId, string pageName)
+        {
+            return m_bookManager.GetBookPageByName(documentId, pageName);
+        }
+
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName)
+        {
+            return m_bookManager.GetBookPagesByName(documentId, startPageName, endPageName);
+        }
+
+        public string GetBookPageByPosition(string documentId, int position)
+        {
+            return m_bookManager.GetBoookPagesByPosition(documentId, position);
+        }
+
+        public IList<BookPage> GetBookPageList(string documentId)
+        {
+            return m_bookManager.GetBookPagesList(documentId);
         }
     }
 }

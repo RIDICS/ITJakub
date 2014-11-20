@@ -35,6 +35,10 @@
     <Reference Include="Castle.Core">
       <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\log4net1.2.12\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime" />
@@ -47,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ItJakubFileProcessingClient.cs" />
+    <Compile Include="ItJakubServiceClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -61,6 +66,10 @@
     <ProjectReference Include="..\ITJakub.ITJakubService.Core\ITJakub.ITJakubService.Core.csproj">
       <Project>{904E449B-6F51-46C7-A730-4F4C992BDDC8}</Project>
       <Name>ITJakub.ITJakubService.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">
+      <Project>{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}</Project>
+      <Name>ITJakub.ITJakubService.DataContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>

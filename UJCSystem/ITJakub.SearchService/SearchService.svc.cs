@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Searching;
 
 namespace ITJakub.SearchService
 {
@@ -29,6 +28,10 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetBookPagesByName(documentId, startPageName, endPageName);
         }
 
+        public IList<BookPage> GetBookPageList(string documentId)
+        {
+            return m_searchServiceManager.GetBookPageList(documentId);
+        }
     }
 
     [ServiceContract]

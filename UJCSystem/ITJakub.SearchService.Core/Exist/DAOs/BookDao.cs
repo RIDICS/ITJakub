@@ -26,5 +26,11 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
             var parameters = new Dictionary<string, object> { { "document", documentId }, { "page", pagePosition } };
             return RunStoredQuery("get-pages.xquery", parameters);
         }
+
+        public string GetBookPageList(string documentId)
+        {
+            var parameters = new Dictionary<string, object> { { "document", documentId } };
+            return RunStoredQuery("get-page-list.xquery", parameters);
+        }
     }
 }

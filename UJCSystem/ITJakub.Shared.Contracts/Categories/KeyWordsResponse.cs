@@ -15,4 +15,17 @@ namespace ITJakub.Shared.Contracts.Categories
         [DataMember]
         public List<SelectionBase> CategoryTree { get; set; }
     }
+
+    [DataContract]
+    public class BookPage
+    {
+        [DataMember]
+        public List<string> FoundTerms { get; set; }
+
+        [DataMember]
+        public List<Book> FoundInBooks { get; set; }
+
+        [DataMember]
+        public List<SelectionBase> CategoryTree { get; set; }
+    }
 }

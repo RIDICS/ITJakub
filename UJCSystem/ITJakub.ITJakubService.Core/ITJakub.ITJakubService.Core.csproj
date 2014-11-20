@@ -50,7 +50,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchService\SearchServiceClient.cs" />
     <Compile Include="UploadManager.cs" />
-    <Compile Include="XmlProcessingManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.ITJakubService.Core.Container.Config" />

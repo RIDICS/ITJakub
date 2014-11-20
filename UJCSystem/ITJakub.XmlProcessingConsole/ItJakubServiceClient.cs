@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.ServiceModel;
@@ -6,9 +6,9 @@ using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using log4net;
 
-namespace ITJakub.Web.Hub
+namespace ITJakub.XmlProcessingConsole
 {
-    public class ItJakubServiceClient:ClientBase<IItJakubService>, IItJakubService
+    public class ItJakubServiceClient : ClientBase<IItJakubService>, IItJakubService
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -36,7 +36,7 @@ namespace ITJakub.Web.Hub
         {
             try
             {
-               Channel.LoginUser(providerContract, providerToken, email);
+                Channel.LoginUser(providerContract, providerToken, email);
             }
             catch (CommunicationException ex)
             {

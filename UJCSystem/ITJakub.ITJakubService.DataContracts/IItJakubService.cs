@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-using ITJakub.Shared.Contracts.Categories;
-using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
@@ -35,5 +34,17 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds);
+
+        [OperationContract]
+        string GetBookPageByName(string documentId, string pageName);
+
+        [OperationContract]
+        string GetBookPagesByName(string documentId, string startPageName, string endPageName);
+
+        [OperationContract]
+        string GetBookPageByPosition(string documentId, int position);
+
+        [OperationContract]
+        IList<BookPage> GetBookPageList(string documentId);
     }
 }
