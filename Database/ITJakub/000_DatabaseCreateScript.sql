@@ -106,9 +106,12 @@ BEGIN TRAN
     CREATE TABLE [dbo].[Transformation]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Transformation(Id)] PRIMARY KEY CLUSTERED,
-	   [ResultType] smallint NOT NULL,	    
+	   [Name] varchar (100) NOT NULL,
+	   [Description] varchar (MAX) NULL,	    
+	   [ResultFormat] smallint NOT NULL,	    
 	   [BookType] int  NULL CONSTRAINT [FK_Transformation(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
-	   [IsDefault] bit NOT NULL
+	   [IsDefault] bit NOT NULL,
+	   [IsDefaultForBookType] bit NOT NULL
     )
 
 
@@ -119,17 +122,24 @@ BEGIN TRAN
 	   [VersionId] varchar(50) NOT NULL,
 	   [Title] varchar (MAX) NULL,
 	   [SubTitle] varchar (MAX) NULL,
-	   [CreateTime]datetime NOT NULL,
+	   [CreateTime] datetime NOT NULL,
 	   [Description] varchar(MAX) NULL,
 	   [Book] bigint NOT NULL CONSTRAINT [FK_BookVersion(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book] (Id),
-	   [Transformation] int NULL CONSTRAINT [FK_BookVersion(Book)_Transformation(Id)] FOREIGN KEY REFERENCES [dbo].[Transformation] (Id),
 	   [Publisher] int NULL CONSTRAINT [FK_BookVersion(Publisher)_Publisher(Id)] FOREIGN KEY REFERENCES [dbo].[Publisher](Id),
 	   [PublishPlace] varchar(100) NULL,
 	   [PublishDate] varchar(50) NULL,
 	   [Copyright] varchar(MAX) NULL,
 	   [AvailabilityStatus] smallint NULL,
-	   [BiblText] varchar (MAX) NULL
+	   [BiblText] varchar (MAX) NULL,
+	   CONSTRAINT [Uniq_VersionId_Book] UNIQUE ([VersionId],[Book])  
 
+    )
+
+    CREATE TABLE [dbo].[BookVersion_Transformation]
+    (
+	   [Transformation] int NOT NULL CONSTRAINT [FK_BookVersion_Transformation(Transformation)_Transformation(Id)] FOREIGN KEY REFERENCES [dbo].[Transformation] (Id),
+	   [BookVersion] bigint NOT NULL CONSTRAINT [FK_BookVersion_Transformation(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion](Id),
+	   CONSTRAINT [PK_BookVersion_Transformation(Transformation)_BookVersion_Transformation(Book)] PRIMARY KEY ([Transformation], [BookVersion])
     )
 
     CREATE TABLE [dbo].[BookPage] 

@@ -8,9 +8,12 @@ namespace ITJakub.DataEntities.Database.Entities {
     public class Transformation : IEquatable<Transformation> {
 
         public virtual int Id { get; set; }
+        public virtual string Name { get; set; }
         public virtual BookType BookType { get; set; }
-        public virtual short ResultType { get; set; }
+        public virtual short ResultFormat { get; set; }
+        public virtual string Description { get; set; }
         public virtual bool IsDefault { get; set; }
+        public virtual bool IsDefaultForBookType { get; set; }
         public virtual IList<BookVersion> BookVersions { get; set; }
 
         public virtual bool Equals(Transformation other)

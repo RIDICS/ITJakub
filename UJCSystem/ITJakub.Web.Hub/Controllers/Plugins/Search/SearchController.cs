@@ -172,7 +172,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                 listBooks.Add(bookInfo);
             }
             return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);
-            ;
+            
         }
     }
 

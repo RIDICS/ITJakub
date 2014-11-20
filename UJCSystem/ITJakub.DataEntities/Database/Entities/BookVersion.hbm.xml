@@ -7,9 +7,6 @@
     <many-to-one name="Book" cascade="save-update">
       <column name="Book" sql-type="bigint" not-null="true" />
     </many-to-one>
-    <many-to-one name="Transformation" cascade="save-update">
-      <column name="Transformation" sql-type="int" not-null="false" />
-    </many-to-one>
     <many-to-one name="Publisher" cascade="save-update">
       <column name="Publisher" sql-type="int" not-null="false" />
     </many-to-one>
@@ -66,6 +63,10 @@
     <bag name="Responsibles" table="BookVersion_Responsible" cascade="save-update" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Responsible" column="Responsible" />
+    </bag>
+    <bag name="Transformations" table="BookVersion_Transformation" cascade="save-update" lazy="true">
+      <key column="BookVersion" />
+      <many-to-many class="Transformation" column="Transformation" />
     </bag>
     
     

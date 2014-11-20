@@ -43,7 +43,7 @@ namespace ITJakub.FileProcessing.Core.Processors.Header
             Book book = m_bookRepository.GetBookByGuid(bookGuid) ?? new Book {Guid = bookGuid};
             bookVersion.Book = book;
 
-            string versionId = xmlReader.GetAttribute("version");
+            string versionId = xmlReader.GetAttribute("version"); //TODO version can be null. When this happens we should generate GUID and use it (with setting flag parse warning on)
             bookVersion.VersionId = versionId;
         }
     }

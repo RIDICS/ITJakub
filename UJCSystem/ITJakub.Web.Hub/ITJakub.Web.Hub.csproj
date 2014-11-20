@@ -178,6 +178,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\Plugins\Bibliography\BibliographyController.cs" />
+    <Compile Include="Controllers\Plugins\Reader\ReaderController.cs" />
     <Compile Include="Controllers\Plugins\Search\SearchController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
