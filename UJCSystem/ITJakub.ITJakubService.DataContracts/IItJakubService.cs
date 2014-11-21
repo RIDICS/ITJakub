@@ -36,13 +36,13 @@ namespace ITJakub.ITJakubService.DataContracts
         void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds);
 
         [OperationContract]
-        string GetBookPageByName(string documentId, string pageName);
+        string GetBookPageByName(string documentId, string pageName, string resultFormat);
 
         [OperationContract]
-        string GetBookPagesByName(string documentId, string startPageName, string endPageName);
+        string GetBookPagesByName(string documentId, string startPageName, string endPageName, string resultFormat);
 
         [OperationContract]
-        string GetBookPageByPosition(string documentId, int position);
+        string GetBookPageByPosition(string documentId, int position, string resultFormat);
 
         [OperationContract]
         IList<BookPage> GetBookPageList(string documentId);

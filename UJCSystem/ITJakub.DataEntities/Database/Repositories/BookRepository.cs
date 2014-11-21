@@ -110,5 +110,11 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .SingleOrDefault<BookVersion>();
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual string FindTransformationName(string documentId, string resultFormat) //TODO return transformation entity
+        {
+            return "pageToHtml.xsl"; //TODO resolve correct transformation and return its name
+        }
     }
 }

@@ -6,19 +6,19 @@ namespace ITJakub.ITJakubService.Core.SearchService
 {
     public class SearchServiceClient : ClientBase<ISearchService>, ISearchService
     {
-        public string GetBookPageByPosition(string documentId, int pagePosition)
+        public string GetBookPageByPosition(string documentId, int pagePosition, string transformationName)
         {
-            return Channel.GetBookPageByPosition(documentId, pagePosition);
+            return Channel.GetBookPageByPosition(documentId, pagePosition, transformationName);
         }
 
-        public string GetBookPageByName(string documentId, string pageName)
+        public string GetBookPageByName(string documentId, string pageName, string transformationName)
         {
-            return Channel.GetBookPageByName(documentId, pageName);
+            return Channel.GetBookPageByName(documentId, pageName,transformationName);
         }
 
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName)
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string transformationName)
         {
-            return Channel.GetBookPagesByName(documentId, startPageName, endPageName);
+            return Channel.GetBookPagesByName(documentId, startPageName, endPageName,transformationName);
         }
 
         public IList<BookPage> GetBookPageList(string documentId)

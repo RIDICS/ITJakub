@@ -13,7 +13,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult GetBookPageByName(string bookId, string pageName)
         {
-            return Json(new { pageText = m_mainServiceClient.GetBookPageByName(bookId, pageName) }, JsonRequestBehavior.AllowGet);
+            return Json(new { pageText = m_mainServiceClient.GetBookPageByName(bookId, pageName, "html") }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetBookPageList(string bookId)
@@ -23,7 +23,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult GetBookPageByPosition(string bookId, int pagePosition)
         {
-            return Json(new { pageText = m_mainServiceClient.GetBookPageByPosition(bookId, pagePosition) }, JsonRequestBehavior.AllowGet);
+            return Json(new { pageText = m_mainServiceClient.GetBookPageByPosition(bookId, pagePosition, "html") }, JsonRequestBehavior.AllowGet);
         }
     }
 }

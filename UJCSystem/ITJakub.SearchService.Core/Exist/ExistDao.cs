@@ -14,7 +14,7 @@ namespace ITJakub.SearchService.Core.Exist
     public class ExistConnectionSettingsSkeleton
     {
         public ExistConnectionSettingsSkeleton(string baseUri, string viewsCollection, string resourcesCollection,
-            string dbUser, string dbPassword, string xQueriesRelativeUri)
+            string dbUser, string dbPassword, string xQueriesRelativeUri, string transformationRelativeUri)
         {
             BaseUri = baseUri;
             ViewsCollection = viewsCollection;
@@ -22,6 +22,7 @@ namespace ITJakub.SearchService.Core.Exist
             DBUser = dbUser;
             DBPassword = dbPassword;
             XQueriesRelativeUri = xQueriesRelativeUri;
+            TransformationRelativeUri = transformationRelativeUri;
         }
 
         public string BaseUri { get; private set; }
@@ -29,6 +30,8 @@ namespace ITJakub.SearchService.Core.Exist
         public string ResourcesCollection { get; private set; }
 
         public string XQueriesRelativeUri { get; private set; }
+
+        public string TransformationRelativeUri { get; private set; }
 
         public string DBUser { get; private set; }
         public string DBPassword { get; private set; }
@@ -40,7 +43,7 @@ namespace ITJakub.SearchService.Core.Exist
     public class ExistDao
     {
         private const int DBMaxResults = 99999;
-        
+
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ExistConnectionSettingsSkeleton m_settings;
 
@@ -52,12 +55,23 @@ namespace ITJakub.SearchService.Core.Exist
 
         public string RunStoredQuery(string queryName, Dictionary<string, object> parameters)
         {
-            var relativeUri = m_settings.XQueriesRelativeUri + queryName;
+            return RunStoredQuery(queryName, "", parameters);
+        }
+
+        public string RunStoredQuery(string queryName, string transformationName, Dictionary<string, object> parameters)
+        {
+            string relativeUri = m_settings.XQueriesRelativeUri + queryName;
+            relativeUri += "?";
+            if (!string.IsNullOrEmpty(transformationName))
+            {
+                relativeUri += "_xsl=" + m_settings.TransformationRelativeUri + transformationName + "&";
+            }
             if (parameters != null)
             {
-                relativeUri+="?";
-                relativeUri = parameters.Keys.Aggregate(relativeUri, (current, paramName) => current + (paramName + "=" + parameters[paramName] + "&"));
+                relativeUri = parameters.Keys.Aggregate(relativeUri,
+                    (current, paramName) => current + (paramName + "=" + parameters[paramName] + "&"));
             }
+
             byte[] respBytes = QueryDb("GET", relativeUri, null);
             return Encoding.UTF8.GetString(respBytes);
         }

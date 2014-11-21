@@ -9,6 +9,11 @@
             <xsl:apply-templates/>
         </span>
     </xsl:template>
+    <xsl:template match="result">
+        <div>
+            <xsl:apply-templates/>
+        </div>
+    </xsl:template>
     <xsl:template match="tei:pc">
         <span data-nlp-type="{name()}">
             <xsl:apply-templates/>

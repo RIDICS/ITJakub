@@ -13,19 +13,19 @@ namespace ITJakub.SearchService
             m_searchServiceManager = Container.Current.Resolve<SearchServiceManager>();
         }
 
-        public string GetBookPageByPosition(string documentId, int pagePosition)
+        public string GetBookPageByPosition(string documentId, int pagePosition, string transformationName)
         {
-            return m_searchServiceManager.GetBookPageByPosition(documentId, pagePosition);
+            return m_searchServiceManager.GetBookPageByPosition(documentId, pagePosition, transformationName);
         }
 
-        public string GetBookPageByName(string documentId, string pageName)
+        public string GetBookPageByName(string documentId, string pageName, string transformationName)
         {
-            return m_searchServiceManager.GetBookPageByName(documentId, pageName);
+            return m_searchServiceManager.GetBookPageByName(documentId, pageName, transformationName);
         }
 
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName)
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string transformationName)
         {
-            return m_searchServiceManager.GetBookPagesByName(documentId, startPageName, endPageName);
+            return m_searchServiceManager.GetBookPagesByName(documentId, startPageName, endPageName, transformationName);
         }
 
         public IList<BookPage> GetBookPageList(string documentId)
@@ -35,7 +35,7 @@ namespace ITJakub.SearchService
     }
 
     [ServiceContract]
-    public interface ISearchServiceLocal:ISearchService
+    public interface ISearchServiceLocal : ISearchService
     {
     }
 }

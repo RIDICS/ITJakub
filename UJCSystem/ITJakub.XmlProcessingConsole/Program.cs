@@ -8,7 +8,9 @@ namespace ITJakub.XmlProcessingConsole
         static void Main(string[] args)
         {
             var mainService = new ItJakubServiceClient();
-            var pageList = mainService.GetBookPageList("{125A0032-03B5-40EC-B68D-80473CC5653A}");
+            const string bookId = "{125A0032-03B5-40EC-B68D-80473CC5653A}";
+            var pageList = mainService.GetBookPageList(bookId);
+            var htmlPage = mainService.GetBookPageByPosition(bookId, 1, "html");
 
             var searchService = new SearchServiceClient();
             //var result = searchService.GetBookPageByPosition("{125A0032-03B5-40EC-B68D-80473CC5653A}", 1);

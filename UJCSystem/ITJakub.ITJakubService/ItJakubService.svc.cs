@@ -63,19 +63,19 @@ namespace ITJakub.ITJakubService
             m_serviceManager.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
         }
 
-        public string GetBookPageByName(string documentId, string pageName)
+        public string GetBookPageByName(string documentId, string pageName, string resultFormat)
         {
-            return m_serviceManager.GetBookPageByName(documentId, pageName);
+            return m_serviceManager.GetBookPageByName(documentId, pageName, resultFormat);
         }
 
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName)
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string resultFormat)
         {
-            return m_serviceManager.GetBookPagesByName(documentId, startPageName, endPageName);
+            return m_serviceManager.GetBookPagesByName(documentId, startPageName, endPageName, resultFormat);
         }
 
-        public string GetBookPageByPosition(string documentId, int position)
+        public string GetBookPageByPosition(string documentId, int position, string resultFormat)
         {
-            return m_serviceManager.GetBookPageByPosition(documentId, position);
+            return m_serviceManager.GetBookPageByPosition(documentId, position, resultFormat);
         }
 
         public IList<BookPage> GetBookPageList(string documentId)

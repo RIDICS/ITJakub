@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
 using ITJakub.SearchService.Core.Exist.DAOs;
 using ITJakub.Shared.Contracts;
 
@@ -15,35 +13,24 @@ namespace ITJakub.SearchService
             m_bookDao = bookDao;
         }
 
-        public string GetBookPageByPosition(string documentId, int pagePosition)
+        public string GetBookPageByPosition(string documentId, int pagePosition, string transformationName)
         {
-            return m_bookDao.GetPageByPositionFromStart(documentId, pagePosition);
+            return m_bookDao.GetPageByPositionFromStart(documentId, pagePosition,transformationName);
         }
 
-        public string GetBookPageByName(string documentId, string pageName)
+        public string GetBookPageByName(string documentId, string pageName, string transformationName)
         {
-            return m_bookDao.GetPageByName(documentId, pageName);
+            return m_bookDao.GetPageByName(documentId, pageName, transformationName);
         }
 
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName)
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string transformationName)
         {
-            return m_bookDao.GetPagesByName(documentId, startPageName, endPageName);
+            return m_bookDao.GetPagesByName(documentId, startPageName, endPageName, transformationName);
         }
 
         public IList<BookPage> GetBookPageList(string documentId)
         {
-            string pagesXmlAsString = m_bookDao.GetBookPageList(documentId);
-            XDocument xmlDoc = XDocument.Parse(pagesXmlAsString);
-            IEnumerable<XElement> pageBreakElements = xmlDoc.Root.Elements().Where<XElement>(element => element.Name.LocalName == "pb");
-            var pageList = new List<BookPage>();
-            int position = 0;
-            foreach (XElement pageBreakElement in pageBreakElements)
-            {
-                ++position;
-                pageList.Add(new BookPage {Position = position, Text = pageBreakElement.Attribute("n").Value});
-            }
-
-            return pageList;
+            return m_bookDao.GetBookPageList(documentId);
         }
     }
 }

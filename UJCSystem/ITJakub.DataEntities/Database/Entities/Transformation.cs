@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using ITJakub.DataEntities.Database.Entities.Enums;
 
 
 namespace ITJakub.DataEntities.Database.Entities {
@@ -10,7 +11,7 @@ namespace ITJakub.DataEntities.Database.Entities {
         public virtual int Id { get; set; }
         public virtual string Name { get; set; }
         public virtual BookType BookType { get; set; }
-        public virtual short ResultFormat { get; set; }
+        public virtual ResultFormatEnum ResultFormat { get; set; }
         public virtual string Description { get; set; }
         public virtual bool IsDefault { get; set; }
         public virtual bool IsDefaultForBookType { get; set; }

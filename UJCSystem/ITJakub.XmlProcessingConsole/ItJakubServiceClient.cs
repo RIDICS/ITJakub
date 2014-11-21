@@ -192,11 +192,11 @@ namespace ITJakub.XmlProcessingConsole
             }
         }
 
-        public string GetBookPageByName(string documentId, string pageName)
+        public string GetBookPageByName(string documentId, string pageName, string resultFormat)
         {
             try
             {
-                return Channel.GetBookPageByName(documentId, pageName);
+                return Channel.GetBookPageByName(documentId, pageName, resultFormat);
             }
             catch (CommunicationException ex)
             {
@@ -212,11 +212,11 @@ namespace ITJakub.XmlProcessingConsole
             }
         }
 
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName)
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string resultFormat)
         {
             try
             {
-                return Channel.GetBookPagesByName(documentId, startPageName, endPageName);
+                return Channel.GetBookPagesByName(documentId, startPageName, endPageName, resultFormat);
             }
             catch (CommunicationException ex)
             {
@@ -232,11 +232,11 @@ namespace ITJakub.XmlProcessingConsole
             }
         }
 
-        public string GetBookPageByPosition(string documentId, int position)
+        public string GetBookPageByPosition(string documentId, int position, string resultFormat)
         {
             try
             {
-                return Channel.GetBookPageByPosition(documentId, position);
+                return Channel.GetBookPageByPosition(documentId, position, resultFormat);
             }
             catch (CommunicationException ex)
             {

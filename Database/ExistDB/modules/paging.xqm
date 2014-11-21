@@ -77,10 +77,8 @@ declare function vw:getPagesProcess(
            {$result}
            </result>    
     </query-result>
-
-    return
-    <div>
-    {transform:transform($resultXml,doc("/apps/jacob-test/transformations/pageToHtml.xsl"),() )} </div>    
+    
+    return $resultXml
 };
 
 declare function vw:getPageNamesList(
