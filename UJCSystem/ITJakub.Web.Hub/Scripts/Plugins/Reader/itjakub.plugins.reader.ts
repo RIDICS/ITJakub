@@ -35,6 +35,7 @@ class ReaderModule {
     }
 
     private downloadPageByPosition(pagePosition: number, pageContainer: JQuery) {
+        $(pageContainer).addClass("loading");
         $.ajax({
             type: "GET",
             traditional: true,
@@ -44,11 +45,13 @@ class ReaderModule {
             contentType: 'application/json',
             success: (response) => {
                 $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
             }
         });
     }
 
     private downloadPageByName(pageName: string, pageContainer: JQuery) {
+        $(pageContainer).addClass("loading");
         $.ajax({
             type: "GET",
             traditional: true,
@@ -58,6 +61,7 @@ class ReaderModule {
             contentType: 'application/json',
             success: (response) => {
                 $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
             }
         });
     }

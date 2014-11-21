@@ -214,6 +214,7 @@
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\mlceni.jpg" />
     <Content Include="Content\Images\news_background.png" />
+    <Content Include="Content\Images\Plugins\Reader\loading.gif" />
     <Content Include="Content\ITJakub.css.map">
       <DependentUpon>ITJakub.css</DependentUpon>
     </Content>

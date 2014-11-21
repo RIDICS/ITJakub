@@ -24,6 +24,7 @@ var ReaderModule = (function () {
     };
 
     ReaderModule.prototype.downloadPageByPosition = function (pagePosition, pageContainer) {
+        $(pageContainer).addClass("loading");
         $.ajax({
             type: "GET",
             traditional: true,
@@ -33,11 +34,13 @@ var ReaderModule = (function () {
             contentType: 'application/json',
             success: function (response) {
                 $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
             }
         });
     };
 
     ReaderModule.prototype.downloadPageByName = function (pageName, pageContainer) {
+        $(pageContainer).addClass("loading");
         $.ajax({
             type: "GET",
             traditional: true,
@@ -47,6 +50,7 @@ var ReaderModule = (function () {
             contentType: 'application/json',
             success: function (response) {
                 $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
             }
         });
     };
