@@ -6,9 +6,9 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
     {
         private readonly ItJakubServiceClient m_mainServiceClient;
 
-        public ReaderController(ItJakubServiceClient mainServiceClient)
+        public ReaderController()
         {
-            m_mainServiceClient = mainServiceClient;
+            m_mainServiceClient = new ItJakubServiceClient();
         }
 
         public ActionResult GetBookPageByName(string bookId, string pageName)
@@ -18,7 +18,8 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult GetBookPageList(string bookId)
         {
-            return Json(new { pageText = m_mainServiceClient.GetBookPageList(bookId) }, JsonRequestBehavior.AllowGet);
+            var pages = m_mainServiceClient.GetBookPageList(bookId);
+            return Json(new { pageList =  pages}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetBookPageByPosition(string bookId, int pagePosition)

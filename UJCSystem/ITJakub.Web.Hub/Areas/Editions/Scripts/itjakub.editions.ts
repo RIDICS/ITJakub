@@ -38,6 +38,7 @@ $(document).ready(function () {
 
 
     var readerPlugin: ReaderModule = new ReaderModule('#Reader');
-    readerPlugin.makeReader(<IBookInfo>new Object);
+    var book = new BookInfo();
+    readerPlugin.makeReader(book);
 
 });

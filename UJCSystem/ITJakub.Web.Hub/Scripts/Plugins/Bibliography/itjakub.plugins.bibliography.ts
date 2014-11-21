@@ -88,7 +88,6 @@ class BibliographyModule {
 
 }
 
-
 interface IBookInfo {
     BookId: string;
     BookType: string;
@@ -109,6 +108,31 @@ interface IBookInfo {
     Authors: IAuthor[];
     Description: string;
     Year: number;
+}
+
+
+//TODO remove or move to separated file
+class BookInfo implements  IBookInfo {
+    BookId = "{125A0032-03B5-40EC-B68D-80473CC5653A}";
+    BookType: string;
+    Name = "PasKal";
+    Editor: string;
+    Pattern: string;
+    SourceAbbreviation: string;
+    RelicAbbreviation: string;
+    LiteraryType: string;
+    LiteraryGenre: string;
+    LastEditation: string;
+    EditationNote: string; //anchor href?
+    Copyright: string;
+    Pages: IPage[];
+    Archive: IArchive;
+    Century: number;
+    Sign: string;
+    Authors: IAuthor[];
+    Description: string;
+    Year: number;
+
 }
 
 interface IPage {

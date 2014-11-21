@@ -3,15 +3,62 @@ var ReaderModule = (function () {
     function ReaderModule(readerContainer) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
+    }
+    ReaderModule.prototype.downloadPageList = function () {
+        var _this = this;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            async: false,
+            data: { bookId: this.book.BookId },
+            url: "/Reader/GetBookPageList",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                var pages = response["pageList"];
+                for (var i = 0; i < pages.length; i++) {
+                    _this.pages.push(pages[i]["Text"]);
+                }
+            }
+        });
+    };
+
+    ReaderModule.prototype.downloadPageByPosition = function (pagePosition, pageContainer) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.book.BookId, pagePosition: pagePosition },
+            url: "/Reader/GetBookPageByPosition",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $(pageContainer).append(response["pageText"]);
+            }
+        });
+    };
+
+    ReaderModule.prototype.downloadPageByName = function (pageName, pageContainer) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.book.BookId, pageName: pageName },
+            url: "/Reader/GetBookPageByName",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $(pageContainer).append(response["pageText"]);
+            }
+        });
+    };
+
+    ReaderModule.prototype.makeReader = function (book) {
+        var _this = this;
+        this.book = book;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array();
-        for (var i = 0; i < 15; i++) {
-            this.pages.push(i.toString() + "r");
-        }
-    }
-    ReaderModule.prototype.makeReader = function (book) {
-        var _this = this;
+        this.downloadPageList();
+
         $(this.readerContainer).empty();
         var readerDiv = document.createElement('div');
         $(readerDiv).addClass('reader');
@@ -59,7 +106,7 @@ var ReaderModule = (function () {
     ReaderModule.prototype.makeTitle = function (book) {
         var titleDiv = document.createElement('div');
         $(titleDiv).addClass('title');
-        titleDiv.innerHTML = "Stitny ze stitneho, Tomas : [Stitensky sbornik klementinsky]";
+        titleDiv.innerHTML = book.Name;
         return titleDiv;
     };
 
@@ -414,9 +461,7 @@ var ReaderModule = (function () {
         var pageDiv = $(this.readerContainer).find('div.reader-text').find('#page_' + page);
         var pageLoaded = $(pageDiv).data('loaded');
         if (typeof pageLoaded === 'undefined' || !pageLoaded) {
-            for (var i = 0; i < 30000; i++) {
-                $(pageDiv).append(' ' + page);
-            }
+            this.downloadPageByName(page, $(pageDiv));
             $(pageDiv).data('loaded', true);
         }
         if (scrollTo) {

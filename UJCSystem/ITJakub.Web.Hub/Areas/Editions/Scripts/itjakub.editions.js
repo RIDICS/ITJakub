@@ -34,6 +34,7 @@ $(document).ready(function () {
     });
 
     var readerPlugin = new ReaderModule('#Reader');
-    readerPlugin.makeReader(new Object);
+    var book = new BookInfo();
+    readerPlugin.makeReader(book);
 });
 //# sourceMappingURL=itjakub.editions.js.map

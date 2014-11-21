@@ -8,20 +8,67 @@ class ReaderModule {
     actualPageIndex: number;
     pages: Array<string>;
     pagerDisplayPages: number;
+    book : IBookInfo;
 
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
-        this.actualPageIndex = 0;
-        this.sliderOnPage = 0;
-        this.pages = new Array<string>();
-        for (var i = 0; i < 15; i++) { //TODO pages should be loaded by ajax
-            this.pages.push(i.toString() + "r");
-        }
+    }
 
+    private downloadPageList() {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            async: false,
+            data: { bookId: this.book.BookId },
+            url: "/Reader/GetBookPageList",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                var pages = response["pageList"];
+                for (var i = 0; i < pages.length; i++) {
+                    this.pages.push(pages[i]["Text"]);
+                }
+                   
+            }
+        });
+    }
+
+    private downloadPageByPosition(pagePosition: number, pageContainer: JQuery) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.book.BookId, pagePosition : pagePosition },
+            url: "/Reader/GetBookPageByPosition",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                $(pageContainer).append(response["pageText"]);
+            }
+        });
+    }
+
+    private downloadPageByName(pageName: string, pageContainer: JQuery) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.book.BookId, pageName: pageName },
+            url: "/Reader/GetBookPageByName",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                $(pageContainer).append(response["pageText"]);
+            }
+        });
     }
 
     public makeReader(book: IBookInfo) {
+        this.book = book;
+        this.actualPageIndex = 0;
+        this.sliderOnPage = 0;
+        this.pages = new Array<string>();
+        this.downloadPageList();
+
         $(this.readerContainer).empty();
         var readerDiv: HTMLDivElement = document.createElement('div');
         $(readerDiv).addClass('reader');
@@ -71,7 +118,7 @@ class ReaderModule {
     private makeTitle(book: IBookInfo): HTMLDivElement {
         var titleDiv: HTMLDivElement = document.createElement('div');
         $(titleDiv).addClass('title');
-        titleDiv.innerHTML = "Stitny ze stitneho, Tomas : [Stitensky sbornik klementinsky]";
+        titleDiv.innerHTML = book.Name;
         return titleDiv;
     }
 
@@ -426,10 +473,7 @@ class ReaderModule {
         var pageDiv = $(this.readerContainer).find('div.reader-text').find('#page_' + page);
         var pageLoaded: boolean = $(pageDiv).data('loaded');
         if (typeof pageLoaded === 'undefined' || !pageLoaded) {
-            //TODO load page content here
-            for (var i = 0; i < 30000; i++) {
-                $(pageDiv).append(' ' + page);
-            }
+            this.downloadPageByName(page, $(pageDiv));
             $(pageDiv).data('loaded', true);
         }
         if (scrollTo) {

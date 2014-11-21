@@ -82,4 +82,13 @@ var BibliographyModule = (function () {
     };
     return BibliographyModule;
 })();
+
+//TODO remove or move to separated file
+var BookInfo = (function () {
+    function BookInfo() {
+        this.BookId = "{125A0032-03B5-40EC-B68D-80473CC5653A}";
+        this.Name = "PasKal";
+    }
+    return BookInfo;
+})();
 //# sourceMappingURL=itjakub.plugins.bibliography.js.map
