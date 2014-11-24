@@ -8,11 +8,15 @@ class ReaderModule {
     actualPageIndex: number;
     pages: Array<string>;
     pagerDisplayPages: number;
+    preloadPagesBefore: number;
+    preloadPagesAfter: number;
     book : IBookInfo;
 
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
+        this.preloadPagesBefore = 2;
+        this.preloadPagesAfter = 2;
     }
 
     private downloadPageList() {
@@ -116,7 +120,9 @@ class ReaderModule {
 
         $(this.readerContainer).append(readerDiv);
 
-        this.moveToPageNumber(0, true); //load first page and scroll to it
+        this.moveToPageNumber(0, false); //load first page
+        this.scrollTextToPositionFromTop(0);
+
     }
 
     private makeTitle(book: IBookInfo): HTMLDivElement {
@@ -413,7 +419,14 @@ class ReaderModule {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
+        for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
+            this.displayPage(this.pages[pageIndex - j], false);
+        }
         this.displayPage(this.pages[pageIndex], scrollTo);
+        for (var i = 1; pageIndex + i < this.pages.length && i <= this.preloadPagesAfter; i++) {
+            this.displayPage(this.pages[pageIndex + i], false);
+        }
+
     }
 
     moveToPage(page: string, scrollTo: boolean) {
@@ -481,11 +494,15 @@ class ReaderModule {
             $(pageDiv).data('loaded', true);
         }
         if (scrollTo) {
-            var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
-            $(scrollableContainer).scrollTop(0);
+            this.scrollTextToPositionFromTop(0);
             var topOffset = $(pageDiv).offset().top;
-            $(scrollableContainer).scrollTop(topOffset);
+            this.scrollTextToPositionFromTop(topOffset);
         }
+    }
+
+    scrollTextToPositionFromTop(topOffset: number) {
+        var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
+        $(scrollableContainer).scrollTop(topOffset);
     }
 
     addBookmark() {

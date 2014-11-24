@@ -224,6 +224,7 @@ div.container {
   z-index: 9999;
   background-color: #e5e5e5;
   max-width: 1100px;
+  width: 100%;
 }
 .reader .fullscreen-close-button {
   display: none;

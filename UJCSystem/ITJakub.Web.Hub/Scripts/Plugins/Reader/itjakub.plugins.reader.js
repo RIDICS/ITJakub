@@ -3,6 +3,8 @@ var ReaderModule = (function () {
     function ReaderModule(readerContainer) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
+        this.preloadPagesBefore = 2;
+        this.preloadPagesAfter = 2;
     }
     ReaderModule.prototype.downloadPageList = function () {
         var _this = this;
@@ -104,7 +106,8 @@ var ReaderModule = (function () {
 
         $(this.readerContainer).append(readerDiv);
 
-        this.moveToPageNumber(0, true); //load first page and scroll to it
+        this.moveToPageNumber(0, false); //load first page
+        this.scrollTextToPositionFromTop(0);
     };
 
     ReaderModule.prototype.makeTitle = function (book) {
@@ -402,7 +405,13 @@ var ReaderModule = (function () {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
+        for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
+            this.displayPage(this.pages[pageIndex - j], false);
+        }
         this.displayPage(this.pages[pageIndex], scrollTo);
+        for (var i = 1; pageIndex + i < this.pages.length && i <= this.preloadPagesAfter; i++) {
+            this.displayPage(this.pages[pageIndex + i], false);
+        }
     };
 
     ReaderModule.prototype.moveToPage = function (page, scrollTo) {
@@ -469,11 +478,15 @@ var ReaderModule = (function () {
             $(pageDiv).data('loaded', true);
         }
         if (scrollTo) {
-            var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
-            $(scrollableContainer).scrollTop(0);
+            this.scrollTextToPositionFromTop(0);
             var topOffset = $(pageDiv).offset().top;
-            $(scrollableContainer).scrollTop(topOffset);
+            this.scrollTextToPositionFromTop(topOffset);
         }
+    };
+
+    ReaderModule.prototype.scrollTextToPositionFromTop = function (topOffset) {
+        var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
+        $(scrollableContainer).scrollTop(topOffset);
     };
 
     ReaderModule.prototype.addBookmark = function () {
