@@ -115,14 +115,13 @@ class ReaderModule {
         readerHeadDiv.appendChild(controls);
         readerDiv.appendChild(readerHeadDiv);
 
-        var textArea = this.makeTextArea(book);
-        readerDiv.appendChild(textArea);
+        var readerBodyDiv = this.makeTextArea(book);
+        readerDiv.appendChild(readerBodyDiv);
 
         $(this.readerContainer).append(readerDiv);
 
         this.moveToPageNumber(0, false); //load first page
         this.scrollTextToPositionFromTop(0);
-
     }
 
     private makeTitle(book: IBookInfo): HTMLDivElement {
@@ -379,8 +378,13 @@ class ReaderModule {
     }
 
     private makeTextArea(book: IBookInfo): HTMLDivElement {
+        var bodyContainerDiv: HTMLDivElement = document.createElement('div');
+        $(bodyContainerDiv).addClass('reader-body-container content-container');
+
+
         var textContainerDiv: HTMLDivElement = document.createElement('div');
-        $(textContainerDiv).addClass('reader-text-container content-container');
+        $(textContainerDiv).addClass('reader-text-container');
+
         $(textContainerDiv).scroll((event: Event) => { //TODO make better scroll event
             var pages = $(this.readerContainer).find('.reader-text-container').find('.page');
             var minOffset = Number.MAX_VALUE;
@@ -407,7 +411,31 @@ class ReaderModule {
         }
 
         textContainerDiv.appendChild(textAreaDiv);
-        return textContainerDiv;
+
+        var searchResultDiv: HTMLDivElement = document.createElement('div');
+        $(searchResultDiv).addClass('reader-search-panel');
+        searchResultDiv.innerHTML = "search div here";
+        //$(searchResultDiv).draggable();
+        $(searchResultDiv).resizable({
+            handles: "e",
+            maxWidth: 250,
+            minWidth: 100
+        });
+        bodyContainerDiv.appendChild(searchResultDiv);
+
+        var notesDiv: HTMLDivElement = document.createElement('div');
+        $(notesDiv).addClass('reader-notes-panel');
+        notesDiv.innerHTML = "note div here";
+        $(notesDiv).draggable();
+        $(notesDiv).resizable({
+            handles: "w",
+            maxWidth: 250,
+            minWidth: 100
+        });
+        bodyContainerDiv.appendChild(notesDiv);
+
+        bodyContainerDiv.appendChild(textContainerDiv);
+        return bodyContainerDiv;
     }
 
     moveToPageNumber(pageIndex: number, scrollTo: boolean) {

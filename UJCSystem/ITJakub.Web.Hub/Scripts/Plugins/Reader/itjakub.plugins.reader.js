@@ -101,8 +101,8 @@ var ReaderModule = (function () {
         readerHeadDiv.appendChild(controls);
         readerDiv.appendChild(readerHeadDiv);
 
-        var textArea = this.makeTextArea(book);
-        readerDiv.appendChild(textArea);
+        var readerBodyDiv = this.makeTextArea(book);
+        readerDiv.appendChild(readerBodyDiv);
 
         $(this.readerContainer).append(readerDiv);
 
@@ -365,8 +365,12 @@ var ReaderModule = (function () {
 
     ReaderModule.prototype.makeTextArea = function (book) {
         var _this = this;
+        var bodyContainerDiv = document.createElement('div');
+        $(bodyContainerDiv).addClass('reader-body-container content-container');
+
         var textContainerDiv = document.createElement('div');
-        $(textContainerDiv).addClass('reader-text-container content-container');
+        $(textContainerDiv).addClass('reader-text-container');
+
         $(textContainerDiv).scroll(function (event) {
             var pages = $(_this.readerContainer).find('.reader-text-container').find('.page');
             var minOffset = Number.MAX_VALUE;
@@ -393,7 +397,32 @@ var ReaderModule = (function () {
         }
 
         textContainerDiv.appendChild(textAreaDiv);
-        return textContainerDiv;
+
+        var searchResultDiv = document.createElement('div');
+        $(searchResultDiv).addClass('reader-search-panel');
+        searchResultDiv.innerHTML = "search div here";
+
+        //$(searchResultDiv).draggable();
+        $(searchResultDiv).resizable({
+            handles: "e",
+            maxWidth: 250,
+            minWidth: 100
+        });
+        bodyContainerDiv.appendChild(searchResultDiv);
+
+        var notesDiv = document.createElement('div');
+        $(notesDiv).addClass('reader-notes-panel');
+        notesDiv.innerHTML = "note div here";
+        $(notesDiv).draggable();
+        $(notesDiv).resizable({
+            handles: "w",
+            maxWidth: 250,
+            minWidth: 100
+        });
+        bodyContainerDiv.appendChild(notesDiv);
+
+        bodyContainerDiv.appendChild(textContainerDiv);
+        return bodyContainerDiv;
     };
 
     ReaderModule.prototype.moveToPageNumber = function (pageIndex, scrollTo) {

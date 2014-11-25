@@ -462,13 +462,10 @@ ul.bib-listing li.list-item .label {
 .reader-controls {
   height: 85px;
 }
-.reader-text-container {
+.reader-body-container {
   width: auto;
   margin-top: 1px;
-  padding: 5px 30px 5px 30px;
-  height: 700px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  display: block;
 }
 .reader-controls .ui-slider {
   background: #84ced7;
@@ -644,6 +641,31 @@ ul.bib-listing li.list-item .label {
 .loading {
   background: url(Images/Plugins/Reader/loading.gif) no-repeat center;
   margin: 0 auto;
+}
+.reader-search-panel {
+  float: left;
+  background-color: white;
+  width: 100px;
+  height: 100%;
+}
+.reader-search-panel.ui-draggable,
+.reader-notes-panel.ui-draggable {
+  position: absolute!important;
+  z-index: 9999;
+}
+.reader-notes-panel {
+  float: right;
+  background-color: white;
+  width: 100px;
+  height: 100%;
+  margin: 5px;
+}
+.reader-text-container {
+  padding: 5px 30px 5px 30px;
+  height: 700px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: auto;
 }
 .main_logo {
   margin: 10px;
