@@ -116,6 +116,7 @@
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\HighlightMeConverter.cs" />
     <Compile Include="Converter\TimeSpanConverter.cs" />
+    <Compile Include="EditorBaseViewModel.cs" />
     <Compile Include="Enum\ApplicationCategory.cs" />
     <Compile Include="Enum\ApplicationRoleType.cs" />
     <Compile Include="Enum\ApplicationType.cs" />
