@@ -398,28 +398,57 @@ var ReaderModule = (function () {
 
         textContainerDiv.appendChild(textAreaDiv);
 
-        var searchResultDiv = document.createElement('div');
-        $(searchResultDiv).addClass('reader-search-panel');
-        searchResultDiv.innerHTML = "search div here";
-
-        //$(searchResultDiv).draggable();
-        $(searchResultDiv).resizable({
+        var leftPanelDiv = document.createElement('div');
+        $(leftPanelDiv).addClass('reader-left-panel');
+        $(leftPanelDiv).resizable({
             handles: "e",
             maxWidth: 250,
             minWidth: 100
         });
-        bodyContainerDiv.appendChild(searchResultDiv);
 
-        var notesDiv = document.createElement('div');
-        $(notesDiv).addClass('reader-notes-panel');
-        notesDiv.innerHTML = "note div here";
-        $(notesDiv).draggable();
-        $(notesDiv).resizable({
-            handles: "w",
-            maxWidth: 250,
-            minWidth: 100
+        var leftPanelHeaderDiv = document.createElement('div');
+        $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
+
+        var searchResultCloseButton = document.createElement("button");
+        $(searchResultCloseButton).addClass('close-button');
+        $(searchResultCloseButton).click(function (event) {
+            $(leftPanelDiv).hide();
         });
-        bodyContainerDiv.appendChild(notesDiv);
+
+        var searchCloseSpan = document.createElement("span");
+        $(searchCloseSpan).addClass('glyphicon glyphicon-remove');
+        $(searchResultCloseButton).append(searchCloseSpan);
+
+        leftPanelHeaderDiv.appendChild(searchResultCloseButton);
+
+        var leftPanelMoveButton = document.createElement("button");
+        $(leftPanelMoveButton).addClass('move-button');
+        $(leftPanelMoveButton).click(function (event) {
+            if ($(leftPanelDiv).data('ui-draggable')) {
+                $(leftPanelDiv).draggable("destroy");
+                $(leftPanelDiv).css('top', '');
+                $(leftPanelDiv).css('left', '');
+                $(leftPanelDiv).css('width', 250);
+                $(leftPanelDiv).resizable("option", "maxWidth", 250);
+                $(leftPanelDiv).resizable("option", "handles", "e");
+            } else {
+                $(leftPanelDiv).draggable({ containment: "body", appendTo: "body" });
+                $(leftPanelDiv).resizable("option", "maxWidth", 500);
+                $(leftPanelDiv).resizable("option", "handles", "all");
+            }
+        });
+
+        var searchMoveSpan = document.createElement("span");
+        $(searchMoveSpan).addClass('glyphicon glyphicon-move');
+        $(leftPanelMoveButton).append(searchMoveSpan);
+
+        leftPanelHeaderDiv.appendChild(leftPanelMoveButton);
+
+        leftPanelDiv.appendChild(leftPanelHeaderDiv);
+
+        $(leftPanelDiv).append("search result here");
+
+        bodyContainerDiv.appendChild(leftPanelDiv);
 
         bodyContainerDiv.appendChild(textContainerDiv);
         return bodyContainerDiv;

@@ -1,4 +1,6 @@
 ﻿@import "../../ITJakub.DefaultTheme.less";
+@reader-body-height: 700px;
+
 
 .reader {
     position: relative;
@@ -225,31 +227,48 @@
 }
 
 
-.reader-search-panel {
+.reader-left-panel {
     float : left;
     background-color : white;
     width : 100px;
-    height : 100%;
+    padding: 3px;
+    height: @reader-body-height;
+    border-right: 1px solid @background-color;
 }
 
-.reader-search-panel.ui-draggable, .reader-notes-panel.ui-draggable {
+.reader-left-panel.ui-draggable {
     position : absolute!important;
+    border: 1px solid @background-color;
     z-index : 9999;
-}
-
-.reader-notes-panel {
-    float : right;
-    background-color : white;
-    width : 100px;
-    height : 100%;
-    margin : 5px;
 }
 
 .reader-text-container{
     padding: 5px 30px 5px 30px;
-    height: 700px;
+    height: @reader-body-height;
     overflow-y: auto;
     overflow-x: hidden;
     width: auto;
+}
+
+.close-button, .move-button {
+    float: right;
+    color: lightgray;
+    display: inline-block;
+    background-color: white;
+    border: none;
+    outline: 0;
+    padding: 2px;
+    margin-left: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.close-button:hover, .move-button:hover {
+    color: @item-background-color;
+}
+
+.reader-left-panel-header {
+     padding: 5px;
+     margin-bottom : 15px;
 }
 
