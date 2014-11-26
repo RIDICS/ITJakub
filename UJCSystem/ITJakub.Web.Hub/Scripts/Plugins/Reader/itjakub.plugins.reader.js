@@ -327,18 +327,47 @@ var ReaderModule = (function () {
         $(commentButton).addClass('comment-button');
 
         var commentSpan = document.createElement("span");
-        $(commentSpan).addClass('glyphicon glyphicon-comment');
+        $(commentSpan).addClass('glyphicon glyphicon-cog');
         $(commentButton).append(commentSpan);
 
         var commentSpanText = document.createElement("span");
         $(commentSpanText).addClass('button-text');
-        $(commentSpanText).append("Zobrazit komentář");
+        $(commentSpanText).append("Nastavení prohlížení");
         $(commentButton).append(commentSpanText);
 
         $(commentButton).click(function (event) {
+            var innerContent = "Obsah editacniho panelu";
+            var panelId = "EditacniPanel";
+            if (!_this.existSidePanel(panelId)) {
+                _this.loadSidePanel(_this.makeSidePanel(innerContent, panelId));
+            }
+            _this.changeSidePanelVisibility("EditacniPanel");
         });
 
         buttonsDiv.appendChild(commentButton);
+
+        var searchResultButton = document.createElement("button");
+        $(searchResultButton).addClass('search-button');
+
+        var searchSpan = document.createElement("span");
+        $(searchSpan).addClass('glyphicon glyphicon-search');
+        $(searchResultButton).append(searchSpan);
+
+        var searchSpanText = document.createElement("span");
+        $(searchSpanText).addClass('button-text');
+        $(searchSpanText).append("Výsledky vyhledávání");
+        $(searchResultButton).append(searchSpanText);
+
+        $(searchResultButton).click(function (event) {
+            var innerContent = "Obsah vyhledavaciho panelu";
+            var panelId = "SearchPanel";
+            if (!_this.existSidePanel(panelId)) {
+                _this.loadSidePanel(_this.makeSidePanel(innerContent, panelId));
+            }
+            _this.changeSidePanelVisibility("SearchPanel");
+        });
+
+        buttonsDiv.appendChild(searchResultButton);
 
         var contentButton = document.createElement("button");
         $(contentButton).addClass('content-button');
@@ -358,7 +387,7 @@ var ReaderModule = (function () {
             if (!_this.existSidePanel(panelId)) {
                 _this.loadSidePanel(_this.makeSidePanel(innerContent, panelId));
             }
-            _this.showSidePanel("ObsahPanel");
+            _this.changeSidePanelVisibility("ObsahPanel");
         });
 
         buttonsDiv.appendChild(contentButton);
@@ -394,9 +423,9 @@ var ReaderModule = (function () {
 
         leftPanelHeaderDiv.appendChild(sidePanelCloseButton);
 
-        var leftPanelMoveButton = document.createElement("button");
-        $(leftPanelMoveButton).addClass('move-button');
-        $(leftPanelMoveButton).click(function (event) {
+        var leftPanelPinButton = document.createElement("button");
+        $(leftPanelPinButton).addClass('pin-button');
+        $(leftPanelPinButton).click(function (event) {
             if ($(leftPanelDiv).data('ui-draggable')) {
                 $(leftPanelDiv).draggable("destroy");
                 $(leftPanelDiv).css('top', '');
@@ -412,11 +441,11 @@ var ReaderModule = (function () {
             }
         });
 
-        var searchMoveSpan = document.createElement("span");
-        $(searchMoveSpan).addClass('glyphicon glyphicon-move');
-        $(leftPanelMoveButton).append(searchMoveSpan);
+        var pinSpan = document.createElement("span");
+        $(pinSpan).addClass('glyphicon glyphicon-pushpin');
+        $(leftPanelPinButton).append(pinSpan);
 
-        leftPanelHeaderDiv.appendChild(leftPanelMoveButton);
+        leftPanelHeaderDiv.appendChild(leftPanelPinButton);
 
         leftPanelDiv.appendChild(leftPanelHeaderDiv);
 
@@ -436,12 +465,20 @@ var ReaderModule = (function () {
         $(bodyContainerDiv).prepend(sidePanel);
     };
 
-    ReaderModule.prototype.showSidePanel = function (sidePanelIdentificator) {
+    ReaderModule.prototype.changeSidePanelVisibility = function (sidePanelIdentificator) {
         var sidePanel = document.getElementById(sidePanelIdentificator);
-        if ($(sidePanel).data('ui-draggable')) {
-            $(sidePanel).show();
+        if ($(sidePanel).is(':visible')) {
+            if ($(sidePanel).data('ui-draggable')) {
+                $(sidePanel).hide();
+            } else {
+                $(sidePanel).hide('slide', { direction: 'left' });
+            }
         } else {
-            $(sidePanel).show('slide', { direction: 'left' });
+            if ($(sidePanel).data('ui-draggable')) {
+                $(sidePanel).show();
+            } else {
+                $(sidePanel).show('slide', { direction: 'left' });
+            }
         }
     };
 
@@ -479,8 +516,6 @@ var ReaderModule = (function () {
         }
 
         textContainerDiv.appendChild(textAreaDiv);
-
-        $(bodyContainerDiv).prepend(this.makeSidePanel("testing", "testId"));
 
         bodyContainerDiv.appendChild(textContainerDiv);
         return bodyContainerDiv;

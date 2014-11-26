@@ -171,7 +171,7 @@ div.container {
   border: none;
   outline: 0;
   text-align: center;
-  width: 70px;
+  width: 72px;
   font-size: 0.9em;
 }
 .reader-controls .buttons button:hover {
@@ -249,7 +249,7 @@ div.container {
 .reader-left-panel {
   float: left;
   background-color: white;
-  width: 100px;
+  width: 250px;
   padding: 3px;
   height: 700px;
   border-right: 1px solid #e5e5e5;
@@ -267,7 +267,7 @@ div.container {
   width: auto;
 }
 .close-button,
-.move-button {
+.pin-button {
   float: right;
   color: lightgray;
   display: inline-block;
@@ -280,7 +280,7 @@ div.container {
   vertical-align: middle;
 }
 .close-button:hover,
-.move-button:hover {
+.pin-button:hover {
   color: #84ced7;
 }
 .reader-left-panel-header {
