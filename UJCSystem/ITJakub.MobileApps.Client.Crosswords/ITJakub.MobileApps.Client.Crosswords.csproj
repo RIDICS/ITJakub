@@ -160,6 +160,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ExampleTask.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

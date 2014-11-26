@@ -201,6 +201,7 @@
     <Content Include="Icon\time-26.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ExampleTask.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

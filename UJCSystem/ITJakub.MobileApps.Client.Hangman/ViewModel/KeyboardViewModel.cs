@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -55,11 +56,21 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         public void SetSpecialLetters(IEnumerable<char> letters)
         {
-            Keys = new ObservableCollection<KeyViewModel>(m_basicKeys);
+            var keyList = m_basicKeys.ToList();
             
             foreach (var capitalLetter in letters.Select(Char.ToUpper).Where(letter => letter < 'A' || letter > 'Z').Distinct())
             {
-                Keys.Add(new KeyViewModel(capitalLetter));
+                keyList.Add(new KeyViewModel(capitalLetter));
+            }
+            
+            Keys = new ObservableCollection<KeyViewModel>(keyList.OrderBy(keyViewModel => keyViewModel.Letter.ToString(), new StringComparer()));
+        }
+
+        private class StringComparer : IComparer<string>
+        {
+            public int Compare(string x, string y)
+            {
+                return string.Compare(x, y, StringComparison.CurrentCultureIgnoreCase);
             }
         }
     }

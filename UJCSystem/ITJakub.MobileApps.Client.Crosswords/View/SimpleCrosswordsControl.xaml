@@ -76,7 +76,7 @@
                                                       MaxLength="{Binding Cells.Count}"
                                                       Width="{Binding Cells.Count, Converter={StaticResource LengthToWidthConverter}, ConverterParameter=48}"
                                                       Text="{Binding Word, Mode=TwoWay}"
-                                                      KeyboardLetters="žščř" />
+                                                      KeyboardLetters="äāąćèľłḿǫṕŕſüūźъь" />
                     </Grid>
                 </Grid>
             </DataTemplate>

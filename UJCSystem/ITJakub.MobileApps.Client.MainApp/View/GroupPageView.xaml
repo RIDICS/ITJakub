@@ -82,7 +82,8 @@
             <StackPanel Orientation="Vertical"
                         Margin="120,0,0,0"
                         Grid.Column="0">
-                <TextBlock Style="{StaticResource MyLabelStyle}">
+                <TextBlock Style="{StaticResource MyLabelStyle}"
+                           IsTextSelectionEnabled="True">
                     <Run Text="Kód skupiny:" />
                     <Run Text="{Binding GroupInfo.GroupCode}" />
                 </TextBlock>
