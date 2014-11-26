@@ -60,6 +60,11 @@
                                                 </DiscreteObjectKeyFrame.Value>
                                             </DiscreteObjectKeyFrame>
                                         </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ShowKeyboardButton"
+                                                                       Storyboard.TargetProperty="Opacity"
+                                                                       Duration="0">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0.0" />
+                                        </ObjectAnimationUsingKeyFrames>
                                         <!--<DoubleAnimation Storyboard.TargetName="BackgroundElement"
                                                      Storyboard.TargetProperty="Opacity"
                                                      Duration="0"
@@ -95,6 +100,11 @@
                                                 </DiscreteObjectKeyFrame.Value>
                                             </DiscreteObjectKeyFrame>
                                         </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ShowKeyboardButton"
+                                                                       Storyboard.TargetProperty="Opacity"
+                                                                       Duration="0">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="1.0" />
+                                        </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="FlyoutOpenState">
@@ -107,6 +117,11 @@
                                                     <Visibility>Visible</Visibility>
                                                 </DiscreteObjectKeyFrame.Value>
                                             </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ShowKeyboardButton"
+                                                                       Storyboard.TargetProperty="Opacity"
+                                                                       Duration="0">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="1.0" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -162,22 +177,30 @@
                             </Button.Content>
                             <Button.Flyout>
                                 <Flyout>
-                                    <ItemsControl MaxWidth="400">
-                                        <!--TODO bind KeyboardLetters to ItemsControl.ItemsSource-->
+                                    <GridView MaxWidth="400"
+                                              ItemsSource="{TemplateBinding KeyboardViewModel}"
+                                              IsItemClickEnabled="True"
+                                              SelectionMode="None">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <control:AlignableWrapPanel HorizontalContentAlignment="Center" />
+                                                <control:AlignableWrapPanel HorizontalContentAlignment="Center"
+                                                                            MaxWidth="400" />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Button Content="{Binding}"
-                                                        Width="70"
-                                                        Height="60"
-                                                        FontSize="30" />
+                                                <Grid Width="70"
+                                                      Height="60"
+                                                      Background="DarkGray">
+                                                    <TextBlock Text="{Binding Label}"
+                                                               FontSize="30"
+                                                               VerticalAlignment="Center"
+                                                               HorizontalAlignment="Center"
+                                                               Foreground="{StaticResource ButtonForegroundThemeBrush}" />
+                                                </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+                                    </GridView>
                                 </Flyout>
                             </Button.Flyout>
                         </Button>

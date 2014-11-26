@@ -1,8 +1,8 @@
-﻿using Windows.System;
+﻿using System.Collections.ObjectModel;
+using System.Text;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-
-// The Templated Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234235
 using Windows.UI.Xaml.Input;
 
 namespace ITJakub.MobileApps.Client.Crosswords.View
@@ -77,6 +77,27 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
             }
         }
 
+        private void InsertLetter(char letter)
+        {
+            var selectionStart = SelectionStart;
+            var newText = new StringBuilder(Text);
+            if (selectionStart < newText.Length)
+            {
+                newText[selectionStart] = letter;
+            }
+            else if (selectionStart < MaxLength)
+            {
+                newText.Append(letter);
+            }
+            else
+            {
+                return;
+            }
+            
+            Text = newText.ToString();
+            SelectionStart = selectionStart + 1;
+        }
+
         public Thickness CursorMargin
         {
             get { return (Thickness) GetValue(CursorMarginProperty); }
@@ -89,11 +110,37 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
             set { SetValue(KeyboardLettersProperty, value); }
         }
 
+        public ObservableCollection<ButtonViewModel> KeyboardViewModel
+        {
+            get { return (ObservableCollection<ButtonViewModel>) GetValue(KeyboardViewModelProperty); }
+        }
+
         public static readonly DependencyProperty CursorMarginProperty = DependencyProperty.Register("CursorMargin",
             typeof(Thickness), typeof(CrosswordTextBoxControl), new PropertyMetadata(new Thickness(-1,0,0,0)));
 
         public static readonly DependencyProperty KeyboardLettersProperty = DependencyProperty.Register("KeyboardLetters",
-            typeof (string), typeof (CrosswordTextBoxControl), new PropertyMetadata(default(string)));
+            typeof (string), typeof (CrosswordTextBoxControl), new PropertyMetadata(string.Empty, OnKeyboardLettersChanged));
+
+        public static readonly DependencyProperty KeyboardViewModelProperty =
+            DependencyProperty.Register("KeyboardViewModel", typeof (ObservableCollection<ButtonViewModel>),
+                typeof (CrosswordTextBoxControl), new PropertyMetadata(new ObservableCollection<ButtonViewModel>()));
+
+        private static void OnKeyboardLettersChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var textBox = d as CrosswordTextBoxControl;
+            var text = e.NewValue as string;
+            if (textBox == null || text == null)
+                return;
+
+            textBox.KeyboardViewModel.Clear();
+            foreach (var letter in text)
+            {
+                textBox.KeyboardViewModel.Add(new ButtonViewModel
+                {
+                    Label = letter
+                });
+            }
+        }
 
 
         // Section for handling Visual States
@@ -117,6 +164,21 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
                 m_textBoxState = TextBoxState.KeyboardShown;
             };
             showKeyboardButton.Flyout.Closed += (sender, o) => Focus(FocusState.Programmatic);
+
+
+            var gridView = ((Flyout) showKeyboardButton.Flyout).Content as GridView;
+            if (gridView == null)
+                return;
+
+            // Add event handler for Keyboard letter click
+            gridView.ItemClick += (sender, args) =>
+            {
+                var viewModel = args.ClickedItem as ButtonViewModel;
+                if (viewModel == null)
+                    return;
+
+                InsertLetter(viewModel.Label);
+            };
         }
 
         protected override void OnLostFocus(RoutedEventArgs e)
@@ -155,5 +217,10 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
             base.OnGotFocus(e);
             m_textBoxState = TextBoxState.Focused;
         }
+    }
+
+    public class ButtonViewModel
+    {
+        public char Label { get; set; }
     }
 }
