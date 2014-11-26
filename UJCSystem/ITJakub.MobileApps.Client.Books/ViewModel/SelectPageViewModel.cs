@@ -226,6 +226,9 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 
         private void Save()
         {
+            if (SelectedPage == null || LoadingPage)
+                return;
+
             m_navigationService.GoFromBookSelection();
             SelectedPage.BookInfo = Book;
             Messenger.Default.Send(new SelectedPageMessage

@@ -1,18 +1,24 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ITJakub.MobileApps.Client.Fillwords.DataContract
 {
     public class FillwordsTaskContract
     {
+        [JsonProperty("DocumentRtf")]
         public string DocumentRtf { get; set; }
 
-        public IList<OptionsTaskContract> Options { get; set; } 
+        [JsonProperty("Options")]
+        public IList<WordOptionsTaskContract> Options { get; set; } 
 
-        public class OptionsTaskContract
+
+        public class WordOptionsTaskContract
         {
+            [JsonProperty("WordPosition")]
             public int WordPosition { get; set; }
 
-            public IList<string> Options { get; set; } 
+            [JsonProperty("WordList")]
+            public IList<string> WordList { get; set; } 
         }
     }
 }

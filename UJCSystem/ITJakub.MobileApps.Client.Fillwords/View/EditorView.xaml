@@ -141,6 +141,11 @@
                                         Content="Přidat"
                                         Command="{Binding AddNewOptionCommand}" />
                             </Grid>
+                            <TextBlock Text="Zadané slovo už v seznamu existuje."
+                                       FontSize="12"
+                                       Margin="0,3,0,0"
+                                       Foreground="DarkCyan"
+                                       Visibility="{Binding ShowOptionExistsInfo, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             
                             <Grid HorizontalAlignment="Stretch"
                                   Margin="0,10,0,5"

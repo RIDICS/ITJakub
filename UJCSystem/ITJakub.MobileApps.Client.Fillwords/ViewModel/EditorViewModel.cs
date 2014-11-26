@@ -28,6 +28,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private bool m_errorOptionsMissing;
         private bool m_isSaveFlyoutOpen;
         private bool m_loadingPhoto;
+        private bool m_showOptionExistsInfo;
 
         public EditorViewModel(FillwordsDataService dataService)
         {
@@ -218,6 +219,16 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
+        public bool ShowOptionExistsInfo
+        {
+            get { return m_showOptionExistsInfo; }
+            set
+            {
+                m_showOptionExistsInfo = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public string TaskName { get; set; }
 
         #endregion
@@ -231,7 +242,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         public RelayCommand SelectBookCommand { get; private set; }
 
         public RelayCommand SaveTaskCommand { get; private set; }
-
+        
         #endregion
 
         private void AddNewOption()
@@ -239,15 +250,21 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             if (NewOption == string.Empty)
                 return;
 
-            var newOptionViewModel = new OptionViewModel
+            if (SelectedOption.List.Any(model => model.Word == NewOption))
             {
-                Word = NewOption,
-            };
-            newOptionViewModel.DeleteCommand = new RelayCommand(() => SelectedOption.List.Remove(newOptionViewModel));
+                ShowOptionExistsInfo = true;
+            }
+            else
+            {
+                var newOptionViewModel = new OptionViewModel {Word = NewOption};
+                var deleteCommand = new RelayCommand(() =>
+                    SelectedOption.List.Remove(newOptionViewModel)); //TODO some error with removing after save
+                newOptionViewModel.DeleteCommand = deleteCommand;
 
-            SelectedOption.List.Add(newOptionViewModel);
-
-            NewOption = string.Empty;
+                SelectedOption.List.Add(newOptionViewModel);
+                ShowOptionExistsInfo = false;
+                NewOption = string.Empty;
+            }
         }
 
         private void SaveOptions()

@@ -14,6 +14,8 @@ namespace ITJakub.MobileApps.Client.Shared.Communication
 
         IPollingService GetPollingService();
 
+        Task CreateTaskAsync(ApplicationType applicationType, string name, string data);
+
         //todo more required methods
     }
 }
