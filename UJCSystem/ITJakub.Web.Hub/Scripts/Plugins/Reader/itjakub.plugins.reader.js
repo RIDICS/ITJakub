@@ -101,7 +101,7 @@ var ReaderModule = (function () {
         readerHeadDiv.appendChild(controls);
         readerDiv.appendChild(readerHeadDiv);
 
-        var readerBodyDiv = this.makeTextArea(book);
+        var readerBodyDiv = this.makeReaderBody(book);
         readerDiv.appendChild(readerBodyDiv);
 
         $(this.readerContainer).append(readerDiv);
@@ -353,6 +353,12 @@ var ReaderModule = (function () {
         $(contentButton).append(contentSpanText);
 
         $(contentButton).click(function (event) {
+            var innerContent = "Obsah";
+            var panelId = "ObsahPanel";
+            if (!_this.existSidePanel(panelId)) {
+                _this.loadSidePanel(_this.makeSidePanel(innerContent, panelId));
+            }
+            _this.showSidePanel("ObsahPanel");
         });
 
         buttonsDiv.appendChild(contentButton);
@@ -363,7 +369,83 @@ var ReaderModule = (function () {
         return controlsDiv;
     };
 
-    ReaderModule.prototype.makeTextArea = function (book) {
+    ReaderModule.prototype.makeSidePanel = function (innerContent, identificator) {
+        var leftPanelDiv = document.createElement('div');
+        leftPanelDiv.id = identificator;
+        $(leftPanelDiv).addClass('reader-left-panel');
+        $(leftPanelDiv).resizable({
+            handles: "e",
+            maxWidth: 250,
+            minWidth: 100
+        });
+
+        var leftPanelHeaderDiv = document.createElement('div');
+        $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
+
+        var sidePanelCloseButton = document.createElement("button");
+        $(sidePanelCloseButton).addClass('close-button');
+        $(sidePanelCloseButton).click(function (event) {
+            $(leftPanelDiv).hide();
+        });
+
+        var closeSpan = document.createElement("span");
+        $(closeSpan).addClass('glyphicon glyphicon-remove');
+        $(sidePanelCloseButton).append(closeSpan);
+
+        leftPanelHeaderDiv.appendChild(sidePanelCloseButton);
+
+        var leftPanelMoveButton = document.createElement("button");
+        $(leftPanelMoveButton).addClass('move-button');
+        $(leftPanelMoveButton).click(function (event) {
+            if ($(leftPanelDiv).data('ui-draggable')) {
+                $(leftPanelDiv).draggable("destroy");
+                $(leftPanelDiv).css('top', '');
+                $(leftPanelDiv).css('left', '');
+                $(leftPanelDiv).css('width', "");
+                $(leftPanelDiv).css('height', "");
+                $(leftPanelDiv).resizable("destroy");
+                $(leftPanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
+            } else {
+                $(leftPanelDiv).draggable({ containment: "body", appendTo: "body" });
+                $(leftPanelDiv).resizable("destroy");
+                $(leftPanelDiv).resizable({ handles: "all", minWidth: 100 });
+            }
+        });
+
+        var searchMoveSpan = document.createElement("span");
+        $(searchMoveSpan).addClass('glyphicon glyphicon-move');
+        $(leftPanelMoveButton).append(searchMoveSpan);
+
+        leftPanelHeaderDiv.appendChild(leftPanelMoveButton);
+
+        leftPanelDiv.appendChild(leftPanelHeaderDiv);
+
+        $(leftPanelDiv).append(innerContent);
+
+        return leftPanelDiv;
+    };
+
+    ReaderModule.prototype.existSidePanel = function (sidePanelIdentificator) {
+        var sidePanel = document.getElementById(sidePanelIdentificator);
+        return ($(sidePanel).length > 0 && sidePanel != null);
+    };
+
+    ReaderModule.prototype.loadSidePanel = function (sidePanel) {
+        var bodyContainerDiv = $('.reader-body-container');
+        $(sidePanel).hide();
+        $(bodyContainerDiv).prepend(sidePanel);
+    };
+
+    ReaderModule.prototype.showSidePanel = function (sidePanelIdentificator) {
+        var sidePanel = document.getElementById(sidePanelIdentificator);
+        if ($(sidePanel).data('ui-draggable')) {
+            $(sidePanel).show();
+        } else {
+            $(sidePanel).show('slide', { direction: 'left' });
+        }
+    };
+
+    ReaderModule.prototype.makeReaderBody = function (book) {
         var _this = this;
         var bodyContainerDiv = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
@@ -398,57 +480,7 @@ var ReaderModule = (function () {
 
         textContainerDiv.appendChild(textAreaDiv);
 
-        var leftPanelDiv = document.createElement('div');
-        $(leftPanelDiv).addClass('reader-left-panel');
-        $(leftPanelDiv).resizable({
-            handles: "e",
-            maxWidth: 250,
-            minWidth: 100
-        });
-
-        var leftPanelHeaderDiv = document.createElement('div');
-        $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
-
-        var searchResultCloseButton = document.createElement("button");
-        $(searchResultCloseButton).addClass('close-button');
-        $(searchResultCloseButton).click(function (event) {
-            $(leftPanelDiv).hide();
-        });
-
-        var searchCloseSpan = document.createElement("span");
-        $(searchCloseSpan).addClass('glyphicon glyphicon-remove');
-        $(searchResultCloseButton).append(searchCloseSpan);
-
-        leftPanelHeaderDiv.appendChild(searchResultCloseButton);
-
-        var leftPanelMoveButton = document.createElement("button");
-        $(leftPanelMoveButton).addClass('move-button');
-        $(leftPanelMoveButton).click(function (event) {
-            if ($(leftPanelDiv).data('ui-draggable')) {
-                $(leftPanelDiv).draggable("destroy");
-                $(leftPanelDiv).css('top', '');
-                $(leftPanelDiv).css('left', '');
-                $(leftPanelDiv).css('width', 250);
-                $(leftPanelDiv).resizable("option", "maxWidth", 250);
-                $(leftPanelDiv).resizable("option", "handles", "e");
-            } else {
-                $(leftPanelDiv).draggable({ containment: "body", appendTo: "body" });
-                $(leftPanelDiv).resizable("option", "maxWidth", 500);
-                $(leftPanelDiv).resizable("option", "handles", "all");
-            }
-        });
-
-        var searchMoveSpan = document.createElement("span");
-        $(searchMoveSpan).addClass('glyphicon glyphicon-move');
-        $(leftPanelMoveButton).append(searchMoveSpan);
-
-        leftPanelHeaderDiv.appendChild(leftPanelMoveButton);
-
-        leftPanelDiv.appendChild(leftPanelHeaderDiv);
-
-        $(leftPanelDiv).append("search result here");
-
-        bodyContainerDiv.appendChild(leftPanelDiv);
+        $(bodyContainerDiv).prepend(this.makeSidePanel("testing", "testId"));
 
         bodyContainerDiv.appendChild(textContainerDiv);
         return bodyContainerDiv;

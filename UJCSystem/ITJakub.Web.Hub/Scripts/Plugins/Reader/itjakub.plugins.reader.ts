@@ -10,7 +10,8 @@ class ReaderModule {
     pagerDisplayPages: number;
     preloadPagesBefore: number;
     preloadPagesAfter: number;
-    book : IBookInfo;
+    book: IBookInfo
+    loadedBookContent : boolean;
 
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
@@ -115,7 +116,7 @@ class ReaderModule {
         readerHeadDiv.appendChild(controls);
         readerDiv.appendChild(readerHeadDiv);
 
-        var readerBodyDiv = this.makeTextArea(book);
+        var readerBodyDiv = this.makeReaderBody(book);
         readerDiv.appendChild(readerBodyDiv);
 
         $(this.readerContainer).append(readerDiv);
@@ -367,6 +368,12 @@ class ReaderModule {
         $(contentButton).append(contentSpanText);
 
         $(contentButton).click((event: Event) => {
+            var innerContent = "Obsah";
+            var panelId = "ObsahPanel";
+            if(!this.existSidePanel(panelId)){
+                this.loadSidePanel(this.makeSidePanel(innerContent, panelId));
+            }
+            this.showSidePanel("ObsahPanel");
         });
 
         buttonsDiv.appendChild(contentButton);
@@ -377,7 +384,87 @@ class ReaderModule {
         return controlsDiv;
     }
 
-    private makeTextArea(book: IBookInfo): HTMLDivElement {
+    private makeSidePanel(innerContent, identificator: string): HTMLDivElement {
+
+        var leftPanelDiv: HTMLDivElement = document.createElement('div');
+        leftPanelDiv.id = identificator;
+        $(leftPanelDiv).addClass('reader-left-panel');
+        $(leftPanelDiv).resizable({
+            handles: "e",
+            maxWidth: 250,
+            minWidth: 100
+        });
+
+        var leftPanelHeaderDiv: HTMLDivElement = document.createElement('div');
+        $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
+
+        var sidePanelCloseButton = document.createElement("button");
+        $(sidePanelCloseButton).addClass('close-button');
+        $(sidePanelCloseButton).click((event: Event) => {
+            $(leftPanelDiv).hide();
+        });
+
+        var closeSpan = document.createElement("span");
+        $(closeSpan).addClass('glyphicon glyphicon-remove');
+        $(sidePanelCloseButton).append(closeSpan);
+
+        leftPanelHeaderDiv.appendChild(sidePanelCloseButton);
+
+        var leftPanelMoveButton = document.createElement("button");
+        $(leftPanelMoveButton).addClass('move-button');
+        $(leftPanelMoveButton).click((event: Event) => {
+            if ($(leftPanelDiv).data('ui-draggable')) {
+                $(leftPanelDiv).draggable("destroy");
+                $(leftPanelDiv).css('top', '');
+                $(leftPanelDiv).css('left', '');
+                $(leftPanelDiv).css('width', "");
+                $(leftPanelDiv).css('height', "");
+                $(leftPanelDiv).resizable("destroy");
+                $(leftPanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
+
+            }
+            else {
+                $(leftPanelDiv).draggable({ containment: "body", appendTo: "body" });
+                $(leftPanelDiv).resizable("destroy");
+                $(leftPanelDiv).resizable({ handles: "all", minWidth: 100 });
+            }
+        });
+
+        var searchMoveSpan = document.createElement("span");
+        $(searchMoveSpan).addClass('glyphicon glyphicon-move');
+        $(leftPanelMoveButton).append(searchMoveSpan);
+
+        leftPanelHeaderDiv.appendChild(leftPanelMoveButton);
+
+        leftPanelDiv.appendChild(leftPanelHeaderDiv);
+
+        $(leftPanelDiv).append(innerContent);
+
+        return leftPanelDiv;
+    }
+
+    private existSidePanel(sidePanelIdentificator: string) : boolean {
+        var sidePanel = document.getElementById(sidePanelIdentificator);
+        return ($(sidePanel).length > 0 && sidePanel !=null);
+    }
+
+    private loadSidePanel(sidePanel) {
+        var bodyContainerDiv = $('.reader-body-container');
+        $(sidePanel).hide();
+        $(bodyContainerDiv).prepend(sidePanel);
+    }
+
+    private showSidePanel(sidePanelIdentificator: string) {
+        var sidePanel = document.getElementById(sidePanelIdentificator);
+        if ($(sidePanel).data('ui-draggable')) {
+            $(sidePanel).show();
+        } else {
+            $(sidePanel).show('slide', { direction: 'left' });
+        }
+      
+    }
+
+    private makeReaderBody(book: IBookInfo): HTMLDivElement {
         var bodyContainerDiv: HTMLDivElement = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
 
@@ -412,59 +499,7 @@ class ReaderModule {
 
         textContainerDiv.appendChild(textAreaDiv);
 
-        var leftPanelDiv: HTMLDivElement = document.createElement('div');
-        $(leftPanelDiv).addClass('reader-left-panel');
-        $(leftPanelDiv).resizable({
-            handles: "e",
-            maxWidth: 250,
-            minWidth: 100
-        });
-
-        var leftPanelHeaderDiv: HTMLDivElement = document.createElement('div');
-        $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
-
-        var searchResultCloseButton = document.createElement("button");
-        $(searchResultCloseButton).addClass('close-button');
-        $(searchResultCloseButton).click((event: Event) => {
-            $(leftPanelDiv).hide();
-        });
-
-        var searchCloseSpan = document.createElement("span");
-        $(searchCloseSpan).addClass('glyphicon glyphicon-remove');
-        $(searchResultCloseButton).append(searchCloseSpan);
-
-        leftPanelHeaderDiv.appendChild(searchResultCloseButton);
-
-        var leftPanelMoveButton = document.createElement("button");
-        $(leftPanelMoveButton).addClass('move-button');
-        $(leftPanelMoveButton).click((event: Event) => {
-            if ($(leftPanelDiv).data('ui-draggable')) {
-                $(leftPanelDiv).draggable("destroy");
-                $(leftPanelDiv).css('top', '');
-                $(leftPanelDiv).css('left', '');
-                $(leftPanelDiv).css('width', 250);
-                $(leftPanelDiv).resizable("option", "maxWidth", 250);
-                $(leftPanelDiv).resizable("option", "handles", "e");
-
-            }
-            else {
-                $(leftPanelDiv).draggable({ containment: "body", appendTo: "body" });
-                $(leftPanelDiv).resizable("option", "maxWidth", 500);
-                $(leftPanelDiv).resizable("option", "handles", "all");
-            }
-        });
-
-        var searchMoveSpan = document.createElement("span");
-        $(searchMoveSpan).addClass('glyphicon glyphicon-move');
-        $(leftPanelMoveButton).append(searchMoveSpan);
-
-        leftPanelHeaderDiv.appendChild(leftPanelMoveButton);
-
-        leftPanelDiv.appendChild(leftPanelHeaderDiv);
-
-        $(leftPanelDiv).append("search result here");
-
-        bodyContainerDiv.appendChild(leftPanelDiv);
+        $(bodyContainerDiv).prepend(this.makeSidePanel("testing", "testId"));
 
         bodyContainerDiv.appendChild(textContainerDiv);
         return bodyContainerDiv;
@@ -486,7 +521,6 @@ class ReaderModule {
         for (var i = 1; pageIndex + i < this.pages.length && i <= this.preloadPagesAfter; i++) {
             this.displayPage(this.pages[pageIndex + i], false);
         }
-
     }
 
     moveToPage(page: string, scrollTo: boolean) {
