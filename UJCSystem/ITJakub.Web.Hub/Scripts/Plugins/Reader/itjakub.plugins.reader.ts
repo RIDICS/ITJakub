@@ -11,7 +11,7 @@ class ReaderModule {
     preloadPagesBefore: number;
     preloadPagesAfter: number;
     book: IBookInfo
-    loadedBookContent : boolean;
+    loadedBookContent: boolean;
 
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
@@ -34,7 +34,7 @@ class ReaderModule {
                 for (var i = 0; i < pages.length; i++) {
                     this.pages.push(pages[i]["Text"]);
                 }
-                   
+
             }
         });
     }
@@ -44,7 +44,7 @@ class ReaderModule {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.book.BookId, pagePosition : pagePosition },
+            data: { bookId: this.book.BookId, pagePosition: pagePosition },
             url: "/Reader/GetBookPageByPosition",
             dataType: 'json',
             contentType: 'application/json',
@@ -347,7 +347,7 @@ class ReaderModule {
 
         var commentSpanText = document.createElement("span");
         $(commentSpanText).addClass('button-text');
-        $(commentSpanText).append("Nastavení prohlížení");
+        $(commentSpanText).append("Možnosti zobrazeni");
         $(commentButton).append(commentSpanText);
 
         $(commentButton).click((event: Event) => {
@@ -399,7 +399,7 @@ class ReaderModule {
         $(contentButton).click((event: Event) => {
             var innerContent = "Obsah";
             var panelId = "ObsahPanel";
-            if(!this.existSidePanel(panelId)){
+            if (!this.existSidePanel(panelId)) {
                 this.loadSidePanel(this.makeSidePanel(innerContent, panelId));
             }
             this.changeSidePanelVisibility("ObsahPanel");
@@ -415,10 +415,10 @@ class ReaderModule {
 
     private makeSidePanel(innerContent, identificator: string): HTMLDivElement {
 
-        var leftPanelDiv: HTMLDivElement = document.createElement('div');
-        leftPanelDiv.id = identificator;
-        $(leftPanelDiv).addClass('reader-left-panel');
-        $(leftPanelDiv).resizable({
+        var sidePanelDiv: HTMLDivElement = document.createElement('div');
+        sidePanelDiv.id = identificator;
+        $(sidePanelDiv).addClass('reader-left-panel');
+        $(sidePanelDiv).resizable({
             handles: "e",
             maxWidth: 250,
             minWidth: 100
@@ -430,7 +430,12 @@ class ReaderModule {
         var sidePanelCloseButton = document.createElement("button");
         $(sidePanelCloseButton).addClass('close-button');
         $(sidePanelCloseButton).click((event: Event) => {
-            $(leftPanelDiv).hide();
+            if ($(sidePanelDiv).data('ui-draggable')) {
+                $(sidePanelDiv).hide();
+            } else {
+                $(sidePanelDiv).hide('slide', { direction: 'left' });
+            }
+
         });
 
         var closeSpan = document.createElement("span");
@@ -442,20 +447,19 @@ class ReaderModule {
         var leftPanelPinButton = document.createElement("button");
         $(leftPanelPinButton).addClass('pin-button');
         $(leftPanelPinButton).click((event: Event) => {
-            if ($(leftPanelDiv).data('ui-draggable')) {
-                $(leftPanelDiv).draggable("destroy");
-                $(leftPanelDiv).css('top', '');
-                $(leftPanelDiv).css('left', '');
-                $(leftPanelDiv).css('width', "");
-                $(leftPanelDiv).css('height', "");
-                $(leftPanelDiv).resizable("destroy");
-                $(leftPanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
+            if ($(sidePanelDiv).data('ui-draggable')) {
+                $(sidePanelDiv).draggable("destroy");
+                $(sidePanelDiv).css('top', '');
+                $(sidePanelDiv).css('left', '');
+                $(sidePanelDiv).css('width', "");
+                $(sidePanelDiv).css('height', "");
+                $(sidePanelDiv).resizable("destroy");
+                $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
 
-            }
-            else {
-                $(leftPanelDiv).draggable({ containment: "body", appendTo: "body" });
-                $(leftPanelDiv).resizable("destroy");
-                $(leftPanelDiv).resizable({ handles: "all", minWidth: 100 });
+            } else {
+                $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
+                $(sidePanelDiv).resizable("destroy");
+                $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
             }
         });
 
@@ -465,16 +469,16 @@ class ReaderModule {
 
         leftPanelHeaderDiv.appendChild(leftPanelPinButton);
 
-        leftPanelDiv.appendChild(leftPanelHeaderDiv);
+        sidePanelDiv.appendChild(leftPanelHeaderDiv);
 
-        $(leftPanelDiv).append(innerContent);
+        $(sidePanelDiv).append(innerContent);
 
-        return leftPanelDiv;
+        return sidePanelDiv;
     }
 
-    private existSidePanel(sidePanelIdentificator: string) : boolean {
+    private existSidePanel(sidePanelIdentificator: string): boolean {
         var sidePanel = document.getElementById(sidePanelIdentificator);
-        return ($(sidePanel).length > 0 && sidePanel !=null);
+        return ($(sidePanel).length > 0 && sidePanel != null);
     }
 
     private loadSidePanel(sidePanel) {
@@ -498,7 +502,7 @@ class ReaderModule {
                 $(sidePanel).show('slide', { direction: 'left' });
             }
         }
-      
+
     }
 
     private makeReaderBody(book: IBookInfo): HTMLDivElement {
@@ -563,7 +567,7 @@ class ReaderModule {
         if (pageIndex >= 0 && pageIndex < this.pages.length) {
             this.moveToPageNumber(pageIndex, scrollTo);
         } else {
-            console.log("Page '"+page+"' does not exist");
+            console.log("Page '" + page + "' does not exist");
             //TODO tell user page not exist  
         }
     }

@@ -332,7 +332,7 @@ var ReaderModule = (function () {
 
         var commentSpanText = document.createElement("span");
         $(commentSpanText).addClass('button-text');
-        $(commentSpanText).append("Nastavení prohlížení");
+        $(commentSpanText).append("Možnosti zobrazeni");
         $(commentButton).append(commentSpanText);
 
         $(commentButton).click(function (event) {
@@ -399,10 +399,10 @@ var ReaderModule = (function () {
     };
 
     ReaderModule.prototype.makeSidePanel = function (innerContent, identificator) {
-        var leftPanelDiv = document.createElement('div');
-        leftPanelDiv.id = identificator;
-        $(leftPanelDiv).addClass('reader-left-panel');
-        $(leftPanelDiv).resizable({
+        var sidePanelDiv = document.createElement('div');
+        sidePanelDiv.id = identificator;
+        $(sidePanelDiv).addClass('reader-left-panel');
+        $(sidePanelDiv).resizable({
             handles: "e",
             maxWidth: 250,
             minWidth: 100
@@ -414,7 +414,11 @@ var ReaderModule = (function () {
         var sidePanelCloseButton = document.createElement("button");
         $(sidePanelCloseButton).addClass('close-button');
         $(sidePanelCloseButton).click(function (event) {
-            $(leftPanelDiv).hide();
+            if ($(sidePanelDiv).data('ui-draggable')) {
+                $(sidePanelDiv).hide();
+            } else {
+                $(sidePanelDiv).hide('slide', { direction: 'left' });
+            }
         });
 
         var closeSpan = document.createElement("span");
@@ -426,18 +430,18 @@ var ReaderModule = (function () {
         var leftPanelPinButton = document.createElement("button");
         $(leftPanelPinButton).addClass('pin-button');
         $(leftPanelPinButton).click(function (event) {
-            if ($(leftPanelDiv).data('ui-draggable')) {
-                $(leftPanelDiv).draggable("destroy");
-                $(leftPanelDiv).css('top', '');
-                $(leftPanelDiv).css('left', '');
-                $(leftPanelDiv).css('width', "");
-                $(leftPanelDiv).css('height', "");
-                $(leftPanelDiv).resizable("destroy");
-                $(leftPanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
+            if ($(sidePanelDiv).data('ui-draggable')) {
+                $(sidePanelDiv).draggable("destroy");
+                $(sidePanelDiv).css('top', '');
+                $(sidePanelDiv).css('left', '');
+                $(sidePanelDiv).css('width', "");
+                $(sidePanelDiv).css('height', "");
+                $(sidePanelDiv).resizable("destroy");
+                $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
             } else {
-                $(leftPanelDiv).draggable({ containment: "body", appendTo: "body" });
-                $(leftPanelDiv).resizable("destroy");
-                $(leftPanelDiv).resizable({ handles: "all", minWidth: 100 });
+                $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
+                $(sidePanelDiv).resizable("destroy");
+                $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
             }
         });
 
@@ -447,11 +451,11 @@ var ReaderModule = (function () {
 
         leftPanelHeaderDiv.appendChild(leftPanelPinButton);
 
-        leftPanelDiv.appendChild(leftPanelHeaderDiv);
+        sidePanelDiv.appendChild(leftPanelHeaderDiv);
 
-        $(leftPanelDiv).append(innerContent);
+        $(sidePanelDiv).append(innerContent);
 
-        return leftPanelDiv;
+        return sidePanelDiv;
     };
 
     ReaderModule.prototype.existSidePanel = function (sidePanelIdentificator) {
