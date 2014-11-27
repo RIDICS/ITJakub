@@ -52,12 +52,10 @@
     <Folder Include="Profiles" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ITJakub.MobileApps.ServiceContent\diagnostics.wadcfg">
-      <SubType>Content</SubType>
-    </Content>
+    <PublishProfile Include="Profiles\ITJakubMobileAppsServiceProduction.azurePubxml" />
   </ItemGroup>
   <ItemGroup>
-    <PublishProfile Include="Profiles\ITJakubMobileAppsServiceProduction.azurePubxml" />
+    <DiagnosticsConfiguration Include="ITJakub.MobileApps.ServiceContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
