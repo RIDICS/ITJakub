@@ -1,6 +1,6 @@
 xquery version "3.0";
 
-module namespace vw = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0";
+module namespace vw = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/paging";
 
 declare default collation "http://exist-db.org/collation?lang=CS-cz";
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
@@ -10,43 +10,24 @@ declare namespace util = "http://exist-db.org/xquery/util";
 declare namespace exist = "http://exist.sourceforge.net/NS/exist";
 
 
-declare function vw:getPageInPosition(
-    $collectionPath as xs:string, 
-    $documentId as xs:string, 
-    $pagePosition as xs:integer)
+declare function vw:getPageInPosition($document as node(), $pagePosition as xs:integer)
     as element() {
-    
-    let $collection := collection($collectionPath)
-    let $document := $collection//tei:TEI[tei:teiHeader/tei:fileDesc[@n=$documentId]]   
     let $startPoint := $document/descendant::tei:pb[$pagePosition]    
     let $endPoint := $startPoint/following::tei:pb[1]    
     return vw:getPagesProcess($startPoint, $endPoint)
     
 };
 
-declare function vw:getPage(
-    $collectionPath as xs:string, 
-    $documentId as xs:string, 
-    $pageName as xs:string)
+declare function vw:getPage($document as node(),$pageName as xs:string)
     as element() {
-    
-    let $collection := collection($collectionPath)
-    let $document := $collection//tei:TEI[tei:teiHeader/tei:fileDesc[@n=$documentId]]   
     let $startPoint := $document//tei:pb[@n=$pageName]
     let $endPoint := $document//tei:pb[@n=$pageName]/following::tei:pb[1]    
     return vw:getPagesProcess($startPoint, $endPoint)
     
 };
 
-declare function vw:getPages(
-    $collectionPath as xs:string, 
-    $documentId as xs:string, 
-    $startPageName as xs:string, 
-    $endPageName as xs:string)
+declare function vw:getPages($document as node(), $startPageName as xs:string, $endPageName as xs:string)
     as element() {   
-
-    let $collection := collection($collectionPath)
-    let $document := $collection//tei:TEI[tei:teiHeader/tei:fileDesc[@n=$documentId]] 
     let $startPoint := $document//tei:pb[@n=$startPageName]
     let $endPoint := $document//tei:pb[@n=$endPageName]    
     return vw:getPagesProcess($startPoint, $endPoint)
@@ -77,24 +58,14 @@ declare function vw:getPagesProcess(
            {$result}
            </result>    
     </query-result>
-    
-    return $resultXml
+
+    return $resultXml    
 };
 
-declare function vw:getPageNamesList(
-    $collectionPath as xs:string, 
-    $documentId as xs:string)
-    as element() {
-    
-    
-    let $collection := collection($collectionPath)
-    let $document := $collection//tei:TEI[tei:teiHeader/tei:fileDesc[@n=$documentId]] 
+declare function vw:getPageNamesList($document as node())
+    as node()* {    
     let $result := $document//tei:pb
-    
-    return 
-           <result>
-           {$result}
-           </result>     
+    return $result 
 };
     
 
