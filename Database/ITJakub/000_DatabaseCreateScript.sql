@@ -108,9 +108,8 @@ BEGIN TRAN
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Transformation(Id)] PRIMARY KEY CLUSTERED,
 	   [Name] varchar (100) NOT NULL,
 	   [Description] varchar (MAX) NULL,	    
-	   [ResultFormat] smallint NOT NULL,	    
+	   [OutputFormat] smallint NOT NULL,	    
 	   [BookType] int  NULL CONSTRAINT [FK_Transformation(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
-	   [IsDefault] bit NOT NULL,
 	   [IsDefaultForBookType] bit NOT NULL
     )
 
@@ -146,6 +145,7 @@ BEGIN TRAN
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookPage(Id)] PRIMARY KEY CLUSTERED,
 	   [Text] varchar(50) NULL,
+	   [XmlId] varchar(100) NULL,
 	   [Position] int NOT NULL,
 	   [BookVersion] bigint NOT NULL CONSTRAINT [FK_BookPage(BookVersion)_BookVersion(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion](Id)
 

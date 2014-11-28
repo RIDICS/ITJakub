@@ -13,11 +13,8 @@
     <many-to-one name="BookType">
       <column name="BookType" sql-type="int" not-null="false" />
     </many-to-one>
-    <property name="ResultFormat">
-      <column name="ResultFormat" sql-type="smallint" not-null="true" />
-    </property>
-    <property name="IsDefault">
-      <column name="IsDefault" sql-type="bit" not-null="true" />
+    <property name="OutputFormat">
+      <column name="OutputFormat" sql-type="smallint" not-null="true" />
     </property>
     <property name="IsDefaultForBookType">
       <column name="IsDefaultForBookType" sql-type="bit" not-null="true" />

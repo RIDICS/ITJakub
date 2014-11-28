@@ -7,6 +7,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual long Id { get; set; }
         public virtual BookVersion BookVersion { get; set; }
         public virtual string Text { get; set; }
+        public virtual string XmlId { get; set; }
         public virtual int Position { get; set; }
 
         public virtual bool Equals(BookPage other)

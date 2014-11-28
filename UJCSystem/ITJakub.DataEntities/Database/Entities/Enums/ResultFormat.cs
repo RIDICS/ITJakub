@@ -1,6 +1,6 @@
 namespace ITJakub.DataEntities.Database.Entities.Enums
 {
-    public enum ResultFormatEnum : short
+    public enum OutputFormatEnum : short
     {
         Unknown = 0,
         Html = 1,

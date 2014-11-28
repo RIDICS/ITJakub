@@ -30,24 +30,24 @@ namespace ITJakub.ITJakubService.Core
 
         public string GetBookPageByName(string documentId, string pageName, string resultFormat)
         {
-            ResultFormatEnum resultFormatEnum;
-            Enum.TryParse(resultFormat, true, out resultFormatEnum);
+            OutputFormatEnum outputFormatEnum;
+            Enum.TryParse(resultFormat, true, out outputFormatEnum);
             var transformationName = m_bookRepository.FindTransformationName(documentId, resultFormat);
             return m_searchServiceClient.GetBookPageByName(documentId, pageName, transformationName);
         }
 
         public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string resultFormat)
         {
-            ResultFormatEnum resultFormatEnum;
-            Enum.TryParse(resultFormat, true, out resultFormatEnum);
+            OutputFormatEnum outputFormatEnum;
+            Enum.TryParse(resultFormat, true, out outputFormatEnum);
             var transformationName = m_bookRepository.FindTransformationName(documentId, resultFormat);
             return m_searchServiceClient.GetBookPagesByName(documentId, startPageName, endPageName, transformationName);
         }
 
         public string GetBoookPagesByPosition(string documentId, int position, string resultFormat)
         {
-            ResultFormatEnum resultFormatEnum;
-            Enum.TryParse(resultFormat, true, out resultFormatEnum);
+            OutputFormatEnum outputFormatEnum;
+            Enum.TryParse(resultFormat, true, out outputFormatEnum);
             var transformationName = m_bookRepository.FindTransformationName(documentId, resultFormat);
             return m_searchServiceClient.GetBookPageByPosition(documentId, position, transformationName);
         }
