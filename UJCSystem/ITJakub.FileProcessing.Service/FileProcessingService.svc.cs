@@ -1,21 +1,27 @@
-﻿using Castle.Windsor;
+﻿using System.IO;
+using Castle.Windsor;
+using ITJakub.FileProcessing.Core.Sessions;
 
 namespace ITJakub.FileProcessing.Service
 {
     public class FileProcessingService : IFileProcessingService
     {
-        private readonly WindsorContainer m_container;
-        private readonly FileProcessingManager m_fileProcessingManager;
+        private readonly ResourceSessionManager m_sessionManager;
 
-        public FileProcessingService()
+        public FileProcessingService(ResourceSessionManager sessionManager)
         {
-            m_container = Container.Current;
-            m_fileProcessingManager = m_container.Resolve<FileProcessingManager>();
+            m_sessionManager = sessionManager;
         }
 
-        public void TestXml()
+        public void AddResource(string sessionId, string fileName, Stream dataStream)
         {
-            m_fileProcessingManager.TestXml();
+            m_sessionManager.AddResource(sessionId, fileName, dataStream);
+
+        }
+
+        public bool ProcessSession(string sessionId)
+        {
+            return m_sessionManager.ProcessSession(sessionId);
         }
     }
 }

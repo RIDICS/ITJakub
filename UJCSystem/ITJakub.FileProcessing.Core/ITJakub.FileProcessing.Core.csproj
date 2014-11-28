@@ -42,53 +42,56 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Processors\ConcreteInstanceListProcessorBase.cs" />
-    <Compile Include="Processors\ConcreteInstanceProcessorBase.cs" />
-    <Compile Include="Processors\Header\AuthorProcessor.cs" />
-    <Compile Include="Processors\Header\AvailabilityProcessor.cs" />
-    <Compile Include="Processors\Header\BiblProcessor.cs" />
-    <Compile Include="Processors\Header\CategoryDescriptionProcessor.cs" />
-    <Compile Include="Processors\Header\CategoryProcessor.cs" />
-    <Compile Include="Processors\Header\CatRefProcessor.cs" />
-    <Compile Include="Processors\Header\ClassDeclProcessor.cs" />
-    <Compile Include="Processors\Header\CountryProcessor.cs" />
-    <Compile Include="Processors\Header\DateProcessor.cs" />
-    <Compile Include="Processors\Header\EditionProcessor.cs" />
-    <Compile Include="Processors\Header\EditionStmtProcessor.cs" />
-    <Compile Include="Processors\Header\EncodingDescProcessor.cs" />
-    <Compile Include="Processors\Header\HistoryProcessor.cs" />
-    <Compile Include="Processors\Header\IdnoProcessor.cs" />
-    <Compile Include="Processors\Header\KeywordsProcessor.cs" />
-    <Compile Include="Processors\Header\ListBiblProcessor.cs" />
-    <Compile Include="Processors\Header\MsContentsProcessor.cs" />
-    <Compile Include="Processors\Header\MsDescProcessor.cs" />
-    <Compile Include="Processors\Header\MsIdentifierProcessor.cs" />
-    <Compile Include="Processors\Header\MsItemProcessor.cs" />
-    <Compile Include="Processors\Header\MsTitleProcessor.cs" />
-    <Compile Include="Processors\Header\OrigDateProcessor.cs" />
-    <Compile Include="Processors\Header\OriginProcessor.cs" />
-    <Compile Include="Processors\Header\PublisherProcessor.cs" />
-    <Compile Include="Processors\Header\PubPlaceProcessor.cs" />
-    <Compile Include="Processors\Header\RepositoryProcessor.cs" />
-    <Compile Include="Processors\Header\RespStmtProcessor.cs" />
-    <Compile Include="Processors\Header\SettlementProcessor.cs" />
-    <Compile Include="Processors\Header\SourceDescProcessor.cs" />
-    <Compile Include="Processors\Header\FileDescProcessor.cs" />
-    <Compile Include="Processors\Header\ProfileDescProcessor.cs" />
-    <Compile Include="Processors\DocumentProcessor.cs" />
-    <Compile Include="Processors\Header\TaxonomyProcessor.cs" />
-    <Compile Include="Processors\Header\TermProcessor.cs" />
-    <Compile Include="Processors\Header\TextClassProcessor.cs" />
-    <Compile Include="Processors\Header\TitleStmtProcessor.cs" />
-    <Compile Include="Processors\ListProcessorBase.cs" />
-    <Compile Include="Processors\Text\TextProcessor.cs" />
-    <Compile Include="Processors\Header\TitleProcessor.cs" />
-    <Compile Include="Processors\Header\PublicationStmtProcessor.cs" />
-    <Compile Include="Processors\ProcessorBase.cs" />
-    <Compile Include="Processors\Header\TeiHeaderProcessor.cs" />
-    <Compile Include="XSLT\XsltTransformationManager.cs" />
+    <Compile Include="Sessions\IResourceProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\ConcreteInstanceListProcessorBase.cs" />
+    <Compile Include="XMLProcessing\Processors\ConcreteInstanceProcessorBase.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\AuthorProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\AvailabilityProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\BiblProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\CategoryDescriptionProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\CategoryProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\CatRefProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\ClassDeclProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\CountryProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\DateProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\EditionProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\EditionStmtProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\EncodingDescProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\HistoryProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\IdnoProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\KeywordsProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\ListBiblProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\MsContentsProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\MsDescProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\MsIdentifierProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\MsItemProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\MsTitleProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\OrigDateProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\OriginProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\PublisherProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\PubPlaceProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\RepositoryProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\RespStmtProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\SettlementProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\SourceDescProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\FileDescProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\ProfileDescProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\DocumentProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\TaxonomyProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\TermProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\TextClassProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\TitleStmtProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\ListProcessorBase.cs" />
+    <Compile Include="XMLProcessing\Processors\Text\TextProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\TitleProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\PublicationStmtProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\ProcessorBase.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\TeiHeaderProcessor.cs" />
+    <Compile Include="Sessions\ResourceProcessorManger.cs" />
+    <Compile Include="Sessions\ResourceSessionManager.cs" />
+    <Compile Include="XMLProcessing\XSLT\XsltTransformationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlProcessingManager.cs" />
+    <Compile Include="XMLProcessing\XmlProcessingManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.FileProcessing.Core.Container.Config" />
@@ -101,7 +104,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="XSLT\CommonTEI.xsl" />
+    <EmbeddedResource Include="XMLProcessing\XSLT\CommonTEI.xsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

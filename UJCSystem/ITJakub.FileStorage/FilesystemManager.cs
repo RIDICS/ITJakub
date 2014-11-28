@@ -3,7 +3,11 @@ using System.IO;
 
 namespace ITJakub.FileStorage
 {
-    public class FilesystemManager
+
+
+
+
+    public class FileSystemManager
     {
         private const string FrontPageDirName = "FrontPage";
         private const string ImagesFolderName = "Images";
@@ -11,7 +15,7 @@ namespace ITJakub.FileStorage
         private readonly string m_path;
         private readonly string m_tempFolderPath;
 
-        public FilesystemManager(string path)
+        public FileSystemManager(string path)
         {
             m_path = path;
             m_tempFolderPath = Path.Combine(m_path, TempFolderName);
