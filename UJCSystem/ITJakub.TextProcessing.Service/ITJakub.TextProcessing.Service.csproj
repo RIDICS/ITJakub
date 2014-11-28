@@ -87,6 +87,14 @@
     <Content Include="ITJakub.TextProcessing.Service.Container.Config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.FileProcessing.Core\ITJakub.FileProcessing.Core.csproj">
+      <Project>{5cef4267-5e27-4acb-b832-74852be6ce1e}</Project>
+      <Name>ITJakub.FileProcessing.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.FileProcessing.Service\ITJakub.FileProcessing.Service.csproj">
+      <Project>{1f8cbb1c-5613-4e99-ad5d-f3469631363b}</Project>
+      <Name>ITJakub.FileProcessing.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.TextProcessing.DataContracts\ITJakub.TextProcessing.DataContracts.csproj">
       <Project>{7C9997B5-7986-418C-9F2B-5CBFF4F835F3}</Project>
       <Name>ITJakub.TextProcessing.DataContracts</Name>
