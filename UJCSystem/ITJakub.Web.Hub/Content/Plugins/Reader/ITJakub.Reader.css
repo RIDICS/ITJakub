@@ -287,4 +287,7 @@ div.container {
   padding: 5px;
   margin-bottom: 15px;
 }
+.reader-text-container .search-hit {
+  background-color: yellow;
+}
 /*# sourceMappingURL=ITJakub.Reader.css.map */
