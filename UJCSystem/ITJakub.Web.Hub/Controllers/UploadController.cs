@@ -6,6 +6,7 @@ using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.Web.Hub.Controllers
 {
+     [Authorize]
     public class UploadController : Controller
     {
         private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();

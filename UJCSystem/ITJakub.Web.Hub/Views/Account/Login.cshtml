@@ -1,5 +1,4 @@
-﻿@using ITJakub.Web.Hub.Models
-@model ITJakub.Web.Hub.Models.LoginViewModel
+﻿@model ITJakub.Web.Hub.Models.LoginViewModel
 @{
     ViewBag.Title = "Přihlášení";
 }
@@ -54,7 +53,7 @@
         </div>
         <div class="col-md-4">
             <section id="socialLoginForm">
-                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                @Html.Partial("_ExternalLoginsListPartial")
             </section>
         </div>
     </div>
