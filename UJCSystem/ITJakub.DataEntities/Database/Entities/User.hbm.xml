@@ -16,11 +16,8 @@
     <property name="AuthenticationProvider">
       <column name="AuthenticationProvider" sql-type="tinyint" not-null="true" unique="true" />
     </property>
-    <property name="AuthenticationProviderToken">
-      <column name="AuthenticationProviderToken" sql-type="varchar" not-null="false" />
-    </property>
     <property name="CommunicationToken">
-      <column name="CommunicationToken" sql-type="varchar" not-null="false" />
+      <column name="CommunicationToken" sql-type="varchar" not-null="true" unique="true"/>
     </property>
     <property name="CommunicationTokenCreateTime">
       <column name="CommunicationTokenCreateTime" sql-type="datetime" not-null="false" />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ITJakub.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.DataEntities.Database.Entities
 {
@@ -9,8 +10,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
         public virtual string Email { get; set; }
-        public virtual byte AuthenticationProvider { get; set; }
-        public virtual string AuthenticationProviderToken { get; set; }
+        public virtual AuthenticationProviderEnum AuthenticationProvider { get; set; }
         public virtual string CommunicationToken { get; set; }
         public virtual DateTime? CommunicationTokenCreateTime { get; set; }
         public virtual string PasswordHash { get; set; }
