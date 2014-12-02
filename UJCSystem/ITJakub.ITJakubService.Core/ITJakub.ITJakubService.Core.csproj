@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountManager.cs" />
+    <Compile Include="UserManager.cs" />
     <Compile Include="AuthorManager.cs" />
     <Compile Include="AutoMapperProfiles\AuthorProfile.cs" />
     <Compile Include="BookManager.cs" />

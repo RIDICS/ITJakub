@@ -17,15 +17,14 @@ namespace ITJakub.ITJakubService
             m_serviceManager = m_container.Resolve<ItJakubServiceManager>();
         }
        
-        public void CreateUser(AuthProvidersContract providerContract, string providerToken,
-            UserDetailContract userDetail)
+        public CreateUserResultContract CreateUser(CreateUserContract createUserContract)
         {
-            m_serviceManager.CreateUser(providerContract, providerToken, userDetail);
+            return m_serviceManager.CreateUser(createUserContract);
         }
 
-        public void LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
+        public LoginUserResultContract LoginUser(LoginUserContract loginUserContract)
         {
-            m_serviceManager.LoginUser(providerContract, providerToken, email);
+            return m_serviceManager.LoginUser(loginUserContract);
         }
 
         public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract uploadFileContract)

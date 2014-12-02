@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Web;
 using System.Web.Mvc;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Web.Hub.Models;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -29,15 +31,22 @@ namespace ITJakub.Web.Hub.Controllers
                 return View(model);
             }
 
-            //var user = m_serviceClient.LoginUser(); //TODO
-            //if (user == null)
-            //{
-            //    ModelState.AddModelError("", "Invalid login attempt.");
-            //    return View(model);
-            //}
+            LoginUserResultContract result = m_serviceClient.LoginUser(new LoginUserContract
+            {
+                AuthenticationProvider = AuthProviderEnumContract.ItJakub,
+                Email = model.Email,
+                Password = model.Password
+            });
+
+            if (result == null || !result.Successfull)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
+            }
 
             //TODO save token to cookie
-            return View();
+            ModelState.AddModelError("", "Login Successfull");
+            return View(model);
         }
 
         //
@@ -53,14 +62,20 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [RequireHttps]
         public ActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                m_serviceClient.CreateUser(model.Email, model.Password);
+                m_serviceClient.CreateUser(new CreateUserContract
+                {
+                    AuthenticationProvider = AuthProviderEnumContract.ItJakub,
+                    Email = model.Email,
+                    Password = model.Password,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
+                });
             }
-            return View(model);
+            return View("Login");
         }
 
         //
@@ -69,7 +84,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOut()
         {
-            var httpCookie = Response.Cookies["comm_token"];
+            HttpCookie httpCookie = Response.Cookies["comm_token"];
             if (httpCookie != null)
                 httpCookie.Expires = DateTime.Now.AddDays(-1);
             return RedirectToAction("Index", "Home");

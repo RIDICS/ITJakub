@@ -12,11 +12,11 @@ namespace ITJakub.Web.Hub
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
+        public CreateUserResultContract CreateUser(CreateUserContract createUserContract)
         {
             try
             {
-                Channel.CreateUser(providerContract, providerToken, userDetail);
+                return Channel.CreateUser(createUserContract);
             }
             catch (CommunicationException ex)
             {
@@ -32,11 +32,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
+        public LoginUserResultContract LoginUser(LoginUserContract loginUserContract)
         {
             try
             {
-               Channel.LoginUser(providerContract, providerToken, email);
+                return Channel.LoginUser(loginUserContract);
             }
             catch (CommunicationException ex)
             {

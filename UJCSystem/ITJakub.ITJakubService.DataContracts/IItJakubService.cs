@@ -9,10 +9,10 @@ namespace ITJakub.ITJakubService.DataContracts
     {
         
         [OperationContract]
-        void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail);
+        CreateUserResultContract CreateUser(CreateUserContract createUserContract);
 
         [OperationContract]
-        void LoginUser(AuthProvidersContract providerContract, string providerToken, string email);
+        LoginUserResultContract LoginUser(LoginUserContract loginUserContract);
 
         [OperationContract]
         ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract dataStream);

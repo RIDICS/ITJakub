@@ -5,29 +5,29 @@ using ITJakub.Shared.Contracts;
 
 namespace ITJakub.ITJakubService
 {
-    public class ItJakubServiceManager
+    public class ItJakubServiceManager : IItJakubServiceLocal
     {
-        private readonly AccountManager m_accountManager;
+        private readonly UserManager m_userManager;
         private readonly UploadManager m_uploadManager;
         private readonly BookManager m_bookManager;
         private readonly AuthorManager m_authorManager;
 
-        public ItJakubServiceManager(AccountManager accountManager, UploadManager uploadManager, BookManager bookManager, AuthorManager authorManager)
+        public ItJakubServiceManager(UserManager userManager, UploadManager uploadManager, BookManager bookManager, AuthorManager authorManager)
         {
-            m_accountManager = accountManager;
+            m_userManager = userManager;
             m_uploadManager = uploadManager;
             m_bookManager = bookManager;
             m_authorManager = authorManager;
         }
 
-        public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
+        public CreateUserResultContract CreateUser(CreateUserContract createUserContract)
         {
-            m_accountManager.CreateUser(providerContract, providerToken, userDetail);
+            return m_userManager.CreateUser(createUserContract);
         }
 
-        public void LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
+        public LoginUserResultContract LoginUser(LoginUserContract loginUserContract)
         {
-            m_accountManager.LoiginUser(providerContract, providerToken, email);
+            return m_userManager.LoginUser(loginUserContract);
         }
 
         public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract uploadFileContract)

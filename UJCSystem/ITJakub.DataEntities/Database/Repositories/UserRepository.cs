@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
@@ -6,6 +7,7 @@ using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -22,22 +24,20 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (ISession session = GetSession())
             {
-                var userInstance = session.QueryOver<User>()
-                    .Where(user => user.Email == email && user.PasswordHash == ComputePasswordHash(password, user.Salt))
-                    .SingleOrDefault<User>();
-
-                if (userInstance != null)
+                var userInstance = session.Query<User>().SingleOrDefault(user => user.Email == email && user.AuthenticationProvider == AuthenticationProviderEnum.ItJakub); //TODO use query over
+                if (userInstance!=null && userInstance.PasswordHash.Equals(ComputePasswordHash(password, userInstance.Salt)))
                 {
                     userInstance.CommunicationToken = GenerateCommunicationToken();
                     userInstance.CommunicationTokenCreateTime = DateTime.UtcNow;
                     Update(userInstance);
+                    return userInstance;
                 }
-                return userInstance;
+                return null;
             }
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int RegisterWithLocalAccount(string email, string password, string firstName, string lastName)
+        public virtual int RegisterLocalAccount(string email, string password, string firstName, string lastName)
         {
             using (ISession session = GetSession())
             {

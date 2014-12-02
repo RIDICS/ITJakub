@@ -42,7 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorDetailContract.cs" />
-    <Compile Include="AuthProvidersContract.cs" />
+    <Compile Include="AuthProviderEnumContract.cs" />
+    <Compile Include="LoginUserContract.cs" />
+    <Compile Include="CreateUserContract.cs" />
+    <Compile Include="LoginUserResultContract.cs" />
+    <Compile Include="CreateUserResultContract.cs" />
     <Compile Include="IItJakubService.cs" />
     <Compile Include="ProcessedFileInfoContract.cs" />
     <Compile Include="UploadFileContract.cs" />

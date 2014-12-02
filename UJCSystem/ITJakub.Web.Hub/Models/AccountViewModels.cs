@@ -6,16 +6,13 @@ namespace ITJakub.Web.Hub.Models
     {
         [Required]
         [Display(Name = "Email")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Vyplněný e-mail neni validní")]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Heslo")]
         public string Password { get; set; }
-
-        [Display(Name = "Zapamatovat si mě")]
-        public bool RememberMe { get; set; }
     }
 
     public class RegisterViewModel
