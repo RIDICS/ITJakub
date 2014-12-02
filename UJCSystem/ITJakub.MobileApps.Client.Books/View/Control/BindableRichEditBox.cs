@@ -37,6 +37,7 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
             richEditBox.IsReadOnly = false;
             richEditBox.Document.SetText(TextSetOptions.FormatRtf, e.NewValue.ToString());
             richEditBox.IsReadOnly = oldIsReadonlyState;
+            richEditBox.OnDocumentLoad();
         }
 
         public static readonly DependencyProperty SourceStreamProperty = DependencyProperty.Register("SourceStream",
@@ -60,6 +61,10 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
             Document.GetText(TextGetOptions.FormatRtf, out text);
             if (!IsReadOnly && text != DocumentRtf)
                 DocumentRtf = text;
+        }
+
+        protected virtual void OnDocumentLoad()
+        {
         }
     }
 }

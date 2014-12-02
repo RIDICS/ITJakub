@@ -26,7 +26,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
                 Options = new List<FillwordsTaskContract.WordOptionsTaskContract>(optionsList.Select(model => new FillwordsTaskContract.WordOptionsTaskContract
                 {
                     WordList = model.List.Select(viewModel => viewModel.Word).ToList(),
-                    WordPosition = model.WordPosition
+                    WordPosition = model.WordPosition,
+                    CorrectAnswer = model.CorrectAnswer
                 }))
             };
             var data = JsonConvert.SerializeObject(taskContract);

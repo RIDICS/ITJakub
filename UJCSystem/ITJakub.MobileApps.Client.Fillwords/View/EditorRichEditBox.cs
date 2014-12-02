@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -14,6 +16,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
     public class EditorRichEditBox : BindableRichEditBox
     {
         private ScrollViewer m_contentElement;
+        private Color m_defaultBackgroundColor;
 
         protected override void OnTapped(TappedRoutedEventArgs e)
         {
@@ -23,11 +26,18 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
                 return;
 
             var point = e.GetPosition(this);
-            var shiftedPoint = new Point(point.X, point.Y + m_contentElement.VerticalOffset);
+            var shiftedPoint = new Point(point.X - Padding.Left, point.Y + m_contentElement.VerticalOffset - Padding.Top);
             var textRange = Document.GetRangeFromPoint(shiftedPoint, PointOptions.ClientCoordinates);
             
-            textRange.MoveStart(TextRangeUnit.Word, -1);
-            textRange.MoveEnd(TextRangeUnit.Word, 1);
+            textRange.Expand(TextRangeUnit.Word);
+            while (textRange.Length > 0 && char.IsWhiteSpace(textRange.Text.Last()))
+            {
+                textRange.MoveEnd(TextRangeUnit.Character, -1);
+            }
+            if (textRange.Length == 0)
+            {
+                return;
+            }
 
             Document.Selection.SetRange(textRange.StartPosition, textRange.EndPosition);
 
@@ -39,6 +49,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
                 SelectedOptions = new OptionsViewModel
                 {
                     WordPosition = key,
+                    CorrectAnswer = SelectedText,
                     List = new ObservableCollection<OptionViewModel>(WordOptionsList[key].List)
                 };
             }
@@ -47,14 +58,16 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
                 SelectedOptions = new OptionsViewModel
                 {
                     WordPosition = textRange.StartPosition,
+                    CorrectAnswer = SelectedText,
                     List = new ObservableCollection<OptionViewModel>()
                 };
             }
 
             Flyout.ShowAt(this);
             IsFlyoutOpen = true;
+            IsSelectedTextHighlighted = !textRange.CharacterFormat.BackgroundColor.Equals(m_defaultBackgroundColor);
         }
-
+        
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -79,6 +92,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
         public static readonly DependencyProperty IsFlyoutOpenProperty = DependencyProperty.Register("IsFlyoutOpen", typeof (bool), typeof (EditorRichEditBox), new PropertyMetadata(false, IsFlyoutOpenChanged));
 
         public static readonly DependencyProperty IsEditingEnabledProperty = DependencyProperty.Register("IsEditingEnabled", typeof (bool), typeof (EditorRichEditBox), new PropertyMetadata(false, IsEditingEnabledChanged));
+
+        public static readonly DependencyProperty IsSelectedTextHighlightedProperty = DependencyProperty.Register("IsSelectedTextHighlighted", typeof (bool), typeof (EditorRichEditBox), new PropertyMetadata(false, OnSelectedTextHighlightChanged));
+        
+        public static readonly DependencyProperty BackgroundColorHighlightProperty = DependencyProperty.Register("BackgroundColorHighlight", typeof (Color), typeof (EditorRichEditBox), new PropertyMetadata(Colors.SpringGreen));
 
         public Dictionary<int, OptionsViewModel> WordOptionsList
         {
@@ -116,6 +133,18 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
             set { SetValue(IsEditingEnabledProperty, value); }
         }
 
+        public bool IsSelectedTextHighlighted
+        {
+            get { return (bool) GetValue(IsSelectedTextHighlightedProperty); }
+            set { SetValue(IsSelectedTextHighlightedProperty, value); }
+        }
+
+        public Color BackgroundColorHighlight
+        {
+            get { return (Color) GetValue(BackgroundColorHighlightProperty); }
+            set { SetValue(BackgroundColorHighlightProperty, value); }
+        }
+
         private static void IsFlyoutOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var editBox = d as EditorRichEditBox;
@@ -126,8 +155,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
             if (!isOpen)
                 editBox.Flyout.Hide();
         }
-
-
+        
         private static void IsEditingEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var editBox = d as EditorRichEditBox;
@@ -136,6 +164,26 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
 
             var isEnabled = (bool)e.NewValue;
             editBox.IsReadOnly = !isEnabled;
+        }
+        
+        private static void OnSelectedTextHighlightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var editBox = d as EditorRichEditBox;
+            if (editBox == null)
+                return;
+
+            var isHighlight = (bool) e.NewValue;
+            var color = isHighlight ? editBox.BackgroundColorHighlight : editBox.m_defaultBackgroundColor;
+            var readOnlyState = editBox.IsReadOnly;
+            editBox.IsReadOnly = false;
+            editBox.Document.Selection.CharacterFormat.BackgroundColor = color;
+            editBox.IsReadOnly = readOnlyState;
+        }
+
+        protected override void OnDocumentLoad()
+        {
+            base.OnDocumentLoad();
+            m_defaultBackgroundColor = Document.GetDefaultCharacterFormat().BackgroundColor;
         }
     }
 }

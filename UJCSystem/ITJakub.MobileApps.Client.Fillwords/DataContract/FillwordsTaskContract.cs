@@ -18,7 +18,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataContract
             public int WordPosition { get; set; }
 
             [JsonProperty("WordList")]
-            public IList<string> WordList { get; set; } 
+            public IList<string> WordList { get; set; }
+
+            [JsonProperty("CorrectAnswer")]
+            public string CorrectAnswer { get; set; }
         }
     }
 }

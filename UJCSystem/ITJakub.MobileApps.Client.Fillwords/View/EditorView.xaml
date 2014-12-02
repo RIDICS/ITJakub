@@ -115,17 +115,20 @@
                 Background="#50FFFFFF"
                 BorderBrush="#30000000"
                 BorderThickness="2">
-            <view:EditorRichEditBox 
+            <view:EditorRichEditBox
+                IsSelectedTextHighlighted="{Binding OptionsEditorViewModel.SetSelectedTextHighlighted, Mode=TwoWay}"
                 IsEditingEnabled="{Binding IsTextEditingEnabled}"
-                SelectedText="{Binding SelectedText, Mode=TwoWay}"
+                SelectedText="{Binding OptionsEditorViewModel.SelectedText, Mode=TwoWay}"
                 WordOptionsList="{Binding WordOptionsList}"
-                SelectedOptions="{Binding SelectedOption, Mode=TwoWay}"
+                SelectedOptions="{Binding OptionsEditorViewModel.SelectedOption, Mode=TwoWay}"
                 IsFlyoutOpen="{Binding IsEditorFlyoutOpen, Mode=TwoWay}"
                 DocumentRtf="{Binding BookRtfContent, Mode=TwoWay}">
                 <view:EditorRichEditBox.Flyout>
                     <Flyout>
                         <StackPanel Orientation="Vertical"
-                                    Width="270">
+                                    Width="270"
+                                    DataContext="{Binding OptionsEditorViewModel}"
+                                    x:Name="FlyoutContent">
                             <TextBlock Text="Nové slovo:"
                                        FontSize="15" />
                             <Grid>
@@ -204,7 +207,8 @@
                                                        TextTrimming="CharacterEllipsis"
                                                        Text="{Binding Word}" />
                                             <Button Grid.Column="1"
-                                                    Command="{Binding DeleteCommand}"
+                                                    Command="{Binding DataContext.DeleteCommand, ElementName=FlyoutContent}"
+                                                    CommandParameter="{Binding}"
                                                     RequestedTheme="Dark"
                                                     Foreground="Black"
                                                     BorderBrush="Black">
@@ -245,6 +249,5 @@
                   IsChecked="{Binding IsTextEditingEnabled, Mode=TwoWay}">
             <TextBlock Text="Zapnout editaci textu (odstraní všechny vyplněné možnosti)" />
         </CheckBox>
-
     </Grid>
 </Page>

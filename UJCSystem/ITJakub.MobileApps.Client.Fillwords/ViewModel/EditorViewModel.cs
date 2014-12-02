@@ -11,10 +11,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
     public class EditorViewModel : EditorBaseViewModel
     {
         private readonly FillwordsDataService m_dataService;
-        private string m_selectedText;
         private Dictionary<int, OptionsViewModel> m_wordOptionsList;
-        private OptionsViewModel m_selectedOption;
-        private string m_newOption;
         private bool m_isEditorFlyoutOpen;
         private bool m_isTextEditingEnabled;
         private string m_bookName;
@@ -28,7 +25,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private bool m_errorOptionsMissing;
         private bool m_isSaveFlyoutOpen;
         private bool m_loadingPhoto;
-        private bool m_showOptionExistsInfo;
 
         public EditorViewModel(FillwordsDataService dataService)
         {
@@ -36,23 +32,12 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             IsTextEditingEnabled = false;
 
             WordOptionsList = new Dictionary<int, OptionsViewModel>();
-            AddNewOptionCommand = new RelayCommand(AddNewOption);
-            SaveOptionsCommand = new RelayCommand(SaveOptions);
             SelectBookCommand = new RelayCommand(SelectBook);
             SaveTaskCommand = new RelayCommand(SaveTask);
+            OptionsEditorViewModel = new OptionsEditorViewModel(WordOptionsList, CloseOptionsFlyout);
         }
 
         #region Properties
-
-        public string SelectedText
-        {
-            get { return m_selectedText; }
-            set
-            {
-                m_selectedText = value;
-                RaisePropertyChanged();
-            }
-        }
 
         public Dictionary<int, OptionsViewModel> WordOptionsList
         {
@@ -60,27 +45,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             set
             {
                 m_wordOptionsList = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public OptionsViewModel SelectedOption
-        {
-            get { return m_selectedOption; }
-            set
-            {
-                m_selectedOption = value;
-                NewOption = string.Empty;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string NewOption
-        {
-            get { return m_newOption; }
-            set
-            {
-                m_newOption = value;
                 RaisePropertyChanged();
             }
         }
@@ -218,64 +182,20 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 RaisePropertyChanged();
             }
         }
-
-        public bool ShowOptionExistsInfo
-        {
-            get { return m_showOptionExistsInfo; }
-            set
-            {
-                m_showOptionExistsInfo = value;
-                RaisePropertyChanged();
-            }
-        }
-
+        
         public string TaskName { get; set; }
 
-        #endregion
-
-        #region Commands
-
-        public RelayCommand AddNewOptionCommand { get; private set; }
-
-        public RelayCommand SaveOptionsCommand { get; private set; }
-
+        public OptionsEditorViewModel OptionsEditorViewModel { get; private set; }
+        
         public RelayCommand SelectBookCommand { get; private set; }
 
         public RelayCommand SaveTaskCommand { get; private set; }
         
         #endregion
 
-        private void AddNewOption()
+
+        private void CloseOptionsFlyout()
         {
-            if (NewOption == string.Empty)
-                return;
-
-            if (SelectedOption.List.Any(model => model.Word == NewOption))
-            {
-                ShowOptionExistsInfo = true;
-            }
-            else
-            {
-                var newOptionViewModel = new OptionViewModel {Word = NewOption};
-                var deleteCommand = new RelayCommand(() =>
-                    SelectedOption.List.Remove(newOptionViewModel)); //TODO some error with removing after save
-                newOptionViewModel.DeleteCommand = deleteCommand;
-
-                SelectedOption.List.Add(newOptionViewModel);
-                ShowOptionExistsInfo = false;
-                NewOption = string.Empty;
-            }
-        }
-
-        private void SaveOptions()
-        {
-            var key = SelectedOption.WordPosition;
-
-            if (SelectedOption.List.Count == 0)
-                WordOptionsList.Remove(key);
-            else
-                WordOptionsList[key] = SelectedOption;
-
             IsEditorFlyoutOpen = false;
         }
 
@@ -349,7 +269,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 if (exception != null)
                     return;
 
-                //TODO complete task creation
+                GoBack();
             });
         }
     }
