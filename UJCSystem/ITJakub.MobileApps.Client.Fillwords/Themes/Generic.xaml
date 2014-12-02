@@ -1,0 +1,38 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:view="using:ITJakub.MobileApps.Client.Fillwords.View"
+    xmlns:control="using:ITJakub.MobileApps.Client.Books.View.Control">
+
+    <Style TargetType="view:ComboRichEditBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="view:ComboRichEditBox">
+                    <ScrollViewer HorizontalScrollMode="Disabled"
+                                  VerticalScrollMode="Auto">
+                        <Grid>
+                            <control:BindableRichEditBox DocumentRtf="{TemplateBinding DocumentRtf}"
+                                                         IsReadOnly="True"
+                                                         IsTapEnabled="False"
+                                                         x:Name="RichEditBox" />
+                            <ItemsControl ItemsSource="{TemplateBinding Data}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding WordList}"
+                                                  Margin="{Binding Position}"
+                                                  PlaceholderText="???" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

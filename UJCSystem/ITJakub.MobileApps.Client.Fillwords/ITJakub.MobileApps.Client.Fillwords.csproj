@@ -115,6 +115,7 @@
     <Compile Include="ViewModel\FillwordsViewModel.cs" />
     <Compile Include="ViewModel\OptionsEditorViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
+    <Compile Include="View\ComboRichEditBox.cs" />
     <Compile Include="View\EditorRichEditBox.cs" />
     <Compile Include="View\EditorView.xaml.cs">
       <DependentUpon>EditorView.xaml</DependentUpon>
@@ -156,9 +157,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ExampleTask.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\EditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

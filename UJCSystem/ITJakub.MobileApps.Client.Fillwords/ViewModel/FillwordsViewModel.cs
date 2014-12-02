@@ -5,8 +5,11 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 {
     public class FillwordsViewModel : ApplicationBaseViewModel
     {
+        private readonly FillwordsDataService m_dataService;
+
         public FillwordsViewModel(FillwordsDataService dataService)
         {
+            m_dataService = dataService;
         }
 
         public override void InitializeCommunication()
