@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -18,11 +18,6 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
             set { SetValue(DocumentRtfProperty, value);}
         }
 
-        public Stream SourceStream
-        {
-            set { SetValue(SourceStreamProperty, value); }
-        }
-
         public static readonly DependencyProperty DocumentRtfProperty = DependencyProperty.Register("DocumentRtf",
             typeof (string), typeof (BindableRichEditBox),
             new PropertyMetadata(string.Empty, DocumentRtfPropertyChanged));
@@ -40,21 +35,6 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
             richEditBox.OnDocumentLoad();
         }
 
-        public static readonly DependencyProperty SourceStreamProperty = DependencyProperty.Register("SourceStream",
-            typeof (Stream), typeof (BindableRichEditBox), new PropertyMetadata(null, SourceStreamPropertyChanged));
-
-        private static void SourceStreamPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var richEditBox = d as BindableRichEditBox;
-            if (richEditBox == null)
-                return;
-
-            var oldIsReadonlyState = richEditBox.IsReadOnly;
-            richEditBox.IsReadOnly = false;
-            richEditBox.Document.LoadFromStream(TextSetOptions.FormatRtf, ((Stream)e.NewValue).AsRandomAccessStream());
-            richEditBox.IsReadOnly = oldIsReadonlyState;
-        }
-
         protected override void OnLostFocus(RoutedEventArgs e)
         {
             string text;
@@ -65,6 +45,10 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
 
         protected virtual void OnDocumentLoad()
         {
+            if (DocumentLoaded != null)
+                DocumentLoaded(this, new EventArgs());
         }
+
+        public event EventHandler DocumentLoaded;
     }
 }

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Windows.Foundation;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Documents;
+using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Books.View.Control;
 using ITJakub.MobileApps.Client.Fillwords.ViewModel;
 
@@ -18,6 +20,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
         public ComboRichEditBox()
         {
             DefaultStyleKey = typeof(ComboRichEditBox);
+            SizeChanged += OnSizeChanged;
         }
 
         protected override void OnApplyTemplate()
@@ -25,9 +28,9 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
             base.OnApplyTemplate();
 
             m_richEditBoxControl = GetTemplateChild("RichEditBox") as BindableRichEditBox;
-            OnOptionsListChanged(this, m_lastPropertyChangedEventArgs);
+            LoadAndModifyDocument();
         }
-
+        
         public string DocumentRtf
         {
             get { return (string)GetValue(DocumentRtfProperty); }
@@ -42,7 +45,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
 
         public List<ComboBoxData> Data
         {
-            get { return (List<ComboBoxData>)GetValue(OptionsListProperty); }
+            get { return (List<ComboBoxData>)GetValue(DataProperty); }
         }
 
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register("Data",
@@ -50,55 +53,107 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
 
         public static readonly DependencyProperty OptionsListProperty = DependencyProperty.Register("OptionsList",
             typeof(List<OptionsViewModel>), typeof(ComboRichEditBox),
-            new PropertyMetadata(null, OnOptionsListChanged));
+            new PropertyMetadata(null, OnDocumentOrOptionsChanged));
         
         public static readonly DependencyProperty DocumentRtfProperty = DependencyProperty.Register("DocumentRtf",
             typeof(string), typeof(ComboRichEditBox),
-            new PropertyMetadata(string.Empty));
-
-        private static DependencyPropertyChangedEventArgs m_lastPropertyChangedEventArgs;
-
-        private static void OnOptionsListChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+            new PropertyMetadata(string.Empty, OnDocumentOrOptionsChanged));
+        
+        private static void OnDocumentOrOptionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            m_lastPropertyChangedEventArgs = e;
-
             var richEditBox = d as ComboRichEditBox;
             if (richEditBox == null || e == null)
                 return;
 
-            var newList = e.NewValue as List<OptionsViewModel>;
-            if (newList == null || richEditBox.m_richEditBoxControl == null)
-                return;
-
-            var newDataList = new List<ComboBoxData>(newList.Count + 1);
-            foreach (var optionsViewModel in newList)
-            {
-                var dataItem = new ComboBoxData();
-                dataItem.WordList.Add(optionsViewModel.CorrectAnswer);
-                dataItem.WordList.AddRange(optionsViewModel.List.Select(model => model.Word));
-                dataItem.WordList = dataItem.WordList.OrderBy(s => s).ToList();
-
-                Point point;
-                Rect rect;
-                int hit;
-                var textRange = richEditBox.m_richEditBoxControl.Document.GetRange(optionsViewModel.WordPosition, optionsViewModel.WordPosition);
-                textRange.GetPoint(HorizontalCharacterAlignment.Left, VerticalCharacterAlignment.Top, PointOptions.ClientCoordinates, out point);
-                textRange.GetRect(PointOptions.ClientCoordinates, out rect, out hit);
-                // TODO get correct position (GetPoint and GetRect now returns incorrect values)
-
-                dataItem.SetPosition(rect.Left, rect.Top);
-
-                newDataList.Add(dataItem);
-            }
-
-            richEditBox.SetValue(DataProperty, newDataList);
+            richEditBox.LoadAndModifyDocument();
         }
 
-        //TODO if RichEditBox size change then rearrange ComboBox positions
-
-
-        public class ComboBoxData
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
+            UpdateComboBoxProperties();
+        }
+
+        private void LoadAndModifyDocument()
+        {
+            if (string.IsNullOrEmpty(DocumentRtf) || OptionsList == null || m_richEditBoxControl == null)
+                return;
+
+            const char emDash = (char) 0x2014;
+            const int charCountEnlarge = 3;
+
+            var oldIsReadonlyState = m_richEditBoxControl.IsReadOnly;
+            m_richEditBoxControl.IsReadOnly = false;
+            m_richEditBoxControl.Document.SetText(TextSetOptions.FormatRtf, DocumentRtf);
+
+            var newDataList = new List<ComboBoxData>(OptionsList.Count + 1);
+            int indexCorrection = 0;
+
+            foreach (var optionsViewModel in OptionsList.OrderBy(model => model.WordPosition))
+            {
+                var wordList = optionsViewModel.List.Select(model => model.Word).ToList();
+                int maxWordLength = wordList.Max(s => s.Length);
+                if (maxWordLength < optionsViewModel.CorrectAnswer.Length)
+                    maxWordLength = optionsViewModel.CorrectAnswer.Length;
+                maxWordLength += charCountEnlarge;
+
+                // create replacement for current word in the document
+                var stringBuilder = new StringBuilder(maxWordLength, maxWordLength);
+                stringBuilder.Append(emDash, maxWordLength);
+                var characterSequence = stringBuilder.ToString();
+                
+                // select word for remove
+                int correctedWordPosition = indexCorrection + optionsViewModel.WordPosition;
+                var textRange = m_richEditBoxControl.Document.GetRange(correctedWordPosition, correctedWordPosition);
+                textRange.MoveEnd(TextRangeUnit.Word, 1);
+                while (Math.Abs(textRange.Length) > 0 && char.IsWhiteSpace(textRange.Text.Last()))
+                {
+                    textRange.MoveEnd(TextRangeUnit.Character, -1);
+                }
+                
+                // replace selected word with character sequence
+                textRange.SetText(TextSetOptions.None, characterSequence);
+                textRange.ParagraphFormat.SetLineSpacing(LineSpacingRule.Multiple, 1.5f);
+                
+                // create ComboBoxData
+                var comboBoxData = new ComboBoxData
+                {
+                    Index = correctedWordPosition,
+                    Length = maxWordLength
+                };
+                comboBoxData.WordList.Add(optionsViewModel.CorrectAnswer);
+                comboBoxData.WordList.AddRange(wordList);
+                comboBoxData.WordList = comboBoxData.WordList.OrderBy(s => s).ToList();
+
+                newDataList.Add(comboBoxData);
+                indexCorrection += maxWordLength - optionsViewModel.CorrectAnswer.Length;
+            }
+
+            SetValue(DataProperty, newDataList);
+            UpdateComboBoxProperties();
+
+            m_richEditBoxControl.IsReadOnly = oldIsReadonlyState;
+        }
+
+        private void UpdateComboBoxProperties()
+        {
+            foreach (var comboBoxData in Data)
+            {
+                Rect rect;
+                int hit;
+                
+                var textRange = m_richEditBoxControl.Document.GetRange(comboBoxData.Index, comboBoxData.Index + comboBoxData.Length);
+                textRange.GetRect(PointOptions.ClientCoordinates, out rect, out hit);
+
+                comboBoxData.SetPosition(rect.Left + m_richEditBoxControl.Padding.Left + m_richEditBoxControl.BorderThickness.Left, rect.Top);
+                comboBoxData.Width = rect.Width - 3;
+            }
+        }
+
+        public class ComboBoxData : ViewModelBase
+        {
+            private Thickness m_position;
+            private double m_width;
+
             public ComboBoxData()
             {
                 WordList = new List<string>();
@@ -110,9 +165,33 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
                 Position = new Thickness(x, y, 0, 0);
             }
 
-            public Thickness Position { get; set; }
+            public Thickness Position
+            {
+                get { return m_position; }
+                set
+                {
+                    m_position = value;
+                    RaisePropertyChanged();
+                }
+            }
+
+            public double Width
+            {
+                get { return m_width; }
+                set
+                {
+                    m_width = value;
+                    RaisePropertyChanged();
+                }
+            }
+
+            public int Length { get; set; }
+
+            public int Index { get; set; }
 
             public List<string> WordList { get; set; }
+
+            public string SelectedWord { get; set; }
         }
     }
 }
