@@ -123,32 +123,34 @@ var ReaderModule = (function () {
         $(controlsDiv).addClass('reader-controls content-container');
 
         //TEST START
-        //var testDiv: HTMLDivElement = document.createElement('div');
-        //$(testDiv).addClass('testDiv');
-        //controlsDiv.appendChild(testDiv);
-        //var testButton = document.createElement("button");
-        //$(testButton).addClass('testButton-button');
-        //var testSpan = document.createElement("span");
-        //$(testSpan).addClass('glyphicon glyphicon-search');
-        //$(testButton).append(testSpan);
-        //$(testButton).click((event: Event) => {
-        //    if (!$(testButton).hasClass('searched-a')) {
-        //        $(testButton).addClass('searched-a');
-        //    } else {
-        //        $(testButton).removeClass('searched-a');
-        //    }
-        //    for (var i = 0; i < this.pages.length; i++) {
-        //        var pageId = '#page_' + this.pages[i];
-        //       // $(pageId).find('span[data-nlp-type="tei:w"]').addClass('search-hit');
-        //        $(pageId).find('span').removeClass('search-hit');
-        //        if ($(testButton).hasClass('searched-a')) {
-        //            $(pageId).find('span[data-id*="a"]').addClass('search-hit');
-        //        } else {
-        //            $(pageId).find('span[data-id*="e"]').addClass('search-hit');
-        //        }
-        //    }
-        //});
-        //controlsDiv.appendChild(testButton);
+        var testDiv = document.createElement('div');
+        $(testDiv).addClass('testDiv');
+        controlsDiv.appendChild(testDiv);
+        var testButton = document.createElement("button");
+        $(testButton).addClass('testButton-button');
+        var testSpan = document.createElement("span");
+        $(testSpan).addClass('glyphicon glyphicon-search');
+        $(testButton).append(testSpan);
+        $(testButton).click(function (event) {
+            if (!$(testButton).hasClass('searched-a')) {
+                $(testButton).addClass('searched-a');
+            } else {
+                $(testButton).removeClass('searched-a');
+            }
+            for (var i = 0; i < _this.pages.length; i++) {
+                var pageId = '#page_' + _this.pages[i];
+
+                // $(pageId).find('span[data-nlp-type="tei:w"]').addClass('search-hit');
+                $(pageId).find('span').removeClass('search-hit');
+                if ($(testButton).hasClass('searched-a')) {
+                    $(pageId).find('span[data-id*="a"]').addClass('search-hit');
+                } else {
+                    $(pageId).find('span[data-id*="e"]').addClass('search-hit');
+                }
+            }
+        });
+        controlsDiv.appendChild(testButton);
+
         //TEST END
         var slider = document.createElement('div');
         $(slider).addClass('slider');

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Web;
+using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
@@ -20,8 +22,8 @@ namespace ITJakub.Web.Hub
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
-                Provider = new CookieAuthenticationProvider()
-
+                CookieSecure = CookieSecureOption.Always,
+                ExpireTimeSpan = new TimeSpan(1,0,0,0)
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 

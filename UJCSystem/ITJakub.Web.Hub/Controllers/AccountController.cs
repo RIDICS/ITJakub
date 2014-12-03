@@ -14,6 +14,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
+        [RequireHttps]
         public ActionResult Login()
         {
             return View();
@@ -23,6 +24,7 @@ namespace ITJakub.Web.Hub.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
+        [RequireHttps]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model)
         {
@@ -52,6 +54,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
+        [RequireHttps]
         public ActionResult Register()
         {
             return View();
@@ -84,9 +87,10 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOut()
         {
-            HttpCookie httpCookie = Response.Cookies["comm_token"];
-            if (httpCookie != null)
-                httpCookie.Expires = DateTime.Now.AddDays(-1);
+
+            //HttpCookie httpCookie = Response.Cookies["comm_token"];
+            //if (httpCookie != null)
+            //    httpCookie.Expires = DateTime.Now.AddDays(-1);
             return RedirectToAction("Index", "Home");
         }
     }
