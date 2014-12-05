@@ -1,12 +1,16 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Web.Hub.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin;
+using Microsoft.Owin.Security;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize]
+    [Authorize] 
     public class AccountController : Controller
     {
         private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
@@ -46,8 +50,16 @@ namespace ITJakub.Web.Hub.Controllers
                 return View(model);
             }
 
-            //TODO save token to cookie
-            ModelState.AddModelError("", "Login Successfull");
+
+            var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, "Brock"));
+            claims.Add(new Claim(ClaimTypes.Email, "brockallen@gmail.com"));
+            var id = new ClaimsIdentity(claims,
+                                        DefaultAuthenticationTypes.ApplicationCookie);
+
+            var ctx = Request.GetOwinContext();
+            var authenticationManager = ctx.Authentication;
+            authenticationManager.SignIn(id);
             return View(model);
         }
 
@@ -87,10 +99,9 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOut()
         {
-
-            //HttpCookie httpCookie = Response.Cookies["comm_token"];
-            //if (httpCookie != null)
-            //    httpCookie.Expires = DateTime.Now.AddDays(-1);
+            var ctx = Request.GetOwinContext();
+            var authenticationManager = ctx.Authentication;
+            authenticationManager.SignOut();
             return RedirectToAction("Index", "Home");
         }
     }

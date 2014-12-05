@@ -22,7 +22,7 @@ namespace ITJakub.Web.Hub
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
-                CookieSecure = CookieSecureOption.Always,
+                CookieSecure = CookieSecureOption.Never, //TODO not recommended settings
                 ExpireTimeSpan = new TimeSpan(1,0,0,0)
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
