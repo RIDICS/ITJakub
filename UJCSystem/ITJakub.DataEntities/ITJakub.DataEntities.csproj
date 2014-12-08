@@ -75,6 +75,7 @@
     <Compile Include="Database\Entities\Author.cs" />
     <Compile Include="Database\Entities\BookPage.cs" />
     <Compile Include="Database\Entities\Enums\AuthenticationProviderEnum.cs" />
+    <Compile Include="Database\Entities\Enums\BookTypeEnum.cs" />
     <Compile Include="Database\Entities\Enums\ResultFormat.cs" />
     <Compile Include="Database\Entities\Keyword.cs" />
     <Compile Include="Database\Entities\ManuscriptDescription.cs" />
@@ -86,7 +87,6 @@
     <Compile Include="Database\Entities\BookType.cs" />
     <Compile Include="Database\Entities\BookVersion.cs" />
     <Compile Include="Database\Entities\Category.cs" />
-    <Compile Include="Database\Entities\Image.cs" />
     <Compile Include="Database\Entities\Publisher.cs" />
     <Compile Include="Database\Entities\Responsible.cs" />
     <Compile Include="Database\Entities\ResponsibleType.cs" />
@@ -111,7 +111,6 @@
     <EmbeddedResource Include="Database\Entities\Bookmark.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\BookVersion.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Category.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\Image.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\User.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

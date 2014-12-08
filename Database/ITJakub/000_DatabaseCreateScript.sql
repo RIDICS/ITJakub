@@ -83,7 +83,7 @@ BEGIN TRAN
     CREATE TABLE [dbo].[BookType]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookType(Id)] PRIMARY KEY CLUSTERED,
-	   [Type] varchar(50) NOT NULL
+	   [Type] smallint NOT NULL
     )
 
     CREATE TABLE [dbo].[Book]
@@ -145,6 +145,8 @@ BEGIN TRAN
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookPage(Id)] PRIMARY KEY CLUSTERED,
 	   [Text] varchar(50) NULL,
 	   [XmlId] varchar(100) NULL,
+	   [XmlResource] varchar(100) NULL,
+	   [Image] varchar(100) NULL,	   
 	   [Position] int NOT NULL,
 	   [BookVersion] bigint NOT NULL CONSTRAINT [FK_BookPage(BookVersion)_BookVersion(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion](Id)
 
@@ -195,20 +197,6 @@ BEGIN TRAN
 	   [BookVersion] bigint NOT NULL CONSTRAINT [FK_BookVersion_Author(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion](Id),
 	   CONSTRAINT [PK_BookVersion_Author(Author)_BookVersion_Author(Book)] PRIMARY KEY ([Author], [BookVersion])
     )
-
-    CREATE TABLE [dbo].[Image]
-    (
-	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Image(Id)] PRIMARY KEY CLUSTERED,
-	   [FileName] varchar(255) NOT NULL,
-	   [ImageType] smallint NOT NULL,
-	   [Book] bigint NOT NULL CONSTRAINT [FK_Image(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book](Id)
-    )
-
-
-
-
-
-
 
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)

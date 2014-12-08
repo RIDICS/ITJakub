@@ -11,7 +11,6 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string Guid { get; set; }
         public virtual IList<Bookmark> Bookmarks { get; set; }
         public virtual IList<BookVersion> BookVersions { get; set; }
-        public virtual IList<Image> Images { get; set; }
 
         public virtual bool Equals(Book other)
         {

@@ -13,6 +13,12 @@
     <property name="XmlId">
       <column name="XmlId" sql-type="varchar" not-null="false" />
     </property>
+    <property name="XmlResource">
+      <column name="XmlResource" sql-type="varchar" not-null="false" />
+    </property>
+    <property name="Image">
+      <column name="Image" sql-type="varchar" not-null="false" />
+    </property>
     <property name="Position">
       <column name="Position" sql-type="int" not-null="true" />
     </property>
