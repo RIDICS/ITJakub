@@ -32,6 +32,11 @@ namespace ITJakub.SearchService
         {
             return m_searchServiceManager.GetBookPageList(documentId);
         }
+
+        public void Test()
+        {
+            m_searchServiceManager.Test();
+        }
     }
 
     [ServiceContract]

@@ -5,35 +5,34 @@ using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist.DAOs
 {
-    public class BookDao : ExistDao
+    public class BookDao
     {
-        public BookDao(ExistConnectionSettingsSkeleton connectionSettings) : base(connectionSettings)
+        private readonly ExistManager m_existManager;
+
+        public BookDao(ExistManager existManager)
         {
+            m_existManager = existManager;
         }
 
         public string GetPagesByName(string documentId, string start, string end, string transformationName)
         {
-            var parameters = new Dictionary<string, object> {{"document", documentId}, {"start", start}, {"end", end}};
-            return RunStoredQuery("get-pages.xquery", transformationName, parameters);
+            return m_existManager.GetPagesByName(documentId, start, end);
         }
 
         public string GetPageByName(string documentId, string pageName, string transformationName)
         {
-            var parameters = new Dictionary<string, object> { { "document", documentId }, { "start", pageName }};
-            return RunStoredQuery("get-pages.xquery", transformationName, parameters);
+            return m_existManager.GetPageByName(documentId, pageName);
             
         }
 
         public string GetPageByPositionFromStart(string documentId, int pagePosition, string transformationName)
         {
-            var parameters = new Dictionary<string, object> { { "document", documentId }, { "page", pagePosition } };
-            return RunStoredQuery("get-pages.xquery", transformationName, parameters);
+            return m_existManager.GetPageByPositionFromStart(documentId, pagePosition);
         }
 
         public IList<BookPage> GetBookPageList(string documentId)
         {
-            var parameters = new Dictionary<string, object> { { "document", documentId } };
-            string pagesXmlAsString = RunStoredQuery("get-page-list.xquery", parameters);
+            string pagesXmlAsString = m_existManager.GetPageList(documentId);
             XDocument xmlDoc = XDocument.Parse(pagesXmlAsString);
             IEnumerable<XElement> pageBreakElements = xmlDoc.Root.Elements().Where<XElement>(element => element.Name.LocalName == "pb");
             var pageList = new List<BookPage>();
@@ -45,6 +44,12 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
             }
 
             return pageList;
+        }
+
+        public void Test()
+        {
+            var res = m_existManager.GetPageList("{8688926F-9106-4A70-9440-673779415D07}");
+
         }
     }
 }

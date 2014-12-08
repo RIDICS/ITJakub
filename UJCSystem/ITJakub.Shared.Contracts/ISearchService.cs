@@ -17,5 +17,9 @@ namespace ITJakub.Shared.Contracts
 
         [OperationContract]
         IList<BookPage> GetBookPageList(string documentId);
+
+
+        [OperationContract]
+        void Test();
     }
 }

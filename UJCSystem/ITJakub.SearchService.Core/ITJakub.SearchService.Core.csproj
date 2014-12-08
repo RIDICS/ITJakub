@@ -38,6 +38,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,7 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exist\DAOs\BookDao.cs" />
-    <Compile Include="Exist\ExistDao.cs" />
+    <Compile Include="Exist\ExistConnectionSettingsSkeleton.cs" />
+    <Compile Include="Exist\ExistDaoClient.cs" />
+    <Compile Include="Exist\ExistManager.cs" />
+    <Compile Include="Exist\IExistDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

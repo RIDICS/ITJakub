@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ITJakub.SearchService.Core.Exist;
 using ITJakub.SearchService.Core.Exist.DAOs;
 using ITJakub.Shared.Contracts;
 
@@ -31,6 +32,11 @@ namespace ITJakub.SearchService
         public IList<BookPage> GetBookPageList(string documentId)
         {
             return m_bookDao.GetBookPageList(documentId);
+        }
+
+        public void Test()
+        {
+            m_bookDao.Test();
         }
     }
 }

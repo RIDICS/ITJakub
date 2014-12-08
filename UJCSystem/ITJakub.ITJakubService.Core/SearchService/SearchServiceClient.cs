@@ -25,5 +25,10 @@ namespace ITJakub.ITJakubService.Core.SearchService
         {
             return Channel.GetBookPageList(documentId);
         }
+
+        public void Test()
+        {
+            Channel.Test();
+        }
     }
 }
