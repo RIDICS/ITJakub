@@ -48,11 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exist\ExistClient.cs" />
     <Compile Include="Exist\DAOs\BookDao.cs" />
+    <Compile Include="Exist\ExistAttribute.cs" />
     <Compile Include="Exist\ExistConnectionSettingsSkeleton.cs" />
-    <Compile Include="Exist\ExistDaoClient.cs" />
     <Compile Include="Exist\ExistManager.cs" />
     <Compile Include="Exist\IExistDao.cs" />
+    <Compile Include="Exist\UriCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

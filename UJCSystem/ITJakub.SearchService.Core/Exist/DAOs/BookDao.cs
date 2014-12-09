@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using ITJakub.Shared.Contracts;
@@ -32,7 +33,8 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
 
         public IList<BookPage> GetBookPageList(string documentId)
         {
-            string pagesXmlAsString = m_existManager.GetPageList(documentId);
+            var pagesStream = m_existManager.GetPageList(documentId);
+            string pagesXmlAsString = new StreamReader(pagesStream).ReadToEnd();
             XDocument xmlDoc = XDocument.Parse(pagesXmlAsString);
             IEnumerable<XElement> pageBreakElements = xmlDoc.Root.Elements().Where<XElement>(element => element.Name.LocalName == "pb");
             var pageList = new List<BookPage>();
@@ -48,8 +50,7 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
 
         public void Test()
         {
-            var res = m_existManager.GetPageList("{8688926F-9106-4A70-9440-673779415D07}");
-
+            var pages= GetBookPageList("{125A0032-03B5-40EC-B68D-80473CC5653A}");
         }
     }
 }

@@ -1,24 +1,24 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Web;
+﻿using System.IO;
 
 namespace ITJakub.SearchService.Core.Exist
 {
     public class ExistManager
     {
-        private readonly ExistConnectionSettingsSkeleton m_existSettings;
-        private readonly ExistDaoClient m_client;
+        private readonly ExistClient m_client;
 
-        public ExistManager(ExistConnectionSettingsSkeleton existSettings)
+        public ExistManager(ExistClient existClient)
         {
-            m_existSettings = existSettings;
-            m_client = new ExistDaoClient();
+            m_client = existClient;
         }
 
-        public string GetPageList(string documentId)
+        public Stream GetPageList(string documentId, string xslPath)
         {
-            return m_client.GetPageList(m_existSettings.ViewsCollection, documentId);
+            return m_client.GetPageList(documentId,xslPath);
+        }
+
+        public Stream GetPageList(string documentId)
+        {
+            return m_client.GetPageList(documentId);
         }
 
         public string GetPageByPositionFromStart(string documentId, int pagePosition)
