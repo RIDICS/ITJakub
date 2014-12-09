@@ -1,0 +1,119 @@
+﻿<Page
+    x:Class="ITJakub.MobileApps.Client.MainApp.View.OwnedTaskListView"
+    DataContext="{Binding OwnedTaskListViewModel, Source={StaticResource Locator}}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
+    xmlns:comboBoxItem="using:ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <CollectionViewSource Source="{Binding GroupedTaskList}" IsSourceGrouped="True" x:Key="TaskListViewSource" />
+        <converter:ApplicationTypeToNameConverter x:Key="ApplicationTypeToNameConverter" />
+        <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
+    </Page.Resources>
+    
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Add" Label="Vytvořit"
+                          Command="{Binding CreateNewTaskCommand}" />
+        </CommandBar>
+    </Page.BottomAppBar>
+    
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Back button and page title -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Margin="39,59,39,0"
+                    Command="{Binding GoBackCommand}"
+                    Style="{StaticResource NavigationBackButtonNormalStyle}"
+                    VerticalAlignment="Top"
+                    AutomationProperties.Name="Back"
+                    AutomationProperties.AutomationId="BackButton"
+                    AutomationProperties.ItemType="Navigation Button" />
+            <TextBlock Text="Moje zadání"
+                       Style="{StaticResource HeaderTextBlockStyle}"
+                       Grid.Column="1" 
+                       IsHitTestVisible="false"
+                       TextWrapping="NoWrap"
+                       VerticalAlignment="Bottom"
+                       Margin="0,0,30,40" />
+            
+            <ComboBox Grid.Column="2"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Bottom"
+                      Margin="20,0,0,40"
+                      Style="{StaticResource TextComboBoxStyle}"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Type"
+                      SelectedValue="{Binding SelectedSort, Mode=TwoWay}"
+                      SelectedIndex="{Binding DefaultIndex}">
+                <comboBoxItem:SortTaskItem Name="Seřadit podle názvu"
+                                           Type="Name" />
+                <comboBoxItem:SortTaskItem Name="Seřadit podle data vytvoření"
+                                           Type="CreateTime" />
+            </ComboBox>
+        </Grid>
+        
+        <GridView Grid.Row="1"
+                  ItemsSource="{Binding Source={StaticResource TaskListViewSource}}"
+                  Padding="110,0,0,60"
+                  IsItemClickEnabled="True"
+                  SelectionMode="Single">
+            
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid GroupPadding="0,0,70,0" />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+
+            <GridView.GroupStyle>
+                <GroupStyle HidesIfEmpty="True">
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Key, Converter={StaticResource ApplicationTypeToNameConverter}}"
+                                       Style="{StaticResource SubheaderTextBlockStyle}" />
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </GridView.GroupStyle>
+            
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="5,3,5,3">
+                        <Viewbox Width="48"
+                                 Height="48">
+                            <SymbolIcon Symbol="Page" />
+                        </Viewbox>
+
+                        <StackPanel Orientation="Vertical" Width="250">
+                            <TextBlock Text="{Binding Name}"
+                                       FontWeight="Bold" />
+                            <TextBlock>
+                                <Run Text="Vytvořeno: " />
+                                <Run Text="{Binding CreateTime, Converter={StaticResource DateTimeToStringConverter}}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
+</Page>

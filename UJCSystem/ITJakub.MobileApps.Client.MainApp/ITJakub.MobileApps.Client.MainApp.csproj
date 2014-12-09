@@ -107,12 +107,16 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ApplicationTypeComparator.cs" />
+    <Compile Include="ViewModel\ComboBoxItem\SortTaskItem.cs" />
+    <Compile Include="ViewModel\ComboBoxItem\SortTaskType.cs" />
     <Compile Include="ViewModel\EditorHostViewModel.cs" />
     <Compile Include="ViewModel\GroupList\ConnectToGroupViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
     <Compile Include="ViewModel\Message\SelectedApplicationMessage.cs" />
     <Compile Include="ViewModel\Message\SelectedTaskMessage.cs" />
     <Compile Include="ViewModel\Message\OpenEditorMessage.cs" />
+    <Compile Include="ViewModel\OwnedTaskListViewModel.cs" />
     <Compile Include="View\AboutSettingsFlyout.xaml.cs">
       <DependentUpon>AboutSettingsFlyout.xaml</DependentUpon>
     </Compile>
@@ -167,6 +171,9 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="View\Login\UserMenu\UserMenu.xaml.cs">
       <DependentUpon>UserMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\OwnedTaskListView.xaml.cs">
+      <DependentUpon>OwnedTaskListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SelectTaskView.xaml.cs">
       <DependentUpon>SelectTaskView.xaml</DependentUpon>
@@ -251,6 +258,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\OwnedTaskListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SelectTaskView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -323,7 +334,9 @@
       <Name>ITJakub.MobileApps.DataContracts</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ViewModel\TaskList\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

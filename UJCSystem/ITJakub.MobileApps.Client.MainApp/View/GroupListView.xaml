@@ -30,7 +30,8 @@
 
             <AppBarButton Icon="Bullets"
                           Label="Editor zadání"
-                          Visibility="{Binding TeachersButtonVisibility}" />
+                          Visibility="{Binding TeachersButtonVisibility}"
+                          Command="{Binding OpenTaskEditorCommand}" />
             
             <AppBarButton Icon="Forward"
                           Label="Připojit se k nové skupině">

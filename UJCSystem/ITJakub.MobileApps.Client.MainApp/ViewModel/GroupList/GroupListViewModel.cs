@@ -86,6 +86,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         public RelayCommand ConnectCommand { get; private set; }
 
+        public RelayCommand OpenTaskEditorCommand { get; private set; }
+
         public string NewGroupName
         {
             get { return m_newGroupName; }
@@ -171,13 +173,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         }
 
         public ConnectToGroupViewModel ConnectToGroupViewModel { get; set; }
-
+        
         private void InitCommands()
         {
             GroupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
             ConnectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
             CreateNewGroupCommand = new RelayCommand(CreateNewGroup);
             RefreshListCommand = new RelayCommand(LoadData);
+            OpenTaskEditorCommand = new RelayCommand(() => m_navigationService.Navigate(typeof(OwnedTaskListView)));
         }
 
         private void InitViewModels()

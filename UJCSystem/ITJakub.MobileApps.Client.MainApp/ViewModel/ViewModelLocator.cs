@@ -99,5 +99,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get { return Container.Current.Resolve<EditorHostViewModel>(); }
         }
+
+        public OwnedTaskListViewModel OwnedTaskListViewModel
+        {
+            get { return Container.Current.Resolve<OwnedTaskListViewModel>(); }
+        }
     }
 }
