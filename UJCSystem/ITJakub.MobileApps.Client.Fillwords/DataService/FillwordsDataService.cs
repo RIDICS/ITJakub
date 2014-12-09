@@ -18,5 +18,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
         {
             m_taskManager.CreateTask(taskName, bookRtfContent, optionsList, callback);
         }
+
+        public void SetTaskAndGetData(string data, Action<TaskViewModel> callback)
+        {
+            m_taskManager.SetTaskAndGetData(data, callback);
+        }
     }
 }

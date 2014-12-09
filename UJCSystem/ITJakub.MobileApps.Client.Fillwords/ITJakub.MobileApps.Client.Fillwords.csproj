@@ -110,13 +110,15 @@
     <Compile Include="DataContract\FillwordsTaskContract.cs" />
     <Compile Include="DataService\FillwordsDataService.cs" />
     <Compile Include="DataService\TaskManager.cs" />
+    <Compile Include="ViewModel\TaskViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />
     <Compile Include="ViewModel\FillwordsViewModel.cs" />
     <Compile Include="ViewModel\OptionsEditorViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
-    <Compile Include="View\ComboRichEditBox.cs" />
-    <Compile Include="View\EditorRichEditBox.cs" />
+    <Compile Include="View\Converter\AnswerStateToBackgroundConverter.cs" />
+    <Compile Include="View\Control\ComboRichEditBox.cs" />
+    <Compile Include="View\Control\EditorRichEditBox.cs" />
     <Compile Include="View\EditorView.xaml.cs">
       <DependentUpon>EditorView.xaml</DependentUpon>
     </Compile>

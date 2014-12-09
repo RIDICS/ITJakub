@@ -8,6 +8,7 @@
     xmlns:view="using:ITJakub.MobileApps.Client.Fillwords.View"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:control1="using:ITJakub.MobileApps.Client.Fillwords.View.Control"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:EditorViewModel}">
     
@@ -115,7 +116,7 @@
                 Background="#50FFFFFF"
                 BorderBrush="#30000000"
                 BorderThickness="2">
-            <view:EditorRichEditBox
+            <control1:EditorRichEditBox
                 IsSelectedTextHighlighted="{Binding OptionsEditorViewModel.SetSelectedTextHighlighted, Mode=TwoWay}"
                 IsEditingEnabled="{Binding IsTextEditingEnabled}"
                 SelectedText="{Binding OptionsEditorViewModel.SelectedText, Mode=TwoWay}"
@@ -123,7 +124,7 @@
                 SelectedOptions="{Binding OptionsEditorViewModel.SelectedOption, Mode=TwoWay}"
                 IsFlyoutOpen="{Binding IsEditorFlyoutOpen, Mode=TwoWay}"
                 DocumentRtf="{Binding BookRtfContent, Mode=TwoWay}">
-                <view:EditorRichEditBox.Flyout>
+                <control1:EditorRichEditBox.Flyout>
                     <Flyout>
                         <StackPanel Orientation="Vertical"
                                     Width="270"
@@ -224,8 +225,8 @@
                                     Command="{Binding SaveOptionsCommand}" />
                         </StackPanel>
                     </Flyout>
-                </view:EditorRichEditBox.Flyout>
-            </view:EditorRichEditBox>
+                </control1:EditorRichEditBox.Flyout>
+            </control1:EditorRichEditBox>
         </Border>
 
         <Grid Grid.Row="1"

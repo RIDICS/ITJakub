@@ -4,9 +4,29 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    xmlns:viewModel="using:ITJakub.MobileApps.Client.Fillwords.ViewModel"
+    xmlns:control="using:ITJakub.MobileApps.Client.Fillwords.View.Control"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance viewModel:FillwordsViewModel}">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          Margin="120,0,120,60">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <control:ComboRichEditBox Grid.Row="1"
+                                  Margin="10"
+                                  DocumentRtf="{Binding TaskDocumentRtf}"
+                                  OptionsList="{Binding TaskOptionsList}"
+                                  AnswerChangedCommand="{Binding AnswerChangedCommand}" />
+        
+        <Button Grid.Row="2"
+                HorizontalAlignment="Right"
+                MinWidth="170"
+                Content="Odevzdat"
+                Command="{Binding SubmitCommand}" />
     </Grid>
 </UserControl>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using ITJakub.MobileApps.Client.Fillwords.DataContract;
 using ITJakub.MobileApps.Client.Fillwords.ViewModel;
@@ -33,6 +34,32 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             var data = JsonConvert.SerializeObject(taskContract);
             await m_applicationCommunication.CreateTaskAsync(ApplicationType.Fillwords, taskName, data);
             callback(null);
+        }
+
+        public void SetTaskAndGetData(string data, Action<TaskViewModel> callback)
+        {
+            if (data == null)
+                return;
+
+            var taskData = JsonConvert.DeserializeObject<FillwordsTaskContract>(data);
+            if (taskData == null)
+                return;
+
+            var viewModel = new TaskViewModel
+            {
+                DocumentRtf = taskData.DocumentRtf,
+                Options = new List<OptionsViewModel>(taskData.Options.Select(contract => new OptionsViewModel
+                {
+                    CorrectAnswer = contract.CorrectAnswer,
+                    WordPosition = contract.WordPosition,
+                    List = new ObservableCollection<OptionViewModel>(contract.WordList.Select(s => new OptionViewModel
+                    {
+                        Word = s
+                    }))
+                }))
+            };
+
+            callback(viewModel);
         }
     }
 }

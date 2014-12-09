@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Books.View.Control;
 using ITJakub.MobileApps.Client.Fillwords.ViewModel;
 
-namespace ITJakub.MobileApps.Client.Fillwords.View
+namespace ITJakub.MobileApps.Client.Fillwords.View.Control
 {
     [TemplatePart(Name = "RichEditBox", Type = typeof(BindableRichEditBox))]
-    public sealed class ComboRichEditBox : Control
+    public sealed class ComboRichEditBox : Windows.UI.Xaml.Controls.Control
     {
         private BindableRichEditBox m_richEditBoxControl;
 
@@ -48,6 +48,12 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
             get { return (List<ComboBoxData>)GetValue(DataProperty); }
         }
 
+        public ICommand AnswerChangedCommand
+        {
+            get { return (ICommand) GetValue(AnswerChangedCommandProperty); }
+            set { SetValue(AnswerChangedCommandProperty, value); }
+        }
+
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register("Data",
             typeof (List<ComboBoxData>), typeof (ComboRichEditBox), new PropertyMetadata(new List<ComboBoxData>()));
 
@@ -58,6 +64,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
         public static readonly DependencyProperty DocumentRtfProperty = DependencyProperty.Register("DocumentRtf",
             typeof(string), typeof(ComboRichEditBox),
             new PropertyMetadata(string.Empty, OnDocumentOrOptionsChanged));
+
+        public static readonly DependencyProperty AnswerChangedCommandProperty =
+            DependencyProperty.Register("AnswerChangedCommand", typeof (ICommand), typeof (ComboRichEditBox),
+                new PropertyMetadata(null));
         
         private static void OnDocumentOrOptionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -115,7 +125,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
                 textRange.ParagraphFormat.SetLineSpacing(LineSpacingRule.Multiple, 1.5f);
                 
                 // create ComboBoxData
-                var comboBoxData = new ComboBoxData
+                var comboBoxData = new ComboBoxData(optionsViewModel, InvokeAnswerChangedCommand)
                 {
                     Index = correctedWordPosition,
                     Length = maxWordLength
@@ -149,13 +159,26 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
             }
         }
 
+        private void InvokeAnswerChangedCommand(OptionsViewModel optionsViewModel)
+        {
+            if (AnswerChangedCommand == null || !AnswerChangedCommand.CanExecute(optionsViewModel))
+                return;
+            
+            AnswerChangedCommand.Execute(optionsViewModel);
+        }
+
         public class ComboBoxData : ViewModelBase
         {
+            private readonly OptionsViewModel m_optionsViewModel;
+            private readonly Action<OptionsViewModel> m_answerChangedCallback;
             private Thickness m_position;
             private double m_width;
+            private string m_selectedWord;
 
-            public ComboBoxData()
+            public ComboBoxData(OptionsViewModel optionsViewModel, Action<OptionsViewModel> answerChangedCallback)
             {
+                m_optionsViewModel = optionsViewModel;
+                m_answerChangedCallback = answerChangedCallback;
                 WordList = new List<string>();
                 Position = new Thickness(0);
             }
@@ -191,7 +214,21 @@ namespace ITJakub.MobileApps.Client.Fillwords.View
 
             public List<string> WordList { get; set; }
 
-            public string SelectedWord { get; set; }
+            public OptionsViewModel OptionsViewModel
+            {
+                get { return m_optionsViewModel; }
+            }
+
+            public string SelectedWord
+            {
+                get { return m_selectedWord; }
+                set
+                {
+                    m_selectedWord = value;
+                    m_optionsViewModel.SelectedAnswer = value;
+                    m_answerChangedCallback(m_optionsViewModel);
+                }
+            }
         }
     }
 }

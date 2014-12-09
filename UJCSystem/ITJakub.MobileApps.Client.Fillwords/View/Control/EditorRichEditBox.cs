@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Input;
 using ITJakub.MobileApps.Client.Books.View.Control;
 using ITJakub.MobileApps.Client.Fillwords.ViewModel;
 
-namespace ITJakub.MobileApps.Client.Fillwords.View
+namespace ITJakub.MobileApps.Client.Fillwords.View.Control
 {
     [TemplatePart(Name = "ContentElement", Type = typeof(ScrollViewer))]
     public class EditorRichEditBox : BindableRichEditBox
