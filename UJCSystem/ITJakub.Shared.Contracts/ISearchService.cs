@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.ServiceModel;
 
 namespace ITJakub.Shared.Contracts
@@ -18,8 +19,8 @@ namespace ITJakub.Shared.Contracts
         [OperationContract]
         IList<BookPage> GetBookPageList(string documentId);
 
-
         [OperationContract]
-        void Test();
+        void UploadFile(FileUploadContract fileUploadContract);
+
     }
 }

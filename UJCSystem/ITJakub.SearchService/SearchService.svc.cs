@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 
@@ -33,9 +34,9 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetBookPageList(documentId);
         }
 
-        public void Test()
+        public void UploadFile(FileUploadContract fileUploadContract)
         {
-            m_searchServiceManager.Test();
+            m_searchServiceManager.UploadFile(fileUploadContract);
         }
     }
 

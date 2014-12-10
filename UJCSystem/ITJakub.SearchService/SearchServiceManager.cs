@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ITJakub.SearchService.Core.Exist;
+using System.IO;
 using ITJakub.SearchService.Core.Exist.DAOs;
 using ITJakub.Shared.Contracts;
 
@@ -16,7 +16,7 @@ namespace ITJakub.SearchService
 
         public string GetBookPageByPosition(string documentId, int pagePosition, string transformationName)
         {
-            return m_bookDao.GetPageByPositionFromStart(documentId, pagePosition,transformationName);
+            return m_bookDao.GetPageByPositionFromStart(documentId, pagePosition, transformationName);
         }
 
         public string GetBookPageByName(string documentId, string pageName, string transformationName)
@@ -24,7 +24,8 @@ namespace ITJakub.SearchService
             return m_bookDao.GetPageByName(documentId, pageName, transformationName);
         }
 
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string transformationName)
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName,
+            string transformationName)
         {
             return m_bookDao.GetPagesByName(documentId, startPageName, endPageName, transformationName);
         }
@@ -34,9 +35,9 @@ namespace ITJakub.SearchService
             return m_bookDao.GetBookPageList(documentId);
         }
 
-        public void Test()
+        public void UploadFile(FileUploadContract contract)
         {
-            m_bookDao.Test();
+            m_bookDao.UploadFile(contract.BookId, contract.BookVersionid, contract.FileName, contract.DataStream);
         }
     }
 }

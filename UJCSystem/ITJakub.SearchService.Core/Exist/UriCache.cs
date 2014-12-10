@@ -2,56 +2,48 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace ITJakub.SearchService.Core.Exist
 {
     public class UriCache
     {
+        private readonly MethodInfoResolver m_methodInfoResolver;
         private readonly ExistConnectionSettingsSkeleton m_settings;
-        private readonly Dictionary<string, string> m_uriTemplateDictionary;
+        private readonly Dictionary<string, CommunicationInfo> m_uriTemplateDictionary;
 
-        public UriCache(ExistConnectionSettingsSkeleton settings)
+        public UriCache(ExistConnectionSettingsSkeleton settings, MethodInfoResolver methodInfoResolver)
         {
             m_settings = settings;
-            m_uriTemplateDictionary = new Dictionary<string, string>();
+            m_methodInfoResolver = methodInfoResolver;
+            m_uriTemplateDictionary = new Dictionary<string, CommunicationInfo>();
         }
 
-        public string GetUriForMethod([CallerMemberName] string methodName = null)
+        public CommunicationInfo GetCommunicationInfoForMethod([CallerMemberName] string methodName = null)
         {
-            string uriTemplate;
-            m_uriTemplateDictionary.TryGetValue(methodName, out uriTemplate);
-            if (string.IsNullOrEmpty(uriTemplate))
+            if (methodName == null) return null;
+            CommunicationInfo commInfo;
+            m_uriTemplateDictionary.TryGetValue(methodName, out commInfo);
+            if (commInfo == null)
             {
                 Type interfaceType = typeof (IExistClient);
                 MethodInfo mInfo = interfaceType.GetMethod(methodName);
-                var attribute = (ExistAttribute) Attribute.GetCustomAttribute(mInfo, typeof (ExistAttribute));
-                string queryStringParams = GetQueryStringTemplateFromMethodInfo(mInfo);
-
-                uriTemplate = string.Format("{0}{1}{2}{3}", m_settings.BaseUri, m_settings.XQueriesRelativeUri,
-                    attribute.XqueryName, queryStringParams);
-                AddUriForMethod(methodName, uriTemplate);
+                commInfo = m_methodInfoResolver.Resolve(mInfo);
+                AddCommunicationInfoForMethod(methodName, commInfo);
             }
 
-            return uriTemplate;
+            return commInfo;
         }
 
-        private string GetQueryStringTemplateFromMethodInfo(MethodInfo mInfo)
-        {
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append("?");
-            for (int index = 0; index < mInfo.GetParameters().Length; index++)
-            {
-                if (index != 0) stringBuilder.Append("&");
-                ParameterInfo paramInfo = mInfo.GetParameters()[index];
-                stringBuilder.Append(string.Format("{0}={{{1}}}", paramInfo.Name, index));
-            }
-            return stringBuilder.ToString();
-        }
 
-        private void AddUriForMethod(string methodName, string uriTemplate)
+        private void AddCommunicationInfoForMethod(string methodName, CommunicationInfo communicationInfo)
         {
-            m_uriTemplateDictionary.Add(methodName, uriTemplate);
+            m_uriTemplateDictionary.Add(methodName, communicationInfo);
         }
+    }
+
+    public class CommunicationInfo
+    {
+        public string Method { get; set; }
+        public string UriTemplate { get; set; }
     }
 }

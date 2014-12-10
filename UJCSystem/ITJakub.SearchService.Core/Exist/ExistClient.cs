@@ -18,21 +18,7 @@ namespace ITJakub.SearchService.Core.Exist
             };
         }
 
-        public Stream GetPageList(string documentId, string xslPath)
-        {
-            string uriTemplate = m_uriCache.GetUriForMethod();
-            if (!string.IsNullOrEmpty(xslPath))
-            {
-                AddXslParam(uriTemplate, xslPath);
-            }
-            Uri uri = SetParamsToUri(uriTemplate, documentId);
-            return m_webClient.OpenRead(uri);
-        }
-
-        public Stream GetPageList(string documentId)
-        {
-            return GetPageList(documentId, null);
-        }
+        #region Helpers
 
         private static Uri SetParamsToUri(string uriTemplate, params object[] args)
         {
@@ -41,7 +27,73 @@ namespace ITJakub.SearchService.Core.Exist
 
         private static string AddXslParam(string uriTemplate, string xslPath)
         {
-            return string.Format("{0}&_xsl={1}", uriTemplate, xslPath);
+            return string.Format("{0}&_xsl={1}", uriTemplate, xslPath); //TODO add check for "?"
+        }
+
+        private static Uri GetCompleteUri(CommunicationInfo commInfo, string xslPath, params object[] args)
+        {
+            string uriTemplate = commInfo.UriTemplate;
+            if (!string.IsNullOrEmpty(xslPath))
+            {
+                uriTemplate = AddXslParam(uriTemplate, xslPath);
+            }
+            return SetParamsToUri(uriTemplate, args);
+        }
+
+        #endregion
+
+        public Stream GetPageList(string documentId)
+        {
+            return GetPageList(documentId, null);
+        }
+
+        public void UploadFile(string bookId, string bookVersionId, string fileName, Stream fileStream)
+        {
+            CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            Uri uri = SetParamsToUri(commInfo.UriTemplate, bookId, bookVersionId, fileName);
+            using (Stream writeStream = m_webClient.OpenWrite(uri, commInfo.Method))
+            {
+                fileStream.CopyTo(writeStream);
+            }
+        }
+
+        public string GetPageByPositionFromStart(string documentId, int pagePosition)
+        {
+            return GetPageByPositionFromStart(documentId, pagePosition, null);
+        }
+
+        public string GetPageByName(string documentId, string start)
+        {
+            return GetPageByName(documentId, start, null);
+        }
+
+        public string GetPagesByName(string documentId, string start, string end)
+        {
+            return GetPagesByName(documentId, start, end, null);
+        }
+
+        public Stream GetPageList(string documentId, string xslPath)
+        {
+            CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            return m_webClient.OpenRead(GetCompleteUri(commInfo, xslPath, documentId));
+        }
+
+        public string GetPageByPositionFromStart(string documentId, int pagePosition, string xslPath)
+        {
+            CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            return m_webClient.DownloadString(GetCompleteUri(commInfo, xslPath, documentId, pagePosition));
+        }
+
+        public string GetPageByName(string documentId, string start, string xslPath)
+        {
+            CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            return m_webClient.DownloadString(GetCompleteUri(commInfo, xslPath, documentId, start));
+        }
+
+        public string GetPagesByName(string documentId, string start, string end, string xslPath)
+        {
+            CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            return m_webClient.DownloadString(GetCompleteUri(commInfo, xslPath, documentId, start, end));
         }
     }
 }

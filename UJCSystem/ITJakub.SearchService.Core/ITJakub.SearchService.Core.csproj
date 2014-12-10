@@ -48,11 +48,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exist\ExistResourceManager.cs" />
+    <Compile Include="Exist\Attributes\ExistQuery.cs" />
+    <Compile Include="Exist\Attributes\ExistResource.cs" />
+    <Compile Include="Exist\IExistResourceManager.cs" />
+    <Compile Include="Exist\MethodInfoResolver.cs" />
     <Compile Include="Exist\ExistClient.cs" />
     <Compile Include="Exist\DAOs\BookDao.cs" />
-    <Compile Include="Exist\ExistAttribute.cs" />
+    <Compile Include="Exist\Attributes\ExistAttribute.cs" />
     <Compile Include="Exist\ExistConnectionSettingsSkeleton.cs" />
     <Compile Include="Exist\ExistManager.cs" />
+    <Compile Include="Exist\AttributeResolver\ExistQueryResolver.cs" />
+    <Compile Include="Exist\AttributeResolver\ExistResourceResolver.cs" />
+    <Compile Include="Exist\AttributeResolver\IExistAttributeResolver.cs" />
     <Compile Include="Exist\IExistDao.cs" />
     <Compile Include="Exist\UriCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
