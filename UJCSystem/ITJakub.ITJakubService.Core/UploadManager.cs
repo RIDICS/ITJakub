@@ -8,9 +8,9 @@ namespace ITJakub.ITJakubService.Core
 {
     public class UploadManager
     {
-        private readonly FilesystemManager m_filesystemManager;
+        private readonly FileSystemManager m_filesystemManager;
 
-        public UploadManager(FilesystemManager filesystemManager)
+        public UploadManager(FileSystemManager filesystemManager)
         {
             m_filesystemManager = filesystemManager;
         }

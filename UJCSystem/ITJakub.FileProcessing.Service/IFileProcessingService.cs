@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.IO;
+using System.ServiceModel;
 
 namespace ITJakub.FileProcessing.Service
 {
@@ -6,6 +7,9 @@ namespace ITJakub.FileProcessing.Service
     public interface IFileProcessingService
     {
         [OperationContract]
-        void TestXml();
+        void AddResource(string sessionId,string fileName, Stream dataStream);
+
+        [OperationContract]
+        bool ProcessSession(string sessionId);
     }
 }

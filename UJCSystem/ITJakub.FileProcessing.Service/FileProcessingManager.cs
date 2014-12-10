@@ -1,12 +1,13 @@
 using System.IO;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.FileProcessing.Core;
+using ITJakub.FileProcessing.Core.XMLProcessing;
 
 namespace ITJakub.FileProcessing.Service
 {
     public class FileProcessingManager
     {
-        private readonly BookVersionRepository m_bookVersionRepository; //TODO just for testing purpose
+        private readonly BookVersionRepository m_bookVersionRepository; 
         private readonly XmlProcessingManager m_xmlProcessingmanager;
 
         public FileProcessingManager(BookVersionRepository bookVersionRepository, XmlProcessingManager xmlProcessingManager)

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 
