@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Web;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Web.Hub.Models;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-     [Authorize]
+    //[Authorize]
     public class UploadController : Controller
     {
         private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
@@ -14,66 +14,21 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Upload()
         {
-            return View();
+            return View(new UploadViewModel{ SessionId = Guid.NewGuid().ToString()});
         }
 
 
         //Dropzone upload method
-        public ActionResult UploadFile(string changeMessage)
-        {
-            if (Request.Files.Count == 1)
-            {
-                HttpPostedFileBase file = Request.Files[0];
-                if (file != null && file.ContentLength != 0)
-                {
-                    ProcessedFileInfoContract fileInfo = m_serviceClient.ProcessUploadedFile(new UploadFileContract
-                    {
-                        ChangeMessage= changeMessage,
-                        Data = file.InputStream
-                    });
-                    return Json(new {FileInfo = fileInfo});
-                }
-            }
-
-            return Json(new {Error = "Some error occured in uploading file"});
-        }
-
-        //public ActionResult UploadMetadata(string fileGuid, string name, string author)
-        //{
-        //    m_serviceClient.SaveFileMetadata(fileGuid, name, author);
-        //    return Json(new {});
-        //}
-
-        public ActionResult UploadFrontImage(string fileGuid)
-        {
-            if (Request.Files.Count == 1)
-            {
-                HttpPostedFileBase file = Request.Files[0];
-                if (file != null && file.ContentLength != 0)
-                {
-                    m_serviceClient.SaveFrontImageForFile(new UploadImageContract
-                    {
-                        FileGuid = fileGuid,
-                        Name = file.FileName,
-                        Data = file.InputStream
-                    });
-                    return Json(new {});
-                }
-            }
-
-            return Json(new {Error = "Some error occured in uploading front image"});
-        }
-
-        public ActionResult UploadImages(string fileGuid)
+        public ActionResult UploadFile(string sessionId)
         {
             for (int i = 0; i < Request.Files.Count; i++)
             {
                 HttpPostedFileBase file = Request.Files[i];
                 if (file != null && file.ContentLength != 0)
                 {
-                    m_serviceClient.SavePageImageForFile(new UploadImageContract
+                    m_serviceClient.SaveUploadedFile(new UploadFileContract()
                     {
-                        FileGuid = fileGuid,
+                        SessionId = sessionId,
                         Name = file.FileName,
                         Data = file.InputStream
                     });
@@ -81,6 +36,12 @@ namespace ITJakub.Web.Hub.Controllers
             }
             return Json(new {});
         }
-    }
 
+
+        public ActionResult ProcessUploadedFiles(string sessionId)
+        {
+            //TODO process here 
+            return Json(new { success = true});
+        }
+    }
 }

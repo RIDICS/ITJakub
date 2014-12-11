@@ -54,11 +54,17 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
 }
 div.container {
   padding: 0;
   width: 100%;
   max-width: 1100px;
+}
+.style-button {
+  border-radius: 0;
+  background-color: #84ced7;
+  color: white;
 }
 #dropzoneFileForm {
   background: white;
@@ -723,12 +729,6 @@ a.main_logo_href img {
   margin: 0 0 0 7px;
   font-family: 'Times New Roman';
 }
-/* top navbar with ujc logo*/
-/*.navbar-top {
-    margin:auto; 
-    max-width:1100px;
-    height:65px;
-}*/
 .main-navbar-container {
   margin-left: 2px;
   margin-right: 2px;
@@ -756,6 +756,18 @@ ul {
 .file-upload-metadata input[type='text'] {
   display: block;
   width: 100%;
+}
+#dropzoneFileForm {
+  width: 600px;
+}
+#ProcessUploadedButton {
+  margin: 5px;
+}
+#progressbar .ui-progressbar-value {
+  background-color: #84ced7;
+}
+#dropzoneFileFormPreview {
+  overflow-y: auto;
 }
 #authorsTableDiv {
   margin: 5px;
@@ -837,4 +849,4 @@ ul {
 .top-offset-without-submenu {
   margin: -25px 0 0 0;
 }
-/*# sourceMappingURL=itjakub.css.map */
+/*# sourceMappingURL=ITJakub.css.map */

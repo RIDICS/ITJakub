@@ -30,17 +30,5 @@ namespace ITJakub.ITJakubService.Core
         {
             throw new NotImplementedException();
         }
-
-        public void SaveFrontImageForFile(UploadImageContract uploadImageContract)
-        {
-            m_filesystemManager.SaveFrontImage(uploadImageContract.FileGuid, uploadImageContract.Name,
-                uploadImageContract.Data);
-        }
-
-        public void SavePageImageForFile(UploadImageContract uploadImageContract)
-        {
-            m_filesystemManager.SaveImage(uploadImageContract.FileGuid, uploadImageContract.Name,
-                uploadImageContract.Data);
-        }
     }
 }

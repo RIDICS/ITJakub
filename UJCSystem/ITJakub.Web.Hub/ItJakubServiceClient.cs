@@ -52,62 +52,22 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract dataStream)
+        public ProcessedFileInfoContract SaveUploadedFile(UploadFileContract dataStream)
         {
             try
             {
-                return Channel.ProcessUploadedFile(dataStream);
+                return Channel.SaveUploadedFile(dataStream);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("ProcessUploadedFile failed with: {0}", ex);
+                    m_log.ErrorFormat("SaveUploadedFile failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("ProcessUploadedFile timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
-        public void SaveFrontImageForFile(UploadImageContract uploadImageContract)
-        {
-            try
-            {
-                Channel.SaveFrontImageForFile(uploadImageContract);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SaveFrontImageForFile failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SaveFrontImageForFile timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
-        public void SavePageImageForFile(UploadImageContract uploadImageContract)
-        {
-            try
-            {
-                Channel.SavePageImageForFile(uploadImageContract);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SavePageImageForFile failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SavePageImageForFile timeouted with: {0}", ex);
+                    m_log.ErrorFormat("SaveUploadedFile timeouted with: {0}", ex);
                 throw;
             }
         }
