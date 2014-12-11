@@ -1,6 +1,4 @@
-﻿using System.IO;
-using Castle.Windsor;
-using ITJakub.FileProcessing.Core.Sessions;
+﻿using ITJakub.FileProcessing.Core.Sessions;
 using ITJakub.FileProcessing.DataContracts;
 using ITJakub.Shared.Contracts.Resources;
 

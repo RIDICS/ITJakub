@@ -1,6 +1,4 @@
-using System.IO;
 using ITJakub.DataEntities.Database.Repositories;
-using ITJakub.FileProcessing.Core;
 using ITJakub.FileProcessing.Core.XMLProcessing;
 
 namespace ITJakub.FileProcessing.Service
@@ -8,19 +6,12 @@ namespace ITJakub.FileProcessing.Service
     public class FileProcessingManager
     {
         private readonly BookVersionRepository m_bookVersionRepository; 
-        private readonly XmlProcessingManager m_xmlProcessingmanager;
+        private readonly XmlMetadataProcessingManager m_xmlMetadataProcessingmanager;
 
-        public FileProcessingManager(BookVersionRepository bookVersionRepository, XmlProcessingManager xmlProcessingManager)
+        public FileProcessingManager(BookVersionRepository bookVersionRepository, XmlMetadataProcessingManager xmlMetadataProcessingManager)
         {
             m_bookVersionRepository = bookVersionRepository;
-            m_xmlProcessingmanager = xmlProcessingManager;
-        }
-
-        public void TestXml()
-        {
-            FileStream xmlFileStream = File.Open("D:\\ITJakubTestXml\\CerKal.xml", FileMode.Open);
-            var bookVersion = m_xmlProcessingmanager.GetXmlMetadata(xmlFileStream);
-            var bookVersionId = m_bookVersionRepository.Create(bookVersion);
+            m_xmlMetadataProcessingmanager = xmlMetadataProcessingManager;
         }
     }
 }

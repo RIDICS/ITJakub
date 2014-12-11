@@ -98,7 +98,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             }
             var director = GetDirectorBySessionId(sessionId);
 
-            return m_resourceProcessorManager.ProcessSessionResources(director.Resources);
+            return m_resourceProcessorManager.ProcessSessionResources(director);
         }
     }
 
@@ -209,6 +209,11 @@ namespace ITJakub.FileProcessing.Core.Sessions
             m_disposed = true;
         }
         #endregion
+
+        public Resource GetMetaData()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Resource
