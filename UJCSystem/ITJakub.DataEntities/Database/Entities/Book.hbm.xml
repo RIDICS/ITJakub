@@ -21,9 +21,5 @@
       <key column="Book" />
       <one-to-many class="BookVersion" />
     </bag>
-    <bag name="Images" inverse="true">
-      <key column="Book" />
-      <one-to-many class="Image" />
-    </bag>
   </class>
 </hibernate-mapping>

@@ -15,12 +15,7 @@ namespace ITJakub.FileProcessing.Service
 
     public class FileProcessingService : IFileProcessingService
     {
-        private readonly ResourceSessionManager m_sessionManager;
-
-        public FileProcessingService(ResourceSessionManager sessionManager)
-        {
-            m_sessionManager = sessionManager;
-        }
+        private readonly ResourceSessionManager m_sessionManager = Container.Current.Resolve<ResourceSessionManager>();
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)
         {

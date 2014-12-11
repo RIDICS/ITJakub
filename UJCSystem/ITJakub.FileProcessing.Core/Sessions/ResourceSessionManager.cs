@@ -16,9 +16,9 @@ namespace ITJakub.FileProcessing.Core.Sessions
         private readonly Dictionary<string, ResourceSessionDirector> m_resourceDirectors =
             new Dictionary<string, ResourceSessionDirector>();
 
-        private readonly ResourceProcessorManger m_resourceProcessorManager;
+        private readonly ResourceProcessorManager m_resourceProcessorManager;
 
-        public ResourceSessionManager(ResourceProcessorManger resourceProcessorManager, string rootFolder)
+        public ResourceSessionManager(ResourceProcessorManager resourceProcessorManager, string rootFolder)
         {
             m_resourceProcessorManager = resourceProcessorManager;
             InitializeRootFolder(rootFolder);
@@ -34,7 +34,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 try
                 {
                     Directory.CreateDirectory(rootFolder);
-                    m_rootFolderPath = rootFolder;
+                   
                 }
                 catch (IOException ex)
                 {
@@ -61,6 +61,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
                     throw;
                 }
             }
+            m_rootFolderPath = rootFolder;
         }
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)
@@ -132,7 +133,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 try
                 {
                     Directory.CreateDirectory(path);
-                    m_fullPath = path;
+                   
                 }
                 catch (IOException ex)
                 {
@@ -159,11 +160,12 @@ namespace ITJakub.FileProcessing.Core.Sessions
                     throw;
                 }
             }
+            m_fullPath = path;
         }
 
         public void AddResource(string fileName, Stream dataStream)
         {
-            var fullpath = Path.Combine(fileName, fileName);
+            var fullpath = Path.Combine(m_fullPath, fileName);
 
             using (var fs = File.Create(fullpath))
             {

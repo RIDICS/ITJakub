@@ -4,12 +4,12 @@ using Castle.MicroKernel;
 
 namespace ITJakub.FileProcessing.Core.Sessions
 {
-    public class ResourceProcessorManger
+    public class ResourceProcessorManager
     {
-        private readonly DocxProcessor m_docXConverter;
+        private readonly IResourceProcessor m_docXConverter;
         
 
-        public ResourceProcessorManger(DocxProcessor docXConverter)
+        public ResourceProcessorManager(IResourceProcessor docXConverter)
         {
             m_docXConverter = docXConverter;
             //TODO add other processors

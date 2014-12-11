@@ -7,13 +7,13 @@ namespace ITJakub.FileProcessing.Core.Sessions
         IEnumerable<string> SupportedFormats { get; }
     }
 
-    public class ImageProcessor
+    public class ImageProcessor : IResourceProcessor
     {
-        
+        public IEnumerable<string> SupportedFormats { get; private set; }
     }
 
-    public class DocxProcessor
+    public class DocxProcessor : IResourceProcessor
     {
-        
+        public IEnumerable<string> SupportedFormats { get; private set; }
     }
 }

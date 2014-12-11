@@ -90,7 +90,7 @@
     <Compile Include="XMLProcessing\Processors\Header\PublicationStmtProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TeiHeaderProcessor.cs" />
-    <Compile Include="Sessions\ResourceProcessorManger.cs" />
+    <Compile Include="Sessions\ResourceProcessorManager.cs" />
     <Compile Include="Sessions\ResourceSessionManager.cs" />
     <Compile Include="XMLProcessing\XSLT\XsltTransformationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
