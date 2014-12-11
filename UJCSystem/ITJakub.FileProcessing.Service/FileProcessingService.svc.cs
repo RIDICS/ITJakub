@@ -1,9 +1,17 @@
 ﻿using System.IO;
 using Castle.Windsor;
 using ITJakub.FileProcessing.Core.Sessions;
+using ITJakub.FileProcessing.DataContracts;
 
 namespace ITJakub.FileProcessing.Service
 {
+
+    public interface IFileProcessingServiceLocal : IFileProcessingService
+    {
+        
+    }
+
+
     public class FileProcessingService : IFileProcessingService
     {
         private readonly ResourceSessionManager m_sessionManager;

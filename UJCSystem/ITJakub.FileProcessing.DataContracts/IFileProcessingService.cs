@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.ServiceModel;
 
-namespace ITJakub.FileProcessing.Service
+namespace ITJakub.FileProcessing.DataContracts
 {
     [ServiceContract]
     public interface IFileProcessingService

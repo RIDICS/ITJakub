@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
@@ -8,7 +9,7 @@ using log4net;
 
 namespace ITJakub.Web.Hub
 {
-    public class ItJakubServiceClient:ClientBase<IItJakubService>, IItJakubService
+    public class ItJakubServiceClient : ClientBase<IItJakubService>, IItJakubService
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -268,6 +269,59 @@ namespace ITJakub.Web.Hub
             {
                 if (m_log.IsErrorEnabled)
                     m_log.ErrorFormat("GetBookPageList timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public void AddResource(string resourceSessionId, string fileName, Stream dataStream)
+        {
+            try
+            {
+                Channel.AddResource(resourceSessionId, fileName, dataStream);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AddResource failed with: {0}", ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AddResource failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AddResource timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public bool ProcessSession(string resourceSessionId)
+        {
+            try
+            {
+                return Channel.ProcessSession(resourceSessionId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("ProcessSession failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("ProcessSession failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("ProcessSession timeouted with: {0}", ex);
                 throw;
             }
         }

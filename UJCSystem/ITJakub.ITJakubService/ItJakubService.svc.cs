@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.ServiceModel;
 using Castle.Windsor;
 using ITJakub.ITJakubService.DataContracts;
@@ -80,6 +81,16 @@ namespace ITJakub.ITJakubService
         public IList<BookPage> GetBookPageList(string documentId)
         {
             return m_serviceManager.GetBookPageList(documentId);
+        }
+
+        public void AddResource(string resourceSessionId, string fileName, Stream dataStream)
+        {
+            m_serviceManager.AddResource(resourceSessionId, fileName, dataStream);
+        }
+
+        public bool ProcessSession(string resourceSessionId)
+        {
+            return m_serviceManager.ProcessSession(resourceSessionId);
         }
     }
 

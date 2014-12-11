@@ -95,7 +95,6 @@
     <Compile Include="FileProcessingService.svc.cs">
       <DependentUpon>FileProcessingService.svc</DependentUpon>
     </Compile>
-    <Compile Include="IFileProcessingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +120,10 @@
     <ProjectReference Include="..\ITJakub.FileProcessing.Core\ITJakub.FileProcessing.Core.csproj">
       <Project>{5cef4267-5e27-4acb-b832-74852be6ce1e}</Project>
       <Name>ITJakub.FileProcessing.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj">
+      <Project>{56512CDC-6912-49B3-8AC4-CE96A0340165}</Project>
+      <Name>ITJakub.FileProcessing.DataContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.FileStorage\ITJakub.FileStorage.csproj">
       <Project>{7d1c5f31-7ea6-478a-bc72-9ace5c20b853}</Project>
