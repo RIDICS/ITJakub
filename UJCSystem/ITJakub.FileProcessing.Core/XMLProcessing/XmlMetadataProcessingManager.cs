@@ -5,11 +5,11 @@ using ITJakub.FileProcessing.Core.XMLProcessing.Processors;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing
 {
-    public class XmlProcessingManager
+    public class XmlMetadataProcessingManager
     {
         private readonly DocumentProcessor m_documentProcessor;
 
-        public XmlProcessingManager(DocumentProcessor documentProcessor)
+        public XmlMetadataProcessingManager(DocumentProcessor documentProcessor)
         {
             m_documentProcessor = documentProcessor;
         }

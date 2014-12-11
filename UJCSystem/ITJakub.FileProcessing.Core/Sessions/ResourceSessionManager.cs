@@ -7,16 +7,17 @@ using log4net;
 
 namespace ITJakub.FileProcessing.Core.Sessions
 {
-    public class ResourceSessionManager
+    public class ResourceSessionManager : IDisposable
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private string m_rootFolderPath;
         private readonly object m_lock = new object();
 
         private readonly Dictionary<string, ResourceSessionDirector> m_resourceDirectors =
             new Dictionary<string, ResourceSessionDirector>();
 
         private readonly ResourceProcessorManager m_resourceProcessorManager;
+        private bool m_disposed;
+        private string m_rootFolderPath;
 
         public ResourceSessionManager(ResourceProcessorManager resourceProcessorManager, string rootFolder)
         {
@@ -34,7 +35,6 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 try
                 {
                     Directory.CreateDirectory(rootFolder);
-                   
                 }
                 catch (IOException ex)
                 {
@@ -66,7 +66,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)
         {
-            var director = GetDirectorBySessionId(resourceInfoSkeleton.SessionId);
+            ResourceSessionDirector director = GetDirectorBySessionId(resourceInfoSkeleton.SessionId);
 
             director.AddResource(resourceInfoSkeleton.FileName, resourceInfoSkeleton.Data);
         }
@@ -96,101 +96,33 @@ namespace ITJakub.FileProcessing.Core.Sessions
                     return false;
                 }
             }
-            var director = GetDirectorBySessionId(sessionId);
+            ResourceSessionDirector director = GetDirectorBySessionId(sessionId);
 
-            return m_resourceProcessorManager.ProcessSessionResources(director);
-        }
-    }
-
-    public class ResourceSessionDirector : IDisposable
-    {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private bool m_disposed;
-        private string m_fullPath;
-
-        public ResourceSessionDirector(string sessionId, string resourceRootFolder)
-        {
-            SessionId = sessionId;
-            InitializeSessionFolder(resourceRootFolder);
-            Resources = new List<Resource>();
-            CreateTime = DateTime.UtcNow;
+            bool result = m_resourceProcessorManager.ProcessSessionResources(director);
+            FinalizeSession(sessionId);
+            return result;
         }
 
-        public string SessionId { get; private set; }
-        public DateTime CreateTime { get; private set; }
-        public List<Resource> Resources { get; set; }
-
-       
-
-        private void InitializeSessionFolder(string rootFolder)
+        private void FinalizeSession(string sessionId)
         {
-            var path = Path.Combine(rootFolder, SessionId);
-            if (!Directory.Exists(path))
+            lock (m_lock)
             {
-                if (m_log.IsInfoEnabled)
-                    m_log.InfoFormat("Creating directory for resources in: '{0}'", path);
-
-                try
-                {
-                    Directory.CreateDirectory(path);
-                   
-                }
-                catch (IOException ex)
-                {
-                    if (m_log.IsFatalEnabled)
-                        m_log.FatalFormat("Cannot create directory on path: '{0}'. Exception: '{1}'", rootFolder, ex);
-                    throw;
-                }
-                catch (UnauthorizedAccessException ex)
-                {
-                    if (m_log.IsFatalEnabled)
-                        m_log.FatalFormat("Cannot create directory on path: '{0}'. Exception: '{1}'", rootFolder, ex);
-                    throw;
-                }
-                catch (NotSupportedException ex)
-                {
-                    if (m_log.IsFatalEnabled)
-                        m_log.FatalFormat("Cannot create directory on path: '{0}'. Exception: '{1}'", rootFolder, ex);
-                    throw;
-                }
-                catch (ArgumentException ex)
-                {
-                    if (m_log.IsFatalEnabled)
-                        m_log.FatalFormat("Cannot create directory on path: '{0}'. Exception: '{1}'", rootFolder, ex);
-                    throw;
-                }
+                m_resourceDirectors[sessionId].Dispose();
+                m_resourceDirectors.Remove(sessionId);
             }
-            m_fullPath = path;
-        }
-
-        public void AddResource(string fileName, Stream dataStream)
-        {
-            var fullpath = Path.Combine(m_fullPath, fileName);
-
-            using (var fs = File.Create(fullpath))
-            {
-                dataStream.CopyTo(fs);
-            }
-
-            var resource = new Resource
-            {
-                FullPath = fullpath,
-                FileName = fileName
-            };
-
-            Resources.Add(resource);
         }
 
         #region IDisposable implmentation
-        ~ResourceSessionDirector()
-        {
-            Dispose(false);
-        }
 
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        ~ResourceSessionManager()
+        {
+            Dispose(false);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -200,25 +132,17 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
             if (disposing)
             {
-                // Free any other managed objects here. 
-                //
+                foreach (ResourceSessionDirector resourceDirector in m_resourceDirectors.Values)
+                {
+                    resourceDirector.Dispose();
+                }
             }
 
-            Directory.Delete(m_fullPath);
+            Directory.Delete(m_rootFolderPath);
 
             m_disposed = true;
         }
+
         #endregion
-
-        public Resource GetMetaData()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class Resource
-    {
-        public string FullPath { get; set; }
-        public string FileName { get; set; }
     }
 }

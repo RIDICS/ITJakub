@@ -1,4 +1,5 @@
-﻿using ITJakub.DataEntities.Database.Entities;
+﻿using System.Threading.Tasks;
+using ITJakub.DataEntities.Database.Entities;
 using ITJakub.FileProcessing.Core.Sessions.Processors;
 
 namespace ITJakub.FileProcessing.Core.Sessions
@@ -25,10 +26,10 @@ namespace ITJakub.FileProcessing.Core.Sessions
         {
             ProcessXmlConversion(resourceDirector); //call of library to convert docx to xml resources which are added to resources in paramater
             var bookVersion = ProcessMetaData(resourceDirector); //obtain entity information from processing metadata
-            ProcessExistDbStore(resourceDirector);   //saves xmls to Exist
-            ProcessFileDbStore(resourceDirector);  //saves images, docx etc on physical disk
+            var existTask = Task.Factory.StartNew(() => ProcessExistDbStore(resourceDirector));   //saves xmls to Exist
+            var resourceTask = Task.Factory.StartNew(() => ProcessFileDbStore(resourceDirector));  //saves images, docx etc on physical disk
+            Task.WaitAll(new[] {existTask, resourceTask});
             ProcessRelationalDbStore(bookVersion); //if everything was ok then saves entity into relational database
-            resourceDirector.Dispose();
             //TODO add try catch with rollback and return false
             return true;
         }

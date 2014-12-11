@@ -45,7 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sessions\IResourceProcessor.cs" />
+    <Compile Include="Sessions\Processors\FileDbStoreProcessor.cs" />
+    <Compile Include="Sessions\Processors\XmlConversionProcessor.cs" />
+    <Compile Include="Sessions\Processors\MetadataProcessor.cs" />
+    <Compile Include="Sessions\Processors\RelationalDbStoreProcessor.cs" />
+    <Compile Include="Sessions\Processors\XmlDbStoreProcessor.cs" />
+    <Compile Include="Sessions\Resource.cs" />
+    <Compile Include="Sessions\ResourceSessionDirector.cs" />
     <Compile Include="XMLProcessing\Processors\ConcreteInstanceListProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\ConcreteInstanceProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\Header\AuthorProcessor.cs" />
@@ -94,7 +100,7 @@
     <Compile Include="Sessions\ResourceSessionManager.cs" />
     <Compile Include="XMLProcessing\XSLT\XsltTransformationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XMLProcessing\XmlProcessingManager.cs" />
+    <Compile Include="XMLProcessing\XmlMetadataProcessingManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.FileProcessing.Core.Container.Config" />
