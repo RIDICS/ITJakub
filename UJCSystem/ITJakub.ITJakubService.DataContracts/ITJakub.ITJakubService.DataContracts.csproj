@@ -49,7 +49,6 @@
     <Compile Include="CreateUserResultContract.cs" />
     <Compile Include="IItJakubService.cs" />
     <Compile Include="ProcessedFileInfoContract.cs" />
-    <Compile Include="UploadFileContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserDetailContract.cs" />
   </ItemGroup>

@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml.Linq;
 using ITJakub.FileStorage;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -15,9 +16,9 @@ namespace ITJakub.ITJakubService.Core
             m_filesystemManager = filesystemManager;
         }
 
-        public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract uploadFileContract)
+        public ProcessedFileInfoContract ProcessUploadedFile(UploadResourceContract uploadResourceContract)
         {
-            string tempName = m_filesystemManager.SaveTempFile(uploadFileContract.Data);
+            string tempName = m_filesystemManager.SaveTempFile(uploadResourceContract.Data);
             return new ProcessedFileInfoContract {FileGuid = "ABCDEFG", VersionId = "XYZ"};
                 //TODO just for testing purposes
             //TODO call program for converting docx to xml here

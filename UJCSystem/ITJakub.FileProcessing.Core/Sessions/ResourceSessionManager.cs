@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using ITJakub.Shared.Contracts.Resources;
 using log4net;
 
 namespace ITJakub.FileProcessing.Core.Sessions
@@ -62,11 +63,11 @@ namespace ITJakub.FileProcessing.Core.Sessions
             }
         }
 
-        public void AddResource(string sessionId, string fileName, Stream dataStream)
+        public void AddResource(UploadResourceContract resourceInfoSkeleton)
         {
-            var director = GetDirectorBySessionId(sessionId);
+            var director = GetDirectorBySessionId(resourceInfoSkeleton.SessionId);
 
-            director.AddResource(fileName, dataStream);
+            director.AddResource(resourceInfoSkeleton.FileName, resourceInfoSkeleton.Data);
         }
 
         private ResourceSessionDirector GetDirectorBySessionId(string sessionId)

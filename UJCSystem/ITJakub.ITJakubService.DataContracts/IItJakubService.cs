@@ -2,6 +2,7 @@
 using System.IO;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
@@ -14,10 +15,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         LoginUserResultContract LoginUser(LoginUserContract loginUserContract);
-
-        [OperationContract]
-        ProcessedFileInfoContract SaveUploadedFile(UploadFileContract dataStream);
-
+        
         [OperationContract]
         void SaveFileMetadata(string fileGuid, string name, string author);
 
@@ -44,7 +42,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #region Resource Import
         [OperationContract]       
-        void AddResource(string resourceSessionId, string fileName, Stream dataStream);
+        void AddResource(UploadResourceContract uploadFileInfoSkeleton);
 
         [OperationContract]
         bool ProcessSession(string resourceSessionId);

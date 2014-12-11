@@ -4,6 +4,7 @@ using System.ServiceModel;
 using Castle.Windsor;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.ITJakubService
 {
@@ -28,9 +29,9 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.LoginUser(loginUserContract);
         }
 
-        public ProcessedFileInfoContract SaveUploadedFile(UploadFileContract uploadFileContract)
+        public ProcessedFileInfoContract SaveUploadedFile(UploadResourceContract uploadResourceContract)
         {
-            return m_serviceManager.SaveUploadedFile(uploadFileContract);
+            return m_serviceManager.SaveUploadedFile(uploadResourceContract);
         }
 
         public void SaveFileMetadata(string fileGuid, string name, string author)
@@ -73,9 +74,9 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.GetBookPageList(documentId);
         }
 
-        public void AddResource(string resourceSessionId, string fileName, Stream dataStream)
+        public void AddResource(UploadResourceContract resourceInfoSkeleton)
         {
-            m_serviceManager.AddResource(resourceSessionId, fileName, dataStream);
+            m_serviceManager.AddResource(resourceInfoSkeleton);
         }
 
         public bool ProcessSession(string resourceSessionId)
