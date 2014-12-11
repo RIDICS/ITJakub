@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.ITJakubService.Core.Resources
 {
@@ -15,9 +16,9 @@ namespace ITJakub.ITJakubService.Core.Resources
             m_resourceClient = resourceClient;
         }
 
-        public void AddResource(string resourceSessionId, string fileName, Stream dataStream)
-        {         
-            m_resourceClient.AddResource(resourceSessionId, fileName, dataStream);
+        public void AddResource(UploadResourceContract resourceInfoSkeleton)
+        {
+            m_resourceClient.AddResource(resourceInfoSkeleton);
         }
 
         public bool ProcessSession(string resourceSessionId)

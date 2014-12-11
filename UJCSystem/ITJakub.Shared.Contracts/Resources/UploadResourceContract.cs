@@ -1,16 +1,16 @@
 ﻿using System.IO;
 using System.ServiceModel;
 
-namespace ITJakub.ITJakubService.DataContracts
+namespace ITJakub.Shared.Contracts.Resources
 {
     [MessageContract]
-    public class UploadFileContract
+    public class UploadResourceContract
     {
         [MessageHeader]
         public string SessionId { get; set; }
 
         [MessageHeader]
-        public string Name { get; set; }
+        public string FileName { get; set; }
 
         [MessageBodyMember]
         public Stream Data { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.ServiceModel;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.DataContracts
 {
@@ -7,7 +8,7 @@ namespace ITJakub.FileProcessing.DataContracts
     public interface IFileProcessingService
     {
         [OperationContract]
-        void AddResource(string sessionId,string fileName, Stream dataStream);
+        void AddResource(UploadResourceContract resourceInfoSkeleton);
 
         [OperationContract]
         bool ProcessSession(string sessionId);

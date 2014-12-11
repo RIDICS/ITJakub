@@ -133,6 +133,10 @@
       <Project>{a12068e9-19a4-45e4-924b-c9d509c6b950}</Project>
       <Name>ITJakub.SearchService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
+      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
+      <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

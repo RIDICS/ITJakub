@@ -2,6 +2,7 @@
 using Castle.Windsor;
 using ITJakub.FileProcessing.Core.Sessions;
 using ITJakub.FileProcessing.DataContracts;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.Service
 {
@@ -21,9 +22,9 @@ namespace ITJakub.FileProcessing.Service
             m_sessionManager = sessionManager;
         }
 
-        public void AddResource(string sessionId, string fileName, Stream dataStream)
+        public void AddResource(UploadResourceContract resourceInfoSkeleton)
         {
-            m_sessionManager.AddResource(sessionId, fileName, dataStream);
+            m_sessionManager.AddResource(resourceInfoSkeleton);
 
         }
 
