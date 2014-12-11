@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Resources\FileProcessingServiceClient.cs" />
+    <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="AuthorManager.cs" />
     <Compile Include="AutoMapperProfiles\AuthorProfile.cs" />
@@ -58,6 +60,10 @@
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
       <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
       <Name>ITJakub.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj">
+      <Project>{56512CDC-6912-49B3-8AC4-CE96A0340165}</Project>
+      <Name>ITJakub.FileProcessing.DataContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.FileStorage\ITJakub.FileStorage.csproj">
       <Project>{7D1C5F31-7EA6-478A-BC72-9ACE5C20B853}</Project>

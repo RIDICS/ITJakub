@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 
@@ -40,5 +41,13 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<BookPage> GetBookPageList(string documentId);
+
+        #region Resource Import
+        [OperationContract]       
+        void AddResource(string resourceSessionId, string fileName, Stream dataStream);
+
+        [OperationContract]
+        bool ProcessSession(string resourceSessionId);
+        #endregion
     }
 }

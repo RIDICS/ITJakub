@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using ITJakub.ITJakubService.Core;
+using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 
@@ -11,13 +13,15 @@ namespace ITJakub.ITJakubService
         private readonly UploadManager m_uploadManager;
         private readonly BookManager m_bookManager;
         private readonly AuthorManager m_authorManager;
+        private readonly ResourceManager m_resourceManager;
 
-        public ItJakubServiceManager(UserManager userManager, UploadManager uploadManager, BookManager bookManager, AuthorManager authorManager)
+        public ItJakubServiceManager(UserManager userManager, UploadManager uploadManager, BookManager bookManager, AuthorManager authorManager, ResourceManager resourceManager)
         {
             m_userManager = userManager;
             m_uploadManager = uploadManager;
             m_bookManager = bookManager;
             m_authorManager = authorManager;
+            m_resourceManager = resourceManager;
         }
 
         public CreateUserResultContract CreateUser(CreateUserContract createUserContract)
@@ -73,6 +77,16 @@ namespace ITJakub.ITJakubService
         public IList<BookPage> GetBookPageList(string documentId)
         {
             return m_bookManager.GetBookPagesList(documentId);
+        }
+
+        public void AddResource(string resourceSessionId, string fileName, Stream dataStream)
+        {
+            m_resourceManager.AddResource(resourceSessionId, fileName, dataStream);
+        }
+
+        public bool ProcessSession(string resourceSessionId)
+        {
+            return m_resourceManager.ProcessSession(resourceSessionId);
         }
     }
 }
