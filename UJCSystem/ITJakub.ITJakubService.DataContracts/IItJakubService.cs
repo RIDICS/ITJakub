@@ -16,13 +16,7 @@ namespace ITJakub.ITJakubService.DataContracts
         LoginUserResultContract LoginUser(LoginUserContract loginUserContract);
 
         [OperationContract]
-        ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract dataStream);
-
-        [OperationContract]
-        void SaveFrontImageForFile(UploadImageContract uploadImageContract);
-
-        [OperationContract]
-        void SavePageImageForFile(UploadImageContract uploadImageContract);
+        ProcessedFileInfoContract SaveUploadedFile(UploadFileContract dataStream);
 
         [OperationContract]
         void SaveFileMetadata(string fileGuid, string name, string author);

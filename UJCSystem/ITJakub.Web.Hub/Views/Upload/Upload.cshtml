@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ITJakub.Web.Hub.Models.UploadViewModel
+@{
     ViewBag.Title = "Indexs";
 }
 @section scripts{
@@ -6,6 +7,36 @@
 }
 <div class="content-container top-offset-without-submenu">
     <h2>Nahrání díla</h2>
+    
+    <div class="centered">
+        <div id="upload">
+            <p> Pro nahrání souborů klikněte na formulář a proveďtě výběr nebo je na formlulář přetáhněte.</p>
+
+            <form action="@Url.Action("UploadFile", "Upload")" method="post" class="dropzone" enctype="multipart/form-data" id="dropzoneFileForm">
+                <div id="dropzoneFileFormPreview"></div>
+                <div class="fallback">
+                    <input name="file" type="file" />
+                </div>
+                <div class="additionalData">
+                    <input type="hidden" id="sessionId" name="sessionId" value="@Model.SessionId" />
+                </div>
+            </form>
+
+            <button id="ProcessUploadedButton" type="button" class="btn btn-default style-button">
+                Zpracovat
+            </button>
+        </div>
+        <div id="processing" style="display: none">
+            <div id="progressbar"></div>
+            <h2>Zpracovává se...</h2>
+        </div>
+    
+        <div id="done" style="display: none">
+            <h2 class="sucess">Zpracování proběhlo v pořádku</h2>
+            <h2 class="error">Zpracování se nezdařilo</h2>
+        </div>
+
+        @*<h2>Nahrání díla</h2>
     <ol class="numbered upload-file">
         <li>
             <p> Pro nahrání díla klikněte na formulář a proveďtě výběr nebo je na formlulář přetáhněte.</p>
@@ -33,9 +64,6 @@
                 </div>
                 <div id="authorsTableDiv">
                     <table class="table table-hover" id="authorsTable">
-                        @*<thead>
-                                <tr></tr>
-                            </thead>*@
                         <tbody id="authorsTableBody"></tbody>
                     </table>
                 </div>
@@ -62,12 +90,12 @@
                 </div>
             </form>
         </li>
-    </ol>
+    </ol>*@
 
 
-    <!-- Modal -->
+        <!-- Modal -->
 
-    <div class="modal fade" id="addAuthorModal" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 9999">
+        @*<div class="modal fade" id="addAuthorModal" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 9999">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
@@ -93,5 +121,6 @@
                 </div>
             </div>
         </div>
+    </div>*@
     </div>
 </div>

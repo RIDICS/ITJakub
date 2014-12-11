@@ -34,19 +34,9 @@ namespace ITJakub.ITJakubService
             return m_userManager.LoginUser(loginUserContract);
         }
 
-        public ProcessedFileInfoContract ProcessUploadedFile(UploadFileContract uploadFileContract)
+        public ProcessedFileInfoContract SaveUploadedFile(UploadFileContract uploadFileContract)
         {
             return m_uploadManager.ProcessUploadedFile(uploadFileContract);
-        }
-
-        public void SaveFrontImageForFile(UploadImageContract uploadImageContract)
-        {
-            m_uploadManager.SaveFrontImageForFile(uploadImageContract);
-        }
-
-        public void SavePageImageForFile(UploadImageContract uploadImageContract)
-        {
-            m_uploadManager.SavePageImageForFile(uploadImageContract);
         }
 
         public void SaveFileMetadata(string fileGuid, string name, string author)

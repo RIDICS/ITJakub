@@ -7,7 +7,10 @@ namespace ITJakub.ITJakubService.DataContracts
     public class UploadFileContract
     {
         [MessageHeader]
-        public string ChangeMessage { get; set; }
+        public string SessionId { get; set; }
+
+        [MessageHeader]
+        public string Name { get; set; }
 
         [MessageBodyMember]
         public Stream Data { get; set; }
