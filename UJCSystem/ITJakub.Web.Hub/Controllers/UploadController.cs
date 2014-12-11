@@ -41,7 +41,7 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult ProcessUploadedFiles(string sessionId)
         {
             //TODO process here 
-            return Json(new { success = true});
+            return Json(new { success = false});
         }
     }
 }

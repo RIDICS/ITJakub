@@ -56,10 +56,10 @@
             contentType: 'application/json',
             success: function(response) {
                 var done = $('#done');
-                if (response.success != false) {
-                    done.find('.error').hide();
+                if (response.success == true) {
+                    done.find('.success').show();
                 } else {
-                    done.find('.success').hide();
+                    done.find('.error').show();
                 }
                 $('#processing').hide();
                 done.show();
