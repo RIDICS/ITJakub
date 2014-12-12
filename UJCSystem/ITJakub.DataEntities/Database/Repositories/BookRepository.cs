@@ -4,6 +4,7 @@ using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using NHibernate;
 using NHibernate.Criterion;
 
@@ -115,6 +116,18 @@ namespace ITJakub.DataEntities.Database.Repositories
         public virtual string FindTransformationName(string documentId, string resultFormat) //TODO return transformation entity
         {
             return "pageToHtml.xsl"; //TODO resolve correct transformation and return its name
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public BookType FindBookType(BookTypeEnum bookTypeEnum)
+        {
+            using (ISession session = GetSession())
+            {
+                return
+                    session.QueryOver<BookType>()
+                        .Where(bookType => bookType.Type == bookTypeEnum)
+                        .SingleOrDefault<BookType>();
+            }
         }
     }
 }
