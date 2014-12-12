@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
+using ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header;
-using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Text;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
@@ -15,7 +15,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
 
         protected override string NodeName
         {
-            get { return "TEI"; }
+            get { return "DocDescription"; }
         }
 
         public string XmlRootName
@@ -31,7 +31,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
                 return new List<ProcessorBase>
                 {
                     Container.Resolve<TeiHeaderProcessor>(),
-                    Container.Resolve<TextProcessor>(),
+                    Container.Resolve<BookContentProcessor>(),
                 };
             }
         }

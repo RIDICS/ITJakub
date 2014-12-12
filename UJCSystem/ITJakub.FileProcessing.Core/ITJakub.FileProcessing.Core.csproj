@@ -52,6 +52,7 @@
     <Compile Include="Sessions\Processors\XmlDbStoreProcessor.cs" />
     <Compile Include="Sessions\Resource.cs" />
     <Compile Include="Sessions\ResourceSessionDirector.cs" />
+    <Compile Include="XMLProcessing\Processors\BookContent\DivProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ConcreteInstanceListProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\ConcreteInstanceProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\Header\AuthorProcessor.cs" />
@@ -91,9 +92,10 @@
     <Compile Include="XMLProcessing\Processors\Header\TextClassProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TitleStmtProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ListProcessorBase.cs" />
-    <Compile Include="XMLProcessing\Processors\Text\TextProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\BookContent\BookContentProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TitleProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\PublicationStmtProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Pages\PagesProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TeiHeaderProcessor.cs" />
     <Compile Include="Sessions\ResourceProcessorManager.cs" />
