@@ -46,11 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Sessions\Processors\FileDbStoreProcessor.cs" />
+    <Compile Include="Sessions\Resources\ResourceMissingException.cs" />
     <Compile Include="Sessions\Processors\XmlConversionProcessor.cs" />
     <Compile Include="Sessions\Processors\MetadataProcessor.cs" />
     <Compile Include="Sessions\Processors\RelationalDbStoreProcessor.cs" />
-    <Compile Include="Sessions\Processors\XmlDbStoreProcessor.cs" />
-    <Compile Include="Sessions\Resource.cs" />
+    <Compile Include="Sessions\Processors\ExistDbStoreProcessor.cs" />
+    <Compile Include="Sessions\Resources\Resource.cs" />
     <Compile Include="Sessions\ResourceSessionDirector.cs" />
     <Compile Include="XMLProcessing\Processors\BookContent\DivProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ConcreteInstanceListProcessorBase.cs" />

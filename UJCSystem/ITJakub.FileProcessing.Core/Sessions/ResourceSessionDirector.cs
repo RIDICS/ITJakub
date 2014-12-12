@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using ITJakub.FileProcessing.Core.Sessions.Resources;
 using log4net;
 
 namespace ITJakub.FileProcessing.Core.Sessions
@@ -81,11 +82,6 @@ namespace ITJakub.FileProcessing.Core.Sessions
             };
 
             Resources.Add(resource);
-        }
-
-        public Resource GetMetaData()
-        {
-            throw new NotImplementedException();
         }
 
         #region IDisposable implmentation
