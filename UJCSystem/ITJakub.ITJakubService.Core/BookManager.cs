@@ -18,16 +18,6 @@ namespace ITJakub.ITJakubService.Core
             m_bookRepository = bookRepository;
         }
 
-        public void CreateBook(string bookGuid, string name, string author)
-        {
-            m_bookRepository.CreateBook(bookGuid, name, author);
-        }
-
-        public void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)
-        {
-            m_bookRepository.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
-        }
-
         public string GetBookPageByName(string documentId, string pageName, string resultFormat)
         {
             OutputFormatEnum outputFormatEnum;

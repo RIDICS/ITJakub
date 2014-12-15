@@ -17,16 +17,7 @@ namespace ITJakub.ITJakubService.DataContracts
         LoginUserResultContract LoginUser(LoginUserContract loginUserContract);
         
         [OperationContract]
-        void SaveFileMetadata(string fileGuid, string name, string author);
-
-        [OperationContract]
         IEnumerable<AuthorDetailContract> GetAllAuthors();
-
-        [OperationContract]
-        int CreateAuthor(string name);
-
-        [OperationContract]
-        void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds);
 
         [OperationContract]
         string GetBookPageByName(string documentId, string pageName, string resultFormat);

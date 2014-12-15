@@ -3,7 +3,7 @@ using ITJakub.DataEntities.Database.Repositories;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
-    public class RelationalDbStoreProcessor
+    public class RelationalDbStoreProcessor : IResourceProcessor
     {
         private readonly BookVersionRepository m_bookVersionRepository;
 
@@ -12,9 +12,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             m_bookVersionRepository = bookVersionRepository;
         }
 
-        public void Process(BookVersion bookVersion)
+        public void Process(ResourceSessionDirector resourceDirector)
         {
-            m_bookVersionRepository.Create(bookVersion);
+            m_bookVersionRepository.Create(resourceDirector.GetSessionInfoValue<BookVersion>(SessionInfo.BookVersionEntity));
         }
     }
 }

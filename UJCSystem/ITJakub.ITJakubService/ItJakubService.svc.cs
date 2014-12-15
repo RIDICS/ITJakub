@@ -34,11 +34,6 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.SaveUploadedFile(uploadResourceContract);
         }
 
-        public void SaveFileMetadata(string fileGuid, string name, string author)
-        {
-            m_serviceManager.SaveFileMetadata(fileGuid, name, author);
-        }
-
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
         {
             return m_serviceManager.GetAllAuthors();
@@ -47,11 +42,6 @@ namespace ITJakub.ITJakubService
         public int CreateAuthor(string name)
         {
             return m_serviceManager.CreateAuthor(name);
-        }
-
-        public void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)
-        {
-            m_serviceManager.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
         }
 
         public string GetBookPageByName(string documentId, string pageName, string resultFormat)

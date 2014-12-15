@@ -10,8 +10,8 @@ namespace ITJakub.FileProcessing.Core.Sessions
     public class ResourceSessionDirector : IDisposable
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly Dictionary<SessionInfo, object> m_sessionInfos = new Dictionary<SessionInfo, object>();
         private bool m_disposed;
-        private string m_fullPath;
 
         public ResourceSessionDirector(string sessionId, string resourceRootFolder)
         {
@@ -22,6 +22,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
         }
 
         public string SessionId { get; private set; }
+        public string SessionPath { get; private set; }
         public DateTime CreateTime { get; private set; }
         public List<Resource> Resources { get; set; }
 
@@ -63,12 +64,12 @@ namespace ITJakub.FileProcessing.Core.Sessions
                     throw;
                 }
             }
-            m_fullPath = path;
+            SessionPath = path;
         }
 
         public void AddResource(string fileName, Stream dataStream)
         {
-            string fullpath = Path.Combine(m_fullPath, fileName);
+            string fullpath = Path.Combine(SessionPath, fileName);
 
             using (FileStream fs = File.Create(fullpath))
             {
@@ -82,6 +83,16 @@ namespace ITJakub.FileProcessing.Core.Sessions
             };
 
             Resources.Add(resource);
+        }
+
+        public T GetSessionInfoValue<T>(SessionInfo sessionInfo)
+        {
+            return (T) m_sessionInfos[sessionInfo];
+        }
+
+        public void SetSessionInfoValue(SessionInfo sessionInfo, object value)
+        {
+            m_sessionInfos.Add(sessionInfo, value);
         }
 
         #region IDisposable implmentation
@@ -108,11 +119,21 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 //
             }
 
-            Directory.Delete(m_fullPath);
+            Directory.Delete(SessionPath);
 
             m_disposed = true;
         }
 
         #endregion
+    }
+
+    public enum SessionInfo
+    {
+        CreateTime = 0,
+        Message = 1,
+        VersionId = 2,
+        BookId = 3,
+        BookVersionEntity = 4
+
     }
 }

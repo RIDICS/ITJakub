@@ -68,38 +68,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
-        public virtual void CreateBook(string bookGuid, string title, string author)
-        {
-            DateTime createTime = DateTime.UtcNow;
-            using (ISession session = GetSession())
-            {
-                var bookId = (long) Create(new Book {Guid = bookGuid});
-                var book = session.Load<Book>(bookId);
-                Create(new BookVersion
-                {
-                    Book = book,
-                    Title = title,
-                    CreateTime = createTime
-                });
-            }
-        }
-
-        [Transaction(TransactionMode.Requires)]
-        public virtual void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)
-        {
-            using (ISession session = GetSession())
-            {
-                BookVersion bookVersion = FindBookVersionByGuid(bookVersionGuid);
-                foreach (int authorId in authorIds)
-                {
-                    var author = session.Load<Author>(authorId);
-                    bookVersion.Authors.Add(author);
-                }
-                session.Update(bookVersion);
-            }
-        }
-
+        
         [Transaction(TransactionMode.Requires)]
         public virtual BookVersion FindBookVersionByGuid(string bookVersionGuid)
         {
@@ -113,7 +82,8 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual string FindTransformationName(string documentId, string resultFormat) //TODO return transformation entity
+        public virtual string FindTransformationName(string documentId, string resultFormat)
+            //TODO return transformation entity
         {
             return "pageToHtml.xsl"; //TODO resolve correct transformation and return its name
         }
@@ -127,6 +97,18 @@ namespace ITJakub.DataEntities.Database.Repositories
                     session.QueryOver<BookType>()
                         .Where(bookType => bookType.Type == bookTypeEnum)
                         .SingleOrDefault<BookType>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IEnumerable<BookVersion> GetAllVersionsByBookId(string bookId)
+        {
+            using (ISession session = GetSession())
+            {
+                return
+                    session.QueryOver<BookVersion>()
+                        .Where(bookVersion => bookVersion.Book.Guid == bookId)
+                        .List<BookVersion>();
             }
         }
     }

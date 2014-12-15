@@ -54,28 +54,6 @@ namespace ITJakub.Web.Hub
             }
         }
 
-      
-
-        public void SaveFileMetadata(string fileGuid, string name, string author)
-        {
-            try
-            {
-                Channel.SaveFileMetadata(fileGuid, name, author);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SaveFileMetadata failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SaveFileMetadata timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
         {
             try
@@ -92,46 +70,6 @@ namespace ITJakub.Web.Hub
             {
                 if (m_log.IsErrorEnabled)
                     m_log.ErrorFormat("GetAllAuthors timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
-        public int CreateAuthor(string name)
-        {
-            try
-            {
-                return Channel.CreateAuthor(name);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("CreateAuthor failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("CreateAuthor timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
-        public void AssignAuthorsToBook(string bookGuid, string bookVersionGuid, IEnumerable<int> authorIds)
-        {
-            try
-            {
-                Channel.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AssignAuthorsToBook failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AssignAuthorsToBook timeouted with: {0}", ex);
                 throw;
             }
         }

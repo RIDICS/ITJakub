@@ -13,21 +13,5 @@ namespace ITJakub.Web.Hub.Controllers
             IEnumerable<AuthorDetailContract> authors = m_serviceClient.GetAllAuthors();
             return Json(new { Authors = authors }, JsonRequestBehavior.AllowGet);
         }
-
-        public ActionResult CreateAuthor(string name)
-        {
-            int authorId = m_serviceClient.CreateAuthor(name);
-            return Json(new {AuthorId = authorId});
-        }
-
-        public ActionResult AssignAuthorsToBook(string bookGuid, string bookVersionGuid, int[] authorIds)
-        {
-            if (bookGuid == null || bookVersionGuid == null)
-            {
-                return Json(new {Error = "Cannot assigns author(s) to book. BookGuid and BookversionId could not be empty"});
-            }
-            m_serviceClient.AssignAuthorsToBook(bookGuid, bookVersionGuid, authorIds);
-            return Json(new { });
-        }
     }
 }

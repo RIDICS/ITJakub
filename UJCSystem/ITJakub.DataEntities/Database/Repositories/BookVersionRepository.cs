@@ -21,7 +21,6 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (ISession session = GetSession())
             {
-                bookVersion.CreateTime = DateTime.UtcNow;
                 return (long) session.Save(bookVersion);
             }
         }

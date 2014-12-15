@@ -1,23 +1,24 @@
-using System.Collections.Generic;
 using ITJakub.Core;
 using ITJakub.Core.Resources;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
-    public class FileDbStoreProcessor
+    public class FileDbStoreProcessor : IResourceProcessor
     {
         private readonly FileSystemManager m_fileSystemManager;
-            
+
         public FileDbStoreProcessor(FileSystemManager fileSystemManager)
         {
             m_fileSystemManager = fileSystemManager;
         }
 
-        public void Process(string bookId, string versionId, IEnumerable<Resource> resources)
+        public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            foreach (var resource in resources)
+            foreach (Resource resource in resourceSessionDirector.Resources)
             {
-                m_fileSystemManager.SaveResource(bookId, versionId, resource);
+                m_fileSystemManager.SaveResource(
+                    resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
+                    resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.VersionId), resource);
             }
         }
     }
