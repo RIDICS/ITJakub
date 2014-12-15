@@ -1,4 +1,4 @@
-﻿namespace ITJakub.FileProcessing.Core.Sessions.Resources
+﻿namespace ITJakub.FileStorage.Resources
 {
     public class Resource
     {
@@ -14,5 +14,6 @@
         Metadata = 2,
         Page = 3,
         Transformation = 4,
+        Image = 5,
     }
 }

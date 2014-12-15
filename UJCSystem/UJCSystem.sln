@@ -85,7 +85,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.SearchService.Core"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.FileProcessing.DataContracts", "ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj", "{56512CDC-6912-49B3-8AC4-CE96A0340165}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.Storage", "ITJakub.Storage", "{113925C1-E046-4E2F-A0C8-96F84C7F3415}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.FileStorage", "ITJakub.FileStorage", "{113925C1-E046-4E2F-A0C8-96F84C7F3415}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

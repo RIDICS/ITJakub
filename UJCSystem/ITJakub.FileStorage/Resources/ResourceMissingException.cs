@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ITJakub.FileProcessing.Core.Sessions.Resources
+namespace ITJakub.FileStorage.Resources
 {
     public class ResourceMissingException : Exception
     {

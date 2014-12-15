@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using ITJakub.FileProcessing.Core.Sessions.Resources;
+using ITJakub.FileStorage.Resources;
 using log4net;
 
 namespace ITJakub.FileProcessing.Core.Sessions

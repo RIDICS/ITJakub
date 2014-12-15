@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net1.2.12\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,8 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FilesystemManager.cs" />
+    <Compile Include="FileSystemManager.cs" />
+    <Compile Include="PathResolvers\BookPathResolver.cs" />
+    <Compile Include="PathResolvers\ImagePathResolver.cs" />
+    <Compile Include="PathResolvers\IResourceTypePathResolver.cs" />
+    <Compile Include="PathResolvers\MetaDataPathResolver.cs" />
+    <Compile Include="PathResolvers\PagePathResolver.cs" />
+    <Compile Include="PathResolvers\SourceDocumentPathResolver.cs" />
+    <Compile Include="PathResolvers\TransformationPathResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Resource.cs" />
+    <Compile Include="Resources\ResourceMissingException.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.FileStorage.Container.Config" />

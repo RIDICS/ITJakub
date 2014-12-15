@@ -46,12 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Sessions\Processors\FileDbStoreProcessor.cs" />
-    <Compile Include="Sessions\Resources\ResourceMissingException.cs" />
     <Compile Include="Sessions\Processors\XmlConversionProcessor.cs" />
     <Compile Include="Sessions\Processors\MetadataProcessor.cs" />
     <Compile Include="Sessions\Processors\RelationalDbStoreProcessor.cs" />
     <Compile Include="Sessions\Processors\ExistDbStoreProcessor.cs" />
-    <Compile Include="Sessions\Resources\Resource.cs" />
     <Compile Include="Sessions\ResourceSessionDirector.cs" />
     <Compile Include="XMLProcessing\Processors\BookContent\DivProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ConcreteInstanceListProcessorBase.cs" />
@@ -112,6 +110,10 @@
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
       <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
       <Name>ITJakub.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.FileStorage\ITJakub.FileStorage.csproj">
+      <Project>{7d1c5f31-7ea6-478a-bc72-9ace5c20b853}</Project>
+      <Name>ITJakub.FileStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>

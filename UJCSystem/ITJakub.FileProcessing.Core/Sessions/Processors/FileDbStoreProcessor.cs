@@ -1,15 +1,24 @@
-using System;
 using System.Collections.Generic;
-using ITJakub.FileProcessing.Core.Sessions.Resources;
+using ITJakub.FileStorage;
+using ITJakub.FileStorage.Resources;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class FileDbStoreProcessor
     {
-
-        public void Process(string getFiles, string versionId, List<Resource> resources)
+        private readonly FileSystemManager m_fileSystemManager;
+            
+        public FileDbStoreProcessor(FileSystemManager fileSystemManager)
         {
-            throw new NotImplementedException();
+            m_fileSystemManager = fileSystemManager;
+        }
+
+        public void Process(string bookId, string versionId, IEnumerable<Resource> resources)
+        {
+            foreach (var resource in resources)
+            {
+                m_fileSystemManager.SaveResource(bookId, versionId, resource);
+            }
         }
     }
 }

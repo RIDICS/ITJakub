@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Xml.Linq;
 using ITJakub.FileStorage;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts.Resources;
@@ -18,13 +16,7 @@ namespace ITJakub.ITJakubService.Core
 
         public ProcessedFileInfoContract ProcessUploadedFile(UploadResourceContract uploadResourceContract)
         {
-            string tempName = m_filesystemManager.SaveTempFile(uploadResourceContract.Data);
-            return new ProcessedFileInfoContract {FileGuid = "ABCDEFG", VersionId = "XYZ"};
-                //TODO just for testing purposes
-            //TODO call program for converting docx to xml here
-            ProcessedFileInfoContract fileInfo = GetFileInfoFromTempFile(tempName);
-            m_filesystemManager.RenameTempFile(tempName, fileInfo.FileGuid);
-            return fileInfo;
+            throw new NotImplementedException();
         }
 
         private ProcessedFileInfoContract GetFileInfoFromTempFile(string fileName)

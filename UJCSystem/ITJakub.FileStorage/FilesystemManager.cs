@@ -1,114 +1,118 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Reflection;
+using Castle.MicroKernel;
+using ITJakub.FileStorage.PathResolvers;
+using ITJakub.FileStorage.Resources;
+using log4net;
 
 namespace ITJakub.FileStorage
 {
-
-
-
-
     public class FileSystemManager
     {
-        private const string FrontPageDirName = "FrontPage";
-        private const string ImagesFolderName = "Images";
-        private const string TempFolderName = "Temp";
-        private readonly string m_path;
-        private readonly string m_tempFolderPath;
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public FileSystemManager(string path)
-        {
-            m_path = path;
-            m_tempFolderPath = Path.Combine(m_path, TempFolderName);
-            MakeDirectoryIfNotExist(m_tempFolderPath);
-        }
+        private readonly Dictionary<ResourceTypeEnum, IResourceTypePathResolver> m_resourceTypePathResolvers;
+        private readonly string m_rootFolderPath;
 
-        //makes all directories in specified path
-        private void MakeDirectoryIfNotExist(string path)
-        {
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-        }
 
-        private void SaveFile(string guid, Stream data)
+        public FileSystemManager(IKernel container, string rootFolder)
         {
-            string path = GetFilePath(guid);
-            string parentDirName = Path.GetDirectoryName(path);
-            if (parentDirName != null)
-                MakeDirectoryIfNotExist(parentDirName);
-            using (FileStream fileStream = File.Create(path))
+            m_rootFolderPath = rootFolder;
+            m_resourceTypePathResolvers = new Dictionary<ResourceTypeEnum, IResourceTypePathResolver>();
+            foreach (IResourceTypePathResolver pathResolver in container.ResolveAll<IResourceTypePathResolver>())
             {
-                data.CopyTo(fileStream);
+                m_resourceTypePathResolvers.Add(pathResolver.ResolvingResourceType(), pathResolver);
             }
         }
 
-        public string SaveTempFile(Stream dataStream)
+        public Resource GetResource(string bookId, string bookVersionId, string fileName, ResourceTypeEnum resourceType)
         {
-            string guid = Guid.NewGuid().ToString();
-            SaveFile(GetTempFilePath(guid), dataStream);
-            return guid;
+            IResourceTypePathResolver pathResolver = GetPathResolver(resourceType);
+            string relativePath = pathResolver.ResolvePath(bookId, bookVersionId, fileName);
+            return new Resource
+            {
+                FileName = fileName,
+                FullPath = GetFullPath(relativePath),
+                ResourceType = resourceType
+            };
         }
 
-        public void RenameTempFile(string oldName, string newName)
+
+        public void SaveResource(string bookId, string bookVersionId, Resource resource)
         {
-            var file = new FileInfo(GetTempFilePath(oldName));
-            file.MoveTo(GetTempFilePath(newName));
+            IResourceTypePathResolver pathResolver = GetPathResolver(resource.ResourceType);
+            string relativePath = pathResolver.ResolvePath(bookId, bookVersionId, resource.FileName);
+            string fullPath = GetFullPath(relativePath);
+            CreateDirsIfNotExist(fullPath);
+            File.Copy(resource.FullPath, fullPath);
         }
 
-        public FileStream OpenTempFile(string fileName)
+        private string GetFullPath(string relativePath)
         {
-            return File.Open(GetTempFilePath(fileName), FileMode.Open);
+            return Path.Combine(m_rootFolderPath, relativePath);
         }
 
-        public void SaveImage(string fileGuid, string imageName, Stream dataStream)
+        private void CreateDirsIfNotExist(string path)
         {
-            string imagePath = GetImagePath(fileGuid, imageName);
-            SaveFile(imagePath, dataStream);
+            string dirPath = Path.GetDirectoryName(path);
+            if (dirPath == null) return;
+            if (!Directory.Exists(path))
+            {
+                if (m_log.IsInfoEnabled)
+                    m_log.InfoFormat("Creating directory for resources in: '{0}'", dirPath);
+
+                try
+                {
+                    Directory.CreateDirectory(dirPath);
+                }
+                catch (IOException ex)
+                {
+                    if (m_log.IsFatalEnabled)
+                        m_log.FatalFormat("Cannot create directory on path: '{0}'. Exception: '{1}'", dirPath,
+                            ex);
+                    throw;
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    if (m_log.IsFatalEnabled)
+                        m_log.FatalFormat("Cannot create directory on path: '{0}'. Exception: '{1}'", dirPath,
+                            ex);
+                    throw;
+                }
+                catch (NotSupportedException ex)
+                {
+                    if (m_log.IsFatalEnabled)
+                        m_log.FatalFormat("Cannot create directory on path: '{0}'. Exception: '{1}'", dirPath,
+                            ex);
+                    throw;
+                }
+                catch (ArgumentException ex)
+                {
+                    if (m_log.IsFatalEnabled)
+                        m_log.FatalFormat("Cannot create directory on path: '{0}'. Exception: '{1}'", dirPath,
+                            ex);
+                    throw;
+                }
+            }
         }
 
-        public void SaveFrontImage(string fileGuid, string imageName, Stream dataStream)
-        {
-            string imagePath = GetFrontImagePath(fileGuid, imageName);
-            SaveFile(imagePath, dataStream);
-        }
 
-        private string GetTempFilePath(string fileGuid)
+        private IResourceTypePathResolver GetPathResolver(ResourceTypeEnum resourceType)
         {
-            return Path.Combine(GetTempFileFolder(fileGuid), fileGuid);
-        }
-
-        private string GetFilePath(string fileGuid)
-        {
-            return Path.Combine(GetFileFolder(fileGuid), fileGuid);
-        }
-
-        private string GetImagePath(string fileGuid, string imageName)
-        {
-            return Path.Combine(GetImageFolder(fileGuid), imageName);
-        }
-
-        private string GetFrontImagePath(string fileGuid, string imageName)
-        {
-            return Path.Combine(GetFrontImageFolder(fileGuid), imageName);
-        }
-
-        private string GetTempFileFolder(string fileGuid)
-        {
-            return m_tempFolderPath;
-        }
-
-        private string GetFileFolder(string fileGuid)
-        {
-            return Path.Combine(m_path, fileGuid);
-        }
-
-        private string GetImageFolder(string fileGuid)
-        {
-            return Path.Combine(GetFileFolder(fileGuid), ImagesFolderName);
-        }
-
-        private string GetFrontImageFolder(string fileGuid)
-        {
-            return Path.Combine(GetImageFolder(fileGuid), FrontPageDirName);
+            IResourceTypePathResolver pathResolver;
+            m_resourceTypePathResolvers.TryGetValue(resourceType, out pathResolver);
+            if (pathResolver == null)
+            {
+                string message = string.Format("Resource with type '{0}' does not have rule for resolving path",
+                    resourceType);
+                if (m_log.IsFatalEnabled)
+                    m_log.FatalFormat(message);
+                throw new InvalidEnumArgumentException(message);
+            }
+            return pathResolver;
         }
     }
 }

@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using ITJakub.DataEntities.Database.Entities;
-using ITJakub.FileProcessing.Core.Sessions.Resources;
 using ITJakub.FileProcessing.Core.XMLProcessing;
+using ITJakub.FileStorage.Resources;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
