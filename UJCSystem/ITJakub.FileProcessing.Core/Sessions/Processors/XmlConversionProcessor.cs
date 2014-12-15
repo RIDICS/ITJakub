@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ITJakub.FileStorage.Resources;
+using ITJakub.Core.Resources;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {

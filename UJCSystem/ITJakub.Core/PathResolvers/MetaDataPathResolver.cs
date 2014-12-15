@@ -1,13 +1,14 @@
 using System.IO;
-using ITJakub.FileStorage.Resources;
+using ITJakub.Core.Resources;
+using ITJakub.Shared.Contracts.Resources;
 
-namespace ITJakub.FileStorage.PathResolvers
+namespace ITJakub.Core.PathResolvers
 {
-    public class SourceDocumentPathResolver : IResourceTypePathResolver
+    public class MetaDataPathResolver : IResourceTypePathResolver
     {
         public ResourceTypeEnum ResolvingResourceType()
         {
-            return ResourceTypeEnum.SourceDocument;
+            return ResourceTypeEnum.Metadata;
         }
 
         public string ResolvePath(string bookId, string bookVersionId, string fileName)

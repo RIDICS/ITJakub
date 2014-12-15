@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -107,13 +108,13 @@
     <EmbeddedResource Include="ITJakub.FileProcessing.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
+      <Project>{92E907E3-ACE0-4FC6-8919-040031E5192E}</Project>
+      <Name>ITJakub.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
       <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
       <Name>ITJakub.DataEntities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.FileStorage\ITJakub.FileStorage.csproj">
-      <Project>{7d1c5f31-7ea6-478a-bc72-9ace5c20b853}</Project>
-      <Name>ITJakub.FileStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>

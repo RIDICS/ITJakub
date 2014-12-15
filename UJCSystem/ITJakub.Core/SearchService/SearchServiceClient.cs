@@ -2,7 +2,7 @@
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 
-namespace ITJakub.ITJakubService.Core.SearchService
+namespace ITJakub.Core.SearchService
 {
     public class SearchServiceClient : ClientBase<ISearchService>, ISearchService
     {

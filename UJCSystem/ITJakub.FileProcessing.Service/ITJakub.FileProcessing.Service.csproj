@@ -125,10 +125,6 @@
       <Project>{56512CDC-6912-49B3-8AC4-CE96A0340165}</Project>
       <Name>ITJakub.FileProcessing.DataContracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ITJakub.FileStorage\ITJakub.FileStorage.csproj">
-      <Project>{7d1c5f31-7ea6-478a-bc72-9ace5c20b853}</Project>
-      <Name>ITJakub.FileStorage</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.SearchService\ITJakub.SearchService.csproj">
       <Project>{a12068e9-19a4-45e4-924b-c9d509c6b950}</Project>
       <Name>ITJakub.SearchService</Name>

@@ -1,26 +1,40 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using ITJakub.FileStorage.Resources;
+using ITJakub.Core.Resources;
+using ITJakub.Core.SearchService;
+using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class ExistDbStoreProcessor
     {
-        public void Process(string bookId, string versionId, IList<Resource> resources)
+        private readonly SearchServiceClient m_searchServiceClient;
+
+        public ExistDbStoreProcessor(SearchServiceClient searchServiceClient)
         {
-            List<Resource> transformations = resources.Where(resource => resource.ResourceType == ResourceTypeEnum.Transformation).ToList();
-            foreach (Resource transformation in transformations)
-            {
-                //TODO save transformation to exist here
-            }
+            m_searchServiceClient = searchServiceClient;
+        }
 
-            Resource book = resources.FirstOrDefault(resource => resource.ResourceType == ResourceTypeEnum.Book);
-            //TODO save book to exist here
-
-            List<Resource> pages = resources.Where(resource => resource.ResourceType == ResourceTypeEnum.Page).ToList();
-            foreach (Resource page in pages)
+        public void Process(string bookId, string versionId, IEnumerable<Resource> resources)
+        {
+            List<Resource> existResources =
+                resources.Where(
+                    resource =>
+                        resource.ResourceType == ResourceTypeEnum.Transformation ||
+                        resource.ResourceType == ResourceTypeEnum.Book || resource.ResourceType == ResourceTypeEnum.Page)
+                    .ToList();
+            foreach (Resource resource in existResources)
             {
-                //TODO save page to exist here
+                m_searchServiceClient.UploadFile(new FileUploadContract
+                {
+                    BookId = bookId,
+                    BookVersionid = versionId,
+                    FileName = resource.FileName,
+                    ResourceType = resource.ResourceType,
+                    DataStream = File.Open(resource.FullPath, FileMode.Open)
+                });
             }
         }
     }

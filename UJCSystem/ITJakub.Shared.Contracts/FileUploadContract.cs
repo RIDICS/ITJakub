@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.ServiceModel;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.Shared.Contracts
 {
@@ -14,6 +15,9 @@ namespace ITJakub.Shared.Contracts
 
         [MessageHeader]
         public string FileName { get; set; }
+
+        [MessageHeader]
+        public ResourceTypeEnum ResourceType { get; set; }
 
         [MessageBodyMember]
         public Stream DataStream { get; set; }

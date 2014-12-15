@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ITJakub.Core.Resources;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.FileProcessing.Core.XMLProcessing;
-using ITJakub.FileStorage.Resources;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {

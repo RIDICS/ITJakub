@@ -1,7 +1,8 @@
 using System.IO;
-using ITJakub.FileStorage.Resources;
+using ITJakub.Core.Resources;
+using ITJakub.Shared.Contracts.Resources;
 
-namespace ITJakub.FileStorage.PathResolvers
+namespace ITJakub.Core.PathResolvers
 {
     public class ImagePathResolver : IResourceTypePathResolver
     {

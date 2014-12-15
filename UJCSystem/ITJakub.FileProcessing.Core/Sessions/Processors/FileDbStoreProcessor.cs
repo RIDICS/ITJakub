@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using ITJakub.FileStorage;
-using ITJakub.FileStorage.Resources;
+using ITJakub.Core;
+using ITJakub.Core.Resources;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {

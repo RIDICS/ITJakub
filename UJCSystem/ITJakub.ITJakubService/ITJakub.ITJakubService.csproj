@@ -127,10 +127,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.FileStorage\ITJakub.FileStorage.csproj">
-      <Project>{7d1c5f31-7ea6-478a-bc72-9ace5c20b853}</Project>
-      <Name>ITJakub.FileStorage</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.ITJakubService.Core\ITJakub.ITJakubService.Core.csproj">
       <Project>{904E449B-6F51-46C7-A730-4F4C992BDDC8}</Project>
       <Name>ITJakub.ITJakubService.Core</Name>

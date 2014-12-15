@@ -119,7 +119,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public BookType FindBookType(BookTypeEnum bookTypeEnum)
+        public virtual BookType FindBookType(BookTypeEnum bookTypeEnum)
         {
             using (ISession session = GetSession())
             {

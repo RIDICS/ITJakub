@@ -4,11 +4,12 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using Castle.MicroKernel;
-using ITJakub.FileStorage.PathResolvers;
-using ITJakub.FileStorage.Resources;
+using ITJakub.Core.PathResolvers;
+using ITJakub.Core.Resources;
+using ITJakub.Shared.Contracts.Resources;
 using log4net;
 
-namespace ITJakub.FileStorage
+namespace ITJakub.Core
 {
     public class FileSystemManager
     {

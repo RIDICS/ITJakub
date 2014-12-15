@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ITJakub.FileStorage")]
+[assembly: AssemblyTitle("ITJakub.Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ITJakub.FileStorage")]
+[assembly: AssemblyProduct("ITJakub.Core")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7e08ea41-f0f7-4661-877f-b8c2a01252d6")]
+[assembly: Guid("ce661c6f-d62c-41b3-8511-efe755a0dbd0")]
 
 // Version information for an assembly consists of the following four values:
 //

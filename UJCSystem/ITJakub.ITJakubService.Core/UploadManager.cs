@@ -1,5 +1,5 @@
 ﻿using System;
-using ITJakub.FileStorage;
+using ITJakub.Core;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts.Resources;
 

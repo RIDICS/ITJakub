@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
-using ITJakub.ITJakubService.Core.SearchService;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.ITJakubService.Core
