@@ -13,30 +13,30 @@ namespace ITJakub.SearchService
             m_bookDao = bookDao;
         }
 
-        public string GetBookPageByPosition(string documentId, int pagePosition, string transformationName)
+        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName)
         {
-            return m_bookDao.GetPageByPositionFromStart(documentId, pagePosition, transformationName);
+            return m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName);
         }
 
-        public string GetBookPageByName(string documentId, string pageName, string transformationName)
+        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName)
         {
-            return m_bookDao.GetPageByName(documentId, pageName, transformationName);
+            return m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName);
         }
 
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName,
+        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName,
             string transformationName)
         {
-            return m_bookDao.GetPagesByName(documentId, startPageName, endPageName, transformationName);
-        }
-
-        public IList<BookPage> GetBookPageList(string documentId)
-        {
-            return m_bookDao.GetBookPageList(documentId);
+            return m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName);
         }
 
         public void UploadFile(FileUploadContract contract)
         {
             m_bookDao.UploadFile(contract.BookId, contract.BookVersionid, contract.FileName, contract.DataStream);
+        }
+
+        public IList<BookPage> GetBookPageList(string bookId, string versionId)
+        {
+            return m_bookDao.GetBookPageList(bookId, versionId);
         }
     }
 }

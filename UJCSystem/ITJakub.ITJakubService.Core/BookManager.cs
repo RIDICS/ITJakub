@@ -18,33 +18,37 @@ namespace ITJakub.ITJakubService.Core
             m_bookRepository = bookRepository;
         }
 
-        public string GetBookPageByName(string documentId, string pageName, string resultFormat)
+        public string GetBookPageByName(string bookId, string pageName, string resultFormat)
         {
             OutputFormatEnum outputFormatEnum;
             Enum.TryParse(resultFormat, true, out outputFormatEnum);
-            var transformationName = m_bookRepository.FindTransformationName(documentId, resultFormat);
-            return m_searchServiceClient.GetBookPageByName(documentId, pageName, transformationName);
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormatEnum);
+            return m_searchServiceClient.GetBookPageByName(bookId, bookVersion.VersionId, pageName, transformation.Name);
         }
 
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string resultFormat)
+        public string GetBookPagesByName(string bookId, string startPageName, string endPageName, string resultFormat)
         {
             OutputFormatEnum outputFormatEnum;
             Enum.TryParse(resultFormat, true, out outputFormatEnum);
-            var transformationName = m_bookRepository.FindTransformationName(documentId, resultFormat);
-            return m_searchServiceClient.GetBookPagesByName(documentId, startPageName, endPageName, transformationName);
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormatEnum);
+            return m_searchServiceClient.GetBookPagesByName(bookId, bookVersion.VersionId, startPageName, endPageName, transformation.Name);
         }
 
-        public string GetBoookPagesByPosition(string documentId, int position, string resultFormat)
+        public string GetBoookPagesByPosition(string bookId, int position, string resultFormat)
         {
             OutputFormatEnum outputFormatEnum;
             Enum.TryParse(resultFormat, true, out outputFormatEnum);
-            var transformationName = m_bookRepository.FindTransformationName(documentId, resultFormat);
-            return m_searchServiceClient.GetBookPageByPosition(documentId, position, transformationName);
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormatEnum);
+            return m_searchServiceClient.GetBookPageByPosition(bookId, bookVersion.VersionId, position, transformation.Name);
         }
 
-        public IList<BookPage> GetBookPagesList(string documentId)
+        public IList<BookPage> GetBookPagesList(string bookId)
         {
-            return m_searchServiceClient.GetBookPageList(documentId);
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
+            return m_searchServiceClient.GetBookPageList(bookId, bookVersion.VersionId);
         }
 
 

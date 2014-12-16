@@ -9,24 +9,22 @@ namespace ITJakub.SearchService.Core.Exist
     {
         [OperationContract]
         [ExistQuery(XqueryName = "get-page-list.xquery")]
-        Stream GetPageList(string document);
+        Stream GetPageList(string bookId, string versionId);
 
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPageByPositionFromStart(string document, int page);
+        string GetPageByPositionFromStart(string bookId, string versionId, int page);
 
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPageByName(string document, string start);
+        string GetPageByName(string bookId, string versionId, string start);
 
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPagesByName(string document, string start, string end);
-    
-            
-        
+        string GetPagesByName(string bookId, string versionId, string start, string end);
+
         [OperationContract]
         [ExistResource(Method = "PUT")]
-        void UploadFile(string bookId, string bookVersionId, string fileName, Stream readStream);
+        void UploadFile(string bookId, string versionId, string fileName, Stream readStream);
     }
 }

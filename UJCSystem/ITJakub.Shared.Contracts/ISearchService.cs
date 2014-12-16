@@ -7,16 +7,16 @@ namespace ITJakub.Shared.Contracts
     public interface ISearchService
     {
         [OperationContract]
-        string GetBookPageByPosition(string documentId, int pagePosition, string transformationName);
+        string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName);
 
         [OperationContract]
-        string GetBookPageByName(string documentId, string pageName, string transformationName);
+        string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName);
 
         [OperationContract]
-        string GetBookPagesByName(string documentId, string startPageName, string endPageName, string transformationName);
+        string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName);
 
         [OperationContract]
-        IList<BookPage> GetBookPageList(string documentId);
+        IList<BookPage> GetBookPageList(string bookId,string versionId);
 
         [OperationContract]
         void UploadFile(FileUploadContract fileUploadContract);

@@ -70,22 +70,37 @@ namespace ITJakub.DataEntities.Database.Repositories
 
         
         [Transaction(TransactionMode.Requires)]
-        public virtual BookVersion FindBookVersionByGuid(string bookVersionGuid)
+        public virtual BookVersion FindBookVersionByGuid(string bookGuid, string bookVersionGuid)
         {
             using (ISession session = GetSession())
             {
                 return
                     session.QueryOver<BookVersion>()
-                        .Where(bookVersion => bookVersion.VersionId == bookVersionGuid)
+                        .Where(bookVersion => bookVersion.VersionId == bookVersionGuid && bookVersion.Book.Guid == bookGuid)
                         .SingleOrDefault<BookVersion>();
             }
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual string FindTransformationName(string documentId, string resultFormat)
+        public virtual Transformation FindTransformation(BookVersion bookVersion, OutputFormatEnum outputFormat)
             //TODO return transformation entity
         {
-            return "pageToHtml.xsl"; //TODO resolve correct transformation and return its name
+            using (ISession session = GetSession())
+            {
+                var transformation =  session.QueryOver<Transformation>()
+                        .Where(transf => transf.OutputFormat == outputFormat && transf.BookVersions.Contains(bookVersion))
+                        .SingleOrDefault<Transformation>();
+
+                if (transformation == null)
+                {
+                    transformation = session.QueryOver<Transformation>()
+                        .Where(transf => transf.OutputFormat == outputFormat && transf.BookType == bookVersion.Book.BookType)
+                        .SingleOrDefault<Transformation>();
+                }
+
+                return transformation;
+            }
+            //return "pageToHtml.xsl"; //TODO resolve correct transformation and return it
         }
 
         [Transaction(TransactionMode.Requires)]

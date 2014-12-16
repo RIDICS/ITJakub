@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 
@@ -14,29 +13,29 @@ namespace ITJakub.SearchService
             m_searchServiceManager = Container.Current.Resolve<SearchServiceManager>();
         }
 
-        public string GetBookPageByPosition(string documentId, int pagePosition, string transformationName)
+        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName)
         {
-            return m_searchServiceManager.GetBookPageByPosition(documentId, pagePosition, transformationName);
-        }
-
-        public string GetBookPageByName(string documentId, string pageName, string transformationName)
-        {
-            return m_searchServiceManager.GetBookPageByName(documentId, pageName, transformationName);
-        }
-
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string transformationName)
-        {
-            return m_searchServiceManager.GetBookPagesByName(documentId, startPageName, endPageName, transformationName);
-        }
-
-        public IList<BookPage> GetBookPageList(string documentId)
-        {
-            return m_searchServiceManager.GetBookPageList(documentId);
+            return m_searchServiceManager.GetBookPageByPosition(bookId, versionId, pagePosition, transformationName);
         }
 
         public void UploadFile(FileUploadContract fileUploadContract)
         {
             m_searchServiceManager.UploadFile(fileUploadContract);
+        }
+
+        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName)
+        {
+            return m_searchServiceManager.GetBookPageByName(bookId, versionId, pageName, transformationName);
+        }
+
+        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName)
+        {
+            return m_searchServiceManager.GetBookPagesByName(bookId, versionId, startPageName, endPageName,transformationName);
+        }
+
+        public IList<BookPage> GetBookPageList(string bookId, string versionId)
+        {
+            return m_searchServiceManager.GetBookPageList(bookId, versionId);
         }
     }
 

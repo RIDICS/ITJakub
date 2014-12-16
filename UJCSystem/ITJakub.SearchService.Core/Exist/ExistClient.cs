@@ -42,9 +42,9 @@ namespace ITJakub.SearchService.Core.Exist
 
         #endregion
 
-        public Stream GetPageList(string documentId)
+        public Stream GetPageList(string bookId, string versionId)
         {
-            return GetPageList(documentId, null);
+            return GetPageList(bookId, versionId, null);
         }
 
         public void UploadFile(string bookId, string bookVersionId, string fileName, Stream fileStream)
@@ -57,43 +57,43 @@ namespace ITJakub.SearchService.Core.Exist
             }
         }
 
-        public string GetPageByPositionFromStart(string documentId, int pagePosition)
+        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition)
         {
-            return GetPageByPositionFromStart(documentId, pagePosition, null);
+            return GetPageByPositionFromStart(bookId, versionId, pagePosition, null);
         }
 
-        public string GetPageByName(string documentId, string start)
+        public string GetPageByName(string bookId, string versionId, string start)
         {
-            return GetPageByName(documentId, start, null);
+            return GetPageByName(bookId, versionId, start, null);
         }
 
-        public string GetPagesByName(string documentId, string start, string end)
+        public string GetPagesByName(string bookId, string versionId, string start, string end)
         {
-            return GetPagesByName(documentId, start, end, null);
+            return GetPagesByName(bookId, versionId, start, end, null);
         }
 
-        public Stream GetPageList(string documentId, string xslPath)
+        public Stream GetPageList(string bookId, string versionId, string xslPath)
         {
             CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            return m_webClient.OpenRead(GetCompleteUri(commInfo, xslPath, documentId));
+            return m_webClient.OpenRead(GetCompleteUri(commInfo, xslPath, bookId, versionId));
         }
 
-        public string GetPageByPositionFromStart(string documentId, int pagePosition, string xslPath)
+        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string xslPath)
         {
             CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            return m_webClient.DownloadString(GetCompleteUri(commInfo, xslPath, documentId, pagePosition));
+            return m_webClient.DownloadString(GetCompleteUri(commInfo, xslPath, bookId, versionId, pagePosition));
         }
 
-        public string GetPageByName(string documentId, string start, string xslPath)
+        public string GetPageByName(string bookId, string versionId, string start, string xslPath)
         {
             CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            return m_webClient.DownloadString(GetCompleteUri(commInfo, xslPath, documentId, start));
+            return m_webClient.DownloadString(GetCompleteUri(commInfo, xslPath, bookId, versionId, start));
         }
 
-        public string GetPagesByName(string documentId, string start, string end, string xslPath)
+        public string GetPagesByName(string bookId, string versionId, string start, string end, string xslPath)
         {
             CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            return m_webClient.DownloadString(GetCompleteUri(commInfo, xslPath, documentId, start, end));
+            return m_webClient.DownloadString(GetCompleteUri(commInfo, xslPath, bookId, versionId, start, end));
         }
     }
 }

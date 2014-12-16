@@ -6,24 +6,24 @@ namespace ITJakub.Core.SearchService
 {
     public class SearchServiceClient : ClientBase<ISearchService>, ISearchService
     {
-        public string GetBookPageByPosition(string documentId, int pagePosition, string transformationName)
+        public string GetBookPageByPosition(string bookId,string versionId, int pagePosition, string transformationName)
         {
-            return Channel.GetBookPageByPosition(documentId, pagePosition, transformationName);
+            return Channel.GetBookPageByPosition(bookId, versionId, pagePosition, transformationName);
         }
 
-        public string GetBookPageByName(string documentId, string pageName, string transformationName)
+        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName)
         {
-            return Channel.GetBookPageByName(documentId, pageName,transformationName);
+            return Channel.GetBookPageByName(bookId, versionId, pageName, transformationName);
         }
 
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string transformationName)
+        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName)
         {
-            return Channel.GetBookPagesByName(documentId, startPageName, endPageName,transformationName);
+            return Channel.GetBookPagesByName(bookId, versionId, startPageName, endPageName, transformationName);
         }
 
-        public IList<BookPage> GetBookPageList(string documentId)
+        public IList<BookPage> GetBookPageList(string bookId,string versionId)
         {
-            return Channel.GetBookPageList(documentId);
+            return Channel.GetBookPageList(bookId, versionId);
         }
 
         public void UploadFile(FileUploadContract fileUploadContract)

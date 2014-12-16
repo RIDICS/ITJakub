@@ -15,10 +15,10 @@ namespace ITJakub.SearchService.Core.Exist
             m_client = existClient;
         }
 
-        public List<BookPage> GetPageList(string documentId, string xslPath = null)
+        public List<BookPage> GetPageList(string bookId,string versionId, string xslPath = null)
         {
             XDocument xmlDoc;
-            using (Stream pageStream = m_client.GetPageList(documentId, xslPath))
+            using (Stream pageStream = m_client.GetPageList(bookId, xslPath))
             {
                 xmlDoc = XDocument.Load(pageStream);
             }
@@ -34,24 +34,24 @@ namespace ITJakub.SearchService.Core.Exist
             return pageList;
         }
 
-        public void UploadFile(string bookId, string bookVersionid, string fileName, Stream filStream)
+        public void UploadFile(string bookId, string versionId, string fileName, Stream filStream)
         {
-            m_client.UploadFile(bookId, bookVersionid, fileName, filStream);
+            m_client.UploadFile(bookId, versionId, fileName, filStream);
         }
 
-        public string GetPageByPositionFromStart(string documentId, int pagePosition)
+        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition)
         {
-            return m_client.GetPageByPositionFromStart(documentId, pagePosition);
+            return m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition);
         }
 
-        public string GetPageByName(string documentId, string pageName)
+        public string GetPageByName(string bookId, string versionId, string pageName)
         {
-            return m_client.GetPageByName(documentId, pageName);
+            return m_client.GetPageByName(bookId, versionId, pageName);
         }
 
-        public string GetPagesByName(string documentId, string start, string end)
+        public string GetPagesByName(string bookId, string versionId, string start, string end)
         {
-            return m_client.GetPagesByName(documentId, start, end);
+            return m_client.GetPagesByName(bookId, versionId, start, end);
         }
     }
 }

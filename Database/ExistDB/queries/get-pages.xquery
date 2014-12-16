@@ -13,7 +13,8 @@ declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
   
 let $start := request:get-parameter("start", "")
 let $end := request:get-parameter("end", "")
-let $documentId := request:get-parameter("document", "")
+let $documentId := request:get-parameter("bookId", "")
+let $versionId := request:get-parameter("versionId", "")
 let $pagePosition := request:get-parameter("page", 1)
 let $document := vwcollection:getDocument($documentId)
 let $result :=

@@ -138,7 +138,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 }
             }
 
-            Directory.Delete(m_rootFolderPath);
+            Directory.Delete(m_rootFolderPath, true);
 
             m_disposed = true;
         }

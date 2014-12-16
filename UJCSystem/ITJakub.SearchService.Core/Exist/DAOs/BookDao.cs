@@ -13,24 +13,24 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
             m_existManager = existManager;
         }
 
-        public string GetPagesByName(string documentId, string start, string end, string transformationPath)
+        public string GetPagesByName(string bookId, string versionId, string start, string end, string transformationPath)
         {
-            return m_existManager.GetPagesByName(documentId, start, end);
+            return m_existManager.GetPagesByName(bookId, versionId, start, end);
         }
 
-        public string GetPageByName(string documentId, string pageName, string transformationPath)
+        public string GetPageByName(string bookId, string versionId, string pageName, string transformationPath)
         {
-            return m_existManager.GetPageByName(documentId, pageName);
+            return m_existManager.GetPageByName(bookId, versionId, pageName);
         }
 
-        public string GetPageByPositionFromStart(string documentId, int pagePosition, string transformationPath)
+        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationPath)
         {
-            return m_existManager.GetPageByPositionFromStart(documentId, pagePosition);
+            return m_existManager.GetPageByPositionFromStart(bookId, versionId, pagePosition);
         }
 
-        public IList<BookPage> GetBookPageList(string documentId)
+        public IList<BookPage> GetBookPageList(string bookId, string versionId)
         {
-            return m_existManager.GetPageList(documentId);
+            return m_existManager.GetPageList(bookId, versionId);
         }
 
         public void UploadFile(string bookId, string bookVersionid, string fileName, Stream dataStream)

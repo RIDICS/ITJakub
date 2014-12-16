@@ -9,7 +9,8 @@ import module namespace vwcollection = "http://vokabular.ujc.cas.cz/ns/it-jakub/
  : http://localhost:8080/exist/rest/db/apps/jacob-test/queries/testMatch.xquery?document={8688926F-9106-4A70-9440-673779415D07}&term=Psi
  :)
  
-let $documentId := request:get-parameter("document", "")
+let $documentId := request:get-parameter("bookId", "")
+let $versionId := request:get-parameter("versionId", "")
 let $term := request:get-parameter("term", "")
 let $document := vwcollection:getDocument($documentId)
 let $hits := vwsearch:SearchQuery($document, $term)
