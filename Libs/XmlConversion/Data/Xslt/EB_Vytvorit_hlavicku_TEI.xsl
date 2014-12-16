@@ -26,7 +26,8 @@
 				</xsl:attribute>
 				<titleStmt>
 					<title>
-						<xsl:value-of select="ev:Hlavicka/ev:Titul"/>
+						<xsl:value-of select="ev:Zpracovani/ev:Publikace/ev:Vydani[1]/ev:Titul"/>
+						<!--<xsl:value-of select="ev:Hlavicka/ev:Titul"/>-->
 					</title>
 					<xsl:apply-templates select="ev:Hlavicka/ev:Autor" mode="titleStmt"/>
 				</titleStmt>
@@ -46,12 +47,20 @@
 					<publisher>oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.<email>vyvoj@ujc.cas.cz</email>
 					</publisher>
 					<pubPlace>Praha</pubPlace>
-					<!-- TODO: načítat datum publikace programově -->
-                    <date><xsl:value-of select="'2012'"/></date>
+										<!-- TODO: načítat datum publikace programově -->
+					<!--<date><xsl:value-of select="'2012'"/></date>-->
+					<date><xsl:value-of select="ev:Zpracovani/ev:Publikace/ev:Vydani[1]/ev:Vroceni"/></date>
 					<!--<publisher>Manuscriptorium.com</publisher>-->
 					<availability status="restricted">
 						<p>Tato edice je autorské dílo chráněné ve smyslu zákona č. 121/2000 Sb., o právu autorském, a je určena pouze k nekomerčním účelům.</p>
 					</availability>
+
+										<!-- TODO: načíst ISBN z evidenčního souboru -->
+					<!-- ISBN přidělené elektronické verzi publikace -->
+					<idno type="ISBN_EPUB" ><xsl:value-of select="ev:Zpracovani/ev:Publikace/ev:Vydani[1]/ev:EvidencniCisla/ev:Isbn[ev:Format/text() = 'EPUB']/ev:Cislo"/></idno>
+					<idno type="ISBN_PDF" ><xsl:value-of select="ev:Zpracovani/ev:Publikace/ev:Vydani[1]/ev:EvidencniCisla/ev:Isbn[ev:Format/text() = 'PDF']/ev:Cislo"/></idno>
+					<!-- ISBN přidělené tištěné verzi publikace -->
+					<idno type="ISBN_P" />
 				</publicationStmt>
 				
 				
@@ -60,7 +69,8 @@
 						<xsl:call-template name="identifikaceRukopisu" />
 						<msContents>
 							<msItem>
-								<title><xsl:value-of select="ev:Hlavicka/ev:Titul"/></title>
+								<!--<title><xsl:value-of select="ev:Hlavicka/ev:Titul"/></title>-->
+								<title><xsl:value-of select="ev:Zpracovani/ev:Publikace/ev:Vydani[1]/ev:Titul"/></title>
 							</msItem>
 						</msContents>
 						<history>
@@ -87,10 +97,83 @@
 					</msDesc>
 				</sourceDesc>
 			</fileDesc>
+			<xsl:call-template name="encodingDesc" />
 			<!--<revisionDesc>
 				<change when="{substring-before(ev:Zpracovani/ev:Exporty/ev:Export[ev:ZpusobVyuziti = 'Manuscriptorium'][last()]/ev:CasExportu, 'T')}"/>
 			</revisionDesc>-->
 		</teiHeader>
+	</xsl:template>
+
+	<xsl:template name="encodingDesc">
+		<encodingDesc>
+			<classDecl>
+				<taxonomy xml:id="taxonomy">
+					<category xml:id="taxonomy-dictionary">
+						<catDesc xml:lang="cs-cz">slovník</catDesc>
+						<category xml:id="taxonomy-dictionary-contemporary">
+							<catDesc xml:lang="cs-cz">soudobý</catDesc>
+						</category>
+						<category xml:id="taxonomy-dictionary-historical">
+							<catDesc xml:lang="cs-cz">dobový</catDesc>
+						</category>
+					</category>
+					<category xml:id="taxonomy-historical_text">
+						<catDesc xml:lang="cs-cz">historický text</catDesc>
+						<category xml:id="taxonomy-historical_text-old_czech">
+							<catDesc xml:lang="cs-cz">staročeský</catDesc>
+						</category>
+						<category xml:id="taxonomy-historical_text-medieval_czech">
+							<catDesc xml:lang="cs-cz">středněčeský</catDesc>
+						</category>
+					</category>
+					<category xml:id="taxonomy-scholary_text">
+						<catDesc xml:lang="cs-cz">odborný text</catDesc>
+					</category>
+					<category xml:id="taxonomy-digitized-grammar">
+						<catDesc xml:lang="cs-cz">digitalizovaná mluvnice</catDesc>
+					</category>
+					<category xml:id="taxonomy-card-index">
+						<catDesc xml:lang="cs-cz">lístková kartotéka</catDesc>
+					</category>
+				</taxonomy>
+			</classDecl>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<xsl:call-template name="catRef" />
+				<keywords scheme="http://vokabular.ujc.cas.cz/scheme/classification/secondary">
+					<xsl:apply-templates select="ev:Zpracovani/ev:LiterarniDruh | ev:Zpracovani/ev:LiterarniZanr" mode="term"/>
+					<term>verš</term>
+				</keywords>
+			</textClass>
+		</profileDesc>
+
+	</xsl:template>
+
+	<xsl:template name="catRef">
+		<xsl:element name="catRef">
+			<xsl:attribute name="target">
+				<xsl:choose>
+					<xsl:when test="ev:TypPrepisu/. = 'edice' and ev:Zpracovani/ev:CasoveZarazeni/. = 'DoRoku1500'">
+						<xsl:text>#taxonomy-historical_text-old_czech</xsl:text>
+					</xsl:when>
+					<xsl:when test="ev:TypPrepisu/. = 'edice' and ev:Zpracovani/ev:CasoveZarazeni/. = 'DoRoku1800'">
+						<xsl:text>#taxonomy-historical_text-medieval_czech</xsl:text>
+					</xsl:when>
+					<xsl:when test="ev:TypPrepisu/. = 'odborná literatura'">
+						<xsl:text>#taxonomy-scholary_text</xsl:text>
+					</xsl:when>
+				</xsl:choose>
+
+			</xsl:attribute>
+		</xsl:element>
+
+	</xsl:template>
+
+	<xsl:template match="ev:LiterarniDruh | ev:LiterarniZanr" mode="term">
+		<term>
+			<xsl:apply-templates />
+		</term>
 	</xsl:template>
 	
 	<xsl:template name="identifikaceRukopisu">
@@ -150,7 +233,7 @@
 	</name>
 	</respStmt>
 </xsl:template>
-	
+
 	<xsl:template match="ev:Autor" mode="titleStmt">
 		<xsl:element name="author">
 			<xsl:value-of select="."/>

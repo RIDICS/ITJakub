@@ -50,7 +50,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             var settings = new DocxToTeiConverterSettings
             {
-                Debug = false,
+                Debug = true,
                 InputFilePath = inputFileResource.FullPath,
                 //Message = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message), //TODO fill in client and pass it
                 Message = "ahoj",
@@ -66,10 +66,10 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             resourceSessionDirector.Resources.Add(bookResource);
         }
 
-        private List<Version> GetVersionsByBookId(string bookId)
+        private List<VersionInfoSkeleton> GetVersionsByBookId(string bookId)
         {
             IEnumerable<BookVersion> versions = m_bookRepository.GetAllVersionsByBookId(bookId);
-            return versions.Select(x => new Version(x.Description, x.CreateTime)).ToList();
+            return versions.Select(x => new VersionInfoSkeleton(x.Description, x.CreateTime)).ToList();
         }
     }
 }

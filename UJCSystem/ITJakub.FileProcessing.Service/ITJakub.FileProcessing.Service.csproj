@@ -57,6 +57,10 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Daliboris.Texty.Export.EdicniModul, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\XmlConversion\Daliboris.Texty.Export.EdicniModul.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Iesi.Collections.dll</HintPath>
     </Reference>

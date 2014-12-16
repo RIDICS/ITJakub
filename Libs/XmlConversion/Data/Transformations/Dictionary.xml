@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<transformations directory="D:\!UJC\OVJ\Texty\Konverze\Xslt"
+	xmlns="http://vokabular.ujc.cas.cz/ns/xslt-transformation/1.0">
+	<transformation xml:id="body" >
+		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />
+	</transformation>
+</transformations>
