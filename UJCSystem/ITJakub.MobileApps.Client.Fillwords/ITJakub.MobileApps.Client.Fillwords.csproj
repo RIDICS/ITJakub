@@ -112,15 +112,15 @@
     <Compile Include="DataService\TaskManager.cs" />
     <Compile Include="ViewModel\TaskViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\EditorViewModel.cs" />
+    <Compile Include="ViewModel\FillwordsEditorViewModel.cs" />
     <Compile Include="ViewModel\FillwordsViewModel.cs" />
     <Compile Include="ViewModel\OptionsEditorViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="View\Converter\AnswerStateToBackgroundConverter.cs" />
     <Compile Include="View\Control\ComboRichEditBox.cs" />
     <Compile Include="View\Control\EditorRichEditBox.cs" />
-    <Compile Include="View\EditorView.xaml.cs">
-      <DependentUpon>EditorView.xaml</DependentUpon>
+    <Compile Include="View\FillwordsEditorView.xaml.cs">
+      <DependentUpon>FillwordsEditorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FillwordsView.xaml.cs">
       <DependentUpon>FillwordsView.xaml</DependentUpon>
@@ -167,7 +167,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\EditorView.xaml">
+    <Page Include="View\FillwordsEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

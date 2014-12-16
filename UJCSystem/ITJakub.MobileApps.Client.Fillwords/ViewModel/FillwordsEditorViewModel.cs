@@ -8,7 +8,7 @@ using ITJakub.MobileApps.Client.Shared;
 
 namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 {
-    public class EditorViewModel : EditorBaseViewModel
+    public class FillwordsEditorViewModel : EditorBaseViewModel
     {
         private readonly FillwordsDataService m_dataService;
         private Dictionary<int, OptionsViewModel> m_wordOptionsList;
@@ -26,7 +26,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private bool m_isSaveFlyoutOpen;
         private bool m_loadingPhoto;
 
-        public EditorViewModel(FillwordsDataService dataService)
+        public FillwordsEditorViewModel(FillwordsDataService dataService)
         {
             m_dataService = dataService;
             IsTextEditingEnabled = false;

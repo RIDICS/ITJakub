@@ -10,8 +10,7 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
-    mc:Ignorable="d"
-    NavigationCacheMode="Enabled">
+    mc:Ignorable="d">
 
     <Page.Resources>
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />

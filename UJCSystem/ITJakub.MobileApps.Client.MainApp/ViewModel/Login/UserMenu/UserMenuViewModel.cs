@@ -12,9 +12,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
         private string m_lastName;
         private string m_firstName;
         private ImageSource m_userAvatar;
-        private readonly NavigationService m_navigationService;
+        private readonly INavigationService m_navigationService;
 
-        public UserMenuViewModel(IDataService dataService, NavigationService navigationService)
+        public UserMenuViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;

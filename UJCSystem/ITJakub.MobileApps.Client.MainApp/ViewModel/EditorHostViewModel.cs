@@ -13,7 +13,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public EditorHostViewModel(INavigationService navigationService, IDataService dataService)
         {
             m_dataService = dataService;
-            GoBackCommand = new RelayCommand(navigationService.GoBack);
+            GoBackCommand = new RelayCommand(navigationService.GoBackUsingCache);
 
             MessengerInstance.Register<OpenEditorMessage>(this, OpenEditor);
         }

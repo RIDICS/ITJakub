@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
@@ -20,7 +19,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
 
         public GroupInfoViewModel()
         {
-            Icon = new BitmapImage(new Uri("ms-appx:///Icon/group-64.png"));
+            m_members = new ObservableCollection<GroupMemberViewModel>();
 
             SearchText = string.Empty;
             SearchCommand = new RelayCommand(() => RaisePropertyChanged(() => FilteredMembers));
@@ -28,7 +27,6 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
 
         public string GroupName { get; set; }
         public string GroupCode { get; set; }
-        public BitmapImage Icon { get; set; }
         public long GroupId { get; set; }
         public GroupType GroupType { get; set; }
         public DateTime CreateTime { get; set; }

@@ -20,7 +20,8 @@
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton Icon="Add"
-                          Label="Nové zadání"/>
+                          Label="Nové zadání"
+                          Command="{Binding CreateNewTaskCommand}" />
         </CommandBar>
     </Page.BottomAppBar>
     

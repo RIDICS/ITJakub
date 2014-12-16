@@ -2,27 +2,25 @@
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace ITJakub.MobileApps.Client.Core.Service
 {
     public class NavigationService : INavigationService
     {
-        private readonly Stack<object> m_frameContentCache;
-        private object m_currentParameter;
+        private readonly Stack<Type> m_pageTypeStack;
+        private readonly Stack<object> m_viewModelStack;
 
         public NavigationService()
         {
-            m_frameContentCache = new Stack<object>();
-            m_currentParameter = null;
+            m_pageTypeStack = new Stack<Type>();
+            m_viewModelStack = new Stack<object>();
         }
 
         public virtual bool CanGoBack
         {
             get
             {
-                var frame = ((Frame)Window.Current.Content);
-                return frame.CanGoBack;
+                return m_pageTypeStack.Count > 0;
             }
         }
 
@@ -39,10 +37,12 @@ namespace ITJakub.MobileApps.Client.Core.Service
         {
             var frame = ((Frame)Window.Current.Content);
 
-            if (frame.CanGoBack)
+            if (CanGoBack)
             {
-                m_frameContentCache.Pop();
-                frame.GoBack();
+                frame.Navigate(m_pageTypeStack.Pop());
+                m_viewModelStack.Pop();
+
+                frame.BackStack.Clear();
             }
         }
 
@@ -50,57 +50,57 @@ namespace ITJakub.MobileApps.Client.Core.Service
         {
             var frame = ((Frame)Window.Current.Content);
 
-            if (frame.CanGoBack)
+            if (CanGoBack)
             {
-                if (frame.Content != null)
-                {
-                    var currentPageEntry = new PageStackEntry(frame.Content.GetType(), m_currentParameter, null);
-                    frame.ForwardStack.Add(currentPageEntry);
-                }
-                var backStackPeek = frame.BackStack[frame.BackStackDepth - 1];
-                frame.BackStack.Remove(backStackPeek);
-                frame.Content = m_frameContentCache.Pop();
+                frame.Navigate(m_pageTypeStack.Pop());
+
+                var newPage = (Page) frame.Content;
+                var dataContext = m_viewModelStack.Pop();
+                if (newPage != null) 
+                    newPage.DataContext = dataContext;
+
+                frame.BackStack.Clear();
             }
         }
 
         public virtual void GoForward()
         {
-            var frame = ((Frame)Window.Current.Content);
-
-            if (frame.CanGoForward)
-            {
-                frame.GoForward();
-            }
+            throw new NotSupportedException();
         }
 
         public virtual void GoHome()
         {
             var frame = ((Frame)Window.Current.Content);
 
-            if (frame.BackStackDepth == 0)
+            if (m_pageTypeStack.Count == 0)
                 return;
 
-            Type rootPageType = frame.BackStack[0].SourcePageType;
-            frame.Navigate(rootPageType);
-            frame.BackStack.Clear();
-            m_frameContentCache.Clear();
+            while (m_pageTypeStack.Count > 0)
+                m_pageTypeStack.Pop();
+            
+            frame.Navigate(m_pageTypeStack.Pop());
+            
+            m_pageTypeStack.Clear();
+            m_viewModelStack.Clear();
         }
 
         public virtual void Navigate(Type sourcePageType)
         {
-            m_currentParameter = null;
             var frame = ((Frame)Window.Current.Content);
+            var page = (Page) frame.Content;
 
-            m_frameContentCache.Push(frame.Content);
+            m_pageTypeStack.Push(frame.CurrentSourcePageType);
+            m_viewModelStack.Push(page != null ? page.DataContext : null);
             frame.Navigate(sourcePageType);
         }
 
         public virtual void Navigate(Type sourcePageType, object parameter)
         {
-            m_currentParameter = parameter;
             var frame = ((Frame)Window.Current.Content);
+            var page = (Page) frame.Content;
 
-            m_frameContentCache.Push(frame.Content);
+            m_pageTypeStack.Push(frame.CurrentSourcePageType);
+            m_viewModelStack.Push(page != null ? page.DataContext : null);
             frame.Navigate(sourcePageType, parameter);
         }
     }

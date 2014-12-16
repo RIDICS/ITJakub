@@ -239,7 +239,7 @@
                                 Orientation="Horizontal">
                         <Image Width="64"
                                Height="64"
-                               Source="{Binding Icon}" />
+                               Source="../Icon/group-64.png" />
                         <StackPanel Width="270"
                                     Margin="10,0,0,0"
                                     Orientation="Vertical">

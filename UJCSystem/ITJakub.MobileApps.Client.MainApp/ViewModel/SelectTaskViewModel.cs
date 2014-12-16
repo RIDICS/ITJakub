@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
@@ -38,8 +39,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             GoBackCommand = new RelayCommand(() => m_navigationService.GoBackUsingCache());
             TaskClickCommand = new RelayCommand<ItemClickEventArgs>(TaskClick);
+            CreateNewTaskCommand = new RelayCommand(CreateNewTask);
         }
-
+        
         private void LoadTasks(ApplicationType applicationType)
         {
             Loading = true;
@@ -90,6 +92,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        public RelayCommand CreateNewTaskCommand { get; private set; }
+
         private void TaskClick(ItemClickEventArgs args)
         {
             var task = args.ClickedItem as TaskViewModel;
@@ -98,6 +102,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_navigationService.GoBackUsingCache();
                 Messenger.Default.Send(new SelectedTaskMessage {TaskInfo = task});
             }
+        }
+
+        private void CreateNewTask()
+        {
+            m_navigationService.Navigate(typeof(EditorHostView));
+            MessengerInstance.Send(new OpenEditorMessage { Application = SelectedApplication.ApplicationType });
         }
     }
 }

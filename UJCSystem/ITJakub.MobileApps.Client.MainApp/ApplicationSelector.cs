@@ -1,6 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core;
 using ITJakub.MobileApps.Client.Core.Service;
@@ -15,8 +13,6 @@ namespace ITJakub.MobileApps.Client.MainApp
     {
         private readonly TaskCompletionSource<AppInfoViewModel> m_taskCompletition;
         private readonly INavigationService m_navigationService;
-        private int m_lastCacheSize;
-        private Frame m_frame;
 
         private ApplicationSelector()
         {
@@ -28,9 +24,6 @@ namespace ITJakub.MobileApps.Client.MainApp
 
         private async Task<AppInfoViewModel> StartSelectingApplicationAsync()
         {
-            m_frame = ((Frame)Window.Current.Content);
-            m_lastCacheSize = m_frame.CacheSize;
-
             m_navigationService.Navigate(typeof(ApplicationSelectionView));
             return await m_taskCompletition.Task;
         } 
@@ -39,16 +32,8 @@ namespace ITJakub.MobileApps.Client.MainApp
         {
             Messenger.Default.Unregister(this);
             m_taskCompletition.SetResult(message.AppInfo);
-
-            m_frame.CacheSize = 0;
-            m_frame.CacheSize = m_lastCacheSize;
         }
 
-        /// <summary>
-        /// Open new page for selecting application from list.
-        /// Page must contains NavigationCacheMode property set to "Enabled" for restoring state.
-        /// </summary>
-        /// <returns>Application info</returns>
         public static async Task<AppInfoViewModel> SelectApplicationAsync()
         {
             var book = new ApplicationSelector();

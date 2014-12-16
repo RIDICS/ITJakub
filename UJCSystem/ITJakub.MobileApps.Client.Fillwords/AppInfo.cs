@@ -36,12 +36,12 @@ namespace ITJakub.MobileApps.Client.Fillwords
 
         public override EditorBaseViewModel EditorViewModel
         {
-            get { return new EditorViewModel(m_dataService); }
+            get { return new FillwordsEditorViewModel(m_dataService); }
         }
 
         public override Type EditorDataTemplate
         {
-            get { return typeof (EditorView); }
+            get { return typeof (FillwordsEditorView); }
         }
 
         public override ApplicationRoleType ApplicationRoleType

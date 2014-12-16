@@ -56,6 +56,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             SelectedTaskViewModel = new TaskViewModel();
             GroupStates = new ObservableCollection<GroupStateViewModel>();
 
+            GroupInfo = new GroupInfoViewModel();
+
             InitCommands();
         }
 

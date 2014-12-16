@@ -72,7 +72,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void GoBack()
         {
-            m_navigationService.GoBack();
+            m_navigationService.GoBackUsingCache();
             MessengerInstance.Send(new SelectedApplicationMessage());
         }
 
@@ -82,7 +82,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             if (selectedApp == null)
                 return;
 
-            m_navigationService.GoBack();
+            m_navigationService.GoBackUsingCache();
             Messenger.Default.Send(new SelectedApplicationMessage
             {
                 AppInfo = selectedApp

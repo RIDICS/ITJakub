@@ -57,7 +57,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
                     GroupCode = "123546",
                     MemberCount = 5,
                     GroupName = "Group A",
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/facebook-128.png")),
                     Task = new TaskViewModel {Application = ApplicationType.Hangman},
                     Members = new ObservableCollection<GroupMemberViewModel>
                     {
@@ -74,7 +73,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
                     GroupCode = "123546",
                     MemberCount = 5,
                     GroupName = "Group B",
-                    Icon = new BitmapImage(new Uri("ms-appx:///Icon/facebook-128.png")),
                     Task = new TaskViewModel{Application = ApplicationType.SampleApp}
                 },
             };

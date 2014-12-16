@@ -1,8 +1,8 @@
 ﻿namespace ITJakub.MobileApps.Client.Fillwords.View
 {
-    public sealed partial class EditorView
+    public sealed partial class FillwordsEditorView
     {
-        public EditorView()
+        public FillwordsEditorView()
         {
             InitializeComponent();
         }
