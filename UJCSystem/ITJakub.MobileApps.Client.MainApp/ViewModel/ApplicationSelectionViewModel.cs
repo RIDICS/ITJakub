@@ -34,7 +34,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             LoadAppList();
 
             AppClickCommand = new RelayCommand<ItemClickEventArgs>(AppClick);
-            GoBackCommand = new RelayCommand(() => m_navigationService.GoBackUsingCache());
+            GoBackCommand = new RelayCommand(GoBack);
         }
 
         private void LoadAppList()
@@ -70,13 +70,19 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         public RelayCommand GoBackCommand { get; private set; }
 
+        private void GoBack()
+        {
+            m_navigationService.GoBack();
+            MessengerInstance.Send(new SelectedApplicationMessage());
+        }
+
         private void AppClick(ItemClickEventArgs args)
         {
             var selectedApp = args.ClickedItem as AppInfoViewModel;
             if (selectedApp == null)
                 return;
 
-            m_navigationService.GoBackUsingCache();
+            m_navigationService.GoBack();
             Messenger.Default.Send(new SelectedApplicationMessage
             {
                 AppInfo = selectedApp

@@ -105,14 +105,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GroupedTaskList = new ObservableCollection<IGrouping<ApplicationType, TaskViewModel>>(sortedTaskList.GroupBy(model => model.Application).OrderBy(models => models.Key, new ApplicationTypeComparator()));
         }
 
-        private void CreateNewTask()
+        private async void CreateNewTask()
         {
-            m_navigationService.Navigate(typeof(ApplicationSelectionView));
-            MessengerInstance.Register<SelectedApplicationMessage>(this, message =>
+            var selectedApp = await ApplicationSelector.SelectApplicationAsync();
+
+            if (selectedApp != null)
             {
-                MessengerInstance.Unregister(this);
-                OpenEditor(message.AppInfo.ApplicationType);
-            });
+                OpenEditor(selectedApp.ApplicationType);
+            }
         }
 
         private void OpenEditor(ApplicationType applicationType)

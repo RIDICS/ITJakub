@@ -247,18 +247,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         public RelayCommand RemoveGroupCommand { get; private set; }
         
-        private void SelectAppAndTask()
+        private async void SelectAppAndTask()
         {
             ChangingTask = false;
             TaskSaved = false;
 
-            m_navigationService.Navigate(typeof(ApplicationSelectionView));
-            Messenger.Default.Register<SelectedApplicationMessage>(this, message =>
+            var selectedApp = await ApplicationSelector.SelectApplicationAsync();
+            if (selectedApp != null)
             {
-                Messenger.Default.Unregister<SelectedApplicationMessage>(this);
-                SelectedApplicationInfo = message.AppInfo;
-                SelectTask(message.AppInfo);
-            });
+                SelectedApplicationInfo = selectedApp;
+                SelectTask(selectedApp);
+            }
         }
 
         private void SelectTask(AppInfoViewModel application)

@@ -107,6 +107,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationSelector.cs" />
     <Compile Include="ViewModel\ApplicationTypeComparator.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SortTaskItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SortTaskType.cs" />
