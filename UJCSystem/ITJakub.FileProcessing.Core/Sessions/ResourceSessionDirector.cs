@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using ITJakub.Core.Resources;
+using ITJakub.Shared.Contracts.Resources;
 using log4net;
 
 namespace ITJakub.FileProcessing.Core.Sessions
@@ -76,10 +77,13 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 dataStream.CopyTo(fs);
             }
 
+            ResourceTypeEnum resourceType = ResourceTypeEnum.SourceDocument; //TODO HACK make and call resourceTypeResolver by file extension
+
             var resource = new Resource
             {
                 FullPath = fullpath,
-                FileName = fileName
+                FileName = fileName,
+                ResourceType = resourceType
             };
 
             Resources.Add(resource);

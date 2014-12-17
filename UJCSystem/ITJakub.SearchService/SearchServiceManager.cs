@@ -31,7 +31,7 @@ namespace ITJakub.SearchService
 
         public void UploadFile(FileUploadContract contract)
         {
-            m_bookDao.UploadFile(contract.BookId, contract.BookVersionid, contract.FileName, contract.DataStream);
+            m_bookDao.UploadFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
         }
 
         public IList<BookPage> GetBookPageList(string bookId, string versionId)

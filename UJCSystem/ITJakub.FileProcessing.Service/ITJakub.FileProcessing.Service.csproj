@@ -57,10 +57,6 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="Daliboris.Texty.Export.EdicniModul, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\XmlConversion\Daliboris.Texty.Export.EdicniModul.dll</HintPath>
-    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -117,6 +113,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\xmlconversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj">
+      <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
+      <Name>Ujc.Ovj.Ooxml.Conversion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\xmlconversion\Ujc.Ovj.Xml.Tei.Splitting\Ujc.Ovj.Xml.Tei.Splitting.csproj">
+      <Project>{e3bebcd1-4b5e-4d35-981c-256f2a03cc7a}</Project>
+      <Name>Ujc.Ovj.Xml.Tei.Splitting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
       <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
       <Name>ITJakub.DataEntities</Name>
@@ -128,10 +132,6 @@
     <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj">
       <Project>{56512CDC-6912-49B3-8AC4-CE96A0340165}</Project>
       <Name>ITJakub.FileProcessing.DataContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.SearchService\ITJakub.SearchService.csproj">
-      <Project>{a12068e9-19a4-45e4-924b-c9d509c6b950}</Project>
-      <Name>ITJakub.SearchService</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>

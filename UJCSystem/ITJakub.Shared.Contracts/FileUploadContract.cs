@@ -11,7 +11,7 @@ namespace ITJakub.Shared.Contracts
         public string BookId { get; set; }
 
         [MessageHeader]
-        public string BookVersionid { get; set; }
+        public string BookVersionId { get; set; }
 
         [MessageHeader]
         public string FileName { get; set; }

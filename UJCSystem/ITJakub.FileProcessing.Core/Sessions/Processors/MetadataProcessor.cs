@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using ITJakub.Core.Resources;
-using ITJakub.DataEntities.Database.Entities;
 using ITJakub.FileProcessing.Core.XMLProcessing;
 using ITJakub.Shared.Contracts.Resources;
 
@@ -19,19 +18,30 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            Resource metaData =
-                resourceSessionDirector.Resources.FirstOrDefault(
-                    resource => resource.ResourceType == ResourceTypeEnum.Metadata);
+            var metaData = resourceSessionDirector.Resources.FirstOrDefault( resource => resource.ResourceType == ResourceTypeEnum.Metadata);
             if (metaData == null)
                 throw new ResourceMissingException("Metada not found in resources");
-            FileStream xmlFileStream = File.Open(metaData.FullPath, FileMode.Open);
+            var xmlFileStream = File.Open(metaData.FullPath, FileMode.Open);
 
-            BookVersion bookVersion = m_xmlMetadataProcessingManager.GetXmlMetadata(xmlFileStream);
-            
+            var bookVersion = m_xmlMetadataProcessingManager.GetXmlMetadata(xmlFileStream);
+
             bookVersion.Description = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
             bookVersion.CreateTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
-            
+
             resourceSessionDirector.SetSessionInfoValue(SessionInfo.BookVersionEntity, bookVersion);
+            resourceSessionDirector.SetSessionInfoValue(SessionInfo.BookId, bookVersion.Book.Guid);
+            resourceSessionDirector.SetSessionInfoValue(SessionInfo.VersionId, bookVersion.VersionId);
+
+            foreach (var page in bookVersion.BookPages)
+            {
+                var pageResource = new Resource
+                {
+                    FileName = page.XmlResource,
+                    FullPath = Path.Combine(resourceSessionDirector.SessionPath, page.XmlResource),
+                    ResourceType = ResourceTypeEnum.Page
+                };
+                resourceSessionDirector.Resources.Add(pageResource);
+            }
         }
     }
 }

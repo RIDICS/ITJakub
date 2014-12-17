@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ITJakub.Core.Resources;
@@ -11,11 +12,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class XmlConversionProcessor : IResourceProcessor
     {
+        private readonly string m_conversionMetadataPath;
         private readonly BookRepository m_bookRepository;
+        private readonly VersionIdGenerator m_versionIdGenerator;
 
-        public XmlConversionProcessor(BookRepository bookRepository)
+        public XmlConversionProcessor(string conversionMetadataPath, BookRepository bookRepository, VersionIdGenerator versionIdGenerator)
         {
+            m_conversionMetadataPath = conversionMetadataPath;
             m_bookRepository = bookRepository;
+            m_versionIdGenerator = versionIdGenerator;
         }
 
 
@@ -25,7 +30,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 resourceSessionDirector.Resources.First(
                     resource => resource.ResourceType == ResourceTypeEnum.SourceDocument);
 
-            string metaDataFileName = string.Format("{0}_metadata.xml",
+            string metaDataFileName = string.Format("{0}.xmd",
                 Path.GetFileNameWithoutExtension(inputFileResource.FileName));
             var metaDataResource = new Resource
             {
@@ -48,28 +53,56 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 Directory.CreateDirectory(tmpDirPath);
             }
 
+
+            resourceSessionDirector.SetSessionInfoValue(SessionInfo.Message, "moje zpravicka"); //TODO pull it up
+            resourceSessionDirector.SetSessionInfoValue(SessionInfo.CreateTime, DateTime.UtcNow); //TODO pull it up
+
+            var message = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
+            var createTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
+
+            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_bookRepository, m_versionIdGenerator);
+
             var settings = new DocxToTeiConverterSettings
             {
-                Debug = true,
+                Debug = false,
                 InputFilePath = inputFileResource.FullPath,
-                //Message = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message), //TODO fill in client and pass it
-                Message = "ahoj",
-                MetadataFilePath = "D:\\Pool\\xmlconversion\\Ujc.Ovj.Ooxml.Conversion.Test\\Data\\Input\\Evidence.xml",//TODO load from config path to evidence.xml
+                MetadataFilePath = m_conversionMetadataPath,
                 OutputFilePath = bookResource.FullPath,
-                TempDirectoryPath = tmpDirPath
+                TempDirectoryPath = tmpDirPath,
+                GetVersionList = versionProviderHelper.GetVersionsByBookId,
+                SplitDocumentByPageBreaks = true
             };
 
             var converter = new DocxToTeiConverter();
             converter.Convert(settings);
 
+
             resourceSessionDirector.Resources.Add(metaDataResource);
             resourceSessionDirector.Resources.Add(bookResource);
         }
+    }
 
-        private List<VersionInfoSkeleton> GetVersionsByBookId(string bookId)
+    public class VersionProviderHelper
+    {
+        private readonly string m_message;
+        private readonly DateTime m_createTime;
+        private readonly BookRepository m_bookRepository;
+        private readonly VersionIdGenerator m_versionIdGenerator;
+
+        public VersionProviderHelper(string message, DateTime createTime, BookRepository bookRepository, VersionIdGenerator versionIdGenerator)
+        {
+            m_message = message;
+            m_createTime = createTime;
+            m_bookRepository = bookRepository;
+            m_versionIdGenerator = versionIdGenerator;
+        }
+
+        public List<VersionInfoSkeleton> GetVersionsByBookId(string bookId)
         {
             IEnumerable<BookVersion> versions = m_bookRepository.GetAllVersionsByBookId(bookId);
-            return versions.Select(x => new VersionInfoSkeleton(x.Description, x.CreateTime)).ToList();
+            var vers = versions.Select(x => new VersionInfoSkeleton(x.Description, x.CreateTime)).ToList();
+            vers.Add(new VersionInfoSkeleton(m_message, m_createTime, m_versionIdGenerator.Generate(m_createTime)));
+            return vers;
         }
     }
 }

@@ -14,16 +14,14 @@ namespace ITJakub.Core
     public class FileSystemManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         private readonly Dictionary<ResourceTypeEnum, IResourceTypePathResolver> m_resourceTypePathResolvers;
         private readonly string m_rootFolderPath;
-
 
         public FileSystemManager(IKernel container, string rootFolder)
         {
             m_rootFolderPath = rootFolder;
             m_resourceTypePathResolvers = new Dictionary<ResourceTypeEnum, IResourceTypePathResolver>();
-            foreach (IResourceTypePathResolver pathResolver in container.ResolveAll<IResourceTypePathResolver>())
+            foreach (var pathResolver in container.ResolveAll<IResourceTypePathResolver>())
             {
                 m_resourceTypePathResolvers.Add(pathResolver.ResolvingResourceType(), pathResolver);
             }
@@ -31,8 +29,8 @@ namespace ITJakub.Core
 
         public Resource GetResource(string bookId, string bookVersionId, string fileName, ResourceTypeEnum resourceType)
         {
-            IResourceTypePathResolver pathResolver = GetPathResolver(resourceType);
-            string relativePath = pathResolver.ResolvePath(bookId, bookVersionId, fileName);
+            var pathResolver = GetPathResolver(resourceType);
+            var relativePath = pathResolver.ResolvePath(bookId, bookVersionId, fileName);
             return new Resource
             {
                 FileName = fileName,
@@ -41,14 +39,19 @@ namespace ITJakub.Core
             };
         }
 
-
         public void SaveResource(string bookId, string bookVersionId, Resource resource)
         {
-            IResourceTypePathResolver pathResolver = GetPathResolver(resource.ResourceType);
-            string relativePath = pathResolver.ResolvePath(bookId, bookVersionId, resource.FileName);
-            string fullPath = GetFullPath(relativePath);
+            var pathResolver = GetPathResolver(resource.ResourceType);
+            var relativePath = pathResolver.ResolvePath(bookId, bookVersionId, resource.FileName);
+            var fullPath = GetFullPath(relativePath);
             CreateDirsIfNotExist(fullPath);
-            File.Copy(resource.FullPath, fullPath);
+            using (var sourceStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                using (var writeStream = File.Create(fullPath))
+                {
+                    sourceStream.CopyTo(writeStream);
+                }
+            }
         }
 
         private string GetFullPath(string relativePath)
@@ -58,7 +61,7 @@ namespace ITJakub.Core
 
         private void CreateDirsIfNotExist(string path)
         {
-            string dirPath = Path.GetDirectoryName(path);
+            var dirPath = Path.GetDirectoryName(path);
             if (dirPath == null) return;
             if (!Directory.Exists(path))
             {
@@ -100,14 +103,13 @@ namespace ITJakub.Core
             }
         }
 
-
         private IResourceTypePathResolver GetPathResolver(ResourceTypeEnum resourceType)
         {
             IResourceTypePathResolver pathResolver;
             m_resourceTypePathResolvers.TryGetValue(resourceType, out pathResolver);
             if (pathResolver == null)
             {
-                string message = string.Format("Resource with type '{0}' does not have rule for resolving path",
+                var message = string.Format("Resource with type '{0}' does not have rule for resolving path",
                     resourceType);
                 if (m_log.IsFatalEnabled)
                     m_log.FatalFormat(message);

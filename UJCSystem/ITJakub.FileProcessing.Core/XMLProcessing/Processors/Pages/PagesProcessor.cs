@@ -1,15 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
+using log4net;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
 {
     public class PagesProcessor : ListProcessorBase
     {
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public PagesProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
@@ -22,21 +27,47 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            IEnumerable<XElement> pagesElements = XDocument.Load(xmlReader).Elements().Where(element => element.Name.LocalName == "page");
-            int position = 0;
-            foreach (XElement pageElement in pagesElements)
+            var pagesElements =
+                XDocument.Load(xmlReader).Descendants().Where(element => element.Name.LocalName == "page");
+            var position = 0;
+            if (bookVersion.BookPages == null)
+            {
+                bookVersion.BookPages = new List<BookPage>();
+            }
+
+            foreach (var pageElement in pagesElements)
             {
                 ++position;
+                var faxValue = GetAttributeValue(pageElement, "fax");
+                var pageNameValue = GetAttributeValue(pageElement, "n") ?? Convert.ToString(position);
+                var pageIdValue = GetAttributeValue(pageElement, XmlNamespace + "id") ?? Convert.ToString(Guid.NewGuid());
+                var xmlResourceValue = GetAttributeValue(pageElement, "resource");
+
+                if (string.IsNullOrEmpty(xmlResourceValue) && m_log.IsFatalEnabled)
+                    m_log.ErrorFormat("Metadata_processor : Page in position {0} does not have resource attribute",
+                        position);
+
                 bookVersion.BookPages.Add(new BookPage
                 {
                     Position = position,
-                    Text = pageElement.Attribute("n").Value,
+                    Text = pageNameValue,
                     BookVersion = bookVersion,
-                    Image = pageElement.Attribute("fax").Value,
-                    XmlId = pageElement.Attribute("xml:id").Value,
-                    XmlResource = pageElement.Attribute("resource").Value
+                    Image = faxValue,
+                    XmlId = pageIdValue,
+                    XmlResource = xmlResourceValue
                 });
             }
+        }
+
+        private string GetAttributeValue(XElement pageElement, XName attributeName)
+        {
+            string faxValue = null;
+            var faxAttribute = pageElement.Attribute(attributeName);
+            if (faxAttribute != null)
+            {
+                faxValue = faxAttribute.Value;
+            }
+            return faxValue;
         }
     }
 }

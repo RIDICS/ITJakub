@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
@@ -13,7 +14,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         private readonly XsltTransformationManager m_xsltTransformationManager;
         private bool m_initialized;
         private Dictionary<string, ProcessorBase> m_processors;
-
+        protected readonly XNamespace XmlNamespace = "http://www.w3.org/XML/1998/namespace";
 
         protected ProcessorBase(XsltTransformationManager xsltTransformationManager, IKernel container)
         {

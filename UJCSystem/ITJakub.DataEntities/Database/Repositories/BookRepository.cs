@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
@@ -20,7 +19,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual IList<Book> GetAllBooks()
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return session.QueryOver<Book>().List<Book>();
             }
@@ -29,12 +28,12 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual BookVersion GetLastVersionForBook(string bookGuid)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
-                Book book = GetBookByGuid(bookGuid);
+                var book = GetBookByGuid(bookGuid);
                 BookVersion bookVersionAlias = null;
 
-                QueryOver<BookVersion, BookVersion> lastVersionSubquery = QueryOver.Of<BookVersion>()
+                var lastVersionSubquery = QueryOver.Of<BookVersion>()
                     .SelectList(l => l
                         .SelectGroup(item => item.Book.Id)
                         .SelectMax(item => item.CreateTime)
@@ -56,11 +55,10 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-
         [Transaction(TransactionMode.Requires)]
         public virtual Book GetBookByGuid(string bookGuid)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return session.QueryOver<Book>()
                     .Where(book => book.Guid == bookGuid)
@@ -68,15 +66,15 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        
         [Transaction(TransactionMode.Requires)]
         public virtual BookVersion FindBookVersionByGuid(string bookGuid, string bookVersionGuid)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return
                     session.QueryOver<BookVersion>()
-                        .Where(bookVersion => bookVersion.VersionId == bookVersionGuid && bookVersion.Book.Guid == bookGuid)
+                        .Where(
+                            bookVersion => bookVersion.VersionId == bookVersionGuid && bookVersion.Book.Guid == bookGuid)
                         .SingleOrDefault<BookVersion>();
             }
         }
@@ -85,16 +83,18 @@ namespace ITJakub.DataEntities.Database.Repositories
         public virtual Transformation FindTransformation(BookVersion bookVersion, OutputFormatEnum outputFormat)
             //TODO return transformation entity
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
-                var transformation =  session.QueryOver<Transformation>()
-                        .Where(transf => transf.OutputFormat == outputFormat && transf.BookVersions.Contains(bookVersion))
-                        .SingleOrDefault<Transformation>();
+                var transformation = session.QueryOver<Transformation>()
+                    .Where(transf => transf.OutputFormat == outputFormat && transf.BookVersions.Contains(bookVersion))
+                    .SingleOrDefault<Transformation>();
 
                 if (transformation == null)
                 {
                     transformation = session.QueryOver<Transformation>()
-                        .Where(transf => transf.OutputFormat == outputFormat && transf.BookType == bookVersion.Book.BookType)
+                        .Where(
+                            transf =>
+                                transf.OutputFormat == outputFormat && transf.BookType == bookVersion.Book.BookType)
                         .SingleOrDefault<Transformation>();
                 }
 
@@ -106,7 +106,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual BookType FindBookType(BookTypeEnum bookTypeEnum)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return
                     session.QueryOver<BookType>()
@@ -118,12 +118,11 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual IEnumerable<BookVersion> GetAllVersionsByBookId(string bookId)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
-                return
-                    session.QueryOver<BookVersion>()
-                        .Where(bookVersion => bookVersion.Book.Guid == bookId)
-                        .List<BookVersion>();
+               return session.QueryOver<BookVersion>()
+                        .JoinQueryOver(version => version.Book)
+                        .Where(book => book.Guid == bookId).List<BookVersion>();
             }
         }
     }

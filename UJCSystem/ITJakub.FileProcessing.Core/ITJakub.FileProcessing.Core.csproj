@@ -11,6 +11,7 @@
     <AssemblyName>ITJakub.FileProcessing.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Windsor">
@@ -44,13 +47,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Ujc.Ovj.Ooxml.Conversion">
-      <HintPath>..\..\Libs\XmlConversion\Ujc.Ovj.Ooxml.Conversion.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Sessions\Processors\FileDbStoreProcessor.cs" />
     <Compile Include="Sessions\Processors\IResourceProcessor.cs" />
+    <Compile Include="Sessions\Processors\VersionIdGenerator.cs" />
     <Compile Include="Sessions\Processors\XmlConversionProcessor.cs" />
     <Compile Include="Sessions\Processors\MetadataProcessor.cs" />
     <Compile Include="Sessions\Processors\RelationalDbStoreProcessor.cs" />
@@ -112,6 +113,10 @@
     <EmbeddedResource Include="ITJakub.FileProcessing.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\xmlconversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj">
+      <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
+      <Name>Ujc.Ovj.Ooxml.Conversion</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
       <Project>{92E907E3-ACE0-4FC6-8919-040031E5192E}</Project>
       <Name>ITJakub.Core</Name>

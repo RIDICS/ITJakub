@@ -7,6 +7,7 @@ using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header;
+using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
@@ -24,7 +25,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
 
         protected override string NodeName
         {
-            get { return "DocDescription"; }
+            get { return "document"; }
         }
 
         public string XmlRootName
@@ -41,6 +42,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
                 {
                     Container.Resolve<TeiHeaderProcessor>(),
                     Container.Resolve<BookContentProcessor>(),
+                    Container.Resolve<PagesProcessor>(),
                 };
             }
         }
