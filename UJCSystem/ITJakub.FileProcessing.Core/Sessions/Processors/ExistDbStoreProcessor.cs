@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reflection;
-using ITJakub.Core.Resources;
 using ITJakub.Core.SearchService;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
@@ -23,38 +20,34 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
-            List<Resource> existResources =
+            var existResources =
                 resourceDirector.Resources.Where(
                     resource =>
                         resource.ResourceType == ResourceTypeEnum.Transformation ||
                         resource.ResourceType == ResourceTypeEnum.Book || resource.ResourceType == ResourceTypeEnum.Page)
                     .ToList();
-            foreach (Resource resource in existResources)
+            foreach (var resource in existResources)
             {
                 if (string.IsNullOrEmpty(resource.FileName) && m_log.IsFatalEnabled)
                 {
-                    m_log.ErrorFormat("Resource of type {0} and path {1} does not have fileName", resource.ResourceType, resource.FullPath);
-                    continue;   //TODO maybe throw exception?
+                    m_log.ErrorFormat("Resource of type {0} and path {1} does not have fileName", resource.ResourceType,
+                        resource.FullPath);
+                    continue; //TODO maybe throw exception?
                 }
 
-                try
+                using (var dataStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-
                     m_searchServiceClient.UploadFile(new FileUploadContract
                     {
                         BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
                         BookVersionId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.VersionId),
                         FileName = resource.FileName,
                         ResourceType = resource.ResourceType,
-                        DataStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read)
+                        DataStream = dataStream
                     });
-                }
-                catch (Exception ex)
-                {
-                    var a = ex.Message;
-                    throw;
                 }
             }
         }
     }
 }
+

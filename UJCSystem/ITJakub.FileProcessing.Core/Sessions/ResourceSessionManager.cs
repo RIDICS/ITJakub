@@ -18,10 +18,12 @@ namespace ITJakub.FileProcessing.Core.Sessions
         private readonly ResourceProcessorManager m_resourceProcessorManager;
         private bool m_disposed;
         private string m_rootFolderPath;
+        private readonly ResourceTypeResolverManager m_resourceTypeResolverManager;
 
-        public ResourceSessionManager(ResourceProcessorManager resourceProcessorManager, string rootFolder)
+        public ResourceSessionManager(ResourceProcessorManager resourceProcessorManager, string rootFolder, ResourceTypeResolverManager resourceTypeResolverManager)
         {
             m_resourceProcessorManager = resourceProcessorManager;
+            m_resourceTypeResolverManager = resourceTypeResolverManager;
             InitializeRootFolder(rootFolder);
         }
 
@@ -80,7 +82,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 if (m_resourceDirectors.TryGetValue(sessionId, out result))
                     return result;
 
-                result = new ResourceSessionDirector(sessionId, m_rootFolderPath);
+                result = new ResourceSessionDirector(sessionId, m_rootFolderPath, m_resourceTypeResolverManager);
                 m_resourceDirectors.Add(sessionId, result);
             }
 

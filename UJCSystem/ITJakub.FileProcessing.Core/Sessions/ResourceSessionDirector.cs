@@ -13,10 +13,12 @@ namespace ITJakub.FileProcessing.Core.Sessions
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly Dictionary<SessionInfo, object> m_sessionInfos = new Dictionary<SessionInfo, object>();
         private bool m_disposed;
+        private readonly ResourceTypeResolverManager m_resourceTypeResolverManager;
 
-        public ResourceSessionDirector(string sessionId, string resourceRootFolder)
+        public ResourceSessionDirector(string sessionId, string resourceRootFolder, ResourceTypeResolverManager resourceTypeResolverManager)
         {
             SessionId = sessionId;
+            m_resourceTypeResolverManager = resourceTypeResolverManager;
             InitializeSessionFolder(resourceRootFolder);
             Resources = new List<Resource>();
             CreateTime = DateTime.UtcNow;
@@ -77,7 +79,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 dataStream.CopyTo(fs);
             }
 
-            ResourceTypeEnum resourceType = ResourceTypeEnum.SourceDocument; //TODO HACK make and call resourceTypeResolver by file extension
+            ResourceTypeEnum resourceType = m_resourceTypeResolverManager.Resolve(fileName);
 
             var resource = new Resource
             {

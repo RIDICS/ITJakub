@@ -57,6 +57,7 @@
     <Compile Include="Sessions\Processors\RelationalDbStoreProcessor.cs" />
     <Compile Include="Sessions\Processors\ExistDbStoreProcessor.cs" />
     <Compile Include="Sessions\ResourceSessionDirector.cs" />
+    <Compile Include="Sessions\ResourceTypeResolverManager.cs" />
     <Compile Include="XMLProcessing\Processors\BookContent\DivProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ConcreteInstanceListProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\ConcreteInstanceProcessorBase.cs" />
