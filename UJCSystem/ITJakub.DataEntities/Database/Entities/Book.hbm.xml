@@ -7,7 +7,7 @@
     <many-to-one name="Category">
       <column name="Category" sql-type="int" not-null="false" />
     </many-to-one>
-    <many-to-one name="BookType">
+    <many-to-one name="BookType" cascade="all-delete-orphan">
       <column name="BookType" sql-type="int" not-null="false" />
     </many-to-one>
     <property name="Guid">

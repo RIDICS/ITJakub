@@ -14,7 +14,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
-            m_bookVersionRepository.Create(resourceDirector.GetSessionInfoValue<BookVersion>(SessionInfo.BookVersionEntity));
+            var bookEntity = resourceDirector.GetSessionInfoValue<BookVersion>(SessionInfo.BookVersionEntity);
+            m_bookVersionRepository.Create(bookEntity);
+            
         }
     }
 }

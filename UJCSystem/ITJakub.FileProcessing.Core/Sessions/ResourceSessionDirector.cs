@@ -123,7 +123,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 //
             }
 
-            Directory.Delete(SessionPath);
+            Directory.Delete(SessionPath, true);
 
             m_disposed = true;
         }
