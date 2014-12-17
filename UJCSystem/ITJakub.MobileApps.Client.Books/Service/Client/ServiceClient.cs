@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using ITJakub.MobileApps.MobileContracts;
 
-namespace ITJakub.MobileApps.Client.Books.Service
+namespace ITJakub.MobileApps.Client.Books.Service.Client
 {
     public class ServiceClient : ClientBase<IMobileAppsService>
     {

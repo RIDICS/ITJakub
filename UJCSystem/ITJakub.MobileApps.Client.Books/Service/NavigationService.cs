@@ -1,72 +1,68 @@
 using System;
+using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace ITJakub.MobileApps.Client.Books.Service
 {
-    public class NavigationService
+    public class NavigationService : INavigationService
     {
-        private int m_originalBackStackDepth;
-        private object m_originalFrameContent;
+        private readonly Popup m_parent;
+        private readonly Stack<Type> m_backStack;
+        private Type m_currentPageType;
 
         public NavigationService()
         {
-            SetRootPage();
+            m_parent = new Popup();
+            m_backStack = new Stack<Type>();
         }
 
-        public void SetRootPage()
+        public Popup ParentPopup
         {
-            var frame = ((Frame)Window.Current.Content);
-            m_originalFrameContent = frame.Content;
-            m_originalBackStackDepth = frame.BackStackDepth;
+            get { return m_parent; }
         }
 
-        public bool CanGoBack
+        private void DisplayPage(Type pageType)
         {
-            get
-            {
-                var frame = ((Frame)Window.Current.Content);
-                return m_originalBackStackDepth < frame.BackStackDepth;
-            }
+            m_currentPageType = pageType;
+            var newPage = (Page) Activator.CreateInstance(pageType);
+            newPage.Width = Window.Current.Bounds.Width;
+            newPage.Height = Window.Current.Bounds.Height;
+            m_parent.Child = newPage;
+        }
+
+        public bool CanGoBack()
+        {
+            return m_backStack.Count > 0;
         }
 
         public void GoBack()
         {
-            if (!CanGoBack)
-                return;
-
-            var frame = ((Frame)Window.Current.Content);
-
-            if (m_originalBackStackDepth + 1 == frame.BackStackDepth)
+            if (CanGoBack())
             {
-                GoFromBookSelection();
-                return;
+                DisplayPage(m_backStack.Pop());
             }
-
-            frame.GoBack();
-        }
-
-        public void GoFromBookSelection()
-        {
-            var frame = ((Frame) Window.Current.Content);
-            while (m_originalBackStackDepth < frame.BackStackDepth)
+            else
             {
-                frame.GoBack();
-                frame = ((Frame) Window.Current.Content);
+                m_parent.Child = null;
+                m_currentPageType = null;
             }
-            frame.Content = m_originalFrameContent;
         }
 
-        public void Navigate(Type sourcePageType)
+        public void Navigate<T>()
         {
-            var frame = ((Frame)Window.Current.Content);
-            frame.Navigate(sourcePageType);
+            if (m_currentPageType != null)
+                m_backStack.Push(m_currentPageType);
+
+            var type = typeof (T);
+            DisplayPage(type);
         }
 
-        public void Navigate(Type sourcePageType, object parameter)
+        public void ResetBackStack()
         {
-            var frame = ((Frame)Window.Current.Content);
-            frame.Navigate(sourcePageType, parameter);
+            m_backStack.Clear();
+            m_currentPageType = null;
         }
     }
 }

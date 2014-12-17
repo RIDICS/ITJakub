@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Books.Manager;
 using ITJakub.MobileApps.Client.Books.ViewModel;
 using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Service
 {
-    public class DataService
+    public class DataService : IDataService
     {
         private readonly BookManager m_bookManager;
 
@@ -40,6 +39,16 @@ namespace ITJakub.MobileApps.Client.Books.Service
         public void GetPagePhoto(string bookGuid, string pageId, Action<BitmapImage, Exception> callback)
         {
             m_bookManager.GetPagePhoto(bookGuid, pageId, callback);
+        }
+
+        public void SetCurrentBook(BookViewModel book)
+        {
+            m_bookManager.CurrentBook = book;
+        }
+
+        public void GetCurrentBook(Action<BookViewModel> callback)
+        {
+            callback(m_bookManager.CurrentBook);
         }
     }
 }

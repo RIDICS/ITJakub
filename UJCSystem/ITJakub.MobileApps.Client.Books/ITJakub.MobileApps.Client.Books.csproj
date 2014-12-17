@@ -121,11 +121,15 @@
   <ItemGroup>
     <Compile Include="Book.cs" />
     <Compile Include="Container.cs" />
-    <Compile Include="Service\BookManager.cs" />
-    <Compile Include="Service\EndpointConfiguration.cs" />
-    <Compile Include="Service\MobileCommunicationException.cs" />
-    <Compile Include="Service\MockServiceClient.cs" />
-    <Compile Include="Service\ServiceClient.cs" />
+    <Compile Include="Manager\BookManager.cs" />
+    <Compile Include="Manager\BookModel.cs" />
+    <Compile Include="Message\PageListMessage.cs" />
+    <Compile Include="Service\Client\EndpointConfiguration.cs" />
+    <Compile Include="Service\IDataService.cs" />
+    <Compile Include="Service\INavigationService.cs" />
+    <Compile Include="Service\Client\MobileCommunicationException.cs" />
+    <Compile Include="Service\Client\MockServiceClient.cs" />
+    <Compile Include="Service\Client\ServiceClient.cs" />
     <Compile Include="ViewModel\BookPageViewModel.cs" />
     <Compile Include="Message\SelectedPageMessage.cs" />
     <Compile Include="Service\DataService.cs" />
@@ -134,12 +138,10 @@
     <Compile Include="ViewModel\ComboBoxItem\CategoryItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\FilterYearItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SearchDestinationItem.cs" />
-    <Compile Include="Message\PageListMessage.cs" />
     <Compile Include="ViewModel\SelectBookViewModel.cs" />
     <Compile Include="Enum\SearchByType.cs" />
     <Compile Include="Enum\SortType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Message\SelectedBookMessage.cs" />
     <Compile Include="ViewModel\SelectPageViewModel.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SortItem.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

@@ -3,18 +3,42 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Books.Service.Client;
 using ITJakub.MobileApps.Client.Books.ViewModel;
 using ITJakub.MobileApps.MobileContracts;
 
-namespace ITJakub.MobileApps.Client.Books.Service
+namespace ITJakub.MobileApps.Client.Books.Manager
 {
     public class BookManager
     {
         private readonly MockServiceClient m_serviceClient;
+        private readonly BookModel m_currentBook;
 
         public BookManager(ServiceClient serviceClient)
         {
             m_serviceClient = (MockServiceClient) serviceClient; // todo cast to MockServiceClient only for testing
+            m_currentBook = new BookModel();
+        }
+
+        public BookViewModel CurrentBook
+        {
+            get 
+            { 
+                return new BookViewModel
+                {
+                    Author = m_currentBook.Author,
+                    Guid = m_currentBook.Guid,
+                    Title = m_currentBook.Title,
+                    Year =  m_currentBook.Year
+                };
+            }
+            set
+            {
+                m_currentBook.Author = value.Author;
+                m_currentBook.Guid = value.Guid;
+                m_currentBook.Title = value.Title;
+                m_currentBook.Year = value.Year;
+            }
         }
 
         public async void GetBookList(CategoryContract category, Action<ObservableCollection<BookViewModel>, Exception> callback)

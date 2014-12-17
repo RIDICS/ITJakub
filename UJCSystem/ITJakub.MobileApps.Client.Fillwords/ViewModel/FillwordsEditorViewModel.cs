@@ -213,6 +213,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             BookRtfContent = book.RtfText;
             BookPagePhoto = book.PagePhoto; // may be null
 
+            IsShowPhotoEnabled = BookPagePhoto != null;
+
             LoadPagePhoto();
         }
 

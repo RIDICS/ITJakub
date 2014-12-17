@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using ITJakub.MobileApps.MobileContracts;
 
-namespace ITJakub.MobileApps.Client.Books.Service
+namespace ITJakub.MobileApps.Client.Books.Service.Client
 {
     public class MockServiceClient : ServiceClient
     {

@@ -110,11 +110,5 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.CreateTask);
             m_navigationService.Navigate<ApplicationSelectionView>();
         }
-
-        //private void OpenEditor(ApplicationType applicationType) //TODO remov
-        //{
-        //    m_navigationService.Navigate(typeof(EditorHostView));
-        //    MessengerInstance.Send(new OpenEditorMessage {Application = applicationType});
-        //}
     }
 }

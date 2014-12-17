@@ -13,8 +13,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 {
     public class SelectPageViewModel : ViewModelBase
     {
-        private readonly DataService m_dataService;
-        private readonly NavigationService m_navigationService;
+        private readonly IDataService m_dataService;
+        private readonly INavigationService m_navigationService;
         private readonly DispatcherTimer m_delayTimer;
         private ObservableCollection<BookPageViewModel> m_pageList;
         private BookViewModel m_book;
@@ -26,7 +26,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private bool m_loadingPhoto;
         private bool m_isShowPhotoEnabled;
 
-        public SelectPageViewModel(DataService dataService, NavigationService navigationService)
+        public SelectPageViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
@@ -36,12 +36,13 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 
             GoBackCommand = new RelayCommand(navigationService.GoBack);
             SaveCommand = new RelayCommand(Save);
-            Messenger.Default.Register<SelectedBookMessage>(this, LoadData);
+
+            m_dataService.GetCurrentBook(LoadData);
         }
         
-        private void LoadData(SelectedBookMessage message)
+        private void LoadData(BookViewModel bookViewModel)
         {
-            Book = message.Book;
+            Book = bookViewModel;
             MessengerInstance.Unregister(this);
 
             Loading = true;
@@ -229,7 +230,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             if (SelectedPage == null || LoadingPage)
                 return;
 
-            m_navigationService.GoFromBookSelection();
+            m_navigationService.ResetBackStack();
             SelectedPage.BookInfo = Book;
             Messenger.Default.Send(new SelectedPageMessage
             {

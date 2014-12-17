@@ -14,8 +14,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 {
     public class SelectBookViewModel : ViewModelBase
     {
-        private readonly DataService m_dataService;
-        private readonly NavigationService m_navigationService;
+        private readonly IDataService m_dataService;
+        private readonly INavigationService m_navigationService;
         private ObservableCollection<BookViewModel> m_bookList;
         private bool m_noBookFound;
         private bool m_loading;
@@ -27,7 +27,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private int m_filterFromYear;
         private int m_filterToYear;
 
-        public SelectBookViewModel(DataService dataService, NavigationService navigationService)
+        public SelectBookViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
@@ -181,8 +181,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             if (book == null)
                 return;
             
-            m_navigationService.Navigate(typeof(SelectPageView));
-            Messenger.Default.Send(new SelectedBookMessage {Book = book});
+            m_dataService.SetCurrentBook(book);
+            m_navigationService.Navigate<SelectPageView>();
         }
 
         private void Search()
