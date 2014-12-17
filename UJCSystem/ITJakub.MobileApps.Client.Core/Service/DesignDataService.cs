@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
@@ -79,7 +80,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             callback(result, null);
         }
 
-        public void OpenGroupAndGetDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
+        public void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
         {
             throw new NotImplementedException();
         }
@@ -139,15 +140,42 @@ namespace ITJakub.MobileApps.Client.Core.Service
             }, null);
         }
 
-        public void AssignTaskToGroup(long groupId, long taskId, Action<Exception> callback)
+        public void AssignTaskToCurrentGroup(long taskId, Action<Exception> callback)
         {
             callback(null);
         }
 
-        public void OpenGroup(long groupId) { }
+        public void SetCurrentGroup(long groupId) { }
 
         public void UpdateGroupState(long groupId, GroupState newState, Action<Exception> callback) { }
 
         public void RemoveGroup(long groupId, Action<Exception> callback) { }
+
+        public void GetCurrentGroupId(Action<long> callback)
+        {
+            callback(1);
+        }
+
+        public void SetCurrentApplication(ApplicationType selectedApp)
+        {
+        }
+
+        public void GetCurrentApplication(Action<ApplicationType> callback)
+        {
+            callback(ApplicationType.SampleApp);
+        }
+
+        public void SetRestoringLastGroupState(bool restore)
+        {
+        }
+
+        public void GetAppSelectionTarget(Action<ApplicationSelectionTarget> callback)
+        {
+            callback(ApplicationSelectionTarget.None);
+        }
+
+        public void SetAppSelectionTarget(ApplicationSelectionTarget target)
+        {
+        }
     }
 }

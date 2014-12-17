@@ -107,16 +107,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationSelector.cs" />
     <Compile Include="ViewModel\ApplicationTypeComparator.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SortTaskItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SortTaskType.cs" />
     <Compile Include="ViewModel\EditorHostViewModel.cs" />
     <Compile Include="ViewModel\GroupList\ConnectToGroupViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
-    <Compile Include="ViewModel\Message\SelectedApplicationMessage.cs" />
-    <Compile Include="ViewModel\Message\SelectedTaskMessage.cs" />
-    <Compile Include="ViewModel\Message\OpenEditorMessage.cs" />
     <Compile Include="ViewModel\OwnedTaskListViewModel.cs" />
     <Compile Include="View\AboutSettingsFlyout.xaml.cs">
       <DependentUpon>AboutSettingsFlyout.xaml</DependentUpon>
@@ -136,7 +132,6 @@
     </Compile>
     <Compile Include="ViewModel\ErrorBarViewModel.cs" />
     <Compile Include="ViewModel\ApplicationHostViewModel.cs" />
-    <Compile Include="ViewModel\Message\OpenGroupMessage.cs" />
     <Compile Include="ViewModel\SelectTaskViewModel.cs" />
     <Compile Include="View\Converter\ApplicationCategoryToNameConverter.cs" />
     <Compile Include="View\Converter\GroupTypeToNameConverter.cs" />

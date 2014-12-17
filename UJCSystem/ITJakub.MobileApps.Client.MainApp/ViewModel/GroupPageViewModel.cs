@@ -3,12 +3,12 @@ using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
-using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
@@ -27,11 +27,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private readonly IMainPollingService m_pollingService;
-        private AppInfoViewModel m_selectedApplicationInfo;
+        private ApplicationType m_selectedApplication;
         private GroupInfoViewModel m_groupInfo;
-        private TaskViewModel m_selectedTaskViewModel;
-        private bool m_changingTask;
-        private bool m_taskSaved;
+        private string m_selectedTaskName;
         private bool m_loading;
         private bool m_changingState;
         private bool m_removing;
@@ -46,40 +44,26 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_dataService = dataService;
             m_navigationService = navigationService;
             m_pollingService = pollingService;
-            Messenger.Default.Register<OpenGroupMessage>(this, message =>
-            {
-                LoadData(message.Group);
-                Messenger.Default.Unregister<OpenGroupMessage>(this);
-            });
 
-            SelectedApplicationInfo = new AppInfoViewModel();
-            SelectedTaskViewModel = new TaskViewModel();
             GroupStates = new ObservableCollection<GroupStateViewModel>();
-
             GroupInfo = new GroupInfoViewModel();
+
+            m_dataService.GetCurrentGroupId(LoadData);
 
             InitCommands();
         }
 
         private void InitCommands()
         {
-            GoBackCommand = new RelayCommand(() =>
-            {
-                m_pollingService.Unregister(MembersPollingInterval, UpdateMembers);
-                Messenger.Default.Unregister(this);
-                m_navigationService.GoBack();
-            });
-
+            GoBackCommand = new RelayCommand(GoBack);
             SelectAppAndTaskCommand = new RelayCommand(SelectAppAndTask);
             RemoveGroupCommand = new RelayCommand(RemoveGroup);
         }
 
-        private void LoadData(GroupInfoViewModel group)
+        private void LoadData(long groupId)
         {
-            GroupInfo = group;
-
             Loading = true;
-            m_dataService.OpenGroupAndGetDetails(group.GroupId, (groupInfo, exception) =>
+            m_dataService.GetGroupDetails(groupId, (groupInfo, exception) =>
             {
                 Loading = false;
                 if (exception != null)
@@ -88,13 +72,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupInfo = groupInfo;
                 if (groupInfo.Task == null)
                 {
-                    SelectedTaskViewModel = new TaskViewModel();
-                    SelectedApplicationInfo = new AppInfoViewModel {ApplicationType = ApplicationType.Unknown};
+                    SelectedTaskName = null;
+                    SelectedApplication = ApplicationType.Unknown;
                 }
                 else
                 {
-                    SelectedTaskViewModel = groupInfo.Task;
-                    SelectedApplicationInfo = new AppInfoViewModel {ApplicationType = groupInfo.Task.Application};
+                    SelectedTaskName = groupInfo.Task.Name;
+                    SelectedApplication = groupInfo.Task.Application;
                 }
 
                 GroupStateUpdated(groupInfo.State);
@@ -138,43 +122,22 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public AppInfoViewModel SelectedApplicationInfo
+        public ApplicationType SelectedApplication
         {
-            get { return m_selectedApplicationInfo; }
+            get { return m_selectedApplication; }
             set
             {
-                m_selectedApplicationInfo = value;
+                m_selectedApplication = value;
                 RaisePropertyChanged();
             }
         }
 
-        public TaskViewModel SelectedTaskViewModel
+        public string SelectedTaskName
         {
-            get { return m_selectedTaskViewModel; }
+            get { return m_selectedTaskName; }
             set
             {
-                m_selectedTaskViewModel = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool ChangingTask
-        {
-            get { return m_changingTask; }
-            set
-            {
-                m_changingTask = value;
-                ChangingState = m_changingTask;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool TaskSaved
-        {
-            get { return m_taskSaved; }
-            set
-            {
-                m_taskSaved = value;
+                m_selectedTaskName = value;
                 RaisePropertyChanged();
             }
         }
@@ -249,47 +212,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         public RelayCommand RemoveGroupCommand { get; private set; }
         
-        private async void SelectAppAndTask()
+        private void SelectAppAndTask()
         {
-            ChangingTask = false;
-            TaskSaved = false;
-
-            var selectedApp = await ApplicationSelector.SelectApplicationAsync();
-            if (selectedApp != null)
-            {
-                SelectedApplicationInfo = selectedApp;
-                SelectTask(selectedApp);
-            }
-        }
-
-        private void SelectTask(AppInfoViewModel application)
-        {
-            m_navigationService.Navigate(typeof(SelectTaskView));
-
-            Messenger.Default.Send(new SelectedApplicationMessage {AppInfo = application});
-
-            Messenger.Default.Register<SelectedTaskMessage>(this, message =>
-            {
-                Messenger.Default.Unregister<SelectTaskView>(this);
-                SelectedTaskViewModel = message.TaskInfo;
-                SaveTask(message.TaskInfo);
-            });
-        }
-
-        private void SaveTask(TaskViewModel task)
-        {
-            TaskSaved = false;
-            ChangingTask = true;
-            m_dataService.AssignTaskToGroup(m_groupInfo.GroupId, task.Id, exception =>
-            {
-                ChangingTask = false;
-                if (exception != null)
-                    return;
-
-                TaskSaved = true;
-                GroupInfo.Task = task;
-                GroupStateUpdated(GroupInfo.State);
-            });
+            m_dataService.SetRestoringLastGroupState(true);
+            m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.SelectTask);
+            m_navigationService.Navigate<ApplicationSelectionView>();
         }
 
         private void ChangeGroupState(GroupState newState)
@@ -316,8 +243,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (exception != null)
                     return;
 
-                m_navigationService.GoBack();
+                GoBack();
             });
+        }
+
+        private void GoBack()
+        {
+            m_dataService.SetRestoringLastGroupState(false);
+            m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.None);
+            m_pollingService.Unregister(MembersPollingInterval, UpdateMembers);
+            Messenger.Default.Unregister(this);
+            m_navigationService.GoBack();
         }
     }
 

@@ -13,7 +13,6 @@ using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
-using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 
@@ -251,7 +250,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         {
             if (group != null)
             {
-                m_dataService.OpenGroup(group.GroupId);
+                m_dataService.SetCurrentGroup(group.GroupId);
                 m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
 
                 var viewType = group.GroupType == GroupType.Member
@@ -259,7 +258,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                     : typeof (GroupPageView);
                 m_navigationService.Navigate(viewType);
                 Messenger.Default.Unregister(this);
-                Messenger.Default.Send(new OpenGroupMessage {Group = group});
             }
         }
     }

@@ -4,11 +4,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem;
-using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -105,20 +105,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GroupedTaskList = new ObservableCollection<IGrouping<ApplicationType, TaskViewModel>>(sortedTaskList.GroupBy(model => model.Application).OrderBy(models => models.Key, new ApplicationTypeComparator()));
         }
 
-        private async void CreateNewTask()
+        private void CreateNewTask()
         {
-            var selectedApp = await ApplicationSelector.SelectApplicationAsync();
-
-            if (selectedApp != null)
-            {
-                OpenEditor(selectedApp.ApplicationType);
-            }
+            m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.CreateTask);
+            m_navigationService.Navigate<ApplicationSelectionView>();
         }
 
-        private void OpenEditor(ApplicationType applicationType)
-        {
-            m_navigationService.Navigate(typeof(EditorHostView));
-            MessengerInstance.Send(new OpenEditorMessage {Application = applicationType});
-        }
+        //private void OpenEditor(ApplicationType applicationType) //TODO remov
+        //{
+        //    m_navigationService.Navigate(typeof(EditorHostView));
+        //    MessengerInstance.Send(new OpenEditorMessage {Application = applicationType});
+        //}
     }
 }

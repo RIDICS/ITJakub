@@ -56,7 +56,7 @@
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
                     AutomationProperties.ItemType="Navigation Button"
-                    IsEnabled="{Binding ChangingTask, Converter={StaticResource BooleanNegationConverter}}" />
+                    IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}" />
             <TextBlock Style="{StaticResource HeaderTextBlockStyle}"
                        Grid.Column="1"
                        IsHitTestVisible="false"
@@ -95,12 +95,12 @@
 
                 <TextBlock Style="{StaticResource MyLabelStyle}">
                     <Run Text="Aplikace:" />
-                    <Run Text="{Binding SelectedApplicationInfo.ApplicationType, Converter={StaticResource ApplicationTypeToNameConverter}}" />
+                    <Run Text="{Binding SelectedApplication, Converter={StaticResource ApplicationTypeToNameConverter}}" />
                 </TextBlock>
 
                 <TextBlock Style="{StaticResource MyLabelStyle}">
                     <Run Text="Zadání:" />
-                    <Run Text="{Binding SelectedTaskViewModel.Name, Converter={StaticResource NotChosenStringConverter}}" />
+                    <Run Text="{Binding SelectedTaskName, Converter={StaticResource NotChosenStringConverter}}" />
                 </TextBlock>
                 
                 <StackPanel Orientation="Horizontal"
@@ -109,23 +109,6 @@
                     <Button Content="Změnit zadání"
                             IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}"
                             Command="{Binding SelectAppAndTaskCommand}" />
-                    <ProgressRing IsActive="True"
-                                  Width="30"
-                                  Height="30"
-                                  Margin="10,0,5,0"
-                                  Foreground="Gold"
-                                  Visibility="{Binding ChangingTask, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <TextBlock Text="Ukládání"
-                               FontSize="20"
-                               Foreground="Gold"
-                               VerticalAlignment="Center"
-                               Visibility="{Binding ChangingTask, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <TextBlock Text="Uloženo"
-                               FontSize="20"
-                               Margin="10,0,0,0"
-                               Foreground="Gold"
-                               VerticalAlignment="Center"
-                               Visibility="{Binding TaskSaved, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </StackPanel>
 
                 <TextBlock Style="{StaticResource MyLabelStyle}"

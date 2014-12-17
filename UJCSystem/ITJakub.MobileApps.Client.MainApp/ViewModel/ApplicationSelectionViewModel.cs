@@ -3,10 +3,10 @@ using System.Linq;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
+using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
-using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
+using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -72,8 +72,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void GoBack()
         {
-            m_navigationService.GoBackUsingCache();
-            MessengerInstance.Send(new SelectedApplicationMessage());
+            m_navigationService.GoBack();
         }
 
         private void AppClick(ItemClickEventArgs args)
@@ -82,10 +81,21 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             if (selectedApp == null)
                 return;
 
-            m_navigationService.GoBackUsingCache();
-            Messenger.Default.Send(new SelectedApplicationMessage
+            m_dataService.SetCurrentApplication(selectedApp.ApplicationType);
+            m_dataService.GetAppSelectionTarget(target =>
             {
-                AppInfo = selectedApp
+                switch (target)
+                {
+                    case ApplicationSelectionTarget.SelectTask:
+                        m_navigationService.Navigate<SelectTaskView>();
+                        break;
+                    case ApplicationSelectionTarget.CreateTask:
+                        m_navigationService.Navigate<EditorHostView>();
+                        break;
+                    default:
+                        m_navigationService.GoBack();
+                        break;
+                }
             });
         }
     }

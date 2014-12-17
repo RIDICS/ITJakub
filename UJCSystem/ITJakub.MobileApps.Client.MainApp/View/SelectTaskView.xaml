@@ -70,7 +70,7 @@
                        VerticalAlignment="Center"
                        Margin="30,0,0,0">
                 <Run Text="pro aplikaci" />
-                <Run Text="{Binding SelectedApplication.Name}" />
+                <Run Text="{Binding ApplicationName}" />
             </TextBlock>
             
             <SearchBox Grid.Column="3"
@@ -143,5 +143,27 @@
                    Text="Pro zvolenou aplikaci nejsou dostupná žádná zadání."
                    Style="{StaticResource SubheaderTextBlockStyle}"
                    Visibility="{Binding NoTaskExists, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <StackPanel Grid.Row="1"
+                    MinWidth="400"
+                    MinHeight="100"
+                    Margin="0,0,0,70"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Background="White"
+                    Visibility="{Binding Saving, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+            <ProgressRing Width="40"
+                          Height="40"
+                          Margin="20"
+                          Foreground="Black"
+                          IsActive="True" />
+            <TextBlock VerticalAlignment="Center"
+                       Text="Přiřazování zadání skupině"
+                       Foreground="Black"
+                       Margin="0,0,40,0"
+                       FontSize="30" />
+        </StackPanel>
     </Grid>
 </Page>

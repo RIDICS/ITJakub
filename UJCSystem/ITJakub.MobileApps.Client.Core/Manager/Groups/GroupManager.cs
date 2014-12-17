@@ -23,8 +23,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         private readonly UserAvatarCache m_userAvatarCache;
         private readonly BitmapImage m_defaultUserAvatar;
         private readonly ApplicationIdManager m_applicationIdManager;
+        private GroupDetailContract m_currentGroupInfoModel;
 
         public long CurrentGroupId { get; private set; }
+
+        public bool RestoreLastState { get; set; }
 
         public GroupManager(IUnityContainer container)
         {
@@ -150,23 +153,30 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             }
         }
 
-        public async void OpenGroupAndGetDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
+        public async void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
         {
             try
             {
-                CurrentGroupId = groupId;
-                var result = await m_serviceClient.GetGroupDetailsAsync(groupId);
+                CurrentGroupId = groupId; // TODO
+
+                if (!RestoreLastState)
+                {
+                    m_currentGroupInfoModel = null;
+                    m_currentGroupInfoModel = await m_serviceClient.GetGroupDetailsAsync(groupId);
+                }
+
+                var groupInfo = m_currentGroupInfoModel;
                 var group = new GroupInfoViewModel
                 {
-                    GroupId = result.Id,
+                    GroupId = groupInfo.Id,
                     Members = new ObservableCollection<GroupMemberViewModel>(),
-                    GroupName = result.Name,
-                    CreateTime = result.CreateTime,
-                    GroupCode = result.EnterCode,
-                    State = (GroupState) result.State,
+                    GroupName = groupInfo.Name,
+                    CreateTime = groupInfo.CreateTime,
+                    GroupCode = groupInfo.EnterCode,
+                    State = (GroupState) groupInfo.State,
                 };
 
-                var task = result.Task;
+                var task = groupInfo.Task;
                 if (task != null)
                 {
                     group.Task = new TaskViewModel
@@ -178,7 +188,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     };
                 }
                 
-                FillGroupMembers(group, result.Members);
+                FillGroupMembers(group, groupInfo.Members);
                 callback(group, null);
             }
             catch (ClientCommunicationException exception)
@@ -186,7 +196,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 callback(null, exception);
             }
         }
-
+        
         private async void LoadMemberAvatar(GroupMemberViewModel member)
         {
             member.UserAvatar = await m_userAvatarCache.GetUserAvatar(member.Id);

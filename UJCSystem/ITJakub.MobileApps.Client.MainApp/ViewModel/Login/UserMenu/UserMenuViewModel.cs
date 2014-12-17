@@ -1,7 +1,6 @@
 ﻿using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Service;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
@@ -44,7 +43,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
             {
                 m_dataService.LogOut();
                 m_navigationService.GoHome();
-                Messenger.Default.Send(new LogOutMessage());
+                MessengerInstance.Send(new LogOutMessage());
             });
         }
 

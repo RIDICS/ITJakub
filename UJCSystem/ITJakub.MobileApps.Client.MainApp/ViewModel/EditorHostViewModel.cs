@@ -1,7 +1,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Service;
-using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
+using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -13,14 +13,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public EditorHostViewModel(INavigationService navigationService, IDataService dataService)
         {
             m_dataService = dataService;
-            GoBackCommand = new RelayCommand(navigationService.GoBackUsingCache);
+            GoBackCommand = new RelayCommand(navigationService.GoBack);
 
-            MessengerInstance.Register<OpenEditorMessage>(this, OpenEditor);
+            m_dataService.GetCurrentApplication(OpenEditor);
         }
 
-        private void OpenEditor(OpenEditorMessage message)
+        private void OpenEditor(ApplicationType applicationType)
         {
-            m_dataService.GetApplication(message.Application, (appInfo, exception) =>
+            m_dataService.GetApplication(applicationType, (appInfo, exception) =>
             {
                 if (exception != null)
                     return;
@@ -28,7 +28,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 ApplicationName = appInfo.Name;
                 EditorViewModel = appInfo.EditorViewModel;
             });
-            MessengerInstance.Unregister<OpenEditorMessage>(this);
         }
 
         public RelayCommand GoBackCommand { get; private set; }

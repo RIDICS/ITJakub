@@ -8,7 +8,6 @@ using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
-using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -43,13 +42,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GoBackCommand = new RelayCommand(GoBack);
             m_taskLoaded = false;
 
-            Messenger.Default.Register<OpenGroupMessage>(this, message =>
+            m_dataService.GetCurrentGroupId(groupId =>
             {
                 WaitingForStart = true;
                 WaitingForData = true;
-                m_groupId = message.Group.GroupId;
-                m_pollingService.RegisterForGetGroupState(GroupStatePollingInterval, message.Group.GroupId, GroupStateUpdate);
-                Messenger.Default.Unregister<OpenGroupMessage>(this);
+                m_groupId = groupId;
+                m_pollingService.RegisterForGetGroupState(GroupStatePollingInterval, groupId, GroupStateUpdate);
             });
 
             Messenger.Default.Register<LogOutMessage>(this, message => StopCommunication());
