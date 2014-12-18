@@ -114,10 +114,6 @@
     <EmbeddedResource Include="ITJakub.FileProcessing.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\xmlconversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj">
-      <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
-      <Name>Ujc.Ovj.Ooxml.Conversion</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
       <Project>{92E907E3-ACE0-4FC6-8919-040031E5192E}</Project>
       <Name>ITJakub.Core</Name>
@@ -129,6 +125,10 @@
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj">
+      <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
+      <Name>Ujc.Ovj.Ooxml.Conversion</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

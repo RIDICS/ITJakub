@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MVCWebLayer", "MVCWebLayer\ITJakub.MVCWebLayer.csproj", "{45118A71-641D-4A5F-8E92-57B4972B19B5}"
 EndProject
@@ -87,9 +87,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Core", "ITJakub.Cor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.Xml.Conversion", "ITJakub.Xml.Conversion", "{AF61ADAD-8F76-4A0E-AB27-F8D83392D370}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Xml.Tei.Splitting", "..\..\xmlconversion\Ujc.Ovj.Xml.Tei.Splitting\Ujc.Ovj.Xml.Tei.Splitting.csproj", "{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Ooxml.Conversion", "ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj", "{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Ooxml.Conversion", "..\..\xmlconversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj", "{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Xml.Tei.Splitting", "ITJakub.Xml.Conversion\Ujc.Ovj.Xml.Tei.Splitting\Ujc.Ovj.Xml.Tei.Splitting.csproj", "{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -570,20 +570,6 @@ Global
 		{92E907E3-ACE0-4FC6-8919-040031E5192E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{92E907E3-ACE0-4FC6-8919-040031E5192E}.Release|x64.ActiveCfg = Release|Any CPU
 		{92E907E3-ACE0-4FC6-8919-040031E5192E}.Release|x86.ActiveCfg = Release|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|ARM.ActiveCfg = Release|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|x64.ActiveCfg = Release|Any CPU
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|x86.ActiveCfg = Release|Any CPU
 		{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -598,6 +584,20 @@ Global
 		{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}.Release|x64.ActiveCfg = Release|Any CPU
 		{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}.Release|x86.ActiveCfg = Release|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|x64.ActiveCfg = Release|Any CPU
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -630,8 +630,8 @@ Global
 		{5CEF4267-5E27-4ACB-B832-74852BE6CE1E} = {20AD4F4B-31EB-419D-A116-9AD3B206D874}
 		{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A} = {03208FD7-4079-4AE7-8BC9-643C06A89967}
 		{56512CDC-6912-49B3-8AC4-CE96A0340165} = {20AD4F4B-31EB-419D-A116-9AD3B206D874}
-		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 		{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
+		{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi

@@ -117,14 +117,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\xmlconversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj">
-      <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
-      <Name>Ujc.Ovj.Ooxml.Conversion</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\xmlconversion\Ujc.Ovj.Xml.Tei.Splitting\Ujc.Ovj.Xml.Tei.Splitting.csproj">
-      <Project>{e3bebcd1-4b5e-4d35-981c-256f2a03cc7a}</Project>
-      <Name>Ujc.Ovj.Xml.Tei.Splitting</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
       <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
       <Name>ITJakub.DataEntities</Name>
@@ -140,6 +132,10 @@
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj">
+      <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
+      <Name>Ujc.Ovj.Ooxml.Conversion</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
