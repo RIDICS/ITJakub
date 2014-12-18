@@ -1,11 +1,11 @@
 ﻿
 
 
-$(document).ready(function () {
+$(document).ready(function() {
 
     var bibliographyModule = new BibliographyModule("#biblListResults", "#biblListResultsHeader");
 
-    $('#searchButton').click(function () {
+    $('#searchButton').click(function() {
         var text = $('#searchbox').val();
 
         $.ajax({
@@ -17,9 +17,9 @@ $(document).ready(function () {
             contentType: 'application/json',
             success: function(response) {
                 bibliographyModule.showBooks(response.books);
+
             }
         });
     });
 
 });
-

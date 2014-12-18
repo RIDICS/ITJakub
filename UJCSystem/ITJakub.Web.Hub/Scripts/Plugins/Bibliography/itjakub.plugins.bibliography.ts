@@ -1,13 +1,12 @@
 ﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
-
 class BibliographyModule {
 
     booksContainer: string;
     sortBarContainer: string
     bibliographyFactoryResolver: BibliographyFactoryResolver;
-    configurationManager : ConfigurationManager;
+    configurationManager: ConfigurationManager;
 
     constructor(booksContainer: string, sortBarContainer: string) {
         this.booksContainer = booksContainer;
@@ -35,13 +34,21 @@ class BibliographyModule {
 
     public showBooks(books: IBookInfo[]) {
         $(this.booksContainer).empty();
-        var rootElement: HTMLUListElement = document.createElement('ul');
-        $(rootElement).addClass('bib-listing');
-        $.each(books, (index, book: IBookInfo) => {
-            var bibliographyHtml = this.makeBibliography(book);
-            rootElement.appendChild(bibliographyHtml);
-        });
-        $(this.booksContainer).append(rootElement);
+        if (books.length > 0) {
+            var rootElement: HTMLUListElement = document.createElement('ul');
+            $(rootElement).addClass('bib-listing');
+            $.each(books, (index, book: IBookInfo) => {
+                var bibliographyHtml = this.makeBibliography(book);
+                rootElement.appendChild(bibliographyHtml);
+            });
+            $(this.booksContainer).append(rootElement);
+        } else {
+            var divElement: HTMLDivElement = document.createElement('div');
+            $(divElement).addClass('bib-listing-empty');
+            divElement.innerHTML = "Žádné výsledky k zobrazení";
+            $(this.booksContainer).append(divElement);
+        }
+
     }
 
     private makeBibliography(bibItem: IBookInfo): HTMLLIElement {
@@ -112,7 +119,7 @@ interface IBookInfo {
 
 
 //TODO remove or move to separated file
-class BookInfo implements  IBookInfo {
+class BookInfo implements IBookInfo {
     BookId = "{125A0032-03B5-40EC-B68D-80473CC5653A}";
     BookType: string;
     Name = "PasKal";

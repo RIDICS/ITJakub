@@ -28,13 +28,20 @@ var BibliographyModule = (function () {
     BibliographyModule.prototype.showBooks = function (books) {
         var _this = this;
         $(this.booksContainer).empty();
-        var rootElement = document.createElement('ul');
-        $(rootElement).addClass('bib-listing');
-        $.each(books, function (index, book) {
-            var bibliographyHtml = _this.makeBibliography(book);
-            rootElement.appendChild(bibliographyHtml);
-        });
-        $(this.booksContainer).append(rootElement);
+        if (books.length > 0) {
+            var rootElement = document.createElement('ul');
+            $(rootElement).addClass('bib-listing');
+            $.each(books, function (index, book) {
+                var bibliographyHtml = _this.makeBibliography(book);
+                rootElement.appendChild(bibliographyHtml);
+            });
+            $(this.booksContainer).append(rootElement);
+        } else {
+            var divElement = document.createElement('div');
+            $(divElement).addClass('bib-listing-empty');
+            divElement.innerHTML = "Žádné výsledky k zobrazení";
+            $(this.booksContainer).append(divElement);
+        }
     };
 
     BibliographyModule.prototype.makeBibliography = function (bibItem) {
