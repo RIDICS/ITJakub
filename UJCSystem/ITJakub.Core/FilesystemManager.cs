@@ -14,20 +14,20 @@ namespace ITJakub.Core
     public class FileSystemManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly Dictionary<ResourceTypeEnum, IResourceTypePathResolver> m_resourceTypePathResolvers;
+        private readonly Dictionary<ResourceType, IResourceTypePathResolver> m_resourceTypePathResolvers;
         private readonly string m_rootFolderPath;
 
         public FileSystemManager(IKernel container, string rootFolder)
         {
             m_rootFolderPath = rootFolder;
-            m_resourceTypePathResolvers = new Dictionary<ResourceTypeEnum, IResourceTypePathResolver>();
+            m_resourceTypePathResolvers = new Dictionary<ResourceType, IResourceTypePathResolver>();
             foreach (var pathResolver in container.ResolveAll<IResourceTypePathResolver>())
             {
                 m_resourceTypePathResolvers.Add(pathResolver.ResolvingResourceType(), pathResolver);
             }
         }
 
-        public Resource GetResource(string bookId, string bookVersionId, string fileName, ResourceTypeEnum resourceType)
+        public Resource GetResource(string bookId, string bookVersionId, string fileName, ResourceType resourceType)
         {
             var pathResolver = GetPathResolver(resourceType);
             var relativePath = pathResolver.ResolvePath(bookId, bookVersionId, fileName);
@@ -103,7 +103,7 @@ namespace ITJakub.Core
             }
         }
 
-        private IResourceTypePathResolver GetPathResolver(ResourceTypeEnum resourceType)
+        private IResourceTypePathResolver GetPathResolver(ResourceType resourceType)
         {
             IResourceTypePathResolver pathResolver;
             m_resourceTypePathResolvers.TryGetValue(resourceType, out pathResolver);

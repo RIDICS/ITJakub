@@ -6,6 +6,6 @@ namespace ITJakub.Core.Resources
     {
         public string FullPath { get; set; }
         public string FileName { get; set; }
-        public ResourceTypeEnum ResourceType { get; set; }
+        public ResourceType ResourceType { get; set; }
     }
 }

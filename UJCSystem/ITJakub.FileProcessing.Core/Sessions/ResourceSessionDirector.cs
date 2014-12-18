@@ -79,7 +79,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 dataStream.CopyTo(fs);
             }
 
-            ResourceTypeEnum resourceType = m_resourceTypeResolverManager.Resolve(fileName);
+            ResourceType resourceType = m_resourceTypeResolverManager.Resolve(fileName);
 
             var resource = new Resource
             {

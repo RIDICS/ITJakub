@@ -1,6 +1,6 @@
 ﻿namespace ITJakub.Shared.Contracts.Resources
 {
-    public enum ResourceTypeEnum
+    public enum ResourceType
     {
         SourceDocument = 0,
         Book = 1,

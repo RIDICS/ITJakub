@@ -47,13 +47,33 @@ namespace ITJakub.SearchService.Core.Exist
             return GetPageList(bookId, versionId, null);
         }
 
-        public void UploadFile(string bookId, string bookVersionId, string fileName, Stream fileStream)
+        public void UploadVersionFile(string bookId, string bookVersionId, string fileName, Stream dataStream)
         {
             CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
             Uri uri = SetParamsToUri(commInfo.UriTemplate, bookId, bookVersionId, fileName);
             using (Stream writeStream = m_webClient.OpenWrite(uri, commInfo.Method))
             {
-                fileStream.CopyTo(writeStream);
+                dataStream.CopyTo(writeStream);
+            }
+        }
+
+        public void UploadBookFile(string bookId, string fileName, Stream dataStream)
+        {
+            CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            Uri uri = SetParamsToUri(commInfo.UriTemplate, bookId, fileName);
+            using (Stream writeStream = m_webClient.OpenWrite(uri, commInfo.Method))
+            {
+                dataStream.CopyTo(writeStream);
+            }
+        }
+
+        public void UploadSharedFile(string fileName, Stream dataStream)
+        {
+            CommunicationInfo commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            Uri uri = SetParamsToUri(commInfo.UriTemplate, fileName);
+            using (Stream writeStream = m_webClient.OpenWrite(uri, commInfo.Method))
+            {
+                dataStream.CopyTo(writeStream);
             }
         }
 

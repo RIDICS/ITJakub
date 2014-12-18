@@ -19,7 +19,13 @@ namespace ITJakub.Shared.Contracts
         IList<BookPage> GetBookPageList(string bookId,string versionId);
 
         [OperationContract]
-        void UploadFile(FileUploadContract fileUploadContract);
+        void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract);
+
+        [OperationContract]
+        void UploadBookFile(BookResourceUploadContract contract);
+
+        [OperationContract]
+        void UploadSharedFile(ResourceUploadContract contract);
 
     }
 }

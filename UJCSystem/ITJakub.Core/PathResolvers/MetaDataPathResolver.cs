@@ -6,9 +6,9 @@ namespace ITJakub.Core.PathResolvers
 {
     public class MetaDataPathResolver : IResourceTypePathResolver
     {
-        public ResourceTypeEnum ResolvingResourceType()
+        public ResourceType ResolvingResourceType()
         {
-            return ResourceTypeEnum.Metadata;
+            return ResourceType.Metadata;
         }
 
         public string ResolvePath(string bookId, string bookVersionId, string fileName)

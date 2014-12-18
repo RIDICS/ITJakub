@@ -28,7 +28,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         {
             Resource inputFileResource =
                 resourceSessionDirector.Resources.First(
-                    resource => resource.ResourceType == ResourceTypeEnum.SourceDocument);
+                    resource => resource.ResourceType == ResourceType.SourceDocument);
 
             string metaDataFileName = string.Format("{0}.xmd",
                 Path.GetFileNameWithoutExtension(inputFileResource.FileName));
@@ -36,7 +36,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             {
                 FileName = metaDataFileName,
                 FullPath = Path.Combine(resourceSessionDirector.SessionPath, metaDataFileName),
-                ResourceType = ResourceTypeEnum.Metadata
+                ResourceType = ResourceType.Metadata
             };
 
             string bookFileName = string.Format("{0}.xml", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
@@ -44,7 +44,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             {
                 FileName = bookFileName,
                 FullPath = Path.Combine(resourceSessionDirector.SessionPath, bookFileName),
-                ResourceType = ResourceTypeEnum.Book
+                ResourceType = ResourceType.Book
             };
 
             string tmpDirPath = Path.Combine(resourceSessionDirector.SessionPath, "tmp");

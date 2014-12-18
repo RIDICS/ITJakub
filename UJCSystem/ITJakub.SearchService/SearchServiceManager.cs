@@ -29,10 +29,21 @@ namespace ITJakub.SearchService
             return m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName);
         }
 
-        public void UploadFile(FileUploadContract contract)
+        public void UploadVersionFile(VersionResourceUploadContract contract)
         {
-            m_bookDao.UploadFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
+            m_bookDao.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
         }
+
+        public void UploadBookFile(BookResourceUploadContract contract)
+        {
+            m_bookDao.UploadBookFile(contract.BookId, contract.FileName, contract.DataStream);
+        }
+
+        public void UploadSharedFile(ResourceUploadContract contract)
+        {
+            m_bookDao.UploadSharedFile(contract.FileName, contract.DataStream);
+        }
+
 
         public IList<BookPage> GetBookPageList(string bookId, string versionId)
         {

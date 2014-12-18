@@ -26,9 +26,19 @@ namespace ITJakub.Core.SearchService
             return Channel.GetBookPageList(bookId, versionId);
         }
 
-        public void UploadFile(FileUploadContract fileUploadContract)
+        public void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract)
         {
-            Channel.UploadFile(fileUploadContract);
+            Channel.UploadVersionFile(versionResourceUploadContract);
+        }
+
+        public void UploadBookFile(BookResourceUploadContract contract)
+        {
+            Channel.UploadBookFile(contract);
+        }
+
+        public void UploadSharedFile(ResourceUploadContract contract)
+        {
+            Channel.UploadSharedFile(contract);
         }
     }
 }

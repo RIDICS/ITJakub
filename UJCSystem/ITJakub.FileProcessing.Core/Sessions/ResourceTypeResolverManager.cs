@@ -8,8 +8,8 @@ namespace ITJakub.FileProcessing.Core.Sessions
 {
     public class ResourceTypeResolverManager
     {
-        private readonly Dictionary<string, ResourceTypeEnum> m_resolversDictionary =
-            new Dictionary<string, ResourceTypeEnum>();
+        private readonly Dictionary<string, ResourceType> m_resolversDictionary =
+            new Dictionary<string, ResourceType>();
 
         public ResourceTypeResolverManager(IKernel container)
         {
@@ -27,7 +27,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             }
         }
 
-        public ResourceTypeEnum Resolve(string fileName)
+        public ResourceType Resolve(string fileName)
         {
             var extension = Path.GetExtension(fileName);
             if (extension == null)
@@ -46,7 +46,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             FileExtensions = fileExtensions;
         }
 
-        public abstract ResourceTypeEnum ResolveResourceType { get; }
+        public abstract ResourceType ResolveResourceType { get; }
         public string[] FileExtensions { get; private set; }
     }
 
@@ -56,9 +56,9 @@ namespace ITJakub.FileProcessing.Core.Sessions
         {
         }
 
-        public override ResourceTypeEnum ResolveResourceType
+        public override ResourceType ResolveResourceType
         {
-            get { return ResourceTypeEnum.SourceDocument; }
+            get { return ResourceType.SourceDocument; }
         }
     }
 
@@ -69,9 +69,9 @@ namespace ITJakub.FileProcessing.Core.Sessions
         {
         }
 
-        public override ResourceTypeEnum ResolveResourceType
+        public override ResourceType ResolveResourceType
         {
-            get { return ResourceTypeEnum.Image; }
+            get { return ResourceType.Image; }
         }
     }
 
@@ -82,9 +82,9 @@ namespace ITJakub.FileProcessing.Core.Sessions
         {
         }
 
-        public override ResourceTypeEnum ResolveResourceType
+        public override ResourceType ResolveResourceType
         {
-            get { return ResourceTypeEnum.Transformation; }
+            get { return ResourceType.Transformation; }
         }
     }
 }

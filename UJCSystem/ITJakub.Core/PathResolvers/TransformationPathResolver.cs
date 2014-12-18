@@ -6,9 +6,9 @@ namespace ITJakub.Core.PathResolvers
 {
     public class TransformationPathResolver : IResourceTypePathResolver
     {
-        public ResourceTypeEnum ResolvingResourceType()
+        public ResourceType ResolvingResourceType()
         {
-            return ResourceTypeEnum.Transformation;
+            return ResourceType.Transformation;
         }
 
         public string ResolvePath(string bookId, string bookVersionId, string fileName)

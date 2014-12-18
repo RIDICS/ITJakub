@@ -34,9 +34,19 @@ namespace ITJakub.SearchService.Core.Exist
             return pageList;
         }
 
-        public void UploadFile(string bookId, string versionId, string fileName, Stream filStream)
+        public void UploadBookFile(string bookId, string fileName, Stream dataStream)
         {
-            m_client.UploadFile(bookId, versionId, fileName, filStream);
+            m_client.UploadBookFile(bookId, fileName, dataStream);
+        }
+
+        public void UploadVersionFile(string bookId, string versionId, string fileName, Stream filStream)
+        {
+            m_client.UploadVersionFile(bookId, versionId, fileName, filStream);
+        }
+
+        public void UploadSharedFile(string fileName, Stream filStream)
+        {
+            m_client.UploadSharedFile(fileName, filStream);
         }
 
         public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition)

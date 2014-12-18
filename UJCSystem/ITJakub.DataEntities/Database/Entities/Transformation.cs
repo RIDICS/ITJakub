@@ -11,7 +11,7 @@ namespace ITJakub.DataEntities.Database.Entities {
         public virtual int Id { get; set; }
         public virtual string Name { get; set; }
         public virtual BookType BookType { get; set; }
-        public virtual OutputFormatEnum OutputFormat { get; set; }
+        public virtual OutputFormat OutputFormat { get; set; }
         public virtual string Description { get; set; }
         public virtual bool IsDefaultForBookType { get; set; }
         public virtual IList<BookVersion> BookVersions { get; set; }

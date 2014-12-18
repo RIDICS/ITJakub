@@ -24,7 +24,15 @@ namespace ITJakub.SearchService.Core.Exist
         string GetPagesByName(string bookId, string versionId, string start, string end);
 
         [OperationContract]
-        [ExistResource(Method = "PUT")]
-        void UploadFile(string bookId, string versionId, string fileName, Stream readStream);
+        [ExistResource(Method = "PUT", Type = ResourceLevelType.Version)]
+        void UploadVersionFile(string bookId, string versionId, string fileName, Stream dataStream);
+
+        [OperationContract]
+        [ExistResource(Method = "PUT", Type = ResourceLevelType.Book)]
+        void UploadBookFile(string bookId, string fileName, Stream dataStream);
+
+        [OperationContract]
+        [ExistResource(Method = "PUT", Type = ResourceLevelType.Shared)]
+        void UploadSharedFile(string fileName, Stream dataStream);
     }
 }

@@ -33,9 +33,19 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
             return m_existManager.GetPageList(bookId, versionId);
         }
 
-        public void UploadFile(string bookId, string bookVersionid, string fileName, Stream dataStream)
+        public void UploadVersionFile(string bookId, string bookVersionid, string fileName, Stream dataStream)
         {
-            m_existManager.UploadFile(bookId, bookVersionid, fileName, dataStream);
+            m_existManager.UploadVersionFile(bookId, bookVersionid, fileName, dataStream);
+        }
+
+        public void UploadBookFile(string bookId, string fileName, Stream dataStream)
+        {
+            m_existManager.UploadBookFile(bookId, fileName, dataStream);
+        }
+
+        public void UploadSharedFile(string fileName, Stream dataStream)
+        {
+            m_existManager.UploadSharedFile(fileName, dataStream);
         }
     }
 }

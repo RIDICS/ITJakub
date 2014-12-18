@@ -80,7 +80,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual Transformation FindTransformation(BookVersion bookVersion, OutputFormatEnum outputFormat)
+        public virtual Transformation FindTransformation(BookVersion bookVersion, OutputFormat outputFormat)
             //TODO return transformation entity
         {
             using (var session = GetSession())

@@ -6,9 +6,9 @@ namespace ITJakub.Core.PathResolvers
 {
     public class ImagePathResolver : IResourceTypePathResolver
     {
-        public ResourceTypeEnum ResolvingResourceType()
+        public ResourceType ResolvingResourceType()
         {
-            return ResourceTypeEnum.Image;
+            return ResourceType.Image;
         }
 
         public string ResolvePath(string bookId, string bookVersionId, string fileName)

@@ -16,7 +16,7 @@ namespace ITJakub.SearchService.Core.Exist.AttributeResolver
         public CommunicationInfo Resolve(ExistAttribute attribute, MethodInfo methodInfo)
         {
             var att = (ExistResource) attribute;
-            var commInfo = new CommunicationInfo {Method = att.Method, UriTemplate = m_existResourceManager.GetResourceUriTemplate()};
+            var commInfo = new CommunicationInfo {Method = att.Method, UriTemplate = m_existResourceManager.GetResourceUriTemplate(att.Type)};
             return commInfo;
         }
 

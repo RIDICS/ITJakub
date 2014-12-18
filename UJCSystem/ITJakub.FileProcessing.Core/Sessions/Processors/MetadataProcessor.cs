@@ -18,7 +18,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            var metaData = resourceSessionDirector.Resources.FirstOrDefault( resource => resource.ResourceType == ResourceTypeEnum.Metadata);
+            var metaData = resourceSessionDirector.Resources.FirstOrDefault( resource => resource.ResourceType == ResourceType.Metadata);
             if (metaData == null)
                 throw new ResourceMissingException("Metada not found in resources");
             var xmlFileStream = File.Open(metaData.FullPath, FileMode.Open);
@@ -38,7 +38,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 {
                     FileName = page.XmlResource,
                     FullPath = Path.Combine(resourceSessionDirector.SessionPath, page.XmlResource),
-                    ResourceType = ResourceTypeEnum.Page
+                    ResourceType = ResourceType.Page
                 };
                 resourceSessionDirector.Resources.Add(pageResource);
             }

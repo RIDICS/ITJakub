@@ -18,9 +18,19 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetBookPageByPosition(bookId, versionId, pagePosition, transformationName);
         }
 
-        public void UploadFile(FileUploadContract fileUploadContract)
+        public void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract)
         {
-            m_searchServiceManager.UploadFile(fileUploadContract);
+            m_searchServiceManager.UploadVersionFile(versionResourceUploadContract);
+        }
+
+        public void UploadBookFile(BookResourceUploadContract contract)
+        {
+            m_searchServiceManager.UploadBookFile(contract);
+        }
+
+        public void UploadSharedFile(ResourceUploadContract contract)
+        {
+            m_searchServiceManager.UploadSharedFile(contract);
         }
 
         public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName)

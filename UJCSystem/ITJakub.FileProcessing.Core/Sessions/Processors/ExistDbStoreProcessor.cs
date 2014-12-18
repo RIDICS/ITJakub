@@ -20,13 +20,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
-            var existResources =
+            var existFileResources =
                 resourceDirector.Resources.Where(
                     resource =>
-                        resource.ResourceType == ResourceTypeEnum.Transformation ||
-                        resource.ResourceType == ResourceTypeEnum.Book || resource.ResourceType == ResourceTypeEnum.Page)
-                    .ToList();
-            foreach (var resource in existResources)
+                        resource.ResourceType == ResourceType.Book || resource.ResourceType == ResourceType.Page || resource.ResourceType == ResourceType.Transformation);
+            foreach (var resource in existFileResources)
             {
                 if (string.IsNullOrEmpty(resource.FileName) && m_log.IsFatalEnabled)
                 {
@@ -37,7 +35,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
                 using (var dataStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    m_searchServiceClient.UploadFile(new FileUploadContract
+                    m_searchServiceClient.UploadVersionFile(new VersionResourceUploadContract
                     {
                         BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
                         BookVersionId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.VersionId),
@@ -50,4 +48,3 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         }
     }
 }
-

@@ -64,7 +64,7 @@
       <key column="BookVersion" />
       <many-to-many class="Responsible" column="Responsible" />
     </bag>
-    <bag name="Transformations" table="BookVersion_Transformation" cascade="save-update" lazy="true">
+    <bag name="Transformations" table="BookVersion_Transformation" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Transformation" column="Transformation" />
     </bag>
