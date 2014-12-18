@@ -16,6 +16,9 @@
     <property name="OutputFormat">
       <column name="OutputFormat" sql-type="smallint" not-null="true" />
     </property>
+    <property name="ResourceLevel">
+      <column name="ResourceLevel" sql-type="smallint" not-null="true" />
+    </property>
     <property name="IsDefaultForBookType">
       <column name="IsDefaultForBookType" sql-type="bit" not-null="true" />
     </property>

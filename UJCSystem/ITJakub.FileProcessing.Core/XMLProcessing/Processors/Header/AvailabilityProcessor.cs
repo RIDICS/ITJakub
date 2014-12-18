@@ -26,7 +26,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
         protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
         {
             string status = xmlReader.GetAttribute("status");
-            bookVersion.AvailabilityStatus = ParseEnum<AvailabilityStatusEnum>(status);
+            bookVersion.AvailabilityStatus = ParseEnum<AvailabilityStatus>(status);
         }
     }
 }

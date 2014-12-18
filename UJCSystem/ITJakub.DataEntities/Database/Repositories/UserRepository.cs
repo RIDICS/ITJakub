@@ -24,7 +24,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (ISession session = GetSession())
             {
-                var userInstance = session.Query<User>().SingleOrDefault(user => user.Email == email && user.AuthenticationProvider == AuthenticationProviderEnum.ItJakub); //TODO use query over
+                var userInstance = session.Query<User>().SingleOrDefault(user => user.Email == email && user.AuthenticationProvider == AuthenticationProvider.ItJakub); //TODO use query over
                 if (userInstance!=null && userInstance.PasswordHash.Equals(ComputePasswordHash(password, userInstance.Salt)))
                 {
                     userInstance.CommunicationToken = GenerateCommunicationToken();
@@ -51,7 +51,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     FirstName = firstName,
                     LastName = lastName,
                     CreateTime = registrationTime,
-                    AuthenticationProvider = AuthenticationProviderEnum.ItJakub,
+                    AuthenticationProvider = AuthenticationProvider.ItJakub,
                     CommunicationToken = GenerateCommunicationToken(),
                     CommunicationTokenCreateTime = registrationTime
                 });

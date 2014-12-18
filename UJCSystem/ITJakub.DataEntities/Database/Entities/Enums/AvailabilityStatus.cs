@@ -1,9 +1,9 @@
 namespace ITJakub.DataEntities.Database.Entities.Enums
 {
-    public enum ResponsibleTypeEnum : short
+    public enum AvailabilityStatus : short
     {
         Unknown = 0,
-        Editor = 1,
-        Kolace = 2,
+        Free = 1,
+        Restricted = 2,
     }
 }

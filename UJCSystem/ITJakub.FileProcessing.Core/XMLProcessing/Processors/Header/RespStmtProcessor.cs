@@ -5,6 +5,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
+using ResponsibleType = ITJakub.DataEntities.Database.Entities.Enums.ResponsibleType;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
@@ -40,10 +41,10 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                 {
                     xmlReader.Read(); //read text value
                     string value = xmlReader.Value;
-                    responsible.ResponsibleType = new ResponsibleType
+                    responsible.ResponsibleType = new DataEntities.Database.Entities.ResponsibleType
                     {
                         Text = value,
-                        Type = ParseEnum<ResponsibleTypeEnum>(value)
+                        Type = ParseEnum<ResponsibleType>(value)
                     };
                 }
 

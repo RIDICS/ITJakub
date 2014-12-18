@@ -109,7 +109,8 @@ BEGIN TRAN
 	   [Description] varchar (MAX) NULL,	    
 	   [OutputFormat] smallint NOT NULL,	    
 	   [BookType] int  NULL CONSTRAINT [FK_Transformation(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
-	   [IsDefaultForBookType] bit NOT NULL
+	   [IsDefaultForBookType] bit NOT NULL,
+	   [ResourceLevel] smallint NOT NULL
     )
 
 

@@ -10,7 +10,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string Text { get; set; }
         public virtual string Type { get; set; }
         public virtual string SubType { get; set; }
-        public virtual BiblTypeEnum BiblType { get; set; }
+        public virtual BiblType BiblType { get; set; }
 
         public virtual bool Equals(BookBibl other)
         {

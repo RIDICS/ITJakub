@@ -32,7 +32,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                     IsDefaultForBookType = false,
                     Description = string.Empty,
                     Name = transResource.FileName,
-                    OutputFormat = OutputFormat.Html
+                    OutputFormat = OutputFormat.Html,
+                    ResourceLevel = ResourceLevel.Version
                 });
             }
 

@@ -1,8 +1,9 @@
 namespace ITJakub.DataEntities.Database.Entities.Enums
 {
-    public enum BiblTypeEnum: byte
+    public enum ResponsibleType : short
     {
         Unknown = 0,
-        Acronym = 1,
+        Editor = 1,
+        Kolace = 2,
     }
 }

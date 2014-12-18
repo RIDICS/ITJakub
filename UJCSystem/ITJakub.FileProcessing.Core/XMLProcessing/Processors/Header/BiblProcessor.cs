@@ -33,7 +33,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                     SubType = xmlReader.GetAttribute("subtype"),
                 };
 
-                bookBibl.BiblType = ParseEnum<BiblTypeEnum>(bookBibl.Type);
+                bookBibl.BiblType = ParseEnum<BiblType>(bookBibl.Type);
                 bookBibl.Text = GetInnerContentAsString(xmlReader);
 
 

@@ -74,13 +74,14 @@
     <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
     <Compile Include="Database\Entities\Author.cs" />
     <Compile Include="Database\Entities\BookPage.cs" />
-    <Compile Include="Database\Entities\Enums\AuthenticationProviderEnum.cs" />
+    <Compile Include="Database\Entities\Enums\AuthenticationProvider.cs" />
     <Compile Include="Database\Entities\Enums\BookTypeEnum.cs" />
-    <Compile Include="Database\Entities\Enums\ResultFormat.cs" />
+    <Compile Include="Database\Entities\Enums\OutputFormat.cs" />
+    <Compile Include="Database\Entities\Enums\ResourceLevel.cs" />
     <Compile Include="Database\Entities\Keyword.cs" />
     <Compile Include="Database\Entities\ManuscriptDescription.cs" />
-    <Compile Include="Database\Entities\Enums\AvailabilityStatusEnum.cs" />
-    <Compile Include="Database\Entities\Enums\BiblTypeEnum.cs" />
+    <Compile Include="Database\Entities\Enums\AvailabilityStatus.cs" />
+    <Compile Include="Database\Entities\Enums\BiblType.cs" />
     <Compile Include="Database\Entities\Book.cs" />
     <Compile Include="Database\Entities\BookBibl.cs" />
     <Compile Include="Database\Entities\Bookmark.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="Database\Entities\Publisher.cs" />
     <Compile Include="Database\Entities\Responsible.cs" />
     <Compile Include="Database\Entities\ResponsibleType.cs" />
-    <Compile Include="Database\Entities\Enums\ResponsibleTypeEnum.cs" />
+    <Compile Include="Database\Entities\Enums\ResponsibleType.cs" />
     <Compile Include="Database\Entities\Transformation.cs" />
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Repositories\UserRepository.cs" />
