@@ -160,6 +160,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Bibliographies\BibliographiesAreaRegistration.cs" />
+    <Compile Include="Areas\Bibliographies\BundleConfig.cs" />
+    <Compile Include="Areas\Bibliographies\Controllers\BibliographiesController.cs" />
+    <Compile Include="Areas\Bibliographies\RouteConfig.cs" />
     <Compile Include="Areas\Dictionaries\BundleConfig.cs" />
     <Compile Include="Areas\Dictionaries\RouteConfig.cs" />
     <Compile Include="Areas\Editions\BundleConfig.cs" />
@@ -185,6 +189,12 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.css">
+      <DependentUpon>itjakub.bibliographies.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.min.css">
+      <DependentUpon>itjakub.dictionaries.css</DependentUpon>
+    </Content>
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.css">
       <DependentUpon>itjakub.dictionaries.less</DependentUpon>
     </Content>
@@ -215,6 +225,17 @@
     <Content Include="Content\ITJakub.PluginMenu.css.map">
       <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
     </Content>
+    <Content Include="Areas\Bibliographies\Views\web.config" />
+    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.less" />
+    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.css.map">
+      <DependentUpon>itjakub.dictionaries.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\Bibliographies\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Bibliographies\Views\Bibliographies\Index.cshtml" />
+    <Content Include="Areas\Bibliographies\Views\Bibliographies\List.cshtml" />
+    <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
+    <Content Include="Areas\Bibliographies\Views\Bibliographies\TermsOfUse.cshtml" />
+    <Content Include="Areas\Bibliographies\Views\Bibliographies\Feedback.cshtml" />
     <None Include="Content\Plugins\Bibliography\configuration.json" />
     <Content Include="Content\ITJakub.css">
       <DependentUpon>ITJakub.less</DependentUpon>
@@ -450,6 +471,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Bibliographies\Models\" />
+    <Folder Include="Areas\Bibliographies\Views\Shared\" />
     <Folder Include="Areas\Dictionaries\Models\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
     <Folder Include="Areas\Editions\Models\" />
@@ -465,6 +488,7 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.sorting.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.configuration.ts" />

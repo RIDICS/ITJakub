@@ -100,6 +100,23 @@
                         <li><a href='#'><span>Odborná literatura</span></a></li>
                         <li class='last'><a href='#'><span>Kartotéky excerpce</span></a></li>
                         <li class='has-sub'>
+                            <a href='@Url.Action("Index", "Bibliographies", new { area = "Bibliographies" })'><span>Bibliografický modul</span></a>
+                            <ul>
+                                <li>
+                                    <a href='@Url.Action("List", "Bibliographies", new { area = "Bibliographies" })'><span>Seznam</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Information", "Bibliographies", new { area = "Bibliographies" })'><span>Informace</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("TermsOfUse", "Bibliographies", new { area = "Bibliographies" })'><span>Podmínky užití</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Feedback", "Bibliographies", new { area = "Bibliographies" })'><span>Připomínky</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class='has-sub'>
                             <a href='#'><span>Administrační modul</span></a>
                             <ul>
                                 <li>
