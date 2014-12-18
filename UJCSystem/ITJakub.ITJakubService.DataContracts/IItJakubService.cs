@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
@@ -38,5 +37,8 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         bool ProcessSession(string resourceSessionId, string uploadMessage);
         #endregion
+
+        [OperationContract]
+        List<SearchResultContract> Search(string term);
     }
 }

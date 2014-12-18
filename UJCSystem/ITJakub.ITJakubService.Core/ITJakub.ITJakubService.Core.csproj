@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Resources\FileProcessingServiceClient.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
+    <Compile Include="SearchManager.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="AuthorManager.cs" />
     <Compile Include="AutoMapperProfiles\AuthorProfile.cs" />

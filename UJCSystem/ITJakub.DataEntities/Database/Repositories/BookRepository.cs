@@ -4,7 +4,6 @@ using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
-using NHibernate;
 using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -120,9 +119,40 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-               return session.QueryOver<BookVersion>()
-                        .JoinQueryOver(version => version.Book)
-                        .Where(book => book.Guid == bookId).List<BookVersion>();
+                return session.QueryOver<BookVersion>()
+                    .JoinQueryOver(version => version.Book)
+                    .Where(book => book.Guid == bookId).List<BookVersion>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> SearchByTitle(string text)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersion = null;
+
+                // subquery to be later used for EXISTS
+                var maxSubquery = QueryOver.Of<BookVersion>()
+                    .SelectList(l => l
+                        .SelectGroup(item => item.Book.Id)
+                        .SelectMax(item => item.CreateTime)
+                    )
+                    // WHERE Clause
+                    .Where(x => x.Book.Id == bookVersion.Book.Id)
+                    // HAVING Clause
+                    .Where(Restrictions.EqProperty(
+                        Projections.Max<BookVersion>(item => item.CreateTime),
+                        Projections.Property(() => bookVersion.CreateTime)
+                        ));
+
+                // final query without any transformations/projections... but filtered
+                var result = session.QueryOver(() => bookVersion)
+                    .WhereRestrictionOn(x => x.Title).IsLike(string.Format("%{0}%", text))
+                    .WithSubquery
+                    .WhereExists(maxSubquery)
+                    .List<BookVersion>();
+                return result;
             }
         }
     }

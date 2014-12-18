@@ -28,6 +28,9 @@ class BibliographyModule {
         });
         this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
+        $(this.sortBarContainer).empty();
+        var sortBarHtml = new SortBar().makeSortBar(this.booksContainer, this.sortBarContainer);
+        $(this.sortBarContainer).append(sortBarHtml);
     }
 
     public showBooks(books: IBookInfo[]) {
@@ -39,9 +42,6 @@ class BibliographyModule {
             rootElement.appendChild(bibliographyHtml);
         });
         $(this.booksContainer).append(rootElement);
-        $(this.sortBarContainer).empty();
-        var sortBarHtml = new SortBar().makeSortBar(this.booksContainer, this.sortBarContainer);
-        $(this.sortBarContainer).append(sortBarHtml);
     }
 
     private makeBibliography(bibItem: IBookInfo): HTMLLIElement {

@@ -56,6 +56,7 @@
     <Compile Include="Searching\SearchCriteriumBase.cs" />
     <Compile Include="Searching\SearchRequest.cs" />
     <Compile Include="Searching\SearchTermPossibleResult.cs" />
+    <Compile Include="SearchResultContract.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

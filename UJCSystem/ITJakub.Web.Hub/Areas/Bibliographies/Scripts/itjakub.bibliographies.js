@@ -1,11 +1,1 @@
-﻿//TODO methods below are for testing purposes of Bibliography module
-$(document).ready(function () {
-    var searchPlugin = new SearchModule(new BibliographyModule("#biblListResults", "#biblListResultsHeader"));
-
-    var arrayOfIds = new Array();
-    for (var i = 0; i < 10; i++) {
-        arrayOfIds.push(i.toString());
-    }
-    searchPlugin.getBookWithIds(arrayOfIds);
-});
-//# sourceMappingURL=itjakub.bibliographies.js.map
+﻿//# sourceMappingURL=itjakub.bibliographies.js.map

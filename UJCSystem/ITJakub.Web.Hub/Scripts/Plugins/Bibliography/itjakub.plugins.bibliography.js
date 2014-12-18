@@ -21,6 +21,9 @@ var BibliographyModule = (function () {
         });
         this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
+        $(this.sortBarContainer).empty();
+        var sortBarHtml = new SortBar().makeSortBar(this.booksContainer, this.sortBarContainer);
+        $(this.sortBarContainer).append(sortBarHtml);
     }
     BibliographyModule.prototype.showBooks = function (books) {
         var _this = this;
@@ -32,9 +35,6 @@ var BibliographyModule = (function () {
             rootElement.appendChild(bibliographyHtml);
         });
         $(this.booksContainer).append(rootElement);
-        $(this.sortBarContainer).empty();
-        var sortBarHtml = new SortBar().makeSortBar(this.booksContainer, this.sortBarContainer);
-        $(this.sortBarContainer).append(sortBarHtml);
     };
 
     BibliographyModule.prototype.makeBibliography = function (bibItem) {

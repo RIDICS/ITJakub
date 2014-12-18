@@ -488,6 +488,7 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.List.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.sorting.ts" />

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
@@ -15,14 +14,16 @@ namespace ITJakub.ITJakubService
         private readonly BookManager m_bookManager;
         private readonly AuthorManager m_authorManager;
         private readonly ResourceManager m_resourceManager;
+        private readonly SearchManager m_searchManager;
 
-        public ItJakubServiceManager(UserManager userManager, UploadManager uploadManager, BookManager bookManager, AuthorManager authorManager, ResourceManager resourceManager)
+        public ItJakubServiceManager(UserManager userManager, UploadManager uploadManager, BookManager bookManager, AuthorManager authorManager, ResourceManager resourceManager, SearchManager searchManager)
         {
             m_userManager = userManager;
             m_uploadManager = uploadManager;
             m_bookManager = bookManager;
             m_authorManager = authorManager;
             m_resourceManager = resourceManager;
+            m_searchManager = searchManager;
         }
 
         public CreateUserResultContract CreateUser(CreateUserContract createUserContract)
@@ -78,6 +79,11 @@ namespace ITJakub.ITJakubService
         public bool ProcessSession(string resourceSessionId, string uploadMessage)
         {
             return m_resourceManager.ProcessSession(resourceSessionId, uploadMessage);
+        }
+
+        public List<SearchResultContract> Search(string term)
+        {
+            return m_searchManager.Search(term);
         }
     }
 }

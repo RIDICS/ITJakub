@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.ServiceModel;
 using Castle.Windsor;
 using ITJakub.ITJakubService.DataContracts;
@@ -72,6 +71,11 @@ namespace ITJakub.ITJakubService
         public bool ProcessSession(string resourceSessionId, string uploadMessage)
         {
             return m_serviceManager.ProcessSession(resourceSessionId, uploadMessage);
+        }
+
+        public List<SearchResultContract> Search(string term)
+        {
+            return m_serviceManager.Search(term);
         }
     }
 

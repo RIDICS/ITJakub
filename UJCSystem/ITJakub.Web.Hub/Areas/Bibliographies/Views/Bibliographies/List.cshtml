@@ -3,6 +3,8 @@
 }
 @section scripts{
     @Scripts.Render("~/itjakub/bibliographies/javascript")
+
+    <script src="@Url.Content("~/Areas/Bibliographies/Scripts/itjakub.bibliographies.List.ts")"></script>
 }
 
 <div id="biblListHeader">
@@ -10,7 +12,7 @@
         <form role="form" class="form-horizontal">
             <div class="form-group searchbar">
                 <div class="searchbar-buttons">
-                    <button type="button" class="btn btn-default searchbar-button">
+                    <button id="searchButton" type="button" class="btn btn-default searchbar-button">
                         Vyhledat
                     </button>
                     <button type="button" class="btn btn-default searchbar-button">
@@ -23,7 +25,7 @@
             </div>
         </form>
     </div>
-    <div style="float: left; margin-left: 50px; ">
+    <div style="float: left; margin-left: 50px;">
         Řadit podle
         <div id="biblListResultsHeader" style="display: inline-block">
         </div>
