@@ -36,7 +36,7 @@ namespace ITJakub.ITJakubService.DataContracts
         void AddResource(UploadResourceContract uploadFileInfoSkeleton);
 
         [OperationContract]
-        bool ProcessSession(string resourceSessionId);
+        bool ProcessSession(string resourceSessionId, string uploadMessage);
         #endregion
     }
 }

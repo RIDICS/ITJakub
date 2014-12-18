@@ -18,11 +18,13 @@
                     <input name="file" type="file" />
                 </div>
                 <div class="additionalData">
-                    <input type="hidden" id="sessionId" name="sessionId" value="@Model.SessionId" />
+                    <input type="hidden" id="sessionId" name="sessionId" value="@Model.SessionId"/>
                 </div>
             </form>
 
-            <button id="ProcessUploadedButton" type="button" class="btn btn-default style-button">
+            <input type="text" id="uploadMessage" name="bookVeuploadMessagersionMessage" placeholder="Zde napiste zpravu k nove verzi" style="width: 400px"/>
+
+            <button id="ProcessUploadedButton" type="button" class="btn btn-default style-button" disabled>
                 Zpracovat
             </button>
         </div>

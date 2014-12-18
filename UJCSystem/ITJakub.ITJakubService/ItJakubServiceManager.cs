@@ -75,9 +75,9 @@ namespace ITJakub.ITJakubService
             m_resourceManager.AddResource(resourceInfoSkeleton);
         }
 
-        public bool ProcessSession(string resourceSessionId)
+        public bool ProcessSession(string resourceSessionId, string uploadMessage)
         {
-            return m_resourceManager.ProcessSession(resourceSessionId);
+            return m_resourceManager.ProcessSession(resourceSessionId, uploadMessage);
         }
     }
 }

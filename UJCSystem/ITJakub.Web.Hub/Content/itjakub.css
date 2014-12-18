@@ -763,6 +763,9 @@ ul {
 #ProcessUploadedButton {
   margin: 5px;
 }
+#ProcessUploadedButton[disabled] {
+  background-color: #84ced7;
+}
 #progressbar .ui-progressbar-value {
   background-color: #84ced7;
 }

@@ -53,10 +53,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 Directory.CreateDirectory(tmpDirPath);
             }
 
-
-            resourceSessionDirector.SetSessionInfoValue(SessionInfo.Message, "moje zpravicka"); //TODO pull it up
-            resourceSessionDirector.SetSessionInfoValue(SessionInfo.CreateTime, DateTime.UtcNow); //TODO pull it up
-
             var message = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
             var createTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
 

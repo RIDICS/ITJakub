@@ -21,9 +21,9 @@ namespace ITJakub.ITJakubService.Core.Resources
             m_resourceClient.AddResource(resourceInfoSkeleton);
         }
 
-        public bool ProcessSession(string resourceSessionId)
+        public bool ProcessSession(string resourceSessionId, string uploadMessage)
         {
-            return m_resourceClient.ProcessSession(resourceSessionId);
+            return m_resourceClient.ProcessSession(resourceSessionId, uploadMessage);
         }
     }
 }

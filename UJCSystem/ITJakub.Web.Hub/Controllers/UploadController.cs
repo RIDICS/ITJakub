@@ -37,9 +37,9 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(new {});
         }
 
-        public ActionResult ProcessUploadedFiles(string sessionId)
+        public ActionResult ProcessUploadedFiles(string sessionId, string uploadMessage)
         {
-            return Json(new {success = m_serviceClient.ProcessSession(sessionId)});
+            return Json(new { success = m_serviceClient.ProcessSession(sessionId, uploadMessage) });
         }
     }
 }

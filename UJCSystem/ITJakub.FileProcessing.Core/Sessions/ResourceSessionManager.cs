@@ -89,7 +89,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             return result;
         }
 
-        public bool ProcessSession(string sessionId)
+        public bool ProcessSession(string sessionId, string uploadMessage)
         {
             lock (m_lock)
             {
@@ -99,7 +99,8 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 }
             }
             ResourceSessionDirector director = GetDirectorBySessionId(sessionId);
-
+            director.SetSessionInfoValue(SessionInfo.Message,  uploadMessage);
+            director.SetSessionInfoValue(SessionInfo.CreateTime,  DateTime.UtcNow);
             bool result = m_resourceProcessorManager.ProcessSessionResources(director);
             FinalizeSession(sessionId);
             return result;

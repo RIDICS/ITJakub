@@ -27,11 +27,11 @@ namespace ITJakub.ITJakubService.Core.Resources
             }
         }
 
-        public bool ProcessSession(string sessionId)
+        public bool ProcessSession(string sessionId, string uploadMessage)
         {
             try
             {
-                return Channel.ProcessSession(sessionId);
+                return Channel.ProcessSession(sessionId, uploadMessage);
             }
             catch (TimeoutException ex)
             {

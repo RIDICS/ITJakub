@@ -180,11 +180,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public bool ProcessSession(string resourceSessionId)
+        public bool ProcessSession(string sessionId, string uploadMessage)
         {
             try
             {
-                return Channel.ProcessSession(resourceSessionId);
+                return Channel.ProcessSession(sessionId, uploadMessage);
             }
             catch (CommunicationException ex)
             {

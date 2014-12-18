@@ -1,19 +1,47 @@
 ﻿$(document).ready(function() {
 
     Dropzone.autoDiscover = false; // otherwise will be initialized twice
+    function disableUploadButton() {
+        $("#ProcessUploadedButton").attr("disabled", true);
+    }
+
+    function enableUploadButton() {
+        $("#ProcessUploadedButton").removeAttr("disabled");
+
+    }
+
+    function getSessionIdFromPage() {
+        return $("#sessionId").val();
+    }
+
+    function getUploadMessage() {
+        return $("#uploadMessage").val();
+    }
+
 
     $("#dropzoneFileForm").dropzone({
-        url: '/Upload/UploadFile',
+        url: "/Upload/UploadFile",
         maxFilesize: 10000, // MB
         uploadMultiple: true,
         clickable: "#dropzoneFileFormPreview",
         autoProcessQueue: true,
         previewsContainer: "#dropzoneFileFormPreview",
-        acceptedFiles: '.doc,.docx, .jpg, .jpeg, .png, .gif, .bmp,',
-        dictInvalidFileType: 'Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc, .docx, .jpg, .jpeg, .png, .gif nebo .bmp,',
+        acceptedFiles: ".doc,.docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt",
+        dictInvalidFileType: "Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc,.docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt",
 
         init: function() {
             var fileDropzone = this;
+
+            this.on("complete", function(file) {
+                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                    enableUploadButton();
+                }
+            });
+
+
+            this.on("addedfile", function() {
+                disableUploadButton();
+            });
 
             //this.element.querySelector("input[type=submit]").addEventListener("click", function(e) {
             //    e.preventDefault();
@@ -21,11 +49,6 @@
             //    fileDropzone.processQueue();
             //});
 
-            //this.on("addedfile", function() {
-            //    if (this.files[1] != null) {
-            //        this.removeFile(this.files[0]);
-            //    }
-            //});
 
             //this.on("drop", function(event) {
             //    if (this.getQueuedFiles().length == 0 && this.getUploadingFiles().length == 0) {
@@ -45,23 +68,23 @@
     });
 
 
-    $('#ProcessUploadedButton').click(function() {
-        $('#upload').hide();
-        $('#processing').show();
+    $("#ProcessUploadedButton").click(function() {
+        $("#upload").hide();
+        $("#processing").show();
         $.ajax({
             type: "POST",
             url: "/Upload/ProcessUploadedFiles",
-            data: JSON.stringify({ 'sessionId': getSessionIdFromPage() }),
-            dataType: 'json',
-            contentType: 'application/json',
+            data: JSON.stringify({ 'sessionId': getSessionIdFromPage(), 'uploadMessage': getUploadMessage() }),
+            dataType: "json",
+            contentType: "application/json",
             success: function(response) {
-                var done = $('#done');
+                var done = $("#done");
                 if (response.success == true) {
-                    done.find('.success').show();
+                    done.find(".success").show();
                 } else {
-                    done.find('.error').show();
+                    done.find(".error").show();
                 }
-                $('#processing').hide();
+                $("#processing").hide();
                 done.show();
 
             }
@@ -72,10 +95,6 @@
         value: false
     });
 
-
-    function getSessionIdFromPage() {
-        return $('#sessionId').val();
-    }
 
 });
 
