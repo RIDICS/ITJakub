@@ -5,7 +5,6 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
     [RouteArea("Bibliographies")]
     public class BibliographiesController : Controller
     {
-        // GET: Dictionaries/Dictionaries
         public ActionResult Index()
         {
             return View();
