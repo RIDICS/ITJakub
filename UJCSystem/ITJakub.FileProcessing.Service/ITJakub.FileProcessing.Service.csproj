@@ -109,6 +109,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="ITJakub.FileProcessing.Service.Container.Config" />
+    <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -422,6 +422,7 @@
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.css.map">
       <DependentUpon>ITJakub.Reader.css</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
