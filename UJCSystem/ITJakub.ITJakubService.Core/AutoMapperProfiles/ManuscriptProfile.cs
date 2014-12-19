@@ -4,11 +4,11 @@ using ITJakub.Shared.Contracts;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
-    public class AuthorProfile : Profile
+    public class ManuscriptProfile : Profile
     {
         protected override void Configure()
         {
-            CreateMap<Author, AuthorContract>();
+            CreateMap<ManuscriptDescription, ManuscriptContract>();
         }
     }
 }

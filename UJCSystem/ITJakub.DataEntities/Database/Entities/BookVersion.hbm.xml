@@ -7,7 +7,7 @@
     <many-to-one name="Book" cascade="save-update" lazy="false">
       <column name="Book" sql-type="bigint" not-null="true" />
     </many-to-one>
-    <many-to-one name="Publisher" cascade="save-update">
+    <many-to-one name="Publisher" cascade="save-update" lazy="false">
       <column name="Publisher" sql-type="int" not-null="false" />
     </many-to-one>
     <property name="VersionId">
@@ -40,27 +40,27 @@
     <property name="BiblText">
       <column name="BiblText" sql-type="varchar" not-null="false" />
     </property>
-    <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="true">
+    <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="false">
       <key column="BookVersion" />
       <one-to-many class="ManuscriptDescription" />
     </bag>
-    <bag name="Keywords" cascade="all-delete-orphan">
+    <bag name="Keywords" cascade="all-delete-orphan" lazy="false">
       <key column="BookVersion" />
       <one-to-many class="Keyword" />
     </bag>
-    <bag name="BookBibls" cascade="all-delete-orphan">
+    <bag name="BookBibls" cascade="all-delete-orphan" lazy="false">
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>
-    <bag name="BookPages" cascade="all-delete-orphan">
+    <bag name="BookPages" cascade="all-delete-orphan" lazy="false"  fetch="select">
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
     </bag>
-    <bag name="Authors" table="BookVersion_Author" cascade="save-update" lazy="true">
+    <bag name="Authors" table="BookVersion_Author" cascade="save-update" lazy="false">
       <key column="BookVersion" />
       <many-to-many class="Author" column="Author" />
     </bag>
-    <bag name="Responsibles" table="BookVersion_Responsible" cascade="save-update" lazy="true">
+    <bag name="Responsibles" table="BookVersion_Responsible" cascade="save-update" lazy="false">
       <key column="BookVersion" />
       <many-to-many class="Responsible" column="Responsible" />
     </bag>

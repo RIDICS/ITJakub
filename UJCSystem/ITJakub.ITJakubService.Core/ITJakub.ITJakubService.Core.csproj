@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapperProfiles\ManuscriptProfile.cs" />
+    <Compile Include="AutoMapperProfiles\PublisherProfile.cs" />
+    <Compile Include="AutoMapperProfiles\EditorProfile.cs" />
+    <Compile Include="AutoMapperProfiles\SearchResultContractProfile.cs" />
     <Compile Include="Resources\FileProcessingServiceClient.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="SearchManager.cs" />

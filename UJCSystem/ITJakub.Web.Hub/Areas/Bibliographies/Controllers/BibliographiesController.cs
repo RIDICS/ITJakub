@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Web.Mvc;
 using ITJakub.Shared.Contracts;
 using ITJakub.Web.Hub.Controllers.Plugins.Search;
@@ -13,7 +14,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return View("Information");
         }
 
         public ActionResult List()
@@ -39,6 +40,10 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
         public ActionResult Search(string term)
         {
             List<SearchResultContract> listBooks = m_serviceClient.Search(term);
+            foreach (var list in listBooks)
+            {
+                list.CreateTimeString = list.CreateTime.ToString();
+            }
             return Json(new { books = listBooks }, JsonRequestBehavior.AllowGet);
         }
     }

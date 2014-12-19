@@ -56,12 +56,12 @@ class BibliographyModule {
         $(liElement).addClass('list-item');
         $(liElement).attr("data-bookid", bibItem.BookId);
         $(liElement).attr("data-booktype", bibItem.BookType);
-        $(liElement).attr("data-name", bibItem.Name);
+        $(liElement).attr("data-name", bibItem.Title);
         $(liElement).attr("data-century", bibItem.Century);
         //TODO toggle uncommented with commented code after testing
-        //$(liElement).data('bookid', bibItem.BookId);
+        //$(liElement).data('bookid', bibItem.BookGuid);
         //$(liElement).data('booktype', bibItem.BookType);
-        //$(liElement).data('name', bibItem.Name);
+        //$(liElement).data('name', bibItem.Title);
         //$(liElement).data('century', bibItem.Century); //TODO add values for sorting
 
 
@@ -98,7 +98,7 @@ class BibliographyModule {
 interface IBookInfo {
     BookId: string;
     BookType: string;
-    Name: string;
+    Title: string;
     Editor: string;
     Pattern: string;
     SourceAbbreviation: string;
@@ -122,7 +122,7 @@ interface IBookInfo {
 class BookInfo implements IBookInfo {
     BookId = "{125A0032-03B5-40EC-B68D-80473CC5653A}";
     BookType: string;
-    Name = "PasKal";
+    Title = "PasKal";
     Editor: string;
     Pattern: string;
     SourceAbbreviation: string;

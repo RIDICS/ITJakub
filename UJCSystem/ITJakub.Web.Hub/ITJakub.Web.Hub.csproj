@@ -231,7 +231,6 @@
       <DependentUpon>itjakub.dictionaries.css</DependentUpon>
     </Content>
     <Content Include="Areas\Bibliographies\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Bibliographies\Views\Bibliographies\Index.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\List.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\TermsOfUse.cshtml" />
@@ -312,7 +311,6 @@
     <Content Include="Areas\Editions\Views\web.config" />
     <Content Include="Areas\Dictionaries\Views\web.config" />
     <Content Include="Areas\Editions\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Editions\Views\Editions\Index.cshtml" />
     <Content Include="Areas\Dictionaries\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Index.cshtml" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />

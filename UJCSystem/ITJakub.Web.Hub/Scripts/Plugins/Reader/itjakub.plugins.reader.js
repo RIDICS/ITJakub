@@ -113,7 +113,7 @@ var ReaderModule = (function () {
     ReaderModule.prototype.makeTitle = function (book) {
         var titleDiv = document.createElement('div');
         $(titleDiv).addClass('title');
-        titleDiv.innerHTML = book.Name;
+        titleDiv.innerHTML = book.Title;
         return titleDiv;
     };
 

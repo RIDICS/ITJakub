@@ -8,7 +8,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         // GET: Editions/Editions
         public ActionResult Index()
         {
-            return View();
+            return View("Information");
         }
 
         public ActionResult Search()

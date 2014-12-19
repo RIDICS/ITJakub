@@ -41,10 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorContract.cs" />
     <Compile Include="BookPage.cs" />
     <Compile Include="Categories\CategoryShowType.cs" />
     <Compile Include="Categories\KeyWordsResponse.cs" />
     <Compile Include="Categories\SelectionBase.cs" />
+    <Compile Include="EditorContract.cs" />
+    <Compile Include="ManuscriptContract.cs" />
+    <Compile Include="PublisherContract.cs" />
     <Compile Include="ResourceUploadContract.cs" />
     <Compile Include="ILemmatizationService.cs" />
     <Compile Include="ISearchService.cs" />

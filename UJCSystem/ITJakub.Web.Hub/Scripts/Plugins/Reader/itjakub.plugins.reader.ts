@@ -128,7 +128,7 @@ class ReaderModule {
     private makeTitle(book: IBookInfo): HTMLDivElement {
         var titleDiv: HTMLDivElement = document.createElement('div');
         $(titleDiv).addClass('title');
-        titleDiv.innerHTML = book.Name;
+        titleDiv.innerHTML = book.Title;
         return titleDiv;
     }
 

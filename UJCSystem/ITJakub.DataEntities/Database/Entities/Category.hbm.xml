@@ -4,7 +4,7 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    <many-to-one name="ParentCategory">
+    <many-to-one name="ParentCategory" lazy="false">
       <column name="ParentCategory" sql-type="int" not-null="false" />
     </many-to-one>
     <property name="XmlId">

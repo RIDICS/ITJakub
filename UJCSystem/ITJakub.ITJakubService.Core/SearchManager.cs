@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using AutoMapper;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts;
 
@@ -17,12 +17,7 @@ namespace ITJakub.ITJakubService.Core
         public List<SearchResultContract> Search(string term)
         {
             var bookVersionResults = m_bookRepository.SearchByTitle(term);
-            return bookVersionResults.Select(bookVersion => new SearchResultContract
-            {
-                BookId = bookVersion.Book.Guid,
-                BookType = bookVersion.Book.BookType.ToString(),
-                Name = bookVersion.Title
-            }).ToList();
+            return Mapper.Map<List<SearchResultContract>>(bookVersionResults);
         }
     }
 }
