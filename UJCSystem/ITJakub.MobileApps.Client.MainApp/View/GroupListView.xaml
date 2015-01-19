@@ -10,7 +10,6 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
-    x:Name="PageRoot"
     DataContext="{Binding GroupListViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d" >
 
@@ -18,6 +17,9 @@
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <converter:GroupTypeToNameConverter x:Key="GroupTypeToNameConverter" />
+        <converter:GroupTypeOwnerToBooleanConverter x:Key="GroupTypeOwnerToBooleanConverter" />
+        <SolidColorBrush Color="DarkRed" x:Key="FlyoutErrorColor" />
+        <SolidColorBrush Color="Gray" x:Key="FlyoutProgressColor" />
         <CollectionViewSource x:Name="GroupList" Source="{Binding GroupList}" IsSourceGrouped="True" />
     </Page.Resources>
 
@@ -34,24 +36,32 @@
                           Command="{Binding OpenTaskEditorCommand}" />
             
             <AppBarButton Icon="Forward"
-                          Label="Připojit se k nové skupině">
+                          Label="Připojit se k nové skupině"
+                          x:Name="ConnectToGroupButton">
                 <AppBarButton.Flyout>
-                    <Flyout control:FlyoutHelpers.IsOpen="{Binding ConnectToGroupViewModel.IsFlyoutOpen, Mode=TwoWay}">
+                    <Flyout control:FlyoutHelpers.IsOpen="{Binding ConnectToGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
+                            control:FlyoutHelpers.Parent="{Binding ElementName=ConnectToGroupButton}">
                         <StackPanel DataContext="{Binding ConnectToGroupViewModel}"
                                     Orientation="Vertical">
                             <TextBlock FontSize="15"
                                        Text="Zadejte číslo skupiny:" />
                             <control:SubmitTextBox
                                      Width="250"
-                                     Margin="0,5,0,2"
+                                     Margin="0,5,0,5"
                                      Text="{Binding ConnectToGroupCode, Mode=TwoWay}"
                                      EnterCommand="{Binding ConnectToGroupCommand}" />
-                            <TextBlock Foreground="DarkRed"
+                            <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
                                        FontSize="15"
+                                       Margin="0,0,0,5"
                                        Text="Zadaný kód skupiny neexistuje."
                                        Visibility="{Binding ShowCodeNotExistError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
+                                       FontSize="15"
+                                       Margin="0,0,0,5"
+                                       Text="Nejdříve musíte zadat kód skupiny."
+                                       Visibility="{Binding ShowCodeEmptyError, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                            <Grid Margin="0,3,0,0">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
@@ -59,11 +69,11 @@
                                 </Grid.ColumnDefinitions>
                                 
                                 <ProgressRing IsActive="{Binding InProgress}"
-                                              Foreground="Gray"/>
+                                              Foreground="{StaticResource FlyoutProgressColor}"/>
                                 <TextBlock Grid.Column="1"
                                            Text="Připojování"
                                            FontSize="15"
-                                           Foreground="Gray"
+                                           Foreground="{StaticResource FlyoutProgressColor}"
                                            VerticalAlignment="Center"
                                            Visibility="{Binding InProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
                                            Margin="5,0,0,0" />
@@ -81,10 +91,13 @@
 
             <AppBarButton Icon="Add"
                           Label="Vytvořit skupinu"
-                          Visibility="{Binding TeachersButtonVisibility}">
+                          Visibility="{Binding TeachersButtonVisibility}"
+                          x:Name="CreateGroupButton">
                 <AppBarButton.Flyout>
-                    <Flyout x:Name="CreateNewGroupFlyout">
-                        <StackPanel Orientation="Vertical">
+                    <Flyout control:FlyoutHelpers.IsOpen="{Binding CreateNewGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
+                            control:FlyoutHelpers.Parent="{Binding ElementName=CreateGroupButton}">
+                        <StackPanel Orientation="Vertical"
+                                    DataContext="{Binding CreateNewGroupViewModel}">
                             <TextBlock FontSize="15"
                                        Text="Zadejte název skupiny:" />
                             <control:SubmitTextBox
@@ -92,10 +105,41 @@
                                      Margin="0,5,0,5"
                                      Text="{Binding NewGroupName, Mode=TwoWay}"
                                      EnterCommand="{Binding CreateNewGroupCommand}" />
-                            <Button HorizontalAlignment="Right"
-                                    Content="Vytvořit"
-                                    Command="{Binding CreateNewGroupCommand}"
-                                    Click="CreateGroupButton_OnClick" />
+
+                            <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
+                                       FontSize="15"
+                                       Margin="0,0,0,5"
+                                       Text="Skupinu se nepodařilo vytvořit."
+                                       Visibility="{Binding ShowError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
+                                       FontSize="15"
+                                       Margin="0,0,0,5"
+                                       Text="Prázdný název není povolen."
+                                       Visibility="{Binding ShowNameEmptyError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <ProgressRing IsActive="{Binding InProgress}"
+                                              Foreground="{StaticResource FlyoutProgressColor}"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="Vytváření"
+                                           FontSize="15"
+                                           Foreground="{StaticResource FlyoutProgressColor}"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding InProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                           Margin="5,0,0,0" />
+                                
+                                <Button Grid.Column="2"
+                                        HorizontalAlignment="Right"
+                                        Content="Vytvořit"
+                                        IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
+                                        Command="{Binding CreateNewGroupCommand}" />
+                            </Grid>
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>
@@ -108,29 +152,57 @@
                               Visibility="{Binding ConnectButtonVisibility}" />
                 <AppBarButton Icon="Delete"
                               Label="Odstranit"
-                              Visibility="{Binding TeachersSecondaryButtonVisibility}">
+                              Visibility="{Binding TeachersSecondaryButtonVisibility}"
+                              IsEnabled="{Binding SelectedGroup.GroupType, Converter={StaticResource GroupTypeOwnerToBooleanConverter}}"
+                              x:Name="DeleteGroupButton">
                     <AppBarButton.Flyout>
-                        <Flyout>
-                            <StackPanel Orientation="Vertical">
+                        <Flyout control:FlyoutHelpers.IsOpen="{Binding IsDeleteFlyoutOpen, Mode=TwoWay}"
+                                control:FlyoutHelpers.Parent="{Binding ElementName=DeleteGroupButton}">
+                            <StackPanel Orientation="Vertical"
+                                        DataContext="{Binding DeleteGroupViewModel}">
                                 <TextBlock MaxWidth="350"
                                            FontSize="15"
-                                           TextWrapping="Wrap"
-                                           Text="{Binding DeleteMessage}">
-                                    <Run Text="Chystáte se odstranit skupinu &quot;" />
-                                    <Run
-                                        Text="{Binding ElementName=PageRoot, Path=DataContext.SelectedGroup.GroupName}" />
-                                    <Run Text="&quot;." />
+                                           TextWrapping="Wrap">
+                                    <Run Text="Chystáte se odstranit skupinu &quot;" /><Run Text="{Binding SelectedGroup.GroupName}" /><Run Text="&quot;." />
+                                    <Run Text="Tato akce smaže také všechny výsledky." />
                                 </TextBlock>
-                                <Button Margin="0,10,0,0"
-                                        HorizontalAlignment="Right"
-                                        Content="Odstranit"
-                                        Command="{Binding DeleteGroupCommand}" />
+
+                                <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
+                                           FontSize="15"
+                                           Margin="0,5,0,0"
+                                           Text="Skupinu se nepodařilo odstranit."
+                                           Visibility="{Binding ShowError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ProgressRing IsActive="{Binding InProgress}"
+                                                  Foreground="{StaticResource FlyoutProgressColor}"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="Odstraňování"
+                                               FontSize="15"
+                                               Foreground="{StaticResource FlyoutProgressColor}"
+                                               VerticalAlignment="Center"
+                                               Visibility="{Binding InProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                               Margin="5,0,0,0" />
+
+                                    <Button Grid.Column="2"
+                                            HorizontalAlignment="Right"
+                                            Content="Odstranit"
+                                            IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
+                                            Command="{Binding DeleteGroupCommand}" />
+                                </Grid>
                             </StackPanel>
                         </Flyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>
                 <AppBarButton Icon="Pause"
                               Label="Přepnout na pozastaveno"
+                              IsEnabled="{Binding SelectedGroup.GroupType, Converter={StaticResource GroupTypeOwnerToBooleanConverter}}"
                               Visibility="{Binding TeachersSecondaryButtonVisibility}">
                     <AppBarButton.Flyout>
                         <Flyout>
@@ -147,6 +219,7 @@
                 </AppBarButton>
                 <AppBarButton Icon="Play"
                               Label="Přepnout na spuštěno"
+                              IsEnabled="{Binding SelectedGroup.GroupType, Converter={StaticResource GroupTypeOwnerToBooleanConverter}}"
                               Visibility="{Binding TeachersSecondaryButtonVisibility}">
                     <AppBarButton.Flyout>
                         <Flyout>
@@ -191,7 +264,7 @@
             <Button
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Command="{Binding NavigationHelper.GoBackCommand, ElementName=PageRoot}"
+                Command="{Binding GoBackCommand}"
                 Style="{StaticResource NavigationBackButtonNormalStyle}"
                 AutomationProperties.Name="Back"
                 AutomationProperties.AutomationId="BackButton"

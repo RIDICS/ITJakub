@@ -1,5 +1,4 @@
 ﻿<Page
-    x:Name="PageRoot"
     x:Class="ITJakub.MobileApps.Client.MainApp.View.Login.RegistrationView"
     DataContext="{Binding RegistrationViewModel, Source={StaticResource Locator}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,7 +8,6 @@
     xmlns:login="using:ITJakub.MobileApps.Client.MainApp.View.Login"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d">
 
@@ -43,7 +41,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button Margin="39,59,39,0" 
-                    Command="{Binding NavigationHelper.GoBackCommand, ElementName=PageRoot}"
+                    Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
                     VerticalAlignment="Top"
                     AutomationProperties.Name="Back"

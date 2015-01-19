@@ -1,9 +1,10 @@
 ﻿using System.Collections.ObjectModel;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using ITJakub.MobileApps.Client.Core.Manager.Authentication;
+using ITJakub.MobileApps.Client.Core.Manager.Communication;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.MainApp.View;
@@ -11,47 +12,44 @@ using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class RegistrationViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private RelayCommand<ItemClickEventArgs> m_itemClickCommand;
         private Visibility m_loginDialogVisibility;
         private bool m_registrationInProgress;
 
-        /// <summary>
-        /// Initializes a new instance of the RegistrationViewModel class.
-        /// </summary>
         public RegistrationViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
             RegistrationInProgress = false;
-            m_itemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
+
+            GoBackCommand = new RelayCommand(m_navigationService.GoBack);
+            ItemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
             LoadInitData();
         }
 
         private void LoadInitData()
         {
+            LoginProviders = new ObservableCollection<LoginProviderViewModel>();
             m_dataService.GetLoginProviders((list, exception) =>
             {
                 if (exception != null)
                     return;
 
-                LoginProviders = new ObservableCollection<LoginProviderViewModel>(list);
+                foreach (var loginProvider in list)
+                {
+                    LoginProviders.Add(loginProvider);
+                }
             });
         }
 
-        public RelayCommand<ItemClickEventArgs> ItemClickCommand
-        {
-            get { return m_itemClickCommand; }
-        }
+        public ObservableCollection<LoginProviderViewModel> LoginProviders { get; set; }
+
+        public RelayCommand<ItemClickEventArgs> ItemClickCommand { get; private set; }
+
+        public RelayCommand GoBackCommand { get; private set; }
 
         public Visibility LoginDialogVisibility
         {
@@ -74,8 +72,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
             }
         }
 
-        public ObservableCollection<LoginProviderViewModel> LoginProviders { get; set; }
-
         private void ItemClick(ItemClickEventArgs args)
         {
             var item = args.ClickedItem as LoginProviderViewModel;
@@ -92,7 +88,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
             {
                 RegistrationInProgress = false;
                 if (exception != null)
+                {
+                    if (exception is UserAlreadyRegisteredException)
+                        new MessageDialog("Tento uživatelský účet už byl v minulosti v systému zaregistrován. Pro pokračování využijte předchozí obrazovku \"Přihlášení\".", "Uživatel je registrovaný").ShowAsync();
+
                     return;
+                }
 
                 if (createUserResult)
                     m_navigationService.Navigate(typeof(GroupListView));

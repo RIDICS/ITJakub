@@ -42,7 +42,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException)
                 {
-                    throw new ClientCommunicationException();
+                    throw new UserAlreadyRegisteredException();
                 }
                 catch (CommunicationException)
                 {

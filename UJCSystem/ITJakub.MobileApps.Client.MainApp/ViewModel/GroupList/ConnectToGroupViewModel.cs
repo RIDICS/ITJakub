@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private bool m_showCodeNotExistError;
         private bool m_inProgress;
         private bool m_isFlyoutOpen;
+        private bool m_showCodeEmptyError;
 
         public ConnectToGroupViewModel(IDataService dataService, Action refreshAction)
         {
@@ -44,6 +45,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
+        public bool ShowCodeEmptyError
+        {
+            get { return m_showCodeEmptyError; }
+            set
+            {
+                m_showCodeEmptyError = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool InProgress
         {
             get { return m_inProgress; }
@@ -66,22 +77,28 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void ConnectToGroup()
         {
-            if (ConnectToGroupCode == string.Empty)
+            ShowCodeNotExistError = false;
+            if (string.IsNullOrWhiteSpace(ConnectToGroupCode))
+            {
+                ShowCodeEmptyError = true;
                 return;
+            }
 
+            ShowCodeEmptyError = false;
             InProgress = true;
             m_dataService.ConnectToGroup(ConnectToGroupCode, exception =>
             {
                 InProgress = false;
                 if (exception != null)
+                {
+                    ShowCodeNotExistError = true;
                     return;
+                }
 
-                // TODO show error
-
+                ConnectToGroupCode = string.Empty;
                 IsFlyoutOpen = false;
                 m_refreshAction();
             });
-            ConnectToGroupCode = string.Empty;
         }
     }
 }

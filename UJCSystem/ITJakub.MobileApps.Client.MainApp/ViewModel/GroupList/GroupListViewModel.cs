@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
@@ -18,12 +17,6 @@ using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 {
-    /// <summary>
-    ///     This class contains properties that a View can data bind to.
-    ///     <para>
-    ///         See http://www.galasoft.ch/mvvm
-    ///     </para>
-    /// </summary>
     public class GroupListViewModel : ViewModelBase
     {
         private const PollingInterval UpdatePollingInterval = PollingInterval.Medium;
@@ -34,13 +27,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         
         private UserRoleContract m_userRole;
         private bool m_commandBarOpen;
-        private string m_deleteMessage;
         private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
-        private string m_newGroupName;
         private bool m_noGroupExist;
         private GroupInfoViewModel m_selectedGroup;
         private bool m_loading;
         private ObservableCollection<GroupInfoViewModel> m_groups;
+        private bool m_isDeleteFlyoutOpen;
 
         /// <summary>
         ///     Initializes a new instance of the GroupListViewModel class.
@@ -77,26 +69,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         public RelayCommand<ItemClickEventArgs> GroupClickCommand { get; private set; }
 
-        public RelayCommand CreateNewGroupCommand { get; private set; }
-
-        public RelayCommand DeleteGroupCommand { get; private set; }
-
         public RelayCommand RefreshListCommand { get; private set; }
 
         public RelayCommand ConnectCommand { get; private set; }
 
         public RelayCommand OpenTaskEditorCommand { get; private set; }
-
-        public string NewGroupName
-        {
-            get { return m_newGroupName; }
-            set
-            {
-                m_newGroupName = value;
-                RaisePropertyChanged();
-            }
-        }
-
+        
         public bool CommandBarOpen
         {
             get { return m_commandBarOpen; }
@@ -114,11 +92,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             {
                 m_selectedGroup = value;
                 CommandBarOpen = value != null;
+                DeleteGroupViewModel.SelectedGroup = value;
+
                 RaisePropertyChanged();
                 RaisePropertyChanged(() => ConnectButtonVisibility);
                 RaisePropertyChanged(() => TeachersSecondaryButtonVisibility);
-                if (value != null)
-                    DeleteMessage = string.Format("Chystáte se odstranit skupinu \"{0}\"", value.GroupName);
             }
         }
 
@@ -141,16 +119,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             get { return m_userRole == UserRoleContract.Teacher ? Visibility.Visible : Visibility.Collapsed; }
         }
 
-        public string DeleteMessage
-        {
-            get { return m_deleteMessage; }
-            set
-            {
-                m_deleteMessage = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public bool NoGroupExist
         {
             get { return m_noGroupExist; }
@@ -171,37 +139,38 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
+        public bool IsDeleteFlyoutOpen
+        {
+            get { return m_isDeleteFlyoutOpen; }
+            set
+            {
+                m_isDeleteFlyoutOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ConnectToGroupViewModel ConnectToGroupViewModel { get; set; }
-        
+
+        public CreateGroupViewModel CreateNewGroupViewModel { get; set; }
+
+        public DeleteGroupViewModel DeleteGroupViewModel { get; set; }
+
+        public RelayCommand GoBackCommand { get; private set; }
+
         private void InitCommands()
         {
+            GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             GroupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
             ConnectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
-            CreateNewGroupCommand = new RelayCommand(CreateNewGroup);
             RefreshListCommand = new RelayCommand(LoadData);
             OpenTaskEditorCommand = new RelayCommand(() => m_navigationService.Navigate(typeof(OwnedTaskListView)));
         }
-
+        
         private void InitViewModels()
         {
             ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, LoadData);
-        }
-
-        private void CreateNewGroup()
-        {
-            if (NewGroupName == string.Empty)
-                return;
-
-            m_dataService.CreateNewGroup(NewGroupName, (result, exception) =>
-            {
-                if (exception != null)
-                    return;
-
-                new MessageDialog(result.EnterCode, "Nová skupina vytvořena").ShowAsync();
-                NewGroupName = string.Empty;
-                LoadData();
-            });
-            NewGroupName = string.Empty;
+            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, LoadData);
+            DeleteGroupViewModel = new DeleteGroupViewModel(m_dataService, LoadData);
         }
 
         private void LoadData()

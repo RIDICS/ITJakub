@@ -120,6 +120,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
                 UserLoginSkeleton userLoginSkeleton = await CreateUserAsync(loginProviderType);//TODO spravit bug... registrace a login nemohou jet naraz v ruznych vlaknech, protoze pak to obcas spadne na user not authorized exception
                 callback(userLoginSkeleton.Success, null);
             }
+            catch (UserAlreadyRegisteredException exception)
+            {
+                callback(false, exception);
+            }
             catch (ClientCommunicationException exception)
             {
                 callback(false, exception);
