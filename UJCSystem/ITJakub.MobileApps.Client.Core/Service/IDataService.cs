@@ -31,6 +31,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         void GetTaskForGroup(long groupId, Action<TaskViewModel, Exception> callback);
         void GetTasksByApplication(ApplicationType application, Action<ObservableCollection<TaskViewModel>, Exception> callback);
+        void GetMyTasks(Action<ObservableCollection<TaskViewModel>, Exception> callback);
         void AssignTaskToCurrentGroup(long taskId, Action<Exception> callback);
         void SetCurrentGroup(long groupId);
         void UpdateGroupState(long groupId, GroupState newState, Action<Exception> callback);

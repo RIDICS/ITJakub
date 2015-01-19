@@ -11,12 +11,12 @@ namespace ITJakub.MobileApps.Client.Books.Manager
 {
     public class BookManager
     {
-        private readonly MockServiceClient m_serviceClient;
+        private readonly IServiceClient m_serviceClient;
         private readonly BookModel m_currentBook;
 
-        public BookManager(ServiceClient serviceClient)
+        public BookManager(IServiceClient serviceClient)
         {
-            m_serviceClient = (MockServiceClient) serviceClient; // todo cast to MockServiceClient only for testing
+            m_serviceClient = serviceClient;
             m_currentBook = new BookModel();
         }
 

@@ -8,13 +8,9 @@ using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Service.Client
 {
-    public class MockServiceClient : ServiceClient
+    public class MockServiceClient : IServiceClient
     {
-        public MockServiceClient()
-        {
-        }
-
-        public new Task<IList<BookContract>> GetBookListAsync(CategoryContract category)
+        public Task<IList<BookContract>> GetBookListAsync(CategoryContract category)
         {
             return Task.Run(async () =>
             {
@@ -49,14 +45,14 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
                         Guid = "1",
                         Title = "Název knihy",
                         Year = 1800
-                    },
+                    }
                 };
 
                 return (IList<BookContract>) list;
             });
         }
 
-        public new Task<IList<BookContract>> SearchForBookAsync(CategoryContract category, SearchDestinationContract searchBy, string query)
+        public Task<IList<BookContract>> SearchForBookAsync(CategoryContract category, SearchDestinationContract searchBy, string query)
         {
             return Task.Run(async () =>
             {
@@ -76,13 +72,13 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
                         Guid = "1",
                         Title = "Název "+ query +" knihy",
                         Year = 1800
-                    },
+                    }
                 };
                 return list;
             });
         }
 
-        public new Task<IList<string>> GetPageListAsync(string bookGuid)
+        public Task<IList<string>> GetPageListAsync(string bookGuid)
         {
             return Task.Run(async () =>
             {
@@ -90,13 +86,13 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
                 IList<string> list = new List<string>
                 {
                     "1L", "1R", "2L", "2R", "3L", "3R", "4L", "4R", "5L", "5R", "6L", "6R", "7L", "7R", "8L", "8R", "9L", "9R",
-                    "10L", "10R", "11L", "12R",
+                    "10L", "10R", "11L", "12R"
                 };
                 return list;
             });
         }
 
-        public new Task<Stream> GetPageAsRtfAsync(string bookGuid, string pageId)
+        public Task<Stream> GetPageAsRtfAsync(string bookGuid, string pageId)
         {
             return Task.Run(async () =>
             {
@@ -110,7 +106,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
             });
         }
 
-        public new Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
+        public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
         {
             return Task.Run(async () =>
             {

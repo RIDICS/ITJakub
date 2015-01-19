@@ -201,6 +201,21 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
+        public IList<TaskDetailContract> GetTasksByAuthor(long userId)
+        {
+            try
+            {
+                return m_serviceManager.GetTasksByAuthor(userId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
         public void CreateTask(long userId, int applicationId, string name, string data)
         {
             try

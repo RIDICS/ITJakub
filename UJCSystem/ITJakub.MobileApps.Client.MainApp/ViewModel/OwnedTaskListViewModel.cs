@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
@@ -20,6 +19,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private ObservableCollection<IGrouping<ApplicationType, TaskViewModel>> m_groupedTaskList;
         private ObservableCollection<TaskViewModel> m_taskList;
         private SortTaskType m_selectedSort;
+        private bool m_loading;
+        private bool m_noTask;
 
         public OwnedTaskListViewModel(IDataService dataService, INavigationService navigationService)
         {
@@ -28,34 +29,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             CreateNewTaskCommand = new RelayCommand(CreateNewTask);
+            RefreshListCommand = new RelayCommand(LoadTasks);
 
-            //TODO only for test:
-            m_taskList = new ObservableCollection<TaskViewModel>
-            {
-                new TaskViewModel
-                {
-                    Application = ApplicationType.Hangman, Name = "Nazev 1", CreateTime = DateTime.Now
-                },
-                new TaskViewModel
-                {
-                    Application = ApplicationType.Fillwords, Name = "Nazev 2", CreateTime = DateTime.Now.AddMinutes(-29)
-                },
-                new TaskViewModel
-                {
-                    Application = ApplicationType.Fillwords, Name = "Nazev 3", CreateTime = DateTime.Now
-                },
-                new TaskViewModel
-                {
-                    Application = ApplicationType.Crosswords, Name = "Nazev 4", CreateTime = DateTime.Now
-                }
-            };
-
-            GroupAndSortTaskList(m_taskList);
+            LoadTasks();
         }
-
+        
         public RelayCommand GoBackCommand { get; private set; }
 
         public RelayCommand CreateNewTaskCommand { get; private set; }
+
+        public RelayCommand RefreshListCommand { get; private set; }
 
         public ObservableCollection<IGrouping<ApplicationType, TaskViewModel>> GroupedTaskList
         {
@@ -81,6 +64,43 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public int DefaultIndex
         {
             get { return 0; }
+        }
+
+        public bool Loading
+        {
+            get { return m_loading; }
+            set
+            {
+                m_loading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool NoTask
+        {
+            get { return m_noTask; }
+            set
+            {
+                m_noTask = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private void LoadTasks()
+        {
+            Loading = true;
+            m_dataService.GetMyTasks((taskList, exception) =>
+            {
+                Loading = false;
+                if (exception != null)
+                {
+                    return;
+                }
+
+                m_taskList = taskList;
+                NoTask = taskList.Count == 0;
+                GroupAndSortTaskList(m_taskList);
+            });
         }
 
         private void GroupAndSortTaskList(IEnumerable<TaskViewModel> taskList)

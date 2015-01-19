@@ -140,6 +140,30 @@ namespace ITJakub.MobileApps.Client.Core.Service
             }, null);
         }
 
+        public void GetMyTasks(Action<ObservableCollection<TaskViewModel>, Exception> callback)
+        {
+            var taskList = new ObservableCollection<TaskViewModel>
+            {
+                new TaskViewModel
+                {
+                    Application = ApplicationType.Hangman, Name = "Nazev 1", CreateTime = DateTime.Now
+                },
+                new TaskViewModel
+                {
+                    Application = ApplicationType.Fillwords, Name = "Nazev 2", CreateTime = DateTime.Now.AddMinutes(-29)
+                },
+                new TaskViewModel
+                {
+                    Application = ApplicationType.Fillwords, Name = "Nazev 3", CreateTime = DateTime.Now
+                },
+                new TaskViewModel
+                {
+                    Application = ApplicationType.Crosswords, Name = "Nazev 4", CreateTime = DateTime.Now
+                }
+            };
+            callback(taskList, null);
+        }
+
         public void AssignTaskToCurrentGroup(long taskId, Action<Exception> callback)
         {
             callback(null);

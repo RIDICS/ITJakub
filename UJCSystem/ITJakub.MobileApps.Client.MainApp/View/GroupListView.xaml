@@ -24,7 +24,7 @@
     <Page.BottomAppBar>
         <CommandBar IsOpen="{Binding CommandBarOpen, Mode=TwoWay}"
                     IsSticky="True">
-            <AppBarButton Icon="Sync"
+            <AppBarButton Icon="Refresh"
                           Label="Aktualizovat seznam"
                           Command="{Binding RefreshListCommand}" />
 

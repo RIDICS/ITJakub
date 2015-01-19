@@ -85,6 +85,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_taskManager.GetTasksByApplication(application, callback);
         }
 
+        public void GetMyTasks(Action<ObservableCollection<TaskViewModel>, Exception> callback)
+        {
+            m_taskManager.GetMyTasks(callback);
+        }
+
         public void AssignTaskToCurrentGroup(long taskId, Action<Exception> callback)
         {
             m_taskManager.AssignTaskToGroup(m_groupManager.CurrentGroupId, taskId, callback);

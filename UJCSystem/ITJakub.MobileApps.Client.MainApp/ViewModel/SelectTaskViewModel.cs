@@ -14,6 +14,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private ObservableCollection<TaskViewModel> m_taskList;
+        private ApplicationType m_applicationType;
         private bool m_noTaskExists;
         private bool m_loading;
         private string m_applicationName;
@@ -29,6 +30,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             m_dataService.GetCurrentApplication(type =>
             {
+                m_applicationType = type;
                 m_dataService.GetApplication(type, (app, exception) =>
                 {
                     if (exception != null)
@@ -37,7 +39,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     ApplicationName = app.Name;
                 });
 
-                LoadTasks(type);
+                LoadTasks();
             });
         }
 
@@ -46,12 +48,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GoBackCommand = new RelayCommand(() => m_navigationService.GoBack());
             TaskClickCommand = new RelayCommand<ItemClickEventArgs>(TaskClick);
             CreateNewTaskCommand = new RelayCommand(CreateNewTask);
+            RefreshListCommand = new RelayCommand(LoadTasks);
         }
         
-        private void LoadTasks(ApplicationType applicationType)
+        private void LoadTasks()
         {
             Loading = true;
-            m_dataService.GetTasksByApplication(applicationType, (taskList, exception) =>
+            m_dataService.GetTasksByApplication(m_applicationType, (taskList, exception) =>
             {
                 Loading = false;
                 if (exception != null)
@@ -66,6 +69,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public RelayCommand<ItemClickEventArgs> TaskClickCommand { get; private set; }
 
         public RelayCommand CreateNewTaskCommand { get; private set; }
+        
+        public RelayCommand RefreshListCommand { get; private set; }
 
         public ObservableCollection<TaskViewModel> TaskList
         {
@@ -117,7 +122,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged();
             }
         }
-
+        
         private void TaskClick(ItemClickEventArgs args)
         {
             var task = args.ClickedItem as TaskViewModel;

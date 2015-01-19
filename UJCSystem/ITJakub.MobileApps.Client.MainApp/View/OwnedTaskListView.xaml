@@ -7,17 +7,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:comboBoxItem="using:ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
         <CollectionViewSource Source="{Binding GroupedTaskList}" IsSourceGrouped="True" x:Key="TaskListViewSource" />
         <converter:ApplicationTypeToNameConverter x:Key="ApplicationTypeToNameConverter" />
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
+        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
     
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Add" Label="Vytvořit"
+            <AppBarButton Icon="Refresh"
+                          Label="Aktualizovat seznam"
+                          Command="{Binding RefreshListCommand}" />
+            <AppBarButton Icon="Add"
+                          Label="Vytvořit"
                           Command="{Binding CreateNewTaskCommand}" />
         </CommandBar>
     </Page.BottomAppBar>
@@ -70,6 +76,10 @@
                                            Type="CreateTime" />
             </ComboBox>
         </Grid>
+        <ProgressBar Grid.Row="0"
+                     VerticalAlignment="Top"
+                     IsIndeterminate="True"
+                     Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         
         <GridView Grid.Row="1"
                   ItemsSource="{Binding Source={StaticResource TaskListViewSource}}"
@@ -115,5 +125,11 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
+
+        <TextBlock Grid.Row="1"
+                   Margin="120,20,0,0"
+                   Text="Nemáte vytvořené žádné zadání."
+                   Style="{StaticResource SubheaderTextBlockStyle}"
+                   Visibility="{Binding NoTask, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Page>

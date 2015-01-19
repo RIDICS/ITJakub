@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
@@ -86,6 +85,39 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     Data = result.Data
                 };
                 callback(task, null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
+
+        public async void GetMyTasks(Action<ObservableCollection<TaskViewModel>, Exception> callback)
+        {
+            try
+            {
+                var userId = m_authenticationManager.GetCurrentUserId();
+                if (!userId.HasValue)
+                    return;
+
+                var result = await m_client.GetTasksByAuthor(userId.Value);
+                var taskList = new ObservableCollection<TaskViewModel>(result.Select(task => new TaskViewModel
+                {
+                    Id = task.Id,
+                    Application = m_applicationIdManager.GetApplicationType(task.ApplicationId),
+                    Name = task.Name,
+                    CreateTime = task.CreateTime,
+                    Data = task.Data,
+                    Author = new AuthorInfo
+                    {
+                        Id = task.Author.Id,
+                        FirstName = task.Author.FirstName,
+                        LastName = task.Author.LastName,
+                        Email = task.Author.Email,
+                        IsMe = userId == task.Author.Id
+                    }
+                }));
+                callback(taskList, null);
             }
             catch (ClientCommunicationException exception)
             {

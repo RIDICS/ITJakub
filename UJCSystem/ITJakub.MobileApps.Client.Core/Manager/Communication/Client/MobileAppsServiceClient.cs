@@ -329,6 +329,33 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
+        public Task<IList<TaskDetailContract>> GetTasksByAuthor(long userId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetTasksByAuthor(userId);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
         public Task CreateTaskAsync(long userId, int applicationId, string name, string data)
         {
             return Task.Run(() =>
@@ -528,6 +555,5 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             return GetEndpointAddress(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
         }
         #endregion
-
     }
 }

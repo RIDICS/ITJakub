@@ -59,6 +59,10 @@ namespace ITJakub.MobileApps.DataContracts
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
+        IList<TaskDetailContract> GetTasksByAuthor(long userId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
         void CreateTask(long userId, int applicationId, string name, string data);
 
         [OperationContract]

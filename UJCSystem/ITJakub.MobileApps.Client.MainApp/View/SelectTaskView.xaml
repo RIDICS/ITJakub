@@ -19,6 +19,9 @@
 
     <Page.BottomAppBar>
         <CommandBar>
+            <AppBarButton Icon="Refresh"
+                          Label="Aktualizovat seznam"
+                          Command="{Binding RefreshListCommand}" />
             <AppBarButton Icon="Add"
                           Label="Nové zadání"
                           Command="{Binding CreateNewTaskCommand}" />

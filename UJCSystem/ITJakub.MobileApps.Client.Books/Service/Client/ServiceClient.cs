@@ -9,7 +9,7 @@ using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Service.Client
 {
-    public class ServiceClient : ClientBase<IMobileAppsService>
+    public class ServiceClient : ClientBase<IMobileAppsService>, IServiceClient
     {
         private const string EndpointAddress = "http://localhost/";
 
