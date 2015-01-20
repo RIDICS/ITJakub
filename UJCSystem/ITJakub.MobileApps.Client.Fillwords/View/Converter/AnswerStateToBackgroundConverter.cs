@@ -20,7 +20,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Converter
                 case AnswerState.Correct:
                     return new SolidColorBrush(Color.FromArgb(255, 50, 205, 50));
                 case AnswerState.Incorrect:
-                    return new SolidColorBrush(Color.FromArgb(255, 139, 0, 0));
+                    return new SolidColorBrush(Color.FromArgb(255, 230, 100, 100));
                 default:
                     return new SolidColorBrush(Colors.White);
             }

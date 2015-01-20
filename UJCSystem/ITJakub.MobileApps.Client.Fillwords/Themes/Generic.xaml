@@ -88,18 +88,18 @@
                                 </VisualState>
                                 <VisualState x:Name="Disabled">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background"
+                                        <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background"
                                                                        Storyboard.TargetProperty="Background">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="#666666" />
-                                        </ObjectAnimationUsingKeyFrames>
+                                        </ObjectAnimationUsingKeyFrames>-->
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background"
                                                                        Storyboard.TargetProperty="BorderBrush">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="#999999" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                        <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="#999999" />
-                                        </ObjectAnimationUsingKeyFrames>
+                                        </ObjectAnimationUsingKeyFrames>-->
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DropDownGlyph"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="#999999" />
@@ -296,14 +296,17 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
+                                        <Grid Margin="{Binding Position}"
+                                              Background="{Binding OptionsViewModel.AnswerState, Converter={StaticResource AnswerStateToBackgroundConverter}}">
                                         <ComboBox ItemsSource="{Binding WordList}"
-                                                  Margin="{Binding Position}"
                                                   PlaceholderText="???"
                                                   Width="{Binding Width}"
                                                   SelectedItem="{Binding SelectedWord, Mode=TwoWay}"
                                                   Style="{StaticResource OpaqueComboBox}"
+                                                  IsEnabled="{TemplateBinding IsAnsweringAllowed}"
                                                   BorderBrush="White"
-                                                  Background="{Binding OptionsViewModel.AnswerState, Converter={StaticResource AnswerStateToBackgroundConverter}}" />
+                                                  Background="Transparent" />
+                                        </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

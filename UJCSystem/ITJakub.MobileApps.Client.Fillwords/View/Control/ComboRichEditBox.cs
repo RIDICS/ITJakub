@@ -54,6 +54,12 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             set { SetValue(AnswerChangedCommandProperty, value); }
         }
 
+        public bool IsAnsweringAllowed
+        {
+            get { return (bool) GetValue(IsAnsweringAllowedProperty); }
+            set { SetValue(IsAnsweringAllowedProperty, value); }
+        }
+
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register("Data",
             typeof (List<ComboBoxData>), typeof (ComboRichEditBox), new PropertyMetadata(new List<ComboBoxData>()));
 
@@ -68,7 +74,11 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
         public static readonly DependencyProperty AnswerChangedCommandProperty =
             DependencyProperty.Register("AnswerChangedCommand", typeof (ICommand), typeof (ComboRichEditBox),
                 new PropertyMetadata(null));
-        
+
+        public static readonly DependencyProperty IsAnsweringAllowedProperty =
+            DependencyProperty.Register("IsAnsweringAllowed", typeof (bool), typeof (ComboRichEditBox),
+                new PropertyMetadata(true));
+
         private static void OnDocumentOrOptionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var richEditBox = d as ComboRichEditBox;

@@ -114,6 +114,7 @@
     <Compile Include="Control\SubmitTextBox.cs" />
     <Compile Include="Converter\BooleanNegationConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converter\DoubleToStringConverter.cs" />
     <Compile Include="Converter\HighlightMeConverter.cs" />
     <Compile Include="Converter\TimeSpanConverter.cs" />
     <Compile Include="EditorBaseViewModel.cs" />

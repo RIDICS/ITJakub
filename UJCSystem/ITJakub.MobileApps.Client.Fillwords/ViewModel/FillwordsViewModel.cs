@@ -1,16 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
 using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.Data;
 
 namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 {
     public class FillwordsViewModel : ApplicationBaseViewModel
     {
         private readonly FillwordsDataService m_dataService;
-        private string m_taskName;
         private string m_taskDocumentRtf;
         private List<OptionsViewModel> m_taskOptionsList;
+        private ObservableCollection<UserResultViewModel> m_resultList;
+        private bool m_isOver;
 
         public FillwordsViewModel(FillwordsDataService dataService)
         {
@@ -18,16 +21,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 
             AnswerChangedCommand = new RelayCommand<OptionsViewModel>(AnswerChanged);
             SubmitCommand = new RelayCommand(Submit);
-        }
-
-        public string TaskName
-        {
-            get { return m_taskName; }
-            set
-            {
-                m_taskName = value;
-                RaisePropertyChanged();
-            }
         }
 
         public string TaskDocumentRtf
@@ -50,10 +43,30 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
+        public ObservableCollection<UserResultViewModel> ResultList
+        {
+            get { return m_resultList; }
+            set
+            {
+                m_resultList = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsOver
+        {
+            get { return m_isOver; }
+            set
+            {
+                m_isOver = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public RelayCommand<OptionsViewModel> AnswerChangedCommand { get; private set; }
 
         public RelayCommand SubmitCommand { get; private set; }
-
+        
         public override void InitializeCommunication()
         {
             //TODO start polling or get my history?
@@ -87,6 +100,32 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                     ? AnswerState.Correct
                     : AnswerState.Incorrect;
             }
+
+            //TODO only for test:
+            IsOver = true;
+            ResultList = new ObservableCollection<UserResultViewModel>
+            {
+                new UserResultViewModel
+                {
+                    CorrectAnswers = 5,
+                    TotalAnswers = 16,
+                    UserInfo = new AuthorInfo
+                    {
+                        FirstName = "Josef",
+                        LastName = "Josefovič"
+                    }
+                },
+                new UserResultViewModel
+                {
+                    CorrectAnswers = 9,
+                    TotalAnswers = 16,
+                    UserInfo = new AuthorInfo
+                    {
+                        FirstName = "Josef",
+                        LastName = "Josefovič"
+                    }
+                }
+            };
 
             //TODO save evaluation
         }

@@ -6,27 +6,86 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Fillwords.ViewModel"
     xmlns:control="using:ITJakub.MobileApps.Client.Fillwords.View.Control"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance viewModel:FillwordsViewModel}">
+    
+    <UserControl.Resources>
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:DoubleToStringConverter x:Key="DoubleToStringConverter" />
+    </UserControl.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          Margin="120,0,120,60">
+          Margin="120,0,20,60">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" MinWidth="100" />
+        </Grid.ColumnDefinitions>
         
-        <control:ComboRichEditBox Grid.Row="1"
+        <control:ComboRichEditBox Grid.Row="0"
+                                  Grid.Column="0"
+                                  Grid.RowSpan="2"
                                   Margin="10"
+                                  MinWidth="300"
+                                  IsAnsweringAllowed="False"
                                   DocumentRtf="{Binding TaskDocumentRtf}"
                                   OptionsList="{Binding TaskOptionsList}"
                                   AnswerChangedCommand="{Binding AnswerChangedCommand}" />
         
         <Button Grid.Row="2"
+                Grid.Column="0"
                 HorizontalAlignment="Right"
                 MinWidth="170"
                 Content="Odevzdat"
+                IsEnabled="{Binding IsOver, Converter={StaticResource BooleanNegationConverter}}"
                 Command="{Binding SubmitCommand}" />
+        
+        <TextBlock Grid.Row="0"
+                   Grid.Column="1"
+                   Text="Výsledky:"
+                   Margin="10,0,0,0"
+                   Style="{StaticResource SubheaderTextBlockStyle}"
+                   Visibility="{Binding IsOver, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        
+        <ListView Grid.Row="1"
+                  Grid.Column="1"
+                  Width="270"
+                  Margin="10,10,0,0"
+                  SelectionMode="None"
+                  IsItemClickEnabled="False"
+                  ItemsSource="{Binding ResultList}"
+                  Visibility="{Binding IsOver, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontWeight="Bold">
+                            <Run Text="{Binding UserInfo.FirstName}" />
+                            <Run Text="{Binding UserInfo.LastName}" />
+                        </TextBlock>
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Background="LightGray"
+                                  RequestedTheme="Light">
+                                <TextBlock Margin="2">
+                                    <Run Text="{Binding PercentageSuccess, Converter={StaticResource DoubleToStringConverter}}" /><Run Text="%" />
+                                </TextBlock>
+                            </Grid>
+                            <TextBlock Margin="10,0,0,0">
+                                <Run Text="Správně:" />
+                                <Run Text="{Binding CorrectAnswers}" />
+                                <Run Text="z" />
+                                <Run Text="{Binding TotalAnswers}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </UserControl>

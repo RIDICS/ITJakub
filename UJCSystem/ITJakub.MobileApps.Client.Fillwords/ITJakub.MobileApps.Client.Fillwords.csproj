@@ -116,6 +116,7 @@
     <Compile Include="ViewModel\FillwordsViewModel.cs" />
     <Compile Include="ViewModel\OptionsEditorViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
+    <Compile Include="ViewModel\UserResultViewModel.cs" />
     <Compile Include="View\Converter\AnswerStateToBackgroundConverter.cs" />
     <Compile Include="View\Control\ComboRichEditBox.cs" />
     <Compile Include="View\Control\EditorRichEditBox.cs" />
