@@ -10,7 +10,6 @@ using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
-using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.Core.Service
 {
@@ -107,9 +106,9 @@ namespace ITJakub.MobileApps.Client.Core.Service
             }, null);
         }
 
-        public void CreateNewGroup(string groupName, Action<CreateGroupResponse, Exception> callback)
+        public void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)
         {
-            callback(new CreateGroupResponse {EnterCode = "ABCDEF"}, null);
+            callback(new CreatedGroupViewModel {EnterCode = "ABCDEF", GroupId = 10}, null);
         }
 
         public void ConnectToGroup(string code, Action<Exception> callback)

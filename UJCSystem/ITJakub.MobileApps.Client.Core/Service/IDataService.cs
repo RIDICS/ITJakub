@@ -8,7 +8,6 @@ using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
-using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.Core.Service
 {
@@ -26,7 +25,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         
         void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback);
         void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback);
-        void CreateNewGroup(string groupName, Action<CreateGroupResponse, Exception> callback);
+        void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback);
         void ConnectToGroup(string code, Action<Exception> callback);
 
         void GetTaskForGroup(long groupId, Action<TaskViewModel, Exception> callback);

@@ -7,5 +7,8 @@ namespace ITJakub.MobileApps.DataContracts.Groups
     {
         [DataMember]
         public string EnterCode { get; set; }
+
+        [DataMember]
+        public long GroupId { get; set; }
     }
 }

@@ -57,7 +57,11 @@ namespace ITJakub.MobileApps.Core.Groups
                 {
                     group.EnterCode = m_enterCodeGenerator.GenerateCode();
                     m_usersRepository.Create(group);
-                    return new CreateGroupResponse {EnterCode = group.EnterCode};
+                    return new CreateGroupResponse
+                    {
+                        EnterCode = group.EnterCode,
+                        GroupId = group.Id
+                    };
                 }
                 catch (CreateEntityFailedException ex)
                 {
@@ -80,8 +84,7 @@ namespace ITJakub.MobileApps.Core.Groups
             Group group = m_usersRepository.FindByEnterCode(groupAccessCode);
             if (group.State == GroupState.Created || group.State == GroupState.Closed)
             {
-                // TODO fault
-                return;
+                throw new FaultException("Group doesn't accept new members.");
             }
 
             var user = m_usersRepository.Load<User>(userId);
@@ -130,10 +133,19 @@ namespace ITJakub.MobileApps.Core.Groups
             var group = m_usersRepository.FindById<Group>(groupId);
             var newState = Mapper.Map<GroupStateContract, GroupState>(state);
 
+            if (group.Task == null && newState > GroupState.AcceptMembers)
+            {
+                throw new FaultException("Can not change group state, because no task is assigned to the group.");
+            }
+
             if (newState > group.State || (newState == GroupState.Running && group.State == GroupState.Paused))
             {
                 group.State = newState;
                 m_usersRepository.Update(group);
+            }
+            else
+            {
+                throw new FaultException("Can not change group state in this order.");
             }
         }
 

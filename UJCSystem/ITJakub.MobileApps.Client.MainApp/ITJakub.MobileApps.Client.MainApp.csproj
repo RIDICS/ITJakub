@@ -114,6 +114,7 @@
     <Compile Include="ViewModel\GroupList\ConnectToGroupViewModel.cs" />
     <Compile Include="ViewModel\GroupList\CreateGroupViewModel.cs" />
     <Compile Include="ViewModel\GroupList\DeleteGroupViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\SwitchGroupStateViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
     <Compile Include="ViewModel\OwnedTaskListViewModel.cs" />
     <Compile Include="View\AboutSettingsFlyout.xaml.cs">
@@ -121,8 +122,9 @@
     </Compile>
     <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
+    <Compile Include="View\Converter\GroupCountToStringConverter.cs" />
     <Compile Include="View\Converter\GroupStateToNameConverter.cs" />
-    <Compile Include="View\Converter\GroupTypeOwnerToBooleanConverter.cs" />
+    <Compile Include="View\Converter\GroupStateToSymbolConverter.cs" />
     <Compile Include="View\Converter\NotChosenStringConverter.cs" />
     <Compile Include="View\Converter\BooleanToColorConverter.cs" />
     <Compile Include="View\EditorHostView.xaml.cs">

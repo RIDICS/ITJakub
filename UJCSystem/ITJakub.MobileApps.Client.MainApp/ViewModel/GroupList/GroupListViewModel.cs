@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
@@ -24,24 +25,24 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private readonly IMainPollingService m_pollingService;
-        
+
+        private readonly List<GroupInfoViewModel> m_selectedGroups;
         private UserRoleContract m_userRole;
         private bool m_commandBarOpen;
-        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
         private bool m_noGroupExist;
-        private GroupInfoViewModel m_selectedGroup;
         private bool m_loading;
+        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
+        private GroupInfoViewModel m_selectedGroup;
         private ObservableCollection<GroupInfoViewModel> m_groups;
-        private bool m_isDeleteFlyoutOpen;
+        private bool m_isOneItemSelected;
+        private bool m_onlyOwnedGroupsSelected;
 
-        /// <summary>
-        ///     Initializes a new instance of the GroupListViewModel class.
-        /// </summary>
         public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
             m_pollingService = pollingService;
+            m_selectedGroups = new List<GroupInfoViewModel>();
             GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>();
             NoGroupExist = false;
             m_userRole = UserRoleContract.Student;
@@ -67,6 +68,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
+        public RelayCommand GoBackCommand { get; private set; }
+
+        public RelayCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; private set; }
+
         public RelayCommand<ItemClickEventArgs> GroupClickCommand { get; private set; }
 
         public RelayCommand RefreshListCommand { get; private set; }
@@ -74,7 +79,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public RelayCommand ConnectCommand { get; private set; }
 
         public RelayCommand OpenTaskEditorCommand { get; private set; }
-        
+
         public bool CommandBarOpen
         {
             get { return m_commandBarOpen; }
@@ -139,12 +144,22 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
-        public bool IsDeleteFlyoutOpen
+        public bool IsOneItemSelected
         {
-            get { return m_isDeleteFlyoutOpen; }
+            get { return m_isOneItemSelected; }
             set
             {
-                m_isDeleteFlyoutOpen = value;
+                m_isOneItemSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool OnlyOwnedGroupsSelected
+        {
+            get { return m_onlyOwnedGroupsSelected; }
+            set
+            {
+                m_onlyOwnedGroupsSelected = value;
                 RaisePropertyChanged();
             }
         }
@@ -155,12 +170,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         public DeleteGroupViewModel DeleteGroupViewModel { get; set; }
 
-        public RelayCommand GoBackCommand { get; private set; }
+        public SwitchGroupStateViewModel SwitchToPauseViewModel { get; set; }
 
+        public SwitchGroupStateViewModel SwitchToRunningViewModel { get; set; }
+        
         private void InitCommands()
         {
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             GroupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
+            SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(SelectionChanged);
             ConnectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
             RefreshListCommand = new RelayCommand(LoadData);
             OpenTaskEditorCommand = new RelayCommand(() => m_navigationService.Navigate(typeof(OwnedTaskListView)));
@@ -169,8 +187,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private void InitViewModels()
         {
             ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, LoadData);
-            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, LoadData);
-            DeleteGroupViewModel = new DeleteGroupViewModel(m_dataService, LoadData);
+            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, m_navigationService);
+            DeleteGroupViewModel = new DeleteGroupViewModel(m_dataService, m_selectedGroups, LoadData);
+
+            SwitchToPauseViewModel = new SwitchGroupStateViewModel(GroupState.Paused, m_dataService, m_selectedGroups, LoadData);
+            SwitchToRunningViewModel = new SwitchGroupStateViewModel(GroupState.Running, m_dataService, m_selectedGroups, LoadData);
         }
 
         private void LoadData()
@@ -228,6 +249,22 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 m_navigationService.Navigate(viewType);
                 Messenger.Default.Unregister(this);
             }
+        }
+
+        private void SelectionChanged(SelectionChangedEventArgs args)
+        {
+            foreach (var removedItem in args.RemovedItems)
+            {
+                m_selectedGroups.Remove(removedItem as GroupInfoViewModel);
+            }
+            foreach (var addedItem in args.AddedItems)
+            {
+                m_selectedGroups.Add(addedItem as GroupInfoViewModel);
+            }
+            IsOneItemSelected = m_selectedGroups.Count == 1;
+            DeleteGroupViewModel.SelectedGroupCount = m_selectedGroups.Count;
+
+            OnlyOwnedGroupsSelected = m_selectedGroups.All(group => group.GroupType == GroupType.Owner);
         }
     }
 }

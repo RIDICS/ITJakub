@@ -11,7 +11,6 @@ using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
-using ITJakub.MobileApps.DataContracts.Groups;
 using Microsoft.Practices.Unity;
 
 namespace ITJakub.MobileApps.Client.Core.Service
@@ -65,7 +64,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_authenticationManager.GetAllLoginProviderViewModels(callback);
         }
 
-        public void CreateNewGroup(string groupName, Action<CreateGroupResponse, Exception> callback)
+        public void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)
         {
             m_groupManager.CreateNewGroup(groupName, callback);
         }

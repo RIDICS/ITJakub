@@ -60,6 +60,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         GroupName = groupDetails.Name,
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Member,
+                        State = (GroupState) groupDetails.State,
                         Members = new ObservableCollection<GroupMemberViewModel>(),
                         Task = new TaskViewModel()
                     };
@@ -74,6 +75,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         GroupName = groupDetails.Name,
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Owner,
+                        State = (GroupState)groupDetails.State,
                         GroupCode = groupDetails.EnterCode,
                         CreateTime = groupDetails.CreateTime,
                         Members = new ObservableCollection<GroupMemberViewModel>(),
@@ -111,7 +113,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             }
         }
 
-        public async void CreateNewGroup(string groupName, Action<CreateGroupResponse, Exception> callback)
+        public async void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)
         {
             try
             {
@@ -124,7 +126,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 
                 //TODO check groupName validity
                 var result = await m_serviceClient.CreateGroupAsync(userId.Value, groupName);
-                callback(result, null);
+                var viewModel = new CreatedGroupViewModel
+                {
+                    EnterCode = result.EnterCode,
+                    GroupId = result.GroupId
+                };
+
+                callback(viewModel, null);
             }
             catch (ClientCommunicationException exception)
             {

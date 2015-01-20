@@ -1,25 +1,24 @@
-﻿using System;
-using Windows.UI.Popups;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.MainApp.View;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 {
     public class CreateGroupViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
-        private readonly Action m_refreshAction;
+        private readonly INavigationService m_navigationService;
         private string m_newGroupName;
         private bool m_isFlyoutOpen;
         private bool m_inProgress;
         private bool m_showError;
         private bool m_showNameEmptyError;
 
-        public CreateGroupViewModel(IDataService dataService, Action refreshAction)
+        public CreateGroupViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
-            m_refreshAction = refreshAction;
+            m_navigationService = navigationService;
 
             CreateNewGroupCommand = new RelayCommand(CreateNewGroup);
         }
@@ -96,11 +95,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                     return;
                 }
                 
-                //TODO navigate to groupPage
-                new MessageDialog(result.EnterCode, "Nová skupina vytvořena").ShowAsync();
+                m_dataService.SetCurrentGroup(result.GroupId);
+                m_navigationService.Navigate<GroupPageView>();
+
                 NewGroupName = string.Empty;
                 IsFlyoutOpen = false;
-                m_refreshAction();
             });
         }
     }
