@@ -12,6 +12,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
 {
     public class TaskManager
     {
+        private const string EvaluationMessageType = "Evaluation";
         private readonly ISynchronizeCommunication m_applicationCommunication;
 
         public TaskManager(ISynchronizeCommunication applicationCommunication)
@@ -56,10 +57,56 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
                     {
                         Word = s
                     }))
-                }))
+                }).OrderBy(model => model.WordPosition))
             };
 
             callback(viewModel);
+        }
+
+        public void EvaluateTask(List<OptionsViewModel> taskOptionsList, Action<EvaluationResultViewModel, Exception> callback)
+        {
+            int correctAnswerCount = 0;
+            var answerList = new List<string>();
+            foreach (var optionsViewModel in taskOptionsList)
+            {
+                answerList.Add(optionsViewModel.SelectedAnswer);
+                if (optionsViewModel.SelectedAnswer == optionsViewModel.CorrectAnswer)
+                {
+                    optionsViewModel.AnswerState = AnswerState.Correct;
+                    correctAnswerCount++;
+                }
+                else
+                {
+                    optionsViewModel.AnswerState = AnswerState.Incorrect;
+                }
+            } //TODO not confirm evaluation if exception
+
+            try
+            {
+                var evaluationObject = new FillwordsEvaluationContract
+                {
+                    CorrectAnswers = correctAnswerCount,
+                    AnswerList = answerList
+                };
+                var serializedEvaluation = JsonConvert.SerializeObject(evaluationObject);
+
+                m_applicationCommunication.SendObjectAsync(ApplicationType.Fillwords, EvaluationMessageType, serializedEvaluation);
+
+                var evaluationResult = new EvaluationResultViewModel
+                {
+                    IsOver = true,
+                    UserResult = new UserResultViewModel
+                    {
+                        CorrectAnswers = correctAnswerCount,
+                        TotalAnswers = taskOptionsList.Count
+                    }
+                };
+                callback(evaluationResult, null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
         }
     }
 }

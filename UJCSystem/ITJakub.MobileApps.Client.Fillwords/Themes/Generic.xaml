@@ -288,7 +288,8 @@
                                                          Background="#80ffffff"
                                                          IsReadOnly="True"
                                                          x:Name="RichEditBox" />
-                            <ItemsControl ItemsSource="{TemplateBinding Data}">
+                            <ItemsControl ItemsSource="{TemplateBinding Data}"
+                                          IsEnabled="{TemplateBinding IsAnsweringAllowed}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <Canvas />
@@ -298,14 +299,13 @@
                                     <DataTemplate>
                                         <Grid Margin="{Binding Position}"
                                               Background="{Binding OptionsViewModel.AnswerState, Converter={StaticResource AnswerStateToBackgroundConverter}}">
-                                        <ComboBox ItemsSource="{Binding WordList}"
-                                                  PlaceholderText="???"
-                                                  Width="{Binding Width}"
-                                                  SelectedItem="{Binding SelectedWord, Mode=TwoWay}"
-                                                  Style="{StaticResource OpaqueComboBox}"
-                                                  IsEnabled="{TemplateBinding IsAnsweringAllowed}"
-                                                  BorderBrush="White"
-                                                  Background="Transparent" />
+                                            <ComboBox ItemsSource="{Binding WordList}"
+                                                      PlaceholderText="???"
+                                                      Width="{Binding Width}"
+                                                      SelectedItem="{Binding SelectedWord, Mode=TwoWay}"
+                                                      BorderBrush="White"
+                                                      Background="Transparent"
+                                                      Style="{StaticResource OpaqueComboBox}" />
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

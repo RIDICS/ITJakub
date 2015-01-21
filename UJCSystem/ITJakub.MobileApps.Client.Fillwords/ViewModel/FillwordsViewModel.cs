@@ -94,13 +94,12 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         
         private void Submit()
         {
-            foreach (var optionsViewModel in TaskOptionsList)
-            {
-                optionsViewModel.AnswerState = optionsViewModel.SelectedAnswer == optionsViewModel.CorrectAnswer
-                    ? AnswerState.Correct
-                    : AnswerState.Incorrect;
-            }
+            
 
+            m_dataService.EvaluateTask(TaskOptionsList, (result, exception) =>
+            {
+                
+            });
             //TODO only for test:
             IsOver = true;
             ResultList = new ObservableCollection<UserResultViewModel>

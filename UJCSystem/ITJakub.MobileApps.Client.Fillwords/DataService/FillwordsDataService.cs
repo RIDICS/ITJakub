@@ -23,5 +23,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
         {
             m_taskManager.SetTaskAndGetData(data, callback);
         }
+
+        public void EvaluateTask(List<OptionsViewModel> taskOptionsList, Action<EvaluationResultViewModel, Exception> callback)
+        {
+            m_taskManager.EvaluateTask(taskOptionsList, callback);
+        }
     }
 }

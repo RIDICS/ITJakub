@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
@@ -43,9 +44,9 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             set { SetValue(OptionsListProperty, value);}
         }
 
-        public List<ComboBoxData> Data
+        public ObservableCollection<ComboBoxViewModel> Data
         {
-            get { return (List<ComboBoxData>)GetValue(DataProperty); }
+            get { return (ObservableCollection<ComboBoxViewModel>)GetValue(DataProperty); }
         }
 
         public ICommand AnswerChangedCommand
@@ -61,7 +62,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
         }
 
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register("Data",
-            typeof (List<ComboBoxData>), typeof (ComboRichEditBox), new PropertyMetadata(new List<ComboBoxData>()));
+            typeof(ObservableCollection<ComboBoxViewModel>), typeof(ComboRichEditBox), new PropertyMetadata(new ObservableCollection<ComboBoxViewModel>()));
 
         public static readonly DependencyProperty OptionsListProperty = DependencyProperty.Register("OptionsList",
             typeof(List<OptionsViewModel>), typeof(ComboRichEditBox),
@@ -105,10 +106,11 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             m_richEditBoxControl.IsReadOnly = false;
             m_richEditBoxControl.Document.SetText(TextSetOptions.FormatRtf, DocumentRtf);
 
-            var newDataList = new List<ComboBoxData>(OptionsList.Count + 1);
+            var newDataList = new ObservableCollection<ComboBoxViewModel>();
             int indexCorrection = 0;
 
-            foreach (var optionsViewModel in OptionsList.OrderBy(model => model.WordPosition))
+            var sortedOptionsList = OptionsList.OrderBy(model => model.WordPosition);
+            foreach (var optionsViewModel in sortedOptionsList)
             {
                 var wordList = optionsViewModel.List.Select(model => model.Word).ToList();
                 int maxWordLength = wordList.Max(s => s.Length);
@@ -134,8 +136,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                 textRange.SetText(TextSetOptions.None, characterSequence);
                 textRange.ParagraphFormat.SetLineSpacing(LineSpacingRule.Multiple, 1.5f);
                 
-                // create ComboBoxData
-                var comboBoxData = new ComboBoxData(optionsViewModel, InvokeAnswerChangedCommand)
+                // create ComboBoxViewModel
+                var comboBoxData = new ComboBoxViewModel(optionsViewModel, InvokeAnswerChangedCommand)
                 {
                     Index = correctedWordPosition,
                     Length = maxWordLength
@@ -148,7 +150,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                 indexCorrection += maxWordLength - optionsViewModel.CorrectAnswer.Length;
             }
 
-            SetValue(DataProperty, newDataList);
+            SetValue(DataProperty, new ObservableCollection<ComboBoxViewModel>(newDataList));
             UpdateComboBoxProperties();
 
             m_richEditBoxControl.IsReadOnly = oldIsReadonlyState;
@@ -177,7 +179,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             AnswerChangedCommand.Execute(optionsViewModel);
         }
 
-        public class ComboBoxData : ViewModelBase
+        public class ComboBoxViewModel : ViewModelBase
         {
             private readonly OptionsViewModel m_optionsViewModel;
             private readonly Action<OptionsViewModel> m_answerChangedCallback;
@@ -185,7 +187,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             private double m_width;
             private string m_selectedWord;
 
-            public ComboBoxData(OptionsViewModel optionsViewModel, Action<OptionsViewModel> answerChangedCallback)
+            public ComboBoxViewModel(OptionsViewModel optionsViewModel, Action<OptionsViewModel> answerChangedCallback)
             {
                 m_optionsViewModel = optionsViewModel;
                 m_answerChangedCallback = answerChangedCallback;
