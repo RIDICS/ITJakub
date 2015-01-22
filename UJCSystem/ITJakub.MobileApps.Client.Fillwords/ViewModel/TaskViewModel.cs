@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 {
@@ -6,6 +6,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
     {
         public string DocumentRtf { get; set; }
 
-        public List<OptionsViewModel> Options { get; set; }
+        public ObservableCollection<OptionsViewModel> Options { get; set; }
     }
 }

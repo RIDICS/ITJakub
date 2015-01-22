@@ -2,10 +2,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:control="using:ITJakub.MobileApps.Client.Books.View.Control"
-    xmlns:converter="using:ITJakub.MobileApps.Client.Fillwords.View.Converter"
     xmlns:control1="using:ITJakub.MobileApps.Client.Fillwords.View.Control">
 
-    <Style x:Key="OpaqueComboBox" TargetType="ComboBox">
+    <Style TargetType="control1:OpaqueComboBox">
         <Setter Property="Padding" Value="8,0" />
         <Setter Property="MinWidth" Value="{ThemeResource ComboBoxThemeMinWidth}" />
         <Setter Property="Foreground" Value="Black" />
@@ -274,12 +273,10 @@
         </Setter>
     </Style>
 
-    <converter:AnswerStateToBackgroundConverter x:Key="AnswerStateToBackgroundConverter" />
-    
-    <Style TargetType="control1:ComboRichEditBox">
+    <Style TargetType="control1:RichEditComboBox">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="control1:ComboRichEditBox">
+                <ControlTemplate TargetType="control1:RichEditComboBox">
                     <ScrollViewer HorizontalScrollMode="Disabled"
                                   VerticalScrollMode="Enabled">
                         <Grid>
@@ -288,33 +285,11 @@
                                                          Background="#80ffffff"
                                                          IsReadOnly="True"
                                                          x:Name="RichEditBox" />
-                            <ItemsControl ItemsSource="{TemplateBinding Data}"
-                                          IsEnabled="{TemplateBinding IsAnsweringAllowed}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <Canvas />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="{Binding Position}"
-                                              Background="{Binding OptionsViewModel.AnswerState, Converter={StaticResource AnswerStateToBackgroundConverter}}">
-                                            <ComboBox ItemsSource="{Binding WordList}"
-                                                      PlaceholderText="???"
-                                                      Width="{Binding Width}"
-                                                      SelectedItem="{Binding SelectedWord, Mode=TwoWay}"
-                                                      BorderBrush="White"
-                                                      Background="Transparent"
-                                                      Style="{StaticResource OpaqueComboBox}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            <Canvas x:Name="Canvas" />
                         </Grid>
                     </ScrollViewer>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
 </ResourceDictionary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Fillwords.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
 
@@ -24,7 +25,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             m_taskManager.SetTaskAndGetData(data, callback);
         }
 
-        public void EvaluateTask(List<OptionsViewModel> taskOptionsList, Action<EvaluationResultViewModel, Exception> callback)
+        public void EvaluateTask(ICollection<OptionsViewModel> taskOptionsList, Action<EvaluationResultViewModel, Exception> callback)
         {
             m_taskManager.EvaluateTask(taskOptionsList, callback);
         }

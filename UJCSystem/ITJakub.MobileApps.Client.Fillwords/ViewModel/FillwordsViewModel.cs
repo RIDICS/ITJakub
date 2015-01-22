@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
 using ITJakub.MobileApps.Client.Shared;
@@ -11,7 +10,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
     {
         private readonly FillwordsDataService m_dataService;
         private string m_taskDocumentRtf;
-        private List<OptionsViewModel> m_taskOptionsList;
+        private ObservableCollection<OptionsViewModel> m_taskOptionsList;
         private ObservableCollection<UserResultViewModel> m_resultList;
         private bool m_isOver;
 
@@ -19,7 +18,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         {
             m_dataService = dataService;
 
-            AnswerChangedCommand = new RelayCommand<OptionsViewModel>(AnswerChanged);
             SubmitCommand = new RelayCommand(Submit);
         }
 
@@ -33,7 +31,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
-        public List<OptionsViewModel> TaskOptionsList
+        public ObservableCollection<OptionsViewModel> TaskOptionsList
         {
             get { return m_taskOptionsList; }
             set
@@ -62,8 +60,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 RaisePropertyChanged();
             }
         }
-
-        public RelayCommand<OptionsViewModel> AnswerChangedCommand { get; private set; }
 
         public RelayCommand SubmitCommand { get; private set; }
         

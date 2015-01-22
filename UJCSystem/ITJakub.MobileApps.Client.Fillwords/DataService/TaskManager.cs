@@ -49,7 +49,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             var viewModel = new TaskViewModel
             {
                 DocumentRtf = taskData.DocumentRtf,
-                Options = new List<OptionsViewModel>(taskData.Options.Select(contract => new OptionsViewModel
+                Options = new ObservableCollection<OptionsViewModel>(taskData.Options.Select(contract => new OptionsViewModel
                 {
                     CorrectAnswer = contract.CorrectAnswer,
                     WordPosition = contract.WordPosition,
@@ -63,7 +63,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             callback(viewModel);
         }
 
-        public void EvaluateTask(List<OptionsViewModel> taskOptionsList, Action<EvaluationResultViewModel, Exception> callback)
+        public void EvaluateTask(ICollection<OptionsViewModel> taskOptionsList, Action<EvaluationResultViewModel, Exception> callback)
         {
             int correctAnswerCount = 0;
             var answerList = new List<string>();
