@@ -25,9 +25,24 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             m_taskManager.SetTaskAndGetData(data, callback);
         }
 
-        public void EvaluateTask(ICollection<OptionsViewModel> taskOptionsList, Action<EvaluationResultViewModel, Exception> callback)
+        public void EvaluateTask(Action<EvaluationResultViewModel, Exception> callback)
         {
-            m_taskManager.EvaluateTask(taskOptionsList, callback);
+            m_taskManager.EvaluateTask(callback);
+        }
+
+        public void GetTaskResults(Action<TaskFinishedViewModel, Exception> callback)
+        {
+            m_taskManager.GetTaskResults(callback);
+        }
+
+        public void StartPollingResults(Action<ObservableCollection<UserResultViewModel>, Exception> callback)
+        {
+            m_taskManager.StartPollingResults(callback);
+        }
+
+        public void StopPolling()
+        {
+            m_taskManager.StopPolling();
         }
     }
 }

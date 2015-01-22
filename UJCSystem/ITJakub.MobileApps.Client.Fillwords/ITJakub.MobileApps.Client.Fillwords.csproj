@@ -111,6 +111,8 @@
     <Compile Include="DataContract\FillwordsTaskContract.cs" />
     <Compile Include="DataService\FillwordsDataService.cs" />
     <Compile Include="DataService\TaskManager.cs" />
+    <Compile Include="ViewModel\Enum\AnswerState.cs" />
+    <Compile Include="ViewModel\TaskFinishedViewModel.cs" />
     <Compile Include="View\Control\OpaqueComboBox.cs" />
     <Compile Include="View\Control\RichEditComboBox.cs" />
     <Compile Include="ViewModel\EvaluationResultViewModel.cs" />

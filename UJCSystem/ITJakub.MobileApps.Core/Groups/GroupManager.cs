@@ -153,7 +153,7 @@ namespace ITJakub.MobileApps.Core.Groups
         {
             var group = m_usersRepository.FindById<Group>(groupId);
             if (group.State != GroupState.Closed && group.State != GroupState.Created)
-                return;
+                throw new FaultException("Can not remove group until it is closed.");
 
             var rowKeys = m_usersRepository.GetRowKeysAndRemoveGroup(groupId);
             m_applicationManager.DeleteSynchronizedObjects(groupId, rowKeys);

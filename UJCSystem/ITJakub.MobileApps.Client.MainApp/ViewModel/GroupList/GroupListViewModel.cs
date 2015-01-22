@@ -176,22 +176,34 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         
         private void InitCommands()
         {
-            GoBackCommand = new RelayCommand(m_navigationService.GoBack);
+            GoBackCommand = new RelayCommand(GoBack);
             GroupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
             SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(SelectionChanged);
             ConnectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
             RefreshListCommand = new RelayCommand(LoadData);
-            OpenTaskEditorCommand = new RelayCommand(() => m_navigationService.Navigate(typeof(OwnedTaskListView)));
+            OpenTaskEditorCommand = new RelayCommand(() => Navigate(typeof(OwnedTaskListView)));
         }
         
         private void InitViewModels()
         {
             ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, LoadData);
-            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, m_navigationService);
+            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, Navigate);
             DeleteGroupViewModel = new DeleteGroupViewModel(m_dataService, m_selectedGroups, LoadData);
 
             SwitchToPauseViewModel = new SwitchGroupStateViewModel(GroupState.Paused, m_dataService, m_selectedGroups, LoadData);
             SwitchToRunningViewModel = new SwitchGroupStateViewModel(GroupState.Running, m_dataService, m_selectedGroups, LoadData);
+        }
+
+        private void Navigate(Type type)
+        {
+            m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
+            m_navigationService.Navigate(type);
+        }
+
+        private void GoBack()
+        {
+            m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
+            m_navigationService.GoBack();
         }
 
         private void LoadData()
@@ -246,7 +258,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 var viewType = group.GroupType == GroupType.Member
                     ? typeof (ApplicationHostView)
                     : typeof (GroupPageView);
-                m_navigationService.Navigate(viewType);
+                Navigate(viewType);
                 Messenger.Default.Unregister(this);
             }
         }

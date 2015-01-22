@@ -2,7 +2,7 @@
 using Windows.UI;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
-using ITJakub.MobileApps.Client.Fillwords.ViewModel;
+using ITJakub.MobileApps.Client.Fillwords.ViewModel.Enum;
 
 namespace ITJakub.MobileApps.Client.Fillwords.View.Converter
 {

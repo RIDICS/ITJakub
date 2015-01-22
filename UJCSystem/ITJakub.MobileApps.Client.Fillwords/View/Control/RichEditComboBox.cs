@@ -8,6 +8,7 @@ using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 using ITJakub.MobileApps.Client.Books.View.Control;
@@ -86,8 +87,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                 comboBoxItem.ComboBox.IsEnabled = newValue;
             }
         }
-
-
+        
         private static void OnDocumentOrOptionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var richEditBox = d as RichEditComboBox;
@@ -114,7 +114,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             m_richEditBoxControl.IsReadOnly = false;
             m_richEditBoxControl.Document.SetText(TextSetOptions.FormatRtf, DocumentRtf);
 
-            RemoveComboBoxEventListneres();
             m_comboBoxList.Clear();
             m_canvas.Children.Clear();
             int indexCorrection = 0;
@@ -156,13 +155,20 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                 };
                 
                 // create ComboBox background binding
-                var binding = new Binding
+                var answerStateBinding = new Binding
                 {
                     Path = new PropertyPath("AnswerState"),
                     Source = optionsViewModel,
                     Converter = m_answerStateToBackgroundConverter
                 };
-                comboBox.SetBinding(BackgroundProperty, binding);
+                var selectedAnswerBinding = new Binding
+                {
+                    Path = new PropertyPath("SelectedAnswer"),
+                    Source = optionsViewModel,
+                    Mode = BindingMode.TwoWay
+                };
+                comboBox.SetBinding(BackgroundProperty, answerStateBinding);
+                comboBox.SetBinding(Selector.SelectedItemProperty, selectedAnswerBinding);
 
                 // create ComboBoxItem
                 var comboBoxItem = new ComboBoxItem
@@ -170,9 +176,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                     Index = correctedWordPosition,
                     Length = maxWordLength,
                     ComboBox = comboBox,
-                    OptionsViewModel = optionsViewModel
                 };
-                comboBox.SelectionChanged += comboBoxItem.SelectionChanged;
                 
                 m_comboBoxList.Add(comboBoxItem);
                 m_canvas.Children.Add(comboBox);
@@ -204,29 +208,13 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             }
         }
 
-        private void RemoveComboBoxEventListneres()
-        {
-            foreach (var comboBoxItem in m_comboBoxList)
-            {
-                comboBoxItem.ComboBox.SelectionChanged -= comboBoxItem.SelectionChanged;
-            }
-        }
-
         private class ComboBoxItem
         {
             public ComboBox ComboBox { get; set; }
 
-            public OptionsViewModel OptionsViewModel { get; set; }
-
             public int Index { get; set; }
 
             public int Length { get; set; }
-
-            public void SelectionChanged(object sender, SelectionChangedEventArgs e)
-            {
-                var newSelection = e.AddedItems.FirstOrDefault() as string;
-                OptionsViewModel.SelectedAnswer = newSelection;
-            }
         }
     }
 }

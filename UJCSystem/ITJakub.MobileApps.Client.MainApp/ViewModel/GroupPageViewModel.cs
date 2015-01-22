@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
@@ -14,12 +13,6 @@ using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class GroupPageViewModel : ViewModelBase
     {
         private const PollingInterval MembersPollingInterval = PollingInterval.Medium;
@@ -36,9 +29,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_isRemoveFlyoutOpen;
         private bool m_savingState;
 
-        /// <summary>
-        /// Initializes a new instance of the GroupPageViewModel class.
-        /// </summary>
         public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
             m_dataService = dataService;
@@ -216,7 +206,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_dataService.SetRestoringLastGroupState(true);
             m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.SelectTask);
-            m_navigationService.Navigate<ApplicationSelectionView>();
+            Navigate<ApplicationSelectionView>();
         }
 
         private void ChangeGroupState(GroupState newState)
@@ -247,12 +237,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
         }
 
+        private void Navigate<T>()
+        {
+            m_pollingService.Unregister(MembersPollingInterval, UpdateMembers);
+            m_navigationService.Navigate<T>();
+        }
+
         private void GoBack()
         {
             m_dataService.SetRestoringLastGroupState(false);
             m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.None);
             m_pollingService.Unregister(MembersPollingInterval, UpdateMembers);
-            Messenger.Default.Unregister(this);
             m_navigationService.GoBack();
         }
     }

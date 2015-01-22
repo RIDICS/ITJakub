@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using Windows.UI.Popups;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
 using ITJakub.MobileApps.Client.Shared;
-using ITJakub.MobileApps.Client.Shared.Data;
 
 namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 {
@@ -13,6 +13,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private ObservableCollection<OptionsViewModel> m_taskOptionsList;
         private ObservableCollection<UserResultViewModel> m_resultList;
         private bool m_isOver;
+        private bool m_saving;
+        private bool m_isSubmitFlyoutOpen;
 
         public FillwordsViewModel(FillwordsDataService dataService)
         {
@@ -61,14 +63,45 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
+        public bool Saving
+        {
+            get { return m_saving; }
+            set
+            {
+                m_saving = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsSubmitFlyoutOpen
+        {
+            get { return m_isSubmitFlyoutOpen; }
+            set
+            {
+                m_isSubmitFlyoutOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public RelayCommand SubmitCommand { get; private set; }
         
         public override void InitializeCommunication()
         {
-            //TODO start polling or get my history?
-            SetDataLoaded();
-        }
+            m_dataService.GetTaskResults((taskFinished, exception) =>
+            {
+                if (exception != null)
+                    return;
 
+                ResultList = taskFinished.ResultList;
+                IsOver = taskFinished.IsFinished;
+
+                SetDataLoaded();
+
+                if (IsOver)
+                    StartPollingResults();
+            });
+        }
+        
         public override void SetTask(string data)
         {
             m_dataService.SetTaskAndGetData(data, viewModel =>
@@ -80,49 +113,40 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 
         public override void StopCommunication()
         {
-            //TODO stop polling?
-        }
-
-        private void AnswerChanged(OptionsViewModel options)
-        {
-            //TODO save current choice to syncObject
+            m_dataService.StopPolling();
         }
         
         private void Submit()
         {
-            
-
-            m_dataService.EvaluateTask(TaskOptionsList, (result, exception) =>
+            IsSubmitFlyoutOpen = false;
+            Saving = true;
+            m_dataService.EvaluateTask((result, exception) =>
             {
-                
-            });
-            //TODO only for test:
-            IsOver = true;
-            ResultList = new ObservableCollection<UserResultViewModel>
-            {
-                new UserResultViewModel
+                Saving = false;
+                if (exception != null)
                 {
-                    CorrectAnswers = 5,
-                    TotalAnswers = 16,
-                    UserInfo = new AuthorInfo
-                    {
-                        FirstName = "Josef",
-                        LastName = "Josefovič"
-                    }
-                },
-                new UserResultViewModel
-                {
-                    CorrectAnswers = 9,
-                    TotalAnswers = 16,
-                    UserInfo = new AuthorInfo
-                    {
-                        FirstName = "Josef",
-                        LastName = "Josefovič"
-                    }
+                    new MessageDialog("Úlohu se nepodařilo uložit a proto ji ani nelze vyhodnotit. Zkontrolujte připojení k internetu a zkuste to znovu.", "Vyhodnocení nelze provést").ShowAsync();
+                    return;
                 }
-            };
 
-            //TODO save evaluation
+                IsOver = result.IsOver;
+
+                StartPollingResults();
+            });
+        }
+
+        private void StartPollingResults()
+        {
+            m_dataService.StartPollingResults((newResults, exception) =>
+            {
+                if (exception != null)
+                    return;
+
+                foreach (var userResultViewModel in newResults)
+                {
+                    ResultList.Add(userResultViewModel);
+                }
+            });
         }
     }
 }
