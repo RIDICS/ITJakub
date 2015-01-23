@@ -144,7 +144,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             get { return (Color) GetValue(BackgroundColorHighlightProperty); }
             set { SetValue(BackgroundColorHighlightProperty, value); }
         }
-
+        
         private static void IsFlyoutOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var editBox = d as EditorRichEditBox;
@@ -153,7 +153,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             
             var isOpen = (bool) e.NewValue;
             if (!isOpen)
+            {
                 editBox.Flyout.Hide();
+                editBox.Document.Selection.Collapse(true);
+            }
         }
         
         private static void IsEditingEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

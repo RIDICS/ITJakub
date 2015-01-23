@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
@@ -41,6 +42,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
                 LoadTasks();
             });
+            m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.SelectTask);
         }
 
         private void InitCommands()

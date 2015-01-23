@@ -49,7 +49,7 @@ namespace ITJakub.MobileApps.Client.Shared.Control
             DependencyPropertyChangedEventArgs e)
         {
             var flyout = d as Flyout;
-            var parent = (Button)d.GetValue(ParentProperty);
+            var parent = (FrameworkElement)d.GetValue(ParentProperty);
 
             if (flyout != null && parent != null)
             {

@@ -363,7 +363,7 @@
         </Grid>
 
         <GridView Grid.Row="1"
-                  Padding="120,0,50,100"
+                  Padding="120,0,50,110"
                   IsItemClickEnabled="True"
                   SelectionMode="Multiple"
                   ItemsSource="{Binding Source={StaticResource GroupList}}"

@@ -79,9 +79,12 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <ScrollViewer Grid.Column="0"
+                          Margin="0,0,40,0"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical"
-                        Margin="120,0,0,0"
-                        Grid.Column="0">
+                        Margin="120,0,0,0">
                 <TextBlock Style="{StaticResource MyLabelStyle}"
                            IsTextSelectionEnabled="True">
                     <Run Text="Kód skupiny:" />
@@ -299,7 +302,7 @@
                     </Grid>
                 </StackPanel>
             </StackPanel>
-            
+            </ScrollViewer>
             
             <Grid Grid.Column="1"
                   Margin="0,0,120,0"
@@ -347,8 +350,8 @@
                                        Source="{Binding UserAvatar}" />
                                 <TextBlock VerticalAlignment="Center"
                                            Margin="5,0,0,0">
-                                    <Run Text="{Binding FirstName}"/>
-                                    <Run Text="{Binding LastName}"/>
+                                    <Run Text="{Binding FirstName}" />
+                                    <Run Text="{Binding LastName}" />
                                 </TextBlock>
                             </StackPanel>
                         </DataTemplate>
@@ -363,6 +366,5 @@
                            Margin="50,15,0,0" />
             </Grid>
         </Grid>
-
     </Grid>
 </Page>

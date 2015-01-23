@@ -17,8 +17,7 @@
         <converter:DoubleToStringConverter x:Key="DoubleToStringConverter" />
     </UserControl.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          Margin="120,0,20,60">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -26,13 +25,13 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" MinWidth="100" />
+            <ColumnDefinition Width="Auto" MinWidth="120" />
         </Grid.ColumnDefinitions>
         
         <control:RichEditComboBox Grid.Row="0"
                                   Grid.Column="0"
                                   Grid.RowSpan="2"
-                                  Margin="10"
+                                  Margin="120,10,10,10"
                                   MinWidth="300"
                                   IsAnsweringAllowed="{Binding IsOver, Converter={StaticResource BooleanNegationConverter}}"
                                   DocumentRtf="{Binding TaskDocumentRtf}"
@@ -42,6 +41,7 @@
                 Grid.Column="0"
                 HorizontalAlignment="Right"
                 MinWidth="170"
+                Margin="0,0,0,60"
                 Content="Odevzdat"
                 IsEnabled="{Binding IsOver, Converter={StaticResource BooleanNegationConverter}}"
                 x:Name="SubmitButton">
@@ -74,7 +74,7 @@
         <ListView Grid.Row="1"
                   Grid.Column="1"
                   Width="270"
-                  Margin="10,10,0,0"
+                  Margin="10,10,20,0"
                   SelectionMode="None"
                   IsItemClickEnabled="False"
                   ItemsSource="{Binding ResultList}"
@@ -109,10 +109,12 @@
         <Grid Grid.Row="0"
               Grid.Column="0"
               Grid.RowSpan="3"
+              Grid.ColumnSpan="2"
               Visibility="{Binding Saving, Converter={StaticResource BooleanToVisibilityConverter}}"
               Background="#20000000">
             <Grid HorizontalAlignment="Center"
                   VerticalAlignment="Center"
+                  Margin="0,0,0,60"
                   Background="White">
                 <StackPanel Orientation="Horizontal">
                     <ProgressRing Width="40"

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -11,21 +12,12 @@ using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class ApplicationSelectionViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>> m_appList;
 
-        /// <summary>
-        /// Initializes a new instance of the ApplicationSelectionViewModel class.
-        /// </summary>
         public ApplicationSelectionViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
@@ -35,6 +27,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             AppClickCommand = new RelayCommand<ItemClickEventArgs>(AppClick);
             GoBackCommand = new RelayCommand(GoBack);
+
+            m_dataService.GetAppSelectionTarget(async target =>
+            {
+                if (target == ApplicationSelectionTarget.None)
+                {
+                    await Task.Delay(50);
+                    GoBack();
+                }
+            });
         }
 
         private void LoadAppList()
