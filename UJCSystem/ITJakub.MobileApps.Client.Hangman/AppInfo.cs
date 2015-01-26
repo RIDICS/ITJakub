@@ -36,12 +36,12 @@ namespace ITJakub.MobileApps.Client.Hangman
 
         public override EditorBaseViewModel EditorViewModel
         {
-            get { return null; } // TODO editor
+            get { return new HangmanEditorViewModel(m_dataService); }
         }
 
         public override Type EditorDataTemplate
         {
-            get { return null; }
+            get { return typeof(HangmanEditorView); }
         }
 
         public override ApplicationRoleType ApplicationRoleType
