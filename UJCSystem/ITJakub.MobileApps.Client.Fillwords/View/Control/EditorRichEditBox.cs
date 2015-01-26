@@ -63,7 +63,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                 };
             }
 
-            Flyout.ShowAt(this);
             IsFlyoutOpen = true;
             IsSelectedTextHighlighted = !textRange.CharacterFormat.BackgroundColor.Equals(m_defaultBackgroundColor);
         }
@@ -76,7 +75,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
         }
 
         public static readonly DependencyProperty FlyoutProperty = DependencyProperty.Register("Flyout", typeof (Flyout),
-            typeof (EditorRichEditBox), new PropertyMetadata(null));
+            typeof (EditorRichEditBox), new PropertyMetadata(null, OnFlyoutChanged));
 
         public static readonly DependencyProperty WordOptionsListProperty = DependencyProperty.Register("WordOptionsList",
             typeof (Dictionary<int, OptionsViewModel>), typeof (EditorRichEditBox),
@@ -144,15 +143,30 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             get { return (Color) GetValue(BackgroundColorHighlightProperty); }
             set { SetValue(BackgroundColorHighlightProperty, value); }
         }
-        
+
+        private static void OnFlyoutChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var editBox = d as EditorRichEditBox;
+            var newFlyout = e.NewValue as Flyout;
+            if (editBox == null || newFlyout == null)
+                return;
+
+            newFlyout.Opening += (sender, o) => editBox.IsFlyoutOpen = true;
+            newFlyout.Closed += (sender, o) => editBox.IsFlyoutOpen = false;
+        }
+
         private static void IsFlyoutOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var editBox = d as EditorRichEditBox;
-            if (editBox == null)
+            if (editBox == null || editBox.Flyout == null)
                 return;
             
             var isOpen = (bool) e.NewValue;
-            if (!isOpen)
+            if (isOpen)
+            {
+                editBox.Flyout.ShowAt(editBox);
+            }
+            else
             {
                 editBox.Flyout.Hide();
                 editBox.Document.Selection.Collapse(true);

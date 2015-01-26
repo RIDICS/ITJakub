@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.Client.Shared.Control
             typeof(FlyoutHelpers), new PropertyMetadata(false, OnIsOpenPropertyChanged));
 
         public static readonly DependencyProperty ParentProperty =
-            DependencyProperty.RegisterAttached("Parent", typeof(Button),
+            DependencyProperty.RegisterAttached("Parent", typeof(FrameworkElement),
             typeof(FlyoutHelpers), new PropertyMetadata(null, OnParentPropertyChanged));
 
         public static void SetIsOpen(DependencyObject d, bool value)
@@ -23,14 +23,14 @@ namespace ITJakub.MobileApps.Client.Shared.Control
             return (bool)d.GetValue(IsOpenProperty);
         }
 
-        public static void SetParent(DependencyObject d, Button value)
+        public static void SetParent(DependencyObject d, FrameworkElement value)
         {
             d.SetValue(ParentProperty, value);
         }
 
-        public static Button GetParent(DependencyObject d)
+        public static FrameworkElement GetParent(DependencyObject d)
         {
-            return (Button)d.GetValue(ParentProperty);
+            return (FrameworkElement)d.GetValue(ParentProperty);
         }
 
         private static void OnParentPropertyChanged(DependencyObject d,

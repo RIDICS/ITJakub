@@ -6,10 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:core="using:ITJakub.MobileApps.Client.Core"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d">
     
     <Page.Resources>
         <core:EditorTemplateSelector x:Key="EditorTemplateSelector" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -52,5 +54,29 @@
                         ContentTemplateSelector="{StaticResource EditorTemplateSelector}"
                         VerticalContentAlignment="Stretch"
                         HorizontalContentAlignment="Stretch" />
+
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              Grid.RowSpan="2"
+              Visibility="{Binding EditorViewModel.Saving, Converter={StaticResource BooleanToVisibilityConverter}}"
+              Background="#20000000">
+            <Grid HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Background="White">
+                <StackPanel Orientation="Horizontal"
+                            MinWidth="400">
+                    <ProgressRing Width="40"
+                                  Height="40"
+                                  Margin="20"
+                                  Foreground="Black"
+                                  IsActive="True" />
+                    <TextBlock VerticalAlignment="Center"
+                               Text="Ukládání"
+                               Foreground="Black"
+                               FontSize="30"
+                               Margin="0,0,40,0"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>

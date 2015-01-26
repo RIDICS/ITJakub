@@ -265,9 +265,11 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 IsSaveFlyoutOpen = false;
                 return;
             }
-            
+
+            Saving = true;
             m_dataService.CreateTask(TaskName, BookRtfContent, WordOptionsList.Values.ToList(), exception =>
             {
+                Saving = false;
                 if (exception != null)
                     return;
 
