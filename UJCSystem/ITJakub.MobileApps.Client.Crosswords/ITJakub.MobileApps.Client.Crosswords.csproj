@@ -115,6 +115,7 @@
     <Compile Include="DataContract\ProgressInfoContract.cs" />
     <Compile Include="DataService\CrosswordManager.cs" />
     <Compile Include="DataService\CrosswordTask.cs" />
+    <Compile Include="ViewModel\CrosswordsEditorViewModel.cs" />
     <Compile Include="ViewModel\GameInfoViewModel.cs" />
     <Compile Include="ViewModel\Comparer\PlayerRankComparer.cs" />
     <Compile Include="ViewModel\PlayerRankViewModel.cs" />
@@ -129,6 +130,9 @@
     <Compile Include="View\Converter\BooleanToBackgroundConverter.cs" />
     <Compile Include="View\Converter\LengthToWidthConverter.cs" />
     <Compile Include="View\CrosswordRowDataTemplateSelector.cs" />
+    <Compile Include="View\CrosswordsEditorView.xaml.cs">
+      <DependentUpon>CrosswordsEditorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\CrosswordsView.xaml.cs">
       <DependentUpon>CrosswordsView.xaml</DependentUpon>
     </Compile>
@@ -173,6 +177,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\CrosswordsEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CrosswordsView.xaml">
       <SubType>Designer</SubType>

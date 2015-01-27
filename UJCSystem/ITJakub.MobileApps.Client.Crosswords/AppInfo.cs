@@ -12,7 +12,7 @@ namespace ITJakub.MobileApps.Client.Crosswords
     [MobileApplication(ApplicationType.Crosswords)]
     public class AppInfo : ApplicationBase
     {
-        private readonly CrosswordsDataService m_dataService;
+        private readonly ICrosswordsDataService m_dataService;
 
         public AppInfo(ISynchronizeCommunication applicationCommunication) : base(applicationCommunication)
         {
@@ -36,12 +36,12 @@ namespace ITJakub.MobileApps.Client.Crosswords
 
         public override EditorBaseViewModel EditorViewModel
         {
-            get { return null; } // TODO editor
+            get { return new CrosswordsEditorViewModel(m_dataService); }
         }
 
         public override Type EditorDataTemplate
         {
-            get { return null; }
+            get { return typeof(CrosswordsEditorView); }
         }
 
         public override ApplicationRoleType ApplicationRoleType
