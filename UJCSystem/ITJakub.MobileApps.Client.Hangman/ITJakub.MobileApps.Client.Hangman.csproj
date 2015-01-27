@@ -149,7 +149,7 @@
     <Compile Include="View\KeyboardControl.xaml.cs">
       <DependentUpon>KeyboardControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LazyTextBox.cs" />
+    <Compile Include="View\FocusableTextBox.cs" />
     <Compile Include="View\WordControl.xaml.cs">
       <DependentUpon>WordControl.xaml</DependentUpon>
     </Compile>

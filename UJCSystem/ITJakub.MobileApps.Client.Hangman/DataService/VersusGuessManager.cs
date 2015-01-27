@@ -67,6 +67,30 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             SendLetterInfo(letter, wordOrder, callback);
         }
 
+        public override async void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback)
+        {
+            var wordArray = answerList.Select(model => model.Answer).ToArray();
+            var specialLetters = GetSpecialLetter(wordArray).ToArray();
+
+            var taskContract = new HangmanTaskContract
+            {
+                Words = wordArray,
+                SpecialLetters = specialLetters
+            };
+
+            var serializedContract = JsonConvert.SerializeObject(taskContract);
+
+            try
+            {
+                await m_synchronizeCommunication.CreateTaskAsync(ApplicationType.Hangman, taskName, serializedContract);
+                callback(null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
+        }
+
         private async void SendProgressInfo(Action<TaskInfoViewModel, Exception> callback)
         {
             var progressUpdate = new ProgressInfoContract

@@ -5,14 +5,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
-    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:view="using:ITJakub.MobileApps.Client.Hangman.View"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     mc:Ignorable="d"
     x:Name="RootElement"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanEditorViewModel}">
 
     <UserControl.Resources>
-        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <x:Double x:Key="LabelFontSize">14</x:Double>
+        <SolidColorBrush x:Key="ErrorColorBrush" Color="Orange" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -27,6 +30,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -35,28 +39,66 @@
             
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
-                       FontSize="14"
+                       FontSize="{StaticResource LabelFontSize}"
                        Text="Název zadání" />
             
             <Button Grid.Row="1"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     Content="Uložit zadání"
-                    Command="{Binding SaveTaskCommand}">
+                    x:Name="SaveButton">
+                <Button.Flyout>
+                    <Flyout control:FlyoutHelpers.IsOpen="{Binding IsSaveFlyoutOpen, Mode=TwoWay}"
+                            control:FlyoutHelpers.Parent="{Binding ElementName=SaveButton}">
+                        <StackPanel Width="240">
+                            <TextBlock Text="Chystáte se uložit zadání. Následné úpravy již nebudou možné."
+                                       TextWrapping="Wrap"
+                                       FontSize="{StaticResource LabelFontSize}" />
+                            <Button HorizontalAlignment="Right"
+                                    Content="Uložit"
+                                    Command="{Binding SaveTaskCommand}" />
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
             </Button>
             
             <TextBox Grid.Row="1"
                      Grid.Column="0"
                      Margin="0,0,20,0"
+                     FontSize="16"
                      Text="{Binding TaskName, Mode=TwoWay}" />
+
+            <StackPanel Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Left"
+                        Margin="0,5,0,0">
+                <TextBlock FontSize="{StaticResource LabelFontSize}"
+                           Foreground="{StaticResource ErrorColorBrush}"
+                           FontWeight="Bold"
+                           Visibility="{Binding ErrorTaskNameEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                           Text="Vyplňte název zadání." />
+                <TextBlock FontSize="{StaticResource LabelFontSize}"
+                           Foreground="{StaticResource ErrorColorBrush}"
+                           FontWeight="Bold"
+                           Visibility="{Binding ErrorAnswerListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                           Text="Vytvořte alespoň jednu odpověď." />
+                <TextBlock FontSize="{StaticResource LabelFontSize}"
+                           Foreground="{StaticResource ErrorColorBrush}"
+                           FontWeight="Bold"
+                           Visibility="{Binding ErrorSomeAnswerEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                           Text="Žádná odpověď nesmí být prázdná." />
+            </StackPanel>
             
-            <TextBlock Grid.Row="2"
+            
+            <TextBlock Grid.Row="3"
                        Grid.Column="0"
                        Margin="0,20,0,0"
                        Text="Seznam odpovědí"
                        Style="{StaticResource SubheaderTextBlockStyle}" />
             
-            <Button Grid.Row="2"
+            <Button Grid.Row="3"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom"
@@ -86,11 +128,13 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         
-                        <view:LazyTextBox Grid.Column="0"
-                                 Margin="0,0,10,0"
-                                 VerticalAlignment="Center"
-                                 FontSize="16"
-                                 Text="{Binding Answer, Mode=TwoWay}" />
+                        <view:FocusableTextBox Grid.Column="0"
+                                               Margin="0,0,10,0"
+                                               VerticalAlignment="Center"
+                                               FontSize="16"
+                                               Text="{Binding Answer, Mode=TwoWay}"
+                                               IsHitTestVisible="False"
+                                               IsFocus="{Binding IsSelected}" />
                         
                         <Button Grid.Column="1"
                                 Command="{Binding ElementName=RootElement, Path=DataContext.DeleteAnswerCommand}"
@@ -101,5 +145,12 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        
+        <TextBlock Grid.Row="1"
+                   Text="Žádná odpověď"
+                   FontSize="15"
+                   FontWeight="Light"
+                   Margin="140,22,0,0"
+                   Visibility="{Binding IsAnswerListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

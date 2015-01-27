@@ -104,5 +104,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 callback(null, exception);
             }
         }
+
+        public override void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback)
+        {
+            //TODO
+            throw new NotImplementedException();
+        }
     }
 }

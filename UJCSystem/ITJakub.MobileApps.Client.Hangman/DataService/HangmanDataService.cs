@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Hangman.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -51,6 +52,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         {
             m_guessManager = GuessManager.GetInstance(appMode, m_applicationCommunication);
             m_guessManager.SetTask(data, callback);
+        }
+
+        public void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback)
+        {
+            m_guessManager.SaveTask(taskName, answerList, callback);
         }
     }
 }

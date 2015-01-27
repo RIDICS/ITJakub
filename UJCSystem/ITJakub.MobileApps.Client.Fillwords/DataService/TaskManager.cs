@@ -43,8 +43,16 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
                 }))
             };
             var data = JsonConvert.SerializeObject(taskContract);
-            await m_applicationCommunication.CreateTaskAsync(ApplicationType.Fillwords, taskName, data);
-            callback(null);
+
+            try
+            {
+                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Fillwords, taskName, data);
+                callback(null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
         }
 
         public void SetTaskAndGetData(string data, Action<TaskViewModel> callback)

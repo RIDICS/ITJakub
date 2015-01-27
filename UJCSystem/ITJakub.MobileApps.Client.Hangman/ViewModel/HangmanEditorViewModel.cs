@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Hangman.DataService;
 using ITJakub.MobileApps.Client.Shared;
@@ -9,6 +10,10 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
     {
         private readonly HangmanDataService m_dataService;
         private AnswerViewModel m_selectedAnswer;
+        private bool m_errorTaskNameEmpty;
+        private bool m_errorAnswerListEmpty;
+        private bool m_errorSomeAnswerEmpty;
+        private bool m_isSaveFlyoutOpen;
 
         public HangmanEditorViewModel(HangmanDataService dataService)
         {
@@ -48,19 +53,107 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
+        public bool IsAnswerListEmpty
+        {
+            get { return AnswerList.Count == 0; }
+        }
+
+        public bool ErrorTaskNameEmpty
+        {
+            get { return m_errorTaskNameEmpty; }
+            set
+            {
+                m_errorTaskNameEmpty = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ErrorAnswerListEmpty
+        {
+            get { return m_errorAnswerListEmpty; }
+            set
+            {
+                m_errorAnswerListEmpty = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ErrorSomeAnswerEmpty
+        {
+            get { return m_errorSomeAnswerEmpty; }
+            set
+            {
+                m_errorSomeAnswerEmpty = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsSaveFlyoutOpen
+        {
+            get { return m_isSaveFlyoutOpen; }
+            set
+            {
+                m_isSaveFlyoutOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private void AddAnswer()
         {
             AnswerList.Add(new AnswerViewModel());
+            RaisePropertyChanged(() => IsAnswerListEmpty);
         }
 
         private void DeleteAnswer(AnswerViewModel answerViewModel)
         {
             AnswerList.Remove(answerViewModel);
+            RaisePropertyChanged(() => IsAnswerListEmpty);
         }
 
         private void SaveTask()
         {
-            //TODO
+            IsSaveFlyoutOpen = false;
+            if (IsSomeError())
+                return;
+
+            Saving = true;
+            m_dataService.SaveTask(TaskName, AnswerList, exception =>
+            {
+                Saving = false;
+                if (exception != null)
+                    return;
+
+                GoBack();
+            });
+        }
+
+        private bool IsSomeError()
+        {
+            ErrorTaskNameEmpty = false;
+            ErrorAnswerListEmpty = false;
+            ErrorSomeAnswerEmpty = false;
+
+            var anyError = false;
+
+            if (string.IsNullOrWhiteSpace(TaskName))
+            {
+                ErrorTaskNameEmpty = true;
+                anyError = true;
+            }
+
+            if (IsAnswerListEmpty)
+            {
+                ErrorAnswerListEmpty = true;
+                anyError = true;
+            }
+            
+            if (AnswerList.Any(answerViewModel => string.IsNullOrWhiteSpace(answerViewModel.Answer)))
+            {
+                ErrorSomeAnswerEmpty = true;
+                anyError = true;
+            }
+
+            return anyError;
         }
     }
 }
