@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using ITJakub.MobileApps.Client.Crosswords.DataContract;
 using ITJakub.MobileApps.Client.Crosswords.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -114,6 +115,46 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
         public void IsWin(Action<bool> callback)
         {
             callback(m_task.Win);
+        }
+
+        public async void SaveTask(string taskName, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback)
+        {
+            try
+            {
+                var rowList = new List<CrosswordTaskContract.RowContract>();
+                foreach (var viewModel in answerList)
+                {
+                    if (viewModel.Answer == null)
+                    {
+                        rowList.Add(new CrosswordTaskContract.RowContract());
+                    }
+                    else
+                    {
+                        var rowContract = new CrosswordTaskContract.RowContract
+                        {
+                            Answer = viewModel.Answer,
+                            Label = viewModel.Label,
+                            StartPosition = viewModel.Shift
+                        };
+                        rowList.Add(rowContract);
+                    }
+                }
+
+                var taskContract = new CrosswordTaskContract
+                {
+                    AnswerPosition = answerColumn,
+                    RowList = rowList.ToList()
+                };
+
+                var serializedTask = JsonConvert.SerializeObject(taskContract);
+                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Crosswords, taskName, serializedTask);
+
+                callback(null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
         }
     }
 }

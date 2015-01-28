@@ -401,4 +401,23 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="view:StepSlider">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="view:StepSlider">
+                    <Border Background="#20FFFFFF"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid Width="{TemplateBinding StepWidth}"
+                              HorizontalAlignment="Left"
+                              x:Name="InnerGrid">
+                            <SymbolIcon Symbol="{TemplateBinding Symbol}"
+                                        Foreground="{TemplateBinding Foreground}" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

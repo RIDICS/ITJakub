@@ -116,6 +116,7 @@
     <Compile Include="DataService\CrosswordManager.cs" />
     <Compile Include="DataService\CrosswordTask.cs" />
     <Compile Include="ViewModel\CrosswordsEditorViewModel.cs" />
+    <Compile Include="ViewModel\EditorItemViewModel.cs" />
     <Compile Include="ViewModel\GameInfoViewModel.cs" />
     <Compile Include="ViewModel\Comparer\PlayerRankComparer.cs" />
     <Compile Include="ViewModel\PlayerRankViewModel.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="View\SimpleCrosswordsControl.xaml.cs">
       <DependentUpon>SimpleCrosswordsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\StepSlider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="GalaSoft.MvvmLight">

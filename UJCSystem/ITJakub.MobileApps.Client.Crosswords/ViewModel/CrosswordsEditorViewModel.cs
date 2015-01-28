@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Crosswords.DataService;
 using ITJakub.MobileApps.Client.Shared;
@@ -12,18 +11,18 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         private bool m_isSaveFlyoutOpen;
         private bool m_errorTaskNameEmpty;
         private bool m_errorAnswerListEmpty;
-        private bool m_errorSomeAnswerEmpty;
+        private bool m_errorAnswerColumn;
         private int m_answerColumn;
 
         public CrosswordsEditorViewModel(ICrosswordsDataService dataService)
         {
             m_dataService = dataService;
 
-            AnswerList = new ObservableCollection<ItemViewModel> {new ItemViewModel(), new ItemViewModel()};
+            AnswerList = new ObservableCollection<EditorItemViewModel> {new EditorItemViewModel(), new EditorItemViewModel()};
 
             SaveTaskCommand = new RelayCommand(SaveTask);
             AddAnswerCommand = new RelayCommand(AddAnswer);
-            DeleteAnswerCommand = new RelayCommand<ItemViewModel>(DeleteAnswer);
+            DeleteAnswerCommand = new RelayCommand<EditorItemViewModel>(DeleteAnswer);
 
             ShiftLeftCommand = new RelayCommand(() =>
             {
@@ -40,13 +39,13 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public RelayCommand AddAnswerCommand { get; private set; }
 
-        public RelayCommand<ItemViewModel> DeleteAnswerCommand { get; private set; }
+        public RelayCommand<EditorItemViewModel> DeleteAnswerCommand { get; private set; }
 
         public RelayCommand ShiftLeftCommand { get; private set; }
 
         public RelayCommand ShiftRightCommand { get; private set; }
 
-        public ObservableCollection<ItemViewModel> AnswerList { get; set; }
+        public ObservableCollection<EditorItemViewModel> AnswerList { get; set; }
 
         public string TaskName { get; set; }
 
@@ -80,12 +79,12 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             }
         }
 
-        public bool ErrorSomeAnswerEmpty
+        public bool ErrorAnswerColumn
         {
-            get { return m_errorSomeAnswerEmpty; }
+            get { return m_errorAnswerColumn; }
             set
             {
-                m_errorSomeAnswerEmpty = value;
+                m_errorAnswerColumn = value;
                 RaisePropertyChanged();
             }
         }
@@ -105,7 +104,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             get { return AnswerList.Count == 0; }
         }
 
-        private void DeleteAnswer(ItemViewModel viewModel)
+        private void DeleteAnswer(EditorItemViewModel viewModel)
         {
             AnswerList.Remove(viewModel);
             RaisePropertyChanged(() => IsAnswerListEmpty);
@@ -113,51 +112,67 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         private void AddAnswer()
         {
-            AnswerList.Add(new ItemViewModel());
+            AnswerList.Add(new EditorItemViewModel());
             RaisePropertyChanged(() => IsAnswerListEmpty);
+        }
+
+        private bool IsError()
+        {
+            var anyError = false;
+            ErrorTaskNameEmpty = false;
+            ErrorAnswerListEmpty = false;
+            ErrorAnswerColumn = false;
+
+            if (string.IsNullOrWhiteSpace(TaskName))
+            {
+                ErrorTaskNameEmpty = true;
+                anyError = true;
+            }
+
+            if (IsAnswerListEmpty)
+            {
+                ErrorAnswerListEmpty = true;
+                anyError = true;
+            }
+
+            foreach (var editorItemViewModel in AnswerList)
+            {
+                if (string.IsNullOrWhiteSpace(editorItemViewModel.Answer))
+                {
+                    continue;
+                }
+
+                var rowShift = editorItemViewModel.Shift;
+                var answerLength = editorItemViewModel.Answer.Length;
+                if (rowShift > AnswerColumn || rowShift + answerLength <= AnswerColumn)
+                {
+                    ErrorAnswerColumn = true;
+                    break;
+                }
+            }
+
+            return anyError;
         }
 
         private void SaveTask()
         {
-            throw new System.NotImplementedException();
-        }
-    }
+            IsSaveFlyoutOpen = false;
 
-    public class ItemViewModel : ViewModelBase
-    {
-        private int m_shift;
-
-        public ItemViewModel()
-        {
-            Shift = 0;
-
-            ShiftLeftCommand = new RelayCommand(() =>
+            if (IsError())
             {
-                if (Shift > 0)
-                    Shift--;
-            });
-            ShiftRightCommand = new RelayCommand(() =>
-            {
-                Shift++;
-            });
-        }
-
-        public string Answer { get; set; }
-
-        public string Label { get; set; }
-
-        public RelayCommand ShiftLeftCommand { get; private set; }
-
-        public RelayCommand ShiftRightCommand { get; private set; }
-
-        public int Shift
-        {
-            get { return m_shift; }
-            set
-            {
-                m_shift = value;
-                RaisePropertyChanged();
+                return;
             }
+
+            Saving = true;
+            m_dataService.SaveTask(TaskName, AnswerList, AnswerColumn, exception =>
+            {
+                Saving = false;
+
+                if (exception != null)
+                    return;
+
+                GoBack();
+            });
         }
     }
 }
