@@ -330,6 +330,10 @@
       <Project>{2009029F-A9B8-4A44-AC3D-A05C1E65E1E1}</Project>
       <Name>ITJakub.MobileApps.Client.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.Client.SynchronizedReading\ITJakub.MobileApps.Client.SynchronizedReading.csproj">
+      <Project>{247f5787-b5f8-4070-9e51-e65681cd6f71}</Project>
+      <Name>ITJakub.MobileApps.Client.SynchronizedReading</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj">
       <Project>{90F9D8DD-05D5-401F-8939-BD619ADF5CDD}</Project>
       <Name>ITJakub.MobileApps.DataContracts</Name>
