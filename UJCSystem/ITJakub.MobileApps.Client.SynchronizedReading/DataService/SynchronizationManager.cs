@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
     public class SynchronizationManager
     {
         private const string UpdateType = "Update";
-        private const PollingInterval SynchronizationPollingInterval = PollingInterval.Fast;
+        private const PollingInterval SynchronizationPollingInterval = PollingInterval.VeryFast;
         private readonly ISynchronizeCommunication m_applicationCommunication;
         private readonly IPollingService m_pollingService;
         private Action<UpdateViewModel, Exception> m_callback;

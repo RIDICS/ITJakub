@@ -8,16 +8,18 @@
     xmlns:view="using:ITJakub.MobileApps.Client.SynchronizedReading.View"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance d:Type=viewModel:ReadingViewModel}">
-
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
           Margin="120,0,120,20">
         
         <ScrollViewer>
             <Grid>
-                <view:ReaderRichEditBox SelectionStart="{Binding SelectionStart}"
-                                        SelectionLength="{Binding SelectionLength}" />
+                <!--TwoWay binding fixed bug-->
+                <view:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
+                                        SelectionLength="{Binding SelectionLength, Mode=TwoWay}" />
                 <Grid Background="#01FFFFFF" />
             </Grid>
         </ScrollViewer>
+        
     </Grid>
 </UserControl>

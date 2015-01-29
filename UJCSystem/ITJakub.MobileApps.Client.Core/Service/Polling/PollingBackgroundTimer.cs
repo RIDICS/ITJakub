@@ -14,7 +14,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
 
         public PollingBackgroundTimer(PollingInterval interval)
         {
-            m_timeSpan = new TimeSpan(0, 0, (int) interval);
+            m_timeSpan = new TimeSpan(0, 0, 0, 0, (int) interval);
             m_actions = new List<Action>();
         }
 
