@@ -87,5 +87,23 @@ namespace ITJakub.MobileApps.Core.Applications
                 m_azureTableSynchronizedObjectDao.Delete(rowKey, Convert.ToString(groupId));
             }
         }
+
+        public SynchronizedObjectResponseContract GetLatestSynchronizedObject(long groupId, int applicationId, string objectType, DateTime since)
+        {
+            var group = m_usersRepository.FindById<Group>(groupId);
+            if (group.State >= GroupState.Paused)
+            {
+                throw new FaultException<ApplicationNotRunningFault>(new ApplicationNotRunningFault(), "Application is paused or closed.");
+            }
+
+            var syncObj = m_applicationRepository.GetLatestSynchronizedObject(groupId, applicationId, objectType, since);
+            if (syncObj == null)
+                return null;
+
+            SynchronizedObjectEntity syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.RowKey, Convert.ToString(syncObj.Group.Id));
+            syncObj.Data = syncObjEntity.Data;
+
+            return Mapper.Map<SynchronizedObjectResponseContract>(syncObj);
+        }
     }
 }

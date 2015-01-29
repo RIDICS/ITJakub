@@ -76,6 +76,12 @@ namespace ITJakub.MobileApps.Core
             return m_applicationManager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
         }
 
+        public SynchronizedObjectResponseContract GetLatestSynchronizedObject(long groupId, int applicationId, string objectType,
+            DateTime since)
+        {
+            return m_applicationManager.GetLatestSynchronizedObject(groupId, applicationId, objectType, since);
+        }
+
         public IList<ApplicationContract> GetAllApplication()
         {
             return m_applicationManager.GetAllApplication();

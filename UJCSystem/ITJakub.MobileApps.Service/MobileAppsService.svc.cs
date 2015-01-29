@@ -126,6 +126,21 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
+        public SynchronizedObjectResponseContract GetLatestSynchronizedObject(long groupId, int applicationId, string objectType, DateTime since)
+        {
+            try
+            {
+                return m_serviceManager.GetLatestSynchronizedObject(groupId, applicationId, objectType, since);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
         public IList<ApplicationContract> GetAllApplication()
         {
             try
