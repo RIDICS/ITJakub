@@ -11,7 +11,11 @@ namespace ITJakub.MobileApps.Client.Shared.Communication
             DateTime since, string objectType, Action<IList<ObjectDetails>, Exception> callback);
 
         void RegisterForSynchronizedObjects(PollingInterval interval, ApplicationType applicationType, string objectType, Action<IList<ObjectDetails>, Exception> callback);
-        
+
+        void RegisterForLatestSynchronizedObject(PollingInterval interval, ApplicationType applicationType, string objectType, Action<ObjectDetails, Exception> callback);
+
         void UnregisterForSynchronizedObjects(PollingInterval interval, Action<IList<ObjectDetails>, Exception> action);
+
+        void UnregisterForLatestSynchronizedObject(PollingInterval interval, Action<ObjectDetails, Exception> action);
     }
 }

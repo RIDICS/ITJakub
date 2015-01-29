@@ -3,6 +3,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 using ITJakub.MobileApps.Client.SynchronizedReading.View;
 using ITJakub.MobileApps.Client.SynchronizedReading.ViewModel;
 
@@ -11,8 +12,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading
     [MobileApplication(ApplicationType.SynchronizedReading)]
     public class AppInfo : ApplicationBase
     {
+        private readonly ReaderDataService m_dataService;
+
         public AppInfo(ISynchronizeCommunication applicationCommunication) : base(applicationCommunication)
         {
+            m_dataService = new ReaderDataService(applicationCommunication);
         }
 
         public override string Name
@@ -22,7 +26,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading
 
         public override ApplicationBaseViewModel ApplicationViewModel
         {
-            get { return new ReadingViewModel(); }
+            get { return new ReadingViewModel(m_dataService); }
         }
 
         public override Type ApplicationDataTemplate
@@ -32,7 +36,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading
 
         public override EditorBaseViewModel EditorViewModel
         {
-            get { return new ReadingEditorViewModel();}
+            get { return new ReadingEditorViewModel(m_dataService); }
         }
 
         public override Type EditorDataTemplate

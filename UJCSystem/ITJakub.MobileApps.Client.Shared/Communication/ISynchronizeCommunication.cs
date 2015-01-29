@@ -12,6 +12,8 @@ namespace ITJakub.MobileApps.Client.Shared.Communication
 
         Task<IList<ObjectDetails>> GetObjectsAsync(ApplicationType applicationType, DateTime since, string objectType = null);
 
+        Task<ObjectDetails> GetLatestObjectAsync(ApplicationType applicationType, DateTime since, string objectType);
+
         IPollingService GetPollingService();
 
         Task CreateTaskAsync(ApplicationType applicationType, string name, string data);

@@ -80,6 +80,35 @@ namespace ITJakub.MobileApps.Client.Core
             return outputList.ToList();
         }
 
+        public async Task<ObjectDetails> GetLatestObjectAsync(ApplicationType applicationType, DateTime since, string objectType)
+        {
+            var userId = m_authenticationManager.GetCurrentUserId();
+            if (!userId.HasValue)
+                throw new ArgumentException("No logged user");
+
+            var appId = m_applicationIdManager.GetApplicationId(applicationType);
+            var groupId = m_groupManager.CurrentGroupId;
+            var latestObject = await m_serviceClient.GetLatestSynchronizedObjectAsync(groupId, appId, objectType, since);
+
+            if (latestObject == null)
+                return null;
+
+            var objectDetails = new ObjectDetails
+            {
+                Author = new AuthorInfo
+                {
+                    Email = latestObject.Author.Email,
+                    FirstName = latestObject.Author.FirstName,
+                    LastName = latestObject.Author.LastName,
+                    Id = latestObject.Author.Id,
+                    IsMe = (userId.Value == latestObject.Author.Id)
+                },
+                CreateTime = latestObject.CreateTime,
+                Data = latestObject.Data
+            };
+            return objectDetails;
+        }
+
         public IPollingService GetPollingService()
         {
             return Container.Current.Resolve<IPollingService>();

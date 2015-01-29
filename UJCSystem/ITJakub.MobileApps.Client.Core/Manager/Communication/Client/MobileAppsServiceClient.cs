@@ -221,6 +221,33 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             });
         }
 
+        public Task<SynchronizedObjectResponseContract> GetLatestSynchronizedObjectAsync(long groupId, int applicationId, string objectType, DateTime since)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetLatestSynchronizedObject(groupId, applicationId, objectType, since);
+                }
+                catch (FaultException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (CommunicationException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (TimeoutException)
+                {
+                    throw new ClientCommunicationException();
+                }
+                catch (ObjectDisposedException)
+                {
+                    throw new ClientCommunicationException();
+                }
+            });
+        }
+
         public Task<IList<ApplicationContract>> GetAllApplicationAsync()
         {
             return Task.Run(() =>

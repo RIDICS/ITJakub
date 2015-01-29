@@ -5,10 +5,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.SynchronizedReading.ViewModel"
+    xmlns:view="using:ITJakub.MobileApps.Client.SynchronizedReading.View"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance d:Type=viewModel:ReadingViewModel}">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          Margin="120,0,120,20">
+        
+        <ScrollViewer>
+            <Grid>
+                <view:ReaderRichEditBox SelectionStart="{Binding SelectionStart}"
+                                        SelectionLength="{Binding SelectionLength}" />
+                <Grid Background="#01FFFFFF" />
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>
