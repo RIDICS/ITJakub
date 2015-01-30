@@ -133,6 +133,7 @@
   <ItemGroup>
     <Content Include="Icon\license.txt" />
     <Content Include="Icon\literature-128.png" />
+    <Content Include="Icon\one_finger-48.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="GalaSoft.MvvmLight">
@@ -155,6 +156,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\ReadingEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

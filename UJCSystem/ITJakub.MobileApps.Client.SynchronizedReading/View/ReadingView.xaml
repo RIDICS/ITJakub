@@ -12,14 +12,10 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
           Margin="120,0,120,20">
         
-        <ScrollViewer>
-            <Grid>
-                <!--TwoWay binding fixed bug-->
-                <view:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
-                                        SelectionLength="{Binding SelectionLength, Mode=TwoWay}" />
-                <Grid Background="#01FFFFFF" />
-            </Grid>
-        </ScrollViewer>
+        <!--TwoWay binding fixed bug-->
+        <view:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
+                                SelectionLength="{Binding SelectionLength, Mode=TwoWay}"
+                                Mode="Reader" />
         
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
-﻿using ITJakub.MobileApps.Client.Shared;
+﻿using GalaSoft.MvvmLight.Command;
+using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 
 namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
@@ -8,10 +9,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private readonly ReaderDataService m_dataService;
         private int m_selectionStart;
         private int m_selectionLength;
+        private int m_cursorPosition;
 
         public ReadingEditorViewModel(ReaderDataService dataService)
         {
             m_dataService = dataService;
+            SelectionChangedCommand = new RelayCommand(SendUpdate);
         }
 
         public int SelectionStart
@@ -21,7 +24,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             {
                 m_selectionStart = value;
                 RaisePropertyChanged();
-                SendUpdate();
             }
         }
 
@@ -32,13 +34,27 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             {
                 m_selectionLength = value;
                 RaisePropertyChanged();
-                SendUpdate();
             }
         }
+
+        public int CursorPosition
+        {
+            get { return m_cursorPosition; }
+            set
+            {
+                m_cursorPosition = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public RelayCommand SelectionChangedCommand { get; private set; }
 
         //TODO this method is for testing
         private void SendUpdate()
         {
+            if (m_selectionLength == 0)
+                return;
+            
             var updateViewModel = new UpdateViewModel
             {
                 SelectionStart = m_selectionStart,

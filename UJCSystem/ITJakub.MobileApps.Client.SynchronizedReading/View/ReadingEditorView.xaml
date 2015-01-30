@@ -13,13 +13,11 @@
           Margin="120,0,120,20">
         
         <!--TODO simulation for teacher's view-->
-        <ScrollViewer>
-            <Grid>
-                <view:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
-                                        SelectionLength="{Binding SelectionLength, Mode=TwoWay}" />
-                <!--<Grid Background="#01FFFFFF" />-->
-            </Grid>
-        </ScrollViewer>
+        <view:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
+                                SelectionLength="{Binding SelectionLength, Mode=TwoWay}"
+                                Mode="Pointer"
+                                SelectionChangedCommand="{Binding SelectionChangedCommand}"
+                                CursorPosition="{Binding CursorPosition}" />
 
     </Grid>
 </UserControl>
