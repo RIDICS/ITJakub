@@ -50,7 +50,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             var updateViewModel = new UpdateViewModel
             {
                 SelectionStart = updateContract.SelectionStart,
-                SelectionLength = updateContract.SelectionLength
+                SelectionLength = updateContract.SelectionLength,
+                CursorPosition = updateContract.CursorPosition
             };
 
             m_callback(updateViewModel, null);
@@ -63,7 +64,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
                 var updateContract = new UpdateContract
                 {
                     SelectionStart = update.SelectionStart,
-                    SelectionLength = update.SelectionLength
+                    SelectionLength = update.SelectionLength,
+                    CursorPosition = update.CursorPosition
                 };
                 var serializedContract = JsonConvert.SerializeObject(updateContract);
 

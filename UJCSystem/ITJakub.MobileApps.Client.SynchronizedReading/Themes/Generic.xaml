@@ -1,13 +1,13 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:view="using:ITJakub.MobileApps.Client.SynchronizedReading.View"
-    xmlns:control="using:ITJakub.MobileApps.Client.Books.View.Control">
+    xmlns:control="using:ITJakub.MobileApps.Client.Books.View.Control"
+    xmlns:control1="using:ITJakub.MobileApps.Client.SynchronizedReading.View.Control">
 
-    <Style TargetType="view:ReaderRichEditBox">
+    <Style TargetType="control1:ReaderRichEditBox">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="view:ReaderRichEditBox">
+                <ControlTemplate TargetType="control1:ReaderRichEditBox">
                     <ScrollViewer x:Name="ScrollViewer"
                                   Background="{TemplateBinding Background}"
                                   BorderBrush="{TemplateBinding BorderBrush}"

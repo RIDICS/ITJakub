@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.SynchronizedReading.ViewModel"
-    xmlns:view="using:ITJakub.MobileApps.Client.SynchronizedReading.View"
+    xmlns:control="using:ITJakub.MobileApps.Client.SynchronizedReading.View.Control"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance d:Type=viewModel:ReadingViewModel}">
     
@@ -13,9 +13,27 @@
           Margin="120,0,120,20">
         
         <!--TwoWay binding fixed bug-->
-        <view:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
-                                SelectionLength="{Binding SelectionLength, Mode=TwoWay}"
-                                Mode="Reader" />
+        <control:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
+                                   SelectionLength="{Binding SelectionLength, Mode=TwoWay}"
+                                   CursorPosition="{Binding CursorPosition, Mode=TwoWay}"
+                                   Mode="{Binding CurrentMode}"
+                                   SelectionChangedCommand="{Binding SelectionChangedCommand}" />
         
+        <StackPanel Grid.Column="1"
+                    Orientation="Vertical">
+            <ToggleSwitch Header="Učitelský mód"
+                          IsOn="{Binding IsTeacherModeEnabled, Mode=TwoWay}"
+                          OnContent="Zapnuto"
+                          OffContent="Vypnuto" />
+            <ToggleSwitch Header="Výběr textu"
+                          IsOn="{Binding IsSelectionModeEnabled, Mode=TwoWay}"
+                          OnContent="Zapnuto"
+                          OffContent="Vypnuto" />
+        </StackPanel>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
     </Grid>
 </UserControl>

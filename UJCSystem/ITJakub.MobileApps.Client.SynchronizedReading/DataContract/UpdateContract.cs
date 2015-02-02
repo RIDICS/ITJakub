@@ -9,5 +9,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataContract
 
         [JsonProperty("SelectionLength")]
         public int SelectionLength { get; set; }
+
+        [JsonProperty("CursorPosition")]
+        public int CursorPosition { get; set; }
     }
 }

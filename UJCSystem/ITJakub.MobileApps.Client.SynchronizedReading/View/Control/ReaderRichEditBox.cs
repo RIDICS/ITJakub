@@ -6,13 +6,13 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using ITJakub.MobileApps.Client.Books.View.Control;
 
-namespace ITJakub.MobileApps.Client.SynchronizedReading.View
+namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 {
     [TemplatePart(Name = "RichEditBox", Type = typeof(BindableRichEditBox))]
     [TemplatePart(Name = "ScrollViewer", Type = typeof(ScrollViewer))]
     [TemplatePart(Name = "OverlapGrid", Type = typeof(Grid))]
     [TemplatePart(Name = "CursorImage", Type = typeof(Image))]
-    public sealed class ReaderRichEditBox : Control
+    public sealed class ReaderRichEditBox : Windows.UI.Xaml.Controls.Control
     {
         private const double CursorCorrectionLeft = -9.0;
         private const double CursorCorrectionTop = 3.0;
@@ -105,7 +105,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View
             SelectionStart = m_richEditBox.Document.Selection.StartPosition;
             SelectionLength = m_richEditBox.Document.Selection.EndPosition - m_richEditBox.Document.Selection.StartPosition;
             m_selectionChangedRespond = true;
-            if (SelectionChangedCommand != null && SelectionChangedCommand.CanExecute(null))
+            if (Mode != Mode.Reader && SelectionChangedCommand != null && SelectionChangedCommand.CanExecute(null))
             {
                 SelectionChangedCommand.Execute(null);
             }
@@ -138,7 +138,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View
 
             var scrollOffset = readerRichEditBox.m_scrollViewer.VerticalOffset;
             if (rect.Top < scrollOffset || rect.Bottom > scrollOffset + readerRichEditBox.ActualHeight - 40)
-                readerRichEditBox.m_scrollViewer.ScrollToVerticalOffset(rect.Top - 20);
+                readerRichEditBox.m_scrollViewer.ChangeView(null, rect.Top - 20, null);
         }
 
         protected override void OnApplyTemplate()
@@ -170,7 +170,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View
             if (top < scrollOffset || bottom > scrollOffset + boxHeight)
             {
                 var scrollTo = textHeight < boxHeight - 40 ? top - 20 : top;
-                m_scrollViewer.ScrollToVerticalOffset(scrollTo);
+                m_scrollViewer.ChangeView(null, scrollTo, null);
             }
         }
 
