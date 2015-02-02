@@ -123,11 +123,48 @@
 
                 <StackPanel Orientation="Vertical"
                             Margin="0,-10,0,0">
-                    <TextBlock Text="Změnit na:"
-                               Style="{StaticResource MyLabelStyle}"
-                               HorizontalAlignment="Center"
-                               FontSize="20" />
-                
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="60" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <Button Grid.Column="0">
+                            <SymbolIcon Symbol="Help" />
+                            <Button.Flyout>
+                                <Flyout>
+                                    <TextBlock MaxWidth="360"
+                                               TextWrapping="Wrap">
+                                        Skupina se může nacházet v jednom z několika stavů.
+                                        Změna stavu je obvykle nevratná tzn. že například ze stavu <Italic>Čekání na spuštění</Italic>
+                                        se nelze vrátit do stavu <Italic>Přijímání členů</Italic>.
+                                        Vrátit stav zpět jde pouze ze stavu <Italic>Pozastaveno</Italic> do <Italic>Spuštěno</Italic>.
+                                        <LineBreak />
+                                        <Bold>Vytvořená</Bold> - Výchozí stav po vytvoření nové skupiny. V tomto stavu lze přiřazovat zadání ke skupině. Nelze se zatím do skupiny připojovat.
+                                        <LineBreak />
+                                        <Bold>Přijímání členů</Bold> - Skupina je viditelná a studenti se do ní mohou připojovat. Poslední stav ve kterém je možné měnit zadání.
+                                        <LineBreak />
+                                        <Bold>Čekání na spuštění</Bold> - Po přepnutí se studentům načte zadání a tudíž ho už není možné měnit.
+                                        <LineBreak />
+                                        <Bold>Spuštěná</Bold> - Skupina je spuštěná, tzn. studenti už mohou začít hrát, nebo používat aplikaci.
+                                        <LineBreak />
+                                        <Bold>Pozastavená</Bold> - Studentům se pozastaví spuštěná aplikace. Z tohoto stavu se lze vrátit do stavu <Italic>Spuštěná</Italic>.
+                                        <LineBreak />
+                                        <Bold>Ukončená</Bold> - Studentům se ukončí aplikace nebo zobrazí výsledky. Učitel má možnost výsledky ohodnotit.
+                                        <LineBreak />
+                                        <Bold>Odstranit skupinu</Bold> - Nejedná se přímo o stav, protože touto variantou dojde ke smazání skupiny včetně všech výsledků.
+                                    </TextBlock>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                        
+                        <TextBlock Grid.Column="1"
+                                   Text="Změnit na:"
+                                   Style="{StaticResource MyLabelStyle}"
+                                   HorizontalAlignment="Center"
+                                   FontSize="20" />
+                    </Grid>
                     <ItemsControl ItemsSource="{Binding GroupStates}"
                                   IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}">
                         <ItemsControl.ItemTemplate>

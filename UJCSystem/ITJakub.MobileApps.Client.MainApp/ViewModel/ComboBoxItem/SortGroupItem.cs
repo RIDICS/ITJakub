@@ -1,6 +1,6 @@
 ﻿namespace ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem
 {
-    public class SortTaskItem
+    public class SortGroupItem
     {
         public string Name { get; set; }
 
@@ -8,8 +8,7 @@
 
         public enum SortType
         {
-            Name,
-            CreateTime
+            Name, CreateTime, State
         }
     }
 }

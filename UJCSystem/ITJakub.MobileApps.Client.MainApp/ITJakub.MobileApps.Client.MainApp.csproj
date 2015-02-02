@@ -108,8 +108,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\ApplicationTypeComparator.cs" />
+    <Compile Include="ViewModel\ComboBoxItem\SortGroupItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SortTaskItem.cs" />
-    <Compile Include="ViewModel\ComboBoxItem\SortTaskType.cs" />
     <Compile Include="ViewModel\EditorHostViewModel.cs" />
     <Compile Include="ViewModel\GroupList\ConnectToGroupViewModel.cs" />
     <Compile Include="ViewModel\GroupList\CreateGroupViewModel.cs" />

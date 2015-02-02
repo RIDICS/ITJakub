@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private readonly INavigationService m_navigationService;
         private ObservableCollection<IGrouping<ApplicationType, TaskViewModel>> m_groupedTaskList;
         private ObservableCollection<TaskViewModel> m_taskList;
-        private SortTaskType m_selectedSort;
+        private SortTaskItem.SortType m_selectedSort;
         private bool m_loading;
         private bool m_noTask;
 
@@ -50,7 +50,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public SortTaskType SelectedSort
+        public SortTaskItem.SortType SelectedSort
         {
             get { return m_selectedSort; }
             set
@@ -111,10 +111,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             IOrderedEnumerable<TaskViewModel> sortedTaskList;
             switch (SelectedSort)
             {
-                case SortTaskType.Name:
+                case SortTaskItem.SortType.Name:
                     sortedTaskList = taskList.OrderBy(model => model.Name);
                     break;
-                case SortTaskType.CreateTime:
+                case SortTaskItem.SortType.CreateTime:
                     sortedTaskList = taskList.OrderByDescending(model => model.CreateTime);
                     break;
                 default:

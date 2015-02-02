@@ -8,6 +8,9 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Converter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
+            if (value == null)
+                return string.Empty;
+
             var groupState = (GroupState)value;
             switch (groupState)
             {

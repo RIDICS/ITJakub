@@ -61,6 +61,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Member,
                         State = (GroupState) groupDetails.State,
+                        CreateTime = groupDetails.CreateTime,
                         Members = new ObservableCollection<GroupMemberViewModel>(),
                         Task = new TaskViewModel()
                     };

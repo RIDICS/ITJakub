@@ -20,6 +20,9 @@ namespace ITJakub.MobileApps.DataContracts.Groups
         public GroupStateContract State { get; set; }
 
         [DataMember]
+        public DateTime CreateTime { get; set; }
+
+        [DataMember]
         public List<GroupMemberContract> Members { get; set; }
     }
 
@@ -28,9 +31,6 @@ namespace ITJakub.MobileApps.DataContracts.Groups
     {
         [DataMember]
         public string EnterCode { get; set; }
-
-        [DataMember]
-        public DateTime CreateTime { get; set; }
     }
 
     [DataContract]

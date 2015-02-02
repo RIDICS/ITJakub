@@ -12,6 +12,7 @@ using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
@@ -36,6 +37,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private ObservableCollection<GroupInfoViewModel> m_groups;
         private bool m_isOneItemSelected;
         private bool m_onlyOwnedGroupsSelected;
+        private bool m_isFilter;
+        private GroupState? m_currentFilter;
+        private SortGroupItem.SortType m_selectedSortType;
 
         public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -79,6 +83,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public RelayCommand ConnectCommand { get; private set; }
 
         public RelayCommand OpenTaskEditorCommand { get; private set; }
+
+        public RelayCommand<object> FilterCommand { get; private set; }
 
         public bool CommandBarOpen
         {
@@ -164,6 +170,44 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
+        public bool IsFilter
+        {
+            get { return m_isFilter; }
+            set
+            {
+                m_isFilter = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public GroupState? CurrentFilter
+        {
+            get { return m_currentFilter; }
+            set
+            {
+                m_currentFilter = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public SortGroupItem.SortType SelectedSortType
+        {
+            get { return m_selectedSortType; }
+            set
+            {
+                m_selectedSortType = value;
+                RaisePropertyChanged();
+
+                if (m_groups != null)
+                    DisplayGroupList(m_groups);
+            }
+        }
+
+        public int DefaultIndex
+        {
+            get { return 0; }
+        }
+
         public ConnectToGroupViewModel ConnectToGroupViewModel { get; set; }
 
         public CreateGroupViewModel CreateNewGroupViewModel { get; set; }
@@ -173,7 +217,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public SwitchGroupStateViewModel SwitchToPauseViewModel { get; set; }
 
         public SwitchGroupStateViewModel SwitchToRunningViewModel { get; set; }
-        
+
         private void InitCommands()
         {
             GoBackCommand = new RelayCommand(GoBack);
@@ -182,8 +226,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             ConnectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
             RefreshListCommand = new RelayCommand(LoadData);
             OpenTaskEditorCommand = new RelayCommand(() => Navigate(typeof(OwnedTaskListView)));
+            FilterCommand = new RelayCommand<object>(Filter);
         }
-        
+
         private void InitViewModels()
         {
             ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, LoadData);
@@ -218,9 +263,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                     return;
 
                 m_groups = groupList;
-                var groupedList = groupList.GroupBy(group => group.GroupType).OrderBy(group => group.Key);
-                GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
-                NoGroupExist = groupList.Count == 0;
+                DisplayGroupList(m_groups);
 
                 m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_groups, GroupUpdate);
             });
@@ -238,8 +281,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void GroupUpdate(Exception exception)
         {
-            if (exception != null)
-                return;
         }
 
         private void GroupClick(ItemClickEventArgs args)
@@ -277,6 +318,50 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             DeleteGroupViewModel.SelectedGroupCount = m_selectedGroups.Count;
 
             OnlyOwnedGroupsSelected = m_selectedGroups.All(group => group.GroupType == GroupType.Owner);
+        }
+
+        private IEnumerable<GroupInfoViewModel> GetSortedGroupList(IEnumerable<GroupInfoViewModel> list)
+        {
+            switch (SelectedSortType)
+            {
+                case SortGroupItem.SortType.CreateTime:
+                    return list.OrderByDescending(model => model.CreateTime);
+                case SortGroupItem.SortType.Name:
+                    return list.OrderBy(model => model.GroupName);
+                case SortGroupItem.SortType.State:
+                    return list.OrderBy(model => model.State);
+                default:
+                    return list;
+            }
+        }
+
+        private void DisplayGroupList(ObservableCollection<GroupInfoViewModel> groupList)
+        {
+            IEnumerable<GroupInfoViewModel> filteredList = groupList;
+            if (CurrentFilter != null)
+                filteredList = groupList.Where(group => group.State == CurrentFilter);
+
+            filteredList = GetSortedGroupList(filteredList);
+
+            var groupedList = filteredList.GroupBy(group => group.GroupType).OrderBy(group => group.Key);
+            GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
+            NoGroupExist = groupList.Count == 0;
+        }
+
+        private void Filter(object state)
+        {
+            if (state == null)
+            {
+                IsFilter = false;
+                CurrentFilter = null;
+            }
+            else
+            {
+                IsFilter = true;
+                CurrentFilter = state is int ? (GroupState) state : 0;
+            }
+
+            DisplayGroupList(m_groups);
         }
     }
 }
