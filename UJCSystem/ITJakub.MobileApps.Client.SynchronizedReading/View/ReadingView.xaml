@@ -16,8 +16,7 @@
         <control:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                                    SelectionLength="{Binding SelectionLength, Mode=TwoWay}"
                                    CursorPosition="{Binding CursorPosition, Mode=TwoWay}"
-                                   Mode="{Binding CurrentMode}"
-                                   SelectionChangedCommand="{Binding SelectionChangedCommand}" />
+                                   Mode="{Binding CurrentMode}" />
         
         <StackPanel Grid.Column="1"
                     Orientation="Vertical">

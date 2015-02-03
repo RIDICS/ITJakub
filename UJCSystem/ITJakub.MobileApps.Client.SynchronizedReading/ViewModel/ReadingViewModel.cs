@@ -1,6 +1,7 @@
 ﻿using System;
-using GalaSoft.MvvmLight.Command;
+using Windows.UI.Xaml;
 using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 using ITJakub.MobileApps.Client.SynchronizedReading.View.Control;
 
@@ -9,6 +10,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
     public class ReadingViewModel : ApplicationBaseViewModel
     {
         private readonly ReaderDataService m_dataService;
+        private readonly DispatcherTimer m_timer;
         private int m_selectionStart;
         private int m_selectionLength;
         private int m_cursorPosition;
@@ -16,12 +18,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private bool m_isSelectionModeEnabled;
         private Mode m_currentMode;
         private bool m_isPollingStarted;
+        private UpdateViewModel m_lastUpdateViewModel;
 
         public ReadingViewModel(ReaderDataService dataService)
         {
             m_dataService = dataService;
             m_isPollingStarted = false;
-            SelectionChangedCommand = new RelayCommand(SendUpdate);
+
+            m_timer = new DispatcherTimer();
+            m_timer.Interval = new TimeSpan(0, 0, 0, 0, (int) PollingInterval.VeryFast);
+            m_timer.Tick += (sender, o) => SendUpdate();
         }
 
         public override void InitializeCommunication()
@@ -38,6 +44,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         public override void StopCommunication()
         {
             m_dataService.StopPolling();
+            m_timer.Stop();
         }
 
         public int SelectionStart
@@ -67,7 +74,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             {
                 m_cursorPosition = value;
                 RaisePropertyChanged();
-                SendUpdate();
             }
         }
 
@@ -103,8 +109,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             }
         }
 
-        public RelayCommand SelectionChangedCommand { get; private set; }
-
         private void ProcessPollingUpdate(UpdateViewModel update, Exception exception)
         {
             if (exception != null)
@@ -121,15 +125,17 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             {
                 CurrentMode = IsSelectionModeEnabled ? Mode.Selector : Mode.Pointer;
                 m_dataService.StopPolling();
+                m_timer.Start();
                 m_isPollingStarted = false;
             }
             else
             {
                 CurrentMode = Mode.Reader;
-                
+                m_timer.Stop();
+
                 if (m_isPollingStarted)
                     return;
-                
+
                 m_dataService.StartPollingUpdates(ProcessPollingUpdate);
                 m_isPollingStarted = true;
             }
@@ -147,6 +153,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 CursorPosition = m_cursorPosition
             };
 
+            if (updateViewModel.Equals(m_lastUpdateViewModel))
+                return;
+
+            m_lastUpdateViewModel = updateViewModel;
             m_dataService.SendUpdate(updateViewModel, exception => { });
         }
     }
