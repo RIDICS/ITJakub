@@ -201,10 +201,14 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                 if (rect.Width < 1)
                     return;
 
-                var positionLeft = rect.Left + m_richEditBoxControl.Padding.Left + m_richEditBoxControl.BorderThickness.Left;
-                var positionTop = rect.Top;
+                // HACK scale values from RichEditBox
+                var point = ScaleHelper.ScalePoint(false, rect.Left, rect.Top);
+                var width = ScaleHelper.ScaleValue(false, rect.Width);
+
+                var positionLeft = point.X + m_richEditBoxControl.Padding.Left + m_richEditBoxControl.BorderThickness.Left;
+                var positionTop = point.Y;
                 comboBoxItem.ComboBox.Margin = new Thickness(positionLeft, positionTop, 0, 0);
-                comboBoxItem.ComboBox.Width = rect.Width - 3;
+                comboBoxItem.ComboBox.Width = width - 3;
             }
         }
 

@@ -9,6 +9,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="control1:ReaderRichEditBox">
                     <ScrollViewer x:Name="ScrollViewer"
+                                  HorizontalScrollMode="Disabled"
                                   Background="{TemplateBinding Background}"
                                   BorderBrush="{TemplateBinding BorderBrush}"
                                   BorderThickness="{TemplateBinding BorderThickness}">

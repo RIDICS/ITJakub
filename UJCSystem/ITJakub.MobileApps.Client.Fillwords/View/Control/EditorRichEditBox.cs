@@ -26,7 +26,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                 return;
 
             var point = e.GetPosition(this);
-            var shiftedPoint = new Point(point.X - Padding.Left, point.Y + m_contentElement.VerticalOffset - Padding.Top);
+            // HACK get scaled point for RichEditBox
+            point = ScaleHelper.ScalePoint(true, point.X, point.Y + m_contentElement.VerticalOffset);
+            
+            var shiftedPoint = new Point(point.X - Padding.Left, point.Y - Padding.Top);
             var textRange = Document.GetRangeFromPoint(shiftedPoint, PointOptions.ClientCoordinates);
             
             textRange.Expand(TextRangeUnit.Word);

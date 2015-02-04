@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Windows.Foundation;
+using Windows.Graphics.Display;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -132,13 +133,20 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             Rect rect;
             int hit;
             textRange.GetRect(PointOptions.ClientCoordinates, out rect, out hit);
+            var x = (rect.Left + rect.Right)/2;
+            var y = rect.Top;
+            var bottom = rect.Bottom;
 
-            var newMargin = new Thickness((rect.Left + rect.Right) /2 + CursorCorrectionLeft, rect.Bottom + CursorCorrectionTop, 0, 0);
+            // HACK get scaled point coordinates for RichEditBox
+            var point = ScalePoint(false, x, y);
+            bottom = ScaleValue(false, bottom);
+
+            var newMargin = new Thickness(point.X + CursorCorrectionLeft, bottom + CursorCorrectionTop, 0, 0);
             readerRichEditBox.m_cursorImage.Margin = newMargin;
 
             var scrollOffset = readerRichEditBox.m_scrollViewer.VerticalOffset;
-            if (rect.Top < scrollOffset || rect.Bottom > scrollOffset + readerRichEditBox.ActualHeight - 40)
-                readerRichEditBox.m_scrollViewer.ChangeView(null, rect.Top - 20, null);
+            if (point.Y < scrollOffset || bottom > scrollOffset + readerRichEditBox.ActualHeight - 40)
+                readerRichEditBox.m_scrollViewer.ChangeView(null, point.Y - ScaleValue(false, 20), null);
         }
 
         protected override void OnApplyTemplate()
@@ -161,8 +169,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             int hit;
 
             m_richEditBox.Document.Selection.GetRect(PointOptions.ClientCoordinates, out rectangle, out hit);
-            var top = rectangle.Top + 3;
-            var bottom = rectangle.Bottom + 3;
+            
+            // HACK get scaled values using ScaleValue method
+            var top = ScaleValue(false, rectangle.Top + 3);
+            var bottom = ScaleValue(false, rectangle.Bottom + 3);
+
             var textHeight = bottom - top;
             var boxHeight = ActualHeight;
             var scrollOffset = m_scrollViewer.VerticalOffset;
@@ -181,11 +192,37 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
                 return;
 
             var point = e.GetCurrentPoint(m_richEditBox).Position;
+
             point.X -= PointerCorrectionLeft;
             point.Y -= PointerCorrectionTop;
+
+            // HACK get unscaled point coordinates for RichEditBox
+            point = ScalePoint(true, point.X, point.Y);
             
             var textRange = m_richEditBox.Document.GetRangeFromPoint(point, PointOptions.ClientCoordinates);
             CursorPosition = textRange.StartPosition;
+        }
+
+        private static Point ScalePoint(bool inverse, double x, double y)
+        {
+            var resolutionScale = DisplayInformation.GetForCurrentView().ResolutionScale;
+            if (resolutionScale == ResolutionScale.Scale100Percent)
+                return new Point(x, y);
+            
+            var scale = (double) resolutionScale / 100.0;
+
+            return inverse ? new Point(x / scale, y / scale) : new Point(x * scale, y * scale);
+        }
+
+        private static double ScaleValue(bool inverse, double value)
+        {
+            var resolutionScale = DisplayInformation.GetForCurrentView().ResolutionScale;
+            if (resolutionScale == ResolutionScale.Scale100Percent)
+                return value;
+
+            var scale = (double)resolutionScale / 100.0;
+
+            return inverse ? value/ scale : value * scale;
         }
     }
 
