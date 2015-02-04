@@ -8,29 +8,42 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="control1:ReaderRichEditBox">
-                    <ScrollViewer x:Name="ScrollViewer"
-                                  HorizontalScrollMode="Disabled"
-                                  Background="{TemplateBinding Background}"
-                                  BorderBrush="{TemplateBinding BorderBrush}"
-                                  BorderThickness="{TemplateBinding BorderThickness}">
-                        
-                        <Grid>
-                            <control:BindableRichEditBox
-                                x:Name="RichEditBox"
-                                Padding="10,3,20,5"
-                                DocumentRtf="{TemplateBinding DocumentRtf}" />
+                    <Grid>
+                        <ScrollViewer x:Name="ScrollViewer"
+                                      HorizontalScrollMode="Disabled"
+                                      Background="{TemplateBinding Background}"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      BorderThickness="{TemplateBinding BorderThickness}">
                             
-                            <Grid Background="#01FFFFFF"
-                                  x:Name="OverlapGrid" />
+                            <Grid>
+                                <control:BindableRichEditBox
+                                    x:Name="RichEditBox"
+                                    Padding="10,3,20,5"
+                                    ScrollViewer.HorizontalScrollMode="Disabled"
+                                    ScrollViewer.VerticalScrollMode="Disabled"
+                                    DocumentRtf="{TemplateBinding DocumentRtf}" />
+
+                                <Grid x:Name="ScrollBarGrid"
+                                      Width="18"
+                                      HorizontalAlignment="Right"
+                                      Background="#30000000" />
+                                
+                                <Grid Background="#01FFFFFF"
+                                      x:Name="OverlapGrid" />
                             
-                            <Image Source="../Icon/one_finger-48.png"
-                                   Stretch="None"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Top"
-                                   x:Name="CursorImage" />
-                        </Grid>
+                                <Image Source="../Icon/one_finger-48.png"
+                                       Stretch="None"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       x:Name="CursorImage" />
+                            </Grid>
+                            
+                        </ScrollViewer>
                         
-                    </ScrollViewer>
+                        <Grid x:Name="ScrollOverlapGrid"
+                              Background="Transparent"
+                              Margin="0,0,20,0 "/>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

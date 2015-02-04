@@ -13,11 +13,13 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
     [TemplatePart(Name = "ScrollViewer", Type = typeof(ScrollViewer))]
     [TemplatePart(Name = "OverlapGrid", Type = typeof(Grid))]
     [TemplatePart(Name = "CursorImage", Type = typeof(Image))]
+    [TemplatePart(Name = "ScrollOverlapGrid", Type = typeof(Grid))]
+    [TemplatePart(Name = "ScrollBarGrid", Type = typeof(Grid))]
     public sealed class ReaderRichEditBox : Windows.UI.Xaml.Controls.Control
     {
         private const double CursorCorrectionLeft = -9.0;
         private const double CursorCorrectionTop = 3.0;
-        private const double PointerCorrectionTop = 30.0;
+        private const double PointerCorrectionTop = 40.0;
         private const double PointerCorrectionLeft = 20.0;
 
         private bool m_selectionChangedRespond;
@@ -25,6 +27,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         private ScrollViewer m_scrollViewer;
         private Grid m_overlapGrid;
         private Image m_cursorImage;
+        private Grid m_scrollOverlapGrid;
+        private Grid m_scrollBarGrid;
 
         public ReaderRichEditBox()
         {
@@ -118,7 +122,24 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             if (readerRichEditBox == null || readerRichEditBox.m_overlapGrid == null)
                 return;
 
-            readerRichEditBox.m_overlapGrid.Visibility = readerRichEditBox.Mode == Mode.Selector ? Visibility.Collapsed : Visibility.Visible;
+            switch (readerRichEditBox.Mode)
+            {
+                case Mode.Selector:
+                    readerRichEditBox.m_overlapGrid.Visibility = Visibility.Collapsed;
+                    readerRichEditBox.m_scrollOverlapGrid.Visibility = Visibility.Collapsed;
+                    readerRichEditBox.m_scrollBarGrid.Visibility = Visibility.Collapsed;
+                    break;
+                case Mode.Pointer:
+                    readerRichEditBox.m_overlapGrid.Visibility = Visibility.Visible;
+                    readerRichEditBox.m_scrollOverlapGrid.Visibility = Visibility.Visible;
+                    readerRichEditBox.m_scrollBarGrid.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    readerRichEditBox.m_overlapGrid.Visibility = Visibility.Visible;
+                    readerRichEditBox.m_scrollOverlapGrid.Visibility = Visibility.Collapsed;
+                    readerRichEditBox.m_scrollBarGrid.Visibility = Visibility.Collapsed;
+                    break;
+            }
         }
 
         private static void OnCursorPositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -156,6 +177,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             m_scrollViewer = GetTemplateChild("ScrollViewer") as ScrollViewer;
             m_overlapGrid = GetTemplateChild("OverlapGrid") as Grid;
             m_cursorImage = GetTemplateChild("CursorImage") as Image;
+            m_scrollOverlapGrid = GetTemplateChild("ScrollOverlapGrid") as Grid;
+            m_scrollBarGrid = GetTemplateChild("ScrollBarGrid") as Grid;
 
             if (m_richEditBox != null)
                 m_richEditBox.SelectionChanged += OnSelectionChanged;
