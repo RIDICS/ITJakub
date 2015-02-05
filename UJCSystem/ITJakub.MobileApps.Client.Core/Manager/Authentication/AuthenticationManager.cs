@@ -144,7 +144,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             {
                 FirstName = UserLoginInfo.FirstName,
                 LastName = UserLoginInfo.LastName,
-                UserRole = UserLoginInfo.UserRole
+                UserRole = UserRoleContract.Teacher // TODO direct Teacher role assignment for testing
             };
             return viewModel;
         }
@@ -153,6 +153,5 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             return UserLoginInfo == null ? (long?) null : UserLoginInfo.UserId;
         }
-
     }
 }

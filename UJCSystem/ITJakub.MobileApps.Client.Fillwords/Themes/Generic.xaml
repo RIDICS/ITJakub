@@ -284,7 +284,9 @@
                                                          BorderBrush="#80ffffff"
                                                          Background="#80ffffff"
                                                          IsReadOnly="True"
-                                                         x:Name="RichEditBox" />
+                                                         x:Name="RichEditBox"
+                                                         ScrollViewer.HorizontalScrollMode="Disabled"
+                                                         ScrollViewer.VerticalScrollMode="Disabled" />
                             <Canvas x:Name="Canvas" />
                         </Grid>
                     </ScrollViewer>

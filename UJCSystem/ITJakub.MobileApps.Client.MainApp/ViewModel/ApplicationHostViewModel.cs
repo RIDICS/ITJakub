@@ -14,6 +14,7 @@ using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
+using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -43,17 +44,35 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_dataService = dataService;
             m_navigationService = navigationService;
             m_pollingService = pollingService;
+
             GoBackCommand = new RelayCommand(GoBack);
             ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
+            MemberList = new ObservableCollection<GroupMemberViewModel>();
+
             m_taskLoaded = false;
             m_unreadMessageCount = 0;
-
+            
             m_dataService.GetCurrentGroupId(groupId =>
             {
                 WaitingForStart = true;
                 WaitingForData = true;
                 m_groupId = groupId;
                 m_pollingService.RegisterForGetGroupState(GroupStatePollingInterval, groupId, GroupStateUpdate);
+            });
+
+            m_dataService.GetLoggedUserInfo((user, exception) =>
+            {
+                if (exception != null)
+                {
+                    IsTeacherMode = false;
+                    return;
+                }
+
+                IsTeacherMode = user.UserRole == UserRoleContract.Teacher;
+                if (IsTeacherMode)
+                {
+                    //TODO start polling
+                }
             });
 
             Messenger.Default.Register<LogOutMessage>(this, message => StopCommunication());
@@ -63,9 +82,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (!IsChatDisplayed)
                     UnreadMessageCount += message.Count;
             });
-
-            MemberList = new ObservableCollection<GroupMemberViewModel>();
-            IsTeacherMode = true; // TODO
         }
 
         private void StopCommunication()
