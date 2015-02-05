@@ -1,4 +1,4 @@
-﻿namespace ITJakub.MobileApps.Client.SampleApp
+﻿namespace ITJakub.MobileApps.Client.SampleApp.View
 {
     public sealed partial class SampleEditorView
     {

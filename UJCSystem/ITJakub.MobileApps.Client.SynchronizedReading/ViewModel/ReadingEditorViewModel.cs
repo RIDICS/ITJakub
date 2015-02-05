@@ -1,4 +1,4 @@
-﻿using ITJakub.MobileApps.Client.Shared;
+﻿using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 
 namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel

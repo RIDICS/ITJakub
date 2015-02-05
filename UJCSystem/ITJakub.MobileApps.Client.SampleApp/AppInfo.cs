@@ -1,8 +1,12 @@
 ﻿using System;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.SampleApp.Service;
+using ITJakub.MobileApps.Client.SampleApp.View;
+using ITJakub.MobileApps.Client.SampleApp.ViewModel;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.SampleApp
 {

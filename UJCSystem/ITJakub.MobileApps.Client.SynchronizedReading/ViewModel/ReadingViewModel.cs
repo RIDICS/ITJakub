@@ -2,6 +2,7 @@
 using Windows.UI.Xaml;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 using ITJakub.MobileApps.Client.SynchronizedReading.View.Control;
 

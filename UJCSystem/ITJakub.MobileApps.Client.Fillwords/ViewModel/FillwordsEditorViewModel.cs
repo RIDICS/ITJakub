@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
-using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 {

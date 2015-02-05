@@ -1,6 +1,7 @@
-﻿using ITJakub.MobileApps.Client.Shared;
+﻿using ITJakub.MobileApps.Client.SampleApp.Service;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
 
-namespace ITJakub.MobileApps.Client.SampleApp
+namespace ITJakub.MobileApps.Client.SampleApp.ViewModel
 {
     public class SampleViewModel : ApplicationBaseViewModel
     {

@@ -3,6 +3,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 using ITJakub.MobileApps.Client.SynchronizedReading.View;
 using ITJakub.MobileApps.Client.SynchronizedReading.ViewModel;

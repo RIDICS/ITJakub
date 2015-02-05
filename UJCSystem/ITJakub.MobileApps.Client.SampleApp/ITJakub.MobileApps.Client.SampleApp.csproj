@@ -105,27 +105,23 @@
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleDataService.cs" />
-    <Compile Include="SampleEditorView.xaml.cs">
+    <Compile Include="Service\SampleDataService.cs" />
+    <Compile Include="Service\SampleManager.cs" />
+    <Compile Include="View\SampleEditorView.xaml.cs">
       <DependentUpon>SampleEditorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SampleEditorViewModel.cs" />
-    <Compile Include="SampleView.xaml.cs">
+    <Compile Include="ViewModel\SampleEditorViewModel.cs" />
+    <Compile Include="View\SampleView.xaml.cs">
       <DependentUpon>SampleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SampleViewModel.cs" />
+    <Compile Include="ViewModel\SampleViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="DataTemplate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="SampleEditorView.xaml">
+    <Page Include="View\SampleEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SampleView.xaml">
+    <Page Include="View\SampleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

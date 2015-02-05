@@ -1,7 +1,7 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
 
-namespace ITJakub.MobileApps.Client.Shared
+namespace ITJakub.MobileApps.Client.Shared.ViewModel
 {
     public abstract class ApplicationBaseViewModel : ViewModelBase
     {

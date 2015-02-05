@@ -2,7 +2,7 @@
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Hangman.DataService;
-using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 {

@@ -104,7 +104,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ApplicationBase.cs" />
-    <Compile Include="ApplicationBaseViewModel.cs" />
+    <Compile Include="ViewModel\ApplicationBaseViewModel.cs" />
     <Compile Include="Communication\ClientCommunicationException.cs" />
     <Compile Include="Communication\IPollingService.cs" />
     <Compile Include="Communication\PollingInterval.cs" />
@@ -117,7 +117,7 @@
     <Compile Include="Converter\DoubleToStringConverter.cs" />
     <Compile Include="Converter\HighlightMeConverter.cs" />
     <Compile Include="Converter\TimeSpanConverter.cs" />
-    <Compile Include="EditorBaseViewModel.cs" />
+    <Compile Include="ViewModel\EditorBaseViewModel.cs" />
     <Compile Include="Enum\ApplicationCategory.cs" />
     <Compile Include="Enum\ApplicationRoleType.cs" />
     <Compile Include="Enum\ApplicationType.cs" />
