@@ -7,13 +7,55 @@
     xmlns:core="using:ITJakub.MobileApps.Client.Core"
     xmlns:userMenu="using:ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     DataContext="{Binding ApplicationHostViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
     <Page.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <core:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
+        <converter1:MessageCountToNotificationConverter x:Key="MessageCountToNotificationConverter" />
     </Page.Resources>
+    
+    <Page.TopAppBar>
+        <AppBar Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0"
+                            Orientation="Vertical">
+                    <Button Content="Action" />
+                </StackPanel>
+                
+                <ListView Grid.Column="1"
+                          SelectionMode="Single"
+                          ItemsSource="{Binding MemberList}"
+                          Style="{StaticResource HorizontalListView}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical"
+                                        MinWidth="100"
+                                        Margin="0,0,0,10">
+                                <Image Width="50"
+                                       Height="50"
+                                       Source="{Binding UserAvatar}"
+                                       HorizontalAlignment="Center" />
+                                <TextBlock Text="{Binding FirstName}"
+                                           HorizontalAlignment="Center" />
+                                <TextBlock Text="{Binding LastName}"
+                                           HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    
+                </ListView>
+            </Grid>
+        </AppBar>
+    </Page.TopAppBar>
     
     <Page.BottomAppBar>
         <CommandBar IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
@@ -81,7 +123,33 @@
                             Content="{Binding ChatApplicationViewModel}"
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
                             VerticalContentAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch" />
+                            HorizontalContentAlignment="Stretch" />            
+        </Grid>
+
+        <Grid Grid.Row="1"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Bottom"
+              Margin="0,0,30,30"
+              Background="LightGoldenrodYellow"
+              Width="250"
+              Height="80"
+              Visibility="{Binding IsChatNotificationVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button Background="Transparent"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    BorderThickness="0"
+                    Command="{Binding ShowChatCommand}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Upozornění"
+                               Foreground="Black"
+                               FontWeight="Bold" />
+                    <TextBlock Text="{Binding UnreadMessageCount, Converter={StaticResource MessageCountToNotificationConverter}}"
+                               TextWrapping="Wrap"
+                               Foreground="Black" />
+                </StackPanel>
+            </Button>
         </Grid>
 
         <Grid Grid.Row="1"

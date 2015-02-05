@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Hangman.DataService;
-using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 

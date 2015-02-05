@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Chat.Message;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
+using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
-using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
@@ -33,6 +36,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_taskLoaded;
         private long m_groupId;
         private bool m_paused;
+        private int m_unreadMessageCount;
 
         public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -40,7 +44,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService = navigationService;
             m_pollingService = pollingService;
             GoBackCommand = new RelayCommand(GoBack);
+            ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
             m_taskLoaded = false;
+            m_unreadMessageCount = 0;
 
             m_dataService.GetCurrentGroupId(groupId =>
             {
@@ -51,6 +57,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
 
             Messenger.Default.Register<LogOutMessage>(this, message => StopCommunication());
+
+            Messenger.Default.Register<NotifyNewMessagesMessage>(this, message =>
+            {
+                if (!IsChatDisplayed)
+                    UnreadMessageCount += message.Count;
+            });
+
+            MemberList = new ObservableCollection<GroupMemberViewModel>();
+            IsTeacherMode = true; // TODO
         }
 
         private void StopCommunication()
@@ -171,7 +186,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_isChatDisplayed = value;
                 RaisePropertyChanged();
                 if (m_isChatDisplayed)
+                {
                     IsCommandBarOpen = false;
+                    UnreadMessageCount = 0;
+                }
             }
         }
 
@@ -223,6 +241,28 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             get { return m_waitingForStart || m_waitingForData; }
         }
 
+        public int UnreadMessageCount
+        {
+            get { return m_unreadMessageCount; }
+            set
+            {
+                m_unreadMessageCount = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => IsChatNotificationVisible);
+            }
+        }
+
+        public bool IsChatNotificationVisible
+        {
+            get { return m_unreadMessageCount > 0; }
+        }
+
+        public bool IsTeacherMode { get; set; }
+
+        public ObservableCollection<GroupMemberViewModel> MemberList { get; set; }
+
         public RelayCommand GoBackCommand { get; private set; }
+        
+        public RelayCommand ShowChatCommand { get; private set; }
     }
 }

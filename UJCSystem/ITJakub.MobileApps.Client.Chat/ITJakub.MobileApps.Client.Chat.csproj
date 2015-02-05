@@ -114,6 +114,7 @@
     <Compile Include="DataContract\ChatMessage.cs" />
     <Compile Include="DataService\ChatManager.cs" />
     <Compile Include="DataService\IChatDataService.cs" />
+    <Compile Include="Message\NotifyNewMessagesMessage.cs" />
     <Compile Include="ViewModel\MessageViewModel.cs" />
     <Compile Include="View\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>

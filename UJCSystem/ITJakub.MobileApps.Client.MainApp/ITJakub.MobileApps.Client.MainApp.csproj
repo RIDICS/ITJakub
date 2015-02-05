@@ -125,6 +125,7 @@
     <Compile Include="View\Converter\GroupCountToStringConverter.cs" />
     <Compile Include="View\Converter\GroupStateToNameConverter.cs" />
     <Compile Include="View\Converter\GroupStateToSymbolConverter.cs" />
+    <Compile Include="View\Converter\MessageCountToNotificationConverter.cs" />
     <Compile Include="View\Converter\NotChosenStringConverter.cs" />
     <Compile Include="View\Converter\BooleanToColorConverter.cs" />
     <Compile Include="View\EditorHostView.xaml.cs">

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Chat.DataService;
-using ITJakub.MobileApps.Client.Shared;
+using ITJakub.MobileApps.Client.Chat.Message;
 using ITJakub.MobileApps.Client.Shared.Control;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 
@@ -15,9 +15,6 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
         private ObservableCollection<MessageViewModel> m_messageHistory;
         private bool m_loading;
 
-        /// <summary>
-        /// Initializes a new instance of the ChatViewModel class.
-        /// </summary>
         public ChatViewModel(IChatDataService dataService)
         {
             m_dataService = dataService;
@@ -35,6 +32,9 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             {
                 if (exception != null)
                     return;
+
+                if (messages.Count > 0)
+                    MessengerInstance.Send(new NotifyNewMessagesMessage {Count = messages.Count});
 
                 foreach (var message in messages)
                 {
