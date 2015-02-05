@@ -10,7 +10,7 @@
     d:DataContext="{d:DesignInstance d:Type=viewModel:ReadingViewModel}">
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          Margin="120,0,120,20">
+          Margin="120,0,120,40">
         
         <!--TwoWay binding fixed bug-->
         <control:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"

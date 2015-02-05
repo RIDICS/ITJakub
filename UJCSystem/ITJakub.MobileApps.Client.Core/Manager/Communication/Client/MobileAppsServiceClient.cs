@@ -41,7 +41,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     Channel.CreateUser(providerContract, providerToken, userDetail);
                 }
-                catch (FaultException ex)
+                catch (FaultException)
                 {
                     throw new UserAlreadyRegisteredException();
                 }
@@ -68,7 +68,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.LoginUser(providerContract, providerToken, email);
                 }
-                catch (FaultException ex)
+                catch (FaultException)
                 {
                     throw new UserNotRegisteredException();
                 }

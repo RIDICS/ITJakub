@@ -166,8 +166,14 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             readerRichEditBox.m_cursorImage.Margin = newMargin;
 
             var scrollOffset = readerRichEditBox.m_scrollViewer.VerticalOffset;
-            if (point.Y < scrollOffset || bottom > scrollOffset + readerRichEditBox.ActualHeight - 40)
+            if (point.Y < scrollOffset)
+            {
                 readerRichEditBox.m_scrollViewer.ChangeView(null, point.Y - ScaleValue(false, 20), null);
+            }
+            else if (bottom > scrollOffset + readerRichEditBox.ActualHeight - 60)
+            {
+                readerRichEditBox.m_scrollViewer.ChangeView(null, point.Y - readerRichEditBox.ActualHeight + 90, null);
+            }
         }
 
         protected override void OnApplyTemplate()
@@ -182,7 +188,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 
             if (m_richEditBox != null)
                 m_richEditBox.SelectionChanged += OnSelectionChanged;
-            
+
             OnModeChanged(this, null);
         }
         
@@ -246,6 +252,14 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             var scale = (double)resolutionScale / 100.0;
 
             return inverse ? value/ scale : value * scale;
+        }
+
+        protected override void OnPointerWheelChanged(PointerRoutedEventArgs e)
+        {
+            base.OnPointerWheelChanged(e);
+            var properties = e.GetCurrentPoint(this).Properties;
+            var delta = properties.MouseWheelDelta;
+            m_scrollViewer.ChangeView(null, m_scrollViewer.VerticalOffset - delta, null);
         }
     }
 

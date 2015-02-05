@@ -26,7 +26,7 @@
                                 <Grid x:Name="ScrollBarGrid"
                                       Width="18"
                                       HorizontalAlignment="Right"
-                                      Background="#30000000" />
+                                      Background="#20000000" />
                                 
                                 <Grid Background="#01FFFFFF"
                                       x:Name="OverlapGrid" />
