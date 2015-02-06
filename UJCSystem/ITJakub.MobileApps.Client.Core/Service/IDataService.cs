@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
-using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.Core.Service
 {
@@ -15,7 +15,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
     {
         void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback);
         void CreateUser(AuthProvidersContract loginProviderType, Action<bool, Exception> callback);
-        void GetLoggedUserInfo(Action<LoggedUserViewModel, Exception> callback);
+        void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback);
         void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback);
         void LogOut();
         
@@ -33,7 +33,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         void GetMyTasks(Action<ObservableCollection<TaskViewModel>, Exception> callback);
         void AssignTaskToCurrentGroup(long taskId, Action<Exception> callback);
         void SetCurrentGroup(long groupId);
-        void UpdateGroupState(long groupId, GroupState newState, Action<Exception> callback);
+        void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback);
         void RemoveGroup(long groupId, Action<Exception> callback);
         //New
         void GetCurrentGroupId(Action<long> callback);

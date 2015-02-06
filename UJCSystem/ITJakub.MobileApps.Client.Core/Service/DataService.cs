@@ -11,6 +11,7 @@ using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 using Microsoft.Practices.Unity;
 
 namespace ITJakub.MobileApps.Client.Core.Service
@@ -99,7 +100,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_groupManager.OpenGroup(groupId);
         }
 
-        public void UpdateGroupState(long groupId, GroupState newState, Action<Exception> callback)
+        public void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback)
         {
             m_groupManager.UpdateGroupState(groupId, newState, callback);
         }
@@ -149,9 +150,9 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_authenticationManager.CreateUserByLoginProvider(loginProviderType, callback);
         }
 
-        public void GetLoggedUserInfo(Action<LoggedUserViewModel, Exception> callback)
+        public void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
-            m_authenticationManager.GetLoggedUserInfo(callback);
+            m_authenticationManager.GetLoggedUserInfo(getUserAvatar, callback);
         }
 
         public void LogOut()

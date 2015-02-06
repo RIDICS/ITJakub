@@ -10,8 +10,8 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
-    xmlns:groups="using:ITJakub.MobileApps.Client.Core.Manager.Groups"
     xmlns:comboBoxItem="using:ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem"
+    xmlns:groups="using:ITJakub.MobileApps.DataContracts.Groups"
     DataContext="{Binding GroupListViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d" >
 
@@ -28,7 +28,7 @@
     </Page.Resources>
 
     <Page.BottomAppBar>
-        <CommandBar IsOpen="{Binding CommandBarOpen, Mode=TwoWay}"
+        <CommandBar IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}"
                     IsSticky="True">
 
             <AppBarButton Icon="Filter"
@@ -41,37 +41,37 @@
                         <MenuFlyoutItem Text="Vytvořené"
                                         Command="{Binding FilterCommand}">
                             <MenuFlyoutItem.CommandParameter>
-                                <groups:GroupState>Created</groups:GroupState>
+                                <groups:GroupStateContract>Created</groups:GroupStateContract>
                             </MenuFlyoutItem.CommandParameter>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem Text="Čekající na spuštění"
                                         Command="{Binding FilterCommand}">
                             <MenuFlyoutItem.CommandParameter>
-                                <groups:GroupState>WaitingForStart</groups:GroupState>
+                                <groups:GroupStateContract>WaitingForStart</groups:GroupStateContract>
                             </MenuFlyoutItem.CommandParameter>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem Text="Přijímající členy"
                                         Command="{Binding FilterCommand}">
                             <MenuFlyoutItem.CommandParameter>
-                                <groups:GroupState>AcceptMembers</groups:GroupState>
+                                <groups:GroupStateContract>AcceptMembers</groups:GroupStateContract>
                             </MenuFlyoutItem.CommandParameter>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem Text="Spuštěné"
                                         Command="{Binding FilterCommand}">
                             <MenuFlyoutItem.CommandParameter>
-                                <groups:GroupState>Running</groups:GroupState>
+                                <groups:GroupStateContract>Running</groups:GroupStateContract>
                             </MenuFlyoutItem.CommandParameter>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem Text="Pozastavené"
                                         Command="{Binding FilterCommand}">
                             <MenuFlyoutItem.CommandParameter>
-                                <groups:GroupState>Paused</groups:GroupState>
+                                <groups:GroupStateContract>Paused</groups:GroupStateContract>
                             </MenuFlyoutItem.CommandParameter>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem Text="Ukončené"
                                         Command="{Binding FilterCommand}">
                             <MenuFlyoutItem.CommandParameter>
-                                <groups:GroupState>Closed</groups:GroupState>
+                                <groups:GroupStateContract>Closed</groups:GroupStateContract>
                             </MenuFlyoutItem.CommandParameter>
                         </MenuFlyoutItem>
                     </MenuFlyout>
@@ -84,7 +84,7 @@
 
             <AppBarButton Icon="Bullets"
                           Label="Editor zadání"
-                          Visibility="{Binding TeachersButtonVisibility}"
+                          Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}"
                           Command="{Binding OpenTaskEditorCommand}" />
             
             <AppBarButton Icon="Forward"
@@ -143,7 +143,7 @@
 
             <AppBarButton Icon="Add"
                           Label="Vytvořit skupinu"
-                          Visibility="{Binding TeachersButtonVisibility}"
+                          Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}"
                           x:Name="CreateGroupButton">
                 <AppBarButton.Flyout>
                     <Flyout control:FlyoutHelpers.IsOpen="{Binding CreateNewGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
@@ -201,11 +201,11 @@
                 <AppBarButton Icon="Forward"
                               Label="Otevřít"
                               Command="{Binding ConnectCommand}"
-                              Visibility="{Binding ConnectButtonVisibility}"
+                              Visibility="{Binding IsGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               IsEnabled="{Binding IsOneItemSelected}"/>
                 <AppBarButton Icon="Delete"
                               Label="Odstranit"
-                              Visibility="{Binding TeachersSecondaryButtonVisibility}"
+                              Visibility="{Binding IsTeacherAndGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               IsEnabled="{Binding OnlyOwnedGroupsSelected}"
                               x:Name="DeleteGroupButton">
                     <AppBarButton.Flyout>
@@ -266,7 +266,7 @@
                 <AppBarButton Icon="Pause"
                               Label="Přepnout na pozastaveno"
                               IsEnabled="{Binding OnlyOwnedGroupsSelected}"
-                              Visibility="{Binding TeachersSecondaryButtonVisibility}"
+                              Visibility="{Binding IsTeacherAndGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               x:Name="PauseButton">
                     <AppBarButton.Flyout>
                         <Flyout control:FlyoutHelpers.Parent="{Binding ElementName=PauseButton}"
@@ -314,7 +314,7 @@
                 <AppBarButton Icon="Play"
                               Label="Přepnout na spuštěno"
                               IsEnabled="{Binding OnlyOwnedGroupsSelected}"
-                              Visibility="{Binding TeachersSecondaryButtonVisibility}"
+                              Visibility="{Binding IsTeacherAndGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               x:Name="PlayButton">
                     <AppBarButton.Flyout>
                         <Flyout control:FlyoutHelpers.Parent="{Binding ElementName=PlayButton}"
@@ -590,6 +590,6 @@
                    Margin="120,20,0,0"
                    Text="Nejsou dostupné žádné skupiny."
                    Style="{StaticResource SubheaderTextBlockStyle}"
-                   Visibility="{Binding NoGroupExist, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                   Visibility="{Binding IsGroupListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Page>

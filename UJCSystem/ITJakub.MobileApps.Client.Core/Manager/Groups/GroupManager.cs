@@ -9,6 +9,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.Core.ViewModel.Comparer;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Groups;
@@ -60,7 +61,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         GroupName = groupDetails.Name,
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Member,
-                        State = (GroupState) groupDetails.State,
+                        State = groupDetails.State,
                         CreateTime = groupDetails.CreateTime,
                         Members = new ObservableCollection<GroupMemberViewModel>(),
                         Task = new TaskViewModel()
@@ -76,7 +77,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         GroupName = groupDetails.Name,
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Owner,
-                        State = (GroupState)groupDetails.State,
+                        State = groupDetails.State,
                         GroupCode = groupDetails.EnterCode,
                         CreateTime = groupDetails.CreateTime,
                         Members = new ObservableCollection<GroupMemberViewModel>(),
@@ -107,11 +108,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 };
 
                 group.Members.Add(memberViewModel);
-                group.MemberCount = group.Members.Count;
-
+                
                 m_userAvatarCache.AddAvatarUrl(member.Id, member.AvatarUrl);
                 LoadMemberAvatar(memberViewModel);
             }
+
+            group.MemberCount = group.Members.Count;
+            group.Members = new ObservableCollection<GroupMemberViewModel>(group.Members.OrderBy(model => model, new GroupMemberComparer()));
         }
 
         public async void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)
@@ -182,7 +185,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     GroupName = groupInfo.Name,
                     CreateTime = groupInfo.CreateTime,
                     GroupCode = groupInfo.EnterCode,
-                    State = (GroupState) groupInfo.State,
+                    State = groupInfo.State,
                 };
 
                 var task = groupInfo.Task;
@@ -222,6 +225,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 }).ToList();
 
                 var result = await m_serviceClient.GetGroupsUpdateAsync(oldGroupInfo);
+                if (result.Count == 0)
+                    return;
+
                 var groupUpdate = result.ToDictionary(group => group.Id, group => group);
 
                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
@@ -243,12 +249,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             CurrentGroupId = groupId;
         }
-        
-        public async void UpdateGroupState(long groupId, GroupState newState, Action<Exception> callback)
+
+        public async void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback)
         {
             try
             {
-                await m_serviceClient.UpdateGroupStateAsync(groupId, (GroupStateContract) newState);
+                await m_serviceClient.UpdateGroupStateAsync(groupId, newState);
                 callback(null);
             }
             catch (ClientCommunicationException exception)
@@ -270,16 +276,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             }
         }
 
-        public async Task GetGroupStateAsync(long groupId, Action<GroupState, Exception> callback)
+        public async Task GetGroupStateAsync(long groupId, Action<GroupStateContract, Exception> callback)
         {
             try
             {
                 var state = await m_serviceClient.GetGroupStateAsync(groupId);
-                callback((GroupState) state, null);
+                callback(state, null);
             }
             catch (ClientCommunicationException exception)
             {
-                callback(GroupState.Closed, exception);
+                callback(GroupStateContract.Closed, exception);
             }
         }
     }

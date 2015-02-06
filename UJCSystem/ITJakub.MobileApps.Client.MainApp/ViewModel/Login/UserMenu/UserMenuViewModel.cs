@@ -25,12 +25,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
 
         private void LoadInitData()
         {
-            m_dataService.GetLoggedUserInfo((userInfo, exception) =>
+            m_dataService.GetLoggedUserInfo(true, userInfo =>
             {
-                if (exception != null)
-                    return;
-                
-
                 FirstName = userInfo.FirstName;
                 LastName = userInfo.LastName;
                 UserAvatar = userInfo.UserAvatar;

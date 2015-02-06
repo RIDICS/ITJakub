@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
-using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.Core.Service
 {
@@ -26,9 +26,9 @@ namespace ITJakub.MobileApps.Client.Core.Service
             callback(true, null);
         }
 
-        public void GetLoggedUserInfo(Action<LoggedUserViewModel, Exception> callback)
+        public void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
-            callback(new LoggedUserViewModel {FirstName = "Test", LastName = "Testovaci"}, null);
+            callback(new LoggedUserViewModel {FirstName = "Test", LastName = "Testovaci"});
         }
 
         public void LogOut() { }
@@ -170,7 +170,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         public void SetCurrentGroup(long groupId) { }
 
-        public void UpdateGroupState(long groupId, GroupState newState, Action<Exception> callback) { }
+        public void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback) { }
 
         public void RemoveGroup(long groupId, Action<Exception> callback) { }
 

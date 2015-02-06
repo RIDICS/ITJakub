@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 {
     public class SwitchGroupStateViewModel : ViewModelBase
     {
-        private readonly GroupState m_groupState;
+        private readonly GroupStateContract m_groupState;
         private readonly IDataService m_dataService;
         private readonly IList<GroupInfoViewModel> m_selectedGroups;
         private readonly Action m_refreshAction;
@@ -19,7 +19,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private bool m_isFlyoutOpen;
         private bool m_showError;
 
-        public SwitchGroupStateViewModel(GroupState groupState, IDataService dataService, IList<GroupInfoViewModel> selectedGroups, Action refreshAction)
+        public SwitchGroupStateViewModel(GroupStateContract groupState, IDataService dataService, IList<GroupInfoViewModel> selectedGroups, Action refreshAction)
         {
             m_groupState = groupState;
             m_dataService = dataService;

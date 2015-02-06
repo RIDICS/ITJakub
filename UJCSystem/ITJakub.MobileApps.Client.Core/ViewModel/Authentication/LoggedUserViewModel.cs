@@ -1,6 +1,5 @@
 ﻿using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
-using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.ViewModel.Authentication
@@ -30,5 +29,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel.Authentication
         }
 
         public UserRoleContract UserRole { get; set; }
+
+        public long UserId { get; set; }
     }
 }

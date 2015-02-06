@@ -130,18 +130,23 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             }
         }
 
-        public async void GetLoggedUserInfo(Action<LoggedUserViewModel, Exception> callback)
+        public async void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
             var viewModel = GetLoggedUserViewModel();
-            callback(viewModel, null);
-            viewModel.UserAvatar = await m_userAvatarCache.GetUserAvatar(UserLoginInfo.UserId);
-            callback(viewModel, null);
+            callback(viewModel);
+
+            if (getUserAvatar)
+            {
+                viewModel.UserAvatar = await m_userAvatarCache.GetUserAvatar(UserLoginInfo.UserId);
+                callback(viewModel);
+            }
         }
 
         private LoggedUserViewModel GetLoggedUserViewModel()
         {
             var viewModel = new LoggedUserViewModel
             {
+                UserId = UserLoginInfo.UserId,
                 FirstName = UserLoginInfo.FirstName,
                 LastName = UserLoginInfo.LastName,
                 UserRole = UserRoleContract.Teacher // TODO direct Teacher role assignment for testing

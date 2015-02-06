@@ -1,6 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
-using ITJakub.MobileApps.Client.Core.Manager.Groups;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.View.Converter
 {
@@ -11,20 +11,20 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Converter
             if (value == null)
                 return string.Empty;
 
-            var groupState = (GroupState)value;
+            var groupState = (GroupStateContract)value;
             switch (groupState)
             {
-                case GroupState.Created:
-                    return "Vytvořená (pro ostatní skrytá)";
-                case GroupState.AcceptMembers:
+                case GroupStateContract.Created:
+                    return "Vytvořená";
+                case GroupStateContract.AcceptMembers:
                     return "Přijímání členů";
-                case GroupState.WaitingForStart:
+                case GroupStateContract.WaitingForStart:
                     return "Čekání na spuštění";
-                case GroupState.Running:
+                case GroupStateContract.Running:
                     return "Spuštěná";
-                case GroupState.Paused:
+                case GroupStateContract.Paused:
                     return "Pozastavená";
-                case GroupState.Closed:
+                case GroupStateContract.Closed:
                     return "Ukončená";
                 default:
                     return string.Empty;

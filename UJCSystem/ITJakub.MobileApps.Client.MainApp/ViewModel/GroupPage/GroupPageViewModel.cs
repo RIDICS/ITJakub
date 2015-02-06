@@ -3,15 +3,15 @@ using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
-using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.DataContracts.Groups;
 
-namespace ITJakub.MobileApps.Client.MainApp.ViewModel
+namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 {
     public class GroupPageViewModel : ViewModelBase
     {
@@ -28,6 +28,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_removing;
         private bool m_isRemoveFlyoutOpen;
         private bool m_savingState;
+        private bool m_canConnectToGroup;
+        private long m_currentUserId;
+        private bool m_connectingToGroup;
 
         public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -39,6 +42,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GroupInfo = new GroupInfoViewModel();
 
             m_dataService.GetCurrentGroupId(LoadData);
+            m_dataService.GetLoggedUserInfo(false, userInfo =>
+            {
+                m_currentUserId = userInfo.UserId;
+            });
 
             InitCommands();
         }
@@ -48,6 +55,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GoBackCommand = new RelayCommand(GoBack);
             SelectAppAndTaskCommand = new RelayCommand(SelectAppAndTask);
             RemoveGroupCommand = new RelayCommand(RemoveGroup);
+            ConnectToGroupCommand = new RelayCommand(ConnectToGroup);
         }
 
         private void LoadData(long groupId)
@@ -66,7 +74,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     SelectedApplication = ApplicationType.Unknown;
                 }
                 else
-                {
+                { //TODO nastane tahle vetev vubec nekdy??
                     SelectedTaskName = groupInfo.Task.Name;
                     SelectedApplication = groupInfo.Task.Application;
                 }
@@ -76,30 +84,37 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
         }
 
-        private void GroupStateUpdated(GroupState stateUpdate)
+        private void GroupStateUpdated(GroupStateContract stateUpdate)
         {
             if (GroupStates.Count == 0)
             {
-                for (var i = GroupState.AcceptMembers; i <= GroupState.Closed; i++)
+                for (var i = GroupStateContract.AcceptMembers; i <= GroupStateContract.Closed; i++)
                 {
                     GroupStates.Add(new GroupStateViewModel(i, ChangeGroupState));
                 }
             }
             foreach (var groupStateViewModel in GroupStates)
             {
-                if (GroupInfo.Task == null && groupStateViewModel.GroupState > GroupState.AcceptMembers)
+                if (GroupInfo.Task == null && groupStateViewModel.GroupState > GroupStateContract.AcceptMembers)
                     groupStateViewModel.IsEnabled = false;
                 else
-                    groupStateViewModel.IsEnabled = stateUpdate < groupStateViewModel.GroupState || (stateUpdate == GroupState.Paused && groupStateViewModel.GroupState == GroupState.Running);
+                    groupStateViewModel.IsEnabled = stateUpdate < groupStateViewModel.GroupState || (stateUpdate == GroupStateContract.Paused && groupStateViewModel.GroupState == GroupStateContract.Running);
             }
 
             GroupInfo.State = stateUpdate;
             RaisePropertyChanged(() => CanChangeTask);
             RaisePropertyChanged(() => CanRemoveGroup);
+            UpdateCanConnectToGroup();
         }
 
         private void UpdateMembers(Exception exception)
         {
+            UpdateCanConnectToGroup();
+        }
+
+        private void UpdateCanConnectToGroup()
+        {
+            CanConnectToGroup = GroupInfo.State >= GroupStateContract.AcceptMembers && !GroupInfo.ContainsMember(m_currentUserId);
         }
 
         public GroupInfoViewModel GroupInfo
@@ -109,6 +124,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 m_groupInfo = value;
                 RaisePropertyChanged();
+                UpdateCanConnectToGroup();
             }
         }
 
@@ -184,14 +200,34 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        public bool ConnectingToGroup
+        {
+            get { return m_connectingToGroup; }
+            set
+            {
+                m_connectingToGroup = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool CanConnectToGroup
+        {
+            get { return m_canConnectToGroup; }
+            set
+            {
+                m_canConnectToGroup = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool CanChangeTask
         {
-            get { return GroupInfo.State < GroupState.Running; }
+            get { return GroupInfo.State < GroupStateContract.Running; }
         }
 
         public bool CanRemoveGroup
         {
-            get { return GroupInfo.State == GroupState.Created || GroupInfo.State == GroupState.Closed; }
+            get { return GroupInfo.State == GroupStateContract.Created || GroupInfo.State == GroupStateContract.Closed; }
         }
 
         public ObservableCollection<GroupStateViewModel> GroupStates { get; private set; }
@@ -201,7 +237,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public RelayCommand SelectAppAndTaskCommand { get; private set; }
 
         public RelayCommand RemoveGroupCommand { get; private set; }
-        
+
+        public RelayCommand ConnectToGroupCommand { get; private set; }
+
         private void SelectAppAndTask()
         {
             m_dataService.SetRestoringLastGroupState(true);
@@ -209,7 +247,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             Navigate<ApplicationSelectionView>();
         }
 
-        private void ChangeGroupState(GroupState newState)
+        private void ChangeGroupState(GroupStateContract newState)
         {
             SavingState = true;
             m_dataService.UpdateGroupState(GroupInfo.GroupId, newState, exception =>
@@ -250,54 +288,20 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_pollingService.Unregister(MembersPollingInterval, UpdateMembers);
             m_navigationService.GoBack();
         }
-    }
 
-    public class GroupStateViewModel : ViewModelBase
-    {
-        private readonly Action<GroupState> m_changeStateAction;
-        private bool m_isEnabled;
-        private bool m_isFlyoutOpen;
-
-        public GroupStateViewModel(GroupState state, Action<GroupState> changeStateAction)
+        private void ConnectToGroup()
         {
-            m_changeStateAction = changeStateAction;
-            GroupState = state;
-            ChangeStateCommand = new RelayCommand(ChangeState);
-        }
-
-        public GroupState GroupState { get; set; }
-
-        public bool IsEnabled
-        {
-            get { return m_isEnabled; }
-            set
+            CanConnectToGroup = false;
+            ConnectingToGroup = true;
+            m_dataService.ConnectToGroup(GroupInfo.GroupCode, exception =>
             {
-                m_isEnabled = value;
-                RaisePropertyChanged();
-            }
-        }
+                ConnectingToGroup = false;
 
-        public RelayCommand ChangeStateCommand { get; private set; }
-
-        public bool IsFlyoutOpen
-        {
-            get { return m_isFlyoutOpen; }
-            set
-            {
-                m_isFlyoutOpen = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool CanChangeBack
-        {
-            get { return GroupState == GroupState.Paused; }
-        }
-
-        private void ChangeState()
-        {
-            IsFlyoutOpen = false;
-            m_changeStateAction(GroupState);
+                if (exception != null)
+                {
+                    CanConnectToGroup = true;
+                }
+            });
         }
     }
 }

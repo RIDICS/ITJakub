@@ -115,6 +115,7 @@
     <Compile Include="ViewModel\GroupList\CreateGroupViewModel.cs" />
     <Compile Include="ViewModel\GroupList\DeleteGroupViewModel.cs" />
     <Compile Include="ViewModel\GroupList\SwitchGroupStateViewModel.cs" />
+    <Compile Include="ViewModel\GroupPage\GroupStateViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
     <Compile Include="ViewModel\OwnedTaskListViewModel.cs" />
     <Compile Include="View\AboutSettingsFlyout.xaml.cs">
@@ -128,6 +129,9 @@
     <Compile Include="View\Converter\MessageCountToNotificationConverter.cs" />
     <Compile Include="View\Converter\NotChosenStringConverter.cs" />
     <Compile Include="View\Converter\BooleanToColorConverter.cs" />
+    <Compile Include="View\DownArrowControl.xaml.cs">
+      <DependentUpon>DownArrowControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\EditorHostView.xaml.cs">
       <DependentUpon>EditorHostView.xaml</DependentUpon>
     </Compile>
@@ -143,7 +147,7 @@
     <Compile Include="View\Converter\GroupTypeToNameConverter.cs" />
     <Compile Include="ViewModel\ApplicationSelectionViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\UserMenuViewModel.cs" />
-    <Compile Include="ViewModel\GroupPageViewModel.cs" />
+    <Compile Include="ViewModel\GroupPage\GroupPageViewModel.cs" />
     <Compile Include="ViewModel\Login\RegistrationViewModel.cs" />
     <Compile Include="View\ApplicationSelectionView.xaml.cs">
       <DependentUpon>ApplicationSelectionView.xaml</DependentUpon>
@@ -216,6 +220,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="View\AboutSettingsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DownArrowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

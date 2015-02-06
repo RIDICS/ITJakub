@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using ITJakub.MobileApps.Client.Core.Manager.Groups;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.View.Converter
 {
@@ -12,21 +12,21 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Converter
             if (targetType != typeof(Symbol))
                 throw new InvalidOperationException("The target must be a Symbol");
 
-            var groupState = (GroupState)value;
+            var groupState = (GroupStateContract)value;
 
             switch (groupState)
             {
-                case GroupState.Created:
+                case GroupStateContract.Created:
                     return Symbol.Placeholder;
-                case GroupState.AcceptMembers:
+                case GroupStateContract.AcceptMembers:
                     return Symbol.AddFriend;
-                case GroupState.WaitingForStart:
+                case GroupStateContract.WaitingForStart:
                     return Symbol.Clock;
-                case GroupState.Running:
+                case GroupStateContract.Running:
                     return Symbol.Play;
-                case GroupState.Paused:
+                case GroupStateContract.Paused:
                     return Symbol.Pause;
-                case GroupState.Closed:
+                case GroupStateContract.Closed:
                     return Symbol.Stop;
                 default:
                     return Symbol.Placeholder;

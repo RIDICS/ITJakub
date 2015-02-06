@@ -15,12 +15,14 @@ using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     public class ApplicationHostViewModel : ViewModelBase
     {
         private const PollingInterval GroupStatePollingInterval = PollingInterval.Medium;
+        private const PollingInterval GroupMembersPollingInterval = PollingInterval.Medium;
 
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
@@ -38,6 +40,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private long m_groupId;
         private bool m_paused;
         private int m_unreadMessageCount;
+        private GroupInfoViewModel m_groupInfo;
+        private ObservableCollection<GroupMemberViewModel> m_memberList;
 
         public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -47,34 +51,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             GoBackCommand = new RelayCommand(GoBack);
             ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
-            MemberList = new ObservableCollection<GroupMemberViewModel>();
 
             m_taskLoaded = false;
             m_unreadMessageCount = 0;
+
+            LoadData();
             
-            m_dataService.GetCurrentGroupId(groupId =>
-            {
-                WaitingForStart = true;
-                WaitingForData = true;
-                m_groupId = groupId;
-                m_pollingService.RegisterForGetGroupState(GroupStatePollingInterval, groupId, GroupStateUpdate);
-            });
-
-            m_dataService.GetLoggedUserInfo((user, exception) =>
-            {
-                if (exception != null)
-                {
-                    IsTeacherMode = false;
-                    return;
-                }
-
-                IsTeacherMode = user.UserRole == UserRoleContract.Teacher;
-                if (IsTeacherMode)
-                {
-                    //TODO start polling
-                }
-            });
-
             Messenger.Default.Register<LogOutMessage>(this, message => StopCommunication());
 
             Messenger.Default.Register<NotifyNewMessagesMessage>(this, message =>
@@ -84,11 +66,45 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             });
         }
 
+        private void LoadData()
+        {
+            m_dataService.GetCurrentGroupId(groupId =>
+            {
+                WaitingForStart = true;
+                WaitingForData = true;
+                m_groupId = groupId;
+                m_pollingService.RegisterForGetGroupState(GroupStatePollingInterval, groupId, GroupStateUpdate);
+            });
+
+            m_dataService.GetLoggedUserInfo(false, user =>
+            {
+                IsTeacherMode = user.UserRole == UserRoleContract.Teacher;
+
+                if (IsTeacherMode)
+                {
+                    // start polling new group members
+                    m_groupInfo = new GroupInfoViewModel
+                    {
+                        GroupId = m_groupId,
+                        GroupType = GroupType.Owner
+
+                    };
+                    m_pollingService.RegisterForGroupsUpdate(GroupMembersPollingInterval, new []{m_groupInfo}, GroupsUpdate);
+                }
+            });
+        }
+
+        private void GroupsUpdate(Exception exception)
+        {
+            MemberList = m_groupInfo.Members;
+        }
+
         private void StopCommunication()
         {
             WaitingForStart = false;
             WaitingForData = false;
             m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
+            m_pollingService.Unregister(GroupMembersPollingInterval, GroupsUpdate);
             Messenger.Default.Unregister(this);
 
             if (ChatApplicationViewModel != null)
@@ -104,19 +120,19 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService.GoBack();
         }
 
-        private void GroupStateUpdate(GroupState state, Exception exception)
+        private void GroupStateUpdate(GroupStateContract state, Exception exception)
         {
             if (exception != null)
                 return;
 
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                if (state >= GroupState.WaitingForStart && !m_taskLoaded)
+                if (state >= GroupStateContract.WaitingForStart && !m_taskLoaded)
                 {
                     LoadTask();
                 }
 
-                if (state >= GroupState.Running)
+                if (state >= GroupStateContract.Running)
                 {
                     m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
                     WaitingForStart = false;
@@ -273,9 +289,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             get { return m_unreadMessageCount > 0; }
         }
 
-        public bool IsTeacherMode { get; set; }
+        public ObservableCollection<GroupMemberViewModel> MemberList
+        {
+            get { return m_memberList; }
+            set
+            {
+                m_memberList = value;
+                RaisePropertyChanged();
+            }
+        }
 
-        public ObservableCollection<GroupMemberViewModel> MemberList { get; set; }
+        public bool IsTeacherMode { get; set; }
 
         public RelayCommand GoBackCommand { get; private set; }
         

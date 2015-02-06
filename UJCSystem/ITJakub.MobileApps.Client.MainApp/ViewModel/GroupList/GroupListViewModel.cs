@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -16,6 +15,7 @@ using ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 {
@@ -28,27 +28,26 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private readonly IMainPollingService m_pollingService;
 
         private readonly List<GroupInfoViewModel> m_selectedGroups;
-        private UserRoleContract m_userRole;
-        private bool m_commandBarOpen;
-        private bool m_noGroupExist;
-        private bool m_loading;
-        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
         private GroupInfoViewModel m_selectedGroup;
         private ObservableCollection<GroupInfoViewModel> m_groups;
+        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
+        private SortGroupItem.SortType m_selectedSortType;
+        private GroupStateContract? m_currentFilter;
+        private UserRoleContract m_userRole;
+        private bool m_isCommandBarOpen;
+        private bool m_loading;
         private bool m_isOneItemSelected;
         private bool m_onlyOwnedGroupsSelected;
         private bool m_isFilter;
-        private GroupState? m_currentFilter;
-        private SortGroupItem.SortType m_selectedSortType;
-
+        
         public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
             m_pollingService = pollingService;
+
             m_selectedGroups = new List<GroupInfoViewModel>();
             GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>();
-            NoGroupExist = false;
             m_userRole = UserRoleContract.Student;
             
             Messenger.Default.Register<LogOutMessage>(this, message =>
@@ -62,15 +61,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             LoadData();
         }
 
-        public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> GroupList
-        {
-            get { return m_groupList; }
-            set
-            {
-                m_groupList = value;
-                RaisePropertyChanged();
-            }
-        }
+        #region Properties
 
         public RelayCommand GoBackCommand { get; private set; }
 
@@ -86,12 +77,23 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         public RelayCommand<object> FilterCommand { get; private set; }
 
-        public bool CommandBarOpen
+        public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> GroupList
         {
-            get { return m_commandBarOpen; }
+            get { return m_groupList; }
             set
             {
-                m_commandBarOpen = value;
+                m_groupList = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => IsGroupListEmpty);
+            }
+        }
+
+        public bool IsCommandBarOpen
+        {
+            get { return m_isCommandBarOpen; }
+            set
+            {
+                m_isCommandBarOpen = value;
                 RaisePropertyChanged();
             }
         }
@@ -102,42 +104,33 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             set
             {
                 m_selectedGroup = value;
-                CommandBarOpen = value != null;
+                IsCommandBarOpen = value != null;
                 DeleteGroupViewModel.SelectedGroup = value;
 
                 RaisePropertyChanged();
-                RaisePropertyChanged(() => ConnectButtonVisibility);
-                RaisePropertyChanged(() => TeachersSecondaryButtonVisibility);
+                RaisePropertyChanged(() => IsGroupSelected);
+                RaisePropertyChanged(() => IsTeacherAndGroupSelected);
             }
         }
 
-        public Visibility ConnectButtonVisibility
+        public bool IsGroupSelected
         {
-            get { return SelectedGroup != null ? Visibility.Visible : Visibility.Collapsed; }
+            get { return SelectedGroup != null; }
         }
 
-        public Visibility TeachersSecondaryButtonVisibility
+        public bool IsTeacherAndGroupSelected
         {
-            get
-            {
-                bool isVisible = m_userRole == UserRoleContract.Teacher && SelectedGroup != null;
-                return isVisible ? Visibility.Visible : Visibility.Collapsed;
-            }
+            get { return m_userRole == UserRoleContract.Teacher && SelectedGroup != null; }
         }
 
-        public Visibility TeachersButtonVisibility
+        public bool IsTeacherMode
         {
-            get { return m_userRole == UserRoleContract.Teacher ? Visibility.Visible : Visibility.Collapsed; }
+            get { return m_userRole == UserRoleContract.Teacher; }
         }
 
-        public bool NoGroupExist
+        public bool IsGroupListEmpty
         {
-            get { return m_noGroupExist; }
-            set
-            {
-                m_noGroupExist = value;
-                RaisePropertyChanged();
-            }
+            get { return m_groupList.Count == 0; }
         }
 
         public bool Loading
@@ -180,7 +173,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
-        public GroupState? CurrentFilter
+        public GroupStateContract? CurrentFilter
         {
             get { return m_currentFilter; }
             set
@@ -218,6 +211,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         public SwitchGroupStateViewModel SwitchToRunningViewModel { get; set; }
 
+        #endregion
+
         private void InitCommands()
         {
             GoBackCommand = new RelayCommand(GoBack);
@@ -235,8 +230,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, Navigate);
             DeleteGroupViewModel = new DeleteGroupViewModel(m_dataService, m_selectedGroups, LoadData);
 
-            SwitchToPauseViewModel = new SwitchGroupStateViewModel(GroupState.Paused, m_dataService, m_selectedGroups, LoadData);
-            SwitchToRunningViewModel = new SwitchGroupStateViewModel(GroupState.Running, m_dataService, m_selectedGroups, LoadData);
+            SwitchToPauseViewModel = new SwitchGroupStateViewModel(GroupStateContract.Paused, m_dataService, m_selectedGroups, LoadData);
+            SwitchToRunningViewModel = new SwitchGroupStateViewModel(GroupStateContract.Running, m_dataService, m_selectedGroups, LoadData);
         }
 
         private void Navigate(Type type)
@@ -268,14 +263,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_groups, GroupUpdate);
             });
 
-            m_dataService.GetLoggedUserInfo((info, exception) =>
+            m_dataService.GetLoggedUserInfo(false, info =>
             {
-                if (exception != null)
-                    return;
                 m_userRole = info.UserRole;
-                m_userRole = UserRoleContract.Teacher;  //TODO for debug
-                RaisePropertyChanged(() => TeachersButtonVisibility);
-                RaisePropertyChanged(() => TeachersSecondaryButtonVisibility);
+                RaisePropertyChanged(() => IsTeacherMode);
+                RaisePropertyChanged(() => IsTeacherAndGroupSelected);
             });
         }
 
@@ -345,7 +337,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
             var groupedList = filteredList.GroupBy(group => group.GroupType).OrderBy(group => group.Key);
             GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
-            NoGroupExist = groupList.Count == 0;
         }
 
         private void Filter(object state)
@@ -358,7 +349,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             else
             {
                 IsFilter = true;
-                CurrentFilter = state is int ? (GroupState) state : 0;
+                CurrentFilter = state is short ? (GroupStateContract)state : 0;
             }
 
             DisplayGroupList(m_groups);

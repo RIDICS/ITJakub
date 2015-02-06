@@ -7,6 +7,7 @@ using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.Core.Service.Polling
 {
@@ -111,7 +112,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             }
         }
 
-        public void RegisterForGetGroupState(PollingInterval interval, long groupId, Action<GroupState,Exception> callback)
+        public void RegisterForGetGroupState(PollingInterval interval, long groupId, Action<GroupStateContract, Exception> callback)
         {
             Action newAction = () => m_groupManager.GetGroupStateAsync(groupId, callback).GetAwaiter().GetResult();
             m_timerService.Register(interval, newAction);
@@ -135,7 +136,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             m_registeredActions.Remove(action);
         }
 
-        public void Unregister(PollingInterval interval, Action<GroupState, Exception> action)
+        public void Unregister(PollingInterval interval, Action<GroupStateContract, Exception> action)
         {
             UnregisterGenericAction(interval, action);
         }
