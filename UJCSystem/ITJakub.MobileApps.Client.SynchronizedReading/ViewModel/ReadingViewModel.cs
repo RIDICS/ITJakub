@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
+using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
@@ -60,12 +61,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                     new ActionViewModel
                     {
                         Label = "Předat řízení čtení",
-                        Action = PassReadingControl
+                        Command = new RelayCommand<UserInfo>(PassReadingControl)
                     },
                     new ActionViewModel
                     {
                         Label = "Předat řízení označování",
-                        Action = PassSelectingControl
+                        Command = new RelayCommand<UserInfo>(PassSelectingControl)
                     }
                 };
             }

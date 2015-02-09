@@ -1,5 +1,5 @@
-﻿using System;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Shared.Data;
 
 namespace ITJakub.MobileApps.Client.Shared.ViewModel
@@ -34,6 +34,6 @@ namespace ITJakub.MobileApps.Client.Shared.ViewModel
             }
         }
 
-        public Action<UserInfo> Action { get; set; }
+        public RelayCommand<UserInfo> Command { get; set; } 
     }
 }

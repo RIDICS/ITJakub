@@ -52,7 +52,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             GoBackCommand = new RelayCommand(GoBack);
             ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
-            ApplicationSpecificCommand = new RelayCommand<ActionViewModel>(ApplicationSpecificAction);
 
             m_taskLoaded = false;
             m_unreadMessageCount = 0;
@@ -181,11 +180,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     ChatApplicationViewModel.InitializeCommunication();
                 }
             });
-        }
-
-        private void ApplicationSpecificAction(ActionViewModel actionInfo)
-        {
-            actionInfo.Action(SelectedMember);
         }
 
         #region Properties
@@ -325,8 +319,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public RelayCommand GoBackCommand { get; private set; }
         
         public RelayCommand ShowChatCommand { get; private set; }
-
-        public RelayCommand<ActionViewModel> ApplicationSpecificCommand { get; private set; }
 
         #endregion
     }

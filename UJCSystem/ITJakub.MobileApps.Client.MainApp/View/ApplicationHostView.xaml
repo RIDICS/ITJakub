@@ -9,13 +9,13 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     DataContext="{Binding ApplicationHostViewModel, Source={StaticResource Locator}}"
-    mc:Ignorable="d"
-    x:Name="PageRoot">
+    mc:Ignorable="d">
 
     <Page.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <core:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
         <converter1:MessageCountToNotificationConverter x:Key="MessageCountToNotificationConverter" />
+        <converter1:GroupMemberToUserInfoConverter x:Key="GroupMemberToUserInfoConverter" />
     </Page.Resources>
     
     <Page.TopAppBar>
@@ -39,8 +39,8 @@
                             <Button Content="{Binding Label}"
                                     IsEnabled="{Binding IsEnabled}"
                                     HorizontalAlignment="Stretch"
-                                    Command="{Binding ElementName=PageRoot, Path=DataContext.ApplicationSpecificCommand}"
-                                    CommandParameter="{Binding}" />
+                                    Command="{Binding Command}"
+                                    CommandParameter="{Binding ElementName=MembersListView, Path=SelectedItem, Converter={StaticResource GroupMemberToUserInfoConverter}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -50,7 +50,8 @@
                           SelectionMode="Single"
                           ItemsSource="{Binding MemberList}"
                           SelectedItem="{Binding SelectedMember, Mode=TwoWay}"
-                          Style="{StaticResource HorizontalListView}">
+                          Style="{StaticResource HorizontalListView}"
+                          x:Name="MembersListView">
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
