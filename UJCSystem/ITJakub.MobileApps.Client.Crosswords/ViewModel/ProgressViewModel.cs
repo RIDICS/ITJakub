@@ -9,7 +9,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     {
         public ObservableCollection<RowProgressViewModel> Rows { get; set; }
 
-        public AuthorInfo UserInfo { get; set; }
+        public UserInfo UserInfo { get; set; }
     }
 
     public class RowProgressViewModel

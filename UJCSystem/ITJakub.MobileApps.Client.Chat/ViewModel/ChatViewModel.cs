@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Chat.DataService;
@@ -102,6 +103,11 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
         public override void StopCommunication()
         {
             m_dataService.StopPolling();
+        }
+
+        public override IEnumerable<ActionViewModel> ActionsWithUsers
+        {
+            get { return new ActionViewModel[0]; }
         }
 
         public override void AppVisibilityChanged(bool isVisible)

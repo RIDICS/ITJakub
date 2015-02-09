@@ -8,12 +8,6 @@ using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class HangmanViewModel : ApplicationBaseViewModel
     {
         private readonly IHangmanDataService m_dataService;
@@ -22,10 +16,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private bool m_guessHistoryVisible;
         private int m_guessedLetterCount;
 
-        /// <summary>
-        /// Initializes a new instance of the HangmanViewModel class.
-        /// </summary>
-        /// <param name="dataService"></param>
         public HangmanViewModel(IHangmanDataService dataService)
         {
             m_dataService = dataService;
@@ -132,6 +122,11 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             m_dataService.StopPolling();
         }
 
+        public override IEnumerable<ActionViewModel> ActionsWithUsers
+        {
+            get { return new ActionViewModel[0]; }
+        }
+
         private void ProcessNewLetters(IEnumerable<GuessViewModel> guesses)
         {
             var wordIndex = 0;
@@ -147,7 +142,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                     {
                         Letter = '-',
                         WordOrder = wordIndex,
-                        Author = new AuthorInfo()
+                        Author = new UserInfo()
                     });
                     wordIndex = guessViewModel.WordOrder;
                 }

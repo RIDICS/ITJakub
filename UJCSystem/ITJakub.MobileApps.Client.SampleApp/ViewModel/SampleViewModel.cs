@@ -1,4 +1,5 @@
-﻿using ITJakub.MobileApps.Client.SampleApp.Service;
+﻿using System.Collections.Generic;
+using ITJakub.MobileApps.Client.SampleApp.Service;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.SampleApp.ViewModel
@@ -49,6 +50,15 @@ namespace ITJakub.MobileApps.Client.SampleApp.ViewModel
         public override void StopCommunication()
         {
             //Stop all running timers and polling requests in IPollingService
+        }
+
+        public override IEnumerable<ActionViewModel> ActionsWithUsers
+        {
+            get
+            {
+                //Return list with actions viewmodels (these action are displayed as buttons in the top application bar)
+                return new ActionViewModel[0];
+            }
         }
     }
 }

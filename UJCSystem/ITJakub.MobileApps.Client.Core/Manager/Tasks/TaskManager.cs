@@ -40,7 +40,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     Name = task.Name,
                     CreateTime = task.CreateTime,
                     Data = task.Data,
-                    Author = new AuthorInfo
+                    Author = new UserInfo
                     {
                         Id = task.Author.Id,
                         FirstName = task.Author.FirstName,
@@ -108,7 +108,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     Name = task.Name,
                     CreateTime = task.CreateTime,
                     Data = task.Data,
-                    Author = new AuthorInfo
+                    Author = new UserInfo
                     {
                         Id = task.Author.Id,
                         FirstName = task.Author.FirstName,

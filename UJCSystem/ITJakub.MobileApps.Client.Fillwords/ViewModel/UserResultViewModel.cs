@@ -4,7 +4,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 {
     public class UserResultViewModel
     {
-        public AuthorInfo UserInfo { get; set; }
+        public UserInfo UserInfo { get; set; }
 
         public double PercentageSuccess
         {

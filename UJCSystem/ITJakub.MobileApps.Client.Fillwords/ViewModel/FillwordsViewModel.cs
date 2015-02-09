@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Windows.UI.Popups;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
@@ -115,7 +116,12 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         {
             m_dataService.StopPolling();
         }
-        
+
+        public override IEnumerable<ActionViewModel> ActionsWithUsers
+        {
+            get { return new ActionViewModel[0]; }
+        }
+
         private void Submit()
         {
             IsSubmitFlyoutOpen = false;

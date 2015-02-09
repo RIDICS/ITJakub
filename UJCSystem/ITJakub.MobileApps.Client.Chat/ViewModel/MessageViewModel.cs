@@ -7,7 +7,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
 {
     public class MessageViewModel : ViewModelBase
     {
-        private AuthorInfo m_author;
+        private UserInfo m_author;
         private string m_text;
         private Color m_messageBackground;
         private DateTime m_sendTime;
@@ -22,7 +22,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             }
         }
 
-        public AuthorInfo Author
+        public UserInfo Author
         {
             get { return m_author; }
             set

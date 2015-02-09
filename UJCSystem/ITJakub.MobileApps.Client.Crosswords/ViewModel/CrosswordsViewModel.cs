@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ITJakub.MobileApps.Client.Crosswords.DataService;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 
@@ -40,6 +41,11 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         public override void StopCommunication()
         {
             m_dataService.StopPolling();
+        }
+
+        public override IEnumerable<ActionViewModel> ActionsWithUsers
+        {
+            get { return new ActionViewModel[0]; }
         }
     }
 }

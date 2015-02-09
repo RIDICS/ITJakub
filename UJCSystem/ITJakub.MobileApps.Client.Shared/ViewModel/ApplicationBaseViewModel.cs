@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 
 namespace ITJakub.MobileApps.Client.Shared.ViewModel
@@ -26,5 +27,7 @@ namespace ITJakub.MobileApps.Client.Shared.ViewModel
             DataLoadedCallback();
             DataLoadedCallback = null;
         }
+
+        public abstract IEnumerable<ActionViewModel> ActionsWithUsers { get; }
     }
 }

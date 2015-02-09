@@ -12,6 +12,7 @@ using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.DataContracts;
@@ -51,19 +52,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             GoBackCommand = new RelayCommand(GoBack);
             ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
+            ApplicationSpecificCommand = new RelayCommand<ActionViewModel>(ApplicationSpecificAction);
 
             m_taskLoaded = false;
             m_unreadMessageCount = 0;
 
             LoadData();
-            
-            Messenger.Default.Register<LogOutMessage>(this, message => StopCommunication());
-
-            Messenger.Default.Register<NotifyNewMessagesMessage>(this, message =>
-            {
-                if (!IsChatDisplayed)
-                    UnreadMessageCount += message.Count;
-            });
+            RegisterForMessages();
         }
 
         private void LoadData()
@@ -91,6 +86,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     };
                     m_pollingService.RegisterForGroupsUpdate(GroupMembersPollingInterval, new []{m_groupInfo}, GroupsUpdate);
                 }
+            });
+        }
+
+        private void RegisterForMessages()
+        {
+            Messenger.Default.Register<LogOutMessage>(this, message => StopCommunication());
+
+            Messenger.Default.Register<NotifyNewMessagesMessage>(this, message =>
+            {
+                if (!IsChatDisplayed)
+                    UnreadMessageCount += message.Count;
             });
         }
 
@@ -176,6 +182,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 }
             });
         }
+
+        private void ApplicationSpecificAction(ActionViewModel actionInfo)
+        {
+            actionInfo.Action(SelectedMember);
+        }
+
+        #region Properties
 
         public string ApplicationName
         {
@@ -305,10 +318,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        public UserInfo SelectedMember { get; set; }
+
         public bool IsTeacherMode { get; set; }
 
         public RelayCommand GoBackCommand { get; private set; }
         
         public RelayCommand ShowChatCommand { get; private set; }
+
+        public RelayCommand<ActionViewModel> ApplicationSpecificCommand { get; private set; }
+
+        #endregion
     }
 }

@@ -104,6 +104,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ApplicationBase.cs" />
+    <Compile Include="ViewModel\ActionViewModel.cs" />
     <Compile Include="ViewModel\ApplicationBaseViewModel.cs" />
     <Compile Include="Communication\ClientCommunicationException.cs" />
     <Compile Include="Communication\IPollingService.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="Enum\ApplicationRoleType.cs" />
     <Compile Include="Enum\ApplicationType.cs" />
     <Compile Include="Communication\ISynchronizeCommunication.cs" />
-    <Compile Include="Data\AuthorInfo.cs" />
+    <Compile Include="Data\UserInfo.cs" />
     <Compile Include="Data\ObjectDetails.cs" />
     <Compile Include="Control\AsyncObservableCollection.cs" />
     <Compile Include="MobileApplicationAttribute.cs" />

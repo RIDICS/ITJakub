@@ -9,7 +9,8 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     DataContext="{Binding ApplicationHostViewModel, Source={StaticResource Locator}}"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    x:Name="PageRoot">
 
     <Page.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -25,14 +26,30 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 
-                <StackPanel Grid.Column="0"
-                            Orientation="Vertical">
-                    <Button Content="Action" />
-                </StackPanel>
+                <ItemsControl Grid.Column="0"
+                              ItemsSource="{Binding ApplicationViewModel.ActionsWithUsers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding Label}"
+                                    IsEnabled="{Binding IsEnabled}"
+                                    HorizontalAlignment="Stretch"
+                                    Command="{Binding ElementName=PageRoot, Path=DataContext.ApplicationSpecificCommand}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
                 
                 <ListView Grid.Column="1"
+                          Margin="20,0,0,0"
                           SelectionMode="Single"
                           ItemsSource="{Binding MemberList}"
+                          SelectedItem="{Binding SelectedMember, Mode=TwoWay}"
                           Style="{StaticResource HorizontalListView}">
 
                     <ListView.ItemTemplate>

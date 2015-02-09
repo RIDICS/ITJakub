@@ -66,14 +66,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         private bool m_win;
         private int m_letterCount;
 
-        public PlayerRankViewModel(int crosswordRowCount, AuthorInfo userInfo, DateTime firstTime)
+        public PlayerRankViewModel(int crosswordRowCount, UserInfo userInfo, DateTime firstTime)
         {
             m_firstTime = firstTime;
             UserInfo = userInfo;
             m_correctAnswers = new bool[crosswordRowCount];
         }
 
-        public AuthorInfo UserInfo { get; private set; }
+        public UserInfo UserInfo { get; private set; }
 
         public TimeSpan GameTime { get; private set; }
 

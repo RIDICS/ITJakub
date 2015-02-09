@@ -129,7 +129,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
                 {
                     Name = "First task",
                     CreateTime = DateTime.Now,
-                    Author = new AuthorInfo
+                    Author = new UserInfo
                     {
                         FirstName = "Firstname",
                         LastName = "Lastname",

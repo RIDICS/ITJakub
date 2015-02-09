@@ -1,6 +1,6 @@
 ﻿namespace ITJakub.MobileApps.Client.Shared.Data
 {
-    public class AuthorInfo
+    public class UserInfo
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

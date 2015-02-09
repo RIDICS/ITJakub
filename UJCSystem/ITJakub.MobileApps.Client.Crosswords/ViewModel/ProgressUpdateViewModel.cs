@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public bool IsCorrect { get; set; }
 
-        public AuthorInfo UserInfo { get; set; }
+        public UserInfo UserInfo { get; set; }
 
         public DateTime Time { get; set; }
     }

@@ -65,7 +65,7 @@ namespace ITJakub.MobileApps.Client.Core
 
             var outputList = objectList.Select(objectDetails => new ObjectDetails
             {
-                Author = new AuthorInfo
+                Author = new UserInfo
                 {
 
                     Email = objectDetails.Author.Email,
@@ -95,7 +95,7 @@ namespace ITJakub.MobileApps.Client.Core
 
             var objectDetails = new ObjectDetails
             {
-                Author = new AuthorInfo
+                Author = new UserInfo
                 {
                     Email = latestObject.Author.Email,
                     FirstName = latestObject.Author.FirstName,

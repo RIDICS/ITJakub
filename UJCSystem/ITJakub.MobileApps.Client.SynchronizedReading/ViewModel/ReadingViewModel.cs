@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 using ITJakub.MobileApps.Client.SynchronizedReading.View.Control;
@@ -45,6 +49,26 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         {
             m_dataService.StopPolling();
             m_timer.Stop();
+        }
+
+        public override IEnumerable<ActionViewModel> ActionsWithUsers
+        {
+            get
+            {
+                return new ObservableCollection<ActionViewModel>
+                {
+                    new ActionViewModel
+                    {
+                        Label = "Předat řízení čtení",
+                        Action = PassReadingControl
+                    },
+                    new ActionViewModel
+                    {
+                        Label = "Předat řízení označování",
+                        Action = PassSelectingControl
+                    }
+                };
+            }
         }
 
         public int SelectionStart
@@ -158,6 +182,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
 
             m_lastUpdateViewModel = updateViewModel;
             m_dataService.SendUpdate(updateViewModel, exception => { });
+        }
+
+        private void PassReadingControl(UserInfo user)
+        {
+            new MessageDialog("reading" + user.LastName).ShowAsync();
+        }
+
+        private void PassSelectingControl(UserInfo user)
+        {
+            new MessageDialog("selecting" + user.LastName).ShowAsync();
         }
     }
 }

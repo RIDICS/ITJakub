@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public string Name { get; set; }
         public DateTime CreateTime { get; set; }
         public string Data { get; set; }
-        public AuthorInfo Author { get; set; }
+        public UserInfo Author { get; set; }
         public ApplicationType Application { get; set; }
     }
 }

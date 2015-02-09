@@ -57,7 +57,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
-        public AuthorInfo UserInfo { get; set; }
+        public UserInfo UserInfo { get; set; }
 
         public HangmanPictureViewModel PictureViewModel { get; private set; }
 
