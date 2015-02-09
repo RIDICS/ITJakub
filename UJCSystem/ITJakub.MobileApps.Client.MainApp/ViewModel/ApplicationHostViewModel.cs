@@ -29,7 +29,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private readonly IMainPollingService m_pollingService;
         private string m_applicationName;
         private ApplicationBaseViewModel m_applicationViewModel;
-        private ApplicationBaseViewModel m_chatViewModel;
+        private SupportAppBaseViewModel m_chatViewModel;
 
         private bool m_isChatDisplayed;
         private bool m_isChatSupported;
@@ -169,8 +169,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 IsChatSupported = application.IsChatSupported;
 
                 var chat = applications[ApplicationType.Chat];
-                ChatApplicationViewModel = chat.ApplicationViewModel;
-                ChatApplicationViewModel.InitializeCommunication();
+                ChatApplicationViewModel = chat.ApplicationViewModel as SupportAppBaseViewModel;
+                if (ChatApplicationViewModel != null)
+                {
+                    ChatApplicationViewModel.InitializeCommunication();
+                }
             });
         }
 
@@ -194,7 +197,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public ApplicationBaseViewModel ChatApplicationViewModel
+        public SupportAppBaseViewModel ChatApplicationViewModel
         {
             get { return m_chatViewModel; }
             set { m_chatViewModel = value;RaisePropertyChanged(); }
@@ -217,6 +220,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 m_isChatDisplayed = value;
                 RaisePropertyChanged();
+                
+                ChatApplicationViewModel.AppVisibilityChanged(m_isChatDisplayed);
+
                 if (m_isChatDisplayed)
                 {
                     IsCommandBarOpen = false;

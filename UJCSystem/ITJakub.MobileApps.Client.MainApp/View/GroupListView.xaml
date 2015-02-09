@@ -32,7 +32,8 @@
                     IsSticky="True">
 
             <AppBarButton Icon="Filter"
-                          Label="Filtrovat">
+                          Label="Filtrovat"
+                          Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Všechny"
@@ -44,16 +45,16 @@
                                 <groups:GroupStateContract>Created</groups:GroupStateContract>
                             </MenuFlyoutItem.CommandParameter>
                         </MenuFlyoutItem>
-                        <MenuFlyoutItem Text="Čekající na spuštění"
-                                        Command="{Binding FilterCommand}">
-                            <MenuFlyoutItem.CommandParameter>
-                                <groups:GroupStateContract>WaitingForStart</groups:GroupStateContract>
-                            </MenuFlyoutItem.CommandParameter>
-                        </MenuFlyoutItem>
                         <MenuFlyoutItem Text="Přijímající členy"
                                         Command="{Binding FilterCommand}">
                             <MenuFlyoutItem.CommandParameter>
                                 <groups:GroupStateContract>AcceptMembers</groups:GroupStateContract>
+                            </MenuFlyoutItem.CommandParameter>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Čekající na spuštění"
+                                        Command="{Binding FilterCommand}">
+                            <MenuFlyoutItem.CommandParameter>
+                                <groups:GroupStateContract>WaitingForStart</groups:GroupStateContract>
                             </MenuFlyoutItem.CommandParameter>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem Text="Spuštěné"

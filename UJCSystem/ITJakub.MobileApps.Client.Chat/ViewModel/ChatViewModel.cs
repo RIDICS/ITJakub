@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Chat.DataService;
 using ITJakub.MobileApps.Client.Chat.Message;
@@ -7,7 +8,7 @@ using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Chat.ViewModel
 {
-    public class ChatViewModel : ApplicationBaseViewModel
+    public class ChatViewModel : SupportAppBaseViewModel
     {
         private readonly IChatDataService m_dataService;
         private readonly RelayCommand m_sendCommand;
@@ -28,21 +29,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             Loading = true;
             DataLoadedCallback = () => Loading = false;
 
-            m_dataService.StartChatMessagesPolling((messages, exception) =>
-            {
-                if (exception != null)
-                    return;
-
-                if (messages.Count > 0)
-                    MessengerInstance.Send(new NotifyNewMessagesMessage {Count = messages.Count});
-
-                foreach (var message in messages)
-                {
-                    MessageHistory.Add(message);
-                }
-
-                SetDataLoaded();
-            });
+            m_dataService.StartChatMessagesPolling(ProcessNewMessages);
         }
 
         public override void SetTask(string data) { }
@@ -96,9 +83,31 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             Message = string.Empty;
         }
 
+        private void ProcessNewMessages(ObservableCollection<MessageViewModel> messages, Exception exception)
+        {
+            if (exception != null)
+                return;
+
+            if (messages.Count > 0)
+                MessengerInstance.Send(new NotifyNewMessagesMessage { Count = messages.Count });
+
+            foreach (var message in messages)
+            {
+                MessageHistory.Add(message);
+            }
+
+            SetDataLoaded();
+        }
+
         public override void StopCommunication()
         {
             m_dataService.StopPolling();
+        }
+
+        public override void AppVisibilityChanged(bool isVisible)
+        {
+            var newPollingInterval = isVisible ? ChatManager.FastPollingInterval : ChatManager.SlowPollingInterval;
+            m_dataService.UpdateMessagePollingInterval(newPollingInterval);
         }
     }
 }

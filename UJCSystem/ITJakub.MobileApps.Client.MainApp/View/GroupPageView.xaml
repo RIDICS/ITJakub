@@ -153,7 +153,7 @@
                                     <LineBreak />
                                     <Bold>Čekání na spuštění</Bold> - Před přepnutím do tohoto stavu je nutné mít definitivně přiřazené zadání, které následně už není možné měnit.
                                     <LineBreak />
-                                    <Bold>Spuštěná</Bold> - Skupina je spuštěná, tzn. studenti už mohou začít hrát, nebo používat aplikaci.
+                                    <Bold>Spuštěná</Bold> - Skupina je spuštěná, tzn. studenti už mohou začít používat aplikaci.
                                     <LineBreak />
                                     <Bold>Pozastavená</Bold> - Studentům se pozastaví spuštěná aplikace. Z tohoto stavu se lze vrátit do stavu <Italic>Spuštěná</Italic>.
                                     <LineBreak />

@@ -16,15 +16,21 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
         private readonly ISynchronizeCommunication m_applicationCommunication;
         private readonly IPollingService m_pollingService;
         private Action<ObservableCollection<MessageViewModel>, Exception> m_pollingCallback;
+        private PollingInterval m_currentPollingInterval;
+        private DateTime m_latestMessageTime;
 
+        public const PollingInterval FastPollingInterval = PollingInterval.Fast;
+        public const PollingInterval SlowPollingInterval = PollingInterval.Medium;
         private const ApplicationType AppType = ApplicationType.Chat;
-        private const PollingInterval MessagePollingInterval = PollingInterval.Fast;
         private const string MessageType = "ChatMessage";
 
         public ChatManager(ISynchronizeCommunication applicationCommunication)
         {
             m_applicationCommunication = applicationCommunication;
             m_pollingService = applicationCommunication.GetPollingService();
+
+            m_currentPollingInterval = SlowPollingInterval;
+            m_latestMessageTime = new DateTime(1970,1,1);
         }
 
         public void GetAllChatMessages(Action<ObservableCollection<MessageViewModel>, Exception> callback)
@@ -74,7 +80,16 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
         public void StartChatMessagesPolling(Action<ObservableCollection<MessageViewModel>, Exception> callback)
         {
             m_pollingCallback = callback;
-            m_pollingService.RegisterForSynchronizedObjects(MessagePollingInterval, AppType, MessageType, ProcessNewMessages);
+            m_pollingService.RegisterForSynchronizedObjects(m_currentPollingInterval, AppType, MessageType, ProcessNewMessages);
+        }
+
+        public void UpdatePollingInterval(PollingInterval pollingInterval)
+        {
+            StopPolling();
+            m_currentPollingInterval = pollingInterval;
+
+            if (m_pollingCallback != null)
+                m_pollingService.RegisterForSynchronizedObjects(pollingInterval, AppType, m_latestMessageTime, MessageType, ProcessNewMessages);
         }
 
         private void ProcessNewMessages(IList<ObjectDetails> objects, Exception exception)
@@ -91,12 +106,17 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
                 SendTime = objectDetails.CreateTime,
                 Text = JsonConvert.DeserializeObject<ChatMessage>(objectDetails.Data).Text
             });
+
+            var latestObject = objects.LastOrDefault();
+            if (latestObject != null)
+                m_latestMessageTime = latestObject.CreateTime;
+
             m_pollingCallback(new ObservableCollection<MessageViewModel>(messages), null);
         }
 
         public void StopPolling()
         {
-            m_pollingService.UnregisterForSynchronizedObjects(MessagePollingInterval, ProcessNewMessages);
+            m_pollingService.UnregisterForSynchronizedObjects(m_currentPollingInterval, ProcessNewMessages);
         }
     }
 }
