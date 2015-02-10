@@ -13,6 +13,7 @@ using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.Client.Shared.Message;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Groups;
@@ -96,6 +97,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (!IsChatDisplayed)
                     UnreadMessageCount += message.Count;
             });
+
+            Messenger.Default.Register<AppActionFinishedMessage>(this, message =>
+            {
+                IsCommandBarOpen = false;
+            });
         }
 
         private void GroupsUpdate(Exception exception)
@@ -172,6 +178,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 ApplicationName = application.Name;
                 IsChatSupported = application.IsChatSupported;
 
+                if (!IsChatSupported)
+                    return;
+                
                 var chat = applications[ApplicationType.Chat];
                 ChatApplicationViewModel = chat.ApplicationViewModel as SupportAppBaseViewModel;
                 if (ChatApplicationViewModel != null)

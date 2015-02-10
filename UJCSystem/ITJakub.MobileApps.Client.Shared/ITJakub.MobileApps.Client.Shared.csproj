@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="ApplicationBase.cs" />
     <Compile Include="ViewModel\ActionViewModel.cs" />
+    <Compile Include="Message\AppActionFinishedMessage.cs" />
     <Compile Include="ViewModel\ApplicationBaseViewModel.cs" />
     <Compile Include="Communication\ClientCommunicationException.cs" />
     <Compile Include="Communication\IPollingService.cs" />

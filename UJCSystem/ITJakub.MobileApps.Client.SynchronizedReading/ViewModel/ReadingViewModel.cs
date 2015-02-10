@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
-using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
@@ -68,7 +67,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                     new ActionViewModel
                     {
                         Label = "Předat čtení",
-                        Command = new RelayCommand<UserInfo>(PassReadingControl)
+                        Action = PassReadControl
+                    },
+                    new ActionViewModel
+                    {
+                        Label = "Převzít čtení",
+                        Action = TakeReadControl
                     }
                 };
             }
@@ -187,15 +191,25 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             m_dataService.SendUpdate(updateViewModel, exception => { });
         }
 
-        private void PassReadingControl(UserInfo user)
+        private void PassReadControl(ActionViewModel actionViewModel, UserInfo userInfo)
         {
-            m_dataService.PassControl(user, exception =>
+            if (userInfo == null)
+                return;
+
+            actionViewModel.IsActionPerformed = true;
+            m_dataService.PassControl(userInfo, exception =>
             {
-                //TODO
+                actionViewModel.IsActionPerformed = false;
             });
         }
-
-        //TODO mechanism for progress callback to AppHostViewModel!
-
+        
+        private void TakeReadControl(ActionViewModel actionViewModel, UserInfo userInfo)
+        {
+            actionViewModel.IsActionPerformed = true;
+            m_dataService.TakeReadControl(exception =>
+            {
+                actionViewModel.IsActionPerformed = false;
+            });
+        }
     }
 }

@@ -158,5 +158,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
                 callback(exception);
             }
         }
+
+        public async void TakeReadControl(Action<Exception> callback)
+        {
+            var userInfo = await m_applicationCommunication.GetCurrentUserInfo();
+            PassControl(userInfo, callback);
+        }
     }
 }

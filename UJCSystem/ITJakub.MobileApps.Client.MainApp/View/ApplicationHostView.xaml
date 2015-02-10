@@ -16,10 +16,12 @@
         <core:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
         <converter1:MessageCountToNotificationConverter x:Key="MessageCountToNotificationConverter" />
         <converter1:GroupMemberToUserInfoConverter x:Key="GroupMemberToUserInfoConverter" />
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </Page.Resources>
     
     <Page.TopAppBar>
-        <AppBar Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <AppBar Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -37,11 +39,17 @@
                     
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding Label}"
-                                    IsEnabled="{Binding IsEnabled}"
+                            <Button IsEnabled="{Binding IsActionPerformed, Converter={StaticResource BooleanNegationConverter}}"
                                     HorizontalAlignment="Stretch"
                                     Command="{Binding Command}"
-                                    CommandParameter="{Binding ElementName=MembersListView, Path=SelectedItem, Converter={StaticResource GroupMemberToUserInfoConverter}}" />
+                                    CommandParameter="{Binding ElementName=MembersListView, Path=SelectedItem, Converter={StaticResource GroupMemberToUserInfoConverter}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ProgressRing IsActive="True"
+                                                  Margin="0,0,10,0"
+                                                  Visibility="{Binding IsActionPerformed, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <TextBlock Text="{Binding Label}" />
+                                </StackPanel>
+                            </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

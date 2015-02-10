@@ -43,5 +43,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         {
             m_synchronizationManager.PassControl(userInfo, callback);
         }
+
+        public void TakeReadControl(Action<Exception> callback)
+        {
+            m_synchronizationManager.TakeReadControl(callback);
+        }
     }
 }
