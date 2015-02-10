@@ -18,6 +18,8 @@ namespace ITJakub.MobileApps.Client.Shared.Communication
 
         Task CreateTaskAsync(ApplicationType applicationType, string name, string data);
 
+        Task<UserInfo> GetCurrentUserInfo();
+
         //todo more required methods
     }
 }

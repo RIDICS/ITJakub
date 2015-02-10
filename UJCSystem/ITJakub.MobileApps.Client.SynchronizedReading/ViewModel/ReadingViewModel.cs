@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -15,30 +14,38 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
     public class ReadingViewModel : ApplicationBaseViewModel
     {
         private readonly ReaderDataService m_dataService;
-        private readonly DispatcherTimer m_timer;
+        private readonly DispatcherTimer m_updateSenderTimer;
         private int m_selectionStart;
         private int m_selectionLength;
         private int m_cursorPosition;
-        private bool m_isTeacherModeEnabled;
         private bool m_isSelectionModeEnabled;
         private Mode m_currentMode;
         private bool m_isPollingStarted;
         private UpdateViewModel m_lastUpdateViewModel;
+        private UserInfo m_currentReader;
 
         public ReadingViewModel(ReaderDataService dataService)
         {
             m_dataService = dataService;
             m_isPollingStarted = false;
 
-            m_timer = new DispatcherTimer();
-            m_timer.Interval = new TimeSpan(0, 0, 0, 0, (int) PollingInterval.VeryFast);
-            m_timer.Tick += (sender, o) => SendUpdate();
+            m_updateSenderTimer = new DispatcherTimer();
+            m_updateSenderTimer.Interval = new TimeSpan(0, 0, 0, 0, (int) PollingInterval.VeryFast);
+            m_updateSenderTimer.Tick += (sender, o) => SendUpdate();
         }
 
         public override void InitializeCommunication()
         {
             UpdateMode();
             SetDataLoaded();
+
+            m_dataService.StartPollingControlUpdates((model, exception) =>
+            {
+                if (exception != null)
+                    return;
+
+                CurrentReader = model.ReaderUser;
+            });
         }
 
         public override void SetTask(string data)
@@ -48,8 +55,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
 
         public override void StopCommunication()
         {
-            m_dataService.StopPolling();
-            m_timer.Stop();
+            m_dataService.StopAllPolling();
+            m_updateSenderTimer.Stop();
         }
 
         public override IEnumerable<ActionViewModel> ActionsWithUsers
@@ -60,13 +67,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 {
                     new ActionViewModel
                     {
-                        Label = "Předat řízení čtení",
+                        Label = "Předat čtení",
                         Command = new RelayCommand<UserInfo>(PassReadingControl)
-                    },
-                    new ActionViewModel
-                    {
-                        Label = "Předat řízení označování",
-                        Command = new RelayCommand<UserInfo>(PassSelectingControl)
                     }
                 };
             }
@@ -102,17 +104,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             }
         }
 
-        public bool IsTeacherModeEnabled
-        {
-            get { return m_isTeacherModeEnabled; }
-            set
-            {
-                m_isTeacherModeEnabled = value;
-                RaisePropertyChanged();
-                UpdateMode();
-            }
-        }
-
         public bool IsSelectionModeEnabled
         {
             get { return m_isSelectionModeEnabled; }
@@ -134,6 +125,17 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             }
         }
 
+        public UserInfo CurrentReader
+        {
+            get { return m_currentReader; }
+            set
+            {
+                m_currentReader = value;
+                RaisePropertyChanged();
+                UpdateMode();
+            }
+        }
+
         private void ProcessPollingUpdate(UpdateViewModel update, Exception exception)
         {
             if (exception != null)
@@ -146,17 +148,17 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
 
         private void UpdateMode()
         {
-            if (IsTeacherModeEnabled)
+            if (m_currentReader != null && m_currentReader.IsMe)
             {
                 CurrentMode = IsSelectionModeEnabled ? Mode.Selector : Mode.Pointer;
-                m_dataService.StopPolling();
-                m_timer.Start();
+                m_dataService.StopPollingUpdates();
+                m_updateSenderTimer.Start();
                 m_isPollingStarted = false;
             }
             else
             {
                 CurrentMode = Mode.Reader;
-                m_timer.Stop();
+                m_updateSenderTimer.Stop();
 
                 if (m_isPollingStarted)
                     return;
@@ -187,12 +189,13 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
 
         private void PassReadingControl(UserInfo user)
         {
-            new MessageDialog("reading" + user.LastName).ShowAsync();
+            m_dataService.PassControl(user, exception =>
+            {
+                //TODO
+            });
         }
 
-        private void PassSelectingControl(UserInfo user)
-        {
-            new MessageDialog("selecting" + user.LastName).ShowAsync();
-        }
+        //TODO mechanism for progress callback to AppHostViewModel!
+
     }
 }

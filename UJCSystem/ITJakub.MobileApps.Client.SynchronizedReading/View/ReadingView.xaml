@@ -6,25 +6,38 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.SynchronizedReading.ViewModel"
     xmlns:control="using:ITJakub.MobileApps.Client.SynchronizedReading.View.Control"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.SynchronizedReading.View.Converter"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance d:Type=viewModel:ReadingViewModel}">
+
+    <UserControl.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter1:UserInfoToStringConverter x:Key="UserInfoToStringConverter" />
+    </UserControl.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          Margin="120,0,120,40">
+          Margin="120,0,30,40">
         
-        <!--TwoWay binding fixed bug-->
         <control:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                                    SelectionLength="{Binding SelectionLength, Mode=TwoWay}"
                                    CursorPosition="{Binding CursorPosition, Mode=TwoWay}"
                                    Mode="{Binding CurrentMode}" />
         
         <StackPanel Grid.Column="1"
-                    Orientation="Vertical">
-            <ToggleSwitch Header="Učitelský mód"
-                          IsOn="{Binding IsTeacherModeEnabled, Mode=TwoWay}"
-                          OnContent="Zapnuto"
-                          OffContent="Vypnuto" />
+                    Orientation="Vertical"
+                    MinWidth="140">
+            <TextBlock Margin="15,5,0,20"
+                       FontSize="17">
+                <Run Text="Nyní čte:" />
+                <LineBreak />
+                <Run Text="{Binding CurrentReader, Converter={StaticResource UserInfoToStringConverter}}"
+                     FontWeight="Bold" />
+            </TextBlock>
+            
             <ToggleSwitch Header="Výběr textu"
+                          Margin="10,0,0,0"
+                          Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}"
                           IsOn="{Binding IsSelectionModeEnabled, Mode=TwoWay}"
                           OnContent="Zapnuto"
                           OffContent="Vypnuto" />

@@ -121,5 +121,22 @@ namespace ITJakub.MobileApps.Client.Core
             if (userId != null)
                 await m_serviceClient.CreateTaskAsync(userId.Value, appId, name, data);
         }
+
+        public Task<UserInfo> GetCurrentUserInfo()
+        {
+            var taskCompletition = new TaskCompletionSource<UserInfo>();
+            m_authenticationManager.GetLoggedUserInfo(false, userViewModel =>
+            {
+                var userInfo = new UserInfo
+                {
+                    FirstName = userViewModel.FirstName,
+                    LastName = userViewModel.LastName,
+                    Id = userViewModel.UserId,
+                    IsMe = true
+                };
+                taskCompletition.SetResult(userInfo);
+            });
+            return taskCompletition.Task;
+        }
     }
 }

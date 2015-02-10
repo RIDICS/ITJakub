@@ -12,7 +12,6 @@ using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using ITJakub.MobileApps.Client.Shared.Communication;
-using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.DataContracts;
@@ -311,8 +310,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged();
             }
         }
-
-        public UserInfo SelectedMember { get; set; }
 
         public bool IsTeacherMode { get; set; }
 
