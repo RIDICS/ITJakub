@@ -1,4 +1,3 @@
-using System;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Shared.Data;
@@ -15,7 +14,6 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     public class RowProgressViewModel
     {
         private int m_filledLength;
-        private DateTime m_time;
 
         public RowProgressViewModel()
         {

@@ -38,8 +38,12 @@
             <Grid Grid.Column="1" Grid.Row="1" Background="White" />
 
             <Grid Grid.Column="1" Grid.Row="2" Background="White">
-                <WebView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                         Source="{Binding BrowserUri, Mode=TwoWay}" Name="Wv" LoadCompleted="wv_LoadCompleted" NavigationFailed="wv_NavigationFailed">
+                <WebView HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch"
+                         Source="{Binding BrowserUri, Mode=TwoWay}"
+                         NavigationCompleted="Wv_OnNavigationCompleted"
+                         authBroker:WebViewHelpers.BrowserTitle="{Binding BrowserTitle, Mode=TwoWay}"
+                         authBroker:WebViewHelpers.NavigationCompletedCommand="{Binding NavigationCompletedCommand}">
 
                     <!--<interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="LoadCompleted">

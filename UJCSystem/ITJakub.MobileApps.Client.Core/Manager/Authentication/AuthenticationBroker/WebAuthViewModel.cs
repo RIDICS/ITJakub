@@ -1,6 +1,5 @@
 using System;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
 using GalaSoft.MvvmLight;
@@ -23,8 +22,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
 
 
         public RelayCommand CancelCommand { get; private set; }
-        public RelayCommand<NavigationEventArgs> LoadAddresCompletedCommand { get; private set; }
-        public RelayCommand<WebViewNavigationFailedEventArgs> NavigationFailedCommand { get; private set; }
+        public RelayCommand<WebViewNavigationCompletedEventArgs> NavigationCompletedCommand { get; private set; } 
 
         public string BrowserTitle
         {
@@ -48,13 +46,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
         {
             CancelCommand = new RelayCommand(() => MessengerInstance.Send(new AuthBrokerCanceledMessage()));
 
-            LoadAddresCompletedCommand =
-                new RelayCommand<NavigationEventArgs>(
-                    parameters => MessengerInstance.Send(new AuthBrokerUriChangedMessage { Uri = parameters.Uri, DocumentTitle = BrowserTitle }));
-
-            NavigationFailedCommand =
-                new RelayCommand<WebViewNavigationFailedEventArgs>(
-                    parameters => MessengerInstance.Send(new AuthBrokerUriNavigationFailedMessage {Uri = parameters.Uri, DocumentTitle = BrowserTitle}));
+            NavigationCompletedCommand = new RelayCommand<WebViewNavigationCompletedEventArgs>(parameters =>
+            {
+                if (parameters.IsSuccess)
+                    MessengerInstance.Send(new AuthBrokerUriChangedMessage {Uri = parameters.Uri, DocumentTitle = BrowserTitle});
+                else
+                    MessengerInstance.Send(new AuthBrokerUriNavigationFailedMessage {Uri = parameters.Uri, DocumentTitle = BrowserTitle});
+            });
         }
 
         private void UnregisterFromMessages()

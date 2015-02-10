@@ -1,7 +1,6 @@
 ﻿// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker
 {    
@@ -13,16 +12,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
             DataContext = viewModel;
         }
 
-        private void wv_LoadCompleted(object sender, NavigationEventArgs e)
+        private void Wv_OnNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            ((WebAuthViewModel) DataContext).BrowserTitle = Wv.DocumentTitle;//HACK for BrowserTitle cannot be bind
-            ((WebAuthViewModel)DataContext).LoadAddresCompletedCommand.Execute(e);
-        }
-
-        private void wv_NavigationFailed(object sender, WebViewNavigationFailedEventArgs e)
-        {
-            ((WebAuthViewModel)DataContext).BrowserTitle = Wv.DocumentTitle;//HACK for BrowserTitle cannot be bind
-            ((WebAuthViewModel)DataContext).NavigationFailedCommand.Execute(e);
+            WebViewHelpers.SetBrowserTitle(sender, sender.DocumentTitle);
+            
+            var command = WebViewHelpers.GetNavigationCompletedCommand(sender);
+            if (command != null)
+                command.Execute(args);
         }
     }
 }
