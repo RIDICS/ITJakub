@@ -63,13 +63,19 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
                 return;
             }
 
-            var updateContract = JsonConvert.DeserializeObject<UpdateContract>(objectDetails.Data);
+            var updateContract = JsonConvert.DeserializeObject<FullUpdateContract>(objectDetails.Data);
             var updateViewModel = new UpdateViewModel
             {
                 SelectionStart = updateContract.SelectionStart,
                 SelectionLength = updateContract.SelectionLength,
-                CursorPosition = updateContract.CursorPosition
+                CursorPosition = updateContract.CursorPosition,
             };
+            if (updateContract.ImageCursorPositionX != null && updateContract.ImageCursorPositionY != null)
+            {
+                updateViewModel.ContainsImageUpdate = true;
+                updateViewModel.ImageCursorPositionX = updateContract.ImageCursorPositionX.Value;
+                updateViewModel.ImageCursorPositionY = updateContract.ImageCursorPositionY.Value;
+            }
 
             m_callback(updateViewModel, null);
         }
@@ -121,12 +127,24 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         {
             try
             {
-                var updateContract = new UpdateContract
+                UpdateContract updateContract;
+                if (update.ContainsImageUpdate)
                 {
-                    SelectionStart = update.SelectionStart,
-                    SelectionLength = update.SelectionLength,
-                    CursorPosition = update.CursorPosition
-                };
+                    updateContract = new FullUpdateContract
+                    {
+                        ImageCursorPositionX = update.ImageCursorPositionX,
+                        ImageCursorPositionY = update.ImageCursorPositionY
+                    };
+                }
+                else
+                {
+                    updateContract = new UpdateContract();
+                }
+
+                updateContract.SelectionStart = update.SelectionStart;
+                updateContract.SelectionLength = update.SelectionLength;
+                updateContract.CursorPosition = update.CursorPosition;
+                
                 var serializedContract = JsonConvert.SerializeObject(updateContract);
 
                 await

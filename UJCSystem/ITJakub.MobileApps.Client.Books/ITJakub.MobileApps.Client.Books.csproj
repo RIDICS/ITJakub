@@ -148,7 +148,7 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Control\BindableRichEditBox.cs" />
     <Compile Include="View\Control\BindableRichTextBlock.cs" />
-    <Compile Include="View\Control\GridViewbehaviors.cs" />
+    <Compile Include="View\Control\GridViewBehaviors.cs" />
     <Compile Include="View\Converter\PageOrderToLabelConverter.cs" />
     <Compile Include="View\SelectBookView.xaml.cs">
       <DependentUpon>SelectBookView.xaml</DependentUpon>

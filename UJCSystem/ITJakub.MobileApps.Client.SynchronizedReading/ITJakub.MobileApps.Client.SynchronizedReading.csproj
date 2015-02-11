@@ -116,16 +116,20 @@
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
     <Compile Include="DataContract\ControlContract.cs" />
+    <Compile Include="DataContract\FullUpdateContract.cs" />
     <Compile Include="DataContract\UpdateContract.cs" />
     <Compile Include="ViewModel\ControlViewModel.cs" />
     <Compile Include="DataService\ReaderDataService.cs" />
     <Compile Include="DataService\SynchronizationManager.cs" />
+    <Compile Include="ViewModel\Reading\ImageReaderViewModel.cs" />
+    <Compile Include="ViewModel\Reading\TextReaderViewModel.cs" />
     <Compile Include="ViewModel\UpdateViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ReadingEditorViewModel.cs" />
-    <Compile Include="ViewModel\ReadingViewModel.cs" />
+    <Compile Include="ViewModel\Reading\ReadingViewModel.cs" />
     <Compile Include="View\Control\ReaderImage.cs" />
     <Compile Include="View\Control\ReaderRichEditBox.cs" />
+    <Compile Include="View\Converter\BooleanToGridVisibility.cs" />
     <Compile Include="View\Converter\UserInfoToStringConverter.cs" />
     <Compile Include="View\ReadingEditorView.xaml.cs">
       <DependentUpon>ReadingEditorView.xaml</DependentUpon>

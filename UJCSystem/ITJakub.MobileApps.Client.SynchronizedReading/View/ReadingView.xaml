@@ -4,24 +4,31 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModel="using:ITJakub.MobileApps.Client.SynchronizedReading.ViewModel"
     xmlns:control="using:ITJakub.MobileApps.Client.SynchronizedReading.View.Control"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.SynchronizedReading.View.Converter"
+    xmlns:reading="using:ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading"
+    xmlns:controlBooks="using:ITJakub.MobileApps.Client.Books.View.Control"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance d:Type=viewModel:ReadingViewModel}">
+    d:DataContext="{d:DesignInstance d:Type=reading:ReadingViewModel}">
 
     <UserControl.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:UserInfoToStringConverter x:Key="UserInfoToStringConverter" />
+        <converter1:BooleanToGridVisibility x:Key="BooleanToGridVisibility" />
     </UserControl.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
           Margin="120,0,30,40">
         
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToGridVisibility}}" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         
@@ -30,12 +37,22 @@
                                    CursorPosition="{Binding CursorPosition, Mode=TwoWay}"
                                    Mode="{Binding CurrentMode}"
                                    PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
-                                   PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}" />
+                                   PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
+                                   DataContext="{Binding TextReaderViewModel}" />
         
-        <control:ReaderImage Grid.Column="1"
-                             Margin="20,0,0,0" />
+        <control:ReaderImage Grid.Row="0"
+                             Grid.Column="1"
+                             Margin="20,0,0,0"
+                             PointerPositionX="{Binding PointerPositionX, Mode=TwoWay}"
+                             PointerPositionY="{Binding PointerPositionY, Mode=TwoWay}"
+                             Mode="{Binding CurrentMode}"
+                             ImageSource="{Binding Photo}"
+                             PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
+                             PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
+                             DataContext="{Binding ImageReaderViewModel}"/>
         
-        <StackPanel Grid.Column="2"
+        <StackPanel Grid.Row="0"
+                    Grid.Column="2"
                     Orientation="Vertical"
                     MinWidth="140">
             <TextBlock Margin="15,5,0,20"
@@ -45,6 +62,12 @@
                 <Run Text="{Binding CurrentReader, Converter={StaticResource UserInfoToStringConverter}}"
                      FontWeight="Bold" />
             </TextBlock>
+            
+            <ToggleSwitch Header="Zobrazit fotografii"
+                          Margin="10,0,0,0"
+                          IsOn="{Binding IsPhotoDisplayed, Mode=TwoWay}"
+                          OnContent="Zapnuto"
+                          OffContent="Vypnuto" />
             
             <ToggleSwitch Header="Výběr textu"
                           Margin="10,0,0,0"
@@ -65,6 +88,55 @@
                     x:Name="VerticalCalibrationSlider" />
         </StackPanel>
         
+        <Grid Grid.Row="1"
+              Grid.Column="0"
+              Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <Button Grid.Column="0">
+                <SymbolIcon Symbol="Back" />
+            </Button>
+
+            <GridView Grid.Column="1"
+                      SelectionMode="Single"
+                      HorizontalAlignment="Center"
+                      HorizontalContentAlignment="Center"
+                      controlBooks:GridViewBehaviors.IsScrollToSelection="True">
+                <!--TODO add ItemContainerStyle-->
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid MinWidth="20">
+                            <TextBlock Text="{Binding PageId}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center">
+
+                            </TextBlock>
+                        </Grid>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+            
+            <Button Grid.Column="2">
+                <SymbolIcon Symbol="Forward" />
+            </Button>
+        </Grid>
         
+        <StackPanel Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="10,0,0,0"
+                    Orientation="Vertical">
+            <TextBlock Text="Přejít na stranu:" />
+            
+            <TextBox />
+        </StackPanel>
     </Grid>
 </UserControl>

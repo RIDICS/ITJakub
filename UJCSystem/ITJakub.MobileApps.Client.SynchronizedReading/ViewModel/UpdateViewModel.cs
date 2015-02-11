@@ -8,9 +8,19 @@
 
         public int CursorPosition { get; set; }
 
+        public double ImageCursorPositionX { get; set; }
+        
+        public double ImageCursorPositionY { get; set; }
+
+        public bool ContainsImageUpdate { get; set; }
+
+
         protected bool Equals(UpdateViewModel other)
         {
-            return SelectionStart == other.SelectionStart && SelectionLength == other.SelectionLength && CursorPosition == other.CursorPosition;
+            return SelectionStart == other.SelectionStart && SelectionLength == other.SelectionLength &&
+                   CursorPosition == other.CursorPosition && ImageCursorPositionX.Equals(other.ImageCursorPositionX) &&
+                   ImageCursorPositionY.Equals(other.ImageCursorPositionY) &&
+                   ContainsImageUpdate.Equals(other.ContainsImageUpdate);
         }
 
         public override bool Equals(object obj)
@@ -28,6 +38,9 @@
                 var hashCode = SelectionStart;
                 hashCode = (hashCode*397) ^ SelectionLength;
                 hashCode = (hashCode*397) ^ CursorPosition;
+                hashCode = (hashCode*397) ^ ImageCursorPositionX.GetHashCode();
+                hashCode = (hashCode*397) ^ ImageCursorPositionY.GetHashCode();
+                hashCode = (hashCode*397) ^ ContainsImageUpdate.GetHashCode();
                 return hashCode;
             }
         }

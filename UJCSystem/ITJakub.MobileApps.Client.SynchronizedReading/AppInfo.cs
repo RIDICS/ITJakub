@@ -7,6 +7,7 @@ using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 using ITJakub.MobileApps.Client.SynchronizedReading.View;
 using ITJakub.MobileApps.Client.SynchronizedReading.ViewModel;
+using ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading;
 
 namespace ITJakub.MobileApps.Client.SynchronizedReading
 {

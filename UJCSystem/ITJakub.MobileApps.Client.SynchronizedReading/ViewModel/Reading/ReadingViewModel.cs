@@ -8,20 +8,17 @@ using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 using ITJakub.MobileApps.Client.SynchronizedReading.View.Control;
 
-namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
+namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 {
     public class ReadingViewModel : ApplicationBaseViewModel
     {
         private readonly ReaderDataService m_dataService;
         private readonly DispatcherTimer m_updateSenderTimer;
-        private int m_selectionStart;
-        private int m_selectionLength;
-        private int m_cursorPosition;
-        private bool m_isSelectionModeEnabled;
-        private ReaderRichEditBox.Modes m_currentMode;
         private bool m_isPollingStarted;
         private UpdateViewModel m_lastUpdateViewModel;
         private UserInfo m_currentReader;
+        private bool m_isPhotoDisplayed;
+        private bool m_isSelectionModeEnabled;
 
         public ReadingViewModel(ReaderDataService dataService)
         {
@@ -31,6 +28,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             m_updateSenderTimer = new DispatcherTimer();
             m_updateSenderTimer.Interval = new TimeSpan(0, 0, 0, 0, (int) PollingInterval.VeryFast);
             m_updateSenderTimer.Tick += (sender, o) => SendUpdate();
+
+            TextReaderViewModel = new TextReaderViewModel();
+            ImageReaderViewModel = new ImageReaderViewModel();
         }
 
         public override void InitializeCommunication()
@@ -78,54 +78,28 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             }
         }
 
-        public int SelectionStart
+        private void UpdateMode()
         {
-            get { return m_selectionStart; }
-            set
+            if (m_currentReader != null && m_currentReader.IsMe)
             {
-                m_selectionStart = value;
-                RaisePropertyChanged();
-            }
-        }
+                TextReaderViewModel.CurrentMode = m_isSelectionModeEnabled ? ReaderRichEditBox.Modes.Selector : ReaderRichEditBox.Modes.Pointer;
+                ImageReaderViewModel.CurrentMode = ReaderImage.Modes.Pointer;
 
-        public int SelectionLength
-        {
-            get { return m_selectionLength; }
-            set
-            {
-                m_selectionLength = value;
-                RaisePropertyChanged();
+                m_dataService.StopPollingUpdates();
+                m_updateSenderTimer.Start();
+                m_isPollingStarted = false;
             }
-        }
-
-        public int CursorPosition
-        {
-            get { return m_cursorPosition; }
-            set
+            else
             {
-                m_cursorPosition = value;
-                RaisePropertyChanged();
-            }
-        }
+                TextReaderViewModel.CurrentMode = ReaderRichEditBox.Modes.Reader;
+                ImageReaderViewModel.CurrentMode = ReaderImage.Modes.Reader;
+                m_updateSenderTimer.Stop();
 
-        public bool IsSelectionModeEnabled
-        {
-            get { return m_isSelectionModeEnabled; }
-            set
-            {
-                m_isSelectionModeEnabled = value;
-                RaisePropertyChanged();
-                UpdateMode();
-            }
-        }
+                if (m_isPollingStarted)
+                    return;
 
-        public ReaderRichEditBox.Modes CurrentMode
-        {
-            get { return m_currentMode; }
-            set
-            {
-                m_currentMode = value;
-                RaisePropertyChanged();
+                m_dataService.StartPollingUpdates(ProcessPollingUpdate);
+                m_isPollingStarted = true;
             }
         }
 
@@ -139,50 +113,68 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 UpdateMode();
             }
         }
+        public bool IsSelectionModeEnabled
+        {
+            get { return m_isSelectionModeEnabled; }
+            set
+            {
+                m_isSelectionModeEnabled = value;
+                RaisePropertyChanged();
+                UpdateMode();
+            }
+        }
+
+        public bool IsPhotoDisplayed
+        {
+            get { return m_isPhotoDisplayed; }
+            set
+            {
+                m_isPhotoDisplayed = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public TextReaderViewModel TextReaderViewModel { get; set; }
+
+        public ImageReaderViewModel ImageReaderViewModel { get; set; }
+
 
         private void ProcessPollingUpdate(UpdateViewModel update, Exception exception)
         {
             if (exception != null)
                 return;
 
-            SelectionStart = update.SelectionStart;
-            SelectionLength = update.SelectionLength;
-            CursorPosition = update.CursorPosition;
-        }
+            TextReaderViewModel.SelectionStart = update.SelectionStart;
+            TextReaderViewModel.SelectionLength = update.SelectionLength;
+            TextReaderViewModel.CursorPosition = update.CursorPosition;
 
-        private void UpdateMode()
-        {
-            if (m_currentReader != null && m_currentReader.IsMe)
+            if (update.ContainsImageUpdate)
             {
-                CurrentMode = IsSelectionModeEnabled ? ReaderRichEditBox.Modes.Selector : ReaderRichEditBox.Modes.Pointer;
-                m_dataService.StopPollingUpdates();
-                m_updateSenderTimer.Start();
-                m_isPollingStarted = false;
-            }
-            else
-            {
-                CurrentMode = ReaderRichEditBox.Modes.Reader;
-                m_updateSenderTimer.Stop();
-
-                if (m_isPollingStarted)
-                    return;
-
-                m_dataService.StartPollingUpdates(ProcessPollingUpdate);
-                m_isPollingStarted = true;
+                ImageReaderViewModel.PointerPositionX = update.ImageCursorPositionX;
+                ImageReaderViewModel.PointerPositionY = update.ImageCursorPositionY;
+                IsPhotoDisplayed = true;
             }
         }
+
 
         private void SendUpdate()
         {
-            if (m_currentMode == ReaderRichEditBox.Modes.Reader)
+            if (TextReaderViewModel.CurrentMode == ReaderRichEditBox.Modes.Reader)
                 return;
 
             var updateViewModel = new UpdateViewModel
             {
-                SelectionStart = m_selectionStart,
-                SelectionLength = m_selectionLength,
-                CursorPosition = m_cursorPosition
+                SelectionStart = TextReaderViewModel.SelectionStart,
+                SelectionLength = TextReaderViewModel.SelectionLength,
+                CursorPosition = TextReaderViewModel.CursorPosition,
+                ContainsImageUpdate = IsPhotoDisplayed
             };
+
+            if (IsPhotoDisplayed)
+            {
+                updateViewModel.ImageCursorPositionX = ImageReaderViewModel.PointerPositionX;
+                updateViewModel.ImageCursorPositionY = ImageReaderViewModel.PointerPositionY;
+            }
 
             if (updateViewModel.Equals(m_lastUpdateViewModel))
                 return;

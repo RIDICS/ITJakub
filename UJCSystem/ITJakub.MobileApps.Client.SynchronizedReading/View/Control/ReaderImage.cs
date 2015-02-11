@@ -19,7 +19,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         public static readonly DependencyProperty PointerCalibrationXProperty = DependencyProperty.Register("PointerCalibrationX", typeof(double), typeof(ReaderImage), new PropertyMetadata(0.0));
         public static readonly DependencyProperty PointerCalibrationYProperty = DependencyProperty.Register("PointerCalibrationY", typeof(double), typeof(ReaderImage), new PropertyMetadata(0.0));
         public static readonly DependencyProperty ModeProperty = DependencyProperty.Register("Mode", typeof (Modes), typeof (ReaderImage), new PropertyMetadata(Modes.Reader));
-
+        public static readonly DependencyProperty IsScrollingEnabledProperty = DependencyProperty.Register("IsScrollingEnabled", typeof(bool), typeof(ReaderImage), new PropertyMetadata(false, OnScrollingEnabledChanged));
+        
         private Image m_cursorImage;
         private Image m_sourceImage;
 
@@ -34,12 +35,18 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             set { SetValue(ImageSourceProperty, value); }
         }
 
+        /// <summary>
+        /// Horizontal pointer position on image in range from 0.0 to 1.0.
+        /// </summary>
         public double PointerPositionX
         {
             get { return (double) GetValue(PointerPositionXProperty); }
             set { SetValue(PointerPositionXProperty, value); }
         }
 
+        /// <summary>
+        /// Vertical pointer position on image in range from 0.0 to 1.0.
+        /// </summary>
         public double PointerPositionY
         {
             get { return (double) GetValue(PointerPositionYProperty); }
@@ -62,6 +69,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         {
             get { return (Modes) GetValue(ModeProperty); }
             set { SetValue(ModeProperty, value); }
+        }
+
+        public bool IsScrollingEnabled
+        {
+            get { return (bool) GetValue(IsScrollingEnabledProperty); }
+            set { SetValue(IsScrollingEnabledProperty, value); }
         }
 
 
@@ -103,6 +116,15 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             base.OnApplyTemplate();
             m_cursorImage = GetTemplateChild("CursorImage") as Image;
             m_sourceImage = GetTemplateChild("SourceImage") as Image;
+        }
+
+        private static void OnScrollingEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var readerImage = d as ReaderImage;
+            if (readerImage == null)
+                return;
+            
+            //TODO enable / disable scrollviewer
         }
 
         public enum Modes
