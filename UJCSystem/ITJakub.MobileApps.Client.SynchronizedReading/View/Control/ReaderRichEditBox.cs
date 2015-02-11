@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Graphics.Display;
 using Windows.UI.Text;
@@ -46,11 +47,15 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 
         public static readonly DependencyProperty SelectionLengthProperty = DependencyProperty.Register("SelectionLength", typeof(int), typeof(ReaderRichEditBox), new PropertyMetadata(0, OnSelectionPropertyChanged));
         
-        public static readonly DependencyProperty ModeProperty = DependencyProperty.Register("Mode", typeof (Mode), typeof (ReaderRichEditBox), new PropertyMetadata(Mode.Reader, OnModeChanged));
+        public static readonly DependencyProperty ModeProperty = DependencyProperty.Register("Mode", typeof (Modes), typeof (ReaderRichEditBox), new PropertyMetadata(Modes.Reader, OnModeChanged));
         
         public static readonly DependencyProperty SelectionChangedCommandProperty = DependencyProperty.Register("SelectionChangedCommand", typeof (ICommand), typeof (ReaderRichEditBox), new PropertyMetadata(null));
         
         public static readonly DependencyProperty CursorPositionProperty = DependencyProperty.Register("CursorPosition", typeof (int), typeof (ReaderRichEditBox), new PropertyMetadata(0, OnCursorPositionChanged));
+
+        public static readonly DependencyProperty PointerCalibrationXProperty = DependencyProperty.Register("PointerCalibrationX", typeof (double), typeof (ReaderRichEditBox), new PropertyMetadata(0.0));
+
+        public static readonly DependencyProperty PointerCalibrationYProperty = DependencyProperty.Register("PointerCalibrationY", typeof (double), typeof (ReaderRichEditBox), new PropertyMetadata(0.0));
 
         public string DocumentRtf
         {
@@ -70,9 +75,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             set { SetValue(SelectionLengthProperty, value); }
         }
 
-        public Mode Mode
+        public Modes Mode
         {
-            get { return (Mode) GetValue(ModeProperty); }
+            get { return (Modes) GetValue(ModeProperty); }
             set { SetValue(ModeProperty, value); }
         }
 
@@ -86,6 +91,18 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         {
             get { return (int) GetValue(CursorPositionProperty); }
             set { SetValue(CursorPositionProperty, value); }
+        }
+
+        public double PointerCalibrationX
+        {
+            get { return (double) GetValue(PointerCalibrationXProperty); }
+            set { SetValue(PointerCalibrationXProperty, value); }
+        }
+
+        public double PointerCalibrationY
+        {
+            get { return (double) GetValue(PointerCalibrationYProperty); }
+            set { SetValue(PointerCalibrationYProperty, value); }
         }
 
         private static void OnSelectionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -110,7 +127,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             SelectionStart = m_richEditBox.Document.Selection.StartPosition;
             SelectionLength = m_richEditBox.Document.Selection.EndPosition - m_richEditBox.Document.Selection.StartPosition;
             m_selectionChangedRespond = true;
-            if (Mode != Mode.Reader && SelectionChangedCommand != null && SelectionChangedCommand.CanExecute(null))
+            if (Mode != Modes.Reader && SelectionChangedCommand != null && SelectionChangedCommand.CanExecute(null))
             {
                 SelectionChangedCommand.Execute(null);
             }
@@ -124,12 +141,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 
             switch (readerRichEditBox.Mode)
             {
-                case Mode.Selector:
+                case Modes.Selector:
                     readerRichEditBox.m_overlapGrid.Visibility = Visibility.Collapsed;
                     readerRichEditBox.m_scrollOverlapGrid.Visibility = Visibility.Collapsed;
                     readerRichEditBox.m_scrollBarGrid.Visibility = Visibility.Collapsed;
                     break;
-                case Mode.Pointer:
+                case Modes.Pointer:
                     readerRichEditBox.m_overlapGrid.Visibility = Visibility.Visible;
                     readerRichEditBox.m_scrollOverlapGrid.Visibility = Visibility.Visible;
                     readerRichEditBox.m_scrollBarGrid.Visibility = Visibility.Visible;
@@ -217,13 +234,13 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         protected override void OnPointerMoved(PointerRoutedEventArgs e)
         {
             base.OnPointerMoved(e);
-            if (Mode != Mode.Pointer)
+            if (Mode != Modes.Pointer)
                 return;
 
             var point = e.GetCurrentPoint(m_richEditBox).Position;
 
-            point.X -= PointerCorrectionLeft;
-            point.Y -= PointerCorrectionTop;
+            point.X -= PointerCorrectionLeft + PointerCalibrationX;
+            point.Y -= PointerCorrectionTop + PointerCalibrationY;
 
             // HACK get unscaled point coordinates for RichEditBox
             point = ScalePoint(true, point.X, point.Y);
@@ -234,7 +251,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 
         private static Point ScalePoint(bool inverse, double x, double y)
         {
-            var resolutionScale = DisplayInformation.GetForCurrentView().ResolutionScale;
+            var resolutionScale = DesignMode.DesignModeEnabled
+                ? ResolutionScale.Scale100Percent
+                : DisplayInformation.GetForCurrentView().ResolutionScale;
             if (resolutionScale == ResolutionScale.Scale100Percent)
                 return new Point(x, y);
             
@@ -245,7 +264,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 
         private static double ScaleValue(bool inverse, double value)
         {
-            var resolutionScale = DisplayInformation.GetForCurrentView().ResolutionScale;
+            var resolutionScale = DesignMode.DesignModeEnabled
+                ? ResolutionScale.Scale100Percent
+                : DisplayInformation.GetForCurrentView().ResolutionScale;
             if (resolutionScale == ResolutionScale.Scale100Percent)
                 return value;
 
@@ -261,10 +282,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             var delta = properties.MouseWheelDelta;
             m_scrollViewer.ChangeView(null, m_scrollViewer.VerticalOffset - delta, null);
         }
-    }
-
-    public enum Mode
-    {
-        Reader, Pointer, Selector
+        
+        public enum Modes
+        {
+            Reader, Pointer, Selector
+        }
     }
 }

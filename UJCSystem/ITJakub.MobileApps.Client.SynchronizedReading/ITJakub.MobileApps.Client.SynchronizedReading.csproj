@@ -124,6 +124,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ReadingEditorViewModel.cs" />
     <Compile Include="ViewModel\ReadingViewModel.cs" />
+    <Compile Include="View\Control\ReaderImage.cs" />
     <Compile Include="View\Control\ReaderRichEditBox.cs" />
     <Compile Include="View\Converter\UserInfoToStringConverter.cs" />
     <Compile Include="View\ReadingEditorView.xaml.cs">

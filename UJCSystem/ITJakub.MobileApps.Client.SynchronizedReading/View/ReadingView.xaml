@@ -19,12 +19,23 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
           Margin="120,0,30,40">
         
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
         <control:ReaderRichEditBox SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                                    SelectionLength="{Binding SelectionLength, Mode=TwoWay}"
                                    CursorPosition="{Binding CursorPosition, Mode=TwoWay}"
-                                   Mode="{Binding CurrentMode}" />
+                                   Mode="{Binding CurrentMode}"
+                                   PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
+                                   PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}" />
         
-        <StackPanel Grid.Column="1"
+        <control:ReaderImage Grid.Column="1"
+                             Margin="20,0,0,0" />
+        
+        <StackPanel Grid.Column="2"
                     Orientation="Vertical"
                     MinWidth="140">
             <TextBlock Margin="15,5,0,20"
@@ -41,11 +52,19 @@
                           IsOn="{Binding IsSelectionModeEnabled, Mode=TwoWay}"
                           OnContent="Zapnuto"
                           OffContent="Vypnuto" />
+            
+            <Slider Header="Vodorovná korekce ukazatele"
+                    Margin="10,0,5,0"
+                    Minimum="-50"
+                    Maximum="50"
+                    x:Name="HorizontalCalibrationSlider" />
+            <Slider Header="Svislá korekce ukazatele"
+                    Margin="10,0,5,0"
+                    Minimum="-50"
+                    Maximum="50"
+                    x:Name="VerticalCalibrationSlider" />
         </StackPanel>
         
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+        
     </Grid>
 </UserControl>

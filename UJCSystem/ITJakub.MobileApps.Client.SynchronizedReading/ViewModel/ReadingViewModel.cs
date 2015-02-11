@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private int m_selectionLength;
         private int m_cursorPosition;
         private bool m_isSelectionModeEnabled;
-        private Mode m_currentMode;
+        private ReaderRichEditBox.Modes m_currentMode;
         private bool m_isPollingStarted;
         private UpdateViewModel m_lastUpdateViewModel;
         private UserInfo m_currentReader;
@@ -119,7 +119,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             }
         }
 
-        public Mode CurrentMode
+        public ReaderRichEditBox.Modes CurrentMode
         {
             get { return m_currentMode; }
             set
@@ -154,14 +154,14 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         {
             if (m_currentReader != null && m_currentReader.IsMe)
             {
-                CurrentMode = IsSelectionModeEnabled ? Mode.Selector : Mode.Pointer;
+                CurrentMode = IsSelectionModeEnabled ? ReaderRichEditBox.Modes.Selector : ReaderRichEditBox.Modes.Pointer;
                 m_dataService.StopPollingUpdates();
                 m_updateSenderTimer.Start();
                 m_isPollingStarted = false;
             }
             else
             {
-                CurrentMode = Mode.Reader;
+                CurrentMode = ReaderRichEditBox.Modes.Reader;
                 m_updateSenderTimer.Stop();
 
                 if (m_isPollingStarted)
@@ -174,7 +174,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
 
         private void SendUpdate()
         {
-            if (m_currentMode == Mode.Reader)
+            if (m_currentMode == ReaderRichEditBox.Modes.Reader)
                 return;
 
             var updateViewModel = new UpdateViewModel

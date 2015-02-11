@@ -48,4 +48,32 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="control1:ReaderImage">
+        <Setter Property="Background" Value="#200000FF" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="control1:ReaderImage">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Grid VerticalAlignment="Center"
+                              HorizontalAlignment="Center">
+                            <Grid Margin="16,24,26,52">
+                                <Image Source="{TemplateBinding ImageSource}"
+                                       Stretch="Uniform"
+                                       x:Name="SourceImage" />
+                            </Grid>
+                            
+                            <Grid Margin="16,24,0,0">
+                                <Image Source="../Icon/one_finger-48.png"
+                                       Stretch="None"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       x:Name="CursorImage" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
