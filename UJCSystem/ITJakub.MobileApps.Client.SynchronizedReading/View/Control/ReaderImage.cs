@@ -7,6 +7,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 {
     [TemplatePart(Name = "CursorImage", Type = typeof(Image))]
     [TemplatePart(Name = "SourceImage", Type = typeof(Image))]
+    [TemplatePart(Name = "ScrollViewer", Type = typeof(ScrollViewer))]
     public sealed class ReaderImage : Windows.UI.Xaml.Controls.Control
     {
         private const double FinalPointerCorrectionX = 17.0;
@@ -19,10 +20,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         public static readonly DependencyProperty PointerCalibrationXProperty = DependencyProperty.Register("PointerCalibrationX", typeof(double), typeof(ReaderImage), new PropertyMetadata(0.0));
         public static readonly DependencyProperty PointerCalibrationYProperty = DependencyProperty.Register("PointerCalibrationY", typeof(double), typeof(ReaderImage), new PropertyMetadata(0.0));
         public static readonly DependencyProperty ModeProperty = DependencyProperty.Register("Mode", typeof (Modes), typeof (ReaderImage), new PropertyMetadata(Modes.Reader));
-        public static readonly DependencyProperty IsScrollingEnabledProperty = DependencyProperty.Register("IsScrollingEnabled", typeof(bool), typeof(ReaderImage), new PropertyMetadata(false, OnScrollingEnabledChanged));
+        public static readonly DependencyProperty IsScrollingEnabledProperty = DependencyProperty.Register("IsScrollingEnabled", typeof(bool), typeof(ReaderImage), new PropertyMetadata(true, OnScrollingEnabledChanged));
         
         private Image m_cursorImage;
         private Image m_sourceImage;
+        private ScrollViewer m_scrollViewer;
 
         public ReaderImage()
         {
@@ -84,9 +86,35 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             if (readerImage == null)
                 return;
 
-            var left = readerImage.m_sourceImage.ActualWidth * readerImage.PointerPositionX - FinalPointerCorrectionX;
-            var top = readerImage.m_sourceImage.ActualHeight * readerImage.PointerPositionY;
+            var scrollViewer = readerImage.m_scrollViewer;
+            var sourceImage = readerImage.m_sourceImage;
+            var zoom = readerImage.m_scrollViewer.ZoomFactor;
+            var zoomedWidth = sourceImage.ActualWidth*zoom;
+            var zoomedHeight = sourceImage.ActualHeight*zoom;
+            
+            var left = zoomedWidth * readerImage.PointerPositionX - FinalPointerCorrectionX;
+            var top = zoomedHeight * readerImage.PointerPositionY;
 
+            if (scrollViewer.ActualWidth >= zoomedWidth)
+                left += (scrollViewer.ActualWidth - zoomedWidth)/2;
+            else
+                left -= scrollViewer.HorizontalOffset;
+
+            if (scrollViewer.ActualHeight >= zoomedHeight)
+                top += (scrollViewer.ActualHeight - zoomedHeight)/2;
+            else
+                top -= scrollViewer.VerticalOffset;
+
+            if (left < 0)
+            {
+                //todo scroll to position
+                left = 0;
+            }
+            if (top < 0)
+            {
+                //todo scroll to position
+                top = 0;
+            }
             readerImage.m_cursorImage.Margin = new Thickness(left, top, 0, 0);
         }
 
@@ -97,8 +125,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
                 return;
 
             var point = e.GetCurrentPoint(m_sourceImage).Position;
-            var x = (point.X - PointerCorrectionX - PointerCalibrationX) / m_sourceImage.ActualWidth;
-            var y = (point.Y - PointerCorrectionY - PointerCalibrationY) / m_sourceImage.ActualHeight;
+            var zoom = m_scrollViewer.ZoomFactor;
+            var x = (point.X - (PointerCorrectionX + PointerCalibrationX)/zoom) / m_sourceImage.ActualWidth;
+            var y = (point.Y - (PointerCorrectionY + PointerCalibrationY)/zoom) / m_sourceImage.ActualHeight;
 
             var pointerPositionX = x < 0 ? 0 : x;
             var pointerPositionY = y < 0 ? 0 : y;
@@ -116,6 +145,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             base.OnApplyTemplate();
             m_cursorImage = GetTemplateChild("CursorImage") as Image;
             m_sourceImage = GetTemplateChild("SourceImage") as Image;
+            m_scrollViewer = GetTemplateChild("ScrollViewer") as ScrollViewer;
         }
 
         private static void OnScrollingEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -124,7 +154,19 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             if (readerImage == null)
                 return;
             
-            //TODO enable / disable scrollviewer
+            if ((bool) e.NewValue)
+            {
+                readerImage.m_scrollViewer.VerticalScrollMode = ScrollMode.Enabled;
+                readerImage.m_scrollViewer.HorizontalScrollMode = ScrollMode.Enabled;
+                readerImage.m_scrollViewer.ZoomMode = ZoomMode.Enabled;
+            }
+            else
+            {
+                readerImage.m_scrollViewer.VerticalScrollMode = ScrollMode.Disabled;
+                readerImage.m_scrollViewer.HorizontalScrollMode = ScrollMode.Disabled;
+                readerImage.m_scrollViewer.ZoomMode = ZoomMode.Disabled;
+            }
+            
         }
 
         public enum Modes

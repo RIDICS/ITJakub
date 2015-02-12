@@ -55,13 +55,16 @@
             <Setter.Value>
                 <ControlTemplate TargetType="control1:ReaderImage">
                     <Grid Background="{TemplateBinding Background}">
-                        <Grid VerticalAlignment="Center"
-                              HorizontalAlignment="Center">
-                            <Grid Margin="16,24,26,52">
+                        <Grid >
+                            <ScrollViewer Margin="16,24,26,52"
+                                          HorizontalScrollBarVisibility="Visible"
+                                          VerticalScrollBarVisibility="Visible"
+                                          x:Name="ScrollViewer">
                                 <Image Source="{TemplateBinding ImageSource}"
-                                       Stretch="Uniform"
+                                       
+                                       Stretch="None"
                                        x:Name="SourceImage" />
-                            </Grid>
+                            </ScrollViewer>
                             
                             <Grid Margin="16,24,0,0">
                                 <Image Source="../Icon/one_finger-48.png"
