@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -22,11 +23,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         public static readonly DependencyProperty PointerCalibrationYProperty = DependencyProperty.Register("PointerCalibrationY", typeof(double), typeof(ReaderImage), new PropertyMetadata(0.0));
         public static readonly DependencyProperty ModeProperty = DependencyProperty.Register("Mode", typeof (Modes), typeof (ReaderImage), new PropertyMetadata(Modes.Reader));
         public static readonly DependencyProperty IsScrollingEnabledProperty = DependencyProperty.Register("IsScrollingEnabled", typeof(bool), typeof(ReaderImage), new PropertyMetadata(true, OnScrollingEnabledChanged));
-
+        public static readonly DependencyProperty CurrentZoomFactorProperty = DependencyProperty.Register("CurrentZoomFactor", typeof(double), typeof(ReaderImage), new PropertyMetadata(1.0, OnZoomChanged));
+        
         private Image m_cursorImage;
         private Image m_sourceImage;
         private ScrollViewer m_scrollViewer;
-        
+
         public ReaderImage()
         {
             DefaultStyleKey = typeof(ReaderImage);
@@ -78,6 +80,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         {
             get { return (bool) GetValue(IsScrollingEnabledProperty); }
             set { SetValue(IsScrollingEnabledProperty, value); }
+        }
+
+        public double CurrentZoomFactor
+        {
+            get { return (double) GetValue(CurrentZoomFactorProperty); }
+            set { SetValue(CurrentZoomFactorProperty, value); }
         }
 
 
@@ -149,7 +157,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             
             readerImage.m_cursorImage.Margin = new Thickness(left, top, 0, 0);
         }
-
         
 
         protected override void OnPointerMoved(PointerRoutedEventArgs e)
@@ -184,6 +191,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             m_cursorImage = GetTemplateChild("CursorImage") as Image;
             m_sourceImage = GetTemplateChild("SourceImage") as Image;
             m_scrollViewer = GetTemplateChild("ScrollViewer") as ScrollViewer;
+
+            if (m_scrollViewer != null)
+                m_scrollViewer.ViewChanged += OnScrollOrZoom;
         }
 
         private static void OnScrollingEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -203,9 +213,27 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
                 readerImage.m_scrollViewer.VerticalScrollMode = ScrollMode.Disabled;
                 readerImage.m_scrollViewer.HorizontalScrollMode = ScrollMode.Disabled;
                 readerImage.m_scrollViewer.ZoomMode = ZoomMode.Disabled;
-            }
-            
+            }    
         }
+
+        private void OnScrollOrZoom(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            OnPointerPositionChanged(this, null);
+
+            if (Math.Abs(CurrentZoomFactor - m_scrollViewer.ZoomFactor) > 0.001)
+                CurrentZoomFactor = m_scrollViewer.ZoomFactor;
+        }
+
+        private static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var readerImage = d as ReaderImage;
+            if (readerImage == null || Math.Abs(readerImage.CurrentZoomFactor - readerImage.m_scrollViewer.ZoomFactor) < 0.001)
+                return;
+
+            //TODO find error there or in OnScrollOrZoom
+            readerImage.m_scrollViewer.ChangeView(null, null, (float)readerImage.CurrentZoomFactor);
+        }
+
 
         public enum Modes
         {

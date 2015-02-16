@@ -130,6 +130,8 @@
     <Compile Include="View\Control\ReaderImage.cs" />
     <Compile Include="View\Control\ReaderRichEditBox.cs" />
     <Compile Include="View\Converter\BooleanToGridVisibility.cs" />
+    <Compile Include="View\Converter\RangeToZoomFactorConverter.cs" />
+    <Compile Include="View\Converter\RangeToZoomPercentConverter.cs" />
     <Compile Include="View\Converter\UserInfoToStringConverter.cs" />
     <Compile Include="View\ReadingEditorView.xaml.cs">
       <DependentUpon>ReadingEditorView.xaml</DependentUpon>
