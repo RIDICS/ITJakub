@@ -55,13 +55,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="control1:ReaderImage">
                     <Grid Background="{TemplateBinding Background}">
-                        <Grid >
-                            <ScrollViewer Margin="16,24,26,52"
+                        <Grid>
+                            <ScrollViewer Padding="16,24,28,52"
                                           HorizontalScrollBarVisibility="Visible"
                                           VerticalScrollBarVisibility="Visible"
                                           x:Name="ScrollViewer">
                                 <Image Source="{TemplateBinding ImageSource}"
-                                       
                                        Stretch="None"
                                        x:Name="SourceImage" />
                             </ScrollViewer>
@@ -71,7 +70,10 @@
                                        Stretch="None"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Top"
-                                       x:Name="CursorImage" />
+                                       x:Name="CursorImage"
+                                       IsTapEnabled="False"
+                                       IsHitTestVisible="False"
+                                       IsHoldingEnabled="False" />
                             </Grid>
                         </Grid>
                     </Grid>
