@@ -19,6 +19,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private UserInfo m_currentReader;
         private bool m_isPhotoDisplayed;
         private bool m_isSelectionModeEnabled;
+        private ObservableCollection<PageViewModel> m_pageList;
 
         public ReadingViewModel(ReaderDataService dataService)
         {
@@ -31,6 +32,29 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
             TextReaderViewModel = new TextReaderViewModel();
             ImageReaderViewModel = new ImageReaderViewModel();
+            m_currentReader = new UserInfo();
+
+            //TODO load data from server instead of direct values
+            PageList = new ObservableCollection<PageViewModel>
+            {
+                new PageViewModel{PageId = "1L"},
+                new PageViewModel{PageId = "1R"},
+                new PageViewModel{PageId = "2L"},
+                new PageViewModel{PageId = "2R"},
+                new PageViewModel{PageId = "3L"},
+                new PageViewModel{PageId = "3R"},
+                new PageViewModel{PageId = "4L"},
+                new PageViewModel{PageId = "4R"},
+                new PageViewModel{PageId = "5L"},
+                new PageViewModel{PageId = "5R"},
+                new PageViewModel{PageId = "6L"},
+                new PageViewModel{PageId = "6R"},
+                new PageViewModel{PageId = "7L"},
+                new PageViewModel{PageId = "7R"},
+                new PageViewModel{PageId = "8L"},
+                new PageViewModel{PageId = "8R"},
+                new PageViewModel{PageId = "9L"},
+            };
         }
 
         public override void InitializeCommunication()
@@ -130,6 +154,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             set
             {
                 m_isPhotoDisplayed = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<PageViewModel> PageList
+        {
+            get { return m_pageList; }
+            set
+            {
+                m_pageList = value;
                 RaisePropertyChanged();
             }
         }

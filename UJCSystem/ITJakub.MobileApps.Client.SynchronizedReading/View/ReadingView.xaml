@@ -13,9 +13,17 @@
     d:DataContext="{d:DesignInstance d:Type=reading:ReadingViewModel}">
 
     <UserControl.Resources>
-        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converter1:UserInfoToStringConverter x:Key="UserInfoToStringConverter" />
-        <converter1:BooleanToGridVisibility x:Key="BooleanToGridVisibility" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Style.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converter1:UserInfoToStringConverter x:Key="UserInfoToStringConverter" />
+            <converter1:BooleanToGridVisibility x:Key="BooleanToGridVisibility" />
+            <converter1:RangeToZoomFactorConverter x:Key="RangeToZoomFactorConverter" />
+            <converter1:RangeToZoomPercentConverter x:Key="RangeToZoomPercentConverter" />
+        </ResourceDictionary>
     </UserControl.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -40,16 +48,41 @@
                                    PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
                                    DataContext="{Binding TextReaderViewModel}" />
         
-        <control:ReaderImage Grid.Row="0"
-                             Grid.Column="1"
-                             Margin="20,0,0,0"
-                             PointerPositionX="{Binding PointerPositionX, Mode=TwoWay}"
-                             PointerPositionY="{Binding PointerPositionY, Mode=TwoWay}"
-                             Mode="{Binding CurrentMode}"
-                             ImageSource="{Binding Photo}"
-                             PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
-                             PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
-                             DataContext="{Binding ImageReaderViewModel}"/>
+        <Grid Grid.Row="0"
+              Grid.Column="1"
+              Margin="20,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <control:ReaderImage PointerPositionX="{Binding PointerPositionX, Mode=TwoWay}"
+                                 PointerPositionY="{Binding PointerPositionY, Mode=TwoWay}"
+                                 Mode="{Binding CurrentMode}"
+                                 ImageSource="{Binding Photo}"
+                                 PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
+                                 PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
+                                 CurrentZoomFactor="{Binding ElementName=ZoomSlider, Path=Value, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}"
+                                 IsScrollingEnabled="{Binding ElementName=ScrollingEnabledSwitch, Path=IsOn, Mode=TwoWay}"
+                                 DataContext="{Binding ImageReaderViewModel}"/>
+            
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+                <SymbolIcon Grid.Column="0" Symbol="ZoomOut" />
+                <SymbolIcon Grid.Column="2" Symbol="ZoomIn" />
+                <Slider Grid.Column="1"
+                        x:Name="ZoomSlider"
+                        Margin="10,0,10,-10"
+                        Minimum="-24"
+                        Maximum="24"
+                        ThumbToolTipValueConverter="{StaticResource RangeToZoomPercentConverter}" />
+            </Grid>
+        </Grid>
         
         <StackPanel Grid.Row="0"
                     Grid.Column="2"
@@ -69,28 +102,46 @@
                           OnContent="Zapnuto"
                           OffContent="Vypnuto" />
             
-            <ToggleSwitch Header="Výběr textu"
-                          Margin="10,0,0,0"
-                          Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          IsOn="{Binding IsSelectionModeEnabled, Mode=TwoWay}"
-                          OnContent="Zapnuto"
-                          OffContent="Vypnuto" />
+            <StackPanel Orientation="Vertical"
+                        Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
             
-            <Slider Header="Vodorovná korekce ukazatele"
-                    Margin="10,0,5,0"
-                    Minimum="-50"
-                    Maximum="50"
-                    x:Name="HorizontalCalibrationSlider" />
-            <Slider Header="Svislá korekce ukazatele"
-                    Margin="10,0,5,0"
-                    Minimum="-50"
-                    Maximum="50"
-                    x:Name="VerticalCalibrationSlider" />
+                <ToggleSwitch Header="Výběr textu"
+                              Margin="10,0,0,0"
+                              IsOn="{Binding IsSelectionModeEnabled, Mode=TwoWay}"
+                              OnContent="Zapnuto"
+                              OffContent="Vypnuto" />
+            
+                <Slider Header="Vodorovná korekce ukazatele"
+                        Margin="10,0,5,0"
+                        Minimum="-50"
+                        Maximum="50"
+                        x:Name="HorizontalCalibrationSlider" />
+                <Slider Header="Svislá korekce ukazatele"
+                        Margin="10,0,5,0"
+                        Minimum="-50"
+                        Maximum="50"
+                        x:Name="VerticalCalibrationSlider" />
+                <ToggleSwitch Header="Posouvání a přibližování fotografie"
+                              MaxWidth="200"
+                              Margin="10,0,0,0"
+                              OnContent="Zapnuto"
+                              OffContent="Vypnuto"
+                              x:Name="ScrollingEnabledSwitch"
+                              IsEnabled="{Binding IsPhotoDisplayed}">
+                    <ToggleSwitch.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </ToggleSwitch.HeaderTemplate>
+                </ToggleSwitch>
+                
+            </StackPanel>
         </StackPanel>
         
         <Grid Grid.Row="1"
               Grid.Column="0"
-              Grid.ColumnSpan="2">
+              Grid.ColumnSpan="2"
+              Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -102,11 +153,13 @@
             </Button>
 
             <GridView Grid.Column="1"
+                      Margin="0,5,0,0"
                       SelectionMode="Single"
                       HorizontalAlignment="Center"
                       HorizontalContentAlignment="Center"
-                      controlBooks:GridViewBehaviors.IsScrollToSelection="True">
-                <!--TODO add ItemContainerStyle-->
+                      controlBooks:GridViewBehaviors.IsScrollToSelection="True"
+                      ItemContainerStyle="{StaticResource NoBorderGridViewItemStyle}"
+                      ItemsSource="{Binding PageList}">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />
@@ -133,7 +186,8 @@
         <StackPanel Grid.Row="1"
                     Grid.Column="2"
                     Margin="10,0,0,0"
-                    Orientation="Vertical">
+                    Orientation="Vertical"
+                    Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBlock Text="Přejít na stranu:" />
             
             <TextBox />

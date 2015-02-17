@@ -122,6 +122,7 @@
     <Compile Include="DataService\ReaderDataService.cs" />
     <Compile Include="DataService\SynchronizationManager.cs" />
     <Compile Include="ViewModel\Reading\ImageReaderViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel.cs" />
     <Compile Include="ViewModel\Reading\TextReaderViewModel.cs" />
     <Compile Include="ViewModel\UpdateViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -169,6 +170,11 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Style.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="View\ReadingEditorView.xaml">
       <SubType>Designer</SubType>
