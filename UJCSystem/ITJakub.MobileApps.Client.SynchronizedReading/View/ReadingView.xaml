@@ -9,6 +9,7 @@
     xmlns:converter1="using:ITJakub.MobileApps.Client.SynchronizedReading.View.Converter"
     xmlns:reading="using:ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading"
     xmlns:controlBooks="using:ITJakub.MobileApps.Client.Books.View.Control"
+    xmlns:control1="using:ITJakub.MobileApps.Client.Shared.Control"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance d:Type=reading:ReadingViewModel}">
 
@@ -159,7 +160,8 @@
                       HorizontalContentAlignment="Center"
                       controlBooks:GridViewBehaviors.IsScrollToSelection="True"
                       ItemContainerStyle="{StaticResource NoBorderGridViewItemStyle}"
-                      ItemsSource="{Binding PageList}">
+                      ItemsSource="{Binding PageList}"
+                      SelectedItem="{Binding SelectedPage, Mode=TwoWay}">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />
@@ -185,12 +187,22 @@
         
         <StackPanel Grid.Row="1"
                     Grid.Column="2"
-                    Margin="10,0,0,0"
+                    Margin="10,-6,0,6"
                     Orientation="Vertical"
                     Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBlock Text="Přejít na stranu:" />
             
-            <TextBox />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <control1:SubmitTextBox />
+                
+                <Button Grid.Column="1"
+                        Content="Přejít" />
+            </Grid>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -9,7 +9,7 @@ namespace ITJakub.MobileApps.Client.Books.View.Converter
 {
     public class PageOrderToLabelConverter : IValueConverter
     {
-        private ObservableCollection<BookPageViewModel> m_pageList;
+        private ObservableCollection<PageViewModel> m_pageList;
 
         public PageOrderToLabelConverter()
         {

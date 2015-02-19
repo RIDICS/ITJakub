@@ -26,21 +26,21 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
                 {
                     return Channel.GetBookList(category);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new MobileCommunicationException();
+                    throw new MobileCommunicationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new MobileCommunicationException();
+                    throw new MobileCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new MobileCommunicationException();
+                    throw new MobileCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new MobileCommunicationException();
+                    throw new MobileCommunicationException(ex);
                 }
             });
         }

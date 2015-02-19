@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Books.Manager.Cache;
 using ITJakub.MobileApps.Client.Books.Service.Client;
 using ITJakub.MobileApps.Client.Books.ViewModel;
 using ITJakub.MobileApps.MobileContracts;
@@ -11,13 +11,20 @@ namespace ITJakub.MobileApps.Client.Books.Manager
 {
     public class BookManager
     {
+        private const int PhotoCacheSize = 8;
+        private const int TextCacheSize = 64;
+
         private readonly IServiceClient m_serviceClient;
-        private readonly BookModel m_currentBook;
+        private readonly PhotoCache m_photoCache;
+        private readonly DocumentCache m_documentCache;
+        private BookViewModel m_currentBook;
 
         public BookManager(IServiceClient serviceClient)
         {
             m_serviceClient = serviceClient;
-            m_currentBook = new BookModel();
+            m_photoCache = new PhotoCache(serviceClient, PhotoCacheSize);
+            m_documentCache = new DocumentCache(serviceClient, TextCacheSize);
+            m_currentBook = new BookViewModel();
         }
 
         public BookViewModel CurrentBook
@@ -32,13 +39,7 @@ namespace ITJakub.MobileApps.Client.Books.Manager
                     Year =  m_currentBook.Year
                 };
             }
-            set
-            {
-                m_currentBook.Author = value.Author;
-                m_currentBook.Guid = value.Guid;
-                m_currentBook.Title = value.Title;
-                m_currentBook.Year = value.Year;
-            }
+            set { m_currentBook = value; }
         }
 
         public async void GetBookList(CategoryContract category, Action<ObservableCollection<BookViewModel>, Exception> callback)
@@ -81,12 +82,12 @@ namespace ITJakub.MobileApps.Client.Books.Manager
             }
         }
 
-        public async void GetPageList(string bookGuid, Action<ObservableCollection<BookPageViewModel>, Exception> callback)
+        public async void GetPageList(string bookGuid, Action<ObservableCollection<PageViewModel>, Exception> callback)
         {
             try
             {
                 var list = await m_serviceClient.GetPageListAsync(bookGuid);
-                var viewModels = new ObservableCollection<BookPageViewModel>(list.Select(page => new BookPageViewModel
+                var viewModels = new ObservableCollection<PageViewModel>(list.Select(page => new PageViewModel
                 {
                     PageId = page,
                 }));
@@ -103,12 +104,8 @@ namespace ITJakub.MobileApps.Client.Books.Manager
         {
             try
             {
-                using (var pageStream = await m_serviceClient.GetPageAsRtfAsync(bookGuid, pageId))
-                using (var streamReader = new StreamReader(pageStream))
-                {
-                    var text = streamReader.ReadToEnd();
-                    callback(text, null);
-                }
+                var textRtf = await m_documentCache.Get(bookGuid, pageId);
+                callback(textRtf, null);
             }
             catch (MobileCommunicationException exception)
             {
@@ -120,17 +117,8 @@ namespace ITJakub.MobileApps.Client.Books.Manager
         {
             try
             {
-                using (var stream = await m_serviceClient.GetPagePhotoAsync(bookGuid, pageId))
-                using (var memoryStream = new MemoryStream())
-                {
-                    await stream.CopyToAsync(memoryStream);
-                    memoryStream.Position = 0;
-
-                    var bitmapImage = new BitmapImage();
-                    bitmapImage.SetSource(memoryStream.AsRandomAccessStream());
-
-                    callback(bitmapImage, null);
-                }
+                var photo = await m_photoCache.Get(bookGuid, pageId);
+                callback(photo, null);
             }
             catch (MobileCommunicationException exception)
             {

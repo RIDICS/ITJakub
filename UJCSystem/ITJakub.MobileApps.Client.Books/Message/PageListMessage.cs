@@ -5,6 +5,11 @@ namespace ITJakub.MobileApps.Client.Books.Message
 {
     public class PageListMessage
     {
-        public ObservableCollection<BookPageViewModel> PageList { get; set; }
+        public PageListMessage(ObservableCollection<PageViewModel> pageList)
+        {
+            PageList = pageList;
+        }
+
+        public ObservableCollection<PageViewModel> PageList { get; set; }
     }
 }

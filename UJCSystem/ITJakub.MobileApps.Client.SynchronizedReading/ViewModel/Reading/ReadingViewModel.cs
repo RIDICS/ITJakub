@@ -172,6 +172,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
         public ImageReaderViewModel ImageReaderViewModel { get; set; }
 
+        public PageViewModel SelectedPage { get; set; }
+
 
         private void ProcessPollingUpdate(UpdateViewModel update, Exception exception)
         {

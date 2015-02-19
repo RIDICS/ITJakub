@@ -99,10 +99,10 @@
                     <Run Text="{Binding CurrentPageNumber}" /><Run Text=". strana z " /><Run Text="{Binding PageCount}" />
                 </TextBlock>
                 
-                <Slider Maximum="{Binding PageCount}"
+                <control:DelayedSlider Maximum="{Binding PageCount}"
                         Minimum="{Binding FirstPage}"
                         StepFrequency="1"
-                        Value="{Binding CurrentPageNumber, Mode=TwoWay}"
+                        DelayedValue="{Binding CurrentPageNumber, Mode=TwoWay}"
                         ThumbToolTipValueConverter="{StaticResource PageOrderToLabelConverter}" />
 
             </StackPanel>
@@ -119,7 +119,7 @@
                     Background="#50FFFFFF"
                     BorderBrush="#30000000"
                     BorderThickness="2">
-                <control:BindableRichEditBox DocumentRtf="{Binding SelectedPage.RtfText}"
+                <control:BindableRichEditBox DocumentRtf="{Binding RtfText}"
                                              IsReadOnly="True" />
             </Border>
             <ProgressRing Grid.Row="1"

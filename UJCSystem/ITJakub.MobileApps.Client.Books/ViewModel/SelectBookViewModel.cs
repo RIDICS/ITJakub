@@ -17,7 +17,6 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private ObservableCollection<BookViewModel> m_bookList;
-        private bool m_noBookFound;
         private bool m_loading;
         private bool m_isSearchResult;
         private bool m_searching;
@@ -42,6 +41,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         public RelayCommand GoBackCommand { get; private set; }
         
         public RelayCommand<ItemClickEventArgs> BookClickCommand { get; private set; }
+
+        public RelayCommand SearchCommand { get; private set; }
         
         public ObservableCollection<BookViewModel> BookList
         {
@@ -50,18 +51,13 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             {
                 m_bookList = value;
                 RaisePropertyChanged();
-                NoBookFound = m_bookList.Count == 0;
+                RaisePropertyChanged(() => NoBookFound);
             }
         }
 
         public bool NoBookFound
         {
-            get { return m_noBookFound; }
-            set
-            {
-                m_noBookFound = value;
-                RaisePropertyChanged();
-            }
+            get { return m_bookList != null && m_bookList.Count == 0; }
         }
 
         public bool IsInProgress
@@ -90,10 +86,6 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 RaisePropertyChanged(() =>  IsInProgress);
             }
         }
-
-        public string SearchQuery { get; set; }
-
-        public RelayCommand SearchCommand { get; private set; }
 
         public CategoryContract SelectedCategory
         {
@@ -142,6 +134,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 Filter();
             }
         }
+
+        public string SearchQuery { get; set; }
 
         public SearchDestinationContract SearchDestination { get; set; }
 

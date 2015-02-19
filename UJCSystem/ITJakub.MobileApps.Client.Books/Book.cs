@@ -60,6 +60,11 @@ namespace ITJakub.MobileApps.Client.Books
         {
             var book = new Book();
             return await book.StartSelectingBookAsync();
-        } 
+        }
+
+        public static IPublicDataService DataService
+        {
+            get { return Container.Current.Resolve<IDataService>(); }
+        }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Windows.UI.Xaml;
+﻿using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -15,24 +12,21 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private readonly DispatcherTimer m_delayTimer;
-        private ObservableCollection<BookPageViewModel> m_pageList;
+        private ObservableCollection<PageViewModel> m_pageList;
         private BookViewModel m_book;
         private bool m_loading;
-        private BookPageViewModel m_selectedPage;
+        private PageViewModel m_selectedPage;
         private int m_currentPageNumber;
         private ImageSource m_pagePhoto;
         private bool m_loadingPage;
         private bool m_loadingPhoto;
         private bool m_isShowPhotoEnabled;
+        private string m_rtfText;
 
         public SelectPageViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
-            m_delayTimer = new DispatcherTimer();
-            m_delayTimer.Interval = new TimeSpan(0,0,0,0,700);
-            m_delayTimer.Tick += DelayedLoadPage;
 
             GoBackCommand = new RelayCommand(navigationService.GoBack);
             SaveCommand = new RelayCommand(Save);
@@ -70,7 +64,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             }
         }
 
-        public ObservableCollection<BookPageViewModel> PageList
+        public ObservableCollection<PageViewModel> PageList
         {
             get { return m_pageList; }
             set
@@ -81,7 +75,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 RaisePropertyChanged(() => PageCount);
                 RaisePropertyChanged(() => FirstPage);
 
-                MessengerInstance.Send(new PageListMessage {PageList = m_pageList});
+                MessengerInstance.Send(new PageListMessage(m_pageList));
             }
         }
 
@@ -95,7 +89,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             }
         }
 
-        public BookPageViewModel SelectedPage
+        public PageViewModel SelectedPage
         {
             get { return m_selectedPage; }
             set
@@ -111,49 +105,37 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             }
         }
 
-        private void OpenPage(BookPageViewModel page)
+        private void OpenPage(PageViewModel page)
         {
-            if (page.RtfText == null)
+            LoadingPage = true;
+            m_dataService.GetPageAsRtf(Book.Guid, page.PageId, (rtfText, exception) =>
             {
-                LoadingPage = true;
-                m_dataService.GetPageAsRtf(Book.Guid, page.PageId, (rtfText, exception) =>
-                {
-                    LoadingPage = false;
-                    if (exception != null)
-                        return;
+                LoadingPage = false;
+                if (exception != null)
+                    return;
 
-                    page.RtfText = rtfText;
-                    RaisePropertyChanged(() => SelectedPage);
-                });    
-            }
+                RtfText = rtfText;
+            });    
 
             OpenPagePhoto(page);
         }
 
-        private void OpenPagePhoto(BookPageViewModel page)
+
+        private void OpenPagePhoto(PageViewModel page)
         {
             PagePhoto = null;
             if (!IsShowPhotoEnabled)
                 return;
 
-            BitmapImage pagePhoto = page.PagePhoto;
-            if (pagePhoto != null)
+            LoadingPhoto = true;
+            m_dataService.GetPagePhoto(Book.Guid, page.PageId, (image, exception) =>
             {
-                PagePhoto = pagePhoto;
-            }
-            else
-            {
-                LoadingPhoto = true;
-                m_dataService.GetPagePhoto(Book.Guid, page.PageId, (image, exception) =>
-                {
-                    LoadingPhoto = false;
-                    if (exception != null)
-                        return;
+                LoadingPhoto = false;
+                if (exception != null)
+                    return;
 
-                    page.PagePhoto = image;
-                    OpenPagePhoto(SelectedPage);
-                });
-            }
+                PagePhoto = image;
+            });
         }
 
         public int CurrentPageNumber
@@ -162,8 +144,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             set
             {
                 m_currentPageNumber = value;
-                m_delayTimer.Stop();
-                m_delayTimer.Start();
+                SelectedPage = m_pageList[CurrentPageNumber - 1];
                 RaisePropertyChanged();
             }
         }
@@ -171,6 +152,16 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         public int PageCount
         {
             get { return m_pageList != null ? m_pageList.Count : 0; }
+        }
+
+        public string RtfText
+        {
+            get { return m_rtfText; }
+            set
+            {
+                m_rtfText = value;
+                RaisePropertyChanged();
+            }
         }
 
         public ImageSource PagePhoto
@@ -217,25 +208,29 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         {
             get { return PageCount == 0 ? 0 : 1; }
         }
-
-        private void DelayedLoadPage(object sender, object o)
-        {
-            m_delayTimer.Stop();
-            var selectedPage = m_pageList[CurrentPageNumber - 1];
-            SelectedPage = selectedPage;
-        }
-
+        
         private void Save()
         {
             if (SelectedPage == null || LoadingPage)
                 return;
 
             m_navigationService.ResetBackStack();
-            SelectedPage.BookInfo = Book;
-            Messenger.Default.Send(new SelectedPageMessage
+
+            var bookDetails = new BookViewModel
             {
-                BookPage = SelectedPage
-            });
+                Author = Book.Author,
+                Guid = Book.Guid,
+                Title = Book.Title,
+                Year = Book.Year
+            };
+            var pageDetails = new BookPageViewModel
+            {
+                BookInfo = bookDetails,
+                PageId = SelectedPage.PageId,
+                PagePhoto = PagePhoto,
+                RtfText = RtfText
+            };
+            Messenger.Default.Send(new SelectedPageMessage {BookPage = pageDetails});
         }
     }
 }

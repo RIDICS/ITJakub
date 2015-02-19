@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private string m_bookAuthor;
         private int m_bookYear;
         private string m_bookRtfContent;
-        private BitmapImage m_bookPagePhoto;
+        private ImageSource m_bookPagePhoto;
         private bool m_isShowPhotoEnabled;
         private bool m_errorNameMissing;
         private bool m_errorPageEmpty;
@@ -112,7 +112,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
-        public BitmapImage BookPagePhoto
+        public ImageSource BookPagePhoto
         {
             get { return m_bookPagePhoto; }
             set

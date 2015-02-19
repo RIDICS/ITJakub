@@ -26,7 +26,7 @@ namespace ITJakub.MobileApps.Client.Books.Service
             m_bookManager.SearchForBook(category, searchDestination, query, callback);
         }
 
-        public void GetPageList(string bookGuid, Action<ObservableCollection<BookPageViewModel>, Exception> callback)
+        public void GetPageList(string bookGuid, Action<ObservableCollection<PageViewModel>, Exception> callback)
         {
             m_bookManager.GetPageList(bookGuid, callback);
         }

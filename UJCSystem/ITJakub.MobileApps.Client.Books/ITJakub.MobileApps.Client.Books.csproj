@@ -122,8 +122,10 @@
     <Compile Include="Book.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Manager\BookManager.cs" />
-    <Compile Include="Manager\BookModel.cs" />
+    <Compile Include="Manager\Cache\CacheBase.cs" />
+    <Compile Include="Manager\Cache\DocumentCache.cs" />
     <Compile Include="Message\PageListMessage.cs" />
+    <Compile Include="Manager\Cache\BookPageKey.cs" />
     <Compile Include="Service\Client\EndpointConfiguration.cs" />
     <Compile Include="Service\Client\IServiceClient.cs" />
     <Compile Include="Service\IDataService.cs" />
@@ -131,6 +133,7 @@
     <Compile Include="Service\Client\MobileCommunicationException.cs" />
     <Compile Include="Service\Client\MockServiceClient.cs" />
     <Compile Include="Service\Client\ServiceClient.cs" />
+    <Compile Include="Manager\Cache\PhotoCache.cs" />
     <Compile Include="ViewModel\BookPageViewModel.cs" />
     <Compile Include="Message\SelectedPageMessage.cs" />
     <Compile Include="Service\DataService.cs" />
@@ -139,6 +142,7 @@
     <Compile Include="ViewModel\ComboBoxItem\CategoryItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\FilterYearItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SearchDestinationItem.cs" />
+    <Compile Include="ViewModel\PageViewModel.cs" />
     <Compile Include="ViewModel\SelectBookViewModel.cs" />
     <Compile Include="Enum\SearchByType.cs" />
     <Compile Include="Enum\SortType.cs" />
@@ -148,6 +152,7 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Control\BindableRichEditBox.cs" />
     <Compile Include="View\Control\BindableRichTextBlock.cs" />
+    <Compile Include="View\Control\DelayedSlider.cs" />
     <Compile Include="View\Control\GridViewBehaviors.cs" />
     <Compile Include="View\Converter\PageOrderToLabelConverter.cs" />
     <Compile Include="View\SelectBookView.xaml.cs">
@@ -198,6 +203,7 @@
       <Name>Behaviors SDK %28XAML%29</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
