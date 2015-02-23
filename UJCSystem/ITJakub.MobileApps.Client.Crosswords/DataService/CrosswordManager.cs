@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using ITJakub.MobileApps.Client.Crosswords.DataContract;
 using ITJakub.MobileApps.Client.Crosswords.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -35,8 +34,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             var rowIndex = 0;
             foreach (var row in taskContract.RowList)
             {
-                crosswordRows.Add(row.Answer != null
-                    ? new CrosswordRowViewModel(row.Label, row.Answer.Length, row.StartPosition, taskContract.AnswerPosition, rowIndex++)
+                crosswordRows.Add(row.Answer != null && row.StartPosition != null
+                    ? new CrosswordRowViewModel(row.Label, row.Answer.Length, row.StartPosition.Value, taskContract.AnswerPosition, rowIndex++)
                     : new CrosswordRowViewModel());
             }
             m_task = new CrosswordTask(taskContract);
@@ -124,7 +123,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
                 var rowList = new List<CrosswordTaskContract.RowContract>();
                 foreach (var viewModel in answerList)
                 {
-                    if (viewModel.Answer == null)
+                    if (!viewModel.IsAnswer)
                     {
                         rowList.Add(new CrosswordTaskContract.RowContract());
                     }
@@ -143,10 +142,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
                 var taskContract = new CrosswordTaskContract
                 {
                     AnswerPosition = answerColumn,
-                    RowList = rowList.ToList()
+                    RowList = rowList
+                };
+                var serializerSettings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
                 };
 
-                var serializedTask = JsonConvert.SerializeObject(taskContract);
+                var serializedTask = JsonConvert.SerializeObject(taskContract, Formatting.None, serializerSettings);
                 await m_applicationCommunication.CreateTaskAsync(ApplicationType.Crosswords, taskName, serializedTask);
 
                 callback(null);

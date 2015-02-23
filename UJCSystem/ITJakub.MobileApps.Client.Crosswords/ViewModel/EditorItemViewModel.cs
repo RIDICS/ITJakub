@@ -6,10 +6,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     public class EditorItemViewModel : ViewModelBase
     {
         private int m_shift;
+        private bool m_isAnswer;
+        private string m_answer;
+        private string m_label;
 
         public EditorItemViewModel()
         {
             Shift = 0;
+            IsAnswer = true;
 
             ShiftLeftCommand = new RelayCommand(() =>
             {
@@ -22,14 +26,30 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             });
         }
 
-        public string Answer { get; set; }
-
-        public string Label { get; set; }
-
         public RelayCommand ShiftLeftCommand { get; private set; }
 
         public RelayCommand ShiftRightCommand { get; private set; }
 
+        public string Answer
+        {
+            get { return m_answer; }
+            set
+            {
+                m_answer = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Label
+        {
+            get { return m_label; }
+            set
+            {
+                m_label = value;
+                RaisePropertyChanged();
+            }
+        }
+        
         public int Shift
         {
             get { return m_shift; }
@@ -37,6 +57,23 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             {
                 m_shift = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public bool IsAnswer
+        {
+            get { return m_isAnswer; }
+            set
+            {
+                m_isAnswer = value;
+                RaisePropertyChanged();
+                
+                if (!m_isAnswer)
+                {
+                    Answer = string.Empty;
+                    Label = string.Empty;
+                    Shift = 0;
+                }
             }
         }
     }

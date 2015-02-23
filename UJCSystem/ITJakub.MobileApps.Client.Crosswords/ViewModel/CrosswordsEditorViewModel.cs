@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         private bool m_errorAnswerListEmpty;
         private bool m_errorAnswerColumn;
         private int m_answerColumn;
+        private bool m_errorAnswerEmpty;
 
         public CrosswordsEditorViewModel(ICrosswordsDataService dataService)
         {
@@ -21,7 +22,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             AnswerList = new ObservableCollection<EditorItemViewModel> {new EditorItemViewModel(), new EditorItemViewModel()};
 
             SaveTaskCommand = new RelayCommand(SaveTask);
-            AddAnswerCommand = new RelayCommand(AddAnswer);
+            AddAnswerCommand = new RelayCommand(() => AddRow(true));
+            AddSpaceCommand = new RelayCommand(() => AddRow(false));
             DeleteAnswerCommand = new RelayCommand<EditorItemViewModel>(DeleteAnswer);
 
             ShiftLeftCommand = new RelayCommand(() =>
@@ -38,6 +40,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         public RelayCommand SaveTaskCommand { get; private set; }
 
         public RelayCommand AddAnswerCommand { get; private set; }
+
+        public RelayCommand AddSpaceCommand { get; private set; }
 
         public RelayCommand<EditorItemViewModel> DeleteAnswerCommand { get; private set; }
 
@@ -89,6 +93,16 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             }
         }
 
+        public bool ErrorAnswerEmpty
+        {
+            get { return m_errorAnswerEmpty; }
+            set
+            {
+                m_errorAnswerEmpty = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public int AnswerColumn
         {
             get { return m_answerColumn; }
@@ -98,21 +112,21 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 RaisePropertyChanged();
             }
         }
-
+        
         public bool IsAnswerListEmpty
         {
             get { return AnswerList.Count == 0; }
         }
-
+        
         private void DeleteAnswer(EditorItemViewModel viewModel)
         {
             AnswerList.Remove(viewModel);
             RaisePropertyChanged(() => IsAnswerListEmpty);
         }
 
-        private void AddAnswer()
+        private void AddRow(bool isAnswer)
         {
-            AnswerList.Add(new EditorItemViewModel());
+            AnswerList.Add(new EditorItemViewModel{IsAnswer = isAnswer});
             RaisePropertyChanged(() => IsAnswerListEmpty);
         }
 
@@ -121,6 +135,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             var anyError = false;
             ErrorTaskNameEmpty = false;
             ErrorAnswerListEmpty = false;
+            ErrorAnswerEmpty = false;
             ErrorAnswerColumn = false;
 
             if (string.IsNullOrWhiteSpace(TaskName))
@@ -137,8 +152,15 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
             foreach (var editorItemViewModel in AnswerList)
             {
+                if (!editorItemViewModel.IsAnswer)
+                {
+                    continue;
+                }
+
                 if (string.IsNullOrWhiteSpace(editorItemViewModel.Answer))
                 {
+                    ErrorAnswerEmpty = true;
+                    anyError = true;
                     continue;
                 }
 
@@ -147,7 +169,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 if (rowShift > AnswerColumn || rowShift + answerLength <= AnswerColumn)
                 {
                     ErrorAnswerColumn = true;
-                    break;
+                    anyError = true;
                 }
             }
 

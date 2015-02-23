@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataContract
             public string Label { get; set; }
 
             [JsonProperty("StartPosition")]
-            public int StartPosition { get; set; }
+            public int? StartPosition { get; set; }
 
             [JsonProperty("Answer")]
             public string Answer { get; set; }

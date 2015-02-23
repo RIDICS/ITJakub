@@ -18,25 +18,28 @@
             <x:Double x:Key="ColumnWidth">35</x:Double>
             <x:Double x:Key="InnerColumnWidth">33</x:Double>
             <x:Double x:Key="LabelFontSize">14</x:Double>
+            <Color x:Key="TextBoxBackgroundColor">#AAFFFFFF</Color>
             <SolidColorBrush x:Key="ErrorColorBrush" Color="Orange" />
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converter1:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter" />
-            
+            <converter1:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter" />
+
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Themes/Generic.xaml" />
+                <ResourceDictionary Source="../Themes/Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          Margin="120,0,100,20">
+          Margin="90,0,100,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0"
+              Margin="30,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -98,6 +101,11 @@
                 <TextBlock FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource ErrorColorBrush}"
                            FontWeight="Bold"
+                           Visibility="{Binding ErrorAnswerEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                           Text="Některý řádek neobsahuje odpověď." />
+                <TextBlock FontSize="{StaticResource LabelFontSize}"
+                           Foreground="{StaticResource ErrorColorBrush}"
+                           FontWeight="Bold"
                            Visibility="{Binding ErrorAnswerColumn, Converter={StaticResource BooleanToVisibilityConverter}}"
                            Text="Některá odpověď je mimo sloupec s výsledkem." />
             </StackPanel>
@@ -114,6 +122,7 @@
                   Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 
@@ -124,11 +133,16 @@
                 <TextBlock Grid.Column="1"
                            Text="Odpověď"
                            Style="{StaticResource SubheaderTextBlockStyle}" />
+                
+                <Button Grid.Column="2"
+                        Content="Přidat mezeru"
+                        Margin="0,0,20,0"
+                        Command="{Binding AddSpaceCommand}" />
             </Grid>
         </Grid>
 
         <Grid Grid.Row="1"
-              Margin="200,5,0,5"
+              Margin="230,5,0,5"
               HorizontalAlignment="Left">
             <Grid Margin="{Binding AnswerColumn, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter={StaticResource InnerColumnWidth}}"
                   Background="Orange"
@@ -142,6 +156,7 @@
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
@@ -149,39 +164,48 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBox Grid.Column="0"
+                            <CheckBox Grid.Column="0"
+                                      HorizontalAlignment="Center"
+                                      IsChecked="{Binding IsAnswer, Mode=TwoWay}" />
+                            
+                            <TextBox Grid.Column="1"
                                      Margin="0,0,10,0"
                                      Width="190"
                                      VerticalAlignment="Center"
                                      FontSize="16"
+                                     Style="{StaticResource EditorTextBoxStyle}"
+                                     IsEnabled="{Binding IsAnswer}"
                                      Text="{Binding Label, Mode=TwoWay}" />
 
-                            <Grid Grid.Column="1"
+                            <Grid Grid.Column="2"
                                   VerticalAlignment="Center"
-                                  Background="#AAFFFFFF">
-                            
+                                  Background="{Binding IsAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource TextBoxBackgroundColor}}">
+                                
                                 <view:CrosswordTextBoxControl
-                                    Style="{StaticResource EditorTextBoxStyle}"
+                                    Style="{StaticResource EditorCrosswordTextBoxStyle}"
                                     Margin="{Binding Shift, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter={StaticResource InnerColumnWidth}}"
                                     VerticalAlignment="Center"
                                     Height="{StaticResource ColumnWidth}"
                                     FontSize="16"
                                     MaxLength="100"
                                     FontWeight="Bold"
+                                    IsEnabled="{Binding IsAnswer}"
                                     Text="{Binding Answer, Mode=TwoWay}"
                                     KeyboardLetters="äāąćèľłḿǫṕŕſüūźъь" />
                             </Grid>
-
-                            <Button Grid.Column="2"
+                            
+                            <Button Grid.Column="3"
                                     Margin="10,0,0,0"
+                                    IsEnabled="{Binding IsAnswer}"
                                     Command="{Binding ShiftLeftCommand}">
                                 <SymbolIcon Symbol="Back" />
                             </Button>
-                            <Button Grid.Column="3"
+                            <Button Grid.Column="4"
+                                    IsEnabled="{Binding IsAnswer}"
                                     Command="{Binding ShiftRightCommand}">
                                 <SymbolIcon Symbol="Forward" />
                             </Button>
-                            <Button Grid.Column="4"
+                            <Button Grid.Column="5"
                                     Command="{Binding ElementName=RootElement, Path=DataContext.DeleteAnswerCommand}"
                                     CommandParameter="{Binding}">
                                 <SymbolIcon Symbol="Delete" />
@@ -200,7 +224,7 @@
                    Visibility="{Binding IsAnswerListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
         <Grid Grid.Row="2"
-              Margin="0,0,0,20">
+              Margin="30,0,0,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="*" />
@@ -214,13 +238,6 @@
                        FontWeight="Light"
                        FontSize="18" />
 
-            <!--<Grid Grid.Column="1"
-                  Width="{StaticResource ColumnWidth}"
-                  HorizontalAlignment="Left"
-                  Margin="{Binding AnswerColumn, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter={StaticResource InnerColumnWidth}}">
-                <SymbolIcon Symbol="Up"
-                            Foreground="Orange" />
-            </Grid>-->
             <view:StepSlider Grid.Column="1"
                              Step="{Binding AnswerColumn, Mode=TwoWay}"
                              StepWidth="{StaticResource InnerColumnWidth}"
