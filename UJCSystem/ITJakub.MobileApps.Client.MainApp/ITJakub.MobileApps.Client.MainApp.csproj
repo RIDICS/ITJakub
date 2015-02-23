@@ -130,15 +130,15 @@
     <Compile Include="View\Converter\MessageCountToNotificationConverter.cs" />
     <Compile Include="View\Converter\NotChosenStringConverter.cs" />
     <Compile Include="View\Converter\BooleanToColorConverter.cs" />
-    <Compile Include="View\DownArrowControl.xaml.cs">
+    <Compile Include="View\Control\DownArrowControl.xaml.cs">
       <DependentUpon>DownArrowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EditorHostView.xaml.cs">
       <DependentUpon>EditorHostView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ErrorBar.cs" />
+    <Compile Include="View\Control\ErrorBar.cs" />
     <Compile Include="Common\RelayCommand.cs" />
-    <Compile Include="View\ErrorBarView.xaml.cs">
+    <Compile Include="View\Control\ErrorBarView.xaml.cs">
       <DependentUpon>ErrorBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\ErrorBarViewModel.cs" />
@@ -146,12 +146,12 @@
     <Compile Include="ViewModel\SelectTaskViewModel.cs" />
     <Compile Include="View\Converter\ApplicationCategoryToNameConverter.cs" />
     <Compile Include="View\Converter\GroupTypeToNameConverter.cs" />
-    <Compile Include="ViewModel\ApplicationSelectionViewModel.cs" />
+    <Compile Include="ViewModel\SelectApplicationViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\UserMenuViewModel.cs" />
     <Compile Include="ViewModel\GroupPage\GroupPageViewModel.cs" />
     <Compile Include="ViewModel\Login\RegistrationViewModel.cs" />
-    <Compile Include="View\ApplicationSelectionView.xaml.cs">
-      <DependentUpon>ApplicationSelectionView.xaml</DependentUpon>
+    <Compile Include="View\SelectApplicationView.xaml.cs">
+      <DependentUpon>SelectApplicationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
@@ -224,7 +224,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\DownArrowControl.xaml">
+    <Page Include="View\Control\DownArrowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -232,7 +232,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ErrorBarView.xaml">
+    <Page Include="View\Control\ErrorBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -241,7 +241,7 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="View\ApplicationSelectionView.xaml">
+    <Page Include="View\SelectApplicationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

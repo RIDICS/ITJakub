@@ -28,50 +28,49 @@
           DataContext="{Binding Source={StaticResource Locator}, Path=SelectBookViewModel}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
-                <EntranceThemeTransition/>
+                <EntranceThemeTransition />
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Margin="39,59,39,0"
-                    Command="{Binding GoBackCommand}"
+            <Button Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
-                    AutomationProperties.ItemType="Navigation Button"/>
+                    AutomationProperties.ItemType="Navigation Button" />
             <TextBlock Text="Vyberte knihu"
                        Style="{StaticResource HeaderTextBlockStyle}"
                        Grid.Column="1" 
                        IsHitTestVisible="false"
                        TextWrapping="NoWrap"
-                       VerticalAlignment="Bottom"
-                       Margin="0,0,30,40"/>
+                       VerticalAlignment="Center"
+                       Margin="0,0,30,0" />
             
             <TextBlock Grid.Column="2"
                        Style="{StaticResource SubheaderTextBlockStyle}"
-                       VerticalAlignment="Bottom"
-                       Margin="0,0,0,40"
+                       VerticalAlignment="Center"
                        Visibility="{Binding IsSearchResult, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Run Text="Výsledky vyhledávání pro &quot;" /><Run Text="{Binding SearchQuery}" /><Run Text="&quot;"/>
+                <Run Text="Výsledky vyhledávání pro &quot;" /><Run Text="{Binding SearchQuery}" /><Run Text="&quot;" />
             </TextBlock>
             
             <Grid Grid.Column="3">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="40" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 
                 <SearchBox Grid.Row="0"
@@ -88,6 +87,7 @@
                 <ComboBox Grid.Row="1"
                           VerticalAlignment="Top"
                           HorizontalAlignment="Left"
+                          Margin="0,-5,0,-8"
                           Style="{StaticResource TextComboBoxStyle}"
                           DisplayMemberPath="Name"
                           SelectedValuePath="Destination"
@@ -186,7 +186,7 @@
         <GridView Grid.Row="2"
                   SelectionMode="None"
                   ItemsSource="{Binding BookList}"
-                  Margin="120,20,0,70"
+                  Padding="120,20,0,70"
                   IsItemClickEnabled="True">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>

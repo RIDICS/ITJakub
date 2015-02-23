@@ -244,7 +244,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         {
             m_dataService.SetRestoringLastGroupState(true);
             m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.SelectTask);
-            Navigate<ApplicationSelectionView>();
+            Navigate<SelectApplicationView>();
         }
 
         private void ChangeGroupState(GroupStateContract newState)

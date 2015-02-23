@@ -349,7 +349,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             else
             {
                 IsFilter = true;
-                CurrentFilter = state is short ? (GroupStateContract)state : 0;
+                CurrentFilter = (GroupStateContract) Convert.ToInt16(state);
             }
 
             DisplayGroupList(m_groups);

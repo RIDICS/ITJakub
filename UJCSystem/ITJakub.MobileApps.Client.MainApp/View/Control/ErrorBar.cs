@@ -3,7 +3,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.MainApp.ViewModel;
 
-namespace ITJakub.MobileApps.Client.MainApp.View
+namespace ITJakub.MobileApps.Client.MainApp.View.Control
 {
     public class ErrorBar
     {

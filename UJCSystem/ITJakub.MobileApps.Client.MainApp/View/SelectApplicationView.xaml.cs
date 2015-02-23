@@ -1,8 +1,8 @@
 ﻿namespace ITJakub.MobileApps.Client.MainApp.View
 {
-    public sealed partial class ApplicationSelectionView
+    public sealed partial class SelectApplicationView
     {
-        public ApplicationSelectionView()
+        public SelectApplicationView()
         {
             InitializeComponent();
         }

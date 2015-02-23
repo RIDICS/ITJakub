@@ -445,7 +445,7 @@
         </TextBlock>
         
         <GridView Grid.Row="2"
-                  Padding="120,0,50,110"
+                  Padding="120,0,50,70"
                   IsItemClickEnabled="True"
                   SelectionMode="Multiple"
                   ItemsSource="{Binding Source={StaticResource GroupList}}"

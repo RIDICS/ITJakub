@@ -128,7 +128,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private void CreateNewTask()
         {
             m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.CreateTask);
-            m_navigationService.Navigate<ApplicationSelectionView>();
+            m_navigationService.Navigate<SelectApplicationView>();
         }
     }
 }

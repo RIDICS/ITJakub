@@ -12,13 +12,13 @@ using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
-    public class ApplicationSelectionViewModel : ViewModelBase
+    public class SelectApplicationViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>> m_appList;
 
-        public ApplicationSelectionViewModel(IDataService dataService, INavigationService navigationService)
+        public SelectApplicationViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;

@@ -76,9 +76,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             get { return Container.Current.Resolve<ApplicationHostViewModel>(); }
         }
 
-        public ApplicationSelectionViewModel ApplicationSelectionViewModel
+        public SelectApplicationViewModel SelectApplicationViewModel
         {
-            get { return Container.Current.Resolve<ApplicationSelectionViewModel>(); }
+            get { return Container.Current.Resolve<SelectApplicationViewModel>(); }
         }
 
         public GroupPageViewModel GroupPageViewModel

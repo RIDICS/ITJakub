@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml;
 
-namespace ITJakub.MobileApps.Client.MainApp.View
+namespace ITJakub.MobileApps.Client.MainApp.View.Control
 {
     public sealed partial class DownArrowControl
     {

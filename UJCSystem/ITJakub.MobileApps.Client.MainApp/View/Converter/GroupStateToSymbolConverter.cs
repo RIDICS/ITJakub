@@ -17,7 +17,7 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Converter
             switch (groupState)
             {
                 case GroupStateContract.Created:
-                    return Symbol.Placeholder;
+                    return Symbol.SolidStar;
                 case GroupStateContract.AcceptMembers:
                     return Symbol.AddFriend;
                 case GroupStateContract.WaitingForStart:
