@@ -124,7 +124,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private void OpenPagePhoto(PageViewModel page)
         {
             PagePhoto = null;
-            if (!IsShowPhotoEnabled)
+            if (!IsShowPhotoEnabled || page == null)
                 return;
 
             LoadingPhoto = true;
@@ -144,7 +144,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             set
             {
                 m_currentPageNumber = value;
-                SelectedPage = m_pageList[CurrentPageNumber - 1];
+                SelectedPage = m_pageList[value - 1];
                 RaisePropertyChanged();
             }
         }
@@ -211,7 +211,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         
         private void Save()
         {
-            if (SelectedPage == null || LoadingPage)
+            if (SelectedPage == null || LoadingPage || LoadingPhoto)
                 return;
 
             m_navigationService.ResetBackStack();

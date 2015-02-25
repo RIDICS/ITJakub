@@ -16,7 +16,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private bool m_isTextEditingEnabled;
         private string m_bookName;
         private string m_bookAuthor;
-        private int m_bookYear;
+        private int? m_bookYear;
         private string m_bookRtfContent;
         private ImageSource m_bookPagePhoto;
         private bool m_isShowPhotoEnabled;
@@ -92,7 +92,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
-        public int BookYear
+        public int? BookYear
         {
             get { return m_bookYear; }
             set
@@ -214,15 +214,17 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             BookPagePhoto = book.PagePhoto; // may be null
 
             IsShowPhotoEnabled = BookPagePhoto != null;
-
-            LoadPagePhoto();
         }
 
         private void LoadPagePhoto()
         {
-            if (IsShowPhotoEnabled && BookPagePhoto == null)
+            if (IsShowPhotoEnabled)
             {
                 //TODO load photo
+            }
+            else
+            {
+                BookPagePhoto = null;
             }
         }
 

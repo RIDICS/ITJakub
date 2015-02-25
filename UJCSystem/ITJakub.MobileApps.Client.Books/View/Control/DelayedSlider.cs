@@ -6,7 +6,8 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
 {
     public class DelayedSlider : Slider
     {
-        public static readonly DependencyProperty DelayedValueProperty = DependencyProperty.Register("DelayedValue", typeof (double), typeof (DelayedSlider), new PropertyMetadata(default(int)));
+        public static readonly DependencyProperty DelayedValueProperty = DependencyProperty.Register("DelayedValue", typeof (double), typeof (DelayedSlider), new PropertyMetadata(0, OnDelayedValueChanged));
+        
         private readonly DispatcherTimer m_delayTimer;
 
         public DelayedSlider()
@@ -33,6 +34,16 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
         {
             m_delayTimer.Stop();
             DelayedValue = Value;
+        }
+
+        private static void OnDelayedValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var slider = d as DelayedSlider;
+            if (slider == null)
+                return;
+
+            if (Math.Abs(slider.Value - slider.DelayedValue) > 0.01)
+                slider.Value = slider.DelayedValue;
         }
     }
 }

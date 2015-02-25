@@ -116,15 +116,13 @@
                             BorderBrush="#22FFFFFF">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             
                             <Viewbox Stretch="Uniform"
                                      StretchDirection="DownOnly"
-                                     Margin="5,5,5,5"
-                                     HorizontalAlignment="Center"
-                                     VerticalAlignment="Center">
+                                     Margin="5,5,5,5">
                                 <ItemsControl ItemsSource="{Binding Rows}"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center">

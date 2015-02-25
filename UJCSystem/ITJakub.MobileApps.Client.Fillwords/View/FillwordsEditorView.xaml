@@ -92,7 +92,7 @@
                                FontSize="{StaticResource LabelFontSize}"
                                Foreground="{StaticResource ErrorColorBrush}"
                                Visibility="{Binding ErrorPageEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <TextBlock Text="Nastavte alternativní možnosti pro alespoň jedno slovo."
+                    <TextBlock Text="Žádné slovo v doplňovačce neobsahuje možnosti pro výběr odpovědi."
                                TextWrapping="Wrap"
                                Width="230"
                                HorizontalAlignment="Left"
