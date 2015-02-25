@@ -105,5 +105,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get { return Container.Current.Resolve<OwnedTaskListViewModel>(); }
         }
+
+        public UserAccountSettingsViewModel UserAccountSettingsViewModel
+        {
+            get { return Container.Current.Resolve<UserAccountSettingsViewModel>(); }
+        }
     }
 }

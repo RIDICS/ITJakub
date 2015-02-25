@@ -124,6 +124,11 @@ namespace ITJakub.MobileApps.Client.MainApp
         {
             //loader for getting string from string resources (e.g. used for app translation)
             //var loader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+            args.Request.ApplicationCommands.Add(new SettingsCommand("UserAccount", "Uživatelský účet", handler =>
+            {
+                var userAccountSettingsFlyout = new UserAccountSettingsFlyout();
+                userAccountSettingsFlyout.Show();
+            }));
             args.Request.ApplicationCommands.Add(new SettingsCommand(
                 "About", "O aplikaci", handler =>
                 {
