@@ -66,8 +66,8 @@
               Margin="120,0,100,30">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" MinHeight="40" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
@@ -109,12 +109,15 @@
             
             <ToggleSwitch Grid.Row="0"
                           Grid.Column="2"
+                          Grid.RowSpan="2"
+                          VerticalAlignment="Bottom"
+                          Margin="0,0,0,10"
                           Header="Zobrazit fotografii stránky"
                           OnContent="Ano"
                           OffContent="Ne"
                           IsOn="{Binding IsShowPhotoEnabled, Mode=TwoWay}" />
 
-            <Border Grid.Row="1"
+            <Border Grid.Row="2"
                     Grid.Column="0"
                     Background="#50FFFFFF"
                     BorderBrush="#30000000"
@@ -122,7 +125,7 @@
                 <control:BindableRichEditBox DocumentRtf="{Binding RtfText}"
                                              IsReadOnly="True" />
             </Border>
-            <ProgressRing Grid.Row="1"
+            <ProgressRing Grid.Row="2"
                           Grid.Column="0"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
@@ -131,7 +134,7 @@
                           Height="{StaticResource ProgressRingSize}"
                           Foreground="DarkBlue" />
 
-            <Grid Grid.Row="1"
+            <Grid Grid.Row="2"
                   Grid.Column="2"
                   Background="#30000000">
                 <Image VerticalAlignment="Center"
@@ -146,7 +149,7 @@
                               Height="{StaticResource ProgressRingSize}" />
             </Grid>
             
-            <GridView Grid.Row="2"
+            <GridView Grid.Row="1"
                       Grid.Column="0"
                       SelectedItem="{Binding SelectedPage, Mode=TwoWay}"
                       ItemsSource="{Binding Source={StaticResource PageListSource}}"
@@ -157,7 +160,8 @@
                       control:GridViewBehaviors.IsScrollToSelection="True">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
+                        <StackPanel Orientation="Horizontal"
+                                    Background="#20FFFFFF" />
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
                 <GridView.ItemTemplate>

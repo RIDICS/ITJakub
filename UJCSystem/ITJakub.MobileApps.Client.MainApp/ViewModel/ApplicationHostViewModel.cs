@@ -37,12 +37,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_isCommandBarOpen;
         private bool m_waitingForStart;
         private bool m_waitingForData;
-        private bool m_taskLoaded;
+        private bool m_isTaskLoaded;
+        private bool m_isAppLoaded;
         private long m_groupId;
         private bool m_paused;
         private int m_unreadMessageCount;
         private GroupInfoViewModel m_groupInfo;
         private ObservableCollection<GroupMemberViewModel> m_memberList;
+        private TaskViewModel m_currentTask;
 
         public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -53,7 +55,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GoBackCommand = new RelayCommand(GoBack);
             ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
 
-            m_taskLoaded = false;
+            m_isTaskLoaded = false;
             m_unreadMessageCount = 0;
 
             LoadData();
@@ -137,15 +139,19 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                if (state >= GroupStateContract.WaitingForStart && !m_taskLoaded)
+                m_groupInfo.State = state;
+                if (state >= GroupStateContract.WaitingForStart && !m_isTaskLoaded)
                 {
                     LoadTask();
                 }
 
-                if (state >= GroupStateContract.Running)
+                if (state >= GroupStateContract.Running && !m_isAppLoaded)
                 {
                     m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
                     WaitingForStart = false;
+
+                    if (m_isTaskLoaded)
+                        LoadApplications(m_currentTask.Application, m_currentTask.Data);
                 }
             });
         }
@@ -157,13 +163,24 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (exception != null)
                     return;
 
-                LoadApplications(task.Application, task.Data);
-                m_taskLoaded = true;
+                m_currentTask = task;
+                
+                if (m_groupInfo.State >= GroupStateContract.Running)
+                    LoadApplications(task.Application, task.Data);
+
+                m_isTaskLoaded = true;
             });
         }
 
         private void LoadApplications(ApplicationType type, string taskData)
         {
+            lock (this)
+            {
+                if (m_isAppLoaded)
+                    return;
+                m_isAppLoaded = true;
+            }
+
             WaitingForData = true;
             m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, (applications, exception) =>
             {

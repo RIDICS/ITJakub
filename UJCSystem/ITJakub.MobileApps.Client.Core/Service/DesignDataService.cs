@@ -57,6 +57,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
                     GroupCode = "123546",
                     MemberCount = 5,
                     GroupName = "Group A",
+                    State = GroupStateContract.Created,
                     Task = new TaskViewModel {Application = ApplicationType.Hangman},
                     Members = new ObservableCollection<GroupMemberViewModel>
                     {
@@ -73,8 +74,30 @@ namespace ITJakub.MobileApps.Client.Core.Service
                     GroupCode = "123546",
                     MemberCount = 5,
                     GroupName = "Group B",
+                    State = GroupStateContract.Running,
                     Task = new TaskViewModel{Application = ApplicationType.SampleApp}
                 },
+                new GroupInfoViewModel
+                {
+                    GroupName = "Skupina C",
+                    State = GroupStateContract.WaitingForStart
+                },
+                new GroupInfoViewModel
+                {
+                    GroupName = "Skupina C",
+                    State = GroupStateContract.AcceptMembers
+                },
+                new GroupInfoViewModel
+                {
+                    GroupName = "Skupina C",
+                    State = GroupStateContract.Closed
+                },
+                new GroupInfoViewModel
+                {
+                    GroupName = "Skupina C",
+                    State = GroupStateContract.Paused
+                }
+
             };
             callback(result, null);
         }

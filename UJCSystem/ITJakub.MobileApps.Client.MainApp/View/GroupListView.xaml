@@ -283,7 +283,7 @@
                                 <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
                                            FontSize="15"
                                            Margin="0,5,0,0"
-                                           Text="U některých skupin se nepodařilo změnit stav."
+                                           Text="Některé skupiny se nepodařilo pozastavit."
                                            Visibility="{Binding ShowError, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 
                                 <Grid Margin="0,3,0,0">
@@ -296,7 +296,7 @@
                                     <ProgressRing IsActive="{Binding InProgress}"
                                                   Foreground="{StaticResource FlyoutProgressColor}"/>
                                     <TextBlock Grid.Column="1"
-                                               Text="Probíhá změna stavu"
+                                               Text="Probíhá pozastavování"
                                                FontSize="15"
                                                Foreground="{StaticResource FlyoutProgressColor}"
                                                VerticalAlignment="Center"
@@ -305,7 +305,7 @@
 
                                     <Button Grid.Column="2"
                                             HorizontalAlignment="Right"
-                                            Content="Změnit"
+                                            Content="Pozastavit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
                                             Command="{Binding ChangeStateCommand}" />
                                 </Grid>
@@ -331,7 +331,7 @@
                                 <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
                                            FontSize="15"
                                            Margin="0,5,0,0"
-                                           Text="U některých skupin se nepodařilo změnit stav."
+                                           Text="Některé skupiny se nepodařilo spustit."
                                            Visibility="{Binding ShowError, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 
                                 <Grid Margin="0,3,0,0">
@@ -344,7 +344,7 @@
                                     <ProgressRing IsActive="{Binding InProgress}"
                                                   Foreground="{StaticResource FlyoutProgressColor}"/>
                                     <TextBlock Grid.Column="1"
-                                               Text="Probíhá změna stavu"
+                                               Text="Probíhá spouštění"
                                                FontSize="15"
                                                Foreground="{StaticResource FlyoutProgressColor}"
                                                VerticalAlignment="Center"
@@ -353,7 +353,7 @@
 
                                     <Button Grid.Column="2"
                                             HorizontalAlignment="Right"
-                                            Content="Změnit"
+                                            Content="Spustit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
                                             Command="{Binding ChangeStateCommand}" />
                                 </Grid>
@@ -473,20 +473,28 @@
                         <Grid Width="64"
                               Height="64">
                             <Image Source="../Icon/group-64.png" />
-                            <SymbolIcon Symbol="{Binding State, Converter={StaticResource GroupStateToSymbolConverter}}"
-                                        Foreground="Black"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Bottom" />
+                            
+                            <Grid Width="32"
+                                  Height="32"
+                                  Margin="0,0,-3,-3"
+                                  VerticalAlignment="Bottom"
+                                  HorizontalAlignment="Right">
+
+                                <Ellipse Fill="#000070" />
+                                <SymbolIcon Symbol="{Binding State, Converter={StaticResource GroupStateToSymbolConverter}}"
+                                            Foreground="White"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,0,1"/>
+                                
+                            </Grid>
+                            
                         </Grid>
                         <StackPanel Width="270"
                                     Margin="10,0,0,0"
                                     Orientation="Vertical">
                             <TextBlock Text="{Binding GroupName}"
                                        FontWeight="Bold" />
-                            <!--<TextBlock Foreground="{StaticResource ApplicationForegroundThemeBrush}">
-                                <Run Text="Aplikace: " />
-                                <Run Text="{Binding Task.Application, Converter={StaticResource ApplicationTypeToNameConverter}}" />
-                            </TextBlock>-->
                             <TextBlock>
                                 <Run Text="Počet členů: " />
                                 <Run Text="{Binding MemberCount}" />

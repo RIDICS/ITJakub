@@ -162,40 +162,41 @@
                                 HorizontalAlignment="Left"
                                 Margin="{TemplateBinding CursorMargin}" />
 
-                        <Button Grid.Column="1"
-                                x:Name="ShowKeyboardButton">
-                            <Button.Content>
-                                <SymbolIcon Symbol="Keyboard" />
-                            </Button.Content>
-                            <Button.Flyout>
-                                <Flyout>
-                                    <GridView MaxWidth="400"
-                                              ItemsSource="{TemplateBinding KeyboardViewModel}"
-                                              IsItemClickEnabled="True"
-                                              SelectionMode="None">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <control:AlignableWrapPanel HorizontalContentAlignment="Center"
-                                                                            MaxWidth="400" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid Width="70"
-                                                      Height="60"
-                                                      Background="DarkGray">
-                                                    <TextBlock Text="{Binding Label}"
-                                                               FontSize="30"
-                                                               VerticalAlignment="Center"
-                                                               HorizontalAlignment="Center"
-                                                               Foreground="{StaticResource ButtonForegroundThemeBrush}" />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </GridView>
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
+                        <Grid Grid.Column="1" Background="#40000080">
+                            <Button x:Name="ShowKeyboardButton">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="Keyboard" />
+                                </Button.Content>
+                                <Button.Flyout>
+                                    <Flyout>
+                                        <GridView MaxWidth="400"
+                                                  ItemsSource="{TemplateBinding KeyboardViewModel}"
+                                                  IsItemClickEnabled="True"
+                                                  SelectionMode="None">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <control:AlignableWrapPanel HorizontalContentAlignment="Center"
+                                                                                MaxWidth="400" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Width="70"
+                                                          Height="60"
+                                                          Background="DarkGray">
+                                                        <TextBlock Text="{Binding Label}"
+                                                                   FontSize="30"
+                                                                   VerticalAlignment="Center"
+                                                                   HorizontalAlignment="Center"
+                                                                   Foreground="{StaticResource ButtonForegroundThemeBrush}" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </GridView>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                        </Grid>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
