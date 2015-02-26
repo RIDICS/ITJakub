@@ -4,38 +4,72 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:control="using:ITJakub.MobileApps.Client.MainApp.View.Control"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     mc:Ignorable="d"
     IconSource="../Assets/SmallLogo.png"
     Title="Uživatelský účet"
     d:DesignWidth="346"
-    DataContext="{Binding UserAccountSettingsViewModel, Source={StaticResource Locator}}">
+    DataContext="{Binding UserAccountSettingsViewModel, Source={StaticResource Locator}}"
+    control:SettingsFlyoutHelper.IsOpen="{Binding IsSettingsFlyoutOpen, Mode=TwoWay}">
 
     <!-- This StackPanel acts as a root panel for vertical layout of the content sections -->
+    <SettingsFlyout.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:BooleanNegationToVisibilityConverter x:Key="BooleanNegationToVisibilityConverter" />
+        <converter1:UserRoleToNameConverter x:Key="UserRoleToNameConverter" />
+    </SettingsFlyout.Resources>
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
 
         <!-- The StackPanel(s) below define individual content sections -->
 
         <!-- Content Section 1-->
-        <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
+        <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}"
+                    Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <!-- Section 1 header -->
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Přihlášený uživatel:" />
 
             <!-- Section 1 body -->
-            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,25" TextWrapping="Wrap">
-                <Run Text="{Binding FirstName}" />
-                <Run Text="{Binding LastName}" />
-                <LineBreak />
-                <Run Text="{Binding Email}" />
-                <LineBreak />
-                <Run Text="Uživatelská role:" />
-                <Run Text="role" />
-            </TextBlock>
+            <Grid Margin="0,0,0,10"
+                  DataContext="{Binding UserInfoViewModel}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Grid Width="50"
+                      Height="50"
+                      Margin="0,6,0,0"
+                      VerticalAlignment="Center">
+                    
+                    <SymbolIcon Foreground="DarkBlue" Symbol="Contact" />
+                    <Image Stretch="Uniform" Source="{Binding UserAvatar}" />
+                </Grid>
+                
+                <TextBlock Grid.Column="1"
+                           Margin="7,0,0,0"
+                           Style="{StaticResource BodyTextBlockStyle}"
+                           TextWrapping="Wrap">
+                    <Run Text="{Binding FirstName}" />
+                    <Run Text="{Binding LastName}" />
+                    <LineBreak />
+                    <Run Text="{Binding Email}" />
+                    <LineBreak />
+                    <Run Text="Uživatelská role:" />
+                    <Run Text="{Binding UserRole, Converter={StaticResource UserRoleToNameConverter}}" />
+                </TextBlock>
+            </Grid>
 
-            
             <Button Content="Odhlásit se"
-                    Command="{Binding LogOutCommand}"/>
+                    Margin="54,0,0,0"
+                    Command="{Binding LogOutCommand}" />
         </StackPanel>
+        
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}"
+                   Text="Žádný přihlášený uživatel"
+                   Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BooleanNegationToVisibilityConverter}}" />
 
         <!-- Define more Content Sections below as necessary -->
 

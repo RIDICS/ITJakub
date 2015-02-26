@@ -132,6 +132,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
         public async void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
+            if (UserLoginInfo == null)
+            {
+                callback(null);
+                return;
+            }
+
             var viewModel = GetLoggedUserViewModel();
             callback(viewModel);
 
@@ -149,6 +155,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
                 UserId = UserLoginInfo.UserId,
                 FirstName = UserLoginInfo.FirstName,
                 LastName = UserLoginInfo.LastName,
+                Email = UserLoginInfo.Email,
                 UserRole = UserRoleContract.Teacher // TODO direct Teacher role assignment for testing
             };
             return viewModel;

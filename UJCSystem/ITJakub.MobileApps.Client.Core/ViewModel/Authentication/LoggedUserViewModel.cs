@@ -8,8 +8,9 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel.Authentication
     {
         private string m_firstName;
         private string m_lastName;
+        private string m_email;
         private ImageSource m_userAvatar;
-
+        
         public string FirstName
         {
             get { return m_firstName; }
@@ -26,6 +27,12 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel.Authentication
         {
             get { return m_userAvatar; }
             set { m_userAvatar = value; RaisePropertyChanged();}
+        }
+
+        public string Email
+        {
+            get { return m_email; }
+            set { m_email = value; RaisePropertyChanged(); }
         }
 
         public UserRoleContract UserRole { get; set; }

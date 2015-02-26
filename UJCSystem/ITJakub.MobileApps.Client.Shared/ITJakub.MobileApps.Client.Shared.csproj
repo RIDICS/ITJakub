@@ -104,6 +104,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ApplicationBase.cs" />
+    <Compile Include="Converter\BooleanNegationToVisibilityConverter.cs" />
     <Compile Include="ViewModel\ActionViewModel.cs" />
     <Compile Include="Message\AppActionFinishedMessage.cs" />
     <Compile Include="ViewModel\ApplicationBaseViewModel.cs" />

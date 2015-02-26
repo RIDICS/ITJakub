@@ -118,9 +118,11 @@
     <Compile Include="ViewModel\GroupPage\GroupStateViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
     <Compile Include="ViewModel\OwnedTaskListViewModel.cs" />
+    <Compile Include="ViewModel\UserAccountSettingsViewModel.cs" />
     <Compile Include="View\AboutSettingsFlyout.xaml.cs">
       <DependentUpon>AboutSettingsFlyout.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Control\SettingsFlyoutHelper.cs" />
     <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
     <Compile Include="View\Converter\GroupCountToStringConverter.cs" />
@@ -133,6 +135,7 @@
     <Compile Include="View\Control\DownArrowControl.xaml.cs">
       <DependentUpon>DownArrowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Converter\UserRoleToNameConverter.cs" />
     <Compile Include="View\EditorHostView.xaml.cs">
       <DependentUpon>EditorHostView.xaml</DependentUpon>
     </Compile>
