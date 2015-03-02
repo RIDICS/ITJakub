@@ -154,7 +154,10 @@
     <Compile Include="View\Control\BindableRichTextBlock.cs" />
     <Compile Include="View\Control\DelayedSlider.cs" />
     <Compile Include="View\Control\GridViewBehaviors.cs" />
+    <Compile Include="View\Control\ScrollViewerHelper.cs" />
     <Compile Include="View\Converter\PageOrderToLabelConverter.cs" />
+    <Compile Include="View\Converter\RangeToZoomFactorConverter.cs" />
+    <Compile Include="View\Converter\RangeToZoomPercentConverter.cs" />
     <Compile Include="View\SelectBookView.xaml.cs">
       <DependentUpon>SelectBookView.xaml</DependentUpon>
     </Compile>
@@ -189,6 +192,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Icon\pagePhotoMock.jpg" />
     <Content Include="Icon\book-48.png" />
     <Content Include="Icon\license.txt" />
   </ItemGroup>

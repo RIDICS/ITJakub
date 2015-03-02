@@ -9,6 +9,18 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private int m_selectionLength;
         private int m_cursorPosition;
         private ReaderRichEditBox.Modes m_currentMode;
+        private string m_documentRtf;
+        private bool m_loading;
+
+        public string DocumentRtf
+        {
+            get { return m_documentRtf; }
+            set
+            {
+                m_documentRtf = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public int SelectionStart
         {
@@ -46,6 +58,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             set
             {
                 m_currentMode = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool Loading
+        {
+            get { return m_loading; }
+            set
+            {
+                m_loading = value;
                 RaisePropertyChanged();
             }
         }

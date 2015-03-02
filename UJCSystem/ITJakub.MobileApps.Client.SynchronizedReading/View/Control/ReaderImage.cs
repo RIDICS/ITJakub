@@ -3,6 +3,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 {
@@ -16,7 +17,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         private const double PointerCorrectionY = 30.0;
         private const double ScrollStep = 20.0;
 
-        public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource", typeof (ImageSource), typeof (ReaderImage), new PropertyMetadata(null));
+        public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource", typeof (ImageSource), typeof (ReaderImage), new PropertyMetadata(null, OnImageSourceChanged));
         public static readonly DependencyProperty PointerPositionXProperty = DependencyProperty.Register("PointerPositionX", typeof (double), typeof (ReaderImage), new PropertyMetadata(0.0, OnPointerPositionChanged));
         public static readonly DependencyProperty PointerPositionYProperty = DependencyProperty.Register("PointerPositionY", typeof (double), typeof (ReaderImage), new PropertyMetadata(0.0, OnPointerPositionChanged));
         public static readonly DependencyProperty PointerCalibrationXProperty = DependencyProperty.Register("PointerCalibrationX", typeof(double), typeof(ReaderImage), new PropertyMetadata(0.0));
@@ -246,6 +247,25 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 
             if (!readerImage.m_isViewChangeByScrollViewer)
                 readerImage.m_scrollViewer.ChangeView(null, null, (float)readerImage.CurrentZoomFactor);
+        }
+
+        private static void OnImageSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var readerImage = d as ReaderImage;
+            if (readerImage == null)
+                return;
+
+            var bitmap = e.NewValue as BitmapImage;
+            if (bitmap == null)
+                return;
+
+            var zoom = (readerImage.m_scrollViewer.ActualWidth - 45) / bitmap.PixelWidth;
+            var zoomY = (readerImage.m_scrollViewer.ActualHeight - 45) / bitmap.PixelHeight;
+            if (zoomY < zoom)
+                zoom = zoomY;
+
+            if (zoom > 0.001 && zoom < 1.0)
+                readerImage.CurrentZoomFactor = zoom;
         }
 
 

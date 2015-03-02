@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.UI.Xaml;
+using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
@@ -20,6 +22,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private bool m_isPhotoDisplayed;
         private bool m_isSelectionModeEnabled;
         private ObservableCollection<PageViewModel> m_pageList;
+        private bool m_loadingPageList;
+        private PageViewModel m_selectedPage;
 
         public ReadingViewModel(ReaderDataService dataService)
         {
@@ -34,33 +38,27 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             ImageReaderViewModel = new ImageReaderViewModel();
             m_currentReader = new UserInfo();
 
-            //TODO load data from server instead of direct values
-            PageList = new ObservableCollection<PageViewModel>
-            {
-                new PageViewModel{PageId = "1L"},
-                new PageViewModel{PageId = "1R"},
-                new PageViewModel{PageId = "2L"},
-                new PageViewModel{PageId = "2R"},
-                new PageViewModel{PageId = "3L"},
-                new PageViewModel{PageId = "3R"},
-                new PageViewModel{PageId = "4L"},
-                new PageViewModel{PageId = "4R"},
-                new PageViewModel{PageId = "5L"},
-                new PageViewModel{PageId = "5R"},
-                new PageViewModel{PageId = "6L"},
-                new PageViewModel{PageId = "6R"},
-                new PageViewModel{PageId = "7L"},
-                new PageViewModel{PageId = "7R"},
-                new PageViewModel{PageId = "8L"},
-                new PageViewModel{PageId = "8R"},
-                new PageViewModel{PageId = "9L"},
-            };
+            PreviousPageCommand = new RelayCommand(() => JumpToPage(-1));
+            NextPageCommand = new RelayCommand(() => JumpToPage(1));
         }
-
+        
         public override void InitializeCommunication()
         {
             UpdateMode();
             SetDataLoaded();
+
+            LoadingPageList = true;
+            m_dataService.GetPageList((pages, exception) =>
+            {
+                LoadingPageList = false;
+                if (exception != null)
+                    return;
+
+                PageList = pages;
+                UpdateSelectedPage();
+            });
+
+            LoadPage();
 
             m_dataService.StartPollingControlUpdates((model, exception) =>
             {
@@ -73,7 +71,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
         public override void SetTask(string data)
         {
-            //TODO
+            m_dataService.SetTask(data);
         }
 
         public override void StopCommunication()
@@ -155,9 +153,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             {
                 m_isPhotoDisplayed = value;
                 RaisePropertyChanged();
+                LoadPhoto();
             }
         }
-
+        
         public ObservableCollection<PageViewModel> PageList
         {
             get { return m_pageList; }
@@ -168,11 +167,38 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             }
         }
 
+        public bool LoadingPageList
+        {
+            get { return m_loadingPageList; }
+            set
+            {
+                m_loadingPageList = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public PageViewModel SelectedPage
+        {
+            get { return m_selectedPage; }
+            set
+            {
+                if (value == null || value == m_selectedPage)
+                    return;
+
+                m_selectedPage = value;
+                RaisePropertyChanged();
+                m_dataService.SetCurrentPage(value);
+                LoadPage();
+            }
+        }
+
         public TextReaderViewModel TextReaderViewModel { get; set; }
 
         public ImageReaderViewModel ImageReaderViewModel { get; set; }
 
-        public PageViewModel SelectedPage { get; set; }
+        public RelayCommand PreviousPageCommand { get; private set; }
+
+        public RelayCommand NextPageCommand { get; private set; }
 
 
         private void ProcessPollingUpdate(UpdateViewModel update, Exception exception)
@@ -238,6 +264,57 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             {
                 actionViewModel.IsActionPerformed = false;
             });
+        }
+
+        private void LoadPage()
+        {
+            TextReaderViewModel.Loading = true;
+            m_dataService.GetPageAsRtf((textRtf, exception) =>
+            {
+                TextReaderViewModel.Loading = false;
+                if (exception != null)
+                    return;
+
+                TextReaderViewModel.DocumentRtf = textRtf;
+                
+                if (m_pageList != null)
+                    UpdateSelectedPage();
+            });
+
+            LoadPhoto();
+        }
+
+        private void LoadPhoto()
+        {
+            if (!IsPhotoDisplayed)
+                return;
+
+            ImageReaderViewModel.Loading = true;
+            m_dataService.GetPagePhoto((image, exception) =>
+            {
+                ImageReaderViewModel.Loading = false;
+                if (exception != null)
+                    return;
+
+                ImageReaderViewModel.Photo = image;
+            });
+        }
+
+        private void UpdateSelectedPage()
+        {
+            m_dataService.GetCurrentPage(pageId =>
+            {
+                SelectedPage = m_pageList.FirstOrDefault(pageViewModel => pageViewModel.PageId == pageId);
+            });
+        }
+
+        private void JumpToPage(int jump)
+        {
+            var newIndex = m_pageList.IndexOf(SelectedPage) + jump;
+            if (newIndex < 0 || newIndex >= m_pageList.Count)
+                return;
+
+            SelectedPage = m_pageList[newIndex];
         }
     }
 }

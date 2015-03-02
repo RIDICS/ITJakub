@@ -107,6 +107,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 
         private void OpenPage(PageViewModel page)
         {
+            RtfText = null;
             LoadingPage = true;
             m_dataService.GetPageAsRtf(Book.Guid, page.PageId, (rtfText, exception) =>
             {
@@ -180,6 +181,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             set
             {
                 m_isShowPhotoEnabled = value;
+                RaisePropertyChanged();
                 OpenPagePhoto(SelectedPage);
             }
         }

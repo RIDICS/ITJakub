@@ -62,7 +62,7 @@ namespace ITJakub.MobileApps.Client.Books
             return await book.StartSelectingBookAsync();
         }
 
-        public static IPublicDataService DataService
+        public static IBookDataService DataService
         {
             get { return Container.Current.Resolve<IDataService>(); }
         }

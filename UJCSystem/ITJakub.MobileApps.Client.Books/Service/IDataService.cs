@@ -6,14 +6,14 @@ using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Service
 {
-    public interface IPublicDataService
+    public interface IBookDataService
     {
         void GetPageList(string bookGuid, Action<ObservableCollection<PageViewModel>, Exception> callback);
         void GetPageAsRtf(string bookGuid, string pageId, Action<string, Exception> callback);
         void GetPagePhoto(string bookGuid, string pageId, Action<BitmapImage, Exception> callback);
     }
 
-    public interface IDataService : IPublicDataService
+    public interface IDataService : IBookDataService
     {
         void GetBookList(CategoryContract category, Action<ObservableCollection<BookViewModel>, Exception> callback);
         void SearchForBook(CategoryContract category, SearchDestinationContract searchDestination, string query, Action<ObservableCollection<BookViewModel>, Exception> callback);

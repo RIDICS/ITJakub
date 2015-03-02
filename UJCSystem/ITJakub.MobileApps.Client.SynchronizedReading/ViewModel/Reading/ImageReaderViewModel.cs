@@ -1,6 +1,4 @@
-using System;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.SynchronizedReading.View.Control;
 
@@ -12,12 +10,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private double m_pointerPositionY;
         private ReaderImage.Modes m_currentMode;
         private ImageSource m_photo;
-
-        public ImageReaderViewModel()
-        {
-            //TODO for testing:
-            Photo = new BitmapImage(new Uri("ms-appx:///Icon/windows8-128.png"));
-        }
+        private bool m_loading;
 
         public double PointerPositionX
         {
@@ -55,6 +48,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             set
             {
                 m_photo = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool Loading
+        {
+            get { return m_loading; }
+            set
+            {
+                m_loading = value;
                 RaisePropertyChanged();
             }
         }
