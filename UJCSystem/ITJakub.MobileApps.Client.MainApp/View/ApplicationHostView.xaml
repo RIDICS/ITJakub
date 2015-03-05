@@ -156,11 +156,17 @@
               HorizontalAlignment="Right"
               VerticalAlignment="Bottom"
               Margin="0,0,30,30"
-              Background="LightGoldenrodYellow"
               Width="250"
               Height="80"
               Visibility="{Binding IsChatNotificationVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Rectangle Fill="LightGoldenrodYellow"
+                       RadiusX="15"
+                       RadiusY="10"
+                       Stroke="#20000000"
+                       StrokeThickness="2" />
             <Button Background="Transparent"
+                    Margin="8,4,8,4"
+                    Padding="4,0,4,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Left"

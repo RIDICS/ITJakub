@@ -221,11 +221,18 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <control1:SubmitTextBox />
+                <control1:SubmitTextBox Text="{Binding GoToPageText, Mode=TwoWay}"
+                                        EnterCommand="{Binding GoToPageCommand}"/>
                 
                 <Button Grid.Column="1"
-                        Content="Přejít" />
+                        Content="Přejít"
+                        Command="{Binding GoToPageCommand}"/>
             </Grid>
+            
+            <TextBlock Text="Strana nenalezena"
+                       Margin="0,0,0,-14"
+                       Foreground="Orange"
+                       Visibility="{Binding IsPageNotFoundError, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
     </Grid>
 </UserControl>

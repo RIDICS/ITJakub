@@ -24,6 +24,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private ObservableCollection<PageViewModel> m_pageList;
         private bool m_loadingPageList;
         private PageViewModel m_selectedPage;
+        private string m_goToPageText;
+        private bool m_isPageNotFoundError;
 
         public ReadingViewModel(ReaderDataService dataService)
         {
@@ -40,6 +42,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
             PreviousPageCommand = new RelayCommand(() => JumpToPage(-1));
             NextPageCommand = new RelayCommand(() => JumpToPage(1));
+            GoToPageCommand = new RelayCommand(GoToPage);
         }
         
         public override void InitializeCommunication()
@@ -192,6 +195,26 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             }
         }
 
+        public string GoToPageText
+        {
+            get { return m_goToPageText; }
+            set
+            {
+                m_goToPageText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsPageNotFoundError
+        {
+            get { return m_isPageNotFoundError; }
+            set
+            {
+                m_isPageNotFoundError = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public TextReaderViewModel TextReaderViewModel { get; set; }
 
         public ImageReaderViewModel ImageReaderViewModel { get; set; }
@@ -200,6 +223,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
         public RelayCommand NextPageCommand { get; private set; }
 
+        public RelayCommand GoToPageCommand { get; private set; }
+        
 
         private void ProcessPollingUpdate(UpdateViewModel update, Exception exception)
         {
@@ -268,6 +293,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
         private void LoadPage()
         {
+            IsPageNotFoundError = false;
             TextReaderViewModel.Loading = true;
             m_dataService.GetPageAsRtf((textRtf, exception) =>
             {
@@ -315,6 +341,22 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 return;
 
             SelectedPage = m_pageList[newIndex];
+        }
+
+        private void GoToPage()
+        {
+            IsPageNotFoundError = false;
+            if (string.IsNullOrEmpty(GoToPageText))
+                return;
+
+            var pageViewModel = m_pageList.FirstOrDefault(page => page.PageId.Equals(GoToPageText, StringComparison.OrdinalIgnoreCase));
+            if (pageViewModel == null)
+            {
+                IsPageNotFoundError = true;
+                return;
+            }
+
+            SelectedPage = pageViewModel;
         }
     }
 }

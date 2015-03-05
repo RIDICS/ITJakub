@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -14,21 +16,41 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private ObservableCollection<TaskViewModel> m_taskList;
         private ApplicationType m_applicationType;
         private bool m_noTaskExists;
         private bool m_loading;
         private string m_applicationName;
         private bool m_saving;
+        private ObservableCollection<TaskViewModel> m_originalTaskList;
+        private ObservableCollection<IGrouping<bool, TaskViewModel>> m_groupedTaskList;
+        private string m_searchQuery;
+        private bool m_noSearchResults;
+        private bool m_isSearchingMode;
 
         public SelectTaskViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
-            
-            NoTaskExists = false;
-            InitCommands();
 
+            m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.SelectTask);
+
+            InitCommands();
+            LoadData();
+        }
+        
+        private void InitCommands()
+        {
+            GoBackCommand = new RelayCommand(() => m_navigationService.GoBack());
+            TaskClickCommand = new RelayCommand<ItemClickEventArgs>(TaskClick);
+            CreateNewTaskCommand = new RelayCommand(CreateNewTask);
+            RefreshListCommand = new RelayCommand(LoadTasks);
+            SearchCommand = new RelayCommand(Search);
+            CancelSearchCommand = new RelayCommand(CancelSearch);
+        }
+        
+        private void LoadData()
+        {
+            NoTaskExists = false;
             m_dataService.GetCurrentApplication(type =>
             {
                 m_applicationType = type;
@@ -42,17 +64,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
                 LoadTasks();
             });
-            m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.SelectTask);
         }
 
-        private void InitCommands()
-        {
-            GoBackCommand = new RelayCommand(() => m_navigationService.GoBack());
-            TaskClickCommand = new RelayCommand<ItemClickEventArgs>(TaskClick);
-            CreateNewTaskCommand = new RelayCommand(CreateNewTask);
-            RefreshListCommand = new RelayCommand(LoadTasks);
-        }
-        
         private void LoadTasks()
         {
             Loading = true;
@@ -62,10 +75,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (exception != null)
                     return;
 
-                TaskList = taskList;
+                m_originalTaskList = taskList;
+                NoTaskExists = taskList.Count == 0;
+                SetGroupedTaskList(m_originalTaskList);
             });
         }
-
+        
         public RelayCommand GoBackCommand { get; private set; }
 
         public RelayCommand<ItemClickEventArgs> TaskClickCommand { get; private set; }
@@ -74,14 +89,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         
         public RelayCommand RefreshListCommand { get; private set; }
 
-        public ObservableCollection<TaskViewModel> TaskList
+        public RelayCommand SearchCommand { get; private set; }
+
+        public RelayCommand CancelSearchCommand { get; private set; }
+
+        public ObservableCollection<IGrouping<bool, TaskViewModel>> GroupedTaskList
         {
-            get { return m_taskList; }
+            get { return m_groupedTaskList; }
             set
             {
-                m_taskList = value;
+                m_groupedTaskList = value;
                 RaisePropertyChanged();
-                NoTaskExists = m_taskList.Count == 0;
             }
         }
 
@@ -124,6 +142,36 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        public string SearchQuery
+        {
+            get { return m_searchQuery; }
+            set
+            {
+                m_searchQuery = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool NoSearchResults
+        {
+            get { return m_noSearchResults; }
+            set
+            {
+                m_noSearchResults = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsSearchingMode
+        {
+            get { return m_isSearchingMode; }
+            set
+            {
+                m_isSearchingMode = value;
+                RaisePropertyChanged();
+            }
+        }
         
         private void TaskClick(ItemClickEventArgs args)
         {
@@ -152,7 +200,37 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void CreateNewTask()
         {
-            m_navigationService.Navigate(typeof(EditorHostView));
+            m_navigationService.Navigate<EditorHostView>();
+        }
+        
+        private void Search()
+        {
+            IsSearchingMode = false;
+            if (m_originalTaskList == null || m_originalTaskList.Count == 0)
+                return;
+
+            if (string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                SetGroupedTaskList(m_originalTaskList);
+                return;
+            }
+
+            IsSearchingMode = true;
+            SetGroupedTaskList(m_originalTaskList.Where(task => task.Name.ToLower().Contains(SearchQuery.ToLower())));
+        }
+
+        private void CancelSearch()
+        {
+            IsSearchingMode = false;
+            SetGroupedTaskList(m_originalTaskList);
+            SearchQuery = string.Empty;
+        }
+
+        private void SetGroupedTaskList(IEnumerable<TaskViewModel> tasks)
+        {
+            GroupedTaskList =
+                new ObservableCollection<IGrouping<bool, TaskViewModel>>(
+                    tasks.GroupBy(task => task.Author.IsMe).OrderByDescending(taskGroup => taskGroup.Key));
         }
     }
 }
