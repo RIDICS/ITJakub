@@ -16,16 +16,18 @@
         <x:Double x:Key="LabelFontSize">14</x:Double>
         <SolidColorBrush x:Key="ErrorColorBrush" Color="Orange" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <CollectionViewSource Source="{Binding AnswerList, Mode=TwoWay}" x:Key="AnswerListSource" />
     </UserControl.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          Margin="120,0,100,20">
+          Margin="60,0,80,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0"
+              Margin="60,0,20,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -109,9 +111,8 @@
         
         <ListView Grid.Row="1"
                   SelectionMode="None"
-                  ItemsSource="{Binding AnswerList}"
+                  ItemsSource="{Binding Source={StaticResource AnswerListSource}}"
                   CanReorderItems="True"
-                  CanDragItems="True"
                   AllowDrop="True">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -122,19 +123,20 @@
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         
-                        <view:SpecialTextBox Grid.Column="0"
+                        <view:SpecialTextBox Grid.Column="1"
                                              Margin="0,0,10,0"
                                              VerticalAlignment="Center"
                                              FontSize="16"
                                              Text="{Binding Answer, Mode=TwoWay}"
                                              KeyboardLetters="äāąćèľłḿǫṕŕſüūźъь" />
                         
-                        <Button Grid.Column="1"
+                        <Button Grid.Column="2"
                                 Command="{Binding ElementName=RootElement, Path=DataContext.DeleteAnswerCommand}"
                                 CommandParameter="{Binding}">
                             <SymbolIcon Symbol="Delete" />

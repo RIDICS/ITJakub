@@ -31,7 +31,7 @@
     </UserControl.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          Margin="90,0,100,20">
+          Margin="30,0,80,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -39,7 +39,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
-              Margin="30,0,0,0">
+              Margin="90,0,20,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -142,46 +142,53 @@
         </Grid>
 
         <Grid Grid.Row="1"
-              Margin="230,5,0,5"
+              Margin="290,5,0,5"
               HorizontalAlignment="Left">
             <Grid Margin="{Binding AnswerColumn, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter={StaticResource InnerColumnWidth}}"
                   Background="Orange"
                   Width="{StaticResource InnerColumnWidth}"/>
         </Grid>
-        <ScrollViewer Grid.Row="1"
-                      Padding="0,0,20,0"
-                      Margin="0,5,0,5">
-            <ItemsControl ItemsSource="{Binding AnswerList}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="30" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
 
-                            <CheckBox Grid.Column="0"
-                                      HorizontalAlignment="Center"
-                                      IsChecked="{Binding IsAnswer, Mode=TwoWay}" />
-                            
-                            <TextBox Grid.Column="1"
-                                     Margin="0,0,10,0"
-                                     Width="190"
-                                     VerticalAlignment="Center"
-                                     FontSize="16"
-                                     Style="{StaticResource EditorTextBoxStyle}"
-                                     IsEnabled="{Binding IsAnswer}"
-                                     Text="{Binding Label, Mode=TwoWay}" />
+        <ListView Grid.Row="1"
+                  Padding="0,0,20,0"
+                  Margin="0,5,0,5"
+                  ItemsSource="{Binding AnswerList}"
+                  CanReorderItems="True"
+                  AllowDrop="True"
+                  ItemContainerStyle="{StaticResource NoMarginListViewItemStyle}"
+                  SelectionMode="None">
 
-                            <Grid Grid.Column="2"
-                                  VerticalAlignment="Center"
-                                  Background="{Binding IsAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource TextBoxBackgroundColor}}">
-                                
-                                <view:CrosswordTextBoxControl
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <CheckBox Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  IsChecked="{Binding IsAnswer, Mode=TwoWay}" />
+
+                        <TextBox Grid.Column="2"
+                                 Margin="0,0,10,0"
+                                 Width="190"
+                                 VerticalAlignment="Center"
+                                 FontSize="16"
+                                 Style="{StaticResource EditorTextBoxStyle}"
+                                 IsEnabled="{Binding IsAnswer}"
+                                 Text="{Binding Label, Mode=TwoWay}" />
+
+                        <Grid Grid.Column="3"
+                              VerticalAlignment="Center"
+                              Background="{Binding IsAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource TextBoxBackgroundColor}}">
+
+                            <view:CrosswordTextBoxControl
                                     Style="{StaticResource EditorCrosswordTextBoxStyle}"
                                     Margin="{Binding Shift, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter={StaticResource InnerColumnWidth}}"
                                     VerticalAlignment="Center"
@@ -192,30 +199,29 @@
                                     IsEnabled="{Binding IsAnswer}"
                                     Text="{Binding Answer, Mode=TwoWay}"
                                     KeyboardLetters="äāąćèľłḿǫṕŕſüūźъь" />
-                            </Grid>
-                            
-                            <Button Grid.Column="3"
-                                    Margin="10,0,0,0"
-                                    IsEnabled="{Binding IsAnswer}"
-                                    Command="{Binding ShiftLeftCommand}">
-                                <SymbolIcon Symbol="Back" />
-                            </Button>
-                            <Button Grid.Column="4"
-                                    IsEnabled="{Binding IsAnswer}"
-                                    Command="{Binding ShiftRightCommand}">
-                                <SymbolIcon Symbol="Forward" />
-                            </Button>
-                            <Button Grid.Column="5"
-                                    Command="{Binding ElementName=RootElement, Path=DataContext.DeleteAnswerCommand}"
-                                    CommandParameter="{Binding}">
-                                <SymbolIcon Symbol="Delete" />
-                            </Button>
                         </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-            
+
+                        <Button Grid.Column="4"
+                                Margin="10,0,0,0"
+                                IsEnabled="{Binding IsAnswer}"
+                                Command="{Binding ShiftLeftCommand}">
+                            <SymbolIcon Symbol="Back" />
+                        </Button>
+                        <Button Grid.Column="5"
+                                IsEnabled="{Binding IsAnswer}"
+                                Command="{Binding ShiftRightCommand}">
+                            <SymbolIcon Symbol="Forward" />
+                        </Button>
+                        <Button Grid.Column="6"
+                                Command="{Binding ElementName=RootElement, Path=DataContext.DeleteAnswerCommand}"
+                                CommandParameter="{Binding}">
+                            <SymbolIcon Symbol="Delete" />
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ListView>
+
         <TextBlock Grid.Row="1"
                    Text="Žádná odpověď"
                    FontSize="15"
@@ -224,7 +230,7 @@
                    Visibility="{Binding IsAnswerListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
         <Grid Grid.Row="2"
-              Margin="30,0,0,20">
+              Margin="90,0,20,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="*" />
@@ -242,7 +248,7 @@
                              Step="{Binding AnswerColumn, Mode=TwoWay}"
                              StepWidth="{StaticResource InnerColumnWidth}"
                              Foreground="Orange"
-                             Margin="0,0,90,0"/>
+                             Margin="0,0,130,0"/>
             
             <Button Grid.Column="2"
                     Command="{Binding ShiftLeftCommand}">
