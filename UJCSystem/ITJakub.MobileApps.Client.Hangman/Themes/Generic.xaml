@@ -14,18 +14,21 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         
-                        <view:FocusableTextBox Grid.Column="0"
-                                               x:Name="TextBox" />
+                        <view:NoLostFocusTextBox Grid.Column="0"
+                                                 x:Name="TextBox"
+                                                 Text="{TemplateBinding Text}"
+                                                 VerticalAlignment="Center" />
                         
-                        <Button Grid.Column="1">
+                        <Button Grid.Column="1"
+                                x:Name="ShowKeyboardButton">
                             <SymbolIcon Symbol="Keyboard" />
                             
                             <Button.Flyout>
                                 <Flyout>
                                     <GridView MaxWidth="400"
-                                              ItemsSource="{TemplateBinding KeyboardViewModel}"
                                               IsItemClickEnabled="True"
-                                              SelectionMode="None">
+                                              SelectionMode="None"
+                                              x:Name="GridView">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <control:AlignableWrapPanel HorizontalContentAlignment="Center"
@@ -37,7 +40,7 @@
                                                 <Grid Width="70"
                                                       Height="60"
                                                       Background="DarkGray">
-                                                    <TextBlock Text="{Binding Label}"
+                                                    <TextBlock Text="{Binding}"
                                                                FontSize="30"
                                                                VerticalAlignment="Center"
                                                                HorizontalAlignment="Center"

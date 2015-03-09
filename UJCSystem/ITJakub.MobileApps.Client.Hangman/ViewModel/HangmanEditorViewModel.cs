@@ -9,7 +9,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
     public class HangmanEditorViewModel : EditorBaseViewModel
     {
         private readonly HangmanDataService m_dataService;
-        private AnswerViewModel m_selectedAnswer;
         private bool m_errorTaskNameEmpty;
         private bool m_errorAnswerListEmpty;
         private bool m_errorSomeAnswerEmpty;
@@ -35,23 +34,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         public ObservableCollection<AnswerViewModel> AnswerList { get; set; }
 
         public string TaskName { get; set; }
-
-        public AnswerViewModel SelectedAnswer
-        {
-            get { return m_selectedAnswer; }
-            set
-            {
-                if (m_selectedAnswer != null)
-                    m_selectedAnswer.IsSelected = false;
-
-                m_selectedAnswer = value;
-
-                if (m_selectedAnswer != null)
-                    m_selectedAnswer.IsSelected = true;
-
-                RaisePropertyChanged();
-            }
-        }
 
         public bool IsAnswerListEmpty
         {

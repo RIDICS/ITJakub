@@ -108,9 +108,8 @@
         </Grid>
         
         <ListView Grid.Row="1"
-                  SelectionMode="Single"
+                  SelectionMode="None"
                   ItemsSource="{Binding AnswerList}"
-                  SelectedItem="{Binding SelectedAnswer, Mode=TwoWay}"
                   CanReorderItems="True"
                   CanDragItems="True"
                   AllowDrop="True">
@@ -128,13 +127,12 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         
-                        <view:FocusableTextBox Grid.Column="0"
-                                               Margin="0,0,10,0"
-                                               VerticalAlignment="Center"
-                                               FontSize="16"
-                                               Text="{Binding Answer, Mode=TwoWay}"
-                                               IsHitTestVisible="False"
-                                               IsFocus="{Binding IsSelected}" />
+                        <view:SpecialTextBox Grid.Column="0"
+                                             Margin="0,0,10,0"
+                                             VerticalAlignment="Center"
+                                             FontSize="16"
+                                             Text="{Binding Answer, Mode=TwoWay}"
+                                             KeyboardLetters="äāąćèľłḿǫṕŕſüūźъь" />
                         
                         <Button Grid.Column="1"
                                 Command="{Binding ElementName=RootElement, Path=DataContext.DeleteAnswerCommand}"
