@@ -24,15 +24,15 @@
                             <SymbolIcon Symbol="Keyboard" />
                             
                             <Button.Flyout>
-                                <Flyout>
-                                    <GridView MaxWidth="400"
-                                              IsItemClickEnabled="True"
+                                <Flyout Placement="Bottom">
+                                    <GridView IsItemClickEnabled="True"
                                               SelectionMode="None"
-                                              x:Name="GridView">
+                                              x:Name="GridView"
+                                              ScrollViewer.HorizontalScrollMode="Disabled">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <control:AlignableWrapPanel HorizontalContentAlignment="Center"
-                                                                            MaxWidth="400" />
+                                                                            MaxWidth="420" />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>

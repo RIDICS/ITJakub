@@ -72,7 +72,9 @@
                               VerticalAlignment="Center" />
 
             <ScrollViewer Grid.Row="1"
-                          VerticalScrollBarVisibility="Auto">
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollMode="Disabled"
+                          ZoomMode="Disabled">
                 <view:KeyboardControl DataContext="{Binding KeyboardViewModel}"
                                       MaxWidth="800" />
             </ScrollViewer>

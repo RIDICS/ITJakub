@@ -122,7 +122,8 @@
                 WordOptionsList="{Binding WordOptionsList}"
                 SelectedOptions="{Binding OptionsEditorViewModel.SelectedOption, Mode=TwoWay}"
                 IsFlyoutOpen="{Binding IsEditorFlyoutOpen, Mode=TwoWay}"
-                DocumentRtf="{Binding BookRtfContent, Mode=TwoWay}">
+                DocumentRtf="{Binding BookRtfContent, Mode=TwoWay}"
+                ScrollViewer.HorizontalScrollMode="Disabled">
                 <control1:EditorRichEditBox.Flyout>
                     <Flyout>
                         <StackPanel Orientation="Vertical"
