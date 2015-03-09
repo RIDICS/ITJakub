@@ -168,15 +168,15 @@
                                     <SymbolIcon Symbol="Keyboard" />
                                 </Button.Content>
                                 <Button.Flyout>
-                                    <Flyout>
-                                        <GridView MaxWidth="400"
-                                                  ItemsSource="{TemplateBinding KeyboardViewModel}"
+                                    <Flyout Placement="Bottom">
+                                        <GridView ItemsSource="{TemplateBinding KeyboardViewModel}"
                                                   IsItemClickEnabled="True"
-                                                  SelectionMode="None">
+                                                  SelectionMode="None"
+                                                  ScrollViewer.HorizontalScrollMode="Disabled">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <control:AlignableWrapPanel HorizontalContentAlignment="Center"
-                                                                                MaxWidth="400" />
+                                                                                MaxWidth="420" />
                                                 </ItemsPanelTemplate>
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>

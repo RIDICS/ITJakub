@@ -111,7 +111,8 @@
             
             <control1:BindableRichEditBox
                 DocumentRtf="{Binding PageRtfText}"
-                IsReadOnly="True" />
+                IsReadOnly="True"
+                ScrollViewer.HorizontalScrollMode="Disabled" />
             
         </Border>
 

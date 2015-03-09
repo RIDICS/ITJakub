@@ -125,7 +125,8 @@
                     BorderBrush="#30000000"
                     BorderThickness="2">
                 <control:BindableRichEditBox DocumentRtf="{Binding RtfText}"
-                                             IsReadOnly="True" />
+                                             IsReadOnly="True"
+                                             ScrollViewer.HorizontalScrollMode="Disabled" />
             </Border>
             <ProgressRing Grid.Row="2"
                           Grid.Column="0"
