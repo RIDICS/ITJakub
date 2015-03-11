@@ -10,20 +10,21 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
-    xmlns:view="using:ITJakub.MobileApps.Client.MainApp.View"
     xmlns:control1="using:ITJakub.MobileApps.Client.MainApp.View.Control"
     mc:Ignorable="d">
 
     <Page.Resources>
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         <converter:NotChosenStringConverter x:Key="NotChosenStringConverter" />
-        <converter:ApplicationTypeToNameConverter x:Key="ApplicationTypeToNameConverter" />
         <converter:GroupStateToNameConverter x:Key="GroupStateToNameConverter" />
         <converter:BooleanToColorConverter x:Key="BooleanToColorConverter" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
-        <Style x:Key="MyLabelStyle" BasedOn="{StaticResource SubheaderTextBlockStyle}" TargetType="TextBlock">
-            <Setter Property="Margin" Value="0,0,0,15" />
+        <Style x:Key="MyLabelStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,5,0,5" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="FontSize" Value="27" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <x:Double x:Key="ArrowThickness">2</x:Double>
         <SolidColorBrush x:Key="ArrowColor" Color="Black" />
@@ -77,14 +78,10 @@
         <Grid Grid.Row="1"
               Margin="0,20,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" MaxWidth="550" />
             </Grid.ColumnDefinitions>
 
-            <ScrollViewer Grid.Column="0"
-                          Margin="0,0,40,0"
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical"
                         Margin="120,0,0,0">
                 <StackPanel Orientation="Horizontal">
@@ -111,24 +108,41 @@
                     <Run Text="{Binding GroupInfo.CreateTime, Converter={StaticResource DateTimeToStringConverter}}" />
                 </TextBlock>
 
-                <TextBlock Style="{StaticResource MyLabelStyle}">
-                    <Run Text="Aplikace:" />
-                    <Run Text="{Binding SelectedApplication, Converter={StaticResource ApplicationTypeToNameConverter}}" />
-                </TextBlock>
+                <control:AlignableWrapPanel>
+                    <TextBlock Style="{StaticResource MyLabelStyle}"
+                               Text="Zadání:" />
 
-                <TextBlock Style="{StaticResource MyLabelStyle}">
-                    <Run Text="Zadání:" />
-                    <Run Text="{Binding SelectedTaskName, Converter={StaticResource NotChosenStringConverter}}" />
-                </TextBlock>
-                
-                <StackPanel Orientation="Horizontal"
-                            Margin="90,-5,0,5"
-                            Visibility="{Binding CanChangeTask, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Button Content="Změnit zadání"
+                    <Button Margin="7,0,0,7"
+                            Style="{StaticResource TextButtonNoDisableStyle}"
+                            Command="{Binding SelectAppAndTaskCommand}"
+                            IsEnabled="{Binding CanChangeTask}"
+                            VerticalContentAlignment="Center">
+                        <TextBlock Style="{StaticResource MyLabelStyle}"
+                                   Text="{Binding SelectedTaskName, Converter={StaticResource NotChosenStringConverter}}"
+                                   MaxLines="2" />
+                    </Button>
+                    
+                    <Button Content="Změnit"
+                            Margin="30,0,0,0"
                             IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}"
+                            Visibility="{Binding CanChangeTask, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Command="{Binding SelectAppAndTaskCommand}" />
-                </StackPanel>
+                </control:AlignableWrapPanel>
 
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource MyLabelStyle}"
+                               Text="Aplikace:" />
+                    <Grid Width="32"
+                          Height="32"
+                          Margin="10,-3,10,0"
+                          Background="#10FFFFFF">
+                        <Image Source="{Binding AppIcon}" />
+                    </Grid>
+                    <TextBlock Style="{StaticResource MyLabelStyle}"
+                               Text="{Binding AppName, Converter={StaticResource NotChosenStringConverter}}" />
+                </StackPanel>
+                
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource MyLabelStyle}"
                                Margin="0,10,0,15">
@@ -137,8 +151,13 @@
                              Foreground="Yellow" />
                     </TextBlock>
 
-                    <Button Margin="20,0,0,0">
-                        <SymbolIcon Symbol="Help" />
+                    <Button Margin="30,0,0,0"
+                            Width="50"
+                            Height="45"
+                            Style="{StaticResource EllipseButtonStyle}">
+                        <TextBlock FontSize="30"
+                                   Margin="0,-10,0,-10"
+                                   Text="i" />
                         <Button.Flyout>
                             <Flyout>
                                 <TextBlock MaxWidth="360"
@@ -167,6 +186,12 @@
                     </Button>
                 </StackPanel>
 
+                <ScrollViewer Grid.Column="0"
+                          Margin="0,0,40,0"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto"
+                          HorizontalScrollMode="Disabled"
+                          ZoomMode="Disabled">
                 <StackPanel Orientation="Vertical"
                             Margin="0,-10,0,0">
                     
@@ -301,8 +326,8 @@
                                    VerticalAlignment="Center" />
                     </Grid>
                 </StackPanel>
+                </ScrollViewer>
             </StackPanel>
-            </ScrollViewer>
             
             <Grid Grid.Column="1"
                   Margin="0,0,120,0"
@@ -312,7 +337,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 
-                <Grid Grid.Row="0">
+                <Grid Grid.Row="0"
+                      Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -320,14 +346,13 @@
 
                     <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
                                Grid.Column="0">
-                        <Run Text="Seznam členů ("/><Run Text="{Binding MemberCount}"/><Run Text="):" />
+                        <Run Text="Seznam členů ("/><Run Text="{Binding MemberCount}"/><Run Text=")" />
                     </TextBlock>
 
                     <SearchBox Grid.Column="1"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"
                                Width="170"
-                               Margin="0,0,0,10"
                                SearchHistoryEnabled="False"
                                QueryText="{Binding SearchText, Mode=TwoWay}" >
                         <interactivity:Interaction.Behaviors>

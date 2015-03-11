@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
@@ -20,7 +21,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private readonly IMainPollingService m_pollingService;
-        private ApplicationType m_selectedApplication;
         private GroupInfoViewModel m_groupInfo;
         private string m_selectedTaskName;
         private bool m_loading;
@@ -31,6 +31,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private bool m_canConnectToGroup;
         private long m_currentUserId;
         private bool m_connectingToGroup;
+        private BitmapImage m_appIcon;
+        private string m_appName;
 
         public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -71,16 +73,31 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 if (groupInfo.Task == null)
                 {
                     SelectedTaskName = null;
-                    SelectedApplication = ApplicationType.Unknown;
+                    //SelectedApplication = ApplicationType.Unknown;
+                    LoadAppInfo(ApplicationType.Unknown);
                 }
                 else
-                { //TODO nastane tahle vetev vubec nekdy??
+                {
                     SelectedTaskName = groupInfo.Task.Name;
-                    SelectedApplication = groupInfo.Task.Application;
+                    LoadAppInfo(groupInfo.Task.Application);
+                    //SelectedApplication = groupInfo.Task.Application;
                 }
 
                 GroupStateUpdated(groupInfo.State);
                 m_pollingService.RegisterForGroupsUpdate(MembersPollingInterval, new[] {GroupInfo}, UpdateMembers);
+            });
+            
+        }
+
+        private void LoadAppInfo(ApplicationType applicationType)
+        {
+            if (applicationType == ApplicationType.Unknown)
+                return;
+
+            m_dataService.GetApplication(applicationType, (appInfo, exception) =>
+            {
+                AppIcon = appInfo.Icon;
+                AppName = appInfo.Name;
             });
         }
 
@@ -128,12 +145,22 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             }
         }
 
-        public ApplicationType SelectedApplication
+        public BitmapImage AppIcon
         {
-            get { return m_selectedApplication; }
+            get { return m_appIcon; }
             set
             {
-                m_selectedApplication = value;
+                m_appIcon = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string AppName
+        {
+            get { return m_appName; }
+            set
+            {
+                m_appName = value;
                 RaisePropertyChanged();
             }
         }
@@ -219,7 +246,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 RaisePropertyChanged();
             }
         }
-
+        
         public bool CanChangeTask
         {
             get { return GroupInfo.State < GroupStateContract.Running; }
@@ -239,7 +266,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         public RelayCommand RemoveGroupCommand { get; private set; }
 
         public RelayCommand ConnectToGroupCommand { get; private set; }
-
+        
         private void SelectAppAndTask()
         {
             m_dataService.SetRestoringLastGroupState(true);
