@@ -84,13 +84,18 @@
                           Label="Aktualizovat seznam"
                           Command="{Binding RefreshListCommand}" />
 
-            <AppBarButton Icon="Bullets"
-                          Label="Editor zadání"
+            <AppBarButton Icon="Page"
+                          Label="Moje zadání"
                           Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          Command="{Binding OpenTaskEditorCommand}" />
+                          Command="{Binding OpenMyTaskListCommand}" />
+            
+            <AppBarButton Icon="Edit"
+                          Label="Vytvořit zadání"
+                          Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding CreateTaskCommand}" />
             
             <AppBarButton Icon="Forward"
-                          Label="Připojit se k nové skupině"
+                          Label="Připojit se ke skupině"
                           x:Name="ConnectToGroupButton">
                 <AppBarButton.Flyout>
                     <Flyout control:FlyoutHelpers.IsOpen="{Binding ConnectToGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"

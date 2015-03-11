@@ -122,7 +122,7 @@
     <Compile Include="DataTemplateCreator.cs" />
     <Compile Include="EditorTemplateSelector.cs" />
     <Compile Include="Manager\Application\ApplicationStateManager.cs" />
-    <Compile Include="Manager\Application\ApplicationSelectionTarget.cs" />
+    <Compile Include="Manager\Application\SelectApplicationTarget.cs" />
     <Compile Include="Manager\Authentication\AuthenticationBroker\WebViewHelpers.cs" />
     <Compile Include="Manager\Communication\UserAlreadyRegisteredException.cs" />
     <Compile Include="Manager\Tasks\TaskManager.cs" />

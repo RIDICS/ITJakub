@@ -40,7 +40,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         void SetCurrentApplication(ApplicationType selectedApp);
         void GetCurrentApplication(Action<ApplicationType> callback);
         void SetRestoringLastGroupState(bool restore);
-        void GetAppSelectionTarget(Action<ApplicationSelectionTarget> callback);
-        void SetAppSelectionTarget(ApplicationSelectionTarget target);
+        void GetAppSelectionTarget(Action<SelectApplicationTarget> callback);
+        void SetAppSelectionTarget(SelectApplicationTarget target);
     }
 }

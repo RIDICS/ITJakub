@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
@@ -73,7 +74,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         public RelayCommand ConnectCommand { get; private set; }
 
-        public RelayCommand OpenTaskEditorCommand { get; private set; }
+        public RelayCommand OpenMyTaskListCommand { get; private set; }
+
+        public RelayCommand CreateTaskCommand { get; private set; }
 
         public RelayCommand<object> FilterCommand { get; private set; }
 
@@ -210,7 +213,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public SwitchGroupStateViewModel SwitchToPauseViewModel { get; set; }
 
         public SwitchGroupStateViewModel SwitchToRunningViewModel { get; set; }
-
+        
         #endregion
 
         private void InitCommands()
@@ -220,10 +223,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(SelectionChanged);
             ConnectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
             RefreshListCommand = new RelayCommand(LoadData);
-            OpenTaskEditorCommand = new RelayCommand(() => Navigate(typeof(OwnedTaskListView)));
+            OpenMyTaskListCommand = new RelayCommand(() => Navigate(typeof(OwnedTaskListView)));
+            CreateTaskCommand = new RelayCommand(CreateNewTask);
             FilterCommand = new RelayCommand<object>(Filter);
         }
-
+        
         private void InitViewModels()
         {
             ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, LoadData);
@@ -353,6 +357,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
 
             DisplayGroupList(m_groups);
+        }
+
+        private void CreateNewTask()
+        {
+            m_dataService.SetAppSelectionTarget(SelectApplicationTarget.CreateTask);
+            m_navigationService.Navigate<SelectApplicationView>();
         }
     }
 }

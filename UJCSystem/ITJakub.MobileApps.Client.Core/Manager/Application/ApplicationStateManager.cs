@@ -2,6 +2,6 @@
 {
     public class ApplicationStateManager
     {
-        public ApplicationSelectionTarget ApplicationSelectionTarget { get; set; }
+        public SelectApplicationTarget SelectApplicationTarget { get; set; }
     }
 }

@@ -130,14 +130,14 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_groupManager.RestoreLastState = restore;
         }
 
-        public void GetAppSelectionTarget(Action<ApplicationSelectionTarget> callback)
+        public void GetAppSelectionTarget(Action<SelectApplicationTarget> callback)
         {
-            callback(m_applicationStateManager.ApplicationSelectionTarget);
+            callback(m_applicationStateManager.SelectApplicationTarget);
         }
 
-        public void SetAppSelectionTarget(ApplicationSelectionTarget target)
+        public void SetAppSelectionTarget(SelectApplicationTarget target)
         {
-            m_applicationStateManager.ApplicationSelectionTarget = target;
+            m_applicationStateManager.SelectApplicationTarget = target;
         }
 
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)

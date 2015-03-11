@@ -32,7 +32,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_dataService = dataService;
             m_navigationService = navigationService;
 
-            m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.SelectTask);
+            m_dataService.SetAppSelectionTarget(SelectApplicationTarget.SelectTask);
 
             InitCommands();
             LoadData();

@@ -28,7 +28,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         public void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
-            callback(new LoggedUserViewModel {FirstName = "Test", LastName = "Testovaci"});
+            callback(new LoggedUserViewModel {FirstName = "Test", LastName = "Testovaci", UserRole = UserRoleContract.Teacher});
         }
 
         public void LogOut() { }
@@ -215,12 +215,12 @@ namespace ITJakub.MobileApps.Client.Core.Service
         {
         }
 
-        public void GetAppSelectionTarget(Action<ApplicationSelectionTarget> callback)
+        public void GetAppSelectionTarget(Action<SelectApplicationTarget> callback)
         {
-            callback(ApplicationSelectionTarget.None);
+            callback(SelectApplicationTarget.None);
         }
 
-        public void SetAppSelectionTarget(ApplicationSelectionTarget target)
+        public void SetAppSelectionTarget(SelectApplicationTarget target)
         {
         }
     }

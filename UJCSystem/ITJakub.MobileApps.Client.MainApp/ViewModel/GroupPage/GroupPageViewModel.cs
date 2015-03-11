@@ -243,7 +243,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private void SelectAppAndTask()
         {
             m_dataService.SetRestoringLastGroupState(true);
-            m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.SelectTask);
+            m_dataService.SetAppSelectionTarget(SelectApplicationTarget.SelectTask);
             Navigate<SelectApplicationView>();
         }
 
@@ -284,7 +284,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private void GoBack()
         {
             m_dataService.SetRestoringLastGroupState(false);
-            m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.None);
+            m_dataService.SetAppSelectionTarget(SelectApplicationTarget.None);
             m_pollingService.Unregister(MembersPollingInterval, UpdateMembers);
             m_navigationService.GoBack();
         }

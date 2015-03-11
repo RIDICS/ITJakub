@@ -30,7 +30,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             m_dataService.GetAppSelectionTarget(async target =>
             {
-                if (target == ApplicationSelectionTarget.None)
+                if (target == SelectApplicationTarget.None)
                 {
                     await Task.Delay(50);
                     GoBack();
@@ -87,10 +87,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 switch (target)
                 {
-                    case ApplicationSelectionTarget.SelectTask:
+                    case SelectApplicationTarget.SelectTask:
                         m_navigationService.Navigate<SelectTaskView>();
                         break;
-                    case ApplicationSelectionTarget.CreateTask:
+                    case SelectApplicationTarget.CreateTask:
                         m_navigationService.Navigate<EditorHostView>();
                         break;
                     default:

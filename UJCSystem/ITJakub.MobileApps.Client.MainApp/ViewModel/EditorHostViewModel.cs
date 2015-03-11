@@ -33,7 +33,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 EditorViewModel = appInfo.EditorViewModel;
                 EditorViewModel.GoBack = () =>
                 {
-                    m_dataService.SetAppSelectionTarget(ApplicationSelectionTarget.None);
+                    m_dataService.SetAppSelectionTarget(SelectApplicationTarget.None);
                     m_navigationService.GoBack();
                 };
             });

@@ -1,6 +1,6 @@
 ﻿namespace ITJakub.MobileApps.Client.Core.Manager.Application
 {
-    public enum ApplicationSelectionTarget
+    public enum SelectApplicationTarget
     {
         None,
         SelectTask,
