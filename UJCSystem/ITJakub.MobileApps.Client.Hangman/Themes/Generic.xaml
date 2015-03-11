@@ -16,7 +16,7 @@
                         
                         <view:NoLostFocusTextBox Grid.Column="0"
                                                  x:Name="TextBox"
-                                                 Text="{TemplateBinding Text}"
+                                                 Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                                  VerticalAlignment="Center" />
                         
                         <Button Grid.Column="1"

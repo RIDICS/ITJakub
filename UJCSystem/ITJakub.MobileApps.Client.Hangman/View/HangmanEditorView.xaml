@@ -16,7 +16,6 @@
         <x:Double x:Key="LabelFontSize">14</x:Double>
         <SolidColorBrush x:Key="ErrorColorBrush" Color="Orange" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <CollectionViewSource Source="{Binding AnswerList, Mode=TwoWay}" x:Key="AnswerListSource" />
     </UserControl.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -111,7 +110,7 @@
         
         <ListView Grid.Row="1"
                   SelectionMode="None"
-                  ItemsSource="{Binding Source={StaticResource AnswerListSource}}"
+                  ItemsSource="{Binding AnswerList}"
                   CanReorderItems="True"
                   AllowDrop="True">
             <ListView.ItemContainerStyle>
