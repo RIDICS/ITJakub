@@ -198,6 +198,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="30" />
                 </Grid.ColumnDefinitions>
 
                 <ProgressRing Grid.Column="0"
@@ -220,7 +221,7 @@
                       Background="White"
                       Visibility="{Binding WaitingForStart, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBlock VerticalAlignment="Center"
-                               Text="Čekání na spuštění"
+                               Text="Čekání na spuštění učitelem"
                                Foreground="Black"
                                FontSize="30" />
                 </Grid>

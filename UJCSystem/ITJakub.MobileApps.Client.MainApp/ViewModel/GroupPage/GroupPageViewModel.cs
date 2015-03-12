@@ -33,6 +33,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private bool m_connectingToGroup;
         private BitmapImage m_appIcon;
         private string m_appName;
+        private bool m_canOpenApplication;
 
         public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -58,6 +59,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             SelectAppAndTaskCommand = new RelayCommand(SelectAppAndTask);
             RemoveGroupCommand = new RelayCommand(RemoveGroup);
             ConnectToGroupCommand = new RelayCommand(ConnectToGroup);
+            //TODO open app
+            //OpenGroupCommand = new RelayCommand(() => m_navigationService.Navigate<ApplicationHostView>());
         }
 
         private void LoadData(long groupId)
@@ -132,6 +135,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private void UpdateCanConnectToGroup()
         {
             CanConnectToGroup = GroupInfo.State >= GroupStateContract.AcceptMembers && !GroupInfo.ContainsMember(m_currentUserId);
+            CanOpenApplication = GroupInfo.State >= GroupStateContract.AcceptMembers && GroupInfo.ContainsMember(m_currentUserId);
         }
 
         public GroupInfoViewModel GroupInfo
@@ -246,7 +250,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 RaisePropertyChanged();
             }
         }
-        
+
+        public bool CanOpenApplication
+        {
+            get { return m_canOpenApplication; }
+            set
+            {
+                m_canOpenApplication = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool CanChangeTask
         {
             get { return GroupInfo.State < GroupStateContract.Running; }
@@ -266,6 +280,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         public RelayCommand RemoveGroupCommand { get; private set; }
 
         public RelayCommand ConnectToGroupCommand { get; private set; }
+
+        public RelayCommand OpenGroupCommand { get; private set; }
         
         private void SelectAppAndTask()
         {

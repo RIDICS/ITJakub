@@ -38,9 +38,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private bool m_isCommandBarOpen;
         private bool m_loading;
         private bool m_isOneItemSelected;
-        private bool m_onlyOwnedGroupsSelected;
         private bool m_isFilter;
-        
+        private bool m_canRemoveSelected;
+        private bool m_canPauseSelected;
+        private bool m_canStartSelected;
+
         public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
             m_dataService = dataService;
@@ -156,15 +158,36 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
-        public bool OnlyOwnedGroupsSelected
+        public bool CanRemoveSelected
         {
-            get { return m_onlyOwnedGroupsSelected; }
+            get { return m_canRemoveSelected; }
             set
             {
-                m_onlyOwnedGroupsSelected = value;
+                m_canRemoveSelected = value;
                 RaisePropertyChanged();
             }
         }
+
+        public bool CanPauseSelected
+        {
+            get { return m_canPauseSelected; }
+            set
+            {
+                m_canPauseSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool CanStartSelected
+        {
+            get { return m_canStartSelected; }
+            set
+            {
+                m_canStartSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         public bool IsFilter
         {
@@ -213,7 +236,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public SwitchGroupStateViewModel SwitchToPauseViewModel { get; set; }
 
         public SwitchGroupStateViewModel SwitchToRunningViewModel { get; set; }
-        
+
         #endregion
 
         private void InitCommands()
@@ -313,7 +336,31 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             IsOneItemSelected = m_selectedGroups.Count == 1;
             DeleteGroupViewModel.SelectedGroupCount = m_selectedGroups.Count;
 
-            OnlyOwnedGroupsSelected = m_selectedGroups.All(group => group.GroupType == GroupType.Owner);
+            UpdateGroupStateActions();
+        }
+
+        private void UpdateGroupStateActions()
+        {
+            // Enable only appropriate group state change
+            if (m_selectedGroups.Any(model => model.GroupType == GroupType.Member))
+            {
+                CanPauseSelected = false;
+                CanStartSelected = false;
+                CanRemoveSelected = false;
+                return;
+            }
+
+            var stateCount = m_selectedGroups.GroupBy(model => model.State).ToDictionary(models => models.Key, models => models.Count());
+            var totalCount = m_selectedGroups.Count();
+
+            for (var state = GroupStateContract.Created; state <= GroupStateContract.Closed; state++)
+            {
+                if (!stateCount.ContainsKey(state))
+                    stateCount[state] = 0;
+            }
+            CanPauseSelected = stateCount[GroupStateContract.Running] == totalCount;
+            CanRemoveSelected = stateCount[GroupStateContract.Created] + stateCount[GroupStateContract.Closed] == totalCount;
+            CanStartSelected = stateCount[GroupStateContract.WaitingForStart] + stateCount[GroupStateContract.Paused] == totalCount;
         }
 
         private IEnumerable<GroupInfoViewModel> GetSortedGroupList(IEnumerable<GroupInfoViewModel> list)

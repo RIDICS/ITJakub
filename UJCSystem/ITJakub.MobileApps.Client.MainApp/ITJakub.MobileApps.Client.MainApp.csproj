@@ -137,6 +137,7 @@
     <Compile Include="View\Control\DownArrowControl.xaml.cs">
       <DependentUpon>DownArrowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Converter\NotNullToVisibilityConverter.cs" />
     <Compile Include="View\Converter\UserRoleToNameConverter.cs" />
     <Compile Include="View\EditorHostView.xaml.cs">
       <DependentUpon>EditorHostView.xaml</DependentUpon>

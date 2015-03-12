@@ -221,7 +221,7 @@
                 <AppBarButton Icon="Delete"
                               Label="Odstranit"
                               Visibility="{Binding IsTeacherAndGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
-                              IsEnabled="{Binding OnlyOwnedGroupsSelected}"
+                              IsEnabled="{Binding CanRemoveSelected}"
                               x:Name="DeleteGroupButton">
                     <AppBarButton.Flyout>
                         <Flyout control:FlyoutHelpers.IsOpen="{Binding DeleteGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
@@ -284,7 +284,7 @@
                 </AppBarButton>
                 <AppBarButton Icon="Pause"
                               Label="Přepnout na pozastaveno"
-                              IsEnabled="{Binding OnlyOwnedGroupsSelected}"
+                              IsEnabled="{Binding CanPauseSelected}"
                               Visibility="{Binding IsTeacherAndGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               x:Name="PauseButton">
                     <AppBarButton.Flyout>
@@ -337,7 +337,7 @@
                 </AppBarButton>
                 <AppBarButton Icon="Play"
                               Label="Přepnout na spuštěno"
-                              IsEnabled="{Binding OnlyOwnedGroupsSelected}"
+                              IsEnabled="{Binding CanStartSelected}"
                               Visibility="{Binding IsTeacherAndGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               x:Name="PlayButton">
                     <AppBarButton.Flyout>

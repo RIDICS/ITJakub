@@ -18,6 +18,7 @@
         <converter:NotChosenStringConverter x:Key="NotChosenStringConverter" />
         <converter:GroupStateToNameConverter x:Key="GroupStateToNameConverter" />
         <converter:BooleanToColorConverter x:Key="BooleanToColorConverter" />
+        <converter:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <Style x:Key="MyLabelStyle" TargetType="TextBlock">
@@ -29,6 +30,24 @@
         <x:Double x:Key="ArrowThickness">2</x:Double>
         <SolidColorBrush x:Key="ArrowColor" Color="Black" />
     </Page.Resources>
+    
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Label="Připojit se"
+                          Icon="Forward"
+                          Command="{Binding ConnectToGroupCommand}"
+                          IsEnabled="{Binding CanConnectToGroup}" />
+            <AppBarButton Label="Zobrazit aplikaci"
+                          Icon="Forward"
+                          Command="{Binding OpenGroupCommand}"
+                          IsEnabled="{Binding CanOpenApplication}" />
+
+            <!--TODO kick user function + UI-->
+            <!--<CommandBar.SecondaryCommands>
+                <AppBarButton Label="Vyhodit uživatele" />
+            </CommandBar.SecondaryCommands>-->
+        </CommandBar>
+    </Page.BottomAppBar>
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -130,13 +149,13 @@
                 </control:AlignableWrapPanel>
 
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal"
+                            Visibility="{Binding AppName, Converter={StaticResource NotNullToVisibilityConverter}}">
                     <TextBlock Style="{StaticResource MyLabelStyle}"
                                Text="Aplikace:" />
                     <Grid Width="32"
                           Height="32"
-                          Margin="10,-3,10,0"
-                          Background="#10FFFFFF">
+                          Margin="10,-3,10,0">
                         <Image Source="{Binding AppIcon}" />
                     </Grid>
                     <TextBlock Style="{StaticResource MyLabelStyle}"
@@ -200,6 +219,7 @@
                                HorizontalAlignment="Center"
                                FontSize="20" />
                     
+                    <!--TODO Add cancel button to flyouts-->
                     <ItemsControl ItemsSource="{Binding GroupStates}"
                                   IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}">
                         <ItemsControl.ItemTemplate>
