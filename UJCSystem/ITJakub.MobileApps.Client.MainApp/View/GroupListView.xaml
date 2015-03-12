@@ -108,7 +108,7 @@
                                      Width="250"
                                      Margin="0,5,0,5"
                                      Text="{Binding ConnectToGroupCode, Mode=TwoWay}"
-                                     EnterCommand="{Binding ConnectToGroupCommand}" />
+                                     EnterCommand="{Binding SubmitCommand}" />
                             <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
                                        FontSize="15"
                                        Margin="0,0,0,5"
@@ -125,6 +125,7 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 
                                 <ProgressRing IsActive="{Binding InProgress}"
@@ -136,11 +137,14 @@
                                            VerticalAlignment="Center"
                                            Visibility="{Binding InProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
                                            Margin="5,0,0,0" />
-                                
+
                                 <Button Grid.Column="2"
-                                        HorizontalAlignment="Right"
+                                        Content="Zrušit"
+                                        Command="{Binding CancelCommand}"
+                                        IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}" />
+                                <Button Grid.Column="3"
                                         Content="Připojit se"
-                                        Command="{Binding ConnectToGroupCommand}"
+                                        Command="{Binding SubmitCommand}"
                                         IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}" />
                             </Grid>
                         </StackPanel>
@@ -163,7 +167,7 @@
                                      Width="250"
                                      Margin="0,5,0,5"
                                      Text="{Binding NewGroupName, Mode=TwoWay}"
-                                     EnterCommand="{Binding CreateNewGroupCommand}" />
+                                     EnterCommand="{Binding SubmitCommand}" />
 
                             <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
                                        FontSize="15"
@@ -181,6 +185,7 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
                                 <ProgressRing IsActive="{Binding InProgress}"
@@ -194,10 +199,13 @@
                                            Margin="5,0,0,0" />
                                 
                                 <Button Grid.Column="2"
-                                        HorizontalAlignment="Right"
+                                        Content="Zrušit"
+                                        IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
+                                        Command="{Binding CancelCommand}" />
+                                <Button Grid.Column="3"
                                         Content="Vytvořit"
                                         IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
-                                        Command="{Binding CreateNewGroupCommand}" />
+                                        Command="{Binding SubmitCommand}" />
                             </Grid>
                         </StackPanel>
                     </Flyout>
@@ -248,6 +256,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
                                     <ProgressRing IsActive="{Binding InProgress}"
@@ -261,10 +270,13 @@
                                                Margin="5,0,0,0" />
 
                                     <Button Grid.Column="2"
-                                            HorizontalAlignment="Right"
+                                            Content="Zrušit"
+                                            IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
+                                            Command="{Binding CancelCommand}" />
+                                    <Button Grid.Column="3"
                                             Content="Odstranit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
-                                            Command="{Binding DeleteGroupCommand}" />
+                                            Command="{Binding SubmitCommand}" />
                                 </Grid>
                             </StackPanel>
                         </Flyout>
@@ -277,7 +289,7 @@
                               x:Name="PauseButton">
                     <AppBarButton.Flyout>
                         <Flyout control:FlyoutHelpers.Parent="{Binding ElementName=PauseButton}"
-                                control:FlyoutHelpers.IsOpen="{Binding SwitchToPauseViewModel.IsFlyoutOpen}">
+                                control:FlyoutHelpers.IsOpen="{Binding SwitchToPauseViewModel.IsFlyoutOpen, Mode=TwoWay}">
                             <StackPanel Orientation="Vertical"
                                         DataContext="{Binding SwitchToPauseViewModel}">
                                 <TextBlock Text="Chystáte se změnit stav označených skupin na Pozastaveno."
@@ -296,6 +308,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
                                     <ProgressRing IsActive="{Binding InProgress}"
@@ -309,10 +322,14 @@
                                                Margin="5,0,0,0" />
 
                                     <Button Grid.Column="2"
-                                            HorizontalAlignment="Right"
+                                            Content="Zrušit"
+                                            IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
+                                            Command="{Binding CancelCommand}" />
+                                    
+                                    <Button Grid.Column="3"
                                             Content="Pozastavit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
-                                            Command="{Binding ChangeStateCommand}" />
+                                            Command="{Binding SubmitCommand}" />
                                 </Grid>
                             </StackPanel>
                         </Flyout>
@@ -325,7 +342,7 @@
                               x:Name="PlayButton">
                     <AppBarButton.Flyout>
                         <Flyout control:FlyoutHelpers.Parent="{Binding ElementName=PlayButton}"
-                                control:FlyoutHelpers.IsOpen="{Binding SwitchToRunningViewModel.IsFlyoutOpen}">
+                                control:FlyoutHelpers.IsOpen="{Binding SwitchToRunningViewModel.IsFlyoutOpen, Mode=TwoWay}">
                             <StackPanel Orientation="Vertical"
                                         DataContext="{Binding SwitchToRunningViewModel}">
                                 <TextBlock Text="Chystáte se změnit stav označených skupin na Spuštěno."
@@ -344,6 +361,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
                                     <ProgressRing IsActive="{Binding InProgress}"
@@ -355,12 +373,15 @@
                                                VerticalAlignment="Center"
                                                Visibility="{Binding InProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                Margin="5,0,0,0" />
-
+                                    
                                     <Button Grid.Column="2"
-                                            HorizontalAlignment="Right"
+                                            Content="Zrušit"
+                                            IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
+                                            Command="{Binding CancelCommand}" />
+                                    <Button Grid.Column="3"
                                             Content="Spustit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
-                                            Command="{Binding ChangeStateCommand}" />
+                                            Command="{Binding SubmitCommand}" />
                                 </Grid>
                             </StackPanel>
                         </Flyout>

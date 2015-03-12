@@ -1,18 +1,14 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.MainApp.View;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 {
-    public class CreateGroupViewModel : ViewModelBase
+    public class CreateGroupViewModel : FlyoutBaseViewModel
     {
         private readonly IDataService m_dataService;
         private readonly Action<Type> m_navigationAction;
         private string m_newGroupName;
-        private bool m_isFlyoutOpen;
-        private bool m_inProgress;
         private bool m_showError;
         private bool m_showNameEmptyError;
 
@@ -20,11 +16,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         {
             m_dataService = dataService;
             m_navigationAction = navigationAction;
-
-            CreateNewGroupCommand = new RelayCommand(CreateNewGroup);
         }
-
-        public RelayCommand CreateNewGroupCommand { get; private set; }
 
         public string NewGroupName
         {
@@ -32,26 +24,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             set
             {
                 m_newGroupName = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool IsFlyoutOpen
-        {
-            get { return m_isFlyoutOpen; }
-            set
-            {
-                m_isFlyoutOpen = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool InProgress
-        {
-            get { return m_inProgress; }
-            set
-            {
-                m_inProgress = value;
                 RaisePropertyChanged();
             }
         }
@@ -74,6 +46,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 m_showNameEmptyError = value; 
                 RaisePropertyChanged();
             }
+        }
+        
+        protected override void SubmitAction()
+        {
+            CreateNewGroup();
         }
 
         private void CreateNewGroup()

@@ -1,22 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 {
-    public class SwitchGroupStateViewModel : ViewModelBase
+    public class SwitchGroupStateViewModel : FlyoutBaseViewModel
     {
         private readonly GroupStateContract m_groupState;
         private readonly IDataService m_dataService;
         private readonly IList<GroupInfoViewModel> m_selectedGroups;
         private readonly Action m_refreshAction;
-        private bool m_inProgress;
-        private bool m_isFlyoutOpen;
         private bool m_showError;
 
         public SwitchGroupStateViewModel(GroupStateContract groupState, IDataService dataService, IList<GroupInfoViewModel> selectedGroups, Action refreshAction)
@@ -25,30 +21,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_dataService = dataService;
             m_selectedGroups = selectedGroups;
             m_refreshAction = refreshAction;
-
-            ChangeStateCommand = new RelayCommand(ChangeGroupState);
-        }
-
-        public RelayCommand ChangeStateCommand { get; private set; }
-
-        public bool InProgress
-        {
-            get { return m_inProgress; }
-            set
-            {
-                m_inProgress = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool IsFlyoutOpen
-        {
-            get { return m_isFlyoutOpen; }
-            set
-            {
-                m_isFlyoutOpen = value;
-                RaisePropertyChanged();
-            }
         }
 
         public bool ShowError
@@ -61,6 +33,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
+        protected override void SubmitAction()
+        {
+            ChangeGroupState();
+        }
 
         private void ChangeGroupState()
         {

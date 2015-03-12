@@ -29,11 +29,14 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
 
             SelectBookCommand = new RelayCommand(SelectBook);
             SaveTaskCommand = new RelayCommand(SaveTask);
+            CancelCommand = new RelayCommand(() => IsSaveFlyoutOpen = false);
         }
         
         public RelayCommand SelectBookCommand { get; private set; }
 
         public RelayCommand SaveTaskCommand { get; private set; }
+
+        public RelayCommand CancelCommand { get; private set; }
 
         public string TaskName { get; set; }
 
@@ -147,7 +150,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 RaisePropertyChanged();
             }
         }
-
+        
         private void HideErrors()
         {
             ErrorBookNotSelected = false;

@@ -22,6 +22,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             AnswerList = new ObservableCollection<EditorItemViewModel> {new EditorItemViewModel(), new EditorItemViewModel()};
 
             SaveTaskCommand = new RelayCommand(SaveTask);
+            CancelCommand = new RelayCommand(() => IsSaveFlyoutOpen = false);
             AddAnswerCommand = new RelayCommand(() => AddRow(true));
             AddSpaceCommand = new RelayCommand(() => AddRow(false));
             DeleteAnswerCommand = new RelayCommand<EditorItemViewModel>(DeleteAnswer);
@@ -38,6 +39,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         }
 
         public RelayCommand SaveTaskCommand { get; private set; }
+
+        public RelayCommand CancelCommand { get; private set; }
 
         public RelayCommand AddAnswerCommand { get; private set; }
 

@@ -12,7 +12,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
     {
         private readonly FillwordsDataService m_dataService;
         private Dictionary<int, OptionsViewModel> m_wordOptionsList;
-        private bool m_isEditorFlyoutOpen;
         private bool m_isTextEditingEnabled;
         private string m_bookName;
         private string m_bookAuthor;
@@ -34,6 +33,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             WordOptionsList = new Dictionary<int, OptionsViewModel>();
             SelectBookCommand = new RelayCommand(SelectBook);
             SaveTaskCommand = new RelayCommand(SaveTask);
+            CancelCommand = new RelayCommand(() => IsSaveFlyoutOpen = false);
             OptionsEditorViewModel = new OptionsEditorViewModel(WordOptionsList, CloseOptionsFlyout);
         }
 
@@ -45,16 +45,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             set
             {
                 m_wordOptionsList = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool IsEditorFlyoutOpen
-        {
-            get { return m_isEditorFlyoutOpen; }
-            set
-            {
-                m_isEditorFlyoutOpen = value;
                 RaisePropertyChanged();
             }
         }
@@ -190,13 +180,15 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         public RelayCommand SelectBookCommand { get; private set; }
 
         public RelayCommand SaveTaskCommand { get; private set; }
-        
+
+        public RelayCommand CancelCommand { get; private set; }
+
         #endregion
 
 
         private void CloseOptionsFlyout()
         {
-            IsEditorFlyoutOpen = false;
+            OptionsEditorViewModel.IsOpen = false;
         }
 
         private async void SelectBook()

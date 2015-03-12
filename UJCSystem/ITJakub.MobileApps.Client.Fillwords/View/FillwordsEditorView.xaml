@@ -75,9 +75,22 @@
                                         <TextBlock Text="Chystáte se uložit zadání. Následné úpravy již nebudou možné."
                                                    TextWrapping="Wrap"
                                                    FontSize="14" />
-                                        <Button HorizontalAlignment="Right"
-                                                Content="Uložit"
-                                                Command="{Binding SaveTaskCommand}" />
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Button Grid.Column="1"
+                                                    Content="Zrušit"
+                                                    Command="{Binding CancelCommand}" />
+                                            
+                                            <Button Grid.Column="2"
+                                                    Content="Uložit"
+                                                    Command="{Binding SaveTaskCommand}" />
+                                        </Grid>
                                     </StackPanel>
                                 </Flyout>
                             </Button.Flyout>
@@ -121,7 +134,7 @@
                 SelectedText="{Binding OptionsEditorViewModel.SelectedText, Mode=TwoWay}"
                 WordOptionsList="{Binding WordOptionsList}"
                 SelectedOptions="{Binding OptionsEditorViewModel.SelectedOption, Mode=TwoWay}"
-                IsFlyoutOpen="{Binding IsEditorFlyoutOpen, Mode=TwoWay}"
+                IsFlyoutOpen="{Binding OptionsEditorViewModel.IsOpen, Mode=TwoWay}"
                 DocumentRtf="{Binding BookRtfContent, Mode=TwoWay}"
                 ScrollViewer.HorizontalScrollMode="Disabled">
                 <control1:EditorRichEditBox.Flyout>
@@ -211,9 +224,21 @@
                                 </ListView.ItemTemplate>
                             </ListView>
                             
-                            <Button Content="Uložit"
-                                    HorizontalAlignment="Right"
-                                    Command="{Binding SaveOptionsCommand}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="1"
+                                        Content="Zrušit"
+                                        Command="{Binding CloseCommand}" />
+                                
+                                <Button Grid.Column="2"
+                                        Content="Uložit"
+                                        Command="{Binding SaveOptionsCommand}" />
+                            </Grid>
                         </StackPanel>
                     </Flyout>
                 </control1:EditorRichEditBox.Flyout>

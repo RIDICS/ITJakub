@@ -22,12 +22,15 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
             AddAnswerCommand = new RelayCommand(AddAnswer);
             SaveTaskCommand = new RelayCommand(SaveTask);
+            CancelCommand= new RelayCommand(() => IsSaveFlyoutOpen = false);
             DeleteAnswerCommand = new RelayCommand<AnswerViewModel>(DeleteAnswer);
         }
 
         public RelayCommand AddAnswerCommand { get; private set; }
 
         public RelayCommand SaveTaskCommand { get; private set; }
+
+        public RelayCommand CancelCommand { get; private set; }
 
         public RelayCommand<AnswerViewModel> DeleteAnswerCommand { get; private set; }
 
@@ -79,6 +82,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 RaisePropertyChanged();
             }
         }
+        
 
         private void AddAnswer()
         {

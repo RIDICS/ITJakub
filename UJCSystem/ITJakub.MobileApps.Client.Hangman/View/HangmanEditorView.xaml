@@ -55,9 +55,22 @@
                             <TextBlock Text="Chystáte se uložit zadání. Následné úpravy již nebudou možné."
                                        TextWrapping="Wrap"
                                        FontSize="{StaticResource LabelFontSize}" />
-                            <Button HorizontalAlignment="Right"
-                                    Content="Uložit"
-                                    Command="{Binding SaveTaskCommand}" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="1"
+                                        Content="Zrušit"
+                                        Command="{Binding CancelCommand}" />
+                                
+                                <Button Grid.Column="2"
+                                        Content="Uložit"
+                                        Command="{Binding SaveTaskCommand}" />
+                            </Grid>
                         </StackPanel>
                     </Flyout>
                 </Button.Flyout>

@@ -53,12 +53,24 @@
                                    Text="Chystáte se odevzdat tuto úlohu. Následné úpravy už nebudou možné."
                                    TextWrapping="Wrap"
                                    Width="270" />
-                        
-                        <Button Margin="0,5,0,0"
-                                HorizontalAlignment="Right"
-                                Content="Odevzdat"
-                                Command="{Binding SubmitCommand}"
-                                IsEnabled="{Binding IsOver, Converter={StaticResource BooleanNegationConverter}}" />
+
+                        <Grid Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="1"
+                                    Content="Zrušit"
+                                    Command="{Binding CancelCommand}"
+                                    IsEnabled="{Binding IsOver, Converter={StaticResource BooleanNegationConverter}}" />
+                            
+                            <Button Grid.Column="2"
+                                    Content="Odevzdat"
+                                    Command="{Binding SubmitCommand}"
+                                    IsEnabled="{Binding IsOver, Converter={StaticResource BooleanNegationConverter}}" />
+                        </Grid>
                     </StackPanel>
                 </Flyout>
             </Button.Flyout>

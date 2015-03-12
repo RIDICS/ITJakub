@@ -22,6 +22,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             m_dataService = dataService;
 
             SubmitCommand = new RelayCommand(Submit);
+            CancelCommand = new RelayCommand(() => IsSubmitFlyoutOpen = false);
         }
 
         public string TaskDocumentRtf
@@ -85,7 +86,9 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         }
 
         public RelayCommand SubmitCommand { get; private set; }
-        
+
+        public RelayCommand CancelCommand { get; private set; }
+
         public override void InitializeCommunication()
         {
             m_dataService.GetTaskResults((taskFinished, exception) =>
@@ -121,7 +124,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         {
             get { return new ActionViewModel[0]; }
         }
-
+        
         private void Submit()
         {
             IsSubmitFlyoutOpen = false;

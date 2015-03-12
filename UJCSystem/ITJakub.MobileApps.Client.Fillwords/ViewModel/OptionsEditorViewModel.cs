@@ -15,6 +15,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private OptionsViewModel m_selectedOption;
         private string m_selectedText;
         private bool m_setSelectedTextHighlighted;
+        private bool m_isOpen;
 
         public OptionsEditorViewModel(Dictionary<int, OptionsViewModel> wordOptionsList, Action closeFlyoutAction)
         {
@@ -23,9 +24,20 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 
             AddNewOptionCommand = new RelayCommand(AddNewOption);
             SaveOptionsCommand = new RelayCommand(SaveOptions);
+            CloseCommand = new RelayCommand(() => IsOpen = false);
             DeleteCommand = new RelayCommand<OptionViewModel>(DeleteOption);
         }
-        
+
+        public bool IsOpen
+        {
+            get { return m_isOpen; }
+            set
+            {
+                m_isOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool ShowOptionExistsInfo
         {
             get { return m_showOptionExistsInfo; }
@@ -80,6 +92,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         public RelayCommand AddNewOptionCommand { get; private set; }
 
         public RelayCommand SaveOptionsCommand { get; private set; }
+
+        public RelayCommand CloseCommand { get; private set; }
 
         public RelayCommand<OptionViewModel> DeleteCommand { get; private set; }
         

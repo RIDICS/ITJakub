@@ -114,6 +114,7 @@
     <Compile Include="ViewModel\GroupList\ConnectToGroupViewModel.cs" />
     <Compile Include="ViewModel\GroupList\CreateGroupViewModel.cs" />
     <Compile Include="ViewModel\GroupList\DeleteGroupViewModel.cs" />
+    <Compile Include="ViewModel\FlyoutBaseViewModel.cs" />
     <Compile Include="ViewModel\GroupList\SwitchGroupStateViewModel.cs" />
     <Compile Include="ViewModel\GroupPage\GroupStateViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
