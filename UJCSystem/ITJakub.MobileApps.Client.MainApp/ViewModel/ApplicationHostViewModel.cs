@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Windows.UI.Popups;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -182,10 +183,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
 
             WaitingForData = true;
-            m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, (applications, exception) =>
+            m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, async (applications, exception) =>
             {
                 if (exception != null)
+                {
+                    await new MessageDialog("Tato skupina obsahuje neznámé zadání. Pro otevření této skupiny použijte jinou aplikaci.", "Neznámá aplikace").ShowAsync();
+                    m_navigationService.GoBack();
                     return;
+                }
 
                 var application = applications[type];
                 ApplicationViewModel = application.ApplicationViewModel;

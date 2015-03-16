@@ -99,6 +99,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
             m_dataService.GetApplication(applicationType, (appInfo, exception) =>
             {
+                if (exception != null)
+                {
+                    AppName = "(Neznámá aplikace)";
+                    AppIcon = null;
+                    return;
+                }
+
                 AppIcon = appInfo.Icon;
                 AppName = appInfo.Name;
             });

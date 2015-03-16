@@ -54,7 +54,10 @@ namespace ITJakub.MobileApps.Client.Core
 
         public ApplicationBase GetApplicationByType(ApplicationType applicationType)
         {
-            return m_applications[applicationType];
+            if (m_applications.ContainsKey(applicationType))
+                return m_applications[applicationType];
+
+            throw new ArgumentException("Unknown application type");
         }
 
         public Dictionary<ApplicationType, ApplicationBase> GetAllApplications()

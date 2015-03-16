@@ -59,7 +59,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Application
             if (m_applicaitonIdToType.ContainsKey(applicationId))
                 return m_applicaitonIdToType[applicationId];
 
-            throw new ArgumentException("Server doesn't know this application ID.");
+            return ApplicationType.Unknown;
         }
     }
 }

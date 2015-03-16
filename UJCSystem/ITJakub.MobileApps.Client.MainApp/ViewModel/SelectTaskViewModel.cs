@@ -57,7 +57,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_dataService.GetApplication(type, (app, exception) =>
                 {
                     if (exception != null)
+                    {
+                        ApplicationName = "(Neznámá aplikace)";
                         return;
+                    }
 
                     ApplicationName = app.Name;
                 });

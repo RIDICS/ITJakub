@@ -30,9 +30,9 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Converter
             if (targetType != typeof(string))
                 throw new InvalidOperationException("The target must be a string");
 
-            var applicationType = (ApplicationType)value;
+            ApplicationType applicationType = (ApplicationType)value;
 
-            return applicationType == ApplicationType.Unknown ? "(Není zvoleno)" : m_applications[applicationType].Name;
+            return m_applications.ContainsKey(applicationType) ? m_applications[applicationType].Name : "(Neznámá aplikace)";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
