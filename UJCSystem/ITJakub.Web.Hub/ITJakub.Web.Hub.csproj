@@ -235,7 +235,7 @@
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\TermsOfUse.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Feedback.cshtml" />
-    <None Include="Content\Plugins\Bibliography\configuration.json" />
+    <Content Include="Content\Plugins\Bibliography\configuration.json" />
     <Content Include="Content\ITJakub.css">
       <DependentUpon>ITJakub.less</DependentUpon>
     </Content>
@@ -423,6 +423,7 @@
       <DependentUpon>ITJakub.Reader.css</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
+    <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
