@@ -34,6 +34,10 @@
                                                                        Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed" />
                                         </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentElement"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed" />
+                                        </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Normal">
@@ -309,6 +313,10 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement"
                                                                        Storyboard.TargetProperty="BorderBrush">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource DisabledBackgroundColorBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentElement"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentElement"
                                                                        Storyboard.TargetProperty="Foreground">

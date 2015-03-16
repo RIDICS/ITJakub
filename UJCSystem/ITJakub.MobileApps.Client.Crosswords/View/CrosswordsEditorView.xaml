@@ -59,8 +59,14 @@
             <Button Grid.Row="1"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
-                    Content="Uložit zadání"
                     x:Name="SaveButton">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Save"
+                                Margin="0,-3,3,-3" />
+                    <TextBlock Text="Uložit zadání"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+                
                 <Button.Flyout>
                     <Flyout control:FlyoutHelpers.IsOpen="{Binding IsSaveFlyoutOpen, Mode=TwoWay}"
                             control:FlyoutHelpers.Parent="{Binding ElementName=SaveButton}">
@@ -114,8 +120,8 @@
                 <TextBlock FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource ErrorColorBrush}"
                            FontWeight="Bold"
-                           Visibility="{Binding ErrorAnswerEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
-                           Text="Některý řádek neobsahuje odpověď." />
+                           Visibility="{Binding ErrorAnswerRowEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                           Text="Některý řádek neobsahuje otázku nebo odpověď." />
                 <TextBlock FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource ErrorColorBrush}"
                            FontWeight="Bold"

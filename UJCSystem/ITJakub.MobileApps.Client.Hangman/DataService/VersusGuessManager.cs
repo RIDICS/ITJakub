@@ -69,8 +69,9 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         public override async void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback)
         {
-            var wordArray = answerList.Select(model => model.Answer).ToArray();
-            var specialLetters = GetSpecialLetter(wordArray).ToArray();
+            var specialLettersGenerator = new SpecialLettersGenerator();
+            var wordArray = answerList.Select(model => model.Answer.ToLower()).ToArray();
+            var specialLetters = specialLettersGenerator.GetSpecialLettersWithRandom(wordArray).ToArray();
 
             var taskContract = new HangmanTaskContract
             {

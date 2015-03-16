@@ -13,7 +13,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         private bool m_errorAnswerListEmpty;
         private bool m_errorAnswerColumn;
         private int m_answerColumn;
-        private bool m_errorAnswerEmpty;
+        private bool m_errorAnswerRowEmpty;
 
         public CrosswordsEditorViewModel(ICrosswordsDataService dataService)
         {
@@ -96,12 +96,12 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             }
         }
 
-        public bool ErrorAnswerEmpty
+        public bool ErrorAnswerRowEmpty
         {
-            get { return m_errorAnswerEmpty; }
+            get { return m_errorAnswerRowEmpty; }
             set
             {
-                m_errorAnswerEmpty = value;
+                m_errorAnswerRowEmpty = value;
                 RaisePropertyChanged();
             }
         }
@@ -138,7 +138,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             var anyError = false;
             ErrorTaskNameEmpty = false;
             ErrorAnswerListEmpty = false;
-            ErrorAnswerEmpty = false;
+            ErrorAnswerRowEmpty = false;
             ErrorAnswerColumn = false;
 
             if (string.IsNullOrWhiteSpace(TaskName))
@@ -160,9 +160,9 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     continue;
                 }
 
-                if (string.IsNullOrWhiteSpace(editorItemViewModel.Answer))
+                if (string.IsNullOrWhiteSpace(editorItemViewModel.Answer) || string.IsNullOrWhiteSpace(editorItemViewModel.Label))
                 {
-                    ErrorAnswerEmpty = true;
+                    ErrorAnswerRowEmpty = true;
                     anyError = true;
                     continue;
                 }

@@ -118,6 +118,7 @@
     <Compile Include="DataService\GuessManager.cs" />
     <Compile Include="DataService\HangmanDataService.cs" />
     <Compile Include="DataService\HangmanTask.cs" />
+    <Compile Include="DataService\SpecialLettersGenerator.cs" />
     <Compile Include="DataService\VersusGuessManager.cs" />
     <Compile Include="ViewModel\AnswerViewModel.cs" />
     <Compile Include="ViewModel\GameOverViewModel.cs" />

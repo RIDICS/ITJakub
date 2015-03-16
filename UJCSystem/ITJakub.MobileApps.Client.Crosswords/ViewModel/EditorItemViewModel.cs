@@ -9,10 +9,12 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         private bool m_isAnswer;
         private string m_answer;
         private string m_label;
+        private int m_shiftBackup;
 
         public EditorItemViewModel()
         {
             Shift = 0;
+            m_shiftBackup = Shift;
             IsAnswer = true;
 
             ShiftLeftCommand = new RelayCommand(() =>
@@ -67,11 +69,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             {
                 m_isAnswer = value;
                 RaisePropertyChanged();
-                
-                if (!m_isAnswer)
+
+                if (m_isAnswer)
                 {
-                    Answer = string.Empty;
-                    Label = string.Empty;
+                    Shift = m_shiftBackup;
+                }
+                else
+                {
+                    m_shiftBackup = Shift;
                     Shift = 0;
                 }
             }

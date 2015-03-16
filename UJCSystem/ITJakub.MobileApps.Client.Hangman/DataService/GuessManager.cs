@@ -61,22 +61,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 IsNewWord = MyTask.IsNewWord
             };
         }
-
-        protected IEnumerable<char> GetSpecialLetter(IEnumerable<string> wordList)
-        {
-            var charSet = new HashSet<char>();
-            foreach (var word in wordList)
-            {
-                foreach (var letter in word)
-                {
-                    if (letter == ' ' || (letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z'))
-                        continue;
-                    charSet.Add(letter);
-                }
-            }
-            return charSet;
-        } 
-
+        
         public abstract void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
     }
 }

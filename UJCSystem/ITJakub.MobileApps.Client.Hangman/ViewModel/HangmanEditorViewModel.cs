@@ -8,13 +8,13 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 {
     public class HangmanEditorViewModel : EditorBaseViewModel
     {
-        private readonly HangmanDataService m_dataService;
+        private readonly IHangmanDataService m_dataService;
         private bool m_errorTaskNameEmpty;
         private bool m_errorAnswerListEmpty;
         private bool m_errorSomeAnswerEmpty;
         private bool m_isSaveFlyoutOpen;
 
-        public HangmanEditorViewModel(HangmanDataService dataService)
+        public HangmanEditorViewModel(IHangmanDataService dataService)
         {
             m_dataService = dataService;
 

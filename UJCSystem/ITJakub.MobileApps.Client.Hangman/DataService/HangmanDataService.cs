@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         void StopPolling();
         void GuessLetter(char letter, Action<TaskInfoViewModel, Exception> callback);
         void SetTaskAndGetConfiguration(string data, string appMode, Action<TaskSettingsViewModel, TaskInfoViewModel> callback);
+        void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
     }
 
     public class HangmanDataService : IHangmanDataService
