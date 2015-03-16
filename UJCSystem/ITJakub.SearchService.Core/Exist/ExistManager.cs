@@ -18,7 +18,7 @@ namespace ITJakub.SearchService.Core.Exist
         public List<BookPage> GetPageList(string bookId,string versionId, string xslPath = null)
         {
             XDocument xmlDoc;
-            using (Stream pageStream = m_client.GetPageList(bookId, xslPath))
+            using (Stream pageStream = m_client.GetPageList(bookId, versionId, xslPath))
             {
                 xmlDoc = XDocument.Load(pageStream);
             }

@@ -120,7 +120,7 @@ interface IBookInfo {
 
 //TODO remove or move to separated file
 class BookInfo implements IBookInfo {
-    BookId = "{125A0032-03B5-40EC-B68D-80473CC5653A}";
+    BookId = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
     BookType: string;
     Title = "PasKal";
     Editor: string;

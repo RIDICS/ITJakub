@@ -93,7 +93,7 @@ var BibliographyModule = (function () {
 //TODO remove or move to separated file
 var BookInfo = (function () {
     function BookInfo() {
-        this.BookId = "{125A0032-03B5-40EC-B68D-80473CC5653A}";
+        this.BookId = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
         this.Title = "PasKal";
     }
     return BookInfo;
