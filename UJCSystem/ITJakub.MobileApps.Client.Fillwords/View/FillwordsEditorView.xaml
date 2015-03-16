@@ -116,150 +116,128 @@
             </Grid>
         </StackPanel>
 
-        <ToggleSwitch Grid.Row="0"
-                      Grid.Column="2"
-                      Header="Zobrazit fotografii stránky"
-                      OnContent="Ano"
-                      OffContent="Ne"
-                      IsOn="{Binding IsShowPhotoEnabled, Mode=TwoWay}" />
-
         <Border Grid.Row="1"
                 Grid.Column="0"
                 Background="#50FFFFFF"
                 BorderBrush="#30000000"
                 BorderThickness="2">
+            
             <control1:EditorRichEditBox
                 IsSelectedTextHighlighted="{Binding OptionsEditorViewModel.SetSelectedTextHighlighted, Mode=TwoWay}"
                 IsEditingEnabled="{Binding IsTextEditingEnabled}"
                 SelectedText="{Binding OptionsEditorViewModel.SelectedText, Mode=TwoWay}"
-                WordOptionsList="{Binding WordOptionsList}"
-                SelectedOptions="{Binding OptionsEditorViewModel.SelectedOption, Mode=TwoWay}"
-                IsFlyoutOpen="{Binding OptionsEditorViewModel.IsOpen, Mode=TwoWay}"
+                SelectionStart="{Binding OptionsEditorViewModel.SelectionStart, Mode=TwoWay}"
                 DocumentRtf="{Binding BookRtfContent, Mode=TwoWay}"
-                ScrollViewer.HorizontalScrollMode="Disabled">
-                <control1:EditorRichEditBox.Flyout>
-                    <Flyout>
-                        <StackPanel Orientation="Vertical"
-                                    Width="270"
-                                    DataContext="{Binding OptionsEditorViewModel}"
-                                    x:Name="FlyoutContent">
-                            <TextBlock Text="Nové slovo:"
-                                       FontSize="15" />
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                
-                                <control:SubmitTextBox Grid.Column="0"
-                                                       Text="{Binding NewOption, Mode=TwoWay}"
-                                                       EnterCommand="{Binding AddNewOptionCommand}" />
-                                <Button Grid.Column="1"
-                                        Content="Přidat"
-                                        Command="{Binding AddNewOptionCommand}" />
-                            </Grid>
-                            <TextBlock Text="Zadané slovo už v seznamu existuje."
-                                       FontSize="12"
-                                       Margin="0,3,0,0"
-                                       Foreground="DarkCyan"
-                                       Visibility="{Binding ShowOptionExistsInfo, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            
-                            <TextBlock Margin="0,17,0,0"
-                                       FontSize="14"
-                                       FontWeight="SemiBold"
-                                       Text="Správná odpověď:" />
-                            
-                            <Grid HorizontalAlignment="Stretch"
-                                  Background="#18008000"
-                                  Height="30"
-                                  Margin="0,0,22,0">
-                                
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Left"
-                                           TextTrimming="CharacterEllipsis"
-                                           TextAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0,0,0"
-                                           Text="{Binding SelectedText}">
-                                    
-                                </TextBlock>
-                            </Grid>
-                            
-                            <TextBlock FontSize="14"
-                                       Margin="0,17,0,0"
-                                       FontWeight="SemiBold"
-                                       Text="Špatné odpovědi:" />
-                            
-                            <ListView Height="200"
-                                      Margin="-5,0,0,0"
-                                      SelectionMode="None"
-                                      IsItemClickEnabled="False"
-                                      ItemsSource="{Binding SelectedOption.List}">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Width="250"
-                                              Background="#18800000">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            
-                                            <TextBlock Grid.Column="0"
-                                                       VerticalAlignment="Center"
-                                                       Margin="5,0,0,0"
-                                                       MaxLines="1"
-                                                       TextTrimming="CharacterEllipsis"
-                                                       Text="{Binding Word}" />
-                                            <Button Grid.Column="1"
-                                                    Command="{Binding DataContext.DeleteCommand, ElementName=FlyoutContent}"
-                                                    CommandParameter="{Binding}"
-                                                    RequestedTheme="Dark"
-                                                    Foreground="Black"
-                                                    BorderBrush="Black">
-                                                <SymbolIcon Symbol="Delete" />
-                                            </Button>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                            
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <Button Grid.Column="1"
-                                        Content="Zrušit"
-                                        Command="{Binding CloseCommand}" />
-                                
-                                <Button Grid.Column="2"
-                                        Content="Uložit"
-                                        Command="{Binding SaveOptionsCommand}" />
-                            </Grid>
-                        </StackPanel>
-                    </Flyout>
-                </control1:EditorRichEditBox.Flyout>
-            </control1:EditorRichEditBox>
+                ScrollViewer.HorizontalScrollMode="Disabled"
+                SelectionChangedCommand="{Binding OptionsEditorViewModel.SelectionChangedCommand}"
+                SelectionStartedCommand="{Binding OptionsEditorViewModel.SelectionStartedCommand}" />
+            
         </Border>
 
         <Grid Grid.Row="1"
               Grid.Column="2"
-              Background="#30000000">
-            <Image VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Stretch="Uniform"
-                   Source="{Binding BookPagePhoto}" />
+              Background="#10000000"
+              DataContext="{Binding OptionsEditorViewModel}">
+            <Grid Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+            
+                <StackPanel Grid.Row="0"
+                            Orientation="Vertical"
+                            Width="270"
+                            x:Name="FlyoutContent">
+                    <TextBlock Text="Nové slovo:"
+                               FontSize="15" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-            <ProgressRing HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          IsActive="{Binding LoadingPhoto}"
-                          Width="50"
-                          Height="50" />
+                        <control:SubmitTextBox Grid.Column="0"
+                                               Text="{Binding NewOption, Mode=TwoWay}"
+                                               EnterCommand="{Binding AddNewOptionCommand}" />
+                        <Button Grid.Column="1"
+                                Content="Přidat"
+                                Command="{Binding AddNewOptionCommand}" />
+                    </Grid>
+                    <TextBlock Text="Zadané slovo už v seznamu existuje."
+                               FontSize="12"
+                               Margin="0,3,0,0"
+                               Foreground="LightCyan"
+                               Visibility="{Binding ShowOptionExistsInfo, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                    <TextBlock Margin="0,17,0,0"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Text="Správná odpověď:" />
+
+                    <Grid HorizontalAlignment="Stretch"
+                          Background="#90FFFFFF"
+                          Height="30"
+                          Margin="0,0,22,0">
+                    
+                        <Grid Background="#28008000">
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       TextTrimming="CharacterEllipsis"
+                                       TextAlignment="Center"
+                                       Foreground="Black"
+                                       FontSize="14"
+                                       Margin="5,0,0,0"
+                                       Text="{Binding SelectedText}" />
+                        </Grid>
+                    </Grid>
+
+                    <TextBlock FontSize="14"
+                               Margin="0,17,0,0"
+                               FontWeight="SemiBold"
+                               Text="Špatné odpovědi:" />
+
+                </StackPanel>
+            
+                <ListView Grid.Row="1"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch"
+                          Margin="-5,0,0,10"
+                          SelectionMode="None"
+                          IsItemClickEnabled="False"
+                          ItemsSource="{Binding SelectedOption.List}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Background="#90FFFFFF">
+                                <Grid Width="250"
+                                      Background="#28800000">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               VerticalAlignment="Center"
+                                               Margin="5,0,0,0"
+                                               MaxLines="1"
+                                               Foreground="Black"
+                                               TextTrimming="CharacterEllipsis"
+                                               Text="{Binding Word}" />
+                                    <Button Grid.Column="1"
+                                            Command="{Binding DataContext.DeleteCommand, ElementName=FlyoutContent}"
+                                            CommandParameter="{Binding}"
+                                            Foreground="Black"
+                                            BorderBrush="Black">
+                                        <SymbolIcon Symbol="Delete" />
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
         </Grid>
-        
+
         <CheckBox Grid.Row="2"
                   Grid.Column="0"
                   IsThreeState="False"

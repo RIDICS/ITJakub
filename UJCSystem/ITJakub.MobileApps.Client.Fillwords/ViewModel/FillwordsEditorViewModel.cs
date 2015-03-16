@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
@@ -17,13 +16,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private string m_bookAuthor;
         private int? m_bookYear;
         private string m_bookRtfContent;
-        private ImageSource m_bookPagePhoto;
-        private bool m_isShowPhotoEnabled;
         private bool m_errorNameMissing;
         private bool m_errorPageEmpty;
         private bool m_errorOptionsMissing;
         private bool m_isSaveFlyoutOpen;
-        private bool m_loadingPhoto;
 
         public FillwordsEditorViewModel(FillwordsDataService dataService)
         {
@@ -34,7 +30,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             SelectBookCommand = new RelayCommand(SelectBook);
             SaveTaskCommand = new RelayCommand(SaveTask);
             CancelCommand = new RelayCommand(() => IsSaveFlyoutOpen = false);
-            OptionsEditorViewModel = new OptionsEditorViewModel(WordOptionsList, CloseOptionsFlyout);
+            OptionsEditorViewModel = new OptionsEditorViewModel(WordOptionsList);
         }
 
         #region Properties
@@ -102,37 +98,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
-        public ImageSource BookPagePhoto
-        {
-            get { return m_bookPagePhoto; }
-            set
-            {
-                m_bookPagePhoto = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool IsShowPhotoEnabled
-        {
-            get { return m_isShowPhotoEnabled; }
-            set
-            {
-                m_isShowPhotoEnabled = value;
-                LoadPagePhoto();
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool LoadingPhoto
-        {
-            get { return m_loadingPhoto; }
-            set
-            {
-                m_loadingPhoto = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public bool ErrorNameMissing
         {
             get { return m_errorNameMissing; }
@@ -186,11 +151,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         #endregion
 
 
-        private void CloseOptionsFlyout()
-        {
-            OptionsEditorViewModel.IsOpen = false;
-        }
-
         private async void SelectBook()
         {
             HideErrors();
@@ -203,21 +163,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             BookName = book.BookInfo.Title;
             BookYear = book.BookInfo.Year;
             BookRtfContent = book.RtfText;
-            BookPagePhoto = book.PagePhoto; // may be null
-
-            IsShowPhotoEnabled = BookPagePhoto != null;
-        }
-
-        private void LoadPagePhoto()
-        {
-            if (IsShowPhotoEnabled)
-            {
-                //TODO load photo
-            }
-            else
-            {
-                BookPagePhoto = null;
-            }
         }
 
         private void HideErrors()

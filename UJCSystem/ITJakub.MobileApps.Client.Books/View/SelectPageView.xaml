@@ -92,9 +92,9 @@
                     </TextBlock>
                     
                     <Button Grid.Column="1"
-                            Content="Uložit"
+                            Content="Vybrat"
                             MinWidth="130"
-                            Command="{Binding SaveCommand}" />
+                            Command="{Binding SelectCommand}" />
                 </Grid>
 
                 <TextBlock Margin="0,37,0,-60">

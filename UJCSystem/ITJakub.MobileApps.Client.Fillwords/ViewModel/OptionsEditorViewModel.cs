@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -9,33 +9,22 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
     public class OptionsEditorViewModel : ViewModelBase
     {
         private readonly Dictionary<int, OptionsViewModel> m_wordOptionsList;
-        private readonly Action m_closeFlyoutAction;
         private bool m_showOptionExistsInfo;
         private string m_newOption;
         private OptionsViewModel m_selectedOption;
         private string m_selectedText;
         private bool m_setSelectedTextHighlighted;
-        private bool m_isOpen;
+        private int m_selectionStart;
+        private bool m_isSelected;
 
-        public OptionsEditorViewModel(Dictionary<int, OptionsViewModel> wordOptionsList, Action closeFlyoutAction)
+        public OptionsEditorViewModel(Dictionary<int, OptionsViewModel> wordOptionsList)
         {
             m_wordOptionsList = wordOptionsList;
-            m_closeFlyoutAction = closeFlyoutAction;
 
             AddNewOptionCommand = new RelayCommand(AddNewOption);
-            SaveOptionsCommand = new RelayCommand(SaveOptions);
-            CloseCommand = new RelayCommand(() => IsOpen = false);
             DeleteCommand = new RelayCommand<OptionViewModel>(DeleteOption);
-        }
-
-        public bool IsOpen
-        {
-            get { return m_isOpen; }
-            set
-            {
-                m_isOpen = value;
-                RaisePropertyChanged();
-            }
+            SelectionStartedCommand = new RelayCommand(SelectionStarted);
+            SelectionChangedCommand = new RelayCommand(SelectionChanged);
         }
 
         public bool ShowOptionExistsInfo
@@ -61,7 +50,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         public OptionsViewModel SelectedOption
         {
             get { return m_selectedOption; }
-            set
+            private set
             {
                 m_selectedOption = value;
                 NewOption = string.Empty;
@@ -78,6 +67,16 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        public int SelectionStart
+        {
+            get { return m_selectionStart; }
+            set
+            {
+                m_selectionStart = value;
+                RaisePropertyChanged();
+            }
+        }
         
         public bool SetSelectedTextHighlighted
         {
@@ -89,14 +88,25 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
+        public bool IsSelected
+        {
+            get { return m_isSelected; }
+            set
+            {
+                m_isSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public RelayCommand AddNewOptionCommand { get; private set; }
 
-        public RelayCommand SaveOptionsCommand { get; private set; }
-
-        public RelayCommand CloseCommand { get; private set; }
-
         public RelayCommand<OptionViewModel> DeleteCommand { get; private set; }
+
+        public RelayCommand SelectionStartedCommand { get; private set; }
+
+        public RelayCommand SelectionChangedCommand { get; private set; }
         
+
         private void AddNewOption()
         {
             if (NewOption == string.Empty)
@@ -121,22 +131,30 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             SelectedOption.List.Remove(option);
         }
 
-        private void SaveOptions()
+        private void SelectionStarted()
         {
-            var key = SelectedOption.WordPosition;
-
+            if (SelectedOption == null)
+                return;
+            
             if (SelectedOption.List.Count == 0)
             {
-                m_wordOptionsList.Remove(key);
+                m_wordOptionsList.Remove(SelectedOption.WordPosition);
                 SetSelectedTextHighlighted = false;
             }
-            else
+            else if (!m_wordOptionsList.ContainsKey(SelectedOption.WordPosition))
             {
-                m_wordOptionsList[key] = SelectedOption;
+                m_wordOptionsList.Add(SelectedOption.WordPosition, SelectedOption);
                 SetSelectedTextHighlighted = true;
             }
+        }
 
-            m_closeFlyoutAction();
+        private void SelectionChanged()
+        {
+            IsSelected = !string.IsNullOrEmpty(SelectedText);
+
+            SelectedOption = m_wordOptionsList.ContainsKey(SelectionStart)
+                ? m_wordOptionsList[SelectionStart]
+                : new OptionsViewModel {CorrectAnswer = SelectedText, WordPosition = SelectionStart, List = new ObservableCollection<OptionViewModel>()};
         }
     }
 }

@@ -29,7 +29,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             m_navigationService = navigationService;
 
             GoBackCommand = new RelayCommand(navigationService.GoBack);
-            SaveCommand = new RelayCommand(Save);
+            SelectCommand = new RelayCommand(SubmitSelectedPage);
 
             m_dataService.GetCurrentBook(LoadData);
         }
@@ -52,7 +52,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 
         public RelayCommand GoBackCommand { get; private set; }
         
-        public RelayCommand SaveCommand { get; private set; }
+        public RelayCommand SelectCommand { get; private set; }
 
         public BookViewModel Book
         {
@@ -211,7 +211,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             get { return PageCount == 0 ? 0 : 1; }
         }
         
-        private void Save()
+        private void SubmitSelectedPage()
         {
             if (SelectedPage == null || LoadingPage || LoadingPhoto)
                 return;
