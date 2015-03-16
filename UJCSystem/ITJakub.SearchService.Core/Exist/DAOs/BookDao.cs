@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist.DAOs
@@ -13,39 +14,39 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
             m_existManager = existManager;
         }
 
-        public string GetPagesByName(string bookId, string versionId, string start, string end, string transformationPath)
+        public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end, string transformationPath)
         {
-            return m_existManager.GetPagesByName(bookId, versionId, start, end);
+            return await m_existManager.GetPagesByName(bookId, versionId, start, end);
         }
 
-        public string GetPageByName(string bookId, string versionId, string pageName, string transformationPath)
+        public async Task<string> GetPageByName(string bookId, string versionId, string pageName, string transformationPath)
         {
-            return m_existManager.GetPageByName(bookId, versionId, pageName);
+            return await m_existManager.GetPageByName(bookId, versionId, pageName);
         }
 
-        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationPath)
+        public async Task<string> GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationPath)
         {
-            return m_existManager.GetPageByPositionFromStart(bookId, versionId, pagePosition);
+            return await m_existManager.GetPageByPositionFromStart(bookId, versionId, pagePosition);
         }
 
-        public IList<BookPage> GetBookPageList(string bookId, string versionId)
+        public async Task<List<BookPage>> GetBookPageList(string bookId, string versionId)
         {
-            return m_existManager.GetPageList(bookId, versionId);
+            return await m_existManager.GetPageList(bookId, versionId);
         }
 
-        public void UploadVersionFile(string bookId, string bookVersionid, string fileName, Stream dataStream)
+        public async Task UploadVersionFile(string bookId, string bookVersionid, string fileName, Stream dataStream)
         {
-            m_existManager.UploadVersionFile(bookId, bookVersionid, fileName, dataStream);
+            await m_existManager.UploadVersionFile(bookId, bookVersionid, fileName, dataStream);
         }
 
-        public void UploadBookFile(string bookId, string fileName, Stream dataStream)
+        public async Task UploadBookFile(string bookId, string fileName, Stream dataStream)
         {
-            m_existManager.UploadBookFile(bookId, fileName, dataStream);
+            await m_existManager.UploadBookFile(bookId, fileName, dataStream);
         }
 
-        public void UploadSharedFile(string fileName, Stream dataStream)
+        public async Task UploadSharedFile(string fileName, Stream dataStream)
         {
-            m_existManager.UploadSharedFile(fileName, dataStream);
+            await m_existManager.UploadSharedFile(fileName, dataStream);
         }
     }
 }

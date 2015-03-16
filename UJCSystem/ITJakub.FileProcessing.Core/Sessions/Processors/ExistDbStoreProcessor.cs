@@ -35,7 +35,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
                 using (var dataStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    m_searchServiceClient.UploadVersionFile(new VersionResourceUploadContract
+                    m_searchServiceClient.UploadVersionFileAsync(new VersionResourceUploadContract
                     {
                         BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
                         BookVersionId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.VersionId),

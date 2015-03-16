@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
 
@@ -19,16 +20,16 @@ namespace ITJakub.ITJakubService.DataContracts
         IEnumerable<AuthorDetailContract> GetAllAuthors();
 
         [OperationContract]
-        string GetBookPageByName(string documentId, string pageName, string resultFormat);
+        Task<string> GetBookPageByNameAsync(string documentId, string pageName, string resultFormat);
 
         [OperationContract]
-        string GetBookPagesByName(string documentId, string startPageName, string endPageName, string resultFormat);
+        Task<string> GetBookPagesByNameAsync(string documentId, string startPageName, string endPageName, string resultFormat);
 
         [OperationContract]
-        string GetBookPageByPosition(string documentId, int position, string resultFormat);
+        Task<string> GetBookPageByPositionAsync(string documentId, int position, string resultFormat);
 
         [OperationContract]
-        IList<BookPage> GetBookPageList(string documentId);
+        Task<IList<BookPage>> GetBookPageListAsync(string documentId);
 
         #region Resource Import
         [OperationContract]       

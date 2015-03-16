@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace ITJakub.Shared.Contracts
 {
@@ -7,25 +8,25 @@ namespace ITJakub.Shared.Contracts
     public interface ISearchService
     {
         [OperationContract]
-        string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName);
+        Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName);
 
         [OperationContract]
-        string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName);
+        Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName);
 
         [OperationContract]
-        string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName);
+        Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName);
 
         [OperationContract]
-        IList<BookPage> GetBookPageList(string bookId,string versionId);
+        Task<IList<BookPage>> GetBookPageListAsync(string bookId,string versionId);
 
         [OperationContract]
-        void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract);
+        Task UploadVersionFileAsync(VersionResourceUploadContract versionResourceUploadContract);
 
         [OperationContract]
-        void UploadBookFile(BookResourceUploadContract contract);
+        Task UploadBookFileAsync(BookResourceUploadContract contract);
 
         [OperationContract]
-        void UploadSharedFile(ResourceUploadContract contract);
+        Task UploadSharedFileAsync(ResourceUploadContract contract);
 
     }
 }

@@ -99,7 +99,6 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 return transformation;
             }
-            //return "pageToHtml.xsl"; //TODO resolve correct transformation and return it
         }
 
         [Transaction(TransactionMode.Requires)]

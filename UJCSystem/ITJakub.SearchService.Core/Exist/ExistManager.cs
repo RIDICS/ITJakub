@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using ITJakub.Shared.Contracts;
 
@@ -15,10 +16,10 @@ namespace ITJakub.SearchService.Core.Exist
             m_client = existClient;
         }
 
-        public List<BookPage> GetPageList(string bookId,string versionId, string xslPath = null)
+        public async Task<List<BookPage>> GetPageList(string bookId,string versionId, string xslPath = null)
         {
             XDocument xmlDoc;
-            using (Stream pageStream = m_client.GetPageList(bookId, versionId, xslPath))
+            using (Stream pageStream = await m_client.GetPageListAsync(bookId, versionId, xslPath))
             {
                 xmlDoc = XDocument.Load(pageStream);
             }
@@ -34,34 +35,34 @@ namespace ITJakub.SearchService.Core.Exist
             return pageList;
         }
 
-        public void UploadBookFile(string bookId, string fileName, Stream dataStream)
+        public async Task UploadBookFile(string bookId, string fileName, Stream dataStream)
         {
-            m_client.UploadBookFile(bookId, fileName, dataStream);
+            await m_client.UploadBookFileAsync(bookId, fileName, dataStream);
         }
 
-        public void UploadVersionFile(string bookId, string versionId, string fileName, Stream filStream)
+        public async Task UploadVersionFile(string bookId, string versionId, string fileName, Stream filStream)
         {
-            m_client.UploadVersionFile(bookId, versionId, fileName, filStream);
+            await m_client.UploadVersionFileAsync(bookId, versionId, fileName, filStream);
         }
 
-        public void UploadSharedFile(string fileName, Stream filStream)
+        public async Task UploadSharedFile(string fileName, Stream filStream)
         {
-            m_client.UploadSharedFile(fileName, filStream);
+            await m_client.UploadSharedFileAsync(fileName, filStream);
         }
 
-        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition)
+        public async Task<string> GetPageByPositionFromStart(string bookId, string versionId, int pagePosition)
         {
-            return m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition);
+            return await m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition);
         }
 
-        public string GetPageByName(string bookId, string versionId, string pageName)
+        public async Task<string> GetPageByName(string bookId, string versionId, string pageName)
         {
-            return m_client.GetPageByName(bookId, versionId, pageName);
+            return await m_client.GetPageByName(bookId, versionId, pageName);
         }
 
-        public string GetPagesByName(string bookId, string versionId, string start, string end)
+        public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end)
         {
-            return m_client.GetPagesByName(bookId, versionId, start, end);
+            return await m_client.GetPagesByName(bookId, versionId, start, end);
         }
     }
 }

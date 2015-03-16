@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
@@ -51,24 +52,24 @@ namespace ITJakub.ITJakubService
             return m_authorManager.CreateAuthor(name);
         }
 
-        public string GetBookPageByName(string documentId, string pageName, string resultFormat)
+        public async Task<string> GetBookPageByNameAsync(string documentId, string pageName, string resultFormat)
         {
-            return m_bookManager.GetBookPageByName(documentId, pageName, resultFormat);
+            return await m_bookManager.GetBookPageByNameAsync(documentId, pageName, resultFormat);
         }
 
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, string resultFormat)
+        public async Task<string> GetBookPagesByNameAsync(string documentId, string startPageName, string endPageName, string resultFormat)
         {
-            return m_bookManager.GetBookPagesByName(documentId, startPageName, endPageName, resultFormat);
+            return await m_bookManager.GetBookPagesByNameAsync(documentId, startPageName, endPageName, resultFormat);
         }
 
-        public string GetBookPageByPosition(string documentId, int position, string resultFormat)
+        public async Task<string> GetBookPageByPositionAsync(string documentId, int position, string resultFormat)
         {
-            return m_bookManager.GetBoookPagesByPosition(documentId, position, resultFormat);
+            return await m_bookManager.GetBookPagesByPositionAsync(documentId, position, resultFormat);
         }
 
-        public IList<BookPage> GetBookPageList(string documentId)
+        public async Task<IList<BookPage>> GetBookPageListAsync(string documentId)
         {
-            return m_bookManager.GetBookPagesList(documentId);
+            return await m_bookManager.GetBookPagesListAsync(documentId);
         }
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)

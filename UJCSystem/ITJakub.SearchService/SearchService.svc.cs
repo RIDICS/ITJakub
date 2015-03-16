@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService
@@ -13,39 +14,39 @@ namespace ITJakub.SearchService
             m_searchServiceManager = Container.Current.Resolve<SearchServiceManager>();
         }
 
-        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName)
+        public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName)
         {
-            return m_searchServiceManager.GetBookPageByPosition(bookId, versionId, pagePosition, transformationName);
+            return await m_searchServiceManager.GetBookPageByPositionAsync(bookId, versionId, pagePosition, transformationName);
         }
 
-        public void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract)
+        public async Task UploadVersionFileAsync(VersionResourceUploadContract versionResourceUploadContract)
         {
-            m_searchServiceManager.UploadVersionFile(versionResourceUploadContract);
+            await m_searchServiceManager.UploadVersionFileAsync(versionResourceUploadContract);
         }
 
-        public void UploadBookFile(BookResourceUploadContract contract)
+        public async Task UploadBookFileAsync(BookResourceUploadContract contract)
         {
-            m_searchServiceManager.UploadBookFile(contract);
+            await m_searchServiceManager.UploadBookFileAsync(contract);
         }
 
-        public void UploadSharedFile(ResourceUploadContract contract)
+        public async Task UploadSharedFileAsync(ResourceUploadContract contract)
         {
-            m_searchServiceManager.UploadSharedFile(contract);
+            await m_searchServiceManager.UploadSharedFileAsync(contract);
         }
 
-        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName)
+        public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName)
         {
-            return m_searchServiceManager.GetBookPageByName(bookId, versionId, pageName, transformationName);
+            return await m_searchServiceManager.GetBookPageByNameAsync(bookId, versionId, pageName, transformationName);
         }
 
-        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName)
+        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName)
         {
-            return m_searchServiceManager.GetBookPagesByName(bookId, versionId, startPageName, endPageName,transformationName);
+            return await m_searchServiceManager.GetBookPagesByNameAsync(bookId, versionId, startPageName, endPageName, transformationName);
         }
 
-        public IList<BookPage> GetBookPageList(string bookId, string versionId)
+        public async Task<IList<BookPage>> GetBookPageListAsync(string bookId, string versionId)
         {
-            return m_searchServiceManager.GetBookPageList(bookId, versionId);
+            return await m_searchServiceManager.GetBookPageListAsync(bookId, versionId);
         }
     }
 

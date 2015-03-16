@@ -1,44 +1,45 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.Core.SearchService
 {
     public class SearchServiceClient : ClientBase<ISearchService>, ISearchService
     {
-        public string GetBookPageByPosition(string bookId,string versionId, int pagePosition, string transformationName)
+        public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName)
         {
-            return Channel.GetBookPageByPosition(bookId, versionId, pagePosition, transformationName);
+            return await Channel.GetBookPageByPositionAsync(bookId, versionId, pagePosition, transformationName);
         }
 
-        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName)
+        public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName)
         {
-            return Channel.GetBookPageByName(bookId, versionId, pageName, transformationName);
+            return await Channel.GetBookPageByNameAsync(bookId, versionId, pageName, transformationName);
         }
 
-        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName)
+        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName)
         {
-            return Channel.GetBookPagesByName(bookId, versionId, startPageName, endPageName, transformationName);
+            return await Channel.GetBookPagesByNameAsync(bookId, versionId, startPageName, endPageName, transformationName);
         }
 
-        public IList<BookPage> GetBookPageList(string bookId,string versionId)
+        public async Task<IList<BookPage>> GetBookPageListAsync(string bookId,string versionId)
         {
-            return Channel.GetBookPageList(bookId, versionId);
+            return await Channel.GetBookPageListAsync(bookId, versionId);
         }
 
-        public void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract)
+        public async Task UploadVersionFileAsync(VersionResourceUploadContract versionResourceUploadContract)
         {
-            Channel.UploadVersionFile(versionResourceUploadContract);
+            await Channel.UploadVersionFileAsync(versionResourceUploadContract);
         }
 
-        public void UploadBookFile(BookResourceUploadContract contract)
+        public async Task UploadBookFileAsync(BookResourceUploadContract contract)
         {
-            Channel.UploadBookFile(contract);
+            await Channel.UploadBookFileAsync(contract);
         }
 
-        public void UploadSharedFile(ResourceUploadContract contract)
+        public async Task UploadSharedFileAsync(ResourceUploadContract contract)
         {
-            Channel.UploadSharedFile(contract);
+            await Channel.UploadSharedFileAsync(contract);
         }
     }
 }

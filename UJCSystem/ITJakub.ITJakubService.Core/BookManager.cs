@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
@@ -18,37 +19,43 @@ namespace ITJakub.ITJakubService.Core
             m_bookRepository = bookRepository;
         }
 
-        public string GetBookPageByName(string bookId, string pageName, string resultFormat)
+        public async Task<string> GetBookPageByNameAsync(string bookId, string pageName, string resultFormat)
         {
             OutputFormat outputFormat;
             Enum.TryParse(resultFormat, true, out outputFormat);
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
-            return m_searchServiceClient.GetBookPageByName(bookId, bookVersion.VersionId, pageName, transformation.Name);
+            //var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            //var transformationName = transformation.Name; //TODO make transformation resolving and upload to DB
+            var transformationName = "pageToHtml.xsl"; //TODO make transformation resolving and upload to DB
+            return await m_searchServiceClient.GetBookPageByNameAsync(bookId, bookVersion.VersionId, pageName, transformationName);
         }
 
-        public string GetBookPagesByName(string bookId, string startPageName, string endPageName, string resultFormat)
+        public async Task<string> GetBookPagesByNameAsync(string bookId, string startPageName, string endPageName, string resultFormat)
         {
             OutputFormat outputFormat;
             Enum.TryParse(resultFormat, true, out outputFormat);
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
-            return m_searchServiceClient.GetBookPagesByName(bookId, bookVersion.VersionId, startPageName, endPageName, transformation.Name);
+            //var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            //var transformationName = transformation.Name; //TODO make transformation resolving and upload to DB
+            var transformationName = "pageToHtml.xsl"; //TODO make transformation resolving and upload to DB
+            return await m_searchServiceClient.GetBookPagesByNameAsync(bookId, bookVersion.VersionId, startPageName, endPageName, transformationName);
         }
 
-        public string GetBoookPagesByPosition(string bookId, int position, string resultFormat)
+        public async Task<string> GetBookPagesByPositionAsync(string bookId, int position, string resultFormat)
         {
             OutputFormat outputFormat;
             Enum.TryParse(resultFormat, true, out outputFormat);
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
-            return m_searchServiceClient.GetBookPageByPosition(bookId, bookVersion.VersionId, position, transformation.Name);
+            //var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            //var transformationName = transformation.Name; //TODO make transformation resolving and upload to DB
+            var transformationName = "pageToHtml.xsl"; //TODO make transformation resolving and upload to DB
+            return await m_searchServiceClient.GetBookPageByPositionAsync(bookId, bookVersion.VersionId, position, transformationName);
         }
 
-        public IList<BookPage> GetBookPagesList(string bookId)
+        public async Task<IList<BookPage>> GetBookPagesListAsync(string bookId)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
-            return m_searchServiceClient.GetBookPageList(bookId, bookVersion.VersionId);
+            return await m_searchServiceClient.GetBookPageListAsync(bookId, bookVersion.VersionId);
         }
 
 

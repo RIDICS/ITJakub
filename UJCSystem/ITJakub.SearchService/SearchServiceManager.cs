@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ITJakub.SearchService.Core.Exist.DAOs;
 using ITJakub.Shared.Contracts;
 
@@ -13,41 +14,41 @@ namespace ITJakub.SearchService
             m_bookDao = bookDao;
         }
 
-        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName)
+        public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName)
         {
-            return m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName);
+            return await m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName);
         }
 
-        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName)
+        public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName)
         {
-            return m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName);
+            return await m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName);
         }
 
-        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName,
+        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName,
             string transformationName)
         {
-            return m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName);
+            return await m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName);
         }
 
-        public void UploadVersionFile(VersionResourceUploadContract contract)
+        public async Task UploadVersionFileAsync(VersionResourceUploadContract contract)
         {
-            m_bookDao.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
+            await m_bookDao.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
         }
 
-        public void UploadBookFile(BookResourceUploadContract contract)
+        public async Task UploadBookFileAsync(BookResourceUploadContract contract)
         {
-            m_bookDao.UploadBookFile(contract.BookId, contract.FileName, contract.DataStream);
+            await m_bookDao.UploadBookFile(contract.BookId, contract.FileName, contract.DataStream);
         }
 
-        public void UploadSharedFile(ResourceUploadContract contract)
+        public async Task UploadSharedFileAsync(ResourceUploadContract contract)
         {
-            m_bookDao.UploadSharedFile(contract.FileName, contract.DataStream);
+            await m_bookDao.UploadSharedFile(contract.FileName, contract.DataStream);
         }
 
 
-        public IList<BookPage> GetBookPageList(string bookId, string versionId)
+        public async Task<IList<BookPage>> GetBookPageListAsync(string bookId, string versionId)
         {
-            return m_bookDao.GetBookPageList(bookId, versionId);
+            return await m_bookDao.GetBookPageList(bookId, versionId);
         }
     }
 }
