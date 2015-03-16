@@ -34,6 +34,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private BitmapImage m_appIcon;
         private string m_appName;
         private bool m_canOpenApplication;
+        private bool m_isGlobalFocus;
 
         public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -42,6 +43,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             m_pollingService = pollingService;
 
             GroupStates = new ObservableCollection<GroupStateViewModel>();
+            GroupRemoveViewModel = new GroupRemoveViewModel(RemoveGroup);
             GroupInfo = new GroupInfoViewModel();
 
             m_dataService.GetCurrentGroupId(LoadData);
@@ -57,10 +59,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         {
             GoBackCommand = new RelayCommand(GoBack);
             SelectAppAndTaskCommand = new RelayCommand(SelectAppAndTask);
-            RemoveGroupCommand = new RelayCommand(RemoveGroup);
             ConnectToGroupCommand = new RelayCommand(ConnectToGroup);
-            //TODO open app
-            //OpenGroupCommand = new RelayCommand(() => m_navigationService.Navigate<ApplicationHostView>());
+            OpenApplicationCommand = new RelayCommand(() => m_navigationService.Navigate<ApplicationHostView>());
         }
 
         private void LoadData(long groupId)
@@ -76,14 +76,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 if (groupInfo.Task == null)
                 {
                     SelectedTaskName = null;
-                    //SelectedApplication = ApplicationType.Unknown;
                     LoadAppInfo(ApplicationType.Unknown);
                 }
                 else
                 {
                     SelectedTaskName = groupInfo.Task.Name;
                     LoadAppInfo(groupInfo.Task.Application);
-                    //SelectedApplication = groupInfo.Task.Application;
                 }
 
                 GroupStateUpdated(groupInfo.State);
@@ -94,9 +92,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
         private void LoadAppInfo(ApplicationType applicationType)
         {
-            if (applicationType == ApplicationType.Unknown)
-                return;
-
             m_dataService.GetApplication(applicationType, (appInfo, exception) =>
             {
                 if (exception != null)
@@ -142,7 +137,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private void UpdateCanConnectToGroup()
         {
             CanConnectToGroup = GroupInfo.State >= GroupStateContract.AcceptMembers && !GroupInfo.ContainsMember(m_currentUserId);
-            CanOpenApplication = GroupInfo.State >= GroupStateContract.AcceptMembers && GroupInfo.ContainsMember(m_currentUserId);
+            CanOpenApplication = GroupInfo.State >= GroupStateContract.Running && GroupInfo.ContainsMember(m_currentUserId);
         }
 
         public GroupInfoViewModel GroupInfo
@@ -268,6 +263,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             }
         }
 
+        public bool IsGlobalFocus
+        {
+            get { return m_isGlobalFocus; }
+            set
+            {
+                m_isGlobalFocus = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool CanChangeTask
         {
             get { return GroupInfo.State < GroupStateContract.Running; }
@@ -280,15 +285,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
         public ObservableCollection<GroupStateViewModel> GroupStates { get; private set; }
 
+        public GroupRemoveViewModel GroupRemoveViewModel { get; private set; }
+
         public RelayCommand GoBackCommand { get; private set; }
 
         public RelayCommand SelectAppAndTaskCommand { get; private set; }
 
-        public RelayCommand RemoveGroupCommand { get; private set; }
-
         public RelayCommand ConnectToGroupCommand { get; private set; }
 
-        public RelayCommand OpenGroupCommand { get; private set; }
+        public RelayCommand OpenApplicationCommand { get; private set; }
         
         private void SelectAppAndTask()
         {
@@ -308,6 +313,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
                 GroupStateUpdated(newState);
             });
+            IsGlobalFocus = true;
         }
 
         private void RemoveGroup()
