@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MVCWebLayer", "MVCWebLayer\ITJakub.MVCWebLayer.csproj", "{45118A71-641D-4A5F-8E92-57B4972B19B5}"
 EndProject
@@ -90,6 +90,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Ooxml.Conversion", "ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj", "{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Xml.Tei.Splitting", "ITJakub.Xml.Conversion\Ujc.Ovj.Xml.Tei.Splitting\Ujc.Ovj.Xml.Tei.Splitting.csproj", "{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B4C7DB29-66AC-41BE-AFA5-AFDBA0B249E1}"
+	ProjectSection(SolutionItems) = preProject
+		Deploy_readme.txt = Deploy_readme.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
