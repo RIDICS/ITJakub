@@ -52,6 +52,11 @@ namespace ITJakub.ITJakubService
             return m_authorManager.CreateAuthor(name);
         }
 
+        public BookInfoContract GetBookInfo(string bookId)
+        {
+            return m_bookManager.GetBookInfo(bookId);
+        }
+
         public async Task<string> GetBookPageByNameAsync(string documentId, string pageName, string resultFormat)
         {
             return await m_bookManager.GetBookPageByNameAsync(documentId, pageName, resultFormat);
@@ -86,5 +91,6 @@ namespace ITJakub.ITJakubService
         {
             return m_searchManager.Search(term);
         }
+
     }
 }

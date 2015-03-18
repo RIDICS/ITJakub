@@ -106,7 +106,7 @@
                 "url": "\\Editions\\info\\{BookId}"
             },
             "read-button": {
-                "url": "/Editions/Editions/Listing?bookId={BookId}&title={Title}"
+                "url": "/Editions/Editions/Listing?bookId={BookId}"
             },
             "variables": {
                 "$test": {

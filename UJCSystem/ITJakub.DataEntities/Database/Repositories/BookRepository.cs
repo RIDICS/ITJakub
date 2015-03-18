@@ -30,7 +30,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                var book = GetBookByGuid(bookGuid);
+                var book = FindBookByGuid(bookGuid);
 
                 BookVersion bookVersionAlias = null;
 
@@ -57,7 +57,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual Book GetBookByGuid(string bookGuid)
+        public virtual Book FindBookByGuid(string bookGuid)
         {
             using (var session = GetSession())
             {

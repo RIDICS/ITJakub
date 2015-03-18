@@ -75,6 +75,26 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public BookInfoContract GetBookInfo(string bookId)
+        {
+            try
+            {
+                return Channel.GetBookInfo(bookId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookInfo failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookInfo timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
         public async Task<string> GetBookPageByNameAsync(string documentId, string pageName, string resultFormat)
         {
             try

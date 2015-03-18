@@ -50,7 +50,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
         {
             string bookGuid = xmlReader.GetAttribute("n");
-            Book book = m_bookRepository.GetBookByGuid(bookGuid) ?? new Book {Guid = bookGuid};
+            Book book = m_bookRepository.FindBookByGuid(bookGuid) ?? new Book {Guid = bookGuid};
 
             string docType = xmlReader.GetAttribute("doctype");
             BookTypeEnum bookTypeEnum;

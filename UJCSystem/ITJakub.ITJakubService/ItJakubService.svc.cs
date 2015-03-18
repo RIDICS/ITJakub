@@ -44,6 +44,11 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.CreateAuthor(name);
         }
 
+        public BookInfoContract GetBookInfo(string bookId)
+        {
+            return m_serviceManager.GetBookInfo(bookId);
+        }
+
         public async Task<string> GetBookPageByNameAsync(string documentId, string pageName, string resultFormat)
         {
             return await m_serviceManager.GetBookPageByNameAsync(documentId, pageName, resultFormat);

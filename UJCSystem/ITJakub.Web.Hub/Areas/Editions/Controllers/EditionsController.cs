@@ -6,6 +6,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
     [RouteArea("Editions")]
     public class EditionsController : Controller
     {
+        private ItJakubServiceClient m_mainServiceClient;
+
+        public EditionsController()
+        {
+            m_mainServiceClient = new ItJakubServiceClient();
+        }
+
         // GET: Editions/Editions
         public ActionResult Index()
         {
@@ -17,9 +24,10 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View();
         }
 
-        public ActionResult Listing(string bookId, string title)
+        public ActionResult Listing(string bookId)
         {
-            return View(new BookListingModel { BookId = bookId, BookTitle = title });
+            var book = m_mainServiceClient.GetBookInfo(bookId);
+            return View(new BookListingModel { BookId = book.Guid, BookTitle = book.Title });
         }
 
         public ActionResult Information()

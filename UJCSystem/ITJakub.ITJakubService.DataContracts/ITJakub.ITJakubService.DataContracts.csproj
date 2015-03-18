@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AuthorDetailContract.cs" />
     <Compile Include="AuthProviderEnumContract.cs" />
+    <Compile Include="BookInfoContract.cs" />
     <Compile Include="LoginUserContract.cs" />
     <Compile Include="CreateUserContract.cs" />
     <Compile Include="LoginUserResultContract.cs" />

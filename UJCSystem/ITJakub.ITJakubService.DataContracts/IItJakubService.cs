@@ -41,5 +41,8 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         List<SearchResultContract> Search(string term);
+
+        [OperationContract]
+        BookInfoContract GetBookInfo(string bookId);
     }
 }
