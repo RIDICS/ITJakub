@@ -28,7 +28,7 @@ namespace ITJakub.Core.SearchService
             return await Channel.GetBookPagesByNameAsync(bookId, versionId, startPageName, endPageName, transformationName);
         }
 
-        public async Task<IList<BookPage>> GetBookPageListAsync(string bookId,string versionId)
+        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookId,string versionId)
         {
             try
             {

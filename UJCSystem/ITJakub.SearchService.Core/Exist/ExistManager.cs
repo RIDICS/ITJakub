@@ -16,7 +16,7 @@ namespace ITJakub.SearchService.Core.Exist
             m_client = existClient;
         }
 
-        public async Task<List<BookPage>> GetPageList(string bookId,string versionId, string xslPath = null)
+        public async Task<List<BookPageContract>> GetPageList(string bookId,string versionId, string xslPath = null)
         {
             XDocument xmlDoc;
             using (Stream pageStream = await m_client.GetPageListAsync(bookId, versionId, xslPath))
@@ -24,12 +24,12 @@ namespace ITJakub.SearchService.Core.Exist
                 xmlDoc = XDocument.Load(pageStream);
             }
             IEnumerable<XElement> pageBreakElements = xmlDoc.Root.Elements().Where(element => element.Name.LocalName == "pb");
-            var pageList = new List<BookPage>();
+            var pageList = new List<BookPageContract>();
             int position = 0;
             foreach (XElement pageBreakElement in pageBreakElements)
             {
                 ++position;
-                pageList.Add(new BookPage {Position = position, Text = pageBreakElement.Attribute("n").Value});
+                pageList.Add(new BookPageContract {Position = position, Text = pageBreakElement.Attribute("n").Value});
             }
 
             return pageList;

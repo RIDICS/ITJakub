@@ -17,7 +17,7 @@ namespace ITJakub.Shared.Contracts
         Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName);
 
         [OperationContract]
-        Task<IList<BookPage>> GetBookPageListAsync(string bookId,string versionId);
+        Task<IList<BookPageContract>> GetBookPageListAsync(string bookId,string versionId);
 
         [OperationContract]
         Task UploadVersionFileAsync(VersionResourceUploadContract versionResourceUploadContract);

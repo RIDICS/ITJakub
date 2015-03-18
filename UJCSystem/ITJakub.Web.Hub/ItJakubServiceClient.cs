@@ -155,7 +155,7 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public async Task<IList<BookPage>> GetBookPageListAsync(string documentId)
+        public async Task<IList<BookPageContract>> GetBookPageListAsync(string documentId)
         {
             try
             {

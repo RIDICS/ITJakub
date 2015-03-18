@@ -27,7 +27,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         public ActionResult Listing(string bookId)
         {
             var book = m_mainServiceClient.GetBookInfo(bookId);
-            return View(new BookListingModel { BookId = book.Guid, BookTitle = book.Title });
+            return View(new BookListingModel { BookId = book.Guid, BookTitle = book.Title, BookPages = book.BookPages});
         }
 
         public ActionResult Information()

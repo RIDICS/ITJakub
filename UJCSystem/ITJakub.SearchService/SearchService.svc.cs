@@ -44,7 +44,7 @@ namespace ITJakub.SearchService
             return await m_searchServiceManager.GetBookPagesByNameAsync(bookId, versionId, startPageName, endPageName, transformationName);
         }
 
-        public async Task<IList<BookPage>> GetBookPageListAsync(string bookId, string versionId)
+        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookId, string versionId)
         {
             return await m_searchServiceManager.GetBookPageListAsync(bookId, versionId);
         }

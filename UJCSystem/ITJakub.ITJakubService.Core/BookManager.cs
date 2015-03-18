@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 
@@ -53,27 +54,17 @@ namespace ITJakub.ITJakubService.Core
             return await m_searchServiceClient.GetBookPageByPositionAsync(bookId, bookVersion.VersionId, position, transformationName);
         }
 
-        public async Task<IList<BookPage>> GetBookPagesListAsync(string bookId)
+        public async Task<IList<BookPageContract>> GetBookPagesListAsync(string bookId)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
-            return await m_searchServiceClient.GetBookPageListAsync(bookId, bookVersion.VersionId); //TODO test switch to db stored pages
+            return await m_searchServiceClient.GetBookPageListAsync(bookId, bookVersion.VersionId);
         }
 
 
         public BookInfoContract GetBookInfo(string bookId)
         {
-            var bookInfo = m_bookRepository.GetLastVersionForBook(bookId);
-            return new BookInfoContract
-            {
-                Guid = bookInfo.Book.Guid,
-                Title = bookInfo.Title,
-                SubTitle = bookInfo.SubTitle,
-                Description = bookInfo.Description,
-                PublishDate = bookInfo.PublishDate,
-                PublishPlace = bookInfo.PublishPlace,
-                //Pages = bookInfo.BookPages //TODO create mapping profile for conversion PageDBEnt to PageContract
-
-            };
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
+            return AutoMapper.Mapper.Map<BookInfoContract>(bookVersion);
         }
     }
 }

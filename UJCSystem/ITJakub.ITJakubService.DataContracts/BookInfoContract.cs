@@ -1,4 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
@@ -22,5 +24,8 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [DataMember]
         public string PublishPlace { get; set; }
+
+        [DataMember]
+        public IList<BookPageContract> BookPages { get; set; }
     }
 }

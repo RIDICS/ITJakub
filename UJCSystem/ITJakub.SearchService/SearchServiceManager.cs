@@ -46,7 +46,7 @@ namespace ITJakub.SearchService
         }
 
 
-        public async Task<IList<BookPage>> GetBookPageListAsync(string bookId, string versionId)
+        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookId, string versionId)
         {
             return await m_bookDao.GetBookPageList(bookId, versionId);
         }

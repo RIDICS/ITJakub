@@ -29,7 +29,7 @@ namespace ITJakub.ITJakubService.DataContracts
         Task<string> GetBookPageByPositionAsync(string documentId, int position, string resultFormat);
 
         [OperationContract]
-        Task<IList<BookPage>> GetBookPageListAsync(string documentId);
+        Task<IList<BookPageContract>> GetBookPageListAsync(string documentId);
 
         #region Resource Import
         [OperationContract]       

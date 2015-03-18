@@ -64,7 +64,7 @@ namespace ITJakub.ITJakubService
             return await m_serviceManager.GetBookPageByPositionAsync(documentId, position, resultFormat);
         }
 
-        public async Task<IList<BookPage>> GetBookPageListAsync(string documentId)
+        public async Task<IList<BookPageContract>> GetBookPageListAsync(string documentId)
         {
             return await m_serviceManager.GetBookPageListAsync(documentId);
         }

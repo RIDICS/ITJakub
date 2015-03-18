@@ -3,7 +3,7 @@
 namespace ITJakub.Shared.Contracts
 {
     [DataContract]
-    public class BookPage
+    public class BookPageContract
     {
         [DataMember]
         public string Text { get; set; }

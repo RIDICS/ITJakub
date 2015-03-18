@@ -29,7 +29,7 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
             return await m_existManager.GetPageByPositionFromStart(bookId, versionId, pagePosition);
         }
 
-        public async Task<List<BookPage>> GetBookPageList(string bookId, string versionId)
+        public async Task<List<BookPageContract>> GetBookPageList(string bookId, string versionId)
         {
             return await m_existManager.GetPageList(bookId, versionId);
         }
