@@ -16,7 +16,7 @@
     <AssemblyName>ITJakub.Web.Hub</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44300</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -169,6 +169,7 @@
     <Compile Include="Areas\Editions\BundleConfig.cs" />
     <Compile Include="Areas\Dictionaries\Controllers\DictionariesController.cs" />
     <Compile Include="Areas\Dictionaries\DictionariesAreaRegistration.cs" />
+    <Compile Include="Areas\Editions\Models\BookListingModel.cs" />
     <Compile Include="Areas\Editions\RouteConfig.cs" />
     <Compile Include="Areas\Editions\Controllers\EditionsController.cs" />
     <Compile Include="Areas\Editions\EditionsAreaRegistration.cs" />
@@ -475,7 +476,6 @@
     <Folder Include="Areas\Bibliographies\Views\Shared\" />
     <Folder Include="Areas\Dictionaries\Models\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
-    <Folder Include="Areas\Editions\Models\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
     <Folder Include="Views\Author\" />
     <Folder Include="Views\Bibliography\" />
@@ -533,7 +533,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2637</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/</IISUrl>
+          <IISUrl>http://localhost:2637/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://147.32.81.137/ITJakub.Web.Hub</CustomServerUrl>

@@ -4,6 +4,7 @@ using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.DataEntities.Database.Exceptions;
 using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -30,6 +31,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (var session = GetSession())
             {
                 var book = GetBookByGuid(bookGuid);
+
                 BookVersion bookVersionAlias = null;
 
                 var lastVersionSubquery = QueryOver.Of<BookVersion>()
@@ -59,9 +61,17 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                return session.QueryOver<Book>()
+                var result = session.QueryOver<Book>()
                     .Where(book => book.Guid == bookGuid)
                     .SingleOrDefault<Book>();
+
+                
+                if (result == null)
+                {
+                    throw new BookDoesNotExistException(string.Format("Kniha s id {0} neexistuje..", bookGuid));
+                }
+
+                return result;
             }
         }
 

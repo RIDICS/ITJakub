@@ -9,6 +9,15 @@
     @Scripts.Render("~/itjakub/editions/javascript")
 }
 
-<div id="Reader">
+@model ITJakub.Web.Hub.Areas.Editions.Models.BookListingModel
+
+<div id="Reader" data-bookid="@Model.BookId">
 
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var readerPlugin = new ReaderModule('#Reader');
+        readerPlugin.makeReader("@Model.BookId", "@Model.BookTitle");
+    });
+</script>

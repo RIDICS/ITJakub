@@ -132,7 +132,11 @@
             </div>
 
 
-
+            @Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/jqueryui")
+            @Scripts.Render("~/bundles/bootstrap")
+            @Scripts.Render("~/itjakub/javascript")
+            @Scripts.Render("~/bundles/dropzonescripts")
 
             @*main page content*@
             <div class="container module-content">
@@ -147,11 +151,7 @@
         </div>
 
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jqueryui")
-        @Scripts.Render("~/bundles/bootstrap")
-        @Scripts.Render("~/itjakub/javascript")
-        @Scripts.Render("~/bundles/dropzonescripts")
+  
         @RenderSection("scripts", false)
     </body>
 </html>

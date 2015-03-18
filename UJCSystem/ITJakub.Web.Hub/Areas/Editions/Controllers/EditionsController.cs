@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using ITJakub.Web.Hub.Areas.Editions.Models;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 {
@@ -16,9 +17,9 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View();
         }
 
-        public ActionResult Listing()
+        public ActionResult Listing(string bookId, string title)
         {
-            return View();
+            return View(new BookListingModel { BookId = bookId, BookTitle = title });
         }
 
         public ActionResult Information()

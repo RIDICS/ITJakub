@@ -11,14 +11,14 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
             var listBooks = new List<BookInfo>();
             var bookInfo = new BookInfo()
             {
-                BookId = "D122AA8E-BE32-4EAF-B274-011CBBD2A01B",
+                BookId = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}",
                 BookType = "Edition",
                 Editor = "Alena Černá",
                 Copyright = "Černá, Alena M.,2013, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v.v.i., 2012",
                 LastEditation = "",
                 LiteraryGenre = "próza",
                 LiteraryType = "próza",
-                Name = "Chirurgické lékařství",
+                Title = "Chirurgické lékařství",
                 Pattern = "ChL",
                 RelicAbbreviation = "LékChir",
                 SourceAbbreviation = "LékChir",
@@ -49,7 +49,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                 LastEditation = "",
                 LiteraryGenre = "próza",
                 LiteraryType = "próza",
-                Name = "Knihy lékařské",
+                Title = "Knihy lékařské",
                 Pattern = "KL",
                 RelicAbbreviation = "LékJádro",
                 SourceAbbreviation = "LékJádroBrn",
@@ -81,7 +81,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                    LastEditation = "25.6.1989",
                    LiteraryGenre = "proza",
                    LiteraryType = "type",
-                   Name = "Rukopis kunhuta",
+                   Title = "Rukopis kunhuta",
                    Pattern = "Broucci",
                    RelicAbbreviation = "relAbr",
                    SourceAbbreviation = "RK",
@@ -104,29 +104,32 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                    Description = "Elementa latinae, boemicae ac germanicae linugae",
                    Year = 1532
                };
-                if (int.Parse(bookId) % 2 == 0)
+
+                int parsedBookId;
+                var parsed = int.TryParse(bookId, out parsedBookId);
+                if (parsed && parsedBookId % 2 == 0)
                 {
                     bookInfo.BookType = "CardFile";
 
                 }
-                if (int.Parse(bookId) % 3 == 0)
+                if (parsed && parsedBookId % 3 == 0)
                 {
                     bookInfo.BookType = "OldCzechTextBank";
                     bookInfo.Century = 1;
                 }
-                if (int.Parse(bookId) % 4 == 0)
+                if (parsed && parsedBookId % 4 == 0)
                 {
                     bookInfo.BookType = "Dictionary";
-                    bookInfo.Name = "Slovnicek";
+                    bookInfo.Title = "Slovnicek";
                     bookInfo.Century = 5;
                     bookInfo.Linked = true;
 
-                    if (int.Parse(bookId) % 8 == 0)
+                    if (parsed && parsedBookId % 8 == 0)
                     {
                         bookInfo.Linked = false;
                     }
                 }
-                if (int.Parse(bookId) % 5 == 0)
+                if (parsed && parsedBookId % 5 == 0)
                 {
                     bookInfo.BookType = "UndefBokkType";
                 }
@@ -151,7 +154,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
                     LastEditation = "25.6.1989",
                     LiteraryGenre = "proza",
                     LiteraryType = "type",
-                    Name = "Rukopis kunhuta",
+                    Title = "Rukopis kunhuta",
                     Pattern = "Broucci",
                     RelicAbbreviation = "relAbr",
                     SourceAbbreviation = "RK",
@@ -180,7 +183,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Search
     {
         public string BookId { get; set; }
         public string BookType { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Editor { get; set; }
         public string Pattern { get; set; }
         public string SourceAbbreviation { get; set; }

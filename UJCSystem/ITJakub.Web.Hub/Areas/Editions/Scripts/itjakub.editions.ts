@@ -10,6 +10,7 @@ $(document).ready(function () {
         for (var i = 0; i < 10; i++) {
             arrayOfIds.push(i.toString());
         }
+        arrayOfIds[0] = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
         searchPlugin.getBookWithIds(arrayOfIds);
     });
 
@@ -18,6 +19,7 @@ $(document).ready(function () {
         for (var i = 0; i < 3; i++) {
             arrayOfIds.push(i.toString());
         }
+        arrayOfIds[0] = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
         searchPlugin.getBookWithIds(arrayOfIds);
     });
     $('#fillBibList1000').click(function () {
@@ -25,6 +27,7 @@ $(document).ready(function () {
         for (var i = 0; i < 1000; i++) {
             arrayOfIds.push(i.toString());
         }
+        arrayOfIds[0] = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
         searchPlugin.getBookWithIds(arrayOfIds);
     });
 
@@ -37,8 +40,8 @@ $(document).ready(function () {
     });
 
 
-    var readerPlugin: ReaderModule = new ReaderModule('#Reader');
-    var book = new BookInfo();
-    readerPlugin.makeReader(book);
+    //var readerPlugin: ReaderModule = new ReaderModule('#Reader');
+    //var book = new BookInfo();
+    //readerPlugin.makeReader(book);
 
 });

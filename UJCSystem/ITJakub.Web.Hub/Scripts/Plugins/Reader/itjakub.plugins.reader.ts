@@ -10,7 +10,7 @@ class ReaderModule {
     pagerDisplayPages: number;
     preloadPagesBefore: number;
     preloadPagesAfter: number;
-    book: IBookInfo
+    bookId: string;
     loadedBookContent: boolean;
 
     constructor(readerContainer: string) {
@@ -25,7 +25,7 @@ class ReaderModule {
             type: "GET",
             traditional: true,
             async: false,
-            data: { bookId: this.book.BookId },
+            data: { bookId: this.bookId },
             url: "/Reader/GetBookPageList",
             dataType: 'json',
             contentType: 'application/json',
@@ -44,7 +44,7 @@ class ReaderModule {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.book.BookId, pagePosition: pagePosition },
+            data: { bookId: this.bookId, pagePosition: pagePosition },
             url: "/Reader/GetBookPageByPosition",
             dataType: 'json',
             contentType: 'application/json',
@@ -60,7 +60,7 @@ class ReaderModule {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.book.BookId, pageName: pageName },
+            data: { bookId: this.bookId, pageName: pageName },
             url: "/Reader/GetBookPageByName",
             dataType: 'json',
             contentType: 'application/json',
@@ -71,8 +71,8 @@ class ReaderModule {
         });
     }
 
-    public makeReader(book: IBookInfo) {
-        this.book = book;
+    public makeReader(bookId : string, bookTitle : string) {
+        this.bookId = bookId;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array<string>();
@@ -108,15 +108,15 @@ class ReaderModule {
         readerHeadDiv.appendChild(fullscreenCloseButton);
 
 
-        var title = this.makeTitle(book);
+        var title = this.makeTitle(bookTitle);
         readerHeadDiv.appendChild(title);
 
 
-        var controls = this.makeControls(book);
+        var controls = this.makeControls();
         readerHeadDiv.appendChild(controls);
         readerDiv.appendChild(readerHeadDiv);
 
-        var readerBodyDiv = this.makeReaderBody(book);
+        var readerBodyDiv = this.makeReaderBody();
         readerDiv.appendChild(readerBodyDiv);
 
         $(this.readerContainer).append(readerDiv);
@@ -125,14 +125,14 @@ class ReaderModule {
         this.scrollTextToPositionFromTop(0);
     }
 
-    private makeTitle(book: IBookInfo): HTMLDivElement {
+    private makeTitle(bookTitle : string): HTMLDivElement {
         var titleDiv: HTMLDivElement = document.createElement('div');
         $(titleDiv).addClass('title');
-        titleDiv.innerHTML = book.Title;
+        titleDiv.innerHTML = bookTitle;
         return titleDiv;
     }
 
-    private makeControls(book: IBookInfo): HTMLDivElement {
+    private makeControls(): HTMLDivElement {
 
         var controlsDiv: HTMLDivElement = document.createElement('div');
         $(controlsDiv).addClass('reader-controls content-container');
@@ -536,7 +536,7 @@ class ReaderModule {
 
     }
 
-    private makeReaderBody(book: IBookInfo): HTMLDivElement {
+    private makeReaderBody(): HTMLDivElement {
         var bodyContainerDiv: HTMLDivElement = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
 

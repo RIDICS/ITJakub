@@ -12,7 +12,7 @@ var ReaderModule = (function () {
             type: "GET",
             traditional: true,
             async: false,
-            data: { bookId: this.book.BookId },
+            data: { bookId: this.bookId },
             url: "/Reader/GetBookPageList",
             dataType: 'json',
             contentType: 'application/json',
@@ -30,7 +30,7 @@ var ReaderModule = (function () {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.book.BookId, pagePosition: pagePosition },
+            data: { bookId: this.bookId, pagePosition: pagePosition },
             url: "/Reader/GetBookPageByPosition",
             dataType: 'json',
             contentType: 'application/json',
@@ -46,7 +46,7 @@ var ReaderModule = (function () {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.book.BookId, pageName: pageName },
+            data: { bookId: this.bookId, pageName: pageName },
             url: "/Reader/GetBookPageByName",
             dataType: 'json',
             contentType: 'application/json',
@@ -57,9 +57,9 @@ var ReaderModule = (function () {
         });
     };
 
-    ReaderModule.prototype.makeReader = function (book) {
+    ReaderModule.prototype.makeReader = function (bookId, bookTitle) {
         var _this = this;
-        this.book = book;
+        this.bookId = bookId;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array();
@@ -94,14 +94,14 @@ var ReaderModule = (function () {
         });
         readerHeadDiv.appendChild(fullscreenCloseButton);
 
-        var title = this.makeTitle(book);
+        var title = this.makeTitle(bookTitle);
         readerHeadDiv.appendChild(title);
 
-        var controls = this.makeControls(book);
+        var controls = this.makeControls();
         readerHeadDiv.appendChild(controls);
         readerDiv.appendChild(readerHeadDiv);
 
-        var readerBodyDiv = this.makeReaderBody(book);
+        var readerBodyDiv = this.makeReaderBody();
         readerDiv.appendChild(readerBodyDiv);
 
         $(this.readerContainer).append(readerDiv);
@@ -110,14 +110,14 @@ var ReaderModule = (function () {
         this.scrollTextToPositionFromTop(0);
     };
 
-    ReaderModule.prototype.makeTitle = function (book) {
+    ReaderModule.prototype.makeTitle = function (bookTitle) {
         var titleDiv = document.createElement('div');
         $(titleDiv).addClass('title');
-        titleDiv.innerHTML = book.Title;
+        titleDiv.innerHTML = bookTitle;
         return titleDiv;
     };
 
-    ReaderModule.prototype.makeControls = function (book) {
+    ReaderModule.prototype.makeControls = function () {
         var _this = this;
         var controlsDiv = document.createElement('div');
         $(controlsDiv).addClass('reader-controls content-container');
@@ -514,7 +514,7 @@ var ReaderModule = (function () {
         }
     };
 
-    ReaderModule.prototype.makeReaderBody = function (book) {
+    ReaderModule.prototype.makeReaderBody = function () {
         var _this = this;
         var bodyContainerDiv = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
