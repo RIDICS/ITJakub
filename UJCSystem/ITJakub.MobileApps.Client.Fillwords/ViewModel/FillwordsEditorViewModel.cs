@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
@@ -10,7 +9,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
     public class FillwordsEditorViewModel : EditorBaseViewModel
     {
         private readonly FillwordsDataService m_dataService;
-        private Dictionary<int, OptionsViewModel> m_wordOptionsList;
         private bool m_isTextEditingEnabled;
         private string m_bookName;
         private string m_bookAuthor;
@@ -24,26 +22,16 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         public FillwordsEditorViewModel(FillwordsDataService dataService)
         {
             m_dataService = dataService;
-            IsTextEditingEnabled = false;
 
-            WordOptionsList = new Dictionary<int, OptionsViewModel>();
+            OptionsEditorViewModel = new OptionsEditorViewModel();
+            IsTextEditingEnabled = true;
+            
             SelectBookCommand = new RelayCommand(SelectBook);
             SaveTaskCommand = new RelayCommand(SaveTask);
             CancelCommand = new RelayCommand(() => IsSaveFlyoutOpen = false);
-            OptionsEditorViewModel = new OptionsEditorViewModel(WordOptionsList);
         }
 
         #region Properties
-
-        public Dictionary<int, OptionsViewModel> WordOptionsList
-        {
-            get { return m_wordOptionsList; }
-            set
-            {
-                m_wordOptionsList = value;
-                RaisePropertyChanged();
-            }
-        }
 
         public bool IsTextEditingEnabled
         {
@@ -52,7 +40,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             {
                 m_isTextEditingEnabled = value;
                 if (value)
-                    WordOptionsList.Clear();
+                    OptionsEditorViewModel.Reset();
 
                 RaisePropertyChanged();
             }
@@ -159,6 +147,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             if (book == null)
                 return;
 
+            IsTextEditingEnabled = false;
             BookAuthor = book.BookInfo.Author;
             BookName = book.BookInfo.Title;
             BookYear = book.BookInfo.Year;
@@ -188,7 +177,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 return true;
             }
 
-            if (WordOptionsList.Count == 0)
+            if (OptionsEditorViewModel.WordOptionsList.Count == 0)
             {
                 ErrorOptionsMissing = true;
                 return true;
@@ -206,7 +195,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
 
             Saving = true;
-            m_dataService.CreateTask(TaskName, BookRtfContent, WordOptionsList.Values.ToList(), exception =>
+            m_dataService.CreateTask(TaskName, BookRtfContent, OptionsEditorViewModel.WordOptionsList.Values.ToList(), exception =>
             {
                 Saving = false;
                 if (exception != null)

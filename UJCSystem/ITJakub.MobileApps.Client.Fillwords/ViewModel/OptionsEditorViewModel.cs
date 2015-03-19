@@ -16,15 +16,24 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private bool m_setSelectedTextHighlighted;
         private int m_selectionStart;
         private bool m_isSelected;
+        private bool m_isReset;
 
-        public OptionsEditorViewModel(Dictionary<int, OptionsViewModel> wordOptionsList)
+        public OptionsEditorViewModel()
         {
-            m_wordOptionsList = wordOptionsList;
+            m_wordOptionsList = new Dictionary<int, OptionsViewModel>();
 
             AddNewOptionCommand = new RelayCommand(AddNewOption);
             DeleteCommand = new RelayCommand<OptionViewModel>(DeleteOption);
-            SelectionStartedCommand = new RelayCommand(SelectionStarted);
             SelectionChangedCommand = new RelayCommand(SelectionChanged);
+        }
+
+        public Dictionary<int, OptionsViewModel> WordOptionsList
+        {
+            get
+            {
+                UpdateWordOptionsList();
+                return m_wordOptionsList;
+            }
         }
 
         public bool ShowOptionExistsInfo
@@ -98,11 +107,19 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
+        public bool IsReset
+        {
+            get { return m_isReset; }
+            set
+            {
+                m_isReset = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public RelayCommand AddNewOptionCommand { get; private set; }
 
         public RelayCommand<OptionViewModel> DeleteCommand { get; private set; }
-
-        public RelayCommand SelectionStartedCommand { get; private set; }
 
         public RelayCommand SelectionChangedCommand { get; private set; }
         
@@ -111,6 +128,12 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         {
             if (NewOption == string.Empty)
                 return;
+
+            if (SelectedOption.List == null)
+            {
+                SelectedOption.List = new ObservableCollection<OptionViewModel>();
+                SetSelectedTextHighlighted = true;
+            }
 
             if (SelectedOption.List.Any(model => model.Word == NewOption))
             {
@@ -129,32 +152,44 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private void DeleteOption(OptionViewModel option)
         {
             SelectedOption.List.Remove(option);
+
+            if (SelectedOption.List.Count == 0)
+            {
+                SelectedOption.List = null;
+                SetSelectedTextHighlighted = false;
+            }
         }
 
-        private void SelectionStarted()
+        private void UpdateWordOptionsList()
         {
             if (SelectedOption == null)
                 return;
             
-            if (SelectedOption.List.Count == 0)
+            if (SelectedOption.List == null)
             {
                 m_wordOptionsList.Remove(SelectedOption.WordPosition);
-                SetSelectedTextHighlighted = false;
             }
             else if (!m_wordOptionsList.ContainsKey(SelectedOption.WordPosition))
             {
                 m_wordOptionsList.Add(SelectedOption.WordPosition, SelectedOption);
-                SetSelectedTextHighlighted = true;
+                IsReset = false;
             }
         }
 
         private void SelectionChanged()
         {
+            UpdateWordOptionsList();
             IsSelected = !string.IsNullOrEmpty(SelectedText);
 
             SelectedOption = m_wordOptionsList.ContainsKey(SelectionStart)
                 ? m_wordOptionsList[SelectionStart]
-                : new OptionsViewModel {CorrectAnswer = SelectedText, WordPosition = SelectionStart, List = new ObservableCollection<OptionViewModel>()};
+                : new OptionsViewModel {CorrectAnswer = SelectedText, WordPosition = SelectionStart};
+        }
+
+        public void Reset()
+        {
+            m_wordOptionsList.Clear();
+            IsReset = true;
         }
     }
 }

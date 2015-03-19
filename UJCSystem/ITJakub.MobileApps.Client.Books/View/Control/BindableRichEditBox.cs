@@ -30,7 +30,7 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
 
             var oldIsReadonlyState = richEditBox.IsReadOnly;
             richEditBox.IsReadOnly = false;
-            richEditBox.Document.SetText(TextSetOptions.FormatRtf, e.NewValue.ToString());
+            richEditBox.Document.SetText(TextSetOptions.FormatRtf, richEditBox.DocumentRtf);
             richEditBox.IsReadOnly = oldIsReadonlyState;
             richEditBox.OnDocumentLoad();
         }
@@ -50,5 +50,10 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
         }
 
         public event EventHandler DocumentLoaded;
+
+        public void ResetDocument()
+        {
+            DocumentRtfPropertyChanged(this, null);
+        }
     }
 }

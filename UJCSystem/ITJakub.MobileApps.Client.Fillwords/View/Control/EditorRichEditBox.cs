@@ -6,7 +6,6 @@ using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books.View.Control;
 
 namespace ITJakub.MobileApps.Client.Fillwords.View.Control
@@ -24,8 +23,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             if (IsEditingEnabled)
                 return;
 
-            InvokeCommand(SelectionStartedCommand);
-
             var point = e.GetPosition(this);
             // HACK get scaled point for RichEditBox
             point = ScaleHelper.ScalePoint(true, point.X, point.Y + m_contentElement.VerticalOffset);
@@ -42,15 +39,16 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             {
                 SelectionStart = -1;
                 SelectedText = null;
-                InvokeCommand(SelectionChangedCommand);
-                return;
+                IsSelectedTextHighlighted = false;
             }
-
-            Document.Selection.SetRange(textRange.StartPosition, textRange.EndPosition);
-
-            SelectedText = textRange.Text.Trim();
-            SelectionStart = textRange.StartPosition;
-
+            else
+            {
+                Document.Selection.SetRange(textRange.StartPosition, textRange.EndPosition);
+                SelectedText = textRange.Text.Trim();
+                SelectionStart = textRange.StartPosition;
+                IsSelectedTextHighlighted = Document.Selection.CharacterFormat.BackgroundColor.Equals(BackgroundColorHighlight);
+            }
+            
             InvokeCommand(SelectionChangedCommand);
         }
 
@@ -82,8 +80,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
         
         public static readonly DependencyProperty SelectionChangedCommandProperty = DependencyProperty.Register("SelectionChangedCommand", typeof (ICommand), typeof (EditorRichEditBox), new PropertyMetadata(null));
 
-        public static readonly DependencyProperty SelectionStartedCommandProperty = DependencyProperty.Register("SelectionStartedCommand", typeof (ICommand), typeof (EditorRichEditBox), new PropertyMetadata(null));
-
+        public static readonly DependencyProperty IsResetProperty = DependencyProperty.Register("IsReset", typeof (bool), typeof (EditorRichEditBox), new PropertyMetadata(true, OnIsResetChanged));
+        
 
         public string SelectedText
         {
@@ -121,10 +119,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             set { SetValue(SelectionChangedCommandProperty, value); }
         }
 
-        public ICommand SelectionStartedCommand
+        public bool IsReset
         {
-            get { return (ICommand) GetValue(SelectionStartedCommandProperty); }
-            set { SetValue(SelectionStartedCommandProperty, value); }
+            get { return (bool) GetValue(IsResetProperty); }
+            set { SetValue(IsResetProperty, value); }
         }
 
         private static void IsEditingEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -149,12 +147,26 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             editBox.IsReadOnly = false;
             editBox.Document.Selection.CharacterFormat.BackgroundColor = color;
             editBox.IsReadOnly = readOnlyState;
+
+            editBox.IsReset = false;
+        }
+        
+        private static void OnIsResetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var editBox = d as EditorRichEditBox;
+            if (editBox == null)
+                return;
+
+            var isReset = (bool) e.NewValue;
+            if (isReset)
+                editBox.ResetDocument();
         }
 
         protected override void OnDocumentLoad()
         {
             base.OnDocumentLoad();
             m_defaultBackgroundColor = Document.GetDefaultCharacterFormat().BackgroundColor;
+            IsReset = true;
         }
     }
 }
