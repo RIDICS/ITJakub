@@ -104,6 +104,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Page Include="View\Control\ZoomBarControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SelectBookView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -147,7 +151,9 @@
     <Compile Include="Enum\SearchByType.cs" />
     <Compile Include="Enum\SortType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\SelectPageViewModel.cs" />
+    <Compile Include="ViewModel\SelectPage\PagePhotoViewModel.cs" />
+    <Compile Include="ViewModel\SelectPage\PageTextViewModel.cs" />
+    <Compile Include="ViewModel\SelectPage\SelectPageViewModel.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SortItem.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Control\BindableRichEditBox.cs" />
@@ -155,6 +161,9 @@
     <Compile Include="View\Control\DelayedSlider.cs" />
     <Compile Include="View\Control\GridViewBehaviors.cs" />
     <Compile Include="View\Control\ScrollViewerHelper.cs" />
+    <Compile Include="View\Control\ZoomBarControl.xaml.cs">
+      <DependentUpon>ZoomBarControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Converter\PageOrderToLabelConverter.cs" />
     <Compile Include="View\Converter\RangeToZoomFactorConverter.cs" />
     <Compile Include="View\Converter\RangeToZoomPercentConverter.cs" />

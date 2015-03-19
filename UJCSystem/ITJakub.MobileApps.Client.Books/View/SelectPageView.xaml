@@ -16,7 +16,6 @@
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converter:PageOrderToLabelConverter x:Key="PageOrderToLabelConverter" />
             <converter:RangeToZoomFactorConverter x:Key="RangeToZoomFactorConverter" />
-            <converter:RangeToZoomPercentConverter x:Key="RangeToZoomPercentConverter" />
             <x:Double x:Key="ProgressRingSize">50</x:Double>
         </ResourceDictionary>
     </Page.Resources>
@@ -117,27 +116,42 @@
                           Header="Zobrazit fotografii stránky"
                           OnContent="Ano"
                           OffContent="Ne"
-                          IsOn="{Binding IsShowPhotoEnabled, Mode=TwoWay}" />
+                          IsOn="{Binding PagePhotoViewModel.IsShowEnabled, Mode=TwoWay}" />
 
             <Border Grid.Row="2"
                     Grid.Column="0"
                     Background="#50FFFFFF"
                     BorderBrush="#30000000"
-                    BorderThickness="2">
-                <control:BindableRichEditBox DocumentRtf="{Binding RtfText}"
-                                             IsReadOnly="True"
-                                             ScrollViewer.HorizontalScrollMode="Disabled" />
+                    BorderThickness="2"
+                    DataContext="{Binding PageTextViewModel}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <!--TODO add zoom support-->
+                    <control:BindableRichEditBox DocumentRtf="{Binding RtfText}"
+                                                 IsReadOnly="True"
+                                                 ScrollViewer.HorizontalScrollMode="Disabled" />
+                    
+                    <control:ZoomBarControl Grid.Row="1"
+                                            CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
+                                            ZoomInCommand="{Binding ZoomInCommand}"
+                                            ZoomOutCommand="{Binding ZoomOutCommand}" />
+                </Grid>
             </Border>
             <ProgressRing Grid.Row="2"
                           Grid.Column="0"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
-                          IsActive="{Binding LoadingPage}"
+                          IsActive="{Binding PageTextViewModel.Loading}"
                           Width="{StaticResource ProgressRingSize}"
                           Height="{StaticResource ProgressRingSize}"
                           Foreground="DarkBlue" />
 
-            <Grid Grid.Row="2" Grid.Column="2">
+            <Grid Grid.Row="2" Grid.Column="2"
+                  DataContext="{Binding PagePhotoViewModel}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -147,40 +161,27 @@
                               HorizontalScrollMode="Enabled"
                               HorizontalScrollBarVisibility="Visible"
                               control:ScrollViewerHelper.IsExternalZoomEnabled="True"
-                              control:ScrollViewerHelper.Zoom="{Binding ElementName=ZoomSlider, Path=Value, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}">
+                              control:ScrollViewerHelper.Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}">
             
                     <Image VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            Stretch="Uniform"
                            Source="{Binding PagePhoto}" />
                 </ScrollViewer>
-                
-                <Grid Grid.Row="1"
-                      Visibility="{Binding IsShowPhotoEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
 
-                    <SymbolIcon Grid.Column="0"
-                                Symbol="ZoomOut" />
-                    <Slider Grid.Column="1"
-                            x:Name="ZoomSlider"
-                            Margin="10,0,10,-10"
-                            ThumbToolTipValueConverter="{StaticResource RangeToZoomPercentConverter}"
-                            Minimum="-24"
-                            Maximum="24" />
-                    <SymbolIcon Grid.Column="2"
-                                Symbol="ZoomIn" />
-                </Grid>
+                <control:ZoomBarControl Grid.Row="1"
+                                        Visibility="{Binding IsShowEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
+                                        ZoomInCommand="{Binding ZoomInCommand}"
+                                        ZoomOutCommand="{Binding ZoomOutCommand}" />
+                
             </Grid>
             
             <ProgressRing Grid.Row="2"
                           Grid.Column="2"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
-                          IsActive="{Binding LoadingPhoto}"
+                          IsActive="{Binding PagePhotoViewModel.Loading}"
                           Width="{StaticResource ProgressRingSize}"
                           Height="{StaticResource ProgressRingSize}" />
             

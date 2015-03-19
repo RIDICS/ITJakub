@@ -1,12 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Books.Message;
 using ITJakub.MobileApps.Client.Books.Service;
 
-namespace ITJakub.MobileApps.Client.Books.ViewModel
+namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
 {
     public class SelectPageViewModel : ViewModelBase
     {
@@ -17,17 +16,14 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private bool m_loading;
         private PageViewModel m_selectedPage;
         private int m_currentPageNumber;
-        private ImageSource m_pagePhoto;
-        private bool m_loadingPage;
-        private bool m_loadingPhoto;
-        private bool m_isShowPhotoEnabled;
-        private string m_rtfText;
 
         public SelectPageViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
 
+            PagePhotoViewModel = new PagePhotoViewModel(m_dataService);
+            PageTextViewModel = new PageTextViewModel(m_dataService);
             GoBackCommand = new RelayCommand(navigationService.GoBack);
             SelectCommand = new RelayCommand(SubmitSelectedPage);
 
@@ -49,10 +45,21 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 PageList = list;
             });
         }
+        
+        private void OpenPage(PageViewModel page)
+        {
+            PageTextViewModel.OpenPage(page);
+            PagePhotoViewModel.OpenPagePhoto(page);
+        }
+
 
         public RelayCommand GoBackCommand { get; private set; }
         
         public RelayCommand SelectCommand { get; private set; }
+
+        public PageTextViewModel PageTextViewModel { get; set; }
+
+        public PagePhotoViewModel PagePhotoViewModel { get; set; }
 
         public BookViewModel Book
         {
@@ -61,6 +68,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             {
                 m_book = value;
                 RaisePropertyChanged();
+                PageTextViewModel.Book = value;
+                PagePhotoViewModel.Book = value;
             }
         }
 
@@ -104,41 +113,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 OpenPage(m_selectedPage);
             }
         }
-
-        private void OpenPage(PageViewModel page)
-        {
-            RtfText = null;
-            LoadingPage = true;
-            m_dataService.GetPageAsRtf(Book.Guid, page.PageId, (rtfText, exception) =>
-            {
-                LoadingPage = false;
-                if (exception != null)
-                    return;
-
-                RtfText = rtfText;
-            });    
-
-            OpenPagePhoto(page);
-        }
-
-
-        private void OpenPagePhoto(PageViewModel page)
-        {
-            PagePhoto = null;
-            if (!IsShowPhotoEnabled || page == null)
-                return;
-
-            LoadingPhoto = true;
-            m_dataService.GetPagePhoto(Book.Guid, page.PageId, (image, exception) =>
-            {
-                LoadingPhoto = false;
-                if (exception != null)
-                    return;
-
-                PagePhoto = image;
-            });
-        }
-
+        
         public int CurrentPageNumber
         {
             get { return m_currentPageNumber; }
@@ -154,66 +129,16 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         {
             get { return m_pageList != null ? m_pageList.Count : 0; }
         }
-
-        public string RtfText
-        {
-            get { return m_rtfText; }
-            set
-            {
-                m_rtfText = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public ImageSource PagePhoto
-        {
-            get { return m_pagePhoto; }
-            set
-            {
-                m_pagePhoto = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool IsShowPhotoEnabled
-        {
-            get { return m_isShowPhotoEnabled; }
-            set
-            {
-                m_isShowPhotoEnabled = value;
-                RaisePropertyChanged();
-                OpenPagePhoto(SelectedPage);
-            }
-        }
-
-        public bool LoadingPage
-        {
-            get { return m_loadingPage; }
-            set
-            {
-                m_loadingPage = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool LoadingPhoto
-        {
-            get { return m_loadingPhoto; }
-            set
-            {
-                m_loadingPhoto = value;
-                RaisePropertyChanged();
-            }
-        }
-
+        
         public int FirstPage
         {
             get { return PageCount == 0 ? 0 : 1; }
         }
-        
+
+
         private void SubmitSelectedPage()
         {
-            if (SelectedPage == null || LoadingPage || LoadingPhoto)
+            if (SelectedPage == null || PageTextViewModel.Loading || PagePhotoViewModel.Loading)
                 return;
 
             m_navigationService.ResetBackStack();
@@ -229,8 +154,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             {
                 BookInfo = bookDetails,
                 PageId = SelectedPage.PageId,
-                PagePhoto = PagePhoto,
-                RtfText = RtfText
+                PagePhoto = PagePhotoViewModel.PagePhoto,
+                RtfText = PageTextViewModel.RtfText
             };
             Messenger.Default.Send(new SelectedPageMessage {BookPage = pageDetails});
         }

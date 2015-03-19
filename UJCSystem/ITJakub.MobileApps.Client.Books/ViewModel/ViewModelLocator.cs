@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using ITJakub.MobileApps.Client.Books.ViewModel.SelectPage;
+using Microsoft.Practices.Unity;
 
 namespace ITJakub.MobileApps.Client.Books.ViewModel
 {
