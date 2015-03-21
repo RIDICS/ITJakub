@@ -6,8 +6,8 @@
 }
 
 <div class="transparent-content-container">
-    <div style="height: 20vh; padding: 2px;">
-        <div class="search transparent-content-container" style=" height: 100%; width: 70%; float: left">
+    <div class="search-with-saved-word-area">
+        <div class="search-area transparent-content-container">
             <div id="dictionarySearchDiv">
                 <form role="form" class="form-horizontal">
                     <div class="form-group searchbar">
@@ -26,30 +26,45 @@
                 </form>
             </div>
         </div>
-        <div class="saved-word content-container" style=" height: 100%; width: 30%; float:left;">
-            <h2>ulozena hesla</h2>
+        <div class="saved-word-area">
+            <div class="dictionary-header">
+                Uložená hesla
+            </div>
+            <div class="saved-word-body">
+            </div>
         </div>
     </div>
-    <div class="dictionary-selects transparent-content-container" style="height: 5vh;">
-        <div class="dictionary-select searchbar-button" style="float: left">
+    <div class="dictionary-selects transparent-content-container">
+        <div class="dictionary-select searchbar-button">
             Slovnínky o staré češtině
         </div>
 
-        <div class="dictionary-select  searchbar-button" style="float: left">
+        <div class="dictionary-select  searchbar-button">
             Slovnínky o střední češtině
         </div>
 
-        <div class="dictionary-select searchbar-button" style="float: left">
+        <div class="dictionary-select searchbar-button">
             Slovnínky o nové češtině
         </div>
-        <div class="dictionary-select searchbar-button" style="float: left">
+        <div class="dictionary-select searchbar-button">
             Obíbené slovníky
         </div>
     </div>
-    <div class="dictionary-result-area transparent-content-container" style="height: 75vh;">
-        <div class="dictionary-result-word-search-list content-container" style=" height: 100%; width: 20%; float: left">
-        </div>
-        <div class="dictionary-result-word-search-description content-container" style=" margin-left: 1%; height: 100%; width: 79%; float: left">
+    <div class="dictionary-result-area transparent-content-container">
+        <div class="dictionary-result-word-search-list">
+            <div class="dictionary-header">
+                <span class="words-result">Hesla (<span class="words-result-numbers">2</span>x)</span>
+                <span class="fulltext-result">Fulltext (<span class="fulltext-result-numbers">2</span>x)</span>
+            </div>
+            <div class="dictionary-result-word-search-list-body">
+            </div>
+            </div>
+        <div class="dictionary-result-word-search-description">
+            <div class="dictionary-header">
+                Heslové stati
+            </div>
+            <div class="dictionary-result-word-search-description-body">
+            </div>
         </div>
     </div>
 </div>
