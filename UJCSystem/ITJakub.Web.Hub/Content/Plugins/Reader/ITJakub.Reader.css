@@ -48,6 +48,9 @@ body {
   background-color: white;
   padding: 5px;
 }
+.transparent-content-container {
+  padding: 5px;
+}
 .centered {
   align-content: center;
   vertical-align: central;

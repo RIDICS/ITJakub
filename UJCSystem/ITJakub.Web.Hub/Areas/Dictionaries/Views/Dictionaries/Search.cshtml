@@ -5,6 +5,51 @@
     @Scripts.Render("~/itjakub/dictionaries/javascript")
 }
 
-<div class="content-container">
-    <h1>Dictionaries search</h1>
+<div class="transparent-content-container">
+    <div style="height: 20vh; padding: 2px;">
+        <div class="search transparent-content-container" style=" height: 100%; width: 70%; float: left">
+            <div id="dictionarySearchDiv">
+                <form role="form" class="form-horizontal">
+                    <div class="form-group searchbar">
+                        <div class="searchbar-buttons">
+                            <button id="searchButton" type="button" class="btn btn-default searchbar-button">
+                                Vyhledat
+                            </button>
+                            <button type="button" class="btn btn-default searchbar-button">
+                                Pokročilé
+                            </button>
+                        </div>
+                        <div class="searchbar-inputs">
+                            <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="saved-word content-container" style=" height: 100%; width: 30%; float:left;">
+            <h2>ulozena hesla</h2>
+        </div>
+    </div>
+    <div class="dictionary-selects transparent-content-container" style="height: 5vh;">
+        <div class="dictionary-select searchbar-button" style="float: left">
+            Slovnínky o staré češtině
+        </div>
+
+        <div class="dictionary-select  searchbar-button" style="float: left">
+            Slovnínky o střední češtině
+        </div>
+
+        <div class="dictionary-select searchbar-button" style="float: left">
+            Slovnínky o nové češtině
+        </div>
+        <div class="dictionary-select searchbar-button" style="float: left">
+            Obíbené slovníky
+        </div>
+    </div>
+    <div class="dictionary-result-area transparent-content-container" style="height: 75vh;">
+        <div class="dictionary-result-word-search-list content-container" style=" height: 100%; width: 20%; float: left">
+        </div>
+        <div class="dictionary-result-word-search-description content-container" style=" margin-left: 1%; height: 100%; width: 79%; float: left">
+        </div>
+    </div>
 </div>
