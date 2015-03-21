@@ -10,4 +10,20 @@
         body.slideUp();
     }
 });
+
+$(".dictionary-clear-filter").click(function () {
+    $(this).siblings(".dictionary-filter-input").val('').change();
+});
+
+$(".dictionary-filter-input").keyup(function () {
+    $(this).change();
+});
+
+$(".dictionary-filter-input").change(function () {
+    if ($(this).val() == '') {
+        $(this).parents(".dictionary-select-body").children(".concrete-dictionary").show();
+    } else {
+        $(this).parents(".dictionary-select-body").children(".concrete-dictionary").hide().filter(':contains(' + $(this).val() + ')').show();
+    }
+});
 //# sourceMappingURL=itjakub.dictionaries.js.map
