@@ -22,6 +22,7 @@
     height: 100%;
     width: 30%;
     float: left;
+        overflow: hidden;
 }
 
 .dictionary-selects {
@@ -54,20 +55,20 @@
     border-right: 1px solid @background-color;
 }
 
-.dictionary-filter{
-    margin-bottom : 5px;
-    margin-top : 5px; 
+.dictionary-filter {
+    margin-bottom: 5px;
+    margin-top: 5px;
     padding: 5px;
 }
 
-.dictionary-filter-input{
-    margin-right : 5px;
-    width : 90%;
+.dictionary-filter-input {
+    margin-right: 5px;
+    width: 90%;
 }
- 
-.dictionary-clear-filter {    
-    cursor : pointer;
-    width : 5%;
+
+.dictionary-clear-filter {
+    cursor: pointer;
+    width: 5%;
 }
 
 .dictionary-select-checkbox input {
@@ -103,4 +104,39 @@
     height: 100%;
     width: 79%;
     float: left;
+}
+
+.saved-words-body {
+    padding: 5px;
+}
+
+.saved-word {
+    margin: 5px;
+    background-color: @item-background-color;
+    padding: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    white-space:nowrap;
+}
+
+.saved-word-text {
+    color: white;
+    cursor: pointer;
+}
+
+.saved-word-text:hover{
+    color: black;    
+}
+
+.saved-word-clear {
+    cursor: pointer;
+    margin-top : 2px;
+}
+
+.saved-word-more {
+    float: right;
+}
+
+.saved-word-more:hover {
+    cursor: pointer;
 }

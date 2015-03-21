@@ -88,6 +88,7 @@ div.container {
   height: 100%;
   width: 30%;
   float: left;
+  overflow: hidden;
 }
 .dictionary-selects {
   height: 5vh;
@@ -156,5 +157,33 @@ div.container {
   height: 100%;
   width: 79%;
   float: left;
+}
+.saved-words-body {
+  padding: 5px;
+}
+.saved-word {
+  margin: 5px;
+  background-color: #84ced7;
+  padding: 5px;
+  border-radius: 5px;
+  display: inline-block;
+  white-space: nowrap;
+}
+.saved-word-text {
+  color: white;
+  cursor: pointer;
+}
+.saved-word-text:hover {
+  color: black;
+}
+.saved-word-clear {
+  cursor: pointer;
+  margin-top: 2px;
+}
+.saved-word-more {
+  float: right;
+}
+.saved-word-more:hover {
+  cursor: pointer;
 }
 /*# sourceMappingURL=itjakub.dictionaries.css.map */
