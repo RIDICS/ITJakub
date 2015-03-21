@@ -94,12 +94,38 @@ div.container {
   clear: both;
 }
 .dictionary-select {
-  padding: 5px;
   margin-right: 5px;
   float: left;
+  position: relative;
+}
+.dictionary-select-header {
+  padding: 5px;
   border-radius: 0;
   background-color: #84ced7;
   color: white;
+}
+.dictionary-select-body {
+  display: none;
+  padding: 5px;
+  background-color: white;
+  z-index: 3;
+  position: absolute;
+  min-width: 100%;
+  border-left: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
+}
+.dictionary-select-checkbox input {
+  width: 1.1em;
+  height: 1.1em;
+}
+.dictionary-select-more {
+  font-size: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.dictionary-select-more :hover {
+  cursor: pointer;
 }
 .dictionary-result-area {
   height: 75vh;
