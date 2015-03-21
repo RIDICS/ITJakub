@@ -28,7 +28,7 @@ $(".dictionary-filter-input").change(function() {
     }
 });
 
-$(".saved-word-more").click(function () {
+$(".saved-word-area-more").click(function () {
     var area = $(".saved-word-area");
     if (!area.hasClass("uncollapsed")) {
         $(this).children().removeClass("glyphicon-collapse-down");
@@ -50,4 +50,13 @@ $(".saved-word-more").click(function () {
         });
     }
     
+});
+
+
+$(".saved-word-remove").click(function () {
+    $(this).parent(".saved-word").fadeOut(function () { $(this).remove(); }); //TODO populate request on remove to server
+});
+
+$(".saved-word-text").click(function () {
+    alert("here should be request for new search with word: "+$(this).text()); //TODO populate request on server
 });
