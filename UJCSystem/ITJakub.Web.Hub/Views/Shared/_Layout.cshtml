@@ -98,7 +98,29 @@
                         </li>
                         <li><a href='#'><span>Staré mluvnice</span></a></li>
                         <li><a href='#'><span>Odborná literatura</span></a></li>
-                        <li class='last'><a href='#'><span>Kartotéky excerpce</span></a></li>
+                        <li class='has-sub last'>
+                            <a href='@Url.Action("Index", "CardFiles", new { area = "CardFiles" })'><span>Kartotéky excerpce</span></a>
+                            <ul>
+                                <li>
+                                    <a href='@Url.Action("Search", "CardFiles", new { area = "CardFiles" })'><span>Vyhledávání</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Listing", "CardFiles", new { area = "CardFiles" })'><span>Listování</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'><span>Seznam</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Information", "CardFiles", new {area = "CardFiles"})'><span>Informace</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("TermsOfUse", "CardFiles", new {area = "CardFiles"})'><span>Podmínky užití</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Feedback", "CardFiles", new {area = "CardFiles"})'><span>Připomínky</span></a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class='has-sub'>
                             <a href='@Url.Action("Index", "Bibliographies", new { area = "Bibliographies" })'><span>Bibliografický modul</span></a>
                             <ul>

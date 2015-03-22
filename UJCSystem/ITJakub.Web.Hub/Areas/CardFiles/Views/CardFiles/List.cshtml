@@ -1,0 +1,31 @@
+﻿@section styles{
+    @Styles.Render("~/itjakub/cardfiles/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/cardfiles/javascript")
+}
+
+<div id="cardFilesListHeader">
+    <div id="cardFilesListSearchDiv" style="float: left; width: 70%">
+        <form role="form" class="form-horizontal">
+            <div class="form-group searchbar">
+                <div class="searchbar-buttons">
+                    <button id="searchButton" type="button" class="btn btn-default searchbar-button">
+                        Vyhledat
+                    </button>
+                    <button type="button" class="btn btn-default searchbar-button">
+                        Pokročilé
+                    </button>
+                </div>
+                <div class="searchbar-inputs">
+                    <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="float: left; margin-left: 50px;">
+        Řadit podle
+        <div id="cardFilesResultsHeader" style="display: inline-block">
+        </div>
+    </div>
+</div>

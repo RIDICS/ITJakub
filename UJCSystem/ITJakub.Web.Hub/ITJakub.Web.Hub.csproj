@@ -164,6 +164,10 @@
     <Compile Include="Areas\Bibliographies\BundleConfig.cs" />
     <Compile Include="Areas\Bibliographies\Controllers\BibliographiesController.cs" />
     <Compile Include="Areas\Bibliographies\RouteConfig.cs" />
+    <Compile Include="Areas\CardFiles\BundleConfig.cs" />
+    <Compile Include="Areas\CardFiles\CardFilesAreaRegistration.cs" />
+    <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
+    <Compile Include="Areas\CardFiles\RouteConfig.cs" />
     <Compile Include="Areas\Dictionaries\BundleConfig.cs" />
     <Compile Include="Areas\Dictionaries\RouteConfig.cs" />
     <Compile Include="Areas\Editions\BundleConfig.cs" />
@@ -195,6 +199,12 @@
     </Content>
     <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.min.css">
       <DependentUpon>itjakub.dictionaries.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.css">
+      <DependentUpon>itjakub.cardfiles.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.min.css">
+      <DependentUpon>itjakub.cardfiles.css</DependentUpon>
     </Content>
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.css">
       <DependentUpon>itjakub.dictionaries.less</DependentUpon>
@@ -412,6 +422,18 @@
     <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\TermsOfUse.cshtml" />
     <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.less" />
+    <Content Include="Areas\CardFiles\Views\web.config" />
+    <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.less" />
+    <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.css.map">
+      <DependentUpon>itjakub.cardfiles.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\CardFiles\Views\CardFiles\List.cshtml" />
+    <Content Include="Areas\CardFiles\Views\CardFiles\TermsOfUse.cshtml" />
+    <Content Include="Areas\CardFiles\Views\CardFiles\Information.cshtml" />
+    <Content Include="Areas\CardFiles\Views\CardFiles\Feedback.cshtml" />
+    <Content Include="Areas\CardFiles\Views\CardFiles\Search.cshtml" />
+    <Content Include="Areas\CardFiles\Views\CardFiles\Listing.cshtml" />
+    <Content Include="Areas\CardFiles\Views\_ViewStart.cshtml" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
@@ -474,6 +496,8 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Bibliographies\Models\" />
     <Folder Include="Areas\Bibliographies\Views\Shared\" />
+    <Folder Include="Areas\CardFiles\Models\" />
+    <Folder Include="Areas\CardFiles\Views\Shared\" />
     <Folder Include="Areas\Dictionaries\Models\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
@@ -490,6 +514,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.List.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
+    <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfiles.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.sorting.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.configuration.ts" />
