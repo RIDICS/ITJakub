@@ -1,3 +1,99 @@
-﻿/*body {
-    background-color:red;
-}*/
+﻿@import "../../../Content/ITJakub.DefaultTheme.less";
+
+.cardfile-header {
+    background-color: @item-background-color;
+    color: white;
+    padding: 5px;
+}
+
+.search-area {
+    height: 100%;
+    width: 70%;
+    float: left;
+}
+
+
+.cardfile-selects {
+    height: 5vh;
+    clear: both;
+}
+
+.cardfile-select {
+    margin-right: 5px;
+    float: left;
+    position: relative;
+}
+
+.cardfile-select-header {
+    padding: 5px;
+    border-radius: 0;
+    background-color: @item-background-color;
+    color: white;
+}
+
+.cardfile-select-body {
+    display: none;
+    padding: 5px;
+    background-color: white;
+    z-index: 3;
+    position: absolute;
+    min-width: 100%;
+    border-left: 1px solid @background-color;
+    border-bottom: 1px solid @background-color;
+    border-right: 1px solid @background-color;
+}
+
+.concrete-cardfile-name {
+    margin-left: 5px;
+}
+
+.concrete-cardfile-checkbox {
+    float: left;
+    margin-top: 0!important;
+}
+
+.save-cardfile {
+    float: right;
+}
+
+.delete-cardfile {
+    float: right;
+    display: none;
+    color : gold
+}
+
+.cardfile-filter {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+.cardfile-filter-input {
+    margin-right: 5px;
+    width: 90%;
+}
+
+.cardfile-clear-filter {
+    cursor: pointer;
+    width: 5%;
+}
+
+.cardfile-select-checkbox input {
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.cardfile-select-more {
+    font-size: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.cardfile-select-more :hover {
+    cursor: pointer;
+}
+
+.cardfile-result-area {
+    height: 75vh;
+    clear: both;
+}

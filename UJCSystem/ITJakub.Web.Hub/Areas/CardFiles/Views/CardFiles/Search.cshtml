@@ -1,10 +1,90 @@
 ﻿@section styles{
-    @Styles.Render("~/itjakub/bibliographies/css")
+    @Styles.Render("~/itjakub/cardfiles/css")
 }
 @section scripts{
-    @Scripts.Render("~/itjakub/bibliographies/javascript")
+    @Scripts.Render("~/itjakub/cardfiles/javascript")
 }
 
-<div class="content-container">
-    <h1>Search</h1>
+<div class="transparent-content-container">
+    <div class="search-area">
+        <div id="cardfileSearchDiv">
+            <form role="form" class="form-horizontal">
+                <div class="form-group searchbar">
+                    <div class="searchbar-buttons">
+                        <button id="searchButton" type="button" class="btn btn-default searchbar-button">
+                            Vyhledat
+                        </button>
+                        <button type="button" class="btn btn-default searchbar-button">
+                            Pokročilé
+                        </button>
+                    </div>
+                    <div class="searchbar-inputs">
+                        <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                    </div>
+                </div>
+            </form>
+        </div>
+     </div>
+  
+    <div class="cardfile-selects">
+        <div class="cardfile-select">
+            <div class="cardfile-select-header">
+                <span class="cardfile-select-checkbox"><input id="cardfile-select" type="checkbox" /></span>
+                <span class="cardfile-select-text">Výběr kartotéky</span>
+                <span class="cardfile-select-more"><span class="glyphicon glyphicon-chevron-down"></span></span>
+            </div>
+            <div class="cardfile-select-body">
+                <div class="cardfile-filter"><input class="cardfile-filter-input" placeholder="Filtrovat podle názvu.."><span class="cardfile-clear-filter glyphicon glyphicon glyphicon-remove-circle"></span></div>
+                <div class="concrete-cardfile">
+                    <input class="concrete-cardfile-checkbox checkbox" type="checkbox" />
+                    <span class="save-cardfile glyphicon glyphicon-star-empty"></span>
+                    <span class="delete-cardfile glyphicon glyphicon-star"></span>
+                    <span class="concrete-cardfile-name">kartoteka a</span>
+                </div>
+                <div class="concrete-cardfile">
+                    <input class="concrete-cardfile-checkbox checkbox" type="checkbox" />
+                    <span class="save-cardfile glyphicon glyphicon-star-empty"></span>
+                    <span class="delete-cardfile glyphicon glyphicon-star"></span>
+                    <span class="concrete-cardfile-name">kartoteka b</span>
+                </div>
+                <div class="concrete-cardfile">
+                    <input class="concrete-cardfile-checkbox checkbox" type="checkbox" />
+                    <span class="save-cardfile glyphicon glyphicon-star-empty"></span>
+                    <span class="delete-cardfile glyphicon glyphicon-star"></span>
+                    <span class="concrete-cardfile-name">kartoteka c</span>
+                </div>
+            </div>
+        </div>
+        <div class="cardfile-select">
+            <div class="cardfile-select-header">
+                <span class="cardfile-select-checkbox"><input id="favorite-cardfile-select" type="checkbox" /></span>
+                <span class="cardfile-select-text">Oblíbené kartotéky</span>
+                <span class="cardfile-select-more"><span class="glyphicon glyphicon-chevron-down"></span></span>
+            </div>
+            <div class="cardfile-select-body">
+                <div class="cardfile-filter"><input class="cardfile-filter-input" placeholder="Filtrovat podle názvu.."><span class="cardfile-clear-filter glyphicon glyphicon glyphicon-remove-circle"></span></div>
+                <div class="concrete-cardfile">
+                    <input class="concrete-cardfile-checkbox checkbox" type="checkbox" />
+                    <span class="save-cardfile glyphicon glyphicon-star-empty"></span>
+                    <span class="delete-cardfile glyphicon glyphicon-star"></span>
+                    <span class="concrete-cardfile-name">kartoteka a</span>
+                </div>
+                <div class="concrete-cardfile">
+                    <input class="concrete-cardfile-checkbox checkbox" type="checkbox" />
+                    <span class="save-cardfile glyphicon glyphicon-star-empty"></span>
+                    <span class="delete-cardfile glyphicon glyphicon-star"></span>
+                    <span class="concrete-cardfile-name">kartoteka b</span>
+                </div>
+                <div class="concrete-cardfile">
+                    <input class="concrete-cardfile-checkbox checkbox" type="checkbox" />
+                    <span class="save-cardfile glyphicon glyphicon-star-empty"></span>
+                    <span class="delete-cardfile glyphicon glyphicon-star"></span>
+                    <span class="concrete-cardfile-name">kartoteka c</span>
+                </div>
+            </div>
+        </div>
+    </div>   
+    <div class="cardfile-result-area">
+
+    </div>
 </div>
