@@ -116,6 +116,21 @@ div.container {
   border-bottom: 1px solid #e5e5e5;
   border-right: 1px solid #e5e5e5;
 }
+.concrete-dictionary-name {
+  margin-left: 5px;
+}
+.concrete-dictionary-checkbox {
+  float: left;
+  margin-top: 0!important;
+}
+.save-dictionary {
+  float: right;
+}
+.delete-dictionary {
+  float: right;
+  display: none;
+  color: #ffd700;
+}
 .dictionary-filter {
   margin-bottom: 5px;
   margin-top: 5px;

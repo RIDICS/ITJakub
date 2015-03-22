@@ -60,3 +60,22 @@ $(".saved-word-remove").click(function () {
 $(".saved-word-text").click(function () {
     alert("here should be request for new search with word: "+$(this).text()); //TODO populate request on server
 });
+
+$(".delete-dictionary").click(function () {
+    $(this).siblings(".save-dictionary").show();
+    $(this).hide();
+    //TODO populate request on delete from favorites
+});
+
+$(".save-dictionary").click(function () {
+    $(this).siblings(".delete-dictionary").show();
+    $(this).hide();
+    //TODO populate request on save to favorites
+});
+
+$(".concrete-dictionary-checkbox").click(function () {
+    //TODO add dictionary to search criteria
+});
+
+
+
