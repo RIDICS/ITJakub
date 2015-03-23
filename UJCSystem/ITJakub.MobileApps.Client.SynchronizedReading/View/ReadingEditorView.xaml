@@ -66,8 +66,13 @@
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Vybrat knihu"
                                 Command="{Binding SelectBookCommand}" />
-                        <Button Content="Uložit zadání"
-                                x:Name="SaveTaskButton">
+                        <Button x:Name="SaveTaskButton">
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Save"
+                                            Margin="0,-3,3,-3" />
+                                <TextBlock Text="Uložit zadání" />
+                            </StackPanel>
+                            
                             <Button.Flyout>
                                 <Flyout control:FlyoutHelpers.IsOpen="{Binding IsSaveFlyoutOpen, Mode=TwoWay}"
                                         control:FlyoutHelpers.Parent="{Binding ElementName=SaveTaskButton}">

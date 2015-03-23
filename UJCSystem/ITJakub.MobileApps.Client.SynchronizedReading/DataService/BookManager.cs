@@ -29,13 +29,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             get { return m_pageId; }
             set { m_pageId = value; }
         }
-        
-        public void SetTask(string data)
-        {
-            // TODO
-            m_bookGuid = string.Empty;
-            m_pageId = "1L";
-        }
 
         public void GetPageList(Action<ObservableCollection<PageViewModel>, Exception> callback)
         {
@@ -54,7 +47,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
 
         public void GetPageAsRtf(Action<string, Exception> callback)
         {
-            //m_pageId = pageId;
             m_bookDataService.GetPageAsRtf(m_bookGuid, m_pageId, callback);
         }
 

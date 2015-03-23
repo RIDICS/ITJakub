@@ -11,12 +11,14 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
     public class ReaderDataService
     {
         private readonly SynchronizationManager m_synchronizationManager;
+        private readonly ReaderTaskManager m_taskManager;
         private readonly BookManager m_bookManager;
-
+        
         public ReaderDataService(ISynchronizeCommunication applicationCommunication)
         {
-            m_synchronizationManager = new SynchronizationManager(applicationCommunication);
             m_bookManager = new BookManager(Book.DataService);
+            m_synchronizationManager = new SynchronizationManager(applicationCommunication);
+            m_taskManager = new ReaderTaskManager(applicationCommunication, m_bookManager);
         }
 
         public void StartPollingUpdates(Action<UpdateViewModel, Exception> callback)
@@ -71,7 +73,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
 
         public void SetTask(string data)
         {
-            m_bookManager.SetTask(data);
+            m_taskManager.SetTask(data);
         }
 
         public void GetCurrentPage(Action<string> callback)
@@ -83,6 +85,22 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         {
             // TODO replace with method for notifying other users
             m_bookManager.PageId = value.PageId;
+        }
+
+        public void SetCurrentBook(string bookGuid, string pageId)
+        {
+            m_bookManager.BookGuid = bookGuid;
+            m_bookManager.PageId = pageId;
+        }
+
+        public string GetCurrentBookGuid()
+        {
+            return m_bookManager.BookGuid;
+        }
+
+        public void CreateTask(string taskName, string defaultPageId, Action<Exception> callback)
+        {
+            m_taskManager.CreateTask(taskName, defaultPageId, callback);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Windows.UI.Popups;
-using Windows.UI.Xaml.Media;
+﻿using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
@@ -10,7 +9,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
     public class ReadingEditorViewModel : EditorBaseViewModel
     {
         private readonly ReaderDataService m_dataService;
-        private string m_bookGuid;
         private string m_bookName;
         private string m_bookAuthor;
         private int? m_bookYear;
@@ -164,7 +162,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             if (book == null)
                 return;
 
-            m_bookGuid = book.BookInfo.Guid;
+            m_dataService.SetCurrentBook(book.BookInfo.Guid, book.PageId);
             BookAuthor = book.BookInfo.Author;
             BookName = book.BookInfo.Title;
             BookYear = book.BookInfo.Year;
@@ -179,7 +177,22 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         {
             if (IsShowPhotoEnabled)
             {
-                //TODO load photo from server
+                if (BookPagePhoto != null)
+                    return;
+
+                LoadingPhoto = true;
+                m_dataService.GetPagePhoto((image, exception) =>
+                {
+                    LoadingPhoto = false;
+                    if (exception != null)
+                    {
+                        //TODO show error
+                        IsShowPhotoEnabled = false;
+                        return;
+                    }
+
+                    BookPagePhoto = image;
+                });
             }
             else
             {
@@ -198,7 +211,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 isAnyError = true;
             }
 
-            if (m_bookGuid == null)
+            if (DefaultPageId == null)
             {
                 ErrorBookNotSelected = true;
                 isAnyError = true;
@@ -209,11 +222,22 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
 
         private void SaveTask()
         {
+            IsSaveFlyoutOpen = false;
+
             if (IsError())
                 return;
 
-            //TODO save task
-            new MessageDialog("Zatim neni podporovano").ShowAsync();
+            Saving = true;
+            m_dataService.CreateTask(TaskName, DefaultPageId, exception =>
+            {
+                Saving = false;
+                if (exception != null)
+                {
+                    return;
+                }
+
+                GoBack();
+            });
         }
     }
 }

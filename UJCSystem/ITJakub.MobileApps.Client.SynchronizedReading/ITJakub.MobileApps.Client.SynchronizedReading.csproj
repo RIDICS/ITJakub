@@ -117,8 +117,10 @@
     <Compile Include="AppInfo.cs" />
     <Compile Include="DataContract\ControlContract.cs" />
     <Compile Include="DataContract\FullUpdateContract.cs" />
+    <Compile Include="DataContract\SelectedBookTaskContract.cs" />
     <Compile Include="DataContract\UpdateContract.cs" />
     <Compile Include="DataService\BookManager.cs" />
+    <Compile Include="DataService\ReaderTaskManager.cs" />
     <Compile Include="ViewModel\ControlViewModel.cs" />
     <Compile Include="DataService\ReaderDataService.cs" />
     <Compile Include="DataService\SynchronizationManager.cs" />
