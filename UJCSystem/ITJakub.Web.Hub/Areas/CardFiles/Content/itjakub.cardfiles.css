@@ -69,11 +69,6 @@ div.container {
   background-color: #84ced7;
   color: white;
 }
-.cardfile-header {
-  background-color: #84ced7;
-  color: white;
-  padding: 5px;
-}
 .search-area {
   height: 100%;
   width: 70%;
@@ -148,81 +143,5 @@ div.container {
 .cardfile-result-area {
   margin-top: 5px;
   clear: both;
-}
-.cardfile-listing {
-  height: 460px;
-  margin-bottom: 5px;
-}
-.card-file-listing-left-panel {
-  background-color: white;
-  height: 100%;
-  width: 700px;
-  float: left;
-}
-.headword-description {
-  font-size: 1.5em;
-  margin-left: 5px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-.cardfile-image {
-  width: 700px;
-  height: 425px;
-  margin-left: auto ;
-  margin-right: auto ;
-  text-align: center;
-}
-.cardfile-image img {
-  width: 99%;
-  height: 99%;
-}
-.card-file-listing-right-panel {
-  background-color: #84ced7;
-  height: 100%;
-  width: 300px;
-  float: left;
-  padding: 5px;
-  color: white;
-}
-.cardfile-paging-controls {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.cardfile-pages {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.cardfile-description {
-  font-size: 1.3em;
-}
-/* slider style*/
-.cardfile-paging-controls .ui-slider {
-  background: white;
-  height: 2px;
-  width: 95%;
-  margin-left: 2.5%;
-  border: none;
-}
-.cardfile-paging-controls .ui-slider > .ui-slider-handle {
-  background: gray;
-  border-radius: 50%;
-  border: none;
-  top: -0.5em;
-}
-.cardfile-paging-controls span.ui-slider-handle:focus {
-  outline: 0;
-}
-.cardfile-paging-controls .slider-tip {
-  opacity: 1;
-  width: 100px;
-  bottom: 120%;
-  margin-left: -3.5em;
-}
-.cardfile-paging-controls .tooltip-inner {
-  background-color: white;
-  color: black;
-}
-.cardfile-paging-controls .tooltip-arrow {
-  border-top-color: white !important;
 }
 /*# sourceMappingURL=itjakub.cardfiles.css.map */

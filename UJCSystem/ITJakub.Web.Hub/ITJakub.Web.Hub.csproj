@@ -200,6 +200,12 @@
     <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.min.css">
       <DependentUpon>itjakub.dictionaries.css</DependentUpon>
     </Content>
+    <Content Include="Areas\CardFiles\Content\itjakub.cardfile.css">
+      <DependentUpon>itjakub.cardfile.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\CardFiles\Content\itjakub.cardfile.min.css">
+      <DependentUpon>itjakub.cardfile.css</DependentUpon>
+    </Content>
     <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.css">
       <DependentUpon>itjakub.cardfiles.less</DependentUpon>
     </Content>
@@ -440,6 +446,10 @@
     <Content Include="Areas\CardFiles\Views\CardFiles\Search.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Listing.cshtml" />
     <Content Include="Areas\CardFiles\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\CardFiles\Content\itjakub.cardfile.less" />
+    <Content Include="Areas\CardFiles\Content\itjakub.cardfile.css.map">
+      <DependentUpon>itjakub.cardfile.css</DependentUpon>
+    </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
@@ -524,6 +534,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.List.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
+    <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileCreator.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfiles.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.sorting.ts" />

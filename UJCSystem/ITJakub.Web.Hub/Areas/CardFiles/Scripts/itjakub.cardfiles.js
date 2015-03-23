@@ -43,46 +43,10 @@ $(".concrete-cardfile-checkbox").click(function () {
     //TODO add cardfile to search criteria
 });
 
-//slider
 $(document).ready(function () {
-    var slider = $(".slider");
-    $(slider).slider({
-        min: 0,
-        max: 100,
-        value: 0,
-        start: function (event, ui) {
-            $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
-        },
-        stop: function (event, ui) {
-            $(event.target).find('.ui-slider-handle').find('.slider-tip').fadeOut(1000);
-        },
-        slide: function (event, ui) {
-            $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
-            $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
-            $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Lístek - 2047 <br/> Heslo - xxx");
-        }
-    });
-
-    var sliderTooltip = document.createElement('div');
-    $(sliderTooltip).addClass('tooltip top slider-tip');
-    var arrowTooltip = document.createElement('div');
-    $(arrowTooltip).addClass('tooltip-arrow');
-    sliderTooltip.appendChild(arrowTooltip);
-
-    var innerTooltip = document.createElement('div');
-    $(innerTooltip).addClass('tooltip-inner');
-    $(innerTooltip).html("Lístek - 2046 <br/> Heslo - netbalivý");
-    sliderTooltip.appendChild(innerTooltip);
-    $(sliderTooltip).hide();
-
-    var sliderHandle = $(slider).find('.ui-slider-handle');
-    $(sliderHandle).append(sliderTooltip);
-    $(sliderHandle).hover(function (event) {
-        $(event.target).find('.slider-tip').stop(true, true);
-        $(event.target).find('.slider-tip').show();
-    });
-    $(sliderHandle).mouseout(function (event) {
-        $(event.target).find('.slider-tip').fadeOut(1000);
-    });
+    var cardsCreator = new CardFileCreator("div.cardfile-result-area");
+    cardsCreator.makeCardFile();
+    cardsCreator.makeCardFile();
+    cardsCreator.makeCardFile();
 });
 //# sourceMappingURL=itjakub.cardfiles.js.map

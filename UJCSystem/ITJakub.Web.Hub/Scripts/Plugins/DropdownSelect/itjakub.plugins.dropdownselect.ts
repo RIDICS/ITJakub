@@ -14,7 +14,6 @@ class DropDownSelect {
 
     makeDropdown() {
 
-        $(this.dropDownSelectContainer).empty();
         var dropDownDiv = document.createElement("div");
         $(dropDownDiv).addClass("dropdown-select");
 
@@ -41,7 +40,7 @@ class DropDownSelect {
 
         var textSpan = document.createElement("span");
         $(textSpan).addClass("dropdown-select-text");
-        textSpan.innerText = "Slovnínky o staré češtině";
+        textSpan.innerText = "Slovnínky o staré češtině"; //TODO read from parameter
 
         dropDownHeadDiv.appendChild(textSpan);
 
@@ -109,14 +108,14 @@ class DropDownSelect {
 
         //TODO load cascades of childrens
 
-        this.makeItem(dropDownBodyDiv, "slovn9k asaa");
+        this.makeItem(dropDownBodyDiv, "slovn9k asaa"); //TODO read from parameter
 
         dropDownDiv.appendChild(dropDownBodyDiv);
     }
 
     private makeItem(dropDownBodyDiv: HTMLDivElement, name : string) {
         var itemDiv = document.createElement("div");
-        $(itemDiv).addClass("concrete-item");
+        $(itemDiv).addClass("concrete-item"); //TODO add data-item-id, data-item-name, data-item-type, data-item-is-favorite
 
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
