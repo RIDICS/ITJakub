@@ -24,7 +24,6 @@
             <converter1:UserInfoToStringConverter x:Key="UserInfoToStringConverter" />
             <converter1:BooleanToGridVisibility x:Key="BooleanToGridVisibility" />
             <converter1:RangeToZoomFactorConverter x:Key="RangeToZoomFactorConverter" />
-            <converter1:RangeToZoomPercentConverter x:Key="RangeToZoomPercentConverter" />
             <x:Double x:Key="ProgressRingSize">50</x:Double>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -47,17 +46,32 @@
               Grid.Column="0"
               DataContext="{Binding TextReaderViewModel}">
             
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="53" />
+            </Grid.RowDefinitions>
+            
             <control:ReaderRichEditBox DocumentRtf="{Binding DocumentRtf}"
                                        SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                                        SelectionLength="{Binding SelectionLength, Mode=TwoWay}"
                                        CursorPosition="{Binding CursorPosition, Mode=TwoWay}"
                                        Mode="{Binding CurrentMode}"
                                        PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
-                                       PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}" />
-            <ProgressRing Width="{StaticResource ProgressRingSize}"
+                                       PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
+                                       IsExternalZoomEnabled="True"
+                                       Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}" />
+            
+            <ProgressRing Grid.Row="0"
+                          Width="{StaticResource ProgressRingSize}"
                           Height="{StaticResource ProgressRingSize}"
                           IsActive="{Binding Loading}"
                           Foreground="DarkBlue" />
+
+            <!--TODO modify ReaderRichEditBox to allow zooming (correct width and correct scrolling in zoom mode)-->
+            <!--<controlBooks:ZoomBarControl Grid.Row="1"
+                                         CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
+                                         ZoomInCommand="{Binding ZoomInCommand}"
+                                         ZoomOutCommand="{Binding ZoomOutCommand}" />-->
         </Grid>
         
         <Grid Grid.Row="0"
@@ -66,7 +80,7 @@
               DataContext="{Binding ImageReaderViewModel}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="53" />
             </Grid.RowDefinitions>
             
             <control:ReaderImage PointerPositionX="{Binding PointerPositionX, Mode=TwoWay}"
@@ -75,7 +89,7 @@
                                  ImageSource="{Binding Photo}"
                                  PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
                                  PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
-                                 CurrentZoomFactor="{Binding ElementName=ZoomSlider, Path=Value, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}"
+                                 CurrentZoomFactor="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}"
                                  IsScrollingEnabled="{Binding ElementName=ScrollingEnabledSwitch, Path=IsOn, Mode=TwoWay}"
                                  Visibility="{Binding ElementName=RootElement, Path=DataContext.IsPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}" />
             
@@ -84,22 +98,10 @@
                           Height="{StaticResource ProgressRingSize}"
                           IsActive="{Binding Loading}" />
             
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                
-                <SymbolIcon Grid.Column="0" Symbol="ZoomOut" />
-                <SymbolIcon Grid.Column="2" Symbol="ZoomIn" />
-                <Slider Grid.Column="1"
-                        x:Name="ZoomSlider"
-                        Margin="10,0,10,-10"
-                        Minimum="-24"
-                        Maximum="24"
-                        ThumbToolTipValueConverter="{StaticResource RangeToZoomPercentConverter}" />
-            </Grid>
+            <controlBooks:ZoomBarControl Grid.Row="1"
+                                         CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
+                                         ZoomInCommand="{Binding ZoomInCommand}"
+                                         ZoomOutCommand="{Binding ZoomOutCommand}" />
         </Grid>
         
         <StackPanel Grid.Row="0"

@@ -118,29 +118,39 @@
                           OffContent="Ne"
                           IsOn="{Binding PagePhotoViewModel.IsShowEnabled, Mode=TwoWay}" />
 
-            <Border Grid.Row="2"
-                    Grid.Column="0"
-                    Background="#50FFFFFF"
-                    BorderBrush="#30000000"
-                    BorderThickness="2"
-                    DataContext="{Binding PageTextViewModel}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+            <Grid Grid.Row="2"
+                  Grid.Column="0"
+                  DataContext="{Binding PageTextViewModel}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="53" />
+                </Grid.RowDefinitions>
+                
+                <Border Background="White"
+                        BorderBrush="#30000000"
+                        BorderThickness="2">
                     
-                    <!--TODO add zoom support-->
-                    <control:BindableRichEditBox DocumentRtf="{Binding RtfText}"
-                                                 IsReadOnly="True"
-                                                 ScrollViewer.HorizontalScrollMode="Disabled" />
-                    
-                    <control:ZoomBarControl Grid.Row="1"
-                                            CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
-                                            ZoomInCommand="{Binding ZoomInCommand}"
-                                            ZoomOutCommand="{Binding ZoomOutCommand}" />
-                </Grid>
-            </Border>
+                    <ScrollViewer HorizontalScrollMode="Enabled"
+                                  VerticalScrollMode="Enabled"
+                                  ZoomMode="Enabled"
+                                  HorizontalScrollBarVisibility="Visible"
+                                  control:ScrollViewerHelper.IsExternalZoomEnabled="True"
+                                  control:ScrollViewerHelper.Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}">
+                        
+                            <control:BindableRichEditBox DocumentRtf="{Binding RtfText}"
+                                                         IsReadOnly="True"
+                                                         ScrollViewer.HorizontalScrollMode="Disabled"
+                                                         ScrollViewer.VerticalScrollMode="Disabled"
+                                                         ScrollViewer.ZoomMode="Disabled"
+                                                         VerticalAlignment="Top" />
+                    </ScrollViewer>
+                </Border>
+
+                <control:ZoomBarControl Grid.Row="1"
+                                        CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
+                                        ZoomInCommand="{Binding ZoomInCommand}"
+                                        ZoomOutCommand="{Binding ZoomOutCommand}" />
+            </Grid>
             <ProgressRing Grid.Row="2"
                           Grid.Column="0"
                           HorizontalAlignment="Center"
@@ -154,7 +164,7 @@
                   DataContext="{Binding PagePhotoViewModel}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="53" />
                 </Grid.RowDefinitions>
                 
                 <ScrollViewer Background="#30000000"

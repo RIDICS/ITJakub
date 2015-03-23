@@ -25,7 +25,8 @@
                 Command="{Binding ZoomOutCommand}"
                 VerticalAlignment="Stretch"
                 BorderThickness="0"
-                Padding="4">
+                Margin="-5,0,-5,0"
+                Padding="10">
             <SymbolIcon Symbol="ZoomOut" />
         </Button>
 
@@ -41,7 +42,8 @@
                 Command="{Binding ZoomInCommand}"
                 VerticalAlignment="Stretch"
                 BorderThickness="0"
-                Padding="4">
+                Margin="-5,0,-5,0"
+                Padding="10">
             <SymbolIcon Symbol="ZoomIn" />
         </Button>
     </Grid>

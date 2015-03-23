@@ -14,7 +14,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
     {
         private const double FinalPointerCorrectionX = 17.0;
         private const double PointerCorrectionX = 8.0;
-        private const double PointerCorrectionY = 30.0;
+        private const double PointerCorrectionY = 50.0;
         private const double ScrollStep = 20.0;
 
         public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource", typeof (ImageSource), typeof (ReaderImage), new PropertyMetadata(null, OnImageSourceChanged));

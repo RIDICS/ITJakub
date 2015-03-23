@@ -35,7 +35,7 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
         }
 
 
-        private static void OnZoomEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public static void OnZoomEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var scrollViewer = d as ScrollViewer;
             if (scrollViewer == null)
@@ -66,7 +66,7 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
             m_isViewChangeByScrollViewer = false;
         }
 
-        private static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var scrollViewer = d as ScrollViewer;
             var newZoom = (float) e.NewValue;

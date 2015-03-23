@@ -11,16 +11,20 @@
                     <Grid>
                         <ScrollViewer x:Name="ScrollViewer"
                                       HorizontalScrollMode="Disabled"
-                                      Background="{TemplateBinding Background}"
+                                      Background="White"
                                       BorderBrush="{TemplateBinding BorderBrush}"
-                                      BorderThickness="{TemplateBinding BorderThickness}">
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      ZoomMode="Disabled"
+                                      control:ScrollViewerHelper.IsExternalZoomEnabled="True"
+                                      control:ScrollViewerHelper.Zoom="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Zoom, Mode=TwoWay}">
                             
-                            <Grid>
+                            <Grid VerticalAlignment="Top">
                                 <control:BindableRichEditBox
                                     x:Name="RichEditBox"
                                     Padding="10,3,20,5"
                                     ScrollViewer.HorizontalScrollMode="Disabled"
                                     ScrollViewer.VerticalScrollMode="Disabled"
+                                    ScrollViewer.ZoomMode="Disabled"
                                     DocumentRtf="{TemplateBinding DocumentRtf}" />
 
                                 <Grid x:Name="ScrollBarGrid"

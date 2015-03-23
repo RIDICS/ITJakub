@@ -1,5 +1,6 @@
 using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.SynchronizedReading.View.Control;
 
 namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
@@ -11,6 +12,13 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private ReaderImage.Modes m_currentMode;
         private ImageSource m_photo;
         private bool m_loading;
+        private double m_currentZoom;
+
+        public ImageReaderViewModel()
+        {
+            ZoomInCommand = new RelayCommand(() => CurrentZoom++);
+            ZoomOutCommand = new RelayCommand(() => CurrentZoom--);
+        }
 
         public double PointerPositionX
         {
@@ -61,5 +69,19 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 RaisePropertyChanged();
             }
         }
+
+        public double CurrentZoom
+        {
+            get { return m_currentZoom; }
+            set
+            {
+                m_currentZoom = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public RelayCommand ZoomInCommand { get; private set; }
+
+        public RelayCommand ZoomOutCommand { get; private set; }
     }
 }

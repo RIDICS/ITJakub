@@ -20,7 +20,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
     {
         private const double CursorCorrectionLeft = -9.0;
         private const double CursorCorrectionTop = 3.0;
-        private const double PointerCorrectionTop = 40.0;
+        private const double PointerCorrectionTop = 60.0;
         private const double PointerCorrectionLeft = 20.0;
 
         private bool m_selectionChangedRespond;
@@ -53,6 +53,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         public static readonly DependencyProperty PointerCalibrationXProperty = DependencyProperty.Register("PointerCalibrationX", typeof (double), typeof (ReaderRichEditBox), new PropertyMetadata(0.0));
 
         public static readonly DependencyProperty PointerCalibrationYProperty = DependencyProperty.Register("PointerCalibrationY", typeof (double), typeof (ReaderRichEditBox), new PropertyMetadata(0.0));
+        
+        public static readonly DependencyProperty IsExternalZoomEnabledProperty = DependencyProperty.Register("IsExternalZoomEnabled", typeof (bool), typeof (ReaderRichEditBox), new PropertyMetadata(false));
+        
+        public static readonly DependencyProperty ZoomProperty = DependencyProperty.Register("Zoom", typeof (double), typeof (ReaderRichEditBox), new PropertyMetadata(1.0));
 
         public string DocumentRtf
         {
@@ -100,6 +104,18 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         {
             get { return (double) GetValue(PointerCalibrationYProperty); }
             set { SetValue(PointerCalibrationYProperty, value); }
+        }
+
+        public bool IsExternalZoomEnabled
+        {
+            get { return (bool) GetValue(IsExternalZoomEnabledProperty); }
+            set { SetValue(IsExternalZoomEnabledProperty, value); }
+        }
+
+        public double Zoom
+        {
+            get { return (double) GetValue(ZoomProperty); }
+            set { SetValue(ZoomProperty, value); }
         }
 
         private static void OnSelectionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

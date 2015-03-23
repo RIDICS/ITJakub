@@ -9,10 +9,14 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
         private readonly IDataService m_dataService;
         private string m_rtfText;
         private bool m_loading;
+        private double m_currentZoom;
 
         public PageTextViewModel(IDataService dataService)
         {
             m_dataService = dataService;
+
+            ZoomInCommand = new RelayCommand(() => CurrentZoom++);
+            ZoomOutCommand = new RelayCommand(() => CurrentZoom--);
         }
 
         public void OpenPage(PageViewModel page)
@@ -53,7 +57,12 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
 
         public double CurrentZoom
         {
-            get { throw new System.NotImplementedException(); }
+            get { return m_currentZoom; }
+            set
+            {
+                m_currentZoom = value; 
+                RaisePropertyChanged();
+            }
         }
 
         public RelayCommand ZoomInCommand { get; private set; }
