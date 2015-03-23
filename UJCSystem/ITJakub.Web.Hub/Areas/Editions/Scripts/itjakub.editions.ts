@@ -16,7 +16,7 @@ $(document).ready(function () {
 
     $('#fillBibList3').click(function () {
         var arrayOfIds: string[] = new Array();
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < 3; i++) { 
             arrayOfIds.push(i.toString());
         }
         arrayOfIds[0] = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";

@@ -69,74 +69,66 @@ div.container {
   background-color: #84ced7;
   color: white;
 }
-.dictionary-header {
+.dropdown-select {
+  margin-right: 5px;
+  float: left;
+  position: relative;
+}
+.dropdown-select-header {
+  padding: 5px;
+  border-radius: 0;
   background-color: #84ced7;
   color: white;
+}
+.dropdown-select-body {
+  display: none;
   padding: 5px;
-}
-.search-with-saved-word-area {
-  height: 20vh;
-  padding: 5px;
-}
-.search-area {
-  height: 100%;
-  width: 70%;
-  float: left;
-}
-.saved-word-area {
   background-color: white;
-  height: 100%;
-  width: 30%;
+  z-index: 3;
+  position: absolute;
+  min-width: 100%;
+  border-left: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
+}
+.concrete-item-name {
+  margin-left: 5px;
+}
+.concrete-item-checkbox {
   float: left;
-  overflow: hidden;
+  margin-top: 0!important;
 }
-.dictionary-selects {
-  height: 5vh;
-  clear: both;
-}
-.dictionary-result-area {
-  height: 75vh;
-  clear: both;
-}
-.dictionary-result-word-search-list {
-  background-color: white;
-  height: 100%;
-  width: 20%;
-  float: left;
-}
-.dictionary-result-word-search-description {
-  background-color: white;
-  margin-left: 1%;
-  height: 100%;
-  width: 79%;
-  float: left;
-}
-.saved-words-body {
-  padding: 5px;
-}
-.saved-word {
-  margin: 5px;
-  background-color: #84ced7;
-  padding: 5px;
-  border-radius: 5px;
-  display: inline-block;
-  white-space: nowrap;
-}
-.saved-word-text {
-  color: white;
-  cursor: pointer;
-}
-.saved-word-text:hover {
-  color: black;
-}
-.saved-word-remove {
-  cursor: pointer;
-  margin-top: 2px;
-}
-.saved-word-area-more {
+.save-item {
   float: right;
 }
-.saved-word-area-more:hover {
+.delete-item {
+  float: right;
+  display: none;
+  color: #ffd700;
+}
+.dropdown-filter {
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 5px;
+}
+.dropdown-filter-input {
+  margin-right: 5px;
+  width: 90%;
+}
+.dropdown-clear-filter {
+  cursor: pointer;
+  width: 5%;
+}
+.dropdown-select-checkbox input {
+  width: 1.1em;
+  height: 1.1em;
+}
+.dropdown-select-more {
+  font-size: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.dropdown-select-more :hover {
   cursor: pointer;
 }
-/*# sourceMappingURL=itjakub.dictionaries.css.map */
+/*# sourceMappingURL=ITJakub.DropdownSelect.css.map */

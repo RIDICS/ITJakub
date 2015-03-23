@@ -271,6 +271,12 @@
     <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.min.css">
       <DependentUpon>ITJakub.Bibliography.css</DependentUpon>
     </Content>
+    <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.css">
+      <DependentUpon>ITJakub.DropdownSelect.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.min.css">
+      <DependentUpon>ITJakub.DropdownSelect.css</DependentUpon>
+    </Content>
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.css">
       <DependentUpon>ITJakub.Reader.less</DependentUpon>
     </Content>
@@ -445,6 +451,10 @@
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.css.map">
       <DependentUpon>ITJakub.Reader.css</DependentUpon>
     </Content>
+    <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.less" />
+    <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.css.map">
+      <DependentUpon>ITJakub.DropdownSelect.css</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -520,6 +530,7 @@
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.configuration.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.factories.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.variableInterpreter.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\DropdownSelect\itjakub.plugins.dropdownselect.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Reader\itjakub.plugins.reader.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Search\itjakub.plugins.search.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.ts" />

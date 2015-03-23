@@ -695,6 +695,68 @@ ul.bib-listing li.list-item .label {
 .reader-text-container .search-hit {
   background-color: yellow;
 }
+.dropdown-select {
+  margin-right: 5px;
+  float: left;
+  position: relative;
+}
+.dropdown-select-header {
+  padding: 5px;
+  border-radius: 0;
+  background-color: #84ced7;
+  color: white;
+}
+.dropdown-select-body {
+  display: none;
+  padding: 5px;
+  background-color: white;
+  z-index: 3;
+  position: absolute;
+  min-width: 100%;
+  border-left: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
+}
+.concrete-item-name {
+  margin-left: 5px;
+}
+.concrete-item-checkbox {
+  float: left;
+  margin-top: 0!important;
+}
+.save-item {
+  float: right;
+}
+.delete-item {
+  float: right;
+  display: none;
+  color: #ffd700;
+}
+.dropdown-filter {
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 5px;
+}
+.dropdown-filter-input {
+  margin-right: 5px;
+  width: 90%;
+}
+.dropdown-clear-filter {
+  cursor: pointer;
+  width: 5%;
+}
+.dropdown-select-checkbox input {
+  width: 1.1em;
+  height: 1.1em;
+}
+.dropdown-select-more {
+  font-size: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.dropdown-select-more :hover {
+  cursor: pointer;
+}
 .main_logo {
   margin: 10px;
   margin-left: 0;
@@ -855,4 +917,4 @@ ul {
 .top-offset-without-submenu {
   margin: -25px 0 0 0;
 }
-/*# sourceMappingURL=itjakub.css.map */
+/*# sourceMappingURL=ITJakub.css.map */
