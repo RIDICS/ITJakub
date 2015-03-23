@@ -190,8 +190,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
                 m_selectedPage = value;
                 RaisePropertyChanged();
-                m_dataService.SetCurrentPage(value);
-                LoadPage();
+                UpdateCurrentPage(value);
             }
         }
 
@@ -357,6 +356,19 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             }
 
             SelectedPage = pageViewModel;
+        }
+
+        private void UpdateCurrentPage(PageViewModel value)
+        {
+            m_dataService.UpdateCurrentPage(value.PageId, exception =>
+            {
+                if (exception != null)
+                {
+                    //TODO
+                }
+
+            });
+            LoadPage();
         }
     }
 }

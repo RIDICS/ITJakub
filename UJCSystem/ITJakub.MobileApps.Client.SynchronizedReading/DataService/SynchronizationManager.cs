@@ -16,14 +16,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         private const PollingInterval ControlPollingInterval = PollingInterval.Medium;
 
         private readonly ISynchronizeCommunication m_applicationCommunication;
+        private readonly BookManager m_bookManager;
         private readonly IPollingService m_pollingService;
         private Action<UpdateViewModel, Exception> m_callback;
         private Action<ControlViewModel, Exception> m_controlCallback;
         private ControlContract m_latestControlContract;
 
-        public SynchronizationManager(ISynchronizeCommunication applicationCommunication)
+        public SynchronizationManager(ISynchronizeCommunication applicationCommunication, BookManager bookManager)
         {
             m_applicationCommunication = applicationCommunication;
+            m_bookManager = bookManager;
             m_pollingService = applicationCommunication.GetPollingService();
         }
 
@@ -97,6 +99,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             {
                 ReaderUser = MapToUserInfo(controlContract.ReaderUser, currentUser.Id)
             };
+            m_bookManager.PageId = controlContract.PageId;
+            
             m_latestControlContract = controlContract;
 
             m_controlCallback(controlViewModel, null);
@@ -181,6 +185,28 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         {
             var userInfo = await m_applicationCommunication.GetCurrentUserInfo();
             PassControl(userInfo, callback);
+        }
+
+        public async void UpdateCurrentPage(string pageId, Action<Exception> callback)
+        {
+            //TODO minimalize race condition
+            var latestControlContract = m_latestControlContract;
+            if (latestControlContract == null)
+                return;
+
+            m_bookManager.PageId = pageId;
+            latestControlContract.PageId = pageId;
+            var serializedContract = JsonConvert.SerializeObject(latestControlContract);
+
+            try
+            {
+                await m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, ControlObjectType, serializedContract);
+                callback(null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
         }
     }
 }

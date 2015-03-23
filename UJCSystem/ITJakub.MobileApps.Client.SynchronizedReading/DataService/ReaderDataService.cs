@@ -17,7 +17,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         public ReaderDataService(ISynchronizeCommunication applicationCommunication)
         {
             m_bookManager = new BookManager(Book.DataService);
-            m_synchronizationManager = new SynchronizationManager(applicationCommunication);
+            m_synchronizationManager = new SynchronizationManager(applicationCommunication, m_bookManager);
             m_taskManager = new ReaderTaskManager(applicationCommunication, m_bookManager);
         }
 
@@ -81,10 +81,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             callback(m_bookManager.PageId);
         }
 
-        public void SetCurrentPage(PageViewModel value)
+        public void UpdateCurrentPage(string pageId, Action<Exception> callback)
         {
-            // TODO replace with method for notifying other users
-            m_bookManager.PageId = value.PageId;
+            m_synchronizationManager.UpdateCurrentPage(pageId, callback);
         }
 
         public void SetCurrentBook(string bookGuid, string pageId)

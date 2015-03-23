@@ -7,6 +7,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataContract
         [JsonProperty("ReaderUser")]
         public UserInfo ReaderUser { get; set; }
 
+        [JsonProperty("PageId")]
+        public string PageId { get; set; }
+
 
         public class UserInfo
         {
