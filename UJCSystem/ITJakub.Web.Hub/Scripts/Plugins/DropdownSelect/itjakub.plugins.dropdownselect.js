@@ -98,12 +98,14 @@ var DropDownSelect = (function () {
         dropDownBodyDiv.appendChild(filterDiv);
 
         //TODO load cascades of childrens
-        this.makeItem(dropDownBodyDiv, "slovn9k asaa"); //TODO read from parameter
+        this.makeItem(dropDownBodyDiv, "slovn9k asaa", false); //TODO read from parameter
+        this.makeItem(dropDownBodyDiv, "slovn9k asbb", true); //TODO read from parameter
+        this.makeItem(dropDownBodyDiv, "slovn9k ccc", false); //TODO read from parameter
 
         dropDownDiv.appendChild(dropDownBodyDiv);
     };
 
-    DropDownSelect.prototype.makeItem = function (dropDownBodyDiv, name) {
+    DropDownSelect.prototype.makeItem = function (dropDownBodyDiv, name, isLeaf) {
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("concrete-item"); //TODO add data-item-id, data-item-name, data-item-type, data-item-is-favorite
 
@@ -116,6 +118,30 @@ var DropDownSelect = (function () {
         });
 
         itemDiv.appendChild(checkbox);
+
+        if (!isLeaf) {
+            var moreSpan = document.createElement("span");
+            $(moreSpan).addClass("concrete-item-more");
+
+            $(moreSpan).click(function () {
+                var children = $(this).closest(".concrete-item").children(".child-items");
+                if (children.is(":hidden")) {
+                    $(this).children().removeClass("glyphicon-chevron-down");
+                    $(this).children().addClass("glyphicon-chevron-up");
+                    children.slideDown();
+                } else {
+                    $(this).children().removeClass("glyphicon-chevron-up");
+                    $(this).children().addClass("glyphicon-chevron-down");
+                    children.slideUp();
+                }
+            });
+
+            var iconSpan = document.createElement("span");
+            $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
+
+            moreSpan.appendChild(iconSpan);
+            itemDiv.appendChild(moreSpan);
+        }
 
         if (this.showStar) {
             var saveStarSpan = document.createElement("span");
@@ -146,6 +172,18 @@ var DropDownSelect = (function () {
         nameSpan.innerText = name;
 
         itemDiv.appendChild(nameSpan);
+
+        if (!isLeaf) {
+            var childrenDiv = document.createElement("div");
+            $(childrenDiv).addClass("child-items");
+
+            this.makeItem(childrenDiv, "option next", true);
+            if (name !== "option next 2  oijonicvsj9shvg9nhs vmi9d90d90d90rvjegm0j0vgj") {
+                this.makeItem(childrenDiv, "option next 2  oijonicvsj9shvg9nhs vmi9d90d90d90rvjegm0j0vgj", false);
+            }
+
+            itemDiv.appendChild(childrenDiv);
+        }
 
         dropDownBodyDiv.appendChild(itemDiv);
     };

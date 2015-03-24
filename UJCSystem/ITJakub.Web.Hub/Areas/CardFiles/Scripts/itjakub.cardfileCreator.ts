@@ -3,6 +3,9 @@
 class CardFileCreator {
 
     cardFilesContainer: string;
+    maxPage : number;
+    minPage: number;
+    positionPage: number;
 
     constructor(cardFilesContainer: string) {
         this.cardFilesContainer = cardFilesContainer;
