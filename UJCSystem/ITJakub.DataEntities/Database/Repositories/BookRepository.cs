@@ -5,7 +5,10 @@ using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Exceptions;
+using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Dialect.Function;
+using NHibernate.SqlCommand;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -65,7 +68,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Where(book => book.Guid == bookGuid)
                     .SingleOrDefault<Book>();
 
-                
+
                 if (result == null)
                 {
                     throw new BookDoesNotExistException(bookGuid);
@@ -162,6 +165,25 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .WhereExists(maxSubquery)
                     .List<BookVersion>();
                 return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Book> FindBooksByBookType(BookTypeEnum bookType)
+        {
+            Book bookAlias = null;
+            BookType bookTypeAlias = null;
+
+            using (var session = GetSession())
+            {
+                var books = 
+                    session.QueryOver(() => bookAlias)
+                        .JoinAlias(x => x.BookType, () => bookTypeAlias, JoinType.InnerJoin)
+                        .Fetch(x => x.BookVersions).Eager   //TODO resolve duplicates by distinct root entity
+                        .Where(() => bookTypeAlias.Type == bookType)
+                        .List<Book>();
+
+                return books;
             }
         }
     }

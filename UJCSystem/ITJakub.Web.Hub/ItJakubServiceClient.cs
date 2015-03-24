@@ -254,5 +254,32 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
+        {
+            try
+            {
+                return Channel.GetBooksWithCategoriesByBookType(bookType);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBooksWithCategoriesByBookType failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBooksWithCategoriesByBookType failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBooksWithCategoriesByBookType timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

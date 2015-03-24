@@ -49,6 +49,11 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.GetBookInfo(bookId);
         }
 
+        public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
+        {
+            return m_serviceManager.GetBooksWithCategoriesByBookType(bookType);
+        }
+
         public async Task<string> GetBookPageByNameAsync(string documentId, string pageName, string resultFormat)
         {
             return await m_serviceManager.GetBookPageByNameAsync(documentId, pageName, resultFormat);

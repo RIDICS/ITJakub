@@ -44,5 +44,8 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         BookInfoContract GetBookInfo(string bookId);
+
+        [OperationContract]
+        BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType);
     }
 }

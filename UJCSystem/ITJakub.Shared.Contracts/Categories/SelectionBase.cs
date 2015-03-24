@@ -3,9 +3,6 @@ using System.Runtime.Serialization;
 
 namespace ITJakub.Shared.Contracts.Categories
 {
-
-    
-
     [DataContract]
     [KnownType(typeof(Category))]
     [KnownType(typeof(Book))]

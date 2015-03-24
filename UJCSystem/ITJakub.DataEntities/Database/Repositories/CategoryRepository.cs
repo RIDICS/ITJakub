@@ -1,7 +1,9 @@
-﻿using Castle.Facilities.NHibernateIntegration;
+﻿using System.Collections.Generic;
+using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Exceptions;
 using NHibernate;
 
@@ -61,6 +63,22 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 rootCategory.BookType = bookType;
                 session.Update(rootCategory);
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Category> FindCategoriesByBookType(BookTypeEnum type)
+        {
+            Category categoryAlias = null;
+            BookType bookTypeAlias = null;
+
+            using (var session = GetSession())
+            {
+                return
+                    session.QueryOver(() => categoryAlias)
+                        .JoinAlias(x => x.BookType, () => bookTypeAlias)
+                        .Where(() => bookTypeAlias.Type == type)
+                        .List<Category>();
             }
         }
     }

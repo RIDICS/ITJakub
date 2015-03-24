@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.DataEntities.Database.Exceptions;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts.Resources;
+using log4net;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -11,6 +14,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
     {
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly CategoryRepository m_categoryRepository;
+
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public RelationalDbStoreProcessor(BookVersionRepository bookVersionRepository, CategoryRepository categoryRepository)
         {
@@ -46,7 +51,16 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             {
                 category = category.ParentCategory;
             }
-            m_categoryRepository.SetBookTypeToRootCategoryIfNotKnown(bookEntity.Book.BookType, category);
+
+            try
+            {
+                m_categoryRepository.SetBookTypeToRootCategoryIfNotKnown(bookEntity.Book.BookType, category);
+            }
+            catch (BookTypeIsAlreadyAssociatedWithAnotherCategoryException ex)
+            {
+                m_log.Error(ex.Message);
+            }
+            
         }
     }
 }

@@ -45,6 +45,9 @@
   <ItemGroup>
     <Compile Include="AutoMapperProfiles\BookInfoProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookPageProfile.cs" />
+    <Compile Include="AutoMapperProfiles\BookProfile.cs" />
+    <Compile Include="AutoMapperProfiles\BookTypeEnumProfile.cs" />
+    <Compile Include="AutoMapperProfiles\CategoryProfile.cs" />
     <Compile Include="AutoMapperProfiles\ManuscriptProfile.cs" />
     <Compile Include="AutoMapperProfiles\PublisherProfile.cs" />
     <Compile Include="AutoMapperProfiles\EditorProfile.cs" />
