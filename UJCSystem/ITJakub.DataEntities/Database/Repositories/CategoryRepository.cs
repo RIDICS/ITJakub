@@ -2,6 +2,7 @@
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Exceptions;
 using NHibernate;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -40,6 +41,26 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return session.QueryOver<Category>()
                     .Where(category => category.XmlId == xmlId)
                     .SingleOrDefault<Category>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual void SetBookTypeToRootCategoryIfNotKnown(BookType bookType, Category rootCategory)
+        {
+            using (ISession session = GetSession())
+            {
+                var rootCategoryWithBookType =
+                    session.QueryOver<Category>()
+                        .Where(cat => cat.ParentCategory == null && cat.BookType == bookType)
+                        .SingleOrDefault<Category>();
+
+                if (rootCategoryWithBookType != null && rootCategoryWithBookType.Id != rootCategory.Id)
+                {
+                    throw new BookTypeIsAlreadyAssociatedWithAnotherCategoryException(bookType.Id, rootCategoryWithBookType.Id);
+                }
+
+                rootCategory.BookType = bookType;
+                session.Update(rootCategory);
             }
         }
     }

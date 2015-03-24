@@ -20,7 +20,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         {
             var metaData = resourceSessionDirector.Resources.FirstOrDefault( resource => resource.ResourceType == ResourceType.Metadata);
             if (metaData == null)
-                throw new ResourceMissingException("Metada not found in resources");
+                throw new ResourceMissingException("Metadata not found in resources");
             var xmlFileStream = File.Open(metaData.FullPath, FileMode.Open);
 
             var bookVersion = m_xmlMetadataProcessingManager.GetXmlMetadata(xmlFileStream);

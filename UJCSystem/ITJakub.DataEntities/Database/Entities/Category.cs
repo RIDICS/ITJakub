@@ -11,6 +11,7 @@ namespace ITJakub.DataEntities.Database.Entities {
         public virtual Category ParentCategory { get; set; }
         public virtual string XmlId { get; set; }
         public virtual string Description { get; set; }
+        public virtual BookType BookType { get; set; }
         public virtual IList<Book> Books { get; set; }
         public virtual IList<Category> Categories { get; set; }
 

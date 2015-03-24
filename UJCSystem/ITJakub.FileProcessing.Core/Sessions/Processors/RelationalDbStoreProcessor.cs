@@ -10,10 +10,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
     public class RelationalDbStoreProcessor : IResourceProcessor
     {
         private readonly BookVersionRepository m_bookVersionRepository;
+        private readonly CategoryRepository m_categoryRepository;
 
-        public RelationalDbStoreProcessor(BookVersionRepository bookVersionRepository)
+        public RelationalDbStoreProcessor(BookVersionRepository bookVersionRepository, CategoryRepository categoryRepository)
         {
             m_bookVersionRepository = bookVersionRepository;
+            m_categoryRepository = categoryRepository;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
@@ -38,6 +40,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
 
             m_bookVersionRepository.Create(bookEntity);
+
+            var category = bookEntity.Book.Category;
+            while (category.ParentCategory != null)
+            {
+                category = category.ParentCategory;
+            }
+            m_categoryRepository.SetBookTypeToRootCategoryIfNotKnown(bookEntity.Book.BookType, category);
         }
     }
 }

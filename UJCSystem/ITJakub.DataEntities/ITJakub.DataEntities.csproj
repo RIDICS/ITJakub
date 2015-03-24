@@ -95,6 +95,7 @@
     <Compile Include="Database\Entities\Transformation.cs" />
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Exceptions\BookDoesNotExistException.cs" />
+    <Compile Include="Database\Exceptions\BookTypeIsAlreadyAssociatedWithAnotherCategoryException.cs" />
     <Compile Include="Database\Repositories\UserRepository.cs" />
     <Compile Include="Database\Repositories\CategoryRepository.cs" />
     <Compile Include="Database\Repositories\AuthorRepository.cs" />

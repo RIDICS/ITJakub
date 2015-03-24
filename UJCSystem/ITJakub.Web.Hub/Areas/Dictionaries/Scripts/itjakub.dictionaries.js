@@ -23,4 +23,14 @@ $(".saved-word-area-more").click(function () {
         });
     }
 });
+
+$(".saved-word-remove").click(function () {
+    $(this).parent(".saved-word").fadeOut(function () {
+        $(this).remove();
+    }); //TODO populate request to remove on server
+});
+
+$(".saved-word-text").click(function () {
+    alert("here should be request for new search with word: " + $(this).text());
+}); //TODO populate request to add word on server
 //# sourceMappingURL=itjakub.dictionaries.js.map

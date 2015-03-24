@@ -70,6 +70,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Where(
                             responsible =>
                                 responsible.Text == text && responsible.ResponsibleType.Id == responsibleType.Id)
+                        .Take(1)
                         .SingleOrDefault<Responsible>();
             }
         }
@@ -85,6 +86,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                             respType =>
                                 respType.Text == responsibleType.Text ||
                                 respType.Type == responsibleType.Type)
+                        .Take(1)
                         .SingleOrDefault<ResponsibleType>();
             }
         }

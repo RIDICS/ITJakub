@@ -68,7 +68,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 
                 if (result == null)
                 {
-                    throw new BookDoesNotExistException(string.Format("Kniha s id {0} neexistuje..", bookGuid));
+                    throw new BookDoesNotExistException(bookGuid);
                 }
 
                 return result;

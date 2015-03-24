@@ -13,6 +13,9 @@
     <property name="Description">
       <column name="Description" sql-type="varchar" not-null="false" />
     </property>
+    <many-to-one name="BookType" lazy="false">
+      <column name="BookType" sql-type="int" not-null="false" />
+    </many-to-one>
     <bag name="Books" inverse="true">
       <key column="Category" />
       <one-to-many class="Book" />
