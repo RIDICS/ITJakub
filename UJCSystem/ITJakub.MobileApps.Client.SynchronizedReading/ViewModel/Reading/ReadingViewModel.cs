@@ -78,6 +78,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             m_dataService.SetTask(data);
         }
 
+        public override void EvaluateAndShowResults()
+        {
+            // TODO show group end info
+            StopCommunication();
+        }
+
         public override void StopCommunication()
         {
             m_dataService.StopAllPolling();

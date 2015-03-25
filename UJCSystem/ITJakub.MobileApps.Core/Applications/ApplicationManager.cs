@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ServiceModel;
 using AutoMapper;
-using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
 using ITJakub.MobileApps.DataEntities.AzureTables.Entities;
@@ -29,11 +27,12 @@ namespace ITJakub.MobileApps.Core.Applications
         public void CreateSynchronizedObject(int applicationId, long groupId, long userId,
             SynchronizedObjectContract synchronizedObject)
         {
-            var group = m_usersRepository.FindById<Group>(groupId);
-            if (group.State != GroupState.Running)
-            {
-                throw new FaultException<ApplicationNotRunningFault>(new ApplicationNotRunningFault(), "Application is not in the Running state.");
-            }
+            var group = m_usersRepository.Load<Group>(groupId);
+            //var group = m_usersRepository.FindById<Group>(groupId);
+            //if (group.State != GroupState.Running)
+            //{
+            //    throw new FaultException<ApplicationNotRunningFault>(new ApplicationNotRunningFault(), "Application is not in the Running state.");
+            //}
 
             var syncObjectEntity = new SynchronizedObjectEntity(m_idGenerator.GetNewId(), Convert.ToString(groupId), synchronizedObject.Data);
             m_azureTableSynchronizedObjectDao.Create(syncObjectEntity);
@@ -55,12 +54,6 @@ namespace ITJakub.MobileApps.Core.Applications
 
         public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
         {
-            var group = m_usersRepository.FindById<Group>(groupId);
-            if (group.State >= GroupState.Paused)
-            {
-                throw new FaultException<ApplicationNotRunningFault>(new ApplicationNotRunningFault(), "Application is paused or closed.");
-            }
-
             var syncObjs = m_applicationRepository.GetSynchronizedObjects(groupId, applicationId, objectType, since);
 
             foreach (SynchronizedObject syncObj in syncObjs) //TODO try to find some better way how to fill Data property
@@ -90,12 +83,6 @@ namespace ITJakub.MobileApps.Core.Applications
 
         public SynchronizedObjectResponseContract GetLatestSynchronizedObject(long groupId, int applicationId, string objectType, DateTime since)
         {
-            var group = m_usersRepository.FindById<Group>(groupId);
-            if (group.State >= GroupState.Paused)
-            {
-                throw new FaultException<ApplicationNotRunningFault>(new ApplicationNotRunningFault(), "Application is paused or closed.");
-            }
-
             var syncObj = m_applicationRepository.GetLatestSynchronizedObject(groupId, applicationId, objectType, since);
             if (syncObj == null)
                 return null;

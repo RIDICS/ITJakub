@@ -35,6 +35,8 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
 
         public override void SetTask(string data) { }
 
+        public override void EvaluateAndShowResults() { }
+
         public RelayCommand SendCommand
         {
             get { return m_sendCommand; }

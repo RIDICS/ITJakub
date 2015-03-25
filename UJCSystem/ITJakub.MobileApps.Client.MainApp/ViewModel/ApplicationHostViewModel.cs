@@ -38,10 +38,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_isCommandBarOpen;
         private bool m_waitingForStart;
         private bool m_waitingForData;
-        private bool m_isTaskLoaded;
-        private bool m_isAppLoaded;
+        private bool m_isTaskAndAppLoaded;
+        private bool m_isAppStarted;
         private long m_groupId;
-        private bool m_paused;
+        private bool m_isPaused;
         private int m_unreadMessageCount;
         private GroupInfoViewModel m_groupInfo;
         private ObservableCollection<GroupMemberViewModel> m_memberList;
@@ -56,7 +56,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GoBackCommand = new RelayCommand(GoBack);
             ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
 
-            m_isTaskLoaded = false;
+            m_isTaskAndAppLoaded = false;
             m_unreadMessageCount = 0;
 
             LoadData();
@@ -125,6 +125,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             
             if (ApplicationViewModel != null)
                 ApplicationViewModel.StopCommunication();
+
+            m_pollingService.UnregisterAll(); //stop all polling (in case some app didn't stopped)
         }
 
         private void GoBack()
@@ -141,47 +143,49 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
                 m_groupInfo.State = state;
-                if (state >= GroupStateContract.WaitingForStart && !m_isTaskLoaded)
-                {
-                    LoadTask();
-                }
-
-                if (state >= GroupStateContract.Running && !m_isAppLoaded)
-                {
-                    m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
-                    WaitingForStart = false;
-
-                    if (m_isTaskLoaded)
-                        LoadApplications(m_currentTask.Application, m_currentTask.Data);
-                }
+                GroupStateUpdate();
             });
+        }
+
+        private void GroupStateUpdate()
+        {
+            var state = m_groupInfo.State;
+            if (!m_isTaskAndAppLoaded && state >= GroupStateContract.WaitingForStart)
+            {
+                LoadTask();
+                return;
+            }
+
+            if (!m_isAppStarted && state >= GroupStateContract.Running)
+            {
+                WaitingForStart = false;
+                StartMainApplication();
+                return;
+            }
+
+            IsPaused = state == GroupStateContract.Paused;
+
+            if (state == GroupStateContract.Closed)
+            {
+                ApplicationViewModel.EvaluateAndShowResults();
+                m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
+            }
         }
 
         private void LoadTask()
         {
             m_dataService.GetTaskForGroup(m_groupId, (task, exception) =>
             {
-                if (exception != null)
+                if (exception != null) // TODO error handling, m_isTaskAndAppLoaded set true
                     return;
 
                 m_currentTask = task;
-                
-                if (m_groupInfo.State >= GroupStateContract.Running)
-                    LoadApplications(task.Application, task.Data);
-
-                m_isTaskLoaded = true;
+                LoadApplications(task.Application);
             });
         }
 
-        private void LoadApplications(ApplicationType type, string taskData)
+        private void LoadApplications(ApplicationType type)
         {
-            lock (this)
-            {
-                if (m_isAppLoaded)
-                    return;
-                m_isAppLoaded = true;
-            }
-
             WaitingForData = true;
             m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, async (applications, exception) =>
             {
@@ -195,21 +199,32 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 var application = applications[type];
                 ApplicationViewModel = application.ApplicationViewModel;
                 ApplicationViewModel.DataLoadedCallback = () => WaitingForData = false;
-                ApplicationViewModel.SetTask(taskData);
-                ApplicationViewModel.InitializeCommunication();
+                
                 ApplicationName = application.Name;
                 IsChatSupported = application.IsChatSupported;
 
-                if (!IsChatSupported)
-                    return;
-                
-                var chat = applications[ApplicationType.Chat];
-                ChatApplicationViewModel = chat.ApplicationViewModel as SupportAppBaseViewModel;
-                if (ChatApplicationViewModel != null)
+                if (IsChatSupported)
                 {
-                    ChatApplicationViewModel.InitializeCommunication();
+                    var chat = applications[ApplicationType.Chat];
+                    ChatApplicationViewModel = chat.ApplicationViewModel as SupportAppBaseViewModel;
+                    if (ChatApplicationViewModel != null)
+                    {
+                        ChatApplicationViewModel.InitializeCommunication();
+                    }
                 }
+
+                m_isTaskAndAppLoaded = true;
+                GroupStateUpdate();
             });
+        }
+
+        private void StartMainApplication()
+        {
+            ApplicationViewModel.SetTask(m_currentTask.Data);
+            ApplicationViewModel.InitializeCommunication();
+            
+            m_isAppStarted = true;
+            GroupStateUpdate();
         }
 
         #region Properties
@@ -300,12 +315,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public bool Paused
+        public bool IsPaused
         {
-            get { return m_paused; }
+            get { return m_isPaused; }
             set
             {
-                m_paused = value;
+                m_isPaused = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(() => Waiting);
             }
@@ -313,7 +328,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         public bool Waiting
         {
-            get { return m_waitingForStart || m_waitingForData; }
+            get { return m_waitingForStart || m_waitingForData || m_isPaused; }
         }
 
         public int UnreadMessageCount

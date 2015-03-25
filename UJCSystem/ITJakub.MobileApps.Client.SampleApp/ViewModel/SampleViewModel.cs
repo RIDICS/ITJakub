@@ -47,6 +47,11 @@ namespace ITJakub.MobileApps.Client.SampleApp.ViewModel
             //Get task data
         }
 
+        public override void EvaluateAndShowResults()
+        {
+            //Disallow user interaction, evaluate task and show results (if any exists)
+        }
+
         public override void StopCommunication()
         {
             //Stop all running timers and polling requests in IPollingService

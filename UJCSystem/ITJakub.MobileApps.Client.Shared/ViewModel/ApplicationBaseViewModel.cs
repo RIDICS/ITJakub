@@ -10,8 +10,9 @@ namespace ITJakub.MobileApps.Client.Shared.ViewModel
 
         public abstract void InitializeCommunication();
         public abstract void SetTask(string data);
+        public abstract void EvaluateAndShowResults();
         public abstract void StopCommunication();
-
+        
         public Action DataLoadedCallback { private get; set; }
 
         protected void SetDataLoaded()

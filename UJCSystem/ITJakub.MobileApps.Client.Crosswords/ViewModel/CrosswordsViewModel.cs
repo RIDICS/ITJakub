@@ -38,6 +38,11 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             });
         }
 
+        public override void EvaluateAndShowResults()
+        {
+            SimpleCrosswordsViewModel.StopAndShowResults();
+        }
+
         public override void StopCommunication()
         {
             m_dataService.StopPolling();

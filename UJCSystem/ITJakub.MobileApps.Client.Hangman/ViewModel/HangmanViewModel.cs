@@ -15,6 +15,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private bool m_opponentProgressVisible;
         private bool m_guessHistoryVisible;
         private int m_guessedLetterCount;
+        private bool m_isAppStopped;
 
         public HangmanViewModel(IHangmanDataService dataService)
         {
@@ -117,6 +118,12 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             });
         }
 
+        public override void EvaluateAndShowResults()
+        {
+            m_isAppStopped = true;
+            GameOverViewModel.Loss = true;
+        }
+
         public override void StopCommunication()
         {
             m_dataService.StopPolling();
@@ -155,13 +162,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private void ProcessTaskInfo(TaskInfoViewModel taskInfo)
         {
             WordViewModel.Word = taskInfo.Word;
-            GameOverViewModel.Loss = taskInfo.Lives == 0;
             Lives = taskInfo.Lives;
             GuessedLetterCount = taskInfo.GuessedLetterCount;
 
             if (taskInfo.Win)
             {
                 GameOverViewModel.Win = true;
+            }
+            else
+            {
+                GameOverViewModel.Loss = m_isAppStopped || taskInfo.Lives == 0;
             }
 
             if (taskInfo.IsNewWord)

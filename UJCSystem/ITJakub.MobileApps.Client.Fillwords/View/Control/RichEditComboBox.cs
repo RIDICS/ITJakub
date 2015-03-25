@@ -150,6 +150,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                 var comboBox = new OpaqueComboBox
                 {
                     PlaceholderText = "???",
+                    IsEnabled = IsAnsweringAllowed,
                     BorderBrush = new SolidColorBrush(Colors.White),
                     ItemsSource = new ObservableCollection<string>(optionList.OrderBy(s => s))
                 };

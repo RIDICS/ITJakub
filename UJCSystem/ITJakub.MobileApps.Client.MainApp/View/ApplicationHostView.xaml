@@ -144,6 +144,60 @@
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
                             VerticalContentAlignment="Stretch"
                             HorizontalContentAlignment="Stretch" />
+
+            <Grid Grid.Column="0"
+                  Background="#22000000"
+                  Visibility="{Binding Waiting, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <Grid MinWidth="400"
+                      MinHeight="100"
+                      Margin="0,0,0,70"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Background="White">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+
+                    <ProgressRing Grid.Column="0"
+                                  Width="40"
+                                  Height="40"
+                                  Margin="20"
+                                  Foreground="Black"
+                                  IsActive="True" />
+
+                    <Grid Grid.Column="1"
+                          Background="White"
+                          Visibility="{Binding WaitingForData, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Čekání na data"
+                                   Foreground="Black"
+                                   FontSize="30" />
+                    </Grid>
+
+                    <Grid Grid.Column="1"
+                          Background="White"
+                          Visibility="{Binding WaitingForStart, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Čekání na spuštění učitelem"
+                                   Foreground="Black"
+                                   FontSize="30" />
+                    </Grid>
+
+                    <Grid Grid.Column="1"
+                          Background="White"
+                          Visibility="{Binding IsPaused, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Pozastaveno"
+                                   Foreground="Black"
+                                   FontSize="30" />
+                    </Grid>
+                </Grid>
+            </Grid>
+
             <ContentControl Grid.Column="1"
                             Visibility="{Binding IsChatDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Content="{Binding ChatApplicationViewModel}"
@@ -182,59 +236,6 @@
                                Foreground="Black" />
                 </StackPanel>
             </Button>
-        </Grid>
-
-        <Grid Grid.Row="1"
-              Background="#11000000"
-              Visibility="{Binding Waiting, Converter={StaticResource BooleanToVisibilityConverter}}">
-            
-            <Grid MinWidth="400"
-                  MinHeight="100"
-                  Margin="0,0,0,70"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
-                  Background="White">
-                
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="30" />
-                </Grid.ColumnDefinitions>
-
-                <ProgressRing Grid.Column="0"
-                              Width="40"
-                              Height="40"
-                              Margin="20"
-                              Foreground="Black"
-                              IsActive="True" />
-                
-                <Grid Grid.Column="1"
-                      Background="White"
-                      Visibility="{Binding WaitingForData, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock VerticalAlignment="Center"
-                               Text="Čekání na data"
-                               Foreground="Black"
-                               FontSize="30" />
-                </Grid>
-
-                <Grid Grid.Column="1"
-                      Background="White"
-                      Visibility="{Binding WaitingForStart, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock VerticalAlignment="Center"
-                               Text="Čekání na spuštění učitelem"
-                               Foreground="Black"
-                               FontSize="30" />
-                </Grid>
-                
-                <Grid Grid.Column="1"
-                      Background="White"
-                      Visibility="{Binding Paused, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock VerticalAlignment="Center"
-                               Text="Pozastaveno"
-                               Foreground="Black"
-                               FontSize="30" />
-                </Grid>
-            </Grid>
         </Grid>
     </Grid>
 </Page>

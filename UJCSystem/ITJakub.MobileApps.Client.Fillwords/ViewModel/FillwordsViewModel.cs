@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Popups;
 using GalaSoft.MvvmLight.Command;
@@ -97,10 +98,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                     return;
 
                 ResultList = taskFinished.ResultList;
-                IsOver = taskFinished.IsFinished;
+                IsOver = taskFinished.IsFinished || IsOver;
 
                 SetDataLoaded();
-
+                
                 if (IsOver)
                     StartPollingResults();
             });
@@ -113,6 +114,17 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 TaskDocumentRtf = viewModel.DocumentRtf;
                 TaskOptionsList = viewModel.Options;
             });
+        }
+
+        public override void EvaluateAndShowResults()
+        {
+            if (IsOver)
+                return;
+            
+            IsOver = true;
+            // TODO handling over (show info, submit)
+            //await new MessageDialog("Skupina byla ukončena, tudíž dojde k automatickému vyhodnocení vyplněných odpovědí.", "Vyhodnocení odpovědí").ShowAsync();
+            //Submit();
         }
 
         public override void StopCommunication()
