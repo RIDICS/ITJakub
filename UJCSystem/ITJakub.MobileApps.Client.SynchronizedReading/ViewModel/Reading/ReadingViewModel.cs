@@ -69,6 +69,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                     return;
 
                 CurrentReader = model.ReaderUser;
+                LoadPage();
             });
         }
 
@@ -154,6 +155,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             get { return m_isPhotoDisplayed; }
             set
             {
+                if (m_isPhotoDisplayed == value)
+                    return;
+                
                 m_isPhotoDisplayed = value;
                 RaisePropertyChanged();
                 LoadPhoto();
@@ -188,9 +192,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 if (value == null || value == m_selectedPage)
                     return;
 
+                var lastPage = m_selectedPage;
                 m_selectedPage = value;
                 RaisePropertyChanged();
-                UpdateCurrentPage(value);
+                UpdateCurrentPage(lastPage, value);
             }
         }
 
@@ -358,13 +363,17 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             SelectedPage = pageViewModel;
         }
 
-        private void UpdateCurrentPage(PageViewModel value)
+        private void UpdateCurrentPage(PageViewModel lastPage, PageViewModel newPage)
         {
-            m_dataService.UpdateCurrentPage(value.PageId, exception =>
+            m_dataService.UpdateCurrentPage(newPage.PageId, exception =>
             {
                 if (exception != null)
                 {
-                    //TODO
+                    //rollback change current page
+                    m_dataService.SetCurrentBook(m_dataService.GetCurrentBookGuid(), lastPage.PageId);
+                    m_selectedPage = lastPage;
+                    RaisePropertyChanged(() => SelectedPage);
+                    LoadPage();
                 }
 
             });

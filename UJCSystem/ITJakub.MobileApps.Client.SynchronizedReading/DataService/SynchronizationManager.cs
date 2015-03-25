@@ -94,15 +94,18 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
                 return;
 
             var controlContract = JsonConvert.DeserializeObject<ControlContract>(objectDetails.Data);
+            m_latestControlContract = controlContract;
+
+            if (controlContract.PageId != null)
+                m_bookManager.PageId = controlContract.PageId;
+            
             var currentUser = await m_applicationCommunication.GetCurrentUserInfo();
             var controlViewModel = new ControlViewModel
             {
-                ReaderUser = MapToUserInfo(controlContract.ReaderUser, currentUser.Id)
+                ReaderUser = MapToUserInfo(controlContract.ReaderUser, currentUser.Id),
+                PageId = m_bookManager.PageId
             };
-            m_bookManager.PageId = controlContract.PageId;
             
-            m_latestControlContract = controlContract;
-
             m_controlCallback(controlViewModel, null);
         }
 
@@ -166,7 +169,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         {
             var latestControlContract = m_latestControlContract ?? new ControlContract();
             latestControlContract.ReaderUser = MapToUserInfoContract(userInfo);
-            
+
+            if (latestControlContract.PageId == null)
+                latestControlContract.PageId = m_bookManager.PageId;
+
             try
             {
                 var serializedControlContract = JsonConvert.SerializeObject(latestControlContract);
@@ -189,9 +195,13 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
 
         public async void UpdateCurrentPage(string pageId, Action<Exception> callback)
         {
-            //TODO minimalize race condition
             var latestControlContract = m_latestControlContract;
             if (latestControlContract == null)
+                return;
+
+            // check if current user is reader and also can control changing pages
+            var latestControlObject = await m_applicationCommunication.GetLatestObjectAsync(ApplicationType.SynchronizedReading, new DateTime(1970, 1, 1), ControlObjectType);
+            if (!latestControlObject.Author.IsMe)
                 return;
 
             m_bookManager.PageId = pageId;
