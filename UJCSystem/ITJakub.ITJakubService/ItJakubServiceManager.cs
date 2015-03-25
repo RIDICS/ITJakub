@@ -11,16 +11,14 @@ namespace ITJakub.ITJakubService
     public class ItJakubServiceManager : IItJakubServiceLocal
     {
         private readonly UserManager m_userManager;
-        private readonly UploadManager m_uploadManager;
         private readonly BookManager m_bookManager;
         private readonly AuthorManager m_authorManager;
         private readonly ResourceManager m_resourceManager;
         private readonly SearchManager m_searchManager;
 
-        public ItJakubServiceManager(UserManager userManager, UploadManager uploadManager, BookManager bookManager, AuthorManager authorManager, ResourceManager resourceManager, SearchManager searchManager)
+        public ItJakubServiceManager(UserManager userManager, BookManager bookManager, AuthorManager authorManager, ResourceManager resourceManager, SearchManager searchManager)
         {
             m_userManager = userManager;
-            m_uploadManager = uploadManager;
             m_bookManager = bookManager;
             m_authorManager = authorManager;
             m_resourceManager = resourceManager;
@@ -35,11 +33,6 @@ namespace ITJakub.ITJakubService
         public LoginUserResultContract LoginUser(LoginUserContract loginUserContract)
         {
             return m_userManager.LoginUser(loginUserContract);
-        }
-
-        public ProcessedFileInfoContract SaveUploadedFile(UploadResourceContract uploadResourceContract)
-        {
-            return m_uploadManager.ProcessUploadedFile(uploadResourceContract);
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()

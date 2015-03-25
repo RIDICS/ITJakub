@@ -32,7 +32,7 @@ namespace ITJakub.ITJakubService.Core
             return new BookTypeSearchResultContract
             {
                 BookType = bookType,
-                Books = Mapper.Map<IList<BookContract>>(books), //TODO make mapper
+                Books = Mapper.Map<IList<BookContract>>(books),
                 Categories = Mapper.Map<IList<CategoryContract>>(categories)
             };
         }

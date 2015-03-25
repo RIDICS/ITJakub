@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Exceptions;
-using NHibernate;
+using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -20,7 +21,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual void SaveOrUpdate(Category category)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 var tmpCategory = FindByXmlId(category.XmlId);
                 if (tmpCategory != null)
@@ -38,7 +39,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual Category FindByXmlId(string xmlId)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return session.QueryOver<Category>()
                     .Where(category => category.XmlId == xmlId)
@@ -49,7 +50,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual void SetBookTypeToRootCategoryIfNotKnown(BookType bookType, Category rootCategory)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 var rootCategoryWithBookType =
                     session.QueryOver<Category>()
@@ -58,7 +59,8 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 if (rootCategoryWithBookType != null && rootCategoryWithBookType.Id != rootCategory.Id)
                 {
-                    throw new BookTypeIsAlreadyAssociatedWithAnotherCategoryException(bookType.Id, rootCategoryWithBookType.Id);
+                    throw new BookTypeIsAlreadyAssociatedWithAnotherCategoryException(bookType.Id,
+                        rootCategoryWithBookType.Id);
                 }
 
                 rootCategory.BookType = bookType;
@@ -74,11 +76,26 @@ namespace ITJakub.DataEntities.Database.Repositories
 
             using (var session = GetSession())
             {
-                return
-                    session.QueryOver(() => categoryAlias)
-                        .JoinAlias(x => x.BookType, () => bookTypeAlias)
-                        .Where(() => bookTypeAlias.Type == type)
+                var rootCategory = session.QueryOver(() => categoryAlias)
+                    .JoinAlias(x => x.BookType, () => bookTypeAlias)
+                    .Where(() => bookTypeAlias.Type == type)
+                    .SingleOrDefault<Category>();
+
+                IList<int> parentCategoriesIds;
+                var resultCategories = new List<Category>();
+                IList<Category> childCategories = new List<Category> {rootCategory};
+                
+                while (childCategories != null && childCategories.Count() != 0)
+                {
+                    resultCategories.AddRange(childCategories);
+
+                    parentCategoriesIds = childCategories.Select(childCategory => childCategory.Id).ToList();
+                    childCategories = session.QueryOver(() => categoryAlias)
+                        .Where(() => categoryAlias.ParentCategory.Id.IsIn(parentCategoriesIds.ToArray()))
                         .List<Category>();
+                }
+
+                return resultCategories;
             }
         }
     }

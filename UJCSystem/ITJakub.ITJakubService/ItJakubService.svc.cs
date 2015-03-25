@@ -29,11 +29,6 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.LoginUser(loginUserContract);
         }
 
-        public ProcessedFileInfoContract SaveUploadedFile(UploadResourceContract uploadResourceContract)
-        {
-            return m_serviceManager.SaveUploadedFile(uploadResourceContract);
-        }
-
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
         {
             return m_serviceManager.GetAllAuthors();

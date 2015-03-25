@@ -59,6 +59,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
 
             book.BookType = bookType;
             bookVersion.Book = book;
+            book.LastVersion = bookVersion;
 
             string versionId = xmlReader.GetAttribute("versionId");
             bookVersion.VersionId = versionId;

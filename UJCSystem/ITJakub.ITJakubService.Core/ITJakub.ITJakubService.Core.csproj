@@ -60,7 +60,6 @@
     <Compile Include="AutoMapperProfiles\AuthorProfile.cs" />
     <Compile Include="BookManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UploadManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.ITJakubService.Core.Container.Config" />

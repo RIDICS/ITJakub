@@ -179,10 +179,8 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var books = 
                     session.QueryOver(() => bookAlias)
                         .JoinAlias(x => x.BookType, () => bookTypeAlias, JoinType.InnerJoin)
-                        .Fetch(x => x.BookVersions).Eager   //TODO resolve duplicates by distinct root entity
                         .Where(() => bookTypeAlias.Type == bookType)
                         .List<Book>();
-
                 return books;
             }
         }
