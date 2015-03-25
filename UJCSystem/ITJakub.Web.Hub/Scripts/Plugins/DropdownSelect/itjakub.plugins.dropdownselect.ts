@@ -4,12 +4,13 @@
 class DropDownSelect {
 
     dropDownSelectContainer: string;
+    dataUrl: string;
     showStar: boolean;
 
-    constructor(dropDownSelectContainer: string, showStar: boolean) {
+    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean) {
         this.dropDownSelectContainer = dropDownSelectContainer;
+        this.dataUrl = dataUrl;
         this.showStar = showStar;
-        this.makeDropdown();
     }
 
     makeDropdown() {
@@ -40,14 +41,14 @@ class DropDownSelect {
 
         var textSpan = document.createElement("span");
         $(textSpan).addClass("dropdown-select-text");
-        textSpan.innerText = "Slovnínky o staré češtině"; //TODO read from parameter
+        textSpan.innerText = ""; //TODO read from parameter
 
         dropDownHeadDiv.appendChild(textSpan);
 
         var moreSpan = document.createElement("span");
         $(moreSpan).addClass("dropdown-select-more");
 
-        $(moreSpan).click(function () {
+        $(moreSpan).click(function() {
             var body = $(this).parents(".dropdown-select").children(".dropdown-select-body");
             if (body.is(":hidden")) {
                 $(this).children().removeClass("glyphicon-chevron-down");
@@ -81,15 +82,15 @@ class DropDownSelect {
         $(filterInput).addClass("dropdown-filter-input");
         filterInput.placeholder = "Filtrovat podle názvu..";
 
-        $(filterInput).keyup(function () {
+        $(filterInput).keyup(function() {
             $(this).change();
         });
 
-        $(filterInput).change(function () {
-            if ($(this).val() == '') {
+        $(filterInput).change(function() {
+            if ($(this).val() == "") {
                 $(this).parents(".dropdown-select-body").children(".concrete-item").show();
             } else {
-                $(this).parents(".dropdown-select-body").children(".concrete-item").hide().filter(':contains(' + $(this).val() + ')').show();
+                $(this).parents(".dropdown-select-body").children(".concrete-item").hide().filter(":contains(" + $(this).val() + ")").show();
             }
         });
 
@@ -98,24 +99,164 @@ class DropDownSelect {
         var filterClearSpan = document.createElement("span");
         $(filterClearSpan).addClass("dropdown-clear-filter glyphicon glyphicon glyphicon-remove-circle");
 
-        $(filterClearSpan).click(function () {
-            $(this).siblings(".dropdown-filter-input").val('').change();
+        $(filterClearSpan).click(function() {
+            $(this).siblings(".dropdown-filter-input").val("").change();
         });
 
         filterDiv.appendChild(filterClearSpan);
 
         dropDownBodyDiv.appendChild(filterDiv);
 
-        //TODO load cascades of childrens
-
-        this.makeItem(dropDownBodyDiv, "slovn9k asaa", false); //TODO read from parameter
-        this.makeItem(dropDownBodyDiv, "slovn9k asbb", true); //TODO read from parameter
-        this.makeItem(dropDownBodyDiv, "slovn9k ccc", false); //TODO read from parameter
-
         dropDownDiv.appendChild(dropDownBodyDiv);
+
+        this.downloadData(dropDownBodyDiv);
     }
 
-    private makeItem(dropDownBodyDiv: HTMLDivElement, name : string, isLeaf: boolean) {
+    private downloadData(dropDownItemsDiv: HTMLDivElement) {
+        var loadDiv = document.createElement("div");
+        $(loadDiv).addClass("loading");
+        $(dropDownItemsDiv).append(loadDiv);
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: {},
+            url: this.dataUrl,
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                var categories = response["categories"];
+                var books = response["books"];
+
+                $(dropDownItemsDiv).children("div.loading").remove();
+
+                this.makeTreeStructure(categories, books, dropDownItemsDiv);
+            }
+        });
+    }
+
+    private makeTreeStructure(categories, books, dropDownItemsDiv: HTMLDivElement) {
+        var rootCategory = categories[""][0];
+
+        var textSpan = $(dropDownItemsDiv).parent().children(".dropdown-select-header").children(".dropdown-select-text");
+        $(textSpan).append(rootCategory["Description"]);
+
+        var childCategories = categories[rootCategory["Id"]];
+        var childBooks = books[rootCategory["Id"]];
+
+        if (typeof (childCategories) !== "undefined") {
+            for (var i = 0; i < childCategories.length; i++) {
+                var childCategory = childCategories[i];
+                this.makeCategoryItem(dropDownItemsDiv, childCategory, categories, books);
+            }
+        }
+
+        if (typeof (childBooks) !== "undefined") {
+            for (var i = 0; i < childBooks.length; i++) {
+                var childBook = childBooks[i];
+                this.makeBookItem(dropDownItemsDiv, childBook);
+            }
+        }
+    }
+
+
+    private makeCategoryItem(container: HTMLDivElement, currentCategory: any, categories: any, books: any) {
+
+        //TODO create divs with data and append to container
+        var itemDiv = document.createElement("div");
+        $(itemDiv).addClass("concrete-item"); //TODO add data-item-id, data-item-name, data-item-type, data-item-is-favorite
+
+        var checkbox = document.createElement("input");
+        $(checkbox).addClass("concrete-item-checkbox checkbox");
+        checkbox.type = "checkbox";
+
+        $(checkbox).click(function() {
+            //TODO add item to search criteria
+        });
+
+        itemDiv.appendChild(checkbox);
+
+        var moreSpan = document.createElement("span");
+        $(moreSpan).addClass("concrete-item-more");
+
+        $(moreSpan).click(function() {
+            var childsDiv = $(this).closest(".concrete-item").children(".child-items");
+            if (childsDiv.is(":hidden")) {
+                $(this).children().removeClass("glyphicon-chevron-down");
+                $(this).children().addClass("glyphicon-chevron-up");
+                //if ($(childsDiv).children().length > 0) {
+                    childsDiv.slideDown();
+                //}
+            } else {
+                $(this).children().removeClass("glyphicon-chevron-up");
+                $(this).children().addClass("glyphicon-chevron-down");
+                childsDiv.slideUp();
+            }
+        });
+
+        var iconSpan = document.createElement("span");
+        $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
+
+        moreSpan.appendChild(iconSpan);
+        itemDiv.appendChild(moreSpan);
+
+
+        if (this.showStar) {
+
+            var saveStarSpan = document.createElement("span");
+            $(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
+
+            $(saveStarSpan).click(function() {
+                $(this).siblings(".delete-item").show();
+                $(this).hide();
+                //TODO populate request on save to favorites
+            });
+
+            itemDiv.appendChild(saveStarSpan);
+
+            var deleteStarSpan = document.createElement("span");
+            $(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
+
+            $(deleteStarSpan).click(function() {
+                $(this).siblings(".save-item").show();
+                $(this).hide();
+                //TODO populate request on delete from favorites
+            });
+
+            itemDiv.appendChild(deleteStarSpan);
+        }
+
+        var nameSpan = document.createElement("span");
+        $(nameSpan).addClass("concrete-item-name");
+        nameSpan.innerText = currentCategory["Description"];
+        itemDiv.appendChild(nameSpan);
+
+        var childsDiv = document.createElement("div");
+        $(childsDiv).addClass("child-items"); 
+        itemDiv.appendChild(childsDiv);
+
+        container.appendChild(itemDiv);
+
+        var childCategories = categories[currentCategory["Id"]];
+        var childBooks = books[currentCategory["Id"]];
+
+        if (typeof (childCategories) !== "undefined") {
+            for (var i = 0; i < childCategories.length; i++) {
+                var childCategory = childCategories[i];
+                this.makeCategoryItem(childsDiv, childCategory, categories, books);
+            }
+        }
+
+        if (typeof (childBooks) !== "undefined") {
+            for (var i = 0; i < childBooks.length; i++) {
+                var childBook = childBooks[i];
+                this.makeBookItem(childsDiv, childBook);
+            }
+        }
+
+    }
+
+    private makeBookItem(container: HTMLDivElement, currentBook: any) {
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("concrete-item"); //TODO add data-item-id, data-item-name, data-item-type, data-item-is-favorite
 
@@ -128,30 +269,6 @@ class DropDownSelect {
         });
 
         itemDiv.appendChild(checkbox);
-
-        if (!isLeaf) {
-            var moreSpan = document.createElement("span");
-            $(moreSpan).addClass("concrete-item-more");
-
-            $(moreSpan).click(function () {
-                var children = $(this).closest(".concrete-item").children(".child-items");
-                if (children.is(":hidden")) {
-                    $(this).children().removeClass("glyphicon-chevron-down");
-                    $(this).children().addClass("glyphicon-chevron-up");
-                    children.slideDown();
-                } else {
-                    $(this).children().removeClass("glyphicon-chevron-up");
-                    $(this).children().addClass("glyphicon-chevron-down");
-                    children.slideUp();
-                }
-            });
-
-            var iconSpan = document.createElement("span");
-            $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
-
-            moreSpan.appendChild(iconSpan);
-            itemDiv.appendChild(moreSpan);
-        }
 
         if (this.showStar) {
 
@@ -180,22 +297,10 @@ class DropDownSelect {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("concrete-item-name");
-        nameSpan.innerText = name;
+        nameSpan.innerText = currentBook["Title"];
 
         itemDiv.appendChild(nameSpan);
 
-        if (!isLeaf) {  //TODO get from parameter dictionary
-            var childrenDiv = document.createElement("div");
-            $(childrenDiv).addClass("child-items");
-
-            this.makeItem(childrenDiv, "option next", true);
-            if (name !== "option next 2  oijonicvsj9shvg9nhs vmi9d90d90d90rvjegm0j0vgj") {
-                this.makeItem(childrenDiv, "option next 2  oijonicvsj9shvg9nhs vmi9d90d90d90rvjegm0j0vgj", false); 
-            }
-
-            itemDiv.appendChild(childrenDiv);
-        }
-
-        dropDownBodyDiv.appendChild(itemDiv);
+        container.appendChild(itemDiv);
     }
 }

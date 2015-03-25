@@ -38,10 +38,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetDictionariesWithCategories()
         {
-            var dictionariesAndCategories = m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
-            var booksDictionary  = dictionariesAndCategories.Books.GroupBy(x => x.CategoryId).ToDictionary(x => x.Key, x => x.ToList());
-            var categoriesDictionary  = dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId).ToDictionary(x => x.Key, x => x.ToList());
-            return Json(new { dictionaries = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
+            var dictionariesAndCategories = m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
+            var booksDictionary = dictionariesAndCategories.Books.GroupBy(x => x.CategoryId).ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            var categoriesDictionary  = dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId).ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
+            return Json(new { books = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
         }
     }
 }

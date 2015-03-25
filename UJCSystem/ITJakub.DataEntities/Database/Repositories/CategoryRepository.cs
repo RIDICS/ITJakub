@@ -81,6 +81,11 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Where(() => bookTypeAlias.Type == type)
                     .SingleOrDefault<Category>();
 
+                if (rootCategory == null)
+                {
+                  return new List<Category>();  
+                }
+
                 IList<int> parentCategoriesIds;
                 var resultCategories = new List<Category>();
                 IList<Category> childCategories = new List<Category> {rootCategory};

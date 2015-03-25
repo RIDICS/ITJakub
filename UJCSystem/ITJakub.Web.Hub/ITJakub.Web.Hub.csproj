@@ -229,6 +229,7 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\Images\glyphicons_chevron.png" />
     <Content Include="Content\Images\glyphicons_chevron_green.png" />
+    <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\mlceni.jpg" />
     <Content Include="Content\Images\news_background.png" />

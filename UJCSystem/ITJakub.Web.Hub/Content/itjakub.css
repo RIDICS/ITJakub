@@ -699,6 +699,7 @@ ul.bib-listing li.list-item .label {
   margin-right: 5px;
   float: left;
   position: relative;
+  min-width: 200px;
 }
 .dropdown-select-header {
   padding: 5px;
@@ -754,8 +755,10 @@ ul.bib-listing li.list-item .label {
 }
 .dropdown-select-more {
   font-size: 10px;
-  margin-left: 5px;
+  float: right;
   margin-right: 5px;
+  margin-top: 5px;
+  margin-bottom: auto;
 }
 .dropdown-select-more :hover {
   cursor: pointer;
@@ -768,6 +771,12 @@ ul.bib-listing li.list-item .label {
   font-size: 0.8em;
   margin-left: 2px;
   cursor: pointer;
+}
+.loading {
+  background: url(Images/loading.gif) no-repeat center;
+  margin: 0 auto;
+  height: 48px;
+  width: 48px;
 }
 .main_logo {
   margin: 10px;

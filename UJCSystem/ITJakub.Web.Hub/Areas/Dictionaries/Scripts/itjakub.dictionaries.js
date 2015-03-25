@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    new DropDownSelect("div.dictionary-selects", true);
+    new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetDictionariesWithCategories", true).makeDropdown();
 });
 
 $(".saved-word-area-more").click(function () {
