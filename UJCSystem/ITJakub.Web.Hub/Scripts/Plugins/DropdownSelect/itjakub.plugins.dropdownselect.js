@@ -25,13 +25,22 @@ var DropDownSelect = (function () {
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
 
+        var self = this;
+        $(checkbox).change(function () {
+            if (this.checked) {
+                //TODO checkbox check function
+            } else {
+                //TODO checkbox uncheck function
+            }
+        });
+
         checkBoxSpan.appendChild(checkbox);
 
         dropDownHeadDiv.appendChild(checkBoxSpan);
 
         var textSpan = document.createElement("span");
         $(textSpan).addClass("dropdown-select-text");
-        textSpan.innerText = ""; //TODO read from parameter
+        textSpan.innerText = ""; //TODO read from parameter when root is not unique or is not description
 
         dropDownHeadDiv.appendChild(textSpan);
 
@@ -151,16 +160,28 @@ var DropDownSelect = (function () {
     };
 
     DropDownSelect.prototype.makeCategoryItem = function (container, currentCategory, categories, books) {
-        //TODO create divs with data and append to container
         var itemDiv = document.createElement("div");
-        $(itemDiv).addClass("concrete-item"); //TODO add data-item-id, data-item-name, data-item-type, data-item-is-favorite
+        $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
+        $(itemDiv).data("id", currentCategory["Id"]);
+        $(itemDiv).data("name", currentCategory["Description"]);
+        $(itemDiv).data("type", "category");
 
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
 
-        $(checkbox).click(function () {
-            //TODO add item to search criteria
+        var info = this.createCallbackInfo(currentCategory["Id"], itemDiv);
+        var self = this;
+        $(checkbox).change(function () {
+            if (this.checked) {
+                if (self.checkboxCheckCategoryCallback) {
+                    self.checkboxCheckCategoryCallback(info);
+                }
+            } else {
+                if (self.checkboxUncheckCategoryCallback) {
+                    self.checkboxUncheckCategoryCallback(info);
+                }
+            }
         });
 
         itemDiv.appendChild(checkbox);
@@ -173,10 +194,7 @@ var DropDownSelect = (function () {
             if (childsDiv.is(":hidden")) {
                 $(this).children().removeClass("glyphicon-chevron-down");
                 $(this).children().addClass("glyphicon-chevron-up");
-
-                //if ($(childsDiv).children().length > 0) {
                 childsDiv.slideDown();
-                //}
             } else {
                 $(this).children().removeClass("glyphicon-chevron-up");
                 $(this).children().addClass("glyphicon-chevron-down");
@@ -197,7 +215,11 @@ var DropDownSelect = (function () {
             $(saveStarSpan).click(function () {
                 $(this).siblings(".delete-item").show();
                 $(this).hide();
+
                 //TODO populate request on save to favorites
+                if (self.starSaveCategoryCallback) {
+                    self.starSaveCategoryCallback(info);
+                }
             });
 
             itemDiv.appendChild(saveStarSpan);
@@ -208,7 +230,11 @@ var DropDownSelect = (function () {
             $(deleteStarSpan).click(function () {
                 $(this).siblings(".save-item").show();
                 $(this).hide();
+
                 //TODO populate request on delete from favorites
+                if (self.starDeleteCategoryCallback) {
+                    self.starDeleteCategoryCallback(info);
+                }
             });
 
             itemDiv.appendChild(deleteStarSpan);
@@ -245,14 +271,27 @@ var DropDownSelect = (function () {
 
     DropDownSelect.prototype.makeBookItem = function (container, currentBook) {
         var itemDiv = document.createElement("div");
-        $(itemDiv).addClass("concrete-item"); //TODO add data-item-id, data-item-name, data-item-type, data-item-is-favorite
+        $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
+        $(itemDiv).data("id", currentBook["Id"]);
+        $(itemDiv).data("name", currentBook["Title"]);
+        $(itemDiv).data("type", "book");
 
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
 
-        $(checkbox).click(function () {
-            //TODO add item to search criteria
+        var info = this.createCallbackInfo(currentBook["Id"], itemDiv);
+        var self = this;
+        $(checkbox).change(function () {
+            if (this.checked) {
+                if (self.checkboxCheckItemCallback) {
+                    self.checkboxCheckItemCallback(info);
+                }
+            } else {
+                if (self.checkboxUncheckItemCallback) {
+                    self.checkboxUncheckItemCallback(info);
+                }
+            }
         });
 
         itemDiv.appendChild(checkbox);
@@ -264,7 +303,11 @@ var DropDownSelect = (function () {
             $(saveStarSpan).click(function () {
                 $(this).siblings(".delete-item").show();
                 $(this).hide();
+
                 //TODO populate request on save to favorites
+                if (self.starSaveItemCallback) {
+                    self.starSaveItemCallback(info);
+                }
             });
 
             itemDiv.appendChild(saveStarSpan);
@@ -275,7 +318,11 @@ var DropDownSelect = (function () {
             $(deleteStarSpan).click(function () {
                 $(this).siblings(".save-item").show();
                 $(this).hide();
+
                 //TODO populate request on delete from favorites
+                if (self.starDeleteItemCallback) {
+                    self.starDeleteItemCallback(info);
+                }
             });
 
             itemDiv.appendChild(deleteStarSpan);
@@ -289,6 +336,19 @@ var DropDownSelect = (function () {
 
         container.appendChild(itemDiv);
     };
+
+    DropDownSelect.prototype.createCallbackInfo = function (id, target) {
+        var info = new CallbackInfo();
+        info.Id = id;
+        info.Target = target;
+        return info;
+    };
     return DropDownSelect;
+})();
+
+var CallbackInfo = (function () {
+    function CallbackInfo() {
+    }
+    return CallbackInfo;
 })();
 //# sourceMappingURL=itjakub.plugins.dropdownselect.js.map

@@ -1,7 +1,25 @@
 ﻿
 $(document).ready(function () {
     new DropDownSelect("div.dictionary-selects","/Dictionaries/Dictionaries/GetDictionariesWithCategories", true).makeDropdown();
+    var selector = new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetTextWithCategories", true);
+    //selector.checkboxCheckCategoryCallback = testCategoryCallbackMethod;
+    //selector.checkboxCheckItemCallback = testItemCallbackMethod;
+    //selector.checkboxUncheckCategoryCallback = testCategoryCallbackMethod;
+    //selector.checkboxUncheckItemCallback = testItemCallbackMethod;
+    //selector.starSaveCategoryCallback = testCategoryCallbackMethod;
+    //selector.starSaveItemCallback = testItemCallbackMethod;
+    //selector.starDeleteCategoryCallback = testCategoryCallbackMethod;
+    //selector.starDeleteItemCallback = testItemCallbackMethod;
+    selector.makeDropdown();
 });
+
+//function testCategoryCallbackMethod(info : CallbackInfo) {
+//    alert("Id :" + info.Id + "\nTarget : "+info.Target+"\nType : Category");
+//}
+
+//function testItemCallbackMethod(info: CallbackInfo) {
+//    alert("Id :" + info.Id + "\nTarget : "+info.Target+"\nType : Item");
+//}
 
 
 $(".saved-word-area-more").click(function () {

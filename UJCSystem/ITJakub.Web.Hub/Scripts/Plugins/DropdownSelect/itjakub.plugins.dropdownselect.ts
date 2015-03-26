@@ -6,6 +6,14 @@ class DropDownSelect {
     dropDownSelectContainer: string;
     dataUrl: string;
     showStar: boolean;
+    checkboxCheckItemCallback: (info: CallbackInfo) => void;
+    checkboxCheckCategoryCallback: (info: CallbackInfo) => void;
+    checkboxUncheckItemCallback: (info: CallbackInfo) => void;
+    checkboxUncheckCategoryCallback: (info: CallbackInfo) => void;
+    starSaveItemCallback: (info: CallbackInfo) => void;
+    starSaveCategoryCallback: (info: CallbackInfo) => void;
+    starDeleteItemCallback: (info: CallbackInfo) => void;
+    starDeleteCategoryCallback: (info: CallbackInfo) => void;
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean) {
         this.dropDownSelectContainer = dropDownSelectContainer;
@@ -35,13 +43,22 @@ class DropDownSelect {
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
 
+        var self = this;
+        $(checkbox).change(function () {
+            if (this.checked) {
+                //TODO checkbox check function
+            } else {
+                //TODO checkbox uncheck function
+            }
+        });
+
         checkBoxSpan.appendChild(checkbox);
 
         dropDownHeadDiv.appendChild(checkBoxSpan);
 
         var textSpan = document.createElement("span");
         $(textSpan).addClass("dropdown-select-text");
-        textSpan.innerText = ""; //TODO read from parameter
+        textSpan.innerText = ""; //TODO read from parameter when root is not unique or is not description
 
         dropDownHeadDiv.appendChild(textSpan);
 
@@ -162,16 +179,28 @@ class DropDownSelect {
 
     private makeCategoryItem(container: HTMLDivElement, currentCategory: any, categories: any, books: any) {
 
-        //TODO create divs with data and append to container
         var itemDiv = document.createElement("div");
-        $(itemDiv).addClass("concrete-item"); //TODO add data-item-id, data-item-name, data-item-type, data-item-is-favorite
+        $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
+        $(itemDiv).data("id", currentCategory["Id"]);
+        $(itemDiv).data("name", currentCategory["Description"]);
+        $(itemDiv).data("type", "category");
 
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
 
-        $(checkbox).click(function() {
-            //TODO add item to search criteria
+        var info = this.createCallbackInfo(currentCategory["Id"], itemDiv);
+        var self = this;
+        $(checkbox).change(function () {
+            if (this.checked) {
+                if (self.checkboxCheckCategoryCallback) {
+                    self.checkboxCheckCategoryCallback(info);
+                }
+            } else {
+                if (self.checkboxUncheckCategoryCallback) {
+                    self.checkboxUncheckCategoryCallback(info);
+                }
+            }
         });
 
         itemDiv.appendChild(checkbox);
@@ -184,9 +213,7 @@ class DropDownSelect {
             if (childsDiv.is(":hidden")) {
                 $(this).children().removeClass("glyphicon-chevron-down");
                 $(this).children().addClass("glyphicon-chevron-up");
-                //if ($(childsDiv).children().length > 0) {
-                    childsDiv.slideDown();
-                //}
+                childsDiv.slideDown();
             } else {
                 $(this).children().removeClass("glyphicon-chevron-up");
                 $(this).children().addClass("glyphicon-chevron-down");
@@ -210,6 +237,9 @@ class DropDownSelect {
                 $(this).siblings(".delete-item").show();
                 $(this).hide();
                 //TODO populate request on save to favorites
+                if (self.starSaveCategoryCallback) {
+                    self.starSaveCategoryCallback(info); 
+                }
             });
 
             itemDiv.appendChild(saveStarSpan);
@@ -221,6 +251,9 @@ class DropDownSelect {
                 $(this).siblings(".save-item").show();
                 $(this).hide();
                 //TODO populate request on delete from favorites
+                if (self.starDeleteCategoryCallback) {
+                    self.starDeleteCategoryCallback(info);
+                }
             });
 
             itemDiv.appendChild(deleteStarSpan);
@@ -232,7 +265,7 @@ class DropDownSelect {
         itemDiv.appendChild(nameSpan);
 
         var childsDiv = document.createElement("div");
-        $(childsDiv).addClass("child-items"); 
+        $(childsDiv).addClass("child-items");
         itemDiv.appendChild(childsDiv);
 
         container.appendChild(itemDiv);
@@ -258,14 +291,27 @@ class DropDownSelect {
 
     private makeBookItem(container: HTMLDivElement, currentBook: any) {
         var itemDiv = document.createElement("div");
-        $(itemDiv).addClass("concrete-item"); //TODO add data-item-id, data-item-name, data-item-type, data-item-is-favorite
+        $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
+        $(itemDiv).data("id", currentBook["Id"]);
+        $(itemDiv).data("name", currentBook["Title"]);
+        $(itemDiv).data("type", "book");
 
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
 
-        $(checkbox).click(function () {
-            //TODO add item to search criteria
+        var info = this.createCallbackInfo(currentBook["Id"], itemDiv);
+        var self = this;
+        $(checkbox).change(function() {
+            if (this.checked) {
+                if (self.checkboxCheckItemCallback) {
+                    self.checkboxCheckItemCallback(info); 
+                }
+            } else {
+                if (self.checkboxUncheckItemCallback) {
+                    self.checkboxUncheckItemCallback(info);
+                }
+            }
         });
 
         itemDiv.appendChild(checkbox);
@@ -275,10 +321,13 @@ class DropDownSelect {
             var saveStarSpan = document.createElement("span");
             $(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
 
-            $(saveStarSpan).click(function () {
+            $(saveStarSpan).click(function() {
                 $(this).siblings(".delete-item").show();
                 $(this).hide();
                 //TODO populate request on save to favorites
+                if (self.starSaveItemCallback) {
+                    self.starSaveItemCallback(info);
+                }
             });
 
             itemDiv.appendChild(saveStarSpan);
@@ -286,10 +335,13 @@ class DropDownSelect {
             var deleteStarSpan = document.createElement("span");
             $(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
 
-            $(deleteStarSpan).click(function () {
+            $(deleteStarSpan).click(function() {
                 $(this).siblings(".save-item").show();
                 $(this).hide();
                 //TODO populate request on delete from favorites
+                if (self.starDeleteItemCallback) {
+                    self.starDeleteItemCallback(info); 
+                }
             });
 
             itemDiv.appendChild(deleteStarSpan);
@@ -303,4 +355,17 @@ class DropDownSelect {
 
         container.appendChild(itemDiv);
     }
+
+
+    private createCallbackInfo(id: string, target: any): CallbackInfo {
+        var info = new CallbackInfo();
+        info.Id = id;
+        info.Target = target;
+        return info;
+    }
+}
+
+class CallbackInfo {
+    public Id : string; //id of item
+    public Target : any; //This in caller
 }
