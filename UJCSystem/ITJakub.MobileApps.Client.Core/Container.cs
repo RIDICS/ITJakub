@@ -6,6 +6,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProvid
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Manager.Tasks;
+using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using Microsoft.Practices.Unity;
@@ -56,6 +57,7 @@ namespace ITJakub.MobileApps.Client.Core
             container.RegisterType<ITimerService, TimerService>(WithLifetime.ContainerControlled(typeof (TimerService)));
             container.RegisterType<IPollingService, PollingService>(WithLifetime.ContainerControlled(typeof (PollingService)));
             container.RegisterType<IMainPollingService, PollingService>(WithLifetime.ContainerControlled(typeof (PollingService)));
+            container.RegisterType<IErrorService, ErrorService>(WithLifetime.ContainerControlled(typeof (ErrorService)));
 
 
             //container.RegisterTypes(AllClasses.FromApplication())

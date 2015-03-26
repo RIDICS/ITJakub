@@ -1,9 +1,10 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls.Primitives;
 using GalaSoft.MvvmLight.Messaging;
-using ITJakub.MobileApps.Client.MainApp.ViewModel;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
 
-namespace ITJakub.MobileApps.Client.MainApp.View.Control
+namespace ITJakub.MobileApps.Client.Shared.Control
 {
     public class ErrorBar
     {
@@ -34,7 +35,13 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Control
         private void Close(CloseErrorBarMessage message)
         {
             m_popup.IsOpen = false;
+            m_popup = null;
             Messenger.Default.Unregister(this);
+
+            if (ClosedCommand != null)
+                ClosedCommand();
         }
+
+        public Action ClosedCommand { get; set; }
     }
 }

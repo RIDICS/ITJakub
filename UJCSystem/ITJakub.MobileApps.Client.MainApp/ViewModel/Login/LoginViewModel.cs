@@ -17,19 +17,21 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
+        private readonly IErrorService m_errorService;
         private bool m_loggingIn;
         private Visibility m_loginDialogVisibility;
 
-        public LoginViewModel(IDataService dataService, INavigationService navigationService)
+        public LoginViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_errorService = errorService;
             LoggingIn = false;
             LoadInitData();
 
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             ItemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
-            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate(typeof (RegistrationView)));
+            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<RegistrationView>());
         }
 
 
@@ -96,6 +98,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
                 {
                     if (exception is UserNotRegisteredException)
                         new MessageDialog("Pro přihlášení do aplikace je nutné se nejdříve registrovat.", "Uživatel není registrován").ShowAsync();
+                    else
+                        m_errorService.ShowConnectionError();
 
                     return;
                 }

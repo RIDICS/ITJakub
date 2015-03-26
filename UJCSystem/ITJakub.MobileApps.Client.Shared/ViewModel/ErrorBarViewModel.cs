@@ -3,22 +3,12 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Task = System.Threading.Tasks.Task;
 
-namespace ITJakub.MobileApps.Client.MainApp.ViewModel
+namespace ITJakub.MobileApps.Client.Shared.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class ErrorBarViewModel : ViewModelBase
+    internal class ErrorBarViewModel : ViewModelBase
     {
         private string m_message;
 
-        /// <summary>
-        /// Initializes a new instance of the ErrorBarViewModel class.
-        /// </summary>
-        /// <param name="message"></param>
         public ErrorBarViewModel(string message)
         {
             Message = message;

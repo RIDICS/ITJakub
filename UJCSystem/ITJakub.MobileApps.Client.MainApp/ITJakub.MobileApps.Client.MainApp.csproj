@@ -143,12 +143,7 @@
     <Compile Include="View\EditorHostView.xaml.cs">
       <DependentUpon>EditorHostView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Control\ErrorBar.cs" />
     <Compile Include="Common\RelayCommand.cs" />
-    <Compile Include="View\Control\ErrorBarView.xaml.cs">
-      <DependentUpon>ErrorBarView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModel\ErrorBarViewModel.cs" />
     <Compile Include="ViewModel\ApplicationHostViewModel.cs" />
     <Compile Include="ViewModel\SelectTaskViewModel.cs" />
     <Compile Include="View\Converter\ApplicationCategoryToNameConverter.cs" />
@@ -239,10 +234,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\EditorHostView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Control\ErrorBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

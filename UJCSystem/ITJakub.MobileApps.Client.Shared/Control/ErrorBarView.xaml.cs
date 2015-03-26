@@ -3,9 +3,9 @@ using Windows.UI.Xaml;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace ITJakub.MobileApps.Client.MainApp.View.Control
+namespace ITJakub.MobileApps.Client.Shared.Control
 {
-    public sealed partial class ErrorBarView
+    internal sealed partial class ErrorBarView
     {
         public ErrorBarView()
         {
