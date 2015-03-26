@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Web.Mvc;
 using ITJakub.Shared.Contracts;
 
@@ -35,6 +37,15 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             return View();
         }
+
+        //public ActionResult SaveItem(string itemmType, string itemId, string bookType)
+        //{
+        //    var actionType = action == "add" ? ActionType.Save : ActionType.Delete;
+        //    var itemType = action == "add" ? ItemmTypeContract.Book : ItemmTypeContract.Category;
+
+        //    m_mainServiceClient.SaveFavorite(action, bookType);
+
+        //}
 
         public ActionResult GetTextWithCategories()
         {

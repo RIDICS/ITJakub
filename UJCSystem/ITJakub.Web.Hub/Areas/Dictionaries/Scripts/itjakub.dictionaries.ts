@@ -1,40 +1,43 @@
 ﻿
 $(document).ready(function () {
     var dictionarySelector = new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetDictionariesWithCategories", true);
-    //dictionarySelector.selectedChangedCallback = stateChangedCallbackMethod;
+    //dictionarySelector.selectedChangedCallback = showStateInAlertBox;
     dictionarySelector.makeDropdown();
 
     var editionSelector = new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetTextWithCategories", true);
-    //editionSelector.selectedChangedCallback = stateChangedCallbackMethod;
+    //editionSelector.selectedChangedCallback = showStateInAlertBox;
 
     //selector.starSaveCategoryCallback = testCategoryCallbackMethod;
     //selector.starSaveItemCallback = testItemCallbackMethod;
     //selector.starDeleteCategoryCallback = testCategoryCallbackMethod;
     //selector.starDeleteItemCallback = testItemCallbackMethod;
     editionSelector.makeDropdown();
+
+    var array = new Array();
+    array.push(dictionarySelector);
+    array.push(editionSelector);
+
+    $("#searchButton").click(function() {
+        for (var i = 0; i < array.length; i++) {
+            var state = array[i].getState();
+            showStateInAlertBox(state);
+        }
+    });
 });
 
-//function stateChangedCallbackMethod(state : State) {
-//    var itemIds = "";
-//    $.each(state.SelectedItemsIds, function (index, val) {
-//        itemIds = itemIds.concat(val+",");
-//    });
+function showStateInAlertBox(state : State) {
+    var itemIds = "";
+    $.each(state.SelectedItemsIds, function (index, val) {
+        itemIds = itemIds.concat(val+",");
+    });
 
-//    var categoriesIds = "";
-//    $.each(state.SelectedCategoriesIds, function (index, val) {
-//        categoriesIds = categoriesIds.concat(val + ",");
-//    });
+    var categoriesIds = "";
+    $.each(state.SelectedCategoriesIds, function (index, val) {
+        categoriesIds = categoriesIds.concat(val + ",");
+    });
 
-//    alert("State has changed for type: " + state.Type+"\n Items: "+itemIds+"\n Categories: "+categoriesIds);
-//}
-
-//function testCategoryCallbackMethod(info : CallbackInfo) {
-//    alert("Id :" + info.Id + "\nTarget : "+info.Target+"\nType : Category");
-//}
-
-//function testItemCallbackMethod(info: CallbackInfo) {
-//    alert("Id :" + info.Id + "\nTarget : "+info.Target+"\nType : Item");
-//}
+    alert("State for type: " + state.Type+"\nItems: "+itemIds+"\nCategories: "+categoriesIds);
+}
 
 
 $(".saved-word-area-more").click(function () {

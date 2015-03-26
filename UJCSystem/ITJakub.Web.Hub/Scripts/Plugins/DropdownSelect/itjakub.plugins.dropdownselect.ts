@@ -138,7 +138,6 @@ class DropDownSelect {
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
-
                 self.type = response["type"];
                 var categories = response["categories"];
                 var books = response["books"];
