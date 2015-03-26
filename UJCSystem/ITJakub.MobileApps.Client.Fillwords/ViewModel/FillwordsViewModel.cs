@@ -17,6 +17,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private bool m_isOver;
         private bool m_saving;
         private bool m_isSubmitFlyoutOpen;
+        private bool m_isDataLoaded;
+        private bool m_isSubmited;
 
         public FillwordsViewModel(FillwordsDataService dataService)
         {
@@ -101,6 +103,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 IsOver = taskFinished.IsFinished || IsOver;
 
                 SetDataLoaded();
+                m_isDataLoaded = true;
+                m_isSubmited = taskFinished.IsFinished;
                 
                 if (IsOver)
                     StartPollingResults();
@@ -116,15 +120,15 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             });
         }
 
-        public override void EvaluateAndShowResults()
+        public override async void EvaluateAndShowResults()
         {
-            if (IsOver)
-                return;
-            
             IsOver = true;
-            // TODO handling over (show info, submit)
-            //await new MessageDialog("Skupina byla ukončena, tudíž dojde k automatickému vyhodnocení vyplněných odpovědí.", "Vyhodnocení odpovědí").ShowAsync();
-            //Submit();
+            
+            if (m_isDataLoaded && !m_isSubmited)
+            {
+                await new MessageDialog("Skupina byla ukončena, tudíž dojde k automatickému vyhodnocení vyplněných odpovědí.", "Vyhodnocení odpovědí").ShowAsync();
+                Submit();
+            }
         }
 
         public override void StopCommunication()
@@ -151,6 +155,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 }
 
                 IsOver = result.IsOver;
+                m_isSubmited = result.IsOver;
 
                 StartPollingResults();
             });
