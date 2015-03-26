@@ -51,6 +51,7 @@
                    Style="{StaticResource BaseTextBlockStyle}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"
+                   TextWrapping="Wrap"
                    Margin="42,0,0,0" />
         
         <Button Grid.Column="1"

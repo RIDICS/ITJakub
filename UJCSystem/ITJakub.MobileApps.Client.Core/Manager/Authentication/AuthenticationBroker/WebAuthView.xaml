@@ -5,10 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:authBroker="using:ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d"
     RequestedTheme="Light"
     d:DataContext="{d:DesignInstance Type=authBroker:WebAuthViewModel }">
 
+    <Page.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Page.Resources>
+    
     <Grid Background="#70000000">
         <Grid Margin="0,100,0,100">
             <Grid.RowDefinitions>
@@ -55,6 +60,13 @@
                     </interactivity:Interaction.Behaviors>-->
                 </WebView>
 
+                <TextBlock Text="Webovou stránku nelze zobrazit. Zkontrolujte připojení k internetu."
+                           FontSize="16"
+                           Margin="20,30"
+                           Foreground="#202020"
+                           TextWrapping="Wrap"
+                           IsTextSelectionEnabled="True"
+                           Visibility="{Binding IsError, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
         </Grid>
 

@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
         private string m_browserTitle;
         private Uri m_browserUri;
         private bool m_disposed;
+        private bool m_isError;
 
         public WebAuthViewModel()
         {
@@ -36,6 +37,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
             set{m_browserUri = value;RaisePropertyChanged();}
         }
 
+        public bool IsError
+        {
+            get { return m_isError; }
+            set
+            {
+                m_isError = value; 
+                RaisePropertyChanged();
+            }
+        }
+
         public void Dispose()
         {
             Dispose(true);
@@ -51,7 +62,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
                 if (parameters.IsSuccess)
                     MessengerInstance.Send(new AuthBrokerUriChangedMessage {Uri = parameters.Uri, DocumentTitle = BrowserTitle});
                 else
-                    MessengerInstance.Send(new AuthBrokerUriNavigationFailedMessage {Uri = parameters.Uri, DocumentTitle = BrowserTitle});
+                    IsError = true;
             });
         }
 

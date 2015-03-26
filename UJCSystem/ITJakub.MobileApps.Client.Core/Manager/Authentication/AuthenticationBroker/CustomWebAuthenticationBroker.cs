@@ -43,7 +43,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
         private void RegisterForMessages()
         {
             Messenger.Default.Register<AuthBrokerCanceledMessage>(this, WebAuthCanceled);
-            Messenger.Default.Register<AuthBrokerUriNavigationFailedMessage>(this, UriNavigationFailed);
             Messenger.Default.Register<AuthBrokerUriChangedMessage>(this, UriNavigationChanged);
         }
 
@@ -56,22 +55,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
                 m_taskCompletion.TrySetResult(true);
                 m_authenticationPopup.IsOpen = false;
             }
-        }
-
-        private void UriNavigationFailed(AuthBrokerUriNavigationFailedMessage message)
-        {
-            if (message.Uri.AbsoluteUri.StartsWith(EndUri.AbsoluteUri, StringComparison.OrdinalIgnoreCase))
-            {
-                m_responseStatus = WebAuthenticationStatus.Success;
-                m_responseData = GetResponseData(message);
-            }
-            else
-            {
-                m_responseStatus = WebAuthenticationStatus.ErrorHttp;
-            }
-
-            m_taskCompletion.TrySetResult(true);
-            m_authenticationPopup.IsOpen = false;
         }
 
         private void WebAuthCanceled(AuthBrokerCanceledMessage message)

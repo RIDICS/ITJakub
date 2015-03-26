@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Security.Authentication.Web;
@@ -49,7 +50,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
                         return userInfo;
                 }
             }
-            catch (Exception)
+            catch (IOException)
             {
                 // Authentication failed. Handle parameter, SSL/TLS, and Network Unavailable errors here. 
                 // resultSring = ex.Message;
