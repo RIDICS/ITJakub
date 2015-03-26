@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -16,13 +15,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
-        private Visibility m_loginDialogVisibility;
+        private readonly IErrorService m_errorService;
         private bool m_registrationInProgress;
 
-        public RegistrationViewModel(IDataService dataService, INavigationService navigationService)
+        public RegistrationViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_errorService = errorService;
             RegistrationInProgress = false;
 
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
@@ -51,23 +51,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
 
         public RelayCommand GoBackCommand { get; private set; }
 
-        public Visibility LoginDialogVisibility
-        {
-            get { return m_loginDialogVisibility; }
-            set
-            {
-                m_loginDialogVisibility = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public bool RegistrationInProgress
         {
             get { return m_registrationInProgress; }
             set
             {
                 m_registrationInProgress = value;
-                LoginDialogVisibility = value ? Visibility.Visible : Visibility.Collapsed;
                 RaisePropertyChanged();
             }
         }
@@ -91,12 +80,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
                 {
                     if (exception is UserAlreadyRegisteredException)
                         new MessageDialog("Tento uživatelský účet už byl v minulosti v systému zaregistrován. Pro pokračování využijte předchozí obrazovku \"Přihlášení\".", "Uživatel je registrovaný").ShowAsync();
+                    else
+                        m_errorService.ShowConnectionError();
 
                     return;
                 }
 
                 if (createUserResult)
-                    m_navigationService.Navigate(typeof(GroupListView));
+                    m_navigationService.Navigate<GroupListView>();
             });
         }
     }

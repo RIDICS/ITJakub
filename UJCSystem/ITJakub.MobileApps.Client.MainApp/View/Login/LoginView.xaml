@@ -13,6 +13,7 @@
 
     <Page.Resources>
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <login:LoginProviderToIconConverter x:Key="LoginProviderToIcon" />
     </Page.Resources>
 
@@ -59,12 +60,12 @@
         </Grid>
 
         <TextBlock Grid.Row="1"
-                   Margin="120 0 20 0"
+                   Margin="120,0,20,0"
                    Style="{StaticResource SubheaderTextBlockStyle}"
                    Text="Zvolte si službu, pomocí které jste provedli registraci." />
 
         <ListView Grid.Row="1"
-                  Padding="15 40 0 40"
+                  Padding="15,40,0,40"
                   HorizontalAlignment="Center"
                   SelectionMode="None"
                   IsItemClickEnabled="True"
@@ -104,7 +105,7 @@
                     VerticalAlignment="Center"
                     Orientation="Horizontal"
                     Background="White"
-                    Visibility="{Binding LoginDialogVisibility}">
+                    Visibility="{Binding LoggingIn, Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <ProgressRing Width="40"
                           Height="40"

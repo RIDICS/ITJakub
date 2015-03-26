@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -19,7 +18,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
         private readonly INavigationService m_navigationService;
         private readonly IErrorService m_errorService;
         private bool m_loggingIn;
-        private Visibility m_loginDialogVisibility;
 
         public LoginViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
@@ -43,23 +41,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
         
         public RelayCommand GoBackCommand { get; private set; }
 
-        public Visibility LoginDialogVisibility
-        {
-            get { return m_loginDialogVisibility; }
-            set
-            {
-                m_loginDialogVisibility = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public bool LoggingIn
         {
             get { return m_loggingIn; }
             set
             {
                 m_loggingIn = value;
-                LoginDialogVisibility = value ? Visibility.Visible : Visibility.Collapsed;
                 RaisePropertyChanged();
             }
         }
@@ -105,7 +92,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
                 }
 
                 if (loginResult)
-                    m_navigationService.Navigate(typeof (GroupListView));
+                    m_navigationService.Navigate<GroupListView>();
             });
         }
     }
