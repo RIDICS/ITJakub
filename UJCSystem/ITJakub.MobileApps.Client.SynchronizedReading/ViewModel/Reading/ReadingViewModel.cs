@@ -26,6 +26,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private PageViewModel m_selectedPage;
         private string m_goToPageText;
         private bool m_isPageNotFoundError;
+        private bool m_isEnd;
 
         public ReadingViewModel(ReaderDataService dataService)
         {
@@ -80,7 +81,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
         public override void EvaluateAndShowResults()
         {
-            // TODO show group end info
+            IsEnd = true;
+            CurrentReader = null;
             StopCommunication();
         }
 
@@ -221,6 +223,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             set
             {
                 m_isPageNotFoundError = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsEnd
+        {
+            get { return m_isEnd; }
+            set
+            {
+                m_isEnd = value;
                 RaisePropertyChanged();
             }
         }

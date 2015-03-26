@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     public class PlayerRankingViewModel : ViewModelBase
     {
         private readonly int m_crosswordRowCount;
-        private bool m_win;
+        private bool m_isEnd;
         private ObservableCollection<PlayerRankViewModel> m_playerRanking;
 
         public PlayerRankingViewModel(int crosswordRowCount)
@@ -29,12 +29,12 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             }
         }
 
-        public bool Win
+        public bool IsEnd
         {
-            get { return m_win; }
+            get { return m_isEnd; }
             set
             {
-                m_win = value;
+                m_isEnd = value;
                 RaisePropertyChanged();
             }
         }

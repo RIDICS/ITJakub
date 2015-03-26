@@ -53,7 +53,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     return;
 
                 rowViewModel.IsCorrect = gameInfo.WordFilledCorrectly;
-                PlayerRankingViewModel.Win = gameInfo.Win;
+                PlayerRankingViewModel.IsEnd = gameInfo.Win;
             });
         }
 
@@ -103,12 +103,13 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public void SetWin(bool isWin)
         {
-            if (PlayerRankingViewModel != null)
-                PlayerRankingViewModel.Win = isWin;
+            if (PlayerRankingViewModel != null && isWin)
+                PlayerRankingViewModel.IsEnd = true;
         }
 
         public void StopAndShowResults()
         {
+            PlayerRankingViewModel.IsEnd = true;
             //todo try fix slow loading
             //todo show result
             new MessageDialog("Show result table").ShowAsync();

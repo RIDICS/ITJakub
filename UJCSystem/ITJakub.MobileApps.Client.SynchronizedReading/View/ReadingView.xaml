@@ -28,9 +28,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
     
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          Margin="120,0,30,40">
-        
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Margin="120,0,30,40">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -236,5 +235,18 @@
                        Foreground="Orange"
                        Visibility="{Binding IsPageNotFoundError, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
+    </Grid>
+        
+        <Grid Background="#60000000"
+              Visibility="{Binding IsEnd, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid Background="White"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center">
+                <TextBlock Text="Aplikace byla ukončena"
+                           Foreground="Black"
+                           FontSize="30"
+                           Margin="80,40"/>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

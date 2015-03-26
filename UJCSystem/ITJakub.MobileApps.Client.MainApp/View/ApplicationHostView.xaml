@@ -30,6 +30,7 @@
                 
                 <ItemsControl Grid.Column="0"
                               VerticalAlignment="Center"
+                              IsEnabled="{Binding IsClosed, Converter={StaticResource BooleanNegationConverter}}"
                               ItemsSource="{Binding ApplicationViewModel.ActionsWithUsers}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

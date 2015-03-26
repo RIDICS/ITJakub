@@ -46,6 +46,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private GroupInfoViewModel m_groupInfo;
         private ObservableCollection<GroupMemberViewModel> m_memberList;
         private TaskViewModel m_currentTask;
+        private bool m_isClosed;
 
         public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
         {
@@ -167,6 +168,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             if (state == GroupStateContract.Closed)
             {
+                IsClosed = true;
+                IsChatDisplayed = false;
+                IsChatSupported = false;
+                UnreadMessageCount = 0;
                 ApplicationViewModel.EvaluateAndShowResults();
                 m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
             }
@@ -192,7 +197,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 if (exception != null)
                 {
                     await new MessageDialog("Tato skupina obsahuje neznámé zadání. Pro otevření této skupiny použijte jinou aplikaci.", "Neznámá aplikace").ShowAsync();
-                    m_navigationService.GoBack();
+                    GoBack();
                     return;
                 }
 
@@ -326,6 +331,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        public bool IsClosed
+        {
+            get { return m_isClosed; }
+            set
+            {
+                m_isClosed = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool Waiting
         {
             get { return m_waitingForStart || m_waitingForData || m_isPaused; }
@@ -362,6 +377,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public RelayCommand GoBackCommand { get; private set; }
         
         public RelayCommand ShowChatCommand { get; private set; }
+
 
         #endregion
     }

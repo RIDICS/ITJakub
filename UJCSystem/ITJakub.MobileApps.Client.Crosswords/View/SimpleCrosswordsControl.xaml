@@ -175,6 +175,6 @@
         <view:PlayerRankingControl Grid.Row="0"
                                    Grid.RowSpan="2"
                                    DataContext="{Binding PlayerRankingViewModel}"
-                                   Visibility="{Binding Win, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                   Visibility="{Binding IsEnd, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>
