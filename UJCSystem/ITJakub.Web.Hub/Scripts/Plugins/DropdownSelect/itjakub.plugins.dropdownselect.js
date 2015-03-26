@@ -4,6 +4,8 @@ var DropDownSelect = (function () {
         this.dropDownSelectContainer = dropDownSelectContainer;
         this.dataUrl = dataUrl;
         this.showStar = showStar;
+        this.selectedCategoriesIds = new Array();
+        this.selectedItemsIds = new Array();
     }
     DropDownSelect.prototype.makeDropdown = function () {
         var dropDownDiv = document.createElement("div");
@@ -24,15 +26,6 @@ var DropDownSelect = (function () {
 
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-
-        var self = this;
-        $(checkbox).change(function () {
-            if (this.checked) {
-                //TODO checkbox check function
-            } else {
-                //TODO checkbox uncheck function
-            }
-        });
 
         checkBoxSpan.appendChild(checkbox);
 
@@ -116,6 +109,7 @@ var DropDownSelect = (function () {
         var loadDiv = document.createElement("div");
         $(loadDiv).addClass("loading");
         $(dropDownItemsDiv).append(loadDiv);
+        var self = this;
 
         $.ajax({
             type: "GET",
@@ -125,6 +119,7 @@ var DropDownSelect = (function () {
             dataType: "json",
             contentType: "application/json",
             success: function (response) {
+                self.type = response["type"];
                 var categories = response["categories"];
                 var books = response["books"];
 
@@ -138,8 +133,19 @@ var DropDownSelect = (function () {
     DropDownSelect.prototype.makeTreeStructure = function (categories, books, dropDownItemsDiv) {
         var rootCategory = categories[""][0];
 
-        var textSpan = $(dropDownItemsDiv).parent().children(".dropdown-select-header").children(".dropdown-select-text");
-        $(textSpan).append(rootCategory["Description"]);
+        var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
+        $(selectHeader).children(".dropdown-select-text").append(rootCategory["Description"]);
+
+        var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
+        var info = this.createCallbackInfo(rootCategory["Id"], selectHeader);
+        var self = this;
+        $(checkbox).change(function () {
+            if (this.checked) {
+                self.addToSelectedCategories(info);
+            } else {
+                self.removeFromSelectedCategories(info);
+            }
+        });
 
         var childCategories = categories[rootCategory["Id"]];
         var childBooks = books[rootCategory["Id"]];
@@ -174,13 +180,9 @@ var DropDownSelect = (function () {
         var self = this;
         $(checkbox).change(function () {
             if (this.checked) {
-                if (self.checkboxCheckCategoryCallback) {
-                    self.checkboxCheckCategoryCallback(info);
-                }
+                self.addToSelectedCategories(info);
             } else {
-                if (self.checkboxUncheckCategoryCallback) {
-                    self.checkboxUncheckCategoryCallback(info);
-                }
+                self.removeFromSelectedCategories(info);
             }
         });
 
@@ -284,13 +286,9 @@ var DropDownSelect = (function () {
         var self = this;
         $(checkbox).change(function () {
             if (this.checked) {
-                if (self.checkboxCheckItemCallback) {
-                    self.checkboxCheckItemCallback(info);
-                }
+                self.addToSelectedItems(info);
             } else {
-                if (self.checkboxUncheckItemCallback) {
-                    self.checkboxUncheckItemCallback(info);
-                }
+                self.removeFromSelectedItems(info);
             }
         });
 
@@ -343,6 +341,44 @@ var DropDownSelect = (function () {
         info.Target = target;
         return info;
     };
+
+    DropDownSelect.prototype.addToSelectedItems = function (info) {
+        this.selectedItemsIds.push(info.Id);
+        this.selectedChanged();
+    };
+
+    DropDownSelect.prototype.removeFromSelectedItems = function (info) {
+        this.selectedItemsIds = $.grep(this.selectedItemsIds, function (valueId) {
+            return valueId !== info.Id;
+        }, false);
+        this.selectedChanged();
+    };
+
+    DropDownSelect.prototype.addToSelectedCategories = function (info) {
+        this.selectedCategoriesIds.push(info.Id);
+        this.selectedChanged();
+    };
+
+    DropDownSelect.prototype.removeFromSelectedCategories = function (info) {
+        this.selectedCategoriesIds = $.grep(this.selectedCategoriesIds, function (valueId) {
+            return valueId !== info.Id;
+        }, false);
+        this.selectedChanged();
+    };
+
+    DropDownSelect.prototype.selectedChanged = function () {
+        if (this.selectedChangedCallback) {
+            this.selectedChangedCallback(this.getState());
+        }
+    };
+
+    DropDownSelect.prototype.getState = function () {
+        var state = new State();
+        state.Type = this.type;
+        state.SelectedCategoriesIds = this.selectedCategoriesIds;
+        state.SelectedItemsIds = this.selectedItemsIds;
+        return state;
+    };
     return DropDownSelect;
 })();
 
@@ -350,5 +386,11 @@ var CallbackInfo = (function () {
     function CallbackInfo() {
     }
     return CallbackInfo;
+})();
+
+var State = (function () {
+    function State() {
+    }
+    return State;
 })();
 //# sourceMappingURL=itjakub.plugins.dropdownselect.js.map

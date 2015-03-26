@@ -41,7 +41,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var dictionariesAndCategories = m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
             var booksDictionary = dictionariesAndCategories.Books.GroupBy(x => x.CategoryId).ToDictionary(x => x.Key.ToString(), x => x.ToList());
             var categoriesDictionary = dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId).ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
-            return Json(new { books = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
+            return Json(new { type = BookTypeEnumContract.Edition, books = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetDictionariesWithCategories()
@@ -49,7 +49,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var dictionariesAndCategories = m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
             var booksDictionary = dictionariesAndCategories.Books.GroupBy(x => x.CategoryId).ToDictionary(x => x.Key.ToString(), x => x.ToList());
             var categoriesDictionary  = dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId).ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
-            return Json(new { books = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
+            return Json(new { type = BookTypeEnumContract.Dictionary, books = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
         }
     }
 }

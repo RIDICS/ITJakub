@@ -1,18 +1,30 @@
 ﻿$(document).ready(function () {
-    new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetDictionariesWithCategories", true).makeDropdown();
-    var selector = new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetTextWithCategories", true);
+    var dictionarySelector = new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetDictionariesWithCategories", true);
 
-    //selector.checkboxCheckCategoryCallback = testCategoryCallbackMethod;
-    //selector.checkboxCheckItemCallback = testItemCallbackMethod;
-    //selector.checkboxUncheckCategoryCallback = testCategoryCallbackMethod;
-    //selector.checkboxUncheckItemCallback = testItemCallbackMethod;
+    //dictionarySelector.selectedChangedCallback = stateChangedCallbackMethod;
+    dictionarySelector.makeDropdown();
+
+    var editionSelector = new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetTextWithCategories", true);
+
+    //editionSelector.selectedChangedCallback = stateChangedCallbackMethod;
     //selector.starSaveCategoryCallback = testCategoryCallbackMethod;
     //selector.starSaveItemCallback = testItemCallbackMethod;
     //selector.starDeleteCategoryCallback = testCategoryCallbackMethod;
     //selector.starDeleteItemCallback = testItemCallbackMethod;
-    selector.makeDropdown();
+    editionSelector.makeDropdown();
 });
 
+//function stateChangedCallbackMethod(state : State) {
+//    var itemIds = "";
+//    $.each(state.SelectedItemsIds, function (index, val) {
+//        itemIds = itemIds.concat(val+",");
+//    });
+//    var categoriesIds = "";
+//    $.each(state.SelectedCategoriesIds, function (index, val) {
+//        categoriesIds = categoriesIds.concat(val + ",");
+//    });
+//    alert("State has changed for type: " + state.Type+"\n Items: "+itemIds+"\n Categories: "+categoriesIds);
+//}
 //function testCategoryCallbackMethod(info : CallbackInfo) {
 //    alert("Id :" + info.Id + "\nTarget : "+info.Target+"\nType : Category");
 //}

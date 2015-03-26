@@ -3,22 +3,26 @@
 
 class DropDownSelect {
 
-    dropDownSelectContainer: string;
-    dataUrl: string;
-    showStar: boolean;
-    checkboxCheckItemCallback: (info: CallbackInfo) => void;
-    checkboxCheckCategoryCallback: (info: CallbackInfo) => void;
-    checkboxUncheckItemCallback: (info: CallbackInfo) => void;
-    checkboxUncheckCategoryCallback: (info: CallbackInfo) => void;
+    private dropDownSelectContainer: string;
+    private dataUrl: string;
+    private showStar: boolean;
+    private type: string;
+    private selectedItemsIds: Array<string>;
+    private selectedCategoriesIds: Array<string>;
+
     starSaveItemCallback: (info: CallbackInfo) => void;
     starSaveCategoryCallback: (info: CallbackInfo) => void;
     starDeleteItemCallback: (info: CallbackInfo) => void;
     starDeleteCategoryCallback: (info: CallbackInfo) => void;
 
+    selectedChangedCallback: (state: State) => void;
+
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean) {
         this.dropDownSelectContainer = dropDownSelectContainer;
         this.dataUrl = dataUrl;
         this.showStar = showStar;
+        this.selectedCategoriesIds = new Array();
+        this.selectedItemsIds = new Array();
     }
 
     makeDropdown() {
@@ -42,15 +46,6 @@ class DropDownSelect {
 
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-
-        var self = this;
-        $(checkbox).change(function () {
-            if (this.checked) {
-                //TODO checkbox check function
-            } else {
-                //TODO checkbox uncheck function
-            }
-        });
 
         checkBoxSpan.appendChild(checkbox);
 
@@ -133,6 +128,7 @@ class DropDownSelect {
         var loadDiv = document.createElement("div");
         $(loadDiv).addClass("loading");
         $(dropDownItemsDiv).append(loadDiv);
+        var self = this;
 
         $.ajax({
             type: "GET",
@@ -142,6 +138,8 @@ class DropDownSelect {
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
+
+                self.type = response["type"];
                 var categories = response["categories"];
                 var books = response["books"];
 
@@ -155,8 +153,19 @@ class DropDownSelect {
     private makeTreeStructure(categories, books, dropDownItemsDiv: HTMLDivElement) {
         var rootCategory = categories[""][0];
 
-        var textSpan = $(dropDownItemsDiv).parent().children(".dropdown-select-header").children(".dropdown-select-text");
-        $(textSpan).append(rootCategory["Description"]);
+        var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
+        $(selectHeader).children(".dropdown-select-text").append(rootCategory["Description"]);
+
+        var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
+        var info = this.createCallbackInfo(rootCategory["Id"], selectHeader);
+        var self = this;
+        $(checkbox).change(function() {
+            if (this.checked) {
+                self.addToSelectedCategories(info);
+            } else {
+                self.removeFromSelectedCategories(info);
+            }
+        });
 
         var childCategories = categories[rootCategory["Id"]];
         var childBooks = books[rootCategory["Id"]];
@@ -191,15 +200,11 @@ class DropDownSelect {
 
         var info = this.createCallbackInfo(currentCategory["Id"], itemDiv);
         var self = this;
-        $(checkbox).change(function () {
+        $(checkbox).change(function() {
             if (this.checked) {
-                if (self.checkboxCheckCategoryCallback) {
-                    self.checkboxCheckCategoryCallback(info);
-                }
+                self.addToSelectedCategories(info);
             } else {
-                if (self.checkboxUncheckCategoryCallback) {
-                    self.checkboxUncheckCategoryCallback(info);
-                }
+                self.removeFromSelectedCategories(info);
             }
         });
 
@@ -238,7 +243,7 @@ class DropDownSelect {
                 $(this).hide();
                 //TODO populate request on save to favorites
                 if (self.starSaveCategoryCallback) {
-                    self.starSaveCategoryCallback(info); 
+                    self.starSaveCategoryCallback(info);
                 }
             });
 
@@ -304,13 +309,9 @@ class DropDownSelect {
         var self = this;
         $(checkbox).change(function() {
             if (this.checked) {
-                if (self.checkboxCheckItemCallback) {
-                    self.checkboxCheckItemCallback(info); 
-                }
+                self.addToSelectedItems(info);
             } else {
-                if (self.checkboxUncheckItemCallback) {
-                    self.checkboxUncheckItemCallback(info);
-                }
+                self.removeFromSelectedItems(info);
             }
         });
 
@@ -340,7 +341,7 @@ class DropDownSelect {
                 $(this).hide();
                 //TODO populate request on delete from favorites
                 if (self.starDeleteItemCallback) {
-                    self.starDeleteItemCallback(info); 
+                    self.starDeleteItemCallback(info);
                 }
             });
 
@@ -363,9 +364,54 @@ class DropDownSelect {
         info.Target = target;
         return info;
     }
+
+    private addToSelectedItems(info: CallbackInfo) {
+        this.selectedItemsIds.push(info.Id);
+        this.selectedChanged();
+    }
+
+    private removeFromSelectedItems(info: CallbackInfo) {
+        this.selectedItemsIds = $.grep(this.selectedItemsIds, function(valueId) {
+            return valueId !== info.Id;
+        }, false);
+        this.selectedChanged();
+    }
+
+    private addToSelectedCategories(info: CallbackInfo) {
+        this.selectedCategoriesIds.push(info.Id);
+        this.selectedChanged();
+    }
+
+    private removeFromSelectedCategories(info: CallbackInfo) {
+        this.selectedCategoriesIds = $.grep(this.selectedCategoriesIds, function(valueId) {
+            return valueId !== info.Id;
+        }, false);
+        this.selectedChanged();
+    }
+
+    private selectedChanged() {
+        if (this.selectedChangedCallback) {
+            this.selectedChangedCallback(this.getState());
+        }
+    }
+
+    getState(): State {
+        var state = new State();
+        state.Type = this.type;
+        state.SelectedCategoriesIds = this.selectedCategoriesIds;
+        state.SelectedItemsIds = this.selectedItemsIds;
+        return state;
+    }
+
 }
 
 class CallbackInfo {
-    public Id : string; //id of item
-    public Target : any; //This in caller
+    Id: string; //id of item
+    Target: any; //This in caller
+}
+
+class State {
+    Type: string;
+    SelectedItemsIds: Array<string>;
+    SelectedCategoriesIds: Array<string>;
 }
