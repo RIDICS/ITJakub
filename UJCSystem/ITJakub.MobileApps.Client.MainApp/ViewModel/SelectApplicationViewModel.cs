@@ -16,12 +16,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
+        private readonly IErrorService m_errorService;
         private ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>> m_appList;
 
-        public SelectApplicationViewModel(IDataService dataService, INavigationService navigationService)
+        public SelectApplicationViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_errorService = errorService;
+
             AppList = new ObservableCollection<IGrouping<ApplicationCategory, AppInfoViewModel>>();
             LoadAppList();
 
@@ -42,6 +45,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_dataService.GetAllApplications((applications, exception) =>
             {
+                if (exception != null)
+                {
+                    m_errorService.ShowConnectionError();
+                    return;
+                }
+
                 var appList = applications.Where(pair => pair.Value.ApplicationRoleType == ApplicationRoleType.MainApp)
                     .Select(applicationKeyValue => new AppInfoViewModel
                 {

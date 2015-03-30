@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Windows.UI.Popups;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -29,6 +28,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private readonly IMainPollingService m_pollingService;
+        private readonly IErrorService m_errorService;
+
         private string m_applicationName;
         private ApplicationBaseViewModel m_applicationViewModel;
         private SupportAppBaseViewModel m_chatViewModel;
@@ -48,11 +49,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private TaskViewModel m_currentTask;
         private bool m_isClosed;
 
-        public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
+        public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
             m_pollingService = pollingService;
+            m_errorService = errorService;
 
             GoBackCommand = new RelayCommand(GoBack);
             ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
@@ -110,6 +112,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void GroupsUpdate(Exception exception)
         {
+            if (exception != null)
+                m_errorService.ShowConnectionWarning();
+
             MemberList = m_groupInfo.Members;
         }
 
@@ -127,7 +132,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             if (ApplicationViewModel != null)
                 ApplicationViewModel.StopCommunication();
 
-            m_pollingService.UnregisterAll(); //stop all polling (in case some app didn't stopped)
+            m_pollingService.UnregisterAll(); //stop all polling (in case that some app didn't stopped)
         }
 
         private void GoBack()
@@ -139,7 +144,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private void GroupStateUpdate(GroupStateContract state, Exception exception)
         {
             if (exception != null)
+            {
+                m_errorService.ShowConnectionWarning();
                 return;
+            }
 
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
@@ -181,8 +189,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_dataService.GetTaskForGroup(m_groupId, (task, exception) =>
             {
-                if (exception != null) // TODO error handling, m_isTaskAndAppLoaded set true
+                if (exception != null)
+                {
+                    m_errorService.ShowConnectionWarning();
                     return;
+                }
 
                 m_currentTask = task;
                 LoadApplications(task.Application);
@@ -192,12 +203,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private void LoadApplications(ApplicationType type)
         {
             WaitingForData = true;
-            m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, async (applications, exception) =>
+            m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, (applications, exception) =>
             {
                 if (exception != null)
                 {
-                    await new MessageDialog("Tato skupina obsahuje neznámé zadání. Pro otevření této skupiny použijte jinou aplikaci.", "Neznámá aplikace").ShowAsync();
-                    GoBack();
+                    m_errorService.ShowError("Tato skupina obsahuje neznámé zadání. Pro otevření této skupiny použijte jinou aplikaci.", "Neznámá aplikace", GoBack);
                     return;
                 }
 

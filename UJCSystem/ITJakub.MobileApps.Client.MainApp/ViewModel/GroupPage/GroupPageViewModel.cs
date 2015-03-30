@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -21,6 +22,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private readonly IMainPollingService m_pollingService;
+        private readonly IErrorService m_errorService;
         private GroupInfoViewModel m_groupInfo;
         private string m_selectedTaskName;
         private bool m_loading;
@@ -36,11 +38,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private bool m_canOpenApplication;
         private bool m_isGlobalFocus;
 
-        public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
+        public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
             m_pollingService = pollingService;
+            m_errorService = errorService;
 
             GroupStates = new ObservableCollection<GroupStateViewModel>();
             GroupRemoveViewModel = new GroupRemoveViewModel(RemoveGroup);
@@ -70,7 +73,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             {
                 Loading = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowConnectionError();
                     return;
+                }
 
                 GroupInfo = groupInfo;
                 if (groupInfo.Task == null)
@@ -131,6 +137,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
         private void UpdateMembers(Exception exception)
         {
+            if (exception != null)
+                m_errorService.ShowConnectionWarning();
+
             UpdateCanConnectToGroup();
         }
 
@@ -309,7 +318,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             {
                 SavingState = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowConnectionError();
                     return;
+                }
 
                 GroupStateUpdated(newState);
             });
@@ -325,7 +337,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             {
                 Removing = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowConnectionError();
                     return;
+                }
 
                 GoBack();
             });
@@ -355,7 +370,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
                 if (exception != null)
                 {
-                    CanConnectToGroup = true;
+                    if (exception is InvalidServerOperationException)
+                        CanConnectToGroup = true;
+                    else
+                        m_errorService.ShowConnectionError();
                 }
             });
         }

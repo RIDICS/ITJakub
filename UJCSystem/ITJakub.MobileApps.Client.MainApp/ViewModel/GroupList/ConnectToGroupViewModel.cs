@@ -1,4 +1,5 @@
 using System;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Service;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
@@ -7,14 +8,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
     {
         private readonly IDataService m_dataService;
         private readonly Action m_refreshAction;
+        private readonly IErrorService m_errorService;
         private string m_connectToGroupCode;
         private bool m_showCodeNotExistError;
         private bool m_showCodeEmptyError;
 
-        public ConnectToGroupViewModel(IDataService dataService, Action refreshAction)
+        public ConnectToGroupViewModel(IDataService dataService, Action refreshAction, IErrorService errorService)
         {
             m_dataService = dataService;
             m_refreshAction = refreshAction;
+            m_errorService = errorService;
         }
 
 
@@ -69,7 +72,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 InProgress = false;
                 if (exception != null)
                 {
-                    ShowCodeNotExistError = true;
+                    if (exception is InvalidServerOperationException)
+                        ShowCodeNotExistError = true;
+                    else
+                        m_errorService.ShowConnectionError();
                     return;
                 }
 

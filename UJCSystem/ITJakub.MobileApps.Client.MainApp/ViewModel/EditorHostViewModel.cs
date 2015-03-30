@@ -11,12 +11,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     {
         private readonly INavigationService m_navigationService;
         private readonly IDataService m_dataService;
+        private readonly IErrorService m_errorService;
         private string m_applicationName;
 
-        public EditorHostViewModel(INavigationService navigationService, IDataService dataService)
+        public EditorHostViewModel(INavigationService navigationService, IDataService dataService, IErrorService errorService)
         {
             m_navigationService = navigationService;
             m_dataService = dataService;
+            m_errorService = errorService;
+
             GoBackCommand = new RelayCommand(navigationService.GoBack);
 
             m_dataService.GetCurrentApplication(OpenEditor);
@@ -27,7 +30,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_dataService.GetApplication(applicationType, (appInfo, exception) =>
             {
                 if (exception != null)
+                {
+                    m_errorService.ShowConnectionError();
                     return;
+                }
 
                 ApplicationName = appInfo.Name;
                 EditorViewModel = appInfo.EditorViewModel;

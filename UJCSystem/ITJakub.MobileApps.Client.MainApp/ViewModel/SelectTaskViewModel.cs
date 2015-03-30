@@ -16,6 +16,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
+        private readonly IErrorService m_errorService;
         private ApplicationType m_applicationType;
         private bool m_noTaskExists;
         private bool m_loading;
@@ -27,10 +28,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_noSearchResults;
         private bool m_isSearchingMode;
 
-        public SelectTaskViewModel(IDataService dataService, INavigationService navigationService)
+        public SelectTaskViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_errorService = errorService;
 
             m_dataService.SetAppSelectionTarget(SelectApplicationTarget.SelectTask);
 
@@ -76,7 +78,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 Loading = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowConnectionError();
                     return;
+                }
 
                 m_originalTaskList = taskList;
                 NoTaskExists = taskList.Count == 0;
@@ -192,7 +197,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 Saving = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowConnectionError();
                     return;
+                }
 
                 m_dataService.SetRestoringLastGroupState(false);
                 

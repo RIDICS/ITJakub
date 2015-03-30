@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 
@@ -11,15 +12,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private readonly IDataService m_dataService;
         private readonly List<GroupInfoViewModel> m_selectedGroups;
         private readonly Action m_refreshAction;
+        private readonly IErrorService m_errorService;
         private bool m_showError;
         private GroupInfoViewModel m_selectedGroup;
         private int m_selectedGroupCount;
 
-        public DeleteGroupViewModel(IDataService dataService, List<GroupInfoViewModel> selectedGroups, Action refreshAction)
+        public DeleteGroupViewModel(IDataService dataService, List<GroupInfoViewModel> selectedGroups, Action refreshAction, IErrorService errorService)
         {
             m_dataService = dataService;
             m_selectedGroups = selectedGroups;
             m_refreshAction = refreshAction;
+            m_errorService = errorService;
         }
 
         public GroupInfoViewModel SelectedGroup
@@ -81,7 +84,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 {
                     if (exception != null)
                     {
-                        ShowError = true;
+                        if (exception is InvalidServerOperationException)
+                            ShowError = true;
+                        else
+                            m_errorService.ShowConnectionError();
+
                         InProgress = false;
                     }
 

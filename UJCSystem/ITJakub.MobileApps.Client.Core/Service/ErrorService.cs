@@ -35,5 +35,24 @@ namespace ITJakub.MobileApps.Client.Core.Service
             };
             m_errorBar.Show();
         }
+
+        public void ShowError(string content, string title = null, Action closeAction = null)
+        {
+            if (m_messageDialog != null)
+                return;
+
+            m_messageDialog = title != null
+                ? new MessageDialog(content, title)
+                : new MessageDialog(content);
+            
+            m_messageDialog.Commands.Add(new UICommand("Zavřít", command =>
+            {
+                m_messageDialog = null;
+                if (closeAction != null)
+                    closeAction();
+            }));
+
+            m_messageDialog.ShowAsync();
+        }
     }
 }

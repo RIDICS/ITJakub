@@ -16,16 +16,18 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
+        private readonly IErrorService m_errorService;
         private ObservableCollection<IGrouping<ApplicationType, TaskViewModel>> m_groupedTaskList;
         private ObservableCollection<TaskViewModel> m_taskList;
         private SortTaskItem.SortType m_selectedSort;
         private bool m_loading;
         private bool m_noTask;
 
-        public OwnedTaskListViewModel(IDataService dataService, INavigationService navigationService)
+        public OwnedTaskListViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_errorService = errorService;
 
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             CreateNewTaskCommand = new RelayCommand(CreateNewTask);
@@ -94,6 +96,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 Loading = false;
                 if (exception != null)
                 {
+                    m_errorService.ShowConnectionError();
                     return;
                 }
 

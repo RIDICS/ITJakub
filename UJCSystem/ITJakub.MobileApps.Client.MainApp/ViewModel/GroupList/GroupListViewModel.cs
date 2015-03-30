@@ -255,12 +255,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         
         private void InitViewModels()
         {
-            ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, LoadData);
-            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, Navigate);
-            DeleteGroupViewModel = new DeleteGroupViewModel(m_dataService, m_selectedGroups, LoadData);
+            ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, LoadData, m_errorService);
+            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, Navigate, m_errorService);
+            DeleteGroupViewModel = new DeleteGroupViewModel(m_dataService, m_selectedGroups, LoadData, m_errorService);
 
-            SwitchToPauseViewModel = new SwitchGroupStateViewModel(GroupStateContract.Paused, m_dataService, m_selectedGroups, LoadData);
-            SwitchToRunningViewModel = new SwitchGroupStateViewModel(GroupStateContract.Running, m_dataService, m_selectedGroups, LoadData);
+            SwitchToPauseViewModel = new SwitchGroupStateViewModel(GroupStateContract.Paused, m_dataService, m_selectedGroups, LoadData, m_errorService);
+            SwitchToRunningViewModel = new SwitchGroupStateViewModel(GroupStateContract.Running, m_dataService, m_selectedGroups, LoadData, m_errorService);
         }
 
         private void Navigate(Type type)
