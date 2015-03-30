@@ -164,6 +164,10 @@
     <Compile Include="Areas\Bibliographies\BundleConfig.cs" />
     <Compile Include="Areas\Bibliographies\Controllers\BibliographiesController.cs" />
     <Compile Include="Areas\Bibliographies\RouteConfig.cs" />
+    <Compile Include="Areas\BohemianTextBank\BohemianTextBankAreaRegistration.cs" />
+    <Compile Include="Areas\BohemianTextBank\BundleConfig.cs" />
+    <Compile Include="Areas\BohemianTextBank\Controllers\BohemianTextBankController.cs" />
+    <Compile Include="Areas\BohemianTextBank\RouteConfig.cs" />
     <Compile Include="Areas\CardFiles\BundleConfig.cs" />
     <Compile Include="Areas\CardFiles\CardFilesAreaRegistration.cs" />
     <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
@@ -177,6 +181,14 @@
     <Compile Include="Areas\Editions\RouteConfig.cs" />
     <Compile Include="Areas\Editions\Controllers\EditionsController.cs" />
     <Compile Include="Areas\Editions\EditionsAreaRegistration.cs" />
+    <Compile Include="Areas\OldGrammar\BundleConfig.cs" />
+    <Compile Include="Areas\OldGrammar\Controllers\OldGrammarController.cs" />
+    <Compile Include="Areas\OldGrammar\OldGrammarAreaRegistration.cs" />
+    <Compile Include="Areas\OldGrammar\RouteConfig.cs" />
+    <Compile Include="Areas\ProfessionalLiterature\BundleConfig.cs" />
+    <Compile Include="Areas\ProfessionalLiterature\Controllers\ProfessionalLiteratureController.cs" />
+    <Compile Include="Areas\ProfessionalLiterature\ProfessionalLiteratureAreaRegistration.cs" />
+    <Compile Include="Areas\ProfessionalLiterature\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\Plugins\Bibliography\BibliographyController.cs" />
@@ -199,6 +211,12 @@
     </Content>
     <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.min.css">
       <DependentUpon>itjakub.dictionaries.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.css">
+      <DependentUpon>itjakub.bohemiantextbank.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.min.css">
+      <DependentUpon>itjakub.bohemiantextbank.css</DependentUpon>
     </Content>
     <Content Include="Areas\CardFiles\Content\itjakub.cardfile.css">
       <DependentUpon>itjakub.cardfile.less</DependentUpon>
@@ -451,6 +469,32 @@
     <Content Include="Areas\CardFiles\Content\itjakub.cardfile.css.map">
       <DependentUpon>itjakub.cardfile.css</DependentUpon>
     </Content>
+    <Content Include="Areas\ProfessionalLiterature\Views\web.config" />
+    <Content Include="Areas\OldGrammar\Views\web.config" />
+    <Content Include="Areas\BohemianTextBank\Views\web.config" />
+    <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.less" />
+    <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.css.map">
+      <DependentUpon>itjakub.bohemiantextbank.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\BohemianTextBank\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\TermsOfUse.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Search.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\List.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Information.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Feedback.cshtml" />
+    <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.less" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\TermsOfUse.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Search.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\List.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Feedback.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Information.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.less" />
+    <Content Include="Areas\ProfessionalLiterature\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\TermsOfUse.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Search.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Information.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Feedback.cshtml" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
@@ -517,11 +561,17 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Bibliographies\Models\" />
     <Folder Include="Areas\Bibliographies\Views\Shared\" />
+    <Folder Include="Areas\BohemianTextBank\Models\" />
+    <Folder Include="Areas\BohemianTextBank\Views\Shared\" />
     <Folder Include="Areas\CardFiles\Models\" />
     <Folder Include="Areas\CardFiles\Views\Shared\" />
     <Folder Include="Areas\Dictionaries\Models\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
+    <Folder Include="Areas\OldGrammar\Models\" />
+    <Folder Include="Areas\OldGrammar\Views\Shared\" />
+    <Folder Include="Areas\ProfessionalLiterature\Models\" />
+    <Folder Include="Areas\ProfessionalLiterature\Views\Shared\" />
     <Folder Include="Views\Author\" />
     <Folder Include="Views\Bibliography\" />
   </ItemGroup>
@@ -535,9 +585,12 @@
   <ItemGroup>
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.List.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
+    <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileCreator.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfiles.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
+    <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.ts" />
+    <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.sorting.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.configuration.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.factories.ts" />

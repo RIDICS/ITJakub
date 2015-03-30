@@ -1,0 +1,28 @@
+﻿@section styles{
+    @Styles.Render("~/itjakub/bohemiantextbank/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/bohemiantextbank/javascript")
+}
+
+<div class="transparent-content-container">
+    <div class="search-area">
+        <div id="bohemiantextbankSearchDiv">
+            <form role="form" class="form-horizontal">
+                <div class="form-group searchbar">
+                    <div class="searchbar-buttons">
+                        <button id="searchButton" type="button" class="btn btn-default searchbar-button">
+                            Vyhledat
+                        </button>
+                        <button type="button" class="btn btn-default searchbar-button">
+                            Pokročilé
+                        </button>
+                    </div>
+                    <div class="searchbar-inputs">
+                        <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

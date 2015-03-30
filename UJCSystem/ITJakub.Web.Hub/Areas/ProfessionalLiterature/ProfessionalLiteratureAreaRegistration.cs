@@ -1,13 +1,13 @@
 ﻿using System.Web.Mvc;
 using System.Web.Optimization;
 
-namespace ITJakub.Web.Hub.Areas.CardFiles
+namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature
 {
-    public class CardFilesAreaRegistration : AreaRegistration
+    public class ProfessionalLiteratureAreaRegistration : AreaRegistration
     {
         public override string AreaName
         {
-            get { return "CardFiles"; }
+            get { return "ProfessionalLiterature"; }
         }
 
         public override void RegisterArea(AreaRegistrationContext context)

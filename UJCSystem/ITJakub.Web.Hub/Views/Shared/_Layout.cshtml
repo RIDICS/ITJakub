@@ -86,19 +86,63 @@
                             </ul>
                         </li>
                         <li class='has-sub'>
-                            <a href='#'><span>Staročeská textová banka</span></a>
+                            <a href='@Url.Action("Index", "BohemianTextBank", new { area = "BohemianTextBank" })'><span>Staročeská textová banka</span></a>
                             <ul>
                                 <li>
-                                    <a href='#'><span>Podmínky užití</span></a>
+                                    <a href='@Url.Action("Search", "BohemianTextBank", new { area = "BohemianTextBank" })'><span>Vyhledávání</span></a>
                                 </li>
                                 <li>
-                                    <a href='#'><span>Připomínky</span></a>
+                                    <a href='@Url.Action("List", "BohemianTextBank", new { area = "BohemianTextBank" })'><span>Seznam</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Information", "BohemianTextBank", new { area = "BohemianTextBank" })'><span>Informace</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("TermsOfUse", "BohemianTextBank", new { area = "BohemianTextBank" })'><span>Podmínky užití</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Feedback", "BohemianTextBank", new { area = "BohemianTextBank" })'><span>Připomínky</span></a>
                                 </li>
                             </ul>
                         </li>
-                        <li><a href='#'><span>Staré mluvnice</span></a></li>
-                        <li><a href='#'><span>Odborná literatura</span></a></li>
-                        <li class='has-sub last'>
+                        <li class='has-sub'>
+                            <a href='@Url.Action("Index", "OldGrammar", new { area = "OldGrammar" })'><span>Staré mluvnice</span></a>
+                            <ul>
+                                <li>
+                                    <a href='@Url.Action("Search", "OldGrammar", new { area = "OldGrammar" })'><span>Seznam mluvnic a vyhledávání</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("List", "OldGrammar", new { area = "OldGrammar" })'><span>Seznam termínů</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Information", "OldGrammar", new { area = "OldGrammar" })'><span>Informace</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("TermsOfUse", "OldGrammar", new { area = "OldGrammar" })'><span>Podmínky užití</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Feedback", "OldGrammar", new { area = "OldGrammar" })'><span>Připomínky</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class='has-sub'>
+                            <a href='@Url.Action("Index", "ProfessionalLiterature", new { area = "ProfessionalLiterature" })'><span>Odborná literatura</span></a>
+                            <ul>
+                                <li>
+                                    <a href='@Url.Action("Search", "ProfessionalLiterature", new { area = "ProfessionalLiterature" })'><span>Seznam děl a vyhledávání</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Information", "ProfessionalLiterature", new { area = "ProfessionalLiterature" })'><span>Informace</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("TermsOfUse", "ProfessionalLiterature", new { area = "ProfessionalLiterature" })'><span>Podmínky užití</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Feedback", "ProfessionalLiterature", new { area = "ProfessionalLiterature" })'><span>Připomínky</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class='has-sub'>
                             <a href='@Url.Action("Index", "CardFiles", new { area = "CardFiles" })'><span>Kartotéky excerpce</span></a>
                             <ul>
                                 <li>
@@ -138,7 +182,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class='has-sub'>
+                        <li class='has-sub last'>
                             <a href='#'><span>Administrační modul</span></a>
                             <ul>
                                 <li>
