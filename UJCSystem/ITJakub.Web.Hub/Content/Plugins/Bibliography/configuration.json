@@ -103,10 +103,10 @@
         },
         "right-panel": {
             "info-button": {
-                "url": "\\Editions\\info\\{BookId}"
+                "url": "/Editions/Editions/Info?bookId={BookGuid}"
             },
             "read-button": {
-                "url": "/Editions/Editions/Listing?bookId={BookId}"
+                "url": "/Editions/Editions/Listing?bookId={BookGuid}"
             },
             "variables": {
                 "$test": {
