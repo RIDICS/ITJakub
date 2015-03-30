@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
+using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.Shared.Control;
 
 namespace ITJakub.MobileApps.Client.Core.Service
@@ -10,7 +11,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         private MessageDialog m_messageDialog;
         private ErrorBar m_errorBar;
 
-        public void ShowConnectionError()
+        public void ShowConnectionError(Action closeAction = null)
         {
             if (m_messageDialog != null)
                 return;
@@ -18,9 +19,13 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_messageDialog = new MessageDialog("Nelze provést zvolenou akci. Prosím zkontrolujte připojení k internetu a akci opakujte.", "Nelze kontaktovat server");
             m_messageDialog.Commands.Add(new UICommand("Zavřít", command =>
             {
-                m_messageDialog = null;
+                Task.Delay(new TimeSpan(0, 0, 5)).ContinueWith(task => m_messageDialog = null);
+                
+                if (closeAction != null)
+                    closeAction();
             }));
-            m_messageDialog.ShowAsync();
+
+            DispatcherHelper.CheckBeginInvokeOnUI(() => m_messageDialog.ShowAsync());
         }
 
         public void ShowConnectionWarning()
@@ -33,7 +38,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
             {
                 Task.Delay(new TimeSpan(0, 1, 0)).ContinueWith(task => m_errorBar = null);
             };
-            m_errorBar.Show();
+
+            DispatcherHelper.CheckBeginInvokeOnUI(m_errorBar.Show);
         }
 
         public void ShowError(string content, string title = null, Action closeAction = null)
@@ -47,12 +53,13 @@ namespace ITJakub.MobileApps.Client.Core.Service
             
             m_messageDialog.Commands.Add(new UICommand("Zavřít", command =>
             {
-                m_messageDialog = null;
+                Task.Delay(new TimeSpan(0, 0, 5)).ContinueWith(task => m_messageDialog = null);
+                
                 if (closeAction != null)
                     closeAction();
             }));
 
-            m_messageDialog.ShowAsync();
+            DispatcherHelper.CheckBeginInvokeOnUI(() => m_messageDialog.ShowAsync());
         }
     }
 }

@@ -122,6 +122,9 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
         public void RegisterForGroupsUpdate(PollingInterval interval, IList<GroupInfoViewModel> groupList, Action<Exception> callback)
         {
             Action newAction = () => m_groupManager.UpdateGroupsMembersAsync(groupList, callback).GetAwaiter().GetResult();
+            if (m_registeredActions.ContainsKey(callback))
+                return;
+
             m_timerService.Register(interval, newAction);
             m_registeredActions.Add(callback, newAction);
         }

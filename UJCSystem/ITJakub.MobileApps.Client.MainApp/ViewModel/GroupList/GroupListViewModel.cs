@@ -265,13 +265,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void Navigate(Type type)
         {
-            m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
+            m_pollingService.UnregisterAll();
             m_navigationService.Navigate(type);
         }
 
         private void GoBack()
         {
-            m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
+            m_pollingService.UnregisterAll();
             m_navigationService.GoBack();
         }
 

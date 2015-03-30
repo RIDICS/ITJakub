@@ -4,7 +4,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
 {
     public interface IErrorService
     {
-        void ShowConnectionError();
+        void ShowConnectionError(Action closeAction = null);
         void ShowConnectionWarning();
         void ShowError(string content, string title = null, Action closeAction = null);
     }
