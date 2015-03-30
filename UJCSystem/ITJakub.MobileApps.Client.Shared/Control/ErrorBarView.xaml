@@ -21,7 +21,7 @@
 
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Top"
-          Background="Black"
+          Background="#D0000000"
           RenderTransformOrigin="0.5,0.5"
           Height="68">
 

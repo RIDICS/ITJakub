@@ -74,7 +74,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 Loading = false;
                 if (exception != null)
                 {
-                    m_errorService.ShowConnectionError();
+                    m_errorService.ShowConnectionError(GoBack);
                     return;
                 }
 
@@ -139,8 +139,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         {
             if (exception != null)
                 m_errorService.ShowConnectionWarning();
-
-            UpdateCanConnectToGroup();
+            else
+                UpdateCanConnectToGroup();
         }
 
         private void UpdateCanConnectToGroup()

@@ -114,8 +114,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             if (exception != null)
                 m_errorService.ShowConnectionWarning();
-
-            MemberList = m_groupInfo.Members;
+            else
+                DispatcherHelper.CheckBeginInvokeOnUI(() => MemberList = m_groupInfo.Members);
         }
 
         private void StopCommunication()
