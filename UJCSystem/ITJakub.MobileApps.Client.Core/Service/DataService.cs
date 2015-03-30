@@ -97,7 +97,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         public void SetCurrentGroup(long groupId)
         {
-            m_groupManager.OpenGroup(groupId);
+            m_groupManager.CurrentGroupId = groupId;
         }
 
         public void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback)

@@ -27,6 +27,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private readonly IMainPollingService m_pollingService;
+        private readonly IErrorService m_errorService;
 
         private readonly List<GroupInfoViewModel> m_selectedGroups;
         private GroupInfoViewModel m_selectedGroup;
@@ -43,11 +44,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private bool m_canPauseSelected;
         private bool m_canStartSelected;
 
-        public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
+        public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
             m_pollingService = pollingService;
+            m_errorService = errorService;
 
             m_selectedGroups = new List<GroupInfoViewModel>();
             GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>();
@@ -282,7 +284,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             {
                 Loading = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowConnectionError();
                     return;
+                }
 
                 m_groups = groupList;
                 DisplayGroupList(m_groups);
@@ -300,6 +305,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void GroupUpdate(Exception exception)
         {
+            m_errorService.ShowConnectionWarning();
         }
 
         private void GroupClick(ItemClickEventArgs args)
@@ -313,7 +319,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             if (group != null)
             {
                 m_dataService.SetCurrentGroup(group.GroupId);
-                m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
 
                 var viewType = group.GroupType == GroupType.Member
                     ? typeof (ApplicationHostView)

@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Comparer;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -26,7 +27,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         private readonly ApplicationIdManager m_applicationIdManager;
         private GroupDetailContract m_currentGroupInfoModel;
 
-        public long CurrentGroupId { get; private set; }
+        public long CurrentGroupId { get; set; }
 
         public bool RestoreLastState { get; set; }
 
@@ -86,8 +87,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     FillGroupMembers(newGroup, groupDetails.Members);
                     list.Add(newGroup);
                 }
-                
+
                 callback(list, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
             }
             catch (ClientCommunicationException exception)
             {
@@ -128,7 +133,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     return;
                 }
 
-                //TODO check groupName validity
                 var result = await m_serviceClient.CreateGroupAsync(userId.Value, groupName);
                 var viewModel = new CreatedGroupViewModel
                 {
@@ -137,6 +141,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 };
 
                 callback(viewModel, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
             }
             catch (ClientCommunicationException exception)
             {
@@ -159,6 +167,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 await m_serviceClient.AddUserToGroupAsync(code, userId.Value);
                 callback(null);
             }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(exception);
+            }
             catch (ClientCommunicationException exception)
             {
                 callback(exception);
@@ -169,7 +181,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             try
             {
-                CurrentGroupId = groupId; // TODO
+                CurrentGroupId = groupId;
 
                 if (!RestoreLastState)
                 {
@@ -202,6 +214,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 
                 FillGroupMembers(group, groupInfo.Members);
                 callback(group, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
             }
             catch (ClientCommunicationException exception)
             {
@@ -239,15 +255,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     callback(null);
                 });
             }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(exception);
+            }
             catch (ClientCommunicationException exception)
             {
                 callback(exception);
             }
-        }
-
-        public void OpenGroup(long groupId)
-        {
-            CurrentGroupId = groupId;
         }
 
         public async void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback)
@@ -256,6 +271,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             {
                 await m_serviceClient.UpdateGroupStateAsync(groupId, newState);
                 callback(null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(exception);
             }
             catch (ClientCommunicationException exception)
             {
@@ -270,6 +289,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 await m_serviceClient.RemoveGroupAsync(groupId);
                 callback(null);
             }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(exception);
+            }
             catch (ClientCommunicationException exception)
             {
                 callback(exception);
@@ -283,9 +306,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 var state = await m_serviceClient.GetGroupStateAsync(groupId);
                 callback(state, null);
             }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(GroupStateContract.Created, exception);
+            }
             catch (ClientCommunicationException exception)
             {
-                callback(GroupStateContract.Closed, exception);
+                callback(GroupStateContract.Created, exception);
             }
         }
     }

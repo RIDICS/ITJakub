@@ -2,7 +2,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 
-namespace ITJakub.MobileApps.Client.Core.Manager.Communication
+namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
 {
     /// <summary>
     /// Represents a run-time behavior extension for a client endpoint.

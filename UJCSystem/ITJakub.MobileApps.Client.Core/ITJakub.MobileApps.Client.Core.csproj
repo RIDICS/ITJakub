@@ -124,7 +124,8 @@
     <Compile Include="Manager\Application\ApplicationStateManager.cs" />
     <Compile Include="Manager\Application\SelectApplicationTarget.cs" />
     <Compile Include="Manager\Authentication\AuthenticationBroker\WebViewHelpers.cs" />
-    <Compile Include="Manager\Communication\UserAlreadyRegisteredException.cs" />
+    <Compile Include="Manager\Communication\Error\InvalidServerOperationException.cs" />
+    <Compile Include="Manager\Communication\Error\UserAlreadyRegisteredException.cs" />
     <Compile Include="Manager\Tasks\TaskManager.cs" />
     <Compile Include="Service\ErrorService.cs" />
     <Compile Include="Service\IErrorService.cs" />
@@ -159,10 +160,10 @@
     <Compile Include="Manager\Groups\GroupManager.cs" />
     <Compile Include="Manager\Authentication\LoginResult.cs" />
     <Compile Include="Manager\UserAvatarCache.cs" />
-    <Compile Include="Manager\Communication\ClientMessageInspector.cs" />
-    <Compile Include="Manager\Communication\CustomEndpointBehavior.cs" />
+    <Compile Include="Manager\Communication\Client\ClientMessageInspector.cs" />
+    <Compile Include="Manager\Communication\Client\CustomEndpointBehavior.cs" />
     <Compile Include="Manager\Groups\GroupType.cs" />
-    <Compile Include="Manager\Communication\UserNotRegisteredException.cs" />
+    <Compile Include="Manager\Communication\Error\UserNotRegisteredException.cs" />
     <Compile Include="SynchronizeManager.cs" />
     <Compile Include="Configuration\ApplicationConfig.cs" />
     <Compile Include="ApplicationLoader.cs" />

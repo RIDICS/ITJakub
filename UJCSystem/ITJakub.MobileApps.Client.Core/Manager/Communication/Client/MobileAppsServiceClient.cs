@@ -4,6 +4,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using System.Xml;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
@@ -41,9 +42,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     Channel.CreateUser(providerContract, providerToken, userDetail);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new UserAlreadyRegisteredException();
+                    throw new UserAlreadyRegisteredException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -68,9 +69,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.LoginUser(providerContract, providerToken, email);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new UserNotRegisteredException();
+                    throw new UserNotRegisteredException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -97,7 +98,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -124,7 +125,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -151,7 +152,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException("Invalid server operation, probably wrong access code or group is unopened or closed.", ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -259,7 +260,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -286,7 +287,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -313,7 +314,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -340,7 +341,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -367,7 +368,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -394,7 +395,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -421,7 +422,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -448,7 +449,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -475,7 +476,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -502,7 +503,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -529,7 +530,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException(ex);
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {

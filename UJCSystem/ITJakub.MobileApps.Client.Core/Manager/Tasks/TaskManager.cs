@@ -4,6 +4,7 @@ using System.Linq;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
@@ -51,6 +52,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                 }));
                 callback(tasks, null);
             }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
+            }
             catch (ClientCommunicationException exception)
             {
                 callback(null, exception);
@@ -63,6 +68,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
             {
                 await m_client.AssignTaskToGroupAsync(groupId, taskId);
                 callback(null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(exception);
             }
             catch (ClientCommunicationException exception)
             {
@@ -85,6 +94,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     Data = result.Data
                 };
                 callback(task, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
             }
             catch (ClientCommunicationException exception)
             {
@@ -118,6 +131,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     }
                 }));
                 callback(taskList, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
             }
             catch (ClientCommunicationException exception)
             {

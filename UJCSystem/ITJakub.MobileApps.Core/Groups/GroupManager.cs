@@ -34,6 +34,8 @@ namespace ITJakub.MobileApps.Core.Groups
         public UserGroupsContract GetGroupByUser(long userId)
         {
             User user = m_usersRepository.GetUserWithGroups(userId);
+            if (user == null)
+                throw new FaultException("User not found.");
 
             var result = new UserGroupsContract
             {
@@ -82,6 +84,10 @@ namespace ITJakub.MobileApps.Core.Groups
         public void AddUserToGroup(string groupAccessCode, long userId)
         {
             Group group = m_usersRepository.FindByEnterCode(groupAccessCode);
+            if (group == null)
+            {
+                throw new FaultException("No group with this access code found.");
+            }
             if (group.State == GroupState.Created || group.State == GroupState.Closed)
             {
                 throw new FaultException("Group doesn't accept new members.");
@@ -95,6 +101,9 @@ namespace ITJakub.MobileApps.Core.Groups
         public GroupDetailContract GetGroupDetails(long groupId)
         {
             var group = m_usersRepository.GetGroupDetails(groupId);
+            if (group == null)
+                throw new FaultException("Group not found.");
+
             var groupContract = Mapper.Map<Group, GroupDetailContract>(group);
             return groupContract;
         }

@@ -62,19 +62,19 @@ namespace ITJakub.MobileApps.Client.MainApp
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    // Restore the saved session state only when appropriate
-                    try
-                    {
-                        await SuspensionManager.RestoreAsync();
-                    }
-                    catch (SuspensionManagerException)
-                    {
-                        //Something went wrong restoring state.
-                        //Assume there is no state and continue
-                    }
-                }
+                //if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                //{
+                //    // Restore the saved session state only when appropriate
+                //    try
+                //    {
+                //        await SuspensionManager.RestoreAsync();
+                //    }
+                //    catch (SuspensionManagerException)
+                //    {
+                //        //Something went wrong restoring state.
+                //        //Assume there is no state and continue
+                //    }
+                //}
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
