@@ -20,5 +20,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
             if (command != null)
                 command.Execute(args);
         }
+
+        private void Wv_OnNavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        {
+            var command = WebViewHelpers.GetNavigationStartingCommand(sender);
+            if (command != null)
+                command.Execute(args);
+        }
     }
 }

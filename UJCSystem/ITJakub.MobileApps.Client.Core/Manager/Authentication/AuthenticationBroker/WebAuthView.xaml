@@ -46,8 +46,10 @@
                 <WebView HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"
                          Source="{Binding BrowserUri, Mode=TwoWay}"
+                         NavigationStarting="Wv_OnNavigationStarting"
                          NavigationCompleted="Wv_OnNavigationCompleted"
                          authBroker:WebViewHelpers.BrowserTitle="{Binding BrowserTitle, Mode=TwoWay}"
+                         authBroker:WebViewHelpers.NavigationStartingCommand="{Binding NavigationStartingCommand}"
                          authBroker:WebViewHelpers.NavigationCompletedCommand="{Binding NavigationCompletedCommand}">
 
                     <!--<interactivity:Interaction.Behaviors>
@@ -67,6 +69,16 @@
                            TextWrapping="Wrap"
                            IsTextSelectionEnabled="True"
                            Visibility="{Binding IsError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                
+                <Grid Background="#B0FFFFFF"
+                      Width="80"
+                      Height="80"
+                      Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ProgressRing Width="50"
+                                  Height="50"
+                                  IsActive="{Binding Loading}"
+                                  Foreground="Gray" />
+                </Grid>
             </Grid>
         </Grid>
 

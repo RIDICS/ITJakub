@@ -98,6 +98,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
         private void LoadAppInfo(ApplicationType applicationType)
         {
+            if (applicationType == ApplicationType.Unknown)
+            {
+                AppName = null;
+                AppIcon = null;
+                return;
+            }
+
             m_dataService.GetApplication(applicationType, (appInfo, exception) =>
             {
                 if (exception != null)

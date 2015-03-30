@@ -8,6 +8,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
     {
         public static readonly DependencyProperty BrowserTitleProperty = DependencyProperty.RegisterAttached("BrowserTitle", typeof(string), typeof(WebViewHelpers), new PropertyMetadata(string.Empty));
         public static readonly DependencyProperty NavigationCompletedCommandProperty = DependencyProperty.RegisterAttached("NavigationCompletedCommand", typeof(ICommand), typeof(WebViewHelpers), new PropertyMetadata(null));
+        public static readonly DependencyProperty NavigationStartingCommandProperty = DependencyProperty.RegisterAttached("NavigationStartingCommand", typeof(ICommand), typeof(WebViewHelpers), new PropertyMetadata(null));
 
         public static string GetBrowserTitle(WebView element)
         {
@@ -27,6 +28,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
         public static void SetNavigationCompletedCommand(WebView element, ICommand value)
         {
             element.SetValue(NavigationCompletedCommandProperty, value);
+        }
+
+        public static ICommand GetNavigationStartingCommand(WebView element)
+        {
+            return (ICommand) element.GetValue(NavigationStartingCommandProperty);
+        }
+
+        public static void SetNavigationStartingCommand(WebView element, ICommand value)
+        {
+            element.SetValue(NavigationStartingCommandProperty, value);
         }
     }
 }

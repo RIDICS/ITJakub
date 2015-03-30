@@ -16,7 +16,7 @@ namespace ITJakub.MobileApps.Client.Shared.Communication
         {
         }
 
-        public ClientCommunicationException(Exception innerException):base(string.Empty, innerException)
+        public ClientCommunicationException(Exception innerException) : base("Communication problem.", innerException)
         {
         }
     }

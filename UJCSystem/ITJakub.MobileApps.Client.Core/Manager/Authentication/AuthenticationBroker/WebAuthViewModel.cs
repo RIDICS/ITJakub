@@ -14,6 +14,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
         private Uri m_browserUri;
         private bool m_disposed;
         private bool m_isError;
+        private bool m_loading;
 
         public WebAuthViewModel()
         {
@@ -23,6 +24,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
 
 
         public RelayCommand CancelCommand { get; private set; }
+        public RelayCommand NavigationStartingCommand { get; private set; }
         public RelayCommand<WebViewNavigationCompletedEventArgs> NavigationCompletedCommand { get; private set; } 
 
         public string BrowserTitle
@@ -47,6 +49,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
             }
         }
 
+        public bool Loading
+        {
+            get { return m_loading; }
+            set
+            {
+                m_loading = value;
+                RaisePropertyChanged();
+            }
+        }
+        
         public void Dispose()
         {
             Dispose(true);
@@ -57,8 +69,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
         {
             CancelCommand = new RelayCommand(() => MessengerInstance.Send(new AuthBrokerCanceledMessage()));
 
+            NavigationStartingCommand = new RelayCommand(() => Loading = true);
+
             NavigationCompletedCommand = new RelayCommand<WebViewNavigationCompletedEventArgs>(parameters =>
             {
+                Loading = false;
+
                 if (parameters.IsSuccess)
                     MessengerInstance.Send(new AuthBrokerUriChangedMessage {Uri = parameters.Uri, DocumentTitle = BrowserTitle});
                 else
