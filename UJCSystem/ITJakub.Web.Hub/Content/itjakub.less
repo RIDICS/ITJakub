@@ -2,6 +2,7 @@
 @import "dropzones.less";
 @import "ITJakub.NumberedOrderedList.less";
 @import "ITJakub.PluginMenu.less";
+@import "ITJakub.Footer.less";
 @import "Plugins/Bibliography/ITJakub.Bibliography.less";
 @import "Plugins/Reader/ITJakub.Reader.less";
 @import "Plugins/DropdownSelect/ITJakub.DropdownSelect.less";
@@ -85,17 +86,18 @@ a.main_logo_href img {
     width: 600px;
 }
 
-#ProcessUploadedButton{
+#ProcessUploadedButton {
     margin: 5px;
 }
 
-#ProcessUploadedButton[disabled]{
+#ProcessUploadedButton[disabled] {
     background-color: @item-background-color;
 }
 
 #progressbar .ui-progressbar-value {
     background-color: @item-background-color;
-  }
+}
+
 #dropzoneFileFormPreview {
     overflow-y: auto;
 }
@@ -131,11 +133,12 @@ a.main_logo_href img {
 
 .news {
     background-image: url('Images/news_background.png');
-    background-size: 60px 60px;
+    background-size: 86px 50px;
     background-position: left top;
     background-repeat: no-repeat;
     height: 100%;
     width: 100%;
+    overflow: auto;
 }
 
 .news > h1 {
@@ -152,6 +155,8 @@ a.main_logo_href img {
     margin-bottom: 25px;
     margin-left: 25px;
     margin-top: 20px;
+    max-height: 300px;
+    overflow: auto;
 }
 
 .news .message > h2 {
@@ -193,4 +198,8 @@ a.main_logo_href img {
 
 .top-offset-without-submenu {
     margin: -25px 0 0 0;
+}
+
+.navbar-login li a,.navbar-login li a:visited{
+    color: white;
 }

@@ -353,6 +353,49 @@ ol.numbered > li:before {
   display: inline;
   float: left;
 }
+.footer {
+  background-color: white;
+  width: 1100px;
+  margin-top: 5px;
+  padding: 10px;
+}
+.footer .footer-text-area {
+  display: inline-block;
+  text-align: center;
+  width: 900px;
+}
+.footer a.main_logo_href {
+  display: inline-block;
+}
+.footer a.main_logo_href img {
+  width: 50px;
+  height: 50px;
+  margin-top: -20px;
+}
+.footer li {
+  display: inline;
+  padding-right: 1.0em;
+}
+.footer li:after {
+  padding-left: 1.0em;
+  content: "|";
+}
+.footer li a {
+  color: gray;
+}
+.footer li.footer-first {
+  padding-left: 0;
+  background: none;
+}
+.footer li.footer-last {
+  padding-right: 0;
+}
+.footer li.footer-last:after {
+  content: "";
+}
+.footer-text {
+  margin-top: 10px;
+}
 ul.bib-listing {
   width: 80%;
 }
@@ -884,11 +927,12 @@ ul {
 }
 .news {
   background-image: url('Images/news_background.png');
-  background-size: 60px 60px;
+  background-size: 86px 50px;
   background-position: left top;
   background-repeat: no-repeat;
   height: 100%;
   width: 100%;
+  overflow: auto;
 }
 .news > h1 {
   font-family: "Times New Roman";
@@ -903,6 +947,8 @@ ul {
   margin-bottom: 25px;
   margin-left: 25px;
   margin-top: 20px;
+  max-height: 300px;
+  overflow: auto;
 }
 .news .message > h2 {
   font-family: "Times New Roman";
@@ -937,5 +983,9 @@ ul {
 }
 .top-offset-without-submenu {
   margin: -25px 0 0 0;
+}
+.navbar-login li a,
+.navbar-login li a:visited {
+  color: white;
 }
 /*# sourceMappingURL=ITJakub.css.map */

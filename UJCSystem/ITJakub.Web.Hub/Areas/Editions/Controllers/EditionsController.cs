@@ -30,12 +30,22 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View(new BookListingModel { BookId = book.Guid, BookTitle = book.Title, BookPages = book.BookPages});
         }
 
+        public ActionResult List()
+        {
+            return View();
+        }
+
         public ActionResult Information()
         {
             return View();
         }
 
         public ActionResult TermsOfUse()
+        {
+            return View();
+        }
+        
+        public ActionResult FeedBack()
         {
             return View();
         }

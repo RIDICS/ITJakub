@@ -55,33 +55,33 @@
                                     <a href='@Url.Action("List", "Dictionaries", new { area = "Dictionaries" })'><span>Seznam slovníků</span></a>
                                 </li>
                                 <li>
-                                    <a href='#'><span>Informace</span></a>
+                                    <a href='@Url.Action("Information", "Dictionaries", new { area = "Dictionaries" })'><span>Informace</span></a>
                                 </li>
                                 <li>
-                                    <a href='#'><span>Podmínky užití</span></a>
+                                    <a href='@Url.Action("TermsOfUse", "Dictionaries", new { area = "Dictionaries" })'><span>Podmínky užití</span></a>
                                 </li>
                                 <li>
-                                    <a href='#'><span>Připomínky</span></a>
+                                    <a href='@Url.Action("Feedback", "Dictionaries", new { area = "Dictionaries" })'><span>Připomínky</span></a>
                                 </li>
                             </ul>
                         </li>
                         <li class='has-sub'>
-                            <a href='@Url.Action("Information", "Editions", new { area = "Editions" })'><span>Edice</span></a>
+                            <a href='@Url.Action("List", "Editions", new { area = "Editions" })'><span>Edice</span></a>
                             <ul>
-                                <li>
-                                    <a href='@Url.Action("Information", "Editions", new { area = "Editions" })'><span>Úvodní informace</span></a>
-                                </li>
                                 <li>
                                     <a href='@Url.Action("Search", "Editions", new { area = "Editions" })'><span>Vyhledávání</span></a>
                                 </li>
                                 <li>
-                                    <a href='@Url.Action("Listing", "Editions", new { area = "Editions" })'><span>Listování</span></a>
+                                    <a href='@Url.Action("List", "Editions", new { area = "Editions" })'><span>Seznam</span></a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Information", "Editions", new { area = "Editions" })'><span>Informace</span></a>
                                 </li>
                                 <li>
                                     <a href='@Url.Action("TermsOfUse", "Editions", new { area = "Editions" })'><span>Podmínky užití</span></a>
                                 </li>
                                 <li>
-                                    <a href='#'><span>Připomínky</span></a>
+                                    <a href='@Url.Action("Feedback", "Editions", new { area = "Editions" })'><span>Připomínky</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -183,10 +183,10 @@
                             </ul>
                         </li>
                         <li class='has-sub last'>
-                            <a href='#'><span>Administrační modul</span></a>
+                            <a href='@Url.Action("Upload", "Upload", new { area = "" })'><span>Administrační modul</span></a>
                             <ul>
                                 <li>
-                                    <a href='@Url.Action("Upload", "Upload", new { area = "" })'><span>Nahrání díla</span></a>
+                                    <a href='@Url.Action("Upload", "Upload", new {area = ""})'><span>Nahrání díla</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -207,11 +207,25 @@
             @*main page content*@
             <div class="container module-content">
                 @RenderBody()
-                <hr />
-
             </div>
-            <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+
+            <footer class="footer">
+                <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
+                    <img src="@Url.Content("~/Content/Images/logo.png")" alt="main_logo"/> @*TODO make logo small as this size*@
+                </a>
+
+                <div class="footer-text-area">
+                    <ul>
+                        <li class="footer-first"><a href="#">Copyright</a></li>
+                        <li><a href="#">Kontakty</a></li>   @*TODO make pages and link them*@
+                        <li><a href="#">Grantová podpora</a></li>
+                        <li><a href="#">Odkazy</a></li>
+                        <li><a href="#">Nápověda</a></li>
+                        <li><a href="#">Jak citovat</a></li>
+                        <li class="footer-last"><a href="#">Připomínky</a></li>
+                    </ul>
+                    <div class="footer-text">VOKABULÁŘ WEBOVÝ byl spuštěn před 6 lety, 5 měsíci a 13 dny</div> @*TODO make updated by JS*@
+                </div>
             </footer>
 
         </div>

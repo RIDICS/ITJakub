@@ -1,0 +1,58 @@
+﻿@import "ITJakub.DefaultTheme.less";
+
+.footer {
+    background-color: white;
+    width: @max-body-width;
+    margin-top: 5px;
+    padding: 10px;
+}
+
+
+.footer .footer-text-area {
+    display: inline-block;
+    text-align: center;
+    width: @max-body-width - 200px;
+}
+
+.footer a.main_logo_href {
+    display: inline-block;
+}
+
+
+.footer a.main_logo_href img {
+    width: 50px;
+    height: 50px;
+    margin-top: -20px;
+}
+
+
+.footer li {
+    display: inline;
+    padding-right: 1.0em;
+}
+
+.footer li:after {
+    padding-left: 1.0em;
+    content: "|";
+}
+
+.footer li a {
+    color: gray;
+}
+
+.footer li.footer-first {
+    padding-left: 0;
+    background: none;
+}
+
+.footer li.footer-last {
+    padding-right: 0;
+}
+
+.footer li.footer-last:after {
+    content: "";
+}
+
+.footer-text {
+    margin-top: 10px;
+}

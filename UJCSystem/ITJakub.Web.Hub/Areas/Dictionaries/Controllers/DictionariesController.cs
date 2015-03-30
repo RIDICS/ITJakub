@@ -62,5 +62,20 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var categoriesDictionary  = dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId).ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
             return Json(new { type = BookTypeEnumContract.Dictionary, books = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult Information()
+        {
+            return View();
+        }
+
+        public ActionResult TermsOfUse()
+        {
+            return View();
+        }
+
+        public ActionResult FeedBack()
+        {
+            return View();
+        }
     }
 }
