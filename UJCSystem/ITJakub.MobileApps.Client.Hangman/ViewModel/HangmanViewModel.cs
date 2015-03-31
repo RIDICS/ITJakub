@@ -88,7 +88,10 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             m_dataService.StartPollingLetters((guesses, taskInfo, exception) =>
             {
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError(GoBack);
                     return;
+                }
 
                 ProcessNewLetters(guesses);
                 ProcessTaskInfo(taskInfo);
@@ -98,7 +101,10 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             m_dataService.StartPollingProgress((progressInfo, exception) =>
             {
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionWarning();
                     return;
+                }
 
                 ProcessOpponentProgress(progressInfo);
             });
@@ -221,7 +227,10 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             m_dataService.GuessLetter(letter, (taskInfo, exception) =>
             {
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowError("Nepodařilo se odeslat Vámi hádaná písmena. Zkontrolujte připojení k internetu. Aplikace bude ukončena.", "Nelze kontaktovat server", GoBack);
                     return;
+                }
 
                 ProcessTaskInfo(taskInfo);
             });

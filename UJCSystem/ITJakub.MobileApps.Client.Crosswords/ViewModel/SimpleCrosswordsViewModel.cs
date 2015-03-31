@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             Crossword = new ObservableCollection<CrosswordRowViewModel>();
             OpponentProgress = new ObservableCollection<ProgressViewModel>();
         }
+        
+        public Action GoBack { get; set; }
 
         public ObservableCollection<CrosswordRowViewModel> Crossword
         {
@@ -49,7 +52,10 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             m_dataService.FillWord(rowViewModel.RowIndex, rowViewModel.Word, (gameInfo, exception) =>
             {
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError(GoBack);
                     return;
+                }
 
                 rowViewModel.IsCorrect = gameInfo.WordFilledCorrectly;
                 PlayerRankingViewModel.IsEnd = gameInfo.Win;

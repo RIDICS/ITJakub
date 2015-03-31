@@ -1,6 +1,6 @@
 using System;
 
-namespace ITJakub.MobileApps.Client.Core.Service
+namespace ITJakub.MobileApps.Client.Shared.Communication
 {
     public interface IErrorService
     {

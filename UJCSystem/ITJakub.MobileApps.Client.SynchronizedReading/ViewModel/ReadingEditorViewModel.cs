@@ -186,8 +186,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                     LoadingPhoto = false;
                     if (exception != null)
                     {
-                        //TODO show error
-                        IsShowPhotoEnabled = false;
+                        m_dataService.ErrorService.ShowConnectionError(() => IsShowPhotoEnabled = false);
                         return;
                     }
 
@@ -233,6 +232,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 Saving = false;
                 if (exception != null)
                 {
+                    m_dataService.ErrorService.ShowConnectionError();
                     return;
                 }
 

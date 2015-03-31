@@ -56,7 +56,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             {
                 LoadingPageList = false;
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError(GoBack);
                     return;
+                }
 
                 PageList = pages;
                 UpdateSelectedPage();
@@ -67,7 +70,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             m_dataService.StartPollingControlUpdates((model, exception) =>
             {
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionWarning();
                     return;
+                }
 
                 CurrentReader = model.ReaderUser;
                 LoadPage();
@@ -251,7 +257,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private void ProcessPollingUpdate(UpdateViewModel update, Exception exception)
         {
             if (exception != null)
+            {
+                m_dataService.ErrorService.ShowConnectionWarning();
                 return;
+            }
 
             TextReaderViewModel.SelectionStart = update.SelectionStart;
             TextReaderViewModel.SelectionLength = update.SelectionLength;
@@ -301,6 +310,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             m_dataService.PassControl(userInfo, exception =>
             {
                 actionViewModel.IsActionPerformed = false;
+
+                if (exception != null)
+                    m_dataService.ErrorService.ShowConnectionError();
             });
         }
         
@@ -310,6 +322,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             m_dataService.TakeReadControl(exception =>
             {
                 actionViewModel.IsActionPerformed = false;
+
+                if (exception != null)
+                    m_dataService.ErrorService.ShowConnectionError();
             });
         }
 
@@ -321,7 +336,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             {
                 TextReaderViewModel.Loading = false;
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError(GoBack);
                     return;
+                }
 
                 TextReaderViewModel.DocumentRtf = textRtf;
                 
@@ -342,7 +360,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             {
                 ImageReaderViewModel.Loading = false;
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError();
                     return;
+                }
 
                 ImageReaderViewModel.Photo = image;
             });

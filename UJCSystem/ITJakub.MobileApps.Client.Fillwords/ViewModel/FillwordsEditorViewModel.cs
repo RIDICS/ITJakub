@@ -199,7 +199,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             {
                 Saving = false;
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError();
                     return;
+                }
 
                 GoBack();
             });

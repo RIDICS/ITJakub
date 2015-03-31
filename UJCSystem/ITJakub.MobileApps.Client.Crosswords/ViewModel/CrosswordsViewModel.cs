@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             m_dataService = dataService;
 
             SimpleCrosswordsViewModel = new SimpleCrosswordsViewModel(dataService);
+            SimpleCrosswordsViewModel.GoBack = GoBack;
         }
 
         public SimpleCrosswordsViewModel SimpleCrosswordsViewModel { get; set; }
@@ -23,7 +24,10 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             m_dataService.StartPollingProgress((list, exception) =>
             {
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionWarning();
                     return;
+                }
 
                 SimpleCrosswordsViewModel.UpdateProgress(list);
                 m_dataService.GetIsWin(isWin => SimpleCrosswordsViewModel.SetWin(isWin));

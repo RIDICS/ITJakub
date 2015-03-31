@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Books;
-using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.SynchronizedReading.ViewModel;

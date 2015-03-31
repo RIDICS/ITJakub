@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Windows.UI.Popups;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
@@ -97,7 +95,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             m_dataService.GetTaskResults((taskFinished, exception) =>
             {
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError(GoBack);
                     return;
+                }
 
                 ResultList = taskFinished.ResultList;
                 IsOver = taskFinished.IsFinished || IsOver;
@@ -120,14 +121,13 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             });
         }
 
-        public override async void EvaluateAndShowResults()
+        public override void EvaluateAndShowResults()
         {
             IsOver = true;
             
             if (m_isDataLoaded && !m_isSubmited)
             {
-                await new MessageDialog("Skupina byla ukončena, tudíž dojde k automatickému vyhodnocení vyplněných odpovědí.", "Vyhodnocení odpovědí").ShowAsync();
-                Submit();
+                m_dataService.ErrorService.ShowError("Skupina byla ukončena, tudíž dojde k automatickému vyhodnocení vyplněných odpovědí.", "Vyhodnocení odpovědí", Submit);
             }
         }
 
@@ -150,7 +150,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 Saving = false;
                 if (exception != null)
                 {
-                    new MessageDialog("Úlohu se nepodařilo uložit a proto ji ani nelze vyhodnotit. Zkontrolujte připojení k internetu a zkuste to znovu.", "Vyhodnocení nelze provést").ShowAsync();
+                    m_dataService.ErrorService.ShowError("Úlohu se nepodařilo uložit a proto ji ani nelze vyhodnotit. Zkontrolujte připojení k internetu a zkuste to znovu.", "Vyhodnocení nelze provést");
                     return;
                 }
 
@@ -166,7 +166,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             m_dataService.StartPollingResults((newResults, exception) =>
             {
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionWarning();
                     return;
+                }
 
                 foreach (var userResultViewModel in newResults)
                 {

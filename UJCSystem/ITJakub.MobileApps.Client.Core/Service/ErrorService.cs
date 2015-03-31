@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Control;
 
 namespace ITJakub.MobileApps.Client.Core.Service

@@ -194,7 +194,10 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 Saving = false;
 
                 if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError();
                     return;
+                }
 
                 GoBack();
             });
