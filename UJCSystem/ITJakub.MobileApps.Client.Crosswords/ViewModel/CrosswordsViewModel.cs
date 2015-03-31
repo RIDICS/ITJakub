@@ -19,6 +19,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public override void InitializeCommunication()
         {
+            // TODO try fix slow loading
             m_dataService.StartPollingProgress((list, exception) =>
             {
                 if (exception != null)

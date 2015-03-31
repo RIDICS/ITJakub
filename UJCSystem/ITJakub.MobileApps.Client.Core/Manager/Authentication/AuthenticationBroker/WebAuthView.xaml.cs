@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker
 {    
-    public sealed partial class WebAuthView : Page
+    public sealed partial class WebAuthView
     {
         public WebAuthView(WebAuthViewModel viewModel)
         {

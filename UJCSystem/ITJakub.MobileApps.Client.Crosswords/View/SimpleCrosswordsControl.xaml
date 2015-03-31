@@ -99,7 +99,7 @@
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Crossword}"
-                          Margin="5"
+                          Margin="20"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
                           ItemTemplateSelector="{StaticResource CrosswordRowDataTemplateSelector}" />

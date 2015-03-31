@@ -158,13 +158,12 @@
     <Compile Include="Manager\Communication\Client\MobileAppsServiceClient.cs" />
     <Compile Include="Manager\Communication\Client\EndpointConfiguration.cs" />
     <Compile Include="Manager\Groups\GroupManager.cs" />
-    <Compile Include="Manager\Authentication\LoginResult.cs" />
-    <Compile Include="Manager\UserAvatarCache.cs" />
+    <Compile Include="Manager\Authentication\UserAvatarCache.cs" />
     <Compile Include="Manager\Communication\Client\ClientMessageInspector.cs" />
     <Compile Include="Manager\Communication\Client\CustomEndpointBehavior.cs" />
     <Compile Include="Manager\Groups\GroupType.cs" />
     <Compile Include="Manager\Communication\Error\UserNotRegisteredException.cs" />
-    <Compile Include="SynchronizeManager.cs" />
+    <Compile Include="Manager\SynchronizeManager.cs" />
     <Compile Include="Configuration\ApplicationConfig.cs" />
     <Compile Include="ApplicationLoader.cs" />
     <Compile Include="ApplicationTemplateSelector.cs" />
@@ -175,7 +174,6 @@
     <Compile Include="Service\INavigationService.cs" />
     <Compile Include="Service\NavigationService.cs" />
     <Compile Include="Manager\Authentication\AuthenticationProviders\ILoginProvider.cs" />
-    <Compile Include="Manager\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AppInfoViewModel.cs" />
     <Compile Include="ViewModel\Authentication\LoggedUserViewModel.cs" />

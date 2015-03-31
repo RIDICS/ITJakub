@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Windows.UI.Popups;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Crosswords.DataService;
 
@@ -110,9 +109,6 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         public void StopAndShowResults()
         {
             PlayerRankingViewModel.IsEnd = true;
-            //todo try fix slow loading
-            //todo show result
-            new MessageDialog("Show result table").ShowAsync();
         }
     }
 }

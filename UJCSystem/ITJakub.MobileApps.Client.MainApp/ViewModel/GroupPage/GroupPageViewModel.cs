@@ -37,6 +37,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private string m_appName;
         private bool m_canOpenApplication;
         private bool m_isGlobalFocus;
+        private long m_groupId;
 
         public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
@@ -49,7 +50,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             GroupRemoveViewModel = new GroupRemoveViewModel(RemoveGroup);
             GroupInfo = new GroupInfoViewModel();
 
-            m_dataService.GetCurrentGroupId(LoadData);
+            m_dataService.GetCurrentGroupId(groupId =>
+            {
+                m_groupId = groupId;
+                LoadData();
+            });
             m_dataService.GetLoggedUserInfo(false, userInfo =>
             {
                 m_currentUserId = userInfo.UserId;
@@ -64,12 +69,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             SelectAppAndTaskCommand = new RelayCommand(SelectAppAndTask);
             ConnectToGroupCommand = new RelayCommand(ConnectToGroup);
             OpenApplicationCommand = new RelayCommand(() => m_navigationService.Navigate<ApplicationHostView>());
+            ReloadCommand = new RelayCommand(LoadData);
         }
 
-        private void LoadData(long groupId)
+        private void LoadData()
         {
             Loading = true;
-            m_dataService.GetGroupDetails(groupId, (groupInfo, exception) =>
+            m_pollingService.Unregister(MembersPollingInterval, UpdateMembers);
+            m_dataService.GetGroupDetails(m_groupId, (groupInfo, exception) =>
             {
                 Loading = false;
                 if (exception != null)
@@ -310,7 +317,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         public RelayCommand ConnectToGroupCommand { get; private set; }
 
         public RelayCommand OpenApplicationCommand { get; private set; }
-        
+
+        public RelayCommand ReloadCommand { get; private set; }
+
         private void SelectAppAndTask()
         {
             m_dataService.SetRestoringLastGroupState(true);

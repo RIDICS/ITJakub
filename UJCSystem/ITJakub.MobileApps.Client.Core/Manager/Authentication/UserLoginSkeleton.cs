@@ -1,5 +1,4 @@
 using System;
-using Windows.UI.Xaml.Media;
 using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
@@ -14,7 +13,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         public long UserId { get; set; }
         public string CommunicationToken { get; set; }
         public DateTime EstimatedExpirationTime { get; set; }
-        public ImageSource UserAvatar { get; set; }
         public UserRoleContract UserRole { get; set; }
     }
 }

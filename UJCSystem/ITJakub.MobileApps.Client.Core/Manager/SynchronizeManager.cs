@@ -13,29 +13,23 @@ using ITJakub.MobileApps.DataContracts.Applications;
 using Microsoft.Practices.Unity;
 using Task = System.Threading.Tasks.Task;
 
-namespace ITJakub.MobileApps.Client.Core
+namespace ITJakub.MobileApps.Client.Core.Manager
 {
     public class SynchronizeManager : ISynchronizeCommunication
     {
-        private static readonly SynchronizeManager m_instance = new SynchronizeManager();
         private readonly AuthenticationManager m_authenticationManager;
         private readonly MobileAppsServiceClient m_serviceClient;
         private readonly ApplicationIdManager m_applicationIdManager;
         private readonly GroupManager m_groupManager;
 
-        private SynchronizeManager()
+        public SynchronizeManager(AuthenticationManager authenticationManager, MobileAppsServiceClient serviceClient, ApplicationIdManager applicationIdManager, GroupManager groupManager)
         {
-            m_authenticationManager = Container.Current.Resolve<AuthenticationManager>();
-            m_serviceClient = Container.Current.Resolve<MobileAppsServiceClient>();
-            m_applicationIdManager = Container.Current.Resolve<ApplicationIdManager>();
-            m_groupManager = Container.Current.Resolve<GroupManager>();
+            m_authenticationManager = authenticationManager;
+            m_serviceClient = serviceClient;
+            m_applicationIdManager = applicationIdManager;
+            m_groupManager = groupManager;
         }
-
-        public static SynchronizeManager Instance
-        {
-            get { return m_instance; }
-        }
-
+        
         public async Task SendObjectAsync(ApplicationType applicationType, string objectType, string objectValue)
         {
             var userId = m_authenticationManager.GetCurrentUserId();

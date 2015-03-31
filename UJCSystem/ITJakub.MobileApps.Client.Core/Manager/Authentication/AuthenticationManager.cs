@@ -25,7 +25,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             m_serviceClient = container.Resolve<MobileAppsServiceClient>();
             m_userAvatarCache = container.Resolve<UserAvatarCache>();
-            LoadLoginProviders(Container.Current.ResolveAll<ILoginProvider>());
+            LoadLoginProviders(container.ResolveAll<ILoginProvider>());
         }
         
         private void LoadLoginProviders(IEnumerable<ILoginProvider> providers)
@@ -116,7 +116,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             try
             {
-                UserLoginSkeleton userLoginSkeleton = await CreateUserAsync(loginProviderType);//TODO spravit bug... registrace a login nemohou jet naraz v ruznych vlaknech, protoze pak to obcas spadne na user not authorized exception
+                UserLoginSkeleton userLoginSkeleton = await CreateUserAsync(loginProviderType);
                 callback(userLoginSkeleton.Success, null);
             }
             catch (UserAlreadyRegisteredException exception)

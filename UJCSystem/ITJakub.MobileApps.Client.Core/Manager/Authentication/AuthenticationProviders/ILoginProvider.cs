@@ -8,6 +8,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         Task<UserLoginSkeleton> LoginAsync();
 
         string AccountName { get; }
+
         AuthProvidersContract ProviderType { get; }
     }
 }

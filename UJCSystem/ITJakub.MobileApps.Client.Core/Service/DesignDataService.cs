@@ -35,17 +35,17 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
-            throw new NotImplementedException();
+            callback(new Dictionary<ApplicationType, ApplicationBase>(), null);
         }
 
         public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
         {
-            throw new NotImplementedException();
+            callback(null, null);
         }
 
         public void GetApplicationByTypes(IEnumerable<ApplicationType> types, Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
-            throw new NotImplementedException();
+            callback(new Dictionary<ApplicationType, ApplicationBase>(), null);
         }
 
         public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
@@ -104,7 +104,14 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         public void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
         {
-            throw new NotImplementedException();
+            callback(new GroupInfoViewModel
+            {
+                CreateTime = new DateTime(),
+                GroupCode = "Code",
+                GroupName = "Název",
+                Members = new ObservableCollection<GroupMemberViewModel>(),
+                MemberCount = 0
+            }, null);
         }
 
         public void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback)

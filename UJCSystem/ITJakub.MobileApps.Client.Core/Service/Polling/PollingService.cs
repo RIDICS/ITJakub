@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -20,11 +21,11 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
         //Mapping from callback to generic action
         private readonly Dictionary<object, Action> m_registeredActions;
 
-        public PollingService(ITimerService timerService, GroupManager groupManager)
+        public PollingService(ITimerService timerService, GroupManager groupManager, SynchronizeManager synchronizeManager)
         {
             m_timerService = timerService;
             m_groupManager = groupManager;
-            m_synchronizeManager = SynchronizeManager.Instance;
+            m_synchronizeManager = synchronizeManager;
             m_registeredActions = new Dictionary<object, Action>();
         }
 
@@ -152,6 +153,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
         public void UnregisterAll()
         {
             m_timerService.UnregisterAll();
+            m_registeredActions.Clear();
         }
 
         private class PollingObjectsParameters

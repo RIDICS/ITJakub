@@ -35,6 +35,10 @@
     
     <Page.BottomAppBar>
         <CommandBar>
+            <AppBarButton Label="Aktualizovat"
+                          Icon="Refresh"
+                          Command="{Binding ReloadCommand}"
+                          IsEnabled="{Binding Loading, Converter={StaticResource BooleanNegationConverter}}" />
             <AppBarButton Label="Připojit se"
                           Icon="Forward"
                           Command="{Binding ConnectToGroupCommand}"

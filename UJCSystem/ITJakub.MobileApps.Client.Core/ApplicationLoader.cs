@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ITJakub.MobileApps.Client.Core.Configuration;
+using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using Microsoft.Practices.Unity;
 
 namespace ITJakub.MobileApps.Client.Core
 {
@@ -15,7 +17,7 @@ namespace ITJakub.MobileApps.Client.Core
 
         private ApplicationLoader()
         {
-            LoadAllDiffingWrappers(ApplicationConfigLoader.Instance.CurrentConfig.ApplicationAssemblies, SynchronizeManager.Instance);
+            LoadAllDiffingWrappers(ApplicationConfigLoader.Instance.CurrentConfig.ApplicationAssemblies, Container.Current.Resolve<SynchronizeManager>());
         }
 
 
