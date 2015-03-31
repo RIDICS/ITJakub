@@ -23,7 +23,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
         public CrosswordManager(ISynchronizeCommunication applicationCommunication)
         {
             m_applicationCommunication = applicationCommunication;
-            m_pollingService = m_applicationCommunication.GetPollingService();
+            m_pollingService = m_applicationCommunication.PollingService;
         }
 
         public void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback)

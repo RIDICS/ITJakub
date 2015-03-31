@@ -12,15 +12,16 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
     public class ChatViewModel : SupportAppBaseViewModel
     {
         private readonly IChatDataService m_dataService;
-        private readonly RelayCommand m_sendCommand;
         private string m_message;
         private ObservableCollection<MessageViewModel> m_messageHistory;
         private bool m_loading;
+        private bool m_isSendError;
 
         public ChatViewModel(IChatDataService dataService)
         {
             m_dataService = dataService;
-            m_sendCommand = new RelayCommand(SendMessage);
+            SendCommand = new RelayCommand(SendMessage);
+            CloseErrorCommand = new RelayCommand(() => IsSendError = false);
 
             MessageHistory = new AsyncObservableCollection<MessageViewModel>();
         }
@@ -37,10 +38,9 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
 
         public override void EvaluateAndShowResults() { }
 
-        public RelayCommand SendCommand
-        {
-            get { return m_sendCommand; }
-        }
+        public RelayCommand SendCommand { get; private set; }
+
+        public RelayCommand CloseErrorCommand { get; private set; }
 
         public string Message
         {
@@ -72,18 +72,33 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             }
         }
 
+        public bool IsSendError
+        {
+            get { return m_isSendError; }
+            set
+            {
+                m_isSendError = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private void SendMessage()
         {
             if (Message == string.Empty)
                 return;
 
-            m_dataService.SendMessage(Message, exception =>
+            var messageContent = Message;
+            IsSendError = false;
+            Message = string.Empty;
+
+            m_dataService.SendMessage(messageContent, exception =>
             {
                 if (exception != null)
-                    return;
+                {
+                    IsSendError = true;
+                    Message = messageContent;
+                }
             });
-            
-            Message = string.Empty;
         }
 
         private void ProcessNewMessages(ObservableCollection<MessageViewModel> messages, Exception exception)
@@ -111,7 +126,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
         {
             get { return new ActionViewModel[0]; }
         }
-
+        
         public override void AppVisibilityChanged(bool isVisible)
         {
             var newPollingInterval = isVisible ? ChatManager.FastPollingInterval : ChatManager.SlowPollingInterval;

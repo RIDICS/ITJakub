@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Crosswords.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
 
@@ -8,6 +9,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
 {
     public interface ICrosswordsDataService
     {
+        IErrorService ErrorService { get; }
         void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback);
         void FillWord(int rowIndex, string word, Action<GameInfoViewModel, Exception> callback);
         void StartPollingProgress(Action<List<ProgressUpdateViewModel>, Exception> callback);
@@ -19,10 +21,17 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
     public class CrosswordsDataService : ICrosswordsDataService
     {
         private readonly CrosswordManager m_crosswordManager;
+        private readonly IErrorService m_errorService;
 
         public CrosswordsDataService(ISynchronizeCommunication applicationCommunication)
         {
+            m_errorService = applicationCommunication.ErrorService;
             m_crosswordManager = new CrosswordManager(applicationCommunication);
+        }
+
+        public IErrorService ErrorService
+        {
+            get { return m_errorService; }
         }
 
         public void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback)

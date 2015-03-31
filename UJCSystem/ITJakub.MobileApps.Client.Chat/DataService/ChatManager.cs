@@ -27,7 +27,7 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
         public ChatManager(ISynchronizeCommunication applicationCommunication)
         {
             m_applicationCommunication = applicationCommunication;
-            m_pollingService = applicationCommunication.GetPollingService();
+            m_pollingService = applicationCommunication.PollingService;
 
             m_currentPollingInterval = SlowPollingInterval;
             m_latestMessageTime = new DateTime(1970,1,1);

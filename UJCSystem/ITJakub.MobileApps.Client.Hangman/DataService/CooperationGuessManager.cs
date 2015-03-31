@@ -22,7 +22,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public CooperationGuessManager(ISynchronizeCommunication synchronizeCommunication)
         {
             m_synchronizeCommunication = synchronizeCommunication;
-            m_pollingService = synchronizeCommunication.GetPollingService();
+            m_pollingService = synchronizeCommunication.PollingService;
         }
 
         public override TaskSettingsViewModel TaskSettings

@@ -128,7 +128,6 @@
     <Compile Include="Manager\Communication\Error\UserAlreadyRegisteredException.cs" />
     <Compile Include="Manager\Tasks\TaskManager.cs" />
     <Compile Include="Service\ErrorService.cs" />
-    <Compile Include="Service\IErrorService.cs" />
     <Compile Include="Service\Polling\IMainPollingService.cs" />
     <Compile Include="ViewModel\Comparer\GroupMemberComparer.cs" />
     <Compile Include="ViewModel\CreatedGroupViewModel.cs" />

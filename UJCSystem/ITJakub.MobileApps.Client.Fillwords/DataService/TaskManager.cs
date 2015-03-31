@@ -27,7 +27,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
         public TaskManager(ISynchronizeCommunication applicationCommunication)
         {
             m_applicationCommunication = applicationCommunication;
-            m_pollingService = applicationCommunication.GetPollingService();
+            m_pollingService = applicationCommunication.PollingService;
         }
         
         public async void CreateTask(string taskName, string bookRtfContent, IList<OptionsViewModel> optionsList, Action<Exception> callback)

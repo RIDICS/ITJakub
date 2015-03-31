@@ -6,6 +6,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
+using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -103,9 +104,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             return objectDetails;
         }
 
-        public IPollingService GetPollingService()
+        public IPollingService PollingService
         {
-            return Container.Current.Resolve<IPollingService>();
+            get { return Container.Current.Resolve<IPollingService>(); }
+        }
+
+        public IErrorService ErrorService
+        {
+            get { return Container.Current.Resolve<IErrorService>(); }
         }
 
         public async Task CreateTaskAsync(ApplicationType applicationType, string name, string data)

@@ -214,6 +214,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 var application = applications[type];
                 ApplicationViewModel = application.ApplicationViewModel;
                 ApplicationViewModel.DataLoadedCallback = () => WaitingForData = false;
+                ApplicationViewModel.GoBack = GoBack;
                 
                 ApplicationName = application.Name;
                 IsChatSupported = application.IsChatSupported;

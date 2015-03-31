@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Books;
+using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.SynchronizedReading.ViewModel;
@@ -13,12 +14,19 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         private readonly SynchronizationManager m_synchronizationManager;
         private readonly ReaderTaskManager m_taskManager;
         private readonly BookManager m_bookManager;
-        
+        private readonly IErrorService m_errorService;
+
         public ReaderDataService(ISynchronizeCommunication applicationCommunication)
         {
+            m_errorService = applicationCommunication.ErrorService;
             m_bookManager = new BookManager(Book.DataService);
             m_synchronizationManager = new SynchronizationManager(applicationCommunication, m_bookManager);
             m_taskManager = new ReaderTaskManager(applicationCommunication, m_bookManager);
+        }
+
+        public IErrorService ErrorService
+        {
+            get { return m_errorService; }
         }
 
         public void StartPollingUpdates(Action<UpdateViewModel, Exception> callback)

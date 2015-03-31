@@ -26,7 +26,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         {
             m_applicationCommunication = applicationCommunication;
             m_bookManager = bookManager;
-            m_pollingService = applicationCommunication.GetPollingService();
+            m_pollingService = applicationCommunication.PollingService;
         }
 
         public void StartPollingUpdates(Action<UpdateViewModel,Exception> callback)

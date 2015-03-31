@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
@@ -14,12 +15,12 @@ namespace ITJakub.MobileApps.Client.Shared.Communication
 
         Task<ObjectDetails> GetLatestObjectAsync(ApplicationType applicationType, DateTime since, string objectType);
 
-        IPollingService GetPollingService();
+        IPollingService PollingService { get; }
+
+        IErrorService ErrorService { get; }
 
         Task CreateTaskAsync(ApplicationType applicationType, string name, string data);
 
         Task<UserInfo> GetCurrentUserInfo();
-
-        //todo more required methods
     }
 }

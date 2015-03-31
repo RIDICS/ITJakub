@@ -14,6 +14,7 @@ namespace ITJakub.MobileApps.Client.Shared.ViewModel
         public abstract void StopCommunication();
         
         public Action DataLoadedCallback { private get; set; }
+        public Action GoBack { protected get; set; }
 
         protected void SetDataLoaded()
         {

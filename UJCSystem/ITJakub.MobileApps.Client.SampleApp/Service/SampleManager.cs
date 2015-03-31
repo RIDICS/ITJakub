@@ -12,7 +12,7 @@ namespace ITJakub.MobileApps.Client.SampleApp.Service
         public SampleManager(ISynchronizeCommunication applicationCommunication)
         {
             m_synchronizeManager = applicationCommunication;
-            m_pollingService = applicationCommunication.GetPollingService();
+            m_pollingService = applicationCommunication.PollingService;
         }
 
         public void RegisterForSynchronizedObjects(Action<object, Exception> callback)

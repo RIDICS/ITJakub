@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Hangman.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
 
@@ -8,6 +9,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 {
     public interface IHangmanDataService
     {
+        IErrorService ErrorService { get; }
         void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskInfoViewModel, Exception> callback);
         void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback);
         void StopPolling();
@@ -27,6 +29,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
             // manager with default mode
             m_guessManager = GuessManager.GetInstance(string.Empty, applicationCommunication);
+        }
+
+        public IErrorService ErrorService
+        {
+            get { return m_applicationCommunication.ErrorService; }
         }
 
         public void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskInfoViewModel, Exception> callback)
