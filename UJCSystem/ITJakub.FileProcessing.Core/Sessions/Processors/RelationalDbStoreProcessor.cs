@@ -40,7 +40,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                     Description = string.Empty,
                     Name = transResource.FileName,
                     OutputFormat = OutputFormat.Html,
-                    ResourceLevel = ResourceLevel.Version
+                    ResourceLevel = ResourceLevel.Book
                 });
             }
 
@@ -54,7 +54,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             try
             {
-                m_categoryRepository.SetBookTypeToRootCategoryIfNotKnown(bookEntity.Book.BookType, category);
+                m_categoryRepository.SetBookTypeToRootCategoryIfNotKnown(bookEntity.Book.BookType, category); //TODO resolve exception thrown due update
             }
             catch (BookTypeIsAlreadyAssociatedWithAnotherCategoryException ex)
             {

@@ -18,7 +18,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             m_searchServiceClient = searchServiceClient;
         }
 
-        public void Process(ResourceSessionDirector resourceDirector)
+        public async void Process(ResourceSessionDirector resourceDirector)
         {
             var existFileResources =
                 resourceDirector.Resources.Where(
@@ -35,7 +35,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
                 using (var dataStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    m_searchServiceClient.UploadVersionFileAsync(new VersionResourceUploadContract
+                    await m_searchServiceClient.UploadVersionFileAsync(new VersionResourceUploadContract    //TODO resolve Upload version or file
                     {
                         BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
                         BookVersionId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.VersionId),

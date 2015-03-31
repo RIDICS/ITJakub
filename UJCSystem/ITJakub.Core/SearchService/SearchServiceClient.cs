@@ -15,20 +15,83 @@ namespace ITJakub.Core.SearchService
 
         public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName)
         {
-            return await Channel.GetBookPageByPositionAsync(bookId, versionId, pagePosition, transformationName);
+            try
+            {
+                return await Channel.GetBookPageByPositionAsync(bookId, versionId, pagePosition, transformationName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
         }
 
         public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName)
         {
-            return await Channel.GetBookPageByNameAsync(bookId, versionId, pageName, transformationName);
+            try
+            {
+                return await Channel.GetBookPageByNameAsync(bookId, versionId, pageName, transformationName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
         }
 
         public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName)
         {
-            return await Channel.GetBookPagesByNameAsync(bookId, versionId, startPageName, endPageName, transformationName);
+            try
+            {
+                return await Channel.GetBookPagesByNameAsync(bookId, versionId, startPageName, endPageName, transformationName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
         }
 
-        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookId,string versionId)
+        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookId, string versionId)
         {
             try
             {
@@ -52,25 +115,85 @@ namespace ITJakub.Core.SearchService
                     m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
-
         }
 
         public async Task UploadVersionFileAsync(VersionResourceUploadContract versionResourceUploadContract)
         {
-            await Channel.UploadVersionFileAsync(versionResourceUploadContract);
+            try
+            {
+                await Channel.UploadVersionFileAsync(versionResourceUploadContract);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
         }
 
         public async Task UploadBookFileAsync(BookResourceUploadContract contract)
         {
-            await Channel.UploadBookFileAsync(contract);
+            try
+            {
+                await Channel.UploadBookFileAsync(contract);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
         }
 
         public async Task UploadSharedFileAsync(ResourceUploadContract contract)
         {
-            await Channel.UploadSharedFileAsync(contract);
+            try
+            {
+                await Channel.UploadSharedFileAsync(contract);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
         }
-
-
 
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
