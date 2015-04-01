@@ -35,14 +35,29 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
                 using (var dataStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    await m_searchServiceClient.UploadVersionFileAsync(new VersionResourceUploadContract    //TODO resolve Upload version or file
+                    if (resource.ResourceType == ResourceType.Transformation)
                     {
-                        BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
-                        BookVersionId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.VersionId),
-                        FileName = resource.FileName,
-                        ResourceType = resource.ResourceType,
-                        DataStream = dataStream
-                    });
+                        await m_searchServiceClient.UploadBookFileAsync(new BookResourceUploadContract    
+                        {
+                            BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
+                            FileName = resource.FileName,
+                            ResourceType = resource.ResourceType,
+                            DataStream = dataStream
+                        });
+                    }
+                    else
+                    {
+                        await m_searchServiceClient.UploadVersionFileAsync(new VersionResourceUploadContract   
+                        {
+                            BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
+                            BookVersionId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.VersionId),
+                            FileName = resource.FileName,
+                            ResourceType = resource.ResourceType,
+                            DataStream = dataStream
+                        });
+                    }
+
+                    
                 }
             }
         }

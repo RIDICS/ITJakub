@@ -25,6 +25,7 @@
         uploadMultiple: true,
         clickable: "#dropzoneFileFormPreview",
         autoProcessQueue: true,
+        paralelUploads: 5,
         previewsContainer: "#dropzoneFileFormPreview",
         acceptedFiles: ".doc,.docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt",
         dictInvalidFileType: "Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc,.docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt",
@@ -87,7 +88,16 @@
                 $("#processing").hide();
                 done.show();
 
+            },
+            error: function (xmlHttpRequest, textStatus, errorMessage) {
+                var done = $("#done");
+                var error = done.find(".error");
+                error.children(".message").append("Chyba: " + errorMessage);
+                error.show();
+                $("#processing").hide();
+                done.show();
             }
+            
         });
     });
 

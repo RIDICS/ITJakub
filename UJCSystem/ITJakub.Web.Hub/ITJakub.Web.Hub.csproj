@@ -16,7 +16,7 @@
     <AssemblyName>ITJakub.Web.Hub</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort>44300</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -649,7 +649,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2637</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2637/</IISUrl>
+          <IISUrl>http://localhost/ITJakub.Web.Hub</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://147.32.81.137/ITJakub.Web.Hub</CustomServerUrl>

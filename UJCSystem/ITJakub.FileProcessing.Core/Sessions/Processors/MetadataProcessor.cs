@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ITJakub.Core.Resources;
+using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.FileProcessing.Core.XMLProcessing;
 using ITJakub.Shared.Contracts.Resources;
 
@@ -41,6 +44,31 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                     ResourceType = ResourceType.Page
                 };
                 resourceSessionDirector.Resources.Add(pageResource);
+            }
+
+            var trans = resourceSessionDirector.Resources.Where(x => x.ResourceType == ResourceType.Transformation);
+            if (bookVersion.Transformations == null)
+            {
+                bookVersion.Transformations = new List<Transformation>();
+            }
+
+            foreach (var transResource in trans)
+            {
+                var transformation = new Transformation
+                {
+                    IsDefaultForBookType = false,
+                    Description = string.Empty,
+                    Name = transResource.FileName,
+                    OutputFormat = OutputFormat.Html,
+                    ResourceLevel = ResourceLevel.Book //TODO add support for version?
+                };
+
+                if (transformation.Name.ToLower().Contains("rtf")) //TODO make resolver
+                {
+                    transformation.OutputFormat = OutputFormat.Rtf;
+                }
+
+                bookVersion.Transformations.Add(transformation);
             }
         }
     }

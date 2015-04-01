@@ -13,7 +13,7 @@ namespace ITJakub.Core.PathResolvers
 
         public string ResolvePath(string bookId, string bookVersionId, string fileName)
         {
-            return Path.Combine(bookId, bookVersionId, "Images", fileName);
+            return Path.Combine(bookId, "Images", fileName);
         }
     }
 }
