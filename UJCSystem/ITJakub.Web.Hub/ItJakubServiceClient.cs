@@ -154,7 +154,7 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
-
+            
         public async Task<IList<BookPageContract>> GetBookPageListAsync(string documentId)
         {
             try
@@ -278,6 +278,33 @@ namespace ITJakub.Web.Hub
             {
                 if (m_log.IsErrorEnabled)
                     m_log.ErrorFormat("GetBooksWithCategoriesByBookType timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public Stream GetBookPageImage(BookPageImageContract bookPageImageContract)
+        {
+            try
+            {
+                return Channel.GetBookPageImage(bookPageImageContract);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPageImage failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPageImage failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPageImage timeouted with: {0}", ex);
                 throw;
             }
         }

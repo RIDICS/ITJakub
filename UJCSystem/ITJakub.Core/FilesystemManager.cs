@@ -27,16 +27,13 @@ namespace ITJakub.Core
             }
         }
 
-        public Resource GetResource(string bookId, string bookVersionId, string fileName, ResourceType resourceType)
+        public Stream GetResource(string bookId, string bookVersionId, string fileName, ResourceType resourceType)
         {
             var pathResolver = GetPathResolver(resourceType);
             var relativePath = pathResolver.ResolvePath(bookId, bookVersionId, fileName);
-            return new Resource
-            {
-                FileName = fileName,
-                FullPath = GetFullPath(relativePath),
-                ResourceType = resourceType
-            };
+            var fullPath = GetFullPath(relativePath);
+
+            return File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
         public void SaveResource(string bookId, string bookVersionId, Resource resource)

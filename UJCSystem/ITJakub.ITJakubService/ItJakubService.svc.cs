@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using Castle.Windsor;
@@ -39,9 +40,9 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.CreateAuthor(name);
         }
 
-        public BookInfoContract GetBookInfo(string bookId)
+        public BookInfoContract GetBookInfo(string bookGuid)
         {
-            return m_serviceManager.GetBookInfo(bookId);
+            return m_serviceManager.GetBookInfo(bookGuid);
         }
 
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
@@ -49,24 +50,24 @@ namespace ITJakub.ITJakubService
             return m_serviceManager.GetBooksWithCategoriesByBookType(bookType);
         }
 
-        public async Task<string> GetBookPageByNameAsync(string documentId, string pageName, string resultFormat)
+        public async Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, string resultFormat)
         {
-            return await m_serviceManager.GetBookPageByNameAsync(documentId, pageName, resultFormat);
+            return await m_serviceManager.GetBookPageByNameAsync(bookGuid, pageName, resultFormat);
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string documentId, string startPageName, string endPageName, string resultFormat)
+        public async Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, string resultFormat)
         {
-            return await m_serviceManager.GetBookPagesByNameAsync(documentId, startPageName, endPageName, resultFormat);
+            return await m_serviceManager.GetBookPagesByNameAsync(bookGuid, startPageName, endPageName, resultFormat);
         }
 
-        public async Task<string> GetBookPageByPositionAsync(string documentId, int position, string resultFormat)
+        public async Task<string> GetBookPageByPositionAsync(string bookGuid, int position, string resultFormat)
         {
-            return await m_serviceManager.GetBookPageByPositionAsync(documentId, position, resultFormat);
+            return await m_serviceManager.GetBookPageByPositionAsync(bookGuid, position, resultFormat);
         }
 
-        public async Task<IList<BookPageContract>> GetBookPageListAsync(string documentId)
+        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookGuid)
         {
-            return await m_serviceManager.GetBookPageListAsync(documentId);
+            return await m_serviceManager.GetBookPageListAsync(bookGuid);
         }
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)
@@ -82,6 +83,11 @@ namespace ITJakub.ITJakubService
         public List<SearchResultContract> Search(string term)
         {
             return m_serviceManager.Search(term);
+        }
+
+        public Stream GetBookPageImage(BookPageImageContract bookPageImageContract)
+        {
+            return m_serviceManager.GetBookPageImage(bookPageImageContract);
         }
     }
 

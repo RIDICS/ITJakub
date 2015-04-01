@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
@@ -20,16 +21,16 @@ namespace ITJakub.ITJakubService.DataContracts
         IEnumerable<AuthorDetailContract> GetAllAuthors();
 
         [OperationContract]
-        Task<string> GetBookPageByNameAsync(string documentId, string pageName, string resultFormat);
+        Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, string resultFormat);
 
         [OperationContract]
-        Task<string> GetBookPagesByNameAsync(string documentId, string startPageName, string endPageName, string resultFormat);
+        Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, string resultFormat);
 
         [OperationContract]
-        Task<string> GetBookPageByPositionAsync(string documentId, int position, string resultFormat);
+        Task<string> GetBookPageByPositionAsync(string bookGuid, int position, string resultFormat);
 
         [OperationContract]
-        Task<IList<BookPageContract>> GetBookPageListAsync(string documentId);
+        Task<IList<BookPageContract>> GetBookPageListAsync(string bookGuid);
 
         #region Resource Import
         [OperationContract]       
@@ -43,9 +44,12 @@ namespace ITJakub.ITJakubService.DataContracts
         List<SearchResultContract> Search(string term);
 
         [OperationContract]
-        BookInfoContract GetBookInfo(string bookId);
+        BookInfoContract GetBookInfo(string bookGuid);
 
         [OperationContract]
         BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType);
+
+        [OperationContract]
+        Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
     }
 }

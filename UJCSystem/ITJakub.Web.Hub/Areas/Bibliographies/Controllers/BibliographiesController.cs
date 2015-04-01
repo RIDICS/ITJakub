@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
@@ -44,5 +45,6 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             }
             return Json(new { books = listBooks }, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.IO;
+using System.Web.Mvc;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Web.Hub.Areas.Editions.Models;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
@@ -6,11 +8,11 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
     [RouteArea("Editions")]
     public class EditionsController : Controller
     {
-        private ItJakubServiceClient m_mainServiceClient;
+        private readonly ItJakubServiceClient m_serviceClient;
 
         public EditionsController()
         {
-            m_mainServiceClient = new ItJakubServiceClient();
+            m_serviceClient = new ItJakubServiceClient();
         }
 
         // GET: Editions/Editions
@@ -26,8 +28,19 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult Listing(string bookId)
         {
-            var book = m_mainServiceClient.GetBookInfo(bookId);
+            var book = m_serviceClient.GetBookInfo(bookId);
             return View(new BookListingModel { BookId = book.Guid, BookTitle = book.Title, BookPages = book.BookPages});
+        }
+
+
+        public FileResult GetBookImage(string bookId, int position)
+        {
+            var imageDataStream = m_serviceClient.GetBookPageImage(new BookPageImageContract
+            {
+                BookGuid = bookId,
+                Position = position
+            });
+            return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
         }
 
         public ActionResult List()

@@ -184,5 +184,18 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return books;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookPage FindBookPageByVersionAndPosition(long versionId, int position)
+        {
+            using (var session = GetSession())
+            {
+                var bookPage =
+                    session.QueryOver<BookPage>()
+                        .Where(x => x.BookVersion.Id == versionId && x.Position == position)
+                        .SingleOrDefault<BookPage>();
+                return bookPage;
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ITJakub.SearchService.Core.Exist.DAOs;
 using ITJakub.Shared.Contracts;
@@ -15,42 +14,25 @@ namespace ITJakub.SearchService
             m_bookDao = bookDao;
         }
 
-        public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName)
+        public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition,
+            string transformationName)
         {
             return await m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName);
         }
 
         public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName)
         {
-            try
-            {
-                return await m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName);
-            }
-            catch (Exception ex)
-            {
-                var a = ex;
-                throw;
-            }
+            return await m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName);
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName,
-            string transformationName)
+        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName)
         {
             return await m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName);
         }
 
         public async Task UploadVersionFileAsync(VersionResourceUploadContract contract)
         {
-            try
-            {
-                await
-                    m_bookDao.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName,
-                        contract.DataStream);
-            }
-            catch (Exception ex)
-            {
-                var a = ex;
-            }
+            await m_bookDao.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
         }
 
         public async Task UploadBookFileAsync(BookResourceUploadContract contract)
