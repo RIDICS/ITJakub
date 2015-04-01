@@ -16,7 +16,10 @@ let $end := request:get-parameter("end", "")
 let $documentId := request:get-parameter("bookId", "")
 let $versionId := request:get-parameter("versionId", "")
 let $pagePosition := request:get-parameter("page", 1)
-let $document := vwcollection:getDocument($documentId)
+let $document := if (string-length($versionId) > 0) then 
+                    vwcollection:getDocumentVersion($documentId, $versionId)
+                 else
+                    vwcollection:getDocument($documentId)
 let $result :=
     if (string-length($start) > 0) then
         if (string-length($end) > 0) then

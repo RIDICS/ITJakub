@@ -63,8 +63,9 @@ namespace ITJakub.DataEntities.Database.Repositories
                         rootCategoryWithBookType.Id);
                 }
 
-                rootCategory.BookType = bookType;
-                session.Update(rootCategory);
+                var categoryToSave = session.Merge(rootCategory);
+                categoryToSave.BookType = bookType;
+                session.Update(categoryToSave);
             }
         }
 

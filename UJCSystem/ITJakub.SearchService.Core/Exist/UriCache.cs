@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace ITJakub.SearchService.Core.Exist
 {
     public class UriCache
     {
+        private readonly object m_lock = new object();
         private readonly MethodInfoResolver m_methodInfoResolver;
         private readonly ExistConnectionSettingsSkeleton m_settings;
         private readonly Dictionary<string, CommunicationInfo> m_uriTemplateDictionary;
@@ -20,20 +19,22 @@ namespace ITJakub.SearchService.Core.Exist
 
         public CommunicationInfo GetCommunicationInfoForMethod([CallerMemberName] string methodName = null)
         {
-            if (methodName == null) return null;
             CommunicationInfo commInfo;
-            m_uriTemplateDictionary.TryGetValue(methodName, out commInfo);
-            if (commInfo == null)
+            if (methodName == null) return null;
+            lock (m_lock)
             {
-                Type interfaceType = typeof (IExistClient);
-                MethodInfo mInfo = interfaceType.GetMethod(methodName);
-                commInfo = m_methodInfoResolver.Resolve(mInfo);
-                AddCommunicationInfoForMethod(methodName, commInfo);
+                m_uriTemplateDictionary.TryGetValue(methodName, out commInfo);
+                if (commInfo == null)
+                {
+                    var interfaceType = typeof (IExistClient);
+                    var mInfo = interfaceType.GetMethod(methodName);
+                    commInfo = m_methodInfoResolver.Resolve(mInfo);
+                    AddCommunicationInfoForMethod(methodName, commInfo);
+                }
             }
 
             return commInfo;
         }
-
 
         private void AddCommunicationInfoForMethod(string methodName, CommunicationInfo communicationInfo)
         {

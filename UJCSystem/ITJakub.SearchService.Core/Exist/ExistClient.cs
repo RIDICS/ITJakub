@@ -29,6 +29,7 @@ namespace ITJakub.SearchService.Core.Exist
         public async Task UploadVersionFileAsync(string bookId, string bookVersionId, string fileName, Stream dataStream)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, bookVersionId, fileName);
             await m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
@@ -39,6 +40,7 @@ namespace ITJakub.SearchService.Core.Exist
         public async Task UploadBookFileAsync(string bookId, string fileName, Stream dataStream)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, fileName);
             await m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
@@ -49,6 +51,7 @@ namespace ITJakub.SearchService.Core.Exist
         public async Task UploadSharedFileAsync(string fileName, Stream dataStream)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+
             var uri = SetParamsToUri(commInfo.UriTemplate, fileName);
             await m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
@@ -74,6 +77,7 @@ namespace ITJakub.SearchService.Core.Exist
         public async Task<Stream> GetPageListAsync(string bookId, string versionId, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+
             var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId);
             var response = await m_httpClient.GetAsync(completeUri);
             return await response.Content.ReadAsStreamAsync();
@@ -83,14 +87,15 @@ namespace ITJakub.SearchService.Core.Exist
             string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var response =
-                await m_httpClient.GetStringAsync(GetCompleteUri(commInfo, xslPath, bookId, versionId, pagePosition));
+
+            var response = await m_httpClient.GetStringAsync(GetCompleteUri(commInfo, xslPath, bookId, versionId, pagePosition));
             return response;
         }
 
         public async Task<string> GetPageByName(string bookId, string versionId, string start, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+
             var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, start);
             return await m_httpClient.GetStringAsync(completeUri);
         }
@@ -98,10 +103,13 @@ namespace ITJakub.SearchService.Core.Exist
         public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+
             return await m_httpClient.GetStringAsync(GetCompleteUri(commInfo, xslPath, bookId, versionId, start, end));
         }
 
+
         #region Helpers
+
 
         private static Uri SetParamsToUri(string uriTemplate, params object[] args)
         {

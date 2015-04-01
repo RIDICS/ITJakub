@@ -135,13 +135,19 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
             if (disposing)
             {
-                foreach (ResourceSessionDirector resourceDirector in m_resourceDirectors.Values)
+                lock (m_lock)
                 {
-                    resourceDirector.Dispose();
+                    foreach (ResourceSessionDirector resourceDirector in m_resourceDirectors.Values)
+                    {
+                        resourceDirector.Dispose();
+                    }
                 }
             }
 
-            Directory.Delete(m_rootFolderPath, true);
+            if (Directory.Exists(m_rootFolderPath))
+            {
+                Directory.Delete(m_rootFolderPath, true);    
+            }
 
             m_disposed = true;
         }

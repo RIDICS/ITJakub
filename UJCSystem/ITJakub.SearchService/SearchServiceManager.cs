@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ITJakub.SearchService.Core.Exist.DAOs;
 using ITJakub.Shared.Contracts;
@@ -21,7 +22,15 @@ namespace ITJakub.SearchService
 
         public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName)
         {
-            return await m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName);
+            try
+            {
+                return await m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName);
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+                throw;
+            }
         }
 
         public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName,
@@ -32,7 +41,16 @@ namespace ITJakub.SearchService
 
         public async Task UploadVersionFileAsync(VersionResourceUploadContract contract)
         {
-            await m_bookDao.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
+            try
+            {
+                await
+                    m_bookDao.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName,
+                        contract.DataStream);
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+            }
         }
 
         public async Task UploadBookFileAsync(BookResourceUploadContract contract)
@@ -44,7 +62,6 @@ namespace ITJakub.SearchService
         {
             await m_bookDao.UploadSharedFile(contract.FileName, contract.DataStream);
         }
-
 
         public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookId, string versionId)
         {

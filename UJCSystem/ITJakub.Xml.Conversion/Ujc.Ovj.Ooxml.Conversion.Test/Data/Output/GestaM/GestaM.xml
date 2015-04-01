@@ -3,7 +3,7 @@
 <!-- TEI_Priradit_Oznaceni_Note -->
 <!-- EM_Presunout_edicni_komentar_x -->
 <!-- EM_Spojit_s_hlavickou_a_front -->
-<TEI xml:lang="cs" xmlns="http://www.tei-c.org/ns/1.0">
+<TEI xml:lang="cs" xmlns="http://www.tei-c.org/ns/1.0" change="#Change_2015-03-20T09:30:44.2920489Z">
   <teiHeader xml:id="teiHeader-1">
     <fileDesc n="{E494DBC5-F3C4-4841-B4D3-C52FE99839EB}">
       <titleStmt>
@@ -91,9 +91,8 @@
       </textClass>
     </profileDesc>
     <revisionDesc>
-      <change n="Change_2014-12-12T09:30:56" when="2014-12-12T09:30:56.1688472Z">Message 1</change>
-      <change n="Change_2014-12-14T09:30:56" when="2014-12-14T09:30:56.1688472Z">Message 2</change>
-      <change n="Change_2014-12-14T09:30:58" when="2014-12-14T09:30:58.6066104Z"></change>
+      <change n="Change_2015-03-18T09:30:44.2920489Z" when="2015-03-18T09:30:44.2920489Z">Message 1</change>
+      <change n="Change_2015-03-20T09:30:44.2920489Z" when="2015-03-20T09:30:44.2920489Z">Message 2</change>
     </revisionDesc>
   </teiHeader>
   <text xml:id="text-1">

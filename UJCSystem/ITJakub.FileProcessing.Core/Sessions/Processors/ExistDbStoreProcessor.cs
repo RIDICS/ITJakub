@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using ITJakub.Core.SearchService;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
@@ -18,12 +20,14 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             m_searchServiceClient = searchServiceClient;
         }
 
-        public async void Process(ResourceSessionDirector resourceDirector)
+        public void Process(ResourceSessionDirector resourceDirector)
         {
             var existFileResources =
                 resourceDirector.Resources.Where(
                     resource =>
-                        resource.ResourceType == ResourceType.Book || resource.ResourceType == ResourceType.Page || resource.ResourceType == ResourceType.Transformation);
+                        resource.ResourceType == ResourceType.Book || resource.ResourceType == ResourceType.Page ||
+                        resource.ResourceType == ResourceType.Transformation);
+            var uploadingTasks = new List<Task>();
             foreach (var resource in existFileResources)
             {
                 if (string.IsNullOrEmpty(resource.FileName) && m_log.IsFatalEnabled)
@@ -37,29 +41,29 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 {
                     if (resource.ResourceType == ResourceType.Transformation)
                     {
-                        await m_searchServiceClient.UploadBookFileAsync(new BookResourceUploadContract    
+                        uploadingTasks.Add(m_searchServiceClient.UploadBookFileAsync(new BookResourceUploadContract
                         {
                             BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
                             FileName = resource.FileName,
                             ResourceType = resource.ResourceType,
                             DataStream = dataStream
-                        });
+                        }));
                     }
                     else
                     {
-                        await m_searchServiceClient.UploadVersionFileAsync(new VersionResourceUploadContract   
+                        uploadingTasks.Add(m_searchServiceClient.UploadVersionFileAsync(new VersionResourceUploadContract
                         {
                             BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
                             BookVersionId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.VersionId),
                             FileName = resource.FileName,
                             ResourceType = resource.ResourceType,
                             DataStream = dataStream
-                        });
+                        }));
                     }
-
-                    
                 }
             }
+
+            Task.WaitAll(uploadingTasks.ToArray());
         }
     }
 }
