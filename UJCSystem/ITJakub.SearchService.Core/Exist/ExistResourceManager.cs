@@ -1,3 +1,4 @@
+using System;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -53,9 +54,9 @@ namespace ITJakub.SearchService.Core.Exist
             switch (transformationLevel)
             {
                 case ResourceLevelEnumContract.Book:
-                    return string.Format("{0}{1}/{2}", m_existSettings.ResourceRelativeUri, bookGuid, transformationName);
+                    return string.Format("{0}{1}/{2}", m_existSettings.ResourceRelativeUri, Uri.EscapeUriString(bookGuid), transformationName);
                 case ResourceLevelEnumContract.Version:
-                    return string.Format("{0}{1}/{2}/{3}", m_existSettings.ResourceRelativeUri, bookGuid, bookVersion, transformationName);
+                    return string.Format("{0}{1}/{2}/{3}", m_existSettings.ResourceRelativeUri, Uri.EscapeUriString(bookGuid), bookVersion, transformationName);
                 case ResourceLevelEnumContract.Shared:
                     return string.Format("{0}{1}", m_existSettings.TransformationRelativeUri, transformationName);
                 default:

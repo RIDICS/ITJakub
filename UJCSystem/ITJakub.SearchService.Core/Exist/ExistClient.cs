@@ -113,7 +113,8 @@ namespace ITJakub.SearchService.Core.Exist
 
         private static Uri SetParamsToUri(string uriTemplate, params object[] args)
         {
-            return new Uri(string.Format(uriTemplate, args));
+            var uriString = string.Format(uriTemplate, args);
+            return new Uri(uriString);
         }
 
         private static string AddXslParam(string uriTemplate, string xslPath)
