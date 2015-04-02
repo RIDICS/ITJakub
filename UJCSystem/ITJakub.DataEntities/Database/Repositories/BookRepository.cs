@@ -67,13 +67,6 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var result = session.QueryOver<Book>()
                     .Where(book => book.Guid == bookGuid)
                     .SingleOrDefault<Book>();
-
-
-                if (result == null)
-                {
-                    throw new BookDoesNotExistException(bookGuid);
-                }
-
                 return result;
             }
         }
@@ -94,18 +87,24 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual Transformation FindTransformation(BookVersion bookVersion, OutputFormat outputFormat)
         {
+
+            BookVersion bookVersionAlias = null;
+
             using (var session = GetSession())
             {
                 var transformation = session.QueryOver<Transformation>()
-                    .Where(transf => transf.OutputFormat == outputFormat && transf.BookVersions.Contains(bookVersion))
+                    .JoinAlias( t => t.BookVersions, () => bookVersionAlias)
+                    .Where( t => t.OutputFormat == outputFormat && bookVersionAlias.Id == bookVersion.Id)
                     .SingleOrDefault<Transformation>();
+
+                //TODO could be looked up for specific book transformation (shared between version)
 
                 if (transformation == null)
                 {
                     transformation = session.QueryOver<Transformation>()
                         .Where(
-                            transf =>
-                                transf.OutputFormat == outputFormat && transf.BookType == bookVersion.Book.BookType)
+                            t =>
+                                t.OutputFormat == outputFormat && t.BookType == bookVersion.Book.BookType && t.IsDefaultForBookType)
                         .SingleOrDefault<Transformation>();
                 }
 

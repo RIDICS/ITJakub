@@ -10,9 +10,9 @@ namespace ITJakub.SearchService.Core.Exist
     public class ExistManager
     {
         private readonly ExistClient m_client;
-        private readonly ExistResourceManager m_existResourceManager;
+        private readonly IExistResourceManager m_existResourceManager;
 
-        public ExistManager(ExistClient existClient, ExistResourceManager existResourceManager)
+        public ExistManager(ExistClient existClient, IExistResourceManager existResourceManager)
         {
             m_client = existClient;
             m_existResourceManager = existResourceManager;
