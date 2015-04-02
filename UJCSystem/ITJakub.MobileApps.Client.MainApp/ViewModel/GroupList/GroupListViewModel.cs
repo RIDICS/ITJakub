@@ -414,7 +414,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private void CreateNewTask()
         {
             m_dataService.SetAppSelectionTarget(SelectApplicationTarget.CreateTask);
-            m_navigationService.Navigate<SelectApplicationView>();
+            Navigate(typeof (SelectApplicationView));
         }
     }
 }

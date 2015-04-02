@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Application
 
         private void LoadAllApplicationId()
         {
-            var appList = m_serviceClient.GetAllApplicationAsync().Result;
+            var appList = m_serviceClient.GetAllApplicationAsync().Result; //TODO remove bugs: running on UI thread, throwing AggregateException
             
             m_applicationTypeToId = new Dictionary<ApplicationType, int>();
             m_applicaitonIdToType = new Dictionary<int, ApplicationType>();
