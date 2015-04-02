@@ -14,19 +14,19 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
             m_existManager = existManager;
         }
 
-        public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end, string transformationPath)
+        public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_existManager.GetPagesByName(bookId, versionId, start, end);
+            return await m_existManager.GetPagesByName(bookId, versionId, start, end, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetPageByName(string bookId, string versionId, string pageName, string transformationPath)
+        public async Task<string> GetPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_existManager.GetPageByName(bookId, versionId, pageName);
+            return await m_existManager.GetPageByName(bookId, versionId, pageName, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationPath)
+        public async Task<string> GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_existManager.GetPageByPositionFromStart(bookId, versionId, pagePosition);
+            return await m_existManager.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName, transformationLevel);
         }
 
         public async Task<List<BookPageContract>> GetBookPageList(string bookId, string versionId)

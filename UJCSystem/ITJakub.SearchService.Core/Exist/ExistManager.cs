@@ -10,10 +10,12 @@ namespace ITJakub.SearchService.Core.Exist
     public class ExistManager
     {
         private readonly ExistClient m_client;
+        private readonly ExistResourceManager m_existResourceManager;
 
-        public ExistManager(ExistClient existClient)
+        public ExistManager(ExistClient existClient, ExistResourceManager existResourceManager)
         {
             m_client = existClient;
+            m_existResourceManager = existResourceManager;
         }
 
         public async Task<List<BookPageContract>> GetPageList(string bookId,string versionId, string xslPath = null)
@@ -50,19 +52,22 @@ namespace ITJakub.SearchService.Core.Exist
             await m_client.UploadSharedFileAsync(fileName, filStream);
         }
 
-        public async Task<string> GetPageByPositionFromStart(string bookId, string versionId, int pagePosition)
+        public async Task<string> GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition);
+            string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
+            return await m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition, xslPath);
         }
 
-        public async Task<string> GetPageByName(string bookId, string versionId, string pageName)
+        public async Task<string> GetPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_client.GetPageByName(bookId, versionId, pageName);
+            string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
+            return await m_client.GetPageByName(bookId, versionId, pageName, xslPath);
         }
 
-        public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end)
+        public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_client.GetPagesByName(bookId, versionId, start, end);
+            string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
+            return await m_client.GetPagesByName(bookId, versionId, start, end, xslPath);
         }
     }
 }

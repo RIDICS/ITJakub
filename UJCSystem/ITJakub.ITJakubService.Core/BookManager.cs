@@ -32,9 +32,9 @@ namespace ITJakub.ITJakubService.Core
             var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
-            var transformationName = transformation.Name; //TODO make transformation resolving and upload to DB
-            //var transformationName = "pageToHtml.xsl"; //TODO make transformation resolving and upload to DB
-            return await m_searchServiceClient.GetBookPageByNameAsync(bookGuid, bookVersion.VersionId, pageName, transformationName);
+            var transformationName = transformation.Name;
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+            return await m_searchServiceClient.GetBookPageByNameAsync(bookGuid, bookVersion.VersionId, pageName, transformationName, transformationLevel);
         }
 
         public async Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
@@ -43,9 +43,9 @@ namespace ITJakub.ITJakubService.Core
             var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
-            var transformationName = transformation.Name; //TODO make transformation resolving and upload to DB
-            //var transformationName = "pageToHtml.xsl"; //TODO make transformation resolving and upload to DB
-            return await m_searchServiceClient.GetBookPagesByNameAsync(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName);
+            var transformationName = transformation.Name; 
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+            return await m_searchServiceClient.GetBookPagesByNameAsync(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName, transformationLevel);
         }
 
         public async Task<string> GetBookPagesByPositionAsync(string bookGuid, int position, OutputFormatEnumContract resultFormat)
@@ -54,9 +54,9 @@ namespace ITJakub.ITJakubService.Core
             var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
-            var transformationName = transformation.Name; //TODO make transformation resolving and upload to DB
-            //var transformationName = "pageToHtml.xsl"; //TODO make transformation resolving and upload to DB
-            return await m_searchServiceClient.GetBookPageByPositionAsync(bookGuid, bookVersion.VersionId, position, transformationName);
+            var transformationName = transformation.Name; 
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+            return await m_searchServiceClient.GetBookPageByPositionAsync(bookGuid, bookVersion.VersionId, position, transformationName, transformationLevel);
         }
 
         public async Task<IList<BookPageContract>> GetBookPagesListAsync(string bookGuid)
