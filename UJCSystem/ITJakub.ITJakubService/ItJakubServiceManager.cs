@@ -56,17 +56,17 @@ namespace ITJakub.ITJakubService
             return m_searchManager.GetBooksWithCategoriesByBookType(bookType);
         }
 
-        public async Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, string resultFormat)
+        public async Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
         {
             return await m_bookManager.GetBookPageByNameAsync(bookGuid, pageName, resultFormat);
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, string resultFormat)
+        public async Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
         {
             return await m_bookManager.GetBookPagesByNameAsync(bookGuid, startPageName, endPageName, resultFormat);
         }
 
-        public async Task<string> GetBookPageByPositionAsync(string bookGuid, int position, string resultFormat)
+        public async Task<string> GetBookPageByPositionAsync(string bookGuid, int position, OutputFormatEnumContract resultFormat)
         {
             return await m_bookManager.GetBookPagesByPositionAsync(bookGuid, position, resultFormat);
         }

@@ -52,6 +52,7 @@
     <Compile Include="CategoryContract.cs" />
     <Compile Include="EditorContract.cs" />
     <Compile Include="ManuscriptContract.cs" />
+    <Compile Include="OutputFormatEnumContract.cs" />
     <Compile Include="PublisherContract.cs" />
     <Compile Include="ResourceUploadContract.cs" />
     <Compile Include="ILemmatizationService.cs" />
