@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
 {
     public class ServiceClient : ClientBase<IMobileAppsService>, IServiceClient
     {
-        private const string EndpointAddress = "http://localhost/";
+        private const string EndpointAddress = "http://localhost:11186/MobileApps.svc";
 
         public ServiceClient() : base(GetDefaultBinding(), GetDefaultEndpointAddress())
         {

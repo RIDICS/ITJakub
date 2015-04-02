@@ -1,29 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
 
-namespace ITJakub.ITJakubService
+namespace ITJakub.ITJakubService.Services
 {
-    public class ItJakubServiceManager : IItJakubServiceLocal
+    public class ItJakubServiceManager : IItJakubService
     {
         private readonly UserManager m_userManager;
         private readonly BookManager m_bookManager;
         private readonly AuthorManager m_authorManager;
         private readonly ResourceManager m_resourceManager;
         private readonly SearchManager m_searchManager;
+        private readonly WindsorContainer m_container = Container.Current;
 
-        public ItJakubServiceManager(UserManager userManager, BookManager bookManager, AuthorManager authorManager, ResourceManager resourceManager, SearchManager searchManager)
+        public ItJakubServiceManager()
         {
-            m_userManager = userManager;
-            m_bookManager = bookManager;
-            m_authorManager = authorManager;
-            m_resourceManager = resourceManager;
-            m_searchManager = searchManager;
+            m_userManager = m_container.Resolve<UserManager>();
+            m_bookManager = m_container.Resolve<BookManager>();
+            m_authorManager = m_container.Resolve<AuthorManager>();
+            m_resourceManager = m_container.Resolve<ResourceManager>();
+            m_searchManager = m_container.Resolve<SearchManager>();
         }
 
         public CreateUserResultContract CreateUser(CreateUserContract createUserContract)
