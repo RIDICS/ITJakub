@@ -1,0 +1,60 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:view="using:ITJakub.MobileApps.Client.Hangman.View"
+    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control">
+
+    <Style TargetType="view:SpecialTextBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="view:SpecialTextBox">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <view:NoLostFocusTextBox Grid.Column="0"
+                                                 x:Name="TextBox"
+                                                 Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                                 VerticalAlignment="Center" />
+                        
+                        <Button Grid.Column="1"
+                                x:Name="ShowKeyboardButton">
+                            <SymbolIcon Symbol="Keyboard" />
+                            
+                            <Button.Flyout>
+                                <Flyout Placement="Bottom">
+                                    <GridView IsItemClickEnabled="True"
+                                              SelectionMode="None"
+                                              x:Name="GridView"
+                                              ScrollViewer.HorizontalScrollMode="Disabled">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <control:AlignableWrapPanel HorizontalContentAlignment="Center"
+                                                                            MaxWidth="420" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Width="70"
+                                                      Height="60"
+                                                      Background="DarkGray">
+                                                    <TextBlock Text="{Binding}"
+                                                               FontSize="30"
+                                                               VerticalAlignment="Center"
+                                                               HorizontalAlignment="Center"
+                                                               Foreground="{StaticResource ButtonForegroundThemeBrush}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </GridView>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

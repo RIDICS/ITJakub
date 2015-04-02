@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
-using ITJakub.MobileApps.Client.Core.Manager.Tasks;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.Core.Service.Polling
 {
@@ -15,23 +16,17 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
     {
         private readonly ISynchronizeCommunication m_synchronizeManager;
         private readonly ITimerService m_timerService;
-        private readonly TaskManager m_taskManager;
         private readonly GroupManager m_groupManager;
-
-        //Mapping from callback for synchronized objects to generic action (for using TimerService)
-        private readonly Dictionary<Action<IList<ObjectDetails>, Exception>, Action> m_registeredForSynchronizedObjects;
         
         //Mapping from callback to generic action
         private readonly Dictionary<object, Action> m_registeredActions;
 
-        public PollingService(ITimerService timerService, TaskManager taskManager, GroupManager groupManager)
+        public PollingService(ITimerService timerService, GroupManager groupManager, SynchronizeManager synchronizeManager)
         {
             m_timerService = timerService;
-            m_taskManager = taskManager;
             m_groupManager = groupManager;
-            m_synchronizeManager = SynchronizeManager.Instance;
+            m_synchronizeManager = synchronizeManager;
             m_registeredActions = new Dictionary<object, Action>();
-            m_registeredForSynchronizedObjects = new Dictionary<Action<IList<ObjectDetails>, Exception>, Action>();
         }
 
         public void RegisterForSynchronizedObjects(PollingInterval interval, ApplicationType applicationType,
@@ -46,7 +41,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             };
             Action action = () => GetSynchronizedObjectsAsync(objectParameters).GetAwaiter().GetResult();
             m_timerService.Register(interval, action);
-            m_registeredForSynchronizedObjects.Add(callback, action);
+            m_registeredActions.Add(callback, action);
         }
 
         public void RegisterForSynchronizedObjects(PollingInterval interval, ApplicationType applicationType, string objectType, Action<IList<ObjectDetails>, Exception> callback)
@@ -54,14 +49,28 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             RegisterForSynchronizedObjects(interval, applicationType, new DateTime(1970,1,1), objectType, callback);
         }
 
+        public void RegisterForLatestSynchronizedObject(PollingInterval interval, ApplicationType applicationType, string objectType, Action<ObjectDetails, Exception> callback)
+        {
+            var objectParameters = new PollingObjectParameters
+            {
+                ApplicationType = applicationType,
+                ObjectType = objectType,
+                Since = new DateTime(1970,1,1),
+                Callback = callback
+            };
+            Action action = () => GetLatestSynchronizedObjectAsync(objectParameters).GetAwaiter().GetResult();
+            m_timerService.Register(interval, action);
+            m_registeredActions.Add(callback, action);
+        }
+
         public void UnregisterForSynchronizedObjects(PollingInterval interval, Action<IList<ObjectDetails>, Exception> action)
         {
-            if (!m_registeredForSynchronizedObjects.ContainsKey(action))
-                return;
+            UnregisterGenericAction(interval, action);
+        }
 
-            var registeredAction = m_registeredForSynchronizedObjects[action];
-            m_timerService.Unregister(interval, registeredAction);
-            m_registeredForSynchronizedObjects.Remove(action);
+        public void UnregisterForLatestSynchronizedObject(PollingInterval interval, Action<ObjectDetails, Exception> action)
+        {
+            UnregisterGenericAction(interval, action);
         }
 
         private async Task GetSynchronizedObjectsAsync(PollingObjectsParameters parameters)
@@ -84,9 +93,29 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             }
         }
 
-        public void RegisterForGetTaskByGroup(PollingInterval interval, long groupId, Action<TaskViewModel,Exception> callback)
+        private async Task GetLatestSynchronizedObjectAsync(PollingObjectParameters parameters)
         {
-            Action newAction = () => m_taskManager.GetTaskForGroupAsync(groupId, callback).GetAwaiter().GetResult();
+            try
+            {
+                var latestObject =
+                    await
+                        m_synchronizeManager.GetLatestObjectAsync(parameters.ApplicationType, parameters.Since,
+                            parameters.ObjectType);
+
+                if (latestObject != null)
+                    parameters.Since = latestObject.CreateTime;
+
+                DispatcherHelper.CheckBeginInvokeOnUI(() => parameters.Callback(latestObject, null));
+            }
+            catch (ClientCommunicationException exception)
+            {
+                DispatcherHelper.CheckBeginInvokeOnUI(() => parameters.Callback(null, exception));
+            }
+        }
+
+        public void RegisterForGetGroupState(PollingInterval interval, long groupId, Action<GroupStateContract, Exception> callback)
+        {
+            Action newAction = () => m_groupManager.GetGroupStateAsync(groupId, callback).GetAwaiter().GetResult();
             m_timerService.Register(interval, newAction);
             m_registeredActions.Add(callback, newAction);
         }
@@ -94,6 +123,9 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
         public void RegisterForGroupsUpdate(PollingInterval interval, IList<GroupInfoViewModel> groupList, Action<Exception> callback)
         {
             Action newAction = () => m_groupManager.UpdateGroupsMembersAsync(groupList, callback).GetAwaiter().GetResult();
+            if (m_registeredActions.ContainsKey(callback))
+                return;
+
             m_timerService.Register(interval, newAction);
             m_registeredActions.Add(callback, newAction);
         }
@@ -108,7 +140,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             m_registeredActions.Remove(action);
         }
 
-        public void Unregister(PollingInterval interval, Action<TaskViewModel, Exception> action)
+        public void Unregister(PollingInterval interval, Action<GroupStateContract, Exception> action)
         {
             UnregisterGenericAction(interval, action);
         }
@@ -121,6 +153,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
         public void UnregisterAll()
         {
             m_timerService.UnregisterAll();
+            m_registeredActions.Clear();
         }
 
         private class PollingObjectsParameters
@@ -129,6 +162,14 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             public string ObjectType { get; set; }
             public DateTime Since { get; set; }
             public Action<IList<ObjectDetails>, Exception> Callback { get; set; }
+        }
+
+        private class PollingObjectParameters
+        {
+            public ApplicationType ApplicationType { get; set; }
+            public string ObjectType { get; set; }
+            public DateTime Since { get; set; }
+            public Action<ObjectDetails, Exception> Callback { get; set; }
         }
     }
 }

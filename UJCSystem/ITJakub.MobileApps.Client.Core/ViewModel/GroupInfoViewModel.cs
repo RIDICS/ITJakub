@@ -4,10 +4,10 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.Core.ViewModel
 {
@@ -16,10 +16,11 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         private ObservableCollection<GroupMemberViewModel> m_members;
         private int m_memberCount;
         private string m_searchText;
+        private GroupStateContract m_state;
 
         public GroupInfoViewModel()
         {
-            Icon = new BitmapImage(new Uri("ms-appx:///Icon/group-64.png"));
+            m_members = new ObservableCollection<GroupMemberViewModel>();
 
             SearchText = string.Empty;
             SearchCommand = new RelayCommand(() => RaisePropertyChanged(() => FilteredMembers));
@@ -27,7 +28,6 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
 
         public string GroupName { get; set; }
         public string GroupCode { get; set; }
-        public BitmapImage Icon { get; set; }
         public long GroupId { get; set; }
         public GroupType GroupType { get; set; }
         public DateTime CreateTime { get; set; }
@@ -91,6 +91,21 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         public Visibility NoMembersVisibility
         {
             get { return m_memberCount == 0 ? Visibility.Visible : Visibility.Collapsed; }
+        }
+
+        public GroupStateContract State
+        {
+            get { return m_state; }
+            set
+            {
+                m_state = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ContainsMember(long userId)
+        {
+            return m_members.Any(model => model.Id == userId);
         }
     }
 }

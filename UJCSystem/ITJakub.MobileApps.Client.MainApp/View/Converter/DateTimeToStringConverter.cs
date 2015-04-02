@@ -11,6 +11,7 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Converter
                 throw new InvalidOperationException("The target must be a string");
 
             var dateTime = (DateTime)value;
+            dateTime = dateTime.ToLocalTime();
             return dateTime.ToString("d.M.yyyy H:mm");
         }
 

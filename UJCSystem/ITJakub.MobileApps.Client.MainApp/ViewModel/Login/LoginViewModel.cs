@@ -1,14 +1,14 @@
 ﻿using System.Collections.ObjectModel;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using ITJakub.MobileApps.Client.Core.Manager.Communication;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.View.Login;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
@@ -17,17 +17,20 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
+        private readonly IErrorService m_errorService;
         private bool m_loggingIn;
-        private Visibility m_loginDialogVisibility;
 
-        public LoginViewModel(IDataService dataService, INavigationService navigationService)
+        public LoginViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_errorService = errorService;
             LoggingIn = false;
             LoadInitData();
+
+            GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             ItemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
-            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate(typeof (RegistrationView)));
+            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<RegistrationView>());
         }
 
 
@@ -36,16 +39,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
         public RelayCommand<ItemClickEventArgs> ItemClickCommand { get; private set; }
 
         public RelayCommand RegistrationCommand { get; private set; }
-
-        public Visibility LoginDialogVisibility
-        {
-            get { return m_loginDialogVisibility; }
-            set
-            {
-                m_loginDialogVisibility = value;
-                RaisePropertyChanged();
-            }
-        }
+        
+        public RelayCommand GoBackCommand { get; private set; }
 
         public bool LoggingIn
         {
@@ -53,11 +48,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
             set
             {
                 m_loggingIn = value;
-                LoginDialogVisibility = value ? Visibility.Visible : Visibility.Collapsed;
                 RaisePropertyChanged();
             }
         }
-
+        
         private void LoadInitData()
         {
             LoginProviders = new ObservableCollection<LoginProviderViewModel>();
@@ -92,11 +86,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
                 {
                     if (exception is UserNotRegisteredException)
                         new MessageDialog("Pro přihlášení do aplikace je nutné se nejdříve registrovat.", "Uživatel není registrován").ShowAsync();
+                    else
+                        m_errorService.ShowConnectionError();
+
                     return;
                 }
 
                 if (loginResult)
-                    m_navigationService.Navigate(typeof (GroupListView));
+                    m_navigationService.Navigate<GroupListView>();
             });
         }
     }

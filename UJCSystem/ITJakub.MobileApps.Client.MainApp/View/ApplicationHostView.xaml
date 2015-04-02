@@ -7,13 +7,82 @@
     xmlns:core="using:ITJakub.MobileApps.Client.Core"
     xmlns:userMenu="using:ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     DataContext="{Binding ApplicationHostViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
     <Page.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <core:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
+        <converter1:MessageCountToNotificationConverter x:Key="MessageCountToNotificationConverter" />
+        <converter1:GroupMemberToUserInfoConverter x:Key="GroupMemberToUserInfoConverter" />
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </Page.Resources>
+    
+    <Page.TopAppBar>
+        <AppBar Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <ItemsControl Grid.Column="0"
+                              VerticalAlignment="Center"
+                              IsEnabled="{Binding IsClosed, Converter={StaticResource BooleanNegationConverter}}"
+                              ItemsSource="{Binding ApplicationViewModel.ActionsWithUsers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button IsEnabled="{Binding IsActionPerformed, Converter={StaticResource BooleanNegationConverter}}"
+                                    HorizontalAlignment="Stretch"
+                                    Command="{Binding Command}"
+                                    CommandParameter="{Binding ElementName=MembersListView, Path=SelectedItem, Converter={StaticResource GroupMemberToUserInfoConverter}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ProgressRing IsActive="True"
+                                                  Margin="0,0,10,0"
+                                                  Visibility="{Binding IsActionPerformed, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <TextBlock Text="{Binding Label}" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                
+                <ListView Grid.Column="1"
+                          Margin="20,0,0,0"
+                          SelectionMode="Single"
+                          ItemsSource="{Binding MemberList}"
+                          Style="{StaticResource HorizontalListView}"
+                          x:Name="MembersListView">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical"
+                                        MinWidth="100"
+                                        Margin="0,0,0,10">
+                                <Image Width="50"
+                                       Height="50"
+                                       Source="{Binding UserAvatar}"
+                                       HorizontalAlignment="Center" />
+                                <TextBlock Text="{Binding FirstName}"
+                                           HorizontalAlignment="Center" />
+                                <TextBlock Text="{Binding LastName}"
+                                           HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    
+                </ListView>
+            </Grid>
+        </AppBar>
+    </Page.TopAppBar>
     
     <Page.BottomAppBar>
         <CommandBar IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
@@ -76,37 +145,98 @@
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
                             VerticalContentAlignment="Stretch"
                             HorizontalContentAlignment="Stretch" />
+
+            <Grid Grid.Column="0"
+                  Background="#22000000"
+                  Visibility="{Binding Waiting, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <Grid MinWidth="400"
+                      MinHeight="100"
+                      Margin="0,0,0,70"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Background="White">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+
+                    <ProgressRing Grid.Column="0"
+                                  Width="40"
+                                  Height="40"
+                                  Margin="20"
+                                  Foreground="Black"
+                                  IsActive="True" />
+
+                    <Grid Grid.Column="1"
+                          Background="White"
+                          Visibility="{Binding WaitingForData, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Čekání na data"
+                                   Foreground="Black"
+                                   FontSize="30" />
+                    </Grid>
+
+                    <Grid Grid.Column="1"
+                          Background="White"
+                          Visibility="{Binding WaitingForStart, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Čekání na spuštění učitelem"
+                                   Foreground="Black"
+                                   FontSize="30" />
+                    </Grid>
+
+                    <Grid Grid.Column="1"
+                          Background="White"
+                          Visibility="{Binding IsPaused, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Pozastaveno"
+                                   Foreground="Black"
+                                   FontSize="30" />
+                    </Grid>
+                </Grid>
+            </Grid>
+
             <ContentControl Grid.Column="1"
                             Visibility="{Binding IsChatDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Content="{Binding ChatApplicationViewModel}"
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
                             VerticalContentAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch" />
+                            HorizontalContentAlignment="Stretch" />            
         </Grid>
 
         <Grid Grid.Row="1"
-              Background="#11000000"
-              Visibility="{Binding Waiting, Converter={StaticResource BooleanToVisibilityConverter}}">
-            
-            <StackPanel MinWidth="400"
-                        MinHeight="100"
-                        Margin="0,0,0,70"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Orientation="Horizontal"
-                        Background="White">
-
-                <ProgressRing Width="40"
-                              Height="40"
-                              Margin="20"
-                              Foreground="Black"
-                              IsActive="True" />
-                
-                <TextBlock VerticalAlignment="Center"
-                           Text="Čekání na zadání"
-                           Foreground="Black"
-                           FontSize="30" />
-            </StackPanel>
+              HorizontalAlignment="Right"
+              VerticalAlignment="Bottom"
+              Margin="0,0,30,30"
+              Width="250"
+              Height="80"
+              Visibility="{Binding IsChatNotificationVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Rectangle Fill="LightGoldenrodYellow"
+                       RadiusX="15"
+                       RadiusY="10"
+                       Stroke="#20000000"
+                       StrokeThickness="2" />
+            <Button Background="Transparent"
+                    Margin="8,4,8,4"
+                    Padding="4,0,4,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    BorderThickness="0"
+                    Command="{Binding ShowChatCommand}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Upozornění"
+                               Foreground="Black"
+                               FontWeight="Bold" />
+                    <TextBlock Text="{Binding UnreadMessageCount, Converter={StaticResource MessageCountToNotificationConverter}}"
+                               TextWrapping="Wrap"
+                               Foreground="Black" />
+                </StackPanel>
+            </Button>
         </Grid>
     </Grid>
 </Page>

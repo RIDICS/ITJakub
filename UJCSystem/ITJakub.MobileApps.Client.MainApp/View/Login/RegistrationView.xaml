@@ -1,5 +1,4 @@
 ﻿<Page
-    x:Name="PageRoot"
     x:Class="ITJakub.MobileApps.Client.MainApp.View.Login.RegistrationView"
     DataContext="{Binding RegistrationViewModel, Source={StaticResource Locator}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,13 +8,13 @@
     xmlns:login="using:ITJakub.MobileApps.Client.MainApp.View.Login"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter"/>
-        <login:LoginProviderToIconConverter x:Key="LoginProviderToIconConverter"/>
+        <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <login:LoginProviderToIconConverter x:Key="LoginProviderToIconConverter" />
     </Page.Resources>
     
     <!--
@@ -26,47 +25,47 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
-                <EntranceThemeTransition/>
+                <EntranceThemeTransition />
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="140"/>
+            <RowDefinition Height="140" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="140" />
         </Grid.RowDefinitions>
         
         <!-- Back button and page title -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button Margin="39,59,39,0" 
-                    Command="{Binding NavigationHelper.GoBackCommand, ElementName=PageRoot}"
+                    Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
                     VerticalAlignment="Top"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
                     AutomationProperties.ItemType="Navigation Button"
-                    IsEnabled="{Binding RegistrationInProgress, Converter={StaticResource BooleanNegationConverter}}"/>
+                    IsEnabled="{Binding RegistrationInProgress, Converter={StaticResource BooleanNegationConverter}}" />
             <TextBlock Text="Registrace uživatele" 
                        Style="{StaticResource HeaderTextBlockStyle}" 
                        Grid.Column="1" 
                        IsHitTestVisible="false" 
                        TextWrapping="NoWrap" 
                        VerticalAlignment="Bottom" 
-                       Margin="0,0,30,40"/>
+                       Margin="0,0,30,40" />
 
         </Grid>
 
         <TextBlock Grid.Row="1"
                    Style="{StaticResource SubheaderTextBlockStyle}"
                    Text="Zvolte si službu, pomocí které se budete přihlašovat."
-                   Margin="120 0 20 0"/>
+                   Margin="120,0,20,0" />
         
         <ListView Grid.Row="1"
-                  Padding="15 40 0 40"
+                  Padding="15,40,0,40"
                   SelectionMode="None"
                   IsItemClickEnabled="True"
                   Style="{StaticResource HorizontalListView}"
@@ -80,13 +79,13 @@
                         <Image Source="{Binding LoginProviderType, Converter={StaticResource LoginProviderToIconConverter}}"
                                Width="128"
                                Height="128"
-                               Margin="35"/>
+                               Margin="35" />
                         <Grid Background="#3468CD"
                               Height="50">
                             <TextBlock Text="{Binding Name}"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       TextWrapping="Wrap"/>
+                                       TextWrapping="Wrap" />
                         </Grid>
                     </StackPanel>
                 </DataTemplate>
@@ -94,7 +93,7 @@
 
             <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="ItemClick">
-                    <core:InvokeCommandAction Command="{Binding ItemClickCommand}"/>
+                    <core:InvokeCommandAction Command="{Binding ItemClickCommand}" />
                 </core:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
         </ListView>
@@ -106,17 +105,17 @@
                     Background="White"
                     MinWidth="400"
                     MinHeight="100"
-                    Visibility="{Binding LoginDialogVisibility}">
+                    Visibility="{Binding RegistrationInProgress, Converter={StaticResource BooleanToVisibilityConverter}}">
             
             <ProgressRing Width="40"
                           Height="40"
                           Margin="20"
                           Foreground="Black"
-                          IsActive="True"/>
+                          IsActive="True" />
             <TextBlock Text="Registrace"
                        Foreground="Black"
                        VerticalAlignment="Center"
-                       FontSize="30"/>
+                       FontSize="30" />
         </StackPanel>
         
     </Grid>

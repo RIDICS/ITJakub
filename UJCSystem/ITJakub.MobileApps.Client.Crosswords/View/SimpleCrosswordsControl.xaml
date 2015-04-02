@@ -1,0 +1,180 @@
+﻿<UserControl
+    x:Class="ITJakub.MobileApps.Client.Crosswords.View.SimpleCrosswordsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="using:ITJakub.MobileApps.Client.Crosswords.View"
+    xmlns:viewModel="using:ITJakub.MobileApps.Client.Crosswords.ViewModel"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Crosswords.View.Converter"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    d:DataContext="{d:DesignInstance d:Type=viewModel:SimpleCrosswordsViewModel}">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converter:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter" />
+            <converter:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter" />
+            <converter:AnswerToCellBackgroundConverter x:Key="AnswerToCellBackgroundConverter" />
+            <converter:LengthToWidthConverter x:Key="LengthToWidthConverter" />
+            <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <Color x:Key="AnswerCellBackgroundColor">SandyBrown</Color>
+            <Color x:Key="TransparentAnswerCellBackgroundColor">#BBF4A460</Color>
+            <Color x:Key="FilledCellBackgroundColor">DarkRed</Color>
+            <Color x:Key="CorrectCellBackgroundColor">LimeGreen</Color>
+            
+            <DataTemplate x:Key="CrosswordRowDataTemplate">
+                <Grid d:DataContext="{d:DesignInstance d:Type=viewModel:CrosswordRowViewModel}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="280" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               FontSize="20"
+                               Margin="20,0,10,0"
+                               TextWrapping="WrapWholeWords"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="2"
+                               VerticalAlignment="Center"
+                               Text="{Binding Label}" />
+
+                    <ItemsControl x:Name="RowItemsControl"
+                                  Grid.Column="1"
+                                  Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=48}"
+                                  ItemsSource="{Binding Cells}"
+                                  HorizontalAlignment="Left">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="50"
+                                        Height="50"
+                                        BorderBrush="Black"
+                                        BorderThickness="2"
+                                        Margin="-1"
+                                        Background="{Binding ElementName=RowItemsControl, Path=DataContext.IsCorrect, Converter={StaticResource AnswerToCellBackgroundConverter}}">
+                                    <Grid Background="{Binding IsPartOfAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource AnswerCellBackgroundColor}}" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Grid Grid.Column="1"
+                          Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=48}"
+                          HorizontalAlignment="Left">
+                        <view:CrosswordTextBoxControl FontSize="20"
+                                                      Height="50"
+                                                      Foreground="White"
+                                                      FontFamily="Segoe Print"
+                                                      FontWeight="Bold"
+                                                      Margin="0,-1,0,-1"
+                                                      MaxLength="{Binding Cells.Count}"
+                                                      Width="{Binding Cells.Count, Converter={StaticResource LengthToWidthConverter}, ConverterParameter=48}"
+                                                      Text="{Binding Word, Mode=TwoWay}"
+                                                      KeyboardLetters="äāąćèľłḿǫṕŕſüūźъь" />
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="CrosswordSpaceDataTemplate">
+                <Grid Height="30" />
+            </DataTemplate>
+            <view:CrosswordRowDataTemplateSelector x:Key="CrosswordRowDataTemplateSelector"
+                                                   RowDataTemplate="{StaticResource CrosswordRowDataTemplate}"
+                                                   SpaceDataTemplate="{StaticResource CrosswordSpaceDataTemplate}" />
+        </ResourceDictionary>        
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Crossword}"
+                          Margin="20"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          ItemTemplateSelector="{StaticResource CrosswordRowDataTemplateSelector}" />
+        </ScrollViewer>
+        
+        <GridView Grid.Row="1"
+                  Height="200"
+                  ItemsSource="{Binding OpponentProgress}">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Border Height="170"
+                            Width="130"
+                            BorderThickness="2"
+                            BorderBrush="#22FFFFFF">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            
+                            <Viewbox Stretch="Uniform"
+                                     StretchDirection="DownOnly"
+                                     Margin="5,5,5,5">
+                                <ItemsControl ItemsSource="{Binding Rows}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ItemsControl x:Name="RowItemsControl"
+                                                      MinHeight="5"
+                                                      ItemsSource="{Binding Cells}"
+                                                      Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=9}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Width="10"
+                                                            Height="10"
+                                                            BorderBrush="Black"
+                                                            BorderThickness="1"
+                                                            Margin="-0.5"
+                                                            Background="{Binding IsFilled, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource FilledCellBackgroundColor}}">
+                                                        <Grid Background="{Binding ElementName=RowItemsControl, Path=DataContext.IsCorrect, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource CorrectCellBackgroundColor}}">
+                                                            <Grid Background="{Binding IsPartOfAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource TransparentAnswerCellBackgroundColor}}"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            </Viewbox>
+                            
+                            <TextBlock Grid.Row="1"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Bottom"
+                                       TextWrapping="NoWrap"
+                                       TextTrimming="CharacterEllipsis"
+                                       FontSize="14">
+                                <Run Text="{Binding UserInfo.FirstName}" />
+                                <Run Text="{Binding UserInfo.LastName}" />
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+        
+        <view:PlayerRankingControl Grid.Row="0"
+                                   Grid.RowSpan="2"
+                                   DataContext="{Binding PlayerRankingViewModel}"
+                                   Visibility="{Binding IsEnd, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+</UserControl>

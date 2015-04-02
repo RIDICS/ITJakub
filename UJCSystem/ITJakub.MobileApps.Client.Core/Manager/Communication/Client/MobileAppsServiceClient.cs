@@ -4,6 +4,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using System.Xml;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
@@ -15,6 +16,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
     public class MobileAppsServiceClient : ClientBase<IMobileAppsService>
     {
         private const string EndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
+        //private const string EndpointAddress = "http://147.32.81.136/ITJakub.MobileApps.Service/MobileAppsService.svc";
+        //private const string EndpointAddress = "http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc";
 
         private readonly ClientMessageInspector m_clientMessageInspector;
 
@@ -39,21 +42,21 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     Channel.CreateUser(providerContract, providerToken, userDetail);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new UserAlreadyRegisteredException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
@@ -66,21 +69,21 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.LoginUser(providerContract, providerToken, email);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new UserNotRegisteredException();
+                    throw new UserNotRegisteredException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
@@ -93,21 +96,21 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.GetGroupsByUser(userId);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new InvalidServerOperationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
@@ -120,21 +123,21 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.CreateGroup(userId, groupName);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new InvalidServerOperationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
@@ -147,21 +150,21 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     Channel.AddUserToGroup(groupAccessCode, userId);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new InvalidServerOperationException("Invalid server operation, probably wrong access code or group is unopened or closed.", ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
@@ -174,21 +177,21 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     Channel.CreateSynchronizedObject(applicationId, groupId, userId, synchronizedObject);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
@@ -201,26 +204,53 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.GetSynchronizedObjects(groupId, applicationId, objectType, since);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
 
-        public Task<IList<ApplicationContract>> GetAllApplication()
+        public Task<SynchronizedObjectResponseContract> GetLatestSynchronizedObjectAsync(long groupId, int applicationId, string objectType, DateTime since)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetLatestSynchronizedObject(groupId, applicationId, objectType, since);
+                }
+                catch (FaultException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+        public Task<IList<ApplicationContract>> GetAllApplicationAsync()
         {
             return Task.Run(() =>
             {
@@ -228,26 +258,26 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.GetAllApplication();
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new InvalidServerOperationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
 
-        public Task<GroupDetailContract> GetGroupDetails(long groupId)
+        public Task<GroupDetailContract> GetGroupDetailsAsync(long groupId)
         {
             return Task.Run(() =>
             {
@@ -255,21 +285,21 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.GetGroupDetails(groupId);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new InvalidServerOperationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
@@ -282,21 +312,21 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     Channel.AssignTaskToGroup(groupId, taskId);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new InvalidServerOperationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
@@ -309,21 +339,48 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.GetTasksByApplication(applicationId);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new InvalidServerOperationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+        public Task<IList<TaskDetailContract>> GetTasksByAuthor(long userId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetTasksByAuthor(userId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
@@ -336,26 +393,26 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     Channel.CreateTask(userId, applicationId, name, data);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new InvalidServerOperationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
 
-        public Task<TaskContract> GetTaskForGroup(long groupId)
+        public Task<TaskContract> GetTaskForGroupAsync(long groupId)
         {
             return Task.Run(() =>
             {
@@ -363,26 +420,26 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.GetTaskForGroup(groupId);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new InvalidServerOperationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
 
-        public Task<IList<GroupDetailsUpdateContract>> GetGroupsUpdate(IList<OldGroupDetailsContract> groups)
+        public Task<IList<GroupDetailsUpdateContract>> GetGroupsUpdateAsync(IList<OldGroupDetailsContract> groups)
         {
             return Task.Run(() =>
             {
@@ -390,21 +447,102 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
                 {
                     return Channel.GetGroupsUpdate(groups);
                 }
-                catch (FaultException)
+                catch (FaultException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new InvalidServerOperationException(ex);
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    throw new ClientCommunicationException();
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+        public Task UpdateGroupStateAsync(long groupId, GroupStateContract state)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    Channel.UpdateGroupState(groupId, state);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+        public Task RemoveGroupAsync(long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    Channel.RemoveGroup(groupId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+        public Task<GroupStateContract> GetGroupStateAsync(long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetGroupState(groupId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
                 }
             });
         }
@@ -446,6 +584,5 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
             return GetEndpointAddress(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
         }
         #endregion
-
     }
 }

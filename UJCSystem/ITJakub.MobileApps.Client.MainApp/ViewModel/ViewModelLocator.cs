@@ -17,6 +17,8 @@ using System.Reflection;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Core;
 using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
 using Microsoft.Practices.Unity;
@@ -74,9 +76,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             get { return Container.Current.Resolve<ApplicationHostViewModel>(); }
         }
 
-        public ApplicationSelectionViewModel ApplicationSelectionViewModel
+        public SelectApplicationViewModel SelectApplicationViewModel
         {
-            get { return Container.Current.Resolve<ApplicationSelectionViewModel>(); }
+            get { return Container.Current.Resolve<SelectApplicationViewModel>(); }
         }
 
         public GroupPageViewModel GroupPageViewModel
@@ -92,6 +94,21 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public SelectTaskViewModel SelectTaskViewModel
         {
             get { return Container.Current.Resolve<SelectTaskViewModel>(); }
+        }
+
+        public EditorHostViewModel EditorHostViewModel
+        {
+            get { return Container.Current.Resolve<EditorHostViewModel>(); }
+        }
+
+        public OwnedTaskListViewModel OwnedTaskListViewModel
+        {
+            get { return Container.Current.Resolve<OwnedTaskListViewModel>(); }
+        }
+
+        public UserAccountSettingsViewModel UserAccountSettingsViewModel
+        {
+            get { return Container.Current.Resolve<UserAccountSettingsViewModel>(); }
         }
     }
 }

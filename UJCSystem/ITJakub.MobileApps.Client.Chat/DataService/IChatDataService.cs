@@ -12,6 +12,7 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
         void SendMessage(string message, Action<Exception> callback);
         void StartChatMessagesPolling(Action<ObservableCollection<MessageViewModel>, Exception> callback);
         void StopPolling();
+        void UpdateMessagePollingInterval(PollingInterval pollingInterval);
     }
 
     public class ChatDataService : IChatDataService
@@ -46,6 +47,11 @@ namespace ITJakub.MobileApps.Client.Chat.DataService
         public void StopPolling()
         {
             m_chatManager.StopPolling();
+        }
+
+        public void UpdateMessagePollingInterval(PollingInterval pollingInterval)
+        {
+            m_chatManager.UpdatePollingInterval(pollingInterval);
         }
     }
 }

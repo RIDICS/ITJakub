@@ -1,111 +1,106 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Security.Authentication.Web;
+using Windows.Web.Http;
+using ITJakub.MobileApps.Client.DataContracts.Json;
 using ITJakub.MobileApps.DataContracts;
+using Newtonsoft.Json;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
     public class LiveIdProvider : ILoginProvider
     {
         private const string ClientId = "***REMOVED***";
-        private const string ClientSecret = "***REMOVED***";
-        private const string StartUri = "https://login.live.com/oauth20_authorize.srf?client_id={0}&scope=wl.basic&response_type=token&redirect_uri={1}";
+        private const string StartUri = "https://login.live.com/oauth20_authorize.srf?client_id={0}&scope=wl.basic%20wl.emails&response_type=token";
+        private const string RedirectUri = "http://b2191704-17ad-43e2-9e49-ecf66c89ed23.apps.dev.live.com/";
+        private const string UserInfoUrl = "https://apis.live.net/v5.0/me?access_token={0}";
 
-        public string AccountName { get { return "Live ID"; } }
+        public string AccountName { get { return "Microsoft"; } }
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.LiveId; } }
-
-        //TODO register this application in Windows Store developer account and test this method
-        /*
-        public async Task<UserLoginSkeleton> LoginLiveId()
-        {
-            const bool signIn = false;
-            try
-            {
-                // Open Live Connect SDK client.
-                var LCAuth = new LiveAuthClient();
-                var LCLoginResult = await LCAuth.InitializeAsync();
-                try
-                {
-                    LiveLoginResult loginResult = null;
-                    if (signIn)
-                    {
-                        // Sign in to the user's Microsoft account with the required scope.
-                        //  
-                        //  This call will display the Microsoft account sign-in screen if 
-                        //   the user is not already signed in to their Microsoft account 
-                        //   through Windows 8.
-                        // 
-                        //  This call will also display the consent dialog, if the user has 
-                        //   has not already given consent to this app to access the data 
-                        //   described by the scope.
-                        // 
-                        //  Change the parameter of LoginAsync to include the scopes 
-                        //   required by your app.
-                        loginResult = await LCAuth.LoginAsync(new string[] { "wl.basic" });
-                    }
-                    else
-                    {
-                        // If we don't want the user to sign in, continue with the current 
-                        //  sign-in state.
-                        loginResult = LCLoginResult;
-                    }
-                    if (loginResult.Status == LiveConnectSessionStatus.Connected)
-                    {
-                        // Create a client session to get the profile data.
-                        var connect = new LiveConnectClient(LCAuth.Session);
-
-                        // Get the profile loginSkeleton of the user.
-                        var operationResult = await connect.GetAsync("me");
-                        dynamic result = operationResult.Result;
-                        if (result != null)
-                        {
-                            // Update the text of the object passed in to the method. 
-                            Message = string.Join(" ", "Hello", result.name, "!");
-                        }
-                        else
-                        {
-                            // Handle the case where the user name was not returned. 
-                        }
-                    }
-                    else
-                    {
-                        // The user hasn't signed in so display this text 
-                        //  in place of his or her name.
-                        Message = "You're not signed in.";
-                    }
-                }
-                catch (LiveAuthException exception)
-                {
-                    // Handle the exception. 
-                }
-            }
-            catch (LiveAuthException exception)
-            {
-                // Handle the exception. 
-            }
-            catch (LiveConnectException exception)
-            {
-                // Handle the exception. 
-            }
-        }
-        */
 
         public async Task<UserLoginSkeleton> LoginAsync()
         {
-            var endUriString = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri;
-            var startUriString = string.Format(StartUri, ClientId, endUriString);
-            var webAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, new Uri(startUriString),
-                WebAuthenticationBroker.GetCurrentApplicationCallbackUri());
+            var userInfo = new UserLoginSkeleton();
+            var startUriString = string.Format(StartUri, ClientId);
+            string resultSring;
 
-
-            return new UserLoginSkeleton
+            try
             {
-                Success = true,
-                FirstName = "Mocked",
-                LastName = "User",
-                AccessToken = "Aaaaaaaaa",
-                Email = "email@example.com"
-            };
+                var webAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, new Uri(startUriString),
+                    new Uri(RedirectUri));
+
+                switch (webAuthenticationResult.ResponseStatus)
+                {
+                    case WebAuthenticationStatus.Success:
+                        // Successful authentication. 
+                        resultSring = webAuthenticationResult.ResponseData;
+                        userInfo.Success = true;
+                        break;
+                    case WebAuthenticationStatus.ErrorHttp:
+                        // HTTP error. 
+                        // resultSring = webAuthenticationResult.ResponseErrorDetail.ToString();
+                        userInfo.Success = false;
+                        return userInfo;
+                    default:
+                        // Other error.
+                        // resultSring = webAuthenticationResult.ResponseData;
+                        userInfo.Success = false;
+                        return userInfo;
+                }
+            }
+            catch (IOException)
+            {
+                // Authentication failed. Handle parameter, SSL/TLS, and Network Unavailable errors here. 
+                // resultSring = ex.Message;
+                userInfo.Success = false;
+                return userInfo;
+            }
+
+            var accessToken = GetAccessToken(resultSring);
+            if (accessToken == null)
+                return userInfo;
+
+            userInfo.AccessToken = accessToken;
+            await GetUserInfo(userInfo, accessToken);
+
+            return userInfo;
+        }
+
+        private string GetAccessToken(string url)
+        {
+            if (url == null)
+                return null;
+
+            var parameterIndex = url.IndexOf('#');
+            if (parameterIndex == -1)
+                return null;
+
+            var parameter = url.Substring(parameterIndex + 1);
+
+            try
+            {
+                var decoder = new WwwFormUrlDecoder(parameter);
+                return decoder.GetFirstValueByName("access_token");
+            }
+            catch (ArgumentException)
+            {
+                //parameter "access_token" doesn't exists
+                return null;
+            }
+        }
+
+        private async Task GetUserInfo(UserLoginSkeleton userInfo, string accessToken)
+        {
+            var client = new HttpClient();
+
+            var userInfoResponse = await client.GetAsync(new Uri(String.Format(UserInfoUrl, accessToken)));
+            var liveIdUserInfo = JsonConvert.DeserializeObject<LiveIdUserInfo>(userInfoResponse.Content.ToString());
+
+            userInfo.FirstName = liveIdUserInfo.FirstName;
+            userInfo.LastName = liveIdUserInfo.LastName;
+            userInfo.Email = liveIdUserInfo.Emails.Account;
         }
     }
 }

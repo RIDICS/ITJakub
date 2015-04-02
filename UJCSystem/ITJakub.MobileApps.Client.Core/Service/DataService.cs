@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Manager.Tasks;
+using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
@@ -20,6 +22,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
         private readonly AuthenticationManager m_authenticationManager;
         private readonly GroupManager m_groupManager;
         private readonly TaskManager m_taskManager;
+        private readonly IMainPollingService m_mainPollingService;
+        private readonly ApplicationStateManager m_applicationStateManager;
 
         public DataService(IUnityContainer container)
         {
@@ -27,6 +31,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_applicationManager = container.Resolve<ApplicationManager>();
             m_groupManager = container.Resolve<GroupManager>();
             m_taskManager = container.Resolve<TaskManager>();
+            m_mainPollingService = container.Resolve<IMainPollingService>();
+            m_applicationStateManager = container.Resolve<ApplicationStateManager>();
         }
 
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
@@ -49,9 +55,9 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_groupManager.GetGroupForCurrentUser(callback);
         }
 
-        public void OpenGroupAndGetDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
+        public void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
         {
-            m_groupManager.OpenGroupAndGetDetails(groupId, callback);
+            m_groupManager.GetGroupDetails(groupId, callback);
         }
 
         public void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback)
@@ -59,7 +65,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_authenticationManager.GetAllLoginProviderViewModels(callback);
         }
 
-        public void CreateNewGroup(string groupName, Action<CreateGroupResponse, Exception> callback)
+        public void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)
         {
             m_groupManager.CreateNewGroup(groupName, callback);
         }
@@ -69,19 +75,69 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_groupManager.ConnectToGroup(code, callback);
         }
 
+        public void GetTaskForGroup(long groupId, Action<TaskViewModel, Exception> callback)
+        {
+            m_taskManager.GetTaskForGroup(groupId, callback);
+        }
+
         public void GetTasksByApplication(ApplicationType application, Action<ObservableCollection<TaskViewModel>, Exception> callback)
         {
             m_taskManager.GetTasksByApplication(application, callback);
         }
 
-        public void AssignTaskToGroup(long groupId, long taskId, Action<Exception> callback)
+        public void GetMyTasks(Action<ObservableCollection<TaskViewModel>, Exception> callback)
         {
-            m_taskManager.AssignTaskToGroup(groupId, taskId, callback);
+            m_taskManager.GetMyTasks(callback);
         }
 
-        public void OpenGroup(long groupId)
+        public void AssignTaskToCurrentGroup(long taskId, Action<Exception> callback)
         {
-            m_groupManager.OpenGroup(groupId);
+            m_taskManager.AssignTaskToGroup(m_groupManager.CurrentGroupId, taskId, callback);
+        }
+
+        public void SetCurrentGroup(long groupId)
+        {
+            m_groupManager.CurrentGroupId = groupId;
+        }
+
+        public void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback)
+        {
+            m_groupManager.UpdateGroupState(groupId, newState, callback);
+        }
+
+        public void RemoveGroup(long groupId, Action<Exception> callback)
+        {
+            m_groupManager.RemoveGroup(groupId, callback);
+        }
+
+        public void GetCurrentGroupId(Action<long> callback)
+        {
+            callback(m_groupManager.CurrentGroupId);
+        }
+
+        public void SetCurrentApplication(ApplicationType selectedApp)
+        {
+            m_applicationManager.CurrentApplication = selectedApp;
+        }
+
+        public void GetCurrentApplication(Action<ApplicationType> callback)
+        {
+            callback(m_applicationManager.CurrentApplication);
+        }
+
+        public void SetRestoringLastGroupState(bool restore)
+        {
+            m_groupManager.RestoreLastState = restore;
+        }
+
+        public void GetAppSelectionTarget(Action<SelectApplicationTarget> callback)
+        {
+            callback(m_applicationStateManager.SelectApplicationTarget);
+        }
+
+        public void SetAppSelectionTarget(SelectApplicationTarget target)
+        {
+            m_applicationStateManager.SelectApplicationTarget = target;
         }
 
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
@@ -94,14 +150,15 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_authenticationManager.CreateUserByLoginProvider(loginProviderType, callback);
         }
 
-        public void GetLoggedUserInfo(Action<LoggedUserViewModel, Exception> callback)
+        public void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
-            m_authenticationManager.GetLoggedUserInfo(callback);
+            m_authenticationManager.GetLoggedUserInfo(getUserAvatar, callback);
         }
 
         public void LogOut()
         {
             m_authenticationManager.LogOut();
+            m_mainPollingService.UnregisterAll();
         }
     }
 }

@@ -1,59 +1,129 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Chat.Message;
+using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
-using ITJakub.MobileApps.Client.MainApp.ViewModel.Message;
-using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.Client.Shared.Message;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
+using ITJakub.MobileApps.DataContracts;
+using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     public class ApplicationHostViewModel : ViewModelBase
     {
-        private const PollingInterval TaskPollingInterval = PollingInterval.Medium;
+        private const PollingInterval GroupStatePollingInterval = PollingInterval.Medium;
+        private const PollingInterval GroupMembersPollingInterval = PollingInterval.Medium;
 
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private readonly IMainPollingService m_pollingService;
+        private readonly IErrorService m_errorService;
+
         private string m_applicationName;
         private ApplicationBaseViewModel m_applicationViewModel;
-        private ApplicationBaseViewModel m_chatViewModel;
+        private SupportAppBaseViewModel m_chatViewModel;
 
         private bool m_isChatDisplayed;
         private bool m_isChatSupported;
         private bool m_isCommandBarOpen;
-        private bool m_waitingForTask;
+        private bool m_waitingForStart;
         private bool m_waitingForData;
+        private bool m_isTaskAndAppLoaded;
+        private bool m_isAppStarted;
+        private long m_groupId;
+        private bool m_isPaused;
+        private int m_unreadMessageCount;
+        private GroupInfoViewModel m_groupInfo;
+        private ObservableCollection<GroupMemberViewModel> m_memberList;
+        private TaskViewModel m_currentTask;
+        private bool m_isClosed;
 
-        public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService)
+        public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
             m_pollingService = pollingService;
-            GoBackCommand = new RelayCommand(GoBack);
+            m_errorService = errorService;
 
-            Messenger.Default.Register<OpenGroupMessage>(this, message =>
+            GoBackCommand = new RelayCommand(GoBack);
+            ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
+
+            m_isTaskAndAppLoaded = false;
+            m_unreadMessageCount = 0;
+
+            LoadData();
+            RegisterForMessages();
+        }
+
+        private void LoadData()
+        {
+            m_dataService.GetCurrentGroupId(groupId =>
             {
-                WaitingForTask = true;
-                m_pollingService.RegisterForGetTaskByGroup(TaskPollingInterval, message.Group.GroupId, LoadTask);
-                Messenger.Default.Unregister<OpenGroupMessage>(this);
+                WaitingForStart = true;
+                WaitingForData = true;
+                m_groupId = groupId;
+                m_pollingService.RegisterForGetGroupState(GroupStatePollingInterval, groupId, GroupStateUpdate);
             });
 
+            m_dataService.GetLoggedUserInfo(false, user =>
+            {
+                IsTeacherMode = user.UserRole == UserRoleContract.Teacher;
+
+                if (IsTeacherMode)
+                {
+                    // start polling new group members
+                    m_groupInfo = new GroupInfoViewModel
+                    {
+                        GroupId = m_groupId,
+                        GroupType = GroupType.Owner
+
+                    };
+                    m_pollingService.RegisterForGroupsUpdate(GroupMembersPollingInterval, new []{m_groupInfo}, GroupsUpdate);
+                }
+            });
+        }
+
+        private void RegisterForMessages()
+        {
             Messenger.Default.Register<LogOutMessage>(this, message => StopCommunication());
+
+            Messenger.Default.Register<NotifyNewMessagesMessage>(this, message =>
+            {
+                if (!IsChatDisplayed)
+                    UnreadMessageCount += message.Count;
+            });
+
+            Messenger.Default.Register<AppActionFinishedMessage>(this, message =>
+            {
+                IsCommandBarOpen = false;
+            });
+        }
+
+        private void GroupsUpdate(Exception exception)
+        {
+            if (exception != null)
+                m_errorService.ShowConnectionWarning();
+            else
+                DispatcherHelper.CheckBeginInvokeOnUI(() => MemberList = m_groupInfo.Members);
         }
 
         private void StopCommunication()
         {
-            WaitingForTask = false;
+            WaitingForStart = false;
             WaitingForData = false;
-            m_pollingService.Unregister(TaskPollingInterval, LoadTask);
+            m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
+            m_pollingService.Unregister(GroupMembersPollingInterval, GroupsUpdate);
             Messenger.Default.Unregister(this);
 
             if (ChatApplicationViewModel != null)
@@ -61,6 +131,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             
             if (ApplicationViewModel != null)
                 ApplicationViewModel.StopCommunication();
+
+            m_pollingService.UnregisterAll(); //stop all polling (in case that some app didn't stopped)
         }
 
         private void GoBack()
@@ -69,47 +141,109 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService.GoBack();
         }
 
-        private void LoadTask(TaskViewModel task, Exception exception)
+        private void GroupStateUpdate(GroupStateContract state, Exception exception)
         {
             if (exception != null)
+            {
+                m_errorService.ShowConnectionWarning();
                 return;
-
-            if (task == null || task.Data == null)
-                return;
-
-            m_pollingService.Unregister(TaskPollingInterval, LoadTask);
+            }
 
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                if (!WaitingForTask)
-                    return;
-
-                WaitingForTask = false;
-                LoadApplications(task.Application, task.Data);
+                m_groupInfo.State = state;
+                GroupStateUpdate();
             });
         }
 
-        private void LoadApplications(ApplicationType type, string taskData)
+        private void GroupStateUpdate()
+        {
+            var state = m_groupInfo.State;
+            if (!m_isTaskAndAppLoaded && state >= GroupStateContract.WaitingForStart)
+            {
+                LoadTask();
+                return;
+            }
+
+            if (!m_isAppStarted && state >= GroupStateContract.Running)
+            {
+                WaitingForStart = false;
+                StartMainApplication();
+                return;
+            }
+
+            IsPaused = state == GroupStateContract.Paused;
+
+            if (state == GroupStateContract.Closed)
+            {
+                IsClosed = true;
+                IsChatDisplayed = false;
+                IsChatSupported = false;
+                UnreadMessageCount = 0;
+                ApplicationViewModel.EvaluateAndShowResults();
+                m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
+            }
+        }
+
+        private void LoadTask()
+        {
+            m_dataService.GetTaskForGroup(m_groupId, (task, exception) =>
+            {
+                if (exception != null)
+                {
+                    m_errorService.ShowConnectionWarning();
+                    return;
+                }
+
+                m_currentTask = task;
+                LoadApplications(task.Application);
+            });
+        }
+
+        private void LoadApplications(ApplicationType type)
         {
             WaitingForData = true;
             m_dataService.GetApplicationByTypes(new List<ApplicationType> { ApplicationType.Chat, type }, (applications, exception) =>
             {
                 if (exception != null)
+                {
+                    m_errorService.ShowError("Tato skupina obsahuje neznámé zadání. Pro otevření této skupiny použijte jinou aplikaci.", "Neznámá aplikace", GoBack);
                     return;
+                }
 
                 var application = applications[type];
                 ApplicationViewModel = application.ApplicationViewModel;
                 ApplicationViewModel.DataLoadedCallback = () => WaitingForData = false;
-                ApplicationViewModel.SetTask(taskData);
-                ApplicationViewModel.InitializeCommunication();
+                ApplicationViewModel.GoBack = GoBack;
+                
                 ApplicationName = application.Name;
                 IsChatSupported = application.IsChatSupported;
 
-                var chat = applications[ApplicationType.Chat];
-                ChatApplicationViewModel = chat.ApplicationViewModel;
-                ChatApplicationViewModel.InitializeCommunication();
+                if (IsChatSupported)
+                {
+                    var chat = applications[ApplicationType.Chat];
+                    ChatApplicationViewModel = chat.ApplicationViewModel as SupportAppBaseViewModel;
+                    if (ChatApplicationViewModel != null)
+                    {
+                        ChatApplicationViewModel.InitializeCommunication();
+                    }
+                }
+
+                m_isTaskAndAppLoaded = true;
+                GroupStateUpdate();
             });
         }
+
+        private void StartMainApplication()
+        {
+            ApplicationViewModel.SetTask(m_currentTask.Data);
+            ApplicationViewModel.InitializeCommunication();
+            
+            m_isAppStarted = true;
+            GroupStateUpdate();
+        }
+
+        #region Properties
 
         public string ApplicationName
         {
@@ -131,7 +265,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public ApplicationBaseViewModel ChatApplicationViewModel
+        public SupportAppBaseViewModel ChatApplicationViewModel
         {
             get { return m_chatViewModel; }
             set { m_chatViewModel = value;RaisePropertyChanged(); }
@@ -154,8 +288,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 m_isChatDisplayed = value;
                 RaisePropertyChanged();
+                
+                ChatApplicationViewModel.AppVisibilityChanged(m_isChatDisplayed);
+
                 if (m_isChatDisplayed)
+                {
                     IsCommandBarOpen = false;
+                    UnreadMessageCount = 0;
+                }
             }
         }
 
@@ -169,12 +309,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public bool WaitingForTask
+        public bool WaitingForStart
         {
-            get { return m_waitingForTask; }
+            get { return m_waitingForStart; }
             set
             {
-                m_waitingForTask = value;
+                m_waitingForStart = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(() => Waiting);
             }
@@ -191,11 +331,65 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public bool Waiting
+        public bool IsPaused
         {
-            get { return m_waitingForTask || m_waitingForData; }
+            get { return m_isPaused; }
+            set
+            {
+                m_isPaused = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => Waiting);
+            }
         }
 
+        public bool IsClosed
+        {
+            get { return m_isClosed; }
+            set
+            {
+                m_isClosed = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool Waiting
+        {
+            get { return m_waitingForStart || m_waitingForData || m_isPaused; }
+        }
+
+        public int UnreadMessageCount
+        {
+            get { return m_unreadMessageCount; }
+            set
+            {
+                m_unreadMessageCount = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => IsChatNotificationVisible);
+            }
+        }
+
+        public bool IsChatNotificationVisible
+        {
+            get { return m_unreadMessageCount > 0; }
+        }
+
+        public ObservableCollection<GroupMemberViewModel> MemberList
+        {
+            get { return m_memberList; }
+            set
+            {
+                m_memberList = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsTeacherMode { get; set; }
+
         public RelayCommand GoBackCommand { get; private set; }
+        
+        public RelayCommand ShowChatCommand { get; private set; }
+
+
+        #endregion
     }
 }

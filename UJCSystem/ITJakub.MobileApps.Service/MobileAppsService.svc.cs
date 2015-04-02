@@ -126,6 +126,21 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
+        public SynchronizedObjectResponseContract GetLatestSynchronizedObject(long groupId, int applicationId, string objectType, DateTime since)
+        {
+            try
+            {
+                return m_serviceManager.GetLatestSynchronizedObject(groupId, applicationId, objectType, since);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
         public IList<ApplicationContract> GetAllApplication()
         {
             try
@@ -201,6 +216,21 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
+        public IList<TaskDetailContract> GetTasksByAuthor(long userId)
+        {
+            try
+            {
+                return m_serviceManager.GetTasksByAuthor(userId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
         public void CreateTask(long userId, int applicationId, string name, string data)
         {
             try
@@ -221,6 +251,51 @@ namespace ITJakub.MobileApps.Service
             try
             {
                 return m_serviceManager.GetTaskForGroup(groupId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public GroupStateContract GetGroupState(long groupId)
+        {
+            try
+            {
+                return m_serviceManager.GetGroupState(groupId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public void UpdateGroupState(long groupId, GroupStateContract state)
+        {
+            try
+            {
+                m_serviceManager.UpdateGroupState(groupId, state);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public void RemoveGroup(long groupId)
+        {
+            try
+            {
+                m_serviceManager.RemoveGroup(groupId);
             }
             catch (WebFaultException ex)
             {

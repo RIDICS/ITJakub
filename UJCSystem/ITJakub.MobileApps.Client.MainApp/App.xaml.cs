@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -8,6 +9,7 @@ using Windows.UI.Xaml.Navigation;
 // The Grid App template is documented at http://go.microsoft.com/fwlink/?LinkId=234226
 using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.MainApp.Common;
+using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.View.Login;
 
 namespace ITJakub.MobileApps.Client.MainApp
@@ -32,7 +34,7 @@ namespace ITJakub.MobileApps.Client.MainApp
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override async void OnLaunched(LaunchActivatedEventArgs e)
+        protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             DispatcherHelper.Initialize();
 #if DEBUG
@@ -60,19 +62,19 @@ namespace ITJakub.MobileApps.Client.MainApp
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    // Restore the saved session state only when appropriate
-                    try
-                    {
-                        await SuspensionManager.RestoreAsync();
-                    }
-                    catch (SuspensionManagerException)
-                    {
-                        //Something went wrong restoring state.
-                        //Assume there is no state and continue
-                    }
-                }
+                //if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                //{
+                //    // Restore the saved session state only when appropriate
+                //    try
+                //    {
+                //        await SuspensionManager.RestoreAsync();
+                //    }
+                //    catch (SuspensionManagerException)
+                //    {
+                //        //Something went wrong restoring state.
+                //        //Assume there is no state and continue
+                //    }
+                //}
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
@@ -111,5 +113,29 @@ namespace ITJakub.MobileApps.Client.MainApp
             await SuspensionManager.SaveAsync();
             deferral.Complete();
         }
+
+        protected override void OnWindowCreated(WindowCreatedEventArgs args)
+        {
+            base.OnWindowCreated(args);
+            SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested;
+        }
+
+        private void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            //loader for getting string from string resources (e.g. used for app translation)
+            //var loader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+            args.Request.ApplicationCommands.Add(new SettingsCommand("UserAccount", "Uživatelský účet", handler =>
+            {
+                var userAccountSettingsFlyout = new UserAccountSettingsFlyout();
+                userAccountSettingsFlyout.Show();
+            }));
+            args.Request.ApplicationCommands.Add(new SettingsCommand(
+                "About", "O aplikaci", handler =>
+                {
+                    var aboutSettingsFlyout = new AboutSettingsFlyout();
+                    aboutSettingsFlyout.Show();
+                }));
+        }
+
     }
 }

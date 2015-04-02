@@ -8,7 +8,9 @@ using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.Core.ViewModel.Comparer;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Groups;
@@ -23,8 +25,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         private readonly UserAvatarCache m_userAvatarCache;
         private readonly BitmapImage m_defaultUserAvatar;
         private readonly ApplicationIdManager m_applicationIdManager;
+        private GroupDetailContract m_currentGroupInfoModel;
 
-        public long CurrentGroupId { get; private set; }
+        public long CurrentGroupId { get; set; }
+
+        public bool RestoreLastState { get; set; }
 
         public GroupManager(IUnityContainer container)
         {
@@ -57,6 +62,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         GroupName = groupDetails.Name,
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Member,
+                        State = groupDetails.State,
+                        CreateTime = groupDetails.CreateTime,
                         Members = new ObservableCollection<GroupMemberViewModel>(),
                         Task = new TaskViewModel()
                     };
@@ -71,6 +78,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         GroupName = groupDetails.Name,
                         GroupId = groupDetails.Id,
                         GroupType = GroupType.Owner,
+                        State = groupDetails.State,
                         GroupCode = groupDetails.EnterCode,
                         CreateTime = groupDetails.CreateTime,
                         Members = new ObservableCollection<GroupMemberViewModel>(),
@@ -79,8 +87,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     FillGroupMembers(newGroup, groupDetails.Members);
                     list.Add(newGroup);
                 }
-                
+
                 callback(list, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
             }
             catch (ClientCommunicationException exception)
             {
@@ -101,14 +113,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 };
 
                 group.Members.Add(memberViewModel);
-                group.MemberCount = group.Members.Count;
-
+                
                 m_userAvatarCache.AddAvatarUrl(member.Id, member.AvatarUrl);
                 LoadMemberAvatar(memberViewModel);
             }
+
+            group.MemberCount = group.Members.Count;
+            group.Members = new ObservableCollection<GroupMemberViewModel>(group.Members.OrderBy(model => model, new GroupMemberComparer()));
         }
 
-        public async void CreateNewGroup(string groupName, Action<CreateGroupResponse, Exception> callback)
+        public async void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)
         {
             try
             {
@@ -119,9 +133,18 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     return;
                 }
 
-                //TODO check groupName validity
                 var result = await m_serviceClient.CreateGroupAsync(userId.Value, groupName);
-                callback(result, null);
+                var viewModel = new CreatedGroupViewModel
+                {
+                    EnterCode = result.EnterCode,
+                    GroupId = result.GroupId
+                };
+
+                callback(viewModel, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
             }
             catch (ClientCommunicationException exception)
             {
@@ -144,28 +167,40 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 await m_serviceClient.AddUserToGroupAsync(code, userId.Value);
                 callback(null);
             }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(exception);
+            }
             catch (ClientCommunicationException exception)
             {
                 callback(exception);
             }
         }
 
-        public async void OpenGroupAndGetDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
+        public async void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
         {
             try
             {
                 CurrentGroupId = groupId;
-                var result = await m_serviceClient.GetGroupDetails(groupId);
+
+                if (!RestoreLastState)
+                {
+                    m_currentGroupInfoModel = null;
+                    m_currentGroupInfoModel = await m_serviceClient.GetGroupDetailsAsync(groupId);
+                }
+
+                var groupInfo = m_currentGroupInfoModel;
                 var group = new GroupInfoViewModel
                 {
-                    GroupId = result.Id,
+                    GroupId = groupInfo.Id,
                     Members = new ObservableCollection<GroupMemberViewModel>(),
-                    GroupName = result.Name,
-                    CreateTime = result.CreateTime,
-                    GroupCode = result.EnterCode,
+                    GroupName = groupInfo.Name,
+                    CreateTime = groupInfo.CreateTime,
+                    GroupCode = groupInfo.EnterCode,
+                    State = groupInfo.State,
                 };
 
-                var task = result.Task;
+                var task = groupInfo.Task;
                 if (task != null)
                 {
                     group.Task = new TaskViewModel
@@ -177,15 +212,19 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     };
                 }
                 
-                FillGroupMembers(group, result.Members);
+                FillGroupMembers(group, groupInfo.Members);
                 callback(group, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
             }
             catch (ClientCommunicationException exception)
             {
                 callback(null, exception);
             }
         }
-
+        
         private async void LoadMemberAvatar(GroupMemberViewModel member)
         {
             member.UserAvatar = await m_userAvatarCache.GetUserAvatar(member.Id);
@@ -201,7 +240,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     MemberIds = group.Members.Select(x => x.Id).ToList()
                 }).ToList();
 
-                var result = await m_serviceClient.GetGroupsUpdate(oldGroupInfo);
+                var result = await m_serviceClient.GetGroupsUpdateAsync(oldGroupInfo);
+                if (result.Count == 0)
+                    return;
+
                 var groupUpdate = result.ToDictionary(group => group.Id, group => group);
 
                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
@@ -213,15 +255,65 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     callback(null);
                 });
             }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(exception);
+            }
             catch (ClientCommunicationException exception)
             {
                 callback(exception);
             }
         }
 
-        public void OpenGroup(long groupId)
+        public async void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback)
         {
-            CurrentGroupId = groupId;
+            try
+            {
+                await m_serviceClient.UpdateGroupStateAsync(groupId, newState);
+                callback(null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(exception);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
+        }
+
+        public async void RemoveGroup(long groupId, Action<Exception> callback)
+        {
+            try
+            {
+                await m_serviceClient.RemoveGroupAsync(groupId);
+                callback(null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(exception);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(exception);
+            }
+        }
+
+        public async Task GetGroupStateAsync(long groupId, Action<GroupStateContract, Exception> callback)
+        {
+            try
+            {
+                var state = await m_serviceClient.GetGroupStateAsync(groupId);
+                callback(state, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(GroupStateContract.Created, exception);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(GroupStateContract.Created, exception);
+            }
         }
     }
 }

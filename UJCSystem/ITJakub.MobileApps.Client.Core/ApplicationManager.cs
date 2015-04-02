@@ -15,6 +15,8 @@ namespace ITJakub.MobileApps.Client.Core
             m_loader = ApplicationLoader.Instance;
         }
 
+        public ApplicationType CurrentApplication { get; set; }
+
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
             var result = m_loader.GetAllApplications();
@@ -23,14 +25,29 @@ namespace ITJakub.MobileApps.Client.Core
 
         public void GetApplication(ApplicationType type, Action<ApplicationBase, Exception> callback)
         {
-            var appInfo = m_loader.GetApplicationByType(type);
-            callback(appInfo, null);
+            try
+            {
+                var appInfo = m_loader.GetApplicationByType(type);
+                callback(appInfo, null);
+            }
+            catch (ArgumentException exception)
+            {
+                callback(null, exception);
+            }
         }
 
         public void GetAllApplicationsByTypes(IEnumerable<ApplicationType> types, Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
-            var appInfoDictionary = types.ToDictionary(type => type, type => m_loader.GetApplicationByType(type));
-            callback(appInfoDictionary, null);
+            try
+            {
+                var appInfoDictionary = types.ToDictionary(type => type, type => m_loader.GetApplicationByType(type));
+                callback(appInfoDictionary, null);
+            }
+            catch (ArgumentException exception)
+            {
+                callback(null, exception);
+            }
         }
+
     }
 }

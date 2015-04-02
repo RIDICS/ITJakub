@@ -6,6 +6,8 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
     {
         public char Letter { get; set; }
 
-        public AuthorInfo Author { get; set; }
+        public UserInfo Author { get; set; }
+
+        public int WordOrder { get; set; }
     }
 }

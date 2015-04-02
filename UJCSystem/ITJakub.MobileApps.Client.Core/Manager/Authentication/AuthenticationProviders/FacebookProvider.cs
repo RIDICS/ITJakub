@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
 using Facebook;
@@ -13,6 +14,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         private const long ClientId = ***REMOVED***;
         //Standard redirect uri for desktop/non-web based apps
         private const string RedirectUri = "https://www.facebook.com/connect/login_success.html";
+
+        public string AccountName
+        {
+            get { return "Facebook"; }
+        }
+
+        public AuthProvidersContract ProviderType
+        {
+            get { return AuthProvidersContract.Facebook; }
+        }
 
         public async Task<UserLoginSkeleton> LoginAsync()
         {
@@ -28,21 +39,18 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
             });
 
             //TODO switch to CustomWebAuthenticationBroker
-            var webAuthenticationResult =
-                await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl, redirectUri);
-            UserLoginSkeleton userLoginSkeleton = GetUserInfoFromResponse(fbClient, webAuthenticationResult);
+            try
+            {
+                var webAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl, redirectUri);
 
-            return userLoginSkeleton;
-        }
-
-        public string AccountName
-        {
-            get { return "Facebook"; }
-        }
-
-        public AuthProvidersContract ProviderType
-        {
-            get { return AuthProvidersContract.Facebook; }
+                UserLoginSkeleton userLoginSkeleton = GetUserInfoFromResponse(fbClient, webAuthenticationResult);
+                return userLoginSkeleton;
+            }
+            catch (IOException)
+            {
+                UserLoginSkeleton userLoginSkeleton = new UserLoginSkeleton {Success = false};
+                return userLoginSkeleton;
+            }
         }
 
         private UserLoginSkeleton GetUserInfoFromResponse(FacebookClient fbClient, WebAuthenticationResult webAuthenticationResult)

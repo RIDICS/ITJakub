@@ -1,0 +1,16 @@
+﻿{
+    AnswerPosition: 7,
+    RowList: [
+        { Label: "Píti", StartPosition: 7, Answer: "píti" },
+        { Label: "Pohostina", StartPosition: 6, Answer: "pohostina" },
+        { Label: "Často", StartPosition: 5, Answer: "často" },
+        { Label: "Sedíta", StartPosition: 2, Answer: "sedíta" },
+        { Label: "Zedrána", StartPosition: 5, Answer: "zedrána" },
+        { Label: "Poviemť", StartPosition: 4, Answer: "poviemť" },
+        { Label: "Křičéc", StartPosition: 2, Answer: "křičéc" },
+        { Label: "Nalezech", StartPosition: 0, Answer: "nalezech" },
+        {},
+        { Label: "Sukně", StartPosition: 7, Answer: "sukně" },
+        { Label: "Právě", StartPosition: 3, Answer: "právě" }
+    ]
+}

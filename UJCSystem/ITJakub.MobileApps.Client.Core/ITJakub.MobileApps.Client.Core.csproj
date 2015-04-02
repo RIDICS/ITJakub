@@ -119,8 +119,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTemplateCreator.cs" />
+    <Compile Include="EditorTemplateSelector.cs" />
+    <Compile Include="Manager\Application\ApplicationStateManager.cs" />
+    <Compile Include="Manager\Application\SelectApplicationTarget.cs" />
+    <Compile Include="Manager\Authentication\AuthenticationBroker\WebViewHelpers.cs" />
+    <Compile Include="Manager\Communication\Error\InvalidServerOperationException.cs" />
+    <Compile Include="Manager\Communication\Error\UserAlreadyRegisteredException.cs" />
     <Compile Include="Manager\Tasks\TaskManager.cs" />
+    <Compile Include="Service\ErrorService.cs" />
     <Compile Include="Service\Polling\IMainPollingService.cs" />
+    <Compile Include="ViewModel\Comparer\GroupMemberComparer.cs" />
+    <Compile Include="ViewModel\CreatedGroupViewModel.cs" />
     <Compile Include="ViewModel\TaskViewModel.cs" />
     <Compile Include="Service\Polling\IPollingTimer.cs" />
     <Compile Include="Service\Polling\ITimerService.cs" />
@@ -147,13 +157,12 @@
     <Compile Include="Manager\Communication\Client\MobileAppsServiceClient.cs" />
     <Compile Include="Manager\Communication\Client\EndpointConfiguration.cs" />
     <Compile Include="Manager\Groups\GroupManager.cs" />
-    <Compile Include="Manager\Authentication\LoginResult.cs" />
-    <Compile Include="Manager\UserAvatarCache.cs" />
-    <Compile Include="Manager\Communication\ClientMessageInspector.cs" />
-    <Compile Include="Manager\Communication\CustomEndpointBehavior.cs" />
+    <Compile Include="Manager\Authentication\UserAvatarCache.cs" />
+    <Compile Include="Manager\Communication\Client\ClientMessageInspector.cs" />
+    <Compile Include="Manager\Communication\Client\CustomEndpointBehavior.cs" />
     <Compile Include="Manager\Groups\GroupType.cs" />
-    <Compile Include="Manager\Communication\UserNotRegisteredException.cs" />
-    <Compile Include="SynchronizeManager.cs" />
+    <Compile Include="Manager\Communication\Error\UserNotRegisteredException.cs" />
+    <Compile Include="Manager\SynchronizeManager.cs" />
     <Compile Include="Configuration\ApplicationConfig.cs" />
     <Compile Include="ApplicationLoader.cs" />
     <Compile Include="ApplicationTemplateSelector.cs" />
@@ -164,7 +173,6 @@
     <Compile Include="Service\INavigationService.cs" />
     <Compile Include="Service\NavigationService.cs" />
     <Compile Include="Manager\Authentication\AuthenticationProviders\ILoginProvider.cs" />
-    <Compile Include="Manager\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AppInfoViewModel.cs" />
     <Compile Include="ViewModel\Authentication\LoggedUserViewModel.cs" />
@@ -175,13 +183,16 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Facebook">
-      <HintPath>..\packages\Facebook.6.6.0\lib\win81\Facebook.dll</HintPath>
+      <HintPath>..\packages\Facebook.6.8.0\lib\win8\Facebook.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight">
-      <HintPath>..\packages\MvvmLightLibs.4.4.32.1\lib\netcore45\GalaSoft.MvvmLight.dll</HintPath>
+      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras">
-      <HintPath>..\packages\MvvmLightLibs.4.4.32.1\lib\netcore45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform">
+      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -192,9 +203,8 @@
     <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
       <HintPath>..\packages\Unity.3.5.1404.0\lib\win8\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\netcore45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\netcore45\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

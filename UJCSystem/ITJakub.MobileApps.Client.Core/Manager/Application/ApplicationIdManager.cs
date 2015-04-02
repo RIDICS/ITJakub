@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Application
 
         private void LoadAllApplicationId()
         {
-            var appList = m_serviceClient.GetAllApplication().Result;
+            var appList = m_serviceClient.GetAllApplicationAsync().Result;
             
             m_applicationTypeToId = new Dictionary<ApplicationType, int>();
             m_applicaitonIdToType = new Dictionary<int, ApplicationType>();
@@ -59,7 +59,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Application
             if (m_applicaitonIdToType.ContainsKey(applicationId))
                 return m_applicaitonIdToType[applicationId];
 
-            throw new ArgumentException("Server doesn't know this application ID.");
+            return ApplicationType.Unknown;
         }
     }
 }

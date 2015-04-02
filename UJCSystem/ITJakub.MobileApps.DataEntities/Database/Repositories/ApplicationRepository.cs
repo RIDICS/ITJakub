@@ -44,5 +44,24 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                         .List<SynchronizedObject>();
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual SynchronizedObject GetLatestSynchronizedObject(long groupId, int applicationId, string objectType, DateTime since)
+        {
+            using (var session = GetSession())
+            {
+                var group = Load<Group>(groupId);
+                var application = Load<Application>(applicationId);
+                return session.CreateCriteria<SynchronizedObject>()
+                    .Add(Restrictions.Eq("Application", application))
+                    .Add(Restrictions.Eq("Group", group))
+                    .Add(Restrictions.Eq("ObjectType", objectType))
+                    .Add(Restrictions.Gt("CreateTime", since))
+                    .AddOrder(Order.Desc("CreateTime"))
+                    .SetMaxResults(1)
+                    .SetFetchMode("Author", FetchMode.Join)
+                    .UniqueResult<SynchronizedObject>();
+            }
+        }
     }
 }

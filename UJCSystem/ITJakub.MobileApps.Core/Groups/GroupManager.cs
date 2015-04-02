@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.ServiceModel;
 using AutoMapper;
+using ITJakub.MobileApps.Core.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
 using ITJakub.MobileApps.DataEntities;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
@@ -15,14 +17,16 @@ namespace ITJakub.MobileApps.Core.Groups
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly EnterCodeGenerator m_enterCodeGenerator;
+        private readonly ApplicationManager m_applicationManager;
         private readonly UsersRepository m_usersRepository;
 
 
-        public GroupManager(UsersRepository usersRepository, EnterCodeGenerator enterCodeGenerator, int maxAttemptsToSave)
+        public GroupManager(UsersRepository usersRepository, EnterCodeGenerator enterCodeGenerator, ApplicationManager applicationManager, int maxAttemptsToSave)
         {
             MaxAttemptsToSave = maxAttemptsToSave;
             m_usersRepository = usersRepository;
             m_enterCodeGenerator = enterCodeGenerator;
+            m_applicationManager = applicationManager;
         }
 
         private int MaxAttemptsToSave { get; set; }
@@ -30,6 +34,8 @@ namespace ITJakub.MobileApps.Core.Groups
         public UserGroupsContract GetGroupByUser(long userId)
         {
             User user = m_usersRepository.GetUserWithGroups(userId);
+            if (user == null)
+                throw new FaultException("User not found.");
 
             var result = new UserGroupsContract
             {
@@ -44,7 +50,7 @@ namespace ITJakub.MobileApps.Core.Groups
         {
             User user = m_usersRepository.Load<User>(userId);
             
-            var group = new Group {Author = user, CreateTime = DateTime.UtcNow, Name = groupName, IsActive = true};
+            var group = new Group {Author = user, CreateTime = DateTime.UtcNow, Name = groupName, State = GroupState.Created};
 
             int attempt = 0;
             while (attempt < MaxAttemptsToSave)
@@ -53,7 +59,11 @@ namespace ITJakub.MobileApps.Core.Groups
                 {
                     group.EnterCode = m_enterCodeGenerator.GenerateCode();
                     m_usersRepository.Create(group);
-                    return new CreateGroupResponse {EnterCode = group.EnterCode};
+                    return new CreateGroupResponse
+                    {
+                        EnterCode = group.EnterCode,
+                        GroupId = group.Id
+                    };
                 }
                 catch (CreateEntityFailedException ex)
                 {
@@ -74,6 +84,15 @@ namespace ITJakub.MobileApps.Core.Groups
         public void AddUserToGroup(string groupAccessCode, long userId)
         {
             Group group = m_usersRepository.FindByEnterCode(groupAccessCode);
+            if (group == null)
+            {
+                throw new FaultException("No group with this access code found.");
+            }
+            if (group.State == GroupState.Created || group.State == GroupState.Closed)
+            {
+                throw new FaultException("Group doesn't accept new members.");
+            }
+
             var user = m_usersRepository.Load<User>(userId);
             group.Members.Add(user);
             m_usersRepository.Update(group);
@@ -82,6 +101,9 @@ namespace ITJakub.MobileApps.Core.Groups
         public GroupDetailContract GetGroupDetails(long groupId)
         {
             var group = m_usersRepository.GetGroupDetails(groupId);
+            if (group == null)
+                throw new FaultException("Group not found.");
+
             var groupContract = Mapper.Map<Group, GroupDetailContract>(group);
             return groupContract;
         }
@@ -105,11 +127,54 @@ namespace ITJakub.MobileApps.Core.Groups
 
         public void AssignTaskToGroup(long groupId, long taskId)
         {
-            var task = m_usersRepository.Load<Task>(taskId);
             var group = m_usersRepository.FindById<Group>(groupId);
+            if (group.State >= GroupState.Running)
+                throw new FaultException("Can not change task. Group has been already started.");
+
+            var task = m_usersRepository.Load<Task>(taskId);
             group.Task = task;
 
             m_usersRepository.Update(group);
+        }
+
+        public void UpdateGroupState(long groupId, GroupStateContract state)
+        {
+            var group = m_usersRepository.FindById<Group>(groupId);
+            var newState = Mapper.Map<GroupStateContract, GroupState>(state);
+
+            if (group.Task == null && newState > GroupState.AcceptMembers)
+            {
+                throw new FaultException("Can not change group state, because no task is assigned to the group.");
+            }
+
+            if (newState > group.State || (newState == GroupState.Running && group.State == GroupState.Paused))
+            {
+                group.State = newState;
+                m_usersRepository.Update(group);
+            }
+            else
+            {
+                throw new FaultException("Can not change group state in this order.");
+            }
+        }
+
+        public void RemoveGroup(long groupId)
+        {
+            var group = m_usersRepository.FindById<Group>(groupId);
+            if (group.State != GroupState.Closed && group.State != GroupState.Created)
+                throw new FaultException("Can not remove group until it is closed.");
+
+            var rowKeys = m_usersRepository.GetRowKeysAndRemoveGroup(groupId);
+            m_applicationManager.DeleteSynchronizedObjects(groupId, rowKeys);
+        }
+
+        public GroupStateContract GetGroupState(long groupId)
+        {
+            var group = m_usersRepository.FindById<Group>(groupId);
+            if (group == null || group.State == GroupState.Created)
+                throw new FaultException("Group not found.");
+
+            return Mapper.Map<GroupState,GroupStateContract>(group.State);
         }
     }
 }

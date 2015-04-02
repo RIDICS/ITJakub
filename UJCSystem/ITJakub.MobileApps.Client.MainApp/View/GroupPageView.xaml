@@ -9,15 +9,51 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
-    mc:Ignorable="d">
+    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
+    xmlns:control1="using:ITJakub.MobileApps.Client.MainApp.View.Control"
+    mc:Ignorable="d"
+    IsTabStop="True"
+    control:FocusableBehavior.IsFocus="{Binding IsGlobalFocus, Mode=TwoWay}">
 
     <Page.Resources>
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         <converter:NotChosenStringConverter x:Key="NotChosenStringConverter" />
-        <converter:ApplicationTypeToNameConverter x:Key="ApplicationTypeToNameConverter" />
+        <converter:GroupStateToNameConverter x:Key="GroupStateToNameConverter" />
+        <converter:BooleanToColorConverter x:Key="BooleanToColorConverter" />
+        <converter:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <Style x:Key="MyLabelStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,5,0,5" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="FontSize" Value="27" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <x:Double x:Key="ArrowThickness">2</x:Double>
+        <SolidColorBrush x:Key="ArrowColor" Color="Black" />
     </Page.Resources>
+    
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Label="Aktualizovat"
+                          Icon="Refresh"
+                          Command="{Binding ReloadCommand}"
+                          IsEnabled="{Binding Loading, Converter={StaticResource BooleanNegationConverter}}" />
+            <AppBarButton Label="Připojit se"
+                          Icon="Forward"
+                          Command="{Binding ConnectToGroupCommand}"
+                          IsEnabled="{Binding CanConnectToGroup}" />
+            <AppBarButton Label="Zobrazit aplikaci"
+                          Icon="Forward"
+                          Command="{Binding OpenApplicationCommand}"
+                          IsEnabled="{Binding CanOpenApplication}" />
+
+            <!--TODO kick user function + UI-->
+            <!--<CommandBar.SecondaryCommands>
+                <AppBarButton Label="Vyhodit uživatele" />
+            </CommandBar.SecondaryCommands>-->
+        </CommandBar>
+    </Page.BottomAppBar>
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -27,34 +63,33 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
-                <EntranceThemeTransition/>
+                <EntranceThemeTransition />
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Margin="39,59,39,0"
-                    Command="{Binding GoBackCommand}"
+            <Button Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
                     AutomationProperties.ItemType="Navigation Button"
-                    IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}" />
+                    IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}" />
             <TextBlock Style="{StaticResource HeaderTextBlockStyle}"
                        Grid.Column="1"
                        IsHitTestVisible="false"
                        TextWrapping="NoWrap"
-                       VerticalAlignment="Bottom"
-                       Margin="0,0,30,40">
+                       VerticalAlignment="Center">
                 <Run Text="Skupina:" />
                 <Run Text="{Binding GroupInfo.GroupName}" />
             </TextBlock>
@@ -62,74 +97,293 @@
             <ProgressBar Grid.Column="0"
                          Grid.ColumnSpan="2"
                          VerticalAlignment="Top"
-                         Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                         Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
         
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1"
+              Margin="0,20,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" MaxWidth="550" />
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Vertical"
-                        Margin="120,0,0,0"
-                        Grid.Column="0">
-                <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">
-                    <Run Text="Kód skupiny:"/>
-                    <Run Text="{Binding GroupInfo.GroupCode}"/>
-                </TextBlock>
-
-                <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
-                           Margin="0,15,0,0">
-                    <Run Text="Čas založení:"/>
-                    <Run Text="{Binding GroupInfo.CreateTime, Converter={StaticResource DateTimeToStringConverter}}"/>
-                </TextBlock>
-
-                <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
-                           Margin="0,15,0,0">
-                    <Run Text="Aplikace:"/>
-                    <Run Text="{Binding SelectedApplicationInfo.ApplicationType, Converter={StaticResource ApplicationTypeToNameConverter}}"/>
-                </TextBlock>
-
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,15,0,15">
-                    <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" >
-                        <Run Text="Zadání:"/>
-                        <Run Text="{Binding SelectedTaskViewModel.Name, Converter={StaticResource NotChosenStringConverter}}"/>
+                        Margin="120,0,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource MyLabelStyle}"
+                                IsTextSelectionEnabled="True">
+                        <Run Text="Kód skupiny:" />
+                        <Run Text="{Binding GroupInfo.GroupCode}" />
                     </TextBlock>
-                    <Button Content="Změnit"
-                            Margin="40,0,0,0"
-                            IsEnabled="{Binding Saving, Converter={StaticResource BooleanNegationConverter}}"
-                            Command="{Binding SelectAppAndTaskCommand}" />
+                    
+                    <Button Margin="30,0,0,0"
+                            Command="{Binding ConnectToGroupCommand}"
+                            IsEnabled="{Binding CanConnectToGroup}">
+                        <StackPanel Orientation="Horizontal">
+                            <ProgressRing IsActive="True"
+                                          Visibility="{Binding ConnectingToGroup, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                          Margin="5,0,0,0" />
+                            <TextBlock Text="Připojit se" />
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button Margin="10,0,0,0"
+                            Command="{Binding OpenApplicationCommand}"
+                            IsEnabled="{Binding CanOpenApplication}"
+                            Content="Zobrazit aplikaci" />
                 </StackPanel>
+                
+                <TextBlock Style="{StaticResource MyLabelStyle}">
+                    <Run Text="Čas založení:" />
+                    <Run Text="{Binding GroupInfo.CreateTime, Converter={StaticResource DateTimeToStringConverter}}" />
+                </TextBlock>
+
+                <control:AlignableWrapPanel>
+                    <TextBlock Style="{StaticResource MyLabelStyle}"
+                               Text="Zadání:" />
+
+                    <Button Margin="7,0,0,7"
+                            Style="{StaticResource TextButtonNoDisableStyle}"
+                            Command="{Binding SelectAppAndTaskCommand}"
+                            IsEnabled="{Binding CanChangeTask}"
+                            VerticalContentAlignment="Center">
+                        <TextBlock Style="{StaticResource MyLabelStyle}"
+                                   Text="{Binding SelectedTaskName, Converter={StaticResource NotChosenStringConverter}}"
+                                   MaxLines="2" />
+                    </Button>
+                    
+                    <Button Content="Změnit"
+                            Margin="30,0,0,0"
+                            IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}"
+                            Visibility="{Binding CanChangeTask, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Command="{Binding SelectAppAndTaskCommand}" />
+                </control:AlignableWrapPanel>
+
 
                 <StackPanel Orientation="Horizontal"
-                            Margin="100,0,0,0"
-                            Visibility="{Binding Saving, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <ProgressRing IsActive="True"
-                                  Width="30"
-                                  Height="30"
-                                  Foreground="Gold" />
-                    <TextBlock Text="Ukládání"
-                               FontSize="20"
-                               Margin="5,0,30,0"
-                               Foreground="Gold"
-                               VerticalAlignment="Center" />
+                            Visibility="{Binding AppName, Converter={StaticResource NotNullToVisibilityConverter}}">
+                    <TextBlock Style="{StaticResource MyLabelStyle}"
+                               Text="Aplikace:" />
+                    <Grid Margin="10,-3,10,0">
+                        <Image Width="32"
+                               Height="32"
+                               Visibility="{Binding AppIcon, Converter={StaticResource NotNullToVisibilityConverter}}"
+                               Source="{Binding AppIcon}" />
+                    </Grid>
+                    <TextBlock Style="{StaticResource MyLabelStyle}"
+                               Text="{Binding AppName, Converter={StaticResource NotChosenStringConverter}}" />
                 </StackPanel>
-                <TextBlock Text="Uloženo"
-                           FontSize="20"
-                           Margin="100,0,0,0"
-                           Foreground="Gold"
-                           Visibility="{Binding TaskSaved, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource MyLabelStyle}"
+                               Margin="0,10,0,15">
+                        <Run Text="Stav skupiny:" />
+                        <Run Text="{Binding GroupInfo.State, Converter={StaticResource GroupStateToNameConverter}}"
+                             Foreground="Yellow" />
+                    </TextBlock>
 
-                <ToggleSwitch Header="Stav skupiny"
-                              FontSize="20"
-                              OnContent="Aktivní"
-                              OffContent="Neaktivní"
-                              Margin="-7,50,0,0">
-                </ToggleSwitch>
+                    <Button Margin="30,0,0,0"
+                            Width="50"
+                            Height="45"
+                            Style="{StaticResource EllipseButtonStyle}">
+                        <TextBlock FontSize="30"
+                                   Margin="0,-10,0,-10"
+                                   Text="i" />
+                        <Button.Flyout>
+                            <Flyout>
+                                <TextBlock MaxWidth="360"
+                                            TextWrapping="Wrap">
+                                    Skupina se může nacházet v jednom z několika stavů.
+                                    Změna stavu je obvykle nevratná tzn. že například ze stavu <Italic>Čekání na spuštění</Italic>
+                                    se nelze vrátit do stavu <Italic>Přijímání členů</Italic>.
+                                    Vrátit stav zpět jde pouze ze stavu <Italic>Pozastaveno</Italic> do <Italic>Spuštěno</Italic>.
+                                    <LineBreak />
+                                    <Bold>Vytvořená</Bold> - Výchozí stav po vytvoření nové skupiny. V tomto stavu lze přiřazovat zadání ke skupině. Nelze se zatím do skupiny připojovat.
+                                    <LineBreak />
+                                    <Bold>Přijímání členů</Bold> - Skupina je viditelná a studenti se do ní mohou připojovat. Poslední stav ve kterém je možné měnit zadání.
+                                    <LineBreak />
+                                    <Bold>Čekání na spuštění</Bold> - Před přepnutím do tohoto stavu je nutné mít definitivně přiřazené zadání, které následně už není možné měnit.
+                                    <LineBreak />
+                                    <Bold>Spuštěná</Bold> - Skupina je spuštěná, tzn. studenti už mohou začít používat aplikaci.
+                                    <LineBreak />
+                                    <Bold>Pozastavená</Bold> - Studentům se pozastaví spuštěná aplikace. Z tohoto stavu se lze vrátit do stavu <Italic>Spuštěná</Italic>.
+                                    <LineBreak />
+                                    <Bold>Ukončená</Bold> - Studentům se ukončí aplikace nebo zobrazí výsledky. Učitel má možnost výsledky ohodnotit.
+                                    <LineBreak />
+                                    <Bold>Odstranit skupinu</Bold> - Nejedná se přímo o stav, protože touto variantou dojde ke smazání skupiny včetně všech výsledků.
+                                </TextBlock>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+
+                <ScrollViewer Margin="0,0,40,0"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto"
+                          HorizontalScrollMode="Disabled"
+                          ZoomMode="Disabled">
+                <StackPanel Orientation="Vertical"
+                            Margin="30,0,0,0"
+                            HorizontalAlignment="Left">
+                    
+                    <TextBlock Text="Změnit na:"
+                               Style="{StaticResource MyLabelStyle}"
+                               HorizontalAlignment="Center"
+                               FontSize="20" />
+                    
+                    <ItemsControl ItemsSource="{Binding GroupStates}"
+                                  IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <control1:DownArrowControl Grid.Row="0"
+                                                           Height="15"
+                                                           Width="10"
+                                                           HorizontalAlignment="Center"
+                                                           Foreground="{StaticResource ArrowColor}"
+                                                           StrokeThickness="{StaticResource ArrowThickness}"
+                                                           IsBothWay="{Binding CanChangeBack}" />
+                                    
+                                    <Button Grid.Row="1"
+                                            Content="{Binding GroupState, Converter={StaticResource GroupStateToNameConverter}}"
+                                            Width="220"
+                                            HorizontalAlignment="Center"
+                                            Style="{StaticResource EllipseButtonStyle}"
+                                            IsEnabled="{Binding IsEnabled}"
+                                            Foreground="{Binding IsFlyoutOpen, Converter={StaticResource BooleanToColorConverter}}"
+                                            x:Name="ChangeGroupStateButton">
+                                        <Button.Flyout>
+                                            <Flyout control:FlyoutHelpers.IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}"
+                                                    control:FlyoutHelpers.Parent="{Binding ElementName=ChangeGroupStateButton}">
+                                                <StackPanel Orientation="Vertical"
+                                                            Width="300">
+                                                    <TextBlock Text="Chystáte se změnit stav skupiny. Tato akce je nevratná (kromě přepínání mezi stavy Spuštěno a Pozastaveno)."
+                                                               TextWrapping="Wrap"
+                                                               FontSize="14" />
+
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Button Grid.Column="1"
+                                                                Content="Zrušit"
+                                                                Command="{Binding CancelCommand}" />
+                                                        <Button Grid.Column="2"
+                                                                Content="Změnit"
+                                                                Command="{Binding SubmitCommand}" />
+                                                    </Grid>
+                                                </StackPanel>
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                    
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <control1:DownArrowControl Grid.Row="0"
+                                               Height="15"
+                                               Width="10"
+                                               HorizontalAlignment="Center"
+                                               Foreground="{StaticResource ArrowColor}"
+                                               StrokeThickness="{StaticResource ArrowThickness}"
+                                               IsBothWay="False" />
+
+                        <ContentControl Grid.Row="1"
+                                        HorizontalAlignment="Center"
+                                        IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}">
+                            <Button Content="Odstranit skupinu"
+                                    Width="220"
+                                    Style="{StaticResource EllipseButtonStyle}"
+                                    IsEnabled="{Binding CanRemoveGroup}"
+                                    x:Name="RemoveGroupButton">
+                                <Button.Flyout>
+                                    <Flyout control:FlyoutHelpers.IsOpen="{Binding GroupRemoveViewModel.IsFlyoutOpen, Mode=TwoWay}"
+                                            control:FlyoutHelpers.Parent="{Binding ElementName=RemoveGroupButton}">
+                                        <StackPanel Orientation="Vertical"
+                                                    Width="300"
+                                                    DataContext="{Binding GroupRemoveViewModel}">
+                                            <TextBlock Text="Chystáte se odstranit skupinu. Tato akce smaže také všechny výsledky."
+                                                       TextWrapping="Wrap"
+                                                       FontSize="14" />
+
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Button Grid.Column="1"
+                                                            Content="Zrušit"
+                                                            Command="{Binding CancelCommand}" />
+                                                <Button Grid.Column="2"
+                                                            Content="Odstranit"
+                                                            Command="{Binding SubmitCommand}" />
+                                            </Grid>
+                                        </StackPanel>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                        </ContentControl>
+                    </Grid>
+                    
+                    <Grid HorizontalAlignment="Center"
+                          Margin="0,10,0,0"
+                          Visibility="{Binding SavingState, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ProgressRing IsActive="True"
+                                      Width="30"
+                                      Height="30"
+                                      Margin="0,0,5,0"
+                                      Foreground="Gold" />
+                        <TextBlock Grid.Column="1"
+                                   Text="Ukládání"
+                                   FontSize="20"
+                                   Foreground="Gold"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid HorizontalAlignment="Center"
+                          Margin="0,10,0,0"
+                          Visibility="{Binding Removing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ProgressRing IsActive="True"
+                                      Width="30"
+                                      Height="30"
+                                      Margin="0,0,5,0"
+                                      Foreground="Gold" />
+                        <TextBlock Grid.Column="1"
+                                   Text="Odstraňování skupiny"
+                                   FontSize="20"
+                                   Foreground="Gold"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </StackPanel>
+                </ScrollViewer>
             </StackPanel>
-            
             
             <Grid Grid.Column="1"
                   Margin="0,0,120,0"
@@ -139,7 +393,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 
-                <Grid Grid.Row="0">
+                <Grid Grid.Row="0"
+                      Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -147,14 +402,13 @@
 
                     <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
                                Grid.Column="0">
-                        <Run Text="Seznam členů ("/><Run Text="{Binding MemberCount}"/><Run Text="):" />
+                        <Run Text="Seznam členů ("/><Run Text="{Binding MemberCount}"/><Run Text=")" />
                     </TextBlock>
 
                     <SearchBox Grid.Column="1"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"
                                Width="170"
-                               Margin="0,0,0,10"
                                SearchHistoryEnabled="False"
                                QueryText="{Binding SearchText, Mode=TwoWay}" >
                         <interactivity:Interaction.Behaviors>
@@ -177,8 +431,8 @@
                                        Source="{Binding UserAvatar}" />
                                 <TextBlock VerticalAlignment="Center"
                                            Margin="5,0,0,0">
-                                    <Run Text="{Binding FirstName}"/>
-                                    <Run Text="{Binding LastName}"/>
+                                    <Run Text="{Binding FirstName}" />
+                                    <Run Text="{Binding LastName}" />
                                 </TextBlock>
                             </StackPanel>
                         </DataTemplate>
@@ -193,6 +447,5 @@
                            Margin="50,15,0,0" />
             </Grid>
         </Grid>
-
     </Grid>
 </Page>

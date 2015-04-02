@@ -30,11 +30,18 @@ namespace ITJakub.MobileApps.DataContracts
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
+        [FaultContract(typeof(ApplicationNotRunningFault))]
         void CreateSynchronizedObject(int applicationId, long groupId, long userId, SynchronizedObjectContract synchronizedObject);
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
+        [FaultContract(typeof(ApplicationNotRunningFault))]
         IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Student)]
+        [FaultContract(typeof(ApplicationNotRunningFault))]
+        SynchronizedObjectResponseContract GetLatestSynchronizedObject(long groupId, int applicationId, string objectType, DateTime since);
 
         [OperationContract]
         IList<ApplicationContract> GetAllApplication();
@@ -57,10 +64,26 @@ namespace ITJakub.MobileApps.DataContracts
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
+        IList<TaskDetailContract> GetTasksByAuthor(long userId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
         void CreateTask(long userId, int applicationId, string name, string data);
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
         TaskContract GetTaskForGroup(long groupId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Student)]
+        GroupStateContract GetGroupState(long groupId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        void UpdateGroupState(long groupId, GroupStateContract state);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        void RemoveGroup(long groupId);
     }
 }

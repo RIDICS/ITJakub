@@ -8,65 +8,81 @@
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.Hangman.View.Converter"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanViewModel }">
     
     <UserControl.Resources>
-        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter"/>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter1:GuessedLettersTextConverter x:Key="GuessedLettersTextConverter" />
+        <converter1:WinToColorConverter x:Key="WinToColorConverter" />
     </UserControl.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
 
-        <Viewbox Grid.Column="0"
-                 Margin="25"
-                 VerticalAlignment="Top">
-            <view:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}" />
-        </Viewbox>
-           
-        <Grid Grid.Column="1">
+        <Grid Grid.Row="0"
+              Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="200" />
-                <RowDefinition Height="100" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <view:WordControl Word="{Binding WordToGuess}"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"/>
-            
-            <StackPanel Orientation="Horizontal"
-                        Grid.Row="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                
-                <control:SubmitTextBox
-                         VerticalAlignment="Stretch"
-                         HorizontalAlignment="Left"
-                         MaxLength="1"
-                         Margin="0,0,20,0"
-                         FontSize="20"
-                         FontWeight="Bold"
-                         TextAlignment="Center"
-                         Text="{Binding Letter, Mode=TwoWay}"
-                         EnterCommand="{Binding GuessCommand}"
-                         IsEnabled="{Binding GameOver, Converter={StaticResource BooleanNegationConverter}}"
-                         IsTextPredictionEnabled="False" />
-                
-                <Button Content="Hádat písmeno"
-                        FontSize="20"
-                        Command="{Binding GuessCommand}"
-                        IsEnabled="{Binding GameOver, Converter={StaticResource BooleanNegationConverter}}" />
-                
-            </StackPanel>
-        </Grid>
+            <TextBlock Grid.Row="0"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                       FontSize="20"
+                       FontWeight="Light"
+                       Margin="5,10,0,10"
+                       TextWrapping="Wrap">
+                <Run Text="{Binding GuessedLetterCount}"
+                     FontWeight="Bold"
+                     FontFamily="Segoe Print"
+                     Foreground="{Binding GameOverViewModel.Win, Converter={StaticResource WinToColorConverter}}"/>
+                <Run Text="{Binding GuessedLetterCount, Converter={StaticResource GuessedLettersTextConverter}}" />
+            </TextBlock>
 
-        <Grid Grid.Column="2">
+            <Viewbox Grid.Row="1"
+                     VerticalAlignment="Top"
+                     Margin="0,10,0,25"
+                     MinWidth="100">
+                <view:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}"
+                                            Margin="25,0,25,0" />
+            </Viewbox>
+        </Grid>
+           
+        <Grid Grid.Row="0"
+              Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <view:WordControl DataContext="{Binding WordViewModel}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center" />
+
+            <ScrollViewer Grid.Row="1"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollMode="Disabled"
+                          ZoomMode="Disabled">
+                <view:KeyboardControl DataContext="{Binding KeyboardViewModel}"
+                                      MaxWidth="800" />
+            </ScrollViewer>
+        </Grid>
+        
+        <Grid Grid.Row="0"
+              Grid.Column="2"
+              Visibility="{Binding GuessHistoryVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -89,6 +105,7 @@
                                   Margin="0,0,5,0"
                                   Background="White" >
                                 <TextBlock FontSize="17"
+                                           FontFamily="Segoe Print"
                                            Text="{Binding Letter}"
                                            Foreground="Black"
                                            HorizontalAlignment="Center"
@@ -117,5 +134,53 @@
                 </control:AutoScrollListView.ItemContainerStyle>
             </control:AutoScrollListView>
         </Grid>
+        
+        <GridView Grid.Row="1"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="3"
+                  Height="200"
+                  ItemsSource="{Binding OpponentProgress}"
+                  Visibility="{Binding OpponentProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Border Height="170"
+                            Width="130"
+                            BorderThickness="2"
+                            BorderBrush="#22FFFFFF">
+                    <Grid>
+                        <Viewbox>
+                            <view:HangmanPictureControl DataContext="{Binding PictureViewModel}"
+                                                        HorizontalAlignment="Center"
+                                                        Margin="0,15,0,20" />
+                        </Viewbox>
+                        
+                        <TextBlock FontSize="18"
+                                   FontFamily="Segoe Print"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Top"
+                                   Margin="0,0,15,0"
+                                   Foreground="{Binding Win, Converter={StaticResource WinToColorConverter}}"
+                                   Text="{Binding LetterCount}" />
+                        
+                        <TextBlock FontSize="14"
+                                   VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Center"
+                                   TextWrapping="NoWrap"
+                                   TextTrimming="CharacterEllipsis">
+                            <Run Text="{Binding UserInfo.FirstName}" />
+                            <Run Text="{Binding UserInfo.LastName}" />
+                        </TextBlock>
+                    </Grid>
+                    </Border>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+        
+        <view:GameOverControl Grid.Row="0"
+                              Grid.Column="0"
+                              Grid.RowSpan="2"
+                              Grid.ColumnSpan="3"
+                              DataContext="{Binding GameOverViewModel}"
+                              Visibility="{Binding GameOver, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

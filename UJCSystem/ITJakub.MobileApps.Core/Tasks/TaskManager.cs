@@ -71,5 +71,11 @@ namespace ITJakub.MobileApps.Core.Tasks
 
             return task;
         }
+
+        public IList<TaskDetailContract> GetTasksByAuthor(long userId)
+        {
+            var taskList = m_usersRepository.GetTasksByAuthor(userId);
+            return Mapper.Map<IList<TaskDetailContract>>(taskList);
+        }
     }
 }

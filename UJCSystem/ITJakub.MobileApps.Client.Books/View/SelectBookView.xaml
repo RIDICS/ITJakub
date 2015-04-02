@@ -1,0 +1,236 @@
+﻿<Page
+    x:Class="ITJakub.MobileApps.Client.Books.View.SelectBookView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Books.View.Converter"
+    xmlns:comboBoxItem="using:ITJakub.MobileApps.Client.Books.ViewModel.ComboBoxItem"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <!--
+        This grid acts as a root panel for the page that defines two rows:
+        * Row 0 contains the back button and page title
+        * Row 1 contains the rest of the page layout
+    -->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          DataContext="{Binding Source={StaticResource Locator}, Path=SelectBookViewModel}">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Back button and page title -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding GoBackCommand}"
+                    Style="{StaticResource NavigationBackButtonNormalStyle}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    AutomationProperties.Name="Back"
+                    AutomationProperties.AutomationId="BackButton"
+                    AutomationProperties.ItemType="Navigation Button" />
+            <TextBlock Text="Vyberte knihu"
+                       Style="{StaticResource HeaderTextBlockStyle}"
+                       Grid.Column="1" 
+                       IsHitTestVisible="false"
+                       TextWrapping="NoWrap"
+                       VerticalAlignment="Center"
+                       Margin="0,0,30,0" />
+            
+            <TextBlock Grid.Column="2"
+                       Style="{StaticResource SubheaderTextBlockStyle}"
+                       VerticalAlignment="Center"
+                       Visibility="{Binding IsSearchResult, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Run Text="Výsledky vyhledávání pro &quot;" /><Run Text="{Binding SearchQuery}" /><Run Text="&quot;" />
+            </TextBlock>
+            
+            <Grid Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                
+                <SearchBox Grid.Row="0"
+                           VerticalAlignment="Bottom"
+                           Width="200"
+                           Margin="0,0,40,0"
+                           QueryText="{Binding SearchQuery, Mode=TwoWay}">
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="QuerySubmitted">
+                            <core:InvokeCommandAction Command="{Binding SearchCommand}" />
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
+                </SearchBox>
+                <ComboBox Grid.Row="1"
+                          VerticalAlignment="Top"
+                          HorizontalAlignment="Left"
+                          Margin="0,-5,0,-8"
+                          Style="{StaticResource TextComboBoxStyle}"
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="Destination"
+                          SelectedValue="{Binding SearchDestination, Mode=TwoWay}"
+                          SelectedIndex="{Binding DefaultSelectionIndex}"
+                          PlaceholderText="Názvy knih">
+                    <comboBoxItem:SearchDestinationItem Name="Názvy knih"
+                                                        Destination="Title" />
+                    <comboBoxItem:SearchDestinationItem Name="Autoři"
+                                                        Destination="Author" />
+                </ComboBox>
+            </Grid>
+            
+            <ProgressBar Grid.Column="0"
+                         Grid.ColumnSpan="4"
+                         IsIndeterminate="True"
+                         VerticalAlignment="Top"
+                         Visibility="{Binding IsInProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        </Grid>
+        
+        <StackPanel Grid.Row="1"
+                    Margin="120,0,0,0"
+                    Orientation="Horizontal">
+            <ComboBox Style="{StaticResource TextComboBoxStyle}"
+                      PlaceholderText="Mluvnice"
+                      SelectedValuePath="Category"
+                      DisplayMemberPath="Name"
+                      SelectedValue="{Binding SelectedCategory, Mode=TwoWay}"
+                      SelectedIndex="{Binding DefaultSelectionIndex}">
+                <comboBoxItem:CategoryItem Name="Staročeská textová banka"
+                                        Category="OldBohemainTextBank" />
+                <comboBoxItem:CategoryItem Name="Mluvnice"
+                                        Category="OldGrammar" />
+                <comboBoxItem:CategoryItem Name="Edice"
+                                        Category="Edition" />
+                <comboBoxItem:CategoryItem Name="Slovníky"
+                                        Category="Dictionary" />
+                <comboBoxItem:CategoryItem Name="Odborná literatura"
+                                        Category="ProfessionalLiterature" />
+            </ComboBox>
+            
+            <ComboBox Margin="50,0,0,0"
+                      Style="{StaticResource TextComboBoxStyle}"
+                      PlaceholderText="Seřadit podle názvu"
+                      SelectedValuePath="Type"
+                      DisplayMemberPath="Name"
+                      SelectedValue="{Binding SelectedSortType, Mode=TwoWay}"
+                      SelectedIndex="{Binding DefaultSelectionIndex}">
+                <comboBoxItem:SortItem Name="Seřadit podle názvu"
+                                    Type="Name" />
+                <comboBoxItem:SortItem Name="Seřadit podle autora"
+                                    Type="Author" />
+                <comboBoxItem:SortItem Name="Seřadit podle roku"
+                                    Type="Year" />
+            </ComboBox>
+
+            <ComboBox Margin="100,0,0,0"
+                      Style="{StaticResource TextComboBoxStyle}"
+                      PlaceholderText="Od roku 1900"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Value"
+                      SelectedValue="{Binding FilterFromYear, Mode=TwoWay}"
+                      SelectedIndex="{Binding DefaultSelectionIndex}">
+                <comboBoxItem:FilterYearItem Name="Od libovolného roku"
+                                          Value="-1000000" />
+                <comboBoxItem:FilterYearItem Name="Od roku 1500"
+                                          Value="1500" />
+                <comboBoxItem:FilterYearItem Name="Od roku 1700"
+                                          Value="1700" />
+                <comboBoxItem:FilterYearItem Name="Od roku 1800"
+                                          Value="1800" />
+                <comboBoxItem:FilterYearItem Name="Od roku 1900"
+                                          Value="1900" />
+            </ComboBox>
+
+            <ComboBox Margin="50,0,0,0"
+                      Style="{StaticResource TextComboBoxStyle}"
+                      PlaceholderText="Do roku 1900"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Value"
+                      SelectedValue="{Binding FilterToYear, Mode=TwoWay}"
+                      SelectedIndex="{Binding DefaultSelectionIndex}">
+                <comboBoxItem:FilterYearItem Name="Do libovolného roku"
+                                          Value="1000000" />
+                <comboBoxItem:FilterYearItem Name="Do roku 1499"
+                                          Value="1499" />
+                <comboBoxItem:FilterYearItem Name="Do roku 1699"
+                                          Value="1699" />
+                <comboBoxItem:FilterYearItem Name="Do roku 1799"
+                                          Value="1799" />
+                <comboBoxItem:FilterYearItem Name="Do roku 1899"
+                                          Value="1899" />
+            </ComboBox>
+        </StackPanel>
+        
+        <GridView Grid.Row="2"
+                  SelectionMode="None"
+                  ItemsSource="{Binding BookList}"
+                  Padding="120,20,0,70"
+                  IsItemClickEnabled="True">
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="350"
+                          Margin="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <Image Grid.Column="0"
+                               Source="../Icon/book-48.png"
+                               Width="48"
+                               Height="48"
+                               Margin="5"
+                               VerticalAlignment="Center" />
+                        
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Vertical">
+                            <TextBlock Text="{Binding Title}"
+                                       FontWeight="Bold" />
+                            <TextBlock Text="{Binding Author}" />
+                            <TextBlock Text="{Binding Year}" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="ItemClick">
+                    <core:InvokeCommandAction Command="{Binding BookClickCommand}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </GridView>
+
+        <TextBlock Grid.Row="2"
+                   Margin="120,30,0,0"
+                   Text="Žádné knihy odpovídající zadaným parametrům nebyly nenalezeny."
+                   Style="{StaticResource SubheaderTextBlockStyle}"
+                   Visibility="{Binding NoBookFound, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+</Page>

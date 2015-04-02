@@ -6,6 +6,7 @@ using ITJakub.MobileApps.Client.Chat.ViewModel;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Chat
 {
@@ -32,6 +33,16 @@ namespace ITJakub.MobileApps.Client.Chat
         public override Type ApplicationDataTemplate
         {
             get { return typeof (ChatView); }
+        }
+
+        public override EditorBaseViewModel EditorViewModel
+        {
+            get { return null; }
+        }
+
+        public override Type EditorDataTemplate
+        {
+            get { return null; }
         }
 
         public override ApplicationRoleType ApplicationRoleType

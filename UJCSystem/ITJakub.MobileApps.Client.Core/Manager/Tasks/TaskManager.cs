@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
@@ -41,7 +41,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     Name = task.Name,
                     CreateTime = task.CreateTime,
                     Data = task.Data,
-                    Author = new AuthorInfo
+                    Author = new UserInfo
                     {
                         Id = task.Author.Id,
                         FirstName = task.Author.FirstName,
@@ -51,6 +51,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     }
                 }));
                 callback(tasks, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
             }
             catch (ClientCommunicationException exception)
             {
@@ -65,17 +69,21 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                 await m_client.AssignTaskToGroupAsync(groupId, taskId);
                 callback(null);
             }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(exception);
+            }
             catch (ClientCommunicationException exception)
             {
                 callback(exception);
             }
         }
 
-        public async Task GetTaskForGroupAsync(long groupId, Action<TaskViewModel, Exception> callback)
+        public async void GetTaskForGroup(long groupId, Action<TaskViewModel, Exception> callback)
         {
             try
             {
-                var result = await m_client.GetTaskForGroup(groupId);
+                var result = await m_client.GetTaskForGroupAsync(groupId);
                 if (result == null)
                     return;
 
@@ -86,6 +94,47 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     Data = result.Data
                 };
                 callback(task, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
+
+        public async void GetMyTasks(Action<ObservableCollection<TaskViewModel>, Exception> callback)
+        {
+            try
+            {
+                var userId = m_authenticationManager.GetCurrentUserId();
+                if (!userId.HasValue)
+                    return;
+
+                var result = await m_client.GetTasksByAuthor(userId.Value);
+                var taskList = new ObservableCollection<TaskViewModel>(result.Select(task => new TaskViewModel
+                {
+                    Id = task.Id,
+                    Application = m_applicationIdManager.GetApplicationType(task.ApplicationId),
+                    Name = task.Name,
+                    CreateTime = task.CreateTime,
+                    Data = task.Data,
+                    Author = new UserInfo
+                    {
+                        Id = task.Author.Id,
+                        FirstName = task.Author.FirstName,
+                        LastName = task.Author.LastName,
+                        Email = task.Author.Email,
+                        IsMe = userId == task.Author.Id
+                    }
+                }));
+                callback(taskList, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
             }
             catch (ClientCommunicationException exception)
             {

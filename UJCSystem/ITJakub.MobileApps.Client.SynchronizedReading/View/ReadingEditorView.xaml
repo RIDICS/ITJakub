@@ -1,0 +1,154 @@
+﻿<UserControl
+    x:Class="ITJakub.MobileApps.Client.SynchronizedReading.View.ReadingEditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="using:ITJakub.MobileApps.Client.SynchronizedReading.ViewModel"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
+    xmlns:control1="using:ITJakub.MobileApps.Client.Books.View.Control"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance d:Type=viewModel:ReadingEditorViewModel}">
+
+    <UserControl.Resources>
+        <x:Double x:Key="LabelFontSize">14</x:Double>
+        <SolidColorBrush x:Key="ErrorColorBrush" Color="Orange" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+    
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          Margin="120,0,100,50">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Grid.Column="0"
+                    Orientation="Vertical">
+            <TextBlock Text="Název zadání:"
+                       FontSize="{StaticResource LabelFontSize}" />
+            <TextBox Text="{Binding TaskName, Mode=TwoWay}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0"
+                            Orientation="Vertical"
+                            Margin="0,10,0,10">
+                    <TextBlock FontSize="{StaticResource LabelFontSize}">
+                        <Run Text="Kniha: " />
+                        <Run Text="{Binding BookName}" />
+                        <LineBreak />
+                        <Run Text="Autor: " />
+                        <Run Text="{Binding BookAuthor}" />
+                        <LineBreak />
+                        <Run Text="Rok vydání: " />
+                        <Run Text="{Binding BookYear}" />
+                        <LineBreak />
+                        <Run Text="Zvolená výchozí strana: " />
+                        <Run Text="{Binding DefaultPageId}" />
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Vertical"
+                            VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Vybrat knihu"
+                                Command="{Binding SelectBookCommand}" />
+                        <Button x:Name="SaveTaskButton">
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Save"
+                                            Margin="0,-3,3,-3" />
+                                <TextBlock Text="Uložit zadání" />
+                            </StackPanel>
+                            
+                            <Button.Flyout>
+                                <Flyout control:FlyoutHelpers.IsOpen="{Binding IsSaveFlyoutOpen, Mode=TwoWay}"
+                                        control:FlyoutHelpers.Parent="{Binding ElementName=SaveTaskButton}">
+                                    <StackPanel Width="240">
+                                        <TextBlock Text="Chystáte se uložit zadání. Následné úpravy již nebudou možné."
+                                                   TextWrapping="Wrap"
+                                                   FontSize="14" />
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Button Grid.Column="1"
+                                                    Content="Zrušit"
+                                                    Command="{Binding CancelCommand}" />
+                                            
+                                            <Button Grid.Column="2"
+                                                    Content="Uložit"
+                                                    Command="{Binding SaveTaskCommand}" />
+                                        </Grid>
+                                    </StackPanel>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
+
+                    <TextBlock Text="Vyplňte název zadání."
+                               FontSize="{StaticResource LabelFontSize}"
+                               Foreground="{StaticResource ErrorColorBrush}"
+                               Visibility="{Binding ErrorTaskNameMissing, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock Text="Vyberte nějakou knihu."
+                               FontSize="{StaticResource LabelFontSize}"
+                               Foreground="{StaticResource ErrorColorBrush}"
+                               Visibility="{Binding ErrorBookNotSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+
+        <ToggleSwitch Grid.Row="0"
+                      Grid.Column="2"
+                      Header="Zobrazit fotografii stránky"
+                      OnContent="Ano"
+                      OffContent="Ne"
+                      IsOn="{Binding IsShowPhotoEnabled, Mode=TwoWay}" />
+
+        <Border Grid.Row="1"
+                Grid.Column="0"
+                Background="#50FFFFFF"
+                BorderBrush="#30000000"
+                BorderThickness="2">
+            
+            <control1:BindableRichEditBox
+                DocumentRtf="{Binding PageRtfText}"
+                IsReadOnly="True"
+                ScrollViewer.HorizontalScrollMode="Disabled" />
+            
+        </Border>
+
+        <Grid Grid.Row="1"
+              Grid.Column="2"
+              Background="#30000000">
+            
+            <Image VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Stretch="Uniform"
+                   Source="{Binding BookPagePhoto}" />
+
+            <ProgressRing HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          IsActive="{Binding LoadingPhoto}"
+                          Width="50"
+                          Height="50" />
+        </Grid>
+
+    </Grid>
+</UserControl>

@@ -1,11 +1,10 @@
 ﻿// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker
 {    
-    public sealed partial class WebAuthView : Page
+    public sealed partial class WebAuthView
     {
         public WebAuthView(WebAuthViewModel viewModel)
         {
@@ -13,16 +12,20 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
             DataContext = viewModel;
         }
 
-        private void wv_LoadCompleted(object sender, NavigationEventArgs e)
+        private void Wv_OnNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            ((WebAuthViewModel) DataContext).BrowserTitle = Wv.DocumentTitle;//HACK for BrowserTitle cannot be bind
-            ((WebAuthViewModel)DataContext).LoadAddresCompletedCommand.Execute(e);
+            WebViewHelpers.SetBrowserTitle(sender, sender.DocumentTitle);
+            
+            var command = WebViewHelpers.GetNavigationCompletedCommand(sender);
+            if (command != null)
+                command.Execute(args);
         }
 
-        private void wv_NavigationFailed(object sender, WebViewNavigationFailedEventArgs e)
+        private void Wv_OnNavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
-            ((WebAuthViewModel)DataContext).BrowserTitle = Wv.DocumentTitle;//HACK for BrowserTitle cannot be bind
-            ((WebAuthViewModel)DataContext).NavigationFailedCommand.Execute(e);
+            var command = WebViewHelpers.GetNavigationStartingCommand(sender);
+            if (command != null)
+                command.Execute(args);
         }
     }
 }

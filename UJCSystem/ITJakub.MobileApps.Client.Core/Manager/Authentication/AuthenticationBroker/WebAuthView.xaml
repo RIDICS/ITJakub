@@ -5,10 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:authBroker="using:ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d"
     RequestedTheme="Light"
     d:DataContext="{d:DesignInstance Type=authBroker:WebAuthViewModel }">
 
+    <Page.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Page.Resources>
+    
     <Grid Background="#70000000">
         <Grid Margin="0,100,0,100">
             <Grid.RowDefinitions>
@@ -38,8 +43,14 @@
             <Grid Grid.Column="1" Grid.Row="1" Background="White" />
 
             <Grid Grid.Column="1" Grid.Row="2" Background="White">
-                <WebView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                         Source="{Binding BrowserUri, Mode=TwoWay}" Name="Wv" LoadCompleted="wv_LoadCompleted" NavigationFailed="wv_NavigationFailed">
+                <WebView HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch"
+                         Source="{Binding BrowserUri, Mode=TwoWay}"
+                         NavigationStarting="Wv_OnNavigationStarting"
+                         NavigationCompleted="Wv_OnNavigationCompleted"
+                         authBroker:WebViewHelpers.BrowserTitle="{Binding BrowserTitle, Mode=TwoWay}"
+                         authBroker:WebViewHelpers.NavigationStartingCommand="{Binding NavigationStartingCommand}"
+                         authBroker:WebViewHelpers.NavigationCompletedCommand="{Binding NavigationCompletedCommand}">
 
                     <!--<interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="LoadCompleted">
@@ -51,6 +62,23 @@
                     </interactivity:Interaction.Behaviors>-->
                 </WebView>
 
+                <TextBlock Text="Webovou stránku nelze zobrazit. Zkontrolujte připojení k internetu."
+                           FontSize="16"
+                           Margin="20,30"
+                           Foreground="#202020"
+                           TextWrapping="Wrap"
+                           IsTextSelectionEnabled="True"
+                           Visibility="{Binding IsError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                
+                <Grid Background="#B0FFFFFF"
+                      Width="80"
+                      Height="80"
+                      Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ProgressRing Width="50"
+                                  Height="50"
+                                  IsActive="{Binding Loading}"
+                                  Foreground="Gray" />
+                </Grid>
             </Grid>
         </Grid>
 

@@ -107,33 +107,57 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ApplicationTypeComparator.cs" />
+    <Compile Include="ViewModel\ComboBoxItem\SortGroupItem.cs" />
+    <Compile Include="ViewModel\ComboBoxItem\SortTaskItem.cs" />
+    <Compile Include="ViewModel\EditorHostViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\ConnectToGroupViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\CreateGroupViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\DeleteGroupViewModel.cs" />
+    <Compile Include="ViewModel\FlyoutBaseViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\SwitchGroupStateViewModel.cs" />
+    <Compile Include="ViewModel\GroupPage\GroupRemoveViewModel.cs" />
+    <Compile Include="ViewModel\GroupPage\GroupStateViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
-    <Compile Include="ViewModel\Message\SelectedApplicationMessage.cs" />
-    <Compile Include="ViewModel\Message\SelectedTaskMessage.cs" />
+    <Compile Include="ViewModel\OwnedTaskListViewModel.cs" />
+    <Compile Include="ViewModel\UserAccountSettingsViewModel.cs" />
+    <Compile Include="View\AboutSettingsFlyout.xaml.cs">
+      <DependentUpon>AboutSettingsFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\SettingsFlyoutHelper.cs" />
     <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
+    <Compile Include="View\Converter\GroupCountToStringConverter.cs" />
+    <Compile Include="View\Converter\GroupMemberToUserInfoConverter.cs" />
+    <Compile Include="View\Converter\GroupStateToNameConverter.cs" />
+    <Compile Include="View\Converter\GroupStateToSymbolConverter.cs" />
+    <Compile Include="View\Converter\IsMyOwnershipToNameConverter.cs" />
+    <Compile Include="View\Converter\MessageCountToNotificationConverter.cs" />
     <Compile Include="View\Converter\NotChosenStringConverter.cs" />
-    <Compile Include="View\ErrorBar.cs" />
-    <Compile Include="Common\RelayCommand.cs" />
-    <Compile Include="View\ErrorBarView.xaml.cs">
-      <DependentUpon>ErrorBarView.xaml</DependentUpon>
+    <Compile Include="View\Converter\BooleanToColorConverter.cs" />
+    <Compile Include="View\Control\DownArrowControl.xaml.cs">
+      <DependentUpon>DownArrowControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\ErrorBarViewModel.cs" />
+    <Compile Include="View\Converter\NotNullToVisibilityConverter.cs" />
+    <Compile Include="View\Converter\UserRoleToNameConverter.cs" />
+    <Compile Include="View\EditorHostView.xaml.cs">
+      <DependentUpon>EditorHostView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="ViewModel\ApplicationHostViewModel.cs" />
-    <Compile Include="ViewModel\Message\OpenGroupMessage.cs" />
     <Compile Include="ViewModel\SelectTaskViewModel.cs" />
     <Compile Include="View\Converter\ApplicationCategoryToNameConverter.cs" />
     <Compile Include="View\Converter\GroupTypeToNameConverter.cs" />
-    <Compile Include="ViewModel\ApplicationSelectionViewModel.cs" />
+    <Compile Include="ViewModel\SelectApplicationViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\UserMenuViewModel.cs" />
-    <Compile Include="ViewModel\GroupPageViewModel.cs" />
+    <Compile Include="ViewModel\GroupPage\GroupPageViewModel.cs" />
     <Compile Include="ViewModel\Login\RegistrationViewModel.cs" />
-    <Compile Include="View\ApplicationSelectionView.xaml.cs">
-      <DependentUpon>ApplicationSelectionView.xaml</DependentUpon>
+    <Compile Include="View\SelectApplicationView.xaml.cs">
+      <DependentUpon>SelectApplicationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="ViewModel\GroupListViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\GroupListViewModel.cs" />
     <Compile Include="ViewModel\Login\LoginViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ApplicationHostView.xaml.cs">
@@ -157,8 +181,14 @@
     <Compile Include="View\Login\UserMenu\UserMenu.xaml.cs">
       <DependentUpon>UserMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\OwnedTaskListView.xaml.cs">
+      <DependentUpon>OwnedTaskListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SelectTaskView.xaml.cs">
       <DependentUpon>SelectTaskView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserAccountSettingsFlyout.xaml.cs">
+      <DependentUpon>UserAccountSettingsFlyout.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -195,7 +225,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="View\ErrorBarView.xaml">
+    <Page Include="View\AboutSettingsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Control\DownArrowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditorHostView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -204,7 +242,7 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="View\ApplicationSelectionView.xaml">
+    <Page Include="View\SelectApplicationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -232,17 +270,30 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\OwnedTaskListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SelectTaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserAccountSettingsFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="GalaSoft.MvvmLight">
-      <HintPath>..\packages\MvvmLightLibs.4.4.32.1\lib\netcore45\GalaSoft.MvvmLight.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.0.2.32240, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras">
-      <HintPath>..\packages\MvvmLightLibs.4.4.32.1\lib\netcore45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.0.2.32242, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform">
+      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\packages\Unity.3.5.1404.0\lib\win8\Microsoft.Practices.Unity.dll</HintPath>
@@ -262,6 +313,10 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.MobileApps.Client.Books\ITJakub.MobileApps.Client.Books.csproj">
+      <Project>{c30689fe-a72c-42ec-aaf3-63a08d019c2c}</Project>
+      <Name>ITJakub.MobileApps.Client.Books</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.Client.Chat\ITJakub.MobileApps.Client.Chat.csproj">
       <Project>{0326FA0C-8278-43AF-8E76-E690FB9428CD}</Project>
       <Name>ITJakub.MobileApps.Client.Chat</Name>
@@ -269,6 +324,14 @@
     <ProjectReference Include="..\ITJakub.MobileApps.Client.Core\ITJakub.MobileApps.Client.Core.csproj">
       <Project>{A6182390-8F74-4DE0-8F37-974D9321FB74}</Project>
       <Name>ITJakub.MobileApps.Client.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.Client.Crosswords\ITJakub.MobileApps.Client.Crosswords.csproj">
+      <Project>{9754f9bd-7148-4600-8a98-c39b4073fe4d}</Project>
+      <Name>ITJakub.MobileApps.Client.Crosswords</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.Client.Fillwords\ITJakub.MobileApps.Client.Fillwords.csproj">
+      <Project>{8f75b6a6-735e-4de1-b2ae-25002a327674}</Project>
+      <Name>ITJakub.MobileApps.Client.Fillwords</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.Client.Hangman\ITJakub.MobileApps.Client.Hangman.csproj">
       <Project>{83410335-c9de-416f-8ab8-d94cb1933ffc}</Project>
@@ -282,12 +345,18 @@
       <Project>{2009029F-A9B8-4A44-AC3D-A05C1E65E1E1}</Project>
       <Name>ITJakub.MobileApps.Client.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.Client.SynchronizedReading\ITJakub.MobileApps.Client.SynchronizedReading.csproj">
+      <Project>{247f5787-b5f8-4070-9e51-e65681cd6f71}</Project>
+      <Name>ITJakub.MobileApps.Client.SynchronizedReading</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.DataContracts\ITJakub.MobileApps.DataContracts.csproj">
       <Project>{90F9D8DD-05D5-401F-8939-BD619ADF5CDD}</Project>
       <Name>ITJakub.MobileApps.DataContracts</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ViewModel\TaskList\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

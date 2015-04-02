@@ -2,9 +2,10 @@ namespace ITJakub.MobileApps.Client.Shared.Communication
 {
     public enum PollingInterval
     {
-        Fast = 1,
-        Medium = 5,
-        Slow = 10,
-        VerySlow = 30
+        VeryFast = 100,
+        Fast = 1000,
+        Medium = 5000,
+        Slow = 10000,
+        VerySlow = 30000
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ITJakub.MobileApps.Client.Hangman.DataContract;
 
@@ -19,6 +20,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             m_currentWordIndex = -1;
 
             Lives = FullLiveCount;
+            GuessedLetterCount = 0;
             m_guessedLetterSet = new HashSet<char>();
 
             PrepareNewWord();
@@ -45,6 +47,9 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public bool Loss { get { return m_lives == 0; } }
 
         public int WordOrder { get { return m_currentWordIndex; } }
+
+        public int GuessedLetterCount { get; set; }
+
         public bool IsNewWord { get; private set; }
 
         private void PrepareNewWord()
@@ -72,6 +77,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public void Guess(char letter)
         {
             IsNewWord = false;
+            letter = Char.ToUpper(letter);
             if (m_guessedLetterSet.Contains(letter) || Loss || Win)
                 return;
 
@@ -85,6 +91,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 if (letter == currentWord[i])
                 {
                     containsLetter = true;
+                    GuessedLetterCount++;
                     m_guessedLetters[i] = currentWord[i];
                 }
                 if (m_guessedLetters[i] == 0)
@@ -100,10 +107,10 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 PrepareNewWord();
         }
 
-        public void Guess(GuessLetter guessLetterObject)
+        public void Guess(GuessLetterContract guessLetterObject)
         {
             // If user guessing letter in old word (word has been guessed)
-            if (guessLetterObject.WordOrder > m_currentWordIndex)
+            if (guessLetterObject.WordOrder < m_currentWordIndex)
                 return;
 
             Guess(guessLetterObject.Letter);

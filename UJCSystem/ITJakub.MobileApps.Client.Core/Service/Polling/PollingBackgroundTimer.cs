@@ -14,7 +14,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
 
         public PollingBackgroundTimer(PollingInterval interval)
         {
-            m_timeSpan = new TimeSpan(0, 0, (int) interval);
+            m_timeSpan = new TimeSpan(0, 0, 0, 0, (int) interval);
             m_actions = new List<Action>();
         }
 
@@ -33,7 +33,8 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
         {
             lock (this)
             {
-                m_actions.Remove(action);   
+                m_actions.Remove(action);
+                StopTimer();
             }
         }
 
@@ -42,6 +43,16 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
             lock (this)
             {
                 m_actions.Clear();
+                StopTimer();
+            }
+        }
+
+        private void StopTimer()
+        {
+            if (m_actions.Count == 0 && m_timer != null)
+            {
+                m_timer.Cancel();
+                m_timer = null;
             }
         }
 
@@ -70,7 +81,7 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
                     lock (this)
                     {
                         remainingActions--;
-                        if (remainingActions == 0)
+                        if (remainingActions == 0 && m_timer != null)
                             m_timer = ThreadPoolTimer.CreateTimer(OnTimerTick, m_timeSpan);
                     }
                 });

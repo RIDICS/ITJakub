@@ -1,7 +1,6 @@
 ﻿using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Service;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
@@ -12,9 +11,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
         private string m_lastName;
         private string m_firstName;
         private ImageSource m_userAvatar;
-        private readonly NavigationService m_navigationService;
+        private readonly INavigationService m_navigationService;
 
-        public UserMenuViewModel(IDataService dataService, NavigationService navigationService)
+        public UserMenuViewModel(IDataService dataService, INavigationService navigationService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
@@ -26,12 +25,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
 
         private void LoadInitData()
         {
-            m_dataService.GetLoggedUserInfo((userInfo, exception) =>
+            m_dataService.GetLoggedUserInfo(true, userInfo =>
             {
-                if (exception != null)
-                    return;
-                
-
                 FirstName = userInfo.FirstName;
                 LastName = userInfo.LastName;
                 UserAvatar = userInfo.UserAvatar;
@@ -44,7 +39,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu
             {
                 m_dataService.LogOut();
                 m_navigationService.GoHome();
-                Messenger.Default.Send(new LogOutMessage());
+                MessengerInstance.Send(new LogOutMessage());
             });
         }
 

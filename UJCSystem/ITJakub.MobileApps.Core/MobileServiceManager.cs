@@ -76,6 +76,12 @@ namespace ITJakub.MobileApps.Core
             return m_applicationManager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
         }
 
+        public SynchronizedObjectResponseContract GetLatestSynchronizedObject(long groupId, int applicationId, string objectType,
+            DateTime since)
+        {
+            return m_applicationManager.GetLatestSynchronizedObject(groupId, applicationId, objectType, since);
+        }
+
         public IList<ApplicationContract> GetAllApplication()
         {
             return m_applicationManager.GetAllApplication();
@@ -101,6 +107,11 @@ namespace ITJakub.MobileApps.Core
             return m_taskManager.GetTasksByApplication(applicationId);
         }
 
+        public IList<TaskDetailContract> GetTasksByAuthor(long userId)
+        {
+            return m_taskManager.GetTasksByAuthor(userId);
+        }
+
         public void CreateTask(long userId, int applicationId, string name, string data)
         {
             m_taskManager.CreateTask(userId, applicationId, name, data);
@@ -109,6 +120,21 @@ namespace ITJakub.MobileApps.Core
         public TaskContract GetTaskForGroup(long groupId)
         {
             return m_taskManager.GetTaskForGroup(groupId);
+        }
+
+        public GroupStateContract GetGroupState(long groupId)
+        {
+            return m_groupManager.GetGroupState(groupId);
+        }
+
+        public void UpdateGroupState(long groupId, GroupStateContract state)
+        {
+            m_groupManager.UpdateGroupState(groupId, state);
+        }
+
+        public void RemoveGroup(long groupId)
+        {
+            m_groupManager.RemoveGroup(groupId);
         }
     }
 }

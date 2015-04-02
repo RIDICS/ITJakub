@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders;
-using ITJakub.MobileApps.Client.Core.Manager.Communication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
+using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 using Microsoft.Practices.Unity;
-using Task = System.Threading.Tasks.Task;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
@@ -26,7 +25,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             m_serviceClient = container.Resolve<MobileAppsServiceClient>();
             m_userAvatarCache = container.Resolve<UserAvatarCache>();
-            LoadLoginProviders(Container.Current.ResolveAll<ILoginProvider>());
+            LoadLoginProviders(container.ResolveAll<ILoginProvider>());
         }
         
         private void LoadLoginProviders(IEnumerable<ILoginProvider> providers)
@@ -117,8 +116,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             try
             {
-                UserLoginSkeleton userLoginSkeleton = await CreateUserAsync(loginProviderType);//TODO spravit bug... registrace a login nemohou jet naraz v ruznych vlaknech, protoze pak to obcas spadne na user not authorized exception
+                UserLoginSkeleton userLoginSkeleton = await CreateUserAsync(loginProviderType);
                 callback(userLoginSkeleton.Success, null);
+            }
+            catch (UserAlreadyRegisteredException exception)
+            {
+                callback(false, exception);
             }
             catch (ClientCommunicationException exception)
             {
@@ -126,21 +129,33 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             }
         }
 
-        public async void GetLoggedUserInfo(Action<LoggedUserViewModel, Exception> callback)
+        public async void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
+            if (UserLoginInfo == null)
+            {
+                callback(null);
+                return;
+            }
+
             var viewModel = GetLoggedUserViewModel();
-            callback(viewModel, null);
-            viewModel.UserAvatar = await m_userAvatarCache.GetUserAvatar(UserLoginInfo.UserId);
-            callback(viewModel, null);
+            callback(viewModel);
+
+            if (getUserAvatar)
+            {
+                viewModel.UserAvatar = await m_userAvatarCache.GetUserAvatar(UserLoginInfo.UserId);
+                callback(viewModel);
+            }
         }
 
         private LoggedUserViewModel GetLoggedUserViewModel()
         {
             var viewModel = new LoggedUserViewModel
             {
+                UserId = UserLoginInfo.UserId,
                 FirstName = UserLoginInfo.FirstName,
                 LastName = UserLoginInfo.LastName,
-                UserRole = UserLoginInfo.UserRole
+                Email = UserLoginInfo.Email,
+                UserRole = UserRoleContract.Teacher // TODO direct Teacher role assignment for testing
             };
             return viewModel;
         }
@@ -149,6 +164,5 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             return UserLoginInfo == null ? (long?) null : UserLoginInfo.UserId;
         }
-
     }
 }

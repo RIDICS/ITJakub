@@ -7,14 +7,13 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:login="using:ITJakub.MobileApps.Client.MainApp.View.Login"
-    xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
-    x:Name="PageRoot"
     DataContext="{Binding LoginViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
     <Page.Resources>
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <login:LoginProviderToIconConverter x:Key="LoginProviderToIcon" />
     </Page.Resources>
 
@@ -44,7 +43,8 @@
             </Grid.ColumnDefinitions>
             <Button Margin="39,59,39,0"
                     VerticalAlignment="Top"
-                    Command="{Binding NavigationHelper.GoBackCommand, ElementName=PageRoot}"
+                    Command="{Binding GoBackCommand}"
+                    IsEnabled="False"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
@@ -60,12 +60,12 @@
         </Grid>
 
         <TextBlock Grid.Row="1"
-                   Margin="120 0 20 0"
+                   Margin="120,0,20,0"
                    Style="{StaticResource SubheaderTextBlockStyle}"
                    Text="Zvolte si službu, pomocí které jste provedli registraci." />
 
         <ListView Grid.Row="1"
-                  Padding="15 40 0 40"
+                  Padding="15,40,0,40"
                   HorizontalAlignment="Center"
                   SelectionMode="None"
                   IsItemClickEnabled="True"
@@ -105,7 +105,7 @@
                     VerticalAlignment="Center"
                     Orientation="Horizontal"
                     Background="White"
-                    Visibility="{Binding LoginDialogVisibility}">
+                    Visibility="{Binding LoggingIn, Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <ProgressRing Width="40"
                           Height="40"

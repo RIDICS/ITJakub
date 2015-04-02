@@ -6,6 +6,7 @@ using ITJakub.MobileApps.Client.Hangman.ViewModel;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
+using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Hangman
 {
@@ -32,6 +33,16 @@ namespace ITJakub.MobileApps.Client.Hangman
         public override Type ApplicationDataTemplate
         {
             get { return typeof (HangmanView); }
+        }
+
+        public override EditorBaseViewModel EditorViewModel
+        {
+            get { return new HangmanEditorViewModel(m_dataService); }
+        }
+
+        public override Type EditorDataTemplate
+        {
+            get { return typeof(HangmanEditorView); }
         }
 
         public override ApplicationRoleType ApplicationRoleType

@@ -8,8 +8,4 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
         public Uri Uri { get; set; }
         public string DocumentTitle { get; set; }
     }
-
-    public class AuthBrokerUriNavigationFailedMessage:AuthBrokerUriChangedMessage
-    {
-    }
 }

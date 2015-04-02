@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Security.Authentication.Web;
@@ -26,6 +27,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
 
         public string AccountName { get { return "Google"; } }
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.Google; } }
+
         public async Task<UserLoginSkeleton> LoginAsync()
         {
             var startUri = new Uri(string.Format(StartUri, ClientId, RedirectUri));
@@ -59,7 +61,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
                         return userInfo;
                 }
             }
-            catch (Exception)
+            catch (IOException)
             {
                 // Authentication failed. Handle parameter, SSL/TLS, and Network Unavailable errors here. 
                 // resultSring = ex.Message;
