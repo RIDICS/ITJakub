@@ -1,4 +1,4 @@
-using ITJakub.SearchService.Core.Exist.Attributes;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist
 {
@@ -11,13 +11,13 @@ namespace ITJakub.SearchService.Core.Exist
             m_existSettings = existSettings;
         }
 
-        public string GetResourceUriTemplate(ResourceLevelType type)
+        public string GetResourceUriTemplate(ResourceLevelEnumContract type)
         {
             switch (type)
             {
-                case ResourceLevelType.Book:
+                case ResourceLevelEnumContract.Book:
                     return GetBookResourceUriTemplate();
-                case ResourceLevelType.Shared:
+                case ResourceLevelEnumContract.Shared:
                     return GetSharedResourceUriTemplate();
                 default:
                     return GetVersionResourceUriTemplate();
@@ -46,6 +46,21 @@ namespace ITJakub.SearchService.Core.Exist
         {
             return string.Format("{0}{1}/{{0}}", m_existSettings.BaseUri,
                 m_existSettings.ResourceRelativeUri);
+        }
+
+        public string GetTransformationUri(string transformationName, ResourceLevelEnumContract transformationLevel, string bookGuid, string bookVersion)
+        {
+            switch (transformationLevel)
+            {
+                case ResourceLevelEnumContract.Book:
+                    return string.Format("{0}{1}/{2}", m_existSettings.ResourceRelativeUri, bookGuid, transformationName);
+                case ResourceLevelEnumContract.Version:
+                    return string.Format("{0}{1}/{2}/{3}", m_existSettings.ResourceRelativeUri, bookGuid, bookVersion, transformationName);
+                case ResourceLevelEnumContract.Shared:
+                    return string.Format("{0}{1}", m_existSettings.TransformationRelativeUri, transformationName);
+                default:
+                    return "";
+            }
         }
     }
 }

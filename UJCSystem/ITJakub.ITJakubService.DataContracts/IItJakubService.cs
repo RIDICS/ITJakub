@@ -21,13 +21,13 @@ namespace ITJakub.ITJakubService.DataContracts
         IEnumerable<AuthorDetailContract> GetAllAuthors();
 
         [OperationContract]
-        Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, string resultFormat);
+        Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
-        Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, string resultFormat);
+        Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
-        Task<string> GetBookPageByPositionAsync(string bookGuid, int position, string resultFormat);
+        Task<string> GetBookPageByPositionAsync(string bookGuid, int position, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
         Task<IList<BookPageContract>> GetBookPageListAsync(string bookGuid);

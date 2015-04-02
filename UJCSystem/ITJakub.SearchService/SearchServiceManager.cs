@@ -15,19 +15,19 @@ namespace ITJakub.SearchService
         }
 
         public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition,
-            string transformationName)
+            string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName);
+            return await m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName)
+        public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName);
+            return await m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName)
+        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName);
+            return await m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName, transformationLevel);
         }
 
         public async Task UploadVersionFileAsync(VersionResourceUploadContract contract)

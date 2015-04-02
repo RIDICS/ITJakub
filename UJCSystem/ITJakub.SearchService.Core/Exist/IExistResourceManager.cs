@@ -1,11 +1,13 @@
-using ITJakub.SearchService.Core.Exist.Attributes;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist
 {
     public interface IExistResourceManager
     {
-        string GetResourceUriTemplate(ResourceLevelType type);
+        string GetResourceUriTemplate(ResourceLevelEnumContract type);
 
         string GetQueryUriTemplate(string xqueryName, string queryStringParams);
+
+        string GetTransformationUri(string transformationName, ResourceLevelEnumContract transformationLevel, string bookGuid, string bookVersion);
     }
 }

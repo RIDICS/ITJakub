@@ -95,7 +95,7 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public async Task<string> GetBookPageByNameAsync(string documentId, string pageName, string resultFormat)
+        public async Task<string> GetBookPageByNameAsync(string documentId, string pageName, OutputFormatEnumContract resultFormat)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string documentId, string startPageName, string endPageName, string resultFormat)
+        public async Task<string> GetBookPagesByNameAsync(string documentId, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public async Task<string> GetBookPageByPositionAsync(string documentId, int position, string resultFormat)
+        public async Task<string> GetBookPageByPositionAsync(string documentId, int position, OutputFormatEnumContract resultFormat)
         {
             try
             {

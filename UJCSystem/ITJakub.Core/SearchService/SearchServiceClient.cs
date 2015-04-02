@@ -13,11 +13,11 @@ namespace ITJakub.Core.SearchService
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName)
+        public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return await Channel.GetBookPageByPositionAsync(bookId, versionId, pagePosition, transformationName);
+                return await Channel.GetBookPageByPositionAsync(bookId, versionId, pagePosition, transformationName, transformationLevel);
             }
             catch (CommunicationException ex)
             {
@@ -39,11 +39,11 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName)
+        public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return await Channel.GetBookPageByNameAsync(bookId, versionId, pageName, transformationName);
+                return await Channel.GetBookPageByNameAsync(bookId, versionId, pageName, transformationName, transformationLevel);
             }
             catch (CommunicationException ex)
             {
@@ -65,11 +65,11 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName)
+        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return await Channel.GetBookPagesByNameAsync(bookId, versionId, startPageName, endPageName, transformationName);
+                return await Channel.GetBookPagesByNameAsync(bookId, versionId, startPageName, endPageName, transformationName, transformationLevel);
             }
             catch (CommunicationException ex)
             {

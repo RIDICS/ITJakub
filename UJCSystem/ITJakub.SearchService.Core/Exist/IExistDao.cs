@@ -2,6 +2,7 @@ using System.IO;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using ITJakub.SearchService.Core.Exist.Attributes;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist
 {
@@ -25,15 +26,15 @@ namespace ITJakub.SearchService.Core.Exist
         Task<string> GetPagesByName(string bookId, string versionId, string start, string end);
 
         [OperationContract]
-        [ExistResource(Method = "PUT", Type = ResourceLevelType.Version)]
+        [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Version)]
         Task UploadVersionFileAsync(string bookId, string versionId, string fileName, Stream dataStream);
 
         [OperationContract]
-        [ExistResource(Method = "PUT", Type = ResourceLevelType.Book)]
+        [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Book)]
         Task UploadBookFileAsync(string bookId, string fileName, Stream dataStream);
 
         [OperationContract]
-        [ExistResource(Method = "PUT", Type = ResourceLevelType.Shared)]
+        [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Shared)]
         Task UploadSharedFileAsync(string fileName, Stream dataStream);
     }
 }

@@ -8,13 +8,13 @@ namespace ITJakub.Shared.Contracts
     public interface ISearchService
     {
         [OperationContract]
-        Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName);
+        Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
-        Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName);
+        Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
-        Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName);
+        Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
         Task<IList<BookPageContract>> GetBookPageListAsync(string bookId,string versionId);
