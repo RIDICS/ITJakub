@@ -16,8 +16,8 @@ class ReaderModule {
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
-        this.preloadPagesBefore = 2;
-        this.preloadPagesAfter = 2;
+        this.preloadPagesBefore = 5;
+        this.preloadPagesAfter = 10;
     }
 
     private downloadPageByPosition(pagePosition: number, pageContainer: JQuery) {

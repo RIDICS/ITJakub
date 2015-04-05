@@ -3,8 +3,8 @@ var ReaderModule = (function () {
     function ReaderModule(readerContainer) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
-        this.preloadPagesBefore = 2;
-        this.preloadPagesAfter = 2;
+        this.preloadPagesBefore = 5;
+        this.preloadPagesAfter = 10;
     }
     ReaderModule.prototype.downloadPageByPosition = function (pagePosition, pageContainer) {
         $(pageContainer).addClass("loading");
