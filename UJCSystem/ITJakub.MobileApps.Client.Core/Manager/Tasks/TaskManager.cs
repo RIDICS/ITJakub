@@ -31,13 +31,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
             {
                 var currentUserId = m_authenticationManager.GetCurrentUserId();
                 var userId = currentUserId.HasValue ? currentUserId.Value : 0;
-                var applicationId = m_applicationIdManager.GetApplicationId(application);
+                var applicationId = await m_applicationIdManager.GetApplicationId(application);
 
                 var taskList = await m_client.GetTasksByApplicationAsync(applicationId);
+                await m_applicationIdManager.LoadAllApplications(); // ensure that all application IDs are loaded
                 var tasks = new ObservableCollection<TaskViewModel>(taskList.Select(task => new TaskViewModel
                 {
                     Id = task.Id,
-                    Application = m_applicationIdManager.GetApplicationType(task.ApplicationId),
+                    Application = m_applicationIdManager.GetApplicationType(task.ApplicationId).Result, // all IDs are loaded -> no communication with server
                     Name = task.Name,
                     CreateTime = task.CreateTime,
                     Data = task.Data,
@@ -89,7 +90,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
 
                 var task = new TaskViewModel
                 {
-                    Application = m_applicationIdManager.GetApplicationType(result.ApplicationId),
+                    Application = await m_applicationIdManager.GetApplicationType(result.ApplicationId),
                     Id = result.Id,
                     Data = result.Data
                 };
@@ -114,10 +115,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     return;
 
                 var result = await m_client.GetTasksByAuthor(userId.Value);
+                await m_applicationIdManager.LoadAllApplications(); // ensure that all application IDs are loaded
                 var taskList = new ObservableCollection<TaskViewModel>(result.Select(task => new TaskViewModel
                 {
                     Id = task.Id,
-                    Application = m_applicationIdManager.GetApplicationType(task.ApplicationId),
+                    Application = m_applicationIdManager.GetApplicationType(task.ApplicationId).Result, // all IDs are loaded -> no communication with server
                     Name = task.Name,
                     CreateTime = task.CreateTime,
                     Data = task.Data,

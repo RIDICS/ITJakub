@@ -205,7 +205,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 {
                     group.Task = new TaskViewModel
                     {
-                        Application = m_applicationIdManager.GetApplicationType(task.ApplicationId),
+                        Application = await m_applicationIdManager.GetApplicationType(task.ApplicationId),
                         Id = task.Id,
                         Name = task.Name,
                         CreateTime = task.CreateTime
