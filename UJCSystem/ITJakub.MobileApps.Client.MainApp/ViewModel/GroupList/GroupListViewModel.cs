@@ -43,6 +43,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private bool m_canRemoveSelected;
         private bool m_canPauseSelected;
         private bool m_canStartSelected;
+        private bool m_isGroupListEmpty;
 
         public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
@@ -52,7 +53,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_errorService = errorService;
 
             m_selectedGroups = new List<GroupInfoViewModel>();
-            GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>();
             m_userRole = UserRoleContract.Student;
             
             Messenger.Default.Register<LogOutMessage>(this, message =>
@@ -91,7 +91,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             {
                 m_groupList = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(() => IsGroupListEmpty);
+                IsGroupListEmpty = m_groupList.Count == 0;
             }
         }
 
@@ -137,7 +137,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         public bool IsGroupListEmpty
         {
-            get { return m_groupList.Count == 0; }
+            get { return m_isGroupListEmpty; }
+            set
+            {
+                m_isGroupListEmpty = value;
+                RaisePropertyChanged();
+            }
         }
 
         public bool Loading
