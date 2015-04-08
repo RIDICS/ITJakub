@@ -12,7 +12,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private bool m_isTextEditingEnabled;
         private string m_bookName;
         private string m_bookAuthor;
-        private int? m_bookYear;
+        private string m_publishDate;
         private string m_bookRtfContent;
         private bool m_errorNameMissing;
         private bool m_errorPageEmpty;
@@ -66,12 +66,12 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
-        public int? BookYear
+        public string PublishDate
         {
-            get { return m_bookYear; }
+            get { return m_publishDate; }
             set
             {
-                m_bookYear = value;
+                m_publishDate = value;
                 RaisePropertyChanged();
             }
         }
@@ -148,9 +148,9 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 return;
 
             IsTextEditingEnabled = false;
-            BookAuthor = book.BookInfo.Author;
+            BookAuthor = book.BookInfo.Authors;
             BookName = book.BookInfo.Title;
-            BookYear = book.BookInfo.Year;
+            PublishDate = book.BookInfo.PublishDate;
             BookRtfContent = book.RtfText;
         }
 

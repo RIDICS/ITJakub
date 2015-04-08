@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
@@ -8,6 +9,7 @@ using ITJakub.MobileApps.Client.Books.Enum;
 using ITJakub.MobileApps.Client.Books.Message;
 using ITJakub.MobileApps.Client.Books.Service;
 using ITJakub.MobileApps.Client.Books.View;
+using ITJakub.MobileApps.Client.Books.ViewModel.ComboBoxItem;
 using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.ViewModel
@@ -35,6 +37,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             BookClickCommand = new RelayCommand<ItemClickEventArgs>(BookClick);
             SearchCommand = new RelayCommand(Search);
             
+            m_selectedCategory = CategoryContract.Grammar;
+
             LoadData();
         }
 
@@ -92,6 +96,9 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             get { return m_selectedCategory; }
             set
             {
+                if (m_selectedCategory == value)
+                    return;
+
                 m_selectedCategory = value;
                 if (IsSearchResult)
                     Search();
@@ -146,6 +153,33 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             {
                 m_isSearchResult = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<CategoryItem> BookCategoryList
+        {
+            get
+            { 
+                return new ObservableCollection<CategoryItem>
+                {
+                    new CategoryItem{Category = CategoryContract.Grammar, Name = "Mluvnice"},
+                    new CategoryItem{Category = CategoryContract.Edition, Name = "Edice"},
+                    new CategoryItem{Category = CategoryContract.Dictionary, Name = "Slovníky"},
+                    new CategoryItem{Category = CategoryContract.ProfessionalLiterature, Name = "Odborná literatura"},
+                };
+            }
+        }
+
+        public ObservableCollection<SortItem> SortTypeList
+        {
+            get
+            {
+                return new ObservableCollection<SortItem>
+                {
+                    new SortItem{Type = SortByType.Name, Name = "Seřadit podle názvu"},
+                    new SortItem{Type = SortByType.Author, Name = "Seřadit podle autora"},
+                    new SortItem{Type = SortByType.Year, Name = "Seřadit podle roku"},
+                };
             }
         }
 
@@ -207,13 +241,13 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             switch (SelectedSortType)
             {
                 case SortByType.Author:
-                    sortedList = BookList.OrderBy(book => book.Author);
+                    sortedList = BookList.OrderBy(book => book.Authors);
                     break;
                 case SortByType.Name:
                     sortedList = BookList.OrderBy(book => book.Title);
                     break;
                 case SortByType.Year:
-                    sortedList = BookList.OrderBy(book => book.Year);
+                    sortedList = BookList.OrderBy(book => book.PublishDate);
                     break;
                 default:
                     sortedList = BookList.OrderBy(book => book.Title);
@@ -228,8 +262,10 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             if (m_originalBookList == null)
                 return;
 
-            var filteredList = m_originalBookList.Where(book => FilterFromYear <= book.Year && book.Year <= FilterToYear);
-            m_bookList = new ObservableCollection<BookViewModel>(filteredList);
+            //TODO fix filter
+            //var filteredList = m_originalBookList.Where(book => FilterFromYear <= book.PublishDate && book.PublishDate <= FilterToYear);
+            //m_bookList = new ObservableCollection<BookViewModel>(filteredList);
+            m_bookList = m_originalBookList;
 
             Sort();
         }

@@ -17,7 +17,7 @@ namespace ITJakub.MobileApps.MobileContracts
         IList<string> GetPageList(string bookGuid);
 
         [OperationContract]
-        Stream GetPageAsRtf(string bookGuid, string pageId);
+        string GetPageAsRtf(string bookGuid, string pageId);
 
         [OperationContract]
         Stream GetPagePhoto(string bookGuid, string pageId);

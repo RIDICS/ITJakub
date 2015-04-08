@@ -47,22 +47,110 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
 
         public Task<IList<BookContract>> SearchForBookAsync(CategoryContract category, SearchDestinationContract searchBy, string query)
         {
-            return null;
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.SearchForBook(category, searchBy, query);
+                }
+                catch (FaultException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+            });
         }
 
         public Task<IList<string>> GetPageListAsync(string bookGuid)
         {
-            return null;
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetPageList(bookGuid);
+                }
+                catch (FaultException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+            });
         }
 
-        public Task<Stream> GetPageAsRtfAsync(string bookGuid, string pageId)
+        public Task<string> GetPageAsRtfAsync(string bookGuid, string pageId)
         {
-            return null;
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetPageAsRtf(bookGuid, pageId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+            });
         }
 
         public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
         {
-            return null;
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetPagePhoto(bookGuid, pageId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+            });
         }
 
         #region enpoint settings

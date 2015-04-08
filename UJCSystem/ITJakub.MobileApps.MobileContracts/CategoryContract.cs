@@ -3,21 +3,18 @@
 namespace ITJakub.MobileApps.MobileContracts
 {
     [DataContract]
-    public enum CategoryContract
+    public enum CategoryContract : byte
     {
         [EnumMember]
-        Dictionary,
+        Edition = 0,
+        
+        [EnumMember]
+        Dictionary = 1,
+        
+        [EnumMember]
+        Grammar = 2,
 
         [EnumMember]
-        Edition,
-
-        [EnumMember]
-        OldBohemainTextBank,
-
-        [EnumMember]
-        OldGrammar,
-
-        [EnumMember]
-        ProfessionalLiterature
+        ProfessionalLiterature = 3
     }
 }

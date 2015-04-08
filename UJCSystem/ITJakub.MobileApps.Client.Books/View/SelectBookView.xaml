@@ -115,36 +115,20 @@
                       PlaceholderText="Mluvnice"
                       SelectedValuePath="Category"
                       DisplayMemberPath="Name"
+                      ItemsSource="{Binding BookCategoryList}"
                       SelectedValue="{Binding SelectedCategory, Mode=TwoWay}"
-                      SelectedIndex="{Binding DefaultSelectionIndex}">
-                <comboBoxItem:CategoryItem Name="Staročeská textová banka"
-                                        Category="OldBohemainTextBank" />
-                <comboBoxItem:CategoryItem Name="Mluvnice"
-                                        Category="OldGrammar" />
-                <comboBoxItem:CategoryItem Name="Edice"
-                                        Category="Edition" />
-                <comboBoxItem:CategoryItem Name="Slovníky"
-                                        Category="Dictionary" />
-                <comboBoxItem:CategoryItem Name="Odborná literatura"
-                                        Category="ProfessionalLiterature" />
-            </ComboBox>
+                      SelectedIndex="{Binding DefaultSelectionIndex}" />
             
             <ComboBox Margin="50,0,0,0"
                       Style="{StaticResource TextComboBoxStyle}"
                       PlaceholderText="Seřadit podle názvu"
                       SelectedValuePath="Type"
                       DisplayMemberPath="Name"
+                      ItemsSource="{Binding SortTypeList}"
                       SelectedValue="{Binding SelectedSortType, Mode=TwoWay}"
-                      SelectedIndex="{Binding DefaultSelectionIndex}">
-                <comboBoxItem:SortItem Name="Seřadit podle názvu"
-                                    Type="Name" />
-                <comboBoxItem:SortItem Name="Seřadit podle autora"
-                                    Type="Author" />
-                <comboBoxItem:SortItem Name="Seřadit podle roku"
-                                    Type="Year" />
-            </ComboBox>
+                      SelectedIndex="{Binding DefaultSelectionIndex}" />
 
-            <ComboBox Margin="100,0,0,0"
+            <!--<ComboBox Margin="100,0,0,0"
                       Style="{StaticResource TextComboBoxStyle}"
                       PlaceholderText="Od roku 1900"
                       DisplayMemberPath="Name"
@@ -180,7 +164,7 @@
                                           Value="1799" />
                 <comboBoxItem:FilterYearItem Name="Do roku 1899"
                                           Value="1899" />
-            </ComboBox>
+            </ComboBox>-->
         </StackPanel>
         
         <GridView Grid.Row="2"
@@ -213,8 +197,8 @@
                                     Orientation="Vertical">
                             <TextBlock Text="{Binding Title}"
                                        FontWeight="Bold" />
-                            <TextBlock Text="{Binding Author}" />
-                            <TextBlock Text="{Binding Year}" />
+                            <TextBlock Text="{Binding Authors}" />
+                            <TextBlock Text="{Binding PublishDate}" />
                         </StackPanel>
                     </Grid>
                 </DataTemplate>

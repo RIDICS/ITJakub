@@ -145,10 +145,10 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
 
             var bookDetails = new BookViewModel
             {
-                Author = Book.Author,
+                Authors = Book.Authors,
                 Guid = Book.Guid,
                 Title = Book.Title,
-                Year = Book.Year
+                PublishDate = Book.PublishDate
             };
             var pageDetails = new BookPageViewModel
             {

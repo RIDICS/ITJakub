@@ -11,7 +11,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private readonly ReaderDataService m_dataService;
         private string m_bookName;
         private string m_bookAuthor;
-        private int? m_bookYear;
+        private string m_publishDate;
         private string m_defaultPageId;
         private string m_pageRtfText;
         private bool m_isSaveFlyoutOpen;
@@ -58,12 +58,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             }
         }
 
-        public int? BookYear
+        public string PublishDate
         {
-            get { return m_bookYear; }
+            get { return m_publishDate; }
             set
             {
-                m_bookYear = value;
+                m_publishDate = value;
                 RaisePropertyChanged();
             }
         }
@@ -163,9 +163,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 return;
 
             m_dataService.SetCurrentBook(book.BookInfo.Guid, book.PageId);
-            BookAuthor = book.BookInfo.Author;
+            BookAuthor = book.BookInfo.Authors;
             BookName = book.BookInfo.Title;
-            BookYear = book.BookInfo.Year;
+            PublishDate = book.BookInfo.PublishDate;
             DefaultPageId = book.PageId;
             PageRtfText = book.RtfText;
             BookPagePhoto = book.PagePhoto;

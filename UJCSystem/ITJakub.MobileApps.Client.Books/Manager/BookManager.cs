@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Books.Manager.Cache;
 using ITJakub.MobileApps.Client.Books.Service.Client;
@@ -33,13 +35,25 @@ namespace ITJakub.MobileApps.Client.Books.Manager
             { 
                 return new BookViewModel
                 {
-                    Author = m_currentBook.Author,
+                    Authors = m_currentBook.Authors,
                     Guid = m_currentBook.Guid,
                     Title = m_currentBook.Title,
-                    Year =  m_currentBook.Year
+                    PublishDate =  m_currentBook.PublishDate
                 };
             }
             set { m_currentBook = value; }
+        }
+
+        private string GetAuthorStringFromList(IEnumerable<AuthorContract> authors)
+        {
+            const string authorDelimeter = ", ";
+            var stringBuilder = new StringBuilder();
+            foreach (var authorContract in authors)
+            {
+                stringBuilder.Append(authorContract.Name).Append(authorDelimeter);
+            }
+            stringBuilder.Length -= authorDelimeter.Length;
+            return stringBuilder.ToString();
         }
 
         public async void GetBookList(CategoryContract category, Action<ObservableCollection<BookViewModel>, Exception> callback)
@@ -49,10 +63,10 @@ namespace ITJakub.MobileApps.Client.Books.Manager
                 var list = await m_serviceClient.GetBookListAsync(category);
                 var viewModelList = list.Select(contract => new BookViewModel
                 {
-                    Author = contract.Author,
+                    Authors = GetAuthorStringFromList(contract.Authors),
                     Guid = contract.Guid,
                     Title = contract.Title,
-                    Year = contract.Year
+                    PublishDate = contract.PublishDate
                 });
                 callback(new ObservableCollection<BookViewModel>(viewModelList), null);
             }
@@ -69,10 +83,10 @@ namespace ITJakub.MobileApps.Client.Books.Manager
                 var list = await m_serviceClient.SearchForBookAsync(category, searchDestination, query);
                 var viewModelList = list.Select(contract => new BookViewModel
                 {
-                    Author = contract.Author,
+                    Authors = GetAuthorStringFromList(contract.Authors),
                     Guid = contract.Guid,
                     Title = contract.Title,
-                    Year = contract.Year
+                    PublishDate = contract.PublishDate
                 });
                 callback(new ObservableCollection<BookViewModel>(viewModelList), null);
             }
