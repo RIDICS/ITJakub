@@ -164,6 +164,7 @@
     <Compile Include="View\Control\ZoomBarControl.xaml.cs">
       <DependentUpon>ZoomBarControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Converter\NoAuthorConverter.cs" />
     <Compile Include="View\Converter\PageOrderToLabelConverter.cs" />
     <Compile Include="View\Converter\RangeToZoomFactorConverter.cs" />
     <Compile Include="View\Converter\RangeToZoomPercentConverter.cs" />

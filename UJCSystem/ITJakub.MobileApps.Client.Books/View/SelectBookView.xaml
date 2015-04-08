@@ -13,6 +13,7 @@
     <Page.Resources>
         <ResourceDictionary>
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converter:NoAuthorConverter x:Key="NoAuthorConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -197,7 +198,7 @@
                                     Orientation="Vertical">
                             <TextBlock Text="{Binding Title}"
                                        FontWeight="Bold" />
-                            <TextBlock Text="{Binding Authors}" />
+                            <TextBlock Text="{Binding Authors, Converter={StaticResource NoAuthorConverter}}" />
                             <TextBlock Text="{Binding PublishDate}" />
                         </StackPanel>
                     </Grid>

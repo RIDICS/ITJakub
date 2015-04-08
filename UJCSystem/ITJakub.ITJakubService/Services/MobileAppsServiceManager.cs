@@ -1,34 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Castle.Windsor;
+using ITJakub.ITJakubService.Core;
 using ITJakub.MobileApps.MobileContracts;
+using OutputFormatEnumContract = ITJakub.Shared.Contracts.OutputFormatEnumContract;
 
 namespace ITJakub.ITJakubService.Services
 {
     public class MobileAppsServiceManager : IMobileAppsService
     {
+        private readonly BookManager m_bookManager;
+        private readonly MobileManager m_mobileManager;
+        private readonly WindsorContainer m_container = Container.Current;
+        
+        public MobileAppsServiceManager()
+        {
+            m_bookManager = m_container.Resolve<BookManager>();
+            m_mobileManager = m_container.Resolve<MobileManager>();
+        }
+
         public IList<BookContract> GetBookList(CategoryContract category)
         {
-            return new List<BookContract> {new BookContract{Author = "Pepa", Title = "Aaaaa"}};
+            return m_mobileManager.GetBooksByCategory(category);
         }
 
         public IList<BookContract> SearchForBook(CategoryContract category, SearchDestinationContract searchBy, string query)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IList<string> GetPageList(string bookGuid)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public Stream GetPageAsRtf(string bookGuid, string pageId)
+        public string GetPageAsRtf(string bookGuid, string pageId)
         {
-            throw new System.NotImplementedException();
+            // TODO switch contracts to async
+            return m_bookManager.GetBookPageByNameAsync(bookGuid, pageId, OutputFormatEnumContract.Rtf).Result;
         }
 
         public Stream GetPagePhoto(string bookGuid, string pageId)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

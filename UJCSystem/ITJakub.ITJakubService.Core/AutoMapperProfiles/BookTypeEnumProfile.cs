@@ -9,6 +9,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<BookTypeEnum, BookTypeEnumContract>().ReverseMap();
+            CreateMap<BookTypeEnum, MobileApps.MobileContracts.CategoryContract>().ReverseMap();
         }
     }
 }

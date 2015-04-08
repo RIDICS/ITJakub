@@ -46,13 +46,17 @@ namespace ITJakub.MobileApps.Client.Books.Manager
 
         private string GetAuthorStringFromList(IEnumerable<AuthorContract> authors)
         {
-            const string authorDelimeter = ", ";
+            const string authorDelimiter = ", ";
             var stringBuilder = new StringBuilder();
             foreach (var authorContract in authors)
             {
-                stringBuilder.Append(authorContract.Name).Append(authorDelimeter);
+                stringBuilder.Append(authorContract.Name).Append(authorDelimiter);
             }
-            stringBuilder.Length -= authorDelimeter.Length;
+            if (stringBuilder.Length > 0)
+            {
+                stringBuilder.Length -= authorDelimiter.Length;
+            }
+
             return stringBuilder.ToString();
         }
 
