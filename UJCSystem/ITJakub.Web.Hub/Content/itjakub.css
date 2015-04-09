@@ -42,7 +42,7 @@ body {
   text-decoration: none;
 }
 .module-content {
-  margin: 125px 0 0 0;
+  margin: 115px 0 0 0;
 }
 .content-container {
   background-color: white;
@@ -986,10 +986,13 @@ ul {
   color: white;
 }
 .top-offset-without-submenu {
-  margin: -25px 0 0 0;
+  margin: -32px 0 0 0;
 }
 .navbar-login li a,
 .navbar-login li a:visited {
   color: white;
 }
-/*# sourceMappingURL=itjakub.css.map */
+.navbar-login li a:hover {
+  color: #84ced7;
+}
+/*# sourceMappingURL=ITJakub.css.map */
