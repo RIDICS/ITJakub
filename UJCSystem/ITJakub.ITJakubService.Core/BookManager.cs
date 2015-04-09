@@ -10,6 +10,7 @@ using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
+using MobilePageContract = ITJakub.MobileApps.MobileContracts.PageContract;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -65,6 +66,13 @@ namespace ITJakub.ITJakubService.Core
             return await m_searchServiceClient.GetBookPageListAsync(bookGuid, bookVersion.VersionId);
         }
 
+        public async Task<IList<MobilePageContract>> GetBookPageListMobileAsync(string bookGuid)
+        {
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var bookPageList = await m_searchServiceClient.GetBookPageListAsync(bookGuid, bookVersion.VersionId);
+            return Mapper.Map<IList<MobilePageContract>>(bookPageList);
+        }
+
 
         public BookInfoContract GetBookInfo(string bookGuid)
         {
@@ -77,6 +85,14 @@ namespace ITJakub.ITJakubService.Core
             var bookVersion = m_bookRepository.GetLastVersionForBook(imageContract.BookGuid);
             var bookPage = m_bookRepository.FindBookPageByVersionAndPosition(bookVersion.Id, imageContract.Position);
             return m_fileSystemManager.GetResource(imageContract.BookGuid, bookVersion.VersionId,
+                bookPage.Image, ResourceType.Image);
+        }
+
+        public Stream GetBookPageImage(string bookGuid, string pageName)
+        {
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var bookPage = m_bookRepository.FindBookPageByVersionAndName(bookVersion.Id, pageName);
+            return m_fileSystemManager.GetResource(bookGuid, bookVersion.VersionId,
                 bookPage.Image, ResourceType.Image);
         }
     }

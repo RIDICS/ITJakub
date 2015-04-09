@@ -15,8 +15,8 @@ namespace ITJakub.MobileApps.Client.Books.Service
 
     public interface IDataService : IBookDataService
     {
-        void GetBookList(CategoryContract category, Action<ObservableCollection<BookViewModel>, Exception> callback);
-        void SearchForBook(CategoryContract category, SearchDestinationContract searchDestination, string query, Action<ObservableCollection<BookViewModel>, Exception> callback);
+        void GetBookList(BookTypeContract category, Action<ObservableCollection<BookViewModel>, Exception> callback);
+        void SearchForBook(BookTypeContract category, SearchDestinationContract searchDestination, string query, Action<ObservableCollection<BookViewModel>, Exception> callback);
         void SetCurrentBook(BookViewModel book);
         void GetCurrentBook(Action<BookViewModel> callback);
     }

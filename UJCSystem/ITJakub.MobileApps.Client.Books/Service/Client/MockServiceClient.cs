@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
 {
     public class MockServiceClient : IMobileAppsService
     {
-        public Task<IList<BookContract>> GetBookListAsync(CategoryContract category)
+        public Task<IList<BookContract>> GetBookListAsync(BookTypeContract category)
         {
             return Task.Run(async () =>
             {
@@ -52,7 +52,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
             });
         }
 
-        public Task<IList<BookContract>> SearchForBookAsync(CategoryContract category, SearchDestinationContract searchBy, string query)
+        public Task<IList<BookContract>> SearchForBookAsync(BookTypeContract category, SearchDestinationContract searchBy, string query)
         {
             return Task.Run(async () =>
             {

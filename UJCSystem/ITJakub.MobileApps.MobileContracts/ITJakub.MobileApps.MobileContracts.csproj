@@ -36,7 +36,7 @@
   <ItemGroup>
     <Compile Include="AuthorContract.cs" />
     <Compile Include="BookContract.cs" />
-    <Compile Include="CategoryContract.cs" />
+    <Compile Include="BookTypeContract.cs" />
     <Compile Include="IMobileAppsService.cs" />
     <Compile Include="PageContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

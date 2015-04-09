@@ -60,7 +60,7 @@ namespace ITJakub.MobileApps.Client.Books.Manager
             return stringBuilder.ToString();
         }
 
-        public async void GetBookList(CategoryContract category, Action<ObservableCollection<BookViewModel>, Exception> callback)
+        public async void GetBookList(BookTypeContract category, Action<ObservableCollection<BookViewModel>, Exception> callback)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace ITJakub.MobileApps.Client.Books.Manager
             }
         }
 
-        public async void SearchForBook(CategoryContract category, SearchDestinationContract searchDestination, string query, Action<ObservableCollection<BookViewModel>, Exception> callback)
+        public async void SearchForBook(BookTypeContract category, SearchDestinationContract searchDestination, string query, Action<ObservableCollection<BookViewModel>, Exception> callback)
         {
             try
             {

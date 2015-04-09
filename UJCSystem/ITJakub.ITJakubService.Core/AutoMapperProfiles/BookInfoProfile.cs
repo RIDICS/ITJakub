@@ -16,6 +16,9 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishDate))
                 .ForMember(dest => dest.PublishPlace, opts => opts.MapFrom(src => src.PublishPlace))
                 .ForMember(dest => dest.BookPages, opt => opt.MapFrom(src => src.BookPages));
+
+            CreateMap<BookVersion, MobileApps.MobileContracts.BookContract>()
+                .ForMember(dest => dest.Guid, opts => opts.MapFrom(src => src.Book.Guid));
         }
     }
 }

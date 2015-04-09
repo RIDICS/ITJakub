@@ -3,7 +3,7 @@
 namespace ITJakub.MobileApps.MobileContracts
 {
     [DataContract]
-    public enum CategoryContract : byte
+    public enum BookTypeContract : byte
     {
         [EnumMember]
         Edition = 0,

@@ -16,12 +16,12 @@ namespace ITJakub.MobileApps.Client.Books.Service
             m_bookManager = bookManager;
         }
 
-        public void GetBookList(CategoryContract category, Action<ObservableCollection<BookViewModel>, Exception> callback)
+        public void GetBookList(BookTypeContract category, Action<ObservableCollection<BookViewModel>, Exception> callback)
         {
             m_bookManager.GetBookList(category, callback);
         }
 
-        public void SearchForBook(CategoryContract category, SearchDestinationContract searchDestination, string query, Action<ObservableCollection<BookViewModel>, Exception> callback)
+        public void SearchForBook(BookTypeContract category, SearchDestinationContract searchDestination, string query, Action<ObservableCollection<BookViewModel>, Exception> callback)
         {
             m_bookManager.SearchForBook(category, searchDestination, query, callback);
         }

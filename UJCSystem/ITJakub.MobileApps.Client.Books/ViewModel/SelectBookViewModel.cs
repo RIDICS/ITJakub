@@ -22,7 +22,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private bool m_isSearchResult;
         private bool m_searching;
         private ObservableCollection<BookViewModel> m_originalBookList;
-        private CategoryContract m_selectedCategory;
+        private BookTypeContract m_selectedCategory;
         private SortByType m_selectedSortType;
         private int m_filterFromYear;
         private int m_filterToYear;
@@ -36,7 +36,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             BookClickCommand = new RelayCommand<ItemClickEventArgs>(BookClick);
             SearchCommand = new RelayCommand(Search);
             
-            m_selectedCategory = CategoryContract.Grammar;
+            m_selectedCategory = BookTypeContract.Grammar;
 
             LoadData();
         }
@@ -90,7 +90,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             }
         }
 
-        public CategoryContract SelectedCategory
+        public BookTypeContract SelectedCategory
         {
             get { return m_selectedCategory; }
             set
@@ -161,10 +161,10 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             { 
                 return new ObservableCollection<CategoryItem>
                 {
-                    new CategoryItem{Category = CategoryContract.Grammar, Name = "Mluvnice"},
-                    new CategoryItem{Category = CategoryContract.Edition, Name = "Edice"},
-                    new CategoryItem{Category = CategoryContract.Dictionary, Name = "Slovníky"},
-                    new CategoryItem{Category = CategoryContract.ProfessionalLiterature, Name = "Odborná literatura"},
+                    new CategoryItem{Category = BookTypeContract.Grammar, Name = "Mluvnice"},
+                    new CategoryItem{Category = BookTypeContract.Edition, Name = "Edice"},
+                    new CategoryItem{Category = BookTypeContract.Dictionary, Name = "Slovníky"},
+                    new CategoryItem{Category = BookTypeContract.ProfessionalLiterature, Name = "Odborná literatura"},
                 };
             }
         }

@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
             
         }
 
-        public async Task<IList<BookContract>> GetBookListAsync(CategoryContract category)
+        public async Task<IList<BookContract>> GetBookListAsync(BookTypeContract category)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
             }
         }
 
-        public async Task<IList<BookContract>> SearchForBookAsync(CategoryContract category, SearchDestinationContract searchBy, string query)
+        public async Task<IList<BookContract>> SearchForBookAsync(BookTypeContract category, SearchDestinationContract searchBy, string query)
         {
             try
             {

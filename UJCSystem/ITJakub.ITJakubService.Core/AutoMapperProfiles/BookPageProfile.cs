@@ -9,6 +9,9 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<BookPage, BookPageContract>();
+
+            CreateMap<BookPageContract, MobileApps.MobileContracts.PageContract>()
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Text));
         }
     }
 }

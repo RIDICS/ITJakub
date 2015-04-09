@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Castle.Windsor;
@@ -12,38 +11,38 @@ namespace ITJakub.ITJakubService.Services
     public class MobileAppsServiceManager : IMobileAppsService
     {
         private readonly BookManager m_bookManager;
-        private readonly MobileManager m_mobileManager;
+        private readonly SearchManager m_searchManager;
         private readonly WindsorContainer m_container = Container.Current;
-        
+
         public MobileAppsServiceManager()
         {
             m_bookManager = m_container.Resolve<BookManager>();
-            m_mobileManager = m_container.Resolve<MobileManager>();
+            m_searchManager = m_container.Resolve<SearchManager>();
         }
 
-        public Task<IList<BookContract>> GetBookListAsync(CategoryContract category)
+        public Task<IList<BookContract>> GetBookListAsync(BookTypeContract category)
         {
-            return Task.Run(() => m_mobileManager.GetBooksByCategory(category));
+            return Task.Run(() => m_searchManager.GetBooksByBookType(category));
         }
 
-        public Task<IList<BookContract>> SearchForBookAsync(CategoryContract category, SearchDestinationContract searchBy, string query)
+        public Task<IList<BookContract>> SearchForBookAsync(BookTypeContract category, SearchDestinationContract searchBy, string query)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => m_searchManager.Search(category, searchBy, query));
         }
 
         public Task<IList<PageContract>> GetPageListAsync(string bookGuid)
         {
-            throw new NotImplementedException();
+            return m_bookManager.GetBookPageListMobileAsync(bookGuid);
         }
 
-        public async Task<string> GetPageAsRtfAsync(string bookGuid, string pageId)
+        public Task<string> GetPageAsRtfAsync(string bookGuid, string pageName)
         {
-            return await m_bookManager.GetBookPageByNameAsync(bookGuid, pageId, OutputFormatEnumContract.Rtf);
+            return m_bookManager.GetBookPageByNameAsync(bookGuid, pageName, OutputFormatEnumContract.Html);
         }
 
-        public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
+        public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageName)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => m_bookManager.GetBookPageImage(bookGuid, pageName));
         }
     }
 }
