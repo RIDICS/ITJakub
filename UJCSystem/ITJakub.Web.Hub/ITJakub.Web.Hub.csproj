@@ -206,6 +206,7 @@
     <Compile Include="Identity\ApplicationUserStore.cs" />
     <Compile Include="Identity\EmailService.cs" />
     <Compile Include="ItJakubServiceClient.cs" />
+    <Compile Include="ItJakubServiceUnauthorizedClient.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\UploadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
