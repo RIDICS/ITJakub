@@ -153,7 +153,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             var pageDetails = new BookPageViewModel
             {
                 BookInfo = bookDetails,
-                PageId = SelectedPage.PageId,
+                PageName = SelectedPage.Name,
+                PagePosition = SelectedPage.Position,
                 PagePhoto = PagePhotoViewModel.PagePhoto,
                 RtfText = PageTextViewModel.RtfText
             };

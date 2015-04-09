@@ -72,7 +72,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
             });
         }
 
-        public Task<IList<string>> GetPageListAsync(string bookGuid)
+        public Task<IList<PageContract>> GetPageListAsync(string bookGuid)
         {
             return Task.Run(() =>
             {

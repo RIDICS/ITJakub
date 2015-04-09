@@ -162,11 +162,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             if (book == null)
                 return;
 
-            m_dataService.SetCurrentBook(book.BookInfo.Guid, book.PageId);
+            m_dataService.SetCurrentBook(book.BookInfo.Guid, book.PageName);
             BookAuthor = book.BookInfo.Authors;
             BookName = book.BookInfo.Title;
             PublishDate = book.BookInfo.PublishDate;
-            DefaultPageId = book.PageId;
+            DefaultPageId = book.PageName;
             PageRtfText = book.RtfText;
             BookPagePhoto = book.PagePhoto;
 

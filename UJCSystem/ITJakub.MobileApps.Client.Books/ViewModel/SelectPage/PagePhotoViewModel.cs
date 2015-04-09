@@ -31,7 +31,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
                 return;
 
             Loading = true;
-            m_dataService.GetPagePhoto(Book.Guid, page.PageId, (image, exception) =>
+            m_dataService.GetPagePhoto(Book.Guid, page.Name, (image, exception) =>
             {
                 Loading = false;
                 if (exception != null)

@@ -38,6 +38,7 @@
     <Compile Include="BookContract.cs" />
     <Compile Include="CategoryContract.cs" />
     <Compile Include="IMobileAppsService.cs" />
+    <Compile Include="PageContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchDestinationContract.cs" />
   </ItemGroup>

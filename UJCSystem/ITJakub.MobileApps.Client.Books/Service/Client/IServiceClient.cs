@@ -9,7 +9,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
     {
         Task<IList<BookContract>> GetBookListAsync(CategoryContract category);
         Task<IList<BookContract>> SearchForBookAsync(CategoryContract category, SearchDestinationContract searchBy, string query);
-        Task<IList<string>> GetPageListAsync(string bookGuid);
+        Task<IList<PageContract>> GetPageListAsync(string bookGuid);
         Task<string> GetPageAsRtfAsync(string bookGuid, string pageId);
         Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId);
     }

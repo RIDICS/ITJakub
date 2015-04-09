@@ -3,5 +3,7 @@
     public class PageViewModel
     {
         public string PageId { get; set; }
+
+        public int Position { get; set; }
     }
 }

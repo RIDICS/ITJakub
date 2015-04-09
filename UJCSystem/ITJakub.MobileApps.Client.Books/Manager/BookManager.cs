@@ -107,7 +107,8 @@ namespace ITJakub.MobileApps.Client.Books.Manager
                 var list = await m_serviceClient.GetPageListAsync(bookGuid);
                 var viewModels = new ObservableCollection<PageViewModel>(list.Select(page => new PageViewModel
                 {
-                    PageId = page,
+                    Name = page.Name,
+                    Position = page.Position
                 }));
 
                 callback(viewModels, null);

@@ -213,7 +213,7 @@
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <Grid MinWidth="20">
-                            <TextBlock Text="{Binding PageId}"
+                            <TextBlock Text="{Binding Name}"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center">
                                 

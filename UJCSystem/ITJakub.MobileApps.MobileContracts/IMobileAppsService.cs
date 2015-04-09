@@ -14,7 +14,7 @@ namespace ITJakub.MobileApps.MobileContracts
         IList<BookContract> SearchForBook(CategoryContract category, SearchDestinationContract searchBy, string query);
 
         [OperationContract]
-        IList<string> GetPageList(string bookGuid);
+        IList<PageContract> GetPageList(string bookGuid);
 
         [OperationContract]
         string GetPageAsRtf(string bookGuid, string pageId);

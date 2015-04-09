@@ -30,7 +30,7 @@ namespace ITJakub.ITJakubService.Services
             throw new NotImplementedException();
         }
 
-        public IList<string> GetPageList(string bookGuid)
+        public IList<PageContract> GetPageList(string bookGuid)
         {
             throw new NotImplementedException();
         }

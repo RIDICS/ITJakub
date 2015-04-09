@@ -23,7 +23,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
         {
             RtfText = null;
             Loading = true;
-            m_dataService.GetPageAsRtf(Book.Guid, page.PageId, (rtfText, exception) =>
+            m_dataService.GetPageAsRtf(Book.Guid, page.Name, (rtfText, exception) =>
             {
                 Loading = false;
                 if (exception != null)

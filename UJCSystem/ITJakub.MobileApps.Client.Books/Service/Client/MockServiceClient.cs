@@ -78,15 +78,35 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
             });
         }
 
-        public Task<IList<string>> GetPageListAsync(string bookGuid)
+        public Task<IList<PageContract>> GetPageListAsync(string bookGuid)
         {
             return Task.Run(async () =>
             {
                 await Task.Delay(2000);
-                IList<string> list = new List<string>
+                IList<PageContract> list = new List<PageContract>
                 {
-                    "1L", "1R", "2L", "2R", "3L", "3R", "4L", "4R", "5L", "5R", "6L", "6R", "7L", "7R", "8L", "8R", "9L", "9R",
-                    "10L", "10R", "11L", "12R"
+                    new PageContract {Name = "1L", Position = 1},
+                    new PageContract {Name = "1R", Position = 2},
+                    new PageContract {Name = "2L", Position = 3},
+                    new PageContract {Name = "2R", Position = 4},
+                    new PageContract {Name = "3L", Position = 5},
+                    new PageContract {Name = "3R", Position = 6},
+                    new PageContract {Name = "4L", Position = 7},
+                    new PageContract {Name = "4R", Position = 8},
+                    new PageContract {Name = "5L", Position = 9},
+                    new PageContract {Name = "5R", Position = 10},
+                    new PageContract {Name = "6L", Position = 11},
+                    new PageContract {Name = "6R", Position = 12},
+                    new PageContract {Name = "7L", Position = 13},
+                    new PageContract {Name = "7R", Position = 14},
+                    new PageContract {Name = "8L", Position = 15},
+                    new PageContract {Name = "8R", Position = 16},
+                    new PageContract {Name = "9L", Position = 17},
+                    new PageContract {Name = "9R", Position = 18},
+                    new PageContract {Name = "10L", Position = 19},
+                    new PageContract {Name = "10R", Position = 20},
+                    new PageContract {Name = "11L", Position = 21},
+                    new PageContract {Name = "12R", Position = 22}
                 };
                 return list;
             });
