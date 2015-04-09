@@ -140,7 +140,7 @@
 	</xd:doc>
 	<xsl:template match="pb">
 		<xsl:copy >
-		<xsl:apply-templates select="@*" />
+		<xsl:copy-of select="@*" />
 		</xsl:copy>
 	</xsl:template>-->
 	

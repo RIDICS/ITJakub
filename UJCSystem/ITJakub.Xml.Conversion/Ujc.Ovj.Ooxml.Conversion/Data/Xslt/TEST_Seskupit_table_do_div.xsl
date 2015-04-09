@@ -29,7 +29,7 @@
 	<xsl:template match="body/table">
 		<xsl:element name="div">
 			<xsl:copy>
-				<xsl:apply-templates select="@*" />
+				<xsl:copy-of select="@*" />
 				<xsl:apply-templates />
 			</xsl:copy>
 		</xsl:element>

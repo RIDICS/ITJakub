@@ -32,7 +32,7 @@
 				<!--<xsl:apply-templates select="document($konkretni)/t:TEI/t:text/t:front/t:div[@type='editorial' and @subtype='comment']" mode="jmennyProstor" />-->
 					<xsl:apply-templates select="document($konkretni)//t:div[@type='editorial' and @subtype='comment']" mode="jmennyProstor" />
 					<!--<xsl:copy>
-						<xsl:apply-templates select="@*" />
+						<xsl:copy-of select="@*" />
 						<xsl:apply-templates mode="jmennyProstor" />
 					</xsl:copy>-->
 				</xsl:element>

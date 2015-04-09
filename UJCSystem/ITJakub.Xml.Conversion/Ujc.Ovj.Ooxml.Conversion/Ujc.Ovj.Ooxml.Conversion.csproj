@@ -11,8 +11,6 @@
     <AssemblyName>Ujc.Ovj.Ooxml.Conversion</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,74 +29,43 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Campari.Software.Reflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Campari.Software.Reflection.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.OOXML.Word, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.OOXML.Word.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.OOXML.Word.Transform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.OOXML.Word.Transform.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Pomucky.Funkce.Textove, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Pomucky.Funkce.Textove.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Pomucky.Xml, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Pomucky.Xml.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Pomucky.Xml.XsltTransformation, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Pomucky.Xml.XsltTransformation.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Pomucky.Xml.XsltTransformation.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Pomucky.Xml.XsltTransformation.Interface.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Texty.Evidence.Objekty">
-      <HintPath>..\..\..\..\..\Daliboris\Texty\Daliboris.Texty.Evidence.Test\bin\Debug\Daliboris.Texty.Evidence.Objekty.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Texty.Evidence.Rozhrani, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Texty.Evidence.Rozhrani.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Texty.Evidence.SpravaPrepisu, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Texty.Evidence.SpravaPrepisu.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Texty.Evidence.Uloziste, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Texty.Evidence.Uloziste.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Texty.Export.Base, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Texty.Export.Base.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Texty.Export.EdicniModul, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Texty.Export.EdicniModul.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Texty.Export.Rozhrani, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Texty.Export.Rozhrani.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Texty.Export.Transformace, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Texty.Export.Transformace.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Transkripce.Objekty, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e74cfdfeefffaa73, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Transkripce.Objekty.dll</HintPath>
-    </Reference>
-    <Reference Include="Daliboris.Transkriptor.Rozhrani, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e74cfdfeefffaa73, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Transkriptor.Rozhrani.dll</HintPath>
-    </Reference>
     <Reference Include="NLog, Version=3.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NLog.3.1.0.0\lib\net40\NLog.dll</HintPath>
@@ -135,121 +102,100 @@
     <Content Include="Data\Transformations\ProfessionalLiterature.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\EB_Seskupit_prvky_Editorial_do_div_2.0_.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_Presunout_biblicke_misto_do_komentare.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_Presunout_docImprint.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_Seskupit_prvky_Adresat_2.0.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_Seskupit_prvky_oddelene_prazdnym_odstavcem_do_div_2.0.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_TEI_Prevest_del_do_note.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_TEI_Priradit_Oznaceni_Note.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_Upravit_obsah_prvku_unclear_2.0.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_Upravit_obsah_prvku_unclear_2.0_elementy.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_Upravit_obsah_prvku_unclear_2.0_orig.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_Upravit_obsah_prvku_unclear_orig.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_Upravit_prvek_orig_v_zivem_zahlavi.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\EM_Vytvorit_projectDesc.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Oznacit_krizek_jako_obrazek.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Presunout_div_level1_o_uroven_vys.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Propojit_slovo_rozdelene_znackou_pb.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Rozdelit_element_obsahujici_note.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Seskupit_prvky_div1_do_div_2.0.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Seskupit_prvky_explicit+incipit_do_div_2.0.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Seskupit_prvky_head1_bez_head_2.0.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Seskupit_prvky_head_a_head1_do_div_2.0.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Seskupit_prvky_head_a_head1_do_div_2.0_.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Seskupit_prvky_head_a_head1_do_div_2.0_x.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Seskupit_prvky_mezi_div_do_div.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Seskupit_prvky_pred_nadpisem_2.0.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Subsumovat_elementy_k_predchozimu_prvku.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Subsumovat_elementy_k_predchozimu_prvku_rekonstrukce.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\TB_Prejmenovat_rekonstrukci.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\TB_Prejmenovat_unclear.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\TB_Subsumovat_elementy_k_predchozimu_prvku.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\TB_zpracovat_inicialu.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\Xslt\TEI_Priradit_Oznaceni_Note.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Campari.Software.Reflection.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Campari.Software.Reflection.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.OOXML.Word.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.OOXML.Word.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.OOXML.Word.Transform.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.OOXML.Word.Transform.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Pomucky.Funkce.Textove.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Pomucky.Funkce.Textove.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Pomucky.Xml.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Pomucky.Xml.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Pomucky.Xml.XsltTransformation.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Pomucky.Xml.XsltTransformation.Interface.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Pomucky.Xml.XsltTransformation.Interface.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Pomucky.Xml.XsltTransformation.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Evidence.Objekty.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Evidence.Objekty.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Evidence.Rozhrani.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Evidence.Rozhrani.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Evidence.SpravaPrepisu.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Evidence.SpravaPrepisu.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Evidence.Uloziste.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Evidence.Uloziste.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Export.Base.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Export.Base.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Export.EdicniModul.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Export.EdicniModul.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Export.Rozhrani.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Export.Rozhrani.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Export.Transformace.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Texty.Export.Transformace.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Transkripce.Objekty.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Transkripce.Objekty.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Transkriptor.Rozhrani.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Transkriptor.Rozhrani.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Ujc.Ovj.Tools.Xml.XsltTransformation.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Ujc.Ovj.Tools.Xml.XsltTransformation.Interface.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Ujc.Ovj.Tools.Xml.XsltTransformation.Interface.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Ujc.Ovj.Tools.Xml.XsltTransformation.pdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Xslt\Docx2Xml_Prevod_stylu.xsl">
@@ -388,36 +334,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Xslt\EZ_Extrahovat_front.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Xslt\GRADA_Presunout_prvky_div_head1.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Xslt\GRADA_Presunout_prvky_div_head3.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Xslt\GRADA_Prevod_stylu_na_TEI.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Xslt\GRADA_Prevod_wordovskych_stylu_na_TEI.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Xslt\Grada_Pripojit_tiraz_do_body.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Xslt\GRADA_Seskupit_prvky_do_div.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Xslt\GRADA_Seskupit_prvky_do_div2.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Xslt\GRADA_Seskupit_prvky_do_div3.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Xslt\GRADA_Seskupit_prvky_do_div_head.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Xslt\GRADA_Ukazka_s_hlavickou.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Xslt\Kopirovani_prvku.xsl">
@@ -612,6 +528,9 @@
     <Content Include="Data\Xslt\TEST_TEI_Seskupit_odstavce_bez_div.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\Textove_funkce.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\Xslt\Transformace_pro_textovou_banku.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -622,6 +541,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Xslt\Upravit_obsah_prvku_cell.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\Upravit_transliteraci.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Xslt\VW2_EM_Uprava_GUID_Zkratky.xsl">
@@ -639,19 +561,83 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Campari.Software.Reflection\Campari.Software.Reflection.csproj">
+      <Project>{8a6d0f17-5c0f-41b0-ab0a-425548bf92f1}</Project>
+      <Name>Campari.Software.Reflection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.OOXML.Word.Transform\Daliboris.OOXML.Word.Transform.csproj">
+      <Project>{b3231e73-5058-4588-b20d-877babd7384e}</Project>
+      <Name>Daliboris.OOXML.Word.Transform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.OOXML.Word\Daliboris.OOXML.Word.csproj">
+      <Project>{96838f37-2e15-4785-b117-0de31494f733}</Project>
+      <Name>Daliboris.OOXML.Word</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Funkce.Textove\Daliboris.Pomucky.Funkce.Textove.csproj">
+      <Project>{f4fc605c-64c5-4e59-b5e6-8f8644bc1c03}</Project>
+      <Name>Daliboris.Pomucky.Funkce.Textove</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml.XsltTransformation.Interface\Daliboris.Pomucky.Xml.XsltTransformation.Interface.csproj">
+      <Project>{ae568406-c88f-4638-b29e-6582efb31c96}</Project>
+      <Name>Daliboris.Pomucky.Xml.XsltTransformation.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml.XsltTransformation\Daliboris.Pomucky.Xml.XsltTransformation.csproj">
+      <Project>{727cf318-94b5-48ab-93f7-98fb6ef44f61}</Project>
+      <Name>Daliboris.Pomucky.Xml.XsltTransformation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+      <Project>{457fef12-bd22-4498-924f-941b31dccd6b}</Project>
+      <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Evidence.Objekty\Daliboris.Texty.Evidence.Objekty.csproj">
+      <Project>{c166d7a5-ee6e-4cb7-9484-ffcfd33b5adf}</Project>
+      <Name>Daliboris.Texty.Evidence.Objekty</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Evidence.Rozhrani\Daliboris.Texty.Evidence.Rozhrani.csproj">
+      <Project>{a612c779-be2b-44f2-9c86-bd5324f1f8b6}</Project>
+      <Name>Daliboris.Texty.Evidence.Rozhrani</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Evidence.SpravaPrepisu\Daliboris.Texty.Evidence.SpravaPrepisu.csproj">
+      <Project>{c630f74c-826a-4a2a-b56c-577f214b80e7}</Project>
+      <Name>Daliboris.Texty.Evidence.SpravaPrepisu</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Evidence.Uloziste\Daliboris.Texty.Evidence.Uloziste.csproj">
+      <Project>{96d3aeeb-6cbf-4ca8-a8da-e3ff092da77d}</Project>
+      <Name>Daliboris.Texty.Evidence.Uloziste</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Base\Daliboris.Texty.Export.Base.csproj">
+      <Project>{3179d827-1c9e-4291-8399-9d9a2bafe374}</Project>
+      <Name>Daliboris.Texty.Export.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.EdicniModul\Daliboris.Texty.Export.EdicniModul.csproj">
+      <Project>{c575353d-c1a4-46ac-9546-e62e74270e7e}</Project>
+      <Name>Daliboris.Texty.Export.EdicniModul</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Rozhrani\Daliboris.Texty.Export.Rozhrani.csproj">
+      <Project>{585c72e8-10a8-4dfa-8a5c-467c5dd4c98c}</Project>
+      <Name>Daliboris.Texty.Export.Rozhrani</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Transformace\Daliboris.Texty.Export.Transformace.csproj">
+      <Project>{9339ed5b-312f-4aaf-9df6-31b6c3169c48}</Project>
+      <Name>Daliboris.Texty.Export.Transformace</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Transkriptor.Objekty\Daliboris.Transkripce.Objekty.csproj">
+      <Project>{2890bd2d-9511-4503-bb1a-01b7493eade0}</Project>
+      <Name>Daliboris.Transkripce.Objekty</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Transkriptor.Rozhrani\Daliboris.Transkriptor.Rozhrani.csproj">
+      <Project>{d68f920d-02e7-43d4-af48-c2bb70900b11}</Project>
+      <Name>Daliboris.Transkriptor.Rozhrani</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ujc.Ovj.Xml.Tei.Splitting\Ujc.Ovj.Xml.Tei.Splitting.csproj">
       <Project>{e3bebcd1-4b5e-4d35-981c-256f2a03cc7a}</Project>
       <Name>Ujc.Ovj.Xml.Tei.Splitting</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Libraries\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

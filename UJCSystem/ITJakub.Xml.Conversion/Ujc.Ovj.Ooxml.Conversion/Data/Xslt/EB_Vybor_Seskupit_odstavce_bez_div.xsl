@@ -42,7 +42,7 @@
 	<xsl:template match="body/div/p | body/div/l" mode="next">
 		<xsl:variable name="name" select="local-name()"/>
 		<xsl:element name="{$name}">
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 		<!--	<xsl:if test="@rend">
 				<xsl:attribute name="rend"><xsl:value-of select="@rend"/></xsl:attribute>
 			</xsl:if>-->

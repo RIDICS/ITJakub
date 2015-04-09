@@ -25,7 +25,7 @@
 	
 	<xsl:template match="tei:div | tei:head">
 		<xsl:element name="{local-name()}" xmlns="http://www.tei-c.org/ns/1.0">
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:attribute name="xml:id"><xsl:value-of select="concat(generate-id(.), '.', position(), '.', local-name())"/></xsl:attribute>
 <!--			<xsl:if test="tei:head">
 				<xsl:attribute name="n"><xsl:number/></xsl:attribute>

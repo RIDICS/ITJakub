@@ -19,7 +19,7 @@
 
     <xsl:template match="t:TEI">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:copy-of select="@*" />
             <xsl:apply-templates select="t:teiHeader" />
             <xsl:apply-templates select="t:text" />
         </xsl:copy>
@@ -56,7 +56,7 @@
 
     <xsl:template match="t:body/t:div[1 and not(t:head)]">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:copy-of select="@*" />
             <head xmlns="http://www.tei-c.org/ns/1.0">
                 <xsl:apply-templates select="/t:TEI/t:teiHeader/t:fileDesc/t:titleStmt/t:title/node()" />
             </head>
@@ -100,7 +100,7 @@
     
     <xsl:template match="t:div[@subtype='annotation' and @type='editorial']" mode="tiraz">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:copy-of select="@*" />
             <xsl:apply-templates select="t:p" />
         </xsl:copy>
     </xsl:template>
@@ -119,7 +119,7 @@
 
     <xsl:template match="t:body/t:div[@subtype='comment' and @type='editorial']" mode="back">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:copy-of select="@*" />
             <xsl:apply-templates />
         </xsl:copy>
     </xsl:template>

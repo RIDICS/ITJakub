@@ -23,7 +23,7 @@
 	
 	<xsl:template match="body/div">
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:choose>
 				<xsl:when test="p">
 					<xsl:for-each-group select="*" group-adjacent="if(self::p) then 0 else position()">

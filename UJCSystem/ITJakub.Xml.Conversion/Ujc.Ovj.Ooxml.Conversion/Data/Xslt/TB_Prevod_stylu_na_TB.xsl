@@ -5,16 +5,22 @@
 	xmlns:xml="http://www.w3.org/XML/1998/namespace"
 	exclude-result-prefixes="xd" version="1.0">
 	<xd:doc scope="stylesheet">
+		<xsl:import href="Nedefinovany_element_chyba.xsl"/>
+		
 		<xd:desc>
 			<xd:p><xd:b>Created on:</xd:b> Dec 3, 2010</xd:p>
 			<xd:p><xd:b>Author:</xd:b> Boris Lehečka</xd:p>
 			<xd:p>Převodník společných stylů, využitelných v obou výstupech</xd:p>
 		</xd:desc>
 	</xd:doc>
+	
+	<xsl:param name="exportovatTransliteraci" /> <!-- 'true()' nebo 'false()' -->
 
-<xsl:include href="Nedefinovany_element_chyba.xsl"/>
-
-
+	<xsl:template match="/">
+		<xsl:comment> TB_Prevod_stylu_na_TEI; parameters: exportovatTransliteraci = '<xsl:value-of select="$exportovatTransliteraci"/>' </xsl:comment>
+		<xsl:apply-templates/>
+	</xsl:template>
+	
 <xsl:template match="body">
 	<xsl:element name="doc">
 		<xsl:apply-templates />
@@ -275,7 +281,21 @@
 	<xsl:template match="ruznocteni_autor" />
 -->
 	
-	<xsl:template match="transliterace | transliterace_cizi_jazyk | transliterace_rozepsani_zkratky  | transliterace_horni_index | ruznocteni | ruznocteni_autor">
+	<xsl:template match="transliterace | transliterace_cizi_jazyk | transliterace_rozepsani_zkratky  | transliterace_horni_index">
+		<xsl:if test="$exportovatTransliteraci = 'true()'">
+		<xsl:element name="{name()}">
+			<xsl:apply-templates />
+		</xsl:element>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="transliterace/zkratka">
+		<xsl:if test="$exportovatTransliteraci = 'true()'">
+			<xsl:apply-templates />
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="ruznocteni | ruznocteni_autor">
 		<xsl:element name="{name()}">
 			<xsl:apply-templates />
 		</xsl:element>
@@ -286,6 +306,7 @@
 	<xsl:template match="interni_poznamka"/>
 	<xsl:template match="interni_poznamka_kurziva"/>
 	<xsl:template match="interni_poznamka_horni_index" />
+	<xsl:template match="interni_poznamka_preskrtnute" />
 	<xsl:template match="pripisek_marginalni_mladsi" />
 	<xsl:template match="pripisek_interlinearni_mladsi" />
 	<xsl:template match="pripisek_interlinearni_mladsi_cizi_jazyk" />
@@ -348,6 +369,75 @@
 	<xsl:template match="poznamka_pod_carou" />
 	<xsl:template match="footnote_reference" />
 
+	<xsl:template match="pramen_preskrtnute" />
+
+	<xsl:template match="horni_index">
+		<xsl:element name="text">
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
 	
+	<xsl:template match="rozepsani_zkratky">
+			<xsl:apply-templates />
+	</xsl:template>
+	
+	<xsl:template match="skrt" />
+		
+	
+	<xsl:template match="rekonstrukce">
+		<xsl:element name="rekonstrukce">
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="popisek_k_obrazku">
+		<xsl:element name="obrazek">
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="transliterace/preskrtnute" />
+	
+	<xsl:template match="Adresat">
+		<xsl:element name="adresat">
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="Impresum">
+		<xsl:element name="impresum">
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="Marginalni_nadpis">
+		<xsl:element name="nadpis">
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+	
+	
+	<xsl:template match="marginalni_poznamka_cizi_jazyk">
+		 <xsl:element name="cizi_jazyk">
+		 	<xsl:apply-templates />
+		 </xsl:element>
+	</xsl:template>
+	
+	
+	<xsl:template match="*">
+		<xsl:message>
+			<xsl:text>Prvek '</xsl:text>
+			<xsl:value-of select="name(.)"/>
+			<xsl:text>' nemá definvanou šablonu pro zpracování.</xsl:text>
+		</xsl:message>
+		<chyba>
+			<prvek>
+				<xsl:value-of select="name(.)"/>
+			</prvek>
+			<obsah>
+				<xsl:value-of select="."/>
+			</obsah>
+		</chyba>
+	</xsl:template>
 	
 </xsl:stylesheet>

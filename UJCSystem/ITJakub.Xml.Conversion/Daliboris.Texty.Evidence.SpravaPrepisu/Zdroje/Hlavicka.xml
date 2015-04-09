@@ -1,0 +1,4163 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<w:body xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+ <w:tbl>
+  <w:tblPr>
+   <w:tblStyle w:val="TableElegant" />
+   <w:tblW w:type="dxa" w:w="9767" />
+   <w:tblLook w:val="0080" />
+   <w:tblW w:type="dxa" w:w="9767" />
+   <w:tblBorders>
+    <w:top w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:left w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:bottom w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:right w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:insideH w:val="single" w:color="000000" w:space="0" w:sz="6" />
+    <w:insideV w:val="single" w:color="000000" w:space="0" w:sz="6" />
+   </w:tblBorders>
+   <w:tblLayout w:type="auto" />
+   <w:tblCellMar>
+    <w:top w:w="0" w:type="dxa" />
+    <w:bottom w:w="0" w:type="dxa" />
+    <w:left w:w="108" w:type="dxa" />
+    <w:right w:w="108" w:type="dxa" />
+   </w:tblCellMar>
+  </w:tblPr>
+  <w:tblGrid>
+   <w:gridCol w:w="2103" />
+   <w:gridCol w:w="7664" />
+  </w:tblGrid>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="double" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Normal" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Autor</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008b5781">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Titul</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008a55b6" w:rsidRPr="008a55b6">
+      <w:t>[Traktáty a modlitby]</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781" w:rsidRPr="008a55b6">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008b4602" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Datace</w:t>
+     </w:r>
+     <w:r w:rsidR="007451ee">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t xml:space="preserve"> pramene</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008a55b6" w:rsidRPr="008a55b6">
+      <w:t>1495</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781" w:rsidRPr="008a55b6">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Tiskař</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008b5781">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="007451ee">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Mí</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>sto</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008b5781">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00bf2bc4">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:jc w:val="center" />
+     </w:pPr>
+     <w:r w:rsidR="001d699b">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Předloha přepisu</w:t>
+     </w:r>
+     <w:r w:rsidR="001d699b">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00c33f22">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Typ</w:t>
+     </w:r>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008a55b6">
+      <w:t>rukopis</w:t>
+     </w:r>
+     <w:r w:rsidR="008d60ab">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="nil" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Uložení</w:t>
+     </w:r>
+     <w:r w:rsidR="008d60ab">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t xml:space="preserve"> rkp/tisku</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="nil" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008b5781">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Země</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008a55b6">
+      <w:t>Česko</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Město</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008a55b6">
+      <w:t>Praha</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Instituce</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008a55b6" w:rsidRPr="008a55b6">
+      <w:t>Strahovská knihovna</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781" w:rsidRPr="008a55b6">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Signatura</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008a55b6" w:rsidRPr="008a55b6">
+      <w:t>DG V 3</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781" w:rsidRPr="008a55b6">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Folia</w:t>
+     </w:r>
+     <w:r w:rsidR="00500f72" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>ce/</w:t>
+     </w:r>
+     <w:r w:rsidR="001d699b">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>paginace</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008a55b6" w:rsidRPr="008a55b6">
+      <w:t>16v</w:t>
+     </w:r>
+     <w:r w:rsidR="008a55b6">
+      <w:t>–</w:t>
+     </w:r>
+     <w:r w:rsidR="008a55b6" w:rsidRPr="008a55b6">
+      <w:t>39r</w:t>
+     </w:r>
+     <w:r w:rsidR="008b5781" w:rsidRPr="008a55b6">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00bf2bc4">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Edice</w:t>
+     </w:r>
+     <w:r w:rsidR="00bf2bc4">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Titul</w:t>
+     </w:r>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor</w:t>
+     </w:r>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Místo vydání</w:t>
+     </w:r>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Rok vydání</w:t>
+     </w:r>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Strany</w:t>
+     </w:r>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00bf2bc4">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:jc w:val="center" />
+     </w:pPr>
+     <w:r w:rsidR="00bf2bc4" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Přepis</w:t>
+     </w:r>
+     <w:r w:rsidR="00bf2bc4">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (1)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008a55b6" w:rsidRPr="008a55b6">
+      <w:t>Černá</w:t>
+     </w:r>
+     <w:r w:rsidR="008a55b6">
+      <w:t xml:space="preserve">, </w:t>
+     </w:r>
+     <w:r w:rsidR="008a55b6" w:rsidRPr="008a55b6">
+      <w:t>Alena M.</w:t>
+     </w:r>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="008a55b6">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (2)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (3)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="double" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00500f72">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00d6417b" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (</w:t>
+     </w:r>
+     <w:r w:rsidR="00d6417b">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>4</w:t>
+     </w:r>
+     <w:r w:rsidR="00d6417b" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>)</w:t>
+     </w:r>
+     <w:r w:rsidR="008d60ab" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="008b4602">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="008d60ab">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="double" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="00bf2bc4">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:jc w:val="center" />
+     </w:pPr>
+     <w:r w:rsidR="005e5d72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>P</w:t>
+     </w:r>
+     <w:r w:rsidR="00bf2bc4">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>oznámky</w:t>
+     </w:r>
+     <w:r w:rsidR="00bf2bc4">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="double" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="002f3210">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00bf2bc4">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+ </w:tbl>
+  <w:tbl>
+  <w:tblPr>
+   <w:tblStyle w:val="TableElegant" />
+   <w:tblW w:type="dxa" w:w="9767" />
+   <w:tblLook w:val="0080" />
+   <w:tblW w:type="dxa" w:w="9767" />
+   <w:tblBorders>
+    <w:top w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:left w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:bottom w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:right w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:insideH w:val="single" w:color="000000" w:space="0" w:sz="6" />
+    <w:insideV w:val="single" w:color="000000" w:space="0" w:sz="6" />
+   </w:tblBorders>
+   <w:tblLayout w:type="auto" />
+   <w:tblCellMar>
+    <w:top w:w="0" w:type="dxa" />
+    <w:bottom w:w="0" w:type="dxa" />
+    <w:left w:w="108" w:type="dxa" />
+    <w:right w:w="108" w:type="dxa" />
+   </w:tblCellMar>
+  </w:tblPr>
+  <w:tblGrid>
+   <w:gridCol w:w="2103" />
+   <w:gridCol w:w="7664" />
+  </w:tblGrid>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="double" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Normal" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Autor</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:lang w:val="en-US" />
+      </w:rPr>
+      <w:t>[Havel ze Strahova]</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="006559c9">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Titul</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00856489">
+      <w:t>[část pojednání o léčivých vodách]</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="006559c9">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Datace</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t xml:space="preserve"> pramene</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="003c2adf">
+      <w:t>začátek</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539">
+      <w:t xml:space="preserve"> 15. století</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="006559c9">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Tiskař</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="006559c9">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Mí</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>sto</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="006559c9">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:jc w:val="center" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Předloha přepisu</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Typ</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00f76ebd">
+      <w:t>rukopis</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="nil" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Uložení</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t xml:space="preserve"> rkp/tisku</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="nil" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Země</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t>Česko</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Město</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t>Praha</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Instituce</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00302174">
+      <w:t>Knihovna Národního muzea v Praze</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="006559c9">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Signatura</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t>XI A 27</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="006559c9">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Foliace/</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>paginace</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t>1r</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Edice</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Titul</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Místo vydání</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Rok vydání</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Strany</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:jc w:val="center" />
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Přepis</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (1)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t>Černá, Alena M.</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="006559c9">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (2)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (3)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="double" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>4</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539" w:rsidRPr="00500f72">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="double" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:jc w:val="center" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Poznámky</w:t>
+     </w:r>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="double" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p w:rsidP="006952a5">
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00846539">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+ </w:tbl>
+  <w:tbl>
+  <w:tblPr>
+   <w:tblW w:type="dxa" w:w="9767" />
+   <w:tblLook w:val="0080" />
+   <w:tblW w:type="dxa" w:w="9767" />
+   <w:tblBorders>
+    <w:top w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:left w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:bottom w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:right w:val="double" w:color="000000" w:space="0" w:sz="6" />
+    <w:insideH w:val="single" w:color="000000" w:space="0" w:sz="6" />
+    <w:insideV w:val="single" w:color="000000" w:space="0" w:sz="6" />
+   </w:tblBorders>
+   <w:tblLayout w:type="auto" />
+   <w:tblCellMar>
+    <w:top w:w="0" w:type="dxa" />
+    <w:bottom w:w="0" w:type="dxa" />
+    <w:left w:w="108" w:type="dxa" />
+    <w:right w:w="108" w:type="dxa" />
+   </w:tblCellMar>
+  </w:tblPr>
+  <w:tblGrid>
+   <w:gridCol w:w="2103" />
+   <w:gridCol w:w="7664" />
+  </w:tblGrid>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="double" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Normal" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Autor</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Titul</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00227389">
+      <w:t>[</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t>Řád korunován</w:t>
+     </w:r>
+     <w:r w:rsidR="00847ad9">
+      <w:t>í</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t xml:space="preserve"> krále českého a královny</w:t>
+     </w:r>
+     <w:r w:rsidR="00227389">
+      <w:t>]</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Datace pramene</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="009c7181">
+      <w:t>2. polovina 15. století</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Tiskař</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Místo</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:jc w:val="center" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Předloha přepisu</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Typ</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00b33763">
+      <w:t>R</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t>ukopis</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="nil" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Uložení rkp/tisku</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="nil" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Země</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="009c7181">
+      <w:t>Česko</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Město</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="009c7181">
+      <w:t>Praha</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Instituce</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="009c7181">
+      <w:t>Knihovna N</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t>árodní</w:t>
+     </w:r>
+     <w:r w:rsidR="009c7181">
+      <w:t>ho muzea v</w:t>
+     </w:r>
+     <w:r w:rsidR="00ab24b6">
+      <w:t xml:space="preserve"> </w:t>
+     </w:r>
+     <w:r w:rsidR="009c7181">
+      <w:t>Praze</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Signatura</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="009c7181">
+      <w:t>V B 24</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Foliace/paginace</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="009c7181">
+      <w:t>193</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t>r–</w:t>
+     </w:r>
+     <w:r w:rsidR="009c7181">
+      <w:t>204r</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="99cc00" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Edice</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Titul</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Místo vydání</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Rok vydání</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Strany</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:jc w:val="center" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Přepis</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (1)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t>Jamborová</w:t>
+     </w:r>
+     <w:r w:rsidR="005862e0">
+      <w:t>, Martina</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (2)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (3)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="2103" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="2103" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="double" w:color="000000" w:space="0" w:sz="6" />
+      <w:right w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Editor (4)</w:t>
+     </w:r>
+    </w:p>
+   </w:tc>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcW w:w="7664" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="7664" />
+     <w:shd w:fill="ccffff" w:color="auto" w:val="auto" />
+     <w:tcBorders>
+      <w:left w:val="single" w:color="000000" w:space="0" w:sz="18" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:shd w:fill="ff6600" w:color="auto" w:val="auto" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="double" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="single" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+      <w:jc w:val="center" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:rPr>
+       <w:b />
+      </w:rPr>
+      <w:t>Poznámky</w:t>
+     </w:r>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+  <w:tr>
+   <w:trPr>
+    <w:wAfter w:w="0" w:type="dxa" />
+    <w:wAfter w:w="0" w:type="dxa" />
+   </w:trPr>
+   <w:tc>
+    <w:tcPr>
+     <w:tcW w:w="9767" w:type="dxa" />
+     <w:tcW w:type="dxa" w:w="9767" />
+     <w:gridSpan w:val="2" />
+     <w:tcBorders>
+      <w:top w:val="single" w:color="000000" w:space="0" w:sz="6" />
+      <w:bottom w:val="double" w:color="000000" w:space="0" w:sz="6" />
+     </w:tcBorders>
+    </w:tcPr>
+    <w:p>
+     <w:pPr>
+      <w:pStyle w:val="Hlavicka" />
+     </w:pPr>
+     <w:r w:rsidR="00671c38">
+      <w:t />
+     </w:r>
+    </w:p>
+   </w:tc>
+  </w:tr>
+ </w:tbl>
+ </w:body>

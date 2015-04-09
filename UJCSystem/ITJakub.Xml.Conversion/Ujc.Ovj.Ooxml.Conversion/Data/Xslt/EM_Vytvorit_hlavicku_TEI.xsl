@@ -9,7 +9,8 @@
 	</xd:doc>
 
 	<xsl:param name="soubor"/>
-	<xsl:output indent="yes"/>
+	<xsl:param name="rok" select="'2015'" />
+	<xsl:output indent="yes" method="xml"/>
 	<xsl:strip-space elements="*"/>
 
 
@@ -47,7 +48,7 @@
 					</publisher>
 					<pubPlace>Praha</pubPlace>
 					<!-- TODO: načítat datum publikace programově -->
-                    <date><xsl:value-of select="'2012'"/></date>
+                    <date><xsl:call-template name="get-publication-years" /></date>
 					<!--<publisher>Manuscriptorium.com</publisher>-->
 					<availability status="restricted">
 						<p>Tato edice je autorské dílo chráněné ve smyslu zákona č. 121/2000 Sb., o právu autorském, a je určena pouze k nekomerčním účelům.</p>
@@ -93,7 +94,25 @@
 			</revisionDesc>-->
 		</teiHeader>
 	</xsl:template>
-
+	
+	<xsl:template name="get-publication-years">
+		<xsl:variable name="minYear">
+			<xsl:for-each select="ev:Zpracovani/ev:PrvniExporty/ev:Export/ev:CasExportu">
+				<xsl:sort data-type="text"/>
+				<xsl:if test="position() = 1"><xsl:value-of select="substring-before(., '-')"/></xsl:if>
+			</xsl:for-each>
+		</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="string-length($minYear) &gt; 0">
+				<xsl:value-of select="$minYear"/><xsl:if test="$minYear != $rok"><xsl:text>–</xsl:text><xsl:value-of select="$rok"/></xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$rok"/>
+			</xsl:otherwise>
+		</xsl:choose>
+		
+	</xsl:template>
+	
 	<xsl:template name="encodingDesc">
 		<encodingDesc>
 			<classDecl>
@@ -131,42 +150,51 @@
 		<profileDesc>
 			<textClass>
 				<xsl:call-template name="catRef" />
-				<keywords scheme="http://vokabular.ujc.cas.cz/scheme/classification/secondary">
-					<xsl:apply-templates select="ev:Zpracovani/ev:LiterarniDruh" mode="term" />
-					<xsl:apply-templates select="ev:Zpracovani/ev:LiterarniZanr" mode="term" />
-				</keywords>
+				<xsl:call-template name="keywords"/>
 			</textClass>
 		</profileDesc>
-
+		
 	</xsl:template>
-
+	<xsl:template name="keywords">
+		<xsl:if test="ev:Zpracovani/ev:LiterarniDruh/text() | ev:Zpracovani/ev:LiterarniZanr/text()">
+		<keywords scheme="http://vokabular.ujc.cas.cz/scheme/classification/secondary">
+			<xsl:apply-templates select="ev:Zpracovani/ev:LiterarniDruh | ev:Zpracovani/ev:LiterarniZanr" mode="term" />
+		</keywords>
+		</xsl:if>
+	</xsl:template>
+	
 	<xsl:template name="catRef">
+		
+		<xsl:variable name="category">
+			<xsl:choose>
+				<xsl:when test="ev:TypPrepisu/. = 'edice' and ev:Zpracovani/ev:CasoveZarazeni/. = 'DoRoku1500'">
+					<xsl:text>#taxonomy-historical_text-old_czech</xsl:text>
+				</xsl:when>
+				<xsl:when test="ev:TypPrepisu/. = 'edice' and ev:Zpracovani/ev:CasoveZarazeni/. = 'DoRoku1800'">
+					<xsl:text>#taxonomy-historical_text-medieval_czech</xsl:text>
+				</xsl:when>
+				<xsl:when test="ev:TypPrepisu/. = 'odborná literatura'">
+					<xsl:text>#taxonomy-scholary_text</xsl:text>
+				</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		
+		<xsl:if test="string-length($category) &gt; 0">
 		<xsl:element name="catRef">
 			<xsl:attribute name="target">
-				<xsl:choose>
-					<xsl:when test="ev:TypPrepisu/. = 'edice' and ev:Zpracovani/ev:CasoveZarazeni/. = 'DoRoku1500'">
-						<xsl:text>#taxonomy-historical_text-old_czech</xsl:text>
-					</xsl:when>
-					<xsl:when test="ev:TypPrepisu/. = 'edice' and ev:Zpracovani/ev:CasoveZarazeni/. = 'DoRoku1800'">
-						<xsl:text>#taxonomy-historical_text-medieval_czech</xsl:text>
-					</xsl:when>
-					<xsl:when test="ev:TypPrepisu/. = 'odborná literatura'">
-						<xsl:text>#taxonomy-scholary_text</xsl:text>
-					</xsl:when>
-				</xsl:choose>
-
+				<xsl:value-of select="$category"/>
 			</xsl:attribute>
 		</xsl:element>
-
+		</xsl:if>
 	</xsl:template>
-
+	
 	<xsl:template match="ev:LiterarniDruh | ev:LiterarniZanr" mode="term">
 		<term>
 			<xsl:apply-templates />
 		</term>
 	</xsl:template>
-
-
+	
+	
 	<xsl:template name="identifikaceRukopisu">
 		<msIdentifier>
 				<xsl:apply-templates select="ev:Hlavicka/ev:ZemeUlozeni" />

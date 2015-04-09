@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Daliboris.Transkripce.Objekty.Pravidlo" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1.25" Y="3.75" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAGQAgEAoAAAAAAAAAIDAIAAAAIAAQiA=</HashCode>
+      <FileName>Pravidlo.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mdklDoklady" />
+      <Property Name="Doklady" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Pravidla" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1" Y="0.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>ACJAAAAAAAAAABhQCAAQBAQAAAAAAAAAQAAAAABQIAQ=</HashCode>
+      <FileName>Pravidla.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="this[System.Int32]" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Transkripce">
+    <Position X="1.25" Y="1.5" Width="1.75" />
+    <AssociationLine Name="mprPravidla" Type="Daliboris.Transkripce.Objekty.Pravidla" FixedFromPoint="true">
+      <Path>
+        <Point X="2.125" Y="1.5" />
+        <Point X="2.125" Y="1.062" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAgAACAAAA=</HashCode>
+      <FileName>Transkripce.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mprPravidla" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Korelat" Collapsed="true">
+    <Position X="1.25" Y="10" Width="4" />
+    <AssociationLine Name="msgTranskripce" Type="Daliboris.Transkripce.Objekty.Segment">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.149" Y="0.568" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="msgTransliterace" Type="Daliboris.Transkripce.Objekty.Segment">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.274" Y="0.641" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Transkripce" Type="Daliboris.Transkripce.Objekty.Segment">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.992" Y="1.037" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Transliterace" Type="Daliboris.Transkripce.Objekty.Segment">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.024" Y="0.996" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAEQAgAAAAAAAAAAAAIAAAAAAAAAAQiA=</HashCode>
+      <FileName>Korelat.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="msgTranskripce" />
+      <Field Name="msgTransliterace" />
+      <Property Name="Transkripce" />
+      <Property Name="Transliterace" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Korelaty" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1.25" Y="9" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>ACIAAAAAAAAAAJgQAAAQBAQAAAAAAAAAAQAAAABQIAA=</HashCode>
+      <FileName>Korelaty.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Doklady" Collapsed="true">
+    <Position X="1.25" Y="5.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>ACIAAAAAAAAAABhQCAAQBAQAAQAAIAAIAAAAAABQIAA=</HashCode>
+      <FileName>Doklady.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="this[System.Int32]" />
+      <Property Name="this[System.Int32]" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Podminka" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAgAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Podminka.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.179" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Podminky" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACIAAAAAIAAAABgQAAAABAQAAAAAAAAAAAAAAABQIAA=</HashCode>
+      <FileName>Podminky.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.164" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Prepis" Collapsed="true">
+    <Position X="1.25" Y="7.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAkAMECAgAAAAABAAAABAgAAABAAAQgA=</HashCode>
+      <FileName>Prepis.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mkrKorelaty" />
+      <Property Name="Korelaty" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Prepisy" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACIAAAAAAAAAABAQAAAABAQAAAAAAAAAABAAIABQIAA=</HashCode>
+      <FileName>Prepisy.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Spravce">
+    <Position X="5.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Spravce.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Parser">
+    <Position X="5.5" Y="1.25" Width="2" />
+    <AssociationLine Name="Prepisy" Type="Daliboris.Transkripce.Objekty.Prepisy">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.027" Y="0.029" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgABAAAAAAAAAAARAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Parser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mprvPravidla" />
+      <Field Name="mprpPrepisy" />
+      <Property Name="Prepisy" />
+      <Property Name="Pravidla" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Segment" Collapsed="true">
+    <Position X="1.25" Y="12" Width="4" />
+    <TypeIdentifier>
+      <HashCode>ABABAAAAAAAAAAQEgAIAAAAAAAAAAIAAAAAACQAAAiA=</HashCode>
+      <FileName>Segment.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Doklad" Collapsed="true">
+    <Position X="7" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEQEgAAgAAAAABAAAAAAAAAAAAAAQgA=</HashCode>
+      <FileName>Doklad.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Enum Name="Daliboris.Transkripce.Objekty.TypPrepisu">
+    <Position X="5.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQCA=</HashCode>
+      <FileName>TypPrepisu.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

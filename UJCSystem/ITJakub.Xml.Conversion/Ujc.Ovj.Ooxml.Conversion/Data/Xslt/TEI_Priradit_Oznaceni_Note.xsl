@@ -25,7 +25,7 @@
 	
 	<xsl:template match="tei:note">
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:attribute name="n">
 				<xsl:call-template name="calculateFootnoteNumber" />
 			</xsl:attribute>
