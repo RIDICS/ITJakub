@@ -14,6 +14,11 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
             m_existManager = existManager;
         }
 
+        public Task<string> GetPageByXmlIdAsync(string bookGuid, string versionId, string xmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        {
+            return m_existManager.GetPageByXmlIdAsync(bookGuid, versionId, xmlId, transformationName, transformationLevel);
+        }
+
         public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             return await m_existManager.GetPagesByName(bookId, versionId, start, end, transformationName, transformationLevel);

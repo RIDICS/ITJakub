@@ -27,6 +27,17 @@ namespace ITJakub.ITJakubService.Core
             m_fileSystemManager = fileSystemManager;
         }
 
+        public async Task<string> GetBookPageByXmlIdAsync(string bookGuid, string xmlId, OutputFormatEnumContract resultFormat)
+        {
+            OutputFormat outputFormat;
+            var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            var transformationName = transformation.Name;
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+            return await m_searchServiceClient.GetBookPageByXmlIdAsync(bookGuid, bookVersion.VersionId, xmlId, transformationName, transformationLevel);
+        }
+
         public async Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;

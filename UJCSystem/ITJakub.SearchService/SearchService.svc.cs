@@ -14,6 +14,11 @@ namespace ITJakub.SearchService
             m_searchServiceManager = Container.Current.Resolve<SearchServiceManager>();
         }
 
+        public Task<string> GetBookPageByXmlIdAsync(string bookGuid, string versionId, string xmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        {
+            return m_searchServiceManager.GetBookPageByXmlIdAsync(bookGuid, versionId, xmlId, transformationName, transformationLevel);
+        }
+
         public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             return await m_searchServiceManager.GetBookPageByPositionAsync(bookId, versionId, pagePosition, transformationName, transformationLevel);

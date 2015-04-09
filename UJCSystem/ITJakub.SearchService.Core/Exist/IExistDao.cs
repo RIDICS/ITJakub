@@ -26,6 +26,10 @@ namespace ITJakub.SearchService.Core.Exist
         Task<string> GetPagesByName(string bookId, string versionId, string start, string end);
 
         [OperationContract]
+        [ExistQuery(XqueryName = "get-pages.xquery")]
+        Task<string> GetPageByXmlIdAsync(string bookGuid, string versionId, string xmlId, string xslPath);
+
+        [OperationContract]
         [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Version)]
         Task UploadVersionFileAsync(string bookId, string versionId, string fileName, Stream dataStream);
 

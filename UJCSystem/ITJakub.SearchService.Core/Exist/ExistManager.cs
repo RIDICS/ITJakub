@@ -69,5 +69,11 @@ namespace ITJakub.SearchService.Core.Exist
             string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
             return await m_client.GetPagesByName(bookId, versionId, start, end, xslPath);
         }
+
+        public async Task<string> GetPageByXmlIdAsync(string bookGuid, string versionId, string xmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        {
+            string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookGuid, versionId);
+            return await m_client.GetPageByXmlIdAsync(bookGuid, versionId, xmlId, xslPath);
+        }
     }
 }

@@ -107,6 +107,14 @@ namespace ITJakub.SearchService.Core.Exist
             return await m_httpClient.GetStringAsync(GetCompleteUri(commInfo, xslPath, bookId, versionId, start, end));
         }
 
+        public async Task<string> GetPageByXmlIdAsync(string bookGuid, string versionId, string xmlId, string xslPath)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookGuid, versionId, xmlId);
+            return await m_httpClient.GetStringAsync(completeUri);
+        }
+
 
         #region Helpers
 
