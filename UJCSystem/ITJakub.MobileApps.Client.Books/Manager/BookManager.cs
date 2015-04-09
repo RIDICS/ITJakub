@@ -16,12 +16,12 @@ namespace ITJakub.MobileApps.Client.Books.Manager
         private const int PhotoCacheSize = 8;
         private const int TextCacheSize = 64;
 
-        private readonly IServiceClient m_serviceClient;
+        private readonly IMobileAppsService m_serviceClient;
         private readonly PhotoCache m_photoCache;
         private readonly DocumentCache m_documentCache;
         private BookViewModel m_currentBook;
 
-        public BookManager(IServiceClient serviceClient)
+        public BookManager(IMobileAppsService serviceClient)
         {
             m_serviceClient = serviceClient;
             m_photoCache = new PhotoCache(serviceClient, PhotoCacheSize);

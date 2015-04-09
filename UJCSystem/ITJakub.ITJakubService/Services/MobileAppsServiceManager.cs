@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.MobileApps.MobileContracts;
@@ -20,28 +21,27 @@ namespace ITJakub.ITJakubService.Services
             m_mobileManager = m_container.Resolve<MobileManager>();
         }
 
-        public IList<BookContract> GetBookList(CategoryContract category)
+        public Task<IList<BookContract>> GetBookListAsync(CategoryContract category)
         {
-            return m_mobileManager.GetBooksByCategory(category);
+            return Task.Run(() => m_mobileManager.GetBooksByCategory(category));
         }
 
-        public IList<BookContract> SearchForBook(CategoryContract category, SearchDestinationContract searchBy, string query)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<PageContract> GetPageList(string bookGuid)
+        public Task<IList<BookContract>> SearchForBookAsync(CategoryContract category, SearchDestinationContract searchBy, string query)
         {
             throw new NotImplementedException();
         }
 
-        public string GetPageAsRtf(string bookGuid, string pageId)
+        public Task<IList<PageContract>> GetPageListAsync(string bookGuid)
         {
-            // TODO switch contracts to async
-            return m_bookManager.GetBookPageByNameAsync(bookGuid, pageId, OutputFormatEnumContract.Rtf).Result;
+            throw new NotImplementedException();
         }
 
-        public Stream GetPagePhoto(string bookGuid, string pageId)
+        public async Task<string> GetPageAsRtfAsync(string bookGuid, string pageId)
+        {
+            return await m_bookManager.GetBookPageByNameAsync(bookGuid, pageId, OutputFormatEnumContract.Rtf);
+        }
+
+        public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
         {
             throw new NotImplementedException();
         }

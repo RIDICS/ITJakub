@@ -1,13 +1,13 @@
 using System.Threading.Tasks;
-using ITJakub.MobileApps.Client.Books.Service.Client;
+using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Manager.Cache
 {
     public class DocumentCache : CacheBase<string>
     {
-        private readonly IServiceClient m_serviceClient;
+        private readonly IMobileAppsService m_serviceClient;
 
-        public DocumentCache(IServiceClient serviceClient, int maxSize) : base(maxSize)
+        public DocumentCache(IMobileAppsService serviceClient, int maxSize) : base(maxSize)
         {
             m_serviceClient = serviceClient;
         }

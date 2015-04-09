@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace ITJakub.MobileApps.MobileContracts
 {
@@ -8,18 +9,18 @@ namespace ITJakub.MobileApps.MobileContracts
     public interface IMobileAppsService
     {
         [OperationContract]
-        IList<BookContract> GetBookList(CategoryContract category);
+        Task<IList<BookContract>> GetBookListAsync(CategoryContract category);
 
         [OperationContract]
-        IList<BookContract> SearchForBook(CategoryContract category, SearchDestinationContract searchBy, string query);
+        Task<IList<BookContract>> SearchForBookAsync(CategoryContract category, SearchDestinationContract searchBy, string query);
 
         [OperationContract]
-        IList<PageContract> GetPageList(string bookGuid);
+        Task<IList<PageContract>> GetPageListAsync(string bookGuid);
 
         [OperationContract]
-        string GetPageAsRtf(string bookGuid, string pageId);
+        Task<string> GetPageAsRtfAsync(string bookGuid, string pageId);
 
         [OperationContract]
-        Stream GetPagePhoto(string bookGuid, string pageId);
+        Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId);
     }
 }

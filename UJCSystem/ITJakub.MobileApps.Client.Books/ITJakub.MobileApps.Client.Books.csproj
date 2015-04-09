@@ -131,7 +131,6 @@
     <Compile Include="Message\PageListMessage.cs" />
     <Compile Include="Manager\Cache\BookPageKey.cs" />
     <Compile Include="Service\Client\EndpointConfiguration.cs" />
-    <Compile Include="Service\Client\IServiceClient.cs" />
     <Compile Include="Service\IDataService.cs" />
     <Compile Include="Service\INavigationService.cs" />
     <Compile Include="Service\Client\MobileCommunicationException.cs" />
