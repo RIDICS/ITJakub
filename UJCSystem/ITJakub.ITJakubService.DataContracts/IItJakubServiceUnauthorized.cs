@@ -10,6 +10,8 @@ namespace ITJakub.ITJakubService.DataContracts
         
         [OperationContract]
         UserContract FindUserByUserName(string userName);
-        
+
+        [OperationContract]
+        UserContract CreateUser(UserContract user);
     }
 }

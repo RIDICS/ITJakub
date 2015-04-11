@@ -15,7 +15,8 @@ namespace ITJakub.Web.Hub
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public CreateUserResultContract CreateUser(CreateUserContract createUserContract)
+        [Obsolete]
+        public CreateUserResultContract CreateUser(CreateUserContract createUserContract)   //TODO this method is obsolete due to in Unauthorized method
         {
             try
             {
@@ -35,7 +36,8 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public LoginUserResultContract LoginUser(LoginUserContract loginUserContract)
+        [Obsolete]
+        public LoginUserResultContract LoginUser(LoginUserContract loginUserContract) //TODO no need to login (we must obtain username and passwordHash only and then send it with requests)
         {
             try
             {

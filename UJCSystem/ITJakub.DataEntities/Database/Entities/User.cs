@@ -7,6 +7,7 @@ namespace ITJakub.DataEntities.Database.Entities
     public class User : IEquatable<User>
     {
         public virtual int Id { get; set; }
+        public virtual string UserName { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
         public virtual string Email { get; set; }
@@ -18,6 +19,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual DateTime CreateTime { get; set; }
         public virtual string AvatarUrl { get; set; }
         public virtual IList<Bookmark> Bookmarks { get; set; }
+        
 
         public virtual bool Equals(User other)
         {

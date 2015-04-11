@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
 
@@ -15,7 +16,7 @@ namespace ITJakub.ITJakubService.Core
             m_userRepository = userRepository;
         }
 
-        public CreateUserResultContract CreateUser(CreateUserContract userInfo)
+        public CreateUserResultContract CreateUser(CreateUserContract userInfo) //TODO delete this method
         {
             try
             {
@@ -55,5 +56,65 @@ namespace ITJakub.ITJakubService.Core
             }
             return new LoginUserResultContract {Successfull = false};
         }
+
+
+
+        #region New auth methods
+
+        public UserContract CreateLocalUser(UserContract user) //TODO write automapper profiles
+        {
+            var now = DateTime.UtcNow;
+            var dbUser = new User
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                CreateTime = now,
+                PasswordHash = user.PasswordHash,
+                AuthenticationProvider = AuthenticationProvider.ItJakub,
+                CommunicationToken = Guid.NewGuid().ToString(), //TODO remove token
+                CommunicationTokenCreateTime = now,
+            };
+            var userId = m_userRepository.Create(dbUser);
+            return FindById(userId);
+        }
+
+        public UserContract FindByUserName(string userName)
+        {
+            var dbUser = m_userRepository.FindByUserName(userName);
+            if (dbUser == null) return null;
+            var user = new UserContract
+            {
+                Id = dbUser.Id,
+                UserName = dbUser.UserName,
+                Email = dbUser.Email,
+                FirstName = dbUser.FirstName,
+                LastName = dbUser.LastName,
+                CreateTime = dbUser.CreateTime,
+                PasswordHash = dbUser.PasswordHash
+            };
+            return user;
+        }
+
+        public UserContract FindById(int userId)
+        {
+            var dbUser = m_userRepository.FindById(userId);
+            if (dbUser == null) return null;
+            var user = new UserContract
+            {
+                Id = dbUser.Id,
+                UserName = dbUser.UserName,
+                Email = dbUser.Email,
+                FirstName = dbUser.FirstName,
+                LastName = dbUser.LastName,
+                CreateTime = dbUser.CreateTime,
+                PasswordHash = dbUser.PasswordHash
+            };
+            return user;
+        }
+
+
+        #endregion
     }
 }

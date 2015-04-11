@@ -49,5 +49,25 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public UserContract CreateUser(UserContract user)
+        {
+            try
+            {
+                return Channel.CreateUser(user);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("CreateUser failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("CreateUser timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

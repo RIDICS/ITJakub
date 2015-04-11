@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.WebPages;
+using ITJakub.ITJakubService.DataContracts;
 using Microsoft.AspNet.Identity;
 
 namespace ITJakub.Web.Hub.Identity
 {
-    // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
-
-    // Configure the application sign-in manager which is used in this application.
-
     public class ApplicationUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>,IUserLockoutStore<ApplicationUser, string>, IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser, string> {
         private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
 
@@ -35,43 +32,32 @@ namespace ITJakub.Web.Hub.Identity
 
         public Task SetEmailConfirmedAsync(ApplicationUser user, bool confirmed)
         {
-            return Task.FromResult(0L);
+            throw new NotSupportedException();
         }
 
         public async Task<ApplicationUser> FindByEmailAsync(string email)
         {
-            if (email.Contains("a"))
-            {
-                return await Task<ApplicationUser>.Factory.StartNew(() => null);
-            }
-            var task = Task<ApplicationUser>.Factory.StartNew(() => new ApplicationUser //TODO
-            {
-                Id = "uniqueId",
-                Email = "mini@mini.cz"
-            });
-            return await task;
+            throw new NotSupportedException();
         }
 
         public async Task<DateTimeOffset> GetLockoutEndDateAsync(ApplicationUser user)
         {
-            var task = Task<DateTimeOffset>.Factory.StartNew(() => new DateTimeOffset());
-            return await task;
+            throw new NotSupportedException();
         }
 
         public Task SetLockoutEndDateAsync(ApplicationUser user, DateTimeOffset lockoutEnd)
         {
-            return Task.FromResult(0L);
+            throw new NotSupportedException();
         }
 
         public async Task<int> IncrementAccessFailedCountAsync(ApplicationUser user)
         {
-            var task = Task<int>.Factory.StartNew(() => 1);
-            return await task;
+            throw new NotSupportedException();
         }
 
         public Task ResetAccessFailedCountAsync(ApplicationUser user)
         {
-            return Task.FromResult(0L);
+            throw new NotSupportedException();
         }
 
         public async Task<int> GetAccessFailedCountAsync(ApplicationUser user)
@@ -88,7 +74,7 @@ namespace ITJakub.Web.Hub.Identity
 
         public Task SetLockoutEnabledAsync(ApplicationUser user, bool enabled)
         {
-            return Task.FromResult(0L);
+            throw new NotSupportedException();
         }
 
         public async Task SetPasswordHashAsync(ApplicationUser user, string passwordHash)
@@ -109,19 +95,32 @@ namespace ITJakub.Web.Hub.Identity
             return await task;
         }
 
-        public Task CreateAsync(ApplicationUser user)
+        public async Task CreateAsync(ApplicationUser user)
         {
-            return Task.FromResult(0L);
+            var task = Task.Factory.StartNew(() =>
+            {
+                var userContract = new UserContract
+                {
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    CreateTime = user.CreateTime,
+                    PasswordHash = user.PasswordHash
+                };
+                m_serviceUnauthorizedClient.CreateUser(userContract);
+            });
+            await task;
         }
 
         public Task UpdateAsync(ApplicationUser user)
         {
-            return Task.FromResult(0L);
+            throw new NotSupportedException();
         }
 
         public Task DeleteAsync(ApplicationUser user)
         {
-            return Task.FromResult(0L);
+            throw new NotSupportedException();
         }
 
         public async Task<ApplicationUser> FindByIdAsync(string userId)
@@ -129,10 +128,16 @@ namespace ITJakub.Web.Hub.Identity
             var task = Task<ApplicationUser>.Factory.StartNew(() =>
             {
                 var user = m_serviceUnauthorizedClient.FindUserById(Int32.Parse(userId));
+                if (user == null) return null;
                 return new ApplicationUser
                 {
-                    Id = user.Id,
-                    Email = user.Email //TODO
+                    Id = user.Id.ToString(),
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    CreateTime = user.CreateTime,
+                    PasswordHash = user.PasswordHash
                 };
             });
 
@@ -144,10 +149,16 @@ namespace ITJakub.Web.Hub.Identity
             var task = Task<ApplicationUser>.Factory.StartNew(() =>
             {
                 var user = m_serviceUnauthorizedClient.FindUserByUserName(userName);
+                if (user == null) return null;
                 return new ApplicationUser
                 {
-                    Id = user.Id,
-                    Email = user.Email //TODO
+                    Id = user.Id.ToString(),
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    CreateTime = user.CreateTime,
+                    PasswordHash = user.PasswordHash
                 };
             });
             return await task;
@@ -155,16 +166,7 @@ namespace ITJakub.Web.Hub.Identity
 
         public async Task<ApplicationUser> FindAsync(string userName, string password)
         {
-            var task = Task<ApplicationUser>.Factory.StartNew(() =>
-            {
-                var user = m_serviceClient.FindUserByUserName(userName);
-                return new ApplicationUser
-                {
-                    Id = user.Id,
-                    Email = user.Email //TODO
-                };
-            });
-            return await task;
+            return await FindByNameAsync(userName);
         }
 
         public void Dispose()
@@ -173,7 +175,7 @@ namespace ITJakub.Web.Hub.Identity
 
         public Task SetTwoFactorEnabledAsync(ApplicationUser user, bool enabled)
         {
-            return Task.FromResult(0L);
+            throw new NotSupportedException();
         }
 
         public async Task<bool> GetTwoFactorEnabledAsync(ApplicationUser user)

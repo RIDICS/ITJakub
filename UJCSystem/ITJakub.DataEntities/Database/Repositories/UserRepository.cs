@@ -89,5 +89,37 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             return Guid.NewGuid().ToString("N"); //TODO seems little bit overpowered
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual User FindByUserName(string userName)
+        {
+            using (ISession session = GetSession())
+            {
+                return session.QueryOver<User>()
+                    .Where(user => user.UserName == userName)
+                    .SingleOrDefault<User>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual User FindById(int userId)
+        {
+            using (ISession session = GetSession())
+            {
+                return session.QueryOver<User>()
+                    .Where(user => user.Id == userId)
+                    .SingleOrDefault<User>();
+            }
+        }
+        
+        
+        [Transaction(TransactionMode.Requires)]
+        public virtual int Create(User user)
+        {
+            using (ISession session = GetSession())
+            {
+                return (int) base.Create(user);
+            }
+        }
     }
 }
