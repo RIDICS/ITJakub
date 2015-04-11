@@ -7,10 +7,8 @@ using Microsoft.AspNet.Identity;
 namespace ITJakub.Web.Hub.Identity
 {
     public class ApplicationUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>,IUserLockoutStore<ApplicationUser, string>, IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser, string> {
-        private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
-
-        private readonly ItJakubServiceUnauthorizedClient m_serviceUnauthorizedClient =
-            new ItJakubServiceUnauthorizedClient();
+        
+        private readonly ItJakubServiceUnauthorizedClient m_serviceUnauthorizedClient = new ItJakubServiceUnauthorizedClient();
 
         public async Task SetEmailAsync(ApplicationUser user, string email)
         {
@@ -108,7 +106,8 @@ namespace ITJakub.Web.Hub.Identity
                     CreateTime = user.CreateTime,
                     PasswordHash = user.PasswordHash
                 };
-                m_serviceUnauthorizedClient.CreateUser(userContract);
+                var result = m_serviceUnauthorizedClient.CreateUser(userContract);
+                user.Id = result.Id.ToString();
             });
             await task;
         }

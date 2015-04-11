@@ -60,7 +60,6 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
-                case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Přihlášení se nezdařilo.");
                     return View(model);
@@ -94,15 +93,6 @@ namespace ITJakub.Web.Hub.Controllers
                     LastName = model.LastName
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                var userContract = new UserContract
-                {
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    PasswordHash = user.PasswordHash
-                };
-                m_serviceUnauthorizedClient.CreateUser(userContract);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, false, false);
