@@ -11,5 +11,7 @@ namespace ITJakub.Shared.Contracts
         [DataMember]
         public int Position { get; set; }
 
+        [DataMember]
+        public string XmlId { get; set; }
     }
 }

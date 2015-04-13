@@ -27,7 +27,7 @@ namespace ITJakub.SearchService.Core.Exist
 
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        Task<string> GetPageByXmlIdAsync(string bookGuid, string versionId, string xmlId, string xslPath);
+        Task<string> GetPageByXmlIdAsync(string bookId, string versionId, string xmlId);
 
         [OperationContract]
         [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Version)]

@@ -35,10 +35,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageListMobileAsync(bookGuid);
         }
 
-        public Task<string> GetPageAsRtfAsync(string bookGuid, string pageName)
+        public Task<string> GetPageAsRtfAsync(string bookGuid, string pageId)
         {
-            return m_bookManager.GetBookPageByNameAsync(bookGuid, pageName, OutputFormatEnumContract.Html);
-            //TODO use XML ID instead of name
+            return m_bookManager.GetBookPageByXmlIdAsync(bookGuid, pageId, OutputFormatEnumContract.Html); //TODO switch to RTF transformation
         }
 
         public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageName)

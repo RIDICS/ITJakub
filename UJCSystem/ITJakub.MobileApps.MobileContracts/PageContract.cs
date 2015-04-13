@@ -10,5 +10,8 @@ namespace ITJakub.MobileApps.MobileContracts
 
         [DataMember]
         public int Position { get; set; }
+
+        [DataMember]
+        public string XmlId { get; set; }
     }
 }

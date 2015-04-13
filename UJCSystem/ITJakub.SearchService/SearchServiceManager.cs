@@ -14,9 +14,9 @@ namespace ITJakub.SearchService
             m_bookDao = bookDao;
         }
 
-        public Task<string> GetBookPageByXmlIdAsync(string bookGuid, string versionId, string xmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public Task<string> GetBookPageByXmlIdAsync(string bookId, string versionId, string xmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return m_bookDao.GetPageByXmlIdAsync(bookGuid, versionId, xmlId, transformationName, transformationLevel);
+            return m_bookDao.GetPageByXmlIdAsync(bookId, versionId, xmlId, transformationName, transformationLevel);
         }
 
         public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition,

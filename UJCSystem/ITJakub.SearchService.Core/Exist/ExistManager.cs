@@ -31,7 +31,12 @@ namespace ITJakub.SearchService.Core.Exist
             foreach (XElement pageBreakElement in pageBreakElements)
             {
                 ++position;
-                pageList.Add(new BookPageContract {Position = position, Text = pageBreakElement.Attribute("n").Value});
+                pageList.Add(new BookPageContract
+                {
+                    Position = position,
+                    Text = pageBreakElement.Attribute("n").Value,
+                    XmlId = pageBreakElement.Attribute(pageBreakElement.GetNamespaceOfPrefix("xml") + "id").Value
+                });
             }
 
             return pageList;
@@ -70,10 +75,10 @@ namespace ITJakub.SearchService.Core.Exist
             return await m_client.GetPagesByName(bookId, versionId, start, end, xslPath);
         }
 
-        public async Task<string> GetPageByXmlIdAsync(string bookGuid, string versionId, string xmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public async Task<string> GetPageByXmlIdAsync(string bookId, string versionId, string xmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookGuid, versionId);
-            return await m_client.GetPageByXmlIdAsync(bookGuid, versionId, xmlId, xslPath);
+            string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
+            return await m_client.GetPageByXmlIdAsync(bookId, versionId, xmlId, xslPath);
         }
     }
 }

@@ -13,11 +13,11 @@ namespace ITJakub.Core.SearchService
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public async Task<string> GetBookPageByXmlIdAsync(string bookGuid, string versionId, string xmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public async Task<string> GetBookPageByXmlIdAsync(string bookId, string versionId, string xmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return await Channel.GetBookPageByXmlIdAsync(bookGuid, versionId, xmlId, transformationName, transformationLevel);
+                return await Channel.GetBookPageByXmlIdAsync(bookId, versionId, xmlId, transformationName, transformationLevel);
             }
             catch (CommunicationException ex)
             {

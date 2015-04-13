@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.MobileContracts
         Task<IList<PageContract>> GetPageListAsync(string bookGuid);
 
         [OperationContract]
-        Task<string> GetPageAsRtfAsync(string bookGuid, string pageName);
+        Task<string> GetPageAsRtfAsync(string bookGuid, string pageId);
 
         [OperationContract]
         Task<Stream> GetPagePhotoAsync(string bookGuid, string pageName);
