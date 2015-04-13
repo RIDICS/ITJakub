@@ -1,8 +1,11 @@
 ﻿
-namespace Daliboris.Pomucky.Soubory {
-	using System.Collections.Generic;
-	using DSOFile;
-	using System.IO;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Microsoft.WindowsAPICodePack.Shell;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+
+namespace Daliboris.Pomucky.Soubory.MetaInfo {
 	public static class Metadata {
 
 		public enum MtdVlastnosti {
@@ -24,6 +27,12 @@ namespace Daliboris.Pomucky.Soubory {
 
 
 		public static bool UlozUzivatelskeVlastnosti(string sSoubor, Dictionary<string, object> gdcVlastnosti) {
+
+
+			bool bUspech = true;
+			return bUspech;
+
+			/*
 			DSOFile.OleDocumentPropertiesClass oleDocument = new DSOFile.OleDocumentPropertiesClass();
 			DSOFile.CustomProperties customProperties;
 
@@ -74,11 +83,10 @@ namespace Daliboris.Pomucky.Soubory {
 				}
 			}
 			return bUspech;
-
+			*/
 		}
 
-		public static bool UlozUzivatelskouVlasnost(string sSoubor, string sNazevVlastnosti,
-			dsoFilePropertyType pTypVlasnosti, object oHodnota) {
+		public static bool UlozUzivatelskouVlasnost(string sSoubor, string sNazevVlastnosti, object oHodnota) {
 			Dictionary<string, object> gdc = new Dictionary<string, object>(1);
 			gdc.Add(sNazevVlastnosti, oHodnota);
 			return UlozUzivatelskeVlastnosti(sSoubor, gdc);
@@ -117,7 +125,12 @@ namespace Daliboris.Pomucky.Soubory {
 
 		}
 
-		public static bool UlozZabudovanouVlastnost(string sSoubor, string sNazevVlasnosti, dsoFilePropertyType pTypVlasnosti, object oHodnota) {
+		public static bool UlozZabudovanouVlastnost(string sSoubor, string sNazevVlasnosti, object oHodnota) {
+
+			bool bUspech = true;
+			return bUspech;
+
+			/*
 			DSOFile.OleDocumentPropertiesClass oleDocument = new DSOFile.OleDocumentPropertiesClass();
 			DSOFile.SummaryProperties summaryProperties;
 			bool bUspech = true;
@@ -163,9 +176,14 @@ namespace Daliboris.Pomucky.Soubory {
 				}
 			}
 			return bUspech;
+			 */
 		}
 
-		public static object NactiZabudovanouVlastnost(string sSoubor, string sNazevVlasnosti) {
+		public static object NactiZabudovanouVlastnost(string sSoubor, string sNazevVlasnosti)
+		{
+			string[] vlastnosti = new[] {sNazevVlasnosti};
+			return NactiZabudovaneVlastnosti(sSoubor, vlastnosti)[0];
+			/*
 			DSOFile.OleDocumentPropertiesClass oleDocument = new DSOFile.OleDocumentPropertiesClass();
 			DSOFile.SummaryProperties summaryProperties;
 			//DSOFile.CustomProperties customProperties;
@@ -209,61 +227,91 @@ namespace Daliboris.Pomucky.Soubory {
 				}
 			}
 			return oHodnota;
+			 * */
+		}
+
+		private static string PropertyValueAsString(IShellProperty prop)
+		{
+			var value = prop.ValueAsObject == null ? "" : prop.FormatForDisplay(PropertyDescriptionFormatOptions.None);
+
+			return value;
 		}
 
 		public static object[] NactiZabudovaneVlastnosti(string sSoubor, string[] asVlastnosti) {
-			DSOFile.OleDocumentPropertiesClass oleDocument = new DSOFile.OleDocumentPropertiesClass();
-			DSOFile.SummaryProperties summaryProperties;
-			//DSOFile.CustomProperties customProperties;
+
 			object[] aoHodnoty = new object[asVlastnosti.Length];
-			try {
-				oleDocument.Open(sSoubor, true, dsoFileOpenOptions.dsoOptionDefault);
 
-				summaryProperties = oleDocument.SummaryProperties;
-				//customProperties = oleDocument.CustomProperties;
-				for (int i = 0; i < asVlastnosti.Length; i++) {
+			try
+			{
+				using (ShellObject shellObject = ShellObject.FromParsingName(sSoubor))
+				{
+					for (int i = 0; i < asVlastnosti.Length; i++)
+					{
 
 
-					switch (asVlastnosti[i]) {
-						case "Autor":
-							aoHodnoty[i] = summaryProperties.Author;
-							break;
-						case "Kategorie":
-							aoHodnoty[i] = summaryProperties.Category;
-							break;
-						case "Titul":
-							aoHodnoty[i] = summaryProperties.Title;
-							break;
-						case "Předmět":
-						case "Knihovna":
-							aoHodnoty[i] = summaryProperties.Subject;
-							break;
-						case "Komentář":
-							aoHodnoty[i] = summaryProperties.Comments;
-							break;
-						default:
-							break;
+						switch (asVlastnosti[i])
+						{
+							case "Autor":
+								aoHodnoty[i] = PropertyValueAsString(shellObject.Properties.GetProperty(SystemProperties.System.Author));
+								break;
+							case "Kategorie":
+								aoHodnoty[i] = PropertyValueAsString(shellObject.Properties.GetProperty(SystemProperties.System.Category));
+								break;
+							case "Titul":
+								aoHodnoty[i] = PropertyValueAsString(shellObject.Properties.GetProperty(SystemProperties.System.Title));
+								break;
+							case "Předmět":
+							case "Knihovna":
+								aoHodnoty[i] = PropertyValueAsString(shellObject.Properties.GetProperty(SystemProperties.System.Subject));
+								break;
+							case "Komentář":
+								aoHodnoty[i] = PropertyValueAsString(shellObject.Properties.GetProperty(SystemProperties.System.Comment));
+								break;
+							default:
+								break;
+						}
 					}
 				}
-			}
-			catch { }
-			finally {
-				if (oleDocument != null) {
-					if (oleDocument.IsDirty)
-						oleDocument.Close(true);
 
-					else
-						oleDocument.Close(false);
-				}
+			}
+			catch (Exception)
+			{
+				
+				throw;
 			}
 			return aoHodnoty;
 		}
 
-		public static object[] NactiUzivatelskeVlastnosti(string sSoubor, string[] asNazvyVlastnosti) {
+		public static object[] NactiUzivatelskeVlastnosti(string sSoubor, string[] asVlastnosti)
+		{
+
+			object[] aoHodnoty = new object[asVlastnosti.Length];
+
+			try
+			{
+				using (ShellObject shellObject = ShellObject.FromParsingName(sSoubor))
+				{
+
+					foreach (IShellProperty property in shellObject.Properties.DefaultPropertyCollection)
+					{
+						for (int i = 0; i < asVlastnosti.Length; i++)
+						{
+							if (property.CanonicalName == asVlastnosti[i])
+								aoHodnoty[i] = PropertyValueAsString(property);
+						}
+					}
+				}
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+			return aoHodnoty;
+			/*
 			DSOFile.OleDocumentPropertiesClass oleDocument = new DSOFile.OleDocumentPropertiesClass();
 			//DSOFile.SummaryProperties summaryProperties;
 			DSOFile.CustomProperties customProperties;
-			object[] aoHodnoty = new object[asNazvyVlastnosti.Length];
 
 			try {
 				oleDocument.Open(sSoubor, true, dsoFileOpenOptions.dsoOptionDefault);
@@ -271,8 +319,9 @@ namespace Daliboris.Pomucky.Soubory {
 				//summaryProperties = oleDocument.SummaryProperties;
 				customProperties = oleDocument.CustomProperties;
 				foreach (CustomProperty cp in customProperties) {
-					for (int i = 0; i < asNazvyVlastnosti.Length; i++) {
-						if (cp.Name == asNazvyVlastnosti[i])
+					for (int i = 0; i < asVlastnosti.Length; i++)
+					{
+						if (cp.Name == asVlastnosti[i])
 							aoHodnoty[i] = cp.get_Value();
 					}
 
@@ -284,6 +333,7 @@ namespace Daliboris.Pomucky.Soubory {
 					oleDocument.Close(false);
 			}
 			return aoHodnoty;
+			*/
 		}
 
 
@@ -291,7 +341,7 @@ namespace Daliboris.Pomucky.Soubory {
 			return NactiUzivatelskeVlastnosti(sAdresar, "*.*", sNazevVlastnosti);
 		}
 
-		public static object[] NactiUzivatelskeVlastnosti(string sAdresar, string sMaska, string sNazevVlastnosti) {
+		private static object[] NactiUzivatelskeVlastnosti(string sAdresar, string sMaska, string sNazevVlastnosti) {
 			object[] oHodnoty;
 			int i = 0;
 			DirectoryInfo di = new DirectoryInfo(sAdresar);
@@ -311,11 +361,16 @@ namespace Daliboris.Pomucky.Soubory {
 			return oHodnoty;
 		}
 
-		public static object NactiUzivatelskouVlastnost(string sSoubor, string sNazevVlastnosti) {
+		private static object NactiUzivatelskouVlastnost(string sSoubor, string sNazevVlastnosti) {
+
+			object oHodnota = null;
+
+			return oHodnota;
+
+			/*
 			DSOFile.OleDocumentPropertiesClass oleDocument = new DSOFile.OleDocumentPropertiesClass();
 			//DSOFile.SummaryProperties summaryProperties;
 			DSOFile.CustomProperties customProperties;
-			object oHodnota = null;
 
 			try {
 				oleDocument.Open(sSoubor, true, dsoFileOpenOptions.dsoOptionDefault);
@@ -338,8 +393,10 @@ namespace Daliboris.Pomucky.Soubory {
 				}
 			}
 			return oHodnota;
+			*/
 		}
 
+/*
 		private static CustomProperty UzivatelskaVlastnost(string sSoubor, string sNazevVlastnosti) {
 			DSOFile.OleDocumentPropertiesClass oleDocument = new DSOFile.OleDocumentPropertiesClass();
 			DSOFile.SummaryProperties summaryProperties;
@@ -372,6 +429,7 @@ namespace Daliboris.Pomucky.Soubory {
 
 
 		}
+*/
 
 	}
 }

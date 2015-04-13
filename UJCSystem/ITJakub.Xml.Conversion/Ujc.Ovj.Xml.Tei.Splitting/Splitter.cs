@@ -248,7 +248,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 							}
 							else
 							{
-								if (currentSplitInfo != null)
+								if (currentSplitInfo != null && currentSplitInfo.Number == null)
 								{
 									currentSplitInfo.Id = reader.GetAttribute("xml:id");
 									currentSplitInfo.Number = reader.GetAttribute("n");

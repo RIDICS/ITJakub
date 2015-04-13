@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Daliboris.Pomucky.Soubory.MetaInfo;
 
 namespace Ujc.Ovj.Ooxml.Conversion.Test
 {
@@ -16,8 +17,38 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 			stopwatch.Start();
 			MakeBulkConversion();
 			//MakeConversion();
+			//TestMetadata();
 			Console.WriteLine("Conversion finished in {0}.", stopwatch.Elapsed);
 			Console.ReadLine();
+		}
+
+		private static void TestMetadata()
+		{
+			string dataDirectory = GetDataDirectory();
+			string inputDirectory = Path.Combine(dataDirectory, "Input");
+			string outputDirectory = Path.Combine(dataDirectory, "Output");
+			DirectoryInfo inputDirectoryInfo = new DirectoryInfo(inputDirectory);
+			FileInfo[] files = inputDirectoryInfo.GetFiles("*.docx", SearchOption.TopDirectoryOnly);
+			foreach (FileInfo fileInfo in files)
+			{
+				Console.WriteLine("{0}", fileInfo.Name);
+				string[] propertyNames = new[] { "Autor", "Kategorie", "Titul", "Předmět", "Komentář" };
+				object[] properties = Metadata.NactiZabudovaneVlastnosti(fileInfo.FullName, propertyNames);
+
+				string[] customPropertyNames = new[] { "htx_id" };
+				object[] customProperties = Metadata.NactiUzivatelskeVlastnosti(fileInfo.FullName, customPropertyNames);
+
+				for (int i = 0; i < propertyNames.Length; i++)
+				{
+					Console.WriteLine("{0}:\t{1}", propertyNames[i], properties[i]);
+				}
+
+				for (int i = 0; i < customPropertyNames.Length; i++)
+				{
+					Console.WriteLine("{0}:\t{1}", customPropertyNames[i], customProperties[i]);
+				}
+				Console.WriteLine();
+			}
 		}
 
 		private static void MakeBulkConversion()

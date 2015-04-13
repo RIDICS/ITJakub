@@ -1,4 +1,5 @@
-﻿using Daliboris.Pomucky.Xml;
+﻿using Daliboris.Pomucky.Soubory.MetaInfo;
+using Daliboris.Pomucky.Xml;
 using Daliboris.Texty.Evidence.Rozhrani;
 
 namespace Daliboris.Texty.Evidence.Uloziste {
@@ -100,8 +101,9 @@ namespace Daliboris.Texty.Evidence.Uloziste {
 
 				if (!blnJenomZaklad) {
 					if (sb.FormatWordu == FormatSouboru.Doc) {
+						throw new FormatException("Sobory DOC nejsou podporovány");
 						sSouborDocx = System.IO.Path.GetTempPath() + fis[i].Name + "x";
-						Konverze.Doc2Docx(fis[i].FullName, sSouborDocx);
+						//Konverze.Doc2Docx(fis[i].FullName, sSouborDocx);
 						FileInfo fi = new FileInfo(sSouborDocx);
 												if(fi.Exists)
 								sb.Velikost = fi.Length;

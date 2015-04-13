@@ -132,7 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Campari.Software.Reflection\Campari.Software.Reflection.csproj">
-      <Project>{8A6D0F17-5C0F-41B0-AB0A-425548BF92F1}</Project>
+      <Project>{8a6d0f17-5c0f-41b0-ab0a-425548bf92f1}</Project>
       <Name>Campari.Software.Reflection</Name>
     </ProjectReference>
   </ItemGroup>

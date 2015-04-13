@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Transkriptor.Rozh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Transkripce.Objekty", "Daliboris.Transkriptor.Objekty\Daliboris.Transkripce.Objekty.csproj", "{2890BD2D-9511-4503-BB1A-01B7493EADE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Pomucky.Soubory.MetaInfo", "Daliboris.Pomucky.Soubory.MetaInfo\Daliboris.Pomucky.Soubory.MetaInfo.csproj", "{4D9D7CA9-3863-4014-8138-4735AF5B5851}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -349,6 +351,14 @@ Global
 		{2890BD2D-9511-4503-BB1A-01B7493EADE0}.Release|x64.Build.0 = Release|x64
 		{2890BD2D-9511-4503-BB1A-01B7493EADE0}.Release|x86.ActiveCfg = Release|x86
 		{2890BD2D-9511-4503-BB1A-01B7493EADE0}.Release|x86.Build.0 = Release|x86
+		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.Release|x64.ActiveCfg = Release|Any CPU
+		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

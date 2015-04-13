@@ -126,6 +126,10 @@
       <Project>{114b8733-decf-4402-ba25-e3dbe265e993}</Project>
       <Name>Daliboris.OOXML.Pomucky</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Soubory.MetaInfo\Daliboris.Pomucky.Soubory.MetaInfo.csproj">
+      <Project>{4d9d7ca9-3863-4014-8138-4735af5b5851}</Project>
+      <Name>Daliboris.Pomucky.Soubory.MetaInfo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Pomucky.Soubory\Daliboris.Pomucky.Soubory.csproj">
       <Project>{e6f52bb8-df05-449b-964a-1e35d8f57304}</Project>
       <Name>Daliboris.Pomucky.Soubory</Name>

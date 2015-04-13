@@ -164,11 +164,11 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 			IXsltTransformer transformer;
 
 			if (settings.PreferredVersion == "2.0" || xsltInformation.Version == "2.0")
-				goto Altova;
+                goto AltovaExe; //Altova originally
 				//goto AltovaExe;
 
 			if (settings.PreferredProvider == "Altova")
-				goto Altova;
+				goto AltovaExe; //Altova originally
 			if (settings.PreferredProvider == "AltovaExe")
 				goto AltovaExe;
 
