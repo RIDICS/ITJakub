@@ -373,7 +373,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         {
             m_dataService.GetCurrentPage(pageId =>
             {
-                SelectedPage = m_pageList.FirstOrDefault(pageViewModel => pageViewModel.PageId == pageId);
+                SelectedPage = m_pageList.FirstOrDefault(pageViewModel => pageViewModel.XmlId == pageId);
             });
         }
 
@@ -392,7 +392,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             if (string.IsNullOrEmpty(GoToPageText))
                 return;
 
-            var pageViewModel = m_pageList.FirstOrDefault(page => page.PageId.Equals(GoToPageText, StringComparison.OrdinalIgnoreCase));
+            var pageViewModel = m_pageList.FirstOrDefault(page => page.PageName.Equals(GoToPageText, StringComparison.OrdinalIgnoreCase));
             if (pageViewModel == null)
             {
                 IsPageNotFoundError = true;
@@ -404,12 +404,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
         private void UpdateCurrentPage(PageViewModel lastPage, PageViewModel newPage)
         {
-            m_dataService.UpdateCurrentPage(newPage.PageId, exception =>
+            m_dataService.UpdateCurrentPage(newPage.XmlId, exception =>
             {
                 if (exception != null)
                 {
                     //rollback change current page
-                    m_dataService.SetCurrentBook(m_dataService.GetCurrentBookGuid(), lastPage.PageId);
+                    m_dataService.SetCurrentBook(m_dataService.GetCurrentBookGuid(), lastPage.XmlId);
                     m_selectedPage = lastPage;
                     RaisePropertyChanged(() => SelectedPage);
                     LoadPage();

@@ -8,6 +8,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
 
         public string PageName { get; set; }
 
+        public string XmlId { get; set; }
+
         public int PagePosition { get; set; }
 
         public string RtfText { get; set; }

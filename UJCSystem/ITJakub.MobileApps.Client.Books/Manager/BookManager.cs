@@ -108,7 +108,8 @@ namespace ITJakub.MobileApps.Client.Books.Manager
                 var viewModels = new ObservableCollection<PageViewModel>(list.Select(page => new PageViewModel
                 {
                     Name = page.Name,
-                    Position = page.Position
+                    Position = page.Position,
+                    XmlId = page.XmlId
                 }));
 
                 callback(viewModels, null);

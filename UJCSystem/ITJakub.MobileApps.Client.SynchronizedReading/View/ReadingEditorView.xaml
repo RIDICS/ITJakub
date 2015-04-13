@@ -56,7 +56,7 @@
                         <Run Text="{Binding PublishDate}" />
                         <LineBreak />
                         <Run Text="Zvolená výchozí strana: " />
-                        <Run Text="{Binding DefaultPageId}" />
+                        <Run Text="{Binding PageName}" />
                     </TextBlock>
                 </StackPanel>
 

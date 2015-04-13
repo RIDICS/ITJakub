@@ -155,6 +155,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
                 BookInfo = bookDetails,
                 PageName = SelectedPage.Name,
                 PagePosition = SelectedPage.Position,
+                XmlId = SelectedPage.XmlId,
                 PagePhoto = PagePhotoViewModel.PagePhoto,
                 RtfText = PageTextViewModel.RtfText
             };

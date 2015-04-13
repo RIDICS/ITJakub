@@ -20,6 +20,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private bool m_isShowPhotoEnabled;
         private ImageSource m_bookPagePhoto;
         private bool m_loadingPhoto;
+        private string m_pageName;
 
         public ReadingEditorViewModel(ReaderDataService dataService)
         {
@@ -68,12 +69,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             }
         }
 
-        public string DefaultPageId
+        public string PageName
         {
-            get { return m_defaultPageId; }
+            get { return m_pageName; }
             set
             {
-                m_defaultPageId = value;
+                m_pageName = value;
                 RaisePropertyChanged();
             }
         }
@@ -162,11 +163,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             if (book == null)
                 return;
 
-            m_dataService.SetCurrentBook(book.BookInfo.Guid, book.PageName);
+            m_dataService.SetCurrentBook(book.BookInfo.Guid, book.XmlId);
             BookAuthor = book.BookInfo.Authors;
             BookName = book.BookInfo.Title;
             PublishDate = book.BookInfo.PublishDate;
-            DefaultPageId = book.PageName;
+            PageName = book.PageName;
+            m_defaultPageId = book.XmlId;
             PageRtfText = book.RtfText;
             BookPagePhoto = book.PagePhoto;
 
@@ -210,7 +212,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 isAnyError = true;
             }
 
-            if (DefaultPageId == null)
+            if (m_defaultPageId == null)
             {
                 ErrorBookNotSelected = true;
                 isAnyError = true;
@@ -227,7 +229,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 return;
 
             Saving = true;
-            m_dataService.CreateTask(TaskName, DefaultPageId, exception =>
+            m_dataService.CreateTask(TaskName, m_defaultPageId, exception =>
             {
                 Saving = false;
                 if (exception != null)

@@ -2,7 +2,9 @@
 {
     public class PageViewModel
     {
-        public string PageId { get; set; }
+        public string PageName { get; set; }
+
+        public string XmlId { get; set; }
 
         public int Position { get; set; }
     }
