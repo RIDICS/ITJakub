@@ -15,48 +15,6 @@ namespace ITJakub.Web.Hub
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        [Obsolete]
-        public CreateUserResultContract CreateUser(CreateUserContract createUserContract)   //TODO this method is obsolete due to in Unauthorized method
-        {
-            try
-            {
-                return Channel.CreateUser(createUserContract);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("CreateUser failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("CreateUser timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
-        [Obsolete]
-        public LoginUserResultContract LoginUser(LoginUserContract loginUserContract) //TODO no need to login (we must obtain username and passwordHash only and then send it with requests)
-        {
-            try
-            {
-                return Channel.LoginUser(loginUserContract);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("LoginUser failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("LoginUser timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
         {
             try

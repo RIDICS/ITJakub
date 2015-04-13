@@ -28,16 +28,6 @@ namespace ITJakub.ITJakubService.Services
             m_searchManager = m_container.Resolve<SearchManager>();
         }
 
-        public CreateUserResultContract CreateUser(CreateUserContract createUserContract)
-        {
-            return m_userManager.CreateUser(createUserContract);
-        }
-
-        public LoginUserResultContract LoginUser(LoginUserContract loginUserContract)
-        {
-            return m_userManager.LoginUser(loginUserContract);
-        }
-
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
         {
             return m_authorManager.GetAllAuthors();

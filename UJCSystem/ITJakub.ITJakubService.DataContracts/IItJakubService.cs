@@ -10,13 +10,6 @@ namespace ITJakub.ITJakubService.DataContracts
     [ServiceContract]
     public interface IItJakubService
     {
-        
-        [OperationContract]
-        CreateUserResultContract CreateUser(CreateUserContract createUserContract);
-
-        [OperationContract]
-        LoginUserResultContract LoginUser(LoginUserContract loginUserContract);
-        
         [OperationContract]
         IEnumerable<AuthorDetailContract> GetAllAuthors();
 

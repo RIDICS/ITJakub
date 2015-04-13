@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data;
+using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
@@ -16,52 +16,7 @@ namespace ITJakub.ITJakubService.Core
             m_userRepository = userRepository;
         }
 
-        public CreateUserResultContract CreateUser(CreateUserContract userInfo) //TODO delete this method
-        {
-            try
-            {
-                if (userInfo.AuthenticationProvider == AuthProviderEnumContract.ItJakub)  //TODO should be dicitonary of RegisterProviders and select right one by enum as key
-                {
-                    m_userRepository.RegisterLocalAccount(userInfo.Email, userInfo.Password, userInfo.FirstName,
-                        userInfo.LastName);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-                return new CreateUserResultContract {Successfull = true};
-            }
-            catch (DataException ex)
-            {
-                return new CreateUserResultContract {Successfull = false};
-            }
-        }
-
-        public LoginUserResultContract LoginUser(LoginUserContract userInfo)
-        {
-            User user;
-            if (userInfo.AuthenticationProvider == AuthProviderEnumContract.ItJakub)    //TODO should be dicitonary of LoginProviders and select right one by enum as key
-            {
-                var userI = m_userRepository.LoginUserWithLocalAccount(userInfo.Email, userInfo.Password);
-                user = userI;
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-            
-            if (user != null)
-            {
-                return new LoginUserResultContract {Successfull = true, CommunicationToken = user.CommunicationToken};
-            }
-            return new LoginUserResultContract {Successfull = false};
-        }
-
-
-
-        #region New auth methods
-
-        public UserContract CreateLocalUser(UserContract user) //TODO write automapper profiles
+        public UserContract CreateLocalUser(UserContract user)
         {
             var now = DateTime.UtcNow;
             var dbUser = new User
@@ -73,8 +28,8 @@ namespace ITJakub.ITJakubService.Core
                 CreateTime = now,
                 PasswordHash = user.PasswordHash,
                 AuthenticationProvider = AuthenticationProvider.ItJakub,
-                CommunicationToken = Guid.NewGuid().ToString(), //TODO remove token
-                CommunicationTokenCreateTime = now,
+                CommunicationToken = Guid.NewGuid().ToString(), //TODO this should do communicationTokenManager
+                CommunicationTokenCreateTime = now
             };
             var userId = m_userRepository.Create(dbUser);
             return FindById(userId);
@@ -84,16 +39,7 @@ namespace ITJakub.ITJakubService.Core
         {
             var dbUser = m_userRepository.FindByUserName(userName);
             if (dbUser == null) return null;
-            var user = new UserContract
-            {
-                Id = dbUser.Id,
-                UserName = dbUser.UserName,
-                Email = dbUser.Email,
-                FirstName = dbUser.FirstName,
-                LastName = dbUser.LastName,
-                CreateTime = dbUser.CreateTime,
-                PasswordHash = dbUser.PasswordHash
-            };
+            var user = Mapper.Map<UserContract>(dbUser);
             return user;
         }
 
@@ -101,20 +47,8 @@ namespace ITJakub.ITJakubService.Core
         {
             var dbUser = m_userRepository.FindById(userId);
             if (dbUser == null) return null;
-            var user = new UserContract
-            {
-                Id = dbUser.Id,
-                UserName = dbUser.UserName,
-                Email = dbUser.Email,
-                FirstName = dbUser.FirstName,
-                LastName = dbUser.LastName,
-                CreateTime = dbUser.CreateTime,
-                PasswordHash = dbUser.PasswordHash
-            };
+            var user = Mapper.Map<UserContract>(dbUser);
             return user;
         }
-
-
-        #endregion
     }
 }

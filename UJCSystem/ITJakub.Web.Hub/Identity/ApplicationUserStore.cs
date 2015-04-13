@@ -33,12 +33,12 @@ namespace ITJakub.Web.Hub.Identity
             throw new NotSupportedException();
         }
 
-        public async Task<ApplicationUser> FindByEmailAsync(string email)
+        public Task<ApplicationUser> FindByEmailAsync(string email)
         {
             throw new NotSupportedException();
         }
 
-        public async Task<DateTimeOffset> GetLockoutEndDateAsync(ApplicationUser user)
+        public Task<DateTimeOffset> GetLockoutEndDateAsync(ApplicationUser user)
         {
             throw new NotSupportedException();
         }
@@ -48,7 +48,7 @@ namespace ITJakub.Web.Hub.Identity
             throw new NotSupportedException();
         }
 
-        public async Task<int> IncrementAccessFailedCountAsync(ApplicationUser user)
+        public Task<int> IncrementAccessFailedCountAsync(ApplicationUser user)
         {
             throw new NotSupportedException();
         }
