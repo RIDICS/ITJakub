@@ -6,13 +6,11 @@ using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
-using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts.Applications;
 using Microsoft.Practices.Unity;
-using Task = System.Threading.Tasks.Task;
 
 namespace ITJakub.MobileApps.Client.Core.Manager
 {
@@ -43,7 +41,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
                 Data = objectValue
             };
             
-            var appId = m_applicationIdManager.GetApplicationId(applicationType);
+            var appId = await m_applicationIdManager.GetApplicationId(applicationType);
             var groupId = m_groupManager.CurrentGroupId;
             await m_serviceClient.CreateSynchronizedObjectAsync(appId, groupId, userId.Value, synchronizedObject);
         }
@@ -54,7 +52,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             if (!userId.HasValue)
                 throw new ArgumentException("No logged user");
 
-            var appId = m_applicationIdManager.GetApplicationId(applicationType);
+            var appId = await m_applicationIdManager.GetApplicationId(applicationType);
             var groupId = m_groupManager.CurrentGroupId;
             var objectList = await m_serviceClient.GetSynchronizedObjectsAsync(groupId, appId, objectType, since);
 
@@ -81,7 +79,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             if (!userId.HasValue)
                 throw new ArgumentException("No logged user");
 
-            var appId = m_applicationIdManager.GetApplicationId(applicationType);
+            var appId = await m_applicationIdManager.GetApplicationId(applicationType);
             var groupId = m_groupManager.CurrentGroupId;
             var latestObject = await m_serviceClient.GetLatestSynchronizedObjectAsync(groupId, appId, objectType, since);
 
@@ -117,7 +115,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
         public async Task CreateTaskAsync(ApplicationType applicationType, string name, string data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
-            var appId = m_applicationIdManager.GetApplicationId(applicationType);
+            var appId = await m_applicationIdManager.GetApplicationId(applicationType);
             if (userId != null)
                 await m_serviceClient.CreateTaskAsync(userId.Value, appId, name, data);
         }

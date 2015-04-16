@@ -48,6 +48,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private ObservableCollection<GroupMemberViewModel> m_memberList;
         private TaskViewModel m_currentTask;
         private bool m_isClosed;
+        private bool m_isCommunicationStopped;
 
         public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
@@ -59,6 +60,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GoBackCommand = new RelayCommand(GoBack);
             ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
 
+            m_isCommunicationStopped = false;
             m_isTaskAndAppLoaded = false;
             m_unreadMessageCount = 0;
 
@@ -120,6 +122,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void StopCommunication()
         {
+            m_isCommunicationStopped = true;
             WaitingForStart = false;
             WaitingForData = false;
             m_pollingService.Unregister(GroupStatePollingInterval, GroupStateUpdate);
@@ -146,6 +149,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             if (exception != null)
             {
                 m_errorService.ShowConnectionWarning();
+                return;
+            }
+
+            if (m_isCommunicationStopped)
+            {
                 return;
             }
 
@@ -236,6 +244,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void StartMainApplication()
         {
+            if (m_currentTask.Data == null)
+            {
+                m_errorService.ShowError("Nebyla přijata žádná data potřebná pro zobrazení aplikace s konkrétním zadáním (úlohou). Aplikace byla ukončena.", "Nepřijata žádná data");
+                GoBack();
+                return;
+            }
+
             ApplicationViewModel.SetTask(m_currentTask.Data);
             ApplicationViewModel.InitializeCommunication();
             
