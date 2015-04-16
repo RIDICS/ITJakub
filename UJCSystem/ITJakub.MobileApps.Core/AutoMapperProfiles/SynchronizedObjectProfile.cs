@@ -8,7 +8,7 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<SynchronizedObjectContract, SynchronizedObject>().ReverseMap();
+            CreateMap<SynchronizedObjectContract, SynchronizedObjectBase>().ReverseMap();
         }
     }
 }

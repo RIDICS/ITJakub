@@ -240,10 +240,13 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                var group = session.Get<Group>(groupId);
-                var rowKeys = group.SynchronizedObjects.Select(o => o.RowKey);
-
+                var group = session.QueryOver<Group>().Where(x => x.Id == groupId)
+                    .Fetch(x => x.SynchronizedObjects).Eager
+                    .SingleOrDefault<Group>();
+                
                 session.Delete(group);
+
+                var rowKeys = group.SynchronizedObjects.OfType<SynchronizedObject>().Select(o => o.RowKey);
 
                 return rowKeys;
             }

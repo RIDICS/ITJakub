@@ -114,7 +114,7 @@
     <Compile Include="Database\Entities\Application.cs" />
     <Compile Include="Database\Entities\Group.cs" />
     <Compile Include="Database\Entities\Institution.cs" />
-    <Compile Include="Database\Entities\SynchronizedObject.cs" />
+    <Compile Include="Database\Entities\SynchronizedObjectBase.cs" />
     <Compile Include="Database\Entities\Task.cs" />
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Repositories\GroupRepository.cs" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <hibernate-mapping assembly="ITJakub.MobileApps.DataEntities"
                    namespace="ITJakub.MobileApps.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
@@ -38,7 +38,7 @@
 
     <bag name="SynchronizedObjects" lazy="true" inverse="true" cascade="all-delete-orphan">
       <key column="GroupId" />
-      <one-to-many class="SynchronizedObject" />
+      <one-to-many class="SynchronizedObjectBase" />
     </bag>
 
     <bag name="Members" table="UserToGroup" cascade="save-update" lazy="true">

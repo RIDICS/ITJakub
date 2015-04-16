@@ -10,25 +10,25 @@ using NHibernate.Criterion;
 namespace ITJakub.MobileApps.DataEntities.Database.Repositories
 {
     [Transactional]
-    public class SynchronizedObjectRepository : NHibernateTransactionalDao<SynchronizedObject>
+    public class SynchronizedObjectRepository : NHibernateTransactionalDao<SynchronizedObjectBase>
     {
         public SynchronizedObjectRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<SynchronizedObject> LoadSyncObjectsWithDetails(Group group, Application application, string objectType, DateTime since)
+        public virtual IList<SynchronizedObjectBase> LoadSyncObjectsWithDetails(Group group, Application application, string objectType, DateTime since)
         {
             using (var session = GetSession())
             {
                 return
-                    session.CreateCriteria<SynchronizedObject>()
+                    session.CreateCriteria<SynchronizedObjectBase>()
                         .Add(Restrictions.Eq("Application", application))
                         .Add(Restrictions.Eq("Group", group))
                         .Add(Restrictions.Eq("ObjectType", objectType))
                         .Add(Restrictions.Gt("CreateTime", since))
                         .SetFetchMode("Author", FetchMode.Join)
-                        .List<SynchronizedObject>();
+                        .List<SynchronizedObjectBase>();
             }
         }
     }
