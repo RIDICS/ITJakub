@@ -199,12 +199,13 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             if (latestControlContract == null)
                 return;
 
+            m_bookManager.PageId = pageId;
+
             // check if current user is reader and also can control changing pages
             var latestControlObject = await m_applicationCommunication.GetLatestObjectAsync(ApplicationType.SynchronizedReading, new DateTime(1970, 1, 1), ControlObjectType);
             if (!latestControlObject.Author.IsMe)
                 return;
 
-            m_bookManager.PageId = pageId;
             latestControlContract.PageId = pageId;
             var serializedContract = JsonConvert.SerializeObject(latestControlContract);
 

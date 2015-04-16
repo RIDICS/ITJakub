@@ -27,6 +27,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private string m_goToPageText;
         private bool m_isPageNotFoundError;
         private bool m_isEnd;
+        private bool m_isUpdateProgrammatically;
 
         public ReadingViewModel(ReaderDataService dataService)
         {
@@ -50,6 +51,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         {
             UpdateMode();
             SetDataLoaded();
+            TextReaderViewModel.Loading = true;
 
             LoadingPageList = true;
             m_dataService.GetPageList((pages, exception) =>
@@ -62,10 +64,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 }
 
                 PageList = pages;
-                UpdateSelectedPage();
             });
-
-            LoadPage();
 
             m_dataService.StartPollingControlUpdates((model, exception) =>
             {
@@ -209,7 +208,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 var lastPage = m_selectedPage;
                 m_selectedPage = value;
                 RaisePropertyChanged();
-                UpdateCurrentPage(lastPage, value);
+
+                if (!m_isUpdateProgrammatically)
+                    TryUpdateCurrentPage(lastPage, value);
             }
         }
 
@@ -373,7 +374,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         {
             m_dataService.GetCurrentPage(pageId =>
             {
+                m_isUpdateProgrammatically = true;
                 SelectedPage = m_pageList.FirstOrDefault(pageViewModel => pageViewModel.XmlId == pageId);
+                m_isUpdateProgrammatically = false;
             });
         }
 
@@ -402,7 +405,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             SelectedPage = pageViewModel;
         }
 
-        private void UpdateCurrentPage(PageViewModel lastPage, PageViewModel newPage)
+        private void TryUpdateCurrentPage(PageViewModel lastPage, PageViewModel newPage)
         {
             m_dataService.UpdateCurrentPage(newPage.XmlId, exception =>
             {
@@ -410,8 +413,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 {
                     //rollback change current page
                     m_dataService.SetCurrentBook(m_dataService.GetCurrentBookGuid(), lastPage.XmlId);
-                    m_selectedPage = lastPage;
-                    RaisePropertyChanged(() => SelectedPage);
+                    m_isUpdateProgrammatically = true;
+                    SelectedPage = lastPage;
+                    m_isUpdateProgrammatically = false;
                     LoadPage();
                 }
 
