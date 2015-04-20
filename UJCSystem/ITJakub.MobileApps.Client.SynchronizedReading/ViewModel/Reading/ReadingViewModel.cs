@@ -64,6 +64,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 }
 
                 PageList = pages;
+                LoadPage(); // don't wait for control update
             });
 
             m_dataService.StartPollingControlUpdates((model, exception) =>

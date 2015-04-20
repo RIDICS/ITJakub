@@ -156,7 +156,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
 
                 await
                     m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, UpdateObjectType,
-                        serializedContract);
+                        serializedContract, SynchronizationType.SingleObject);
                 callback(null);
             }
             catch (ClientCommunicationException exception)
@@ -178,7 +178,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
                 var serializedControlContract = JsonConvert.SerializeObject(latestControlContract);
                 m_latestControlContract = latestControlContract;
 
-                await m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, ControlObjectType, serializedControlContract);
+                await m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, ControlObjectType, serializedControlContract, SynchronizationType.SingleObject);
                 callback(null);
             }
             catch (ClientCommunicationException exception)
@@ -211,7 +211,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
 
             try
             {
-                await m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, ControlObjectType, serializedContract);
+                await m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, ControlObjectType, serializedContract, SynchronizationType.SingleObject);
                 callback(null);
             }
             catch (ClientCommunicationException exception)

@@ -28,8 +28,20 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             m_applicationIdManager = applicationIdManager;
             m_groupManager = groupManager;
         }
+
+        private SynchronizationTypeContract ConvertSynchronizationType(SynchronizationType synchronizationType)
+        {
+            switch (synchronizationType)
+            {
+                case SynchronizationType.HistoryTrackingObject:
+                    return SynchronizationTypeContract.HistoryTrackingObject;
+                case SynchronizationType.SingleObject:
+                    return SynchronizationTypeContract.SingleObject;
+            }
+            return SynchronizationTypeContract.HistoryTrackingObject;
+        }
         
-        public async Task SendObjectAsync(ApplicationType applicationType, string objectType, string objectValue)
+        public async Task SendObjectAsync(ApplicationType applicationType, string objectType, string objectValue, SynchronizationType synchronizationType)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
             if (!userId.HasValue)
@@ -38,7 +50,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             var synchronizedObject = new SynchronizedObjectContract
             {
                 ObjectType = objectType,
-                Data = objectValue
+                Data = objectValue,
+                SynchronizationType = ConvertSynchronizationType(synchronizationType)
             };
             
             var appId = await m_applicationIdManager.GetApplicationId(applicationType);

@@ -45,16 +45,13 @@ namespace ITJakub.MobileApps.Core.Applications
             if (syncObject != null)
             {
                 syncObject.CreateTime = DateTime.UtcNow;
-                syncObject.Data = synchronizedObject.Data;
+                syncObject.ObjectValue = synchronizedObject.Data;
                 m_applicationRepository.Save(syncObject);
                 return;
             }
 
-            var group = m_usersRepository.Load<Group>(groupId);
-
-
             var now = DateTime.UtcNow;
-
+            var group = m_usersRepository.Load<Group>(groupId);
             var application = m_applicationRepository.Load<Application>(applicationId);
             var user = m_usersRepository.Load<User>(userId);
 
