@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Fillwords.ViewModel.Enum;
 
@@ -11,6 +12,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private string m_correctAnswer;
         private ObservableCollection<OptionViewModel> m_list;
         private int m_wordPosition;
+
+        public Action<OptionsViewModel> AnswerChangedCallback { get; set; } 
 
         public int WordPosition
         {
@@ -49,7 +52,16 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             {
                 m_selectedAnswer = value;
                 RaisePropertyChanged();
+
+                if (AnswerChangedCallback != null)
+                    AnswerChangedCallback(this);
             }
+        }
+
+        public void UpdateSelectedAnswer(string newAnswer)
+        {
+            m_selectedAnswer = newAnswer;
+            RaisePropertyChanged(() => SelectedAnswer);
         }
 
         public AnswerState AnswerState
