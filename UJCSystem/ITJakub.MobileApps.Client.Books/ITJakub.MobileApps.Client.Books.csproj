@@ -104,6 +104,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Page Include="View\Control\ErrorBarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\Control\ZoomBarControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -131,7 +135,9 @@
     <Compile Include="Message\PageListMessage.cs" />
     <Compile Include="Manager\Cache\BookPageKey.cs" />
     <Compile Include="Service\Client\EndpointConfiguration.cs" />
+    <Compile Include="Service\ErrorService.cs" />
     <Compile Include="Service\IDataService.cs" />
+    <Compile Include="Service\IErrorService.cs" />
     <Compile Include="Service\INavigationService.cs" />
     <Compile Include="Service\Client\MobileCommunicationException.cs" />
     <Compile Include="Service\Client\MockServiceClient.cs" />
@@ -145,6 +151,7 @@
     <Compile Include="ViewModel\ComboBoxItem\CategoryItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\FilterYearItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SearchDestinationItem.cs" />
+    <Compile Include="ViewModel\ErrorBarViewModel.cs" />
     <Compile Include="ViewModel\PageViewModel.cs" />
     <Compile Include="ViewModel\SelectBookViewModel.cs" />
     <Compile Include="Enum\SearchByType.cs" />
@@ -158,6 +165,10 @@
     <Compile Include="View\Control\BindableRichEditBox.cs" />
     <Compile Include="View\Control\BindableRichTextBlock.cs" />
     <Compile Include="View\Control\DelayedSlider.cs" />
+    <Compile Include="View\Control\ErrorBar.cs" />
+    <Compile Include="View\Control\ErrorBarView.xaml.cs">
+      <DependentUpon>ErrorBarView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Control\GridViewBehaviors.cs" />
     <Compile Include="View\Control\ScrollViewerHelper.cs" />
     <Compile Include="View\Control\ZoomBarControl.xaml.cs">

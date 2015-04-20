@@ -11,19 +11,21 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
+        private readonly IErrorService m_errorService;
         private ObservableCollection<PageViewModel> m_pageList;
         private BookViewModel m_book;
         private bool m_loading;
         private PageViewModel m_selectedPage;
         private int m_currentPageNumber;
 
-        public SelectPageViewModel(IDataService dataService, INavigationService navigationService)
+        public SelectPageViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_errorService = errorService;
 
-            PagePhotoViewModel = new PagePhotoViewModel(m_dataService);
-            PageTextViewModel = new PageTextViewModel(m_dataService);
+            PagePhotoViewModel = new PagePhotoViewModel(m_dataService, m_errorService);
+            PageTextViewModel = new PageTextViewModel(m_dataService, m_errorService);
             GoBackCommand = new RelayCommand(navigationService.GoBack);
             SelectCommand = new RelayCommand(SubmitSelectedPage);
 
@@ -40,7 +42,10 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             {
                 Loading = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowCommunicationWarning();
                     return;
+                }
 
                 PageList = list;
             });

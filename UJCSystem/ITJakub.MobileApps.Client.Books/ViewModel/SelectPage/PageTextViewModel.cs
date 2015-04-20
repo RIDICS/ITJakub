@@ -7,13 +7,15 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
     public class PageTextViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
+        private readonly IErrorService m_errorService;
         private string m_rtfText;
         private bool m_loading;
         private double m_currentZoom;
 
-        public PageTextViewModel(IDataService dataService)
+        public PageTextViewModel(IDataService dataService, IErrorService errorService)
         {
             m_dataService = dataService;
+            m_errorService = errorService;
 
             ZoomInCommand = new RelayCommand(() => CurrentZoom++);
             ZoomOutCommand = new RelayCommand(() => CurrentZoom--);
@@ -27,7 +29,10 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             {
                 Loading = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowCommunicationWarning();
                     return;
+                }
 
                 RtfText = rtfText;
             });

@@ -17,6 +17,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
+        private readonly IErrorService m_errorService;
         private ObservableCollection<BookViewModel> m_bookList;
         private bool m_loading;
         private bool m_isSearchResult;
@@ -27,14 +28,16 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private int m_filterFromYear;
         private int m_filterToYear;
 
-        public SelectBookViewModel(IDataService dataService, INavigationService navigationService)
+        public SelectBookViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_errorService = errorService;
 
             GoBackCommand = new RelayCommand(GoBack);
             BookClickCommand = new RelayCommand<ItemClickEventArgs>(BookClick);
             SearchCommand = new RelayCommand(Search);
+            ReloadCommand = new RelayCommand(LoadData);
             
             m_selectedCategory = BookTypeContract.Grammar;
 
@@ -46,6 +49,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         public RelayCommand<ItemClickEventArgs> BookClickCommand { get; private set; }
 
         public RelayCommand SearchCommand { get; private set; }
+
+        public RelayCommand ReloadCommand { get; private set; }
         
         public ObservableCollection<BookViewModel> BookList
         {
@@ -181,15 +186,19 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 };
             }
         }
-
+        
         private void LoadData()
         {
+            IsSearchResult = false;
             Loading = true;
             m_dataService.GetBookList(SelectedCategory, (bookList, exception) =>
             {
                 Loading = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowCommunicationWarning();
                     return;
+                }
 
                 m_originalBookList = bookList;
                 Filter();
@@ -222,7 +231,10 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             {
                 Searching = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowCommunicationWarning();
                     return;
+                }
 
                 IsSearchResult = true;
                 RaisePropertyChanged(() => SearchQuery);
