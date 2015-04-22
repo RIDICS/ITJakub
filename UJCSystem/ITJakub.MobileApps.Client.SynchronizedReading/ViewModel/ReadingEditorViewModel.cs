@@ -21,6 +21,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private ImageSource m_bookPagePhoto;
         private bool m_loadingPhoto;
         private string m_pageName;
+        private bool m_isBookSelected;
 
         public ReadingEditorViewModel(ReaderDataService dataService)
         {
@@ -38,6 +39,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         public RelayCommand CancelCommand { get; private set; }
 
         public string TaskName { get; set; }
+
+        public bool IsBookSelected
+        {
+            get { return m_isBookSelected; }
+            set
+            {
+                m_isBookSelected = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public string BookName
         {
@@ -163,6 +174,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             if (book == null)
                 return;
 
+            IsBookSelected = true;
             m_dataService.SetCurrentBook(book.BookInfo.Guid, book.XmlId);
             BookAuthor = book.BookInfo.Authors;
             BookName = book.BookInfo.Title;

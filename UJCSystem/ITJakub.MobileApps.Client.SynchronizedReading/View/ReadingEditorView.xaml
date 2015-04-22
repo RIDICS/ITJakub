@@ -119,6 +119,7 @@
                       Header="Zobrazit fotografii stránky"
                       OnContent="Ano"
                       OffContent="Ne"
+                      IsEnabled="{Binding IsBookSelected}"
                       IsOn="{Binding IsShowPhotoEnabled, Mode=TwoWay}" />
 
         <Border Grid.Row="1"
