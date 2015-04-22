@@ -42,19 +42,21 @@ namespace ITJakub.MobileApps.Core.Applications
         {
             var syncObject = m_applicationRepository.GetLatestSynchronizedObject(groupId, applicationId, synchronizedObject.ObjectType, new DateTime(1975,1,1));
 
+            var now = DateTime.UtcNow;
+            var user = m_usersRepository.Load<User>(userId);
+
             if (syncObject != null)
             {
-                syncObject.CreateTime = DateTime.UtcNow;
+                syncObject.Author = user;
+                syncObject.CreateTime = now;
                 syncObject.ObjectValue = synchronizedObject.Data;
                 m_applicationRepository.Save(syncObject);
                 return;
             }
-
-            var now = DateTime.UtcNow;
+            
             var group = m_usersRepository.Load<Group>(groupId);
             var application = m_applicationRepository.Load<Application>(applicationId);
-            var user = m_usersRepository.Load<User>(userId);
-
+            
             var deSyncObject = new SingleSynchronizedObject
             {
                 Application = application,
