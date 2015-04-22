@@ -143,6 +143,18 @@
                    Stretch="Uniform"
                    Source="{Binding BookPagePhoto}" />
 
+            <Grid Margin="40,20,40,20"
+                  Background="#AAFFFFFF"
+                  VerticalAlignment="Center">
+
+                <TextBlock HorizontalAlignment="Center"
+                           Text="Fotografie této strany nebyla nalezena."
+                           Foreground="DarkRed"
+                           FontSize="17"
+                           Margin="3"
+                           Visibility="{Binding IsPhotoLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
+
             <ProgressRing HorizontalAlignment="Center"
                           VerticalAlignment="Center"
                           IsActive="{Binding LoadingPhoto}"

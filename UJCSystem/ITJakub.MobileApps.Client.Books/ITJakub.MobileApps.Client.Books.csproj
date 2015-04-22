@@ -135,6 +135,7 @@
     <Compile Include="Message\PageListMessage.cs" />
     <Compile Include="Manager\Cache\BookPageKey.cs" />
     <Compile Include="Service\Client\EndpointConfiguration.cs" />
+    <Compile Include="Service\Client\NotFoundException.cs" />
     <Compile Include="Service\ErrorService.cs" />
     <Compile Include="Service\IDataService.cs" />
     <Compile Include="Service\IErrorService.cs" />

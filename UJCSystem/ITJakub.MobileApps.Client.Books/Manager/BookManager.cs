@@ -114,6 +114,10 @@ namespace ITJakub.MobileApps.Client.Books.Manager
 
                 callback(viewModels, null);
             }
+            catch (NotFoundException exception)
+            {
+                callback(null, exception);
+            }
             catch (MobileCommunicationException exception)
             {
                 callback(null, exception);
@@ -127,6 +131,10 @@ namespace ITJakub.MobileApps.Client.Books.Manager
                 var textRtf = await m_documentCache.Get(bookGuid, pageId);
                 callback(textRtf, null);
             }
+            catch (NotFoundException exception)
+            {
+                callback(null, exception);
+            }
             catch (MobileCommunicationException exception)
             {
                 callback(null, exception);
@@ -139,6 +147,11 @@ namespace ITJakub.MobileApps.Client.Books.Manager
             {
                 var photo = await m_photoCache.Get(bookGuid, pageId);
                 callback(photo, null);
+
+            }
+            catch (NotFoundException exception)
+            {
+                callback(null, exception);
             }
             catch (MobileCommunicationException exception)
             {

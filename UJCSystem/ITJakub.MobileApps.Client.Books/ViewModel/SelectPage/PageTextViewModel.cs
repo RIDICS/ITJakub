@@ -1,6 +1,8 @@
+using System;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books.Service;
+using ITJakub.MobileApps.Client.Books.Service.Client;
 
 namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
 {
@@ -8,14 +10,17 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
     {
         private readonly IDataService m_dataService;
         private readonly IErrorService m_errorService;
+        private readonly Action m_pageLoadedCallback;
         private string m_rtfText;
         private bool m_loading;
         private double m_currentZoom;
+        private bool m_isLoadError;
 
-        public PageTextViewModel(IDataService dataService, IErrorService errorService)
+        public PageTextViewModel(IDataService dataService, IErrorService errorService, Action pageLoadedCallback)
         {
             m_dataService = dataService;
             m_errorService = errorService;
+            m_pageLoadedCallback = pageLoadedCallback;
 
             ZoomInCommand = new RelayCommand(() => CurrentZoom++);
             ZoomOutCommand = new RelayCommand(() => CurrentZoom--);
@@ -24,17 +29,26 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
         public void OpenPage(PageViewModel page)
         {
             RtfText = null;
+            IsLoadError = false;
             Loading = true;
             m_dataService.GetPageAsRtf(Book.Guid, page.XmlId, (rtfText, exception) =>
             {
                 Loading = false;
                 if (exception != null)
                 {
-                    m_errorService.ShowCommunicationWarning();
+                    if (exception is NotFoundException)
+                    {
+                        IsLoadError = true;
+                    }
+                    else
+                    {
+                        m_errorService.ShowCommunicationWarning();
+                    }
                     return;
                 }
 
                 RtfText = rtfText;
+                m_pageLoadedCallback();
             });
         }
         
@@ -66,6 +80,16 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             set
             {
                 m_currentZoom = value; 
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsLoadError
+        {
+            get { return m_isLoadError; }
+            set
+            {
+                m_isLoadError = value;
                 RaisePropertyChanged();
             }
         }

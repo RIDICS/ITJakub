@@ -99,10 +99,10 @@ namespace ITJakub.ITJakubService.Core
                 bookPage.Image, ResourceType.Image);
         }
 
-        public Stream GetBookPageImage(string bookGuid, string pageName)
+        public Stream GetBookPageImage(string bookGuid, string pageId)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var bookPage = m_bookRepository.FindBookPageByVersionAndName(bookVersion.Id, pageName);
+            var bookPage = m_bookRepository.FindBookPageByVersionAndXmlId(bookVersion.Id, pageId);
             return m_fileSystemManager.GetResource(bookGuid, bookVersion.VersionId,
                 bookPage.Image, ResourceType.Image);
         }

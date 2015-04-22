@@ -166,8 +166,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             { 
                 return new ObservableCollection<CategoryItem>
                 {
-                    new CategoryItem{Category = BookTypeContract.Grammar, Name = "Mluvnice"},
                     new CategoryItem{Category = BookTypeContract.Edition, Name = "Edice"},
+                    new CategoryItem{Category = BookTypeContract.Grammar, Name = "Mluvnice"},
                     new CategoryItem{Category = BookTypeContract.Dictionary, Name = "Slovníky"},
                     new CategoryItem{Category = BookTypeContract.ProfessionalLiterature, Name = "Odborná literatura"},
                 };

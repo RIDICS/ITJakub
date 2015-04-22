@@ -74,7 +74,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
             }
             catch (FaultException ex)
             {
-                throw new MobileCommunicationException(ex);
+                throw new NotFoundException(ex);
             }
             catch (CommunicationException ex)
             {
@@ -98,7 +98,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
             }
             catch (FaultException ex)
             {
-                throw new MobileCommunicationException(ex);
+                throw new NotFoundException(ex);
             }
             catch (CommunicationException ex)
             {
@@ -122,7 +122,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
             }
             catch (FaultException ex)
             {
-                throw new MobileCommunicationException(ex);
+                throw new NotFoundException(ex);
             }
             catch (CommunicationException ex)
             {

@@ -21,6 +21,6 @@ namespace ITJakub.MobileApps.MobileContracts
         Task<string> GetPageAsRtfAsync(string bookGuid, string pageId);
 
         [OperationContract]
-        Task<Stream> GetPagePhotoAsync(string bookGuid, string pageName);
+        Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId);
     }
 }
