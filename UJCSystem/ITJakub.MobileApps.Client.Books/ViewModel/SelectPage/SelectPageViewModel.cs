@@ -25,7 +25,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             m_errorService = errorService;
 
             PagePhotoViewModel = new PagePhotoViewModel(m_dataService, m_errorService);
-            PageTextViewModel = new PageTextViewModel(m_dataService, m_errorService);
+            PageTextViewModel = new PageTextViewModel(m_dataService, m_errorService, PageLoadedCallback);
             GoBackCommand = new RelayCommand(navigationService.GoBack);
             SelectCommand = new RelayCommand(SubmitSelectedPage);
 
@@ -54,6 +54,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
         private void OpenPage(PageViewModel page)
         {
             PageTextViewModel.OpenPage(page);
+            RaisePropertyChanged(() => CanSubmit);
             PagePhotoViewModel.OpenPagePhoto(page);
         }
 
@@ -140,12 +141,18 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             get { return PageCount == 0 ? 0 : 1; }
         }
 
+        public bool CanSubmit
+        {
+            get { return SelectedPage != null && PageTextViewModel.RtfText != null && !PageTextViewModel.Loading; }
+        }
+
+        private void PageLoadedCallback()
+        {
+            RaisePropertyChanged(() => CanSubmit);
+        }
 
         private void SubmitSelectedPage()
         {
-            if (SelectedPage == null || PageTextViewModel.Loading || PagePhotoViewModel.Loading)
-                return;
-
             m_navigationService.ResetBackStack();
 
             var bookDetails = new BookViewModel

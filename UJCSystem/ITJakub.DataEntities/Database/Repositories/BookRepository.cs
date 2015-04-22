@@ -197,13 +197,13 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual BookPage FindBookPageByVersionAndName(long versionId, string pageName)
+        public virtual BookPage FindBookPageByVersionAndXmlId(long versionId, string xmlId)
         {
             using (var session = GetSession())
             {
                 var bookPage =
                     session.QueryOver<BookPage>()
-                        .Where(x => x.BookVersion.Id == versionId && x.Text == pageName)
+                        .Where(x => x.BookVersion.Id == versionId && x.XmlId == xmlId)
                         .SingleOrDefault<BookPage>();
                 return bookPage;
             }

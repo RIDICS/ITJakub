@@ -1,6 +1,7 @@
 ﻿using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books;
+using ITJakub.MobileApps.Client.Books.Service.Client;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 
@@ -22,6 +23,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private bool m_loadingPhoto;
         private string m_pageName;
         private bool m_isBookSelected;
+        private bool m_isPhotoLoadError;
 
         public ReadingEditorViewModel(ReaderDataService dataService)
         {
@@ -136,6 +138,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             set
             {
                 m_isShowPhotoEnabled = value;
+                IsPhotoLoadError = false;
                 RaisePropertyChanged();
                 LoadPhoto();
             }
@@ -160,7 +163,17 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 RaisePropertyChanged();
             }
         }
-        
+
+        public bool IsPhotoLoadError
+        {
+            get { return m_isPhotoLoadError; }
+            set
+            {
+                m_isPhotoLoadError = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private void HideErrors()
         {
             ErrorBookNotSelected = false;
@@ -200,7 +213,14 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                     LoadingPhoto = false;
                     if (exception != null)
                     {
-                        m_dataService.ErrorService.ShowConnectionError(() => IsShowPhotoEnabled = false);
+                        if (exception is NotFoundException)
+                        {
+                            IsPhotoLoadError = true;
+                        }
+                        else
+                        {
+                            m_dataService.ErrorService.ShowConnectionError(() => IsShowPhotoEnabled = false);
+                        }
                         return;
                     }
 

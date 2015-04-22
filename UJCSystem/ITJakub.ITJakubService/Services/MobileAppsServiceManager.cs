@@ -40,9 +40,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageByXmlIdAsync(bookGuid, pageId, OutputFormatEnumContract.Html); //TODO switch to RTF transformation
         }
 
-        public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageName)
+        public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
         {
-            return Task.Run(() => m_bookManager.GetBookPageImage(bookGuid, pageName));
+            return Task.Run(() => m_bookManager.GetBookPageImage(bookGuid, pageId));
         }
     }
 }
