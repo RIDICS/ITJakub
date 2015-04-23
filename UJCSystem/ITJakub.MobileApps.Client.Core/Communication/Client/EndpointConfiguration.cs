@@ -1,4 +1,4 @@
-﻿namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
+﻿namespace ITJakub.MobileApps.Client.Core.Communication.Client
 {
     public enum EndpointConfiguration
     {

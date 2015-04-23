@@ -4,14 +4,14 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using System.Xml;
-using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
+using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Applications;
 using ITJakub.MobileApps.DataContracts.Groups;
 using ITJakub.MobileApps.DataContracts.Tasks;
 
-namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
+namespace ITJakub.MobileApps.Client.Core.Communication.Client
 {
     public class MobileAppsServiceClient : ClientBase<IMobileAppsService>
     {

@@ -3,8 +3,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using ITJakub.MobileApps.Client.Books;
-using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
+using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.MainApp.View;
@@ -31,10 +30,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
 
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             ItemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
-            RegistrationCommand = new RelayCommand(() =>
-            {
-                Book.SelectBookAsync();
-            });
+            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<RegistrationView>());
         }
 
 

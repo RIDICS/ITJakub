@@ -2,7 +2,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Dispatcher;
 
-namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Client
+namespace ITJakub.MobileApps.Client.Core.Communication.Client
 {
     /// <summary>
     /// Represents a message inspector object that can be added to the <c>MessageInspectors</c> collection to view or modify messages.

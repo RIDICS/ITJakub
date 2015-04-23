@@ -1,6 +1,6 @@
 using System;
 
-namespace ITJakub.MobileApps.Client.Core.Manager.Communication.Error
+namespace ITJakub.MobileApps.Client.Core.Communication.Error
 {
     public class InvalidServerOperationException : Exception
     {
