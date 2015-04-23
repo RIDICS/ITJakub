@@ -44,6 +44,7 @@ var ReaderModule = (function () {
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array();
+        this.sidePanels = new Array();
 
         for (var i = 0; i < pageList.length; i++) {
             this.pages.push(pageList[i]["Text"]);
@@ -325,6 +326,7 @@ var ReaderModule = (function () {
             if (!_this.existSidePanel(panelId)) {
                 var editPanel = new SidePanel(innerContent, panelId);
                 _this.loadSidePanel(editPanel.panelHtml);
+                _this.sidePanels.push(editPanel);
             }
             _this.changeSidePanelVisibility("EditacniPanel");
         });
@@ -349,6 +351,7 @@ var ReaderModule = (function () {
             if (!_this.existSidePanel(panelId)) {
                 var searchPanel = new SidePanel(innerContent, panelId);
                 _this.loadSidePanel(searchPanel.panelHtml);
+                _this.sidePanels.push(searchPanel);
             }
             _this.changeSidePanelVisibility("SearchPanel");
         });
@@ -373,6 +376,7 @@ var ReaderModule = (function () {
             if (!_this.existSidePanel(panelId)) {
                 var contentPanel = new SidePanel(innerContent, panelId);
                 _this.loadSidePanel(contentPanel.panelHtml);
+                _this.sidePanels.push(contentPanel);
             }
             _this.changeSidePanelVisibility("ObsahPanel");
         });
@@ -461,6 +465,9 @@ var ReaderModule = (function () {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
+        for (var k = 0; k < this.sidePanels.length; k++) {
+            this.sidePanels[k].onMoveToPage(pageIndex);
+        }
         for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
             this.displayPage(this.pages[pageIndex - j], false);
         }
@@ -587,6 +594,7 @@ var ReaderModule = (function () {
 var SidePanel = (function () {
     function SidePanel(innerContent, identificator) {
         var _this = this;
+        this.identificator = identificator;
         var sidePanelDiv = document.createElement('div');
         sidePanelDiv.id = identificator;
         $(sidePanelDiv).addClass('reader-left-panel');
@@ -647,12 +655,13 @@ var SidePanel = (function () {
         $(leftPanelWindowButton).addClass('new-window-button');
         $(leftPanelWindowButton).click(function (event) {
             _this.closeButton.click();
-            var panel = _this.panelBodyHtml;
             var newWindow = window.open('', '', 'width=200,height=100,resizable=yes');
             var doc = newWindow.document;
             doc.open();
-            doc.write(panel.outerHTML);
             doc.close();
+            $(doc.head).append($("script").clone());
+            $(doc.head).append($("link").clone());
+            $(doc.body).append($(_this.panelBodyHtml).clone());
         });
 
         var windowSpan = document.createElement("span");
@@ -666,7 +675,7 @@ var SidePanel = (function () {
         sidePanelDiv.appendChild(leftPanelHeaderDiv);
 
         var panelBodyDiv = document.createElement('div');
-        $(leftPanelHeaderDiv).addClass('reader-left-panel-body');
+        $(panelBodyDiv).addClass('reader-left-panel-body');
 
         $(panelBodyDiv).append(innerContent);
 
@@ -675,6 +684,9 @@ var SidePanel = (function () {
         this.panelHtml = sidePanelDiv;
         this.panelBodyHtml = panelBodyDiv;
     }
+    SidePanel.prototype.onMoveToPage = function (pageIndex) {
+        $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
+    };
     return SidePanel;
 })();
 //# sourceMappingURL=itjakub.plugins.reader.js.map

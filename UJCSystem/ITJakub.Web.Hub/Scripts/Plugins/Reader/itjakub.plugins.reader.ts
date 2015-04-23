@@ -13,6 +13,8 @@ class ReaderModule {
     bookId: string;
     loadedBookContent: boolean;
 
+    sidePanels: Array<SidePanel>;
+
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
@@ -57,6 +59,7 @@ class ReaderModule {
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array<string>();
+        this.sidePanels = new Array<SidePanel>();
         
         for (var i = 0; i < pageList.length; i++) { //load pageList
             this.pages.push(pageList[i]["Text"]);
@@ -341,6 +344,7 @@ class ReaderModule {
             if (!this.existSidePanel(panelId)) {
                 var editPanel = new SidePanel(innerContent, panelId);
                 this.loadSidePanel(editPanel.panelHtml);
+                this.sidePanels.push(editPanel);
             }
             this.changeSidePanelVisibility("EditacniPanel");
         });
@@ -365,6 +369,7 @@ class ReaderModule {
             if (!this.existSidePanel(panelId)) {
                 var searchPanel = new SidePanel(innerContent, panelId);
                 this.loadSidePanel(searchPanel.panelHtml);
+                this.sidePanels.push(searchPanel);
             }
             this.changeSidePanelVisibility("SearchPanel");
         });
@@ -389,6 +394,7 @@ class ReaderModule {
             if (!this.existSidePanel(panelId)) {
                 var contentPanel = new SidePanel(innerContent, panelId);
                 this.loadSidePanel(contentPanel.panelHtml);
+                this.sidePanels.push(contentPanel);
             }
             this.changeSidePanelVisibility("ObsahPanel");
         });
@@ -480,6 +486,9 @@ class ReaderModule {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
+        for (var k = 0; k < this.sidePanels.length; k++) {
+            this.sidePanels[k].onMoveToPage(pageIndex);
+        }
         for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
             this.displayPage(this.pages[pageIndex - j], false);
         }
@@ -493,6 +502,7 @@ class ReaderModule {
         var pageIndex: number = $.inArray(page, this.pages);
         if (pageIndex >= 0 && pageIndex < this.pages.length) {
             this.moveToPageNumber(pageIndex, scrollTo);
+            
         } else {
             console.log("Page '" + page + "' does not exist");
             //TODO tell user page not exist  
@@ -611,10 +621,12 @@ class SidePanel {
     panelBodyHtml: HTMLDivElement;
     closeButton : HTMLButtonElement;
     pinButton : HTMLButtonElement;
-    newWindowButton : HTMLButtonElement;
+    newWindowButton: HTMLButtonElement;
+    identificator : string;
 
     public constructor(innerContent, identificator: string) {
 
+        this.identificator = identificator;
         var sidePanelDiv: HTMLDivElement = document.createElement('div');
         sidePanelDiv.id = identificator;
         $(sidePanelDiv).addClass('reader-left-panel');
@@ -677,12 +689,13 @@ class SidePanel {
         $(leftPanelWindowButton).addClass('new-window-button');
         $(leftPanelWindowButton).click((event: Event) => {
             this.closeButton.click();
-            var panel = this.panelBodyHtml;
             var newWindow = window.open('', '', 'width=200,height=100,resizable=yes');
             var doc = newWindow.document;
             doc.open();
-            doc.write(panel.outerHTML);
             doc.close();
+            $(doc.head).append($("script").clone());
+            $(doc.head).append($("link").clone());
+            $(doc.body).append($(this.panelBodyHtml).clone());
         });
 
         var windowSpan = document.createElement("span");
@@ -696,7 +709,7 @@ class SidePanel {
         sidePanelDiv.appendChild(leftPanelHeaderDiv);
 
         var panelBodyDiv: HTMLDivElement = document.createElement('div');
-        $(leftPanelHeaderDiv).addClass('reader-left-panel-body');
+        $(panelBodyDiv).addClass('reader-left-panel-body');
 
         $(panelBodyDiv).append(innerContent);
 
@@ -704,5 +717,9 @@ class SidePanel {
 
         this.panelHtml = sidePanelDiv;
         this.panelBodyHtml = panelBodyDiv;
+    }
+
+    public onMoveToPage(pageIndex: number) {
+        $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
     }
 }
