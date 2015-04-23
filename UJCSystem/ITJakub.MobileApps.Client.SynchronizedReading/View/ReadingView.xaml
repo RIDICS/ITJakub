@@ -57,7 +57,6 @@
                                        Mode="{Binding CurrentMode}"
                                        PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
                                        PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
-                                       IsExternalZoomEnabled="True"
                                        Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}" />
 
                 <Grid Grid.Row="0"
@@ -79,11 +78,12 @@
                           IsActive="{Binding Loading}"
                           Foreground="DarkBlue" />
 
-            <!--TODO modify ReaderRichEditBox to allow zooming (correct width and correct scrolling in zoom mode)-->
-            <!--<controlBooks:ZoomBarControl Grid.Row="1"
+            <controlBooks:ZoomBarControl Grid.Row="1"
                                          CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
                                          ZoomInCommand="{Binding ZoomInCommand}"
-                                         ZoomOutCommand="{Binding ZoomOutCommand}" />-->
+                                         ZoomOutCommand="{Binding ZoomOutCommand}"
+                                         Minimum="-7"
+                                         Maximum="17" />
         </Grid>
         
         <Grid Grid.Row="0"

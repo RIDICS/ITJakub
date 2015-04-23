@@ -163,7 +163,9 @@
                 <control:ZoomBarControl Grid.Row="1"
                                         CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
                                         ZoomInCommand="{Binding ZoomInCommand}"
-                                        ZoomOutCommand="{Binding ZoomOutCommand}" />
+                                        ZoomOutCommand="{Binding ZoomOutCommand}"
+                                        Minimum="-7"
+                                        Maximum="17" />
             </Grid>
             <ProgressRing Grid.Row="2"
                           Grid.Column="0"

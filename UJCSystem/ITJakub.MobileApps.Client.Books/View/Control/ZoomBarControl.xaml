@@ -35,8 +35,8 @@
                 Margin="10,0,10,-10"
                 ThumbToolTipValueConverter="{StaticResource RangeToZoomPercentConverter}"
                 Value="{Binding CurrentZoom, Mode=TwoWay}"
-                Minimum="-24"
-                Maximum="24" />
+                Maximum="{Binding Maximum}"
+                Minimum="{Binding Minimum}" />
 
         <Button Grid.Column="2"
                 Command="{Binding ZoomInCommand}"

@@ -340,9 +340,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             IsPageNotFoundError = false;
             TextReaderViewModel.Loading = true;
             TextReaderViewModel.IsLoadError = false;
+            TextReaderViewModel.DocumentRtf = string.Empty;
             m_dataService.GetPageAsRtf((textRtf, exception) =>
             {
                 TextReaderViewModel.Loading = false;
+                TextReaderViewModel.DocumentRtf = textRtf;
+
                 if (exception != null)
                 {
                     if (exception is NotFoundException)
@@ -357,8 +360,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                     return;
                 }
 
-                TextReaderViewModel.DocumentRtf = textRtf;
-                
                 if (m_pageList != null)
                     UpdateSelectedPage();
             });
@@ -369,6 +370,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private void LoadPhoto()
         {
             ImageReaderViewModel.IsLoadError = false;
+            ImageReaderViewModel.Photo = null;
             if (!IsPhotoDisplayed)
                 return;
 
@@ -376,17 +378,15 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             m_dataService.GetPagePhoto((image, exception) =>
             {
                 ImageReaderViewModel.Loading = false;
+                ImageReaderViewModel.Photo = image;
+
                 if (exception != null)
                 {
                     if (exception is NotFoundException)
                         ImageReaderViewModel.IsLoadError = true;
                     else
                         m_dataService.ErrorService.ShowConnectionError();
-                    
-                    return;
                 }
-
-                ImageReaderViewModel.Photo = image;
             });
         }
 
