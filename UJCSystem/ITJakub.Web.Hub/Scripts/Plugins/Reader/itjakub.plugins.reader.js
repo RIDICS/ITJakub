@@ -323,7 +323,8 @@ var ReaderModule = (function () {
             var innerContent = "Obsah editacniho panelu";
             var panelId = "EditacniPanel";
             if (!_this.existSidePanel(panelId)) {
-                _this.loadSidePanel(_this.makeSidePanel(innerContent, panelId));
+                var editPanel = new SidePanel(innerContent, panelId);
+                _this.loadSidePanel(editPanel.panelHtml);
             }
             _this.changeSidePanelVisibility("EditacniPanel");
         });
@@ -346,7 +347,8 @@ var ReaderModule = (function () {
             var innerContent = "Obsah vyhledavaciho panelu";
             var panelId = "SearchPanel";
             if (!_this.existSidePanel(panelId)) {
-                _this.loadSidePanel(_this.makeSidePanel(innerContent, panelId));
+                var searchPanel = new SidePanel(innerContent, panelId);
+                _this.loadSidePanel(searchPanel.panelHtml);
             }
             _this.changeSidePanelVisibility("SearchPanel");
         });
@@ -369,7 +371,8 @@ var ReaderModule = (function () {
             var innerContent = "Obsah";
             var panelId = "ObsahPanel";
             if (!_this.existSidePanel(panelId)) {
-                _this.loadSidePanel(_this.makeSidePanel(innerContent, panelId));
+                var contentPanel = new SidePanel(innerContent, panelId);
+                _this.loadSidePanel(contentPanel.panelHtml);
             }
             _this.changeSidePanelVisibility("ObsahPanel");
         });
@@ -380,66 +383,6 @@ var ReaderModule = (function () {
 
         controlsDiv.appendChild(pagingDiv);
         return controlsDiv;
-    };
-
-    ReaderModule.prototype.makeSidePanel = function (innerContent, identificator) {
-        var sidePanelDiv = document.createElement('div');
-        sidePanelDiv.id = identificator;
-        $(sidePanelDiv).addClass('reader-left-panel');
-        $(sidePanelDiv).resizable({
-            handles: "e",
-            maxWidth: 250,
-            minWidth: 100
-        });
-
-        var leftPanelHeaderDiv = document.createElement('div');
-        $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
-
-        var sidePanelCloseButton = document.createElement("button");
-        $(sidePanelCloseButton).addClass('close-button');
-        $(sidePanelCloseButton).click(function (event) {
-            if ($(sidePanelDiv).data('ui-draggable')) {
-                $(sidePanelDiv).hide();
-            } else {
-                $(sidePanelDiv).hide('slide', { direction: 'left' });
-            }
-        });
-
-        var closeSpan = document.createElement("span");
-        $(closeSpan).addClass('glyphicon glyphicon-remove');
-        $(sidePanelCloseButton).append(closeSpan);
-
-        leftPanelHeaderDiv.appendChild(sidePanelCloseButton);
-
-        var leftPanelPinButton = document.createElement("button");
-        $(leftPanelPinButton).addClass('pin-button');
-        $(leftPanelPinButton).click(function (event) {
-            if ($(sidePanelDiv).data('ui-draggable')) {
-                $(sidePanelDiv).draggable("destroy");
-                $(sidePanelDiv).css('top', '');
-                $(sidePanelDiv).css('left', '');
-                $(sidePanelDiv).css('width', "");
-                $(sidePanelDiv).css('height', "");
-                $(sidePanelDiv).resizable("destroy");
-                $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
-            } else {
-                $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
-                $(sidePanelDiv).resizable("destroy");
-                $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
-            }
-        });
-
-        var pinSpan = document.createElement("span");
-        $(pinSpan).addClass('glyphicon glyphicon-pushpin');
-        $(leftPanelPinButton).append(pinSpan);
-
-        leftPanelHeaderDiv.appendChild(leftPanelPinButton);
-
-        sidePanelDiv.appendChild(leftPanelHeaderDiv);
-
-        $(sidePanelDiv).append(innerContent);
-
-        return sidePanelDiv;
     };
 
     ReaderModule.prototype.existSidePanel = function (sidePanelIdentificator) {
@@ -639,5 +582,99 @@ var ReaderModule = (function () {
         return true;
     };
     return ReaderModule;
+})();
+
+var SidePanel = (function () {
+    function SidePanel(innerContent, identificator) {
+        var _this = this;
+        var sidePanelDiv = document.createElement('div');
+        sidePanelDiv.id = identificator;
+        $(sidePanelDiv).addClass('reader-left-panel');
+        $(sidePanelDiv).resizable({
+            handles: "e",
+            maxWidth: 250,
+            minWidth: 100
+        });
+
+        var leftPanelHeaderDiv = document.createElement('div');
+        $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
+
+        var sidePanelCloseButton = document.createElement("button");
+        $(sidePanelCloseButton).addClass('close-button');
+        $(sidePanelCloseButton).click(function (event) {
+            if ($(sidePanelDiv).data('ui-draggable')) {
+                $(sidePanelDiv).hide();
+            } else {
+                $(sidePanelDiv).hide('slide', { direction: 'left' });
+            }
+        });
+
+        var closeSpan = document.createElement("span");
+        $(closeSpan).addClass('glyphicon glyphicon-remove');
+        $(sidePanelCloseButton).append(closeSpan);
+
+        this.closeButton = sidePanelCloseButton;
+
+        leftPanelHeaderDiv.appendChild(sidePanelCloseButton);
+
+        var leftPanelPinButton = document.createElement("button");
+        $(leftPanelPinButton).addClass('pin-button');
+        $(leftPanelPinButton).click(function (event) {
+            if ($(sidePanelDiv).data('ui-draggable')) {
+                $(sidePanelDiv).draggable("destroy");
+                $(sidePanelDiv).css('top', '');
+                $(sidePanelDiv).css('left', '');
+                $(sidePanelDiv).css('width', "");
+                $(sidePanelDiv).css('height', "");
+                $(sidePanelDiv).resizable("destroy");
+                $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
+            } else {
+                $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
+                $(sidePanelDiv).resizable("destroy");
+                $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+            }
+        });
+
+        var pinSpan = document.createElement("span");
+        $(pinSpan).addClass('glyphicon glyphicon-pushpin');
+        $(leftPanelPinButton).append(pinSpan);
+
+        this.pinButton = leftPanelPinButton;
+
+        leftPanelHeaderDiv.appendChild(leftPanelPinButton);
+
+        var leftPanelWindowButton = document.createElement("button");
+        $(leftPanelWindowButton).addClass('new-window-button');
+        $(leftPanelWindowButton).click(function (event) {
+            _this.closeButton.click();
+            var panel = _this.panelBodyHtml;
+            var newWindow = window.open('', '', 'width=200,height=100,resizable=yes');
+            var doc = newWindow.document;
+            doc.open();
+            doc.write(panel.outerHTML);
+            doc.close();
+        });
+
+        var windowSpan = document.createElement("span");
+        $(windowSpan).addClass('glyphicon glyphicon-new-window');
+        $(leftPanelWindowButton).append(windowSpan);
+
+        this.newWindowButton = leftPanelWindowButton;
+
+        leftPanelHeaderDiv.appendChild(leftPanelWindowButton);
+
+        sidePanelDiv.appendChild(leftPanelHeaderDiv);
+
+        var panelBodyDiv = document.createElement('div');
+        $(leftPanelHeaderDiv).addClass('reader-left-panel-body');
+
+        $(panelBodyDiv).append(innerContent);
+
+        $(sidePanelDiv).append(panelBodyDiv);
+
+        this.panelHtml = sidePanelDiv;
+        this.panelBodyHtml = panelBodyDiv;
+    }
+    return SidePanel;
 })();
 //# sourceMappingURL=itjakub.plugins.reader.js.map
