@@ -59,8 +59,21 @@
                                        PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
                                        IsExternalZoomEnabled="True"
                                        Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}" />
-            
-            <ProgressRing Grid.Row="0"
+
+                <Grid Grid.Row="0"
+                      Margin="40,20,40,20"
+                      Background="#20000000"
+                      VerticalAlignment="Center">
+
+                    <TextBlock HorizontalAlignment="Center"
+                               Text="Zvolená strana nebyla nalezena."
+                               Foreground="DarkRed"
+                               FontSize="17"
+                               Margin="3"
+                               Visibility="{Binding IsLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </Grid>
+
+                <ProgressRing Grid.Row="0"
                           Width="{StaticResource ProgressRingSize}"
                           Height="{StaticResource ProgressRingSize}"
                           IsActive="{Binding Loading}"
@@ -91,7 +104,20 @@
                                  CurrentZoomFactor="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}"
                                  IsScrollingEnabled="{Binding ElementName=ScrollingEnabledSwitch, Path=IsOn, Mode=TwoWay}"
                                  Visibility="{Binding ElementName=RootElement, Path=DataContext.IsPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            
+
+            <Grid Grid.Row="0"
+                    Margin="40,20,40,20"
+                    Background="#AAFFFFFF"
+                    VerticalAlignment="Center">
+
+                <TextBlock HorizontalAlignment="Center"
+                            Text="Fotografie této strany nebyla nalezena."
+                            Foreground="DarkRed"
+                            FontSize="17"
+                            Margin="3"
+                            Visibility="{Binding IsLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
+
             <ProgressRing Grid.Row="0"
                           Width="{StaticResource ProgressRingSize}"
                           Height="{StaticResource ProgressRingSize}"

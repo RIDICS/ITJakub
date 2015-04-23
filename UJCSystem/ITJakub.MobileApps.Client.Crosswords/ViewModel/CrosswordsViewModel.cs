@@ -13,7 +13,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             m_dataService = dataService;
 
             SimpleCrosswordsViewModel = new SimpleCrosswordsViewModel(dataService);
-            SimpleCrosswordsViewModel.GoBack = GoBack;
+            SimpleCrosswordsViewModel.GoBack = () => GoBack();
         }
 
         public SimpleCrosswordsViewModel SimpleCrosswordsViewModel { get; set; }

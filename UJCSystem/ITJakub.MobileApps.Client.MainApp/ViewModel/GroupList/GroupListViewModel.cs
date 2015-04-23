@@ -390,6 +390,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void DisplayGroupList(ObservableCollection<GroupInfoViewModel> groupList)
         {
+            if (groupList == null)
+                return;
+
             IEnumerable<GroupInfoViewModel> filteredList = groupList;
             if (CurrentFilter != null)
                 filteredList = groupList.Where(group => group.State == CurrentFilter);

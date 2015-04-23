@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private string m_documentRtf;
         private bool m_loading;
         private double m_currentZoom;
+        private bool m_isLoadError;
 
         public TextReaderViewModel()
         {
@@ -86,6 +87,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             set
             {
                 m_currentZoom = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsLoadError
+        {
+            get { return m_isLoadError; }
+            set
+            {
+                m_isLoadError = value;
                 RaisePropertyChanged();
             }
         }

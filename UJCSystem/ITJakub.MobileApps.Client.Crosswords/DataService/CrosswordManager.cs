@@ -43,7 +43,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             callback(crosswordRows);
         }
 
-        public void FillWord(int rowIndex, string word, Action<GameInfoViewModel, Exception> callback)
+        public async void FillWord(int rowIndex, string word, Action<GameInfoViewModel, Exception> callback)
         {
             m_task.FillWord(rowIndex, word);
             var isFilledCorrectly = m_task.IsRowFilledCorrectly(rowIndex);
@@ -64,7 +64,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
 
             try
             {
-                m_applicationCommunication.SendObjectAsync(ApplicationType.Crosswords, ProgressMessage, JsonConvert.SerializeObject(messageProgress));
+                await m_applicationCommunication.SendObjectAsync(ApplicationType.Crosswords, ProgressMessage, JsonConvert.SerializeObject(messageProgress));
             }
             catch (ClientCommunicationException exception)
             {

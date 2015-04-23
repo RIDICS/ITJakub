@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
+using ITJakub.MobileApps.Client.Books.Service.Client;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
@@ -59,7 +60,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 LoadingPageList = false;
                 if (exception != null)
                 {
-                    m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    if (exception is NotFoundException)
+                        m_dataService.ErrorService.ShowError("Pro zvolenou knihu se nepodařilo načíst seznam stran.", "Nelze se načíst data", GoBack);
+                    else
+                        m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    
                     return;
                 }
 
@@ -334,12 +339,21 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         {
             IsPageNotFoundError = false;
             TextReaderViewModel.Loading = true;
+            TextReaderViewModel.IsLoadError = false;
             m_dataService.GetPageAsRtf((textRtf, exception) =>
             {
                 TextReaderViewModel.Loading = false;
                 if (exception != null)
                 {
-                    m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    if (exception is NotFoundException)
+                    {
+                        TextReaderViewModel.IsLoadError = true;
+                    }
+                    else
+                    {
+                        m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    }
+                    
                     return;
                 }
 
@@ -354,6 +368,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
         private void LoadPhoto()
         {
+            ImageReaderViewModel.IsLoadError = false;
             if (!IsPhotoDisplayed)
                 return;
 
@@ -363,7 +378,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 ImageReaderViewModel.Loading = false;
                 if (exception != null)
                 {
-                    m_dataService.ErrorService.ShowConnectionError();
+                    if (exception is NotFoundException)
+                        ImageReaderViewModel.IsLoadError = true;
+                    else
+                        m_dataService.ErrorService.ShowConnectionError();
+                    
                     return;
                 }
 

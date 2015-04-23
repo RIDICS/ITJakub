@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private ImageSource m_photo;
         private bool m_loading;
         private double m_currentZoom;
+        private bool m_isLoadError;
 
         public ImageReaderViewModel()
         {
@@ -76,6 +77,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             set
             {
                 m_currentZoom = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsLoadError
+        {
+            get { return m_isLoadError; }
+            set
+            {
+                m_isLoadError = value;
                 RaisePropertyChanged();
             }
         }
