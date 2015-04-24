@@ -342,7 +342,7 @@ class ReaderModule {
             var innerContent = "Obsah editacniho panelu";
             var panelId = "EditacniPanel";
             if (!this.existSidePanel(panelId)) {
-                var editPanel = new SidePanel(innerContent, panelId);
+                var editPanel = new SidePanel(innerContent, panelId, this);
                 this.loadSidePanel(editPanel.panelHtml);
                 this.sidePanels.push(editPanel);
             }
@@ -367,7 +367,7 @@ class ReaderModule {
             var innerContent = "Obsah vyhledavaciho panelu";
             var panelId = "SearchPanel";
             if (!this.existSidePanel(panelId)) {
-                var searchPanel = new SidePanel(innerContent, panelId);
+                var searchPanel = new SidePanel(innerContent, panelId, this);
                 this.loadSidePanel(searchPanel.panelHtml);
                 this.sidePanels.push(searchPanel);
             }
@@ -392,7 +392,7 @@ class ReaderModule {
             var innerContent = "Obsah";
             var panelId = "ObsahPanel";
             if (!this.existSidePanel(panelId)) {
-                var contentPanel = new SidePanel(innerContent, panelId);
+                var contentPanel = new SidePanel(innerContent, panelId, this);
                 this.loadSidePanel(contentPanel.panelHtml);
                 this.sidePanels.push(contentPanel);
             }
@@ -622,11 +622,16 @@ class SidePanel {
     closeButton : HTMLButtonElement;
     pinButton : HTMLButtonElement;
     newWindowButton: HTMLButtonElement;
-    identificator : string;
+    identificator: string;
+    innerContent: string;
+    parentReader: ReaderModule;
+    windows: Array<HTMLDivElement>;
 
-    public constructor(innerContent, identificator: string) {
-
+    public constructor(innerContent, identificator: string,  parentReader: ReaderModule) {
+        this.parentReader = parentReader;
         this.identificator = identificator;
+        this.innerContent = innerContent;
+        this.windows = new Array();
         var sidePanelDiv: HTMLDivElement = document.createElement('div');
         sidePanelDiv.id = identificator;
         $(sidePanelDiv).addClass('reader-left-panel');
@@ -689,13 +694,17 @@ class SidePanel {
         $(leftPanelWindowButton).addClass('new-window-button');
         $(leftPanelWindowButton).click((event: Event) => {
             this.closeButton.click();
-            var newWindow = window.open('', '', 'width=200,height=100,resizable=yes');
-            var doc = newWindow.document;
-            doc.open();
-            doc.close();
-            $(doc.head).append($("script").clone());
-            $(doc.head).append($("link").clone());
-            $(doc.body).append($(this.panelBodyHtml).clone());
+            var newWindow = window.open("//"+document.domain, '_blank', 'width=200,height=100,resizable=yes');
+            newWindow.document.open();
+            newWindow.document.close();
+
+            $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
+            $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
+
+            var panelBody = this.makeBody(this.innerContent, this);
+            $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
+            
+            this.windows.push(panelBody);
         });
 
         var windowSpan = document.createElement("span");
@@ -708,10 +717,7 @@ class SidePanel {
 
         sidePanelDiv.appendChild(leftPanelHeaderDiv);
 
-        var panelBodyDiv: HTMLDivElement = document.createElement('div');
-        $(panelBodyDiv).addClass('reader-left-panel-body');
-
-        $(panelBodyDiv).append(innerContent);
+        var panelBodyDiv = this.makeBody(innerContent, this);
 
         $(sidePanelDiv).append(panelBodyDiv);
 
@@ -719,7 +725,29 @@ class SidePanel {
         this.panelBodyHtml = panelBodyDiv;
     }
 
+
+    private makeBody(innerContent, rootReference) : HTMLDivElement {
+        var panelBodyDiv: HTMLDivElement = document.createElement('div');
+        $(panelBodyDiv).addClass('reader-left-panel-body');
+
+        var movePageButton: HTMLButtonElement = document.createElement('button');
+        movePageButton.textContent = "Move to page 15";
+        $(movePageButton).click((event: Event) => {
+            rootReference.parentReader.moveToPageNumber(15, true);
+        });
+
+        $(panelBodyDiv).append(movePageButton);
+
+        $(panelBodyDiv).append(innerContent);
+
+        return panelBodyDiv;
+    }
+
     public onMoveToPage(pageIndex: number) {
         $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
+        for (var i = 0; i < this.windows.length;i++) {
+            var windowBody = this.windows[i];
+            $(windowBody).append(" pageIndex is " + pageIndex);
+        }
     }
 }

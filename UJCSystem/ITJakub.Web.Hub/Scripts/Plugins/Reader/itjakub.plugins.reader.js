@@ -324,7 +324,7 @@ var ReaderModule = (function () {
             var innerContent = "Obsah editacniho panelu";
             var panelId = "EditacniPanel";
             if (!_this.existSidePanel(panelId)) {
-                var editPanel = new SidePanel(innerContent, panelId);
+                var editPanel = new SidePanel(innerContent, panelId, _this);
                 _this.loadSidePanel(editPanel.panelHtml);
                 _this.sidePanels.push(editPanel);
             }
@@ -349,7 +349,7 @@ var ReaderModule = (function () {
             var innerContent = "Obsah vyhledavaciho panelu";
             var panelId = "SearchPanel";
             if (!_this.existSidePanel(panelId)) {
-                var searchPanel = new SidePanel(innerContent, panelId);
+                var searchPanel = new SidePanel(innerContent, panelId, _this);
                 _this.loadSidePanel(searchPanel.panelHtml);
                 _this.sidePanels.push(searchPanel);
             }
@@ -374,7 +374,7 @@ var ReaderModule = (function () {
             var innerContent = "Obsah";
             var panelId = "ObsahPanel";
             if (!_this.existSidePanel(panelId)) {
-                var contentPanel = new SidePanel(innerContent, panelId);
+                var contentPanel = new SidePanel(innerContent, panelId, _this);
                 _this.loadSidePanel(contentPanel.panelHtml);
                 _this.sidePanels.push(contentPanel);
             }
@@ -592,9 +592,12 @@ var ReaderModule = (function () {
 })();
 
 var SidePanel = (function () {
-    function SidePanel(innerContent, identificator) {
+    function SidePanel(innerContent, identificator, parentReader) {
         var _this = this;
+        this.parentReader = parentReader;
         this.identificator = identificator;
+        this.innerContent = innerContent;
+        this.windows = new Array();
         var sidePanelDiv = document.createElement('div');
         sidePanelDiv.id = identificator;
         $(sidePanelDiv).addClass('reader-left-panel');
@@ -655,13 +658,17 @@ var SidePanel = (function () {
         $(leftPanelWindowButton).addClass('new-window-button');
         $(leftPanelWindowButton).click(function (event) {
             _this.closeButton.click();
-            var newWindow = window.open('', '', 'width=200,height=100,resizable=yes');
-            var doc = newWindow.document;
-            doc.open();
-            doc.close();
-            $(doc.head).append($("script").clone());
-            $(doc.head).append($("link").clone());
-            $(doc.body).append($(_this.panelBodyHtml).clone());
+            var newWindow = window.open("//" + document.domain, '_blank', 'width=200,height=100,resizable=yes');
+            newWindow.document.open();
+            newWindow.document.close();
+
+            $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
+            $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
+
+            var panelBody = _this.makeBody(_this.innerContent, _this);
+            $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
+
+            _this.windows.push(panelBody);
         });
 
         var windowSpan = document.createElement("span");
@@ -674,18 +681,36 @@ var SidePanel = (function () {
 
         sidePanelDiv.appendChild(leftPanelHeaderDiv);
 
-        var panelBodyDiv = document.createElement('div');
-        $(panelBodyDiv).addClass('reader-left-panel-body');
-
-        $(panelBodyDiv).append(innerContent);
+        var panelBodyDiv = this.makeBody(innerContent, this);
 
         $(sidePanelDiv).append(panelBodyDiv);
 
         this.panelHtml = sidePanelDiv;
         this.panelBodyHtml = panelBodyDiv;
     }
+    SidePanel.prototype.makeBody = function (innerContent, rootReference) {
+        var panelBodyDiv = document.createElement('div');
+        $(panelBodyDiv).addClass('reader-left-panel-body');
+
+        var movePageButton = document.createElement('button');
+        movePageButton.textContent = "Move to page 15";
+        $(movePageButton).click(function (event) {
+            rootReference.parentReader.moveToPageNumber(15, true);
+        });
+
+        $(panelBodyDiv).append(movePageButton);
+
+        $(panelBodyDiv).append(innerContent);
+
+        return panelBodyDiv;
+    };
+
     SidePanel.prototype.onMoveToPage = function (pageIndex) {
         $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
+        for (var i = 0; i < this.windows.length; i++) {
+            var windowBody = this.windows[i];
+            $(windowBody).append(" pageIndex is " + pageIndex);
+        }
     };
     return SidePanel;
 })();
