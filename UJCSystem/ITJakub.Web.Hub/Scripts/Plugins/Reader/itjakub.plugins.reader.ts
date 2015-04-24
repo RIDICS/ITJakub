@@ -13,7 +13,8 @@ class ReaderModule {
     bookId: string;
     loadedBookContent: boolean;
 
-    sidePanels: Array<SidePanel>;
+    leftSidePanels: Array<SidePanel>;
+    rightSidePanels: Array<SidePanel>;
 
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
@@ -59,7 +60,8 @@ class ReaderModule {
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array<string>();
-        this.sidePanels = new Array<SidePanel>();
+        this.leftSidePanels = new Array<SidePanel>();
+        this.rightSidePanels = new Array<SidePanel>();
         
         for (var i = 0; i < pageList.length; i++) { //load pageList
             this.pages.push(pageList[i]["Text"]);
@@ -342,9 +344,9 @@ class ReaderModule {
             var innerContent = "Obsah editacniho panelu";
             var panelId = "EditacniPanel";
             if (!this.existSidePanel(panelId)) {
-                var editPanel = new SidePanel(innerContent, panelId, this);
+                var editPanel = new LeftSidePanel(innerContent, panelId, this);
                 this.loadSidePanel(editPanel.panelHtml);
-                this.sidePanels.push(editPanel);
+                this.leftSidePanels.push(editPanel);
             }
             this.changeSidePanelVisibility("EditacniPanel");
         });
@@ -367,9 +369,9 @@ class ReaderModule {
             var innerContent = "Obsah vyhledavaciho panelu";
             var panelId = "SearchPanel";
             if (!this.existSidePanel(panelId)) {
-                var searchPanel = new SidePanel(innerContent, panelId, this);
+                var searchPanel = new LeftSidePanel(innerContent, panelId, this);
                 this.loadSidePanel(searchPanel.panelHtml);
-                this.sidePanels.push(searchPanel);
+                this.leftSidePanels.push(searchPanel);
             }
             this.changeSidePanelVisibility("SearchPanel");
         });
@@ -392,9 +394,9 @@ class ReaderModule {
             var innerContent = "Obsah";
             var panelId = "ObsahPanel";
             if (!this.existSidePanel(panelId)) {
-                var contentPanel = new SidePanel(innerContent, panelId, this);
+                var contentPanel = new LeftSidePanel(innerContent, panelId, this);
                 this.loadSidePanel(contentPanel.panelHtml);
-                this.sidePanels.push(contentPanel);
+                this.leftSidePanels.push(contentPanel);
             }
             this.changeSidePanelVisibility("ObsahPanel");
         });
@@ -473,7 +475,10 @@ class ReaderModule {
 
         textContainerDiv.appendChild(textAreaDiv);
 
-        bodyContainerDiv.appendChild(textContainerDiv);
+        var textPanel = new RightSidePanel(textContainerDiv, "textPanel", this);
+        this.rightSidePanels.push(textPanel);
+
+        bodyContainerDiv.appendChild(textPanel.panelHtml);
         return bodyContainerDiv;
     }
 
@@ -486,8 +491,8 @@ class ReaderModule {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
-        for (var k = 0; k < this.sidePanels.length; k++) {
-            this.sidePanels[k].onMoveToPage(pageIndex);
+        for (var k = 0; k < this.leftSidePanels.length; k++) {
+            this.leftSidePanels[k].onMoveToPage(pageIndex);
         }
         for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
             this.displayPage(this.pages[pageIndex - j], false);
@@ -634,12 +639,7 @@ class SidePanel {
         this.windows = new Array();
         var sidePanelDiv: HTMLDivElement = document.createElement('div');
         sidePanelDiv.id = identificator;
-        $(sidePanelDiv).addClass('reader-left-panel');
-        $(sidePanelDiv).resizable({
-            handles: "e",
-            maxWidth: 250,
-            minWidth: 100
-        });
+        this.decorateSidePanel(sidePanelDiv);
 
         var leftPanelHeaderDiv: HTMLDivElement = document.createElement('div');
         $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
@@ -749,5 +749,30 @@ class SidePanel {
             var windowBody = this.windows[i];
             $(windowBody).append(" pageIndex is " + pageIndex);
         }
+    }
+
+    decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
+}
+
+
+class LeftSidePanel extends SidePanel {
+    decorateSidePanel(sidePanelDiv: HTMLDivElement) {
+        $(sidePanelDiv).addClass('reader-left-panel');
+        $(sidePanelDiv).resizable({
+            handles: "e",
+            maxWidth: 250,
+            minWidth: 100
+        });
+    }
+}
+
+
+class RightSidePanel extends SidePanel {
+    decorateSidePanel(sidePanelDiv: HTMLDivElement) {
+        $(sidePanelDiv).addClass('reader-right-panel');
+        $(sidePanelDiv).resizable({
+            handles: "w",
+            minWidth: 400
+        });
     }
 }

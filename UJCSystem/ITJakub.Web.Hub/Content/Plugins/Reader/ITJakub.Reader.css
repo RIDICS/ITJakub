@@ -269,7 +269,15 @@ div.container {
   overflow-y: hidden;
   overflow-x: hidden;
 }
-.reader-left-panel.ui-draggable {
+.reader-right-panel {
+  float: right;
+  background-color: white;
+  padding: 3px;
+  height: 77vh;
+  border-right: 1px solid #e5e5e5;
+}
+.reader-left-panel.ui-draggable,
+.reader-right-panel.ui-draggable {
   position: absolute!important;
   border: 1px solid #e5e5e5;
   z-index: 9999;
@@ -296,7 +304,8 @@ div.container {
   vertical-align: middle;
 }
 .close-button:hover,
-.pin-button:hover {
+.pin-button:hover,
+.new-window-button:hover {
   color: #84ced7;
 }
 .reader-left-panel-header {
