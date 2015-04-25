@@ -518,6 +518,7 @@ ul.bib-listing li.list-item .label {
   width: auto;
   margin-top: 1px;
   display: block;
+  padding: 0;
 }
 .reader-controls .ui-slider {
   background: #84ced7;
@@ -702,18 +703,15 @@ ul.bib-listing li.list-item .label {
   float: left;
   background-color: white;
   width: 250px;
-  padding: 3px;
+  /*padding: 3px;*/
   height: 77vh;
   border-right: 1px solid #e5e5e5;
   overflow-y: hidden;
   overflow-x: hidden;
 }
 .reader-right-panel {
-  float: right;
   background-color: white;
-  padding: 3px;
-  height: 77vh;
-  border-right: 1px solid #e5e5e5;
+  width: auto;
 }
 .reader-left-panel.ui-draggable,
 .reader-right-panel.ui-draggable {
@@ -1007,4 +1005,4 @@ ul {
 .navbar-login li a:hover {
   color: #84ced7;
 }
-/*# sourceMappingURL=ITJakub.css.map */
+/*# sourceMappingURL=itjakub.css.map */

@@ -14,6 +14,7 @@
     width: auto;
     margin-top: 1px;
     display : block;
+    padding: 0;
 }
 
 .reader-controls .ui-slider {
@@ -238,7 +239,7 @@
     float : left;
     background-color : white;
     width : 250px;
-    padding: 3px;
+    /*padding: 3px;*/
     height: @reader-body-height;
     border-right: 1px solid @background-color;
     overflow-y: hidden; //TODO make auto and resolve resizable bug
@@ -246,11 +247,8 @@
 }
 
 .reader-right-panel {
-    float : right;
     background-color : white;
-    padding: 3px;
-    height: @reader-body-height;
-    border-right: 1px solid @background-color;
+    width: auto;
 }
 
 .reader-left-panel.ui-draggable, .reader-right-panel.ui-draggable {

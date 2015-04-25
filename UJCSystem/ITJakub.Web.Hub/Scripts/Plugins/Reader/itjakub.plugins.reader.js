@@ -747,10 +747,6 @@ var RightSidePanel = (function (_super) {
     }
     RightSidePanel.prototype.decorateSidePanel = function (sidePanelDiv) {
         $(sidePanelDiv).addClass('reader-right-panel');
-        $(sidePanelDiv).resizable({
-            handles: "w",
-            minWidth: 400
-        });
     };
     return RightSidePanel;
 })(SidePanel);

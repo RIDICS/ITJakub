@@ -770,9 +770,5 @@ class LeftSidePanel extends SidePanel {
 class RightSidePanel extends SidePanel {
     decorateSidePanel(sidePanelDiv: HTMLDivElement) {
         $(sidePanelDiv).addClass('reader-right-panel');
-        $(sidePanelDiv).resizable({
-            handles: "w",
-            minWidth: 400
-        });
     }
 }
