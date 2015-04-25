@@ -618,6 +618,22 @@ class ReaderModule {
 
 
     }
+
+    repaint() {
+        for (var i = 0; i < this.leftSidePanels.length; i++) {
+            if ($(this.leftSidePanels[i]).is(":visible")) {
+                $(this.leftSidePanels[i]).hide();
+                $(this.leftSidePanels[i]).show();
+            }
+        }
+
+        for (var i = 0; i < this.rightSidePanels.length; i++) {
+            if ($(this.rightSidePanels[i]).is(":visible")) {
+                $(this.rightSidePanels[i]).hide();
+                $(this.rightSidePanels[i]).show();
+            }
+        }
+    }
 }
 
 
@@ -666,20 +682,7 @@ class SidePanel {
         var leftPanelPinButton = document.createElement("button");
         $(leftPanelPinButton).addClass('pin-button');
         $(leftPanelPinButton).click((event: Event) => {
-            if ($(sidePanelDiv).data('ui-draggable')) {
-                $(sidePanelDiv).draggable("destroy");
-                $(sidePanelDiv).css('top', '');
-                $(sidePanelDiv).css('left', '');
-                $(sidePanelDiv).css('width', "");
-                $(sidePanelDiv).css('height', "");
-                $(sidePanelDiv).resizable("destroy");
-                $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
-
-            } else {
-                $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
-                $(sidePanelDiv).resizable("destroy");
-                $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
-            }
+            this.onPinButtonClick(sidePanelDiv);
         });
 
         var pinSpan = document.createElement("span");
@@ -694,7 +697,7 @@ class SidePanel {
         $(leftPanelWindowButton).addClass('new-window-button');
         $(leftPanelWindowButton).click((event: Event) => {
             this.closeButton.click();
-            var newWindow = window.open("//"+document.domain, '_blank', 'width=200,height=100,resizable=yes');
+            var newWindow = window.open("//"+document.domain, '_blank', 'width=400,height=600,resizable=yes');
             newWindow.document.open();
             newWindow.document.close();
 
@@ -703,6 +706,8 @@ class SidePanel {
 
             var panelBody = this.makeBody(this.innerContent, this);
             $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
+            $(newWindow.document.getElementsByTagName('body')[0]).css("padding",0);
+            $(newWindow.document.getElementsByTagName('body')[0]).css("background-color","white");
             
             this.windows.push(panelBody);
         });
@@ -752,6 +757,8 @@ class SidePanel {
     }
 
     decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
+
+    onPinButtonClick(sidePanelDiv : HTMLDivElement) { throw new Error("Not implemented"); }
 }
 
 
@@ -764,11 +771,45 @@ class LeftSidePanel extends SidePanel {
             minWidth: 100
         });
     }
+
+    onPinButtonClick(sidePanelDiv: HTMLDivElement) {
+        if ($(sidePanelDiv).data('ui-draggable')) {
+            $(sidePanelDiv).draggable("destroy");
+            $(sidePanelDiv).css('top', '');
+            $(sidePanelDiv).css('left', '');
+            $(sidePanelDiv).css('width', "");
+            $(sidePanelDiv).css('height', "");
+            $(sidePanelDiv).resizable("destroy");
+            $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
+
+        } else {
+            $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
+            $(sidePanelDiv).resizable("destroy");
+            $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+        }
+    }
 }
 
 
 class RightSidePanel extends SidePanel {
     decorateSidePanel(sidePanelDiv: HTMLDivElement) {
         $(sidePanelDiv).addClass('reader-right-panel');
+    }
+
+    onPinButtonClick(sidePanelDiv: HTMLDivElement) {
+        if ($(sidePanelDiv).data('ui-draggable')) {
+            $(sidePanelDiv).draggable("destroy");
+            $(sidePanelDiv).css('top', '');
+            $(sidePanelDiv).css('left', '');
+            $(sidePanelDiv).css('width', "");
+            $(sidePanelDiv).css('position', "");
+            $(sidePanelDiv).css('height', "");
+            $(sidePanelDiv).resizable("destroy");
+
+        } else {
+            $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
+            $(sidePanelDiv).resizable("destroy");
+            $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+        }
     }
 }

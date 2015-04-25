@@ -598,6 +598,22 @@ var ReaderModule = (function () {
         //TODO populate request on service for removing bookmark from DB
         return true;
     };
+
+    ReaderModule.prototype.repaint = function () {
+        for (var i = 0; i < this.leftSidePanels.length; i++) {
+            if ($(this.leftSidePanels[i]).is(":visible")) {
+                $(this.leftSidePanels[i]).hide();
+                $(this.leftSidePanels[i]).show();
+            }
+        }
+
+        for (var i = 0; i < this.rightSidePanels.length; i++) {
+            if ($(this.rightSidePanels[i]).is(":visible")) {
+                $(this.rightSidePanels[i]).hide();
+                $(this.rightSidePanels[i]).show();
+            }
+        }
+    };
     return ReaderModule;
 })();
 
@@ -636,19 +652,7 @@ var SidePanel = (function () {
         var leftPanelPinButton = document.createElement("button");
         $(leftPanelPinButton).addClass('pin-button');
         $(leftPanelPinButton).click(function (event) {
-            if ($(sidePanelDiv).data('ui-draggable')) {
-                $(sidePanelDiv).draggable("destroy");
-                $(sidePanelDiv).css('top', '');
-                $(sidePanelDiv).css('left', '');
-                $(sidePanelDiv).css('width', "");
-                $(sidePanelDiv).css('height', "");
-                $(sidePanelDiv).resizable("destroy");
-                $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
-            } else {
-                $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
-                $(sidePanelDiv).resizable("destroy");
-                $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
-            }
+            _this.onPinButtonClick(sidePanelDiv);
         });
 
         var pinSpan = document.createElement("span");
@@ -663,7 +667,7 @@ var SidePanel = (function () {
         $(leftPanelWindowButton).addClass('new-window-button');
         $(leftPanelWindowButton).click(function (event) {
             _this.closeButton.click();
-            var newWindow = window.open("//" + document.domain, '_blank', 'width=200,height=100,resizable=yes');
+            var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
             newWindow.document.open();
             newWindow.document.close();
 
@@ -672,6 +676,8 @@ var SidePanel = (function () {
 
             var panelBody = _this.makeBody(_this.innerContent, _this);
             $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
+            $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
+            $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
 
             _this.windows.push(panelBody);
         });
@@ -721,6 +727,10 @@ var SidePanel = (function () {
     SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
         throw new Error("Not implemented");
     };
+
+    SidePanel.prototype.onPinButtonClick = function (sidePanelDiv) {
+        throw new Error("Not implemented");
+    };
     return SidePanel;
 })();
 
@@ -737,6 +747,22 @@ var LeftSidePanel = (function (_super) {
             minWidth: 100
         });
     };
+
+    LeftSidePanel.prototype.onPinButtonClick = function (sidePanelDiv) {
+        if ($(sidePanelDiv).data('ui-draggable')) {
+            $(sidePanelDiv).draggable("destroy");
+            $(sidePanelDiv).css('top', '');
+            $(sidePanelDiv).css('left', '');
+            $(sidePanelDiv).css('width', "");
+            $(sidePanelDiv).css('height', "");
+            $(sidePanelDiv).resizable("destroy");
+            $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
+        } else {
+            $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
+            $(sidePanelDiv).resizable("destroy");
+            $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+        }
+    };
     return LeftSidePanel;
 })(SidePanel);
 
@@ -747,6 +773,22 @@ var RightSidePanel = (function (_super) {
     }
     RightSidePanel.prototype.decorateSidePanel = function (sidePanelDiv) {
         $(sidePanelDiv).addClass('reader-right-panel');
+    };
+
+    RightSidePanel.prototype.onPinButtonClick = function (sidePanelDiv) {
+        if ($(sidePanelDiv).data('ui-draggable')) {
+            $(sidePanelDiv).draggable("destroy");
+            $(sidePanelDiv).css('top', '');
+            $(sidePanelDiv).css('left', '');
+            $(sidePanelDiv).css('width', "");
+            $(sidePanelDiv).css('position', "");
+            $(sidePanelDiv).css('height', "");
+            $(sidePanelDiv).resizable("destroy");
+        } else {
+            $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
+            $(sidePanelDiv).resizable("destroy");
+            $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+        }
     };
     return RightSidePanel;
 })(SidePanel);

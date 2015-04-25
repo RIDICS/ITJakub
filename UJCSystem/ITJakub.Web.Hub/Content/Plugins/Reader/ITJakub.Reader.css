@@ -270,15 +270,19 @@ div.container {
   overflow-y: hidden;
   overflow-x: hidden;
 }
-.reader-right-panel {
+.reader-left-panel-body {
   background-color: white;
+}
+.reader-right-panel {
   width: auto;
+  background-color: white;
 }
 .reader-left-panel.ui-draggable,
 .reader-right-panel.ui-draggable {
   position: absolute!important;
   border: 1px solid #e5e5e5;
   z-index: 9999;
+  box-shadow: 5px 5px 5px #888888;
 }
 .reader-text-container {
   padding: 5px 30px 5px 30px;
