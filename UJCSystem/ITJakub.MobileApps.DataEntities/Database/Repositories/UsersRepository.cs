@@ -21,34 +21,6 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual User LoadUserWithDetails(long id)
-        {
-            using (ISession session = GetSession())
-            {
-                return
-                    session.CreateCriteria<User>()
-                        .Add(Restrictions.Eq(Projections.Id(), id))
-                        .SetFetchMode("MemberOfGroups", FetchMode.Join)
-                        .SetFetchMode("CreatedGroups", FetchMode.Join)
-                        .SetFetchMode("CreatedTasks", FetchMode.Join)
-                        .UniqueResult<User>();
-            }
-        }
-
-        [Transaction(TransactionMode.Requires)]
-        public virtual string GetCommunicationToken(byte authenticationProvider, string authenticationProviderToken)
-        {
-            using (ISession session = GetSession())
-            {
-                var user = session.CreateCriteria<User>()
-                    .Add(Restrictions.Eq("AuthenticationProvider", authenticationProvider))
-                    .Add(Restrictions.Eq("AuthenticationProviderToken", authenticationProviderToken))
-                    .UniqueResult<User>();
-                return user == null ? null : user.CommunicationToken;
-            }
-        }
-
-        [Transaction(TransactionMode.Requires)]
         public override object Create(object instance)
         {
             try
@@ -66,10 +38,9 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
             using (ISession session = GetSession())
             {
-                return session.CreateCriteria<User>()
-                    .Add(Restrictions.Eq("Email", email))
-                    .Add(Restrictions.Eq("AuthenticationProvider", authenticationProvider))
-                    .UniqueResult<User>();
+                return session.QueryOver<User>()
+                    .Where(x => x.Email == email && x.AuthenticationProvider == authenticationProvider)
+                    .SingleOrDefault();
             }
         }
 
@@ -78,37 +49,9 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
             using (ISession session = GetSession())
             {
-                return session.CreateCriteria<User>()
-                    .Add(Restrictions.Eq("CommunicationToken", communicationToken))
-                    .UniqueResult<User>();
-            }
-        }
-
-
-        [Transaction(TransactionMode.Requires)]
-        public virtual User FindByAuthenticationProviderToken(string token)
-        {
-            using (ISession session = GetSession())
-            {
-                return session.CreateCriteria<User>()
-                    .Add(Restrictions.Eq("AuthenticationProviderToken", token))
-                    .UniqueResult<User>();
-            }
-        }
-
-        [Transaction(TransactionMode.Requires)]
-        public virtual User LoadGroupsForUser(long userId)
-        {
-            using (ISession session = GetSession())
-            {
-                var user = session.CreateCriteria<User>()
-                    .Add(Restrictions.Eq(Projections.Id(), userId))
-                    .SetFetchMode("MemberOfGroups", FetchMode.Join)
-                    .SetFetchMode("MemberOfGroups.Members", FetchMode.Join)
-                    .SetFetchMode("CreatedGroups", FetchMode.Join)
-                    .SetFetchMode("CreatedGroups.Members", FetchMode.Join)
-                    .UniqueResult<User>();
-                return user;
+                return session.QueryOver<User>()
+                    .Where(x => x.CommunicationToken == communicationToken)
+                    .SingleOrDefault();
             }
         }
 
@@ -171,11 +114,10 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
             using (ISession session = GetSession())
             {
-                return
-                    session.CreateCriteria<Group>()
-                        .Add(Restrictions.Eq("EnterCode", enterCode))
-                        .SetFetchMode("Members", FetchMode.Join)
-                        .UniqueResult<Group>();
+                return session.QueryOver<Group>()
+                    .Where(x => x.EnterCode == enterCode)
+                    .Fetch(x => x.Members).Eager
+                    .SingleOrDefault();
             }
         }
 
@@ -184,11 +126,12 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                return session.CreateCriteria<Group>()
-                    .Add(Restrictions.Eq(Projections.Id(), groupId))
-                    .SetFetchMode("Members", FetchMode.Join)
-                    .SetFetchMode("Task", FetchMode.Join)
-                    .UniqueResult<Group>();
+                return session.QueryOver<Group>()
+                    .Where(x => x.Id == groupId)
+                    .Fetch(x => x.Members).Eager
+                    .JoinQueryOver(x => x.Task, JoinType.LeftOuterJoin)
+                    .JoinQueryOver(x => x.Author, JoinType.LeftOuterJoin)
+                    .SingleOrDefault();
             }
         }
 
@@ -197,13 +140,11 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                var application = Load<Application>(applicationId);
-
-                return session.CreateCriteria<Task>()
-                    .Add(Restrictions.Eq("Application", application))
-                    .SetFetchMode("Author", FetchMode.Join)
-                    .AddOrder(new Order("CreateTime", false))
-                    .List<Task>();
+                return session.QueryOver<Task>()
+                    .Where(x => x.Application.Id == applicationId)
+                    .Fetch(x => x.Author).Eager
+                    .OrderBy(x => x.CreateTime).Desc
+                    .List();
             }
         }
 
@@ -212,12 +153,10 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                var author = Load<User>(authorId);
-
-                return session.CreateCriteria<Task>()
-                    .Add(Restrictions.Eq("Author", author))
-                    .SetFetchMode("Author", FetchMode.Join)
-                    .List<Task>();
+                return session.QueryOver<Task>()
+                    .Where(x => x.Author.Id == authorId)
+                    .Fetch(x => x.Author).Eager
+                    .List();
             }
         }
 
