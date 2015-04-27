@@ -20,7 +20,7 @@
     </Page.Resources>
     
     <Page.TopAppBar>
-        <AppBar Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+        <AppBar Visibility="{Binding IsOwnerMode, Converter={StaticResource BooleanToVisibilityConverter}}"
                 IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
             <Grid>
                 <Grid.ColumnDefinitions>

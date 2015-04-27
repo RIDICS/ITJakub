@@ -28,6 +28,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         private GroupDetailContract m_currentGroupInfoModel;
 
         public long CurrentGroupId { get; set; }
+        public GroupType CurrentGroupType { get; set; }
 
         public bool RestoreLastState { get; set; }
 

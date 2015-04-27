@@ -1,5 +1,6 @@
 ﻿using System;
 using ITJakub.MobileApps.Client.Core.Communication.Error;
+using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -80,7 +81,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                     return;
                 }
                 
-                m_dataService.SetCurrentGroup(result.GroupId);
+                m_dataService.SetCurrentGroup(result.GroupId, GroupType.Owner);
                 m_navigationAction(typeof(GroupPageView));
 
                 NewGroupName = string.Empty;

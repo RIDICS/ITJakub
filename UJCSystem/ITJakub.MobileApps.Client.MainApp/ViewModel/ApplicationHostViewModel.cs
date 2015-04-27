@@ -15,7 +15,6 @@ using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.Client.Shared.Message;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
-using ITJakub.MobileApps.DataContracts;
 using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -41,7 +40,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_waitingForData;
         private bool m_isTaskAndAppLoaded;
         private bool m_isAppStarted;
-        private long m_groupId;
         private bool m_isPaused;
         private int m_unreadMessageCount;
         private GroupInfoViewModel m_groupInfo;
@@ -70,28 +68,24 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LoadData()
         {
-            m_dataService.GetCurrentGroupId(groupId =>
+            m_dataService.GetCurrentGroupId((groupId, groupType) =>
             {
                 WaitingForStart = true;
                 WaitingForData = true;
-                m_groupId = groupId;
+
+                m_groupInfo = new GroupInfoViewModel
+                {
+                    GroupId = groupId,
+                    GroupType = GroupType.Owner
+                };
+
                 m_pollingService.RegisterForGetGroupState(GroupStatePollingInterval, groupId, GroupStateUpdate);
-            });
 
-            m_dataService.GetLoggedUserInfo(false, user =>
-            {
-                IsTeacherMode = user.UserRole == UserRoleContract.Teacher;
-
-                if (IsTeacherMode)
+                IsOwnerMode = groupType == GroupType.Owner;
+                if (IsOwnerMode)
                 {
                     // start polling new group members
-                    m_groupInfo = new GroupInfoViewModel
-                    {
-                        GroupId = m_groupId,
-                        GroupType = GroupType.Owner
-
-                    };
-                    m_pollingService.RegisterForGroupsUpdate(GroupMembersPollingInterval, new []{m_groupInfo}, GroupsUpdate);
+                    m_pollingService.RegisterForGroupsUpdate(GroupMembersPollingInterval, new[] { m_groupInfo }, GroupsUpdate);
                 }
             });
         }
@@ -195,7 +189,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LoadTask()
         {
-            m_dataService.GetTaskForGroup(m_groupId, (task, exception) =>
+            m_dataService.GetTaskForGroup(m_groupInfo.GroupId, (task, exception) =>
             {
                 if (exception != null)
                 {
@@ -398,7 +392,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
-        public bool IsTeacherMode { get; set; }
+        public bool IsOwnerMode { get; set; }
 
         public RelayCommand GoBackCommand { get; private set; }
         

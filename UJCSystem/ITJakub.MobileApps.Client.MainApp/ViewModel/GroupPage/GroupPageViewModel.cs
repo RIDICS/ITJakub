@@ -50,7 +50,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             GroupRemoveViewModel = new GroupRemoveViewModel(RemoveGroup);
             GroupInfo = new GroupInfoViewModel();
 
-            m_dataService.GetCurrentGroupId(groupId =>
+            m_dataService.GetCurrentGroupId((groupId, groupType) =>
             {
                 m_groupId = groupId;
                 LoadData();

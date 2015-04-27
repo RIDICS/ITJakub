@@ -95,9 +95,10 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_taskManager.AssignTaskToGroup(m_groupManager.CurrentGroupId, taskId, callback);
         }
 
-        public void SetCurrentGroup(long groupId)
+        public void SetCurrentGroup(long groupId, GroupType groupType)
         {
             m_groupManager.CurrentGroupId = groupId;
+            m_groupManager.CurrentGroupType = groupType;
         }
 
         public void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback)
@@ -110,9 +111,9 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_groupManager.RemoveGroup(groupId, callback);
         }
 
-        public void GetCurrentGroupId(Action<long> callback)
+        public void GetCurrentGroupId(Action<long, GroupType> callback)
         {
-            callback(m_groupManager.CurrentGroupId);
+            callback(m_groupManager.CurrentGroupId, m_groupManager.CurrentGroupType);
         }
 
         public void SetCurrentApplication(ApplicationType selectedApp)

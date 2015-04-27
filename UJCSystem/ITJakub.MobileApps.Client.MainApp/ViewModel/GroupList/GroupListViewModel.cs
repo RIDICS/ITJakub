@@ -30,6 +30,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private readonly IErrorService m_errorService;
 
         private readonly List<GroupInfoViewModel> m_selectedGroups;
+        private readonly HashSet<long> m_ownedGroupIds;
         private GroupInfoViewModel m_selectedGroup;
         private ObservableCollection<GroupInfoViewModel> m_groups;
         private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
@@ -52,6 +53,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_pollingService = pollingService;
             m_errorService = errorService;
 
+            m_ownedGroupIds = new HashSet<long>();
             m_selectedGroups = new List<GroupInfoViewModel>();
             m_userRole = UserRoleContract.Student;
             
@@ -296,6 +298,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
                 m_groups = groupList;
                 DisplayGroupList(m_groups);
+                CreateOwnedGroupSet();
 
                 m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_groups, GroupUpdate);
             });
@@ -307,7 +310,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 RaisePropertyChanged(() => IsTeacherAndGroupSelected);
             });
         }
-
+        
         private void GroupUpdate(Exception exception)
         {
             m_errorService.ShowConnectionWarning();
@@ -323,7 +326,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         {
             if (group != null)
             {
-                m_dataService.SetCurrentGroup(group.GroupId);
+                var ownCurrentGroup = m_ownedGroupIds.Contains(group.GroupId);
+                m_dataService.SetCurrentGroup(group.GroupId, ownCurrentGroup ? GroupType.Owner : GroupType.Member);
 
                 var viewType = group.GroupType == GroupType.Member
                     ? typeof (ApplicationHostView)
@@ -423,6 +427,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         {
             m_dataService.SetAppSelectionTarget(SelectApplicationTarget.CreateTask);
             Navigate(typeof (SelectApplicationView));
+        }
+
+        private void CreateOwnedGroupSet()
+        {
+            m_ownedGroupIds.Clear();
+            foreach (var groupInfoViewModel in m_groups.Where(x => x.GroupType == GroupType.Owner))
+            {
+                m_ownedGroupIds.Add(groupInfoViewModel.GroupId);
+            }
         }
     }
 }
