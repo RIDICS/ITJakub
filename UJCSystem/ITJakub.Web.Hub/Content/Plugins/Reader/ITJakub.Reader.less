@@ -2,13 +2,11 @@
 @reader-body-height: 77vh;
 @reader-computed-height : calc(~'100vh - 355px');
 @reader-computed-height-fullscreen : calc(~'100vh - 140px');
-@text-reader-computed-height : calc(~'100vh - 380px');
-@text-reader-computed-height-fullscreen : calc(~'100vh - 165px');
 
-body {
-    height: 100vh;
+html,body {    
+    height:100%;
+    margin: 0;
 }
-
 
 .reader {
     position: relative;
@@ -268,6 +266,7 @@ body {
     background-color : white;
     /*overflow-y : auto;*/
     width: 100%;
+    height : calc(100% - 5px);
 }
 
 .fullscreen .reader-right-panel, .fullscreen .reader-left-panel {
@@ -284,15 +283,10 @@ body {
 
 .reader-text-container{
     padding: 5px 30px 5px 30px;
-    height: @reader-body-height;
-    height: @text-reader-computed-height;
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     width: auto;
-}
-
-.fullscreen .reader-text-container {
-    height: @text-reader-computed-height-fullscreen;
 }
 
 .close-button, .pin-button, .new-window-button {

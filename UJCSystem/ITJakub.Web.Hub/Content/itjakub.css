@@ -508,8 +508,10 @@ ul.bib-listing li.list-item .label {
   outline: none!important;
   box-shadow: none !important;
 }
+html,
 body {
-  height: 100vh;
+  height: 100%;
+  margin: 0;
 }
 .reader {
   position: relative;
@@ -724,6 +726,7 @@ body {
   background-color: white;
   /*overflow-y : auto;*/
   width: 100%;
+  height: calc(95%);
 }
 .fullscreen .reader-right-panel,
 .fullscreen .reader-left-panel {
@@ -739,14 +742,10 @@ body {
 }
 .reader-text-container {
   padding: 5px 30px 5px 30px;
-  height: 77vh;
-  height: calc(100vh - 380px);
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   width: auto;
-}
-.fullscreen .reader-text-container {
-  height: calc(100vh - 165px);
 }
 .close-button,
 .pin-button,
