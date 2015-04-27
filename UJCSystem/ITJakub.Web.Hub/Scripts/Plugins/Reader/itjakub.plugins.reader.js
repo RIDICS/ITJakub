@@ -676,6 +676,12 @@ var RightSidePanel = (function (_super) {
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
         }
     };
+    RightSidePanel.prototype.makeBody = function (innerContent, rootReference) {
+        var panelBodyDiv = document.createElement('div');
+        $(panelBodyDiv).addClass('reader-right-panel-body');
+        $(panelBodyDiv).append(innerContent);
+        return panelBodyDiv;
+    };
     return RightSidePanel;
 })(SidePanel);
 //# sourceMappingURL=itjakub.plugins.reader.js.map

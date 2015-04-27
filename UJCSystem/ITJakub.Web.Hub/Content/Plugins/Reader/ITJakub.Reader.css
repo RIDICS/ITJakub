@@ -156,16 +156,14 @@ body {
 }
 .reader-controls ul.pagination > li > a {
   float: left;
+  font-size: 15px;
+  border: none;
+  float: none;
 }
 .reader-controls ul.pagination > li.page-navigation > a {
   font-weight: bold;
   padding-left: 2px;
   padding-right: 2px;
-}
-.reader-controls ul.pagination > li > a {
-  font-size: 15px;
-  border: none;
-  float: none;
 }
 .reader-controls ul.pagination > li.page-active > a {
   font-weight: bold;
@@ -237,9 +235,9 @@ body {
   width: 100%;
   height: 100vh;
 }
-.reader-head {
-  height: 20vh;
-}
+/*.reader-head{
+    height: 140px;
+}*/
 .reader .fullscreen-close-button {
   display: none;
 }
@@ -267,18 +265,31 @@ body {
   float: left;
   background-color: white;
   width: 250px;
-  /*padding: 3px;*/
-  height: 77vh;
   border-right: 1px solid #e5e5e5;
-  overflow-y: auto;
-  overflow-x: hidden;
+  height: 77vh;
+  height: calc(100vh - 355px);
 }
 .reader-left-panel-body {
   background-color: white;
+  overflow-y: auto;
+  width: 100%;
+  height: calc(95%);
 }
 .reader-right-panel {
   width: auto;
   background-color: white;
+  height: 77vh;
+  height: calc(100vh - 355px);
+}
+.reader-right-panel-body {
+  background-color: white;
+  /*overflow-y : auto;*/
+  width: 100%;
+}
+.fullscreen .reader-right-panel,
+.fullscreen .reader-left-panel {
+  height: 77vh;
+  height: calc(100vh - 140px);
 }
 .reader-left-panel.ui-draggable,
 .reader-right-panel.ui-draggable {
@@ -290,9 +301,13 @@ body {
 .reader-text-container {
   padding: 5px 30px 5px 30px;
   height: 77vh;
+  height: calc(100vh - 380px);
   overflow-y: auto;
   overflow-x: hidden;
   width: auto;
+}
+.fullscreen .reader-text-container {
+  height: calc(100vh - 165px);
 }
 .close-button,
 .pin-button,

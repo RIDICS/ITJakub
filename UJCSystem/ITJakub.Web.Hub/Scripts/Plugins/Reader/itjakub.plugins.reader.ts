@@ -731,7 +731,7 @@ class SidePanel {
     }
 
 
-    private makeBody(innerContent, rootReference) : HTMLDivElement {
+    protected  makeBody(innerContent, rootReference) : HTMLDivElement {
         var panelBodyDiv: HTMLDivElement = document.createElement('div');
         $(panelBodyDiv).addClass('reader-left-panel-body');
 
@@ -810,5 +810,12 @@ class RightSidePanel extends SidePanel {
             $(sidePanelDiv).draggable({ containment: "body", appendTo: "body", cursor: "move" });
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
         }
+    }
+
+    protected  makeBody(innerContent, rootReference): HTMLDivElement {
+        var panelBodyDiv: HTMLDivElement = document.createElement('div');
+        $(panelBodyDiv).addClass('reader-right-panel-body');
+        $(panelBodyDiv).append(innerContent);
+        return panelBodyDiv;
     }
 }
