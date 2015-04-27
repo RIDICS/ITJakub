@@ -1,8 +1,7 @@
-﻿//window.onload = () => { alert("hello from editions!"); }
+//window.onload = () => { alert("hello from editions!"); }
 //TODO methods below are for testing purposes of Bibliography module
 $(document).ready(function () {
     var searchPlugin = new SearchModule(new BibliographyModule('#bibliographyList', '#sortBarBibList'));
-
     $('#fillBibList10').click(function () {
         var arrayOfIds = new Array();
         for (var i = 0; i < 10; i++) {
@@ -11,7 +10,6 @@ $(document).ready(function () {
         arrayOfIds[0] = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
         searchPlugin.getBookWithIds(arrayOfIds);
     });
-
     $('#fillBibList3').click(function () {
         var arrayOfIds = new Array();
         for (var i = 0; i < 3; i++) {
@@ -28,7 +26,6 @@ $(document).ready(function () {
         arrayOfIds[0] = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
         searchPlugin.getBookWithIds(arrayOfIds);
     });
-
     $('#fillBibListTypeEdition').click(function () {
         searchPlugin.getBookWithType('Edition');
     });

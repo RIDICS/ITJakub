@@ -113,7 +113,7 @@ div.container {
 .delete-cardfile {
   float: right;
   display: none;
-  color: #ffd700;
+  color: gold;
 }
 .cardfile-filter {
   margin-bottom: 5px;

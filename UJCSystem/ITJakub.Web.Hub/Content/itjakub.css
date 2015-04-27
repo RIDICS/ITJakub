@@ -508,6 +508,9 @@ ul.bib-listing li.list-item .label {
   outline: none!important;
   box-shadow: none !important;
 }
+body {
+  height: 100vh;
+}
 .reader {
   position: relative;
 }
@@ -706,7 +709,7 @@ ul.bib-listing li.list-item .label {
   /*padding: 3px;*/
   height: 77vh;
   border-right: 1px solid #e5e5e5;
-  overflow-y: hidden;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 .reader-left-panel-body {
@@ -792,7 +795,7 @@ ul.bib-listing li.list-item .label {
 .delete-item {
   float: right;
   display: none;
-  color: #ffd700;
+  color: gold;
 }
 .dropdown-filter {
   margin-bottom: 5px;
@@ -894,6 +897,7 @@ ul {
   margin-left: 5px;
   list-style: none;
   margin-top: 20px;
+  margin-right: 5px!important;
 }
 .file-upload-metadata label,
 .file-upload-metadata input[type='submit'] {
@@ -1009,4 +1013,4 @@ ul {
 .navbar-login li a:hover {
   color: #84ced7;
 }
-/*# sourceMappingURL=itjakub.css.map */
+/*# sourceMappingURL=ITJakub.css.map */

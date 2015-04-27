@@ -1,4 +1,4 @@
-﻿var SortBar = (function () {
+var SortBar = (function () {
     function SortBar() {
         this.comparatorResolver = new ComparatorResolver();
         this.actualSortOrder = 1;
@@ -20,7 +20,6 @@
         this.addOption(select, "Datace", "century"); //TODO add options to json config
         this.addOption(select, "Typ", "booktype");
         sortBarDiv.appendChild(select);
-
         var sortOrderButton = document.createElement('button');
         sortOrderButton.type = 'button';
         $(sortOrderButton).addClass('btn btn-sm sort-button');
@@ -34,10 +33,8 @@
             $(event.currentTarget).children('span').toggleClass('glyphicon-arrow-up glyphicon-arrow-down');
         });
         sortBarDiv.appendChild(sortOrderButton);
-
         return sortBarDiv;
     };
-
     SortBar.prototype.sort = function (comparator, order, booksContainer) {
         var elems = $(booksContainer).children('ul.bib-listing').children('li').detach();
         var sortFunction = function (a, b) {
@@ -46,11 +43,9 @@
         elems.sort(sortFunction);
         $(booksContainer).children('ul.bib-listing').append(elems);
     };
-
     SortBar.prototype.changeSortOrder = function () {
         this.actualSortOrder = -this.actualSortOrder;
     };
-
     SortBar.prototype.addOption = function (selectbox, text, value) {
         var option = document.createElement('option');
         option.text = text;
@@ -59,7 +54,6 @@
     };
     return SortBar;
 })();
-
 var ComparatorResolver = (function () {
     function ComparatorResolver() {
         this.comparators = new Array();

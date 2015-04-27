@@ -23,7 +23,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.4</TypeScriptToolsVersion>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -249,6 +249,8 @@
     <Content Include="Areas\Editions\Content\itjakub.editions.min.css">
       <DependentUpon>itjakub.editions.css</DependentUpon>
     </Content>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
@@ -361,6 +363,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Icon.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Editions\Views\web.config" />
@@ -368,79 +371,6 @@
     <Content Include="Areas\Editions\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Dictionaries\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Index.cshtml" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap\wells.less" />
-    <Content Include="Content\bootstrap\variables.less" />
-    <Content Include="Content\bootstrap\utilities.less" />
-    <Content Include="Content\bootstrap\type.less" />
-    <Content Include="Content\bootstrap\tooltip.less" />
-    <Content Include="Content\bootstrap\thumbnails.less" />
-    <Content Include="Content\bootstrap\theme.less" />
-    <Content Include="Content\bootstrap\tables.less" />
-    <Content Include="Content\bootstrap\scaffolding.less" />
-    <Content Include="Content\bootstrap\responsive-utilities.less" />
-    <Content Include="Content\bootstrap\responsive-embed.less" />
-    <Content Include="Content\bootstrap\progress-bars.less" />
-    <Content Include="Content\bootstrap\print.less" />
-    <Content Include="Content\bootstrap\popovers.less" />
-    <Content Include="Content\bootstrap\panels.less" />
-    <Content Include="Content\bootstrap\pagination.less" />
-    <Content Include="Content\bootstrap\pager.less" />
-    <Content Include="Content\bootstrap\normalize.less" />
-    <Content Include="Content\bootstrap\navs.less" />
-    <Content Include="Content\bootstrap\navbar.less" />
-    <Content Include="Content\bootstrap\modals.less" />
-    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
-    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
-    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
-    <Content Include="Content\bootstrap\mixins\table-row.less" />
-    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
-    <Content Include="Content\bootstrap\mixins\size.less" />
-    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
-    <Content Include="Content\bootstrap\mixins\resize.less" />
-    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
-    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
-    <Content Include="Content\bootstrap\mixins\panels.less" />
-    <Content Include="Content\bootstrap\mixins\pagination.less" />
-    <Content Include="Content\bootstrap\mixins\opacity.less" />
-    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
-    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
-    <Content Include="Content\bootstrap\mixins\list-group.less" />
-    <Content Include="Content\bootstrap\mixins\labels.less" />
-    <Content Include="Content\bootstrap\mixins\image.less" />
-    <Content Include="Content\bootstrap\mixins\hide-text.less" />
-    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
-    <Content Include="Content\bootstrap\mixins\grid.less" />
-    <Content Include="Content\bootstrap\mixins\gradients.less" />
-    <Content Include="Content\bootstrap\mixins\forms.less" />
-    <Content Include="Content\bootstrap\mixins\clearfix.less" />
-    <Content Include="Content\bootstrap\mixins\center-block.less" />
-    <Content Include="Content\bootstrap\mixins\buttons.less" />
-    <Content Include="Content\bootstrap\mixins\border-radius.less" />
-    <Content Include="Content\bootstrap\mixins\background-variant.less" />
-    <Content Include="Content\bootstrap\mixins\alerts.less" />
-    <Content Include="Content\bootstrap\mixins.less" />
-    <Content Include="Content\bootstrap\media.less" />
-    <Content Include="Content\bootstrap\list-group.less" />
-    <Content Include="Content\bootstrap\labels.less" />
-    <Content Include="Content\bootstrap\jumbotron.less" />
-    <Content Include="Content\bootstrap\input-groups.less" />
-    <Content Include="Content\bootstrap\grid.less" />
-    <Content Include="Content\bootstrap\glyphicons.less" />
-    <Content Include="Content\bootstrap\forms.less" />
-    <Content Include="Content\bootstrap\dropdowns.less" />
-    <Content Include="Content\bootstrap\component-animations.less" />
-    <Content Include="Content\bootstrap\code.less" />
-    <Content Include="Content\bootstrap\close.less" />
-    <Content Include="Content\bootstrap\carousel.less" />
-    <Content Include="Content\bootstrap\buttons.less" />
-    <Content Include="Content\bootstrap\button-groups.less" />
-    <Content Include="Content\bootstrap\breadcrumbs.less" />
-    <Content Include="Content\bootstrap\bootstrap.less" />
-    <Content Include="Content\bootstrap\badges.less" />
-    <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.less" />
     <Content Include="Content\ITJakub.less" />
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.css.map">
@@ -517,6 +447,82 @@
     <Content Include="Areas\Dictionaries\Views\Dictionaries\TermsOfUse.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\List.cshtml" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap\wells.less" />
+    <Content Include="Content\bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\utilities.less" />
+    <Content Include="Content\bootstrap\type.less" />
+    <Content Include="Content\bootstrap\tooltip.less" />
+    <Content Include="Content\bootstrap\thumbnails.less" />
+    <Content Include="Content\bootstrap\theme.less" />
+    <Content Include="Content\bootstrap\tables.less" />
+    <Content Include="Content\bootstrap\scaffolding.less" />
+    <Content Include="Content\bootstrap\responsive-utilities.less" />
+    <Content Include="Content\bootstrap\responsive-embed.less" />
+    <Content Include="Content\bootstrap\progress-bars.less" />
+    <Content Include="Content\bootstrap\print.less" />
+    <Content Include="Content\bootstrap\popovers.less" />
+    <Content Include="Content\bootstrap\panels.less" />
+    <Content Include="Content\bootstrap\pagination.less" />
+    <Content Include="Content\bootstrap\pager.less" />
+    <Content Include="Content\bootstrap\normalize.less" />
+    <Content Include="Content\bootstrap\navs.less" />
+    <Content Include="Content\bootstrap\navbar.less" />
+    <Content Include="Content\bootstrap\modals.less" />
+    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
+    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
+    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
+    <Content Include="Content\bootstrap\mixins\table-row.less" />
+    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
+    <Content Include="Content\bootstrap\mixins\size.less" />
+    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
+    <Content Include="Content\bootstrap\mixins\resize.less" />
+    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
+    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
+    <Content Include="Content\bootstrap\mixins\panels.less" />
+    <Content Include="Content\bootstrap\mixins\pagination.less" />
+    <Content Include="Content\bootstrap\mixins\opacity.less" />
+    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
+    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
+    <Content Include="Content\bootstrap\mixins\list-group.less" />
+    <Content Include="Content\bootstrap\mixins\labels.less" />
+    <Content Include="Content\bootstrap\mixins\image.less" />
+    <Content Include="Content\bootstrap\mixins\hide-text.less" />
+    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
+    <Content Include="Content\bootstrap\mixins\grid.less" />
+    <Content Include="Content\bootstrap\mixins\gradients.less" />
+    <Content Include="Content\bootstrap\mixins\forms.less" />
+    <Content Include="Content\bootstrap\mixins\clearfix.less" />
+    <Content Include="Content\bootstrap\mixins\center-block.less" />
+    <Content Include="Content\bootstrap\mixins\buttons.less" />
+    <Content Include="Content\bootstrap\mixins\border-radius.less" />
+    <Content Include="Content\bootstrap\mixins\background-variant.less" />
+    <Content Include="Content\bootstrap\mixins\alerts.less" />
+    <Content Include="Content\bootstrap\mixins.less" />
+    <Content Include="Content\bootstrap\media.less" />
+    <Content Include="Content\bootstrap\list-group.less" />
+    <Content Include="Content\bootstrap\labels.less" />
+    <Content Include="Content\bootstrap\jumbotron.less" />
+    <Content Include="Content\bootstrap\input-groups.less" />
+    <Content Include="Content\bootstrap\grid.less" />
+    <Content Include="Content\bootstrap\glyphicons.less" />
+    <Content Include="Content\bootstrap\forms.less" />
+    <Content Include="Content\bootstrap\dropdowns.less" />
+    <Content Include="Content\bootstrap\component-animations.less" />
+    <Content Include="Content\bootstrap\code.less" />
+    <Content Include="Content\bootstrap\close.less" />
+    <Content Include="Content\bootstrap\carousel.less" />
+    <Content Include="Content\bootstrap\buttons.less" />
+    <Content Include="Content\bootstrap\button-groups.less" />
+    <Content Include="Content\bootstrap\breadcrumbs.less" />
+    <Content Include="Content\bootstrap\bootstrap.less" />
+    <Content Include="Content\bootstrap\badges.less" />
+    <Content Include="Content\bootstrap\alerts.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
@@ -532,6 +538,10 @@
     <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.css.map">
       <DependentUpon>ITJakub.DropdownSelect.css</DependentUpon>
     </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -541,19 +551,23 @@
     <Content Include="Scripts\dropzone\dropzone.min.js" />
     <Content Include="Scripts\dropzone\images\spritemap%402x.png" />
     <Content Include="Scripts\dropzone\images\spritemap.png" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js.map">
       <DependentUpon>jquery-1.10.2.min.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\jquery-2.1.3.js" />
+    <Content Include="Scripts\jquery-2.1.3.min.js" />
+    <Content Include="Scripts\jquery-2.1.3.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery-ui-1.11.1.js" />
-    <Content Include="Scripts\jquery-ui.min-1.11.1.js" />
+    <None Include="Scripts\jquery-2.1.3-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -572,7 +586,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
@@ -598,9 +611,6 @@
     <Folder Include="Views\Bibliography\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
@@ -642,6 +652,9 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />

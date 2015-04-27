@@ -1,4 +1,4 @@
-﻿var SearchModule = (function () {
+var SearchModule = (function () {
     function SearchModule(bibModule) {
         this.bibliographyModule = bibModule;
     }
@@ -17,7 +17,6 @@
             }
         });
     };
-
     SearchModule.prototype.getBookWithType = function (type) {
         var _this = this;
         $.ajax({

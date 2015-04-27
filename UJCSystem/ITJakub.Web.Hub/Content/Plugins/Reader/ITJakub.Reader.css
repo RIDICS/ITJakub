@@ -69,6 +69,9 @@ div.container {
   background-color: #84ced7;
   color: white;
 }
+body {
+  height: 100vh;
+}
 .reader {
   position: relative;
 }
@@ -267,7 +270,7 @@ div.container {
   /*padding: 3px;*/
   height: 77vh;
   border-right: 1px solid #e5e5e5;
-  overflow-y: hidden;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 .reader-left-panel-body {

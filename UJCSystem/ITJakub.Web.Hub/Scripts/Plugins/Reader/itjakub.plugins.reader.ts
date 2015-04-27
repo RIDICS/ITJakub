@@ -783,7 +783,7 @@ class LeftSidePanel extends SidePanel {
             $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
 
         } else {
-            $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
+            $(sidePanelDiv).draggable({ containment: "body", appendTo: "body", cursor: "move" });
             $(sidePanelDiv).resizable("destroy");
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
         }
@@ -804,11 +804,10 @@ class RightSidePanel extends SidePanel {
             $(sidePanelDiv).css('width', "");
             $(sidePanelDiv).css('position', "");
             $(sidePanelDiv).css('height', "");
-            $(sidePanelDiv).resizable("destroy");
+            $(sidePanelDiv).resizable('destroy');
 
         } else {
-            $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
-            $(sidePanelDiv).resizable("destroy");
+            $(sidePanelDiv).draggable({ containment: "body", appendTo: "body", cursor: "move" });
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
         }
     }
