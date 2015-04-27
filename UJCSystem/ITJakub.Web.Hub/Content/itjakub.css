@@ -676,9 +676,6 @@ body {
   width: 100%;
   height: 100vh;
 }
-/*.reader-head{
-    height: 140px;
-}*/
 .reader .fullscreen-close-button {
   display: none;
 }
@@ -724,9 +721,9 @@ body {
 }
 .reader-right-panel-body {
   background-color: white;
-  /*overflow-y : auto;*/
   width: 100%;
   height: calc(95%);
+  padding-top: 5px;
 }
 .fullscreen .reader-right-panel,
 .fullscreen .reader-left-panel {
