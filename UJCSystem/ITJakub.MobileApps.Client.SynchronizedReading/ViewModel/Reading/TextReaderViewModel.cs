@@ -1,5 +1,4 @@
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.SynchronizedReading.View.Control;
 
 namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
@@ -14,12 +13,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private bool m_loading;
         private double m_currentZoom;
         private bool m_isLoadError;
-
-        public TextReaderViewModel()
-        {
-            ZoomInCommand = new RelayCommand(() => CurrentZoom++);
-            ZoomOutCommand = new RelayCommand(() => CurrentZoom--);
-        }
 
         public string DocumentRtf
         {
@@ -100,9 +93,5 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 RaisePropertyChanged();
             }
         }
-
-        public RelayCommand ZoomInCommand { get; private set; }
-
-        public RelayCommand ZoomOutCommand { get; private set; }
     }
 }

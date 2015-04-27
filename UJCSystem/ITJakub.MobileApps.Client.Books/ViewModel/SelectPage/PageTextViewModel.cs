@@ -1,6 +1,5 @@
 using System;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books.Service;
 using ITJakub.MobileApps.Client.Books.Service.Client;
 
@@ -21,9 +20,6 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             m_dataService = dataService;
             m_errorService = errorService;
             m_pageLoadedCallback = pageLoadedCallback;
-
-            ZoomInCommand = new RelayCommand(() => CurrentZoom++);
-            ZoomOutCommand = new RelayCommand(() => CurrentZoom--);
         }
 
         public void OpenPage(PageViewModel page)
@@ -93,9 +89,5 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
                 RaisePropertyChanged();
             }
         }
-
-        public RelayCommand ZoomInCommand { get; private set; }
-
-        public RelayCommand ZoomOutCommand { get; private set; }
     }
 }

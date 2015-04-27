@@ -314,6 +314,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             richEditBox.IsReadOnly = isReadOnly;
 
             // TODO improve logic
+            OnCursorPositionChanged(d, null);
         }
         
         public enum Modes

@@ -162,8 +162,6 @@
 
                 <control:ZoomBarControl Grid.Row="1"
                                         CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
-                                        ZoomInCommand="{Binding ZoomInCommand}"
-                                        ZoomOutCommand="{Binding ZoomOutCommand}"
                                         Minimum="-7"
                                         Maximum="17" />
             </Grid>
@@ -210,9 +208,7 @@
 
                 <control:ZoomBarControl Grid.Row="1"
                                         Visibility="{Binding IsShowEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
-                                        ZoomInCommand="{Binding ZoomInCommand}"
-                                        ZoomOutCommand="{Binding ZoomOutCommand}" />
+                                        CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}" />
                 
             </Grid>
             
