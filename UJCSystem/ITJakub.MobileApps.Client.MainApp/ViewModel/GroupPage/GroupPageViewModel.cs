@@ -141,6 +141,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                     groupStateViewModel.IsEnabled = false;
                 else
                     groupStateViewModel.IsEnabled = stateUpdate < groupStateViewModel.GroupState || (stateUpdate == GroupStateContract.Paused && groupStateViewModel.GroupState == GroupStateContract.Running);
+
+                groupStateViewModel.IsCurrentState = groupStateViewModel.GroupState == stateUpdate;
             }
 
             GroupInfo.State = stateUpdate;

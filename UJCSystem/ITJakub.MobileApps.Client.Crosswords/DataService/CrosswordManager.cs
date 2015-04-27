@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using ITJakub.MobileApps.Client.Crosswords.DataContract;
 using ITJakub.MobileApps.Client.Crosswords.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -19,6 +20,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
         private readonly IPollingService m_pollingService;
         private CrosswordTask m_task;
         private Action<List<ProgressUpdateViewModel>, Exception> m_pollingCallback;
+        private DateTime m_lastDateTime;
 
         public CrosswordManager(ISynchronizeCommunication applicationCommunication)
         {
@@ -71,11 +73,31 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
                 callback(null, exception);
             }
         }
+        
+        public async void GetGuessHistory(Action<List<ProgressUpdateViewModel>, Exception> callback)
+        {
+            try
+            {
+                m_lastDateTime = new DateTime(1975, 1, 1);
+                var syncObjList = await m_applicationCommunication.GetObjectsAsync(ApplicationType.Crosswords, m_lastDateTime, ProgressMessage);
+                var progressUpdateList = ProcessProgressUpdate(syncObjList);
+
+                if (progressUpdateList.Count > 0)
+                {
+                    m_lastDateTime = progressUpdateList.Last().Time;
+                }
+                callback(progressUpdateList, null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
 
         public void StartPollingProgress(Action<List<ProgressUpdateViewModel>, Exception> callback)
         {
             m_pollingCallback = callback;
-            m_pollingService.RegisterForSynchronizedObjects(ProgressPollingInterval, ApplicationType.Crosswords, ProgressMessage, ProgressUpdate);
+            m_pollingService.RegisterForSynchronizedObjects(ProgressPollingInterval, ApplicationType.Crosswords, m_lastDateTime, ProgressMessage, ProgressUpdate);
         }
 
         private void ProgressUpdate(IList<ObjectDetails> objectList, Exception exception)
@@ -86,6 +108,12 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
                 return;
             }
 
+            var progressUpdateList = ProcessProgressUpdate(objectList);
+            m_pollingCallback(progressUpdateList, null);
+        }
+
+        private List<ProgressUpdateViewModel> ProcessProgressUpdate(IList<ObjectDetails> objectList)
+        {
             var progressUpdateList = new List<ProgressUpdateViewModel>();
             foreach (var objectDetails in objectList)
             {
@@ -103,7 +131,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
                 if (objectDetails.Author.IsMe)
                     m_task.FillWord(updateContract.RowIndex, updateContract.FilledWord);
             }
-            m_pollingCallback(progressUpdateList, null);
+            return progressUpdateList;
         }
 
         public void StopPolling()

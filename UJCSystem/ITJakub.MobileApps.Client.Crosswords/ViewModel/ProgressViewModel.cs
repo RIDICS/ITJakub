@@ -11,9 +11,10 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         public UserInfo UserInfo { get; set; }
     }
 
-    public class RowProgressViewModel
+    public class RowProgressViewModel : ViewModelBase
     {
         private int m_filledLength;
+        private bool m_isCorrect;
 
         public RowProgressViewModel()
         {
@@ -39,7 +40,16 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public int StartPosition { get; set; }
 
-        public bool IsCorrect { get; set; }
+        public bool IsCorrect
+        {
+            get { return m_isCorrect; }
+            set
+            {
+                m_isCorrect = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => Cells);
+            }
+        }
 
         public int FilledLength
         {
