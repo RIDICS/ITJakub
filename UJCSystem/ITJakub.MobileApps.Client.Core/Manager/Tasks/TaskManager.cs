@@ -41,7 +41,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     Application = m_applicationIdManager.GetApplicationType(task.ApplicationId).Result, // all IDs are loaded -> no communication with server
                     Name = task.Name,
                     CreateTime = task.CreateTime,
-                    Data = task.Data,
                     Author = new UserInfo
                     {
                         Id = task.Author.Id,
@@ -122,7 +121,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     Application = m_applicationIdManager.GetApplicationType(task.ApplicationId).Result, // all IDs are loaded -> no communication with server
                     Name = task.Name,
                     CreateTime = task.CreateTime,
-                    Data = task.Data,
                     Author = new UserInfo
                     {
                         Id = task.Author.Id,

@@ -412,7 +412,7 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
-        public Task<TaskContract> GetTaskForGroupAsync(long groupId)
+        public Task<TaskDataContract> GetTaskForGroupAsync(long groupId)
         {
             return Task.Run(() =>
             {
