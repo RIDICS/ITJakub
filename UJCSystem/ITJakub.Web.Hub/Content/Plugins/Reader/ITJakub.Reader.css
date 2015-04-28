@@ -272,7 +272,7 @@ body {
   background-color: white;
   overflow-y: auto;
   width: 100%;
-  height: calc(95%);
+  height: calc(100% - 25px);
 }
 .reader-right-panel {
   width: auto;
@@ -283,7 +283,7 @@ body {
 .reader-right-panel-body {
   background-color: white;
   width: 100%;
-  height: calc(95%);
+  height: calc(100% - 21px);
   padding-top: 5px;
 }
 .fullscreen .reader-right-panel,
@@ -336,6 +336,8 @@ body {
   height: 100%;
   padding: 2px;
   position: relative;
+  width: auto;
+  overflow-x: hidden;
 }
 .reader-image-container img {
   max-width: 100%;
