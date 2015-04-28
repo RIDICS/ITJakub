@@ -366,7 +366,7 @@ class ReaderModule {
 
             var panelId = "EditacniPanel";
             if (!this.existSidePanel(panelId)) {
-                var editPanel = new LeftSidePanel(innerContent, panelId, this);
+                var editPanel = new LeftSidePanel(innerContent, panelId, "Zobrazení" , this);
                 this.loadSidePanel(editPanel.panelHtml);
                 this.leftSidePanels.push(editPanel);
             }
@@ -391,7 +391,7 @@ class ReaderModule {
             var innerContent = "Obsah vyhledavaciho panelu";
             var panelId = "SearchPanel";
             if (!this.existSidePanel(panelId)) {
-                var searchPanel = new LeftSidePanel(innerContent, panelId, this);
+                var searchPanel = new LeftSidePanel(innerContent, panelId,"Vyhlédávání", this);
                 this.loadSidePanel(searchPanel.panelHtml);
                 this.leftSidePanels.push(searchPanel);
             }
@@ -416,7 +416,7 @@ class ReaderModule {
             var innerContent = "Obsah";
             var panelId = "ObsahPanel";
             if (!this.existSidePanel(panelId)) {
-                var contentPanel = new LeftSidePanel(innerContent, panelId, this);
+                var contentPanel = new LeftSidePanel(innerContent, panelId,"Obsah", this);
                 this.loadSidePanel(contentPanel.panelHtml);
                 this.leftSidePanels.push(contentPanel);
             }
@@ -680,7 +680,7 @@ class SidePanel {
     parentReader: ReaderModule;
     windows: Array<HTMLDivElement>;
 
-    public constructor(innerContent, identificator: string,  parentReader: ReaderModule) {
+    public constructor(innerContent, identificator: string, headerName: string, parentReader: ReaderModule) {
         this.parentReader = parentReader;
         this.identificator = identificator;
         this.innerContent = innerContent;
@@ -691,6 +691,11 @@ class SidePanel {
 
         var panelHeaderDiv: HTMLDivElement = document.createElement('div');
         $(panelHeaderDiv).addClass('reader-left-panel-header');
+
+        var nameSpan = document.createElement("span");
+        $(nameSpan).addClass('panel-header-name');
+        $(nameSpan).append(headerName);
+        $(panelHeaderDiv).append(nameSpan);
 
         var sidePanelCloseButton = document.createElement("button");
         $(sidePanelCloseButton).addClass('close-button');
@@ -888,7 +893,7 @@ class ImagePanel extends RightSidePanel {
         var imageContainerDiv: HTMLDivElement = document.createElement('div');
         $(imageContainerDiv).addClass('reader-image-container');
         this.imageContaier = imageContainerDiv;
-        super(imageContainerDiv, identificator, readerModule);
+        super(imageContainerDiv, identificator, "Obrázky", readerModule);
     }
 
     public onMoveToPage(pageIndex: number) {
@@ -936,7 +941,7 @@ class TextPanel extends RightSidePanel {
         }
 
         textContainerDiv.appendChild(textAreaDiv);
-        super(textContainerDiv, identificator, readerModule);
+        super(textContainerDiv, identificator, "Text", readerModule);
     }
 
     public onMoveToPage(pageIndex: number) {

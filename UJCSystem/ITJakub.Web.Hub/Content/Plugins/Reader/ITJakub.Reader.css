@@ -330,7 +330,8 @@ body {
 }
 .reader-left-panel-header {
   padding: 5px;
-  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #e5e5e5;
 }
 .reader-text-container .search-hit {
   background-color: yellow;
