@@ -444,41 +444,17 @@ class ReaderModule {
         var bodyContainerDiv: HTMLDivElement = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
 
-
-        var textContainerDiv: HTMLDivElement = document.createElement('div');
-        $(textContainerDiv).addClass('reader-text-container');
-
-        $(textContainerDiv).scroll((event: Event) => { //TODO make better scroll event
-            var pages = $(this.readerContainer).find('.reader-text-container').find('.page');
-            var minOffset = Number.MAX_VALUE;
-            var pageWithMinOffset;
-            $.each(pages, (index, page) => {
-                var pageOfsset = Math.abs($(page).offset().top);
-                if (minOffset > pageOfsset) {
-                    minOffset = pageOfsset;
-                    pageWithMinOffset = page;
-                }
-            });
-
-            this.moveToPage($(pageWithMinOffset).data('page-name'), false);
-        });
-
-        var textAreaDiv: HTMLDivElement = document.createElement('div');
-        $(textAreaDiv).addClass('reader-text');
-        for (var i = 0; i < this.pages.length; i++) {
-            var pageDiv: HTMLDivElement = document.createElement('div');
-            $(pageDiv).addClass('page');
-            $(pageDiv).data('page-name', this.pages[i]);
-            pageDiv.id = 'page_' + this.pages[i];
-            textAreaDiv.appendChild(pageDiv);
-        }
-
-        textContainerDiv.appendChild(textAreaDiv);
-
-        var textPanel = new RightSidePanel(textContainerDiv, "textPanel", this);
+        var textPanel = new TextPanel("TextPanel", this);
         this.rightSidePanels.push(textPanel);
 
         bodyContainerDiv.appendChild(textPanel.panelHtml);
+
+        // Image Panel
+        var imagePanel = new ImagePanel("ImagePanel", this);
+        this.rightSidePanels.push(imagePanel);
+
+        bodyContainerDiv.appendChild(imagePanel.panelHtml);
+
         return bodyContainerDiv;
     }
 
@@ -491,15 +467,24 @@ class ReaderModule {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
-        for (var k = 0; k < this.leftSidePanels.length; k++) {
-            this.leftSidePanels[k].onMoveToPage(pageIndex);
-        }
+        this.notifyPanelsMovePage(pageIndex);
+
         for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
             this.displayPage(this.pages[pageIndex - j], false);
         }
         this.displayPage(this.pages[pageIndex], scrollTo);
         for (var i = 1; pageIndex + i < this.pages.length && i <= this.preloadPagesAfter; i++) {
             this.displayPage(this.pages[pageIndex + i], false);
+        }
+    }
+
+    notifyPanelsMovePage(pageIndex : number) {
+        for (var k = 0; k < this.leftSidePanels.length; k++) {
+            this.leftSidePanels[k].onMoveToPage(pageIndex);
+        }
+
+        for (var k = 0; k < this.rightSidePanels.length; k++) {
+            this.rightSidePanels[k].onMoveToPage(pageIndex);
         }
     }
 
@@ -807,8 +792,12 @@ class RightSidePanel extends SidePanel {
             $(sidePanelDiv).resizable('destroy');
 
         } else {
+            var height = $(sidePanelDiv).css("height");
+            var width = $(sidePanelDiv).css("width");
             $(sidePanelDiv).draggable({ containment: "body", appendTo: "body", cursor: "move" });
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+            $(sidePanelDiv).css("width",width);
+            $(sidePanelDiv).css("height", height);
         }
     }
 
@@ -817,5 +806,67 @@ class RightSidePanel extends SidePanel {
         $(panelBodyDiv).addClass('reader-right-panel-body');
         $(panelBodyDiv).append(innerContent);
         return panelBodyDiv;
+    }
+}
+
+class ImagePanel extends RightSidePanel {
+    imageContaier : HTMLDivElement;
+
+    constructor(identificator: string, readerModule: ReaderModule) {
+        var imageContainerDiv: HTMLDivElement = document.createElement('div');
+        $(imageContainerDiv).addClass('reader-image-container');
+        this.imageContaier = imageContainerDiv;
+        super(imageContainerDiv, identificator, readerModule);
+    }
+
+    public onMoveToPage(pageIndex: number) {
+        var pagePosition = pageIndex + 1;
+        $(this.imageContaier).empty();
+        var image : HTMLImageElement = document.createElement("img");
+        image.src = "/Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
+        $(this.imageContaier).append(image);
+        for (var i = 0; i < this.windows.length; i++) {
+            var windowBody = this.windows[i];
+            $(windowBody).empty();
+            $(windowBody).append(image);
+        }
+    }
+}
+
+class TextPanel extends RightSidePanel {
+    constructor(identificator: string, readerModule: ReaderModule) {
+        var textContainerDiv: HTMLDivElement = document.createElement('div');
+        $(textContainerDiv).addClass('reader-text-container');
+
+        $(textContainerDiv).scroll((event: Event) => { //TODO make better scroll event
+            var pages = $(readerModule.readerContainer).find('.reader-text-container').find('.page');
+            var minOffset = Number.MAX_VALUE;
+            var pageWithMinOffset;
+            $.each(pages,(index, page) => {
+                var pageOfsset = Math.abs($(page).offset().top);
+                if (minOffset > pageOfsset) {
+                    minOffset = pageOfsset;
+                    pageWithMinOffset = page;
+                }
+            });
+
+            readerModule.moveToPage($(pageWithMinOffset).data('page-name'), false);
+        });
+
+        var textAreaDiv: HTMLDivElement = document.createElement('div');
+        $(textAreaDiv).addClass('reader-text');
+        for (var i = 0; i < readerModule.pages.length; i++) {
+            var pageDiv: HTMLDivElement = document.createElement('div');
+            $(pageDiv).addClass('page');
+            $(pageDiv).data('page-name', readerModule.pages[i]);
+            pageDiv.id = 'page_' + readerModule.pages[i];
+            textAreaDiv.appendChild(pageDiv);
+        }
+
+        textContainerDiv.appendChild(textAreaDiv);
+        super(textContainerDiv, identificator, readerModule);
+    }
+
+    public onMoveToPage(pageIndex: number) {
     }
 }

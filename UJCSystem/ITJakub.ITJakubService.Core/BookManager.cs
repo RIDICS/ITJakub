@@ -76,8 +76,10 @@ namespace ITJakub.ITJakubService.Core
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(imageContract.BookGuid);
             var bookPage = m_bookRepository.FindBookPageByVersionAndPosition(bookVersion.Id, imageContract.Position);
+            var imageFileName = bookPage.Image;
+            imageFileName = "junslov.jpg"; //TODO test
             return m_fileSystemManager.GetResource(imageContract.BookGuid, bookVersion.VersionId,
-                bookPage.Image, ResourceType.Image);
+                imageFileName, ResourceType.Image);
         }
     }
 }

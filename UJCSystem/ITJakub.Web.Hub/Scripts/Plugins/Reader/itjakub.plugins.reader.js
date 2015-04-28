@@ -365,37 +365,15 @@ var ReaderModule = (function () {
         }
     };
     ReaderModule.prototype.makeReaderBody = function () {
-        var _this = this;
         var bodyContainerDiv = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
-        var textContainerDiv = document.createElement('div');
-        $(textContainerDiv).addClass('reader-text-container');
-        $(textContainerDiv).scroll(function (event) {
-            var pages = $(_this.readerContainer).find('.reader-text-container').find('.page');
-            var minOffset = Number.MAX_VALUE;
-            var pageWithMinOffset;
-            $.each(pages, function (index, page) {
-                var pageOfsset = Math.abs($(page).offset().top);
-                if (minOffset > pageOfsset) {
-                    minOffset = pageOfsset;
-                    pageWithMinOffset = page;
-                }
-            });
-            _this.moveToPage($(pageWithMinOffset).data('page-name'), false);
-        });
-        var textAreaDiv = document.createElement('div');
-        $(textAreaDiv).addClass('reader-text');
-        for (var i = 0; i < this.pages.length; i++) {
-            var pageDiv = document.createElement('div');
-            $(pageDiv).addClass('page');
-            $(pageDiv).data('page-name', this.pages[i]);
-            pageDiv.id = 'page_' + this.pages[i];
-            textAreaDiv.appendChild(pageDiv);
-        }
-        textContainerDiv.appendChild(textAreaDiv);
-        var textPanel = new RightSidePanel(textContainerDiv, "textPanel", this);
+        var textPanel = new TextPanel("TextPanel", this);
         this.rightSidePanels.push(textPanel);
         bodyContainerDiv.appendChild(textPanel.panelHtml);
+        // Image Panel
+        var imagePanel = new ImagePanel("ImagePanel", this);
+        this.rightSidePanels.push(imagePanel);
+        bodyContainerDiv.appendChild(imagePanel.panelHtml);
         return bodyContainerDiv;
     };
     ReaderModule.prototype.moveToPageNumber = function (pageIndex, scrollTo) {
@@ -408,15 +386,21 @@ var ReaderModule = (function () {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
-        for (var k = 0; k < this.leftSidePanels.length; k++) {
-            this.leftSidePanels[k].onMoveToPage(pageIndex);
-        }
+        this.notifyPanelsMovePage(pageIndex);
         for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
             this.displayPage(this.pages[pageIndex - j], false);
         }
         this.displayPage(this.pages[pageIndex], scrollTo);
         for (var i = 1; pageIndex + i < this.pages.length && i <= this.preloadPagesAfter; i++) {
             this.displayPage(this.pages[pageIndex + i], false);
+        }
+    };
+    ReaderModule.prototype.notifyPanelsMovePage = function (pageIndex) {
+        for (var k = 0; k < this.leftSidePanels.length; k++) {
+            this.leftSidePanels[k].onMoveToPage(pageIndex);
+        }
+        for (var k = 0; k < this.rightSidePanels.length; k++) {
+            this.rightSidePanels[k].onMoveToPage(pageIndex);
         }
     };
     ReaderModule.prototype.moveToPage = function (page, scrollTo) {
@@ -672,8 +656,12 @@ var RightSidePanel = (function (_super) {
             $(sidePanelDiv).resizable('destroy');
         }
         else {
+            var height = $(sidePanelDiv).css("height");
+            var width = $(sidePanelDiv).css("width");
             $(sidePanelDiv).draggable({ containment: "body", appendTo: "body", cursor: "move" });
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+            $(sidePanelDiv).css("width", width);
+            $(sidePanelDiv).css("height", height);
         }
     };
     RightSidePanel.prototype.makeBody = function (innerContent, rootReference) {
@@ -684,4 +672,60 @@ var RightSidePanel = (function (_super) {
     };
     return RightSidePanel;
 })(SidePanel);
+var ImagePanel = (function (_super) {
+    __extends(ImagePanel, _super);
+    function ImagePanel(identificator, readerModule) {
+        var imageContainerDiv = document.createElement('div');
+        $(imageContainerDiv).addClass('reader-image-container');
+        this.imageContaier = imageContainerDiv;
+        _super.call(this, imageContainerDiv, identificator, readerModule);
+    }
+    ImagePanel.prototype.onMoveToPage = function (pageIndex) {
+        var pagePosition = pageIndex + 1;
+        $(this.imageContaier).empty();
+        var image = document.createElement("img");
+        image.src = "/Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
+        $(this.imageContaier).append(image);
+        for (var i = 0; i < this.windows.length; i++) {
+            var windowBody = this.windows[i];
+            $(windowBody).empty();
+            $(windowBody).append(image);
+        }
+    };
+    return ImagePanel;
+})(RightSidePanel);
+var TextPanel = (function (_super) {
+    __extends(TextPanel, _super);
+    function TextPanel(identificator, readerModule) {
+        var textContainerDiv = document.createElement('div');
+        $(textContainerDiv).addClass('reader-text-container');
+        $(textContainerDiv).scroll(function (event) {
+            var pages = $(readerModule.readerContainer).find('.reader-text-container').find('.page');
+            var minOffset = Number.MAX_VALUE;
+            var pageWithMinOffset;
+            $.each(pages, function (index, page) {
+                var pageOfsset = Math.abs($(page).offset().top);
+                if (minOffset > pageOfsset) {
+                    minOffset = pageOfsset;
+                    pageWithMinOffset = page;
+                }
+            });
+            readerModule.moveToPage($(pageWithMinOffset).data('page-name'), false);
+        });
+        var textAreaDiv = document.createElement('div');
+        $(textAreaDiv).addClass('reader-text');
+        for (var i = 0; i < readerModule.pages.length; i++) {
+            var pageDiv = document.createElement('div');
+            $(pageDiv).addClass('page');
+            $(pageDiv).data('page-name', readerModule.pages[i]);
+            pageDiv.id = 'page_' + readerModule.pages[i];
+            textAreaDiv.appendChild(pageDiv);
+        }
+        textContainerDiv.appendChild(textAreaDiv);
+        _super.call(this, textContainerDiv, identificator, readerModule);
+    }
+    TextPanel.prototype.onMoveToPage = function (pageIndex) {
+    };
+    return TextPanel;
+})(RightSidePanel);
 //# sourceMappingURL=itjakub.plugins.reader.js.map
