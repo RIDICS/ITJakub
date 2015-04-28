@@ -16,6 +16,10 @@ class ReaderModule {
     leftSidePanels: Array<SidePanel>;
     rightSidePanels: Array<SidePanel>;
 
+
+    imagePanelIdentificator: string = "ImagePanel";
+    textPanelIdentificator: string = "TextPanel";
+
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
@@ -341,14 +345,32 @@ class ReaderModule {
         $(commentButton).append(commentSpanText);
 
         $(commentButton).click((event: Event) => {
-            var innerContent = "Obsah editacniho panelu";
+
+            var textButton = document.createElement("button");
+            textButton.textContent = "Zobrazit/skrýt text";
+            $(textButton).click((event: Event) => {
+                this.changeSidePanelVisibility(this.textPanelIdentificator, "");
+                this.setRightPanelsLayout();
+            });
+
+            var imagesButton = document.createElement("button");
+            imagesButton.textContent = "Zobrazit/skrýt obrázky";
+            $(imagesButton).click((event: Event) => {
+                this.changeSidePanelVisibility(this.imagePanelIdentificator, "");
+                this.setRightPanelsLayout();
+            });
+
+            var innerContent: HTMLDivElement = document.createElement("div");
+            innerContent.appendChild(textButton);
+            innerContent.appendChild(imagesButton);
+
             var panelId = "EditacniPanel";
             if (!this.existSidePanel(panelId)) {
                 var editPanel = new LeftSidePanel(innerContent, panelId, this);
                 this.loadSidePanel(editPanel.panelHtml);
                 this.leftSidePanels.push(editPanel);
             }
-            this.changeSidePanelVisibility("EditacniPanel");
+            this.changeSidePanelVisibility("EditacniPanel", 'left');
         });
 
         buttonsDiv.appendChild(commentButton);
@@ -373,7 +395,7 @@ class ReaderModule {
                 this.loadSidePanel(searchPanel.panelHtml);
                 this.leftSidePanels.push(searchPanel);
             }
-            this.changeSidePanelVisibility("SearchPanel");
+            this.changeSidePanelVisibility("SearchPanel", 'left');
         });
 
         buttonsDiv.appendChild(searchResultButton);
@@ -398,7 +420,7 @@ class ReaderModule {
                 this.loadSidePanel(contentPanel.panelHtml);
                 this.leftSidePanels.push(contentPanel);
             }
-            this.changeSidePanelVisibility("ObsahPanel");
+            this.changeSidePanelVisibility("ObsahPanel",'left');
         });
 
         buttonsDiv.appendChild(contentButton);
@@ -422,37 +444,45 @@ class ReaderModule {
         $(bodyContainerDiv).prepend(sidePanel);
     }
 
-    private changeSidePanelVisibility(sidePanelIdentificator: string) {
+    private changeSidePanelVisibility(sidePanelIdentificator: string, slideDirection: string) {
         var sidePanel = document.getElementById(sidePanelIdentificator);
         if ($(sidePanel).is(':visible')) {
-            if ($(sidePanel).data('ui-draggable')) {
+            if ($(sidePanel).hasClass('ui-draggable')) {
                 $(sidePanel).hide();
             } else {
-                $(sidePanel).hide('slide', { direction: 'left' });
+                if (slideDirection) {
+                    $(sidePanel).hide('slide', { direction: slideDirection });
+                } else {
+                    $(sidePanel).hide();
+                }
             }
         } else {
-            if ($(sidePanel).data('ui-draggable')) {
+            if ($(sidePanel).hasClass('ui-draggable')) {
                 $(sidePanel).show();
             } else {
-                $(sidePanel).show('slide', { direction: 'left' });
+                if (slideDirection) {
+                    $(sidePanel).show('slide', { direction: slideDirection });
+                } else {
+                    $(sidePanel).css('display', '');
+                }
             }
         }
-
     }
 
     private makeReaderBody(): HTMLDivElement {
         var bodyContainerDiv: HTMLDivElement = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
 
-        var textPanel = new TextPanel("TextPanel", this);
+        var textPanel = new TextPanel(this.textPanelIdentificator, this);
         this.rightSidePanels.push(textPanel);
 
         bodyContainerDiv.appendChild(textPanel.panelHtml);
 
         // Image Panel
-        var imagePanel = new ImagePanel("ImagePanel", this);
+        var imagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
 
+        $(imagePanel.panelHtml).hide();
         bodyContainerDiv.appendChild(imagePanel.panelHtml);
 
         return bodyContainerDiv;
@@ -619,6 +649,23 @@ class ReaderModule {
             }
         }
     }
+
+    setRightPanelsLayout() {
+        var rightPanels = this.rightSidePanels;
+        var allPinned = true;
+        for (var i = 0; i < rightPanels.length; i++) {
+            var panel = rightPanels[i].panelHtml;
+            if (!$(panel).is(':visible') || $(panel).hasClass('ui-draggable')) {
+                allPinned = false;
+            }
+        }
+
+        if (allPinned) {
+            $(".reader-body-container").addClass("both-pinned");
+        } else {
+            $(".reader-body-container").removeClass("both-pinned");
+        }
+    }
 }
 
 
@@ -642,18 +689,13 @@ class SidePanel {
         sidePanelDiv.id = identificator;
         this.decorateSidePanel(sidePanelDiv);
 
-        var leftPanelHeaderDiv: HTMLDivElement = document.createElement('div');
-        $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
+        var panelHeaderDiv: HTMLDivElement = document.createElement('div');
+        $(panelHeaderDiv).addClass('reader-left-panel-header');
 
         var sidePanelCloseButton = document.createElement("button");
         $(sidePanelCloseButton).addClass('close-button');
         $(sidePanelCloseButton).click((event: Event) => {
-            if ($(sidePanelDiv).data('ui-draggable')) {
-                $(sidePanelDiv).hide();
-            } else {
-                $(sidePanelDiv).hide('slide', { direction: 'left' });
-            }
-
+            this.onCloseButtonClick(sidePanelDiv);
         });
 
         var closeSpan = document.createElement("span");
@@ -662,50 +704,37 @@ class SidePanel {
 
         this.closeButton = sidePanelCloseButton;
 
-        leftPanelHeaderDiv.appendChild(sidePanelCloseButton);
+        panelHeaderDiv.appendChild(sidePanelCloseButton);
 
-        var leftPanelPinButton = document.createElement("button");
-        $(leftPanelPinButton).addClass('pin-button');
-        $(leftPanelPinButton).click((event: Event) => {
+        var panelPinButton = document.createElement("button");
+        $(panelPinButton).addClass('pin-button');
+        $(panelPinButton).click((event: Event) => {
             this.onPinButtonClick(sidePanelDiv);
         });
 
         var pinSpan = document.createElement("span");
         $(pinSpan).addClass('glyphicon glyphicon-pushpin');
-        $(leftPanelPinButton).append(pinSpan);
+        $(panelPinButton).append(pinSpan);
 
-        this.pinButton = leftPanelPinButton;
+        this.pinButton = panelPinButton;
 
-        leftPanelHeaderDiv.appendChild(leftPanelPinButton);
+        panelHeaderDiv.appendChild(panelPinButton);
 
-        var leftPanelWindowButton = document.createElement("button");
-        $(leftPanelWindowButton).addClass('new-window-button');
-        $(leftPanelWindowButton).click((event: Event) => {
-            this.closeButton.click();
-            var newWindow = window.open("//"+document.domain, '_blank', 'width=400,height=600,resizable=yes');
-            newWindow.document.open();
-            newWindow.document.close();
-
-            $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
-            $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
-
-            var panelBody = this.makeBody(this.innerContent, this);
-            $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
-            $(newWindow.document.getElementsByTagName('body')[0]).css("padding",0);
-            $(newWindow.document.getElementsByTagName('body')[0]).css("background-color","white");
-            
-            this.windows.push(panelBody);
+        var newWindowButton = document.createElement("button");
+        $(newWindowButton).addClass('new-window-button');
+        $(newWindowButton).click((event: Event) => {
+            this.onNewWindowButtonClick(sidePanelDiv);
         });
 
         var windowSpan = document.createElement("span");
         $(windowSpan).addClass('glyphicon glyphicon-new-window');
-        $(leftPanelWindowButton).append(windowSpan);
+        $(newWindowButton).append(windowSpan);
 
-        this.newWindowButton = leftPanelWindowButton;
+        this.newWindowButton = newWindowButton;
 
-        leftPanelHeaderDiv.appendChild(leftPanelWindowButton);
+        panelHeaderDiv.appendChild(newWindowButton);
 
-        sidePanelDiv.appendChild(leftPanelHeaderDiv);
+        sidePanelDiv.appendChild(panelHeaderDiv);
 
         var panelBodyDiv = this.makeBody(innerContent, this);
 
@@ -743,7 +772,26 @@ class SidePanel {
 
     decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
 
-    onPinButtonClick(sidePanelDiv : HTMLDivElement) { throw new Error("Not implemented"); }
+    onPinButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
+
+    onCloseButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
+
+    onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
+        this.closeButton.click();
+        var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
+        newWindow.document.open();
+        newWindow.document.close();
+
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
+
+        var panelBody = this.makeBody(this.innerContent, this);
+        $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
+        $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
+        $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
+
+        this.windows.push(panelBody);
+    }
 }
 
 
@@ -773,6 +821,14 @@ class LeftSidePanel extends SidePanel {
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
         }
     }
+
+    onCloseButtonClick(sidePanelDiv: HTMLDivElement) {
+        if ($(sidePanelDiv).data('ui-draggable')) {
+            $(sidePanelDiv).hide();
+        } else {
+            $(sidePanelDiv).hide('slide', { direction: 'left' });
+        }
+    }
 }
 
 
@@ -799,6 +855,22 @@ class RightSidePanel extends SidePanel {
             $(sidePanelDiv).css("width",width);
             $(sidePanelDiv).css("height", height);
         }
+
+        this.setRightPanelsLayout(sidePanelDiv);
+    }
+
+    onCloseButtonClick(sidePanelDiv: HTMLDivElement) {
+        $(sidePanelDiv).hide();
+        this.setRightPanelsLayout(sidePanelDiv);
+    }
+
+    onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
+        super.onNewWindowButtonClick(sidePanelDiv);
+        this.setRightPanelsLayout(sidePanelDiv);
+    }
+
+    protected setRightPanelsLayout(sidePanelDiv: HTMLDivElement) {
+        this.parentReader.setRightPanelsLayout();
     }
 
     protected  makeBody(innerContent, rootReference): HTMLDivElement {

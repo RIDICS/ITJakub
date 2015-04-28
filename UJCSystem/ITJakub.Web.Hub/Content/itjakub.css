@@ -725,6 +725,10 @@ body {
   height: calc(100% - 21px);
   padding-top: 5px;
 }
+.both-pinned .reader-right-panel {
+  width: 50%;
+  display: inline-block;
+}
 .fullscreen .reader-right-panel,
 .fullscreen .reader-left-panel {
   height: 77vh;

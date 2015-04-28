@@ -7,6 +7,8 @@ var __extends = this.__extends || function (d, b) {
 };
 var ReaderModule = (function () {
     function ReaderModule(readerContainer) {
+        this.imagePanelIdentificator = "ImagePanel";
+        this.textPanelIdentificator = "TextPanel";
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
         this.preloadPagesBefore = 5;
@@ -282,14 +284,28 @@ var ReaderModule = (function () {
         $(commentSpanText).append("Možnosti zobrazeni");
         $(commentButton).append(commentSpanText);
         $(commentButton).click(function (event) {
-            var innerContent = "Obsah editacniho panelu";
+            var textButton = document.createElement("button");
+            textButton.textContent = "Zobrazit/skrýt text";
+            $(textButton).click(function (event) {
+                _this.changeSidePanelVisibility(_this.textPanelIdentificator, "");
+                _this.setRightPanelsLayout();
+            });
+            var imagesButton = document.createElement("button");
+            imagesButton.textContent = "Zobrazit/skrýt obrázky";
+            $(imagesButton).click(function (event) {
+                _this.changeSidePanelVisibility(_this.imagePanelIdentificator, "");
+                _this.setRightPanelsLayout();
+            });
+            var innerContent = document.createElement("div");
+            innerContent.appendChild(textButton);
+            innerContent.appendChild(imagesButton);
             var panelId = "EditacniPanel";
             if (!_this.existSidePanel(panelId)) {
                 var editPanel = new LeftSidePanel(innerContent, panelId, _this);
                 _this.loadSidePanel(editPanel.panelHtml);
                 _this.leftSidePanels.push(editPanel);
             }
-            _this.changeSidePanelVisibility("EditacniPanel");
+            _this.changeSidePanelVisibility("EditacniPanel", 'left');
         });
         buttonsDiv.appendChild(commentButton);
         var searchResultButton = document.createElement("button");
@@ -309,7 +325,7 @@ var ReaderModule = (function () {
                 _this.loadSidePanel(searchPanel.panelHtml);
                 _this.leftSidePanels.push(searchPanel);
             }
-            _this.changeSidePanelVisibility("SearchPanel");
+            _this.changeSidePanelVisibility("SearchPanel", 'left');
         });
         buttonsDiv.appendChild(searchResultButton);
         var contentButton = document.createElement("button");
@@ -329,7 +345,7 @@ var ReaderModule = (function () {
                 _this.loadSidePanel(contentPanel.panelHtml);
                 _this.leftSidePanels.push(contentPanel);
             }
-            _this.changeSidePanelVisibility("ObsahPanel");
+            _this.changeSidePanelVisibility("ObsahPanel", 'left');
         });
         buttonsDiv.appendChild(contentButton);
         pagingDiv.appendChild(buttonsDiv);
@@ -345,34 +361,45 @@ var ReaderModule = (function () {
         $(sidePanel).hide();
         $(bodyContainerDiv).prepend(sidePanel);
     };
-    ReaderModule.prototype.changeSidePanelVisibility = function (sidePanelIdentificator) {
+    ReaderModule.prototype.changeSidePanelVisibility = function (sidePanelIdentificator, slideDirection) {
         var sidePanel = document.getElementById(sidePanelIdentificator);
         if ($(sidePanel).is(':visible')) {
-            if ($(sidePanel).data('ui-draggable')) {
+            if ($(sidePanel).hasClass('ui-draggable')) {
                 $(sidePanel).hide();
             }
             else {
-                $(sidePanel).hide('slide', { direction: 'left' });
+                if (slideDirection) {
+                    $(sidePanel).hide('slide', { direction: slideDirection });
+                }
+                else {
+                    $(sidePanel).hide();
+                }
             }
         }
         else {
-            if ($(sidePanel).data('ui-draggable')) {
+            if ($(sidePanel).hasClass('ui-draggable')) {
                 $(sidePanel).show();
             }
             else {
-                $(sidePanel).show('slide', { direction: 'left' });
+                if (slideDirection) {
+                    $(sidePanel).show('slide', { direction: slideDirection });
+                }
+                else {
+                    $(sidePanel).css('display', '');
+                }
             }
         }
     };
     ReaderModule.prototype.makeReaderBody = function () {
         var bodyContainerDiv = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
-        var textPanel = new TextPanel("TextPanel", this);
+        var textPanel = new TextPanel(this.textPanelIdentificator, this);
         this.rightSidePanels.push(textPanel);
         bodyContainerDiv.appendChild(textPanel.panelHtml);
         // Image Panel
-        var imagePanel = new ImagePanel("ImagePanel", this);
+        var imagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
+        $(imagePanel.panelHtml).hide();
         bodyContainerDiv.appendChild(imagePanel.panelHtml);
         return bodyContainerDiv;
     };
@@ -514,6 +541,22 @@ var ReaderModule = (function () {
             }
         }
     };
+    ReaderModule.prototype.setRightPanelsLayout = function () {
+        var rightPanels = this.rightSidePanels;
+        var allPinned = true;
+        for (var i = 0; i < rightPanels.length; i++) {
+            var panel = rightPanels[i].panelHtml;
+            if (!$(panel).is(':visible') || $(panel).hasClass('ui-draggable')) {
+                allPinned = false;
+            }
+        }
+        if (allPinned) {
+            $(".reader-body-container").addClass("both-pinned");
+        }
+        else {
+            $(".reader-body-container").removeClass("both-pinned");
+        }
+    };
     return ReaderModule;
 })();
 var SidePanel = (function () {
@@ -526,54 +569,39 @@ var SidePanel = (function () {
         var sidePanelDiv = document.createElement('div');
         sidePanelDiv.id = identificator;
         this.decorateSidePanel(sidePanelDiv);
-        var leftPanelHeaderDiv = document.createElement('div');
-        $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
+        var panelHeaderDiv = document.createElement('div');
+        $(panelHeaderDiv).addClass('reader-left-panel-header');
         var sidePanelCloseButton = document.createElement("button");
         $(sidePanelCloseButton).addClass('close-button');
         $(sidePanelCloseButton).click(function (event) {
-            if ($(sidePanelDiv).data('ui-draggable')) {
-                $(sidePanelDiv).hide();
-            }
-            else {
-                $(sidePanelDiv).hide('slide', { direction: 'left' });
-            }
+            _this.onCloseButtonClick(sidePanelDiv);
         });
         var closeSpan = document.createElement("span");
         $(closeSpan).addClass('glyphicon glyphicon-remove');
         $(sidePanelCloseButton).append(closeSpan);
         this.closeButton = sidePanelCloseButton;
-        leftPanelHeaderDiv.appendChild(sidePanelCloseButton);
-        var leftPanelPinButton = document.createElement("button");
-        $(leftPanelPinButton).addClass('pin-button');
-        $(leftPanelPinButton).click(function (event) {
+        panelHeaderDiv.appendChild(sidePanelCloseButton);
+        var panelPinButton = document.createElement("button");
+        $(panelPinButton).addClass('pin-button');
+        $(panelPinButton).click(function (event) {
             _this.onPinButtonClick(sidePanelDiv);
         });
         var pinSpan = document.createElement("span");
         $(pinSpan).addClass('glyphicon glyphicon-pushpin');
-        $(leftPanelPinButton).append(pinSpan);
-        this.pinButton = leftPanelPinButton;
-        leftPanelHeaderDiv.appendChild(leftPanelPinButton);
-        var leftPanelWindowButton = document.createElement("button");
-        $(leftPanelWindowButton).addClass('new-window-button');
-        $(leftPanelWindowButton).click(function (event) {
-            _this.closeButton.click();
-            var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
-            newWindow.document.open();
-            newWindow.document.close();
-            $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
-            $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
-            var panelBody = _this.makeBody(_this.innerContent, _this);
-            $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
-            $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
-            $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
-            _this.windows.push(panelBody);
+        $(panelPinButton).append(pinSpan);
+        this.pinButton = panelPinButton;
+        panelHeaderDiv.appendChild(panelPinButton);
+        var newWindowButton = document.createElement("button");
+        $(newWindowButton).addClass('new-window-button');
+        $(newWindowButton).click(function (event) {
+            _this.onNewWindowButtonClick(sidePanelDiv);
         });
         var windowSpan = document.createElement("span");
         $(windowSpan).addClass('glyphicon glyphicon-new-window');
-        $(leftPanelWindowButton).append(windowSpan);
-        this.newWindowButton = leftPanelWindowButton;
-        leftPanelHeaderDiv.appendChild(leftPanelWindowButton);
-        sidePanelDiv.appendChild(leftPanelHeaderDiv);
+        $(newWindowButton).append(windowSpan);
+        this.newWindowButton = newWindowButton;
+        panelHeaderDiv.appendChild(newWindowButton);
+        sidePanelDiv.appendChild(panelHeaderDiv);
         var panelBodyDiv = this.makeBody(innerContent, this);
         $(sidePanelDiv).append(panelBodyDiv);
         this.panelHtml = sidePanelDiv;
@@ -603,6 +631,22 @@ var SidePanel = (function () {
     };
     SidePanel.prototype.onPinButtonClick = function (sidePanelDiv) {
         throw new Error("Not implemented");
+    };
+    SidePanel.prototype.onCloseButtonClick = function (sidePanelDiv) {
+        throw new Error("Not implemented");
+    };
+    SidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
+        this.closeButton.click();
+        var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
+        newWindow.document.open();
+        newWindow.document.close();
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
+        var panelBody = this.makeBody(this.innerContent, this);
+        $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
+        $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
+        $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
+        this.windows.push(panelBody);
     };
     return SidePanel;
 })();
@@ -635,6 +679,14 @@ var LeftSidePanel = (function (_super) {
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
         }
     };
+    LeftSidePanel.prototype.onCloseButtonClick = function (sidePanelDiv) {
+        if ($(sidePanelDiv).data('ui-draggable')) {
+            $(sidePanelDiv).hide();
+        }
+        else {
+            $(sidePanelDiv).hide('slide', { direction: 'left' });
+        }
+    };
     return LeftSidePanel;
 })(SidePanel);
 var RightSidePanel = (function (_super) {
@@ -663,6 +715,18 @@ var RightSidePanel = (function (_super) {
             $(sidePanelDiv).css("width", width);
             $(sidePanelDiv).css("height", height);
         }
+        this.setRightPanelsLayout(sidePanelDiv);
+    };
+    RightSidePanel.prototype.onCloseButtonClick = function (sidePanelDiv) {
+        $(sidePanelDiv).hide();
+        this.setRightPanelsLayout(sidePanelDiv);
+    };
+    RightSidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
+        _super.prototype.onNewWindowButtonClick.call(this, sidePanelDiv);
+        this.setRightPanelsLayout(sidePanelDiv);
+    };
+    RightSidePanel.prototype.setRightPanelsLayout = function (sidePanelDiv) {
+        this.parentReader.setRightPanelsLayout();
     };
     RightSidePanel.prototype.makeBody = function (innerContent, rootReference) {
         var panelBodyDiv = document.createElement('div');
