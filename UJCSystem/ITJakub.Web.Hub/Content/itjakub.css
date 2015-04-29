@@ -826,6 +826,9 @@ body {
 .both-pinned .reader-right-panel:last-child {
   border-left: 1px solid #e5e5e5;
 }
+.both-pinned .reader-left-panel.ui-draggable .pin-button {
+  display: none;
+}
 .reader-text .dummy-page {
   margin-top: calc(100% - 50px);
 }
@@ -1082,4 +1085,4 @@ ul {
 .navbar-login li a:hover {
   color: #84ced7;
 }
-/*# sourceMappingURL=ITJakub.css.map */
+/*# sourceMappingURL=itjakub.css.map */

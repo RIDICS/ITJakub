@@ -310,28 +310,9 @@ class ReaderModule {
         $(commentButton).append(commentSpanText);
 
         $(commentButton).click((event: Event) => {
-
-            var textButton = document.createElement("button");
-            textButton.textContent = "Zobrazit/skrýt text";
-            $(textButton).click((event: Event) => {
-                this.changeSidePanelVisibility(this.textPanelIdentificator, "");
-                this.setRightPanelsLayout();
-            });
-
-            var imagesButton = document.createElement("button");
-            imagesButton.textContent = "Zobrazit/skrýt obrázky";
-            $(imagesButton).click((event: Event) => {
-                this.changeSidePanelVisibility(this.imagePanelIdentificator, "");
-                this.setRightPanelsLayout();
-            });
-
-            var innerContent: HTMLDivElement = document.createElement("div");
-            innerContent.appendChild(textButton);
-            innerContent.appendChild(imagesButton);
-
             var panelId = "EditacniPanel";
             if (!this.existSidePanel(panelId)) {
-                var editPanel = new LeftSidePanel(innerContent, panelId, "Zobrazení" , this);
+                var editPanel = new SettingsPanel(panelId , this);
                 this.loadSidePanel(editPanel.panelHtml);
                 this.leftSidePanels.push(editPanel);
             }
@@ -353,10 +334,9 @@ class ReaderModule {
         $(searchResultButton).append(searchSpanText);
 
         $(searchResultButton).click((event: Event) => {
-            var innerContent = "Obsah vyhledavaciho panelu";
             var panelId = "SearchPanel";
             if (!this.existSidePanel(panelId)) {
-                var searchPanel = new LeftSidePanel(innerContent, panelId,"Vyhlédávání", this);
+                var searchPanel = new LeftSidePanel(panelId,"Vyhlédávání", this);
                 this.loadSidePanel(searchPanel.panelHtml);
                 this.leftSidePanels.push(searchPanel);
             }
@@ -378,10 +358,9 @@ class ReaderModule {
         $(contentButton).append(contentSpanText);
 
         $(contentButton).click((event: Event) => {
-            var innerContent = "Obsah";
             var panelId = "ObsahPanel";
             if (!this.existSidePanel(panelId)) {
-                var contentPanel = new LeftSidePanel(innerContent, panelId,"Obsah", this);
+                var contentPanel = new LeftSidePanel(panelId,"Obsah", this);
                 this.loadSidePanel(contentPanel.panelHtml);
                 this.leftSidePanels.push(contentPanel);
             }
@@ -407,7 +386,7 @@ class ReaderModule {
         $(bodyContainerDiv).prepend(sidePanel);
     }
 
-    private changeSidePanelVisibility(sidePanelIdentificator: string, slideDirection: string) {
+    changeSidePanelVisibility(sidePanelIdentificator: string, slideDirection: string) {
         var sidePanel = document.getElementById(sidePanelIdentificator);
         if ($(sidePanel).is(':visible')) {
             if ($(sidePanel).hasClass('ui-draggable')) {
@@ -649,15 +628,16 @@ class SidePanel {
     pinButton : HTMLButtonElement;
     newWindowButton: HTMLButtonElement;
     identificator: string;
-    innerContent: string;
+    headerName: string;
+    innerContent: HTMLElement;
     parentReader: ReaderModule;
     windows: Array<HTMLDivElement>;
     isDraggable: boolean;
 
-    public constructor(innerContent, identificator: string, headerName: string, parentReader: ReaderModule) {
+    public constructor(identificator: string, headerName: string, parentReader: ReaderModule) {
         this.parentReader = parentReader;
         this.identificator = identificator;
-        this.innerContent = innerContent;
+        this.headerName = headerName;
         this.isDraggable = false;
         this.windows = new Array();
         var sidePanelDiv: HTMLDivElement = document.createElement('div');
@@ -716,7 +696,8 @@ class SidePanel {
 
         sidePanelDiv.appendChild(panelHeaderDiv);
 
-        var panelBodyDiv = this.makeBody(innerContent, this);
+        this.innerContent = this.makeBody(this);
+        var panelBodyDiv = this.makePanelBody(this.innerContent, this);
 
         $(sidePanelDiv).append(panelBodyDiv);
 
@@ -730,21 +711,15 @@ class SidePanel {
         
     }
 
-    protected  makeBody(innerContent, rootReference) : HTMLDivElement {
+    protected  makePanelBody(innerContent, rootReference) : HTMLDivElement {
         var panelBodyDiv: HTMLDivElement = document.createElement('div');
         $(panelBodyDiv).addClass('reader-left-panel-body');
-
-        var movePageButton: HTMLButtonElement = document.createElement('button');
-        movePageButton.textContent = "Move to page 15";
-        $(movePageButton).click((event: Event) => {
-            rootReference.parentReader.moveToPageNumber(15, true);
-        });
-
-        $(panelBodyDiv).append(movePageButton);
-
         $(panelBodyDiv).append(innerContent);
-
         return panelBodyDiv;
+    }
+
+    protected makeBody(rootReference: SidePanel): HTMLElement {
+        throw new Error("Not implemented");
     }
 
     public onMoveToPage(pageIndex: number, scrollTo:boolean) {
@@ -779,12 +754,12 @@ class SidePanel {
         $(newWindow.document.getElementsByTagName('body')[0]).append(panelWindow);
         $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
         $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
-
+        newWindow.document.title = this.headerName;
         this.windows.push(panelWindow);
     }
 
     makePanelWindow() : HTMLDivElement {
-        return this.makeBody($(this.innerContent).clone(true), this);
+        return this.makePanelBody($(this.innerContent).clone(true), this);
     }
 
     decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
@@ -838,6 +813,44 @@ class LeftSidePanel extends SidePanel {
             $(sidePanelDiv).hide('slide', { direction: 'left' });
         }
     }
+
+    protected makeBody(rootReference: SidePanel): HTMLElement {
+        var movePageButton: HTMLButtonElement = document.createElement('button');
+        movePageButton.textContent = "Move to page 15";
+        $(movePageButton).click((event: Event) => {
+            rootReference.parentReader.moveToPageNumber(15, true);
+        });
+
+        return movePageButton;
+    }
+}
+
+class SettingsPanel extends LeftSidePanel {
+
+    constructor(identificator: string, readerModule: ReaderModule) {
+        super(identificator, "Zobrazení", readerModule);
+    }
+    
+    protected makeBody(rootReference : SidePanel):HTMLElement {
+        var textButton = document.createElement("button");
+        textButton.textContent = "Zobrazit/skrýt text";
+        $(textButton).click((event: Event) => {
+            rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.textPanelIdentificator, "");
+            rootReference.parentReader.setRightPanelsLayout();
+        });
+
+        var imagesButton = document.createElement("button");
+        imagesButton.textContent = "Zobrazit/skrýt obrázky";
+        $(imagesButton).click((event: Event) => {
+            rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.imagePanelIdentificator, "");
+            rootReference.parentReader.setRightPanelsLayout();
+        });
+
+        var innerContent: HTMLDivElement = document.createElement("div");
+        innerContent.appendChild(textButton);
+        innerContent.appendChild(imagesButton);
+        return innerContent;
+    }
 }
 
 
@@ -883,7 +896,7 @@ class RightSidePanel extends SidePanel {
         this.setRightPanelsLayout(sidePanelDiv);
     }
 
-    protected  makeBody(innerContent, rootReference): HTMLDivElement {
+    protected  makePanelBody(innerContent, rootReference): HTMLDivElement {
         var panelBodyDiv: HTMLDivElement = document.createElement('div');
         $(panelBodyDiv).addClass('reader-right-panel-body');
         $(panelBodyDiv).append(innerContent);
@@ -892,21 +905,23 @@ class RightSidePanel extends SidePanel {
 }
 
 class ImagePanel extends RightSidePanel {
-    imageContaier : HTMLDivElement;
 
     constructor(identificator: string, readerModule: ReaderModule) {
+        super(identificator, "Obrázky", readerModule);
+    }
+
+    protected makeBody(rootReference: SidePanel):HTMLElement {
         var imageContainerDiv: HTMLDivElement = document.createElement('div');
         $(imageContainerDiv).addClass('reader-image-container');
-        this.imageContaier = imageContainerDiv;
-        super(imageContainerDiv, identificator, "Obrázky", readerModule);
+        return imageContainerDiv;
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) { 
         var pagePosition = pageIndex + 1;
-        $(this.imageContaier).empty();
+        $(this.innerContent).empty();
         var image : HTMLImageElement = document.createElement("img");
         image.src = "/Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
-        $(this.imageContaier).append(image);
+        $(this.innerContent).append(image);
         for (var i = 0; i < this.windows.length; i++) {
             var windowBody = this.windows[i];
             $(windowBody).empty();
@@ -920,6 +935,12 @@ class TextPanel extends RightSidePanel {
     preloadPagesAfter:number;
 
     constructor(identificator: string, readerModule: ReaderModule) {
+        super(identificator, "Text", readerModule);
+        this.preloadPagesBefore = 5;
+        this.preloadPagesAfter = 10;
+    }
+
+    protected makeBody(rootReference : SidePanel): HTMLElement {
         var textContainerDiv: HTMLDivElement = document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
 
@@ -935,16 +956,16 @@ class TextPanel extends RightSidePanel {
                 }
             });
 
-            readerModule.moveToPage($(pageWithMinOffset).data('page-name'), false);
+            rootReference.parentReader.moveToPage($(pageWithMinOffset).data('page-name'), false);
         });
 
         var textAreaDiv: HTMLDivElement = document.createElement('div');
         $(textAreaDiv).addClass('reader-text');
-        for (var i = 0; i < readerModule.pages.length; i++) {
+        for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
             var pageDiv: HTMLDivElement = document.createElement('div');
             $(pageDiv).addClass('page');
-            $(pageDiv).data('page-name', readerModule.pages[i]);
-            pageDiv.id = 'page_' + readerModule.pages[i];
+            $(pageDiv).data('page-name', rootReference.parentReader.pages[i]);
+            pageDiv.id = 'page_' + rootReference.parentReader.pages[i];
             textAreaDiv.appendChild(pageDiv);
         }
 
@@ -953,10 +974,7 @@ class TextPanel extends RightSidePanel {
         textAreaDiv.appendChild(dummyPage);
 
         textContainerDiv.appendChild(textAreaDiv);
-        super(textContainerDiv, identificator, "Text", readerModule);
-
-        this.preloadPagesBefore = 5;
-        this.preloadPagesAfter = 10;
+        return textContainerDiv;
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
@@ -980,7 +998,13 @@ class TextPanel extends RightSidePanel {
             this.scrollTextToPositionFromTop(0);
             var topOffset = $(pageDiv).offset().top;
             this.scrollTextToPositionFromTop(topOffset);
-            //TODO add scrolling to windows
+
+            for (var i = 0; i < this.windows.length; i++) {
+                var windowBody = this.windows[i];
+                $(windowBody).find(".reader-text-container").scrollTop(0);
+                var pageToScrollOffset = $(windowBody).find('#page_' + pageName).offset().top;
+                $(windowBody).find(".reader-text-container").scrollTop(pageToScrollOffset);
+            }
         }
     }
 
@@ -993,6 +1017,10 @@ class TextPanel extends RightSidePanel {
     private downloadPageByName(pageName: string) {
         var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
         $(pageContainer).addClass("loading");
+        for (var i = 0; i < this.windows.length; i++) {
+            var windowBody = this.windows[i];
+            $(windowBody).find('#page_' + pageName).addClass("loading");
+        }
         $.ajax({
             type: "GET",
             traditional: true,
@@ -1005,8 +1033,9 @@ class TextPanel extends RightSidePanel {
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).data('loaded', true);
 
-                for (var i = 0; i < this.windows.length; i++) {
-                    var windowBody = this.windows[i];
+                for (var j = 0; j < this.windows.length; j++) {
+                    var windowBody = this.windows[j];
+                    $(windowBody).find('#page_' + pageName).removeClass("loading");
                     $(windowBody).find('#page_' + pageName).append(response["pageText"]);
                 }
             },

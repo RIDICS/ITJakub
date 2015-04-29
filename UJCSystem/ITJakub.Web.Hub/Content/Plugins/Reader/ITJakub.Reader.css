@@ -387,6 +387,9 @@ body {
 .both-pinned .reader-right-panel:last-child {
   border-left: 1px solid #e5e5e5;
 }
+.both-pinned .reader-left-panel.ui-draggable .pin-button {
+  display: none;
+}
 .reader-text .dummy-page {
   margin-top: calc(100% - 50px);
 }
