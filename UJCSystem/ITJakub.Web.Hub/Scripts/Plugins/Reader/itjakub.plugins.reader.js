@@ -786,11 +786,12 @@ var TextPanel = (function (_super) {
         var textContainerDiv = document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
         $(textContainerDiv).scroll(function (event) {
-            var pages = $(textContainerDiv).find('.page');
+            var _this = this;
+            var pages = $(this).find('.page');
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
             $.each(pages, function (index, page) {
-                var pageOfsset = Math.abs($(page).offset().top - $(textContainerDiv).offset().top);
+                var pageOfsset = Math.abs($(page).offset().top - $(_this).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
                     pageWithMinOffset = page;

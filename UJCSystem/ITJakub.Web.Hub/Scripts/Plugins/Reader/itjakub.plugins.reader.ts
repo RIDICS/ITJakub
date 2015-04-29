@@ -944,12 +944,12 @@ class TextPanel extends RightSidePanel {
         var textContainerDiv: HTMLDivElement = document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
 
-        $(textContainerDiv).scroll((event: Event) => {
-            var pages = $(textContainerDiv).find('.page');
+        $(textContainerDiv).scroll(function(event: Event) {
+            var pages = $(this).find('.page');
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
             $.each(pages,(index, page) => {
-                var pageOfsset = Math.abs($(page).offset().top - $(textContainerDiv).offset().top);
+                var pageOfsset = Math.abs($(page).offset().top - $(this).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
                     pageWithMinOffset = page;
