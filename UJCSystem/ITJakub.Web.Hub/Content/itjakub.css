@@ -744,6 +744,22 @@ body {
   z-index: 9999;
   box-shadow: 5px 5px 5px #888888;
 }
+.reader-left-panel .glyphicon-pushpin,
+.reader-right-panel .glyphicon-pushpin {
+  -webkit-transform: rotate(-45deg) scale(0.9);
+  -moz-transform: rotate(-45deg) scale(0.9);
+  -o-transform: rotate(-45deg) scale(0.9);
+  -ms-transform: rotate(-45deg) scale(0.9);
+  transform: rotate(-45deg) scale(0.9);
+}
+.reader-left-panel.ui-draggable .glyphicon-pushpin,
+.reader-right-panel.ui-draggable .glyphicon-pushpin {
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  -ms-transform: none;
+  transform: none;
+}
 .reader-text-container {
   padding: 5px 30px 5px 30px;
   height: 100%;
