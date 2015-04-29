@@ -39,6 +39,9 @@ class ReaderModule {
             success: (response) => {
                 $(pageContainer).append(response["pageText"]);
                 $(pageContainer).removeClass("loading");
+            },
+            error: (response) => {
+                $(pageContainer).removeClass("loading");
             }
         });
     }
@@ -54,6 +57,9 @@ class ReaderModule {
             contentType: 'application/json',
             success: (response) => {
                 $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
+            },
+            error: (response) => {
                 $(pageContainer).removeClass("loading");
             }
         });
@@ -592,7 +598,8 @@ class ReaderModule {
 
     scrollTextToPositionFromTop(topOffset: number) {
         var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
-        $(scrollableContainer).scrollTop(topOffset);
+        var containerTopOffset = $(scrollableContainer).offset().top;
+        $(scrollableContainer).scrollTop(topOffset-containerTopOffset);
     }
 
     addBookmark() {
@@ -782,7 +789,7 @@ class SidePanel {
 
         $(sidePanelDiv).append(panelBodyDiv);
 
-        $(sidePanelDiv).click((event:Event)=> {
+        $(sidePanelDiv).mousedown((event:Event)=> {
             this.parentReader.populatePanelOnTop(this);
         });
 
@@ -974,11 +981,12 @@ class TextPanel extends RightSidePanel {
         $(textContainerDiv).addClass('reader-text-container');
 
         $(textContainerDiv).scroll((event: Event) => { //TODO make better scroll event
-            var pages = $(readerModule.readerContainer).find('.reader-text-container').find('.page');
+            //var textContainer = $(readerModule.readerContainer).find('.reader-text-container');
+            var pages = $(textContainerDiv).find('.page');
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
             $.each(pages,(index, page) => {
-                var pageOfsset = Math.abs($(page).offset().top);
+                var pageOfsset = Math.abs($(page).offset().top - $(textContainerDiv).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
                     pageWithMinOffset = page;
@@ -997,6 +1005,10 @@ class TextPanel extends RightSidePanel {
             pageDiv.id = 'page_' + readerModule.pages[i];
             textAreaDiv.appendChild(pageDiv);
         }
+
+        var dummyPage: HTMLDivElement = document.createElement('div');
+        $(dummyPage).addClass('dummy-page');
+        textAreaDiv.appendChild(dummyPage);
 
         textContainerDiv.appendChild(textAreaDiv);
         super(textContainerDiv, identificator, "Text", readerModule);

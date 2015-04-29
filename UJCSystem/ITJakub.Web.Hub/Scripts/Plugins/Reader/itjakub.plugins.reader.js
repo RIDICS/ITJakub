@@ -26,6 +26,9 @@ var ReaderModule = (function () {
             success: function (response) {
                 $(pageContainer).append(response["pageText"]);
                 $(pageContainer).removeClass("loading");
+            },
+            error: function (response) {
+                $(pageContainer).removeClass("loading");
             }
         });
     };
@@ -40,6 +43,9 @@ var ReaderModule = (function () {
             contentType: 'application/json',
             success: function (response) {
                 $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
+            },
+            error: function (response) {
                 $(pageContainer).removeClass("loading");
             }
         });
@@ -497,7 +503,8 @@ var ReaderModule = (function () {
     };
     ReaderModule.prototype.scrollTextToPositionFromTop = function (topOffset) {
         var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
-        $(scrollableContainer).scrollTop(topOffset);
+        var containerTopOffset = $(scrollableContainer).offset().top;
+        $(scrollableContainer).scrollTop(topOffset - containerTopOffset);
     };
     ReaderModule.prototype.addBookmark = function () {
         var positionStep = 100 / (this.pages.length - 1);
@@ -639,7 +646,7 @@ var SidePanel = (function () {
         sidePanelDiv.appendChild(panelHeaderDiv);
         var panelBodyDiv = this.makeBody(innerContent, this);
         $(sidePanelDiv).append(panelBodyDiv);
-        $(sidePanelDiv).click(function (event) {
+        $(sidePanelDiv).mousedown(function (event) {
             _this.parentReader.populatePanelOnTop(_this);
         });
         this.panelHtml = sidePanelDiv;
@@ -816,11 +823,12 @@ var TextPanel = (function (_super) {
         var textContainerDiv = document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
         $(textContainerDiv).scroll(function (event) {
-            var pages = $(readerModule.readerContainer).find('.reader-text-container').find('.page');
+            //var textContainer = $(readerModule.readerContainer).find('.reader-text-container');
+            var pages = $(textContainerDiv).find('.page');
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
             $.each(pages, function (index, page) {
-                var pageOfsset = Math.abs($(page).offset().top);
+                var pageOfsset = Math.abs($(page).offset().top - $(textContainerDiv).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
                     pageWithMinOffset = page;
@@ -837,6 +845,9 @@ var TextPanel = (function (_super) {
             pageDiv.id = 'page_' + readerModule.pages[i];
             textAreaDiv.appendChild(pageDiv);
         }
+        var dummyPage = document.createElement('div');
+        $(dummyPage).addClass('dummy-page');
+        textAreaDiv.appendChild(dummyPage);
         textContainerDiv.appendChild(textAreaDiv);
         _super.call(this, textContainerDiv, identificator, "Text", readerModule);
     }

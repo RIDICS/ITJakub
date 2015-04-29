@@ -274,6 +274,7 @@ body {
   overflow-y: auto;
   width: 100%;
   height: calc(100% - 30px);
+  padding: 5px;
 }
 .reader-right-panel {
   width: auto;
@@ -385,5 +386,8 @@ body {
 }
 .both-pinned .reader-right-panel:last-child {
   border-left: 1px solid #e5e5e5;
+}
+.reader-text .dummy-page {
+  margin-top: calc(100% - 50px);
 }
 /*# sourceMappingURL=ITJakub.Reader.css.map */
