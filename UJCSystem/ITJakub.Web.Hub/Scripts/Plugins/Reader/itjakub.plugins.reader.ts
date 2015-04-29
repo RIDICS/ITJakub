@@ -850,6 +850,7 @@ class SidePanel {
         $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
 
         var panelBody = this.makeBody(this.innerContent, this);
+
         $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
         $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
         $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
@@ -887,6 +888,7 @@ class LeftSidePanel extends SidePanel {
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
             this.placeOnDragStartPosition(sidePanelDiv);
             this.isDraggable = true;
+            this.parentReader.populatePanelOnTop(this);
         }
 
         this.setRightPanelsLayout(sidePanelDiv);
@@ -928,6 +930,7 @@ class RightSidePanel extends SidePanel {
             $(sidePanelDiv).css("height", height);
             this.placeOnDragStartPosition(sidePanelDiv);
             this.isDraggable = true;
+            this.parentReader.populatePanelOnTop(this);
         }
 
         this.setRightPanelsLayout(sidePanelDiv);
@@ -980,8 +983,7 @@ class TextPanel extends RightSidePanel {
         var textContainerDiv: HTMLDivElement = document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
 
-        $(textContainerDiv).scroll((event: Event) => { //TODO make better scroll event
-            //var textContainer = $(readerModule.readerContainer).find('.reader-text-container');
+        $(textContainerDiv).scroll((event: Event) => {
             var pages = $(textContainerDiv).find('.page');
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;

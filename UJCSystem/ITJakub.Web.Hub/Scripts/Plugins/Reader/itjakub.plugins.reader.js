@@ -734,6 +734,7 @@ var LeftSidePanel = (function (_super) {
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
             this.placeOnDragStartPosition(sidePanelDiv);
             this.isDraggable = true;
+            this.parentReader.populatePanelOnTop(this);
         }
         this.setRightPanelsLayout(sidePanelDiv);
     };
@@ -776,6 +777,7 @@ var RightSidePanel = (function (_super) {
             $(sidePanelDiv).css("height", height);
             this.placeOnDragStartPosition(sidePanelDiv);
             this.isDraggable = true;
+            this.parentReader.populatePanelOnTop(this);
         }
         this.setRightPanelsLayout(sidePanelDiv);
     };
@@ -823,7 +825,6 @@ var TextPanel = (function (_super) {
         var textContainerDiv = document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
         $(textContainerDiv).scroll(function (event) {
-            //var textContainer = $(readerModule.readerContainer).find('.reader-text-container');
             var pages = $(textContainerDiv).find('.page');
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
