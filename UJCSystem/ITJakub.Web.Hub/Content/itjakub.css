@@ -744,6 +744,10 @@ body {
   z-index: 9999;
   box-shadow: 5px 5px 5px #888888;
 }
+.reader-left-panel.ui-draggable-dragging,
+.reader-right-panel.ui-draggable-dragging {
+  z-index: 10000;
+}
 .reader-left-panel .glyphicon-pushpin,
 .reader-right-panel .glyphicon-pushpin {
   -webkit-transform: rotate(-45deg) scale(0.9);

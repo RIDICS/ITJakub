@@ -552,10 +552,40 @@ var ReaderModule = (function () {
         }
         if (allPinned) {
             $(".reader-body-container").addClass("both-pinned");
+            var leftPanels = this.leftSidePanels;
+            for (var i = 0; i < leftPanels.length; i++) {
+                var leftPanel = leftPanels[i];
+                if (!leftPanel.isDraggable) {
+                    leftPanel.pinButton.click();
+                }
+            }
         }
         else {
             $(".reader-body-container").removeClass("both-pinned");
         }
+    };
+    ReaderModule.prototype.populatePanelOnTop = function (panel) {
+        if (!panel.isDraggable) {
+            return;
+        }
+        var max = 0;
+        var leftPanels = this.leftSidePanels;
+        for (var i = 0; i < leftPanels.length; i++) {
+            var leftPanel = leftPanels[i];
+            var zIndex = parseInt($(leftPanel.panelHtml).css('z-index'));
+            if (zIndex > max) {
+                max = zIndex;
+            }
+        }
+        var rightPanels = this.rightSidePanels;
+        for (var i = 0; i < rightPanels.length; i++) {
+            var rightPanel = rightPanels[i];
+            var zIndex = parseInt($(rightPanel.panelHtml).css('z-index'));
+            if (zIndex > max) {
+                max = zIndex;
+            }
+        }
+        $(panel.panelHtml).css('z-index', max + 1);
     };
     return ReaderModule;
 })();
@@ -565,6 +595,7 @@ var SidePanel = (function () {
         this.parentReader = parentReader;
         this.identificator = identificator;
         this.innerContent = innerContent;
+        this.isDraggable = false;
         this.windows = new Array();
         var sidePanelDiv = document.createElement('div');
         sidePanelDiv.id = identificator;
@@ -608,6 +639,9 @@ var SidePanel = (function () {
         sidePanelDiv.appendChild(panelHeaderDiv);
         var panelBodyDiv = this.makeBody(innerContent, this);
         $(sidePanelDiv).append(panelBodyDiv);
+        $(sidePanelDiv).click(function (event) {
+            _this.parentReader.populatePanelOnTop(_this);
+        });
         this.panelHtml = sidePanelDiv;
         this.panelBodyHtml = panelBodyDiv;
     }
@@ -629,6 +663,14 @@ var SidePanel = (function () {
             var windowBody = this.windows[i];
             $(windowBody).append(" pageIndex is " + pageIndex);
         }
+    };
+    SidePanel.prototype.placeOnDragStartPosition = function (sidePanelDiv) {
+        var dispersion = Math.floor((Math.random() * 15) + 1) * 3;
+        $(sidePanelDiv).css('top', 135 + dispersion);
+        $(sidePanelDiv).css('left', dispersion);
+    };
+    SidePanel.prototype.setRightPanelsLayout = function (sidePanelDiv) {
+        this.parentReader.setRightPanelsLayout();
     };
     SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
         throw new Error("Not implemented");
@@ -676,12 +718,17 @@ var LeftSidePanel = (function (_super) {
             $(sidePanelDiv).css('height', "");
             $(sidePanelDiv).resizable("destroy");
             $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
+            this.isDraggable = false;
+            $(sidePanelDiv).css('z-index', 9999);
         }
         else {
             $(sidePanelDiv).draggable({ containment: "body", appendTo: "body", cursor: "move" });
             $(sidePanelDiv).resizable("destroy");
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+            this.placeOnDragStartPosition(sidePanelDiv);
+            this.isDraggable = true;
         }
+        this.setRightPanelsLayout(sidePanelDiv);
     };
     LeftSidePanel.prototype.onCloseButtonClick = function (sidePanelDiv) {
         if ($(sidePanelDiv).data('ui-draggable')) {
@@ -710,6 +757,8 @@ var RightSidePanel = (function (_super) {
             $(sidePanelDiv).css('position', "");
             $(sidePanelDiv).css('height', "");
             $(sidePanelDiv).resizable('destroy');
+            this.isDraggable = false;
+            $(sidePanelDiv).css('z-index', 9999);
         }
         else {
             var height = $(sidePanelDiv).css("height");
@@ -718,6 +767,8 @@ var RightSidePanel = (function (_super) {
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
             $(sidePanelDiv).css("width", width);
             $(sidePanelDiv).css("height", height);
+            this.placeOnDragStartPosition(sidePanelDiv);
+            this.isDraggable = true;
         }
         this.setRightPanelsLayout(sidePanelDiv);
     };
@@ -728,9 +779,6 @@ var RightSidePanel = (function (_super) {
     RightSidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
         _super.prototype.onNewWindowButtonClick.call(this, sidePanelDiv);
         this.setRightPanelsLayout(sidePanelDiv);
-    };
-    RightSidePanel.prototype.setRightPanelsLayout = function (sidePanelDiv) {
-        this.parentReader.setRightPanelsLayout();
     };
     RightSidePanel.prototype.makeBody = function (innerContent, rootReference) {
         var panelBodyDiv = document.createElement('div');

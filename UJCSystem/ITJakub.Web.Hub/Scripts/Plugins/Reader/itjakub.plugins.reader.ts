@@ -662,9 +662,44 @@ class ReaderModule {
 
         if (allPinned) {
             $(".reader-body-container").addClass("both-pinned");
+            var leftPanels = this.leftSidePanels;
+            for (var i = 0; i < leftPanels.length; i++) {
+                var leftPanel = leftPanels[i];
+                if (!leftPanel.isDraggable) {
+                    leftPanel.pinButton.click();
+                }
+            }
+
         } else {
             $(".reader-body-container").removeClass("both-pinned");
         }
+    }
+
+    populatePanelOnTop(panel: SidePanel) {
+        if (!panel.isDraggable) {
+            return;
+        }
+
+        var max: number = 0;
+        var leftPanels = this.leftSidePanels;
+        for (var i = 0; i < leftPanels.length; i++) {
+            var leftPanel = leftPanels[i];
+            var zIndex = parseInt($(leftPanel.panelHtml).css('z-index'));
+            if (zIndex > max) {
+                max = zIndex;
+            }
+        }
+
+        var rightPanels = this.rightSidePanels;
+        for (var i = 0; i < rightPanels.length; i++) {
+            var rightPanel = rightPanels[i];
+            var zIndex = parseInt($(rightPanel.panelHtml).css('z-index'));
+            if (zIndex > max) {
+                max = zIndex;
+            }
+        }
+
+        $(panel.panelHtml).css('z-index', max + 1);
     }
 }
 
@@ -679,11 +714,13 @@ class SidePanel {
     innerContent: string;
     parentReader: ReaderModule;
     windows: Array<HTMLDivElement>;
+    isDraggable: boolean;
 
     public constructor(innerContent, identificator: string, headerName: string, parentReader: ReaderModule) {
         this.parentReader = parentReader;
         this.identificator = identificator;
         this.innerContent = innerContent;
+        this.isDraggable = false;
         this.windows = new Array();
         var sidePanelDiv: HTMLDivElement = document.createElement('div');
         sidePanelDiv.id = identificator;
@@ -745,10 +782,15 @@ class SidePanel {
 
         $(sidePanelDiv).append(panelBodyDiv);
 
+        $(sidePanelDiv).click((event:Event)=> {
+            this.parentReader.populatePanelOnTop(this);
+        });
+
         this.panelHtml = sidePanelDiv;
         this.panelBodyHtml = panelBodyDiv;
-    }
 
+        
+    }
 
     protected  makeBody(innerContent, rootReference) : HTMLDivElement {
         var panelBodyDiv: HTMLDivElement = document.createElement('div');
@@ -773,6 +815,16 @@ class SidePanel {
             var windowBody = this.windows[i];
             $(windowBody).append(" pageIndex is " + pageIndex);
         }
+    }
+
+    protected placeOnDragStartPosition(sidePanelDiv: HTMLDivElement) {
+        var dispersion = Math.floor((Math.random() * 15) + 1) * 3;
+        $(sidePanelDiv).css('top', 135 + dispersion);
+        $(sidePanelDiv).css('left', dispersion);
+    }
+
+    protected setRightPanelsLayout(sidePanelDiv: HTMLDivElement) {
+        this.parentReader.setRightPanelsLayout();
     }
 
     decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
@@ -819,12 +871,18 @@ class LeftSidePanel extends SidePanel {
             $(sidePanelDiv).css('height', "");
             $(sidePanelDiv).resizable("destroy");
             $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
+            this.isDraggable = false;
+            $(sidePanelDiv).css('z-index', 9999);
 
         } else {
             $(sidePanelDiv).draggable({ containment: "body", appendTo: "body", cursor: "move" });
             $(sidePanelDiv).resizable("destroy");
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+            this.placeOnDragStartPosition(sidePanelDiv);
+            this.isDraggable = true;
         }
+
+        this.setRightPanelsLayout(sidePanelDiv);
     }
 
     onCloseButtonClick(sidePanelDiv: HTMLDivElement) {
@@ -851,6 +909,8 @@ class RightSidePanel extends SidePanel {
             $(sidePanelDiv).css('position', "");
             $(sidePanelDiv).css('height', "");
             $(sidePanelDiv).resizable('destroy');
+            this.isDraggable = false;
+            $(sidePanelDiv).css('z-index', 9999);
 
         } else {
             var height = $(sidePanelDiv).css("height");
@@ -859,6 +919,8 @@ class RightSidePanel extends SidePanel {
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
             $(sidePanelDiv).css("width",width);
             $(sidePanelDiv).css("height", height);
+            this.placeOnDragStartPosition(sidePanelDiv);
+            this.isDraggable = true;
         }
 
         this.setRightPanelsLayout(sidePanelDiv);
@@ -872,10 +934,6 @@ class RightSidePanel extends SidePanel {
     onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
         super.onNewWindowButtonClick(sidePanelDiv);
         this.setRightPanelsLayout(sidePanelDiv);
-    }
-
-    protected setRightPanelsLayout(sidePanelDiv: HTMLDivElement) {
-        this.parentReader.setRightPanelsLayout();
     }
 
     protected  makeBody(innerContent, rootReference): HTMLDivElement {
