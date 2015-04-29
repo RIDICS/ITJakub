@@ -11,45 +11,7 @@ var ReaderModule = (function () {
         this.textPanelIdentificator = "TextPanel";
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
-        this.preloadPagesBefore = 5;
-        this.preloadPagesAfter = 10;
     }
-    ReaderModule.prototype.downloadPageByPosition = function (pagePosition, pageContainer) {
-        $(pageContainer).addClass("loading");
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { bookId: this.bookId, pagePosition: pagePosition },
-            url: "/Reader/GetBookPageByPosition",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function (response) {
-                $(pageContainer).append(response["pageText"]);
-                $(pageContainer).removeClass("loading");
-            },
-            error: function (response) {
-                $(pageContainer).removeClass("loading");
-            }
-        });
-    };
-    ReaderModule.prototype.downloadPageByName = function (pageName, pageContainer) {
-        $(pageContainer).addClass("loading");
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { bookId: this.bookId, pageName: pageName },
-            url: "/Reader/GetBookPageByName",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function (response) {
-                $(pageContainer).append(response["pageText"]);
-                $(pageContainer).removeClass("loading");
-            },
-            error: function (response) {
-                $(pageContainer).removeClass("loading");
-            }
-        });
-    };
     ReaderModule.prototype.makeReader = function (bookId, bookTitle, pageList) {
         var _this = this;
         this.bookId = bookId;
@@ -93,7 +55,6 @@ var ReaderModule = (function () {
         readerDiv.appendChild(readerBodyDiv);
         $(this.readerContainer).append(readerDiv);
         this.moveToPageNumber(0, false); //load first page
-        this.scrollTextToPositionFromTop(0);
     };
     ReaderModule.prototype.makeTitle = function (bookTitle) {
         var titleDiv = document.createElement('div');
@@ -419,21 +380,14 @@ var ReaderModule = (function () {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
-        this.notifyPanelsMovePage(pageIndex);
-        for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
-            this.displayPage(this.pages[pageIndex - j], false);
-        }
-        this.displayPage(this.pages[pageIndex], scrollTo);
-        for (var i = 1; pageIndex + i < this.pages.length && i <= this.preloadPagesAfter; i++) {
-            this.displayPage(this.pages[pageIndex + i], false);
-        }
+        this.notifyPanelsMovePage(pageIndex, scrollTo);
     };
-    ReaderModule.prototype.notifyPanelsMovePage = function (pageIndex) {
+    ReaderModule.prototype.notifyPanelsMovePage = function (pageIndex, scrollTo) {
         for (var k = 0; k < this.leftSidePanels.length; k++) {
-            this.leftSidePanels[k].onMoveToPage(pageIndex);
+            this.leftSidePanels[k].onMoveToPage(pageIndex, scrollTo);
         }
         for (var k = 0; k < this.rightSidePanels.length; k++) {
-            this.rightSidePanels[k].onMoveToPage(pageIndex);
+            this.rightSidePanels[k].onMoveToPage(pageIndex, scrollTo);
         }
     };
     ReaderModule.prototype.moveToPage = function (page, scrollTo) {
@@ -487,24 +441,6 @@ var ReaderModule = (function () {
         });
         $(displayedPages).css('display', 'inherit');
         $(actualPage).addClass('page-active');
-    };
-    ReaderModule.prototype.displayPage = function (page, scrollTo) {
-        var pageDiv = $(this.readerContainer).find('div.reader-text').find('#page_' + page);
-        var pageLoaded = $(pageDiv).data('loaded');
-        if (typeof pageLoaded === 'undefined' || !pageLoaded) {
-            this.downloadPageByName(page, $(pageDiv));
-            $(pageDiv).data('loaded', true);
-        }
-        if (scrollTo) {
-            this.scrollTextToPositionFromTop(0);
-            var topOffset = $(pageDiv).offset().top;
-            this.scrollTextToPositionFromTop(topOffset);
-        }
-    };
-    ReaderModule.prototype.scrollTextToPositionFromTop = function (topOffset) {
-        var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
-        var containerTopOffset = $(scrollableContainer).offset().top;
-        $(scrollableContainer).scrollTop(topOffset - containerTopOffset);
     };
     ReaderModule.prototype.addBookmark = function () {
         var positionStep = 100 / (this.pages.length - 1);
@@ -664,7 +600,7 @@ var SidePanel = (function () {
         $(panelBodyDiv).append(innerContent);
         return panelBodyDiv;
     };
-    SidePanel.prototype.onMoveToPage = function (pageIndex) {
+    SidePanel.prototype.onMoveToPage = function (pageIndex, scrollTo) {
         $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
         for (var i = 0; i < this.windows.length; i++) {
             var windowBody = this.windows[i];
@@ -808,7 +744,7 @@ var ImagePanel = (function (_super) {
         this.imageContaier = imageContainerDiv;
         _super.call(this, imageContainerDiv, identificator, "Obrázky", readerModule);
     }
-    ImagePanel.prototype.onMoveToPage = function (pageIndex) {
+    ImagePanel.prototype.onMoveToPage = function (pageIndex, scrollTo) {
         var pagePosition = pageIndex + 1;
         $(this.imageContaier).empty();
         var image = document.createElement("img");
@@ -854,8 +790,60 @@ var TextPanel = (function (_super) {
         textAreaDiv.appendChild(dummyPage);
         textContainerDiv.appendChild(textAreaDiv);
         _super.call(this, textContainerDiv, identificator, "Text", readerModule);
+        this.preloadPagesBefore = 5;
+        this.preloadPagesAfter = 10;
     }
-    TextPanel.prototype.onMoveToPage = function (pageIndex) {
+    TextPanel.prototype.onMoveToPage = function (pageIndex, scrollTo) {
+        for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
+            this.displayPage(this.parentReader.pages[pageIndex - j], false);
+        }
+        this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
+        for (var i = 1; pageIndex + i < this.parentReader.pages.length && i <= this.preloadPagesAfter; i++) {
+            this.displayPage(this.parentReader.pages[pageIndex + i], false);
+        }
+    };
+    TextPanel.prototype.displayPage = function (pageName, scrollTo) {
+        var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
+        var pageLoaded = $(pageDiv).data('loaded');
+        var pageLoading = $(pageDiv).hasClass('loading');
+        if ((typeof pageLoaded === 'undefined' || !pageLoaded) && !pageLoading) {
+            this.downloadPageByName(pageName);
+        }
+        if (scrollTo) {
+            this.scrollTextToPositionFromTop(0);
+            var topOffset = $(pageDiv).offset().top;
+            this.scrollTextToPositionFromTop(topOffset);
+        }
+    };
+    TextPanel.prototype.scrollTextToPositionFromTop = function (topOffset) {
+        var scrollableContainer = $(this.innerContent);
+        var containerTopOffset = $(scrollableContainer).offset().top;
+        $(scrollableContainer).scrollTop(topOffset - containerTopOffset);
+    };
+    TextPanel.prototype.downloadPageByName = function (pageName) {
+        var _this = this;
+        var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
+        $(pageContainer).addClass("loading");
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.parentReader.bookId, pageName: pageName },
+            url: "/Reader/GetBookPageByName",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
+                $(pageContainer).data('loaded', true);
+                for (var i = 0; i < _this.windows.length; i++) {
+                    var windowBody = _this.windows[i];
+                    $(windowBody).find('#page_' + pageName).append(response["pageText"]);
+                }
+            },
+            error: function (response) {
+                $(pageContainer).removeClass("loading");
+            }
+        });
     };
     return TextPanel;
 })(RightSidePanel);

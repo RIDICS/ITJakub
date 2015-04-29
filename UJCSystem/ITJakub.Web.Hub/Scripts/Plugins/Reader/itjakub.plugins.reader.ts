@@ -23,46 +23,6 @@ class ReaderModule {
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
-        this.preloadPagesBefore = 5;
-        this.preloadPagesAfter = 10;
-    }
-
-    private downloadPageByPosition(pagePosition: number, pageContainer: JQuery) {
-        $(pageContainer).addClass("loading");
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { bookId: this.bookId, pagePosition: pagePosition },
-            url: "/Reader/GetBookPageByPosition",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: (response) => {
-                $(pageContainer).append(response["pageText"]);
-                $(pageContainer).removeClass("loading");
-            },
-            error: (response) => {
-                $(pageContainer).removeClass("loading");
-            }
-        });
-    }
-
-    private downloadPageByName(pageName: string, pageContainer: JQuery) {
-        $(pageContainer).addClass("loading");
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { bookId: this.bookId, pageName: pageName },
-            url: "/Reader/GetBookPageByName",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: (response) => {
-                $(pageContainer).append(response["pageText"]);
-                $(pageContainer).removeClass("loading");
-            },
-            error: (response) => {
-                $(pageContainer).removeClass("loading");
-            }
-        });
     }
 
     public makeReader(bookId : string, bookTitle : string, pageList) {
@@ -121,7 +81,6 @@ class ReaderModule {
         $(this.readerContainer).append(readerDiv);
 
         this.moveToPageNumber(0, false); //load first page
-        this.scrollTextToPositionFromTop(0);
     }
 
     private makeTitle(bookTitle : string): HTMLDivElement {
@@ -437,8 +396,6 @@ class ReaderModule {
         return controlsDiv;
     }
 
-
-
     private existSidePanel(sidePanelIdentificator: string): boolean {
         var sidePanel = document.getElementById(sidePanelIdentificator);
         return ($(sidePanel).length > 0 && sidePanel != null);
@@ -503,24 +460,16 @@ class ReaderModule {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
-        this.notifyPanelsMovePage(pageIndex);
-
-        for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
-            this.displayPage(this.pages[pageIndex - j], false);
-        }
-        this.displayPage(this.pages[pageIndex], scrollTo);
-        for (var i = 1; pageIndex + i < this.pages.length && i <= this.preloadPagesAfter; i++) {
-            this.displayPage(this.pages[pageIndex + i], false);
-        }
+        this.notifyPanelsMovePage(pageIndex, scrollTo);
     }
 
-    notifyPanelsMovePage(pageIndex : number) {
+    notifyPanelsMovePage(pageIndex : number, scrollTo: boolean) {
         for (var k = 0; k < this.leftSidePanels.length; k++) {
-            this.leftSidePanels[k].onMoveToPage(pageIndex);
+            this.leftSidePanels[k].onMoveToPage(pageIndex, scrollTo);
         }
 
         for (var k = 0; k < this.rightSidePanels.length; k++) {
-            this.rightSidePanels[k].onMoveToPage(pageIndex);
+            this.rightSidePanels[k].onMoveToPage(pageIndex, scrollTo);
         }
     }
 
@@ -582,25 +531,7 @@ class ReaderModule {
 
     }
 
-    displayPage(page: string, scrollTo: boolean) {
-        var pageDiv = $(this.readerContainer).find('div.reader-text').find('#page_' + page);
-        var pageLoaded: boolean = $(pageDiv).data('loaded');
-        if (typeof pageLoaded === 'undefined' || !pageLoaded) {
-            this.downloadPageByName(page, $(pageDiv));
-            $(pageDiv).data('loaded', true);
-        }
-        if (scrollTo) {
-            this.scrollTextToPositionFromTop(0);
-            var topOffset = $(pageDiv).offset().top;
-            this.scrollTextToPositionFromTop(topOffset);
-        }
-    }
 
-    scrollTextToPositionFromTop(topOffset: number) {
-        var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
-        var containerTopOffset = $(scrollableContainer).offset().top;
-        $(scrollableContainer).scrollTop(topOffset-containerTopOffset);
-    }
 
     addBookmark() {
         var positionStep = 100 / (this.pages.length - 1);
@@ -816,7 +747,7 @@ class SidePanel {
         return panelBodyDiv;
     }
 
-    public onMoveToPage(pageIndex: number) {
+    public onMoveToPage(pageIndex: number, scrollTo:boolean) {
         $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
         for (var i = 0; i < this.windows.length;i++) {
             var windowBody = this.windows[i];
@@ -970,7 +901,7 @@ class ImagePanel extends RightSidePanel {
         super(imageContainerDiv, identificator, "Obrázky", readerModule);
     }
 
-    public onMoveToPage(pageIndex: number) {
+    public onMoveToPage(pageIndex: number, scrollTo: boolean) { 
         var pagePosition = pageIndex + 1;
         $(this.imageContaier).empty();
         var image : HTMLImageElement = document.createElement("img");
@@ -985,6 +916,9 @@ class ImagePanel extends RightSidePanel {
 }
 
 class TextPanel extends RightSidePanel {
+    preloadPagesBefore:number;
+    preloadPagesAfter:number;
+
     constructor(identificator: string, readerModule: ReaderModule) {
         var textContainerDiv: HTMLDivElement = document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
@@ -1020,8 +954,65 @@ class TextPanel extends RightSidePanel {
 
         textContainerDiv.appendChild(textAreaDiv);
         super(textContainerDiv, identificator, "Text", readerModule);
+
+        this.preloadPagesBefore = 5;
+        this.preloadPagesAfter = 10;
     }
 
-    public onMoveToPage(pageIndex: number) {
+    public onMoveToPage(pageIndex: number, scrollTo: boolean) {
+        for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
+            this.displayPage(this.parentReader.pages[pageIndex - j], false);
+        }
+        this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
+        for (var i = 1; pageIndex + i < this.parentReader.pages.length && i <= this.preloadPagesAfter; i++) {
+            this.displayPage(this.parentReader.pages[pageIndex + i], false);
+        }
+    }
+
+    displayPage(pageName: string, scrollTo: boolean) {
+        var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
+        var pageLoaded: boolean = $(pageDiv).data('loaded');
+        var pageLoading: boolean = $(pageDiv).hasClass('loading');
+        if ( (typeof pageLoaded === 'undefined' || !pageLoaded) && !pageLoading ) {
+            this.downloadPageByName(pageName);
+        }
+        if (scrollTo) {
+            this.scrollTextToPositionFromTop(0);
+            var topOffset = $(pageDiv).offset().top;
+            this.scrollTextToPositionFromTop(topOffset);
+            //TODO add scrolling to windows
+        }
+    }
+
+    scrollTextToPositionFromTop(topOffset: number) {
+        var scrollableContainer = $(this.innerContent);
+        var containerTopOffset = $(scrollableContainer).offset().top;
+        $(scrollableContainer).scrollTop(topOffset - containerTopOffset);
+    }
+
+    private downloadPageByName(pageName: string) {
+        var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
+        $(pageContainer).addClass("loading");
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.parentReader.bookId, pageName: pageName },
+            url: "/Reader/GetBookPageByName",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
+                $(pageContainer).data('loaded', true);
+
+                for (var i = 0; i < this.windows.length; i++) {
+                    var windowBody = this.windows[i];
+                    $(windowBody).find('#page_' + pageName).append(response["pageText"]);
+                }
+            },
+            error: (response) => {
+                $(pageContainer).removeClass("loading");
+            }
+        });
     }
 }
