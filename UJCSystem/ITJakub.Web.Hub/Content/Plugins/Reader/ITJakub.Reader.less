@@ -18,7 +18,7 @@ html,body {
 
 .reader-body-container {
     width: auto;
-    margin-top: 1px;
+    margin-bottom: 1px;
     display : block;
     padding: 0;
 }
@@ -237,13 +237,14 @@ html,body {
     border-right: 1px solid @background-color;
     height: @reader-body-height;
     height: @reader-computed-height;
+    min-width: 200px;
 }
 
 .reader-left-panel-body {
     background-color : white;
     overflow-y : auto;
     width: 100%;
-    height : ~"calc(100% - 25px)";
+    height : ~"calc(100% - 30px)";
 }
 
 .reader-right-panel {    
@@ -251,12 +252,13 @@ html,body {
     background-color : white;
     height: @reader-body-height;
     height: @reader-computed-height;
+    min-width: 200px;
 }
 
 .reader-right-panel-body {    
     background-color : white;
     width: 100%;
-    height : ~"calc(100% - 21px)";
+    height : ~"calc(100% - 30px)";
     padding-top: 5px;
 }
 
@@ -273,6 +275,7 @@ html,body {
 .reader-left-panel.ui-draggable, .reader-right-panel.ui-draggable {
     position : absolute!important;
     border: 1px solid @background-color;
+    border-top: none;
     z-index : 9999;
     box-shadow: 5px 5px 5px #888888;
 }
@@ -305,7 +308,9 @@ html,body {
 .reader-left-panel-header {
      padding: 5px;
      padding-bottom: 5px;
-     border-bottom : 1px solid @background-color
+     border-bottom : 1px solid @background-color;
+     border-top : 1px solid @background-color;
+     width: 100%;
 }
 
 .reader-text-container .search-hit {
@@ -313,7 +318,6 @@ html,body {
 }
 
 .reader-image-container {
-    width: 100%;
     height: 100%;
     padding: 2px;
     position: relative;
@@ -332,4 +336,15 @@ html,body {
     right:0;
     margin:auto;
 }
+
+.panel-header-name {
+    color: lightgray;
+    font-weight: bold;
+    margin-left: 15px; 
+}
+
+.both-pinned .reader-right-panel:last-child  {
+    border-left : 1px solid @background-color;
+}
+
 
