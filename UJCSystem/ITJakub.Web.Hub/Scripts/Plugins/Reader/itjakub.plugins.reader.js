@@ -673,11 +673,27 @@ var SidePanel = (function () {
     };
     SidePanel.prototype.placeOnDragStartPosition = function (sidePanelDiv) {
         var dispersion = Math.floor((Math.random() * 15) + 1) * 3;
-        $(sidePanelDiv).css('top', 135 + dispersion);
+        $(sidePanelDiv).css('top', 135 + dispersion); //TODO kick out magic number
         $(sidePanelDiv).css('left', dispersion);
     };
     SidePanel.prototype.setRightPanelsLayout = function (sidePanelDiv) {
         this.parentReader.setRightPanelsLayout();
+    };
+    SidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
+        this.closeButton.click();
+        var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
+        newWindow.document.open();
+        newWindow.document.close();
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
+        var panelWindow = this.makePanelWindow();
+        $(newWindow.document.getElementsByTagName('body')[0]).append(panelWindow);
+        $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
+        $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
+        this.windows.push(panelWindow);
+    };
+    SidePanel.prototype.makePanelWindow = function () {
+        return this.makeBody($(this.innerContent).clone(true), this);
     };
     SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
         throw new Error("Not implemented");
@@ -687,19 +703,6 @@ var SidePanel = (function () {
     };
     SidePanel.prototype.onCloseButtonClick = function (sidePanelDiv) {
         throw new Error("Not implemented");
-    };
-    SidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
-        this.closeButton.click();
-        var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
-        newWindow.document.open();
-        newWindow.document.close();
-        $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
-        $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
-        var panelBody = this.makeBody(this.innerContent, this);
-        $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
-        $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
-        $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
-        this.windows.push(panelBody);
     };
     return SidePanel;
 })();

@@ -826,19 +826,13 @@ class SidePanel {
 
     protected placeOnDragStartPosition(sidePanelDiv: HTMLDivElement) {
         var dispersion = Math.floor((Math.random() * 15) + 1) * 3;
-        $(sidePanelDiv).css('top', 135 + dispersion);
+        $(sidePanelDiv).css('top', 135 + dispersion);  //TODO kick out magic number
         $(sidePanelDiv).css('left', dispersion);
     }
 
     protected setRightPanelsLayout(sidePanelDiv: HTMLDivElement) {
         this.parentReader.setRightPanelsLayout();
     }
-
-    decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
-
-    onPinButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
-
-    onCloseButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
 
     onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
         this.closeButton.click();
@@ -849,14 +843,26 @@ class SidePanel {
         $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
         $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
 
-        var panelBody = this.makeBody(this.innerContent, this);
+        var panelWindow = this.makePanelWindow();
 
-        $(newWindow.document.getElementsByTagName('body')[0]).append(panelBody);
+        $(newWindow.document.getElementsByTagName('body')[0]).append(panelWindow);
         $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
         $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
 
-        this.windows.push(panelBody);
+        this.windows.push(panelWindow);
     }
+
+    makePanelWindow() : HTMLDivElement {
+        return this.makeBody($(this.innerContent).clone(true), this);
+    }
+
+    decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
+
+    onPinButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
+
+    onCloseButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
+
+
 }
 
 
