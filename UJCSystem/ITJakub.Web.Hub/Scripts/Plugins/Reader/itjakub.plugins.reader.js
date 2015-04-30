@@ -20,6 +20,14 @@ var ReaderModule = (function () {
         this.pages = new Array();
         this.leftSidePanels = new Array();
         this.rightSidePanels = new Array();
+        $(window).on("beforeunload", function (event) {
+            for (var k = 0; k < _this.leftSidePanels.length; k++) {
+                _this.leftSidePanels[k].window.close();
+            }
+            for (var k = 0; k < _this.rightSidePanels.length; k++) {
+                _this.rightSidePanels[k].window.close();
+            }
+        });
         for (var i = 0; i < pageList.length; i++) {
             this.pages.push(pageList[i]["Text"]);
         }
@@ -327,7 +335,11 @@ var ReaderModule = (function () {
             }
         }
         else {
-            if ($(sidePanel).hasClass('ui-draggable')) {
+            if ($(sidePanel).hasClass("windowed")) {
+                var panelInstance = this.findPanelInstanceById(sidePanelIdentificator);
+                panelInstance.window.focus();
+            }
+            else if ($(sidePanel).hasClass('ui-draggable')) {
                 $(sidePanel).show();
             }
             else {
@@ -339,6 +351,19 @@ var ReaderModule = (function () {
                 }
             }
         }
+    };
+    ReaderModule.prototype.findPanelInstanceById = function (panelIdentificator) {
+        for (var k = 0; k < this.leftSidePanels.length; k++) {
+            if (this.leftSidePanels[k].identificator === panelIdentificator) {
+                return this.leftSidePanels[k];
+            }
+        }
+        for (var k = 0; k < this.rightSidePanels.length; k++) {
+            if (this.rightSidePanels[k].identificator === panelIdentificator) {
+                return this.rightSidePanels[k];
+            }
+        }
+        return null;
     };
     ReaderModule.prototype.makeReaderBody = function () {
         var bodyContainerDiv = document.createElement('div');
@@ -522,7 +547,6 @@ var SidePanel = (function () {
         this.identificator = identificator;
         this.headerName = headerName;
         this.isDraggable = false;
-        this.windows = new Array();
         var sidePanelDiv = document.createElement('div');
         sidePanelDiv.id = identificator;
         this.decorateSidePanel(sidePanelDiv);
@@ -583,9 +607,8 @@ var SidePanel = (function () {
     };
     SidePanel.prototype.onMoveToPage = function (pageIndex, scrollTo) {
         $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
-        for (var i = 0; i < this.windows.length; i++) {
-            var windowBody = this.windows[i];
-            $(windowBody).append(" pageIndex is " + pageIndex);
+        if (typeof this.windowBody !== 'undefined') {
+            $(this.windowBody).append(" pageIndex is " + pageIndex);
         }
     };
     SidePanel.prototype.placeOnDragStartPosition = function (sidePanelDiv) {
@@ -597,10 +620,16 @@ var SidePanel = (function () {
         this.parentReader.setRightPanelsLayout();
     };
     SidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
+        var _this = this;
         this.closeButton.click();
         var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
         newWindow.document.open();
         newWindow.document.close();
+        $(newWindow).on("beforeunload", function (event) {
+            $(document.getElementById(_this.identificator)).removeClass("windowed");
+            $(_this.windowBody).val('');
+            $(_this.window).val('');
+        });
         $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
         $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
         var panelWindow = this.makePanelWindow();
@@ -608,7 +637,9 @@ var SidePanel = (function () {
         $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
         $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
         newWindow.document.title = this.headerName;
-        this.windows.push(panelWindow);
+        $(document.getElementById(this.identificator)).addClass("windowed");
+        this.windowBody = panelWindow;
+        this.window = newWindow;
     };
     SidePanel.prototype.makePanelWindow = function () {
         return this.makePanelBody($(this.innerContent).clone(true), this);
@@ -767,10 +798,9 @@ var ImagePanel = (function (_super) {
         var image = document.createElement("img");
         image.src = "/Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
         $(this.innerContent).append(image);
-        for (var i = 0; i < this.windows.length; i++) {
-            var windowBody = this.windows[i];
-            $(windowBody).empty();
-            $(windowBody).append(image);
+        if (typeof this.windowBody !== 'undefined') {
+            $(this.windowBody).empty();
+            $(this.windowBody).append(image);
         }
     };
     return ImagePanel;
@@ -834,11 +864,10 @@ var TextPanel = (function (_super) {
             this.scrollTextToPositionFromTop(0);
             var topOffset = $(pageDiv).offset().top;
             this.scrollTextToPositionFromTop(topOffset);
-            for (var i = 0; i < this.windows.length; i++) {
-                var windowBody = this.windows[i];
-                $(windowBody).find(".reader-text-container").scrollTop(0);
-                var pageToScrollOffset = $(windowBody).find('#page_' + pageName).offset().top;
-                $(windowBody).find(".reader-text-container").scrollTop(pageToScrollOffset);
+            if (typeof this.windowBody !== 'undefined') {
+                $(this.windowBody).find(".reader-text-container").scrollTop(0);
+                var pageToScrollOffset = $(this.windowBody).find('#page_' + pageName).offset().top;
+                $(this.windowBody).find(".reader-text-container").scrollTop(pageToScrollOffset);
             }
         }
     };
@@ -851,9 +880,8 @@ var TextPanel = (function (_super) {
         var _this = this;
         var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
         $(pageContainer).addClass("loading");
-        for (var i = 0; i < this.windows.length; i++) {
-            var windowBody = this.windows[i];
-            $(windowBody).find('#page_' + pageName).addClass("loading");
+        if (typeof this.windowBody !== 'undefined') {
+            $(this.windowBody).find('#page_' + pageName).addClass("loading");
         }
         $.ajax({
             type: "GET",
@@ -866,10 +894,9 @@ var TextPanel = (function (_super) {
                 $(pageContainer).append(response["pageText"]);
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).data('loaded', true);
-                for (var j = 0; j < _this.windows.length; j++) {
-                    var windowBody = _this.windows[j];
-                    $(windowBody).find('#page_' + pageName).removeClass("loading");
-                    $(windowBody).find('#page_' + pageName).append(response["pageText"]);
+                if (typeof _this.windowBody !== 'undefined') {
+                    $(_this.windowBody).find('#page_' + pageName).removeClass("loading");
+                    $(_this.windowBody).find('#page_' + pageName).append(response["pageText"]);
                 }
             },
             error: function (response) {

@@ -32,6 +32,16 @@ class ReaderModule {
         this.pages = new Array<string>();
         this.leftSidePanels = new Array<SidePanel>();
         this.rightSidePanels = new Array<SidePanel>();
+
+        $(window).on("beforeunload",(event: Event) => {
+            for (var k = 0; k < this.leftSidePanels.length; k++) {
+                this.leftSidePanels[k].window.close();
+            }
+
+            for (var k = 0; k < this.rightSidePanels.length; k++) {
+                this.rightSidePanels[k].window.close();
+            }
+        });
         
         for (var i = 0; i < pageList.length; i++) { //load pageList
             this.pages.push(pageList[i]["Text"]);
@@ -399,7 +409,11 @@ class ReaderModule {
                 }
             }
         } else {
-            if ($(sidePanel).hasClass('ui-draggable')) {
+            if ($(sidePanel).hasClass("windowed")) {
+                var panelInstance = this.findPanelInstanceById(sidePanelIdentificator);
+                panelInstance.window.focus();
+            }
+            else if ($(sidePanel).hasClass('ui-draggable')) {
                 $(sidePanel).show();
             } else {
                 if (slideDirection) {
@@ -409,6 +423,22 @@ class ReaderModule {
                 }
             }
         }
+    }
+
+    findPanelInstanceById(panelIdentificator: string): SidePanel {
+        for (var k = 0; k < this.leftSidePanels.length; k++) {
+            if (this.leftSidePanels[k].identificator === panelIdentificator) {
+                return this.leftSidePanels[k];
+            }
+        }
+
+        for (var k = 0; k < this.rightSidePanels.length; k++) {
+            if (this.rightSidePanels[k].identificator === panelIdentificator) {
+                return this.rightSidePanels[k];
+            }
+        }
+
+        return null;
     }
 
     private makeReaderBody(): HTMLDivElement {
@@ -631,7 +661,8 @@ class SidePanel {
     headerName: string;
     innerContent: HTMLElement;
     parentReader: ReaderModule;
-    windows: Array<HTMLDivElement>;
+    windowBody: HTMLDivElement;
+    window: Window;
     isDraggable: boolean;
 
     public constructor(identificator: string, headerName: string, parentReader: ReaderModule) {
@@ -639,7 +670,6 @@ class SidePanel {
         this.identificator = identificator;
         this.headerName = headerName;
         this.isDraggable = false;
-        this.windows = new Array();
         var sidePanelDiv: HTMLDivElement = document.createElement('div');
         sidePanelDiv.id = identificator;
         this.decorateSidePanel(sidePanelDiv);
@@ -724,9 +754,8 @@ class SidePanel {
 
     public onMoveToPage(pageIndex: number, scrollTo:boolean) {
         $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
-        for (var i = 0; i < this.windows.length;i++) {
-            var windowBody = this.windows[i];
-            $(windowBody).append(" pageIndex is " + pageIndex);
+        if (typeof this.windowBody !== 'undefined') {
+            $(this.windowBody).append(" pageIndex is " + pageIndex);
         }
     }
 
@@ -746,6 +775,12 @@ class SidePanel {
         newWindow.document.open();
         newWindow.document.close();
 
+        $(newWindow).on("beforeunload", (event: Event) => {
+            $(document.getElementById(this.identificator)).removeClass("windowed");
+            $(this.windowBody).val('');
+            $(this.window).val('');
+        });
+
         $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
         $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
 
@@ -755,7 +790,9 @@ class SidePanel {
         $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
         $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
         newWindow.document.title = this.headerName;
-        this.windows.push(panelWindow);
+        $(document.getElementById(this.identificator)).addClass("windowed");
+        this.windowBody = panelWindow;
+        this.window = newWindow;
     }
 
     makePanelWindow() : HTMLDivElement {
@@ -922,10 +959,9 @@ class ImagePanel extends RightSidePanel {
         var image : HTMLImageElement = document.createElement("img");
         image.src = "/Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
         $(this.innerContent).append(image);
-        for (var i = 0; i < this.windows.length; i++) {
-            var windowBody = this.windows[i];
-            $(windowBody).empty();
-            $(windowBody).append(image);
+        if (typeof this.windowBody !== 'undefined') {
+            $(this.windowBody).empty();
+            $(this.windowBody).append(image);
         }
     }
 }
@@ -999,11 +1035,10 @@ class TextPanel extends RightSidePanel {
             var topOffset = $(pageDiv).offset().top;
             this.scrollTextToPositionFromTop(topOffset);
 
-            for (var i = 0; i < this.windows.length; i++) {
-                var windowBody = this.windows[i];
-                $(windowBody).find(".reader-text-container").scrollTop(0);
-                var pageToScrollOffset = $(windowBody).find('#page_' + pageName).offset().top;
-                $(windowBody).find(".reader-text-container").scrollTop(pageToScrollOffset);
+            if (typeof this.windowBody !== 'undefined') {
+                $(this.windowBody).find(".reader-text-container").scrollTop(0);
+                var pageToScrollOffset = $(this.windowBody).find('#page_' + pageName).offset().top;
+                $(this.windowBody).find(".reader-text-container").scrollTop(pageToScrollOffset);
             }
         }
     }
@@ -1017,9 +1052,8 @@ class TextPanel extends RightSidePanel {
     private downloadPageByName(pageName: string) {
         var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
         $(pageContainer).addClass("loading");
-        for (var i = 0; i < this.windows.length; i++) {
-            var windowBody = this.windows[i];
-            $(windowBody).find('#page_' + pageName).addClass("loading");
+        if (typeof this.windowBody !== 'undefined') {
+            $(this.windowBody).find('#page_' + pageName).addClass("loading");
         }
         $.ajax({
             type: "GET",
@@ -1033,10 +1067,9 @@ class TextPanel extends RightSidePanel {
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).data('loaded', true);
 
-                for (var j = 0; j < this.windows.length; j++) {
-                    var windowBody = this.windows[j];
-                    $(windowBody).find('#page_' + pageName).removeClass("loading");
-                    $(windowBody).find('#page_' + pageName).append(response["pageText"]);
+                if (typeof this.windowBody !== 'undefined') {
+                    $(this.windowBody).find('#page_' + pageName).removeClass("loading");
+                    $(this.windowBody).find('#page_' + pageName).append(response["pageText"]);
                 }
             },
             error: (response) => {
