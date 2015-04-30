@@ -190,5 +190,16 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 return rowKeys;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Institution FindInstitutionByEnterCode(string enterCode)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<Institution>()
+                    .Where(x => x.EnterCode == enterCode)
+                    .SingleOrDefault();
+            }
+        }
     }
 }

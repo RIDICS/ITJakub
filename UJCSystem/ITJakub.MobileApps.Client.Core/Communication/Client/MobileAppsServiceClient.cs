@@ -395,7 +395,7 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
                 }
                 catch (FaultException ex)
                 {
-                    throw new InvalidServerOperationException(ex);
+                    throw new ClientCommunicationException(ex);
                 }
                 catch (CommunicationException ex)
                 {

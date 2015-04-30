@@ -84,7 +84,9 @@ namespace ITJakub.MobileApps.Client.Books.Manager
         {
             try
             {
-                var list = await m_serviceClient.SearchForBookAsync(category, searchDestination, query);
+                var list = await m_serviceClient.SearchForBookAsync(category, searchDestination, query) ??
+                           new List<BookContract>();
+
                 var viewModelList = list.Select(contract => new BookViewModel
                 {
                     Authors = GetAuthorStringFromList(contract.Authors),

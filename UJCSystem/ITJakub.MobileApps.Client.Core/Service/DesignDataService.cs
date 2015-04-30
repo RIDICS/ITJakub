@@ -111,7 +111,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
                 GroupCode = "Code",
                 GroupName = "Název",
                 Members = new ObservableCollection<GroupMemberViewModel>(),
-                MemberCount = 0
+                MemberCount = 0,
+                State = GroupStateContract.AcceptMembers
             }, null);
         }
 

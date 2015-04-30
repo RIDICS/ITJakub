@@ -32,7 +32,7 @@
         </Style>
         <x:Double x:Key="ArrowThickness">2</x:Double>
         <SolidColorBrush x:Key="ArrowColor" Color="Black" />
-        <Color x:Key="SelectedStateBackgroundColor">#50FF0000</Color>
+        <Color x:Key="SelectedStateBackgroundColor">#40FFFF00</Color>
     </Page.Resources>
     
     <Page.BottomAppBar>

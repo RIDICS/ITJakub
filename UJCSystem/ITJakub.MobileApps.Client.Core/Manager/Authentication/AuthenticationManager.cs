@@ -155,7 +155,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
                 FirstName = UserLoginInfo.FirstName,
                 LastName = UserLoginInfo.LastName,
                 Email = UserLoginInfo.Email,
-                UserRole = UserRoleContract.Teacher // TODO direct Teacher role assignment for testing
+                UserRole = UserLoginInfo.UserRole
             };
             return viewModel;
         }
