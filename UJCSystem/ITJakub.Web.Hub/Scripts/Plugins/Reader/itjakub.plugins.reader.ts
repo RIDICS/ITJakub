@@ -769,16 +769,20 @@ class SidePanel {
         this.parentReader.setRightPanelsLayout();
     }
 
+    makePanelWindow(): HTMLDivElement {
+        return this.makePanelBody($(this.innerContent).clone(true), this);
+    }
+
+    decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
+
     onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
         this.closeButton.click();
         var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
         newWindow.document.open();
         newWindow.document.close();
 
-        $(newWindow).on("beforeunload", (event: Event) => {
-            $(document.getElementById(this.identificator)).removeClass("windowed");
-            $(this.windowBody).val('');
-            $(this.window).val('');
+        $(newWindow).on("beforeunload",(event: Event) => {
+            this.onUnloadWindowMode();
         });
 
         $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
@@ -795,11 +799,11 @@ class SidePanel {
         this.window = newWindow;
     }
 
-    makePanelWindow() : HTMLDivElement {
-        return this.makePanelBody($(this.innerContent).clone(true), this);
+    onUnloadWindowMode() {
+        $(document.getElementById(this.identificator)).removeClass("windowed");
+        $(this.windowBody).val('');
+        $(this.window).val('');
     }
-
-    decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
 
     onPinButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
 
@@ -1017,10 +1021,10 @@ class TextPanel extends RightSidePanel {
         for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
             this.displayPage(this.parentReader.pages[pageIndex - j], false);
         }
-        this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
         for (var i = 1; pageIndex + i < this.parentReader.pages.length && i <= this.preloadPagesAfter; i++) {
             this.displayPage(this.parentReader.pages[pageIndex + i], false);
         }
+        this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
     }
 
     displayPage(pageName: string, scrollTo: boolean) {
@@ -1035,10 +1039,10 @@ class TextPanel extends RightSidePanel {
             var topOffset = $(pageDiv).offset().top;
             this.scrollTextToPositionFromTop(topOffset);
 
-            if (typeof this.windowBody !== 'undefined') {
-                $(this.windowBody).find(".reader-text-container").scrollTop(0);
-                var pageToScrollOffset = $(this.windowBody).find('#page_' + pageName).offset().top;
-                $(this.windowBody).find(".reader-text-container").scrollTop(pageToScrollOffset);
+            if (typeof this.window !== 'undefined') {
+                $(this.window).find(".reader-text-container").scrollTop(0);
+                var pageToScrollOffset = $(this.window).find('#page_' + pageName).offset().top;
+                $(this.window).find(".reader-text-container").scrollTop(pageToScrollOffset);
             }
         }
     }
@@ -1047,6 +1051,20 @@ class TextPanel extends RightSidePanel {
         var scrollableContainer = $(this.innerContent);
         var containerTopOffset = $(scrollableContainer).offset().top;
         $(scrollableContainer).scrollTop(topOffset - containerTopOffset);
+    }
+
+    onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
+        super.onNewWindowButtonClick(sidePanelDiv);
+        var pageIndex = this.parentReader.actualPageIndex;
+        $(this.window.document).ready(() => {
+            this.parentReader.moveToPageNumber(pageIndex, true);
+        });
+    }
+
+    onUnloadWindowMode() {
+        super.onUnloadWindowMode();
+        var pageIndex = this.parentReader.actualPageIndex;
+        this.parentReader.moveToPageNumber(pageIndex, true);
     }
 
     private downloadPageByName(pageName: string) {

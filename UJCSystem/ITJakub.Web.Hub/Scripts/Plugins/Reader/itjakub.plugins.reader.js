@@ -619,6 +619,12 @@ var SidePanel = (function () {
     SidePanel.prototype.setRightPanelsLayout = function (sidePanelDiv) {
         this.parentReader.setRightPanelsLayout();
     };
+    SidePanel.prototype.makePanelWindow = function () {
+        return this.makePanelBody($(this.innerContent).clone(true), this);
+    };
+    SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
+        throw new Error("Not implemented");
+    };
     SidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
         var _this = this;
         this.closeButton.click();
@@ -626,9 +632,7 @@ var SidePanel = (function () {
         newWindow.document.open();
         newWindow.document.close();
         $(newWindow).on("beforeunload", function (event) {
-            $(document.getElementById(_this.identificator)).removeClass("windowed");
-            $(_this.windowBody).val('');
-            $(_this.window).val('');
+            _this.onUnloadWindowMode();
         });
         $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
         $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
@@ -641,11 +645,10 @@ var SidePanel = (function () {
         this.windowBody = panelWindow;
         this.window = newWindow;
     };
-    SidePanel.prototype.makePanelWindow = function () {
-        return this.makePanelBody($(this.innerContent).clone(true), this);
-    };
-    SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
-        throw new Error("Not implemented");
+    SidePanel.prototype.onUnloadWindowMode = function () {
+        $(document.getElementById(this.identificator)).removeClass("windowed");
+        $(this.windowBody).val('');
+        $(this.window).val('');
     };
     SidePanel.prototype.onPinButtonClick = function (sidePanelDiv) {
         throw new Error("Not implemented");
@@ -848,10 +851,10 @@ var TextPanel = (function (_super) {
         for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
             this.displayPage(this.parentReader.pages[pageIndex - j], false);
         }
-        this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
         for (var i = 1; pageIndex + i < this.parentReader.pages.length && i <= this.preloadPagesAfter; i++) {
             this.displayPage(this.parentReader.pages[pageIndex + i], false);
         }
+        this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
     };
     TextPanel.prototype.displayPage = function (pageName, scrollTo) {
         var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
@@ -864,10 +867,10 @@ var TextPanel = (function (_super) {
             this.scrollTextToPositionFromTop(0);
             var topOffset = $(pageDiv).offset().top;
             this.scrollTextToPositionFromTop(topOffset);
-            if (typeof this.windowBody !== 'undefined') {
-                $(this.windowBody).find(".reader-text-container").scrollTop(0);
-                var pageToScrollOffset = $(this.windowBody).find('#page_' + pageName).offset().top;
-                $(this.windowBody).find(".reader-text-container").scrollTop(pageToScrollOffset);
+            if (typeof this.window !== 'undefined') {
+                $(this.window).find(".reader-text-container").scrollTop(0);
+                var pageToScrollOffset = $(this.window).find('#page_' + pageName).offset().top;
+                $(this.window).find(".reader-text-container").scrollTop(pageToScrollOffset);
             }
         }
     };
@@ -875,6 +878,19 @@ var TextPanel = (function (_super) {
         var scrollableContainer = $(this.innerContent);
         var containerTopOffset = $(scrollableContainer).offset().top;
         $(scrollableContainer).scrollTop(topOffset - containerTopOffset);
+    };
+    TextPanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
+        var _this = this;
+        _super.prototype.onNewWindowButtonClick.call(this, sidePanelDiv);
+        var pageIndex = this.parentReader.actualPageIndex;
+        $(this.window.document).ready(function () {
+            _this.parentReader.moveToPageNumber(pageIndex, true);
+        });
+    };
+    TextPanel.prototype.onUnloadWindowMode = function () {
+        _super.prototype.onUnloadWindowMode.call(this);
+        var pageIndex = this.parentReader.actualPageIndex;
+        this.parentReader.moveToPageNumber(pageIndex, true);
     };
     TextPanel.prototype.downloadPageByName = function (pageName) {
         var _this = this;
