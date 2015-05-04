@@ -15,16 +15,18 @@
                             <button id="searchButton" type="button" class="btn btn-default searchbar-button">
                                 Vyhledat
                             </button>
-                            <button type="button" class="btn btn-default searchbar-button">
+                            <button id="openRegExEditorButton" type="button" class="btn btn-default searchbar-button">
                                 Pokročilé
                             </button>
                         </div>
                         <div class="searchbar-inputs">
                             <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                            <button id="regExButton" type="button" class="btn btn-default searchbox-button">R</button>
                         </div>
                     </div>
                 </form>
             </div>
+            <div id="regExEditorDiv"></div>
         </div>
         <div class="saved-word-area">
             <div class="dictionary-header">
@@ -182,7 +184,7 @@
             </div>
             <div class="dictionary-result-word-search-list-body">
             </div>
-            </div>
+        </div>
         <div class="dictionary-result-word-search-description">
             <div class="dictionary-header">
                 Heslové stati
@@ -192,3 +194,11 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    // TODO fix this (no event is added to button)
+    $(document).getElementById("openRegExEditorButton").addEventListener("click", function () {
+        var regExSearchPlugin = new RegExEditor("#regExEditorDiv", "#searchbox");
+        regExSearchPlugin.makeRegExEditor();
+    });
+</script>

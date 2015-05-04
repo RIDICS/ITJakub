@@ -629,6 +629,7 @@
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.variableInterpreter.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\DropdownSelect\itjakub.plugins.dropdownselect.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Reader\itjakub.plugins.reader.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\RegExSearch\itjakub.plugins.regexsearch.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Search\itjakub.plugins.search.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.ts" />

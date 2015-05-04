@@ -37,7 +37,8 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.sorting.js",
                 "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js",
                 "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.js",
-                "~/Scripts/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js"));
+                "~/Scripts/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js",
+                "~/Scripts/Plugins/RegExSearch/itjakub.plugins.regexsearch.js"));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
