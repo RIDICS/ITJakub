@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.ServiceModel;
 using System.ServiceModel.Web;
-using Ujc.Naki.CardFile.Core.DataContractEntities;
+using ITJakub.CardFile.Core.DataContractEntities;
 
-namespace Ujc.Naki.CardFile.Core
+namespace ITJakub.CardFile.Core
 {
     [ServiceContract]
     [XmlSerializerFormat]

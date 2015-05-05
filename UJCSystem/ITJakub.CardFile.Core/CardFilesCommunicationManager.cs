@@ -5,10 +5,10 @@ using System.Net;
 using System.Reflection;
 using System.Security.Principal;
 using System.ServiceModel;
-using Ujc.Naki.CardFile.Core.DataContractEntities;
+using ITJakub.CardFile.Core.DataContractEntities;
 using log4net;
 
-namespace Ujc.Naki.CardFile.Core
+namespace ITJakub.CardFile.Core
 {
     public class CardFilesCommunicationManager:IDisposable
     {
