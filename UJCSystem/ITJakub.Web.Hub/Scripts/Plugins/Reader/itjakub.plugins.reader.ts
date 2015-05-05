@@ -35,11 +35,11 @@ class ReaderModule {
 
         $(window).on("beforeunload",(event: Event) => {
             for (var k = 0; k < this.leftSidePanels.length; k++) {
-                this.leftSidePanels[k].window.close();
+                this.leftSidePanels[k].childwindow.close();
             }
 
             for (var k = 0; k < this.rightSidePanels.length; k++) {
-                this.rightSidePanels[k].window.close();
+                this.rightSidePanels[k].childwindow.close();
             }
         });
         
@@ -411,7 +411,7 @@ class ReaderModule {
         } else {
             if ($(sidePanel).hasClass("windowed")) {
                 var panelInstance = this.findPanelInstanceById(sidePanelIdentificator);
-                panelInstance.window.focus();
+                panelInstance.childwindow.focus();
             }
             else if ($(sidePanel).hasClass('ui-draggable')) {
                 $(sidePanel).show();
@@ -662,8 +662,9 @@ class SidePanel {
     innerContent: HTMLElement;
     parentReader: ReaderModule;
     windowBody: HTMLDivElement;
-    window: Window;
+    childwindow: Window;
     isDraggable: boolean;
+    documentWindow: Window;
 
     public constructor(identificator: string, headerName: string, parentReader: ReaderModule) {
         this.parentReader = parentReader;
@@ -726,8 +727,8 @@ class SidePanel {
 
         sidePanelDiv.appendChild(panelHeaderDiv);
 
-        this.innerContent = this.makeBody(this);
-        var panelBodyDiv = this.makePanelBody(this.innerContent, this);
+        this.innerContent = this.makeBody(this,window);
+        var panelBodyDiv = this.makePanelBody(this.innerContent, this, window);
 
         $(sidePanelDiv).append(panelBodyDiv);
 
@@ -741,14 +742,14 @@ class SidePanel {
         
     }
 
-    protected  makePanelBody(innerContent, rootReference) : HTMLDivElement {
-        var panelBodyDiv: HTMLDivElement = document.createElement('div');
+    protected  makePanelBody(innerContent, rootReference, window: Window) : HTMLDivElement {
+        var panelBodyDiv: HTMLDivElement = window.document.createElement('div');
         $(panelBodyDiv).addClass('reader-left-panel-body');
         $(panelBodyDiv).append(innerContent);
         return panelBodyDiv;
     }
 
-    protected makeBody(rootReference: SidePanel): HTMLElement {
+    protected makeBody(rootReference: SidePanel, window:Window): HTMLElement {
         throw new Error("Not implemented");
     }
 
@@ -769,26 +770,43 @@ class SidePanel {
         this.parentReader.setRightPanelsLayout();
     }
 
-    makePanelWindow(): HTMLDivElement {
-        return this.makePanelBody($(this.innerContent).clone(true), this);
+    makePanelWindow(documentWindow: Window): HTMLDivElement {
+        return this.makePanelBody($(this.innerContent).clone(true), this, window);
+        //var innerContent = this.makeBody(this, documentWindow);
+        //return this.makePanelBody(innerContent, this, documentWindow);
     }
 
     decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
 
     onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
+
+        //var scripts = document.getElementsByTagName('script');
+        //var links = document.getElementsByTagName('link');
         this.closeButton.click();
         var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
         newWindow.document.open();
+
+        //newWindow.document.write("<head>");
+
+        //for (var i = 0; i < scripts.length; i++) {
+        //    newWindow.document.write(scripts[i].outerHTML);
+        //}
+
+        //for (var i = 0; i < links.length; i++) {
+        //    newWindow.document.write(links[i].outerHTML);
+        //}
+
+        //newWindow.document.write("</head>");
         newWindow.document.close();
 
         $(newWindow).on("beforeunload",(event: Event) => {
             this.onUnloadWindowMode();
         });
 
-        $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
-        $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone(true));
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone(true));
 
-        var panelWindow = this.makePanelWindow();
+        var panelWindow = this.makePanelWindow(newWindow);
 
         $(newWindow.document.getElementsByTagName('body')[0]).append(panelWindow);
         $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
@@ -796,13 +814,13 @@ class SidePanel {
         newWindow.document.title = this.headerName;
         $(document.getElementById(this.identificator)).addClass("windowed");
         this.windowBody = panelWindow;
-        this.window = newWindow;
+        this.childwindow = newWindow;
     }
 
     onUnloadWindowMode() {
         $(document.getElementById(this.identificator)).removeClass("windowed");
         $(this.windowBody).val('');
-        $(this.window).val('');
+        $(this.childwindow).val('');
     }
 
     onPinButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
@@ -855,8 +873,8 @@ class LeftSidePanel extends SidePanel {
         }
     }
 
-    protected makeBody(rootReference: SidePanel): HTMLElement {
-        var movePageButton: HTMLButtonElement = document.createElement('button');
+    protected makeBody(rootReference: SidePanel, window : Window): HTMLElement {
+        var movePageButton: HTMLButtonElement = window.document.createElement('button');
         movePageButton.textContent = "Move to page 15";
         $(movePageButton).click((event: Event) => {
             rootReference.parentReader.moveToPageNumber(15, true);
@@ -872,22 +890,22 @@ class SettingsPanel extends LeftSidePanel {
         super(identificator, "Zobrazení", readerModule);
     }
     
-    protected makeBody(rootReference : SidePanel):HTMLElement {
-        var textButton = document.createElement("button");
+    protected makeBody(rootReference: SidePanel, window: Window):HTMLElement {
+        var textButton = window.document.createElement("button");
         textButton.textContent = "Zobrazit/skrýt text";
         $(textButton).click((event: Event) => {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.textPanelIdentificator, "");
             rootReference.parentReader.setRightPanelsLayout();
         });
 
-        var imagesButton = document.createElement("button");
+        var imagesButton = window.document.createElement("button");
         imagesButton.textContent = "Zobrazit/skrýt obrázky";
         $(imagesButton).click((event: Event) => {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.imagePanelIdentificator, "");
             rootReference.parentReader.setRightPanelsLayout();
         });
 
-        var innerContent: HTMLDivElement = document.createElement("div");
+        var innerContent: HTMLDivElement = window.document.createElement("div");
         innerContent.appendChild(textButton);
         innerContent.appendChild(imagesButton);
         return innerContent;
@@ -937,8 +955,8 @@ class RightSidePanel extends SidePanel {
         this.setRightPanelsLayout(sidePanelDiv);
     }
 
-    protected  makePanelBody(innerContent, rootReference): HTMLDivElement {
-        var panelBodyDiv: HTMLDivElement = document.createElement('div');
+    protected  makePanelBody(innerContent, rootReference, window: Window): HTMLDivElement {
+        var panelBodyDiv: HTMLDivElement = window.document.createElement('div');
         $(panelBodyDiv).addClass('reader-right-panel-body');
         $(panelBodyDiv).append(innerContent);
         return panelBodyDiv;
@@ -951,8 +969,8 @@ class ImagePanel extends RightSidePanel {
         super(identificator, "Obrázky", readerModule);
     }
 
-    protected makeBody(rootReference: SidePanel):HTMLElement {
-        var imageContainerDiv: HTMLDivElement = document.createElement('div');
+    protected makeBody(rootReference: SidePanel, window: Window):HTMLElement {
+        var imageContainerDiv: HTMLDivElement = window.document.createElement('div');
         $(imageContainerDiv).addClass('reader-image-container');
         return imageContainerDiv;
     }
@@ -980,8 +998,8 @@ class TextPanel extends RightSidePanel {
         this.preloadPagesAfter = 10;
     }
 
-    protected makeBody(rootReference : SidePanel): HTMLElement {
-        var textContainerDiv: HTMLDivElement = document.createElement('div');
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var textContainerDiv: HTMLDivElement = window.document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
 
         $(textContainerDiv).scroll(function(event: Event) {
@@ -999,17 +1017,17 @@ class TextPanel extends RightSidePanel {
             rootReference.parentReader.moveToPage($(pageWithMinOffset).data('page-name'), false);
         });
 
-        var textAreaDiv: HTMLDivElement = document.createElement('div');
+        var textAreaDiv: HTMLDivElement = window.document.createElement('div');
         $(textAreaDiv).addClass('reader-text');
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
-            var pageDiv: HTMLDivElement = document.createElement('div');
+            var pageDiv: HTMLDivElement = window.document.createElement('div');
             $(pageDiv).addClass('page');
             $(pageDiv).data('page-name', rootReference.parentReader.pages[i]);
             pageDiv.id = 'page_' + rootReference.parentReader.pages[i];
             textAreaDiv.appendChild(pageDiv);
         }
 
-        var dummyPage: HTMLDivElement = document.createElement('div');
+        var dummyPage: HTMLDivElement = window.document.createElement('div');
         $(dummyPage).addClass('dummy-page');
         textAreaDiv.appendChild(dummyPage);
 
@@ -1039,10 +1057,10 @@ class TextPanel extends RightSidePanel {
             var topOffset = $(pageDiv).offset().top;
             this.scrollTextToPositionFromTop(topOffset);
 
-            if (typeof this.window !== 'undefined') {
-                $(this.window).find(".reader-text-container").scrollTop(0);
-                var pageToScrollOffset = $(this.window).find('#page_' + pageName).offset().top;
-                $(this.window).find(".reader-text-container").scrollTop(pageToScrollOffset);
+            if (typeof this.childwindow !== 'undefined') {
+                $(".reader-text-container", this.childwindow.document).scrollTop(0);
+                var pageToScrollOffset = $('#page_' + pageName, this.childwindow.document).offset().top;
+                $(".reader-text-container", this.childwindow.document).scrollTop(pageToScrollOffset);
             }
         }
     }
@@ -1056,7 +1074,7 @@ class TextPanel extends RightSidePanel {
     onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
         super.onNewWindowButtonClick(sidePanelDiv);
         var pageIndex = this.parentReader.actualPageIndex;
-        $(this.window.document).ready(() => {
+        $(this.childwindow.document).ready(() => {
             this.parentReader.moveToPageNumber(pageIndex, true);
         });
     }
