@@ -88,8 +88,30 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.Xml.Conversion", "ITJakub.Xml.Conversion", "{AF61ADAD-8F76-4A0E-AB27-F8D83392D370}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Ooxml.Conversion", "ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj", "{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AE568406-C88F-4638-B29E-6582EFB31C96} = {AE568406-C88F-4638-B29E-6582EFB31C96}
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1} = {5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}
+		{D68F920D-02E7-43D4-AF48-C2BB70900B11} = {D68F920D-02E7-43D4-AF48-C2BB70900B11}
+		{727CF318-94B5-48AB-93F7-98FB6EF44F61} = {727CF318-94B5-48AB-93F7-98FB6EF44F61}
+		{3179D827-1C9E-4291-8399-9D9A2BAFE374} = {3179D827-1C9E-4291-8399-9D9A2BAFE374}
+		{2890BD2D-9511-4503-BB1A-01B7493EADE0} = {2890BD2D-9511-4503-BB1A-01B7493EADE0}
+		{96838F37-2E15-4785-B117-0DE31494F733} = {96838F37-2E15-4785-B117-0DE31494F733}
+		{C575353D-C1A4-46AC-9546-E62E74270E7E} = {C575353D-C1A4-46AC-9546-E62E74270E7E}
+		{C630F74C-826A-4A2A-B56C-577F214B80E7} = {C630F74C-826A-4A2A-B56C-577F214B80E7}
+		{9339ED5B-312F-4AAF-9DF6-31B6C3169C48} = {9339ED5B-312F-4AAF-9DF6-31B6C3169C48}
+		{F4FC605C-64C5-4E59-B5E6-8F8644BC1C03} = {F4FC605C-64C5-4E59-B5E6-8F8644BC1C03}
+		{B3231E73-5058-4588-B20D-877BABD7384E} = {B3231E73-5058-4588-B20D-877BABD7384E}
+		{A612C779-BE2B-44F2-9C86-BD5324F1F8B6} = {A612C779-BE2B-44F2-9C86-BD5324F1F8B6}
+		{C166D7A5-EE6E-4CB7-9484-FFCFD33B5ADF} = {C166D7A5-EE6E-4CB7-9484-FFCFD33B5ADF}
+		{585C72E8-10A8-4DFA-8A5C-467C5DD4C98C} = {585C72E8-10A8-4DFA-8A5C-467C5DD4C98C}
+		{96D3AEEB-6CBF-4CA8-A8DA-E3FF092DA77D} = {96D3AEEB-6CBF-4CA8-A8DA-E3FF092DA77D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Xml.Tei.Splitting", "ITJakub.Xml.Conversion\Ujc.Ovj.Xml.Tei.Splitting\Ujc.Ovj.Xml.Tei.Splitting.csproj", "{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{457FEF12-BD22-4498-924F-941B31DCCD6B} = {457FEF12-BD22-4498-924F-941B31DCCD6B}
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9} = {2F50F763-2AEF-4647-918A-87B65AF2A6C9}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B4C7DB29-66AC-41BE-AFA5-AFDBA0B249E1}"
 	ProjectSection(SolutionItems) = preProject
@@ -107,12 +129,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.SynchronizedReading", "ITJakub.MobileApps.Client.SynchronizedReading\ITJakub.MobileApps.Client.SynchronizedReading.csproj", "{247F5787-B5F8-4070-9E51-E65681CD6F71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Tools.Xml.XsltTransformation", "ITJakub.Xml.Conversion\Ujc.Ovj.Tools.Xml.XsltTransformation\Ujc.Ovj.Tools.Xml.XsltTransformation.csproj", "{70259678-BEA1-44D4-BD7F-85A60D683B8B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3E64D878-8E98-465B-9FA9-A90D1D3B97B1} = {3E64D878-8E98-465B-9FA9-A90D1D3B97B1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Campari.Software.Reflection", "ITJakub.Xml.Conversion\Campari.Software.Reflection\Campari.Software.Reflection.csproj", "{8A6D0F17-5C0F-41B0-AB0A-425548BF92F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.OOXML.Pomucky", "ITJakub.Xml.Conversion\Daliboris.OOXML.Pomucky\Daliboris.OOXML.Pomucky.csproj", "{114B8733-DECF-4402-BA25-E3DBE265E993}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.OOXML.Word", "ITJakub.Xml.Conversion\Daliboris.OOXML.Word\Daliboris.OOXML.Word.csproj", "{96838F37-2E15-4785-B117-0DE31494F733}"
+	ProjectSection(ProjectDependencies) = postProject
+		{457FEF12-BD22-4498-924F-941B31DCCD6B} = {457FEF12-BD22-4498-924F-941B31DCCD6B}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.OOXML.Word.Transform", "ITJakub.Xml.Conversion\Daliboris.OOXML.Word.Transform\Daliboris.OOXML.Word.Transform.csproj", "{B3231E73-5058-4588-B20D-877BABD7384E}"
 EndProject
@@ -123,6 +151,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Pomucky.Xml", "ITJakub.Xml.Conversion\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj", "{457FEF12-BD22-4498-924F-941B31DCCD6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Pomucky.Xml.XsltTransformation", "ITJakub.Xml.Conversion\Daliboris.Pomucky.Xml.XsltTransformation\Daliboris.Pomucky.Xml.XsltTransformation.csproj", "{727CF318-94B5-48AB-93F7-98FB6EF44F61}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AE568406-C88F-4638-B29E-6582EFB31C96} = {AE568406-C88F-4638-B29E-6582EFB31C96}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Pomucky.Xml.XsltTransformation.Interface", "ITJakub.Xml.Conversion\Daliboris.Pomucky.Xml.XsltTransformation.Interface\Daliboris.Pomucky.Xml.XsltTransformation.Interface.csproj", "{AE568406-C88F-4638-B29E-6582EFB31C96}"
 EndProject
@@ -131,12 +162,21 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Evidence.Rozhrani", "ITJakub.Xml.Conversion\Daliboris.Texty.Evidence.Rozhrani\Daliboris.Texty.Evidence.Rozhrani.csproj", "{A612C779-BE2B-44F2-9C86-BD5324F1F8B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Evidence.SpravaPrepisu", "ITJakub.Xml.Conversion\Daliboris.Texty.Evidence.SpravaPrepisu\Daliboris.Texty.Evidence.SpravaPrepisu.csproj", "{C630F74C-826A-4A2A-B56C-577F214B80E7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{96D3AEEB-6CBF-4CA8-A8DA-E3FF092DA77D} = {96D3AEEB-6CBF-4CA8-A8DA-E3FF092DA77D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Evidence.Uloziste", "ITJakub.Xml.Conversion\Daliboris.Texty.Evidence.Uloziste\Daliboris.Texty.Evidence.Uloziste.csproj", "{96D3AEEB-6CBF-4CA8-A8DA-E3FF092DA77D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4D9D7CA9-3863-4014-8138-4735AF5B5851} = {4D9D7CA9-3863-4014-8138-4735AF5B5851}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.Base", "ITJakub.Xml.Conversion\Daliboris.Texty.Export.Base\Daliboris.Texty.Export.Base.csproj", "{3179D827-1C9E-4291-8399-9D9A2BAFE374}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.EdicniModul", "ITJakub.Xml.Conversion\Daliboris.Texty.Export.EdicniModul\Daliboris.Texty.Export.EdicniModul.csproj", "{C575353D-C1A4-46AC-9546-E62E74270E7E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9339ED5B-312F-4AAF-9DF6-31B6C3169C48} = {9339ED5B-312F-4AAF-9DF6-31B6C3169C48}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.Rozhrani", "ITJakub.Xml.Conversion\Daliboris.Texty.Export.Rozhrani\Daliboris.Texty.Export.Rozhrani.csproj", "{585C72E8-10A8-4DFA-8A5C-467C5DD4C98C}"
 EndProject
