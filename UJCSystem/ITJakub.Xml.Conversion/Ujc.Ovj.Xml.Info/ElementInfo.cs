@@ -4,17 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using System.Xml;
 
-
-namespace Ujc.Ovj.Xml.Tei.Splitting {
- using System;
- using System.Collections.Generic;
- using System.Text;
-
-
-
- /// <summary>
+namespace Ujc.Ovj.Xml.Info {
+	/// <summary>
  /// TODO: Update summary.
  /// </summary>
  [System.Diagnostics.DebuggerDisplay("{Name}, {Attributes.Count} (Depth: {Depth}, Empty: {IsEmpty})")]
@@ -48,7 +43,30 @@ namespace Ujc.Ovj.Xml.Tei.Splitting {
  	{
  		return Clone();
  	}
+
+	public static ElementInfo GetElementInfo(XmlReader reader)
+	{
+		if (reader.NodeType != XmlNodeType.Element)
+			return null;
+
+		ElementInfo element = new ElementInfo(reader.Name);
+		element.IsEmpty = reader.IsEmptyElement;
+		element.Depth = reader.Depth;
+		for (int i = 0; i < reader.AttributeCount; i++)
+		{
+			reader.MoveToAttribute(i);
+			AttributeInfo attribute = new AttributeInfo();
+			attribute.Prefix = reader.Prefix;
+			attribute.LocalName = reader.LocalName;
+			attribute.NamespaceUri = reader.NamespaceURI;
+			attribute.Value = reader.Value;
+
+			element.Attributes.Add(attribute);
+		}
+		return element;
+	}
  }
+
 
 
 }

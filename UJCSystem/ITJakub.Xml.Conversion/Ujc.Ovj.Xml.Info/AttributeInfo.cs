@@ -4,12 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Ujc.Ovj.Xml.Tei.Splitting {
- using System;
- using System.Collections.Generic;
- using System.Text;
-
- /// <summary>
+namespace Ujc.Ovj.Xml.Info {
+	/// <summary>
  /// TODO: Update summary.
  /// </summary>
  public class AttributeInfo {

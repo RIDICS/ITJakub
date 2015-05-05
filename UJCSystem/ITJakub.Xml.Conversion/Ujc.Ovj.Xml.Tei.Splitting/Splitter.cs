@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Daliboris.Pomucky.Xml;
+using Ujc.Ovj.Xml.Info;
 
 namespace Ujc.Ovj.Xml.Tei.Splitting
 {
@@ -111,7 +112,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 						if (!splittingStarted)
 							continue;
 
-						ElementInfo element = GetElementInfo(reader);
+						ElementInfo element = ElementInfo.GetElementInfo(reader); //GetElementInfo(reader);
 						elementQueue.Push(element);
 						WriteElementInfo(element, currentWriter);
 
@@ -212,7 +213,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 								continue;
 							if (reader.Name != "pb")
 							{
-								ElementInfo element = GetElementInfo(reader);
+								ElementInfo element = ElementInfo.GetElementInfo(reader);//GetElementInfo(reader);
 								if (element.Name == "div")
 								{
 									foreach (AttributeInfo attribute in element.Attributes)

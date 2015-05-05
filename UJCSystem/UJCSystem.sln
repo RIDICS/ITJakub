@@ -152,6 +152,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Tools.Xml.XsltTrans
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Pomucky.Soubory.MetaInfo", "ITJakub.Xml.Conversion\Daliboris.Pomucky.Soubory.MetaInfo\Daliboris.Pomucky.Soubory.MetaInfo.csproj", "{4D9D7CA9-3863-4014-8138-4735AF5B5851}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Xml.Tei.Contents", "ITJakub.Xml.Conversion\Ujc.Ovj.Xml.Tei.Contents\Ujc.Ovj.Xml.Tei.Contents.csproj", "{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Xml.Info", "ITJakub.Xml.Conversion\Ujc.Ovj.Xml.Info\Ujc.Ovj.Xml.Info.csproj", "{2F50F763-2AEF-4647-918A-87B65AF2A6C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2175,6 +2179,62 @@ Global
 		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.TranskriptorVBA|Mixed Platforms.Build.0 = Release|Any CPU
 		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.TranskriptorVBA|x64.ActiveCfg = Release|Any CPU
 		{4D9D7CA9-3863-4014-8138-4735AF5B5851}.TranskriptorVBA|x86.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.JenTest|Any CPU.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.JenTest|Any CPU.Build.0 = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.JenTest|ARM.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.JenTest|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.JenTest|Mixed Platforms.Build.0 = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.JenTest|x64.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.JenTest|x86.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Release|x64.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.Release|x86.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.TranskriptorVBA|Any CPU.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.TranskriptorVBA|Any CPU.Build.0 = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.TranskriptorVBA|ARM.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.TranskriptorVBA|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.TranskriptorVBA|Mixed Platforms.Build.0 = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.TranskriptorVBA|x64.ActiveCfg = Release|Any CPU
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}.TranskriptorVBA|x86.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.JenTest|Any CPU.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.JenTest|Any CPU.Build.0 = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.JenTest|ARM.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.JenTest|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.JenTest|Mixed Platforms.Build.0 = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.JenTest|x64.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.JenTest|x86.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Release|ARM.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Release|x64.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.Release|x86.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.TranskriptorVBA|Any CPU.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.TranskriptorVBA|Any CPU.Build.0 = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.TranskriptorVBA|ARM.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.TranskriptorVBA|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.TranskriptorVBA|Mixed Platforms.Build.0 = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.TranskriptorVBA|x64.ActiveCfg = Release|Any CPU
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9}.TranskriptorVBA|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2237,6 +2297,8 @@ Global
 		{9D72312D-BC81-4864-83FB-6C650B06B8BA} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 		{3E64D878-8E98-465B-9FA9-A90D1D3B97B1} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 		{4D9D7CA9-3863-4014-8138-4735AF5B5851} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
+		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
+		{2F50F763-2AEF-4647-918A-87B65AF2A6C9} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi

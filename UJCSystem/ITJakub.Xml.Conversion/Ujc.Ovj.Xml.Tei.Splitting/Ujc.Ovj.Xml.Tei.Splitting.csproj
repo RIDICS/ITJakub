@@ -79,16 +79,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributeInfo.cs" />
-    <Compile Include="ElementInfo.cs" />
-    <Compile Include="ElementInfos.cs" />
     <Compile Include="OutputManager.cs" />
     <Compile Include="PageBreakSplitInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Splitter.cs" />
     <Compile Include="SplittingResult.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Ujc.Ovj.Xml.Info\Ujc.Ovj.Xml.Info.csproj">
+      <Project>{2f50f763-2aef-4647-918a-87b65af2a6c9}</Project>
+      <Name>Ujc.Ovj.Xml.Info</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\Daliboris.Pomucky.Xml.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

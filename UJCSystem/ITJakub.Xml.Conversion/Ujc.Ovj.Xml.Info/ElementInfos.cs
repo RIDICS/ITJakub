@@ -4,12 +4,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Ujc.Ovj.Xml.Tei.Splitting {
- using System;
- using System.Collections.Generic;
- using System.Text;
+using System;
+using System.Collections.Generic;
 
- /// <summary>
+namespace Ujc.Ovj.Xml.Info {
+	/// <summary>
  /// TODO: Update summary.
  /// </summary>
  public class ElementInfos : Stack<ElementInfo>, ICloneable

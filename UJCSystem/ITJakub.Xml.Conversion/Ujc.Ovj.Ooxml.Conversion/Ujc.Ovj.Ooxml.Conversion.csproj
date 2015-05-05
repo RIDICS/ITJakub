@@ -631,6 +631,10 @@
       <Project>{d68f920d-02e7-43d4-af48-c2bb70900b11}</Project>
       <Name>Daliboris.Transkriptor.Rozhrani</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Xml.Tei.Contents\Ujc.Ovj.Xml.Tei.Contents.csproj">
+      <Project>{5f08050c-c6dd-4acc-b472-a7c7cd1f2bb1}</Project>
+      <Name>Ujc.Ovj.Xml.Tei.Contents</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ujc.Ovj.Xml.Tei.Splitting\Ujc.Ovj.Xml.Tei.Splitting.csproj">
       <Project>{e3bebcd1-4b5e-4d35-981c-256f2a03cc7a}</Project>
       <Name>Ujc.Ovj.Xml.Tei.Splitting</Name>

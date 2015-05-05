@@ -15,6 +15,7 @@ using Daliboris.Texty.Export;
 using Daliboris.Texty.Export.Rozhrani;
 using Daliboris.Transkripce.Objekty;
 using JetBrains.Annotations;
+using Ujc.Ovj.Xml.Tei.Contents;
 using Ujc.Ovj.Xml.Tei.Splitting;
 using Prepis = Daliboris.Texty.Evidence.Prepis;
 using Prepisy = Daliboris.Texty.Evidence.Prepisy;
@@ -227,14 +228,16 @@ namespace Ujc.Ovj.Ooxml.Conversion
 					Directory.CreateDirectory(tempDirectory);
 				settings.TempDirectoryPath = tempDirectory;
 			}
-
-
-
 		}
 
 		private void GenerateConversionMetadataFile(SplittingResult splittingResult,
 			string documentType,
 			string finalOutputFileName)
+		{
+			GenerateConversionMetadataFile(splittingResult, default(TableOfContentResult), documentType, finalOutputFileName);
+		}
+
+		private void GenerateConversionMetadataFile(SplittingResult splittingResult, TableOfContentResult tableOfContentResult, string documentType, string finalOutputFileName)
 		{
 			XNamespace nsTei = "http://www.tei-c.org/ns/1.0";
 			XNamespace nsXml = "http://www.w3.org/XML/1998/namespace";
@@ -260,7 +263,13 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			XElement header = teiDocument.Descendants(nsTei + "teiHeader").FirstOrDefault();
 			metada.Root.Add(header);
 
-			XElement toc = new XElement(nsItj + "tableOfContents");
+			XElement toc = new XElement(nsItj + "tableOfContents",
+				from section in tableOfContentResult.Sections 
+				select new XElement(nsItj + "div",
+					new XElement("head", new XAttribute("text", section.Head)))
+				);
+			
+			
 			metada.Root.Add(toc);
 
 			XElement pages = new XElement(nsItj + "pages",
