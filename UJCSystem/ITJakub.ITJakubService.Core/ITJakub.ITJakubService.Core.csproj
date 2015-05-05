@@ -55,6 +55,7 @@
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="Resources\FileProcessingServiceClient.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
+    <Compile Include="CardFileManager.cs" />
     <Compile Include="SearchManager.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="AuthorManager.cs" />
@@ -66,6 +67,10 @@
     <EmbeddedResource Include="ITJakub.ITJakubService.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.CardFile.Core\ITJakub.CardFile.Core.csproj">
+      <Project>{F00801BF-D6B2-4F6C-B808-68BABF177055}</Project>
+      <Name>ITJakub.CardFile.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
       <Project>{92E907E3-ACE0-4FC6-8919-040031E5192E}</Project>
       <Name>ITJakub.Core</Name>

@@ -268,5 +268,32 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public IEnumerable<CardFileContract> GetCardFiles()
+        {
+            try
+            {
+                return Channel.GetCardFiles();
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetCardFiles failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetCardFiles failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetCardFiles timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

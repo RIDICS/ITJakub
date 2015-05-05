@@ -44,5 +44,12 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
+
+        #region CardFile methods
+
+        [OperationContract]
+        IEnumerable<CardFileContract> GetCardFiles();
+
+        #endregion
     }
 }

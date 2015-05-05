@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Castle.Windsor;
@@ -17,6 +18,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly AuthorManager m_authorManager;
         private readonly ResourceManager m_resourceManager;
         private readonly SearchManager m_searchManager;
+        private readonly CardFileManager m_cardFileManager;
         private readonly WindsorContainer m_container = Container.Current;
 
         public ItJakubServiceManager()
@@ -26,6 +28,7 @@ namespace ITJakub.ITJakubService.Services
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
+            m_cardFileManager = m_container.Resolve<CardFileManager>();
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -87,6 +90,14 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_bookManager.GetBookPageImage(bookPageImageContract);
         }
+
+        #region CardFile methods
+        public IEnumerable<CardFileContract> GetCardFiles()
+        {
+            return m_cardFileManager.GetCardFiles();
+        }
+
+        #endregion
 
     }
 }

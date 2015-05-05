@@ -42,5 +42,11 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
         {
             return View();
         }
+
+        public ActionResult CardFiles()
+        {
+            var cardFiles = m_serviceClient.GetCardFiles();
+            return Json(new {cardFiles}, JsonRequestBehavior.AllowGet);
+        }
     }
 }
