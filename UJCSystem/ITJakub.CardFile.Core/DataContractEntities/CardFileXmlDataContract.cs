@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 using System.Xml.Serialization;
+using System.Xml.XPath;
 
 namespace ITJakub.CardFile.Core.DataContractEntities
 { // 
@@ -54,7 +55,7 @@ namespace ITJakub.CardFile.Core.DataContractEntities
     
         private field[] fieldsField;
     
-        private buckets[] bucketsField; //TODO change according to new API (shoul be int of buckets count only)
+        private int bucketsField;
     
         private string idField;
     
@@ -77,6 +78,19 @@ namespace ITJakub.CardFile.Core.DataContractEntities
                 this.descriptionField = value;
             }
         }
+
+        /// <remarks/>
+        public int buckets
+        {
+            get
+            {
+                return this.bucketsField;
+            }
+            set
+            {
+                this.bucketsField = value;
+            }
+        }
     
         /// <remarks/>
         [XmlArrayItem("field", IsNullable=false)]
@@ -89,16 +103,7 @@ namespace ITJakub.CardFile.Core.DataContractEntities
             }
         }
     
-        /// <remarks/>
-        [XmlElement("buckets")]
-        public buckets[] buckets {
-            get {
-                return this.bucketsField;
-            }
-            set {
-                this.bucketsField = value;
-            }
-        }
+
     
         /// <remarks/>
         [XmlAttribute(DataType="integer")]
@@ -218,8 +223,7 @@ namespace ITJakub.CardFile.Core.DataContractEntities
     public partial class buckets {
     
         private bucket[] bucketField;
-    
-        private string countField;
+
     
         /// <remarks/>
         [XmlElement("bucket")]
@@ -230,18 +234,7 @@ namespace ITJakub.CardFile.Core.DataContractEntities
             set {
                 this.bucketField = value;
             }
-        }
-    
-        /// <remarks/>
-        [XmlAttribute(DataType="integer")]
-        public string count {
-            get {
-                return this.countField;
-            }
-            set {
-                this.countField = value;
-            }
-        }
+        }   
     }
 
     /// <remarks/>
@@ -302,7 +295,7 @@ namespace ITJakub.CardFile.Core.DataContractEntities
     
         private card[] cardField;
     
-        private string countField;
+        private int countField;
     
         /// <remarks/>
         [XmlElement("card")]
@@ -316,8 +309,8 @@ namespace ITJakub.CardFile.Core.DataContractEntities
         }
     
         /// <remarks/>
-        [XmlAttribute(DataType="integer")]
-        public string count {
+        [XmlAttribute("count")]
+        public int count {
             get {
                 return this.countField;
             }
@@ -336,7 +329,7 @@ namespace ITJakub.CardFile.Core.DataContractEntities
     [XmlRoot(Namespace="", IsNullable=false)]
     public partial class card {
     
-        private string positionField;
+        private int positionField;
     
         private image[] imageField;
     
@@ -349,8 +342,8 @@ namespace ITJakub.CardFile.Core.DataContractEntities
         private string idField;
     
         /// <remarks/>
-        [XmlElement(DataType="integer")]
-        public string position {
+        [XmlElement("position")]
+        public int position {
             get {
                 return this.positionField;
             }

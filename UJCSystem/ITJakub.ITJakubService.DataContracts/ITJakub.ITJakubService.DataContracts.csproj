@@ -45,6 +45,7 @@
     <Compile Include="AuthProviderEnumContract.cs" />
     <Compile Include="BookInfoContract.cs" />
     <Compile Include="BookPageImageContract.cs" />
+    <Compile Include="CardContract.cs" />
     <Compile Include="BucketContract.cs" />
     <Compile Include="CardFileContract.cs" />
     <Compile Include="IItJakubServiceUnauthorized.cs" />

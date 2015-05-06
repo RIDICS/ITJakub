@@ -20,5 +20,17 @@ namespace ITJakub.ITJakubService.Core
             var cardFiles = m_cardFileClient.GetFiles();
             return Mapper.Map<file[], IList<CardFileContract>>(cardFiles.file);
         }
+
+        public IList<BucketContract> GetBuckets(string cardFileId)
+        {
+            var buckets = m_cardFileClient.GetBuckets(cardFileId);
+            return Mapper.Map<bucket[], IList<BucketContract>>(buckets.bucket);
+        }
+
+        public IList<BucketContract> GetBucketsByHeadword(string cardFileId, string headword)
+        {
+            var buckets = m_cardFileClient.GetBucketsByHeadword(cardFileId, headword);
+            return Mapper.Map<bucket[], IList<BucketContract>>(buckets.bucket);
+        }
     }
 }

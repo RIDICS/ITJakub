@@ -48,9 +48,14 @@ namespace ITJakub.CardFile.Core
             return m_serviceClient.GetFiles();
         }
 
-        public buckets GetBuckets(string fileId, string keyword)
+        public buckets GetBuckets(string fileId)
         {
-            return m_serviceClient.GetBuckets(fileId, keyword);
+            return m_serviceClient.GetBuckets(fileId);
+        }
+
+        public buckets GetBucketsByHeadword(string fileId, string headword)
+        {
+            return m_serviceClient.GetBucketsByHeadword(fileId, headword);
         }
 
         public buckets GetCardsFromBucket(string fileId, string bucketId)

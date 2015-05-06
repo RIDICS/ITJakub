@@ -96,6 +96,15 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_cardFileManager.GetCardFiles();
         }
+        
+        public IEnumerable<BucketContract> GetBuckets(string cardFileId)
+        {
+            return m_cardFileManager.GetBuckets(cardFileId);
+        }        
+        public IEnumerable<BucketContract> GetBucketsWithHeadword(string cardFileId, string headword)
+        {
+            return m_cardFileManager.GetBucketsByHeadword(cardFileId, headword);
+        }
 
         #endregion
 

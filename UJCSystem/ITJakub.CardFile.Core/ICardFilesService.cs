@@ -14,8 +14,12 @@ namespace ITJakub.CardFile.Core
         files GetFiles();
 
         [OperationContract]
-        [WebInvoke(UriTemplate = "/files/{fileId}/buckets?heslo={heslo}", Method = "GET", ResponseFormat = WebMessageFormat.Xml)]
-        buckets GetBuckets(string fileId, string heslo);
+        [WebInvoke(UriTemplate = "/files/{fileId}/buckets?heslo={headword}", Method = "GET", ResponseFormat = WebMessageFormat.Xml)]
+        buckets GetBucketsByHeadword(string fileId, string headword);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "/files/{fileId}/buckets", Method = "GET", ResponseFormat = WebMessageFormat.Xml)]
+        buckets GetBuckets(string fileId);
 
 
         [OperationContract]
@@ -40,9 +44,13 @@ namespace ITJakub.CardFile.Core
             return Channel.GetFiles();
         }
 
-        public buckets GetBuckets(string fileId, string heslo)
+        public buckets GetBucketsByHeadword(string fileId, string headword)
         {
-            return Channel.GetBuckets(fileId, heslo);
+            return Channel.GetBucketsByHeadword(fileId, headword);
+        }
+        public buckets GetBuckets(string fileId)
+        {
+            return Channel.GetBuckets(fileId);
         }
 
         public buckets GetCardsFromBucket(string fileId, string bucketId)

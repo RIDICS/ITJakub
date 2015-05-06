@@ -295,5 +295,58 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+        
+        public IEnumerable<BucketContract> GetBuckets(string cardFileId)
+        {
+            try
+            {
+                return Channel.GetBuckets(cardFileId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBuckets failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBuckets failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBuckets timeouted with: {0}", ex);
+                throw;
+            }
+        }        
+        public IEnumerable<BucketContract> GetBucketsWithHeadword(string cardFileId, string headword)
+        {
+            try
+            {
+                return Channel.GetBucketsWithHeadword(cardFileId, headword);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBucketsWithHeadword failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBucketsWithHeadword failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBucketsWithHeadword timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }
