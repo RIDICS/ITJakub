@@ -402,5 +402,31 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, string imageSize)
+        {
+            try
+            {
+                return Channel.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetImage failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetImage failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetImage timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

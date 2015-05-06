@@ -116,6 +116,11 @@ namespace ITJakub.ITJakubService.Services
             return m_cardFileManager.GetCard(cardFileId, bucketId, cardId);
         }
 
+        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, string imageSize)
+        {
+            return m_cardFileManager.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
+        }
+
         #endregion
 
     }

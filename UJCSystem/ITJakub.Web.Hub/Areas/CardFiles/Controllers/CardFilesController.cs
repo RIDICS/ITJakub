@@ -66,6 +66,12 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
         {
             var card = m_serviceClient.GetCard(cardFileId, bucketId, cardId);
             return Json(new {card}, JsonRequestBehavior.AllowGet);
+        }    
+    
+        public FileResult Image(string cardFileId, string bucketId, string cardId, string imageId, string imageSize)
+        {
+            var imageDataStream = m_serviceClient.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
+            return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
         }
     }
 }

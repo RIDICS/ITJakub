@@ -68,13 +68,9 @@ namespace ITJakub.CardFile.Core
             return m_serviceClient.GetCardFromBucket(fileId, bucketId, cardId);
         }
 
-        public Image GetImageForCard(string fileId, string bucketId, string cardId, string imageId, string imageSize)
+        public Stream GetImageForCard(string fileId, string bucketId, string cardId, string imageId, string imageSize)
         {
-            Stream imageStream = m_serviceClient.GetImageForCard(fileId, bucketId, cardId, imageId, imageSize);
-            MemoryStream memImageStream = new MemoryStream();
-            imageStream.CopyTo(memImageStream);
-
-            return Image.FromStream(memImageStream);
+            return m_serviceClient.GetImageForCard(fileId, bucketId, cardId, imageId, imageSize);
         }
 
         public void Dispose()

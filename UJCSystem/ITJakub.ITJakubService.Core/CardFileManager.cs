@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using ITJakub.CardFile.Core;
@@ -46,6 +47,11 @@ namespace ITJakub.ITJakubService.Core
         {
             var card = m_cardFileClient.GetCardFromBucket(cardFileId, bucketId,cardId);
             return Mapper.Map<card, CardContract>(card); ;
+        }
+
+        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, string imageSize)
+        {
+            return m_cardFileClient.GetImageForCard(cardFileId, bucketId, cardId, imageId, imageSize);
         }
     }
 }
