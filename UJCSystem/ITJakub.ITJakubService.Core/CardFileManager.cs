@@ -15,10 +15,10 @@ namespace ITJakub.ITJakubService.Core
             m_cardFileClient = new CardFilesCommunicationManager(); //TODO load from container
         }
 
-        public IEnumerable<CardFileContract> GetCardFiles()
+        public IList<CardFileContract> GetCardFiles()
         {
             var cardFiles = m_cardFileClient.GetFiles();
-            return Mapper.Map<file[], IEnumerable<CardFileContract>>(cardFiles.file); //TODO make automapper profile
+            return Mapper.Map<file[], IList<CardFileContract>>(cardFiles.file);
         }
     }
 }

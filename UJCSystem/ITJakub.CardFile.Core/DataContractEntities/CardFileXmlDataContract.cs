@@ -54,7 +54,7 @@ namespace ITJakub.CardFile.Core.DataContractEntities
     
         private field[] fieldsField;
     
-        private buckets[] bucketsField;
+        private buckets[] bucketsField; //TODO change according to new API (shoul be int of buckets count only)
     
         private string idField;
     

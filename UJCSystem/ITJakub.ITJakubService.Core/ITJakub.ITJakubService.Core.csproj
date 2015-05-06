@@ -51,6 +51,7 @@
     <Compile Include="AutoMapperProfiles\ManuscriptProfile.cs" />
     <Compile Include="AutoMapperProfiles\PublisherProfile.cs" />
     <Compile Include="AutoMapperProfiles\EditorProfile.cs" />
+    <Compile Include="AutoMapperProfiles\CardFileContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\SearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="Resources\FileProcessingServiceClient.cs" />
