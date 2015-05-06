@@ -234,7 +234,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			string documentType,
 			string finalOutputFileName)
 		{
-			GenerateConversionMetadataFile(splittingResult, default(TableOfContentResult), documentType, finalOutputFileName);
+			GenerateConversionMetadataFile(splittingResult, new TableOfContentResult(), documentType, finalOutputFileName);
 		}
 
 		private void GenerateConversionMetadataFile(SplittingResult splittingResult, TableOfContentResult tableOfContentResult, string documentType, string finalOutputFileName)
