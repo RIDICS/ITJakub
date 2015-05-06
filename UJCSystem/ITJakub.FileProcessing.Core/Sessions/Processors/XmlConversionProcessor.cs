@@ -79,7 +79,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 					}
 					else
 					{
-						throw new FileNotFoundException()
+						throw new Exception(conversionResult.Errors);
 					}
         }
     }
