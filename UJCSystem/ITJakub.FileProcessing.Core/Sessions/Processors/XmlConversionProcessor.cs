@@ -79,11 +79,22 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 					}
 					else
 					{
-						throw new Exception(conversionResult.Errors);
+						throw new ConversionException("Soubor se nepodařilo konvertovat. Viz vnitřní výjimka.", conversionResult.Errors[0]);
 					}
         }
     }
 
+	public class ConversionException : Exception
+	{
+
+		public ConversionException(string message) : base(message)
+		{
+		}
+
+		public ConversionException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+	}
     public class VersionProviderHelper
     {
         private readonly string m_message;

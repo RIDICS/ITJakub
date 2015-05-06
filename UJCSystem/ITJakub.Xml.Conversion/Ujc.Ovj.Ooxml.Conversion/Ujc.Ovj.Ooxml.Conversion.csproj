@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConversionResult.cs" />
+    <Compile Include="CoversionExceptions.cs" />
     <Compile Include="DocxToTeiConverter.cs" />
     <Compile Include="DocxToTeiConverterSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

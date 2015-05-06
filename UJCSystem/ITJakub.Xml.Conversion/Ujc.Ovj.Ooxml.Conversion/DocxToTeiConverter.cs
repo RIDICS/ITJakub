@@ -95,7 +95,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			{
 				//dokument v evidenci neexistuje, nabídnout zanesení dokumentu do evidence
 				// mělo by stačit přiřazení typu dokumentu
-				_result.Errors = "Dokument s uvedeným jménem souboru neexistuje v evidenci.";
+				_result.Errors.Add(new DocumentNotInEvidenceException("Dokument s uvedeným jménem souboru neexistuje v evidenci."));
 				return _result;
 			}
 
@@ -107,7 +107,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			if (documentType == null)
 			{
 				//dokument má v evidenci přiřazen typ dokumentu, který není podporován
-				_result.Errors = "Dokument má v evidenci přiřazen typ dokumentu, který není podporován.";
+				_result.Errors.Add(new NotSupportedFileFormatException("Dokument má v evidenci přiřazen typ dokumentu, který není podporován."));
 				return _result;
 			}
 
@@ -137,7 +137,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			}
 			catch (Exception exception)
 			{
-				_result.Errors = exception.Message;
+				_result.Errors.Add(exception);
 				return _result;
 			}
 
@@ -160,7 +160,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			}
 			catch (Exception exception)
 			{
-				_result.Errors = exception.Message;
+				_result.Errors.Add(exception);
 				return _result;
 			}
 
@@ -186,7 +186,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				if (!splittingResult.IsSplitted)
 				{
 					_result.IsConverted = false;
-					_result.Errors = "Vyskytla se chyba při rozdělení souboru podle hranice stran.\r\n" + _result.Errors;
+					_result.Errors.Add(new DocumentSplittingException("Vyskytla se chyba při rozdělení souboru podle hranice stran."));
 				}
 
 			}
