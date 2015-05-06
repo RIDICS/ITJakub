@@ -46,6 +46,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 			FileInfo xmlFileInfo = new FileInfo(XmlFile);
 
 			string elementName = null;
+			string lastPageBreak = null;
 
 			using (XmlReader reader = XmlReader.Create(XmlFile))
 			{
@@ -64,7 +65,10 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 							}
 						if (!splittingStarted)
 							continue;
-
+						if (elementName == "pb")
+						{
+							lastPageBreak = reader.GetAttribute("n");
+						}
 					}
 				}
 
