@@ -70,11 +70,17 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             };
 
             var converter = new DocxToTeiConverter();
-            converter.Convert(settings);
+						ConversionResult conversionResult = converter.Convert(settings);
 
-
+					if(conversionResult.IsConverted)
+					{ 
             resourceSessionDirector.Resources.Add(metaDataResource);
             resourceSessionDirector.Resources.Add(bookResource);
+					}
+					else
+					{
+						throw new FileNotFoundException()
+					}
         }
     }
 
