@@ -56,5 +56,16 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
                 : m_serviceClient.GetBucketsWithHeadword(cardFileId, headword);
             return Json(new {buckets}, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult Cards(string cardFileId, string bucketId)
+        {
+            var cards = m_serviceClient.GetCards(cardFileId, bucketId);
+            return Json(new {cards}, JsonRequestBehavior.AllowGet);
+        }
+        
+        public ActionResult Card(string cardFileId, string bucketId, string cardId)
+        {
+            var card = m_serviceClient.GetCard(cardFileId, bucketId, cardId);
+            return Json(new {card}, JsonRequestBehavior.AllowGet);
+        }
     }
 }

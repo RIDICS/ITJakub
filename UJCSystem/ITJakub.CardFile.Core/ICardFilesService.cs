@@ -21,7 +21,6 @@ namespace ITJakub.CardFile.Core
         [WebInvoke(UriTemplate = "/files/{fileId}/buckets", Method = "GET", ResponseFormat = WebMessageFormat.Xml)]
         buckets GetBuckets(string fileId);
 
-
         [OperationContract]
         [WebInvoke(UriTemplate = "/files/{fileId}/buckets/{bucketId}", Method = "GET", ResponseFormat = WebMessageFormat.Xml)]
         buckets GetCardsFromBucket(string fileId, string bucketId);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using ITJakub.CardFile.Core;
 using ITJakub.CardFile.Core.DataContractEntities;
@@ -31,6 +32,20 @@ namespace ITJakub.ITJakubService.Core
         {
             var buckets = m_cardFileClient.GetBucketsByHeadword(cardFileId, headword);
             return Mapper.Map<bucket[], IList<BucketContract>>(buckets.bucket);
+        }
+
+        public IList<CardContract> GetCards(string cardFileId, string bucketId)
+        {
+            var buckets = m_cardFileClient.GetCardsFromBucket(cardFileId, bucketId);
+            var bucketContracts = Mapper.Map<bucket[], IList<BucketContract>>(buckets.bucket);
+            var cards = bucketContracts.First().Cards;
+            return cards;
+        }
+
+        public CardContract GetCard(string cardFileId, string bucketId, string cardId)
+        {
+            var card = m_cardFileClient.GetCardFromBucket(cardFileId, bucketId,cardId);
+            return Mapper.Map<card, CardContract>(card); ;
         }
     }
 }

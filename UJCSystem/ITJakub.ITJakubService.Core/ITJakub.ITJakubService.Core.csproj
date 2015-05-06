@@ -47,6 +47,7 @@
     <Compile Include="AutoMapperProfiles\BookPageProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookTypeEnumProfile.cs" />
+    <Compile Include="AutoMapperProfiles\ImageContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\CardContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\BucketContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\CategoryProfile.cs" />
