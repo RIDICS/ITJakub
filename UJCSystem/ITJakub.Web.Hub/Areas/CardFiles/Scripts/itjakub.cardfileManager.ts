@@ -56,6 +56,7 @@ class CardFileViewer {
             this.actualCardPosition = newActualCardPosition;
             this.actualBucket.getCard(this.actualCardPosition).loadCardDetail((card: CardDetail) => this.displayCardDetail(card));
             this.displayHeadword(this.actualBucket.getCard(this.actualCardPosition).getHeadword());
+            this.displayCardPosition(this.actualCardPosition);
         }
     }
 
@@ -67,6 +68,11 @@ class CardFileViewer {
 
     private changeActualCardPosition(positionChange: number) {
         this.changeViewedCard(this.actualCardPosition + positionChange);
+    }
+
+    private displayCardPosition(position: number) {
+        //$(this.htmlBody).find(".card-position-text").html(position.toString());
+        $(this.htmlBody).find(".card-position-text").find("a").html(position.toString());
     }
 
     private displayHeadword(headword: string) {
@@ -165,6 +171,8 @@ class CardFileViewer {
         $(cardFilePageControlsDiv).addClass("cardfile-paging-controls");
 
         this.makeSlider(cardFilePageControlsDiv);
+
+        this.makeNavButtons(cardFilePageControlsDiv);
         
         cardFileRightPanelDiv.appendChild(cardFilePageControlsDiv);
 
@@ -208,6 +216,105 @@ class CardFileViewer {
         cardFileRightPanelDiv.appendChild(cardFileNoteDiv);
 
         cardFileDiv.appendChild(cardFileRightPanelDiv);
+    }
+
+    private makeNavButtons(pageControlsDiv: HTMLDivElement) {
+        var paginationUl: HTMLUListElement = document.createElement('ul');
+        $(paginationUl).addClass('pagination pagination-sm');
+
+        var liElement: HTMLLIElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-left');
+        var anchor: HTMLAnchorElement = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '|<';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.changeViewedCard(0);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-left');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '<<';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.changeActualCardPosition(- 10);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-left');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '<';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.changeActualCardPosition(- 1);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+
+        liElement = document.createElement('li'); //TODO remove anchor and add styles to make it in the middle
+        $(liElement).addClass("page-navigation card-position-text");
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = "";
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+     
+
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.changeActualCardPosition(+1);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>>';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.changeActualCardPosition(+10);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>|';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.changeViewedCard(this.actualBucket.getCardsCount() - 1);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+
+        pageControlsDiv.appendChild(paginationUl);
     }
 
     private makeSlider(pageControlsDiv: HTMLDivElement) {

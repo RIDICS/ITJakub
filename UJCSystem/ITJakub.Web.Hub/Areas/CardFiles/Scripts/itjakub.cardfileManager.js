@@ -38,6 +38,7 @@ var CardFileViewer = (function () {
             this.actualCardPosition = newActualCardPosition;
             this.actualBucket.getCard(this.actualCardPosition).loadCardDetail(function (card) { return _this.displayCardDetail(card); });
             this.displayHeadword(this.actualBucket.getCard(this.actualCardPosition).getHeadword());
+            this.displayCardPosition(this.actualCardPosition);
         }
     };
     CardFileViewer.prototype.displayCardDetail = function (card) {
@@ -47,6 +48,10 @@ var CardFileViewer = (function () {
     };
     CardFileViewer.prototype.changeActualCardPosition = function (positionChange) {
         this.changeViewedCard(this.actualCardPosition + positionChange);
+    };
+    CardFileViewer.prototype.displayCardPosition = function (position) {
+        //$(this.htmlBody).find(".card-position-text").html(position.toString());
+        $(this.htmlBody).find(".card-position-text").find("a").html(position.toString());
     };
     CardFileViewer.prototype.displayHeadword = function (headword) {
         $(this.htmlBody).find(".headword-name").html(headword);
@@ -118,6 +123,7 @@ var CardFileViewer = (function () {
         var cardFilePageControlsDiv = document.createElement("div");
         $(cardFilePageControlsDiv).addClass("cardfile-paging-controls");
         this.makeSlider(cardFilePageControlsDiv);
+        this.makeNavButtons(cardFilePageControlsDiv);
         cardFileRightPanelDiv.appendChild(cardFilePageControlsDiv);
         var cardFilePagesDiv = document.createElement("div");
         $(cardFilePagesDiv).addClass("cardfile-pages");
@@ -148,6 +154,95 @@ var CardFileViewer = (function () {
         cardFileNoteDiv.appendChild(cardFileNoteSpan);
         cardFileRightPanelDiv.appendChild(cardFileNoteDiv);
         cardFileDiv.appendChild(cardFileRightPanelDiv);
+    };
+    CardFileViewer.prototype.makeNavButtons = function (pageControlsDiv) {
+        var _this = this;
+        var paginationUl = document.createElement('ul');
+        $(paginationUl).addClass('pagination pagination-sm');
+        var liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-left');
+        var anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '|<';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.changeViewedCard(0);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-left');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '<<';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.changeActualCardPosition(-10);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-left');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '<';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.changeActualCardPosition(-1);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+        liElement = document.createElement('li'); //TODO remove anchor and add styles to make it in the middle
+        $(liElement).addClass("page-navigation card-position-text");
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = "";
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.changeActualCardPosition(+1);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>>';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.changeActualCardPosition(+10);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>|';
+        $(anchor).click(function (event) {
+            event.stopPropagation();
+            _this.changeViewedCard(_this.actualBucket.getCardsCount() - 1);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        paginationUl.appendChild(liElement);
+        pageControlsDiv.appendChild(paginationUl);
     };
     CardFileViewer.prototype.makeSlider = function (pageControlsDiv) {
         var _this = this;
