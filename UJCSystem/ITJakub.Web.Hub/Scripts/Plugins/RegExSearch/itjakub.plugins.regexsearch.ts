@@ -1,8 +1,154 @@
-﻿class RegExEditor {
-    container: HTMLDivElement;
-    searchBox: HTMLElement;
+﻿class RegExSearchBase {
+    protected createOption(label: string, value: string): HTMLOptionElement {
+        var conditionOption = document.createElement("option");
+        conditionOption.innerHTML = label;
+        conditionOption.value = value;
 
-    constructor(container: HTMLDivElement, searchBox: HTMLElement) {
+        return conditionOption;
+    }
+
+    protected createButton(label: string): HTMLButtonElement {
+        var button: HTMLButtonElement = document.createElement("button");
+        button.type = "button";
+        button.innerHTML = label;
+        $(button).addClass("btn");
+        $(button).addClass("btn-default");
+        $(button).addClass("regexsearch-button");
+
+        return button;
+    }
+} 
+
+class RegExSearch extends RegExSearchBase {
+    container: HTMLDivElement;
+    innerContainer: HTMLDivElement;
+    regExConditions: Array<RegExConditionsArrayItem>;
+
+    constructor(container: HTMLDivElement) {
+        super();
+        this.container = container;
+    }
+
+    public makeRegExSearch() {
+        $(this.container).empty();
+        this.regExConditions = [];
+
+        var commandsDiv: HTMLDivElement = document.createElement("div");
+
+        var addConditionsButton: HTMLButtonElement = this.createButton("Přidat podmínku");
+        commandsDiv.appendChild(addConditionsButton);
+        $(addConditionsButton).click(() => {
+            this.addNewConditions();
+        });
+
+        var removeConditionsButton: HTMLButtonElement = this.createButton("Odebrat podmínku");
+        commandsDiv.appendChild(removeConditionsButton);
+
+
+        var firstInnerDiv: HTMLDivElement = document.createElement("div");
+
+        var newRegExConditions = new RegExConditions(firstInnerDiv);
+        newRegExConditions.makeRegExCondition();
+
+        var arrayItem = new RegExConditionsArrayItem(firstInnerDiv, newRegExConditions);
+        this.regExConditions.push(arrayItem);
+
+
+        $(this.container).append(commandsDiv);
+        $(this.container).append(firstInnerDiv);
+    }
+
+    private addNewConditions() {
+        var mainDiv = document.createElement("div");
+
+        var andInfoDiv = document.createElement("div");
+        andInfoDiv.innerHTML = "A zároveň";
+        mainDiv.appendChild(andInfoDiv);
+
+        var conditionsDiv = document.createElement("div");
+        mainDiv.appendChild(conditionsDiv);
+
+        var newRegExConditions = new RegExConditions(conditionsDiv);
+        newRegExConditions.makeRegExCondition();
+
+        var arrayItem = new RegExConditionsArrayItem(mainDiv, newRegExConditions);
+        this.regExConditions.push(arrayItem);
+
+
+        $(this.innerContainer).append(mainDiv);
+    }
+}
+
+class RegExConditionsArrayItem {
+    htmlElement: HTMLDivElement;
+    regExConditions: RegExConditions;
+
+    constructor(htmlElement: HTMLDivElement, regExConditions: RegExConditions) {
+        this.htmlElement = htmlElement;
+        this.regExConditions = regExConditions;
+    }
+}
+
+class RegExConditions extends RegExSearchBase {
+    container: HTMLDivElement;
+
+    constructor(container: HTMLDivElement) {
+        super();
+        this.container = container;
+    }
+
+    public makeRegExCondition() {
+        $(this.container).empty();
+
+        var mainSearchDiv: HTMLDivElement = document.createElement("div");
+
+        var searchDestinationDiv: HTMLDivElement = document.createElement("div");
+        mainSearchDiv.appendChild(searchDestinationDiv);
+
+        var searchDestinationSpan: HTMLSpanElement = document.createElement("span");
+        searchDestinationSpan.innerHTML = "Zvolte oblast vyhledávání";
+        searchDestinationDiv.appendChild(searchDestinationSpan);
+
+        var searchDestinationSelect: HTMLSelectElement = document.createElement("select");
+        searchDestinationDiv.appendChild(searchDestinationSelect);
+
+        //TODO add options
+
+        var wordFormDiv: HTMLDivElement = document.createElement("div");
+        mainSearchDiv.appendChild(wordFormDiv);
+
+        var wordFormSpan: HTMLSpanElement = document.createElement("span");
+        wordFormSpan.innerHTML = "Tvar slova:";
+        wordFormDiv.appendChild(wordFormSpan);
+
+        var wordFormSelect: HTMLSelectElement = document.createElement("select");
+        wordFormDiv.appendChild(wordFormSelect);
+
+        //TODO add options
+
+        var conditionsDiv: HTMLDivElement = document.createElement("div");
+        mainSearchDiv.appendChild(conditionsDiv);
+
+        var commandsDiv: HTMLDivElement = document.createElement("div");
+        mainSearchDiv.appendChild(commandsDiv);
+
+        var addConditionButton: HTMLButtonElement = this.createButton("Přidat");
+        commandsDiv.appendChild(addConditionButton);
+
+        var removeConditionButton: HTMLButtonElement = this.createButton("Odebrat");
+        commandsDiv.appendChild(removeConditionButton);
+
+
+        $(this.container).append(mainSearchDiv);
+    }
+}
+
+class RegExEditor extends RegExSearchBase {
+    container: HTMLDivElement;
+    searchBox: HTMLInputElement;
+
+    constructor(container: HTMLDivElement, searchBox: HTMLInputElement) {
+        super();
         this.container = container;
         this.searchBox = searchBox;
     }
@@ -97,27 +243,12 @@
         var submitButton: HTMLButtonElement = this.createButton("Dokončit");
         submitButton.style.marginLeft = "10px";
         commandButtonsDiv.appendChild(submitButton);
+        $(submitButton).click(event => {
+            this.searchBox.value = conditionInput.value;
+            // TODO more logic - using conditionType
+        });
 
 
         $(this.container).append(mainRegExDiv);
     }
-
-    private createOption(label: string, value: string): HTMLOptionElement {
-        var conditionOption = document.createElement("option");
-        conditionOption.innerHTML = label;
-        conditionOption.value = value;
-
-        return conditionOption;
-    }
-
-    private createButton(label: string): HTMLButtonElement {
-        var button: HTMLButtonElement = document.createElement("button");
-        button.type = "button";
-        button.innerHTML = label;
-        $(button).addClass("btn");
-        $(button).addClass("btn-default");
-        $(button).addClass("regexsearch-button");
-
-        return button;
-    }
-} 
+}

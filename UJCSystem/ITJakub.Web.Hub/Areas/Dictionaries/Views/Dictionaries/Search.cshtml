@@ -15,18 +15,18 @@
                             <button id="searchButton" type="button" class="btn btn-default searchbar-button">
                                 Vyhledat
                             </button>
-                            <button type="button" class="btn btn-default searchbar-button">
+                            <button id="advancedSearchButton" type="button" class="btn btn-default searchbar-button">
                                 Pokročilé
                             </button>
                         </div>
                         <div class="searchbar-inputs">
                             <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
-                            <button id="openRegExEditorButton" type="button" class="btn btn-default searchbox-button">R</button>
+                            @*<button id="openRegExEditorButton" type="button" class="btn btn-default searchbox-button">R</button>*@
                         </div>
                     </div>
                 </form>
             </div>
-            <div id="regExEditorDiv"></div>
+            <div id="regExSearchDiv"></div>
         </div>
         <div class="saved-word-area">
             <div class="dictionary-header">
@@ -196,12 +196,12 @@
 </div>
 
 <script type="text/javascript">
-    $("#openRegExEditorButton").click(function () {
-        if (document.getElementById("regExEditorDiv").children.length === 0) {
-            var regExSearchPlugin = new RegExEditor("#regExEditorDiv", "#searchbox");
-            regExSearchPlugin.makeRegExEditor();
+    $("#advancedSearchButton").click(function () {
+        if (document.getElementById("regExSearchDiv").children.length === 0) {
+            var regExSearchPlugin = new RegExSearch("#regExSearchDiv");
+            regExSearchPlugin.makeRegExSearch();
         } else {
-            $("#regExEditorDiv").empty();
+            $("#regExSearchDiv").empty();
         }
     });
 </script>
