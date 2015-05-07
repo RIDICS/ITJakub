@@ -45,10 +45,12 @@
     <Compile Include="AuthProviderEnumContract.cs" />
     <Compile Include="BookInfoContract.cs" />
     <Compile Include="BookPageImageContract.cs" />
+    <Compile Include="BucketContract.cs" />
+    <Compile Include="CardShortContract.cs" />
     <Compile Include="ImageSizeEnumContract.cs" />
     <Compile Include="ImageContract.cs" />
     <Compile Include="CardContract.cs" />
-    <Compile Include="BucketContract.cs" />
+    <Compile Include="BucketShortContract.cs" />
     <Compile Include="CardFileContract.cs" />
     <Compile Include="IItJakubServiceUnauthorized.cs" />
     <Compile Include="LoginUserContract.cs" />

@@ -51,13 +51,16 @@ namespace ITJakub.ITJakubService.DataContracts
         IEnumerable<CardFileContract> GetCardFiles();
 
         [OperationContract]
-        IEnumerable<BucketContract> GetBuckets(string cardFileId);
+        IEnumerable<BucketShortContract> GetBuckets(string cardFileId);
 
         [OperationContract]
-        IEnumerable<BucketContract> GetBucketsWithHeadword(string cardFileId, string headword);
+        IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword);
 
         [OperationContract]
         IEnumerable<CardContract> GetCards(string cardFileId, string bucketId);
+
+        [OperationContract]
+        IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId);
         
         [OperationContract]
         CardContract GetCard(string cardFileId, string bucketId, string cardId);

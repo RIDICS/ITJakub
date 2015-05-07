@@ -39,9 +39,9 @@ $(".concrete-cardfile-checkbox").click(function () {
     //TODO add cardfile to search criteria
 });
 $(document).ready(function () {
-    var cardsCreator = new CardFileCreator("div.cardfile-result-area");
-    cardsCreator.makeCardFile();
-    cardsCreator.makeCardFile();
-    cardsCreator.makeCardFile();
+    var cardsCreator = new CardFileManager("div.cardfile-result-area");
+    cardsCreator.makeCardFile("id");
+    cardsCreator.makeCardFile("id");
+    cardsCreator.makeCardFile("id");
 });
 //# sourceMappingURL=itjakub.cardfiles.js.map

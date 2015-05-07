@@ -96,18 +96,23 @@ namespace ITJakub.ITJakubService.Services
             return m_cardFileManager.GetCardFiles();
         }
         
-        public IEnumerable<BucketContract> GetBuckets(string cardFileId)
+        public IEnumerable<BucketShortContract> GetBuckets(string cardFileId)
         {
             return m_cardFileManager.GetBuckets(cardFileId);
         }        
-        public IEnumerable<BucketContract> GetBucketsWithHeadword(string cardFileId, string headword)
+        public IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword)
         {
             return m_cardFileManager.GetBucketsByHeadword(cardFileId, headword);
-        }
+        }        
 
         public IEnumerable<CardContract> GetCards(string cardFileId, string bucketId)
         {
             return m_cardFileManager.GetCards(cardFileId, bucketId);
+        }
+
+        public IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
+        {
+            return m_cardFileManager.GetCardsShort(cardFileId, bucketId);
         }
 
         public CardContract GetCard(string cardFileId, string bucketId, string cardId)

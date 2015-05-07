@@ -24,22 +24,29 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<file[], IList<CardFileContract>>(cardFiles.file);
         }
 
-        public IList<BucketContract> GetBuckets(string cardFileId)
+        public IList<BucketShortContract> GetBuckets(string cardFileId)
         {
             var buckets = m_cardFileClient.GetBuckets(cardFileId);
-            return Mapper.Map<bucket[], IList<BucketContract>>(buckets.bucket);
+            return Mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket);
         }
 
-        public IList<BucketContract> GetBucketsByHeadword(string cardFileId, string headword)
+        public IList<BucketShortContract> GetBucketsByHeadword(string cardFileId, string headword)
         {
             var buckets = m_cardFileClient.GetBucketsByHeadword(cardFileId, headword);
-            return Mapper.Map<bucket[], IList<BucketContract>>(buckets.bucket);
+            return Mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket);
         }
 
         public IList<CardContract> GetCards(string cardFileId, string bucketId)
         {
             var buckets = m_cardFileClient.GetCardsFromBucket(cardFileId, bucketId);
             var bucketContracts = Mapper.Map<bucket[], IList<BucketContract>>(buckets.bucket);
+            var cards = bucketContracts.First().Cards;
+            return cards;
+        }
+        public IList<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
+        {
+            var buckets = m_cardFileClient.GetCardsFromBucket(cardFileId, bucketId);
+            var bucketContracts = Mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket);
             var cards = bucketContracts.First().Cards;
             return cards;
         }

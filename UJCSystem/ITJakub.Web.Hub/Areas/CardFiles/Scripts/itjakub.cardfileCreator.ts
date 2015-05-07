@@ -1,24 +1,45 @@
-﻿
-
-class CardFileCreator {
+﻿class CardFileManager {
 
     cardFilesContainer: string;
-    maxPage : number;
-    minPage: number;
-    positionPage: number;
 
     constructor(cardFilesContainer: string) {
         this.cardFilesContainer = cardFilesContainer;
     }
 
-    makeCardFile() {
+    makeCardFile(cardFileId: string) {
+        var cardFile = new CardFile(cardFileId);
+        $(this.cardFilesContainer).append(cardFile.getHtml());
+    }
+
+    clearContainer() {
+        $(this.cardFilesContainer).empty();
+    }
+}
+
+class CardFile {
+
+    htmlBody: HTMLDivElement;
+
+    cardFileId: string;
+    cardFileName: string;
+    cardFileDescription: string;
+
+    bucketsCount: number;
+    actualBucket: Bucket;
+
+    constructor(cardFileId: string) {
         var cardFileDiv = document.createElement("div");
         $(cardFileDiv).addClass("cardfile-listing");
 
         this.makeLeftPanel(cardFileDiv);
         this.makeRightPanel(cardFileDiv);
 
-        $(this.cardFilesContainer).append(cardFileDiv);
+        this.htmlBody = cardFileDiv;
+        this.cardFileId = cardFileId;
+    }
+
+    public getHtml(): HTMLDivElement {
+        return this.htmlBody;
     }
 
     private makeLeftPanel(cardFileDiv : HTMLDivElement) {
@@ -180,6 +201,12 @@ class CardFileCreator {
 
         pageControlsDiv.appendChild(sliderDiv);
     }
+}
+
+class Bucket {
+    actualBucketId: string;
+    actualCardId: string;
+    actualCardPosition: string;
 }
 
 

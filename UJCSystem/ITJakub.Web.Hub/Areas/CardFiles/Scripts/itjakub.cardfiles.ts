@@ -45,9 +45,9 @@ $(".concrete-cardfile-checkbox").click(function () {
 });
 
 $(document).ready(function () {
-    var cardsCreator = new CardFileCreator("div.cardfile-result-area");
-    cardsCreator.makeCardFile();
-    cardsCreator.makeCardFile();
-    cardsCreator.makeCardFile();
+    var cardsCreator = new CardFileManager("div.cardfile-result-area");
+    cardsCreator.makeCardFile("id");
+    cardsCreator.makeCardFile("id");
+    cardsCreator.makeCardFile("id");
 });
 

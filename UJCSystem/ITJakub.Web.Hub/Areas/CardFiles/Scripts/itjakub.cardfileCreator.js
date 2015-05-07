@@ -1,15 +1,29 @@
-var CardFileCreator = (function () {
-    function CardFileCreator(cardFilesContainer) {
+var CardFileManager = (function () {
+    function CardFileManager(cardFilesContainer) {
         this.cardFilesContainer = cardFilesContainer;
     }
-    CardFileCreator.prototype.makeCardFile = function () {
+    CardFileManager.prototype.makeCardFile = function (cardFileId) {
+        var cardFile = new CardFile(cardFileId);
+        $(this.cardFilesContainer).append(cardFile.getHtml());
+    };
+    CardFileManager.prototype.clearContainer = function () {
+        $(this.cardFilesContainer).empty();
+    };
+    return CardFileManager;
+})();
+var CardFile = (function () {
+    function CardFile(cardFileId) {
         var cardFileDiv = document.createElement("div");
         $(cardFileDiv).addClass("cardfile-listing");
         this.makeLeftPanel(cardFileDiv);
         this.makeRightPanel(cardFileDiv);
-        $(this.cardFilesContainer).append(cardFileDiv);
+        this.htmlBody = cardFileDiv;
+        this.cardFileId = cardFileId;
+    }
+    CardFile.prototype.getHtml = function () {
+        return this.htmlBody;
     };
-    CardFileCreator.prototype.makeLeftPanel = function (cardFileDiv) {
+    CardFile.prototype.makeLeftPanel = function (cardFileDiv) {
         var cardFileLeftPanelDiv = document.createElement("div");
         $(cardFileLeftPanelDiv).addClass("card-file-listing-left-panel");
         var headwordDiv = document.createElement("div");
@@ -33,7 +47,7 @@ var CardFileCreator = (function () {
         cardFileLeftPanelDiv.appendChild(cardFileImageDiv);
         cardFileDiv.appendChild(cardFileLeftPanelDiv);
     };
-    CardFileCreator.prototype.makeRightPanel = function (cardFileDiv) {
+    CardFile.prototype.makeRightPanel = function (cardFileDiv) {
         var cardFileRightPanelDiv = document.createElement("div");
         $(cardFileRightPanelDiv).addClass("card-file-listing-right-panel");
         var cardFileDescDiv = document.createElement("div");
@@ -86,7 +100,7 @@ var CardFileCreator = (function () {
         cardFileRightPanelDiv.appendChild(cardFileNoteDiv);
         cardFileDiv.appendChild(cardFileRightPanelDiv);
     };
-    CardFileCreator.prototype.makeSlider = function (pageControlsDiv) {
+    CardFile.prototype.makeSlider = function (pageControlsDiv) {
         var sliderDiv = document.createElement("div");
         $(sliderDiv).addClass("slider");
         $(sliderDiv).slider({
@@ -126,6 +140,11 @@ var CardFileCreator = (function () {
         });
         pageControlsDiv.appendChild(sliderDiv);
     };
-    return CardFileCreator;
+    return CardFile;
+})();
+var Bucket = (function () {
+    function Bucket() {
+    }
+    return Bucket;
 })();
 //# sourceMappingURL=itjakub.cardfileCreator.js.map

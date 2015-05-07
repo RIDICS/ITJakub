@@ -296,7 +296,7 @@ namespace ITJakub.Web.Hub
             }
         }
         
-        public IEnumerable<BucketContract> GetBuckets(string cardFileId)
+        public IEnumerable<BucketShortContract> GetBuckets(string cardFileId)
         {
             try
             {
@@ -322,7 +322,7 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }        
-        public IEnumerable<BucketContract> GetBucketsWithHeadword(string cardFileId, string headword)
+        public IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword)
         {
             try
             {
@@ -375,6 +375,33 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+        public IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
+        {
+            try
+            {
+                return Channel.GetCardsShort(cardFileId, bucketId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetCardsShort failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetCardsShort failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetCardsShort timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
         public CardContract GetCard(string cardFileId, string bucketId, string cardId)
         {
             try
