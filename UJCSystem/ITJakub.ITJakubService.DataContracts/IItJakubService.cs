@@ -63,7 +63,7 @@ namespace ITJakub.ITJakubService.DataContracts
         CardContract GetCard(string cardFileId, string bucketId, string cardId);
 
         [OperationContract]
-        Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, string imageSize);
+        Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize);
 
         #endregion
 

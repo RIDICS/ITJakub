@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using ITJakub.CardFile.Core.DataContractEntities;
@@ -65,6 +66,7 @@ namespace ITJakub.CardFile.Core
         public Stream GetImageForCard(string fileId, string bucketId, string cardId, string imageId, string imageSize)
         {
             return Channel.GetImageForCard(fileId, bucketId, cardId, imageId, imageSize);
+
         }
     }
 }

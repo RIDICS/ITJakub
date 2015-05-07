@@ -45,6 +45,7 @@
     <Compile Include="AuthProviderEnumContract.cs" />
     <Compile Include="BookInfoContract.cs" />
     <Compile Include="BookPageImageContract.cs" />
+    <Compile Include="ImageSizeEnumContract.cs" />
     <Compile Include="ImageContract.cs" />
     <Compile Include="CardContract.cs" />
     <Compile Include="BucketContract.cs" />
@@ -64,6 +65,10 @@
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jewelery\Jewelery.csproj">
+      <Project>{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}</Project>
+      <Name>Jewelery</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

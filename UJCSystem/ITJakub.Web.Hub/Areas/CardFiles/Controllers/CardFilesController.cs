@@ -1,5 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Net;
+using System.Web.Mvc;
 using System.Web.WebPages;
+using ITJakub.ITJakubService.DataContracts;
+using Jewelery;
 
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 {
@@ -66,12 +70,20 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
         {
             var card = m_serviceClient.GetCard(cardFileId, bucketId, cardId);
             return Json(new {card}, JsonRequestBehavior.AllowGet);
-        }    
-    
-        public FileResult Image(string cardFileId, string bucketId, string cardId, string imageId, string imageSize)
+        }
+
+        public ActionResult Image(string cardFileId, string bucketId, string cardId, string imageId, string imageSize)
         {
-            var imageDataStream = m_serviceClient.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
-            return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
+            ImageSizeEnum imageSizeEnum;
+            var parsingSucceeded = Enum.TryParse(imageSize, true, out imageSizeEnum);
+
+            if (!parsingSucceeded)
+            {
+               return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "invalid image size");
+            }
+
+            var imageDataStream = m_serviceClient.GetImage(cardFileId, bucketId, cardId, imageId, imageSizeEnum);
+            return new FileStreamResult(imageDataStream, "image/jpeg");
         }
     }
 }

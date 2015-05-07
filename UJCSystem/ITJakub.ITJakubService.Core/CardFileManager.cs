@@ -5,6 +5,7 @@ using AutoMapper;
 using ITJakub.CardFile.Core;
 using ITJakub.CardFile.Core.DataContractEntities;
 using ITJakub.ITJakubService.DataContracts;
+using Jewelery;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -49,9 +50,9 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<card, CardContract>(card); ;
         }
 
-        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, string imageSize)
+        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize)
         {
-            return m_cardFileClient.GetImageForCard(cardFileId, bucketId, cardId, imageId, imageSize);
+            return m_cardFileClient.GetImageForCard(cardFileId, bucketId, cardId, imageId, imageSize.GetStringValue());
         }
     }
 }

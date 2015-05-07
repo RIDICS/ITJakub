@@ -402,7 +402,7 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, string imageSize)
+        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize)
         {
             try
             {
