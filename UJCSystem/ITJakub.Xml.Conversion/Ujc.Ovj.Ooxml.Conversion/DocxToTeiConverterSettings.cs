@@ -27,6 +27,12 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		public string InputFilePath { get; set; }
 
 		/// <summary>
+		/// List of full paths to input files (DOCX). 
+		/// In the case when one work is divided into multiple files (e.g. dictionaries divided by letter).
+		/// </summary>
+		public List<string> InputFilesPaths { get; set; }
+
+		/// <summary>
 		/// Full path to output file (XML).
 		/// </summary>
 		public string OutputFilePath { get; set; }
