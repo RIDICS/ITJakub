@@ -323,6 +323,12 @@
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.min.css">
       <DependentUpon>ITJakub.Reader.css</DependentUpon>
     </Content>
+    <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.css">
+      <DependentUpon>ITJakub.RegExSearch.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.min.css">
+      <DependentUpon>ITJakub.RegExSearch.css</DependentUpon>
+    </Content>
     <Content Include="Content\Site.min.css">
       <DependentUpon>Site.css</DependentUpon>
     </Content>
@@ -542,6 +548,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.less" />
+    <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.css.map">
+      <DependentUpon>ITJakub.RegExSearch.css</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

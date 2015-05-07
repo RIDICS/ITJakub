@@ -35,9 +35,11 @@
 
 
         var conditionTypeDiv: HTMLDivElement = document.createElement("div");
+        $(conditionTypeDiv).addClass("regexsearch-condition-type-div");
         editorDiv.appendChild(conditionTypeDiv);
 
         var conditionSelect: HTMLSelectElement = document.createElement("select");
+        $(conditionSelect).addClass("regexsearch-condition-select");
         conditionTypeDiv.appendChild(conditionSelect);
 
         conditionSelect.appendChild(this.createOption("Začíná na", this.conditionType.StartsWith));
@@ -49,6 +51,7 @@
 
 
         var conditionDiv: HTMLDivElement = document.createElement("div");
+        $(conditionDiv).addClass("regexsearch-condition-div");
         editorDiv.appendChild(conditionDiv);
 
         var conditionInputDiv: HTMLDivElement = document.createElement("div");
@@ -56,6 +59,7 @@
 
         var conditionInput: HTMLInputElement = document.createElement("input");
         conditionInput.type = "text";
+        $(conditionInput).addClass("regexsearch-input");
         conditionInputDiv.appendChild(conditionInput);
 
         var conditionButtonsDiv: HTMLDivElement = document.createElement("div");
@@ -63,12 +67,22 @@
 
         var anythingButton: HTMLButtonElement = this.createButton("Cokoliv");
         conditionButtonsDiv.appendChild(anythingButton);
+        $(anythingButton).addClass("regexsearch-input-button");
+        $(anythingButton).click(event => {
+            conditionInput.value += ".*";
+        });
 
         var orButton: HTMLButtonElement = this.createButton("Nebo");
         conditionButtonsDiv.appendChild(orButton);
+        orButton.style.cssFloat = "right";
+        $(orButton).addClass("regexsearch-input-button");
+        $(orButton).click(event => {
+            conditionInput.value += "|";
+        });
 
 
         var commandButtonsDiv: HTMLDivElement = document.createElement("div");
+        $(commandButtonsDiv).addClass("regexsearch-command-buttons-div");
         editorDiv.appendChild(commandButtonsDiv);
 
         var stornoButton: HTMLButtonElement = this.createButton("Zrušit");
@@ -81,6 +95,7 @@
         commandButtonsDiv.appendChild(nextButton);
 
         var submitButton: HTMLButtonElement = this.createButton("Dokončit");
+        submitButton.style.marginLeft = "10px";
         commandButtonsDiv.appendChild(submitButton);
 
 
@@ -97,10 +112,11 @@
 
     private createButton(label: string): HTMLButtonElement {
         var button: HTMLButtonElement = document.createElement("button");
+        button.type = "button";
         button.innerHTML = label;
         $(button).addClass("btn");
         $(button).addClass("btn-default");
-        $(button).addClass("style-button");
+        $(button).addClass("regexsearch-button");
 
         return button;
     }

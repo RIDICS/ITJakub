@@ -24,8 +24,10 @@ var RegExEditor = (function () {
         conditionTitleDiv.innerHTML = "Podmínka";
         editorDiv.appendChild(conditionTitleDiv);
         var conditionTypeDiv = document.createElement("div");
+        $(conditionTypeDiv).addClass("regexsearch-condition-type-div");
         editorDiv.appendChild(conditionTypeDiv);
         var conditionSelect = document.createElement("select");
+        $(conditionSelect).addClass("regexsearch-condition-select");
         conditionTypeDiv.appendChild(conditionSelect);
         conditionSelect.appendChild(this.createOption("Začíná na", this.conditionType.StartsWith));
         conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
@@ -34,19 +36,31 @@ var RegExEditor = (function () {
         conditionSelect.appendChild(this.createOption("Končí na", this.conditionType.EndsWith));
         conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
         var conditionDiv = document.createElement("div");
+        $(conditionDiv).addClass("regexsearch-condition-div");
         editorDiv.appendChild(conditionDiv);
         var conditionInputDiv = document.createElement("div");
         conditionDiv.appendChild(conditionInputDiv);
         var conditionInput = document.createElement("input");
         conditionInput.type = "text";
+        $(conditionInput).addClass("regexsearch-input");
         conditionInputDiv.appendChild(conditionInput);
         var conditionButtonsDiv = document.createElement("div");
         conditionDiv.appendChild(conditionButtonsDiv);
         var anythingButton = this.createButton("Cokoliv");
         conditionButtonsDiv.appendChild(anythingButton);
+        $(anythingButton).addClass("regexsearch-input-button");
+        $(anythingButton).click(function (event) {
+            conditionInput.value += ".*";
+        });
         var orButton = this.createButton("Nebo");
         conditionButtonsDiv.appendChild(orButton);
+        orButton.style.cssFloat = "right";
+        $(orButton).addClass("regexsearch-input-button");
+        $(orButton).click(function (event) {
+            conditionInput.value += "|";
+        });
         var commandButtonsDiv = document.createElement("div");
+        $(commandButtonsDiv).addClass("regexsearch-command-buttons-div");
         editorDiv.appendChild(commandButtonsDiv);
         var stornoButton = this.createButton("Zrušit");
         commandButtonsDiv.appendChild(stornoButton);
@@ -55,6 +69,7 @@ var RegExEditor = (function () {
         var nextButton = this.createButton("Další");
         commandButtonsDiv.appendChild(nextButton);
         var submitButton = this.createButton("Dokončit");
+        submitButton.style.marginLeft = "10px";
         commandButtonsDiv.appendChild(submitButton);
         $(this.container).append(mainRegExDiv);
     };
@@ -66,10 +81,11 @@ var RegExEditor = (function () {
     };
     RegExEditor.prototype.createButton = function (label) {
         var button = document.createElement("button");
+        button.type = "button";
         button.innerHTML = label;
         $(button).addClass("btn");
         $(button).addClass("btn-default");
-        $(button).addClass("style-button");
+        $(button).addClass("regexsearch-button");
         return button;
     };
     return RegExEditor;
