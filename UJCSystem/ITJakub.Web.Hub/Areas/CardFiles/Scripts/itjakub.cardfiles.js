@@ -40,8 +40,8 @@ $(".concrete-cardfile-checkbox").click(function () {
 });
 $(document).ready(function () {
     var cardsCreator = new CardFileManager("div.cardfile-result-area");
-    cardsCreator.makeCardFile("id");
-    cardsCreator.makeCardFile("id");
-    cardsCreator.makeCardFile("id");
+    cardsCreator.makeCardFile("1", "52");
+    cardsCreator.makeCardFile("2", "71");
+    cardsCreator.makeCardFile("3", "70");
 });
 //# sourceMappingURL=itjakub.cardfiles.js.map
