@@ -41,7 +41,7 @@ var CardFileViewer = (function () {
         }
     };
     CardFileViewer.prototype.displayCardDetail = function (card) {
-        this.displayImage("", "");
+        this.displayImage(card.getId(), card.getImagesIds()[0]); //TODO display other images
         this.displayNote(card.getId());
         this.displayWarning(card.getPosition().toString());
     };
@@ -58,10 +58,10 @@ var CardFileViewer = (function () {
     CardFileViewer.prototype.displayWarning = function (warning) {
         $(this.htmlBody).find(".cardfile-notice-text").html(warning);
     };
-    CardFileViewer.prototype.displayImage = function (imagePreviewSrc, imageSrc) {
+    CardFileViewer.prototype.displayImage = function (cardId, imageId) {
         var cardFileImageDiv = $(this.htmlBody).find(".cardfile-image");
-        $(cardFileImageDiv).find("img").attr("src", imagePreviewSrc);
-        $(cardFileImageDiv).find("a").attr("href", imageSrc);
+        $(cardFileImageDiv).find("img").attr("src", "/CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=preview");
+        $(cardFileImageDiv).find("a").attr("href", "/CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=full");
     };
     CardFileViewer.prototype.displayCardFileName = function (name) {
         $(this.htmlBody).find(".cardfile-name").html(name);
@@ -273,9 +273,10 @@ var Card = (function () {
                 var images = card["Images"];
                 var imagesArray = new Array();
                 for (var i = 0; i < images.length; i++) {
-                    imagesArray.push(images[i]["Id"]);
+                    var imageId = images[i]["Id"];
+                    imagesArray.push(imageId);
                 }
-                callback(new CardDetail(card["Id"], card["Position"], card["Headword"], card["Warning"], card["Note"], images));
+                callback(new CardDetail(card["Id"], card["Position"], card["Headword"], card["Warning"], card["Note"], imagesArray));
             },
             error: function (response) {
                 //TODO resolve error
@@ -302,7 +303,7 @@ var CardDetail = (function () {
     CardDetail.prototype.getHeadword = function () {
         return this.headword;
     };
-    CardDetail.prototype.getImages = function () {
+    CardDetail.prototype.getImagesIds = function () {
         return this.images;
     };
     CardDetail.prototype.getWarning = function () {

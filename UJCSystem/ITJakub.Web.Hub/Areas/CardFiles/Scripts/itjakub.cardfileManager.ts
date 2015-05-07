@@ -60,7 +60,7 @@ class CardFileViewer {
     }
 
     private displayCardDetail(card: CardDetail) {
-        this.displayImage("", "");
+        this.displayImage(card.getId(), card.getImagesIds()[0]); //TODO display other images
         this.displayNote(card.getId());
         this.displayWarning(card.getPosition().toString());
     }
@@ -82,10 +82,10 @@ class CardFileViewer {
         $(this.htmlBody).find(".cardfile-notice-text").html(warning);
     }
 
-    private displayImage(imagePreviewSrc: string, imageSrc: string) {
+    private displayImage(cardId: string, imageId: string) {
         var cardFileImageDiv = $(this.htmlBody).find(".cardfile-image");
-        $(cardFileImageDiv).find("img").attr("src", imagePreviewSrc);
-        $(cardFileImageDiv).find("a").attr("href", imageSrc);
+        $(cardFileImageDiv).find("img").attr("src","/CardFiles/CardFiles/Image?cardFileId="+this.cardFileId+"&bucketId="+this.actualBucket.getId()+"&cardId="+cardId+"&imageId="+imageId+"&imageSize=preview");
+        $(cardFileImageDiv).find("a").attr("href", "/CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=full");
     }
 
     private displayCardFileName(name: string) {
@@ -357,9 +357,10 @@ class Card {
                 var images = card["Images"];
                 var imagesArray = new Array<string>();
                 for (var i = 0; i < images.length; i++) {
-                    imagesArray.push(images[i]["Id"]);
+                    var imageId = images[i]["Id"];
+                    imagesArray.push(imageId);
                 }
-                callback(new CardDetail(card["Id"], card["Position"], card["Headword"], card["Warning"], card["Note"], images));
+                callback(new CardDetail(card["Id"], card["Position"], card["Headword"], card["Warning"], card["Note"], imagesArray));
             },
             error: (response) => {
                 //TODO resolve error
@@ -397,7 +398,7 @@ class CardDetail {
         return this.headword;
     }
 
-    public getImages(): Array<string> {
+    public getImagesIds(): Array<string> {
         return this.images;
     }
 
