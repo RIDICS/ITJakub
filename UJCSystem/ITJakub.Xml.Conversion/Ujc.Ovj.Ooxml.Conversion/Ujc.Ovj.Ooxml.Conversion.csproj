@@ -68,8 +68,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog, Version=3.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NLog.3.1.0.0\lib\net40\NLog.dll</HintPath>
+    <Reference Include="NLog, Version=3.2.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NLog.3.2.0.0\lib\net40\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -144,6 +144,7 @@
     <Content Include="Data\Xslt\EM_Vytvorit_projectDesc.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\ESSCRename.xsl" />
     <Content Include="Data\Xslt\Oznacit_krizek_jako_obrazek.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -180,6 +181,7 @@
     <Content Include="Data\Xslt\Seskupit_prvky_pred_nadpisem_2.0.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\StcSRename.xsl" />
     <Content Include="Data\Xslt\Subsumovat_elementy_k_predchozimu_prvku.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -619,6 +621,10 @@
     <ProjectReference Include="..\Daliboris.Texty.Export.Rozhrani\Daliboris.Texty.Export.Rozhrani.csproj">
       <Project>{585c72e8-10a8-4dfa-8a5c-467c5dd4c98c}</Project>
       <Name>Daliboris.Texty.Export.Rozhrani</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.SlovnikovyModul\Daliboris.Texty.Export.SlovnikovyModul.csproj">
+      <Project>{6C5853B2-9D04-417D-8B24-CE1B696216A0}</Project>
+      <Name>Daliboris.Texty.Export.SlovnikovyModul</Name>
     </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Export.Transformace\Daliboris.Texty.Export.Transformace.csproj">
       <Project>{9339ed5b-312f-4aaf-9df6-31b6c3169c48}</Project>

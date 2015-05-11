@@ -192,14 +192,6 @@ namespace Daliboris.Texty.Export
 
 		}
 
-		private void ApplyTransformations(string inputFile, string outputFile, IList<IXsltTransformer> transformers,
-			string tempDirectory, NameValueCollection parameters)
-		{
-			XsltTransformationProcess process = new XsltTransformationProcess(inputFile, outputFile, transformers, parameters);
-			process.TempDirectory = tempDirectory;
-			process.Transform();
-		}
-
 		private void ExportujImplOld(IEnumerable<IPrepis> prpPrepisy)
 		{
 			List<ITransformacniKrok> lsHlavicka = NactiTransformacniKrokyHlavicky();

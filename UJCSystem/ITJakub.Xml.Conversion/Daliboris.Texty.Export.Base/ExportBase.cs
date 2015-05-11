@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export.Rozhrani;
 using NLog;
+using Ujc.Ovj.Tools.Xml.XsltTransformation;
 
 namespace Daliboris.Texty.Export
 {
@@ -77,5 +79,12 @@ namespace Daliboris.Texty.Export
 		}
 
 
+		public void ApplyTransformations(string inputFile, string outputFile, IList<IXsltTransformer> transformers,
+			string tempDirectory, NameValueCollection parameters)
+		{
+			XsltTransformationProcess process = new XsltTransformationProcess(inputFile, outputFile, transformers, parameters);
+			process.TempDirectory = tempDirectory;
+			process.Transform();
+		}
 	}
 }

@@ -13,6 +13,7 @@ using Daliboris.Texty.Evidence;
 using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export;
 using Daliboris.Texty.Export.Rozhrani;
+using Daliboris.Texty.Export.SlovnikovyModul;
 using Daliboris.Transkripce.Objekty;
 using JetBrains.Annotations;
 using Ujc.Ovj.Xml.Tei.Contents;
@@ -357,6 +358,10 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				case "ProfessionalLiterature":
 					exportSettings = GetEdicniModulNastaveni(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, glsPrepisy);
 					break;
+				case "Dictionary":
+					exportSettings = GetDictionarySettings(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads,
+						glsPrepisy);
+					break;
 			}
 			return exportSettings;
 		}
@@ -366,6 +371,24 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			AdresarovaStruktura ads, List<IPrepis> glsPrepisy)
 		{
 			IExportNastaveni nastaveni = new EdicniModulNastaveni();
+			nastaveni.SouborTransformaci = xsltTransformationFilePath;
+			nastaveni.SlozkaXslt = xsltTemplatesPath;
+			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;
+			nastaveni.VystupniSlozka = ads.DejVystup;
+			nastaveni.DocasnaSlozka = ads.DejTemp;
+			nastaveni.Prepisy = glsPrepisy;
+			nastaveni.SmazatDocasneSoubory = !settings.Debug;
+
+			nastaveni.SouborMetadat = settings.MetadataFilePath;
+			return nastaveni;
+		}
+
+		private static IExportNastaveni GetDictionarySettings(DocxToTeiConverterSettings settings,
+			string xsltTransformationFilePath,
+			string xsltTemplatesPath,
+			AdresarovaStruktura ads, List<IPrepis> glsPrepisy)
+		{
+			IExportNastaveni nastaveni = new SlovnikovyModulNastaveni();
 			nastaveni.SouborTransformaci = xsltTransformationFilePath;
 			nastaveni.SlozkaXslt = xsltTemplatesPath;
 			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;
