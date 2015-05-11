@@ -3,7 +3,6 @@ using System.Net;
 using System.Web.Mvc;
 using System.Web.WebPages;
 using ITJakub.ITJakubService.DataContracts;
-using Jewelery;
 
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 {

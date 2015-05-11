@@ -1,4 +1,8 @@
 ﻿@import "../../../Content/ITJakub.DefaultTheme.less";
+@cardfile-viewer-height: 380px;
+@cardfile-viewer-width: @max-body-width - 10px;
+@cardfile-viewer-right-panel-width: 325px;
+@cardfile-viewer-left-panel-width: @cardfile-viewer-width - @cardfile-viewer-right-panel-width;
 
 .cardfile-header {
     background-color: @item-background-color;
@@ -7,14 +11,14 @@
 }
 
 .cardfile-listing {
-    height: 380px;
+    height: @cardfile-viewer-height;
     margin-bottom: 5px;
 }
 
 .card-file-listing-left-panel {
     background-color: white;    
     height: 100%;
-    width: 700px;
+    width: @cardfile-viewer-left-panel-width;
     float: left;
 }
 
@@ -41,7 +45,7 @@
 .card-file-listing-right-panel {
     background-color: @item-background-color;
     height: 100%;
-    width: 300px;
+    width: @cardfile-viewer-right-panel-width;
     float: left;
     padding: 5px;
     color: white;
@@ -54,7 +58,6 @@
 
 .cardfile-pagination {
     display: inline-block;
-    /*margin: 20px 0;*/
 }
 
 .cardfile-pagination > li {
@@ -141,6 +144,9 @@
 }
 
 .loading {
-    background: url(../../Images/Plugins/Reader/loading.gif) no-repeat center;
     margin: 0 auto;
+    margin-bottom: 5px;
+    width: @cardfile-viewer-width;
+    height: @cardfile-viewer-height;
+    background-color: white;
 }

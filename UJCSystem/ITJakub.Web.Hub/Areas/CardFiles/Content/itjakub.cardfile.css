@@ -81,7 +81,7 @@ div.container {
 .card-file-listing-left-panel {
   background-color: white;
   height: 100%;
-  width: 700px;
+  width: 765px;
   float: left;
 }
 .headword-description {
@@ -104,7 +104,7 @@ div.container {
 .card-file-listing-right-panel {
   background-color: #84ced7;
   height: 100%;
-  width: 300px;
+  width: 325px;
   float: left;
   padding: 5px;
   color: white;
@@ -115,7 +115,6 @@ div.container {
 }
 .cardfile-pagination {
   display: inline-block;
-  /*margin: 20px 0;*/
 }
 .cardfile-pagination > li {
   display: inline;
@@ -183,7 +182,10 @@ div.container {
   border-top-color: white !important;
 }
 .loading {
-  background: url(../../Images/Plugins/Reader/loading.gif) no-repeat center;
   margin: 0 auto;
+  margin-bottom: 5px;
+  width: 1090px;
+  height: 380px;
+  background-color: white;
 }
 /*# sourceMappingURL=itjakub.cardfile.css.map */
