@@ -1,18 +1,45 @@
 ﻿class CardFileManager {
 
     private cardFilesContainer: string;
+    private bucketsCache: Array<Bucket>;
 
     constructor(cardFilesContainer: string) {
         this.cardFilesContainer = cardFilesContainer;
+        this.bucketsCache = new Array<Bucket>();
     }
 
     public makeCardFile(cardFileId: string, bucketId: string) {
-        var cardFile = new CardFileViewer(cardFileId, bucketId);
+        var bucket = this.getBucket(cardFileId, bucketId);
+        var cardFile = new CardFileViewer(cardFileId, bucket);
         $(this.cardFilesContainer).append(cardFile.getHtml());
+    }
+
+    private getKeyByCardFileAndBucket(cardFileId: string, bucketId: string): string {
+        return cardFileId + bucketId;
+    }
+
+    private cacheContainsKey(key: string): boolean {
+        var item = this.bucketsCache[key];
+        return typeof item !== "undefined";
+    }
+
+    private getBucket(cardFileId : string, bucketId: string): Bucket {
+        var key = this.getKeyByCardFileAndBucket(cardFileId, bucketId);
+        if (!this.cacheContainsKey(key)) {
+            var bucket = new Bucket(cardFileId, bucketId);
+            this.bucketsCache[key] = bucket;
+        }
+        return this.bucketsCache[key];
     }
 
     public clearContainer() {
         $(this.cardFilesContainer).empty();
+        this.emptyCache();
+    }
+
+    private emptyCache() {
+        this.bucketsCache.length = 0;
+        this.bucketsCache = new Array<Bucket>();
     }
 }
 
@@ -29,12 +56,13 @@ class CardFileViewer {
 
     private actualCardPosition: number;
 
-    constructor(cardFileId: string, bucketId: string) {
+    constructor(cardFileId: string, bucket: Bucket) {
         this.cardFileId = cardFileId;
         var cardFileDiv = document.createElement("div");
         $(cardFileDiv).addClass("cardfile-listing loading");
         this.htmlBody = cardFileDiv;
-        this.actualBucket = new Bucket(cardFileId, bucketId, () => this.makePanel());
+        this.actualBucket = bucket;
+        bucket.addOnFinishLoadCallback(() => this.makePanel());
     }
 
     private makePanel() {
@@ -402,12 +430,16 @@ class Bucket {
     private cardFileId: string;
     private cardsCount: number;
     private cards: Array<Card>;
+    private callbacks: Array<() => void>;
+    private loaded: boolean;
 
-    constructor(cardFileId: string, bucketId: string, initFinishedCallback: () => void) {
+    constructor(cardFileId: string, bucketId: string) {
         this.id = bucketId;
         this.cardFileId = cardFileId;
+        this.loaded = false;
         this.cards = new Array<Card>();
-        this.loadCardsInfo(initFinishedCallback);
+        this.callbacks = new Array<() => void>();
+        this.loadCardsInfo();
     }
 
     public getId(): string {
@@ -429,7 +461,24 @@ class Bucket {
         return null;
     }
 
-    private loadCardsInfo(callback: () => void) {
+    public addOnFinishLoadCallback(callback: () => void) {
+        if (this.loaded) {
+            callback();
+        } else {
+            this.callbacks.push(callback);
+        }
+    }
+
+    private onFinishLoad() {
+        this.loaded = true;
+        for (var i = 0; i < this.callbacks.length; i++) {
+            this.callbacks[i]();
+        }
+
+        this.callbacks.length = 0; //Clear array of callbacks
+    }
+
+    private loadCardsInfo() {
         $.ajax({
             type: "GET",
             traditional: true,
@@ -444,7 +493,7 @@ class Bucket {
                     var jsonCard = cards[i];
                     this.cards.push(new Card(jsonCard["Id"], jsonCard["Position"], jsonCard["Headword"], this));
                 }
-                callback();
+                this.onFinishLoad();
             },
             error: (response) => {
                 //TODO resolve error

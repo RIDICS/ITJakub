@@ -1,24 +1,47 @@
 var CardFileManager = (function () {
     function CardFileManager(cardFilesContainer) {
         this.cardFilesContainer = cardFilesContainer;
+        this.bucketsCache = new Array();
     }
     CardFileManager.prototype.makeCardFile = function (cardFileId, bucketId) {
-        var cardFile = new CardFileViewer(cardFileId, bucketId);
+        var bucket = this.getBucket(cardFileId, bucketId);
+        var cardFile = new CardFileViewer(cardFileId, bucket);
         $(this.cardFilesContainer).append(cardFile.getHtml());
+    };
+    CardFileManager.prototype.getKeyByCardFileAndBucket = function (cardFileId, bucketId) {
+        return cardFileId + bucketId;
+    };
+    CardFileManager.prototype.cacheContainsKey = function (key) {
+        var item = this.bucketsCache[key];
+        return typeof item !== "undefined";
+    };
+    CardFileManager.prototype.getBucket = function (cardFileId, bucketId) {
+        var key = this.getKeyByCardFileAndBucket(cardFileId, bucketId);
+        if (!this.cacheContainsKey(key)) {
+            var bucket = new Bucket(cardFileId, bucketId);
+            this.bucketsCache[key] = bucket;
+        }
+        return this.bucketsCache[key];
     };
     CardFileManager.prototype.clearContainer = function () {
         $(this.cardFilesContainer).empty();
+        this.emptyCache();
+    };
+    CardFileManager.prototype.emptyCache = function () {
+        this.bucketsCache.length = 0;
+        this.bucketsCache = new Array();
     };
     return CardFileManager;
 })();
 var CardFileViewer = (function () {
-    function CardFileViewer(cardFileId, bucketId) {
+    function CardFileViewer(cardFileId, bucket) {
         var _this = this;
         this.cardFileId = cardFileId;
         var cardFileDiv = document.createElement("div");
         $(cardFileDiv).addClass("cardfile-listing loading");
         this.htmlBody = cardFileDiv;
-        this.actualBucket = new Bucket(cardFileId, bucketId, function () { return _this.makePanel(); });
+        this.actualBucket = bucket;
+        bucket.addOnFinishLoadCallback(function () { return _this.makePanel(); });
     }
     CardFileViewer.prototype.makePanel = function () {
         var cardFileDiv = this.htmlBody;
@@ -316,11 +339,13 @@ var CardFileViewer = (function () {
     return CardFileViewer;
 })();
 var Bucket = (function () {
-    function Bucket(cardFileId, bucketId, initFinishedCallback) {
+    function Bucket(cardFileId, bucketId) {
         this.id = bucketId;
         this.cardFileId = cardFileId;
+        this.loaded = false;
         this.cards = new Array();
-        this.loadCardsInfo(initFinishedCallback);
+        this.callbacks = new Array();
+        this.loadCardsInfo();
     }
     Bucket.prototype.getId = function () {
         return this.id;
@@ -337,7 +362,22 @@ var Bucket = (function () {
         }
         return null;
     };
-    Bucket.prototype.loadCardsInfo = function (callback) {
+    Bucket.prototype.addOnFinishLoadCallback = function (callback) {
+        if (this.loaded) {
+            callback();
+        }
+        else {
+            this.callbacks.push(callback);
+        }
+    };
+    Bucket.prototype.onFinishLoad = function () {
+        this.loaded = true;
+        for (var i = 0; i < this.callbacks.length; i++) {
+            this.callbacks[i]();
+        }
+        this.callbacks.length = 0; //Clear array of callbacks
+    };
+    Bucket.prototype.loadCardsInfo = function () {
         var _this = this;
         $.ajax({
             type: "GET",
@@ -353,7 +393,7 @@ var Bucket = (function () {
                     var jsonCard = cards[i];
                     _this.cards.push(new Card(jsonCard["Id"], jsonCard["Position"], jsonCard["Headword"], _this));
                 }
-                callback();
+                _this.onFinishLoad();
             },
             error: function (response) {
                 //TODO resolve error
