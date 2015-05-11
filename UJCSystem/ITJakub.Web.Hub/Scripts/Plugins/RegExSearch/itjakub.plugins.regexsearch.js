@@ -47,6 +47,7 @@ var RegExSearch = (function (_super) {
         commandsDiv.appendChild(removeConditionsButton);
         this.innerContainer = document.createElement("div");
         var firstInnerDiv = document.createElement("div");
+        $(firstInnerDiv).addClass("regexsearch-condition-main-div");
         var newRegExConditions = new RegExConditions(firstInnerDiv);
         newRegExConditions.makeRegExCondition();
         var arrayItem = new RegExConditionsArrayItem(firstInnerDiv, newRegExConditions);
@@ -55,12 +56,15 @@ var RegExSearch = (function (_super) {
         $(this.container).append(commandsDiv);
         $(this.container).append(this.innerContainer);
     };
-    RegExSearch.prototype.addNewConditions = function () {
+    RegExSearch.prototype.addNewConditions = function (useDelimiter) {
+        if (useDelimiter === void 0) { useDelimiter = true; }
         var mainDiv = document.createElement("div");
         var andInfoDiv = document.createElement("div");
+        $(andInfoDiv).addClass("regexsearch-delimiter");
         andInfoDiv.innerHTML = "A zároveň";
         mainDiv.appendChild(andInfoDiv);
         var conditionsDiv = document.createElement("div");
+        $(conditionsDiv).addClass("regexsearch-condition-main-div");
         mainDiv.appendChild(conditionsDiv);
         var newRegExConditions = new RegExConditions(conditionsDiv);
         newRegExConditions.makeRegExCondition();
@@ -107,25 +111,32 @@ var RegExConditions = (function (_super) {
         $(this.container).empty();
         var mainSearchDiv = document.createElement("div");
         var searchDestinationDiv = document.createElement("div");
+        $(searchDestinationDiv).addClass("regexsearch-destination-div");
         mainSearchDiv.appendChild(searchDestinationDiv);
         var searchDestinationSpan = document.createElement("span");
         searchDestinationSpan.innerHTML = "Zvolte oblast vyhledávání";
+        $(searchDestinationSpan).addClass("regexsearch-upper-select-label");
         searchDestinationDiv.appendChild(searchDestinationSpan);
         var searchDestinationSelect = document.createElement("select");
+        $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
         searchDestinationSelect.appendChild(this.createOption("Fulltext", "fulltext"));
         var wordFormDiv = document.createElement("div");
+        $(wordFormDiv).addClass("regexsearch-word-form-div");
         mainSearchDiv.appendChild(wordFormDiv);
         var wordFormSpan = document.createElement("span");
-        wordFormSpan.innerHTML = "Tvar slova:";
+        wordFormSpan.innerHTML = "Tvar slova";
+        $(wordFormSpan).addClass("regexsearch-upper-select-label");
         wordFormDiv.appendChild(wordFormSpan);
         var wordFormSelect = document.createElement("select");
+        $(wordFormSelect).addClass("regexsearch-select");
         wordFormDiv.appendChild(wordFormSelect);
         wordFormSelect.appendChild(this.createOption("Lemma", this.wordFormType.Lemma));
         wordFormSelect.appendChild(this.createOption("Hyperlemma - nové", this.wordFormType.HyperlemmaNew));
         wordFormSelect.appendChild(this.createOption("Hyperlemma - staré", this.wordFormType.HyperlemmaOld));
         wordFormSelect.appendChild(this.createOption("Stemma", this.wordFormType.Stemma));
         this.conditionsContainerDiv = document.createElement("div");
+        $(this.conditionsContainerDiv).addClass("regexsearch-condition-list-div");
         mainSearchDiv.appendChild(this.conditionsContainerDiv);
         var commandsDiv = document.createElement("div");
         mainSearchDiv.appendChild(commandsDiv);
@@ -204,6 +215,8 @@ var RegExInput = (function (_super) {
         lineDiv.appendChild(this.checkBox);
         this.conditionInput = document.createElement("input");
         this.conditionInput.type = "text";
+        $(this.conditionInput).addClass("form-control");
+        $(this.conditionInput).addClass("regexsearch-condition-input");
         lineDiv.appendChild(this.conditionInput);
         var regExButton = this.createButton("R");
         $(regExButton).click(function () {

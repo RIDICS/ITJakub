@@ -31,4 +31,35 @@
   text-align: right;
   margin-top: 30px;
 }
+.regexsearch-delimiter {
+  color: white;
+  background-color: #9A9A9A;
+}
+.regexsearch-destination-div {
+  float: left;
+  width: 170px;
+}
+.regexsearch-word-form-div {
+  float: right;
+  width: 170px;
+}
+.regexsearch-condition-list-div {
+  margin-left: 180px;
+}
+.regexsearch-upper-select-label {
+  display: block;
+  font-weight: bold;
+  font-size: 90%;
+}
+.regexsearch-select {
+  width: 100%;
+}
+.regexsearch-condition-input {
+  width: 300px;
+  border-radius: 0;
+  display: inline-block;
+}
+.regexsearch-condition-main-div {
+  margin: 10px 0 20px 0;
+}
 /*# sourceMappingURL=ITJakub.RegExSearch.css.map */

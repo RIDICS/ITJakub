@@ -49,6 +49,7 @@ class RegExSearch extends RegExSearchBase {
 
         this.innerContainer = document.createElement("div");
         var firstInnerDiv: HTMLDivElement = document.createElement("div");
+        $(firstInnerDiv).addClass("regexsearch-condition-main-div");
 
         var newRegExConditions = new RegExConditions(firstInnerDiv);
         newRegExConditions.makeRegExCondition();
@@ -62,14 +63,16 @@ class RegExSearch extends RegExSearchBase {
         $(this.container).append(this.innerContainer);
     }
 
-    private addNewConditions() {
+    private addNewConditions(useDelimiter:boolean = true) { //TODO
         var mainDiv = document.createElement("div");
 
         var andInfoDiv = document.createElement("div");
+        $(andInfoDiv).addClass("regexsearch-delimiter");
         andInfoDiv.innerHTML = "A zároveň";
         mainDiv.appendChild(andInfoDiv);
 
         var conditionsDiv = document.createElement("div");
+        $(conditionsDiv).addClass("regexsearch-condition-main-div");
         mainDiv.appendChild(conditionsDiv);
 
         var newRegExConditions = new RegExConditions(conditionsDiv);
@@ -134,25 +137,31 @@ class RegExConditions extends RegExSearchBase {
         var mainSearchDiv: HTMLDivElement = document.createElement("div");
 
         var searchDestinationDiv: HTMLDivElement = document.createElement("div");
+        $(searchDestinationDiv).addClass("regexsearch-destination-div");
         mainSearchDiv.appendChild(searchDestinationDiv);
 
         var searchDestinationSpan: HTMLSpanElement = document.createElement("span");
         searchDestinationSpan.innerHTML = "Zvolte oblast vyhledávání";
+        $(searchDestinationSpan).addClass("regexsearch-upper-select-label");
         searchDestinationDiv.appendChild(searchDestinationSpan);
 
         var searchDestinationSelect: HTMLSelectElement = document.createElement("select");
+        $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
 
         searchDestinationSelect.appendChild(this.createOption("Fulltext", "fulltext"));
 
         var wordFormDiv: HTMLDivElement = document.createElement("div");
+        $(wordFormDiv).addClass("regexsearch-word-form-div");
         mainSearchDiv.appendChild(wordFormDiv);
 
         var wordFormSpan: HTMLSpanElement = document.createElement("span");
-        wordFormSpan.innerHTML = "Tvar slova:";
+        wordFormSpan.innerHTML = "Tvar slova";
+        $(wordFormSpan).addClass("regexsearch-upper-select-label");
         wordFormDiv.appendChild(wordFormSpan);
 
         var wordFormSelect: HTMLSelectElement = document.createElement("select");
+        $(wordFormSelect).addClass("regexsearch-select");
         wordFormDiv.appendChild(wordFormSelect);
 
         wordFormSelect.appendChild(this.createOption("Lemma", this.wordFormType.Lemma));
@@ -161,6 +170,7 @@ class RegExConditions extends RegExSearchBase {
         wordFormSelect.appendChild(this.createOption("Stemma", this.wordFormType.Stemma));
 
         this.conditionsContainerDiv = document.createElement("div");
+        $(this.conditionsContainerDiv).addClass("regexsearch-condition-list-div");
         mainSearchDiv.appendChild(this.conditionsContainerDiv);
 
         var commandsDiv: HTMLDivElement = document.createElement("div");
@@ -268,6 +278,8 @@ class RegExInput extends RegExSearchBase {
 
         this.conditionInput = document.createElement("input");
         this.conditionInput.type = "text";
+        $(this.conditionInput).addClass("form-control");
+        $(this.conditionInput).addClass("regexsearch-condition-input");
         lineDiv.appendChild(this.conditionInput);
 
         var regExButton = this.createButton("R");
