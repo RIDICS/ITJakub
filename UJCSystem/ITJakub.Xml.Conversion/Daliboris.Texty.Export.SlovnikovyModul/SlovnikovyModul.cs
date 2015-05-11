@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using Daliboris.Texty.Evidence.Rozhrani;
+using Daliboris.Texty.Export.Rozhrani;
 using Ujc.Ovj.Tools.Xml.XsltTransformation;
 
 namespace Daliboris.Texty.Export.SlovnikovyModul
@@ -15,6 +16,10 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 
 		}
 
+		public SlovnikovyModul(IExportNastaveni emnNastaveni) : base(emnNastaveni)
+		{
+		}
+
 		public override void Exportuj(IEnumerable<IPrepis> prpPrepisy)
 		{
 			ExportujImpl(prpPrepisy);
@@ -23,9 +28,9 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 		private void ExportujImpl(IEnumerable<IPrepis> prpPrepisy)
 		{
 			IPrepis first = (from p in prpPrepisy select p).FirstOrDefault();
-			string start = first.Soubor.NazevBezPripony.Substring(0, first.Soubor.NazevBezPripony.IndexOf("_"));
+			string start = first.Soubor.NazevBezPripony.Substring(0, first.Soubor.NazevBezPripony.IndexOf("_")).ToLowerInvariant();
 
-			IList<IXsltTransformer> step01 = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, start + "-step01", Nastaveni.SlozkaXslt);
+			IList<IXsltTransformer> step01 = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, (start + "-step01"), Nastaveni.SlozkaXslt);
 
 			foreach (IPrepis prepis in prpPrepisy)
 			{
@@ -45,7 +50,7 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 					NameValueCollection parameters = new NameValueCollection();
 					ApplyTransformations(Path.Combine(Nastaveni.VstupniSlozka, souborBezPripony + csPriponaXml),
 						step00File, step01, Nastaveni.DocasnaSlozka, parameters);
-
+					strVystup = step00File;
 				}
 				catch (Exception e)
 				{

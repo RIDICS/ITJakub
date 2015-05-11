@@ -10,6 +10,11 @@ namespace Daliboris.Texty.Export
 {
 	public abstract class ExportBase
 	{
+		protected ExportBase() { }
+		protected ExportBase(IExportNastaveni nastaveni)
+		{
+			Nastaveni = nastaveni;
+		}
 
 		private static Logger _logger = LogManager.GetCurrentClassLogger();
 

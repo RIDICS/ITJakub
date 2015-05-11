@@ -14,10 +14,8 @@ namespace Daliboris.Texty.Export
 
 		public EdicniModul() { }
 
-		public EdicniModul(IExportNastaveni emnNastaveni)
-		{
-			Nastaveni = emnNastaveni;
-		}
+		public EdicniModul(IExportNastaveni emnNastaveni) : base(emnNastaveni)
+		{ }
 
 		/*
 			public void UpravBiblickyText(string strNazev, string strVstup)

@@ -337,6 +337,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				case "Edition":
 				case "ProfessionalLiterature":
 					return new EdicniModul(exportSettings);
+				case "Dictionary":
+					return new SlovnikovyModul(exportSettings);
 			}
 
 			return null;
