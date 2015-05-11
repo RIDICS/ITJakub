@@ -41,14 +41,19 @@ var RegExSearch = (function (_super) {
             _this.addNewConditions();
         });
         var removeConditionsButton = this.createButton("Odebrat podmínku");
+        $(removeConditionsButton).click(function () {
+            _this.removeLastConditions();
+        });
         commandsDiv.appendChild(removeConditionsButton);
+        this.innerContainer = document.createElement("div");
         var firstInnerDiv = document.createElement("div");
         var newRegExConditions = new RegExConditions(firstInnerDiv);
         newRegExConditions.makeRegExCondition();
         var arrayItem = new RegExConditionsArrayItem(firstInnerDiv, newRegExConditions);
         this.regExConditions.push(arrayItem);
+        this.innerContainer.appendChild(firstInnerDiv);
         $(this.container).append(commandsDiv);
-        $(this.container).append(firstInnerDiv);
+        $(this.container).append(this.innerContainer);
     };
     RegExSearch.prototype.addNewConditions = function () {
         var mainDiv = document.createElement("div");
@@ -63,6 +68,12 @@ var RegExSearch = (function (_super) {
         this.regExConditions.push(arrayItem);
         $(this.innerContainer).append(mainDiv);
     };
+    RegExSearch.prototype.removeLastConditions = function () {
+        if (this.regExConditions.length <= 1)
+            return;
+        var arrayItem = this.regExConditions.pop();
+        this.innerContainer.removeChild(arrayItem.htmlElement);
+    };
     return RegExSearch;
 })(RegExSearchBase);
 var RegExConditionsArrayItem = (function () {
@@ -72,13 +83,27 @@ var RegExConditionsArrayItem = (function () {
     }
     return RegExConditionsArrayItem;
 })();
+var RegExInputArrayItem = (function () {
+    function RegExInputArrayItem(htmlElement, regExInput) {
+        this.htmlElement = htmlElement;
+        this.regExInput = regExInput;
+    }
+    return RegExInputArrayItem;
+})();
 var RegExConditions = (function (_super) {
     __extends(RegExConditions, _super);
     function RegExConditions(container) {
         _super.call(this);
+        this.wordFormType = {
+            Lemma: "lemma",
+            HyperlemmaNew: "hyperlemma-new",
+            HyperlemmaOld: "hyperlemma-old",
+            Stemma: "stemma"
+        };
         this.container = container;
     }
     RegExConditions.prototype.makeRegExCondition = function () {
+        var _this = this;
         $(this.container).empty();
         var mainSearchDiv = document.createElement("div");
         var searchDestinationDiv = document.createElement("div");
@@ -88,7 +113,7 @@ var RegExConditions = (function (_super) {
         searchDestinationDiv.appendChild(searchDestinationSpan);
         var searchDestinationSelect = document.createElement("select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
-        //TODO add options
+        searchDestinationSelect.appendChild(this.createOption("Fulltext", "fulltext"));
         var wordFormDiv = document.createElement("div");
         mainSearchDiv.appendChild(wordFormDiv);
         var wordFormSpan = document.createElement("span");
@@ -96,18 +121,112 @@ var RegExConditions = (function (_super) {
         wordFormDiv.appendChild(wordFormSpan);
         var wordFormSelect = document.createElement("select");
         wordFormDiv.appendChild(wordFormSelect);
-        //TODO add options
-        var conditionsDiv = document.createElement("div");
-        mainSearchDiv.appendChild(conditionsDiv);
+        wordFormSelect.appendChild(this.createOption("Lemma", this.wordFormType.Lemma));
+        wordFormSelect.appendChild(this.createOption("Hyperlemma - nové", this.wordFormType.HyperlemmaNew));
+        wordFormSelect.appendChild(this.createOption("Hyperlemma - staré", this.wordFormType.HyperlemmaOld));
+        wordFormSelect.appendChild(this.createOption("Stemma", this.wordFormType.Stemma));
+        this.conditionsContainerDiv = document.createElement("div");
+        mainSearchDiv.appendChild(this.conditionsContainerDiv);
         var commandsDiv = document.createElement("div");
         mainSearchDiv.appendChild(commandsDiv);
         var addConditionButton = this.createButton("Přidat");
+        $(addConditionButton).click(function () {
+            _this.addConditions();
+        });
         commandsDiv.appendChild(addConditionButton);
         var removeConditionButton = this.createButton("Odebrat");
+        $(removeConditionButton).click(function () {
+            _this.removeSelectedConditions();
+        });
         commandsDiv.appendChild(removeConditionButton);
+        this.resetConditions();
         $(this.container).append(mainSearchDiv);
     };
+    RegExConditions.prototype.resetConditions = function () {
+        $(this.conditionsContainerDiv).empty();
+        this.conditionsInputArray = [];
+        var lineDiv = document.createElement("div");
+        var newRegExInput = new RegExInput(lineDiv);
+        newRegExInput.makeRegExInput();
+        var arrayItem = new RegExInputArrayItem(lineDiv, newRegExInput);
+        this.conditionsInputArray.push(arrayItem);
+        this.conditionsContainerDiv.appendChild(lineDiv);
+    };
+    RegExConditions.prototype.addConditions = function () {
+        var mainDiv = document.createElement("div");
+        var labelDiv = document.createElement("div");
+        labelDiv.innerHTML = "Nebo";
+        mainDiv.appendChild(labelDiv);
+        var lineDiv = document.createElement("div");
+        mainDiv.appendChild(lineDiv);
+        var newRegExInput = new RegExInput(lineDiv);
+        newRegExInput.makeRegExInput();
+        var arrayItem = new RegExInputArrayItem(mainDiv, newRegExInput);
+        this.conditionsInputArray.push(arrayItem);
+        this.conditionsContainerDiv.appendChild(mainDiv);
+    };
+    RegExConditions.prototype.removeSelectedConditions = function () {
+        var uncheckedItems = [];
+        var arrayItem;
+        for (var i = 0; i < this.conditionsInputArray.length; i++) {
+            arrayItem = this.conditionsInputArray[i];
+            if (arrayItem.regExInput.isChecked()) {
+                this.conditionsContainerDiv.removeChild(arrayItem.htmlElement);
+            }
+            else {
+                uncheckedItems.push(arrayItem);
+            }
+        }
+        // Remove "Or" label from first condition field
+        if (this.conditionsInputArray[0].regExInput.isChecked() && uncheckedItems.length > 0) {
+            uncheckedItems[0].htmlElement.removeChild(uncheckedItems[0].htmlElement.firstChild);
+        }
+        this.conditionsInputArray = uncheckedItems;
+        if (this.conditionsInputArray.length === 0) {
+            this.resetConditions();
+        }
+    };
     return RegExConditions;
+})(RegExSearchBase);
+var RegExInput = (function (_super) {
+    __extends(RegExInput, _super);
+    function RegExInput(container) {
+        _super.call(this);
+        this.container = container;
+    }
+    RegExInput.prototype.makeRegExInput = function () {
+        var _this = this;
+        $(this.container).empty();
+        var lineDiv = document.createElement("div");
+        this.editorDiv = document.createElement("div");
+        this.checkBox = document.createElement("input");
+        this.checkBox.type = "checkbox";
+        lineDiv.appendChild(this.checkBox);
+        this.conditionInput = document.createElement("input");
+        this.conditionInput.type = "text";
+        lineDiv.appendChild(this.conditionInput);
+        var regExButton = this.createButton("R");
+        $(regExButton).click(function () {
+            if (!_this.regExEditor || _this.editorDiv.children.length === 0) {
+                _this.regExEditor = new RegExEditor(_this.editorDiv, _this.conditionInput);
+                _this.regExEditor.makeRegExEditor();
+            }
+            else {
+                _this.regExEditor = null;
+                $(_this.editorDiv).empty();
+            }
+        });
+        lineDiv.appendChild(regExButton);
+        $(this.container).append(lineDiv);
+        $(this.container).append(this.editorDiv);
+    };
+    RegExInput.prototype.isChecked = function () {
+        return this.checkBox.checked;
+    };
+    RegExInput.prototype.getConditionValue = function () {
+        return this.conditionInput.value;
+    };
+    return RegExInput;
 })(RegExSearchBase);
 var RegExEditor = (function (_super) {
     __extends(RegExEditor, _super);
@@ -163,14 +282,14 @@ var RegExEditor = (function (_super) {
         var anythingButton = this.createButton("Cokoliv");
         conditionButtonsDiv.appendChild(anythingButton);
         $(anythingButton).addClass("regexsearch-input-button");
-        $(anythingButton).click(function (event) {
+        $(anythingButton).click(function () {
             conditionInput.value += ".*";
         });
         var orButton = this.createButton("Nebo");
         conditionButtonsDiv.appendChild(orButton);
         orButton.style.cssFloat = "right";
         $(orButton).addClass("regexsearch-input-button");
-        $(orButton).click(function (event) {
+        $(orButton).click(function () {
             conditionInput.value += "|";
         });
         var commandButtonsDiv = document.createElement("div");
@@ -178,6 +297,9 @@ var RegExEditor = (function (_super) {
         editorDiv.appendChild(commandButtonsDiv);
         var stornoButton = this.createButton("Zrušit");
         commandButtonsDiv.appendChild(stornoButton);
+        $(stornoButton).click(function () {
+            $(_this.container).empty();
+        });
         var backButton = this.createButton("Zpět");
         commandButtonsDiv.appendChild(backButton);
         var nextButton = this.createButton("Další");
@@ -185,9 +307,10 @@ var RegExEditor = (function (_super) {
         var submitButton = this.createButton("Dokončit");
         submitButton.style.marginLeft = "10px";
         commandButtonsDiv.appendChild(submitButton);
-        $(submitButton).click(function (event) {
+        $(submitButton).click(function () {
             _this.searchBox.value = conditionInput.value;
             // TODO more logic - using conditionType
+            $(_this.container).empty();
         });
         $(this.container).append(mainRegExDiv);
     };
