@@ -39,6 +39,7 @@ var CardFileViewer = (function () {
             this.actualBucket.getCard(this.actualCardPosition).loadCardDetail(function (card) { return _this.displayCardDetail(card); });
             this.displayHeadword(this.actualBucket.getCard(this.actualCardPosition).getHeadword());
             this.displayCardPosition(this.actualCardPosition);
+            this.actualizeSlider(this.actualCardPosition);
         }
     };
     CardFileViewer.prototype.displayCardDetail = function (card) {
@@ -50,7 +51,6 @@ var CardFileViewer = (function () {
         this.changeViewedCard(this.actualCardPosition + positionChange);
     };
     CardFileViewer.prototype.displayCardPosition = function (position) {
-        //$(this.htmlBody).find(".card-position-text").html(position.toString());
         $(this.htmlBody).find(".card-position-text").find("a").html(position.toString());
     };
     CardFileViewer.prototype.displayHeadword = function (headword) {
@@ -74,6 +74,10 @@ var CardFileViewer = (function () {
     CardFileViewer.prototype.displayBucketName = function (bucketName) {
         $(this.htmlBody).find(".cardfile-drawer-name").html(bucketName);
     };
+    CardFileViewer.prototype.actualizeSlider = function (position) {
+        $(this.htmlBody).find(".slider").slider('value', position);
+        $(this.htmlBody).find(".slider").find('.ui-slider-handle').find('.tooltip-inner').html(this.getInnerTooltipForSlider(position));
+    };
     CardFileViewer.prototype.getInnerTooltipForSlider = function (cardPosition) {
         return "Lístek: " + cardPosition + "<br/> Heslo: " + this.actualBucket.getCard(cardPosition).getHeadword();
     };
@@ -91,11 +95,11 @@ var CardFileViewer = (function () {
         $(cardFileImageDiv).addClass("cardfile-image");
         var imageAnchor = document.createElement("a");
         imageAnchor.target = "_image";
-        imageAnchor.href = "http://bara.ujc.cas.cz/bara/img/71/911005803_745788?db=2"; //TODO load from parameter
+        imageAnchor.href = "";
         var image = document.createElement("img");
         image.title = "Náhled";
         image.alt = "Náhled";
-        image.src = "http://bara.ujc.cas.cz/bara/preview/71/911751591_31487.jpeg?db=2"; //TODO load from parameter
+        image.src = "";
         imageAnchor.appendChild(image);
         cardFileImageDiv.appendChild(imageAnchor);
         cardFileLeftPanelDiv.appendChild(cardFileImageDiv);
@@ -158,9 +162,8 @@ var CardFileViewer = (function () {
     CardFileViewer.prototype.makeNavButtons = function (pageControlsDiv) {
         var _this = this;
         var paginationUl = document.createElement('ul');
-        $(paginationUl).addClass('pagination pagination-sm');
+        $(paginationUl).addClass('cardfile-pagination');
         var liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-left');
         var anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '|<';
@@ -172,7 +175,6 @@ var CardFileViewer = (function () {
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
         liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-left');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<<';
@@ -184,7 +186,6 @@ var CardFileViewer = (function () {
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
         liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-left');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<';
@@ -196,7 +197,7 @@ var CardFileViewer = (function () {
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
         liElement = document.createElement('li'); //TODO remove anchor and add styles to make it in the middle
-        $(liElement).addClass("page-navigation card-position-text");
+        $(liElement).addClass("card-position-text");
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = "";
@@ -207,7 +208,6 @@ var CardFileViewer = (function () {
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
         liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-right');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>';
@@ -219,7 +219,6 @@ var CardFileViewer = (function () {
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
         liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-right');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>>';
@@ -231,7 +230,6 @@ var CardFileViewer = (function () {
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
         liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-right');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>|';

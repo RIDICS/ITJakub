@@ -57,6 +57,7 @@ class CardFileViewer {
             this.actualBucket.getCard(this.actualCardPosition).loadCardDetail((card: CardDetail) => this.displayCardDetail(card));
             this.displayHeadword(this.actualBucket.getCard(this.actualCardPosition).getHeadword());
             this.displayCardPosition(this.actualCardPosition);
+            this.actualizeSlider(this.actualCardPosition);
         }
     }
 
@@ -71,7 +72,6 @@ class CardFileViewer {
     }
 
     private displayCardPosition(position: number) {
-        //$(this.htmlBody).find(".card-position-text").html(position.toString());
         $(this.htmlBody).find(".card-position-text").find("a").html(position.toString());
     }
 
@@ -102,6 +102,11 @@ class CardFileViewer {
         $(this.htmlBody).find(".cardfile-drawer-name").html(bucketName);
     }
 
+    private actualizeSlider(position:number) {
+        $(this.htmlBody).find(".slider").slider('value', position);
+        $(this.htmlBody).find(".slider").find('.ui-slider-handle').find('.tooltip-inner').html(this.getInnerTooltipForSlider(position));
+    }
+
     private getInnerTooltipForSlider(cardPosition: number): string {
         return "Lístek: " + cardPosition + "<br/> Heslo: " + this.actualBucket.getCard(cardPosition).getHeadword();
     }
@@ -125,12 +130,12 @@ class CardFileViewer {
 
         var imageAnchor: HTMLAnchorElement = document.createElement("a");
         imageAnchor.target = "_image";
-        imageAnchor.href = "http://bara.ujc.cas.cz/bara/img/71/911005803_745788?db=2"; //TODO load from parameter
+        imageAnchor.href = "";
 
         var image: HTMLImageElement = document.createElement("img");
         image.title = "Náhled";
         image.alt = "Náhled";
-        image.src = "http://bara.ujc.cas.cz/bara/preview/71/911751591_31487.jpeg?db=2"; //TODO load from parameter
+        image.src = "";
 
         imageAnchor.appendChild(image);
         cardFileImageDiv.appendChild(imageAnchor);
@@ -220,10 +225,9 @@ class CardFileViewer {
 
     private makeNavButtons(pageControlsDiv: HTMLDivElement) {
         var paginationUl: HTMLUListElement = document.createElement('ul');
-        $(paginationUl).addClass('pagination pagination-sm');
+        $(paginationUl).addClass('cardfile-pagination');
 
         var liElement: HTMLLIElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-left');
         var anchor: HTMLAnchorElement = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '|<';
@@ -236,7 +240,6 @@ class CardFileViewer {
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-left');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<<';
@@ -249,7 +252,6 @@ class CardFileViewer {
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-left');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<';
@@ -263,7 +265,7 @@ class CardFileViewer {
 
 
         liElement = document.createElement('li'); //TODO remove anchor and add styles to make it in the middle
-        $(liElement).addClass("page-navigation card-position-text");
+        $(liElement).addClass("card-position-text");
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = "";
@@ -276,7 +278,6 @@ class CardFileViewer {
      
 
         liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-right');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>';
@@ -289,7 +290,6 @@ class CardFileViewer {
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-right');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>>';
@@ -302,7 +302,6 @@ class CardFileViewer {
         paginationUl.appendChild(liElement);
 
         liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-right');
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>|';
