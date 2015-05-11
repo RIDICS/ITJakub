@@ -143,6 +143,7 @@ div.container {
   margin-top: 10px;
   margin-bottom: 10px;
   display: inline-block;
+  height: 30px;
 }
 .cardfile-image-thumbnail {
   display: inline;

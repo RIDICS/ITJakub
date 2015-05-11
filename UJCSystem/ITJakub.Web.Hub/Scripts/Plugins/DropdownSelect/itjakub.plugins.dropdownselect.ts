@@ -1,4 +1,4 @@
-﻿/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
+﻿ /// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
 
 
 class DropDownSelect {
