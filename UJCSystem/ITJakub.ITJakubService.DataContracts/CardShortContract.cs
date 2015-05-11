@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
@@ -12,6 +13,6 @@ namespace ITJakub.ITJakubService.DataContracts
         public int Position { get; set; }
 
         [DataMember]
-        public string Headword { get; set; }
+        public IEnumerable<string> Headwords { get; set; }
     }
 }

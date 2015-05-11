@@ -3,10 +3,13 @@ var CardFileManager = (function () {
         this.cardFilesContainer = cardFilesContainer;
         this.bucketsCache = new Array();
     }
-    CardFileManager.prototype.makeCardFile = function (cardFileId, bucketId) {
-        var bucket = this.getBucket(cardFileId, bucketId);
-        var cardFile = new CardFileViewer(cardFileId, bucket);
+    CardFileManager.prototype.makeCardFile = function (cardFileId, cardFileName, bucketId, bucketName, initCardPosition) {
+        var bucket = this.getBucket(cardFileId, bucketId, bucketName);
+        var cardFile = new CardFileViewer(cardFileId, cardFileName, bucket);
         $(this.cardFilesContainer).append(cardFile.getHtml());
+        if (initCardPosition != null) {
+            cardFile.setViewedCardByPosition(initCardPosition);
+        }
     };
     CardFileManager.prototype.getKeyByCardFileAndBucket = function (cardFileId, bucketId) {
         return cardFileId + bucketId;
@@ -15,10 +18,10 @@ var CardFileManager = (function () {
         var item = this.bucketsCache[key];
         return typeof item !== "undefined";
     };
-    CardFileManager.prototype.getBucket = function (cardFileId, bucketId) {
+    CardFileManager.prototype.getBucket = function (cardFileId, bucketId, bucketName) {
         var key = this.getKeyByCardFileAndBucket(cardFileId, bucketId);
         if (!this.cacheContainsKey(key)) {
-            var bucket = new Bucket(cardFileId, bucketId);
+            var bucket = new Bucket(cardFileId, bucketId, bucketName);
             this.bucketsCache[key] = bucket;
         }
         return this.bucketsCache[key];
@@ -34,41 +37,46 @@ var CardFileManager = (function () {
     return CardFileManager;
 })();
 var CardFileViewer = (function () {
-    function CardFileViewer(cardFileId, bucket) {
+    function CardFileViewer(cardFileId, cardFileName, bucket) {
         var _this = this;
         this.cardFileId = cardFileId;
+        this.cardFileName = cardFileName;
         var cardFileDiv = document.createElement("div");
         $(cardFileDiv).addClass("cardfile-listing loading");
         this.htmlBody = cardFileDiv;
         this.actualBucket = bucket;
         bucket.addOnFinishLoadCallback(function () { return _this.makePanel(); });
     }
+    CardFileViewer.prototype.setViewedCardByPosition = function (initCardPosition) {
+        var _this = this;
+        this.actualBucket.addOnFinishLoadCallback(function () { return _this.changeViewedCard(initCardPosition); });
+    };
+    CardFileViewer.prototype.getHtml = function () {
+        return this.htmlBody;
+    };
     CardFileViewer.prototype.makePanel = function () {
         var cardFileDiv = this.htmlBody;
         this.makeLeftPanel(cardFileDiv);
         this.makeRightPanel(cardFileDiv);
-        this.displayCardFileName(""); //TODO ajax load and fill
-        this.displayBucketName(""); //TODO ajax load and fill
+        this.displayCardFileName(this.cardFileName);
+        this.displayBucketName(this.actualBucket.getName());
         this.changeViewedCard(0);
         $(cardFileDiv).removeClass("loading");
-    };
-    CardFileViewer.prototype.getHtml = function () {
-        return this.htmlBody;
     };
     CardFileViewer.prototype.changeViewedCard = function (newActualCardPosition) {
         var _this = this;
         if (newActualCardPosition >= 0 && newActualCardPosition < this.actualBucket.getCardsCount()) {
             this.actualCardPosition = newActualCardPosition;
             this.actualBucket.getCard(this.actualCardPosition).loadCardDetail(function (card) { return _this.displayCardDetail(card); });
-            this.displayHeadword(this.actualBucket.getCard(this.actualCardPosition).getHeadword());
+            this.displayHeadwords(this.actualBucket.getCard(this.actualCardPosition).getHeadwords());
             this.displayCardPosition(this.actualCardPosition);
             this.actualizeSlider(this.actualCardPosition);
         }
     };
     CardFileViewer.prototype.displayCardDetail = function (card) {
         this.displayImages(card.getId(), card.getImagesIds());
-        this.displayNote(card.getId());
-        this.displayWarning(card.getPosition().toString());
+        this.displayNotes(card.getNotes());
+        this.displayWarnings(card.getWarnings());
     };
     CardFileViewer.prototype.changeActualCardPosition = function (positionChange) {
         this.changeViewedCard(this.actualCardPosition + positionChange);
@@ -76,15 +84,22 @@ var CardFileViewer = (function () {
     CardFileViewer.prototype.displayCardPosition = function (position) {
         $(this.htmlBody).find(".card-position-text").find("a").html(position.toString());
     };
-    CardFileViewer.prototype.displayHeadword = function (headword) {
-        $(this.htmlBody).find(".headword-name").html(headword);
-        $(this.htmlBody).find(".cardfile-headword-text").html(headword);
+    CardFileViewer.prototype.displayHeadwords = function (headwords) {
+        var headwordsText = "";
+        for (var i = 0; i < headwords.length; i++) {
+            headwordsText += headwords[i];
+            if (i < headwords.length - 1) {
+                headwordsText += ", ";
+            }
+        }
+        $(this.htmlBody).find(".headword-name").html(headwordsText);
+        $(this.htmlBody).find(".cardfile-headword-text").html(headwordsText);
     };
-    CardFileViewer.prototype.displayNote = function (note) {
-        $(this.htmlBody).find(".cardfile-note-text").html(note);
+    CardFileViewer.prototype.displayNotes = function (notes) {
+        $(this.htmlBody).find(".cardfile-note-text").html(notes[0]);
     };
-    CardFileViewer.prototype.displayWarning = function (warning) {
-        $(this.htmlBody).find(".cardfile-notice-text").html(warning);
+    CardFileViewer.prototype.displayWarnings = function (warnings) {
+        $(this.htmlBody).find(".cardfile-notice-text").html(warnings[0]);
     };
     CardFileViewer.prototype.displayImages = function (cardId, imageIds) {
         this.changeDisplayedPreviewImage(cardId, imageIds[0]);
@@ -130,7 +145,12 @@ var CardFileViewer = (function () {
         $(this.htmlBody).find(".slider").find('.ui-slider-handle').find('.tooltip-inner').html(this.getInnerTooltipForSlider(position));
     };
     CardFileViewer.prototype.getInnerTooltipForSlider = function (cardPosition) {
-        return "Lístek: " + cardPosition + "<br/> Heslo: " + this.actualBucket.getCard(cardPosition).getHeadword();
+        var headwords = this.actualBucket.getCard(cardPosition).getHeadwords();
+        var headwordText = headwords[0];
+        if (headwords.length > 1) {
+            headwordText += " ...";
+        }
+        return "Lístek: " + cardPosition + "<br/> Hesla: " + headwordText;
     };
     CardFileViewer.prototype.makeLeftPanel = function (cardFileDiv) {
         var cardFileLeftPanelDiv = document.createElement("div");
@@ -186,7 +206,7 @@ var CardFileViewer = (function () {
         cardFileRightPanelDiv.appendChild(cardFilePagesDiv);
         var cardFileHeadwordDescDiv = document.createElement("div");
         $(cardFileHeadwordDescDiv).addClass("cardfile-headword-description");
-        cardFileHeadwordDescDiv.innerText = "Heslo: ";
+        cardFileHeadwordDescDiv.innerText = "Hesla: ";
         var cardFileHeadwordTextSpan = document.createElement("span");
         $(cardFileHeadwordTextSpan).addClass("cardfile-headword-text");
         cardFileHeadwordTextSpan.innerText = "";
@@ -247,7 +267,7 @@ var CardFileViewer = (function () {
         });
         liElement.appendChild(anchor);
         paginationUl.appendChild(liElement);
-        liElement = document.createElement('li'); //TODO remove anchor and add styles to make it in the middle
+        liElement = document.createElement('li');
         $(liElement).addClass("card-position-text");
         anchor = document.createElement('a');
         anchor.href = '#';
@@ -339,8 +359,9 @@ var CardFileViewer = (function () {
     return CardFileViewer;
 })();
 var Bucket = (function () {
-    function Bucket(cardFileId, bucketId) {
+    function Bucket(cardFileId, bucketId, bucketName) {
         this.id = bucketId;
+        this.bucketName = bucketName;
         this.cardFileId = cardFileId;
         this.loaded = false;
         this.cards = new Array();
@@ -349,6 +370,9 @@ var Bucket = (function () {
     }
     Bucket.prototype.getId = function () {
         return this.id;
+    };
+    Bucket.prototype.getName = function () {
+        return this.bucketName;
     };
     Bucket.prototype.getCardFileId = function () {
         return this.cardFileId;
@@ -391,7 +415,7 @@ var Bucket = (function () {
                 _this.cardsCount = cards.length;
                 for (var i = 0; i < cards.length; i++) {
                     var jsonCard = cards[i];
-                    _this.cards.push(new Card(jsonCard["Id"], jsonCard["Position"], jsonCard["Headword"], _this));
+                    _this.cards.push(new Card(jsonCard["Id"], jsonCard["Position"], jsonCard["Headwords"], _this));
                 }
                 _this.onFinishLoad();
             },
@@ -403,10 +427,10 @@ var Bucket = (function () {
     return Bucket;
 })();
 var Card = (function () {
-    function Card(cardId, position, headword, parentBucket) {
+    function Card(cardId, position, headwords, parentBucket) {
         this.id = cardId;
         this.position = position;
-        this.headword = headword;
+        this.headwords = headwords;
         this.parentBucket = parentBucket;
     }
     Card.prototype.getId = function () {
@@ -415,8 +439,8 @@ var Card = (function () {
     Card.prototype.getPosition = function () {
         return this.position;
     };
-    Card.prototype.getHeadword = function () {
-        return this.headword;
+    Card.prototype.getHeadwords = function () {
+        return this.headwords;
     };
     Card.prototype.getParentBucket = function () {
         return this.parentBucket;
@@ -437,7 +461,7 @@ var Card = (function () {
                     var imageId = images[i]["Id"];
                     imagesArray.push(imageId);
                 }
-                callback(new CardDetail(card["Id"], card["Position"], card["Headword"], card["Warning"], card["Note"], imagesArray));
+                callback(new CardDetail(card["Id"], card["Position"], card["Headwords"], card["Warnings"], card["Notes"], imagesArray));
             },
             error: function (response) {
                 //TODO resolve error
@@ -447,12 +471,12 @@ var Card = (function () {
     return Card;
 })();
 var CardDetail = (function () {
-    function CardDetail(cardId, position, headword, warning, note, images) {
+    function CardDetail(cardId, position, headwords, warnings, notes, images) {
         this.id = cardId;
         this.position = position;
-        this.headword = headword;
-        this.warning = warning;
-        this.note = note;
+        this.headwords = headwords;
+        this.warnings = warnings;
+        this.notes = notes;
         this.images = images;
     }
     CardDetail.prototype.getId = function () {
@@ -461,17 +485,17 @@ var CardDetail = (function () {
     CardDetail.prototype.getPosition = function () {
         return this.position;
     };
-    CardDetail.prototype.getHeadword = function () {
-        return this.headword;
+    CardDetail.prototype.getHeadwords = function () {
+        return this.headwords;
+    };
+    CardDetail.prototype.getWarnings = function () {
+        return this.warnings;
+    };
+    CardDetail.prototype.getNotes = function () {
+        return this.notes;
     };
     CardDetail.prototype.getImagesIds = function () {
         return this.images;
-    };
-    CardDetail.prototype.getWarning = function () {
-        return this.warning;
-    };
-    CardDetail.prototype.getNote = function () {
-        return this.note;
     };
     return CardDetail;
 })();

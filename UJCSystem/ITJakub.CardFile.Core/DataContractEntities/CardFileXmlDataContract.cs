@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 
@@ -340,6 +342,10 @@ namespace ITJakub.CardFile.Core.DataContractEntities
         private string noteField;
     
         private string idField;
+
+
+        [XmlElement(ElementName = "field")]
+        public List<Field> Fields { get; set; }
     
         /// <remarks/>
         [XmlElement("position")]
@@ -362,10 +368,11 @@ namespace ITJakub.CardFile.Core.DataContractEntities
                 this.imageField = value;
             }
         }
-    
+
+        [Obsolete("API changed to Field elements with id='heslo'")]
         /// <remarks/>
         [XmlElement(DataType="NCName")]
-        public string headword {
+        public string headword {       
             get {
                 return this.headwordField;
             }
@@ -373,9 +380,10 @@ namespace ITJakub.CardFile.Core.DataContractEntities
                 this.headwordField = value;
             }
         }
-    
+
+        [Obsolete("API changed to Field elements with id='warning'")]
         /// <remarks/>
-        public string warning {
+        public string warning {       
             get {
                 return this.warningField;
             }
@@ -383,9 +391,10 @@ namespace ITJakub.CardFile.Core.DataContractEntities
                 this.warningField = value;
             }
         }
-    
+
+        [Obsolete("API changed to Field elements with id='commnent'")]
         /// <remarks/>
-        public string note {
+        public string note {           
             get {
                 return this.noteField;
             }
@@ -405,6 +414,45 @@ namespace ITJakub.CardFile.Core.DataContractEntities
             }
         }
     }
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.17929")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(AnonymousType = true)]
+    [XmlRoot(ElementName = "field",Namespace="", IsNullable=false)]
+    public class Field
+    {
+        private string idField;
+        private string valueField;
+
+        [XmlAttribute(DataType = "integer")]
+        public string id
+        {
+            get
+            {
+                return this.idField;
+            }
+            set
+            {
+                this.idField = value;
+            }
+        }
+
+        [XmlTextAttribute]
+        public string value
+        {
+            get
+            {
+                return this.valueField;
+            }
+            set
+            {
+                this.valueField = value;
+            }
+        }
+    }
+
 
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.17929")]

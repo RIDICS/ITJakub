@@ -13,15 +13,15 @@ namespace ITJakub.ITJakubService.DataContracts
         public int Position { get; set; }
 
         [DataMember]
-        public string Headword { get; set; }
+        public IEnumerable<string> Headwords { get; set; }
 
         [DataMember]
-        public IList<ImageContract> Images { get; set; }
+        public IEnumerable<ImageContract> Images { get; set; }
 
         [DataMember]
-        public string Warning { get; set; }
+        public IEnumerable<string> Warnings { get; set; }
 
         [DataMember]
-        public string Note { get; set; }
+        public IEnumerable<string> Notes { get; set; }
     }
 }
