@@ -62,7 +62,7 @@ class CardFileViewer {
     }
 
     private displayCardDetail(card: CardDetail) {
-        this.displayImage(card.getId(), card.getImagesIds()[0]); //TODO display other images
+        this.displayImages(card.getId(), card.getImagesIds());
         this.displayNote(card.getId());
         this.displayWarning(card.getPosition().toString());
     }
@@ -88,9 +88,41 @@ class CardFileViewer {
         $(this.htmlBody).find(".cardfile-notice-text").html(warning);
     }
 
-    private displayImage(cardId: string, imageId: string) {
+    private displayImages(cardId: string, imageIds: string[]) {
+        this.changeDisplayedPreviewImage(cardId, imageIds[0]);
+        var pagesContainer = $(this.htmlBody).find(".cardfile-pages");
+        pagesContainer.empty();
+        for (var i = 0; i < imageIds.length; i++) {
+            var thumbHtml = this.makeImageThumbnail(cardId, imageIds[i]);
+            pagesContainer.append(thumbHtml);
+        }
+    }
+
+    private makeImageThumbnail(cardId :string, imageId: string ): HTMLDivElement {
+        var cardFileImageDiv: HTMLDivElement = document.createElement("div");
+        $(cardFileImageDiv).addClass("cardfile-image-thumbnail");
+
+        var imageAnchor: HTMLAnchorElement = document.createElement("a");
+        imageAnchor.href = "#";
+        $(imageAnchor).click((event: Event) => {
+            event.stopPropagation();
+            this.changeDisplayedPreviewImage(cardId, imageId);
+            return false;
+        });
+
+        var image: HTMLImageElement = document.createElement("img");
+        image.title = "Malý náhled";
+        image.alt = "Malý náhled";
+        image.src = "/CardFiles/CardFiles/Image?cardFileId="+this.cardFileId+"&bucketId="+this.actualBucket.getId()+"&cardId="+cardId+"&imageId="+imageId+"&imageSize=thumbnail";
+
+        imageAnchor.appendChild(image);
+        cardFileImageDiv.appendChild(imageAnchor);
+        return cardFileImageDiv;
+    }
+
+    private changeDisplayedPreviewImage(cardId: string, imageId: string) {
         var cardFileImageDiv = $(this.htmlBody).find(".cardfile-image");
-        $(cardFileImageDiv).find("img").attr("src","/CardFiles/CardFiles/Image?cardFileId="+this.cardFileId+"&bucketId="+this.actualBucket.getId()+"&cardId="+cardId+"&imageId="+imageId+"&imageSize=preview");
+        $(cardFileImageDiv).find("img").attr("src", "/CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=preview");
         $(cardFileImageDiv).find("a").attr("href", "/CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=full");
     }
 
