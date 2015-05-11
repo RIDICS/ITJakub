@@ -228,6 +228,8 @@ var CardFileViewer = (function () {
         $(cardFilePagesDiv).addClass("cardfile-pages");
         cardFilePagesDiv.innerText = "Stránky: ";
         cardFileRightPanelDiv.appendChild(cardFilePagesDiv);
+        var cardFileScrollableRightPanelDiv = document.createElement("div");
+        $(cardFileScrollableRightPanelDiv).addClass("cardfile-scrollable-part-right-panel");
         var cardFileHeadwordDescDiv = document.createElement("div");
         $(cardFileHeadwordDescDiv).addClass("cardfile-headword-description");
         cardFileHeadwordDescDiv.innerText = "Hesla: ";
@@ -235,21 +237,22 @@ var CardFileViewer = (function () {
         $(cardFileHeadwordTextSpan).addClass("cardfile-headword-text");
         cardFileHeadwordTextSpan.innerText = "";
         cardFileHeadwordDescDiv.appendChild(cardFileHeadwordTextSpan);
-        cardFileRightPanelDiv.appendChild(cardFileHeadwordDescDiv);
+        cardFileScrollableRightPanelDiv.appendChild(cardFileHeadwordDescDiv);
         var cardFileNoticeDiv = document.createElement("div");
         $(cardFileNoticeDiv).addClass("cardfile-notice");
         cardFileNoticeDiv.innerText = "Upozornění: ";
         var cardFileNoticeList = document.createElement("ul");
         $(cardFileNoticeList).addClass("cardfile-notice-list");
         cardFileNoticeDiv.appendChild(cardFileNoticeList);
-        cardFileRightPanelDiv.appendChild(cardFileNoticeDiv);
+        cardFileScrollableRightPanelDiv.appendChild(cardFileNoticeDiv);
         var cardFileNoteDiv = document.createElement("div");
         $(cardFileNoteDiv).addClass("cardfile-note");
         cardFileNoteDiv.innerText = "Poznámka: ";
         var cardFileNoteList = document.createElement("ul");
         $(cardFileNoteList).addClass("cardfile-note-list");
         cardFileNoteDiv.appendChild(cardFileNoteList);
-        cardFileRightPanelDiv.appendChild(cardFileNoteDiv);
+        cardFileScrollableRightPanelDiv.appendChild(cardFileNoteDiv);
+        cardFileRightPanelDiv.appendChild(cardFileScrollableRightPanelDiv);
         cardFileDiv.appendChild(cardFileRightPanelDiv);
     };
     CardFileViewer.prototype.makeNavButtons = function (pageControlsDiv) {

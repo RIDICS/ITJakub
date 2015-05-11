@@ -292,6 +292,9 @@ class CardFileViewer {
 
         cardFileRightPanelDiv.appendChild(cardFilePagesDiv);
 
+        var cardFileScrollableRightPanelDiv: HTMLDivElement = document.createElement("div");
+        $(cardFileScrollableRightPanelDiv).addClass("cardfile-scrollable-part-right-panel");
+
         var cardFileHeadwordDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileHeadwordDescDiv).addClass("cardfile-headword-description");
         cardFileHeadwordDescDiv.innerText = "Hesla: ";
@@ -301,7 +304,7 @@ class CardFileViewer {
         cardFileHeadwordTextSpan.innerText = "";
 
         cardFileHeadwordDescDiv.appendChild(cardFileHeadwordTextSpan);
-        cardFileRightPanelDiv.appendChild(cardFileHeadwordDescDiv);
+        cardFileScrollableRightPanelDiv.appendChild(cardFileHeadwordDescDiv);
 
         var cardFileNoticeDiv: HTMLDivElement = document.createElement("div");
         $(cardFileNoticeDiv).addClass("cardfile-notice");
@@ -311,7 +314,7 @@ class CardFileViewer {
         $(cardFileNoticeList).addClass("cardfile-notice-list");
 
         cardFileNoticeDiv.appendChild(cardFileNoticeList);
-        cardFileRightPanelDiv.appendChild(cardFileNoticeDiv);
+        cardFileScrollableRightPanelDiv.appendChild(cardFileNoticeDiv);
 
         var cardFileNoteDiv: HTMLDivElement = document.createElement("div");
         $(cardFileNoteDiv).addClass("cardfile-note");
@@ -321,7 +324,9 @@ class CardFileViewer {
         $(cardFileNoteList).addClass("cardfile-note-list");
 
         cardFileNoteDiv.appendChild(cardFileNoteList);
-        cardFileRightPanelDiv.appendChild(cardFileNoteDiv);
+        cardFileScrollableRightPanelDiv.appendChild(cardFileNoteDiv);
+
+        cardFileRightPanelDiv.appendChild(cardFileScrollableRightPanelDiv);
 
         cardFileDiv.appendChild(cardFileRightPanelDiv);
     }

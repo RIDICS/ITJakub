@@ -190,4 +190,8 @@ div.container {
   height: 380px;
   background-color: white;
 }
+.cardfile-scrollable-part-right-panel {
+  overflow-y: auto;
+  max-height: 150px;
+}
 /*# sourceMappingURL=itjakub.cardfile.css.map */
