@@ -124,11 +124,35 @@ class CardFileViewer {
     }
 
     private displayNotes(notes: Array<string>) {
-        $(this.htmlBody).find(".cardfile-note-text").html(notes[0]);
+        var ulContainer = $(this.htmlBody).find(".cardfile-note-list");
+        ulContainer.empty();
+        var parent = ulContainer.parent();
+        ulContainer.detach();               //fix for infinite adding to computed height in parent div
+        for (var i = 0; i < notes.length; i++) {
+            if (!notes[i] || 0 === notes[i].length) {
+                continue;
+            }
+            var li: HTMLLIElement = document.createElement("li");
+            $(li).html(notes[i]);
+            ulContainer.append(li);
+        }
+        parent.append(ulContainer);
     }
 
     private displayWarnings(warnings: Array<string>) {
-        $(this.htmlBody).find(".cardfile-notice-text").html(warnings[0]);
+        var ulContainer = $(this.htmlBody).find(".cardfile-notice-list");
+        ulContainer.empty();
+        var parent = ulContainer.parent();
+        ulContainer.detach();                //fix for infinite adding to computed height in parent div
+        for (var i = 0; i < warnings.length; i++) {
+            if (!warnings[i] || 0 === warnings[i].length) {
+                continue;
+            }
+            var li: HTMLLIElement = document.createElement("li");
+            $(li).html(warnings[i]);
+            ulContainer.append(li);
+        }
+        parent.append(ulContainer);
     }
 
     private displayImages(cardId: string, imageIds: string[]) {
@@ -283,22 +307,20 @@ class CardFileViewer {
         $(cardFileNoticeDiv).addClass("cardfile-notice");
         cardFileNoticeDiv.innerText = "Upozornění: ";
 
-        var cardFileNoticeSpan: HTMLSpanElement = document.createElement("span");
-        $(cardFileNoticeSpan).addClass("cardfile-notice-text");
-        cardFileNoticeSpan.innerText = "";
+        var cardFileNoticeList: HTMLUListElement = document.createElement("ul");
+        $(cardFileNoticeList).addClass("cardfile-notice-list");
 
-        cardFileNoticeDiv.appendChild(cardFileNoticeSpan);
+        cardFileNoticeDiv.appendChild(cardFileNoticeList);
         cardFileRightPanelDiv.appendChild(cardFileNoticeDiv);
 
         var cardFileNoteDiv: HTMLDivElement = document.createElement("div");
         $(cardFileNoteDiv).addClass("cardfile-note");
         cardFileNoteDiv.innerText = "Poznámka: ";
 
-        var cardFileNoteSpan: HTMLSpanElement = document.createElement("span");
-        $(cardFileNoteSpan).addClass("cardfile-note-text");
-        cardFileNoteSpan.innerText = "";
+        var cardFileNoteList: HTMLUListElement = document.createElement("ul");
+        $(cardFileNoteList).addClass("cardfile-note-list");
 
-        cardFileNoteDiv.appendChild(cardFileNoteSpan);
+        cardFileNoteDiv.appendChild(cardFileNoteList);
         cardFileRightPanelDiv.appendChild(cardFileNoteDiv);
 
         cardFileDiv.appendChild(cardFileRightPanelDiv);

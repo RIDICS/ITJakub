@@ -40,7 +40,7 @@ $(".concrete-cardfile-checkbox").click(function () {
 });
 $(document).ready(function () {
     var cardsCreator = new CardFileManager("div.cardfile-result-area");
-    cardsCreator.makeCardFile("1", "Excerpce", "52", "netbalivy-odymovati"); //TODO load files and buckets by search
+    cardsCreator.makeCardFile("1", "Excerpce", "52", "netbalivy-odymovati", 22); //TODO load files and buckets by search
     cardsCreator.makeCardFile("2", "Excerpce", "71", "netbalivy-odymovati", 13);
     cardsCreator.makeCardFile("3", "Excerpce", "70", "netbalivy-odymovati", 5);
 });

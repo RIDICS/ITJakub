@@ -96,10 +96,34 @@ var CardFileViewer = (function () {
         $(this.htmlBody).find(".cardfile-headword-text").html(headwordsText);
     };
     CardFileViewer.prototype.displayNotes = function (notes) {
-        $(this.htmlBody).find(".cardfile-note-text").html(notes[0]);
+        var ulContainer = $(this.htmlBody).find(".cardfile-note-list");
+        ulContainer.empty();
+        var parent = ulContainer.parent();
+        ulContainer.detach(); //fix for infinite adding to computed height in parent div
+        for (var i = 0; i < notes.length; i++) {
+            if (!notes[i] || 0 === notes[i].length) {
+                continue;
+            }
+            var li = document.createElement("li");
+            $(li).html(notes[i]);
+            ulContainer.append(li);
+        }
+        parent.append(ulContainer);
     };
     CardFileViewer.prototype.displayWarnings = function (warnings) {
-        $(this.htmlBody).find(".cardfile-notice-text").html(warnings[0]);
+        var ulContainer = $(this.htmlBody).find(".cardfile-notice-list");
+        ulContainer.empty();
+        var parent = ulContainer.parent();
+        ulContainer.detach(); //fix for infinite adding to computed height in parent div
+        for (var i = 0; i < warnings.length; i++) {
+            if (!warnings[i] || 0 === warnings[i].length) {
+                continue;
+            }
+            var li = document.createElement("li");
+            $(li).html(warnings[i]);
+            ulContainer.append(li);
+        }
+        parent.append(ulContainer);
     };
     CardFileViewer.prototype.displayImages = function (cardId, imageIds) {
         this.changeDisplayedPreviewImage(cardId, imageIds[0]);
@@ -215,18 +239,16 @@ var CardFileViewer = (function () {
         var cardFileNoticeDiv = document.createElement("div");
         $(cardFileNoticeDiv).addClass("cardfile-notice");
         cardFileNoticeDiv.innerText = "Upozornění: ";
-        var cardFileNoticeSpan = document.createElement("span");
-        $(cardFileNoticeSpan).addClass("cardfile-notice-text");
-        cardFileNoticeSpan.innerText = "";
-        cardFileNoticeDiv.appendChild(cardFileNoticeSpan);
+        var cardFileNoticeList = document.createElement("ul");
+        $(cardFileNoticeList).addClass("cardfile-notice-list");
+        cardFileNoticeDiv.appendChild(cardFileNoticeList);
         cardFileRightPanelDiv.appendChild(cardFileNoticeDiv);
         var cardFileNoteDiv = document.createElement("div");
         $(cardFileNoteDiv).addClass("cardfile-note");
         cardFileNoteDiv.innerText = "Poznámka: ";
-        var cardFileNoteSpan = document.createElement("span");
-        $(cardFileNoteSpan).addClass("cardfile-note-text");
-        cardFileNoteSpan.innerText = "";
-        cardFileNoteDiv.appendChild(cardFileNoteSpan);
+        var cardFileNoteList = document.createElement("ul");
+        $(cardFileNoteList).addClass("cardfile-note-list");
+        cardFileNoteDiv.appendChild(cardFileNoteList);
         cardFileRightPanelDiv.appendChild(cardFileNoteDiv);
         cardFileDiv.appendChild(cardFileRightPanelDiv);
     };
