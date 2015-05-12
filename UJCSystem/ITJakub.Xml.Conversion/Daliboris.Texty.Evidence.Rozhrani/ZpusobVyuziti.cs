@@ -26,7 +26,7 @@ namespace Daliboris.Texty.Evidence.Rozhrani
 		StredoceskyKorpus = 4,
 
 		/// <summary>
-		/// Text určený pro ddiční modul Vokabuláře webového
+		/// Text určený pro ediční modul Vokabuláře webového
 		/// </summary>
 		[EnumDescription("EM")]
 		EdicniModul = 8,
@@ -44,14 +44,26 @@ namespace Daliboris.Texty.Evidence.Rozhrani
 		[EnumDescription("NK")]
 		NarodniKnihovna = 32,
 
-        /// <summary>
-        /// Text, nebo jeho úryvek, určený pro audioknihu
-        /// </summary>
-        [EnumDescription("Audio")]
-        Audiokniha = 64,
+		/// <summary>
+		/// Text, nebo jeho úryvek, určený pro audioknihu
+		/// </summary>
+		[EnumDescription("Audio")]
+		Audiokniha = 64,
 
-	 /// <summary>
-		/// Text určený pro elektronickou knihu
+		/// <summary>
+		/// Text zpracovaný ve formě slovníku (pro modul slovníků)
+		/// </summary>
+		[EnumDescription("Slovník")]
+		Slovnik = 128,
+
+		/// <summary>
+		/// Text určený pro modul odborné literatury
+		/// </summary>
+		[EnumDescription("MOL")]
+		OdbornaLiteratura = 256,
+
+		/// <summary>
+		/// Text určený pro interní textovou banku
 		/// </summary>
 		[EnumDescription("ITB")]
 		InterniKorpus = 16384
