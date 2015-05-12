@@ -38,7 +38,7 @@
                 <xsl:call-template name="InsertEndocingDesc"/>
                 <profileDesc>
                     <textClass>
-                        <catRef target="#taxonomy-dictionary-contemporary"/>
+                    	<catRef target="#taxonomy-dictionary-contemporary #output-dictionary"/>
                     </textClass>
                 </profileDesc>
             </teiHeader>
