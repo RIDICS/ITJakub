@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<itj:document doctype="Dictionary" versionId="d9a796c8-d26e-4e45-a655-fa140e371c0d" xml:lang="cs" n="{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+  <teiHeader>
+    <fileDesc n="4E5DB418-B49B-4AC0-AE9F-78A53E9BE4FE">
+      <titleStmt>
+        <title>Elektronický slovník staré češtiny</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Ústavu pro jazyk český AV ČR, v. v. i.</publisher>
+        <pubPlace>Praha</pubPlace>
+        <date>2006–2012</date>
+        <availability status="restricted">
+          <p>Tato elektronická edice je autorské dílo chráněné ve smyslu zákona č. 121/2000 Sb., o právu autorském, a je určena pouze k nekomerčním účelům.</p>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <listBibl>
+          <bibl type="acronym" subtype="source">ESSČ</bibl>
+        </listBibl>
+        <bibl>Elektronický slovník slovník staré češtiny. Hesla s náslovním <hi rend="italic">R</hi>–<hi rend="italic">Ž</hi> a <hi rend="italic">A</hi>–<hi rend="italic">G</hi>. oddělení vývoje jazyka ÚJČ AV ČR, v. v. i., 2006–2012. 
+                        </bibl>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <classDecl>
+        <taxonomy xml:id="taxonomy">
+          <category xml:id="taxonomy-dictionary">
+            <catDesc xml:lang="cs-cz">slovník</catDesc>
+            <category xml:id="taxonomy-dictionary-contemporary">
+              <catDesc xml:lang="cs-cz">soudobý</catDesc>
+            </category>
+            <category xml:id="taxonomy-dictionary-historical">
+              <catDesc xml:lang="cs-cz">dobový</catDesc>
+            </category>
+          </category>
+          <category xml:id="taxonomy-historical_text">
+            <catDesc xml:lang="cs-cz">historický text</catDesc>
+            <category xml:id="taxonomy-historical_text-old_czech">
+              <catDesc xml:lang="cs-cz">staročeský</catDesc>
+            </category>
+            <category xml:id="taxonomy-historical_text-medieval_czech">
+              <catDesc xml:lang="cs-cz">středněčeský</catDesc>
+            </category>
+          </category>
+          <category xml:id="taxonomy-scholary_text">
+            <catDesc xml:lang="cs-cz">odborný text</catDesc>
+          </category>
+          <category xml:id="taxonomy-digitized-grammar">
+            <catDesc xml:lang="cs-cz">digitalizovaná mluvnice</catDesc>
+          </category>
+          <category xml:id="taxonomy-card-index">
+            <catDesc xml:lang="cs-cz">lístková kartotéka</catDesc>
+          </category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+    <profileDesc>
+      <textClass>
+        <catRef target="#taxonomy-dictionary-contemporary" />
+      </textClass>
+    </profileDesc>
+    <revisionDesc>
+      <change n="Change_2015-05-12T05:35:37.0000000" when="2015-05-12T05:35:37"></change>
+      <change n="d9a796c8-d26e-4e45-a655-fa140e371c0d" when="2015-05-12T10:11:02.4804403Z"></change>
+    </revisionDesc>
+  </teiHeader>
+  <itj:tableOfContents />
+  <itj:pages />
+</itj:document>

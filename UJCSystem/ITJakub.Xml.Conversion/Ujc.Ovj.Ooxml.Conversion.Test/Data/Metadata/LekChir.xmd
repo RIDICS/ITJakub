@@ -1,0 +1,789 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<itj:document doctype="Edition" versionId="9dc3ee5a-86a6-448b-a74b-903265777408" xml:lang="cs" n="{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+  <teiHeader xml:id="teiHeader-1">
+    <fileDesc n="{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}">
+      <titleStmt>
+        <title>[Chirurgické lékařství]</title>
+      </titleStmt>
+      <editionStmt>
+        <edition>elektronická edice</edition>
+        <respStmt>
+          <resp>editor</resp>
+          <name>Černá, Alena M.</name>
+        </respStmt>
+        <respStmt>
+          <resp>kódování TEI</resp>
+          <name>Lehečka, Boris</name>
+        </respStmt>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.<email>vyvoj@ujc.cas.cz</email></publisher>
+        <pubPlace>Praha</pubPlace>
+        <date>2011–2015</date>
+        <availability status="restricted">
+          <p xml:id="p-1">Tato edice je autorské dílo chráněné ve smyslu zákona č. 121/2000 Sb., o právu autorském, a je určena pouze k nekomerčním účelům.</p>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <msDesc xml:lang="cs">
+          <msIdentifier>
+            <country key="xr">Česko</country>
+            <settlement>Praha</settlement>
+            <repository>Národní knihovna České republiky</repository>
+            <idno>XVII H 23</idno>
+          </msIdentifier>
+          <msContents>
+            <msItem>
+              <title>[Chirurgické lékařství]</title>
+            </msItem>
+          </msContents>
+          <history>
+            <origin>
+              <origDate notBefore="1500" notAfter="1515">začátek 16. století</origDate>
+            </origin>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc xml:id="teiHeader-1.encodingDesc-1">
+      <projectDesc xml:id="teiHeader-1.encodingDesc-1.projectDesc-1">
+        <p rend="grant" xml:id="teiHeader-1.encodingDesc-1.projectDesc-1.p-1">Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 <hi rend="italic">Výzkum historické češtiny (na základě nových materiálových bází)</hi>.</p>
+      </projectDesc>
+      <classDecl>
+        <taxonomy xml:id="taxonomy">
+          <category xml:id="taxonomy-dictionary">
+            <catDesc xml:lang="cs-cz">slovník</catDesc>
+            <category xml:id="taxonomy-dictionary-contemporary">
+              <catDesc xml:lang="cs-cz">soudobý</catDesc>
+            </category>
+            <category xml:id="taxonomy-dictionary-historical">
+              <catDesc xml:lang="cs-cz">dobový</catDesc>
+            </category>
+          </category>
+          <category xml:id="taxonomy-historical_text">
+            <catDesc xml:lang="cs-cz">historický text</catDesc>
+            <category xml:id="taxonomy-historical_text-old_czech">
+              <catDesc xml:lang="cs-cz">staročeský</catDesc>
+            </category>
+            <category xml:id="taxonomy-historical_text-medieval_czech">
+              <catDesc xml:lang="cs-cz">středněčeský</catDesc>
+            </category>
+          </category>
+          <category xml:id="taxonomy-scholary_text">
+            <catDesc xml:lang="cs-cz">odborný text</catDesc>
+          </category>
+          <category xml:id="taxonomy-digitized-grammar">
+            <catDesc xml:lang="cs-cz">digitalizovaná mluvnice</catDesc>
+          </category>
+          <category xml:id="taxonomy-card-index">
+            <catDesc xml:lang="cs-cz">lístková kartotéka</catDesc>
+          </category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+    <profileDesc>
+      <textClass>
+        <catRef target="#taxonomy-historical_text-old_czech" />
+        <keywords scheme="http://vokabular.ujc.cas.cz/scheme/classification/secondary">
+          <term>próza</term>
+          <term>lékařství</term>
+        </keywords>
+      </textClass>
+    </profileDesc>
+    <revisionDesc>
+      <change n="Change_2015-04-24T09:51:01.0000000" when="2015-04-24T09:51:01"></change>
+      <change n="Change_2015-04-30T08:37:27.0000000" when="2015-04-30T08:37:27"></change>
+      <change n="Change_2015-05-01T14:57:08.0000000" when="2015-05-01T14:57:08"></change>
+      <change n="Change_2015-05-06T14:16:50.0000000" when="2015-05-06T14:16:50">dd</change>
+      <change n="Change_2015-05-11T12:30:32.0000000" when="2015-05-11T12:30:32">DD</change>
+      <change n="9dc3ee5a-86a6-448b-a74b-903265777408" when="2015-05-12T08:57:21.4370388Z"></change>
+    </revisionDesc>
+  </teiHeader>
+  <itj:tableOfContents />
+  <itj:pages>
+    <itj:page n="1v" xml:id="t-1.body-1.pb-1" resource="LekChir_0001.xml" />
+    <itj:page n="2v" xml:id="t-1.body-1.div-2.div-1.div-1.p-1.pb-1" resource="LekChir_0002.xml" />
+    <itj:page n="3r" xml:id="t-1.body-1.div-2.div-1.div-1.p-1.pb-2" resource="LekChir_0003.xml" />
+    <itj:page n="3v" xml:id="t-1.body-1.div-2.div-1.div-1.p-1.pb-3" resource="LekChir_0004.xml" />
+    <itj:page n="4r" xml:id="t-1.body-1.div-2.div-1.div-1.p-1.pb-4" resource="LekChir_0005.xml" />
+    <itj:page n="4v" xml:id="t-1.body-1.div-2.div-1.div-1.p-1.pb-5" resource="LekChir_0006.xml" />
+    <itj:page n="5r" xml:id="t-1.body-1.div-2.div-1.div-1.p-1.pb-6" resource="LekChir_0007.xml" />
+    <itj:page n="5v" xml:id="t-1.body-1.div-2.div-1.div-2.p-1.pb-1" resource="LekChir_0008.xml" />
+    <itj:page n="6r" xml:id="t-1.body-1.div-2.div-1.div-2.p-1.pb-2" resource="LekChir_0009.xml" />
+    <itj:page n="6v" xml:id="t-1.body-1.div-2.div-1.div-2.p-1.pb-3" resource="LekChir_0010.xml" />
+    <itj:page n="7r" xml:id="t-1.body-1.div-2.div-1.div-2.p-1.pb-4" resource="LekChir_0011.xml" />
+    <itj:page n="7v" xml:id="t-1.body-1.div-2.div-1.div-3.p-2.pb-1" resource="LekChir_0012.xml" />
+    <itj:page n="8r" xml:id="t-1.body-1.div-2.div-1.div-3.p-2.pb-2" resource="LekChir_0013.xml" />
+    <itj:page n="8v" xml:id="t-1.body-1.div-2.div-1.div-3.p-2.pb-3" resource="LekChir_0014.xml" />
+    <itj:page n="9r" xml:id="t-1.body-1.div-2.div-1.div-4.p-2.pb-1" resource="LekChir_0015.xml" />
+    <itj:page n="9v" xml:id="t-1.body-1.div-2.div-1.div-4.p-2.pb-2" resource="LekChir_0016.xml" />
+    <itj:page n="10r" xml:id="t-1.body-1.div-2.div-1.div-5.p-1.pb-1" resource="LekChir_0017.xml" />
+    <itj:page n="10v" xml:id="t-1.body-1.div-2.div-1.div-5.p-1.pb-2" resource="LekChir_0018.xml" />
+    <itj:page n="11r" xml:id="t-1.body-1.div-2.div-1.div-6.p-1.pb-1" resource="LekChir_0019.xml" />
+    <itj:page n="11v" xml:id="t-1.body-1.div-2.div-1.div-7.p-1.pb-1" resource="LekChir_0020.xml" />
+    <itj:page n="12r" xml:id="t-1.body-1.div-2.div-1.div-7.p-1.pb-2" resource="LekChir_0021.xml" />
+    <itj:page n="12v" xml:id="t-1.body-1.div-2.div-1.div-7.p-2.pb-1" resource="LekChir_0022.xml" />
+    <itj:page n="13r" xml:id="t-1.body-1.div-2.div-1.div-7.p-2.pb-2" resource="LekChir_0023.xml" />
+    <itj:page n="13v" xml:id="t-1.body-1.div-2.div-1.div-8.p-1.pb-1" resource="LekChir_0024.xml" />
+    <itj:page n="14r" xml:id="t-1.body-1.div-2.div-1.div-8.p-1.pb-2" resource="LekChir_0025.xml" />
+    <itj:page n="14v" xml:id="t-1.body-1.div-2.div-1.div-9.p-1.pb-1" resource="LekChir_0026.xml" />
+    <itj:page n="15r" xml:id="t-1.body-1.div-2.div-1.div-9.p-1.pb-2" resource="LekChir_0027.xml" />
+    <itj:page n="15v" xml:id="t-1.body-1.div-2.div-1.div-9.p-1.pb-3" resource="LekChir_0028.xml" />
+    <itj:page n="16r" xml:id="t-1.body-1.div-2.div-1.div-9.p-1.pb-4" resource="LekChir_0029.xml" />
+    <itj:page n="16v" xml:id="t-1.body-1.div-2.div-1.div-10.p-1.pb-1" resource="LekChir_0030.xml" />
+    <itj:page n="17r" xml:id="t-1.body-1.div-2.div-1.pb-1" resource="LekChir_0031.xml" />
+    <itj:page n="17v" xml:id="t-1.body-1.div-2.div-1.div-12.p-1.pb-1" resource="LekChir_0032.xml" />
+    <itj:page n="18r" xml:id="t-1.body-1.div-2.div-1.div-13.p-1.pb-1" resource="LekChir_0033.xml" />
+    <itj:page n="18v" xml:id="t-1.body-1.div-2.div-1.div-14.p-1.pb-1" resource="LekChir_0034.xml" />
+    <itj:page n="19r" xml:id="t-1.body-1.div-2.div-1.div-14.p-2.pb-1" resource="LekChir_0035.xml" />
+    <itj:page n="19v" xml:id="t-1.body-1.div-2.div-1.div-14.p-2.pb-2" resource="LekChir_0036.xml" />
+    <itj:page n="20r" xml:id="t-1.body-1.div-2.div-1.div-14.pb-1" resource="LekChir_0037.xml" />
+    <itj:page n="20v" xml:id="t-1.body-1.div-2.div-1.div-14.p-3.pb-1" resource="LekChir_0038.xml" />
+    <itj:page n="20 bis r" xml:id="t-1.body-1.div-2.div-1.div-14.p-4.pb-1" resource="LekChir_0039.xml" />
+    <itj:page n="20 bis v" xml:id="t-1.body-1.div-2.div-1.div-15.p-1.pb-1" resource="LekChir_0040.xml" />
+    <itj:page n="21r" xml:id="t-1.body-1.div-2.div-1.div-16.p-1.pb-1" resource="LekChir_0041.xml" />
+    <itj:page n="21v" xml:id="t-1.body-1.div-2.div-1.div-16.p-1.pb-2" resource="LekChir_0042.xml" />
+    <itj:page n="22r" xml:id="t-1.body-1.div-2.div-1.pb-2" resource="LekChir_0043.xml" />
+    <itj:page n="22v" xml:id="t-1.body-1.div-2.div-1.div-17.p-1.pb-1" resource="LekChir_0044.xml" />
+    <itj:page n="23r" xml:id="t-1.body-1.div-2.div-1.div-18.p-1.pb-1" resource="LekChir_0045.xml" />
+    <itj:page n="23v" xml:id="t-1.body-1.div-2.div-1.div-18.p-1.pb-2" resource="LekChir_0046.xml" />
+    <itj:page n="24r" xml:id="t-1.body-1.div-2.div-1.div-19.p-1.pb-1" resource="LekChir_0047.xml" />
+    <itj:page n="24v" xml:id="t-1.body-1.div-2.div-1.div-20.p-1.pb-1" resource="LekChir_0048.xml" />
+    <itj:page n="25r" xml:id="t-1.body-1.div-2.div-1.div-22.p-1.pb-1" resource="LekChir_0049.xml" />
+    <itj:page n="25v" xml:id="t-1.body-1.div-2.div-1.div-23.p-1.pb-1" resource="LekChir_0050.xml" />
+    <itj:page n="26r" xml:id="t-1.body-1.div-2.div-1.div-24.p-1.pb-1" resource="LekChir_0051.xml" />
+    <itj:page n="26v" xml:id="t-1.body-1.div-2.div-1.div-24.p-1.pb-2" resource="LekChir_0052.xml" />
+    <itj:page n="27r" xml:id="t-1.body-1.div-2.div-1.div-24.p-1.pb-3" resource="LekChir_0053.xml" />
+    <itj:page n="27v" xml:id="t-1.body-1.div-2.div-1.div-25.p-1.pb-1" resource="LekChir_0054.xml" />
+    <itj:page n="28r" xml:id="t-1.body-1.div-2.div-1.div-25.p-1.pb-2" resource="LekChir_0055.xml" />
+    <itj:page n="28v" xml:id="t-1.body-1.div-2.div-1.div-26.p-1.pb-1" resource="LekChir_0056.xml" />
+    <itj:page n="29r" xml:id="t-1.body-1.div-2.div-1.div-27.p-1.pb-1" resource="LekChir_0057.xml" />
+    <itj:page n="29v" xml:id="t-1.body-1.div-2.div-1.div-28.p-1.pb-1" resource="LekChir_0058.xml" />
+    <itj:page n="30r" xml:id="t-1.body-1.div-2.div-1.div-29.p-1.pb-1" resource="LekChir_0059.xml" />
+    <itj:page n="30v" xml:id="t-1.body-1.div-2.div-1.pb-3" resource="LekChir_0060.xml" />
+    <itj:page n="31r" xml:id="t-1.body-1.div-2.div-1.div-30.p-1.pb-1" resource="LekChir_0061.xml" />
+    <itj:page n="31v" xml:id="t-1.body-1.div-2.div-1.div-31.p-1.pb-1" resource="LekChir_0062.xml" />
+    <itj:page n="32r" xml:id="t-1.body-1.div-2.div-1.div-32.p-1.pb-1" resource="LekChir_0063.xml" />
+    <itj:page n="32v" xml:id="t-1.body-1.div-2.div-1.div-33.p-1.pb-1" resource="LekChir_0064.xml" />
+    <itj:page n="33r" xml:id="t-1.body-1.div-2.div-1.div-34.p-1.pb-1" resource="LekChir_0065.xml" />
+    <itj:page n="33v" xml:id="t-1.body-1.div-2.div-1.div-35.p-1.pb-1" resource="LekChir_0066.xml" />
+    <itj:page n="34r" xml:id="t-1.body-1.div-2.div-1.div-36.p-1.pb-1" resource="LekChir_0067.xml" />
+    <itj:page n="34v" xml:id="t-1.body-1.div-2.div-1.div-36.p-1.pb-2" resource="LekChir_0068.xml" />
+    <itj:page n="35r" xml:id="t-1.body-1.div-2.div-1.div-37.p-1.pb-1" resource="LekChir_0069.xml" />
+    <itj:page n="35v" xml:id="t-1.body-1.div-2.div-1.div-38.p-1.pb-1" resource="LekChir_0070.xml" />
+    <itj:page n="36r" xml:id="t-1.body-1.div-2.div-1.div-39.p-1.pb-1" resource="LekChir_0071.xml" />
+    <itj:page n="36v" xml:id="t-1.body-1.div-2.div-1.pb-4" resource="LekChir_0072.xml" />
+    <itj:page n="37r" xml:id="t-1.body-1.div-2.div-1.div-40.p-1.pb-1" resource="LekChir_0073.xml" />
+    <itj:page n="37v" xml:id="t-1.body-1.div-2.div-1.pb-5" resource="LekChir_0074.xml" />
+    <itj:page n="38r" xml:id="t-1.body-1.div-2.div-1.div-41.p-1.pb-1" resource="LekChir_0075.xml" />
+    <itj:page n="38v" xml:id="t-1.body-1.div-2.div-1.div-42.p-1.pb-1" resource="LekChir_0076.xml" />
+    <itj:page n="39r" xml:id="t-1.body-1.div-2.div-1.pb-6" resource="LekChir_0077.xml" />
+    <itj:page n="39v" xml:id="t-1.body-1.div-2.div-1.div-43.p-2.pb-1" resource="LekChir_0078.xml" />
+    <itj:page n="40r" xml:id="t-1.body-1.div-2.div-1.div-43.p-2.pb-2" resource="LekChir_0079.xml" />
+    <itj:page n="40v" xml:id="t-1.body-1.div-2.div-1.div-43.p-2.pb-3" resource="LekChir_0080.xml" />
+    <itj:page n="41r" xml:id="t-1.body-1.div-2.div-1.div-44.p-1.pb-1" resource="LekChir_0081.xml" />
+    <itj:page n="41v" xml:id="t-1.body-1.div-2.div-1.div-45.p-1.pb-1" resource="LekChir_0082.xml" />
+    <itj:page n="42r" xml:id="t-1.body-1.div-2.div-1.div-46.p-1.pb-1" resource="LekChir_0083.xml" />
+    <itj:page n="42v" xml:id="t-1.body-1.div-2.div-1.div-47.p-1.pb-1" resource="LekChir_0084.xml" />
+    <itj:page n="43r" xml:id="t-1.body-1.div-2.div-1.div-47.p-1.pb-2" resource="LekChir_0085.xml" />
+    <itj:page n="43v" xml:id="t-1.body-1.div-2.div-1.div-47.p-1.pb-3" resource="LekChir_0086.xml" />
+    <itj:page n="44r" xml:id="t-1.body-1.div-2.div-1.pb-7" resource="LekChir_0087.xml" />
+    <itj:page n="44v" xml:id="t-1.body-1.div-2.div-1.div-48.p-1.pb-1" resource="LekChir_0088.xml" />
+    <itj:page n="45r" xml:id="t-1.body-1.div-2.div-1.div-49.p-1.pb-1" resource="LekChir_0089.xml" />
+    <itj:page n="45v" xml:id="t-1.body-1.div-2.div-1.div-50.p-1.pb-1" resource="LekChir_0090.xml" />
+    <itj:page n="46r" xml:id="t-1.body-1.div-2.div-1.div-51.p-1.pb-1" resource="LekChir_0091.xml" />
+    <itj:page n="46v" xml:id="t-1.body-1.div-2.div-1.div-52.p-1.pb-1" resource="LekChir_0092.xml" />
+    <itj:page n="47r" xml:id="t-1.body-1.div-2.div-1.div-53.p-1.pb-1" resource="LekChir_0093.xml" />
+    <itj:page n="47v" xml:id="t-1.body-1.div-2.div-1.div-54.p-1.pb-1" resource="LekChir_0094.xml" />
+    <itj:page n="48r" xml:id="t-1.body-1.div-2.div-1.div-54.p-1.pb-2" resource="LekChir_0095.xml" />
+    <itj:page n="48v" xml:id="t-1.body-1.div-2.div-1.div-55.p-1.pb-1" resource="LekChir_0096.xml" />
+    <itj:page n="49r" xml:id="t-1.body-1.div-2.div-1.div-56.p-1.pb-1" resource="LekChir_0097.xml" />
+    <itj:page n="49v" xml:id="t-1.body-1.div-2.div-1.div-57.p-1.pb-1" resource="LekChir_0098.xml" />
+    <itj:page n="50r" xml:id="t-1.body-1.div-2.div-1.div-57.p-2.pb-1" resource="LekChir_0099.xml" />
+    <itj:page n="50v" xml:id="t-1.body-1.div-2.div-1.div-58.p-1.pb-1" resource="LekChir_0100.xml" />
+    <itj:page n="51r" xml:id="t-1.body-1.div-2.div-1.div-58.p-2.pb-1" resource="LekChir_0101.xml" />
+    <itj:page n="52v" xml:id="t-1.body-1.div-2.div-1.div-59.p-1.pb-1" resource="LekChir_0102.xml" />
+    <itj:page n="52r" xml:id="t-1.body-1.div-2.div-1.div-59.p-1.pb-2" resource="LekChir_0103.xml" />
+    <itj:page n="52v" xml:id="t-1.body-1.div-2.div-1.div-60.p-1.pb-1" resource="LekChir_0104.xml" />
+    <itj:page n="53r" xml:id="t-1.body-1.div-2.div-1.div-60.p-2.pb-1" resource="LekChir_0105.xml" />
+    <itj:page n="53v" xml:id="t-1.body-1.div-2.div-1.div-61.p-1.pb-1" resource="LekChir_0106.xml" />
+    <itj:page n="54r" xml:id="t-1.body-1.div-2.div-1.div-62.p-1.pb-1" resource="LekChir_0107.xml" />
+    <itj:page n="54v" xml:id="t-1.body-1.div-2.div-1.div-63.p-1.pb-1" resource="LekChir_0108.xml" />
+    <itj:page n="55r" xml:id="t-1.body-1.div-2.div-1.pb-8" resource="LekChir_0109.xml" />
+    <itj:page n="55v" xml:id="t-1.body-1.div-2.div-1.div-64.p-1.pb-1" resource="LekChir_0110.xml" />
+    <itj:page n="56r" xml:id="t-1.body-1.div-2.div-1.div-64.p-2.pb-1" resource="LekChir_0111.xml" />
+    <itj:page n="56v" xml:id="t-1.body-1.div-2.div-1.div-65.pb-1" resource="LekChir_0112.xml" />
+    <itj:page n="57r" xml:id="t-1.body-1.div-2.div-1.pb-9" resource="LekChir_0113.xml" />
+    <itj:page n="57v" xml:id="t-1.body-1.div-2.div-1.div-66.p-1.pb-1" resource="LekChir_0114.xml" />
+    <itj:page n="58r" xml:id="t-1.body-1.div-2.div-1.div-66.p-2.pb-1" resource="LekChir_0115.xml" />
+    <itj:page n="58v" xml:id="t-1.body-1.div-2.div-1.div-67.p-1.pb-1" resource="LekChir_0116.xml" />
+    <itj:page n="59r" xml:id="t-1.body-1.div-2.div-1.div-67.p-1.pb-2" resource="LekChir_0117.xml" />
+    <itj:page n="59v" xml:id="t-1.body-1.div-2.div-1.div-68.p-1.pb-1" resource="LekChir_0118.xml" />
+    <itj:page n="60r" xml:id="t-1.body-1.div-2.div-1.div-69.p-2.pb-1" resource="LekChir_0119.xml" />
+    <itj:page n="60v" xml:id="t-1.body-1.div-2.div-1.div-69.p-3.pb-1" resource="LekChir_0120.xml" />
+    <itj:page n="61r" xml:id="t-1.body-1.div-2.div-1.div-69.p-4.pb-1" resource="LekChir_0121.xml" />
+    <itj:page n="61v" xml:id="t-1.body-1.div-2.div-1.div-69.pb-1" resource="LekChir_0122.xml" />
+    <itj:page n="62r" xml:id="t-1.body-1.div-2.div-1.pb-10" resource="LekChir_0123.xml" />
+    <itj:page n="62v" xml:id="t-1.body-1.div-2.div-1.div-70.p-2.pb-1" resource="LekChir_0124.xml" />
+    <itj:page n="63r" xml:id="t-1.body-1.div-2.div-1.div-70.p-4.pb-1" resource="LekChir_0125.xml" />
+    <itj:page n="63v" xml:id="t-1.body-1.div-2.div-1.div-71.pb-1" resource="LekChir_0126.xml" />
+    <itj:page n="64r" xml:id="t-1.body-1.div-2.div-1.pb-11" resource="LekChir_0127.xml" />
+    <itj:page n="64v" xml:id="t-1.body-1.div-2.div-1.div-72.p-2.pb-1" resource="LekChir_0128.xml" />
+    <itj:page n="65r" xml:id="t-1.body-1.div-2.div-1.pb-12" resource="LekChir_0129.xml" />
+    <itj:page n="65v" xml:id="t-1.body-1.div-2.div-1.div-73.p-1.pb-1" resource="LekChir_0130.xml" />
+    <itj:page n="66r" xml:id="t-1.body-1.div-2.div-1.div-74.p-1.pb-1" resource="LekChir_0131.xml" />
+    <itj:page n="66v" xml:id="t-1.body-1.div-2.div-1.div-75.p-2.pb-1" resource="LekChir_0132.xml" />
+    <itj:page n="67r" xml:id="t-1.body-1.div-2.div-1.div-75.p-3.pb-1" resource="LekChir_0133.xml" />
+    <itj:page n="67v" xml:id="t-1.body-1.div-2.div-1.div-76.p-1.pb-1" resource="LekChir_0134.xml" />
+    <itj:page n="68r" xml:id="t-1.body-1.div-2.div-1.div-77.p-1.pb-1" resource="LekChir_0135.xml" />
+    <itj:page n="68v" xml:id="t-1.body-1.div-2.div-1.div-78.p-1.pb-1" resource="LekChir_0136.xml" />
+    <itj:page n="69r" xml:id="t-1.body-1.div-2.div-1.pb-13" resource="LekChir_0137.xml" />
+    <itj:page n="69v" xml:id="t-1.body-1.div-2.div-1.div-80.pb-1" resource="LekChir_0138.xml" />
+    <itj:page n="70r" xml:id="t-1.body-1.div-2.div-1.div-80.p-3.pb-1" resource="LekChir_0139.xml" />
+    <itj:page n="70v" xml:id="t-1.body-1.div-2.div-1.div-81.p-1.pb-1" resource="LekChir_0140.xml" />
+    <itj:page n="71r" xml:id="t-1.body-1.div-2.div-1.pb-14" resource="LekChir_0141.xml" />
+    <itj:page n="71v" xml:id="t-1.body-1.div-2.div-1.div-82.p-1.pb-1" resource="LekChir_0142.xml" />
+    <itj:page n="72r" xml:id="t-1.body-1.div-2.div-1.div-82.p-3.pb-1" resource="LekChir_0143.xml" />
+    <itj:page n="72v" xml:id="t-1.body-1.div-2.div-1.div-83.p-2.pb-1" resource="LekChir_0144.xml" />
+    <itj:page n="73r" xml:id="t-1.body-1.div-2.div-1.div-84.p-2.pb-1" resource="LekChir_0145.xml" />
+    <itj:page n="73v" xml:id="t-1.body-1.div-2.div-1.div-84.p-4.pb-1" resource="LekChir_0146.xml" />
+    <itj:page n="74r" xml:id="t-1.body-1.div-2.div-1.div-85.p-1.pb-1" resource="LekChir_0147.xml" />
+    <itj:page n="74v" xml:id="t-1.body-1.div-2.div-1.div-86.p-1.pb-1" resource="LekChir_0148.xml" />
+    <itj:page n="75r" xml:id="t-1.body-1.div-2.div-1.div-87.p-1.pb-1" resource="LekChir_0149.xml" />
+    <itj:page n="75v" xml:id="t-1.body-1.div-2.div-1.pb-15" resource="LekChir_0150.xml" />
+    <itj:page n="76r" xml:id="t-1.body-1.div-2.div-1.div-89.p-2.pb-1" resource="LekChir_0151.xml" />
+    <itj:page n="76v" xml:id="t-1.body-1.div-2.div-1.div-89.p-3.pb-1" resource="LekChir_0152.xml" />
+    <itj:page n="77r" xml:id="t-1.body-1.div-2.div-1.div-90.p-2.pb-1" resource="LekChir_0153.xml" />
+    <itj:page n="77v" xml:id="t-1.body-1.div-2.div-1.div-91.p-1.pb-1" resource="LekChir_0154.xml" />
+    <itj:page n="78r" xml:id="t-1.body-1.div-2.div-1.pb-16" resource="LekChir_0155.xml" />
+    <itj:page n="78v" xml:id="t-1.body-1.div-2.div-1.div-93.p-2.pb-1" resource="LekChir_0156.xml" />
+    <itj:page n="79r" xml:id="t-1.body-1.div-2.div-1.div-94.p-1.pb-1" resource="LekChir_0157.xml" />
+    <itj:page n="79v" xml:id="t-1.body-1.div-2.div-1.div-95.p-2.pb-1" resource="LekChir_0158.xml" />
+    <itj:page n="80r" xml:id="t-1.body-1.div-2.div-1.div-95.p-3.pb-1" resource="LekChir_0159.xml" />
+    <itj:page n="80v" xml:id="t-1.body-1.div-2.div-1.div-96.pb-1" resource="LekChir_0160.xml" />
+    <itj:page n="81r" xml:id="t-1.body-1.div-2.div-1.pb-17" resource="LekChir_0161.xml" />
+    <itj:page n="81v" xml:id="t-1.body-1.div-2.div-1.div-97.p-2.pb-1" resource="LekChir_0162.xml" />
+    <itj:page n="82r" xml:id="t-1.body-1.div-2.div-1.div-98.p-1.pb-1" resource="LekChir_0163.xml" />
+    <itj:page n="82v" xml:id="t-1.body-1.div-2.div-1.div-99.p-1.pb-1" resource="LekChir_0164.xml" />
+    <itj:page n="83r" xml:id="t-1.body-1.div-2.div-1.div-99.p-2.pb-1" resource="LekChir_0165.xml" />
+    <itj:page n="83v" xml:id="t-1.body-1.div-2.div-1.div-99.p-3.pb-1" resource="LekChir_0166.xml" />
+    <itj:page n="84r" xml:id="t-1.body-1.div-2.div-1.div-99.p-4.pb-1" resource="LekChir_0167.xml" />
+    <itj:page n="84v" xml:id="t-1.body-1.div-2.div-1.div-100.p-1.pb-1" resource="LekChir_0168.xml" />
+    <itj:page n="85r" xml:id="t-1.body-1.div-2.div-1.div-100.p-2.pb-1" resource="LekChir_0169.xml" />
+    <itj:page n="85v" xml:id="t-1.body-1.div-2.div-1.div-101.p-1.pb-1" resource="LekChir_0170.xml" />
+    <itj:page n="86r" xml:id="t-1.body-1.div-2.div-1.div-101.p-2.pb-1" resource="LekChir_0171.xml" />
+    <itj:page n="86v" xml:id="t-1.body-1.div-2.div-1.div-102.p-1.pb-1" resource="LekChir_0172.xml" />
+    <itj:page n="87r" xml:id="t-1.body-1.div-2.div-1.div-102.p-2.pb-1" resource="LekChir_0173.xml" />
+    <itj:page n="87v" xml:id="t-1.body-1.div-2.div-1.div-103.p-1.pb-1" resource="LekChir_0174.xml" />
+    <itj:page n="88r" xml:id="t-1.body-1.div-2.div-1.div-103.p-2.pb-1" resource="LekChir_0175.xml" />
+    <itj:page n="88v" xml:id="t-1.body-1.div-2.div-1.div-104.p-1.pb-1" resource="LekChir_0176.xml" />
+    <itj:page n="89r" xml:id="t-1.body-1.div-2.div-1.div-104.p-3.pb-1" resource="LekChir_0177.xml" />
+    <itj:page n="89v" xml:id="t-1.body-1.div-2.div-1.div-104.p-3.pb-2" resource="LekChir_0178.xml" />
+    <itj:page n="90r" xml:id="t-1.body-1.div-2.div-1.div-104.p-4.pb-1" resource="LekChir_0179.xml" />
+    <itj:page n="90v" xml:id="t-1.body-1.div-2.div-1.div-104.p-4.pb-2" resource="LekChir_0180.xml" />
+    <itj:page n="91r" xml:id="t-1.body-1.div-2.div-1.pb-18" resource="LekChir_0181.xml" />
+    <itj:page n="91v" xml:id="t-1.body-1.div-2.div-1.div-105.pb-1" resource="LekChir_0182.xml" />
+    <itj:page n="92r" xml:id="t-1.body-1.div-2.div-1.div-105.p-2.pb-1" resource="LekChir_0183.xml" />
+    <itj:page n="92v" xml:id="t-1.body-1.div-2.div-1.div-106.p-1.pb-1" resource="LekChir_0184.xml" />
+    <itj:page n="93r" xml:id="t-1.body-1.div-2.div-1.div-106.p-1.pb-2" resource="LekChir_0185.xml" />
+    <itj:page n="93v" xml:id="t-1.body-1.div-2.div-1.div-107.p-1.pb-1" resource="LekChir_0186.xml" />
+    <itj:page n="94r" xml:id="t-1.body-1.div-2.div-1.div-107.p-1.pb-2" resource="LekChir_0187.xml" />
+    <itj:page n="94v" xml:id="t-1.body-1.div-2.div-1.div-108.pb-1" resource="LekChir_0188.xml" />
+    <itj:page n="95r" xml:id="t-1.body-1.div-2.div-1.pb-19" resource="LekChir_0189.xml" />
+    <itj:page n="95v" xml:id="t-1.body-1.div-2.div-1.div-109.p-1.pb-1" resource="LekChir_0190.xml" />
+    <itj:page n="96r" xml:id="t-1.body-1.div-2.div-1.div-109.p-2.pb-1" resource="LekChir_0191.xml" />
+    <itj:page n="96v" xml:id="t-1.body-1.div-2.div-1.div-109.pb-1" resource="LekChir_0192.xml" />
+    <itj:page n="97r" xml:id="t-1.body-1.div-2.div-1.div-109.p-4.pb-1" resource="LekChir_0193.xml" />
+    <itj:page n="97v" xml:id="t-1.body-1.div-2.div-1.div-110.p-1.pb-1" resource="LekChir_0194.xml" />
+    <itj:page n="98r" xml:id="t-1.body-1.div-2.div-1.div-110.p-2.pb-1" resource="LekChir_0195.xml" />
+    <itj:page n="98v" xml:id="t-1.body-1.div-2.div-1.div-111.p-1.pb-1" resource="LekChir_0196.xml" />
+    <itj:page n="99r" xml:id="t-1.body-1.div-2.div-1.div-111.p-2.pb-1" resource="LekChir_0197.xml" />
+    <itj:page n="99v" xml:id="t-1.body-1.div-2.div-1.pb-20" resource="LekChir_0198.xml" />
+    <itj:page n="100r" xml:id="t-1.body-1.div-2.div-1.div-113.p-1.pb-1" resource="LekChir_0199.xml" />
+    <itj:page n="100v" xml:id="t-1.body-1.div-2.div-1.div-113.p-2.pb-1" resource="LekChir_0200.xml" />
+    <itj:page n="101r" xml:id="t-1.body-1.div-2.div-1.div-113.p-3.pb-1" resource="LekChir_0201.xml" />
+    <itj:page n="101v" xml:id="t-1.body-1.div-2.div-1.pb-21" resource="LekChir_0202.xml" />
+    <itj:page n="102r" xml:id="t-1.body-1.div-2.div-1.div-115.p-1.pb-1" resource="LekChir_0203.xml" />
+    <itj:page n="102v" xml:id="t-1.body-1.div-2.div-1.div-115.p-2.pb-1" resource="LekChir_0204.xml" />
+    <itj:page n="103r" xml:id="t-1.body-1.div-2.div-1.div-115.p-2.pb-2" resource="LekChir_0205.xml" />
+    <itj:page n="103v" xml:id="t-1.body-1.div-2.div-1.div-116.p-1.pb-1" resource="LekChir_0206.xml" />
+    <itj:page n="104r" xml:id="t-1.body-1.div-2.div-1.div-116.p-2.pb-1" resource="LekChir_0207.xml" />
+    <itj:page n="104v" xml:id="t-1.body-1.div-2.div-1.div-116.p-3.pb-1" resource="LekChir_0208.xml" />
+    <itj:page n="105r" xml:id="t-1.body-1.div-2.div-1.div-116.p-3.pb-2" resource="LekChir_0209.xml" />
+    <itj:page n="105v" xml:id="t-1.body-1.div-2.div-1.div-117.p-1.pb-1" resource="LekChir_0210.xml" />
+    <itj:page n="106r" xml:id="t-1.body-1.div-2.div-1.div-117.p-2.pb-1" resource="LekChir_0211.xml" />
+    <itj:page n="106v" xml:id="t-1.body-1.div-2.div-1.div-118.p-1.pb-1" resource="LekChir_0212.xml" />
+    <itj:page n="107r" xml:id="t-1.body-1.div-2.div-1.div-119.p-1.pb-1" resource="LekChir_0213.xml" />
+    <itj:page n="107v" xml:id="t-1.body-1.div-2.div-1.div-120.p-1.pb-1" resource="LekChir_0214.xml" />
+    <itj:page n="108r" xml:id="t-1.body-1.div-2.div-1.div-121.p-1.pb-1" resource="LekChir_0215.xml" />
+    <itj:page n="108v" xml:id="t-1.body-1.div-2.div-1.div-122.p-2.pb-1" resource="LekChir_0216.xml" />
+    <itj:page n="109r" xml:id="t-1.body-1.div-2.div-1.div-122.p-3.pb-1" resource="LekChir_0217.xml" />
+    <itj:page n="109v" xml:id="t-1.body-1.div-2.div-1.div-123.p-1.pb-1" resource="LekChir_0218.xml" />
+    <itj:page n="110r" xml:id="t-1.body-1.div-2.div-1.pb-22" resource="LekChir_0219.xml" />
+    <itj:page n="110v" xml:id="t-1.body-1.div-2.div-1.div-124.p-1.pb-1" resource="LekChir_0220.xml" />
+    <itj:page n="111r" xml:id="t-1.body-1.div-2.div-1.div-124.p-3.pb-1" resource="LekChir_0221.xml" />
+    <itj:page n="111v" xml:id="t-1.body-1.div-2.div-1.div-125.p-1.pb-1" resource="LekChir_0222.xml" />
+    <itj:page n="112r" xml:id="t-1.body-1.div-2.div-1.div-125.p-2.pb-1" resource="LekChir_0223.xml" />
+    <itj:page n="112v" xml:id="t-1.body-1.div-2.div-1.div-125.p-3.pb-1" resource="LekChir_0224.xml" />
+    <itj:page n="113r" xml:id="t-1.body-1.div-2.div-1.div-125.p-4.pb-1" resource="LekChir_0225.xml" />
+    <itj:page n="113v" xml:id="t-1.body-1.div-2.div-1.div-126.pb-1" resource="LekChir_0226.xml" />
+    <itj:page n="114r" xml:id="t-1.body-1.div-2.div-1.pb-23" resource="LekChir_0227.xml" />
+    <itj:page n="114v" xml:id="t-1.body-1.div-2.div-1.div-127.pb-1" resource="LekChir_0228.xml" />
+    <itj:page n="115r" xml:id="t-1.body-1.div-2.div-1.div-127.p-2.pb-1" resource="LekChir_0229.xml" />
+    <itj:page n="115v" xml:id="t-1.body-1.div-2.div-1.div-129.p-1.pb-1" resource="LekChir_0230.xml" />
+    <itj:page n="116r" xml:id="t-1.body-1.div-2.div-1.div-129.p-1.pb-2" resource="LekChir_0231.xml" />
+    <itj:page n="116v" xml:id="t-1.body-1.div-2.div-1.div-130.p-1.pb-1" resource="LekChir_0232.xml" />
+    <itj:page n="117r" xml:id="t-1.body-1.div-2.div-1.div-131.p-1.pb-1" resource="LekChir_0233.xml" />
+    <itj:page n="117v" xml:id="t-1.body-1.div-2.div-1.div-132.pb-1" resource="LekChir_0234.xml" />
+    <itj:page n="118r" xml:id="t-1.body-1.div-2.div-1.div-132.p-2.pb-1" resource="LekChir_0235.xml" />
+    <itj:page n="118v" xml:id="t-1.body-1.div-2.div-1.div-133.p-1.pb-1" resource="LekChir_0236.xml" />
+    <itj:page n="119r" xml:id="t-1.body-1.div-2.div-1.div-133.p-1.pb-2" resource="LekChir_0237.xml" />
+    <itj:page n="119v" xml:id="t-1.body-1.div-2.div-1.div-134.p-1.pb-1" resource="LekChir_0238.xml" />
+    <itj:page n="120r" xml:id="t-1.body-1.div-2.div-1.div-134.p-2.pb-1" resource="LekChir_0239.xml" />
+    <itj:page n="120v" xml:id="t-1.body-1.div-2.div-1.div-134.p-3.pb-1" resource="LekChir_0240.xml" />
+    <itj:page n="121r" xml:id="t-1.body-1.div-2.div-1.div-134.p-4.pb-1" resource="LekChir_0241.xml" />
+    <itj:page n="121v" xml:id="t-1.body-1.div-2.div-1.div-135.pb-1" resource="LekChir_0242.xml" />
+    <itj:page n="122r" xml:id="t-1.body-1.div-2.div-1.div-135.p-3.pb-1" resource="LekChir_0243.xml" />
+    <itj:page n="122v" xml:id="t-1.body-1.div-2.div-1.div-135.p-3.pb-2" resource="LekChir_0244.xml" />
+    <itj:page n="123r" xml:id="t-1.body-1.div-2.div-1.div-135.p-4.pb-1" resource="LekChir_0245.xml" />
+    <itj:page n="123v" xml:id="t-1.body-1.div-2.div-1.div-136.p-1.pb-1" resource="LekChir_0246.xml" />
+    <itj:page n="124r" xml:id="t-1.body-1.div-2.div-1.div-136.p-2.pb-1" resource="LekChir_0247.xml" />
+    <itj:page n="124v" xml:id="t-1.body-1.div-2.div-1.div-137.p-1.pb-1" resource="LekChir_0248.xml" />
+    <itj:page n="125r" xml:id="t-1.body-1.div-2.div-1.div-138.p-1.pb-1" resource="LekChir_0249.xml" />
+    <itj:page n="125v" xml:id="t-1.body-1.div-2.div-1.div-139.p-1.pb-1" resource="LekChir_0250.xml" />
+    <itj:page n="126r" xml:id="t-1.body-1.div-2.div-1.div-139.p-2.pb-1" resource="LekChir_0251.xml" />
+    <itj:page n="126v" xml:id="t-1.body-1.div-2.div-1.div-140.p-2.pb-1" resource="LekChir_0252.xml" />
+    <itj:page n="127r" xml:id="t-1.body-1.div-2.div-1.div-140.p-3.pb-1" resource="LekChir_0253.xml" />
+    <itj:page n="127v" xml:id="t-1.body-1.div-2.div-1.div-141.p-1.pb-1" resource="LekChir_0254.xml" />
+    <itj:page n="128r" xml:id="t-1.body-1.div-2.div-1.div-141.p-2.pb-1" resource="LekChir_0255.xml" />
+    <itj:page n="128v" xml:id="t-1.body-1.div-2.div-1.div-142.p-1.pb-1" resource="LekChir_0256.xml" />
+    <itj:page n="129r" xml:id="t-1.body-1.div-2.div-1.div-142.p-2.pb-1" resource="LekChir_0257.xml" />
+    <itj:page n="129v" xml:id="t-1.body-1.div-2.div-1.div-143.p-1.pb-1" resource="LekChir_0258.xml" />
+    <itj:page n="130r" xml:id="t-1.body-1.div-2.div-1.pb-24" resource="LekChir_0259.xml" />
+    <itj:page n="130v" xml:id="t-1.body-1.div-2.div-1.div-144.p-1.pb-1" resource="LekChir_0260.xml" />
+    <itj:page n="131r" xml:id="t-1.body-1.div-2.div-1.div-144.p-2.pb-1" resource="LekChir_0261.xml" />
+    <itj:page n="131v" xml:id="t-1.body-1.div-2.div-1.div-145.p-2.pb-1" resource="LekChir_0262.xml" />
+    <itj:page n="132r" xml:id="t-1.body-1.div-2.div-1.div-145.pb-1" resource="LekChir_0263.xml" />
+    <itj:page n="132v" xml:id="t-1.body-1.div-2.div-1.div-146.p-1.pb-1" resource="LekChir_0264.xml" />
+    <itj:page n="133r" xml:id="t-1.body-1.div-2.div-1.pb-25" resource="LekChir_0265.xml" />
+    <itj:page n="133v" xml:id="t-1.body-1.div-2.div-1.div-147.p-2.pb-1" resource="LekChir_0266.xml" />
+    <itj:page n="134r" xml:id="t-1.body-1.div-2.div-1.div-147.p-2.pb-2" resource="LekChir_0267.xml" />
+    <itj:page n="134r" xml:id="t-1.body-1.div-2.div-1.div-148.p-1.pb-1" resource="LekChir_0268.xml" />
+    <itj:page n="135r" xml:id="t-1.body-1.div-2.div-1.div-148.p-2.pb-1" resource="LekChir_0269.xml" />
+    <itj:page n="135v" xml:id="t-1.body-1.div-2.div-1.div-148.pb-1" resource="LekChir_0270.xml" />
+    <itj:page n="136r" xml:id="t-1.body-1.div-2.div-1.div-148.p-3.pb-1" resource="LekChir_0271.xml" />
+    <itj:page n="136v" xml:id="t-1.body-1.div-2.div-1.div-149.p-1.pb-1" resource="LekChir_0272.xml" />
+    <itj:page n="137r" xml:id="t-1.body-1.div-2.div-1.div-149.p-2.pb-1" resource="LekChir_0273.xml" />
+    <itj:page n="137v" xml:id="t-1.body-1.div-2.div-1.div-151.p-1.pb-1" resource="LekChir_0274.xml" />
+    <itj:page n="138r" xml:id="t-1.body-1.div-2.div-1.pb-26" resource="LekChir_0275.xml" />
+    <itj:page n="138v" xml:id="t-1.body-1.div-2.div-1.div-152.pb-1" resource="LekChir_0276.xml" />
+    <itj:page n="139r" xml:id="t-1.body-1.div-2.div-1.div-152.p-2.pb-1" resource="LekChir_0277.xml" />
+    <itj:page n="139v" xml:id="t-1.body-1.div-2.div-1.div-154.p-1.pb-1" resource="LekChir_0278.xml" />
+    <itj:page n="140r" xml:id="t-1.body-1.div-2.div-1.div-154.p-2.pb-1" resource="LekChir_0279.xml" />
+    <itj:page n="140v" xml:id="t-1.body-1.div-2.div-1.div-155.p-1.pb-1" resource="LekChir_0280.xml" />
+    <itj:page n="141r" xml:id="t-1.body-1.div-2.div-1.div-155.p-2.pb-1" resource="LekChir_0281.xml" />
+    <itj:page n="141v" xml:id="t-1.body-1.div-2.div-1.div-156.p-1.pb-1" resource="LekChir_0282.xml" />
+    <itj:page n="142r" xml:id="t-1.body-1.div-2.div-1.div-156.p-1.pb-2" resource="LekChir_0283.xml" />
+    <itj:page n="142v" xml:id="t-1.body-1.div-2.div-1.pb-27" resource="LekChir_0284.xml" />
+    <itj:page n="143r" xml:id="t-1.body-1.div-2.div-1.div-158.p-1.pb-1" resource="LekChir_0285.xml" />
+    <itj:page n="143v" xml:id="t-1.body-1.div-2.div-1.div-158.p-1.pb-2" resource="LekChir_0286.xml" />
+    <itj:page n="144r" xml:id="t-1.body-1.div-2.div-1.pb-28" resource="LekChir_0287.xml" />
+    <itj:page n="144v" xml:id="t-1.body-1.div-2.div-1.div-159.p-1.pb-1" resource="LekChir_0288.xml" />
+    <itj:page n="145r" xml:id="t-1.body-1.div-2.div-1.div-159.p-1.pb-2" resource="LekChir_0289.xml" />
+    <itj:page n="145v" xml:id="t-1.body-1.div-2.div-1.div-160.p-1.pb-1" resource="LekChir_0290.xml" />
+    <itj:page n="146r" xml:id="t-1.body-1.div-2.div-1.div-160.p-1.pb-2" resource="LekChir_0291.xml" />
+    <itj:page n="146v" xml:id="t-1.body-1.div-2.div-1.div-160.pb-1" resource="LekChir_0292.xml" />
+    <itj:page n="147r" xml:id="t-1.body-1.div-2.div-1.div-160.p-3.pb-1" resource="LekChir_0293.xml" />
+    <itj:page n="147v" xml:id="t-1.body-1.div-2.div-1.div-160.p-3.pb-2" resource="LekChir_0294.xml" />
+    <itj:page n="148r" xml:id="t-1.body-1.div-2.div-1.div-161.p-1.pb-1" resource="LekChir_0295.xml" />
+    <itj:page n="148v" xml:id="t-1.body-1.div-2.div-1.div-162.p-1.pb-1" resource="LekChir_0296.xml" />
+    <itj:page n="149r" xml:id="t-1.body-1.div-2.div-1.div-163.p-1.pb-1" resource="LekChir_0297.xml" />
+    <itj:page n="149v" xml:id="t-1.body-1.div-2.div-1.div-163.p-1.pb-2" resource="LekChir_0298.xml" />
+    <itj:page n="150r" xml:id="t-1.body-1.div-2.div-1.div-163.p-2.pb-1" resource="LekChir_0299.xml" />
+    <itj:page n="150v" xml:id="t-1.body-1.div-2.div-1.div-164.p-1.pb-1" resource="LekChir_0300.xml" />
+    <itj:page n="151r" xml:id="t-1.body-1.div-2.div-1.div-164.p-2.pb-1" resource="LekChir_0301.xml" />
+    <itj:page n="151v" xml:id="t-1.body-1.div-2.div-1.div-164.p-2.pb-2" resource="LekChir_0302.xml" />
+    <itj:page n="152r" xml:id="t-1.body-1.div-2.div-1.div-164.p-3.pb-1" resource="LekChir_0303.xml" />
+    <itj:page n="152v" xml:id="t-1.body-1.div-2.div-1.div-165.pb-1" resource="LekChir_0304.xml" />
+    <itj:page n="153r" xml:id="t-1.body-1.div-2.div-1.div-165.p-2.pb-1" resource="LekChir_0305.xml" />
+    <itj:page n="153v" xml:id="t-1.body-1.div-2.div-1.div-166.p-1.pb-1" resource="LekChir_0306.xml" />
+    <itj:page n="154r" xml:id="t-1.body-1.div-2.div-1.div-166.p-2.pb-1" resource="LekChir_0307.xml" />
+    <itj:page n="154v" xml:id="t-1.body-1.div-2.div-1.div-167.p-1.pb-1" resource="LekChir_0308.xml" />
+    <itj:page n="155r" xml:id="t-1.body-1.div-2.div-1.div-167.p-2.pb-1" resource="LekChir_0309.xml" />
+    <itj:page n="155v" xml:id="t-1.body-1.div-2.div-1.div-167.pb-1" resource="LekChir_0310.xml" />
+    <itj:page n="156r" xml:id="t-1.body-1.div-2.div-1.div-167.p-4.pb-1" resource="LekChir_0311.xml" />
+    <itj:page n="156v" xml:id="t-1.body-1.div-2.div-1.div-168.p-1.pb-1" resource="LekChir_0312.xml" />
+    <itj:page n="157r" xml:id="t-1.body-1.div-2.div-1.div-168.p-2.pb-1" resource="LekChir_0313.xml" />
+    <itj:page n="157v" xml:id="t-1.body-1.div-2.div-1.div-169.p-1.pb-1" resource="LekChir_0314.xml" />
+    <itj:page n="158r" xml:id="t-1.body-1.div-2.div-1.div-169.p-2.pb-1" resource="LekChir_0315.xml" />
+    <itj:page n="158v" xml:id="t-1.body-1.div-2.div-1.div-170.pb-1" resource="LekChir_0316.xml" />
+    <itj:page n="159r" xml:id="t-1.body-1.div-2.div-1.div-170.p-2.pb-1" resource="LekChir_0317.xml" />
+    <itj:page n="159v" xml:id="t-1.body-1.div-2.div-1.div-171.p-1.pb-1" resource="LekChir_0318.xml" />
+    <itj:page n="160r" xml:id="t-1.body-1.div-2.div-1.div-171.p-2.pb-1" resource="LekChir_0319.xml" />
+    <itj:page n="160v" xml:id="t-1.body-1.div-2.div-1.div-172.p-1.pb-1" resource="LekChir_0320.xml" />
+    <itj:page n="161r" xml:id="t-1.body-1.div-2.div-1.div-172.p-1.pb-2" resource="LekChir_0321.xml" />
+    <itj:page n="161v" xml:id="t-1.body-1.div-2.div-1.div-173.p-1.pb-1" resource="LekChir_0322.xml" />
+    <itj:page n="162r" xml:id="t-1.body-1.div-2.div-1.div-173.p-2.pb-1" resource="LekChir_0323.xml" />
+    <itj:page n="162v" xml:id="t-1.body-1.div-2.div-1.div-173.pb-1" resource="LekChir_0324.xml" />
+    <itj:page n="163r" xml:id="t-1.body-1.div-2.div-1.div-173.p-3.pb-1" resource="LekChir_0325.xml" />
+    <itj:page n="163v" xml:id="t-1.body-1.div-2.div-1.div-174.p-1.pb-1" resource="LekChir_0326.xml" />
+    <itj:page n="164r" xml:id="t-1.body-1.div-2.div-1.div-174.p-2.pb-1" resource="LekChir_0327.xml" />
+    <itj:page n="164v" xml:id="t-1.body-1.div-2.div-1.div-175.p-1.pb-1" resource="LekChir_0328.xml" />
+    <itj:page n="165r" xml:id="t-1.body-1.div-2.div-1.div-175.p-1.pb-2" resource="LekChir_0329.xml" />
+    <itj:page n="165v" xml:id="t-1.body-1.div-2.div-1.div-176.p-1.pb-1" resource="LekChir_0330.xml" />
+    <itj:page n="166r" xml:id="t-1.body-1.div-2.div-1.div-177.p-1.pb-1" resource="LekChir_0331.xml" />
+    <itj:page n="166v" xml:id="t-1.body-1.div-2.div-1.div-177.p-1.pb-2" resource="LekChir_0332.xml" />
+    <itj:page n="167r" xml:id="t-1.body-1.div-2.div-1.div-177.p-2.pb-1" resource="LekChir_0333.xml" />
+    <itj:page n="167v" xml:id="t-1.body-1.div-2.div-1.div-178.p-1.pb-1" resource="LekChir_0334.xml" />
+    <itj:page n="168r" xml:id="t-1.body-1.div-2.div-1.div-178.p-2.pb-1" resource="LekChir_0335.xml" />
+    <itj:page n="168v" xml:id="t-1.body-1.div-2.div-1.div-179.p-1.pb-1" resource="LekChir_0336.xml" />
+    <itj:page n="169r" xml:id="t-1.body-1.div-2.div-1.div-179.p-2.pb-1" resource="LekChir_0337.xml" />
+    <itj:page n="169v" xml:id="t-1.body-1.div-2.div-1.div-180.p-1.pb-1" resource="LekChir_0338.xml" />
+    <itj:page n="170r" xml:id="t-1.body-1.div-2.div-1.div-180.p-2.pb-1" resource="LekChir_0339.xml" />
+    <itj:page n="170v" xml:id="t-1.body-1.div-2.div-1.div-181.p-1.pb-1" resource="LekChir_0340.xml" />
+    <itj:page n="171r" xml:id="t-1.body-1.div-2.div-1.div-181.p-2.pb-1" resource="LekChir_0341.xml" />
+    <itj:page n="171v" xml:id="t-1.body-1.div-2.div-1.div-182.p-1.pb-1" resource="LekChir_0342.xml" />
+    <itj:page n="172r" xml:id="t-1.body-1.div-2.div-1.div-182.p-1.pb-2" resource="LekChir_0343.xml" />
+    <itj:page n="172v" xml:id="t-1.body-1.div-2.div-1.div-183.p-1.pb-1" resource="LekChir_0344.xml" />
+    <itj:page n="173r" xml:id="t-1.body-1.div-2.div-1.div-183.p-2.pb-1" resource="LekChir_0345.xml" />
+    <itj:page n="173v" xml:id="t-1.body-1.div-2.div-1.div-183.p-2.pb-2" resource="LekChir_0346.xml" />
+    <itj:page n="174r" xml:id="t-1.body-1.div-2.div-1.div-183.p-2.pb-3" resource="LekChir_0347.xml" />
+    <itj:page n="174v" xml:id="t-1.body-1.div-2.div-1.div-183.p-3.pb-1" resource="LekChir_0348.xml" />
+    <itj:page n="175r" xml:id="t-1.body-1.div-2.div-1.div-183.p-4.pb-1" resource="LekChir_0349.xml" />
+    <itj:page n="175v" xml:id="t-1.body-1.div-2.div-1.div-184.p-1.pb-1" resource="LekChir_0350.xml" />
+    <itj:page n="176r" xml:id="t-1.body-1.div-2.div-1.div-184.p-1.pb-2" resource="LekChir_0351.xml" />
+    <itj:page n="176v" xml:id="t-1.body-1.div-2.div-1.div-185.p-1.pb-1" resource="LekChir_0352.xml" />
+    <itj:page n="177r" xml:id="t-1.body-1.div-2.div-1.div-185.p-2.pb-1" resource="LekChir_0353.xml" />
+    <itj:page n="177v" xml:id="t-1.body-1.div-2.div-1.div-186.p-1.pb-1" resource="LekChir_0354.xml" />
+    <itj:page n="178r" xml:id="t-1.body-1.div-2.div-1.div-186.p-3.pb-1" resource="LekChir_0355.xml" />
+    <itj:page n="178v" xml:id="t-1.body-1.div-2.div-1.div-187.p-1.pb-1" resource="LekChir_0356.xml" />
+    <itj:page n="179r" xml:id="t-1.body-1.div-2.div-1.div-187.p-1.pb-2" resource="LekChir_0357.xml" />
+    <itj:page n="179v" xml:id="t-1.body-1.div-2.div-1.div-188.p-1.pb-1" resource="LekChir_0358.xml" />
+    <itj:page n="180r" xml:id="t-1.body-1.div-2.div-1.div-188.p-1.pb-2" resource="LekChir_0359.xml" />
+    <itj:page n="180v" xml:id="t-1.body-1.div-2.div-1.div-189.pb-1" resource="LekChir_0360.xml" />
+    <itj:page n="181r" xml:id="t-1.body-1.div-2.div-1.div-189.p-2.pb-1" resource="LekChir_0361.xml" />
+    <itj:page n="181v" xml:id="t-1.body-1.div-2.div-1.div-189.p-2.pb-2" resource="LekChir_0362.xml" />
+    <itj:page n="182r" xml:id="t-1.body-1.div-2.div-1.div-189.p-2.pb-3" resource="LekChir_0363.xml" />
+    <itj:page n="182v" xml:id="t-1.body-1.div-2.div-1.div-190.p-1.pb-1" resource="LekChir_0364.xml" />
+    <itj:page n="183r" xml:id="t-1.body-1.div-2.div-1.div-190.p-1.pb-2" resource="LekChir_0365.xml" />
+    <itj:page n="183v" xml:id="t-1.body-1.div-2.div-1.div-190.p-1.pb-3" resource="LekChir_0366.xml" />
+    <itj:page n="184r" xml:id="t-1.body-1.div-2.div-1.div-190.p-1.pb-4" resource="LekChir_0367.xml" />
+    <itj:page n="184v" xml:id="t-1.body-1.div-2.div-1.div-191.p-1.pb-1" resource="LekChir_0368.xml" />
+    <itj:page n="185r" xml:id="t-1.body-1.div-2.div-1.div-191.p-2.pb-1" resource="LekChir_0369.xml" />
+    <itj:page n="185r" xml:id="t-1.body-1.div-2.div-1.div-192.p-1.pb-1" resource="LekChir_0370.xml" />
+    <itj:page n="186r" xml:id="t-1.body-1.div-2.div-1.div-192.p-2.pb-1" resource="LekChir_0371.xml" />
+    <itj:page n="186v" xml:id="t-1.body-1.div-2.div-1.div-193.pb-1" resource="LekChir_0372.xml" />
+    <itj:page n="187r" xml:id="t-1.body-1.div-2.div-1.div-193.p-2.pb-1" resource="LekChir_0373.xml" />
+    <itj:page n="187v" xml:id="t-1.body-1.div-2.div-1.div-194.p-1.pb-1" resource="LekChir_0374.xml" />
+    <itj:page n="188r" xml:id="t-1.body-1.div-2.div-1.div-194.p-1.pb-2" resource="LekChir_0375.xml" />
+    <itj:page n="188v" xml:id="t-1.body-1.div-2.div-1.div-195.p-1.pb-1" resource="LekChir_0376.xml" />
+    <itj:page n="189r" xml:id="t-1.body-1.div-2.div-1.div-196.p-1.pb-1" resource="LekChir_0377.xml" />
+    <itj:page n="189v" xml:id="t-1.body-1.div-2.div-1.div-197.p-1.pb-1" resource="LekChir_0378.xml" />
+    <itj:page n="190r" xml:id="t-1.body-1.div-2.div-1.div-197.p-2.pb-1" resource="LekChir_0379.xml" />
+    <itj:page n="190v" xml:id="t-1.body-1.div-2.div-1.div-198.p-1.pb-1" resource="LekChir_0380.xml" />
+    <itj:page n="191r" xml:id="t-1.body-1.div-2.div-1.pb-29" resource="LekChir_0381.xml" />
+    <itj:page n="191v" xml:id="t-1.body-1.div-2.div-1.div-199.p-2.pb-1" resource="LekChir_0382.xml" />
+    <itj:page n="192r" xml:id="t-1.body-1.div-2.div-1.div-199.p-3.pb-1" resource="LekChir_0383.xml" />
+    <itj:page n="192v" xml:id="t-1.body-1.div-2.div-1.div-200.p-1.pb-1" resource="LekChir_0384.xml" />
+    <itj:page n="193r" xml:id="t-1.body-1.div-2.div-1.div-200.p-2.pb-1" resource="LekChir_0385.xml" />
+    <itj:page n="193v" xml:id="t-1.body-1.div-2.div-1.div-201.p-1.pb-1" resource="LekChir_0386.xml" />
+    <itj:page n="194r" xml:id="t-1.body-1.div-2.div-1.div-201.p-1.pb-2" resource="LekChir_0387.xml" />
+    <itj:page n="194v" xml:id="t-1.body-1.div-2.div-1.div-202.p-1.pb-1" resource="LekChir_0388.xml" />
+    <itj:page n="195r" xml:id="t-1.body-1.div-2.div-1.div-202.p-2.pb-1" resource="LekChir_0389.xml" />
+    <itj:page n="195v" xml:id="t-1.body-1.div-2.div-1.div-203.p-1.pb-1" resource="LekChir_0390.xml" />
+    <itj:page n="196r" xml:id="t-1.body-1.div-2.div-1.div-204.p-1.pb-1" resource="LekChir_0391.xml" />
+    <itj:page n="196v" xml:id="t-1.body-1.div-2.div-1.div-205.p-1.pb-1" resource="LekChir_0392.xml" />
+    <itj:page n="197r" xml:id="t-1.body-1.div-2.div-1.div-205.p-2.pb-1" resource="LekChir_0393.xml" />
+    <itj:page n="197v" xml:id="t-1.body-1.div-2.div-1.div-205.p-2.pb-2" resource="LekChir_0394.xml" />
+    <itj:page n="198r" xml:id="t-1.body-1.div-2.div-1.div-205.p-3.pb-1" resource="LekChir_0395.xml" />
+    <itj:page n="198v" xml:id="t-1.body-1.div-2.div-1.div-206.p-1.pb-1" resource="LekChir_0396.xml" />
+    <itj:page n="199r" xml:id="t-1.body-1.div-2.div-1.div-206.p-2.pb-1" resource="LekChir_0397.xml" />
+    <itj:page n="199v" xml:id="t-1.body-1.div-2.div-1.div-207.p-1.pb-1" resource="LekChir_0398.xml" />
+    <itj:page n="200r" xml:id="t-1.body-1.div-2.div-1.div-207.pb-1" resource="LekChir_0399.xml" />
+    <itj:page n="200v" xml:id="t-1.body-1.div-2.div-1.div-208.p-1.pb-1" resource="LekChir_0400.xml" />
+    <itj:page n="201r" xml:id="t-1.body-1.div-2.div-1.pb-30" resource="LekChir_0401.xml" />
+    <itj:page n="201v" xml:id="t-1.body-1.div-2.div-1.div-209.p-1.pb-1" resource="LekChir_0402.xml" />
+    <itj:page n="202r" xml:id="t-1.body-1.div-2.div-1.pb-31" resource="LekChir_0403.xml" />
+    <itj:page n="202v" xml:id="t-1.body-1.div-2.div-1.div-210.p-1.pb-1" resource="LekChir_0404.xml" />
+    <itj:page n="203r" xml:id="t-1.body-1.div-2.div-1.div-210.p-2.pb-1" resource="LekChir_0405.xml" />
+    <itj:page n="203v" xml:id="t-1.body-1.div-2.div-1.div-210.pb-1" resource="LekChir_0406.xml" />
+    <itj:page n="204r" xml:id="t-1.body-1.div-2.div-1.div-210.p-3.pb-1" resource="LekChir_0407.xml" />
+    <itj:page n="204v" xml:id="t-1.body-1.div-2.div-1.div-211.p-1.pb-1" resource="LekChir_0408.xml" />
+    <itj:page n="205r" xml:id="t-1.body-1.div-2.div-1.div-211.p-2.pb-1" resource="LekChir_0409.xml" />
+    <itj:page n="205v" xml:id="t-1.body-1.div-2.div-1.div-212.p-1.pb-1" resource="LekChir_0410.xml" />
+    <itj:page n="206r" xml:id="t-1.body-1.div-2.div-1.div-212.p-2.pb-1" resource="LekChir_0411.xml" />
+    <itj:page n="206v" xml:id="t-1.body-1.div-2.div-1.div-213.p-1.pb-1" resource="LekChir_0412.xml" />
+    <itj:page n="207r" xml:id="t-1.body-1.div-2.div-1.div-213.p-2.pb-1" resource="LekChir_0413.xml" />
+    <itj:page n="207v" xml:id="t-1.body-1.div-2.div-1.div-214.p-1.pb-1" resource="LekChir_0414.xml" />
+    <itj:page n="208r" xml:id="t-1.body-1.div-2.div-1.div-214.p-1.pb-2" resource="LekChir_0415.xml" />
+    <itj:page n="208v" xml:id="t-1.body-1.div-2.div-1.div-215.p-1.pb-1" resource="LekChir_0416.xml" />
+    <itj:page n="209r" xml:id="t-1.body-1.div-2.div-1.div-215.p-1.pb-2" resource="LekChir_0417.xml" />
+    <itj:page n="209v" xml:id="t-1.body-1.div-2.div-1.div-216.p-1.pb-1" resource="LekChir_0418.xml" />
+    <itj:page n="210r" xml:id="t-1.body-1.div-2.div-1.div-216.p-2.pb-1" resource="LekChir_0419.xml" />
+    <itj:page n="210v" xml:id="t-1.body-1.div-2.div-1.div-217.p-1.pb-1" resource="LekChir_0420.xml" />
+    <itj:page n="211r" xml:id="t-1.body-1.div-2.div-1.div-217.p-2.pb-1" resource="LekChir_0421.xml" />
+    <itj:page n="211v" xml:id="t-1.body-1.div-2.div-1.div-217.p-2.pb-2" resource="LekChir_0422.xml" />
+    <itj:page n="212r" xml:id="t-1.body-1.div-2.div-1.div-218.p-1.pb-1" resource="LekChir_0423.xml" />
+    <itj:page n="212v" xml:id="t-1.body-1.div-2.div-1.div-219.p-1.pb-1" resource="LekChir_0424.xml" />
+    <itj:page n="213r" xml:id="t-1.body-1.div-2.div-1.pb-32" resource="LekChir_0425.xml" />
+    <itj:page n="213v" xml:id="t-1.body-1.div-2.div-1.div-220.p-1.pb-1" resource="LekChir_0426.xml" />
+    <itj:page n="214r" xml:id="t-1.body-1.div-2.div-1.div-220.p-4.pb-1" resource="LekChir_0427.xml" />
+    <itj:page n="214v" xml:id="t-1.body-1.div-2.div-1.div-220.p-4.pb-2" resource="LekChir_0428.xml" />
+    <itj:page n="215r" xml:id="t-1.body-1.div-2.div-1.div-220.p-5.pb-1" resource="LekChir_0429.xml" />
+    <itj:page n="215v" xml:id="t-1.body-1.div-2.div-1.div-221.p-1.pb-1" resource="LekChir_0430.xml" />
+    <itj:page n="216r" xml:id="t-1.body-1.div-2.div-1.div-221.p-1.pb-2" resource="LekChir_0431.xml" />
+    <itj:page n="216v" xml:id="t-1.body-1.div-2.div-1.div-222.p-1.pb-1" resource="LekChir_0432.xml" />
+    <itj:page n="217r" xml:id="t-1.body-1.div-2.div-1.div-222.p-1.pb-2" resource="LekChir_0433.xml" />
+    <itj:page n="217v" xml:id="t-1.body-1.div-2.div-1.div-223.p-1.pb-1" resource="LekChir_0434.xml" />
+    <itj:page n="218r" xml:id="t-1.body-1.div-2.div-1.div-223.p-2.pb-1" resource="LekChir_0435.xml" />
+    <itj:page n="218v" xml:id="t-1.body-1.div-2.div-1.div-224.p-1.pb-1" resource="LekChir_0436.xml" />
+    <itj:page n="219r" xml:id="t-1.body-1.div-2.div-1.div-224.p-2.pb-1" resource="LekChir_0437.xml" />
+    <itj:page n="219v" xml:id="t-1.body-1.div-2.div-1.div-224.p-2.pb-2" resource="LekChir_0438.xml" />
+    <itj:page n="220r" xml:id="t-1.body-1.div-2.div-1.div-224.p-3.pb-1" resource="LekChir_0439.xml" />
+    <itj:page n="220v" xml:id="t-1.body-1.div-2.div-1.div-225.p-1.pb-1" resource="LekChir_0440.xml" />
+    <itj:page n="221r" xml:id="t-1.body-1.div-2.div-1.div-225.p-2.pb-1" resource="LekChir_0441.xml" />
+    <itj:page n="221v" xml:id="t-1.body-1.div-2.div-1.div-226.p-1.pb-1" resource="LekChir_0442.xml" />
+    <itj:page n="222r" xml:id="t-1.body-1.div-2.div-1.div-226.p-2.pb-1" resource="LekChir_0443.xml" />
+    <itj:page n="222v" xml:id="t-1.body-1.div-2.div-1.div-227.pb-1" resource="LekChir_0444.xml" />
+    <itj:page n="223r" xml:id="t-1.body-1.div-2.div-1.div-227.p-2.pb-1" resource="LekChir_0445.xml" />
+    <itj:page n="223v" xml:id="t-1.body-1.div-2.div-1.div-228.p-1.pb-1" resource="LekChir_0446.xml" />
+    <itj:page n="224r" xml:id="t-1.body-1.div-2.div-1.div-228.p-2.pb-1" resource="LekChir_0447.xml" />
+    <itj:page n="224v" xml:id="t-1.body-1.div-2.div-1.div-228.p-2.pb-2" resource="LekChir_0448.xml" />
+    <itj:page n="225r" xml:id="t-1.body-1.div-2.div-1.div-228.p-3.pb-1" resource="LekChir_0449.xml" />
+    <itj:page n="225v" xml:id="t-1.body-1.div-2.div-1.div-229.p-1.pb-1" resource="LekChir_0450.xml" />
+    <itj:page n="226r" xml:id="t-1.body-1.div-2.div-1.div-229.p-2.pb-1" resource="LekChir_0451.xml" />
+    <itj:page n="226v" xml:id="t-1.body-1.div-2.div-1.div-229.p-3.pb-1" resource="LekChir_0452.xml" />
+    <itj:page n="227r" xml:id="t-1.body-1.div-2.div-1.pb-33" resource="LekChir_0453.xml" />
+    <itj:page n="227v" xml:id="t-1.body-1.div-2.div-1.div-230.p-1.pb-1" resource="LekChir_0454.xml" />
+    <itj:page n="228r" xml:id="t-1.body-1.div-2.div-1.pb-34" resource="LekChir_0455.xml" />
+    <itj:page n="228v" xml:id="t-1.body-1.div-2.div-1.div-231.p-1.pb-1" resource="LekChir_0456.xml" />
+    <itj:page n="229r" xml:id="t-1.body-1.div-2.div-1.div-231.p-2.pb-1" resource="LekChir_0457.xml" />
+    <itj:page n="229v" xml:id="t-1.body-1.div-2.div-1.div-232.pb-1" resource="LekChir_0458.xml" />
+    <itj:page n="230r" xml:id="t-1.body-1.div-2.div-1.div-232.p-2.pb-1" resource="LekChir_0459.xml" />
+    <itj:page n="230v" xml:id="t-1.body-1.div-2.div-1.div-233.p-1.pb-1" resource="LekChir_0460.xml" />
+    <itj:page n="231r" xml:id="t-1.body-1.div-2.div-1.div-233.p-2.pb-1" resource="LekChir_0461.xml" />
+    <itj:page n="231v" xml:id="t-1.body-1.div-2.div-1.div-234.p-1.pb-1" resource="LekChir_0462.xml" />
+    <itj:page n="232r" xml:id="t-1.body-1.div-2.div-1.div-234.p-2.pb-1" resource="LekChir_0463.xml" />
+    <itj:page n="232v" xml:id="t-1.body-1.div-2.div-1.div-235.p-1.pb-1" resource="LekChir_0464.xml" />
+    <itj:page n="233r" xml:id="t-1.body-1.div-2.div-1.div-235.p-1.pb-2" resource="LekChir_0465.xml" />
+    <itj:page n="233v" xml:id="t-1.body-1.div-2.div-1.div-236.p-1.pb-1" resource="LekChir_0466.xml" />
+    <itj:page n="234r" xml:id="t-1.body-1.div-2.div-1.div-236.p-2.pb-1" resource="LekChir_0467.xml" />
+    <itj:page n="234v" xml:id="t-1.body-1.div-2.div-1.div-237.p-1.pb-1" resource="LekChir_0468.xml" />
+    <itj:page n="235r" xml:id="t-1.body-1.div-2.div-1.div-237.p-1.pb-2" resource="LekChir_0469.xml" />
+    <itj:page n="235v" xml:id="t-1.body-1.div-2.div-1.div-238.p-1.pb-1" resource="LekChir_0470.xml" />
+    <itj:page n="236r" xml:id="t-1.body-1.div-2.div-1.div-238.p-2.pb-1" resource="LekChir_0471.xml" />
+    <itj:page n="236v" xml:id="t-1.body-1.div-2.div-1.div-239.p-1.pb-1" resource="LekChir_0472.xml" />
+    <itj:page n="237r" xml:id="t-1.body-1.div-2.div-1.pb-35" resource="LekChir_0473.xml" />
+    <itj:page n="237v" xml:id="t-1.body-1.div-2.div-1.div-240.p-1.pb-1" resource="LekChir_0474.xml" />
+    <itj:page n="238r" xml:id="t-1.body-1.div-2.div-1.div-240.p-2.pb-1" resource="LekChir_0475.xml" />
+    <itj:page n="238v" xml:id="t-1.body-1.div-2.div-1.div-240.pb-1" resource="LekChir_0476.xml" />
+    <itj:page n="240r" xml:id="t-1.body-1.div-2.div-1.div-240.p-3.pb-1" resource="LekChir_0477.xml" />
+    <itj:page n="240v" xml:id="t-1.body-1.div-2.div-1.div-241.p-1.pb-1" resource="LekChir_0478.xml" />
+    <itj:page n="241r" xml:id="t-1.body-1.div-2.div-1.div-241.p-2.pb-1" resource="LekChir_0479.xml" />
+    <itj:page n="241v" xml:id="t-1.body-1.div-2.div-1.div-242.p-1.pb-1" resource="LekChir_0480.xml" />
+    <itj:page n="242r" xml:id="t-1.body-1.div-2.div-1.div-242.p-1.pb-2" resource="LekChir_0481.xml" />
+    <itj:page n="242v" xml:id="t-1.body-1.div-2.div-1.div-243.p-1.pb-1" resource="LekChir_0482.xml" />
+    <itj:page n="243r" xml:id="t-1.body-1.div-2.div-1.div-243.p-2.pb-1" resource="LekChir_0483.xml" />
+    <itj:page n="243v" xml:id="t-1.body-1.div-2.div-1.div-243.pb-1" resource="LekChir_0484.xml" />
+    <itj:page n="244r" xml:id="t-1.body-1.div-2.div-1.div-243.p-3.pb-1" resource="LekChir_0485.xml" />
+    <itj:page n="244v" xml:id="t-1.body-1.div-2.div-1.div-244.p-1.pb-1" resource="LekChir_0486.xml" />
+    <itj:page n="245r" xml:id="t-1.body-1.div-2.div-1.div-244.p-2.pb-1" resource="LekChir_0487.xml" />
+    <itj:page n="245v" xml:id="t-1.body-1.div-2.div-1.div-245.pb-1" resource="LekChir_0488.xml" />
+    <itj:page n="246r" xml:id="t-1.body-1.div-2.div-1.div-245.p-2.pb-1" resource="LekChir_0489.xml" />
+    <itj:page n="246v" xml:id="t-1.body-1.div-2.div-1.div-247.p-1.pb-1" resource="LekChir_0490.xml" />
+    <itj:page n="247r" xml:id="t-1.body-1.div-2.div-1.div-247.p-1.pb-2" resource="LekChir_0491.xml" />
+    <itj:page n="247v" xml:id="t-1.body-1.div-2.div-1.div-248.p-1.pb-1" resource="LekChir_0492.xml" />
+    <itj:page n="248r" xml:id="t-1.body-1.div-2.div-1.div-248.p-1.pb-2" resource="LekChir_0493.xml" />
+    <itj:page n="248v" xml:id="t-1.body-1.div-2.div-1.div-249.p-1.pb-1" resource="LekChir_0494.xml" />
+    <itj:page n="249r" xml:id="t-1.body-1.div-2.div-1.div-249.p-2.pb-1" resource="LekChir_0495.xml" />
+    <itj:page n="249v" xml:id="t-1.body-1.div-2.div-1.div-250.p-1.pb-1" resource="LekChir_0496.xml" />
+    <itj:page n="250r" xml:id="t-1.body-1.div-2.div-1.div-250.p-1.pb-2" resource="LekChir_0497.xml" />
+    <itj:page n="250v" xml:id="t-1.body-1.div-2.div-1.div-251.p-1.pb-1" resource="LekChir_0498.xml" />
+    <itj:page n="251r" xml:id="t-1.body-1.div-2.div-1.div-251.p-1.pb-2" resource="LekChir_0499.xml" />
+    <itj:page n="251v" xml:id="t-1.body-1.div-2.div-1.div-252.pb-1" resource="LekChir_0500.xml" />
+    <itj:page n="252r" xml:id="t-1.body-1.div-2.div-1.div-252.p-3.pb-1" resource="LekChir_0501.xml" />
+    <itj:page n="252v" xml:id="t-1.body-1.div-2.div-1.div-253.p-1.pb-1" resource="LekChir_0502.xml" />
+    <itj:page n="253r" xml:id="t-1.body-1.div-2.div-1.pb-36" resource="LekChir_0503.xml" />
+    <itj:page n="253v" xml:id="t-1.body-1.div-2.div-1.div-254.p-1.pb-1" resource="LekChir_0504.xml" />
+    <itj:page n="254r" xml:id="t-1.body-1.div-2.div-1.div-255.p-2.pb-1" resource="LekChir_0505.xml" />
+    <itj:page n="254v" xml:id="t-1.body-1.div-2.div-1.div-256.p-1.pb-1" resource="LekChir_0506.xml" />
+    <itj:page n="255r" xml:id="t-1.body-1.div-2.div-1.div-256.p-3.pb-1" resource="LekChir_0507.xml" />
+    <itj:page n="255v" xml:id="t-1.body-1.div-2.div-1.div-257.p-1.pb-1" resource="LekChir_0508.xml" />
+    <itj:page n="256r" xml:id="t-1.body-1.div-2.div-1.div-257.p-2.pb-1" resource="LekChir_0509.xml" />
+    <itj:page n="256v" xml:id="t-1.body-1.div-2.div-1.div-258.pb-1" resource="LekChir_0510.xml" />
+    <itj:page n="257r" xml:id="t-1.body-1.div-2.div-1.pb-37" resource="LekChir_0511.xml" />
+    <itj:page n="257v" xml:id="t-1.body-1.div-2.div-1.div-259.p-1.pb-1" resource="LekChir_0512.xml" />
+    <itj:page n="258r" xml:id="t-1.body-1.div-2.div-1.div-259.p-1.pb-2" resource="LekChir_0513.xml" />
+    <itj:page n="258v" xml:id="t-1.body-1.div-2.div-1.div-260.p-2.pb-1" resource="LekChir_0514.xml" />
+    <itj:page n="259r" xml:id="t-1.body-1.div-2.div-1.div-260.p-2.pb-2" resource="LekChir_0515.xml" />
+    <itj:page n="259v" xml:id="t-1.body-1.div-2.div-1.div-261.p-1.pb-1" resource="LekChir_0516.xml" />
+    <itj:page n="260r" xml:id="t-1.body-1.div-2.div-1.div-261.p-2.pb-1" resource="LekChir_0517.xml" />
+    <itj:page n="260v" xml:id="t-1.body-1.div-2.div-1.div-261.p-2.pb-2" resource="LekChir_0518.xml" />
+    <itj:page n="261r" xml:id="t-1.body-1.div-2.div-1.div-261.p-3.pb-1" resource="LekChir_0519.xml" />
+    <itj:page n="261v" xml:id="t-1.body-1.div-2.div-1.div-262.p-1.pb-1" resource="LekChir_0520.xml" />
+    <itj:page n="262r" xml:id="t-1.body-1.div-2.div-1.div-263.p-1.pb-1" resource="LekChir_0521.xml" />
+    <itj:page n="262v" xml:id="t-1.body-1.div-2.div-1.div-263.p-1.pb-2" resource="LekChir_0522.xml" />
+    <itj:page n="263r" xml:id="t-1.body-1.div-2.div-1.div-263.p-1.pb-3" resource="LekChir_0523.xml" />
+    <itj:page n="263v" xml:id="t-1.body-1.div-2.div-1.div-263.p-1.pb-4" resource="LekChir_0524.xml" />
+    <itj:page n="264r" xml:id="t-1.body-1.div-2.div-1.pb-38" resource="LekChir_0525.xml" />
+    <itj:page n="264v" xml:id="t-1.body-1.div-2.div-1.div-264.p-1.pb-1" resource="LekChir_0526.xml" />
+    <itj:page n="265r" xml:id="t-1.body-1.div-2.div-1.div-264.p-2.pb-1" resource="LekChir_0527.xml" />
+    <itj:page n="265v" xml:id="t-1.body-1.div-2.div-1.div-264.p-2.pb-2" resource="LekChir_0528.xml" />
+    <itj:page n="266r" xml:id="t-1.body-1.div-2.div-1.div-264.p-2.pb-3" resource="LekChir_0529.xml" />
+    <itj:page n="266v" xml:id="t-1.body-1.div-2.div-1.div-265.p-1.pb-1" resource="LekChir_0530.xml" />
+    <itj:page n="267r" xml:id="t-1.body-1.div-2.div-1.div-265.p-2.pb-1" resource="LekChir_0531.xml" />
+    <itj:page n="267v" xml:id="t-1.body-1.div-2.div-1.div-266.p-1.pb-1" resource="LekChir_0532.xml" />
+    <itj:page n="268r" xml:id="t-1.body-1.div-2.div-1.div-266.p-2.pb-1" resource="LekChir_0533.xml" />
+    <itj:page n="268v" xml:id="t-1.body-1.div-2.div-1.div-266.p-2.pb-2" resource="LekChir_0534.xml" />
+    <itj:page n="269r" xml:id="t-1.body-1.div-2.div-1.div-266.p-3.pb-1" resource="LekChir_0535.xml" />
+    <itj:page n="269v" xml:id="t-1.body-1.div-2.div-1.div-267.pb-1" resource="LekChir_0536.xml" />
+    <itj:page n="270r" xml:id="t-1.body-1.div-2.div-1.div-267.p-2.pb-1" resource="LekChir_0537.xml" />
+    <itj:page n="270v" xml:id="t-1.body-1.div-2.div-1.div-268.p-1.pb-1" resource="LekChir_0538.xml" />
+    <itj:page n="271r" xml:id="t-1.body-1.div-2.div-1.div-268.p-2.pb-1" resource="LekChir_0539.xml" />
+    <itj:page n="271v" xml:id="t-1.body-1.div-2.div-1.div-269.p-2.pb-1" resource="LekChir_0540.xml" />
+    <itj:page n="272r" xml:id="t-1.body-1.div-2.div-1.div-269.p-3.pb-1" resource="LekChir_0541.xml" />
+    <itj:page n="272v" xml:id="t-1.body-1.div-2.div-1.div-270.p-1.pb-1" resource="LekChir_0542.xml" />
+    <itj:page n="273r" xml:id="t-1.body-1.div-2.div-1.pb-39" resource="LekChir_0543.xml" />
+    <itj:page n="273v" xml:id="t-1.body-1.div-2.div-1.div-271.p-1.pb-1" resource="LekChir_0544.xml" />
+    <itj:page n="274r" xml:id="t-1.body-1.div-2.div-1.div-271.p-2.pb-1" resource="LekChir_0545.xml" />
+    <itj:page n="274v" xml:id="t-1.body-1.div-2.div-1.div-272.p-1.pb-1" resource="LekChir_0546.xml" />
+    <itj:page n="275r" xml:id="t-1.body-1.div-2.div-1.div-272.p-2.pb-1" resource="LekChir_0547.xml" />
+    <itj:page n="275v" xml:id="t-1.body-1.div-2.div-1.div-273.p-1.pb-1" resource="LekChir_0548.xml" />
+    <itj:page n="276r" xml:id="t-1.body-1.div-2.div-1.div-273.p-1.pb-2" resource="LekChir_0549.xml" />
+    <itj:page n="276v" xml:id="t-1.body-1.div-2.div-1.div-274.pb-1" resource="LekChir_0550.xml" />
+    <itj:page n="277r" xml:id="t-1.body-1.div-2.div-1.div-274.pb-2" resource="LekChir_0551.xml" />
+    <itj:page n="277v" xml:id="t-1.body-1.div-2.div-1.div-275.p-1.pb-1" resource="LekChir_0552.xml" />
+    <itj:page n="278r" xml:id="t-1.body-1.div-2.div-1.div-275.p-1.pb-2" resource="LekChir_0553.xml" />
+    <itj:page n="278v" xml:id="t-1.body-1.div-2.div-1.div-276.p-1.pb-1" resource="LekChir_0554.xml" />
+    <itj:page n="279r" xml:id="t-1.body-1.div-2.div-1.div-276.p-2.pb-1" resource="LekChir_0555.xml" />
+    <itj:page n="279v" xml:id="t-1.body-1.div-2.div-1.div-276.p-2.pb-2" resource="LekChir_0556.xml" />
+    <itj:page n="280r" xml:id="t-1.body-1.div-2.div-1.div-276.p-3.pb-1" resource="LekChir_0557.xml" />
+    <itj:page n="280v" xml:id="t-1.body-1.div-2.div-1.div-276.pb-1" resource="LekChir_0558.xml" />
+    <itj:page n="281r" xml:id="t-1.body-1.div-2.div-1.div-276.p-4.pb-1" resource="LekChir_0559.xml" />
+    <itj:page n="281v" xml:id="t-1.body-1.div-2.div-1.div-276.p-4.pb-2" resource="LekChir_0560.xml" />
+    <itj:page n="282r" xml:id="t-1.body-1.div-2.div-1.div-276.p-5.pb-1" resource="LekChir_0561.xml" />
+    <itj:page n="282v" xml:id="t-1.body-1.div-2.div-1.div-277.p-1.pb-1" resource="LekChir_0562.xml" />
+    <itj:page n="283r" xml:id="t-1.body-1.div-2.div-1.div-277.p-1.pb-2" resource="LekChir_0563.xml" />
+    <itj:page n="283v" xml:id="t-1.body-1.div-2.div-1.div-278.p-1.pb-1" resource="LekChir_0564.xml" />
+    <itj:page n="284r" xml:id="t-1.body-1.div-2.div-1.div-278.p-2.pb-1" resource="LekChir_0565.xml" />
+    <itj:page n="284v" xml:id="t-1.body-1.div-2.div-1.div-279.pb-1" resource="LekChir_0566.xml" />
+    <itj:page n="285r" xml:id="t-1.body-1.div-2.div-1.div-279.p-3.pb-1" resource="LekChir_0567.xml" />
+    <itj:page n="285v" xml:id="t-1.body-1.div-2.div-1.div-280.p-1.pb-1" resource="LekChir_0568.xml" />
+    <itj:page n="286r" xml:id="t-1.body-1.div-2.div-1.div-280.p-1.pb-2" resource="LekChir_0569.xml" />
+    <itj:page n="286v" xml:id="t-1.body-1.div-2.div-1.div-281.p-1.pb-1" resource="LekChir_0570.xml" />
+    <itj:page n="287r" xml:id="t-1.body-1.div-2.div-1.div-281.p-1.pb-2" resource="LekChir_0571.xml" />
+    <itj:page n="287v" xml:id="t-1.body-1.div-2.div-1.div-283.pb-1" resource="LekChir_0572.xml" />
+    <itj:page n="288r" xml:id="t-1.body-1.div-2.div-1.div-283.p-2.pb-1" resource="LekChir_0573.xml" />
+    <itj:page n="288v" xml:id="t-1.body-1.div-2.div-1.div-283.p-2.pb-2" resource="LekChir_0574.xml" />
+    <itj:page n="289r" xml:id="t-1.body-1.div-2.div-1.div-283.p-3.pb-1" resource="LekChir_0575.xml" />
+    <itj:page n="289v" xml:id="t-1.body-1.div-2.div-1.div-283.p-3.pb-2" resource="LekChir_0576.xml" />
+    <itj:page n="290r" xml:id="t-1.body-1.div-2.div-1.div-283.p-4.pb-1" resource="LekChir_0577.xml" />
+    <itj:page n="290v" xml:id="t-1.body-1.div-2.div-1.div-284.p-1.pb-1" resource="LekChir_0578.xml" />
+    <itj:page n="291r" xml:id="t-1.body-1.div-2.div-1.pb-40" resource="LekChir_0579.xml" />
+    <itj:page n="291v" xml:id="t-1.body-1.div-2.div-1.div-286.p-1.pb-1" resource="LekChir_0580.xml" />
+    <itj:page n="292r" xml:id="t-1.body-1.div-2.div-1.pb-41" resource="LekChir_0581.xml" />
+    <itj:page n="292v" xml:id="t-1.body-1.div-2.div-1.div-288.pb-1" resource="LekChir_0582.xml" />
+    <itj:page n="293r" xml:id="t-1.body-1.div-2.div-1.pb-42" resource="LekChir_0583.xml" />
+    <itj:page n="293v" xml:id="t-1.body-1.div-2.div-1.div-289.p-1.pb-1" resource="LekChir_0584.xml" />
+    <itj:page n="294r" xml:id="t-1.body-1.div-2.div-1.div-289.p-2.pb-1" resource="LekChir_0585.xml" />
+    <itj:page n="294v" xml:id="t-1.body-1.div-2.div-1.div-290.p-1.pb-1" resource="LekChir_0586.xml" />
+    <itj:page n="295r" xml:id="t-1.body-1.div-2.div-1.div-290.p-2.pb-1" resource="LekChir_0587.xml" />
+    <itj:page n="295v" xml:id="t-1.body-1.div-2.div-1.div-290.p-2.pb-2" resource="LekChir_0588.xml" />
+    <itj:page n="296r" xml:id="t-1.body-1.div-2.div-1.div-290.p-3.pb-1" resource="LekChir_0589.xml" />
+    <itj:page n="276v" xml:id="t-1.body-1.div-2.div-1.div-291.p-1.pb-1" resource="LekChir_0590.xml" />
+    <itj:page n="297r" xml:id="t-1.body-1.div-2.div-1.div-291.p-2.pb-1" resource="LekChir_0591.xml" />
+    <itj:page n="297v" xml:id="t-1.body-1.div-2.div-1.div-292.p-1.pb-1" resource="LekChir_0592.xml" />
+    <itj:page n="298r" xml:id="t-1.body-1.div-2.div-1.div-292.pb-1" resource="LekChir_0593.xml" />
+    <itj:page n="298v" xml:id="t-1.body-1.div-2.div-1.div-293.p-1.pb-1" resource="LekChir_0594.xml" />
+    <itj:page n="299r" xml:id="t-1.body-1.div-2.div-1.pb-43" resource="LekChir_0595.xml" />
+    <itj:page n="299v" xml:id="t-1.body-1.div-2.div-1.div-294.pb-1" resource="LekChir_0596.xml" />
+    <itj:page n="300r" xml:id="t-1.body-1.div-2.div-1.div-294.p-2.pb-1" resource="LekChir_0597.xml" />
+    <itj:page n="300v" xml:id="t-1.body-1.div-2.div-1.div-295.p-1.pb-1" resource="LekChir_0598.xml" />
+    <itj:page n="301r" xml:id="t-1.body-1.div-2.div-1.pb-44" resource="LekChir_0599.xml" />
+    <itj:page n="301v" xml:id="t-1.body-1.div-2.div-1.div-296.p-1.pb-1" resource="LekChir_0600.xml" />
+    <itj:page n="302r" xml:id="t-1.body-1.div-2.div-1.pb-45" resource="LekChir_0601.xml" />
+    <itj:page n="302v" xml:id="t-1.body-1.div-2.div-1.div-298.p-2.pb-1" resource="LekChir_0602.xml" />
+    <itj:page n="303r" xml:id="t-1.body-1.div-2.div-1.div-298.p-3.pb-1" resource="LekChir_0603.xml" />
+    <itj:page n="303v" xml:id="t-1.body-1.div-2.div-1.div-299.p-1.pb-1" resource="LekChir_0604.xml" />
+    <itj:page n="304r" xml:id="t-1.body-1.div-2.div-1.div-299.pb-1" resource="LekChir_0605.xml" />
+    <itj:page n="304v" xml:id="t-1.body-1.div-2.div-1.div-300.p-1.pb-1" resource="LekChir_0606.xml" />
+    <itj:page n="305r" xml:id="t-1.body-1.div-2.div-1.div-300.p-2.pb-1" resource="LekChir_0607.xml" />
+    <itj:page n="305v" xml:id="t-1.body-1.div-2.div-1.div-301.p-1.pb-1" resource="LekChir_0608.xml" />
+    <itj:page n="306r" xml:id="t-1.body-1.div-2.div-1.div-301.p-1.pb-2" resource="LekChir_0609.xml" />
+    <itj:page n="306v" xml:id="t-1.body-1.div-2.div-1.div-301.p-1.pb-3" resource="LekChir_0610.xml" />
+    <itj:page n="307r" xml:id="t-1.body-1.div-2.div-1.pb-46" resource="LekChir_0611.xml" />
+    <itj:page n="307v" xml:id="t-1.body-1.div-2.div-1.div-303.pb-1" resource="LekChir_0612.xml" />
+    <itj:page n="308r" xml:id="t-1.body-1.div-2.div-1.div-303.p-2.pb-1" resource="LekChir_0613.xml" />
+    <itj:page n="308v" xml:id="t-1.body-1.div-2.div-1.div-304.p-1.pb-1" resource="LekChir_0614.xml" />
+    <itj:page n="309r" xml:id="t-1.body-1.div-2.div-1.div-304.p-2.pb-1" resource="LekChir_0615.xml" />
+    <itj:page n="309v" xml:id="t-1.body-1.div-2.div-1.div-305.p-1.pb-1" resource="LekChir_0616.xml" />
+    <itj:page n="310r" xml:id="t-1.body-1.div-2.div-1.div-305.p-2.pb-1" resource="LekChir_0617.xml" />
+    <itj:page n="310v" xml:id="t-1.body-1.div-2.div-1.div-306.p-1.pb-1" resource="LekChir_0618.xml" />
+    <itj:page n="311r" xml:id="t-1.body-1.div-2.div-1.div-306.p-2.pb-1" resource="LekChir_0619.xml" />
+    <itj:page n="311v" xml:id="t-1.body-1.div-2.div-1.div-307.pb-1" resource="LekChir_0620.xml" />
+    <itj:page n="312r" xml:id="t-1.body-1.div-2.div-1.pb-47" resource="LekChir_0621.xml" />
+    <itj:page n="312v" xml:id="t-1.body-1.div-2.div-1.div-308.p-2.pb-1" resource="LekChir_0622.xml" />
+    <itj:page n="313r" xml:id="t-1.body-1.div-2.div-1.div-308.p-4.pb-1" resource="LekChir_0623.xml" />
+    <itj:page n="313v" xml:id="t-1.body-1.div-2.div-1.pb-48" resource="LekChir_0624.xml" />
+    <itj:page n="314r" xml:id="t-1.body-1.div-2.div-1.pb-49" resource="LekChir_0625.xml" />
+    <itj:page n="314v" xml:id="t-1.body-1.div-2.div-1.pb-50" resource="LekChir_0626.xml" />
+    <itj:page n="315r" xml:id="t-1.body-1.div-2.div-1.div-313.p-1.pb-1" resource="LekChir_0627.xml" />
+    <itj:page n="315v" xml:id="t-1.body-1.div-2.div-1.div-314.p-1.pb-1" resource="LekChir_0628.xml" />
+    <itj:page n="316r" xml:id="t-1.body-1.div-2.div-1.div-315.p-1.pb-1" resource="LekChir_0629.xml" />
+    <itj:page n="316v" xml:id="t-1.body-1.div-2.div-1.pb-51" resource="LekChir_0630.xml" />
+    <itj:page n="317r" xml:id="t-1.body-1.div-2.div-1.div-317.p-3.pb-1" resource="LekChir_0631.xml" />
+    <itj:page n="317v" xml:id="t-1.body-1.div-2.div-1.div-318.p-1.pb-1" resource="LekChir_0632.xml" />
+    <itj:page n="318r" xml:id="t-1.body-1.div-2.div-1.div-319.p-1.pb-1" resource="LekChir_0633.xml" />
+    <itj:page n="318v" xml:id="t-1.body-1.div-2.div-1.div-320.p-1.pb-1" resource="LekChir_0634.xml" />
+    <itj:page n="319r" xml:id="t-1.body-1.div-2.div-1.div-321.p-1.pb-1" resource="LekChir_0635.xml" />
+    <itj:page n="319v" xml:id="t-1.body-1.div-2.div-1.pb-52" resource="LekChir_0636.xml" />
+    <itj:page n="320r" xml:id="t-1.body-1.div-2.div-1.div-324.p-1.pb-1" resource="LekChir_0637.xml" />
+    <itj:page n="320v" xml:id="t-1.body-1.div-2.div-1.div-327.p-1.pb-1" resource="LekChir_0638.xml" />
+    <itj:page n="321r" xml:id="t-1.body-1.div-2.div-1.div-328.p-2.pb-1" resource="LekChir_0639.xml" />
+    <itj:page n="321v" xml:id="t-1.body-1.div-2.div-1.div-330.p-1.pb-1" resource="LekChir_0640.xml" />
+    <itj:page n="322r" xml:id="t-1.body-1.div-2.div-1.div-331.p-1.pb-1" resource="LekChir_0641.xml" />
+    <itj:page n="322v" xml:id="t-1.body-1.div-2.div-1.pb-53" resource="LekChir_0642.xml" />
+    <itj:page n="323r" xml:id="t-1.body-1.div-2.div-1.div-334.p-1.pb-1" resource="LekChir_0643.xml" />
+    <itj:page n="323v" xml:id="t-1.body-1.div-2.div-1.pb-54" resource="LekChir_0644.xml" />
+    <itj:page n="324r" xml:id="t-1.body-1.div-2.div-1.div-337.p-1.pb-1" resource="LekChir_0645.xml" />
+    <itj:page n="324v" xml:id="t-1.body-1.div-2.div-1.div-339.p-1.pb-1" resource="LekChir_0646.xml" />
+    <itj:page n="325r" xml:id="t-1.body-1.div-2.div-1.div-339.p-2.pb-1" resource="LekChir_0647.xml" />
+    <itj:page n="325v" xml:id="t-1.body-1.div-2.div-1.div-340.pb-1" resource="LekChir_0648.xml" />
+    <itj:page n="326r" xml:id="t-1.body-1.div-2.div-1.div-340.p-2.pb-1" resource="LekChir_0649.xml" />
+    <itj:page n="326v" xml:id="t-1.body-1.div-2.div-1.div-343.p-1.pb-1" resource="LekChir_0650.xml" />
+    <itj:page n="327r" xml:id="t-1.body-1.div-2.div-1.div-343.p-2.pb-1" resource="LekChir_0651.xml" />
+    <itj:page n="327v" xml:id="t-1.body-1.div-2.div-1.div-344.p-1.pb-1" resource="LekChir_0652.xml" />
+    <itj:page n="328r" xml:id="t-1.body-1.div-2.div-1.div-344.p-2.pb-1" resource="LekChir_0653.xml" />
+    <itj:page n="328v" xml:id="t-1.body-1.div-2.div-1.div-345.p-1.pb-1" resource="LekChir_0654.xml" />
+    <itj:page n="329r" xml:id="t-1.body-1.div-2.div-1.div-345.p-2.pb-1" resource="LekChir_0655.xml" />
+    <itj:page n="329v" xml:id="t-1.body-1.div-2.div-1.div-346.p-1.pb-1" resource="LekChir_0656.xml" />
+    <itj:page n="330r" xml:id="t-1.body-1.div-2.div-1.div-346.p-3.pb-1" resource="LekChir_0657.xml" />
+    <itj:page n="330v" xml:id="t-1.body-1.div-2.div-1.div-348.p-1.pb-1" resource="LekChir_0658.xml" />
+    <itj:page n="331r" xml:id="t-1.body-1.div-2.div-1.pb-55" resource="LekChir_0659.xml" />
+    <itj:page n="331v" xml:id="t-1.body-1.div-2.div-1.div-350.p-1.pb-1" resource="LekChir_0660.xml" />
+    <itj:page n="332r" xml:id="t-1.body-1.div-2.div-1.div-351.p-1.pb-1" resource="LekChir_0661.xml" />
+    <itj:page n="332v" xml:id="t-1.body-1.div-2.div-1.div-352.p-1.pb-1" resource="LekChir_0662.xml" />
+    <itj:page n="333r" xml:id="t-1.body-1.div-2.div-1.div-353.p-1.pb-1" resource="LekChir_0663.xml" />
+    <itj:page n="333v" xml:id="t-1.body-1.div-2.div-1.div-354.p-1.pb-1" resource="LekChir_0664.xml" />
+    <itj:page n="334r" xml:id="t-1.body-1.div-2.div-1.div-354.pb-1" resource="LekChir_0665.xml" />
+    <itj:page n="334v" xml:id="t-1.body-1.div-2.div-1.div-354.pb-2" resource="LekChir_0666.xml" />
+    <itj:page n="335r" xml:id="t-1.body-1.div-2.div-1.div-354.p-6.pb-1" resource="LekChir_0667.xml" />
+    <itj:page n="335v" xml:id="t-1.body-1.div-2.div-1.div-354.p-6.pb-2" resource="LekChir_0668.xml" />
+    <itj:page n="336r" xml:id="t-1.body-1.div-2.div-1.div-354.pb-3" resource="LekChir_0669.xml" />
+    <itj:page n="336v" xml:id="t-1.body-1.div-2.div-1.div-354.pb-4" resource="LekChir_0670.xml" />
+    <itj:page n="337r" xml:id="t-1.body-1.div-2.div-1.pb-56" resource="LekChir_0671.xml" />
+    <itj:page n="337v" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-1" resource="LekChir_0672.xml" />
+    <itj:page n="338v" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-2" resource="LekChir_0673.xml" />
+    <itj:page n="339r" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-3" resource="LekChir_0674.xml" />
+    <itj:page n="339v" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-4" resource="LekChir_0675.xml" />
+    <itj:page n="340r" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-5" resource="LekChir_0676.xml" />
+    <itj:page n="340v" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-6" resource="LekChir_0677.xml" />
+    <itj:page n="341r" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-7" resource="LekChir_0678.xml" />
+    <itj:page n="341v" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-8" resource="LekChir_0679.xml" />
+    <itj:page n="342r" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-9" resource="LekChir_0680.xml" />
+    <itj:page n="342v" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-10" resource="LekChir_0681.xml" />
+    <itj:page n="343r" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-11" resource="LekChir_0682.xml" />
+    <itj:page n="343v" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-12" resource="LekChir_0683.xml" />
+    <itj:page resource="LekChir_0684.xml" />
+  </itj:pages>
+</itj:document>
