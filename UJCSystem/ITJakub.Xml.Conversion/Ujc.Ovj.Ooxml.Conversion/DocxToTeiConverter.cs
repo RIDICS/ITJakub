@@ -39,7 +39,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:System.Object"/> class.
 		/// </summary>
-		public VersionInfoSkeleton(string message, DateTime creation) : this()
+		public VersionInfoSkeleton(string message, DateTime creation)
+			: this()
 		{
 			Message = message;
 			Creation = creation;
@@ -50,7 +51,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:System.Object"/> class.
 		/// </summary>
-		public VersionInfoSkeleton(string message, DateTime creation, string id) : this(message, creation)
+		public VersionInfoSkeleton(string message, DateTime creation, string id)
+			: this(message, creation)
 		{
 			Id = id;
 		}
@@ -61,7 +63,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 		private static string GenerateId(DateTime dateTime)
 		{
-		 return	String.Format("Change_{0:O}", dateTime);
+			return String.Format("Change_{0:O}", dateTime);
 		}
 
 	}
@@ -215,8 +217,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// <param name="settings"></param>
 		private void ResolveDefaultSettingsValues(DocxToTeiConverterSettings settings)
 		{
-			if(settings == null) return;
-			if(settings.InputFilePath == null) return;
+			if (settings == null) return;
+			if (settings.InputFilePath == null) return;
 			FileInfo fileInfo = new FileInfo(settings.InputFilePath);
 			DirectoryInfo directoryInfo = new DirectoryInfo(fileInfo.DirectoryName);
 			if (settings.OutputFilePath == null)
@@ -265,25 +267,28 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			metada.Root.Add(header);
 
 			XElement toc = new XElement(nsItj + "tableOfContents",
-				from section in tableOfContentResult.Sections 
+				from section in tableOfContentResult.Sections
 				select new XElement(nsItj + "div",
 					new XElement("head", new XAttribute("text", section.Head)))
 				);
-			
-			
+
+
 			metada.Root.Add(toc);
 
-			XElement pages = new XElement(nsItj + "pages",
-				from info in splittingResult.PageBreaksSplitInfo
-				select new XElement(nsItj + "page",
-					info.Number == null ? null : new XAttribute("n", info.Number),
-					info.Id == null ? null : new XAttribute(nsXml + "id", info.Id),
-					info.FileName == null ? null : new XAttribute("resource", info.FileName),
-					info.Facsimile == null ? null : new XAttribute("facs", info.Facsimile)
-					)
-				);
+			if (splittingResult != null) //generovat pouze v případě, že k rozdělení na strany došlo
+			{
+				XElement pages = new XElement(nsItj + "pages",
+					from info in splittingResult.PageBreaksSplitInfo
+					select new XElement(nsItj + "page",
+						info.Number == null ? null : new XAttribute("n", info.Number),
+						info.Id == null ? null : new XAttribute(nsXml + "id", info.Id),
+						info.FileName == null ? null : new XAttribute("resource", info.FileName),
+						info.Facsimile == null ? null : new XAttribute("facs", info.Facsimile)
+						)
+					);
 
-			metada.Root.Add(pages);
+				metada.Root.Add(pages);
+			}
 			metada.Save(GetConversionMetadataFileFullPath(finalOutputFileName));
 
 		}
@@ -305,7 +310,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			Splitter splitter = new Splitter(fileFullPath, outputDirectory);
 			splitter.StartingElement = "body";
-			
+
 			SplittingResult splittingResult = splitter.SplitOnPageBreak();
 			return splittingResult;
 		}

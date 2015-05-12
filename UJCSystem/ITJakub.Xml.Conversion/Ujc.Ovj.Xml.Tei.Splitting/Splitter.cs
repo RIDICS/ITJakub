@@ -292,17 +292,19 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 								result.IsSplitted = true;
 								return result;
 							}
-
-							ElementInfo elementPeak = elementStack.Peek();
-							if (elementPeak.Name != name)
+							if (elementStack.Count > 0)
 							{
-								result.Errors = String.Format("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
-								//Console.WriteLine("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
-							}
-							else
-							{
-								Transformace.SerializeNode(reader, currentWriter);
-								elementStack.Pop();
+								ElementInfo elementPeak = elementStack.Peek();
+								if (elementPeak.Name != name)
+								{
+									result.Errors = String.Format("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
+									//Console.WriteLine("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
+								}
+								else
+								{
+									Transformace.SerializeNode(reader, currentWriter);
+									elementStack.Pop();
+								}
 							}
 						}
 						else
@@ -320,7 +322,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 			}
 			finally
 			{
-				if(currentWriter != null)
+				if (currentWriter != null)
 					currentWriter.Close();
 			}
 
@@ -362,13 +364,19 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 				currentWriter.WriteEndElement();
 				elementQueue.Pop();
 			}
-			currentWriter.WriteEndElement(); //tj. </vw:fragment>
-			currentWriter.WriteEndDocument();
-			currentWriter.Close();
+			if (currentWriter != null)
+			{
+				currentWriter.WriteEndElement(); //tj. </vw:fragment>
+				currentWriter.WriteEndDocument();
+				currentWriter.Close();
+			}
 			elementQueue.Clear();
 
-			result.PageBreaksSplitInfo.Add(currentSplitInfo);
-			currentSplitInfo = new PageBreakSplitInfo();
+			if (currentSplitInfo != null && currentSplitInfo.Id != null)
+			{
+				result.PageBreaksSplitInfo.Add(currentSplitInfo);
+				currentSplitInfo = new PageBreakSplitInfo();
+			}
 
 			return tempQueue;
 

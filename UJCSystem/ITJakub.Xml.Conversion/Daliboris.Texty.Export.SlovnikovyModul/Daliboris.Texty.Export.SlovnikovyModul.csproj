@@ -44,6 +44,10 @@
     <Compile Include="SlovnikovyModulNastaveni.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Daliboris.Texty.Export.Slovniky.Slovnik\Daliboris.Texty.Export.Slovniky.Slovnik.csproj">
+      <Project>{56B8BC06-0BE8-4045-94DF-6844AA49E523}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.Slovnik</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Evidence.Rozhrani\Daliboris.Texty.Evidence.Rozhrani.csproj">
       <Project>{A612C779-BE2B-44F2-9C86-BD5324F1F8B6}</Project>
       <Name>Daliboris.Texty.Evidence.Rozhrani</Name>
@@ -55,6 +59,10 @@
     <ProjectReference Include="..\Daliboris.Texty.Export.Rozhrani\Daliboris.Texty.Export.Rozhrani.csproj">
       <Project>{585C72E8-10A8-4DFA-8A5C-467C5DD4C98C}</Project>
       <Name>Daliboris.Texty.Export.Rozhrani</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.ESSC\Daliboris.Texty.Export.Slovniky.ESSC.csproj">
+      <Project>{2FCB6B55-EE90-4664-BF98-2249B9BC94D3}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.ESSC</Name>
     </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Export.Transformace\Daliboris.Texty.Export.Transformace.csproj">
       <Project>{9339ED5B-312F-4AAF-9DF6-31B6C3169C48}</Project>

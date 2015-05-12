@@ -84,7 +84,7 @@ namespace Daliboris.Texty.Evidence.Uloziste {
 					NacteniSouboru(this, new NacteniPrepisuEventArgs(mintPocetSouboru, i+1, fis[i].Name));
 
 				string sSouborDocx = null;
-				ISoubor sb = new Soubor();
+				ISoubor sb = new Evidence.Soubor();
 				sb.Adresar = mstrSlozka;
 				sb.Nazev = fis[i].Name;
 				sb.Zmeneno = fis[i].LastWriteTime;

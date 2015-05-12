@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2F50F763-2AEF-4647-918A-87B65AF2A6C9}</ProjectGuid>
+    <ProjectGuid>{2FCB6B55-EE90-4664-BF98-2249B9BC94D3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ujc.Ovj.Xml.Info</RootNamespace>
-    <AssemblyName>Ujc.Ovj.Xml.Info</AssemblyName>
+    <RootNamespace>Daliboris.Texty.Export.Slovniky.ESSC</RootNamespace>
+    <AssemblyName>Daliboris.Texty.Export.Slovniky.ESSC</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,11 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributeInfo.cs" />
-    <Compile Include="AttributeInfos.cs" />
-    <Compile Include="ElementInfo.cs" />
-    <Compile Include="ElementInfos.cs" />
+    <Compile Include="ESSC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Daliboris.Texty.Export.Slovniky.Slovnik\Daliboris.Texty.Export.Slovniky.Slovnik.csproj">
+      <Project>{56B8BC06-0BE8-4045-94DF-6844AA49E523}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.Slovnik</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+      <Project>{457fef12-bd22-4498-924f-941b31dccd6b}</Project>
+      <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -144,7 +144,10 @@
     <Content Include="Data\Xslt\EM_Vytvorit_projectDesc.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Xslt\ESSCRename.xsl">
+    <Content Include="Data\Xslt\ESSC_Rename.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\ESSC_OldToTeiP5.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Xslt\Oznacit_krizek_jako_obrazek.xsl">

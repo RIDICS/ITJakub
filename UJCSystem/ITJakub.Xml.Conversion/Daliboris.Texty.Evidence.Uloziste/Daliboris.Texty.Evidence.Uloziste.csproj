@@ -122,6 +122,10 @@
     <Compile Include="Subversion.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Daliboris.Pomucky.Soubory\Daliboris.Pomucky.Soubory.csproj">
+      <Project>{d9f98df2-f423-4c3e-b120-d8700631cecf}</Project>
+      <Name>Daliboris.Pomucky.Soubory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.OOXML.Pomucky\Daliboris.OOXML.Pomucky.csproj">
       <Project>{114b8733-decf-4402-ba25-e3dbe265e993}</Project>
       <Name>Daliboris.OOXML.Pomucky</Name>
@@ -129,10 +133,6 @@
     <ProjectReference Include="..\Daliboris.Pomucky.Soubory.MetaInfo\Daliboris.Pomucky.Soubory.MetaInfo.csproj">
       <Project>{4d9d7ca9-3863-4014-8138-4735af5b5851}</Project>
       <Name>Daliboris.Pomucky.Soubory.MetaInfo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Daliboris.Pomucky.Soubory\Daliboris.Pomucky.Soubory.csproj">
-      <Project>{e6f52bb8-df05-449b-964a-1e35d8f57304}</Project>
-      <Name>Daliboris.Pomucky.Soubory</Name>
     </ProjectReference>
     <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
       <Project>{457FEF12-BD22-4498-924F-941B31DCCD6B}</Project>
