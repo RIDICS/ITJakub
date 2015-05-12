@@ -113,6 +113,7 @@
     <None Include="Data\Input\AlexPovD.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Data\Input\ESSC_A.docx" />
     <None Include="Data\Input\GestaM.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -122,6 +123,9 @@
     <None Include="Data\Input\LekChir.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Data\Metadata\ESSC_A.xmd" />
+    <None Include="Data\Metadata\KazLeg.xmd" />
+    <None Include="Data\Metadata\LekChir.xmd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<itj:document doctype="Edition" versionId="9dc3ee5a-86a6-448b-a74b-903265777408" xml:lang="cs" n="{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<itj:document doctype="Edition" versionId="837e4e53-b0f7-41d2-b7bb-12cd9d00eef0" xml:lang="cs" n="{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <teiHeader xml:id="teiHeader-1">
     <fileDesc n="{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}">
       <titleStmt>
@@ -79,11 +79,34 @@
             <catDesc xml:lang="cs-cz">lístková kartotéka</catDesc>
           </category>
         </taxonomy>
+        <taxonomy xml:id="output">
+          <category xml:id="output-dictionary">
+            <catDesc xml:lang="cs-cz">slovníky</catDesc>
+          </category>
+          <category xml:id="output-editions">
+            <catDesc xml:lang="cs-cz">edice</catDesc>
+          </category>
+          <category xml:id="output-text_bank">
+            <catDesc xml:lang="cs-cz">textová banka</catDesc>
+            <category xml:id="output-text_bank-old_czech">
+              <catDesc xml:lang="cs-cz">staročeská textová banka</catDesc>
+            </category>
+            <category xml:id="output-text_bank-middle_czech">
+              <catDesc xml:lang="cs-cz">středněčeská textová banka</catDesc>
+            </category>
+          </category>
+          <category xml:id="output-scholary_literature">
+            <catDesc xml:lang="cs-cz">odborná literatura</catDesc>
+          </category>
+          <category xml:id="output-digitized-grammar">
+            <catDesc xml:lang="cs-cz">digitalizované mluvnice</catDesc>
+          </category>
+        </taxonomy>
       </classDecl>
     </encodingDesc>
     <profileDesc>
       <textClass>
-        <catRef target="#taxonomy-historical_text-old_czech" />
+        <catRef target="#taxonomy-historical_text-old_czech#output-text_bank-old_czech #output-editions" />
         <keywords scheme="http://vokabular.ujc.cas.cz/scheme/classification/secondary">
           <term>próza</term>
           <term>lékařství</term>
@@ -96,7 +119,13 @@
       <change n="Change_2015-05-01T14:57:08.0000000" when="2015-05-01T14:57:08"></change>
       <change n="Change_2015-05-06T14:16:50.0000000" when="2015-05-06T14:16:50">dd</change>
       <change n="Change_2015-05-11T12:30:32.0000000" when="2015-05-11T12:30:32">DD</change>
-      <change n="9dc3ee5a-86a6-448b-a74b-903265777408" when="2015-05-12T08:57:21.4370388Z"></change>
+      <change n="Change_2015-05-12T08:57:21.0000000" when="2015-05-12T08:57:21"></change>
+      <change n="Change_2015-05-12T10:13:22.0000000" when="2015-05-12T10:13:22">Po změnách</change>
+      <change n="Change_2015-05-12T11:07:35.0000000" when="2015-05-12T11:07:35"></change>
+      <change n="Change_2015-05-12T12:55:55.0000000" when="2015-05-12T12:55:55"></change>
+      <change n="Change_2015-05-12T13:03:00.0000000" when="2015-05-12T13:03:00"></change>
+      <change n="Change_2015-05-12T13:07:57.0000000" when="2015-05-12T13:07:57"></change>
+      <change n="837e4e53-b0f7-41d2-b7bb-12cd9d00eef0" when="2015-05-12T13:59:59.4477318Z"></change>
     </revisionDesc>
   </teiHeader>
   <itj:tableOfContents />
@@ -784,6 +813,5 @@
     <itj:page n="342v" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-10" resource="LekChir_0681.xml" />
     <itj:page n="343r" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-11" resource="LekChir_0682.xml" />
     <itj:page n="343v" xml:id="t-1.body-1.div-2.div-1.div-355.table-1.pb-12" resource="LekChir_0683.xml" />
-    <itj:page resource="LekChir_0684.xml" />
   </itj:pages>
 </itj:document>

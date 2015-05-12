@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<itj:document doctype="Dictionary" versionId="d9a796c8-d26e-4e45-a655-fa140e371c0d" xml:lang="cs" n="{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<itj:document doctype="Dictionary" versionId="58089d6b-7bf5-4422-afd4-643010b20f89" xml:lang="cs" n="{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <teiHeader>
     <fileDesc n="4E5DB418-B49B-4AC0-AE9F-78A53E9BE4FE">
       <titleStmt>
@@ -22,7 +22,7 @@
       </sourceDesc>
     </fileDesc>
     <encodingDesc>
-      <classDecl>
+      <classDecl xmlns="">
         <taxonomy xml:id="taxonomy">
           <category xml:id="taxonomy-dictionary">
             <catDesc xml:lang="cs-cz">slovník</catDesc>
@@ -52,16 +52,42 @@
             <catDesc xml:lang="cs-cz">lístková kartotéka</catDesc>
           </category>
         </taxonomy>
+        <taxonomy xml:id="output">
+          <category xml:id="output-dictionary">
+            <catDesc xml:lang="cs-cz">slovníky</catDesc>
+          </category>
+          <category xml:id="output-editions">
+            <catDesc xml:lang="cs-cz">edice</catDesc>
+          </category>
+          <category xml:id="output-text_bank">
+            <catDesc xml:lang="cs-cz">textová banka</catDesc>
+            <category xml:id="output-text_bank-old_czech">
+              <catDesc xml:lang="cs-cz">staročeská textová banka</catDesc>
+            </category>
+            <category xml:id="output-text_bank-middle_czech">
+              <catDesc xml:lang="cs-cz">středněčeská textová banka</catDesc>
+            </category>
+          </category>
+          <category xml:id="output-scholary_literature">
+            <catDesc xml:lang="cs-cz">odborná literatura</catDesc>
+          </category>
+          <category xml:id="output-digitized-grammar">
+            <catDesc xml:lang="cs-cz">digitalizované mluvnice</catDesc>
+          </category>
+        </taxonomy>
       </classDecl>
     </encodingDesc>
     <profileDesc>
       <textClass>
-        <catRef target="#taxonomy-dictionary-contemporary" />
+        <catRef target="#taxonomy-dictionary-contemporary #output-dictionary" />
       </textClass>
     </profileDesc>
     <revisionDesc>
       <change n="Change_2015-05-12T05:35:37.0000000" when="2015-05-12T05:35:37"></change>
-      <change n="d9a796c8-d26e-4e45-a655-fa140e371c0d" when="2015-05-12T10:11:02.4804403Z"></change>
+      <change n="Change_2015-05-12T10:11:02.0000000" when="2015-05-12T10:11:02"></change>
+      <change n="Change_2015-05-12T13:50:26.0000000" when="2015-05-12T13:50:26"></change>
+      <change n="Change_2015-05-12T13:51:45.0000000" when="2015-05-12T13:51:45"></change>
+      <change n="58089d6b-7bf5-4422-afd4-643010b20f89" when="2015-05-12T13:58:59.0894992Z"></change>
     </revisionDesc>
   </teiHeader>
   <itj:tableOfContents />

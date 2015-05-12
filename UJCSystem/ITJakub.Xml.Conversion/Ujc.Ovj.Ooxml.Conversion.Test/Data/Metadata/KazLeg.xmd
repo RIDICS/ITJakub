@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<itj:document doctype="Edition" versionId="974ec12f-abbb-4d84-a589-1f20d6e7b5c4" xml:lang="cs" n="{FA10177B-25E6-4BB6-B061-0DB988AD3840}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<itj:document doctype="Edition" versionId="de2260b9-0b68-4fd7-a864-f5a0eb2767f7" xml:lang="cs" n="{FA10177B-25E6-4BB6-B061-0DB988AD3840}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <teiHeader xml:id="teiHeader-1">
     <fileDesc n="{FA10177B-25E6-4BB6-B061-0DB988AD3840}">
       <titleStmt>
@@ -87,11 +87,34 @@
             <catDesc xml:lang="cs-cz">lístková kartotéka</catDesc>
           </category>
         </taxonomy>
+        <taxonomy xml:id="output">
+          <category xml:id="output-dictionary">
+            <catDesc xml:lang="cs-cz">slovníky</catDesc>
+          </category>
+          <category xml:id="output-editions">
+            <catDesc xml:lang="cs-cz">edice</catDesc>
+          </category>
+          <category xml:id="output-text_bank">
+            <catDesc xml:lang="cs-cz">textová banka</catDesc>
+            <category xml:id="output-text_bank-old_czech">
+              <catDesc xml:lang="cs-cz">staročeská textová banka</catDesc>
+            </category>
+            <category xml:id="output-text_bank-middle_czech">
+              <catDesc xml:lang="cs-cz">středněčeská textová banka</catDesc>
+            </category>
+          </category>
+          <category xml:id="output-scholary_literature">
+            <catDesc xml:lang="cs-cz">odborná literatura</catDesc>
+          </category>
+          <category xml:id="output-digitized-grammar">
+            <catDesc xml:lang="cs-cz">digitalizované mluvnice</catDesc>
+          </category>
+        </taxonomy>
       </classDecl>
     </encodingDesc>
     <profileDesc>
       <textClass>
-        <catRef target="#taxonomy-historical_text-old_czech" />
+        <catRef target="#taxonomy-historical_text-old_czech#output-text_bank-old_czech #output-editions" />
         <keywords scheme="http://vokabular.ujc.cas.cz/scheme/classification/secondary">
           <term>próza</term>
           <term>kázání</term>
@@ -102,7 +125,8 @@
       <change n="Change_2015-04-30T08:40:10.0000000" when="2015-04-30T08:40:10"></change>
       <change n="Change_2015-05-06T14:18:41.0000000" when="2015-05-06T14:18:41"></change>
       <change n="Change_2015-05-11T12:31:51.0000000" when="2015-05-11T12:31:51"></change>
-      <change n="974ec12f-abbb-4d84-a589-1f20d6e7b5c4" when="2015-05-12T08:28:03.2709172Z"></change>
+      <change n="Change_2015-05-12T08:28:03.0000000" when="2015-05-12T08:28:03"></change>
+      <change n="de2260b9-0b68-4fd7-a864-f5a0eb2767f7" when="2015-05-12T14:01:01.1605708Z"></change>
     </revisionDesc>
   </teiHeader>
   <itj:tableOfContents />
@@ -496,6 +520,5 @@
     <itj:page n="194v" xml:id="t-1.body-1.div-1.div-47.p-1.pb-5" resource="KazLeg_0387.xml" />
     <itj:page n="195r" xml:id="t-1.body-1.div-1.div-47.p-1.pb-6" resource="KazLeg_0388.xml" />
     <itj:page n="195v" xml:id="t-1.body-1.div-1.div-47.p-1.pb-7" resource="KazLeg_0389.xml" />
-    <itj:page resource="KazLeg_0390.xml" />
   </itj:pages>
 </itj:document>
