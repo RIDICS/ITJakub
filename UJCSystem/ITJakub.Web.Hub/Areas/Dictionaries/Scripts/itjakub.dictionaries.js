@@ -1,14 +1,8 @@
 $(document).ready(function () {
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     var dictionarySelector = new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
-    //dictionarySelector.selectedChangedCallback = showStateInAlertBox;
     dictionarySelector.makeDropdown();
     var editionSelector = new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetTextWithCategories", true, callbackDelegate);
-    //editionSelector.selectedChangedCallback = showStateInAlertBox;
-    //selector.starSaveCategoryCallback = testCategoryCallbackMethod;
-    //selector.starSaveItemCallback = testItemCallbackMethod;
-    //selector.starDeleteCategoryCallback = testCategoryCallbackMethod;
-    //selector.starDeleteItemCallback = testItemCallbackMethod;
     editionSelector.makeDropdown();
     var array = new Array();
     array.push(dictionarySelector);
@@ -22,12 +16,12 @@ $(document).ready(function () {
 });
 function showStateInAlertBox(state) {
     var itemIds = "";
-    $.each(state.SelectedItemsIds, function (index, val) {
-        itemIds = itemIds.concat(val + ",");
+    $.each(state.SelectedItems, function (index, item) {
+        itemIds = itemIds.concat(item.Id + ",");
     });
     var categoriesIds = "";
-    $.each(state.SelectedCategoriesIds, function (index, val) {
-        categoriesIds = categoriesIds.concat(val + ",");
+    $.each(state.SelectedCategories, function (index, category) {
+        categoriesIds = categoriesIds.concat(category.Id + ",");
     });
     alert("State for type: " + state.Type + "\nItems: " + itemIds + "\nCategories: " + categoriesIds);
 }

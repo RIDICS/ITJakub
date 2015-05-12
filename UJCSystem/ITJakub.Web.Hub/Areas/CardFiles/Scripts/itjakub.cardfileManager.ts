@@ -10,11 +10,8 @@
 
     public makeCardFile(cardFileId: string, cardFileName: string, bucketId: string, bucketName: string,  initCardPosition?: number) {
         var bucket = this.getBucket(cardFileId, bucketId, bucketName);
-        var cardFile = new CardFileViewer(cardFileId, cardFileName, bucket);
+        var cardFile = new CardFileViewer(cardFileId, cardFileName, bucket, initCardPosition);
         $(this.cardFilesContainer).append(cardFile.getHtml());
-        if (initCardPosition != null) {
-            cardFile.setViewedCardByPosition(initCardPosition);
-        }
     }
 
     private getKeyByCardFileAndBucket(cardFileId: string, bucketId: string): string {
@@ -59,14 +56,14 @@ class CardFileViewer {
 
     private actualCardPosition: number;
 
-    constructor(cardFileId: string, cardFileName: string, bucket: Bucket) {
+    constructor(cardFileId: string, cardFileName: string, bucket: Bucket, initCardPosition?: number) {
         this.cardFileId = cardFileId;
         this.cardFileName = cardFileName;
         var cardFileDiv = document.createElement("div");
         $(cardFileDiv).addClass("cardfile-listing loading");
         this.htmlBody = cardFileDiv;
         this.actualBucket = bucket;
-        bucket.addOnFinishLoadCallback(() => this.makePanel());
+        bucket.addOnFinishLoadCallback(() => this.makePanel(initCardPosition));
     }
 
     public setViewedCardByPosition(initCardPosition: number) {
@@ -77,13 +74,17 @@ class CardFileViewer {
         return this.htmlBody;
     }
 
-    private makePanel() {
+    private makePanel(initCardPosition?: number) {
         var cardFileDiv = this.htmlBody;
         this.makeLeftPanel(cardFileDiv);
         this.makeRightPanel(cardFileDiv);
         this.displayCardFileName(this.cardFileName);
         this.displayBucketName(this.actualBucket.getName());
-        this.changeViewedCard(0);
+        if (initCardPosition != null) {
+            this.changeViewedCard(initCardPosition);
+        } else {
+            this.changeViewedCard(0);    
+        }
         $(cardFileDiv).removeClass("loading");
     }
 

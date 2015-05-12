@@ -44,8 +44,8 @@ var DropDownSelect = (function () {
         this.dataUrl = dataUrl;
         this.showStar = showStar;
         this.callbackDelegate = callbackDelegate;
-        this.selectedCategoriesIds = new Array();
-        this.selectedItemsIds = new Array();
+        this.selectedCategories = new Array();
+        this.selectedItems = new Array();
     }
     DropDownSelect.prototype.getType = function (response) {
         return this.callbackDelegate.getTypeFromResponseCallback(response);
@@ -175,7 +175,7 @@ var DropDownSelect = (function () {
         var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
         $(selectHeader).children(".dropdown-select-text").append(this.getCategoryName(rootCategory));
         var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
-        var info = this.createCallbackInfo(this.getCategoryId(rootCategory), selectHeader);
+        var info = this.createCallbackInfo(this.getCategoryId(rootCategory), this.getCategoryName(rootCategory), selectHeader);
         var self = this;
         $(checkbox).change(function () {
             if (this.checked) {
@@ -209,7 +209,7 @@ var DropDownSelect = (function () {
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
-        var info = this.createCallbackInfo(this.getCategoryId(currentCategory), itemDiv);
+        var info = this.createCallbackInfo(this.getCategoryId(currentCategory), this.getCategoryName(currentCategory), itemDiv);
         var self = this;
         $(checkbox).change(function () {
             if (this.checked) {
@@ -295,7 +295,7 @@ var DropDownSelect = (function () {
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
-        var info = this.createCallbackInfo(this.getLeafItemId(currentLeafItem), itemDiv);
+        var info = this.createCallbackInfo(this.getLeafItemId(currentLeafItem), this.getLeafItemName(currentLeafItem), itemDiv);
         var self = this;
         $(checkbox).change(function () {
             if (this.checked) {
@@ -336,30 +336,27 @@ var DropDownSelect = (function () {
         itemDiv.appendChild(nameSpan);
         container.appendChild(itemDiv);
     };
-    DropDownSelect.prototype.createCallbackInfo = function (id, target) {
+    DropDownSelect.prototype.createCallbackInfo = function (itemId, itemText, target) {
         var info = new CallbackInfo();
-        info.Id = id;
+        info.ItemId = itemId;
+        info.ItemText = itemText;
         info.Target = target;
         return info;
     };
     DropDownSelect.prototype.addToSelectedItems = function (info) {
-        this.selectedItemsIds.push(info.Id);
+        this.selectedItems.push(new Item(info.ItemId, info.ItemText));
         this.selectedChanged();
     };
     DropDownSelect.prototype.removeFromSelectedItems = function (info) {
-        this.selectedItemsIds = $.grep(this.selectedItemsIds, function (valueId) {
-            return valueId !== info.Id;
-        }, false);
+        this.selectedItems = $.grep(this.selectedItems, function (item) { return (item.Id !== info.ItemId); }, false);
         this.selectedChanged();
     };
     DropDownSelect.prototype.addToSelectedCategories = function (info) {
-        this.selectedCategoriesIds.push(info.Id);
+        this.selectedCategories.push(new Category(info.ItemId, info.ItemText));
         this.selectedChanged();
     };
     DropDownSelect.prototype.removeFromSelectedCategories = function (info) {
-        this.selectedCategoriesIds = $.grep(this.selectedCategoriesIds, function (valueId) {
-            return valueId !== info.Id;
-        }, false);
+        this.selectedCategories = $.grep(this.selectedCategories, function (category) { return (category.Id !== info.ItemId); }, false);
         this.selectedChanged();
     };
     DropDownSelect.prototype.selectedChanged = function () {
@@ -370,8 +367,8 @@ var DropDownSelect = (function () {
     DropDownSelect.prototype.getState = function () {
         var state = new State();
         state.Type = this.type;
-        state.SelectedCategoriesIds = this.selectedCategoriesIds;
-        state.SelectedItemsIds = this.selectedItemsIds;
+        state.SelectedCategories = this.selectedCategories;
+        state.SelectedItems = this.selectedItems;
         return state;
     };
     return DropDownSelect;
@@ -385,5 +382,19 @@ var State = (function () {
     function State() {
     }
     return State;
+})();
+var Item = (function () {
+    function Item(id, name) {
+        this.Id = id;
+        this.Name = name;
+    }
+    return Item;
+})();
+var Category = (function () {
+    function Category(id, name) {
+        this.Id = id;
+        this.Name = name;
+    }
+    return Category;
 })();
 //# sourceMappingURL=itjakub.plugins.dropdownselect.js.map

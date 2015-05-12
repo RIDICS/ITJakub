@@ -78,8 +78,8 @@ class DropDownSelect {
     private dataUrl: string;
     private showStar: boolean;
     private type: string;
-    private selectedItemsIds: Array<string>;
-    private selectedCategoriesIds: Array<string>;
+    private selectedItems: Array<Item>;
+    private selectedCategories: Array<Category>;
     private callbackDelegate: DropDownSelectCallbackDelegate;
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
@@ -87,8 +87,8 @@ class DropDownSelect {
         this.dataUrl = dataUrl;
         this.showStar = showStar;
         this.callbackDelegate = callbackDelegate;
-        this.selectedCategoriesIds = new Array();
-        this.selectedItemsIds = new Array();
+        this.selectedCategories = new Array();
+        this.selectedItems = new Array();
     }
 
     private getType(response): string {
@@ -261,7 +261,7 @@ class DropDownSelect {
         $(selectHeader).children(".dropdown-select-text").append(this.getCategoryName(rootCategory));
 
         var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
-        var info = this.createCallbackInfo(this.getCategoryId(rootCategory), selectHeader);
+        var info = this.createCallbackInfo(this.getCategoryId(rootCategory), this.getCategoryName(rootCategory), selectHeader);
         var self = this;
         $(checkbox).change(function() {
             if (this.checked) {
@@ -302,7 +302,7 @@ class DropDownSelect {
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
 
-        var info = this.createCallbackInfo(this.getCategoryId(currentCategory), itemDiv);
+        var info = this.createCallbackInfo(this.getCategoryId(currentCategory), this.getCategoryName(currentCategory), itemDiv);
         var self = this;
         $(checkbox).change(function() {
             if (this.checked) {
@@ -410,7 +410,7 @@ class DropDownSelect {
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
 
-        var info = this.createCallbackInfo(this.getLeafItemId(currentLeafItem), itemDiv);
+        var info = this.createCallbackInfo(this.getLeafItemId(currentLeafItem), this.getLeafItemName(currentLeafItem), itemDiv);
         var self = this;
         $(checkbox).change(function() {
             if (this.checked) {
@@ -463,34 +463,31 @@ class DropDownSelect {
     }
 
 
-    private createCallbackInfo(id: string, target: any): CallbackInfo {
+    private createCallbackInfo(itemId: string, itemText: string, target: any): CallbackInfo {
         var info = new CallbackInfo();
-        info.Id = id;
+        info.ItemId = itemId;
+        info.ItemText = itemText;
         info.Target = target;
         return info;
     }
 
     private addToSelectedItems(info: CallbackInfo) {
-        this.selectedItemsIds.push(info.Id);
+        this.selectedItems.push(new Item(info.ItemId, info.ItemText));
         this.selectedChanged();
     }
 
     private removeFromSelectedItems(info: CallbackInfo) {
-        this.selectedItemsIds = $.grep(this.selectedItemsIds, function(valueId) {
-            return valueId !== info.Id;
-        }, false);
+        this.selectedItems = $.grep(this.selectedItems, (item : Item) => (item.Id !== info.ItemId), false);
         this.selectedChanged();
     }
 
     private addToSelectedCategories(info: CallbackInfo) {
-        this.selectedCategoriesIds.push(info.Id);
+        this.selectedCategories.push(new Category(info.ItemId, info.ItemText));
         this.selectedChanged();
     }
 
     private removeFromSelectedCategories(info: CallbackInfo) {
-        this.selectedCategoriesIds = $.grep(this.selectedCategoriesIds, function(valueId) {
-            return valueId !== info.Id;
-        }, false);
+        this.selectedCategories = $.grep(this.selectedCategories, (category: Category) => (category.Id !== info.ItemId), false);
         this.selectedChanged();
     }
 
@@ -503,20 +500,41 @@ class DropDownSelect {
     getState(): State {
         var state = new State();
         state.Type = this.type;
-        state.SelectedCategoriesIds = this.selectedCategoriesIds;
-        state.SelectedItemsIds = this.selectedItemsIds;
+        state.SelectedCategories = this.selectedCategories;
+        state.SelectedItems = this.selectedItems;
         return state;
     }
 
 }
 
 class CallbackInfo {
-    Id: string; //id of item
+    ItemId: string; //id of item
+    ItemText: string; //text of item
     Target: any; //This in caller
 }
 
 class State {
     Type: string;
-    SelectedItemsIds: Array<string>;
-    SelectedCategoriesIds: Array<string>;
+    SelectedItems: Array<Item>;
+    SelectedCategories: Array<Category>;
+}
+
+class Item {
+    Id: string;
+    Name: string;
+
+    constructor(id: string, name: string) {
+        this.Id = id;
+        this.Name = name;
+    }
+}
+
+class Category {
+    Id: string;
+    Name: string;
+
+    constructor(id: string, name: string) {
+        this.Id = id;
+        this.Name = name;
+    }
 }

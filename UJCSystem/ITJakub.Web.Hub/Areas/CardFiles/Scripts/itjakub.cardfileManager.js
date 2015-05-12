@@ -5,11 +5,8 @@ var CardFileManager = (function () {
     }
     CardFileManager.prototype.makeCardFile = function (cardFileId, cardFileName, bucketId, bucketName, initCardPosition) {
         var bucket = this.getBucket(cardFileId, bucketId, bucketName);
-        var cardFile = new CardFileViewer(cardFileId, cardFileName, bucket);
+        var cardFile = new CardFileViewer(cardFileId, cardFileName, bucket, initCardPosition);
         $(this.cardFilesContainer).append(cardFile.getHtml());
-        if (initCardPosition != null) {
-            cardFile.setViewedCardByPosition(initCardPosition);
-        }
     };
     CardFileManager.prototype.getKeyByCardFileAndBucket = function (cardFileId, bucketId) {
         return cardFileId + bucketId;
@@ -37,7 +34,7 @@ var CardFileManager = (function () {
     return CardFileManager;
 })();
 var CardFileViewer = (function () {
-    function CardFileViewer(cardFileId, cardFileName, bucket) {
+    function CardFileViewer(cardFileId, cardFileName, bucket, initCardPosition) {
         var _this = this;
         this.cardFileId = cardFileId;
         this.cardFileName = cardFileName;
@@ -45,7 +42,7 @@ var CardFileViewer = (function () {
         $(cardFileDiv).addClass("cardfile-listing loading");
         this.htmlBody = cardFileDiv;
         this.actualBucket = bucket;
-        bucket.addOnFinishLoadCallback(function () { return _this.makePanel(); });
+        bucket.addOnFinishLoadCallback(function () { return _this.makePanel(initCardPosition); });
     }
     CardFileViewer.prototype.setViewedCardByPosition = function (initCardPosition) {
         var _this = this;
@@ -54,13 +51,18 @@ var CardFileViewer = (function () {
     CardFileViewer.prototype.getHtml = function () {
         return this.htmlBody;
     };
-    CardFileViewer.prototype.makePanel = function () {
+    CardFileViewer.prototype.makePanel = function (initCardPosition) {
         var cardFileDiv = this.htmlBody;
         this.makeLeftPanel(cardFileDiv);
         this.makeRightPanel(cardFileDiv);
         this.displayCardFileName(this.cardFileName);
         this.displayBucketName(this.actualBucket.getName());
-        this.changeViewedCard(0);
+        if (initCardPosition != null) {
+            this.changeViewedCard(initCardPosition);
+        }
+        else {
+            this.changeViewedCard(0);
+        }
         $(cardFileDiv).removeClass("loading");
     };
     CardFileViewer.prototype.changeViewedCard = function (newActualCardPosition) {
