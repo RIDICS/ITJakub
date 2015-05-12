@@ -82,9 +82,13 @@ function createDelegate() {
     return callbackDelegate;
 }
 function createListing() {
-    var cardFileManager = new CardFileManager("div.cardfile-result-area");
     var cardFileSelector = $("#card-file-select");
+    var cardFileLoadingDiv = $("div.card-file-select div.loading");
     var bucketSelector = $("#bucket-select");
+    var bucketLoadingDiv = $("div.bucket-select div.loading");
+    $(cardFileSelector).hide();
+    $(bucketSelector).hide();
+    var cardFileManager = new CardFileManager("div.cardfile-result-area");
     var cardFileIdListed = "";
     var cardFileNameListed = "";
     $.ajax({
@@ -106,6 +110,9 @@ function createListing() {
                 optionElement.text = cardFile["Name"];
                 $(cardFileSelector).append(optionElement);
             }
+            $(cardFileLoadingDiv).hide();
+            $(cardFileSelector).show();
+            $(cardFileSelector).change();
         },
         error: function (response) {
             //TODO resolve error
@@ -116,6 +123,8 @@ function createListing() {
         cardFileIdListed = optionSelected.val();
         cardFileNameListed = optionSelected.text();
         $(bucketSelector).empty();
+        $(bucketSelector).hide();
+        $(bucketLoadingDiv).show();
         $.ajax({
             type: "GET",
             traditional: true,
@@ -135,6 +144,9 @@ function createListing() {
                     optionElement.text = bucket["Name"];
                     $(bucketSelector).append(optionElement);
                 }
+                $(bucketLoadingDiv).hide();
+                $(bucketSelector).show();
+                $(bucketSelector).change();
             },
             error: function (response) {
                 //TODO resolve error

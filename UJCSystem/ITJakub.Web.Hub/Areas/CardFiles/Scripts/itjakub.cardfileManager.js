@@ -94,6 +94,11 @@ var CardFileViewer = (function () {
         $(this.htmlBody).find(".card-position-text").find("a").html(position.toString());
     };
     CardFileViewer.prototype.displayHeadwords = function (headwords) {
+        var headwordsText = this.getHeadwordText(headwords);
+        $(this.htmlBody).find(".headword-name").html(headwordsText);
+        $(this.htmlBody).find(".cardfile-headword-text").html(headwordsText);
+    };
+    CardFileViewer.prototype.getHeadwordText = function (headwords) {
         var headwordsText = "";
         for (var i = 0; i < headwords.length; i++) {
             if (typeof headwords[i] === "undefined" || headwords[i] == null) {
@@ -109,8 +114,7 @@ var CardFileViewer = (function () {
         if (headwordsText === "") {
             headwordsText = "&lt;Nezadáno&gt;";
         }
-        $(this.htmlBody).find(".headword-name").html(headwordsText);
-        $(this.htmlBody).find(".cardfile-headword-text").html(headwordsText);
+        return headwordsText;
     };
     CardFileViewer.prototype.displayNotes = function (notes) {
         var ulContainer = $(this.htmlBody).find(".cardfile-note-list");
@@ -187,7 +191,7 @@ var CardFileViewer = (function () {
     };
     CardFileViewer.prototype.getInnerTooltipForSlider = function (cardPosition) {
         var headwords = this.actualBucket.getCard(cardPosition).getHeadwords();
-        var headwordText = headwords[0];
+        var headwordText = this.getHeadwordText(new Array(headwords[0]));
         if (headwords.length > 1) {
             headwordText += " ...";
         }

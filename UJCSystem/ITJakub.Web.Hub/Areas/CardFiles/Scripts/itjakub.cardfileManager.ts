@@ -120,6 +120,12 @@ class CardFileViewer {
     }
 
     private displayHeadwords(headwords: Array<string>) {
+        var headwordsText = this.getHeadwordText(headwords);
+        $(this.htmlBody).find(".headword-name").html(headwordsText);
+        $(this.htmlBody).find(".cardfile-headword-text").html(headwordsText);
+    }
+
+    private getHeadwordText(headwords: Array<string>):string {
         var headwordsText: string = "";
         for (var i = 0; i < headwords.length; i++) {
             if (typeof headwords[i] === "undefined" || headwords[i] == null) {
@@ -134,8 +140,8 @@ class CardFileViewer {
         if (headwordsText === "") {
             headwordsText = "&lt;Nezadáno&gt;";
         }
-        $(this.htmlBody).find(".headword-name").html(headwordsText);
-        $(this.htmlBody).find(".cardfile-headword-text").html(headwordsText);
+
+        return headwordsText;
     }
 
     private displayNotes(notes: Array<string>) {
@@ -223,7 +229,7 @@ class CardFileViewer {
 
     private getInnerTooltipForSlider(cardPosition: number): string {
         var headwords = this.actualBucket.getCard(cardPosition).getHeadwords();
-        var headwordText: string = headwords[0];
+        var headwordText: string = this.getHeadwordText(new Array(headwords[0]));
         if (headwords.length > 1) {
             headwordText += " ...";
         }
