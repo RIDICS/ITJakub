@@ -122,10 +122,17 @@ class CardFileViewer {
     private displayHeadwords(headwords: Array<string>) {
         var headwordsText: string = "";
         for (var i = 0; i < headwords.length; i++) {
-            headwordsText += headwords[i];
-            if (i < headwords.length - 1) {
-                headwordsText += ", ";
+            if (typeof headwords[i] === "undefined" || headwords[i] == null) {
+                headwordsText = "&lt;Nezadáno&gt;";
+            } else {
+                headwordsText += headwords[i];
+                if (i < headwords.length - 1) {
+                    headwordsText += ", ";
+                }
             }
+        }
+        if (headwordsText === "") {
+            headwordsText = "&lt;Nezadáno&gt;";
         }
         $(this.htmlBody).find(".headword-name").html(headwordsText);
         $(this.htmlBody).find(".cardfile-headword-text").html(headwordsText);

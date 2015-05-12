@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿function createSearch(){
     var callbackDelegate = createDelegate();
     var cardfileSelector = new DropDownSelect("div.cardfile-selects", "/CardFiles/CardFiles/CardFiles", true, callbackDelegate);
     var cardFileManager = new CardFileManager("div.cardfile-result-area");
@@ -51,7 +51,7 @@
 
 
     });
-});
+};
 
 function createDelegate() {
     var callbackDelegate = new DropDownSelectCallbackDelegate();
@@ -100,3 +100,76 @@ function createDelegate() {
     return callbackDelegate;
 }
 
+function createListing() {
+    var cardFileManager = new CardFileManager("div.cardfile-result-area");
+    var cardFileSelector = $("#card-file-select");
+    var bucketSelector = $("#bucket-select");
+    var cardFileIdListed: string = "";
+    var cardFileNameListed: string = "";
+
+    $.ajax({
+        type: "GET",
+        traditional: true,
+        data: { },
+        url: "/CardFiles/CardFiles/CardFiles",
+        dataType: 'json',
+        contentType: 'application/json',
+        success: (response) => {
+            var cardFiles = response["cardFiles"];
+            for (var i = 0; i < cardFiles.length; i++) {
+                var cardFile = cardFiles[i];
+                var optionElement: HTMLOptionElement = document.createElement("option");
+                if (i === 0) {
+                    optionElement.selected = true;
+                }
+                optionElement.value = cardFile["Id"];
+                optionElement.text = cardFile["Name"];
+                $(cardFileSelector).append(optionElement);
+            }
+        },
+        error: (response) => {
+            //TODO resolve error
+        }
+    });
+
+    $(cardFileSelector).change(function() {
+        var optionSelected = $("option:selected", this);
+        cardFileIdListed = optionSelected.val();
+        cardFileNameListed = optionSelected.text();
+        $(bucketSelector).empty();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { cardFileId: cardFileIdListed},
+            url: "/CardFiles/CardFiles/Buckets",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                var buckets = response["buckets"];
+                for (var i = 0; i < buckets.length; i++) {
+                    var bucket = buckets[i];
+                    var optionElement: HTMLOptionElement = document.createElement("option");
+                    if (i === 0) {
+                        optionElement.selected = true;
+                    }
+                    optionElement.value = bucket["Id"];
+                    optionElement.text = bucket["Name"];
+                    $(bucketSelector).append(optionElement);
+                }
+            },
+            error: (response) => {
+                //TODO resolve error
+            }
+        });
+    });
+
+    $(bucketSelector).change(function() {
+        var optionSelected = $("option:selected", this);
+        var bucketId = optionSelected.val();
+        var bucketText = optionSelected.text();
+        cardFileManager.clearContainer();
+        cardFileManager.makeCardFile(cardFileIdListed, cardFileNameListed, bucketId, bucketText);
+    });
+
+}

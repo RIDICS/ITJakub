@@ -203,11 +203,12 @@
             @Scripts.Render("~/bundles/bootstrap")
             @Scripts.Render("~/itjakub/javascript")
             @Scripts.Render("~/bundles/dropzonescripts")
-
+            @RenderSection("scripts", false)
             @*main page content*@
-            <div class="container module-content">
-                @RenderBody()
-            </div>
+        <div class="container module-content">
+            
+            @RenderBody()
+        </div>
 
             <footer class="footer">
                 <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
@@ -229,9 +230,5 @@
             </footer>
 
         </div>
-
-
-  
-        @RenderSection("scripts", false)
     </body>
 </html>

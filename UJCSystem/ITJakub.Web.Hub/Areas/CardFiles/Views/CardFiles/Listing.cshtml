@@ -5,6 +5,34 @@
     @Scripts.Render("~/itjakub/cardfiles/javascript")
 }
 
-<div class="content-container">
-    <h1>Listing</h1>
+<div class="transparent-content-container">
+    <div class="card-file-listing">
+        <div class="card-file-select">
+            <select name="cardFile" id="card-file-select">
+                @*<option>Slower</option>
+                <option>Slow</option>
+                <option selected="selected">Medium</option>
+                <option>Fast</option>
+                <option>Faster</option>*@
+            </select>
+        </div>
+
+        <div class="bucket-select">
+            <select name="bucket" id="bucket-select">
+                @*<option>Slower</option>
+                <option>Slow</option>
+                <option selected="selected">Medium</option>
+                <option>Fast</option>
+                <option>Faster</option>*@
+            </select>
+        </div>
+
+        <div class="cardfile-result-area">
+
+        </div>
+    </div>
 </div>
+
+<script>
+    $(document).ready(createListing());
+</script>
