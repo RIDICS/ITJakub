@@ -10,6 +10,8 @@ class DropDownSelect {
     private selectedItemsIds: Array<string>;
     private selectedCategoriesIds: Array<string>;
 
+    //callbacks needs to be implemented
+
     starSaveItemCallback: (info: CallbackInfo) => void;
     starSaveCategoryCallback: (info: CallbackInfo) => void;
     starDeleteItemCallback: (info: CallbackInfo) => void;
@@ -17,16 +19,114 @@ class DropDownSelect {
 
     selectedChangedCallback: (state: State) => void;
 
+    getTypeFromResponseCallback: (response) => string;
+    getRootCategoryCallback: (categories) => any;
+    getCategoryIdCallback: (category) => string;
+    getCategoryTextCallback: (category) => string;
+
+    getLeafItemIdCallback: (category) => string;
+    getLeafItemTextCallback: (category) => string;
+
+    getCategoriesFromResponseCallback: (response) => any;
+    getLeafItemsFromResponseCallback: (response) => any;
+
+    getChildCategoriesCallback: (categories, currentCategory) => Array<any>;
+    getChildLeafItemsCallback: (leafItems, currentCategory) => Array<any>;
+    
+
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean) {
         this.dropDownSelectContainer = dropDownSelectContainer;
         this.dataUrl = dataUrl;
         this.showStar = showStar;
         this.selectedCategoriesIds = new Array();
         this.selectedItemsIds = new Array();
+        this.mockupCallbacks();
+    }
+
+    //mockup callbacks for advanced search
+    private mockupCallbacks() {                                         
+        this.getTypeFromResponseCallback = (response) : string => {
+            return response["type"];
+        };
+
+        this.getCategoriesFromResponseCallback = (response): any => {
+            return response["categories"];
+        };
+
+        this.getLeafItemsFromResponseCallback = (response): any => {
+            return response["books"];
+        };
+
+        this.getRootCategoryCallback = (categories): any => {
+            return categories[""][0];
+        };
+
+        this.getCategoryIdCallback = (category): string => {
+            return category["Id"];
+        };
+
+        this.getLeafItemIdCallback = (leafItem): string => {
+            return leafItem["Id"];
+        };
+
+        this.getChildCategoriesCallback = (categories, currentCategory): Array<any> => {
+            return categories[currentCategory["Id"]];
+        };
+
+        this.getChildLeafItemsCallback = (leafItems, currentCategory): Array<any> => {
+            return leafItems[currentCategory["Id"]];
+        };
+
+        this.getCategoryTextCallback = (category): string => {
+            return category["Description"];
+        };
+
+        this.getLeafItemTextCallback = (leafItem): string => {
+            return leafItem["Title"];
+        };
+    }
+
+    private getType(response): string {
+        return this.getTypeFromResponseCallback(response);
+    }
+
+    private getRootCategory(categories): any {
+        return this.getRootCategoryCallback(categories);
+    }
+
+    private getCategoryId(category): string {
+        return this.getCategoryIdCallback(category);
+    }
+
+    private getCategoryName(category): string {
+        return this.getCategoryTextCallback(category);
+    }
+
+    private getLeafItemId(leafItem): string {
+        return this.getLeafItemIdCallback(leafItem);
+    }
+
+    private getLeafItemName(leafItem): string {
+        return this.getLeafItemTextCallback(leafItem);
+    }
+
+    private getCategories(response): any {
+        return this.getCategoriesFromResponseCallback(response);
+    }
+
+    private getLeafItems(response): any {
+        return this.getLeafItemsFromResponseCallback(response);
+    }
+
+    private getChildCategories(categories, currentCategory): Array<any> {
+        return this.getChildCategoriesCallback(categories, currentCategory);
+    }
+
+    private getChildLeafItems(leafItems, currentCategory): Array<any> {
+        return this.getChildLeafItemsCallback(leafItems, currentCategory);
     }
 
     makeDropdown() {
-
         var dropDownDiv = document.createElement("div");
         $(dropDownDiv).addClass("dropdown-select");
 
@@ -138,25 +238,25 @@ class DropDownSelect {
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
-                self.type = response["type"];
-                var categories = response["categories"];
-                var books = response["books"];
+                self.type = this.getType(response);
+                var categories = this.getCategories(response);
+                var items = this.getLeafItems(response);
 
                 $(dropDownItemsDiv).children("div.loading").remove();
 
-                this.makeTreeStructure(categories, books, dropDownItemsDiv);
+                this.makeTreeStructure(categories, items, dropDownItemsDiv);
             }
         });
     }
 
-    private makeTreeStructure(categories, books, dropDownItemsDiv: HTMLDivElement) {
-        var rootCategory = categories[""][0];
+    private makeTreeStructure(categories, leafItems, dropDownItemsDiv: HTMLDivElement) {
+        var rootCategory = this.getRootCategory(categories);
 
         var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
-        $(selectHeader).children(".dropdown-select-text").append(rootCategory["Description"]);
+        $(selectHeader).children(".dropdown-select-text").append(this.getCategoryName(rootCategory));
 
         var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
-        var info = this.createCallbackInfo(rootCategory["Id"], selectHeader);
+        var info = this.createCallbackInfo(this.getCategoryId(rootCategory), selectHeader);
         var self = this;
         $(checkbox).change(function() {
             if (this.checked) {
@@ -166,38 +266,38 @@ class DropDownSelect {
             }
         });
 
-        var childCategories = categories[rootCategory["Id"]];
-        var childBooks = books[rootCategory["Id"]];
+        var childCategories: Array<any> = this.getChildCategories(categories, rootCategory);
+        var childLeafItems: Array<any> = this.getChildLeafItems(leafItems, rootCategory);
 
         if (typeof (childCategories) !== "undefined") {
             for (var i = 0; i < childCategories.length; i++) {
                 var childCategory = childCategories[i];
-                this.makeCategoryItem(dropDownItemsDiv, childCategory, categories, books);
+                this.makeCategoryItem(dropDownItemsDiv, childCategory, categories, leafItems);
             }
         }
 
-        if (typeof (childBooks) !== "undefined") {
-            for (var i = 0; i < childBooks.length; i++) {
-                var childBook = childBooks[i];
-                this.makeBookItem(dropDownItemsDiv, childBook);
+        if (typeof (childLeafItems) !== "undefined") {
+            for (var i = 0; i < childLeafItems.length; i++) {
+                var childBook = childLeafItems[i];
+                this.makeLeafItem(dropDownItemsDiv, childBook);
             }
         }
     }
 
 
-    private makeCategoryItem(container: HTMLDivElement, currentCategory: any, categories: any, books: any) {
+    private makeCategoryItem(container: HTMLDivElement, currentCategory: any, categories: any, leafItems: any) {
 
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
-        $(itemDiv).data("id", currentCategory["Id"]);
-        $(itemDiv).data("name", currentCategory["Description"]);
+        $(itemDiv).data("id", this.getCategoryId(currentCategory));
+        $(itemDiv).data("name", this.getCategoryName(currentCategory));
         $(itemDiv).data("type", "category");
 
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
 
-        var info = this.createCallbackInfo(currentCategory["Id"], itemDiv);
+        var info = this.createCallbackInfo(this.getCategoryId(currentCategory), itemDiv);
         var self = this;
         $(checkbox).change(function() {
             if (this.checked) {
@@ -265,7 +365,7 @@ class DropDownSelect {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("concrete-item-name");
-        nameSpan.innerText = currentCategory["Description"];
+        nameSpan.innerText = this.getCategoryName(currentCategory);
         itemDiv.appendChild(nameSpan);
 
         var childsDiv = document.createElement("div");
@@ -274,37 +374,38 @@ class DropDownSelect {
 
         container.appendChild(itemDiv);
 
-        var childCategories = categories[currentCategory["Id"]];
-        var childBooks = books[currentCategory["Id"]];
+        var childCategories = this.getChildCategories(categories, currentCategory);
+        var childLeafItems = this.getChildLeafItems(leafItems, currentCategory);
 
         if (typeof (childCategories) !== "undefined") {
             for (var i = 0; i < childCategories.length; i++) {
                 var childCategory = childCategories[i];
-                this.makeCategoryItem(childsDiv, childCategory, categories, books);
+                this.makeCategoryItem(childsDiv, childCategory, categories, leafItems);
             }
         }
 
-        if (typeof (childBooks) !== "undefined") {
-            for (var i = 0; i < childBooks.length; i++) {
-                var childBook = childBooks[i];
-                this.makeBookItem(childsDiv, childBook);
+        if (typeof (childLeafItems) !== "undefined") {
+            for (var i = 0; i < childLeafItems.length; i++) {
+                var childLeafItem = childLeafItems[i];
+                this.makeLeafItem(childsDiv, childLeafItem);
             }
         }
 
     }
 
-    private makeBookItem(container: HTMLDivElement, currentBook: any) {
+    private makeLeafItem(container: HTMLDivElement, currentLeafItem: any) {
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
-        $(itemDiv).data("id", currentBook["Id"]);
-        $(itemDiv).data("name", currentBook["Title"]);
-        $(itemDiv).data("type", "book");
+
+        $(itemDiv).data("id", this.getLeafItemId(currentLeafItem));
+        $(itemDiv).data("name", this.getLeafItemName(currentLeafItem));
+        $(itemDiv).data("type", "item");
 
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
 
-        var info = this.createCallbackInfo(currentBook["Id"], itemDiv);
+        var info = this.createCallbackInfo(this.getLeafItemId(currentLeafItem), itemDiv);
         var self = this;
         $(checkbox).change(function() {
             if (this.checked) {
@@ -349,7 +450,7 @@ class DropDownSelect {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("concrete-item-name");
-        nameSpan.innerText = currentBook["Title"];
+        nameSpan.innerText = this.getLeafItemName(currentLeafItem);
 
         itemDiv.appendChild(nameSpan);
 
