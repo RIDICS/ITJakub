@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" xmlns:ev="http://www.daliboris.cz/schemata/prepisy.xsd" exclude-result-prefixes="xd ev" version="1.0">
+	<xsl:import href="TEI_ClassificationDeclarations.xsl"/>
+	<xsl:import href="TEI_CategoryReference.xsl"/>
 	<xd:doc scope="stylesheet">
 		<xd:desc>
 			<xd:p><xd:b>Created on:</xd:b> Dec 2, 2010</xd:p>
@@ -115,37 +117,7 @@
 	
 	<xsl:template name="encodingDesc">
 		<encodingDesc>
-			<classDecl>
-				<taxonomy xml:id="taxonomy">
-					<category xml:id="taxonomy-dictionary">
-						<catDesc xml:lang="cs-cz">slovník</catDesc>
-						<category xml:id="taxonomy-dictionary-contemporary">
-							<catDesc xml:lang="cs-cz">soudobý</catDesc>
-						</category>
-						<category xml:id="taxonomy-dictionary-historical">
-							<catDesc xml:lang="cs-cz">dobový</catDesc>
-						</category>
-					</category>
-					<category xml:id="taxonomy-historical_text">
-						<catDesc xml:lang="cs-cz">historický text</catDesc>
-						<category xml:id="taxonomy-historical_text-old_czech">
-							<catDesc xml:lang="cs-cz">staročeský</catDesc>
-						</category>
-						<category xml:id="taxonomy-historical_text-medieval_czech">
-							<catDesc xml:lang="cs-cz">středněčeský</catDesc>
-						</category>
-					</category>
-					<category xml:id="taxonomy-scholary_text">
-						<catDesc xml:lang="cs-cz">odborný text</catDesc>
-					</category>
-					<category xml:id="taxonomy-digitized-grammar">
-						<catDesc xml:lang="cs-cz">digitalizovaná mluvnice</catDesc>
-					</category>
-					<category xml:id="taxonomy-card-index">
-						<catDesc xml:lang="cs-cz">lístková kartotéka</catDesc>
-					</category>
-				</taxonomy>
-			</classDecl>
+			<xsl:call-template name="classificationDeclarations"/>
 		</encodingDesc>
 		<profileDesc>
 			<textClass>
@@ -155,6 +127,7 @@
 		</profileDesc>
 		
 	</xsl:template>
+
 	<xsl:template name="keywords">
 		<xsl:if test="ev:Zpracovani/ev:LiterarniDruh/text() | ev:Zpracovani/ev:LiterarniZanr/text()">
 		<keywords scheme="http://vokabular.ujc.cas.cz/scheme/classification/secondary">
@@ -163,30 +136,7 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template name="catRef">
-		
-		<xsl:variable name="category">
-			<xsl:choose>
-				<xsl:when test="ev:TypPrepisu/. = 'edice' and ev:Zpracovani/ev:CasoveZarazeni/. = 'DoRoku1500'">
-					<xsl:text>#taxonomy-historical_text-old_czech</xsl:text>
-				</xsl:when>
-				<xsl:when test="ev:TypPrepisu/. = 'edice' and ev:Zpracovani/ev:CasoveZarazeni/. = 'DoRoku1800'">
-					<xsl:text>#taxonomy-historical_text-medieval_czech</xsl:text>
-				</xsl:when>
-				<xsl:when test="ev:TypPrepisu/. = 'odborná literatura'">
-					<xsl:text>#taxonomy-scholary_text</xsl:text>
-				</xsl:when>
-			</xsl:choose>
-		</xsl:variable>
-		
-		<xsl:if test="string-length($category) &gt; 0">
-		<xsl:element name="catRef">
-			<xsl:attribute name="target">
-				<xsl:value-of select="$category"/>
-			</xsl:attribute>
-		</xsl:element>
-		</xsl:if>
-	</xsl:template>
+
 	
 	<xsl:template match="ev:LiterarniDruh | ev:LiterarniZanr" mode="term">
 		<term>

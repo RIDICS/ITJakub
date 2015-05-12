@@ -5,19 +5,17 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D9F98DF2-F423-4C3E-B120-D8700631CECF}</ProjectGuid>
+    <ProjectGuid>{BA3F1BC4-31F5-4991-9470-D9417F4C0DE9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Daliboris.Pomucky.Soubory</RootNamespace>
-    <AssemblyName>Daliboris.Pomucky.Soubory</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <RootNamespace>Daliboris.Slovniky</RootNamespace>
+    <AssemblyName>Daliboris.Slovniky.Odkazy</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -30,8 +28,10 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,7 +52,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -60,9 +60,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
@@ -70,27 +69,47 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Daliboris.Pomucky.Soubory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ITJakub.FileProcessing.Service\Bin\Daliboris.Pomucky.Soubory.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CteckaSouboru.cs" />
-    <Compile Include="CteckaSouboruNastaveni.cs" />
-    <Compile Include="CteckaZaznamu.cs" />
-    <Compile Include="FileComparer.cs" />
-    <Compile Include="Kontrola.cs" />
-    <Compile Include="KontrolaNastaveni.cs" />
-    <Compile Include="KontrolniSoucet.cs" />
+    <Compile Include="OdkazInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RadekEventArgs.cs" />
-    <Compile Include="Slucovani.cs" />
-    <Compile Include="SlucovaniNastaveni.cs" />
-    <Compile Include="Soubor.cs" />
-    <Compile Include="StreamReaderWithMemory.cs" />
+    <Compile Include="Sprava.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Daliboris.OOXML.Word\Daliboris.OOXML.Word.csproj">
+      <Project>{96838F37-2E15-4785-B117-0DE31494F733}</Project>
+      <Name>Daliboris.OOXML.Word</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Databaze.Zaznamy\Daliboris.Pomucky.Databaze.Zaznamy.csproj">
+      <Project>{da551169-b52d-4403-944d-dc0da8d6edc4}</Project>
+      <Name>Daliboris.Pomucky.Databaze.Zaznamy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Texty\Daliboris.Pomucky.Texty.csproj">
+      <Project>{ee001376-f27f-4cf5-bca8-b25029b7d09c}</Project>
+      <Name>Daliboris.Pomucky.Texty</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+      <Project>{457FEF12-BD22-4498-924F-941B31DCCD6B}</Project>
+      <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

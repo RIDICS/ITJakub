@@ -43,13 +43,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Daliboris.Texty.Export.Slovniky.Slovnik\Daliboris.Texty.Export.Slovniky.Slovnik.csproj">
-      <Project>{56B8BC06-0BE8-4045-94DF-6844AA49E523}</Project>
-      <Name>Daliboris.Texty.Export.Slovniky.Slovnik</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
       <Project>{457fef12-bd22-4498-924f-941b31dccd6b}</Project>
       <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.Slovnik\Daliboris.Texty.Export.Slovniky.Slovnik.csproj">
+      <Project>{56b8bc06-0be8-4045-94df-6844aa49e523}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.Slovnik</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

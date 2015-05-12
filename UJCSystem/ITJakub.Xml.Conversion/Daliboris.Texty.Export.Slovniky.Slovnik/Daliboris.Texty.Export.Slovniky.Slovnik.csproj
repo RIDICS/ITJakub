@@ -49,6 +49,10 @@
       <Project>{DA551169-B52D-4403-944D-DC0DA8D6EDC4}</Project>
       <Name>Daliboris.Pomucky.Databaze.Zaznamy</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+      <Project>{457fef12-bd22-4498-924f-941b31dccd6b}</Project>
+      <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Slovniky.Heslar\Daliboris.Slovniky.Heslar.csproj">
       <Project>{1DAEA4E2-3283-4924-90F3-EA09A0780ACB}</Project>
       <Name>Daliboris.Slovniky.Heslar</Name>
@@ -57,11 +61,7 @@
       <Project>{BA3F1BC4-31F5-4991-9470-D9417F4C0DE9}</Project>
       <Name>Daliboris.Slovniky.Odkazy</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Xml.Conversion\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
-      <Project>{457fef12-bd22-4498-924f-941b31dccd6b}</Project>
-      <Name>Daliboris.Pomucky.Xml</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Xml.Conversion\Ujc.Ovj.Xml.Info\Ujc.Ovj.Xml.Info.csproj">
+    <ProjectReference Include="..\Ujc.Ovj.Xml.Info\Ujc.Ovj.Xml.Info.csproj">
       <Project>{2f50f763-2aef-4647-918a-87b65af2a6c9}</Project>
       <Name>Ujc.Ovj.Xml.Info</Name>
     </ProjectReference>

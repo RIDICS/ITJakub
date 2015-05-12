@@ -79,6 +79,10 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Daliboris.Pomucky.Soubory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ITJakub.FileProcessing.Service\Bin\Daliboris.Pomucky.Soubory.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -101,19 +105,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Daliboris.Pomucky.Databaze.Zaznamy\Daliboris.Pomucky.Databaze.Zaznamy.csproj">
-      <Project>{da551169-b52d-4403-944d-dc0da8d6edc4}</Project>
-      <Name>Daliboris.Pomucky.Databaze.Zaznamy</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Daliboris.Pomucky.Soubory\Daliboris.Pomucky.Soubory.csproj">
-      <Project>{d9f98df2-f423-4c3e-b120-d8700631cecf}</Project>
-      <Name>Daliboris.Pomucky.Soubory</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Pomucky.Texty\Daliboris.Pomucky.Texty.csproj">
       <Project>{ee001376-f27f-4cf5-bca8-b25029b7d09c}</Project>
       <Name>Daliboris.Pomucky.Texty</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Xml.Conversion\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
       <Project>{457FEF12-BD22-4498-924F-941B31DCCD6B}</Project>
       <Name>Daliboris.Pomucky.Xml</Name>
     </ProjectReference>

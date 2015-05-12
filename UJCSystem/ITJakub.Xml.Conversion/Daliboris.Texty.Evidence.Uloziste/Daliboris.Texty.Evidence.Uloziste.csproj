@@ -103,6 +103,10 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Daliboris.Pomucky.Soubory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ITJakub.FileProcessing.Service\Bin\Daliboris.Pomucky.Soubory.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -122,10 +126,6 @@
     <Compile Include="Subversion.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Daliboris.Pomucky.Soubory\Daliboris.Pomucky.Soubory.csproj">
-      <Project>{d9f98df2-f423-4c3e-b120-d8700631cecf}</Project>
-      <Name>Daliboris.Pomucky.Soubory</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Daliboris.OOXML.Pomucky\Daliboris.OOXML.Pomucky.csproj">
       <Project>{114b8733-decf-4402-ba25-e3dbe265e993}</Project>
       <Name>Daliboris.OOXML.Pomucky</Name>
