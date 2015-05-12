@@ -39,9 +39,41 @@ $(".concrete-cardfile-checkbox").click(function () {
     //TODO add cardfile to search criteria
 });
 $(document).ready(function () {
-    var cardsCreator = new CardFileManager("div.cardfile-result-area");
-    cardsCreator.makeCardFile("1", "Excerpce", "52", "netbalivy-odymovati", 22); //TODO load files and buckets by search
-    cardsCreator.makeCardFile("2", "Excerpce", "71", "netbalivy-odymovati", 13);
-    cardsCreator.makeCardFile("3", "Excerpce", "70", "netbalivy-odymovati", 5);
+    downloadCardFiles();
 });
+function downloadCardFiles() {
+    $.ajax({
+        type: "GET",
+        traditional: true,
+        data: {},
+        url: "/CardFiles/CardFiles/CardFiles",
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (response) {
+            var cardsCreator = new CardFileManager("div.cardfile-result-area");
+            var cardFiles = response["cardFiles"];
+            for (var i = 0; i < 3; i++) {
+                var cardFile = cardFiles[i];
+                var buckets = getBuckets(cardFile["Id"]);
+                var firstBucket = buckets[0];
+                cardsCreator.makeCardFile(cardFile["Id"], cardFile["Name"], firstBucket["Id"], firstBucket["Name"]);
+            }
+        },
+        error: function (response) {
+            //TODO resolve error
+        }
+    });
+}
+function getBuckets(cardFileId) {
+    var response = $.ajax({
+        async: false,
+        type: "GET",
+        traditional: true,
+        data: { cardFileId: cardFileId },
+        url: "/CardFiles/CardFiles/Buckets",
+        dataType: 'json',
+        contentType: 'application/json'
+    });
+    return response.responseJSON["buckets"];
+}
 //# sourceMappingURL=itjakub.cardfiles.js.map

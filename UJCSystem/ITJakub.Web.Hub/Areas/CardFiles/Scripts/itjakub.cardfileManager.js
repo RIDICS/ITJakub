@@ -79,7 +79,14 @@ var CardFileViewer = (function () {
         this.displayWarnings(card.getWarnings());
     };
     CardFileViewer.prototype.changeActualCardPosition = function (positionChange) {
-        this.changeViewedCard(this.actualCardPosition + positionChange);
+        var newPosition = this.actualCardPosition + positionChange;
+        if (newPosition < 0) {
+            newPosition = 0;
+        }
+        if (newPosition >= this.actualBucket.getCardsCount()) {
+            newPosition = this.actualBucket.getCardsCount() - 1;
+        }
+        this.changeViewedCard(newPosition);
     };
     CardFileViewer.prototype.displayCardPosition = function (position) {
         $(this.htmlBody).find(".card-position-text").find("a").html(position.toString());

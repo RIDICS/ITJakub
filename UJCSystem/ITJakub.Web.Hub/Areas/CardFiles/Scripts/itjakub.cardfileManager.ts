@@ -104,7 +104,14 @@ class CardFileViewer {
     }
 
     private changeActualCardPosition(positionChange: number) {
-        this.changeViewedCard(this.actualCardPosition + positionChange);
+        var newPosition = this.actualCardPosition + positionChange;
+        if (newPosition < 0) {
+            newPosition = 0;
+        }
+        if (newPosition >= this.actualBucket.getCardsCount()) {
+            newPosition = this.actualBucket.getCardsCount() - 1;
+        }
+        this.changeViewedCard(newPosition);
     }
 
     private displayCardPosition(position: number) {
