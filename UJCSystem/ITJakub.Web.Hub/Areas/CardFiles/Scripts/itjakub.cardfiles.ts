@@ -1,52 +1,82 @@
-﻿
-$(".cardfile-select-more").click(function () {
-    var body = $(this).parents(".cardfile-select").children(".cardfile-select-body");
-    if (body.is(":hidden")) {
-        $(this).children().removeClass("glyphicon-chevron-down");
-        $(this).children().addClass("glyphicon-chevron-up");
-        body.slideDown();
-    } else {
-        $(this).children().removeClass("glyphicon-chevron-up");
-        $(this).children().addClass("glyphicon-chevron-down");
-        body.slideUp();
-    }
-});
-
-$(".cardfile-clear-filter").click(function () {
-    $(this).siblings(".cardfile-filter-input").val('').change();
-});
-
-$(".cardfile-filter-input").keyup(function () {
-    $(this).change();
-});
-
-$(".cardfile-filter-input").change(function () {
-    if ($(this).val() == '') {
-        $(this).parents(".cardfile-select-body").children(".concrete-cardfile").show();
-    } else {
-        $(this).parents(".cardfile-select-body").children(".concrete-cardfile").hide().filter(':contains(' + $(this).val() + ')').show();
-    }
-});
-
-$(".delete-cardfile").click(function () {
-    $(this).siblings(".save-cardfile").show();
-    $(this).hide();
-    //TODO populate request on delete from favorites
-});
-
-$(".save-cardfile").click(function () {
-    $(this).siblings(".delete-cardfile").show();
-    $(this).hide();
-    //TODO populate request on save to favorites
-});
-
-$(".concrete-cardfile-checkbox").click(function () {
-    //TODO add cardfile to search criteria
-});
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
     downloadCardFiles();
+    var callbackDelegate = createDelegate();
+    var cardfileSelector = new DropDownSelect("div.cardfile-selects", "/CardFiles/CardFiles/CardFiles", true, callbackDelegate);
+
+    cardfileSelector.makeDropdown();
+
+    var array = new Array();
+    array.push(cardfileSelector);
+
+    $("#searchButton").click(function () {
+        for (var i = 0; i < array.length; i++) {
+            var state = array[i].getState();
+            showStateInAlertBoxCardFile(state);
+        }
+    });
 });
+
+function createDelegate() {
+    var callbackDelegate = new DropDownSelectCallbackDelegate();
+    callbackDelegate.getCategoriesFromResponseCallback = (response) => {
+        return null;
+    };
+
+    callbackDelegate.getLeafItemsFromResponseCallback = (response) => {
+        return response["cardFiles"];
+    };
+
+    callbackDelegate.getLeafItemIdCallback = (item) => {
+        return item["Id"];
+    };
+
+    callbackDelegate.getLeafItemTextCallback = (item) => {
+        return item["Name"];
+    };
+
+    callbackDelegate.getCategoryIdCallback = (category): string => {
+        return category["Id"];
+    };
+
+    callbackDelegate.getCategoryTextCallback = (category): string => {
+        return category["Name"];
+    };
+
+    callbackDelegate.getRootCategoryCallback = (categories): any => {
+        var rootCategory = new Object();
+        rootCategory["Name"] = "Kartotéky";
+        return rootCategory;
+    };
+
+    callbackDelegate.getChildCategoriesCallback = (categories, currentCategory): Array<any> => {
+        return null;
+    }
+
+    callbackDelegate.getChildLeafItemsCallback = (leaftItems, currentCategory): Array<any> => {
+        return leaftItems;
+    }
+
+    callbackDelegate.getTypeFromResponseCallback = (response) => {
+        return "kartoteky";
+    }
+
+    return callbackDelegate;
+}
+
+//TODO this method is just showcase what is result of dropdown select menu. Remove this method in future
+function showStateInAlertBoxCardFile(state: State) {
+    var itemIds = "";
+    $.each(state.SelectedItemsIds, function (index, val) {
+        itemIds = itemIds.concat(val + ",");
+    });
+
+    var categoriesIds = "";
+    $.each(state.SelectedCategoriesIds, function (index, val) {
+        categoriesIds = categoriesIds.concat(val + ",");
+    });
+
+    alert("State for type: " + state.Type + "\nItems: " + itemIds + "\nCategories: " + categoriesIds);
+}
 
 function downloadCardFiles() {
     $.ajax({

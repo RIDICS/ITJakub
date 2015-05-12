@@ -1,15 +1,6 @@
 ﻿ /// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
 
-
-class DropDownSelect {
-
-    private dropDownSelectContainer: string;
-    private dataUrl: string;
-    private showStar: boolean;
-    private type: string;
-    private selectedItemsIds: Array<string>;
-    private selectedCategoriesIds: Array<string>;
-
+class DropDownSelectCallbackDelegate {
     //callbacks needs to be implemented
 
     starSaveItemCallback: (info: CallbackInfo) => void;
@@ -32,20 +23,14 @@ class DropDownSelect {
 
     getChildCategoriesCallback: (categories, currentCategory) => Array<any>;
     getChildLeafItemsCallback: (leafItems, currentCategory) => Array<any>;
-    
 
-    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean) {
-        this.dropDownSelectContainer = dropDownSelectContainer;
-        this.dataUrl = dataUrl;
-        this.showStar = showStar;
-        this.selectedCategoriesIds = new Array();
-        this.selectedItemsIds = new Array();
-        this.mockupCallbacks();
+    constructor() {
+        this.mockup();
     }
 
-    //mockup callbacks for advanced search
-    private mockupCallbacks() {                                         
-        this.getTypeFromResponseCallback = (response) : string => {
+    //working callbacks for advanced search
+    private mockup() {
+        this.getTypeFromResponseCallback = (response): string => {
             return response["type"];
         };
 
@@ -85,45 +70,65 @@ class DropDownSelect {
             return leafItem["Title"];
         };
     }
+}
+
+class DropDownSelect {
+
+    private dropDownSelectContainer: string;
+    private dataUrl: string;
+    private showStar: boolean;
+    private type: string;
+    private selectedItemsIds: Array<string>;
+    private selectedCategoriesIds: Array<string>;
+    private callbackDelegate: DropDownSelectCallbackDelegate;
+
+    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
+        this.dropDownSelectContainer = dropDownSelectContainer;
+        this.dataUrl = dataUrl;
+        this.showStar = showStar;
+        this.callbackDelegate = callbackDelegate;
+        this.selectedCategoriesIds = new Array();
+        this.selectedItemsIds = new Array();
+    }
 
     private getType(response): string {
-        return this.getTypeFromResponseCallback(response);
+        return this.callbackDelegate.getTypeFromResponseCallback(response);
     }
 
     private getRootCategory(categories): any {
-        return this.getRootCategoryCallback(categories);
+        return this.callbackDelegate.getRootCategoryCallback(categories);
     }
 
     private getCategoryId(category): string {
-        return this.getCategoryIdCallback(category);
+        return this.callbackDelegate.getCategoryIdCallback(category);
     }
 
     private getCategoryName(category): string {
-        return this.getCategoryTextCallback(category);
+        return this.callbackDelegate.getCategoryTextCallback(category);
     }
 
     private getLeafItemId(leafItem): string {
-        return this.getLeafItemIdCallback(leafItem);
+        return this.callbackDelegate.getLeafItemIdCallback(leafItem);
     }
 
     private getLeafItemName(leafItem): string {
-        return this.getLeafItemTextCallback(leafItem);
+        return this.callbackDelegate.getLeafItemTextCallback(leafItem);
     }
 
     private getCategories(response): any {
-        return this.getCategoriesFromResponseCallback(response);
+        return this.callbackDelegate.getCategoriesFromResponseCallback(response);
     }
 
     private getLeafItems(response): any {
-        return this.getLeafItemsFromResponseCallback(response);
+        return this.callbackDelegate.getLeafItemsFromResponseCallback(response);
     }
 
     private getChildCategories(categories, currentCategory): Array<any> {
-        return this.getChildCategoriesCallback(categories, currentCategory);
+        return this.callbackDelegate.getChildCategoriesCallback(categories, currentCategory);
     }
 
     private getChildLeafItems(leafItems, currentCategory): Array<any> {
-        return this.getChildLeafItemsCallback(leafItems, currentCategory);
+        return this.callbackDelegate.getChildLeafItemsCallback(leafItems, currentCategory);
     }
 
     makeDropdown() {
@@ -269,14 +274,14 @@ class DropDownSelect {
         var childCategories: Array<any> = this.getChildCategories(categories, rootCategory);
         var childLeafItems: Array<any> = this.getChildLeafItems(leafItems, rootCategory);
 
-        if (typeof (childCategories) !== "undefined") {
+        if (typeof (childCategories) !== "undefined" && childCategories !== null) {
             for (var i = 0; i < childCategories.length; i++) {
                 var childCategory = childCategories[i];
                 this.makeCategoryItem(dropDownItemsDiv, childCategory, categories, leafItems);
             }
         }
 
-        if (typeof (childLeafItems) !== "undefined") {
+        if (typeof (childLeafItems) !== "undefined" && childLeafItems !== null) {
             for (var i = 0; i < childLeafItems.length; i++) {
                 var childBook = childLeafItems[i];
                 this.makeLeafItem(dropDownItemsDiv, childBook);
@@ -341,8 +346,8 @@ class DropDownSelect {
                 $(this).siblings(".delete-item").show();
                 $(this).hide();
                 //TODO populate request on save to favorites
-                if (self.starSaveCategoryCallback) {
-                    self.starSaveCategoryCallback(info);
+                if (self.callbackDelegate.starSaveCategoryCallback) {
+                    self.callbackDelegate.starSaveCategoryCallback(info);
                 }
             });
 
@@ -355,8 +360,8 @@ class DropDownSelect {
                 $(this).siblings(".save-item").show();
                 $(this).hide();
                 //TODO populate request on delete from favorites
-                if (self.starDeleteCategoryCallback) {
-                    self.starDeleteCategoryCallback(info);
+                if (self.callbackDelegate.starDeleteCategoryCallback) {
+                    self.callbackDelegate.starDeleteCategoryCallback(info);
                 }
             });
 
@@ -377,14 +382,14 @@ class DropDownSelect {
         var childCategories = this.getChildCategories(categories, currentCategory);
         var childLeafItems = this.getChildLeafItems(leafItems, currentCategory);
 
-        if (typeof (childCategories) !== "undefined") {
+        if (typeof (childCategories) !== "undefined" && childCategories !== null) {
             for (var i = 0; i < childCategories.length; i++) {
                 var childCategory = childCategories[i];
                 this.makeCategoryItem(childsDiv, childCategory, categories, leafItems);
             }
         }
 
-        if (typeof (childLeafItems) !== "undefined") {
+        if (typeof (childLeafItems) !== "undefined" && childLeafItems !== null) {
             for (var i = 0; i < childLeafItems.length; i++) {
                 var childLeafItem = childLeafItems[i];
                 this.makeLeafItem(childsDiv, childLeafItem);
@@ -426,8 +431,8 @@ class DropDownSelect {
                 $(this).siblings(".delete-item").show();
                 $(this).hide();
                 //TODO populate request on save to favorites
-                if (self.starSaveItemCallback) {
-                    self.starSaveItemCallback(info);
+                if (self.callbackDelegate.starSaveItemCallback) {
+                    self.callbackDelegate.starSaveItemCallback(info);
                 }
             });
 
@@ -440,8 +445,8 @@ class DropDownSelect {
                 $(this).siblings(".save-item").show();
                 $(this).hide();
                 //TODO populate request on delete from favorites
-                if (self.starDeleteItemCallback) {
-                    self.starDeleteItemCallback(info);
+                if (self.callbackDelegate.starDeleteItemCallback) {
+                    self.callbackDelegate.starDeleteItemCallback(info);
                 }
             });
 
@@ -490,8 +495,8 @@ class DropDownSelect {
     }
 
     private selectedChanged() {
-        if (this.selectedChangedCallback) {
-            this.selectedChangedCallback(this.getState());
+        if (this.callbackDelegate.selectedChangedCallback) {
+            this.callbackDelegate.selectedChangedCallback(this.getState());
         }
     }
 

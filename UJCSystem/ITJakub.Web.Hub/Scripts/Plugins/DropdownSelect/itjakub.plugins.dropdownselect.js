@@ -1,15 +1,10 @@
 /// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
-var DropDownSelect = (function () {
-    function DropDownSelect(dropDownSelectContainer, dataUrl, showStar) {
-        this.dropDownSelectContainer = dropDownSelectContainer;
-        this.dataUrl = dataUrl;
-        this.showStar = showStar;
-        this.selectedCategoriesIds = new Array();
-        this.selectedItemsIds = new Array();
-        this.mockupCallbacks();
+var DropDownSelectCallbackDelegate = (function () {
+    function DropDownSelectCallbackDelegate() {
+        this.mockup();
     }
-    //mockup callbacks for advanced search
-    DropDownSelect.prototype.mockupCallbacks = function () {
+    //working callbacks for advanced search
+    DropDownSelectCallbackDelegate.prototype.mockup = function () {
         this.getTypeFromResponseCallback = function (response) {
             return response["type"];
         };
@@ -41,35 +36,46 @@ var DropDownSelect = (function () {
             return leafItem["Title"];
         };
     };
+    return DropDownSelectCallbackDelegate;
+})();
+var DropDownSelect = (function () {
+    function DropDownSelect(dropDownSelectContainer, dataUrl, showStar, callbackDelegate) {
+        this.dropDownSelectContainer = dropDownSelectContainer;
+        this.dataUrl = dataUrl;
+        this.showStar = showStar;
+        this.callbackDelegate = callbackDelegate;
+        this.selectedCategoriesIds = new Array();
+        this.selectedItemsIds = new Array();
+    }
     DropDownSelect.prototype.getType = function (response) {
-        return this.getTypeFromResponseCallback(response);
+        return this.callbackDelegate.getTypeFromResponseCallback(response);
     };
     DropDownSelect.prototype.getRootCategory = function (categories) {
-        return this.getRootCategoryCallback(categories);
+        return this.callbackDelegate.getRootCategoryCallback(categories);
     };
     DropDownSelect.prototype.getCategoryId = function (category) {
-        return this.getCategoryIdCallback(category);
+        return this.callbackDelegate.getCategoryIdCallback(category);
     };
     DropDownSelect.prototype.getCategoryName = function (category) {
-        return this.getCategoryTextCallback(category);
+        return this.callbackDelegate.getCategoryTextCallback(category);
     };
     DropDownSelect.prototype.getLeafItemId = function (leafItem) {
-        return this.getLeafItemIdCallback(leafItem);
+        return this.callbackDelegate.getLeafItemIdCallback(leafItem);
     };
     DropDownSelect.prototype.getLeafItemName = function (leafItem) {
-        return this.getLeafItemTextCallback(leafItem);
+        return this.callbackDelegate.getLeafItemTextCallback(leafItem);
     };
     DropDownSelect.prototype.getCategories = function (response) {
-        return this.getCategoriesFromResponseCallback(response);
+        return this.callbackDelegate.getCategoriesFromResponseCallback(response);
     };
     DropDownSelect.prototype.getLeafItems = function (response) {
-        return this.getLeafItemsFromResponseCallback(response);
+        return this.callbackDelegate.getLeafItemsFromResponseCallback(response);
     };
     DropDownSelect.prototype.getChildCategories = function (categories, currentCategory) {
-        return this.getChildCategoriesCallback(categories, currentCategory);
+        return this.callbackDelegate.getChildCategoriesCallback(categories, currentCategory);
     };
     DropDownSelect.prototype.getChildLeafItems = function (leafItems, currentCategory) {
-        return this.getChildLeafItemsCallback(leafItems, currentCategory);
+        return this.callbackDelegate.getChildLeafItemsCallback(leafItems, currentCategory);
     };
     DropDownSelect.prototype.makeDropdown = function () {
         var dropDownDiv = document.createElement("div");
@@ -181,13 +187,13 @@ var DropDownSelect = (function () {
         });
         var childCategories = this.getChildCategories(categories, rootCategory);
         var childLeafItems = this.getChildLeafItems(leafItems, rootCategory);
-        if (typeof (childCategories) !== "undefined") {
+        if (typeof (childCategories) !== "undefined" && childCategories !== null) {
             for (var i = 0; i < childCategories.length; i++) {
                 var childCategory = childCategories[i];
                 this.makeCategoryItem(dropDownItemsDiv, childCategory, categories, leafItems);
             }
         }
-        if (typeof (childLeafItems) !== "undefined") {
+        if (typeof (childLeafItems) !== "undefined" && childLeafItems !== null) {
             for (var i = 0; i < childLeafItems.length; i++) {
                 var childBook = childLeafItems[i];
                 this.makeLeafItem(dropDownItemsDiv, childBook);
@@ -240,8 +246,8 @@ var DropDownSelect = (function () {
                 $(this).siblings(".delete-item").show();
                 $(this).hide();
                 //TODO populate request on save to favorites
-                if (self.starSaveCategoryCallback) {
-                    self.starSaveCategoryCallback(info);
+                if (self.callbackDelegate.starSaveCategoryCallback) {
+                    self.callbackDelegate.starSaveCategoryCallback(info);
                 }
             });
             itemDiv.appendChild(saveStarSpan);
@@ -251,8 +257,8 @@ var DropDownSelect = (function () {
                 $(this).siblings(".save-item").show();
                 $(this).hide();
                 //TODO populate request on delete from favorites
-                if (self.starDeleteCategoryCallback) {
-                    self.starDeleteCategoryCallback(info);
+                if (self.callbackDelegate.starDeleteCategoryCallback) {
+                    self.callbackDelegate.starDeleteCategoryCallback(info);
                 }
             });
             itemDiv.appendChild(deleteStarSpan);
@@ -267,13 +273,13 @@ var DropDownSelect = (function () {
         container.appendChild(itemDiv);
         var childCategories = this.getChildCategories(categories, currentCategory);
         var childLeafItems = this.getChildLeafItems(leafItems, currentCategory);
-        if (typeof (childCategories) !== "undefined") {
+        if (typeof (childCategories) !== "undefined" && childCategories !== null) {
             for (var i = 0; i < childCategories.length; i++) {
                 var childCategory = childCategories[i];
                 this.makeCategoryItem(childsDiv, childCategory, categories, leafItems);
             }
         }
-        if (typeof (childLeafItems) !== "undefined") {
+        if (typeof (childLeafItems) !== "undefined" && childLeafItems !== null) {
             for (var i = 0; i < childLeafItems.length; i++) {
                 var childLeafItem = childLeafItems[i];
                 this.makeLeafItem(childsDiv, childLeafItem);
@@ -307,8 +313,8 @@ var DropDownSelect = (function () {
                 $(this).siblings(".delete-item").show();
                 $(this).hide();
                 //TODO populate request on save to favorites
-                if (self.starSaveItemCallback) {
-                    self.starSaveItemCallback(info);
+                if (self.callbackDelegate.starSaveItemCallback) {
+                    self.callbackDelegate.starSaveItemCallback(info);
                 }
             });
             itemDiv.appendChild(saveStarSpan);
@@ -318,8 +324,8 @@ var DropDownSelect = (function () {
                 $(this).siblings(".save-item").show();
                 $(this).hide();
                 //TODO populate request on delete from favorites
-                if (self.starDeleteItemCallback) {
-                    self.starDeleteItemCallback(info);
+                if (self.callbackDelegate.starDeleteItemCallback) {
+                    self.callbackDelegate.starDeleteItemCallback(info);
                 }
             });
             itemDiv.appendChild(deleteStarSpan);
@@ -357,8 +363,8 @@ var DropDownSelect = (function () {
         this.selectedChanged();
     };
     DropDownSelect.prototype.selectedChanged = function () {
-        if (this.selectedChangedCallback) {
-            this.selectedChangedCallback(this.getState());
+        if (this.callbackDelegate.selectedChangedCallback) {
+            this.callbackDelegate.selectedChangedCallback(this.getState());
         }
     };
     DropDownSelect.prototype.getState = function () {
