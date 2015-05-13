@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
 using System.Web.WebPages;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts;
+using Microsoft.Ajax.Utilities;
 
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 {
@@ -26,9 +29,29 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             return View();
         }
 
-        public ActionResult List()
+        public ActionResult List(string term)
         {
             return View();
+        }
+
+        public ActionResult SearchList(string term)
+        {
+            var cardFiles = m_serviceClient.GetCardFiles();
+            var result = new List<SearchResultContract>();
+            foreach (var cardFile in cardFiles)
+            {
+                if (cardFile.Name.Contains(term) || cardFile.Description.Contains(term) || term.IsNullOrWhiteSpace())
+                {
+                    result.Add(new SearchResultContract()
+                    {
+                        Title = cardFile.Name,
+                        BookGuid = cardFile.Id,
+                        SubTitle = cardFile.Description,
+                        BookType = "CardFile"
+                    });
+                }
+            }
+            return Json(new {books = result}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Information()
@@ -65,12 +88,13 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             var cards = m_serviceClient.GetCards(cardFileId, bucketId);
             return Json(new {cards}, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult CardsShort(string cardFileId, string bucketId)
         {
             var cards = m_serviceClient.GetCardsShort(cardFileId, bucketId);
             return Json(new {cards}, JsonRequestBehavior.AllowGet);
         }
-        
+
         public ActionResult Card(string cardFileId, string bucketId, string cardId)
         {
             var card = m_serviceClient.GetCard(cardFileId, bucketId, cardId);
@@ -84,7 +108,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
             if (!parsingSucceeded)
             {
-               return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "invalid image size");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "invalid image size");
             }
 
             var imageDataStream = m_serviceClient.GetImage(cardFileId, bucketId, cardId, imageId, imageSizeEnum);

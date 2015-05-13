@@ -11,7 +11,8 @@
         $(nothingSelectedDiv).hide();
         var serverErrorDiv = $("div.server-error");
         $(serverErrorDiv).hide();
-        var nothingSelected = false;
+        var shouldShowErrorMessage = true;
+        var shouldShowNoResultMessage = true;
 
         cardFileManager.clearContainer();
         var selectedCardFiles = cardfileSelector.getState().SelectedItems;
@@ -19,10 +20,16 @@
 
         if (selectedCardFiles.length === 0) {
             $(nothingSelectedDiv).show();
-            nothingSelected = true;
         } else {
-            $(noResultDiv).show();
-            $(serverErrorDiv).show();
+            var showMessage = () => {
+                if(shouldShowErrorMessage){
+                    $(serverErrorDiv).show();   
+                }
+                if (shouldShowNoResultMessage) {
+                    $(noResultDiv).show();
+                }
+            }
+            setTimeout(showMessage, 1000);
         }
 
         for (var cardFileIndex = 0; cardFileIndex < selectedCardFiles.length; cardFileIndex++) {
@@ -37,10 +44,12 @@
                     dataType: 'json',
                     contentType: 'application/json',
                     success: (response) => {
+                        shouldShowErrorMessage = false;
                         $(serverErrorDiv).hide();
                         var buckets = response["buckets"];
 
                         if (buckets.length !== 0) {
+                            shouldShowNoResultMessage = false;
                             $(noResultDiv).hide();
                         }
 
@@ -54,6 +63,7 @@
                         }
                     },
                     error: (response) => {
+                        shouldShowNoResultMessage = false;
                         $(noResultDiv).hide();
                     }
                 });
@@ -196,5 +206,25 @@ function createListing() {
         cardFileManager.clearContainer();
         cardFileManager.makeCardFile(cardFileIdListed, cardFileNameListed, bucketId, bucketText);
     });
+
+}
+
+function createList() {
+    var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader");
+
+       $('#searchButton').click(() => {
+           var text = $('#searchbox').val();
+           $.ajax({
+               type: "GET",
+               traditional: true,
+               url: "/CardFiles/CardFiles/SearchList",
+               data: { term: text },
+               dataType: 'json',
+               contentType: 'application/json',
+               success(response) {
+                   bibliographyModule.showBooks(response.books);
+               }
+           });
+       });
 
 }

@@ -260,13 +260,13 @@
     },
     "CardFile": {
         "middle-panel": {
-            "title": "{Title} {$srcAbbreHref}",
-            "body": "{$authors}{$description}{$archive}{$year}",
+            "title": "{Title}",
+            "body": "{$description}",
             "variables": {
                 "$srcAbbreHref": {
                     "type": "basic",
-                    "pattern": "<a href='#'>[{SourceAbbreviation}]</a>",
-                    "printIfNullValue": false
+                    "pattern": "<a href='#'>[AAA]</a>",
+                    "printIfNullValue": true
                 },
                 "$authors": {
                     "type": "array",
@@ -276,28 +276,17 @@
                 },
                 "$description": {
                     "type": "basic",
-                    "pattern": ", {Description}",
-                    "printIfNullValue": false
-                },
-                "$archive": {
-                    "type": "basic",
-                    "scope": "Archive",
-                    "pattern": ", {City}",
-                    "printIfNullValue": false
-                },
-                "$year": {
-                    "type": "basic",
-                    "pattern": " {Year}.",
+                    "pattern": "{SubTitle}",
                     "printIfNullValue": false
                 }
             }
         },
         "right-panel": {
             "info-button": {
-                "url": "\\CardFile\\info\\{BookId}"
+                "url": "\\CardFile\\info\\{BookGuid}"
             },
             "read-button": {
-                "url": "\\CardFile\\read\\{$test}"
+                "url": "\\CardFile\\read\\{BookGuid}"
             },
             "variables": {
                 "$test": {
