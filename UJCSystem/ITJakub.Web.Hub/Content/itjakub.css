@@ -915,6 +915,17 @@ body {
   height: 48px;
   width: 48px;
 }
+.dropdown-select-text-loading {
+  width: 70%;
+  height: 18px;
+  /*margin-left: 40px;*/
+  text-align: center;
+  background-image: url(/Content/Images/small_trans_loading.gif);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+}
 .main_logo {
   margin: 10px;
   margin-left: 0;

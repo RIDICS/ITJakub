@@ -91,12 +91,16 @@ var DropDownSelect = (function () {
         $(checkBoxSpan).addClass("dropdown-select-checkbox");
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
+        //checkbox.indeterminate = true;
         checkBoxSpan.appendChild(checkbox);
         dropDownHeadDiv.appendChild(checkBoxSpan);
         var textSpan = document.createElement("span");
         $(textSpan).addClass("dropdown-select-text");
         textSpan.innerText = ""; //TODO read from parameter when root is not unique or is not description
         dropDownHeadDiv.appendChild(textSpan);
+        var loadSpan = document.createElement("span");
+        $(loadSpan).addClass("dropdown-select-text-loading");
+        dropDownHeadDiv.appendChild(loadSpan);
         var moreSpan = document.createElement("span");
         $(moreSpan).addClass("dropdown-select-more");
         $(moreSpan).click(function () {
@@ -174,15 +178,23 @@ var DropDownSelect = (function () {
         var rootCategory = this.getRootCategory(categories);
         var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
         $(selectHeader).children(".dropdown-select-text").append(this.getCategoryName(rootCategory));
+        $(selectHeader).children(".dropdown-select-text-loading").hide();
         var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
         var info = this.createCallbackInfo(this.getCategoryId(rootCategory), this.getCategoryName(rootCategory), selectHeader);
         var self = this;
         $(checkbox).change(function () {
+            var items = $(dropDownItemsDiv).children(".concrete-item").children("input");
             if (this.checked) {
                 self.addToSelectedCategories(info);
+                $(items).prop('checked', false);
+                $(items).change();
+                $(items).prop('checked', true);
+                $(items).change();
             }
             else {
                 self.removeFromSelectedCategories(info);
+                $(items).prop('checked', false);
+                $(items).change();
             }
         });
         var childCategories = this.getChildCategories(categories, rootCategory);
@@ -212,11 +224,18 @@ var DropDownSelect = (function () {
         var info = this.createCallbackInfo(this.getCategoryId(currentCategory), this.getCategoryName(currentCategory), itemDiv);
         var self = this;
         $(checkbox).change(function () {
+            var items = $(itemDiv).children(".child-items").children(".concrete-item").children("input");
             if (this.checked) {
                 self.addToSelectedCategories(info);
+                $(items).prop('checked', false);
+                $(items).change();
+                $(items).prop('checked', true);
+                $(items).change();
             }
             else {
                 self.removeFromSelectedCategories(info);
+                $(items).prop('checked', false);
+                $(items).change();
             }
         });
         itemDiv.appendChild(checkbox);
