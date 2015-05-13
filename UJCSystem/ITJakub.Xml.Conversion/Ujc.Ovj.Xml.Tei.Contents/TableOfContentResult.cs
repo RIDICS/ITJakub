@@ -18,18 +18,29 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 
 	public class TableOfContentItem
 	{
+		public TableOfContentItem Parent { get; set; }
+
 		public TableOfContentItem()
 		{
-			Subsections = new List<TableOfContentItem>();
+			Sections = new List<TableOfContentItem>();
 		}
+
+		public TableOfContentItem(TableOfContentItem parent)
+			: this()
+		{
+			Parent = parent;
+		}
+
 
 		public string Head { get; set; }
 		public XmlElement HeadXml { get; set; }
-		public string PageBreakFirst { get; set; }
-		public string PageBreakLast { get; set; }
+		public string PageBreak { get; set; }
+		public string PageBreakXmlId { get; set; }
 		public int Level { get; set; }
 
-		public List<TableOfContentItem> Subsections { get; set; }
+		public string DivXmlId { get; set; }
+
+		public List<TableOfContentItem> Sections { get; set; }
 
 	}
 }
