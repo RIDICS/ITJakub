@@ -145,7 +145,8 @@ div.container {
   clear: both;
 }
 .no-result,
-.nothing-selected {
+.nothing-selected,
+.server-error {
   display: none;
 }
 .card-file-listing .card-file-select,

@@ -8,6 +8,8 @@ function createSearch() {
         $(noResultDiv).hide();
         var nothingSelectedDiv = $("div.nothing-selected");
         $(nothingSelectedDiv).hide();
+        var serverErrorDiv = $("div.server-error");
+        $(serverErrorDiv).hide();
         var nothingSelected = false;
         cardFileManager.clearContainer();
         var selectedCardFiles = cardfileSelector.getState().SelectedItems;
@@ -43,7 +45,8 @@ function createSearch() {
                     }
                 },
                 error: function (response) {
-                    //TODO resolve error
+                    $(noResultDiv).hide();
+                    $(serverErrorDiv).show();
                 }
             });
         }

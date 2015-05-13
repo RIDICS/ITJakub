@@ -9,6 +9,8 @@
         $(noResultDiv).hide();
         var nothingSelectedDiv = $("div.nothing-selected");
         $(nothingSelectedDiv).hide();
+        var serverErrorDiv = $("div.server-error");
+        $(serverErrorDiv).hide();
         var nothingSelected = false;
 
         cardFileManager.clearContainer();
@@ -48,7 +50,8 @@
                     }
                 },
                 error: (response) => {
-                    //TODO resolve error
+                    $(noResultDiv).hide();
+                    $(serverErrorDiv).show();
                 }
             });
         }
