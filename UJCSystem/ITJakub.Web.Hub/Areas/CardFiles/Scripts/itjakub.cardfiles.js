@@ -133,8 +133,10 @@ function createListing() {
             }
             $(cardFileLoadingDiv).hide();
             var cardFileId = getQueryStringParameterByName("cardFileId");
-            $(cardFileSelector).find("option:selected").removeAttr('selected');
-            $(cardFileSelector).find("option[value =" + cardFileId + "]").prop('selected', 'selected');
+            if (cardFileId) {
+                $(cardFileSelector).find("option:selected").removeAttr('selected');
+                $(cardFileSelector).find("option[value =" + cardFileId + "]").prop('selected', 'selected');
+            }
             $(cardFileSelector).show();
             $(cardFileSelector).change();
         },
