@@ -22,38 +22,42 @@
             nothingSelected = true;
         } else {
             $(noResultDiv).show();
+            $(serverErrorDiv).show();
         }
 
         for (var cardFileIndex = 0; cardFileIndex < selectedCardFiles.length; cardFileIndex++) {
+            
             var selectedCardFileItem: Item = selectedCardFiles[cardFileIndex];
-            $.ajax({
-                type: "GET",
-                traditional: true,
-                data: { cardFileId: selectedCardFileItem.Id, headword: searchedHeadword },
-                url: "/CardFiles/CardFiles/Buckets",
-                dataType: 'json',
-                contentType: 'application/json',
-                success: (response) => {
-                    var buckets = response["buckets"];
+            ((selectedCardFileItem: Item) => {
+                $.ajax({
+                    type: "GET",
+                    traditional: true,
+                    data: { cardFileId: selectedCardFileItem.Id, headword: searchedHeadword },
+                    url: "/CardFiles/CardFiles/Buckets",
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: (response) => {
+                        $(serverErrorDiv).hide();
+                        var buckets = response["buckets"];
 
-                    if (buckets.length !== 0) {
+                        if (buckets.length !== 0) {
                             $(noResultDiv).hide();
-                    }
-
-                    for (var bucketIndex = 0; bucketIndex < buckets.length; bucketIndex++) {
-                        var bucket = buckets[bucketIndex];
-                        var cards = bucket["Cards"];
-                        for (var cardIndex = 0; cardIndex < cards.length; cardIndex++) {
-                            var card = cards[cardIndex];
-                            cardFileManager.makeCardFile(selectedCardFileItem.Id, selectedCardFileItem.Name, bucket["Id"], bucket["Name"], card["Position"]);
                         }
+
+                        for (var bucketIndex = 0; bucketIndex < buckets.length; bucketIndex++) {
+                            var bucket = buckets[bucketIndex];
+                            var cards = bucket["Cards"];
+                            for (var cardIndex = 0; cardIndex < cards.length; cardIndex++) {
+                                var card = cards[cardIndex];
+                                cardFileManager.makeCardFile(selectedCardFileItem.Id, selectedCardFileItem.Name, bucket["Id"], bucket["Name"], card["Position"]);
+                            }
+                        }
+                    },
+                    error: (response) => {
+                        $(noResultDiv).hide();
                     }
-                },
-                error: (response) => {
-                    $(noResultDiv).hide();
-                    $(serverErrorDiv).show();
-                }
-            });
+                });
+            })(selectedCardFileItem);
         }
         
     });
