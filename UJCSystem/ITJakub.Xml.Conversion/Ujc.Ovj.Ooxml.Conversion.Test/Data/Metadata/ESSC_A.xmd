@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<itj:document doctype="Dictionary" versionId="58089d6b-7bf5-4422-afd4-643010b20f89" xml:lang="cs" n="{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<itj:document doctype="Dictionary" versionId="bf6258a2-4ba6-4339-8e35-c19ed1981760" xml:lang="cs" n="{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <teiHeader>
     <fileDesc n="4E5DB418-B49B-4AC0-AE9F-78A53E9BE4FE">
       <titleStmt>
@@ -87,9 +87,16 @@
       <change n="Change_2015-05-12T10:11:02.0000000" when="2015-05-12T10:11:02"></change>
       <change n="Change_2015-05-12T13:50:26.0000000" when="2015-05-12T13:50:26"></change>
       <change n="Change_2015-05-12T13:51:45.0000000" when="2015-05-12T13:51:45"></change>
-      <change n="58089d6b-7bf5-4422-afd4-643010b20f89" when="2015-05-12T13:58:59.0894992Z"></change>
+      <change n="Change_2015-05-12T13:58:59.0000000" when="2015-05-12T13:58:59"></change>
+      <change n="bf6258a2-4ba6-4339-8e35-c19ed1981760" when="2015-05-13T10:29:14.8356031Z"></change>
     </revisionDesc>
   </teiHeader>
-  <itj:tableOfContents />
+  <itj:tableOfContent>
+    <list>
+      <item corresp="#lt01">
+        <head>A</head>
+      </item>
+    </list>
+  </itj:tableOfContent>
   <itj:pages />
 </itj:document>

@@ -59,6 +59,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 			string actualPageBreakXmlId = null;
 
 			string actualDivId = null;
+			string actualEntryType = null;
 			TableOfContentItem currentTocItem = null;
 
 			using (XmlReader reader = XmlReader.Create(XmlFile))
@@ -78,42 +79,67 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 							}
 						if (!splittingStarted)
 							continue;
-						if (elementName == "pb")
+						switch (elementName)
 						{
-							actualPageBreak = reader.GetAttribute("n");
-							actualPageBreakXmlId = reader.GetAttribute("id", XmlNamespace);
-						}
-						else if (elementName == "div")
-						{
-							actualDivId = reader.GetAttribute("id", XmlNamespace);
+							case "pb":
+								actualPageBreak = reader.GetAttribute("n");
+								actualPageBreakXmlId = reader.GetAttribute("id", XmlNamespace);
+								break;
+							case "entryFree":
+								actualEntryType = reader.GetAttribute("type");
+								goto case "div";
+							case "div":
+								actualDivId = reader.GetAttribute("id", XmlNamespace);
+								break;
+							case "form":
+							case "head":
+								TableOfContentItem parent = currentTocItem;
+								if (parent != null && (parent.Level == reader.Depth || parent.DivXmlId == actualDivId))
+									parent = currentTocItem.Parent;
+								TableOfContentItem tocItem = new TableOfContentItem(parent);
+								tocItem.Level = reader.Depth;
+								GetElementHead(reader, tocItem);
+								tocItem.PageBreak = actualPageBreak;
+								tocItem.PageBreakXmlId = actualPageBreakXmlId;
+								tocItem.DivXmlId = actualDivId;
+								tocItem.Type = actualEntryType;
 
-						}
-						else if (elementName == "head")
-						{
-							TableOfContentItem parent = currentTocItem;
-							if (parent != null && parent.Level == reader.Depth)
-								parent = currentTocItem.Parent;
-							TableOfContentItem tocItem = new TableOfContentItem(parent);
-							tocItem.Level = reader.Depth;
-							GetElementHead(reader, tocItem);
-							tocItem.PageBreak = actualPageBreak;
-							tocItem.PageBreakXmlId = actualPageBreakXmlId;
-							tocItem.DivXmlId = actualDivId;
-							if (currentTocItem == null)
-							{
-								result.Sections.Add(tocItem);
-							}
-							else
-							{
-								if (currentTocItem.Parent == null)
-									if(currentTocItem.Level < tocItem.Level)
-										currentTocItem.Sections.Add(tocItem);
-								else
+								if (currentTocItem == null)
+								{
 									result.Sections.Add(tocItem);
+								}
 								else
-									currentTocItem.Parent.Sections.Add(tocItem);
-							}
-							currentTocItem = tocItem;
+								{
+									if (elementName == "form" && currentTocItem.DivXmlId != tocItem.DivXmlId)
+										{
+											TableOfContentItem tocEntry = new TableOfContentItem(parent);
+											tocEntry.DivXmlId = actualDivId;
+											tocEntry.Head = tocItem.Head;
+											tocEntry.Level = tocItem.Level;
+											tocEntry.Type = actualEntryType;
+											parent.Sections.Add(tocEntry);
+											tocItem.Parent = tocEntry;
+											currentTocItem = tocEntry;
+										}
+									if (currentTocItem.Parent == null)
+									{
+										
+										if (currentTocItem.Level < tocItem.Level || currentTocItem.DivXmlId == tocItem.DivXmlId)
+											currentTocItem.Sections.Add(tocItem);
+										else
+											result.Sections.Add(tocItem);
+									}
+									else
+									{
+										if(currentTocItem.DivXmlId == tocItem.DivXmlId && currentTocItem.Parent != null && currentTocItem.Parent.DivXmlId == tocItem.DivXmlId)
+											currentTocItem.Parent.Sections.Add(tocItem);
+										else
+											currentTocItem.Sections.Add(tocItem);
+									}
+								}
+								
+								currentTocItem = tocItem;
+								break;
 						}
 					}
 					else if (reader.NodeType == XmlNodeType.EndElement)
@@ -130,7 +156,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 				return result;
 			}
 
-			#endregion
+		#endregion
 
 		}
 
@@ -141,7 +167,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 			tocItem.HeadXml = doc.DocumentElement;
 			StringWriter sw = new StringWriter();
 			xsltTransform.Transform(doc.DocumentElement.CreateNavigator(), new XsltArgumentList(), sw);
-			tocItem.Head = sw.ToString();
+			tocItem.Head = sw.ToString().Trim();
 		}
 
 		private static string GetDataDirectory()

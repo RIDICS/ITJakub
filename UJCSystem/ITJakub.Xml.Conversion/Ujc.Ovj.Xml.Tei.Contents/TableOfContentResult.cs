@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Xml;
 
 namespace Ujc.Ovj.Xml.Tei.Contents
 {
+	
 	public class TableOfContentResult
 	{
 		public TableOfContentResult()
@@ -16,6 +18,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 
 	}
 
+	[DebuggerDisplay("Head = {Head}, DivXmlId = {DivXmlId}, Level = {Level}, Type = {Type}")]
 	public class TableOfContentItem
 	{
 		public TableOfContentItem Parent { get; set; }
@@ -37,6 +40,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 		public string PageBreak { get; set; }
 		public string PageBreakXmlId { get; set; }
 		public int Level { get; set; }
+		public string Type { get; set; }
 
 		public string DivXmlId { get; set; }
 

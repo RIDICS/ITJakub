@@ -25,6 +25,4 @@
 
 	<xsl:template match="*[@rend='hidden']" priority="10" />
 
-
-
 </xsl:stylesheet>

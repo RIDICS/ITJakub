@@ -70,6 +70,13 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 	public class DocxToTeiConverter
 	{
+
+		XNamespace nsTei = "http://www.tei-c.org/ns/1.0";
+		XNamespace nsXml = "http://www.w3.org/XML/1998/namespace";
+		XNamespace nsItj = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0";
+		XNamespace nsNlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
+
+
 		private ConversionResult _result;
 		private const string XmlExtension = ".xml";
 		private string _documentId = null;
@@ -191,10 +198,15 @@ namespace Ujc.Ovj.Ooxml.Conversion
 					_result.IsConverted = false;
 					_result.Errors.Add(new DocumentSplittingException("Vyskytla se chyba při rozdělení souboru podle hranice stran."));
 				}
-
 			}
 
-			GenerateConversionMetadataFile(splittingResult, documentType, settings.OutputFilePath);
+			TableOfContentResult tocResult = null;
+			TableOfContentBuilder tocBuilder = new TableOfContentBuilder();
+			tocBuilder.XmlFile = settings.OutputFilePath;
+			tocBuilder.StartingElement = "body";
+			tocResult = tocBuilder.MakeTableOfContent();
+
+			GenerateConversionMetadataFile(splittingResult, tocResult, documentType, settings.OutputFilePath);
 
 			if (!settings.Debug)
 			{
@@ -242,10 +254,6 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 		private void GenerateConversionMetadataFile(SplittingResult splittingResult, TableOfContentResult tableOfContentResult, string documentType, string finalOutputFileName)
 		{
-			XNamespace nsTei = "http://www.tei-c.org/ns/1.0";
-			XNamespace nsXml = "http://www.w3.org/XML/1998/namespace";
-			XNamespace nsItj = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0";
-			XNamespace nsNlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
 
 			XDocument metada = new XDocument();
 
@@ -266,11 +274,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			XElement header = teiDocument.Descendants(nsTei + "teiHeader").FirstOrDefault();
 			metada.Root.Add(header);
 
-			XElement toc = new XElement(nsItj + "tableOfContents",
-				from section in tableOfContentResult.Sections
-				select new XElement(nsItj + "div",
-					new XElement("head", new XAttribute("text", section.Head)))
-				);
+			XElement toc = GenerateToc(tableOfContentResult);
 
 
 			metada.Root.Add(toc);
@@ -291,6 +295,50 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			}
 			metada.Save(GetConversionMetadataFileFullPath(finalOutputFileName));
 
+		}
+
+
+		private XElement GenerateToc(TableOfContentResult result)
+		{
+			XDocument doc = new XDocument(new XElement(nsItj + "tableOfContent"));
+			doc.Root.Add(GenerateList(result.Sections));
+			return doc.Root;
+		}
+
+		private  XElement GenerateList(List<TableOfContentItem> items)
+		{
+			if (items.Count > 0)
+			{
+				XElement list = new XElement(nsTei + "list");
+				foreach (TableOfContentItem item in items)
+				{
+					list.Add(GenerateList(item));
+				}
+				return list;
+			}
+			return null;
+		}
+
+		private XElement GenerateList(TableOfContentItem item)
+		{
+			if (item == null) return null;
+			XElement it =
+					new XElement(nsTei + "item", new XAttribute("corresp", "#" + item.DivXmlId),
+						new XElement(nsTei + "head", new XText(item.Head)),
+						item.PageBreak == null ? null : new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakXmlId), new XText(item.PageBreak)),
+						GenerateList(item.Sections)
+					);
+			/*
+			if (item.Sections.Count > 0)
+			{
+				List<XElement> its = new List<XElement>();
+				foreach (TableOfContentItem section in item.Sections)
+				{
+					its.Add(GenerateList(section));
+				}
+			}
+			 */
+			return it;
 		}
 
 		private static string GetConversionMetadataFileFullPath(string outputFilePath)
