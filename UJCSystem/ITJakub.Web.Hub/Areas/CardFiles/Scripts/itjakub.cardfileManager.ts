@@ -11,6 +11,13 @@
     public makeCardFile(cardFileId: string, cardFileName: string, bucketId: string, bucketName: string,  initCardPosition?: number) {
         var bucket = this.getBucket(cardFileId, bucketId, bucketName);
         var cardFile = new CardFileViewer(cardFileId, cardFileName, bucket, initCardPosition);
+        cardFile.onErrorCallback = (cardFileViewer: CardFileViewer) => { this.moveViewerWithErrorOnTheEnd(cardFileViewer) };
+        $(this.cardFilesContainer).append(cardFile.getHtml());
+    }
+
+    private moveViewerWithErrorOnTheEnd(cardFile: CardFileViewer) {
+        var cardFileHtml = cardFile.getHtml();
+        $(cardFileHtml).detach();
         $(this.cardFilesContainer).append(cardFile.getHtml());
     }
 
@@ -56,6 +63,8 @@ class CardFileViewer {
 
     private actualCardPosition: number;
 
+    public onErrorCallback: (viewer: CardFileViewer) => void;
+
     constructor(cardFileId: string, cardFileName: string, bucket: Bucket, initCardPosition?: number) {
         this.cardFileId = cardFileId;
         this.cardFileName = cardFileName;
@@ -64,6 +73,7 @@ class CardFileViewer {
         this.htmlBody = cardFileDiv;
         this.actualBucket = bucket;
         bucket.addOnFinishLoadCallback(() => this.makePanel(initCardPosition));
+        bucket.addOnErrorLoadCallback(() => this.showError());
     }
 
     public setViewedCardByPosition(initCardPosition: number) {
@@ -72,6 +82,13 @@ class CardFileViewer {
 
     public getHtml(): HTMLDivElement {
         return this.htmlBody;
+    }
+
+    private showError() {
+        $(this.htmlBody).removeClass("loading");
+        $(this.htmlBody).addClass("error");
+        $(this.htmlBody).html("Nepodařilo se načíst výsledek ze zásuvky '" + this.actualBucket.getName() + "' z kartotéky '" + this.cardFileName + "'");
+        this.onErrorCallback(this);
     }
 
     private makePanel(initCardPosition?: number) {
@@ -500,7 +517,9 @@ class Bucket {
     private cardsCount: number;
     private cards: Array<Card>;
     private callbacks: Array<() => void>;
+    private errorCallbacks: Array<() => void>;
     private loaded: boolean;
+    private loadingError: boolean;
     private bucketName : string;
 
     constructor(cardFileId: string, bucketId: string, bucketName: string) {
@@ -510,6 +529,7 @@ class Bucket {
         this.loaded = false;
         this.cards = new Array<Card>();
         this.callbacks = new Array<() => void>();
+        this.errorCallbacks = new Array<() => void>();
         this.loadCardsInfo();
     }
 
@@ -544,6 +564,14 @@ class Bucket {
         }
     }
 
+    public addOnErrorLoadCallback(errorCallback: () => void) {
+        if (this.loadingError) {
+            errorCallback();
+        } else {
+            this.errorCallbacks.push(errorCallback);
+        }
+    }
+
     private onFinishLoad() {
         this.loaded = true;
         for (var i = 0; i < this.callbacks.length; i++) {
@@ -551,6 +579,15 @@ class Bucket {
         }
 
         this.callbacks.length = 0; //Clear array of callbacks
+    }
+
+    private onErrorLoad() {
+        this.loadingError = true;
+        for (var i = 0; i < this.errorCallbacks.length; i++) {
+            this.errorCallbacks[i]();
+        }
+
+        this.errorCallbacks.length = 0; //Clear array of callbacks
     }
 
     private loadCardsInfo() {
@@ -571,7 +608,7 @@ class Bucket {
                 this.onFinishLoad();
             },
             error: (response) => {
-                //TODO resolve error
+                this.onErrorLoad();
             }
         });
     }

@@ -190,6 +190,15 @@ div.container {
   height: 380px;
   background-color: white;
 }
+.error {
+  margin: 0 auto;
+  margin-bottom: 5px;
+  width: 1090px;
+  height: 20px;
+  background-color: grey;
+  color: white;
+  padding-left: 5px;
+}
 .cardfile-scrollable-part-right-panel {
   overflow-y: auto;
   max-height: 150px;

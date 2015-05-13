@@ -6,9 +6,10 @@
 
     $("#searchButton").click(() => {
         var noResultDiv = $("div.no-result");
-        noResultDiv.hide();
+        $(noResultDiv).hide();
         var nothingSelectedDiv = $("div.nothing-selected");
-        nothingSelectedDiv.hide();
+        $(nothingSelectedDiv).hide();
+        var nothingSelected = false;
 
         cardFileManager.clearContainer();
         var selectedCardFiles = cardfileSelector.getState().SelectedItems;
@@ -16,6 +17,9 @@
 
         if (selectedCardFiles.length === 0) {
             $(nothingSelectedDiv).show();
+            nothingSelected = true;
+        } else {
+            $(noResultDiv).show();
         }
 
         for (var cardFileIndex = 0; cardFileIndex < selectedCardFiles.length; cardFileIndex++) {
@@ -30,8 +34,8 @@
                 success: (response) => {
                     var buckets = response["buckets"];
 
-                    if (buckets.length === 0) {
-                        $(noResultDiv).show();
+                    if (buckets.length !== 0) {
+                            $(noResultDiv).hide();
                     }
 
                     for (var bucketIndex = 0; bucketIndex < buckets.length; bucketIndex++) {
@@ -48,8 +52,7 @@
                 }
             });
         }
-
-
+        
     });
 };
 
