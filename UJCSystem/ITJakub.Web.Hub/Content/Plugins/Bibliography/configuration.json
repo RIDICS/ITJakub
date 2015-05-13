@@ -283,10 +283,10 @@
         },
         "right-panel": {
             "info-button": {
-                "url": "\\CardFile\\info\\{BookGuid}"
+                "url": "\\CardFiles\\info\\{BookGuid}"
             },
             "read-button": {
-                "url": "\\CardFile\\read\\{BookGuid}"
+                "url": "\\CardFiles\\CardFiles\\Listing?cardFileId={BookGuid}"
             },
             "variables": {
                 "$test": {

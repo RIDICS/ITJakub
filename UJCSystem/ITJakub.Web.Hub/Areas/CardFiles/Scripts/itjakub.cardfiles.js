@@ -132,6 +132,9 @@ function createListing() {
                 $(cardFileSelector).append(optionElement);
             }
             $(cardFileLoadingDiv).hide();
+            var cardFileId = getQueryStringParameterByName("cardFileId");
+            $(cardFileSelector).find("option:selected").removeAttr('selected');
+            $(cardFileSelector).find("option[value =" + cardFileId + "]").prop('selected', 'selected');
             $(cardFileSelector).show();
             $(cardFileSelector).change();
         },
@@ -198,5 +201,6 @@ function createList() {
             }
         });
     });
+    $('#searchButton').click();
 }
 //# sourceMappingURL=itjakub.cardfiles.js.map
