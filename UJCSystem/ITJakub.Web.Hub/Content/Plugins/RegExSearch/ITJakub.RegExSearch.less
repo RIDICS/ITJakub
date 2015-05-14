@@ -1,9 +1,24 @@
-﻿.regexsearch-button {
+﻿@regexsearch-column-width: 170px;
+@regexsearch-margin-left: 196px;
+@regexsearch-checkbox-div-width: 19px;
+@regexsearch-gray-color: #9A9A9A;
+
+.regexsearch-button {
     margin-left: 3px;
     margin-right: 3px;
     border-radius: 0;
     background-color: #84ced7;
     color: white;
+}
+
+.regexsearch-condition-input-button {
+    width: 40px;
+    height: 34px;
+    margin-top: -2px;
+    background-color: transparent;
+    border-style: none;
+    font-weight: bold;
+    color: @regexsearch-gray-color;
 }
 
 .regexsearch-condition-select, .regexsearch-input {
@@ -21,9 +36,10 @@
 .regexsearch-condition-div {
     width: 200px;
     margin-left: 170px;
+    margin-right: 50px;
 }
 
-.regexsearch-input-button {
+.regexsearch-editor-button {
     width: 48%;
     margin: 0;
     margin-top: 3px;
@@ -40,21 +56,23 @@
 
 .regexsearch-delimiter {
     color: white;
-    background-color: #9A9A9A;
+    background-color: @regexsearch-gray-color;
+    padding: 0 10px 0 10px;
 }
 
 .regexsearch-destination-div {
     float: left;
-    width: 170px;
+    width: @regexsearch-column-width;
 }
 
 .regexsearch-word-form-div {
     float: right;
-    width: 170px;
+    width: @regexsearch-column-width;
 }
 
 .regexsearch-condition-list-div {
     margin-left: 180px;
+    padding-top: 5px;
 }
 
 .regexsearch-upper-select-label {
@@ -68,11 +86,35 @@
 }
 
 .regexsearch-condition-input {
-    width: 300px;
+    width: 340px;
     border-radius: 0;
     display: inline-block;
+    margin-right: -40px;
 }
 
 .regexsearch-condition-main-div {
     margin: 10px 0 20px 0;
+}
+
+input.regexsearch-checkbox {
+    vertical-align: middle;
+    margin: 3px;
+}
+
+.regexsearch-or-delimiter {
+    margin-left: @regexsearch-checkbox-div-width;
+}
+
+.regexsearch-conditions-commands {
+    margin-left: @regexsearch-margin-left;
+    margin-top: 5px;
+}
+
+.regexsearch-editor-container {
+    margin: 3px 0 10px @regexsearch-checkbox-div-width;
+}
+
+.regexsearch-editor-title {
+    font-size: 150%;
+    display: block;
 }

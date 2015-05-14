@@ -46,23 +46,23 @@ var RegExSearch = (function (_super) {
         });
         commandsDiv.appendChild(removeConditionsButton);
         this.innerContainer = document.createElement("div");
-        var firstInnerDiv = document.createElement("div");
-        $(firstInnerDiv).addClass("regexsearch-condition-main-div");
-        var newRegExConditions = new RegExConditions(firstInnerDiv);
-        newRegExConditions.makeRegExCondition();
-        var arrayItem = new RegExConditionsArrayItem(firstInnerDiv, newRegExConditions);
-        this.regExConditions.push(arrayItem);
-        this.innerContainer.appendChild(firstInnerDiv);
+        this.addNewConditions(false);
+        var endDelimiter = document.createElement("div");
+        endDelimiter.innerHTML = "&nbsp;";
+        $(endDelimiter).addClass("regexsearch-delimiter");
         $(this.container).append(commandsDiv);
         $(this.container).append(this.innerContainer);
+        $(this.container).append(endDelimiter);
     };
     RegExSearch.prototype.addNewConditions = function (useDelimiter) {
         if (useDelimiter === void 0) { useDelimiter = true; }
         var mainDiv = document.createElement("div");
-        var andInfoDiv = document.createElement("div");
-        $(andInfoDiv).addClass("regexsearch-delimiter");
-        andInfoDiv.innerHTML = "A zároveň";
-        mainDiv.appendChild(andInfoDiv);
+        if (useDelimiter) {
+            var andInfoDiv = document.createElement("div");
+            $(andInfoDiv).addClass("regexsearch-delimiter");
+            andInfoDiv.innerHTML = "A zároveň";
+            mainDiv.appendChild(andInfoDiv);
+        }
         var conditionsDiv = document.createElement("div");
         $(conditionsDiv).addClass("regexsearch-condition-main-div");
         mainDiv.appendChild(conditionsDiv);
@@ -139,6 +139,7 @@ var RegExConditions = (function (_super) {
         $(this.conditionsContainerDiv).addClass("regexsearch-condition-list-div");
         mainSearchDiv.appendChild(this.conditionsContainerDiv);
         var commandsDiv = document.createElement("div");
+        $(commandsDiv).addClass("regexsearch-conditions-commands");
         mainSearchDiv.appendChild(commandsDiv);
         var addConditionButton = this.createButton("Přidat");
         $(addConditionButton).click(function () {
@@ -167,6 +168,7 @@ var RegExConditions = (function (_super) {
         var mainDiv = document.createElement("div");
         var labelDiv = document.createElement("div");
         labelDiv.innerHTML = "Nebo";
+        $(labelDiv).addClass("regexsearch-or-delimiter");
         mainDiv.appendChild(labelDiv);
         var lineDiv = document.createElement("div");
         mainDiv.appendChild(lineDiv);
@@ -212,13 +214,18 @@ var RegExInput = (function (_super) {
         this.editorDiv = document.createElement("div");
         this.checkBox = document.createElement("input");
         this.checkBox.type = "checkbox";
+        $(this.checkBox).addClass("regexsearch-checkbox");
         lineDiv.appendChild(this.checkBox);
         this.conditionInput = document.createElement("input");
         this.conditionInput.type = "text";
         $(this.conditionInput).addClass("form-control");
         $(this.conditionInput).addClass("regexsearch-condition-input");
         lineDiv.appendChild(this.conditionInput);
-        var regExButton = this.createButton("R");
+        var regExButton = document.createElement("button");
+        regExButton.innerText = "R";
+        regExButton.type = "button";
+        $(regExButton).addClass("btn");
+        $(regExButton).addClass("regexsearch-condition-input-button");
         $(regExButton).click(function () {
             if (!_this.regExEditor || _this.editorDiv.children.length === 0) {
                 _this.regExEditor = new RegExEditor(_this.editorDiv, _this.conditionInput);
@@ -261,8 +268,10 @@ var RegExEditor = (function (_super) {
         $(this.container).empty();
         var mainRegExDiv = document.createElement("div");
         $(mainRegExDiv).addClass("content-container");
-        var titleHeading = document.createElement("h3");
+        $(mainRegExDiv).addClass("regexsearch-editor-container");
+        var titleHeading = document.createElement("span");
         titleHeading.innerHTML = "Editor regulárního výrazu";
+        $(titleHeading).addClass("regexsearch-editor-title");
         mainRegExDiv.appendChild(titleHeading);
         var editorDiv = document.createElement("div");
         mainRegExDiv.appendChild(editorDiv);
@@ -294,14 +303,14 @@ var RegExEditor = (function (_super) {
         conditionDiv.appendChild(conditionButtonsDiv);
         var anythingButton = this.createButton("Cokoliv");
         conditionButtonsDiv.appendChild(anythingButton);
-        $(anythingButton).addClass("regexsearch-input-button");
+        $(anythingButton).addClass("regexsearch-editor-button");
         $(anythingButton).click(function () {
             conditionInput.value += ".*";
         });
         var orButton = this.createButton("Nebo");
         conditionButtonsDiv.appendChild(orButton);
         orButton.style.cssFloat = "right";
-        $(orButton).addClass("regexsearch-input-button");
+        $(orButton).addClass("regexsearch-editor-button");
         $(orButton).click(function () {
             conditionInput.value += "|";
         });
@@ -318,7 +327,7 @@ var RegExEditor = (function (_super) {
         var nextButton = this.createButton("Další");
         commandButtonsDiv.appendChild(nextButton);
         var submitButton = this.createButton("Dokončit");
-        submitButton.style.marginLeft = "10px";
+        submitButton.style.marginLeft = "25px";
         commandButtonsDiv.appendChild(submitButton);
         $(submitButton).click(function () {
             _this.searchBox.value = conditionInput.value;
