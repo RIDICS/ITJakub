@@ -97,12 +97,13 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 								if (parent != null && (parent.Level == reader.Depth || parent.DivXmlId == actualDivId))
 									parent = currentTocItem.Parent;
 								TableOfContentItem tocItem = new TableOfContentItem(parent);
+								tocItem.FormXmlId = reader.GetAttribute("id", XmlNamespace);
+								tocItem.Type = reader.GetAttribute("type");
 								tocItem.Level = reader.Depth;
 								GetElementHead(reader, tocItem);
 								tocItem.PageBreak = actualPageBreak;
 								tocItem.PageBreakXmlId = actualPageBreakXmlId;
 								tocItem.DivXmlId = actualDivId;
-								tocItem.Type = actualEntryType;
 
 								if (currentTocItem == null)
 								{
@@ -134,11 +135,18 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 										if(currentTocItem.DivXmlId == tocItem.DivXmlId && currentTocItem.Parent != null && currentTocItem.Parent.DivXmlId == tocItem.DivXmlId)
 											currentTocItem.Parent.Sections.Add(tocItem);
 										else
+										{
+											if(elementName == "head" && currentTocItem.Level == tocItem.Level)
+												currentTocItem.Parent.Sections.Add(tocItem);
+											else
 											currentTocItem.Sections.Add(tocItem);
+										}
 									}
 								}
-								
-								currentTocItem = tocItem;
+								if (elementName == "form")
+									currentTocItem = currentTocItem;
+								else
+									currentTocItem = tocItem;
 								break;
 						}
 					}
