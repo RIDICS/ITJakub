@@ -322,22 +322,13 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		private XElement GenerateList(TableOfContentItem item)
 		{
 			if (item == null) return null;
+			string corresp = item.FormXmlId ?? item.DivXmlId;
 			XElement it =
-					new XElement(nsTei + "item", new XAttribute("corresp", "#" + item.DivXmlId),
+				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp), (item.Type == null) ? null : new XAttribute("type", item.Type),
 						new XElement(nsTei + "head", new XText(item.Head)),
 						item.PageBreak == null ? null : new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakXmlId), new XText(item.PageBreak)),
 						GenerateList(item.Sections)
 					);
-			/*
-			if (item.Sections.Count > 0)
-			{
-				List<XElement> its = new List<XElement>();
-				foreach (TableOfContentItem section in item.Sections)
-				{
-					its.Add(GenerateList(section));
-				}
-			}
-			 */
 			return it;
 		}
 

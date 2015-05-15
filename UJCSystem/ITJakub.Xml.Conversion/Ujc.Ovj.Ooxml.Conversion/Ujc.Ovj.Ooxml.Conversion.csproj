@@ -207,6 +207,7 @@
     <Content Include="Data\Xslt\TB_zpracovat_inicialu.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\TEI_ClassificationDeclarations.xsl" />
     <Content Include="Data\Xslt\TEI_Priradit_Oznaceni_Note.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

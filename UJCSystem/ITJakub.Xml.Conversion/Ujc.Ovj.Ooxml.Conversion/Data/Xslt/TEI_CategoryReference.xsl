@@ -29,7 +29,9 @@
 		<xsl:element name="catRef">
 			<xsl:attribute name="target">
 				<xsl:value-of select="normalize-space($category)"/>
-				<xsl:value-of select="normalize-space($output)"/>
+				<xsl:if test="string-length($output) &gt; 0">
+					<xsl:value-of select="concat(' ', normalize-space($output))"/>
+				</xsl:if>
 			</xsl:attribute>
 		</xsl:element>
 		</xsl:if>

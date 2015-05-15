@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<itj:document doctype="Edition" versionId="08db14bd-07ce-419d-8722-54f14b14e014" xml:lang="cs" n="{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<itj:document doctype="Edition" versionId="d9ae17e1-5471-480f-964c-190cb909c526" xml:lang="cs" n="{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <teiHeader xml:id="teiHeader-1">
     <fileDesc n="{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}">
       <titleStmt>
@@ -106,7 +106,7 @@
     </encodingDesc>
     <profileDesc>
       <textClass>
-        <catRef target="#taxonomy-historical_text-old_czech#output-text_bank-old_czech #output-editions" />
+        <catRef target="#taxonomy-historical_text-old_czech #output-text_bank-old_czech #output-editions" />
         <keywords scheme="http://vokabular.ujc.cas.cz/scheme/classification/secondary">
           <term>próza</term>
           <term>lékařství</term>
@@ -127,1428 +127,1430 @@
       <change n="Change_2015-05-12T13:07:57.0000000" when="2015-05-12T13:07:57"></change>
       <change n="Change_2015-05-12T13:59:59.0000000" when="2015-05-12T13:59:59"></change>
       <change n="Change_2015-05-13T10:06:36.0000000" when="2015-05-13T10:06:36"></change>
-      <change n="08db14bd-07ce-419d-8722-54f14b14e014" when="2015-05-13T10:11:00.7995033Z"></change>
+      <change n="Change_2015-05-13T10:11:00.0000000" when="2015-05-13T10:11:00"></change>
+      <change n="Change_2015-05-15T12:49:49.0000000" when="2015-05-15T12:49:49"></change>
+      <change n="d9ae17e1-5471-480f-964c-190cb909c526" when="2015-05-15T12:55:37.963015Z"></change>
     </revisionDesc>
   </teiHeader>
   <itj:tableOfContent>
     <list>
-      <item corresp="#t-1.body-1.div-2.div-1.div-1">
+      <item corresp="#t-1.body-1.div-2.div-1.div-1.head-1">
         <head>Naučenie</head>
         <ref target="#t-1.body-1.pb-2">2r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-2">
+      <item corresp="#t-1.body-1.div-2.div-1.div-2.head-1">
         <head>Správa</head>
         <ref target="#t-1.body-1.div-2.div-1.div-1.p-1.pb-6">5r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-3">
+      <item corresp="#t-1.body-1.div-2.div-1.div-3.head-1">
         <head>O lékaři</head>
         <ref target="#t-1.body-1.div-2.div-1.div-2.p-1.pb-4">7r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-4">
+      <item corresp="#t-1.body-1.div-2.div-1.div-4.head-1">
         <head>Kterak se mají chovati ranění a čeho se vystřiehati mají</head>
         <ref target="#t-1.body-1.div-2.div-1.div-3.p-2.pb-3">8v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-5">
+      <item corresp="#t-1.body-1.div-2.div-1.div-5.head-1">
         <head>Vejstraha lékařův</head>
         <ref target="#t-1.body-1.div-2.div-1.div-4.p-2.pb-2">9v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-6">
+      <item corresp="#t-1.body-1.div-2.div-1.div-6.head-1">
         <head>Smrtedlné raněnie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-5.p-1.pb-2">10v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-7">
+      <item corresp="#t-1.body-1.div-2.div-1.div-7.head-1">
         <head>Kterak máš počéti hojiti raněného</head>
         <ref target="#t-1.body-1.div-2.div-1.div-6.p-1.pb-1">11r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-8">
+      <item corresp="#t-1.body-1.div-2.div-1.div-8.head-1">
         <head>Komuž jest nos rozťat</head>
         <ref target="#t-1.body-1.div-2.div-1.div-7.p-2.pb-2">13r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-9">
+      <item corresp="#t-1.body-1.div-2.div-1.div-9.head-1">
         <head>Ktož jest šípem raněn kdež koli</head>
         <ref target="#t-1.body-1.div-2.div-1.div-8.p-1.pb-2">14r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-10">
+      <item corresp="#t-1.body-1.div-2.div-1.div-10.head-1">
         <head>Ktož sobě krk vyrazí nebo ukřiví</head>
         <ref target="#t-1.body-1.div-2.div-1.div-9.p-1.pb-4">16r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-11">
+      <item corresp="#t-1.body-1.div-2.div-1.div-11.head-1">
         <head>Když se komu čelisti hnú, totižto sáňky</head>
         <ref target="#t-1.body-1.div-2.div-1.div-10.p-1.pb-1">16v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-12">
+      <item corresp="#t-1.body-1.div-2.div-1.div-12.head-1">
         <head>Ktož jest v hlavu zbit ranami suchými</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-1">17r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-13">
+      <item corresp="#t-1.body-1.div-2.div-1.div-13.head-1">
         <head>Komuž jest leb v hlavu vražena</head>
         <ref target="#t-1.body-1.div-2.div-1.div-12.p-1.pb-1">17v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-14">
+      <item corresp="#t-1.body-1.div-2.div-1.div-14.head-1">
         <head>Žehnánie ran</head>
         <ref target="#t-1.body-1.div-2.div-1.div-13.p-1.pb-1">18r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-15">
+      <item corresp="#t-1.body-1.div-2.div-1.div-15.head-1">
         <head>O mastech</head>
         <ref target="#t-1.body-1.div-2.div-1.div-14.p-4.pb-1">20 bis r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-16">
+      <item corresp="#t-1.body-1.div-2.div-1.div-16.head-1">
         <head>Populeon</head>
         <ref target="#t-1.body-1.div-2.div-1.div-15.p-1.pb-1">20 bis v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-17">
+      <item corresp="#t-1.body-1.div-2.div-1.div-17.head-1">
         <head>Hnojície</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-2">22r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-18">
+      <item corresp="#t-1.body-1.div-2.div-1.div-18.head-1">
         <head>Mast celicé</head>
         <ref target="#t-1.body-1.div-2.div-1.div-17.p-1.pb-1">22v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-19">
+      <item corresp="#t-1.body-1.div-2.div-1.div-19.head-1">
         <head>Celicé</head>
         <ref target="#t-1.body-1.div-2.div-1.div-18.p-1.pb-2">23v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-20">
+      <item corresp="#t-1.body-1.div-2.div-1.div-20.head-1">
         <head>Mast celicie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-19.p-1.pb-1">24r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-21">
+      <item corresp="#t-1.body-1.div-2.div-1.div-21.head-1">
         <head>Mast celicie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-20.p-1.pb-1">24v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-22">
+      <item corresp="#t-1.body-1.div-2.div-1.div-22.head-1">
         <head>Celicé</head>
         <ref target="#t-1.body-1.div-2.div-1.div-20.p-1.pb-1">24v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-23">
+      <item corresp="#t-1.body-1.div-2.div-1.div-23.head-1">
         <head>Celicé</head>
         <ref target="#t-1.body-1.div-2.div-1.div-22.p-1.pb-1">25r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-24">
+      <item corresp="#t-1.body-1.div-2.div-1.div-24.head-1">
         <head>Mast dyaltea</head>
         <ref target="#t-1.body-1.div-2.div-1.div-23.p-1.pb-1">25v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-25">
+      <item corresp="#t-1.body-1.div-2.div-1.div-25.head-1">
         <head>Fuskum</head>
         <ref target="#t-1.body-1.div-2.div-1.div-24.p-1.pb-3">27r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-26">
+      <item corresp="#t-1.body-1.div-2.div-1.div-26.head-1">
         <head>Apostolicon</head>
         <ref target="#t-1.body-1.div-2.div-1.div-25.p-1.pb-2">28r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-27">
+      <item corresp="#t-1.body-1.div-2.div-1.div-27.head-1">
         <head>Mast apostolicon</head>
         <ref target="#t-1.body-1.div-2.div-1.div-26.p-1.pb-1">28v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-28">
+      <item corresp="#t-1.body-1.div-2.div-1.div-28.head-1">
         <head>Apostolicon</head>
         <ref target="#t-1.body-1.div-2.div-1.div-27.p-1.pb-1">29r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-29">
+      <item corresp="#t-1.body-1.div-2.div-1.div-29.head-1">
         <head>Mast apostolicon</head>
         <ref target="#t-1.body-1.div-2.div-1.div-28.p-1.pb-1">29v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-30">
+      <item corresp="#t-1.body-1.div-2.div-1.div-30.head-1">
         <head>Mast agripa</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-3">30v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-31">
+      <item corresp="#t-1.body-1.div-2.div-1.div-31.head-1">
         <head>Mast pruská</head>
         <ref target="#t-1.body-1.div-2.div-1.div-30.p-1.pb-1">31r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-32">
+      <item corresp="#t-1.body-1.div-2.div-1.div-32.head-1">
         <head>Pruská</head>
         <ref target="#t-1.body-1.div-2.div-1.div-31.p-1.pb-1">31v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-33">
+      <item corresp="#t-1.body-1.div-2.div-1.div-33.head-1">
         <head>Mast bielá</head>
         <ref target="#t-1.body-1.div-2.div-1.div-32.p-1.pb-1">32r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-34">
+      <item corresp="#t-1.body-1.div-2.div-1.div-34.head-1">
         <head>Bielá</head>
         <ref target="#t-1.body-1.div-2.div-1.div-33.p-1.pb-1">32v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-35">
+      <item corresp="#t-1.body-1.div-2.div-1.div-35.head-1">
         <head>Mast červená</head>
         <ref target="#t-1.body-1.div-2.div-1.div-34.p-1.pb-1">33r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-36">
+      <item corresp="#t-1.body-1.div-2.div-1.div-36.head-1">
         <head>Mast, kterážto vytahuje leb v hlavu vraženú nebo vlomenú</head>
         <ref target="#t-1.body-1.div-2.div-1.div-35.p-1.pb-1">33v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-37">
+      <item corresp="#t-1.body-1.div-2.div-1.div-37.head-1">
         <head>Mast na hlavy zmožděné</head>
         <ref target="#t-1.body-1.div-2.div-1.div-36.p-1.pb-2">34v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-38">
+      <item corresp="#t-1.body-1.div-2.div-1.div-38.head-1">
         <head>Mast na provaly</head>
         <ref target="#t-1.body-1.div-2.div-1.div-37.p-1.pb-1">35r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-39">
+      <item corresp="#t-1.body-1.div-2.div-1.div-39.head-1">
         <head>Na provaly</head>
         <ref target="#t-1.body-1.div-2.div-1.div-38.p-1.pb-1">35v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-40">
+      <item corresp="#t-1.body-1.div-2.div-1.div-40.head-1">
         <head>Mast na provaly</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-4">36v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-41">
+      <item corresp="#t-1.body-1.div-2.div-1.div-41.head-1">
         <head>Mast na vlkojedy</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-5">37v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-42">
+      <item corresp="#t-1.body-1.div-2.div-1.div-42.head-1">
         <head>Na provaly</head>
         <ref target="#t-1.body-1.div-2.div-1.div-41.p-1.pb-1">38r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-43">
+      <item corresp="#t-1.body-1.div-2.div-1.div-43.head-1">
         <head>Na vlkojedy</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-6">39r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-44">
+      <item corresp="#t-1.body-1.div-2.div-1.div-44.head-1">
         <head>Mast na zlé jézvy</head>
         <ref target="#t-1.body-1.div-2.div-1.div-43.p-2.pb-3">40v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-45">
+      <item corresp="#t-1.body-1.div-2.div-1.div-45.head-1">
         <head>Na provaly</head>
         <ref target="#t-1.body-1.div-2.div-1.div-44.p-1.pb-1">41r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-46">
+      <item corresp="#t-1.body-1.div-2.div-1.div-46.head-1">
         <head>Voda k vymývaní ran starých</head>
         <ref target="#t-1.body-1.div-2.div-1.div-45.p-1.pb-1">41v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-47">
+      <item corresp="#t-1.body-1.div-2.div-1.div-47.head-1">
         <head>Flastr</head>
         <ref target="#t-1.body-1.div-2.div-1.div-46.p-1.pb-1">42r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-48">
+      <item corresp="#t-1.body-1.div-2.div-1.div-48.head-1">
         <head>K vytažení šípu</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-7">44r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-49">
+      <item corresp="#t-1.body-1.div-2.div-1.div-49.head-1">
         <head>Mast, kterážto táhne k sobě železo</head>
         <ref target="#t-1.body-1.div-2.div-1.div-48.p-1.pb-1">44v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-50">
+      <item corresp="#t-1.body-1.div-2.div-1.div-50.head-1">
         <head>Flastr</head>
         <ref target="#t-1.body-1.div-2.div-1.div-49.p-1.pb-1">45r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-51">
+      <item corresp="#t-1.body-1.div-2.div-1.div-51.head-1">
         <head>K vytažení všeliké věci z rány</head>
         <ref target="#t-1.body-1.div-2.div-1.div-50.p-1.pb-1">45v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-52">
+      <item corresp="#t-1.body-1.div-2.div-1.div-52.head-1">
         <head>Flastr</head>
         <ref target="#t-1.body-1.div-2.div-1.div-51.p-1.pb-1">46r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-53">
+      <item corresp="#t-1.body-1.div-2.div-1.div-53.head-1">
         <head>Ktož se čím zakuolé</head>
         <ref target="#t-1.body-1.div-2.div-1.div-52.p-1.pb-1">46v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-54">
+      <item corresp="#t-1.body-1.div-2.div-1.div-54.head-1">
         <head>Ktož jest raněn u veliké střevo nebo v žaludek</head>
         <ref target="#t-1.body-1.div-2.div-1.div-53.p-1.pb-1">47r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-55">
+      <item corresp="#t-1.body-1.div-2.div-1.div-55.head-1">
         <head>Ktož má velikú žílu na hrdle přeťatú</head>
         <ref target="#t-1.body-1.div-2.div-1.div-54.p-1.pb-2">48r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-56">
+      <item corresp="#t-1.body-1.div-2.div-1.div-56.head-1">
         <head>Kterak máš klidvosr staviti</head>
         <ref target="#t-1.body-1.div-2.div-1.div-55.p-1.pb-1">48v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-57">
+      <item corresp="#t-1.body-1.div-2.div-1.div-57.head-1">
         <head>Klidvosr</head>
         <ref target="#t-1.body-1.div-2.div-1.div-56.p-1.pb-1">49r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-58">
+      <item corresp="#t-1.body-1.div-2.div-1.div-58.head-1">
         <head>Klidvosr</head>
         <ref target="#t-1.body-1.div-2.div-1.div-57.p-2.pb-1">50r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-59">
+      <item corresp="#t-1.body-1.div-2.div-1.div-59.head-1">
         <head>Klidvosr</head>
         <ref target="#t-1.body-1.div-2.div-1.div-58.p-2.pb-1">51r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-60">
+      <item corresp="#t-1.body-1.div-2.div-1.div-60.head-1">
         <head>Klidvosr. Maria</head>
         <ref target="#t-1.body-1.div-2.div-1.div-59.p-1.pb-2">52r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-61">
+      <item corresp="#t-1.body-1.div-2.div-1.div-61.head-1">
         <head>Klidvosr</head>
         <ref target="#t-1.body-1.div-2.div-1.div-60.p-2.pb-1">53r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-62">
+      <item corresp="#t-1.body-1.div-2.div-1.div-62.head-1">
         <head>Klidvosr</head>
         <ref target="#t-1.body-1.div-2.div-1.div-61.p-1.pb-1">53v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-63">
+      <item corresp="#t-1.body-1.div-2.div-1.div-63.head-1">
         <head>Takto máš krev staviti</head>
         <ref target="#t-1.body-1.div-2.div-1.div-62.p-1.pb-1">54r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-64">
+      <item corresp="#t-1.body-1.div-2.div-1.div-64.head-1">
         <head>O krvi stavení</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-8">55r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-65">
+      <item corresp="#t-1.body-1.div-2.div-1.div-65.head-1">
         <head>O krvi</head>
         <ref target="#t-1.body-1.div-2.div-1.div-64.p-2.pb-1">56r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-66">
+      <item corresp="#t-1.body-1.div-2.div-1.div-66.head-1">
         <head>O krvi stavení</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-9">57r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-67">
+      <item corresp="#t-1.body-1.div-2.div-1.div-67.head-1">
         <head>O krvi stavení z nosu</head>
         <ref target="#t-1.body-1.div-2.div-1.div-66.p-2.pb-1">58r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-68">
+      <item corresp="#t-1.body-1.div-2.div-1.div-68.head-1">
         <head>O krvi stavení z nosu</head>
         <ref target="#t-1.body-1.div-2.div-1.div-67.p-1.pb-2">59r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-69">
+      <item corresp="#t-1.body-1.div-2.div-1.div-69.head-1">
         <head>Tuto se vypisuje o rozličných traňciech, a který se které ráně hodí anebo kterak jich užívati má</head>
         <ref target="#t-1.body-1.div-2.div-1.div-68.p-1.pb-1">59v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-70">
+      <item corresp="#t-1.body-1.div-2.div-1.div-70.head-1">
         <head>Traňky rozličné</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-10">62r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-71">
+      <item corresp="#t-1.body-1.div-2.div-1.div-71.head-1">
         <head>Traňk, když komu jde krev do života</head>
         <ref target="#t-1.body-1.div-2.div-1.div-70.p-4.pb-1">63r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-72">
+      <item corresp="#t-1.body-1.div-2.div-1.div-72.head-1">
         <head>Traňky rozličné</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-11">64r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-73">
+      <item corresp="#t-1.body-1.div-2.div-1.div-73.head-1">
         <head>Traňk ruožený</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-12">65r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-74">
+      <item corresp="#t-1.body-1.div-2.div-1.div-74.head-1">
         <head>Mast na všeckny rány</head>
         <ref target="#t-1.body-1.div-2.div-1.div-73.p-1.pb-1">65v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-75">
+      <item corresp="#t-1.body-1.div-2.div-1.div-75.head-1">
         <head>Mast na všeckny věci vyhnilé</head>
         <ref target="#t-1.body-1.div-2.div-1.div-74.p-1.pb-1">66r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-76">
+      <item corresp="#t-1.body-1.div-2.div-1.div-76.head-1">
         <head>Mast na příměty</head>
         <ref target="#t-1.body-1.div-2.div-1.div-75.p-3.pb-1">67r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-77">
+      <item corresp="#t-1.body-1.div-2.div-1.div-77.head-1">
         <head>Emplastrum coctum</head>
         <ref target="#t-1.body-1.div-2.div-1.div-76.p-1.pb-1">67v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-78">
+      <item corresp="#t-1.body-1.div-2.div-1.div-78.head-1">
         <head>Mast, kterážto rány rychle hojí a otoky odhoní</head>
         <ref target="#t-1.body-1.div-2.div-1.div-77.p-1.pb-1">68r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-79">
+      <item corresp="#t-1.body-1.div-2.div-1.div-79.head-1">
         <head>Mast rychlá k hojení</head>
         <ref target="#t-1.body-1.div-2.div-1.div-78.p-1.pb-1">68v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-80">
+      <item corresp="#t-1.body-1.div-2.div-1.div-80.head-1">
         <head>Mast na rány</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-13">69r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-81">
+      <item corresp="#t-1.body-1.div-2.div-1.div-81.head-1">
         <head>Masti rozličné</head>
         <ref target="#t-1.body-1.div-2.div-1.div-80.p-3.pb-1">70r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-82">
+      <item corresp="#t-1.body-1.div-2.div-1.div-82.head-1">
         <head>Mast, kterážto vole a hlízy tvrdé prodievá</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-14">71r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-83">
+      <item corresp="#t-1.body-1.div-2.div-1.div-83.head-1">
         <head>Masti rozličné</head>
         <ref target="#t-1.body-1.div-2.div-1.div-82.p-3.pb-1">72r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-84">
+      <item corresp="#t-1.body-1.div-2.div-1.div-84.head-1">
         <head>Masti rozličné</head>
         <ref target="#t-1.body-1.div-2.div-1.div-83.p-2.pb-1">72v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-85">
+      <item corresp="#t-1.body-1.div-2.div-1.div-85.head-1">
         <head>Mast na rány, v kterýchž se maso samo jie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-84.p-4.pb-1">73v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-86">
+      <item corresp="#t-1.body-1.div-2.div-1.div-86.head-1">
         <head>Ktož má súchotiny</head>
         <ref target="#t-1.body-1.div-2.div-1.div-85.p-1.pb-1">74r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-87">
+      <item corresp="#t-1.body-1.div-2.div-1.div-87.head-1">
         <head>Mast proti prašivosti</head>
         <ref target="#t-1.body-1.div-2.div-1.div-86.p-1.pb-1">74v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-88">
+      <item corresp="#t-1.body-1.div-2.div-1.div-88.head-1">
         <head>Proti prašivosti</head>
         <ref target="#t-1.body-1.div-2.div-1.div-87.p-1.pb-1">75r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-89">
+      <item corresp="#t-1.body-1.div-2.div-1.div-89.head-1">
         <head>Mast, kterážto krev u prsech stavuje</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-15">75v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-90">
+      <item corresp="#t-1.body-1.div-2.div-1.div-90.head-1">
         <head>Mast, kterážto činí tracenie a stolici a ženě jejie právo</head>
         <ref target="#t-1.body-1.div-2.div-1.div-89.p-3.pb-1">76v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-91">
+      <item corresp="#t-1.body-1.div-2.div-1.div-91.head-1">
         <head>Mast, kterážto rány odvierá</head>
         <ref target="#t-1.body-1.div-2.div-1.div-90.p-2.pb-1">77r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-92">
+      <item corresp="#t-1.body-1.div-2.div-1.div-92.head-1">
         <head>Mast, kterážto mrtvé maso s vočí shánie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-91.p-1.pb-1">77v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-93">
+      <item corresp="#t-1.body-1.div-2.div-1.div-93.head-1">
         <head>Mast, kterážto křeč zahoní</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-16">78r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-94">
+      <item corresp="#t-1.body-1.div-2.div-1.div-94.head-1">
         <head>Masti, kteréžto zlámanie hojí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-93.p-2.pb-1">78v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-95">
+      <item corresp="#t-1.body-1.div-2.div-1.div-95.head-1">
         <head>Zlámanie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-94.p-1.pb-1">79r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-96">
+      <item corresp="#t-1.body-1.div-2.div-1.div-96.head-1">
         <head>Zlámanie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-95.p-3.pb-1">80r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-97">
+      <item corresp="#t-1.body-1.div-2.div-1.div-97.head-1">
         <head>Zlámanie</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-17">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-98">
+      <item corresp="#t-1.body-1.div-2.div-1.div-98.head-1">
         <head>Traňk lidem zlámaným</head>
         <ref target="#t-1.body-1.div-2.div-1.div-97.p-2.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-99">
+      <item corresp="#t-1.body-1.div-2.div-1.div-99.head-1">
         <head>Ktož sobě vyrazí ruku nebo nohu</head>
         <ref target="#t-1.body-1.div-2.div-1.div-98.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-100">
+      <item corresp="#t-1.body-1.div-2.div-1.div-100.head-1">
         <head>Votok</head>
         <ref target="#t-1.body-1.div-2.div-1.div-99.p-4.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-101">
+      <item corresp="#t-1.body-1.div-2.div-1.div-101.head-1">
         <head>Votok</head>
         <ref target="#t-1.body-1.div-2.div-1.div-100.p-2.pb-1">85r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-102">
+      <item corresp="#t-1.body-1.div-2.div-1.div-102.head-1">
         <head>Votok</head>
         <ref target="#t-1.body-1.div-2.div-1.div-101.p-2.pb-1">86r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-103">
+      <item corresp="#t-1.body-1.div-2.div-1.div-103.head-1">
         <head>Votok</head>
         <ref target="#t-1.body-1.div-2.div-1.div-102.p-2.pb-1">87r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-104">
+      <item corresp="#t-1.body-1.div-2.div-1.div-104.head-1">
         <head>Votok</head>
         <ref target="#t-1.body-1.div-2.div-1.div-103.p-2.pb-1">88r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-105">
+      <item corresp="#t-1.body-1.div-2.div-1.div-105.head-1">
         <head>Votok</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-18">91r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-106">
+      <item corresp="#t-1.body-1.div-2.div-1.div-106.head-1">
         <head>Když komu schne ruka nebo noha</head>
         <ref target="#t-1.body-1.div-2.div-1.div-105.p-2.pb-1">92r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-107">
+      <item corresp="#t-1.body-1.div-2.div-1.div-107.head-1">
         <head>Schnutie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-106.p-1.pb-2">93r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-108">
+      <item corresp="#t-1.body-1.div-2.div-1.div-108.head-1">
         <head>Schnutie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-107.p-1.pb-2">94r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-109">
+      <item corresp="#t-1.body-1.div-2.div-1.div-109.head-1">
         <head>Schnutie</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-19">95r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-110">
+      <item corresp="#t-1.body-1.div-2.div-1.div-110.head-1">
         <head>Komuž se žíly krčie v rukú nebo v nohách</head>
         <ref target="#t-1.body-1.div-2.div-1.div-109.p-4.pb-1">97r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-111">
+      <item corresp="#t-1.body-1.div-2.div-1.div-111.head-1">
         <head>Žil skrčenie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-110.p-2.pb-1">98r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-112">
+      <item corresp="#t-1.body-1.div-2.div-1.div-112.head-1">
         <head>Žil skrčenie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-111.p-2.pb-1">99r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-113">
+      <item corresp="#t-1.body-1.div-2.div-1.div-113.head-1">
         <head>Ktož má v sobě krev sraženú</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-20">99v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-114">
+      <item corresp="#t-1.body-1.div-2.div-1.div-114.head-1">
         <head>Krev sražená</head>
         <ref target="#t-1.body-1.div-2.div-1.div-113.p-3.pb-1">101r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-115">
+      <item corresp="#t-1.body-1.div-2.div-1.div-115.head-1">
         <head>Kterak máš uhasiti oheň pekelný</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-21">101v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-116">
+      <item corresp="#t-1.body-1.div-2.div-1.div-116.head-1">
         <head>Zapálenie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-115.p-2.pb-2">103r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-117">
+      <item corresp="#t-1.body-1.div-2.div-1.div-117.head-1">
         <head>Zapálenie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-116.p-3.pb-2">105r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-118">
+      <item corresp="#t-1.body-1.div-2.div-1.div-118.head-1">
         <head>Voda k vymývaní ran nečistých</head>
         <ref target="#t-1.body-1.div-2.div-1.div-117.p-2.pb-1">106r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-119">
+      <item corresp="#t-1.body-1.div-2.div-1.div-119.head-1">
         <head>Takto máš vytáhnúti každú horkost</head>
         <ref target="#t-1.body-1.div-2.div-1.div-118.p-1.pb-1">106v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-120">
+      <item corresp="#t-1.body-1.div-2.div-1.div-120.head-1">
         <head>Voda k ranám zapáleným</head>
         <ref target="#t-1.body-1.div-2.div-1.div-119.p-1.pb-1">107r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-121">
+      <item corresp="#t-1.body-1.div-2.div-1.div-121.head-1">
         <head>Voda k vymývaní ran nečistých a zasmrazených</head>
         <ref target="#t-1.body-1.div-2.div-1.div-120.p-1.pb-1">107v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-122">
+      <item corresp="#t-1.body-1.div-2.div-1.div-122.head-1">
         <head>Ceráty</head>
         <ref target="#t-1.body-1.div-2.div-1.div-121.p-1.pb-1">108r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-123">
+      <item corresp="#t-1.body-1.div-2.div-1.div-123.head-1">
         <head>Ceráty</head>
         <ref target="#t-1.body-1.div-2.div-1.div-122.p-3.pb-1">109r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-124">
+      <item corresp="#t-1.body-1.div-2.div-1.div-124.head-1">
         <head>Prach k ranám</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-22">110r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-125">
+      <item corresp="#t-1.body-1.div-2.div-1.div-125.head-1">
         <head>Prach k ranám</head>
         <ref target="#t-1.body-1.div-2.div-1.div-124.p-3.pb-1">111r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-126">
+      <item corresp="#t-1.body-1.div-2.div-1.div-126.head-1">
         <head>Prach k ranám</head>
         <ref target="#t-1.body-1.div-2.div-1.div-125.p-4.pb-1">113r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-127">
+      <item corresp="#t-1.body-1.div-2.div-1.div-127.head-1">
         <head>Prach, kterýžto mrtvé maso shánie</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-23">114r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-128">
+      <item corresp="#t-1.body-1.div-2.div-1.div-128.head-1">
         <head>Prach na mrtvé maso</head>
         <ref target="#t-1.body-1.div-2.div-1.div-127.p-2.pb-1">115r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-129">
+      <item corresp="#t-1.body-1.div-2.div-1.div-129.head-1">
         <head>O raněném</head>
         <ref target="#t-1.body-1.div-2.div-1.div-127.p-2.pb-1">115r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-130">
+      <item corresp="#t-1.body-1.div-2.div-1.div-130.head-1">
         <head>Umře li raněný, čili nic</head>
         <ref target="#t-1.body-1.div-2.div-1.div-129.p-1.pb-2">116r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-131">
+      <item corresp="#t-1.body-1.div-2.div-1.div-131.head-1">
         <head>Takto máš udělati počištěnie raněným</head>
         <ref target="#t-1.body-1.div-2.div-1.div-130.p-1.pb-1">116v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-132">
+      <item corresp="#t-1.body-1.div-2.div-1.div-132.head-1">
         <head>Počištěnie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-131.p-1.pb-1">117r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-133">
+      <item corresp="#t-1.body-1.div-2.div-1.div-133.head-1">
         <head>Spánie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-132.p-2.pb-1">118r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-134">
+      <item corresp="#t-1.body-1.div-2.div-1.div-134.head-1">
         <head>Spánie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-133.p-1.pb-2">119r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-135">
+      <item corresp="#t-1.body-1.div-2.div-1.div-135.head-1">
         <head>Spánie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-134.p-4.pb-1">121r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-136">
+      <item corresp="#t-1.body-1.div-2.div-1.div-136.head-1">
         <head>Přímět</head>
         <ref target="#t-1.body-1.div-2.div-1.div-135.p-4.pb-1">123r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-137">
+      <item corresp="#t-1.body-1.div-2.div-1.div-137.head-1">
         <head>Přímět</head>
         <ref target="#t-1.body-1.div-2.div-1.div-136.p-2.pb-1">124r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-138">
+      <item corresp="#t-1.body-1.div-2.div-1.div-138.head-1">
         <head>Střiely</head>
         <ref target="#t-1.body-1.div-2.div-1.div-137.p-1.pb-1">124v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-139">
+      <item corresp="#t-1.body-1.div-2.div-1.div-139.head-1">
         <head>Střiely</head>
         <ref target="#t-1.body-1.div-2.div-1.div-138.p-1.pb-1">125r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-140">
+      <item corresp="#t-1.body-1.div-2.div-1.div-140.head-1">
         <head>Střiely</head>
         <ref target="#t-1.body-1.div-2.div-1.div-139.p-2.pb-1">126r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-141">
+      <item corresp="#t-1.body-1.div-2.div-1.div-141.head-1">
         <head>Fistulu</head>
         <ref target="#t-1.body-1.div-2.div-1.div-140.p-3.pb-1">127r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-142">
+      <item corresp="#t-1.body-1.div-2.div-1.div-142.head-1">
         <head>Fistula</head>
         <ref target="#t-1.body-1.div-2.div-1.div-141.p-2.pb-1">128r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-143">
+      <item corresp="#t-1.body-1.div-2.div-1.div-143.head-1">
         <head>Rak</head>
         <ref target="#t-1.body-1.div-2.div-1.div-142.p-2.pb-1">129r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-144">
+      <item corresp="#t-1.body-1.div-2.div-1.div-144.head-1">
         <head>Rak</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-24">130r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-145">
+      <item corresp="#t-1.body-1.div-2.div-1.div-145.head-1">
         <head>Ktož nemuož které rány dlúho zahojiti</head>
         <ref target="#t-1.body-1.div-2.div-1.div-144.p-2.pb-1">131r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-146">
+      <item corresp="#t-1.body-1.div-2.div-1.div-146.head-1">
         <head>Fík</head>
         <ref target="#t-1.body-1.div-2.div-1.div-145.pb-1">132r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-147">
+      <item corresp="#t-1.body-1.div-2.div-1.div-147.head-1">
         <head>Fík</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-25">133r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-148">
+      <item corresp="#t-1.body-1.div-2.div-1.div-148.head-1">
         <head>Zlá neštovice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-147.p-2.pb-2">134r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-149">
+      <item corresp="#t-1.body-1.div-2.div-1.div-149.head-1">
         <head>Zlá neštovice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-148.p-3.pb-1">136r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-150">
+      <item corresp="#t-1.body-1.div-2.div-1.div-150.head-1">
         <head>Zlá neštovice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-149.p-2.pb-1">137r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-151">
+      <item corresp="#t-1.body-1.div-2.div-1.div-151.head-1">
         <head>Hlíza</head>
         <ref target="#t-1.body-1.div-2.div-1.div-149.p-2.pb-1">137r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-152">
+      <item corresp="#t-1.body-1.div-2.div-1.div-152.head-1">
         <head>Nežity</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-26">138r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-153">
+      <item corresp="#t-1.body-1.div-2.div-1.div-153.head-1">
         <head>Nežit na pysku</head>
         <ref target="#t-1.body-1.div-2.div-1.div-152.p-2.pb-1">139r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-154">
+      <item corresp="#t-1.body-1.div-2.div-1.div-154.head-1">
         <head>Hlíza</head>
         <ref target="#t-1.body-1.div-2.div-1.div-152.p-2.pb-1">139r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-155">
+      <item corresp="#t-1.body-1.div-2.div-1.div-155.head-1">
         <head>Hlíza</head>
         <ref target="#t-1.body-1.div-2.div-1.div-154.p-2.pb-1">140r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-156">
+      <item corresp="#t-1.body-1.div-2.div-1.div-156.head-1">
         <head>Hlíza</head>
         <ref target="#t-1.body-1.div-2.div-1.div-155.p-2.pb-1">141r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-157">
+      <item corresp="#t-1.body-1.div-2.div-1.div-157.head-1">
         <head>Hlíza</head>
         <ref target="#t-1.body-1.div-2.div-1.div-156.p-1.pb-2">142r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-158">
+      <item corresp="#t-1.body-1.div-2.div-1.div-158.head-1">
         <head>Tuto se pokládá a vypisuje naučenie mistra Galiena o rozličných volejích, kterak se dělati mají a který se k čemu hoditi bude.</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-27">142v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-159">
+      <item corresp="#t-1.body-1.div-2.div-1.div-159.head-1">
         <head>Volej fiolový</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-28">144r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-160">
+      <item corresp="#t-1.body-1.div-2.div-1.div-160.head-1">
         <head>Volej ruožený</head>
         <ref target="#t-1.body-1.div-2.div-1.div-159.p-1.pb-2">145r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-161">
+      <item corresp="#t-1.body-1.div-2.div-1.div-161.head-1">
         <head>Volej z květu liliového</head>
         <ref target="#t-1.body-1.div-2.div-1.div-160.p-3.pb-2">147v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-162">
+      <item corresp="#t-1.body-1.div-2.div-1.div-162.head-1">
         <head>Volej vinštieřový</head>
         <ref target="#t-1.body-1.div-2.div-1.div-161.p-1.pb-1">148r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-163">
+      <item corresp="#t-1.body-1.div-2.div-1.div-163.head-1">
         <head>Volej žlútkuov vaječných</head>
         <ref target="#t-1.body-1.div-2.div-1.div-162.p-1.pb-1">148v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-164">
+      <item corresp="#t-1.body-1.div-2.div-1.div-164.head-1">
         <head>Tracenie staviti</head>
         <ref target="#t-1.body-1.div-2.div-1.div-163.p-2.pb-1">150r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-165">
+      <item corresp="#t-1.body-1.div-2.div-1.div-165.head-1">
         <head>Kašel staviti</head>
         <ref target="#t-1.body-1.div-2.div-1.div-164.p-3.pb-1">152r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-166">
+      <item corresp="#t-1.body-1.div-2.div-1.div-166.head-1">
         <head>Kašel</head>
         <ref target="#t-1.body-1.div-2.div-1.div-165.p-2.pb-1">153r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-167">
+      <item corresp="#t-1.body-1.div-2.div-1.div-167.head-1">
         <head>Kašel</head>
         <ref target="#t-1.body-1.div-2.div-1.div-166.p-2.pb-1">154r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-168">
+      <item corresp="#t-1.body-1.div-2.div-1.div-168.head-1">
         <head>Červi</head>
         <ref target="#t-1.body-1.div-2.div-1.div-167.p-4.pb-1">156r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-169">
+      <item corresp="#t-1.body-1.div-2.div-1.div-169.head-1">
         <head>Živý vlas</head>
         <ref target="#t-1.body-1.div-2.div-1.div-168.p-2.pb-1">157r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-170">
+      <item corresp="#t-1.body-1.div-2.div-1.div-170.head-1">
         <head>Živý vlas</head>
         <ref target="#t-1.body-1.div-2.div-1.div-169.p-2.pb-1">158r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-171">
+      <item corresp="#t-1.body-1.div-2.div-1.div-171.head-1">
         <head>Ktož má palici</head>
         <ref target="#t-1.body-1.div-2.div-1.div-170.p-2.pb-1">159r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-172">
+      <item corresp="#t-1.body-1.div-2.div-1.div-172.head-1">
         <head>Ktož má palici</head>
         <ref target="#t-1.body-1.div-2.div-1.div-171.p-2.pb-1">160r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-173">
+      <item corresp="#t-1.body-1.div-2.div-1.div-173.head-1">
         <head>Ktož má palici</head>
         <ref target="#t-1.body-1.div-2.div-1.div-172.p-1.pb-2">161r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-174">
+      <item corresp="#t-1.body-1.div-2.div-1.div-174.head-1">
         <head>Prach</head>
         <ref target="#t-1.body-1.div-2.div-1.div-173.p-3.pb-1">163r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-175">
+      <item corresp="#t-1.body-1.div-2.div-1.div-175.head-1">
         <head>O prachu a o řezanici</head>
         <ref target="#t-1.body-1.div-2.div-1.div-174.p-2.pb-1">164r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-176">
+      <item corresp="#t-1.body-1.div-2.div-1.div-176.head-1">
         <head>Prach</head>
         <ref target="#t-1.body-1.div-2.div-1.div-175.p-1.pb-2">165r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-177">
+      <item corresp="#t-1.body-1.div-2.div-1.div-177.head-1">
         <head>Voda k nápoji</head>
         <ref target="#t-1.body-1.div-2.div-1.div-176.p-1.pb-1">165v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-178">
+      <item corresp="#t-1.body-1.div-2.div-1.div-178.head-1">
         <head>O řezanici</head>
         <ref target="#t-1.body-1.div-2.div-1.div-177.p-2.pb-1">167r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-179">
+      <item corresp="#t-1.body-1.div-2.div-1.div-179.head-1">
         <head>Ktož má žábu v hrdle</head>
         <ref target="#t-1.body-1.div-2.div-1.div-178.p-2.pb-1">168r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-180">
+      <item corresp="#t-1.body-1.div-2.div-1.div-180.head-1">
         <head>Ktož má žábu</head>
         <ref target="#t-1.body-1.div-2.div-1.div-179.p-2.pb-1">169r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-181">
+      <item corresp="#t-1.body-1.div-2.div-1.div-181.head-1">
         <head>Ktož má žábu</head>
         <ref target="#t-1.body-1.div-2.div-1.div-180.p-2.pb-1">170r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-182">
+      <item corresp="#t-1.body-1.div-2.div-1.div-182.head-1">
         <head>Prašivost</head>
         <ref target="#t-1.body-1.div-2.div-1.div-181.p-2.pb-1">171r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-183">
+      <item corresp="#t-1.body-1.div-2.div-1.div-183.head-1">
         <head>Nápoj</head>
         <ref target="#t-1.body-1.div-2.div-1.div-182.p-1.pb-2">172r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-184">
+      <item corresp="#t-1.body-1.div-2.div-1.div-184.head-1">
         <head>Svrab zahnati</head>
         <ref target="#t-1.body-1.div-2.div-1.div-183.p-4.pb-1">175r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-185">
+      <item corresp="#t-1.body-1.div-2.div-1.div-185.head-1">
         <head>Tvář škaredá</head>
         <ref target="#t-1.body-1.div-2.div-1.div-184.p-1.pb-2">176r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-186">
+      <item corresp="#t-1.body-1.div-2.div-1.div-186.head-1">
         <head>Tvář škaredá</head>
         <ref target="#t-1.body-1.div-2.div-1.div-185.p-2.pb-1">177r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-187">
+      <item corresp="#t-1.body-1.div-2.div-1.div-187.head-1">
         <head>Malomocenstvie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-186.p-3.pb-1">178r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-188">
+      <item corresp="#t-1.body-1.div-2.div-1.div-188.head-1">
         <head>Malomocenstvie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-187.p-1.pb-2">179r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-189">
+      <item corresp="#t-1.body-1.div-2.div-1.div-189.head-1">
         <head>Malomocenstvie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-188.p-1.pb-2">180r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-190">
+      <item corresp="#t-1.body-1.div-2.div-1.div-190.head-1">
         <head>Lékařstvie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-189.p-2.pb-3">182r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-191">
+      <item corresp="#t-1.body-1.div-2.div-1.div-191.head-1">
         <head>Lékařstvie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-190.p-1.pb-4">184r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-192">
+      <item corresp="#t-1.body-1.div-2.div-1.div-192.head-1">
         <head>Prašivost</head>
         <ref target="#t-1.body-1.div-2.div-1.div-191.p-2.pb-1">185r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-193">
+      <item corresp="#t-1.body-1.div-2.div-1.div-193.head-1">
         <head>Zlitina na tváři</head>
         <ref target="#t-1.body-1.div-2.div-1.div-192.p-2.pb-1">186r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-194">
+      <item corresp="#t-1.body-1.div-2.div-1.div-194.head-1">
         <head>Zlitina na tváři</head>
         <ref target="#t-1.body-1.div-2.div-1.div-193.p-2.pb-1">187r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-195">
+      <item corresp="#t-1.body-1.div-2.div-1.div-195.head-1">
         <head>Zlitina na tváři</head>
         <ref target="#t-1.body-1.div-2.div-1.div-194.p-1.pb-2">188r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-196">
+      <item corresp="#t-1.body-1.div-2.div-1.div-196.head-1">
         <head>Uhřivost</head>
         <ref target="#t-1.body-1.div-2.div-1.div-195.p-1.pb-1">188v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-197">
+      <item corresp="#t-1.body-1.div-2.div-1.div-197.head-1">
         <head>Ktož má uhry na tváři</head>
         <ref target="#t-1.body-1.div-2.div-1.div-196.p-1.pb-1">189r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-198">
+      <item corresp="#t-1.body-1.div-2.div-1.div-198.head-1">
         <head>Uhry na tváři</head>
         <ref target="#t-1.body-1.div-2.div-1.div-197.p-2.pb-1">190r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-199">
+      <item corresp="#t-1.body-1.div-2.div-1.div-199.head-1">
         <head>Uhry na tváři</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-29">191r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-200">
+      <item corresp="#t-1.body-1.div-2.div-1.div-200.head-1">
         <head>Nečistá tvář</head>
         <ref target="#t-1.body-1.div-2.div-1.div-199.p-3.pb-1">192r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-201">
+      <item corresp="#t-1.body-1.div-2.div-1.div-201.head-1">
         <head>Nečistú tvář. Tvář</head>
         <ref target="#t-1.body-1.div-2.div-1.div-200.p-2.pb-1">193r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-202">
+      <item corresp="#t-1.body-1.div-2.div-1.div-202.head-1">
         <head>Tvář škeredá</head>
         <ref target="#t-1.body-1.div-2.div-1.div-201.p-1.pb-2">194r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-203">
+      <item corresp="#t-1.body-1.div-2.div-1.div-203.head-1">
         <head>Ktož má lišeje na tváři</head>
         <ref target="#t-1.body-1.div-2.div-1.div-202.p-2.pb-1">195r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-204">
+      <item corresp="#t-1.body-1.div-2.div-1.div-204.head-1">
         <head>Ktož má bradavice na tváři</head>
         <ref target="#t-1.body-1.div-2.div-1.div-203.p-1.pb-1">195v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-205">
+      <item corresp="#t-1.body-1.div-2.div-1.div-205.head-1">
         <head>Ktož má pěhy</head>
         <ref target="#t-1.body-1.div-2.div-1.div-204.p-1.pb-1">196r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-206">
+      <item corresp="#t-1.body-1.div-2.div-1.div-206.head-1">
         <head>Pakostnice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-205.p-3.pb-1">198r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-207">
+      <item corresp="#t-1.body-1.div-2.div-1.div-207.head-1">
         <head>Pakostnice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-206.p-2.pb-1">199r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-208">
+      <item corresp="#t-1.body-1.div-2.div-1.div-208.head-1">
         <head>Pakostnice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-207.pb-1">200r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-209">
+      <item corresp="#t-1.body-1.div-2.div-1.div-209.head-1">
         <head>Pakostnice</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-30">201r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-210">
+      <item corresp="#t-1.body-1.div-2.div-1.div-210.head-1">
         <head>Pakostnice</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-31">202r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-211">
+      <item corresp="#t-1.body-1.div-2.div-1.div-211.head-1">
         <head>Střevnie dna</head>
         <ref target="#t-1.body-1.div-2.div-1.div-210.p-3.pb-1">204r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-212">
+      <item corresp="#t-1.body-1.div-2.div-1.div-212.head-1">
         <head>Střevnie dna</head>
         <ref target="#t-1.body-1.div-2.div-1.div-211.p-2.pb-1">205r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-213">
+      <item corresp="#t-1.body-1.div-2.div-1.div-213.head-1">
         <head>Červená nemoc</head>
         <ref target="#t-1.body-1.div-2.div-1.div-212.p-2.pb-1">206r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-214">
+      <item corresp="#t-1.body-1.div-2.div-1.div-214.head-1">
         <head>Červená nemoc</head>
         <ref target="#t-1.body-1.div-2.div-1.div-213.p-2.pb-1">207r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-215">
+      <item corresp="#t-1.body-1.div-2.div-1.div-215.head-1">
         <head>Červená nemoc</head>
         <ref target="#t-1.body-1.div-2.div-1.div-214.p-1.pb-2">208r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-216">
+      <item corresp="#t-1.body-1.div-2.div-1.div-216.head-1">
         <head>Červená nemoc</head>
         <ref target="#t-1.body-1.div-2.div-1.div-215.p-1.pb-2">209r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-217">
+      <item corresp="#t-1.body-1.div-2.div-1.div-217.head-1">
         <head>Úplavice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-216.p-2.pb-1">210r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-218">
+      <item corresp="#t-1.body-1.div-2.div-1.div-218.head-1">
         <head>Ktož má projem</head>
         <ref target="#t-1.body-1.div-2.div-1.div-217.p-2.pb-2">211v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-219">
+      <item corresp="#t-1.body-1.div-2.div-1.div-219.head-1">
         <head>Když komu střevo zadkem vychodí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-218.p-1.pb-1">212r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-220">
+      <item corresp="#t-1.body-1.div-2.div-1.div-220.head-1">
         <head>Střevo</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-32">213r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-221">
+      <item corresp="#t-1.body-1.div-2.div-1.div-221.head-1">
         <head>Zimnice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-220.p-5.pb-1">215r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-222">
+      <item corresp="#t-1.body-1.div-2.div-1.div-222.head-1">
         <head>Zimnice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-221.p-1.pb-2">216r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-223">
+      <item corresp="#t-1.body-1.div-2.div-1.div-223.head-1">
         <head>Zimnice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-222.p-1.pb-2">217r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-224">
+      <item corresp="#t-1.body-1.div-2.div-1.div-224.head-1">
         <head>Zimnice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-223.p-2.pb-1">218r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-225">
+      <item corresp="#t-1.body-1.div-2.div-1.div-225.head-1">
         <head>Zimnice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-224.p-3.pb-1">220r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-226">
+      <item corresp="#t-1.body-1.div-2.div-1.div-226.head-1">
         <head>Snědek</head>
         <ref target="#t-1.body-1.div-2.div-1.div-225.p-2.pb-1">221r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-227">
+      <item corresp="#t-1.body-1.div-2.div-1.div-227.head-1">
         <head>Snědek</head>
         <ref target="#t-1.body-1.div-2.div-1.div-226.p-2.pb-1">222r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-228">
+      <item corresp="#t-1.body-1.div-2.div-1.div-228.head-1">
         <head>Snědek</head>
         <ref target="#t-1.body-1.div-2.div-1.div-227.p-2.pb-1">223r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-229">
+      <item corresp="#t-1.body-1.div-2.div-1.div-229.head-1">
         <head>Žlútenice</head>
         <ref target="#t-1.body-1.div-2.div-1.div-228.p-3.pb-1">225r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-230">
+      <item corresp="#t-1.body-1.div-2.div-1.div-230.head-1">
         <head>Žlútenice</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-33">227r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-231">
+      <item corresp="#t-1.body-1.div-2.div-1.div-231.head-1">
         <head>Šlak</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-34">228r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-232">
+      <item corresp="#t-1.body-1.div-2.div-1.div-232.head-1">
         <head>Šlak</head>
         <ref target="#t-1.body-1.div-2.div-1.div-231.p-2.pb-1">229r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-233">
+      <item corresp="#t-1.body-1.div-2.div-1.div-233.head-1">
         <head>Křeč</head>
         <ref target="#t-1.body-1.div-2.div-1.div-232.p-2.pb-1">230r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-234">
+      <item corresp="#t-1.body-1.div-2.div-1.div-234.head-1">
         <head>Kámen</head>
         <ref target="#t-1.body-1.div-2.div-1.div-233.p-2.pb-1">231r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-235">
+      <item corresp="#t-1.body-1.div-2.div-1.div-235.head-1">
         <head>Kámen</head>
         <ref target="#t-1.body-1.div-2.div-1.div-234.p-2.pb-1">232r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-236">
+      <item corresp="#t-1.body-1.div-2.div-1.div-236.head-1">
         <head>Ktož nemuož vody pustiti pro kámen</head>
         <ref target="#t-1.body-1.div-2.div-1.div-235.p-1.pb-2">233r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-237">
+      <item corresp="#t-1.body-1.div-2.div-1.div-237.head-1">
         <head>Ktož se ští na loži</head>
         <ref target="#t-1.body-1.div-2.div-1.div-236.p-2.pb-1">234r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-238">
+      <item corresp="#t-1.body-1.div-2.div-1.div-238.head-1">
         <head>Ktož nemuož moče držeti</head>
         <ref target="#t-1.body-1.div-2.div-1.div-237.p-1.pb-2">235r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-239">
+      <item corresp="#t-1.body-1.div-2.div-1.div-239.head-1">
         <head>Měchýř</head>
         <ref target="#t-1.body-1.div-2.div-1.div-238.p-2.pb-1">236r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-240">
+      <item corresp="#t-1.body-1.div-2.div-1.div-240.head-1">
         <head>Jedovaté uštnutie</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-35">237r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-241">
+      <item corresp="#t-1.body-1.div-2.div-1.div-241.head-1">
         <head>Hadové uštnutie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-240.p-3.pb-1">240r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-242">
+      <item corresp="#t-1.body-1.div-2.div-1.div-242.head-1">
         <head>Pominulý pes</head>
         <ref target="#t-1.body-1.div-2.div-1.div-241.p-2.pb-1">241r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-243">
+      <item corresp="#t-1.body-1.div-2.div-1.div-243.head-1">
         <head>Vsteklý pes</head>
         <ref target="#t-1.body-1.div-2.div-1.div-242.p-1.pb-2">242r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-244">
+      <item corresp="#t-1.body-1.div-2.div-1.div-244.head-1">
         <head>Ktož má hada v sobě</head>
         <ref target="#t-1.body-1.div-2.div-1.div-243.p-3.pb-1">244r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-245">
+      <item corresp="#t-1.body-1.div-2.div-1.div-245.head-1">
         <head>Ktož schne po všem životě</head>
         <ref target="#t-1.body-1.div-2.div-1.div-244.p-2.pb-1">245r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-246">
+      <item corresp="#t-1.body-1.div-2.div-1.div-246.head-1">
         <head>Když kto ženského diela dělati nemuož</head>
         <ref target="#t-1.body-1.div-2.div-1.div-245.p-2.pb-1">246r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-247">
+      <item corresp="#t-1.body-1.div-2.div-1.div-247.head-1">
         <head>Mistra Lotra a Rufiána, bratra jeho peského a sodomského, lékařství</head>
         <ref target="#t-1.body-1.div-2.div-1.div-245.p-2.pb-1">246r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-248">
+      <item corresp="#t-1.body-1.div-2.div-1.div-248.head-1">
         <head>Ženské dielo</head>
         <ref target="#t-1.body-1.div-2.div-1.div-247.p-1.pb-2">247r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-249">
+      <item corresp="#t-1.body-1.div-2.div-1.div-249.head-1">
         <head>Ženské dielo</head>
         <ref target="#t-1.body-1.div-2.div-1.div-248.p-1.pb-2">248r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-250">
+      <item corresp="#t-1.body-1.div-2.div-1.div-250.head-1">
         <head>Ženské dielo</head>
         <ref target="#t-1.body-1.div-2.div-1.div-249.p-2.pb-1">249r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-251">
+      <item corresp="#t-1.body-1.div-2.div-1.div-251.head-1">
         <head>Kterak máš ženu k smilstvu zbúřiti</head>
         <ref target="#t-1.body-1.div-2.div-1.div-250.p-1.pb-2">250r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-252">
+      <item corresp="#t-1.body-1.div-2.div-1.div-252.head-1">
         <head>Ženský nesyt</head>
         <ref target="#t-1.body-1.div-2.div-1.div-251.p-1.pb-2">251r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-253">
+      <item corresp="#t-1.body-1.div-2.div-1.div-253.head-1">
         <head>Klánie u bociech</head>
         <ref target="#t-1.body-1.div-2.div-1.div-252.p-3.pb-1">252r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-254">
+      <item corresp="#t-1.body-1.div-2.div-1.div-254.head-1">
         <head>Vnitřní votok</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-36">253r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-255">
+      <item corresp="#t-1.body-1.div-2.div-1.div-255.head-1">
         <head>Emigrania</head>
         <ref target="#t-1.body-1.div-2.div-1.div-254.p-1.pb-1">253v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-256">
+      <item corresp="#t-1.body-1.div-2.div-1.div-256.head-1">
         <head>Slezena oteklá</head>
         <ref target="#t-1.body-1.div-2.div-1.div-255.p-2.pb-1">254r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-257">
+      <item corresp="#t-1.body-1.div-2.div-1.div-257.head-1">
         <head>Votok žíly po púštění</head>
         <ref target="#t-1.body-1.div-2.div-1.div-256.p-3.pb-1">255r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-258">
+      <item corresp="#t-1.body-1.div-2.div-1.div-258.head-1">
         <head>Když ženě prsy otekú</head>
         <ref target="#t-1.body-1.div-2.div-1.div-257.p-2.pb-1">256r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-259">
+      <item corresp="#t-1.body-1.div-2.div-1.div-259.head-1">
         <head>Ženské prsy</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-37">257r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-260">
+      <item corresp="#t-1.body-1.div-2.div-1.div-260.head-1">
         <head>Objietřenie a plavánie prsí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-259.p-1.pb-2">258r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-261">
+      <item corresp="#t-1.body-1.div-2.div-1.div-261.head-1">
         <head>Dušnota</head>
         <ref target="#t-1.body-1.div-2.div-1.div-260.p-2.pb-2">259r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-262">
+      <item corresp="#t-1.body-1.div-2.div-1.div-262.head-1">
         <head>Srdce třesenie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-261.p-3.pb-1">261r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-263">
+      <item corresp="#t-1.body-1.div-2.div-1.div-263.head-1">
         <head>Reuma</head>
         <ref target="#t-1.body-1.div-2.div-1.div-262.p-1.pb-1">261v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-264">
+      <item corresp="#t-1.body-1.div-2.div-1.div-264.head-1">
         <head>Duch smrdutý</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-38">264r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-265">
+      <item corresp="#t-1.body-1.div-2.div-1.div-265.head-1">
         <head>Purdej v ustech</head>
         <ref target="#t-1.body-1.div-2.div-1.div-264.p-2.pb-3">266r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-266">
+      <item corresp="#t-1.body-1.div-2.div-1.div-266.head-1">
         <head>Purdej</head>
         <ref target="#t-1.body-1.div-2.div-1.div-265.p-2.pb-1">267r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-267">
+      <item corresp="#t-1.body-1.div-2.div-1.div-267.head-1">
         <head>Bolest zubuov</head>
         <ref target="#t-1.body-1.div-2.div-1.div-266.p-3.pb-1">269r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-268">
+      <item corresp="#t-1.body-1.div-2.div-1.div-268.head-1">
         <head>Zuby</head>
         <ref target="#t-1.body-1.div-2.div-1.div-267.p-2.pb-1">270r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-269">
+      <item corresp="#t-1.body-1.div-2.div-1.div-269.head-1">
         <head>Zuby</head>
         <ref target="#t-1.body-1.div-2.div-1.div-268.p-2.pb-1">271r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-270">
+      <item corresp="#t-1.body-1.div-2.div-1.div-270.head-1">
         <head>Bolest zubuov</head>
         <ref target="#t-1.body-1.div-2.div-1.div-269.p-3.pb-1">272r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-271">
+      <item corresp="#t-1.body-1.div-2.div-1.div-271.head-1">
         <head>Bolest hlavy</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-39">273r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-272">
+      <item corresp="#t-1.body-1.div-2.div-1.div-272.head-1">
         <head>Bolest hlavy</head>
         <ref target="#t-1.body-1.div-2.div-1.div-271.p-2.pb-1">274r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-273">
+      <item corresp="#t-1.body-1.div-2.div-1.div-273.head-1">
         <head>Bolest hlavy</head>
         <ref target="#t-1.body-1.div-2.div-1.div-272.p-2.pb-1">275r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-274">
+      <item corresp="#t-1.body-1.div-2.div-1.div-274.head-1">
         <head>Bolest hlavy</head>
         <ref target="#t-1.body-1.div-2.div-1.div-273.p-1.pb-2">276r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-275">
+      <item corresp="#t-1.body-1.div-2.div-1.div-275.head-1">
         <head>Bolest očí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-274.pb-2">277r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-276">
+      <item corresp="#t-1.body-1.div-2.div-1.div-276.head-1">
         <head>Bolest očí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-275.p-1.pb-2">278r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-277">
+      <item corresp="#t-1.body-1.div-2.div-1.div-277.head-1">
         <head>Poškvrny na očí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-276.p-5.pb-1">282r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-278">
+      <item corresp="#t-1.body-1.div-2.div-1.div-278.head-1">
         <head>Oči</head>
         <ref target="#t-1.body-1.div-2.div-1.div-277.p-1.pb-2">283r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-279">
+      <item corresp="#t-1.body-1.div-2.div-1.div-279.head-1">
         <head>Nedostatky v očí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-278.p-2.pb-1">284r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-280">
+      <item corresp="#t-1.body-1.div-2.div-1.div-280.head-1">
         <head>Neštovice v očí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-279.p-3.pb-1">285r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-281">
+      <item corresp="#t-1.body-1.div-2.div-1.div-281.head-1">
         <head>Slzenie očí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-280.p-1.pb-2">286r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-282">
+      <item corresp="#t-1.body-1.div-2.div-1.div-282.head-1">
         <head>Úraz oka</head>
         <ref target="#t-1.body-1.div-2.div-1.div-281.p-1.pb-2">287r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-283">
+      <item corresp="#t-1.body-1.div-2.div-1.div-283.head-1">
         <head>Oči</head>
         <ref target="#t-1.body-1.div-2.div-1.div-281.p-1.pb-2">287r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-284">
+      <item corresp="#t-1.body-1.div-2.div-1.div-284.head-1">
         <head>Ktož má klíny</head>
         <ref target="#t-1.body-1.div-2.div-1.div-283.p-4.pb-1">290r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-285">
+      <item corresp="#t-1.body-1.div-2.div-1.div-285.head-1">
         <head>Ktož se narodí a dlúho nemluví</head>
         <ref target="#t-1.body-1.div-2.div-1.div-284.p-1.pb-1">290v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-286">
+      <item corresp="#t-1.body-1.div-2.div-1.div-286.head-1">
         <head>Kterak vyčistiti mozk v hlavě</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-40">291r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-287">
+      <item corresp="#t-1.body-1.div-2.div-1.div-287.head-1">
         <head>Dryák</head>
         <ref target="#t-1.body-1.div-2.div-1.div-286.p-1.pb-1">291v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-288">
+      <item corresp="#t-1.body-1.div-2.div-1.div-288.head-1">
         <head>Kterak jest mozk jiesti nezdravý</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-41">292r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-289">
+      <item corresp="#t-1.body-1.div-2.div-1.div-289.head-1">
         <head>Škrkavice</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-42">293r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-290">
+      <item corresp="#t-1.body-1.div-2.div-1.div-290.head-1">
         <head>Padúcie nemoc</head>
         <ref target="#t-1.body-1.div-2.div-1.div-289.p-2.pb-1">294r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-291">
+      <item corresp="#t-1.body-1.div-2.div-1.div-291.head-1">
         <head>Božec</head>
         <ref target="#t-1.body-1.div-2.div-1.div-290.p-3.pb-1">296r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-292">
+      <item corresp="#t-1.body-1.div-2.div-1.div-292.head-1">
         <head>Krtice nebo červi</head>
         <ref target="#t-1.body-1.div-2.div-1.div-291.p-2.pb-1">297r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-293">
+      <item corresp="#t-1.body-1.div-2.div-1.div-293.head-1">
         <head>Plíce hnijí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-292.pb-1">298r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-294">
+      <item corresp="#t-1.body-1.div-2.div-1.div-294.head-1">
         <head>Hlava prašivá</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-43">299r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-295">
+      <item corresp="#t-1.body-1.div-2.div-1.div-295.head-1">
         <head>Hlava prašivá</head>
         <ref target="#t-1.body-1.div-2.div-1.div-294.p-2.pb-1">300r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-296">
+      <item corresp="#t-1.body-1.div-2.div-1.div-296.head-1">
         <head>Nezdravý žaludek</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-44">301r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-297">
+      <item corresp="#t-1.body-1.div-2.div-1.div-297.head-1">
         <head>Suchá nemoc</head>
         <ref target="#t-1.body-1.div-2.div-1.div-296.p-1.pb-1">301v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-298">
+      <item corresp="#t-1.body-1.div-2.div-1.div-298.head-1">
         <head>Votok srdce</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-45">302r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-299">
+      <item corresp="#t-1.body-1.div-2.div-1.div-299.head-1">
         <head>Ktož se zblázní</head>
         <ref target="#t-1.body-1.div-2.div-1.div-298.p-3.pb-1">303r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-300">
+      <item corresp="#t-1.body-1.div-2.div-1.div-300.head-1">
         <head>Závrat v hlavě</head>
         <ref target="#t-1.body-1.div-2.div-1.div-299.pb-1">304r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-301">
+      <item corresp="#t-1.body-1.div-2.div-1.div-301.head-1">
         <head>Kterak máš pomáhati lidem zlú krví nakaženým</head>
         <ref target="#t-1.body-1.div-2.div-1.div-300.p-2.pb-1">305r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-302">
+      <item corresp="#t-1.body-1.div-2.div-1.div-302.head-1">
         <head>Nápoj malomocným</head>
         <ref target="#t-1.body-1.div-2.div-1.div-301.p-1.pb-3">306v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-303">
+      <item corresp="#t-1.body-1.div-2.div-1.div-303.head-1">
         <head>Poznati malomocného</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-46">307r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-304">
+      <item corresp="#t-1.body-1.div-2.div-1.div-304.head-1">
         <head>Ktož má tvář škeradú</head>
         <ref target="#t-1.body-1.div-2.div-1.div-303.p-2.pb-1">308r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-305">
+      <item corresp="#t-1.body-1.div-2.div-1.div-305.head-1">
         <head>Tvář nečistá škeredá</head>
         <ref target="#t-1.body-1.div-2.div-1.div-304.p-2.pb-1">309r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-306">
+      <item corresp="#t-1.body-1.div-2.div-1.div-306.head-1">
         <head>Zlitina tváři</head>
         <ref target="#t-1.body-1.div-2.div-1.div-305.p-2.pb-1">310r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-307">
+      <item corresp="#t-1.body-1.div-2.div-1.div-307.head-1">
         <head>Ktož jest zlú krví nakažený</head>
         <ref target="#t-1.body-1.div-2.div-1.div-306.p-2.pb-1">311r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-308">
+      <item corresp="#t-1.body-1.div-2.div-1.div-308.head-1">
         <head>Nedostatek na očí</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-47">312r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-309">
+      <item corresp="#t-1.body-1.div-2.div-1.div-309.head-1">
         <head>Rozličné bolesti vočí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-308.p-4.pb-1">313r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-310">
+      <item corresp="#t-1.body-1.div-2.div-1.div-310.head-1">
         <head>Bělmo</head>
         <ref target="#t-1.body-1.div-2.div-1.div-308.p-4.pb-1">313r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-311">
+      <item corresp="#t-1.body-1.div-2.div-1.div-311.head-1">
         <head>Ktož má šťkavku</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-48">313v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-312">
+      <item corresp="#t-1.body-1.div-2.div-1.div-312.head-1">
         <head>Ktož má listy</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-49">314r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-313">
+      <item corresp="#t-1.body-1.div-2.div-1.div-313.head-1">
         <head>Ktož se spálí nebo spaří</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-50">314v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-314">
+      <item corresp="#t-1.body-1.div-2.div-1.div-314.head-1">
         <head>Zmučenie</head>
         <ref target="#t-1.body-1.div-2.div-1.div-313.p-1.pb-1">315r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-315">
+      <item corresp="#t-1.body-1.div-2.div-1.div-315.head-1">
         <head>Ktož nemuož pro mdlobu mluviti</head>
         <ref target="#t-1.body-1.div-2.div-1.div-314.p-1.pb-1">315v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-316">
+      <item corresp="#t-1.body-1.div-2.div-1.div-316.head-1">
         <head>Ktož řeč potratí</head>
         <ref target="#t-1.body-1.div-2.div-1.div-315.p-1.pb-1">316r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-317">
+      <item corresp="#t-1.body-1.div-2.div-1.div-317.head-1">
         <head>Ktož má žlázy na hrdle</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-51">316v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-318">
+      <item corresp="#t-1.body-1.div-2.div-1.div-318.head-1">
         <head>Ktož jest hluch</head>
         <ref target="#t-1.body-1.div-2.div-1.div-317.p-3.pb-1">317r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-319">
+      <item corresp="#t-1.body-1.div-2.div-1.div-319.head-1">
         <head>O krvi sražené</head>
         <ref target="#t-1.body-1.div-2.div-1.div-318.p-1.pb-1">317v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-320">
+      <item corresp="#t-1.body-1.div-2.div-1.div-320.head-1">
         <head>Reuma</head>
         <ref target="#t-1.body-1.div-2.div-1.div-319.p-1.pb-1">318r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-321">
+      <item corresp="#t-1.body-1.div-2.div-1.div-321.head-1">
         <head>Ktož se čím zabodne</head>
         <ref target="#t-1.body-1.div-2.div-1.div-320.p-1.pb-1">318v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-322">
+      <item corresp="#t-1.body-1.div-2.div-1.div-322.head-1">
         <head>Ktož má v ráně jakú věc uvázlú</head>
         <ref target="#t-1.body-1.div-2.div-1.div-321.p-1.pb-1">319r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-323">
+      <item corresp="#t-1.body-1.div-2.div-1.div-323.head-1">
         <head>Klidvosr</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-52">319v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-324">
+      <item corresp="#t-1.body-1.div-2.div-1.div-324.head-1">
         <head>Krev</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-52">319v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-325">
+      <item corresp="#t-1.body-1.div-2.div-1.div-325.head-1">
         <head>Rána</head>
         <ref target="#t-1.body-1.div-2.div-1.div-324.p-1.pb-1">320r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-326">
+      <item corresp="#t-1.body-1.div-2.div-1.div-326.head-1">
         <head>Vrty nohy</head>
         <ref target="#t-1.body-1.div-2.div-1.div-324.p-1.pb-1">320r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-327">
+      <item corresp="#t-1.body-1.div-2.div-1.div-327.head-1">
         <head>Hnilost nohy</head>
         <ref target="#t-1.body-1.div-2.div-1.div-324.p-1.pb-1">320r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-328">
+      <item corresp="#t-1.body-1.div-2.div-1.div-328.head-1">
         <head>Ktož má pryskýře</head>
         <ref target="#t-1.body-1.div-2.div-1.div-327.p-1.pb-1">320v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-329">
+      <item corresp="#t-1.body-1.div-2.div-1.div-329.head-1">
         <head>Prach na vlkojedy</head>
         <ref target="#t-1.body-1.div-2.div-1.div-328.p-2.pb-1">321r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-330">
+      <item corresp="#t-1.body-1.div-2.div-1.div-330.head-1">
         <head>Fík</head>
         <ref target="#t-1.body-1.div-2.div-1.div-328.p-2.pb-1">321r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-331">
+      <item corresp="#t-1.body-1.div-2.div-1.div-331.head-1">
         <head>Střevo</head>
         <ref target="#t-1.body-1.div-2.div-1.div-330.p-1.pb-1">321v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-332">
+      <item corresp="#t-1.body-1.div-2.div-1.div-332.head-1">
         <head>Když se dietky ospú</head>
         <ref target="#t-1.body-1.div-2.div-1.div-331.p-1.pb-1">322r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-333">
+      <item corresp="#t-1.body-1.div-2.div-1.div-333.head-1">
         <head>Žába v hrdle Na žábu v hrdle</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-53">322v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-334">
+      <item corresp="#t-1.body-1.div-2.div-1.div-334.head-1">
         <head>Namoženie</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-53">322v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-335">
+      <item corresp="#t-1.body-1.div-2.div-1.div-335.head-1">
         <head>Přímět</head>
         <ref target="#t-1.body-1.div-2.div-1.div-334.p-1.pb-1">323r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-336">
+      <item corresp="#t-1.body-1.div-2.div-1.div-336.head-1">
         <head>Ktož se blénu najie</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-54">323v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-337">
+      <item corresp="#t-1.body-1.div-2.div-1.div-337.head-1">
         <head>Sračka</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-54">323v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-338">
+      <item corresp="#t-1.body-1.div-2.div-1.div-338.head-1">
         <head>Žieznivost</head>
         <ref target="#t-1.body-1.div-2.div-1.div-337.p-1.pb-1">324r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-339">
+      <item corresp="#t-1.body-1.div-2.div-1.div-339.head-1">
         <head>Noli me tangere</head>
         <ref target="#t-1.body-1.div-2.div-1.div-337.p-1.pb-1">324r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-340">
+      <item corresp="#t-1.body-1.div-2.div-1.div-340.head-1">
         <head>O ženských nemocech</head>
         <ref target="#t-1.body-1.div-2.div-1.div-339.p-2.pb-1">325r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-341">
+      <item corresp="#t-1.body-1.div-2.div-1.div-341.head-1">
         <head>Ženská nemoc Zobuditi tok její</head>
         <ref target="#t-1.body-1.div-2.div-1.div-340.p-2.pb-1">326r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-342">
+      <item corresp="#t-1.body-1.div-2.div-1.div-342.head-1">
         <head>Stavení</head>
         <ref target="#t-1.body-1.div-2.div-1.div-340.p-2.pb-1">326r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-343">
+      <item corresp="#t-1.body-1.div-2.div-1.div-343.head-1">
         <head>Zastaviti Tok ženský – skušeno</head>
         <ref target="#t-1.body-1.div-2.div-1.div-340.p-2.pb-1">326r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-344">
+      <item corresp="#t-1.body-1.div-2.div-1.div-344.head-1">
         <head>Ženská nemoc</head>
         <ref target="#t-1.body-1.div-2.div-1.div-343.p-2.pb-1">327r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-345">
+      <item corresp="#t-1.body-1.div-2.div-1.div-345.head-1">
         <head>Ženská nemoc</head>
         <ref target="#t-1.body-1.div-2.div-1.div-344.p-2.pb-1">328r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-346">
+      <item corresp="#t-1.body-1.div-2.div-1.div-346.head-1">
         <head>Kteráž nemuož poroditi</head>
         <ref target="#t-1.body-1.div-2.div-1.div-345.p-2.pb-1">329r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-347">
+      <item corresp="#t-1.body-1.div-2.div-1.div-347.head-1">
         <head>O ženských věcech</head>
         <ref target="#t-1.body-1.div-2.div-1.div-346.p-3.pb-1">330r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-348">
+      <item corresp="#t-1.body-1.div-2.div-1.div-348.head-1">
         <head>Tvář škeredá</head>
         <ref target="#t-1.body-1.div-2.div-1.div-346.p-3.pb-1">330r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-349">
+      <item corresp="#t-1.body-1.div-2.div-1.div-349.head-1">
         <head>Morffea</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-55">331r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-350">
+      <item corresp="#t-1.body-1.div-2.div-1.div-350.head-1">
         <head>Prach</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-55">331r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-351">
+      <item corresp="#t-1.body-1.div-2.div-1.div-351.head-1">
         <head>Prach z listu dubového</head>
         <ref target="#t-1.body-1.div-2.div-1.div-350.p-1.pb-1">331v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-352">
+      <item corresp="#t-1.body-1.div-2.div-1.div-352.head-1">
         <head>Žaludový</head>
         <ref target="#t-1.body-1.div-2.div-1.div-351.p-1.pb-1">332r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-353">
+      <item corresp="#t-1.body-1.div-2.div-1.div-353.head-1">
         <head>O krvi</head>
         <ref target="#t-1.body-1.div-2.div-1.div-352.p-1.pb-1">332v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-354">
+      <item corresp="#t-1.body-1.div-2.div-1.div-354.head-1">
         <head>O krvi stavení</head>
         <ref target="#t-1.body-1.div-2.div-1.div-353.p-1.pb-1">333r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-2.div-1.div-355">
+      <item corresp="#t-1.body-1.div-2.div-1.div-355.head-1">
         <head>Tuto se počíná rejistrum těchto knížek, kterak máš po alfabetě o každé věci lék nalézti</head>
         <ref target="#t-1.body-1.div-2.div-1.pb-56">337r</ref>
       </item>

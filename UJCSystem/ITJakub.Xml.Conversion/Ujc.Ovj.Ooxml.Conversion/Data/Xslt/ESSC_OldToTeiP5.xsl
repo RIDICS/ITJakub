@@ -3,6 +3,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:dcr="http://www.isocat.org/ns/dcr" 
     xmlns="http://www.tei-c.org/ns/1.0"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="xs"
     version="1.0">
     
@@ -72,8 +73,18 @@
     </xsl:template>
     
     <xsl:template match="hw">
-        <form xml:id="{@id}" rend="{@rend}">
-            <orth><xsl:apply-templates /></orth>
+        <form xml:id="{@id}">
+        	<xsl:if test="@rend">
+        	<xsl:attribute name="rend">
+        			<xsl:value-of select="@rend"/>
+        	</xsl:attribute>
+        	</xsl:if>
+        	<xsl:if test="@type">
+        		<xsl:attribute name="type">
+        			<xsl:value-of select="@type"/>
+        		</xsl:attribute>
+        	</xsl:if>
+        	<orth><xsl:apply-templates /></orth>
         </form>
     </xsl:template>
     
@@ -354,7 +365,7 @@
         </note>
     </xsl:template>
     
-    <xsl:template match="refsource[@type='hidden']">
+    <xsl:template match="refsource[@type='hidden']" priority="10">
         <xr type="source" rend="hidden">
             <xsl:attribute name="norm">
             <xsl:choose>
@@ -434,6 +445,10 @@
     
     <xsl:template match="hwcolloc">
         <form type="compound">
+        	<xsl:attribute name="id" namespace="http://www.w3.org/XML/1998/namespace">
+        	<xsl:value-of select="concat(preceding::entry[1]/@id, '.hc')"/>
+        	<xsl:number from="entry" level="any"  format="1"/>
+        </xsl:attribute>
             <xsl:apply-templates />
         </form>
     </xsl:template>

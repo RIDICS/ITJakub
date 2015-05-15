@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" xmlns:ev="http://www.daliboris.cz/schemata/prepisy.xsd" exclude-result-prefixes="xd ev" version="1.0">
-	<xsl:template name="classificationDeclarations">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" xmlns:ev="http://www.daliboris.cz/schemata/prepisy.xsd" xmlns:tei="http://www.tei-c.org/ns/1.0" exclude-result-prefixes="xd ev tei" version="1.0">
+	<xsl:template name="classificationDeclarations" xmlns="http://www.tei-c.org/ns/1.0">
 		<classDecl>
 			<taxonomy xml:id="taxonomy">
 				<category xml:id="taxonomy-dictionary">
