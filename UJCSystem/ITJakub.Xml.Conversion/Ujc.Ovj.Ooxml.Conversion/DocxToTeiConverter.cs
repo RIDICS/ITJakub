@@ -201,7 +201,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			}
 
 			TableOfContentResult tocResult = null;
-			TableOfContentBuilder tocBuilder = new TableOfContentBuilder();
+			ContentInfoBuilder tocBuilder = new ContentInfoBuilder();
 			tocBuilder.XmlFile = settings.OutputFilePath;
 			tocBuilder.StartingElement = "body";
 			tocResult = tocBuilder.MakeTableOfContent();
@@ -275,9 +275,10 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			metada.Root.Add(header);
 
 			XElement toc = GenerateToc(tableOfContentResult);
-
+			XElement hws = GenerateHwList(tableOfContentResult);
 
 			metada.Root.Add(toc);
+			metada.Root.Add(hws);
 
 			if (splittingResult != null) //generovat pouze v případě, že k rozdělení na strany došlo
 			{
@@ -305,6 +306,73 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			return doc.Root;
 		}
 
+		private XElement GenerateHwList(TableOfContentResult result)
+		{
+			XDocument doc = new XDocument(new XElement(nsItj + "headwordsList"));
+			doc.Root.Add(GenerateList(result.HeadwordsList));
+			return doc.Root;
+		}
+
+		private XElement GenerateList(List<HeadwordsListItem> items)
+		{
+			if (items.Count > 0)
+			{
+				XElement list = new XElement(nsTei + "list");
+				foreach (HeadwordsListItem item in items)
+				{
+					list.Add(GenerateList(item));
+				}
+				if (list.IsEmpty)
+					return null;
+				return list;
+			}
+			return null;
+		}
+
+		private XElement GenerateList(List<ItemBase> items)
+		{
+			if (items.Count > 0)
+			{
+				XElement list = new XElement(nsTei + "list");
+				foreach (ItemBase item in items)
+				{
+					if (item is TableOfContentItem)
+					{
+						list.Add(GenerateList(item as TableOfContentItem));
+					}
+					if (item is HeadwordsListItem)
+					{
+						list.Add(GenerateList(item as HeadwordsListItem));
+					}
+				}
+				if (list.IsEmpty)
+					return null;
+				return list;
+			}
+			return null;
+		}
+
+		private XElement GenerateList(HeadwordsListItem item)
+		{
+			if (item == null) return null;
+			string corresp = item.HeadwordInfo.FormXmlId ?? item.DivXmlId;
+			XAttribute type = null;
+			if (item.HeadwordInfo.Type != null)
+				type = new XAttribute("type", item.HeadwordInfo.Type);
+			XElement it =
+				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp),
+					type,
+					new XElement(nsTei + "head", new XText(item.HeadInfo.HeadText)),
+					item.PageBreakInfo.PageBreak == null
+						? null
+						: new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakInfo.PageBreakXmlId),
+							new XText(item.PageBreakInfo.PageBreak)),
+					GenerateList(item.Sections)
+					);
+			return it;
+		}
+
+
 		private  XElement GenerateList(List<TableOfContentItem> items)
 		{
 			if (items.Count > 0)
@@ -314,11 +382,27 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				{
 					list.Add(GenerateList(item));
 				}
+				if (list.IsEmpty)
+					return null;
 				return list;
 			}
 			return null;
 		}
 
+		private XElement GenerateList(TableOfContentItem item)
+		{
+			if (item == null || item.PageBreakInfo.PageBreakXmlId == null) return null;
+			string corresp = item.DivXmlId;
+			XElement it =
+				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp),
+						new XElement(nsTei + "head", new XText(item.HeadInfo.HeadText)),
+						item.PageBreakInfo.PageBreak == null ? null : new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakInfo.PageBreakXmlId), new XText(item.PageBreakInfo.PageBreak)),
+						GenerateList(item.Sections)
+					);
+			return it;
+		}
+
+		/*
 		private XElement GenerateList(TableOfContentItem item)
 		{
 			if (item == null) return null;
@@ -331,6 +415,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 					);
 			return it;
 		}
+		*/
 
 		private static string GetConversionMetadataFileFullPath(string outputFilePath)
 		{

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<itj:document doctype="Edition" versionId="b1c47260-1645-4b26-8627-39548d8a40cb" xml:lang="cs" n="{FA10177B-25E6-4BB6-B061-0DB988AD3840}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<itj:document doctype="Edition" versionId="46b58b0b-4f27-4831-a5a4-d17765d97222" xml:lang="cs" n="{FA10177B-25E6-4BB6-B061-0DB988AD3840}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <teiHeader xml:id="teiHeader-1">
     <fileDesc n="{FA10177B-25E6-4BB6-B061-0DB988AD3840}">
       <titleStmt>
@@ -128,201 +128,204 @@
       <change n="Change_2015-05-12T08:28:03.0000000" when="2015-05-12T08:28:03"></change>
       <change n="Change_2015-05-12T14:01:01.0000000" when="2015-05-12T14:01:01"></change>
       <change n="Change_2015-05-13T10:12:57.0000000" when="2015-05-13T10:12:57"></change>
-      <change n="b1c47260-1645-4b26-8627-39548d8a40cb" when="2015-05-15T13:04:23.6835307Z"></change>
+      <change n="Change_2015-05-15T13:04:23.0000000" when="2015-05-15T13:04:23"></change>
+      <change n="Change_2015-05-15T22:23:40.0000000" when="2015-05-15T22:23:40"></change>
+      <change n="46b58b0b-4f27-4831-a5a4-d17765d97222" when="2015-05-15T23:55:33.8003228Z"></change>
     </revisionDesc>
   </teiHeader>
   <itj:tableOfContent>
     <list>
-      <item corresp="#t-1.body-1.div-1.div-1.head-1">
+      <item corresp="#t-1.body-1.div-1.div-1">
         <head>Legenda. De sancto Andraea</head>
         <ref target="#t-1.body-1.pb-1">1r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-2.head-1">
+      <item corresp="#t-1.body-1.div-1.div-2">
         <head>De sancta Barbaramulier timens Dominum ipsa laudabitur, Proverbio ultimo</head>
         <ref target="#t-1.body-1.div-1.div-1.p-1.pb-12">7r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-3.head-1">
+      <item corresp="#t-1.body-1.div-1.div-3">
         <head>De sancto Nicolao</head>
         <ref target="#t-1.body-1.div-1.div-2.p-1.pb-5">9v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-4.head-1">
+      <item corresp="#t-1.body-1.div-1.div-4">
         <head>Concepcio sancte Marie Virginis</head>
         <ref target="#t-1.body-1.div-1.div-3.p-1.pb-9">14r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-5.head-1">
+      <item corresp="#t-1.body-1.div-1.div-5">
         <head>De sancto Thoma</head>
         <ref target="#t-1.body-1.div-1.div-4.p-1.pb-5">16v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-6.head-1">
+      <item corresp="#t-1.body-1.div-1.div-6">
         <head>De nativitate Christi</head>
         <ref target="#t-1.body-1.div-1.div-5.p-1.pb-11">22r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-7.head-1">
+      <item corresp="#t-1.body-1.div-1.div-7">
         <head>De sancto Stephano</head>
         <ref target="#t-1.body-1.div-1.div-6.p-1.pb-10">27v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-8.head-1">
+      <item corresp="#t-1.body-1.div-1.div-8">
         <head>De sancto Johanne</head>
         <ref target="#t-1.body-1.div-1.div-7.p-1.pb-6">30v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-9.head-1">
+      <item corresp="#t-1.body-1.div-1.div-9">
         <head>Innocentum</head>
         <ref target="#t-1.body-1.div-1.div-8.p-1.pb-7">34r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-10.head-1">
+      <item corresp="#t-1.body-1.div-1.div-10">
         <head>De sancto Silvestro</head>
         <ref target="#t-1.body-1.div-1.div-9.p-1.pb-3">35v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-11.head-1">
+      <item corresp="#t-1.body-1.div-1.div-11">
         <head>Circumcisio Domini</head>
         <ref target="#t-1.body-1.div-1.div-10.p-1.pb-7">39r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-12.head-1">
+      <item corresp="#t-1.body-1.div-1.div-12">
         <head>In Epiphania Domini</head>
         <ref target="#t-1.body-1.div-1.div-11.p-1.pb-2">40r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-13.head-1">
+      <item corresp="#t-1.body-1.div-1.div-13">
         <head>De sancta Agnete</head>
         <ref target="#t-1.body-1.div-1.div-12.p-1.pb-5">42v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-14.head-1">
+      <item corresp="#t-1.body-1.div-1.div-14">
         <head>Conversio sancti Pauli</head>
         <ref target="#t-1.body-1.div-1.div-13.p-1.pb-3">44r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-15.head-1">
+      <item corresp="#t-1.body-1.div-1.div-15">
         <head>Purificacionis sancte Marie</head>
         <ref target="#t-1.body-1.div-1.div-14.p-1.pb-3">46r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-16.head-1">
+      <item corresp="#t-1.body-1.div-1.div-16">
         <head>De sancto Blasio</head>
         <ref target="#t-1.body-1.div-1.div-15.p-1.pb-3">47v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-17.head-1">
+      <item corresp="#t-1.body-1.div-1.div-17">
         <head>De sancta Agata</head>
         <ref target="#t-1.body-1.div-1.div-16.p-1.pb-4">49v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-18.head-1">
+      <item corresp="#t-1.body-1.div-1.div-18">
         <head>De sancta Dorothea</head>
         <ref target="#t-1.body-1.div-1.div-17.p-1.pb-5">52v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-19.head-1">
+      <item corresp="#t-1.body-1.div-1.div-19">
         <head>Cathedra sancti Petri</head>
         <ref target="#t-1.body-1.div-1.div-18.p-1.pb-3">54r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-20.head-1">
+      <item corresp="#t-1.body-1.div-1.div-20">
         <head>De sancto Mathia</head>
         <ref target="#t-1.body-1.div-1.div-19.p-1.pb-3">56r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-21.head-1">
+      <item corresp="#t-1.body-1.div-1.div-21">
         <head>De sancto Gregorio</head>
         <ref target="#t-1.body-1.div-1.div-20.p-1.pb-6">59r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-22.head-1">
+      <item corresp="#t-1.body-1.div-1.div-22">
         <head>De Annuncciacione sancte Marie Virginis</head>
         <ref target="#t-1.body-1.div-1.div-21.p-1.pb-7">62v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-23.head-1">
+      <item corresp="#t-1.body-1.div-1.div-23">
         <head>Sancti Georgii</head>
         <ref target="#t-1.body-1.div-1.div-22.p-1.pb-18">71v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-24.head-1">
+      <item corresp="#t-1.body-1.div-1.div-24">
         <head>De sancto Valentino</head>
         <ref target="#t-1.body-1.div-1.pb-1">78r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-25.head-1">
+      <item corresp="#t-1.body-1.div-1.div-25">
         <head>De sancto Cirillio et Methudio</head>
         <ref target="#t-1.body-1.div-1.div-24.p-1.pb-1">78v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-26.head-1">
+      <item corresp="#t-1.body-1.div-1.div-26">
         <head>Svatého Alexí život</head>
         <ref target="#t-1.body-1.div-1.div-25.p-1.pb-6">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-27.head-1">
+      <item corresp="#t-1.body-1.div-1.div-27">
         <head>De sancto Cristoforo</head>
         <ref target="#t-1.body-1.div-1.div-26.p-1.pb-6">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-28.head-1">
+      <item corresp="#t-1.body-1.div-1.div-28">
         <head>Philippi et Jacobi</head>
         <ref target="#t-1.body-1.div-1.div-27.p-1.pb-7">88r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-29.head-1">
+      <item corresp="#t-1.body-1.div-1.div-29">
         <head>O skažení Jeruzaléma</head>
         <ref target="#t-1.body-1.div-1.div-28.p-3.pb-3">90r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-30.head-1">
+      <item corresp="#t-1.body-1.div-1.div-30">
         <head>In Invencione sancte Crucis</head>
         <ref target="#t-1.body-1.div-1.div-29.p-1.pb-5">92v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-31.head-1">
+      <item corresp="#t-1.body-1.div-1.div-31">
         <head>Viti et Modesti</head>
         <ref target="#t-1.body-1.div-1.div-30.p-1.pb-7">96r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-32.head-1">
+      <item corresp="#t-1.body-1.div-1.div-32">
         <head>Iohannis vaptiste</head>
         <ref target="#t-1.body-1.div-1.div-31.p-1.pb-4">98r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-33.head-1">
+      <item corresp="#t-1.body-1.div-1.div-33">
         <head>Petri et Pauli</head>
         <ref target="#t-1.body-1.div-1.div-32.p-1.pb-6">101r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-34.head-1">
+      <item corresp="#t-1.body-1.div-1.div-34">
         <head>Iakobi</head>
         <ref target="#t-1.body-1.div-1.div-33.p-1.pb-16">109r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-35.head-1">
+      <item corresp="#t-1.body-1.div-1.div-35">
         <head>Maria Magdalene</head>
         <ref target="#t-1.body-1.div-1.pb-2">117v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-36.head-1">
+      <item corresp="#t-1.body-1.div-1.div-36">
         <head>Laurency</head>
         <ref target="#t-1.body-1.div-1.div-35.p-1.pb-22">128v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-37.head-1">
+      <item corresp="#t-1.body-1.div-1.div-37">
         <head>In die Assumpcionis</head>
         <ref target="#t-1.body-1.div-1.div-36.p-1.pb-10">133v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-38.head-1">
+      <item corresp="#t-1.body-1.div-1.div-38">
         <head>Wartholomei</head>
         <ref target="#t-1.body-1.div-1.div-37.p-1.pb-21">144r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-39.head-1">
+      <item corresp="#t-1.body-1.div-1.div-39">
         <head>Nativitatis beate Virginis</head>
         <ref target="#t-1.body-1.div-1.div-38.p-1.pb-8">148r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-40.head-1">
+      <item corresp="#t-1.body-1.div-1.div-40">
         <head>O Navštievení panny Marie</head>
         <ref target="#t-1.body-1.div-1.div-39.p-1.pb-9">152v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-41.head-1">
+      <item corresp="#t-1.body-1.div-1.div-41">
         <head>De sancto Matheo</head>
         <ref target="#t-1.body-1.div-1.div-40.p-1.pb-10">157v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-42.head-1">
+      <item corresp="#t-1.body-1.div-1.div-42">
         <head>Simonis et Iude</head>
         <ref target="#t-1.body-1.div-1.div-41.p-1.pb-8">161v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-43.head-1">
+      <item corresp="#t-1.body-1.div-1.div-43">
         <head>Omnium sanctorum</head>
         <ref target="#t-1.body-1.div-1.div-42.p-1.pb-13">168r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-44.head-1">
+      <item corresp="#t-1.body-1.div-1.div-44">
         <head>De sancto Martino</head>
         <ref target="#t-1.body-1.div-1.div-43.p-1.pb-15">175v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-45.head-1">
+      <item corresp="#t-1.body-1.div-1.div-45">
         <head>De sancta Elizabeth</head>
         <ref target="#t-1.body-1.div-1.div-44.p-1.pb-10">180v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-46.head-1">
+      <item corresp="#t-1.body-1.div-1.div-46">
         <head>Katherine</head>
         <ref target="#t-1.body-1.div-1.div-45.p-1.pb-10">185v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-47.head-1">
+      <item corresp="#t-1.body-1.div-1.div-47">
         <head>De Assumpcione beate Virginis</head>
         <ref target="#t-1.body-1.div-1.div-46.p-1.pb-13">192r</ref>
       </item>
     </list>
   </itj:tableOfContent>
+  <itj:headwordsList />
   <itj:pages>
     <itj:page n="1r" xml:id="t-1.body-1.pb-1" resource="KazLeg_0001.xml" />
     <itj:page n="2r" xml:id="t-1.body-1.div-1.div-1.p-1.pb-2" resource="KazLeg_0002.xml" />

@@ -9,8 +9,8 @@ namespace Ujc.Ovj.Xml.Tei.Contents.Test
 {
 	class Program
 	{
-		static XNamespace nsTei = TableOfContentBuilder.TeiNamespace;
-		static XNamespace nsItj = TableOfContentBuilder.ItJakubTeiNamespace;
+		static XNamespace nsTei = ContentInfoBuilder.TeiNamespace;
+		static XNamespace nsItj = ContentInfoBuilder.ItJakubTeiNamespace;
 		static void Main(string[] args)
 		{
 			TestDocument();
@@ -20,7 +20,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents.Test
 		private static void TestDocument()
 		{
 			DirectoryInfo directory = new DirectoryInfo(@"V:\Projekty\BitBucket\itjakub\Tests\Ujc.Ovj.Xml.Tei.Contents.Test\Ujc.Ovj.Xml.Tei.Contents.Test\Data");
-			FileInfo[] files = directory.GetFiles("ESS*.xml");
+			FileInfo[] files = directory.GetFiles("*.xml");
 			foreach (FileInfo file in files)
 			{
 				Console.WriteLine("{0}", file.Name);
@@ -30,7 +30,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents.Test
 		}
 		private static void TestDocument(string file)
 		{
-			TableOfContentBuilder builder = new TableOfContentBuilder();
+			ContentInfoBuilder builder = new ContentInfoBuilder();
 			builder.XmlFile = file;
 			builder.StartingElement = "body";
 			TableOfContentResult result = builder.MakeTableOfContent();
@@ -69,10 +69,25 @@ namespace Ujc.Ovj.Xml.Tei.Contents.Test
 			return doc.Root;
 		}
 
+		private static XElement GenerateHwList(TableOfContentResult result)
+		{
+			XDocument doc = new XDocument(new XElement(nsItj + "headwordsList"));
+			doc.Root.Add(GenerateList(result.HeadwordsList));
+			return doc.Root;
+		}
+
 		private static void SaveToc(TableOfContentResult result, string filepath)
 		{
-			XDocument doc = new XDocument(new XElement(nsItj + "tableOfContent"));
-			doc.Root.Add(GenerateList(result.Sections));
+			XDocument doc = new XDocument(new XElement(nsItj + "metadata"));
+			XElement toc = new XElement(nsItj + "tableOfContent");
+			toc.Add(GenerateList(result.Sections));
+
+			XElement hw = new XElement(nsItj + "headwordsList");
+			hw.Add(GenerateList(result.HeadwordsList));
+
+
+			doc.Root.Add(toc);
+			doc.Root.Add(hw);
 			doc.Save(filepath);
 		}
 
@@ -85,6 +100,79 @@ namespace Ujc.Ovj.Xml.Tei.Contents.Test
 				{
 					list.Add(GenerateList(item));
 				}
+				if (list.IsEmpty)
+					return null;
+				return list;
+			}
+			return null;
+		}
+
+		private static XElement GenerateList(List<HeadwordsListItem> items)
+		{
+			if (items.Count > 0)
+			{
+				XElement list = new XElement(nsTei + "list");
+				foreach (HeadwordsListItem item in items)
+				{
+					list.Add(GenerateList(item));
+				}
+				return list;
+			}
+			return null;
+		}
+
+		private static XElement GenerateList(HeadwordsListItem item)
+		{
+			//if (item == null) return null;
+			//string corresp = item.DivXmlId;
+			//XElement it =
+			//	new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp),
+			//		new XElement(nsTei + "head", new XText(item.HeadInfo.HeadText)),
+			//		item.PageBreakInfo.PageBreak == null
+			//			? null
+			//			: new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakInfo.PageBreakXmlId),
+			//				new XText(item.PageBreakInfo.PageBreak)),
+			//		GenerateList(item.Sections)
+			//		);
+			//return it;
+
+			if (item == null) return null;
+			string corresp = item.HeadwordInfo.FormXmlId ?? item.DivXmlId;
+			XAttribute type = null;
+			if (item.HeadwordInfo.Type != null)
+				type = new XAttribute("type", item.HeadwordInfo.Type);
+
+			XElement it =
+				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp),
+					type,
+					new XElement(nsTei + "head", new XText(item.HeadInfo.HeadText)),
+					item.PageBreakInfo.PageBreak == null
+						? null
+						: new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakInfo.PageBreakXmlId),
+							new XText(item.PageBreakInfo.PageBreak)),
+					GenerateList(item.Sections)
+					);
+			return it;
+		}
+
+		private static XElement GenerateList(List<ItemBase> items)
+		{
+			if (items.Count > 0)
+			{
+				XElement list = new XElement(nsTei + "list");
+				foreach (ItemBase item in items)
+				{
+					if (item is TableOfContentItem)
+					{
+						list.Add(GenerateList(item as TableOfContentItem));
+					}
+					if (item is HeadwordsListItem)
+					{
+						list.Add(GenerateList(item as HeadwordsListItem));
+					}
+				}
+				if (list.IsEmpty)
+					return null;
 				return list;
 			}
 			return null;
@@ -92,24 +180,14 @@ namespace Ujc.Ovj.Xml.Tei.Contents.Test
 
 		private static XElement GenerateList(TableOfContentItem item)
 		{
-			if (item == null) return null;
-			string corresp = item.FormXmlId ?? item.DivXmlId;
+			if (item == null || item.PageBreakInfo.PageBreakXmlId == null) return null;
+			string corresp = item.DivXmlId;
 			XElement it = 
-				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp), (item.Type == null) ? null : new XAttribute("type", item.Type),
-						new XElement(nsTei + "head", new XText(item.Head)),
-						item.PageBreak == null ? null : new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakXmlId), new XText(item.PageBreak)),
+				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp), 
+						new XElement(nsTei + "head", new XText(item.HeadInfo.HeadText)),
+						item.PageBreakInfo.PageBreak == null ? null : new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakInfo.PageBreakXmlId), new XText(item.PageBreakInfo.PageBreak)),
 						GenerateList(item.Sections)	
 					);
-			/*
-			if (item.Sections.Count > 0)
-			{
-				List<XElement> its = new List<XElement>();
-				foreach (TableOfContentItem section in item.Sections)
-				{
-					its.Add(GenerateList(section));
-				}
-			}
-			 */
 			return it;
 		}
 
@@ -117,7 +195,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents.Test
 
 		private static void WriteTocInfo(TableOfContentItem item)
 		{
-			Console.WriteLine("{0}: [{1}] {2}", item.Level, item.PageBreak, item.Head);
+			Console.WriteLine("{0}: [{1}] {2}", item.Level, item.PageBreakInfo.PageBreak, item.HeadInfo.HeadText);
 			foreach (TableOfContentItem section in item.Sections)
 			{
 				WriteTocInfo(section);
@@ -126,7 +204,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents.Test
 
 		private static void WriteTocInfoXml(TableOfContentItem item, int indent)
 		{
-			Console.WriteLine("<item corresp=\"#{0}\"><head>{1}</head><ref target=\"#{2}\">{3}</xref><item>", item.DivXmlId, item.Head, item.PageBreakXmlId, item.PageBreak);
+			Console.WriteLine("<item corresp=\"#{0}\"><head>{1}</head><ref target=\"#{2}\">{3}</xref><item>", item.DivXmlId, item.HeadInfo.HeadText, item.PageBreakInfo.PageBreakXmlId, item.PageBreakInfo.PageBreak);
 			if (item.Sections.Count > 0)
 			{
 				Console.WriteLine();

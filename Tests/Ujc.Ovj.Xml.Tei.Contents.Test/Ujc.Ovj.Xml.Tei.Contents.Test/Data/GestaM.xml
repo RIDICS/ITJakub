@@ -10,7 +10,7 @@
 <!-- EM_Vytvorit_projectDesc -->
 <!-- EM_Presunout_edicni_komentar_x -->
 <!-- EM_Spojit_s_hlavickou_a_front -->
-<TEI xml:lang="cs" xmlns="http://www.tei-c.org/ns/1.0" change="#6d0d8cdb-42a7-4a7c-b868-43b00cbf04bb">
+<TEI xml:lang="cs" xmlns="http://www.tei-c.org/ns/1.0" change="#83d13017-e30c-407c-bb4d-f105009b2efd">
   <teiHeader xml:id="teiHeader-1">
     <fileDesc n="{E494DBC5-F3C4-4841-B4D3-C52FE99839EB}">
       <titleStmt>
@@ -124,7 +124,9 @@
       </textClass>
     </profileDesc>
     <revisionDesc>
-      <change n="6d0d8cdb-42a7-4a7c-b868-43b00cbf04bb" when="2015-05-15T13:03:28.1832507Z"></change>
+      <change n="Change_2015-05-15T13:03:28.0000000" when="2015-05-15T13:03:28"></change>
+      <change n="Change_2015-05-15T22:22:53.0000000" when="2015-05-15T22:22:53"></change>
+      <change n="83d13017-e30c-407c-bb4d-f105009b2efd" when="2015-05-15T23:54:45.3883212Z"></change>
     </revisionDesc>
   </teiHeader>
   <text xml:id="t-1">

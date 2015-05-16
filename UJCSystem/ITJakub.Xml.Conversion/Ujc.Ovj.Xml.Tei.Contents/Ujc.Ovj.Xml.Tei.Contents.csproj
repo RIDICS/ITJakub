@@ -40,8 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TableOfContentBuilder.cs" />
+    <Compile Include="HeadInfo.cs" />
+    <Compile Include="HeadwordInfo.cs" />
+    <Compile Include="TableOfContentItem.cs" />
+    <Compile Include="PageBreakInfo.cs" />
+    <Compile Include="ContentInfoBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HeadwordsListItem.cs" />
+    <Compile Include="ItemBase.cs" />
     <Compile Include="TableOfContentResult.cs" />
   </ItemGroup>
   <ItemGroup>

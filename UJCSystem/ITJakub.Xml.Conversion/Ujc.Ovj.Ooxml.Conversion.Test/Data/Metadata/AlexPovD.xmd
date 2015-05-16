@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<itj:document doctype="Edition" versionId="7231089a-49a1-4413-9d7a-525fa46e63f9" xml:lang="cs" n="{E776D714-0D0A-475A-962F-FC9F8CCAC846}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<itj:document doctype="Edition" versionId="a5e10386-5cca-4e50-86ca-ce1930803cf0" xml:lang="cs" n="{E776D714-0D0A-475A-962F-FC9F8CCAC846}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <teiHeader xml:id="teiHeader-1">
     <fileDesc n="{E776D714-0D0A-475A-962F-FC9F8CCAC846}">
       <titleStmt>
@@ -116,1185 +116,1188 @@
       <change n="Change_2015-05-11T12:32:21.0000000" when="2015-05-11T12:32:21"></change>
       <change n="Change_2015-05-13T10:14:04.0000000" when="2015-05-13T10:14:04"></change>
       <change n="Change_2015-05-15T06:37:22.0000000" when="2015-05-15T06:37:22"></change>
-      <change n="7231089a-49a1-4413-9d7a-525fa46e63f9" when="2015-05-15T12:58:09.8228697Z"></change>
+      <change n="Change_2015-05-15T12:58:09.0000000" when="2015-05-15T12:58:09"></change>
+      <change n="Change_2015-05-15T22:18:16.0000000" when="2015-05-15T22:18:16"></change>
+      <change n="a5e10386-5cca-4e50-86ca-ce1930803cf0" when="2015-05-15T23:42:25.7276133Z"></change>
     </revisionDesc>
   </teiHeader>
   <itj:tableOfContent>
     <list>
-      <item corresp="#t-1.body-1.div-1.div-1.head-1">
+      <item corresp="#t-1.body-1.div-1.div-1">
         <head>Tuto se počíná celá kronika o Velikém Alexandru</head>
         <ref target="#t-1.body-1.pb-1">28r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-2.head-1">
+      <item corresp="#t-1.body-1.div-1.div-2">
         <head>Kapitola II.</head>
         <ref target="#t-1.body-1.div-1.div-1.p-1.pb-1">28v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-3.head-1">
+      <item corresp="#t-1.body-1.div-1.div-3">
         <head>Kapitola III.</head>
         <ref target="#t-1.body-1.div-1.div-2.p-1.pb-3">30r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-4.head-1">
+      <item corresp="#t-1.body-1.div-1.div-4">
         <head>Kapitola IV.</head>
         <ref target="#t-1.body-1.div-1.div-2.p-1.pb-3">30r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-5.head-1">
+      <item corresp="#t-1.body-1.div-1.div-5">
         <head>Kapitola V.</head>
         <ref target="#t-1.body-1.div-1.div-2.p-1.pb-3">30r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-6.head-1">
+      <item corresp="#t-1.body-1.div-1.div-6">
         <head>Kapitola VI.</head>
         <ref target="#t-1.body-1.div-1.div-5.p-1.pb-2">31v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-7.head-1">
+      <item corresp="#t-1.body-1.div-1.div-7">
         <head>Kapitola sedmá, VII.</head>
         <ref target="#t-1.body-1.div-1.div-5.p-1.pb-2">31v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-8.head-1">
+      <item corresp="#t-1.body-1.div-1.div-8">
         <head>Kapitola VIII.</head>
         <ref target="#t-1.body-1.div-1.div-7.p-1.pb-2">32v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-9.head-1">
+      <item corresp="#t-1.body-1.div-1.div-9">
         <head>Kapitola IX.</head>
         <ref target="#t-1.body-1.div-1.div-8.p-1.pb-1">33r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-10.head-1">
+      <item corresp="#t-1.body-1.div-1.div-10">
         <head>Kapitola X.</head>
         <ref target="#t-1.body-1.div-1.div-9.p-1.pb-1">33v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-11.head-1">
+      <item corresp="#t-1.body-1.div-1.div-11">
         <head>Kapitola XI.</head>
         <ref target="#t-1.body-1.div-1.div-10.p-1.pb-1">34r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-12.head-1">
+      <item corresp="#t-1.body-1.div-1.div-12">
         <head>Kapitola XII.</head>
         <ref target="#t-1.body-1.div-1.div-10.p-1.pb-1">34r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-13.head-1">
+      <item corresp="#t-1.body-1.div-1.div-13">
         <head>Kapitola XIII.</head>
         <ref target="#t-1.body-1.div-1.div-12.p-1.pb-2">35r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-14.head-1">
+      <item corresp="#t-1.body-1.div-1.div-14">
         <head>Kapitola XIIII.</head>
         <ref target="#t-1.body-1.div-1.div-13.p-1.pb-3">36v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-15.head-1">
+      <item corresp="#t-1.body-1.div-1.div-15">
         <head>Kapitola XV.</head>
         <ref target="#t-1.body-1.div-1.div-14.p-1.pb-1">37r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-16.head-1">
+      <item corresp="#t-1.body-1.div-1.div-16">
         <head>Kapitola XVI.</head>
         <ref target="#t-1.body-1.div-1.div-15.p-1.pb-1">37v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-17.head-1">
+      <item corresp="#t-1.body-1.div-1.div-17">
         <head>Kapitola XVII.</head>
         <ref target="#t-1.body-1.div-1.div-15.p-1.pb-1">37v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-18.head-1">
+      <item corresp="#t-1.body-1.div-1.div-18">
         <head>Kapitola XVIII.</head>
         <ref target="#t-1.body-1.div-1.div-17.p-1.pb-1">38r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-19.head-1">
+      <item corresp="#t-1.body-1.div-1.div-19">
         <head>Kapitola XIX.</head>
         <ref target="#t-1.body-1.div-1.div-18.p-1.pb-2">39r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-20.head-1">
+      <item corresp="#t-1.body-1.div-1.div-20">
         <head>XX.</head>
         <ref target="#t-1.body-1.div-1.div-18.p-1.pb-2">39r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-21.head-1">
+      <item corresp="#t-1.body-1.div-1.div-21">
         <head>XXI.</head>
         <ref target="#t-1.body-1.div-1.div-18.p-1.pb-2">39r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-22.head-1">
+      <item corresp="#t-1.body-1.div-1.div-22">
         <head>XXII.</head>
         <ref target="#t-1.body-1.div-1.div-21.p-1.pb-1">39v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-23.head-1">
+      <item corresp="#t-1.body-1.div-1.div-23">
         <head>XXIII.</head>
         <ref target="#t-1.body-1.div-1.div-21.p-1.pb-1">39v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-24.head-1">
+      <item corresp="#t-1.body-1.div-1.div-24">
         <head>XXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-23.p-1.pb-1">40r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-25.head-1">
+      <item corresp="#t-1.body-1.div-1.div-25">
         <head>XXV.</head>
         <ref target="#t-1.body-1.div-1.div-23.p-1.pb-1">40r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-26.head-1">
+      <item corresp="#t-1.body-1.div-1.div-26">
         <head>XXVI.</head>
         <ref target="#t-1.body-1.div-1.div-25.p-1.pb-1">40v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-27.head-1">
+      <item corresp="#t-1.body-1.div-1.div-27">
         <head>XXVII.</head>
         <ref target="#t-1.body-1.div-1.div-26.p-1.pb-1">41r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-28.head-1">
+      <item corresp="#t-1.body-1.div-1.div-28">
         <head>XXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-26.p-1.pb-1">41r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-29.head-1">
+      <item corresp="#t-1.body-1.div-1.div-29">
         <head>XXIX. kapitola</head>
         <ref target="#t-1.body-1.div-1.div-28.p-1.pb-2">42r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-30.head-1">
+      <item corresp="#t-1.body-1.div-1.div-30">
         <head>XXX.</head>
         <ref target="#t-1.body-1.div-1.div-28.p-1.pb-2">42r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-31.head-1">
+      <item corresp="#t-1.body-1.div-1.div-31">
         <head>XXXI.</head>
         <ref target="#t-1.body-1.div-1.div-30.p-1.pb-1">42v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-32.head-1">
+      <item corresp="#t-1.body-1.div-1.div-32">
         <head>Kapitola XXXII.</head>
         <ref target="#t-1.body-1.div-1.div-31.p-1.pb-1">43r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-33.head-1">
+      <item corresp="#t-1.body-1.div-1.div-33">
         <head>Kapitola XXXIII.</head>
         <ref target="#t-1.body-1.div-1.div-32.p-1.pb-1">43v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-34.head-1">
+      <item corresp="#t-1.body-1.div-1.div-34">
         <head>Kapitola XXXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-32.p-1.pb-1">43v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-35.head-1">
+      <item corresp="#t-1.body-1.div-1.div-35">
         <head>Kapitola XXXV.</head>
         <ref target="#t-1.body-1.div-1.div-34.p-1.pb-1">44r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-36.head-1">
+      <item corresp="#t-1.body-1.div-1.div-36">
         <head>Kapitola XXXVI.</head>
         <ref target="#t-1.body-1.div-1.pb-1">44v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-37.head-1">
+      <item corresp="#t-1.body-1.div-1.div-37">
         <head>Kapitola XXXVII.</head>
         <ref target="#t-1.body-1.div-1.div-36.p-1.pb-1">45r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-38.head-1">
+      <item corresp="#t-1.body-1.div-1.div-38">
         <head>Kapitula XXXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-37.p-1.pb-1">45v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-39.head-1">
+      <item corresp="#t-1.body-1.div-1.div-39">
         <head>XXXIX.</head>
         <ref target="#t-1.body-1.div-1.div-38.p-1.pb-1">46r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-40.head-1">
+      <item corresp="#t-1.body-1.div-1.div-40">
         <head>Kapitola XL.</head>
         <ref target="#t-1.body-1.div-1.div-38.p-1.pb-1">46r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-41.head-1">
+      <item corresp="#t-1.body-1.div-1.div-41">
         <head>Kapitola XLI.</head>
         <ref target="#t-1.body-1.div-1.div-40.p-1.pb-2">47r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-42.head-1">
+      <item corresp="#t-1.body-1.div-1.div-42">
         <head>Kapitola XLII.</head>
         <ref target="#t-1.body-1.div-1.div-40.p-1.pb-2">47r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-43.head-1">
+      <item corresp="#t-1.body-1.div-1.div-43">
         <head>XLIII.</head>
         <ref target="#t-1.body-1.div-1.div-40.p-1.pb-2">47r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-44.head-1">
+      <item corresp="#t-1.body-1.div-1.div-44">
         <head>XLIIII.</head>
         <ref target="#t-1.body-1.div-1.div-43.p-1.pb-1">47v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-45.head-1">
+      <item corresp="#t-1.body-1.div-1.div-45">
         <head>XLV.</head>
         <ref target="#t-1.body-1.div-1.div-43.p-1.pb-1">47v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-46.head-1">
+      <item corresp="#t-1.body-1.div-1.div-46">
         <head>XLVI.</head>
         <ref target="#t-1.body-1.div-1.div-45.p-1.pb-1">48r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-47.head-1">
+      <item corresp="#t-1.body-1.div-1.div-47">
         <head>XLVII.</head>
         <ref target="#t-1.body-1.div-1.div-45.p-1.pb-1">48r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-48.head-1">
+      <item corresp="#t-1.body-1.div-1.div-48">
         <head>XLVIII.</head>
         <ref target="#t-1.body-1.div-1.div-45.p-1.pb-1">48r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-49.head-1">
+      <item corresp="#t-1.body-1.div-1.div-49">
         <head>Kapitola XLIX.</head>
         <ref target="#t-1.body-1.div-1.div-48.p-1.pb-1">48v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-50.head-1">
+      <item corresp="#t-1.body-1.div-1.div-50">
         <head>Kapitola L.</head>
         <ref target="#t-1.body-1.div-1.div-49.p-1.pb-3">50r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-51.head-1">
+      <item corresp="#t-1.body-1.div-1.div-51">
         <head>Kapitola LI.</head>
         <ref target="#t-1.body-1.div-1.div-49.p-1.pb-3">50r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-52.head-1">
+      <item corresp="#t-1.body-1.div-1.div-52">
         <head>Kapitola LII.</head>
         <ref target="#t-1.body-1.div-1.div-49.p-1.pb-3">50r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-53.head-1">
+      <item corresp="#t-1.body-1.div-1.div-53">
         <head>Kapitola LIII.</head>
         <ref target="#t-1.body-1.div-1.div-52.p-1.pb-1">50v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-54.head-1">
+      <item corresp="#t-1.body-1.div-1.div-54">
         <head>Kapitola LIIII.</head>
         <ref target="#t-1.body-1.div-1.div-52.p-1.pb-1">50v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-55.head-1">
+      <item corresp="#t-1.body-1.div-1.div-55">
         <head>Kapitola LV.</head>
         <ref target="#t-1.body-1.div-1.div-54.p-1.pb-1">51r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-56.head-1">
+      <item corresp="#t-1.body-1.div-1.div-56">
         <head>Kapitola LVI.</head>
         <ref target="#t-1.body-1.div-1.div-55.p-1.pb-1">51v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-57.head-1">
+      <item corresp="#t-1.body-1.div-1.div-57">
         <head>LVII.</head>
         <ref target="#t-1.body-1.div-1.div-55.p-1.pb-1">51v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-58.head-1">
+      <item corresp="#t-1.body-1.div-1.div-58">
         <head>Kapitola LVIII.</head>
         <ref target="#t-1.body-1.div-1.div-57.p-1.pb-1">52r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-59.head-1">
+      <item corresp="#t-1.body-1.div-1.div-59">
         <head>LIX.</head>
         <ref target="#t-1.body-1.div-1.div-58.p-1.pb-1">52v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-60.head-1">
+      <item corresp="#t-1.body-1.div-1.div-60">
         <head>LX.</head>
         <ref target="#t-1.body-1.div-1.div-59.p-1.pb-1">53r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-61.head-1">
+      <item corresp="#t-1.body-1.div-1.div-61">
         <head>LXI.</head>
         <ref target="#t-1.body-1.div-1.div-60.p-1.pb-1">53v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-62.head-1">
+      <item corresp="#t-1.body-1.div-1.div-62">
         <head>LXII.</head>
         <ref target="#t-1.body-1.div-1.div-61.p-1.pb-2">54v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-63.head-1">
+      <item corresp="#t-1.body-1.div-1.div-63">
         <head>Kapitola LXIII</head>
         <ref target="#t-1.body-1.div-1.div-61.p-1.pb-2">54v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-64.head-1">
+      <item corresp="#t-1.body-1.div-1.div-64">
         <head>Kapitola LXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-63.p-1.pb-1">55r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-65.head-1">
+      <item corresp="#t-1.body-1.div-1.div-65">
         <head>Kapitola LXV.</head>
         <ref target="#t-1.body-1.div-1.div-64.p-1.pb-1">55v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-66.head-1">
+      <item corresp="#t-1.body-1.div-1.div-66">
         <head>Kapitola LXVI.</head>
         <ref target="#t-1.body-1.div-1.div-64.p-1.pb-1">55v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-67.head-1">
+      <item corresp="#t-1.body-1.div-1.div-67">
         <head>Kapitola LXVII.</head>
         <ref target="#t-1.body-1.div-1.div-66.p-1.pb-1">56r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-68.head-1">
+      <item corresp="#t-1.body-1.div-1.div-68">
         <head>LXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-67.p-1.pb-1">56v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-69.head-1">
+      <item corresp="#t-1.body-1.div-1.div-69">
         <head>Kapitolum LXIX.</head>
         <ref target="#t-1.body-1.div-1.div-67.p-1.pb-1">56v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-70.head-1">
+      <item corresp="#t-1.body-1.div-1.div-70">
         <head>LXX.</head>
         <ref target="#t-1.body-1.div-1.div-67.p-1.pb-1">56v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-71.head-1">
+      <item corresp="#t-1.body-1.div-1.div-71">
         <head>LXXI.</head>
         <ref target="#t-1.body-1.div-1.div-70.p-1.pb-1">57r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-72.head-1">
+      <item corresp="#t-1.body-1.div-1.div-72">
         <head>LXXII.</head>
         <ref target="#t-1.body-1.div-1.div-71.p-1.pb-1">57v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-73.head-1">
+      <item corresp="#t-1.body-1.div-1.div-73">
         <head>Kapitola LXXIII.</head>
         <ref target="#t-1.body-1.div-1.div-71.p-1.pb-1">57v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-74.head-1">
+      <item corresp="#t-1.body-1.div-1.div-74">
         <head>Kapitola LXXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-73.p-1.pb-1">58r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-75.head-1">
+      <item corresp="#t-1.body-1.div-1.div-75">
         <head>Kapitola LXXV.</head>
         <ref target="#t-1.body-1.div-1.div-74.p-1.pb-1">58v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-76.head-1">
+      <item corresp="#t-1.body-1.div-1.div-76">
         <head>Kapitola LXXVI.</head>
         <ref target="#t-1.body-1.div-1.div-74.p-1.pb-1">58v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-77.head-1">
+      <item corresp="#t-1.body-1.div-1.div-77">
         <head>LXXVII.</head>
         <ref target="#t-1.body-1.div-1.div-76.p-1.pb-1">59r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-78.head-1">
+      <item corresp="#t-1.body-1.div-1.div-78">
         <head>LXXIX.</head>
         <ref target="#t-1.body-1.div-1.div-77.pb-1">59v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-79.head-1">
+      <item corresp="#t-1.body-1.div-1.div-79">
         <head>Kapitula LXXX.</head>
         <ref target="#t-1.body-1.div-1.div-78.p-1.pb-1">60r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-80.head-1">
+      <item corresp="#t-1.body-1.div-1.div-80">
         <head>Kapitola LXXXI.</head>
         <ref target="#t-1.body-1.div-1.div-78.p-1.pb-1">60r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-81.head-1">
+      <item corresp="#t-1.body-1.div-1.div-81">
         <head>LXXXII.</head>
         <ref target="#t-1.body-1.div-1.div-78.p-1.pb-1">60r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-82.head-1">
+      <item corresp="#t-1.body-1.div-1.div-82">
         <head>Kapitola LXXXIII.</head>
         <ref target="#t-1.body-1.div-1.div-78.p-1.pb-1">60r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-83.head-1">
+      <item corresp="#t-1.body-1.div-1.div-83">
         <head>Kapitola LXXXIIII</head>
         <ref target="#t-1.body-1.div-1.div-82.p-1.pb-1">60v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-84.head-1">
+      <item corresp="#t-1.body-1.div-1.div-84">
         <head>LXXXV</head>
         <ref target="#t-1.body-1.div-1.div-82.p-1.pb-1">60v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-85.head-1">
+      <item corresp="#t-1.body-1.div-1.div-85">
         <head>Kapitola LXXXVI.</head>
         <ref target="#t-1.body-1.div-1.div-84.p-1.pb-1">61r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-86.head-1">
+      <item corresp="#t-1.body-1.div-1.div-86">
         <head>LXXXVII.</head>
         <ref target="#t-1.body-1.div-1.div-85.p-1.pb-1">61v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-87.head-1">
+      <item corresp="#t-1.body-1.div-1.div-87">
         <head>LXXXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-85.p-1.pb-1">61v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-88.head-1">
+      <item corresp="#t-1.body-1.div-1.div-88">
         <head>LXXXVIX</head>
         <ref target="#t-1.body-1.div-1.div-85.p-1.pb-1">61v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-89.head-1">
+      <item corresp="#t-1.body-1.div-1.div-89">
         <head>XC.</head>
         <ref target="#t-1.body-1.div-1.div-88.p-1.pb-1">62r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-90.head-1">
+      <item corresp="#t-1.body-1.div-1.div-90">
         <head>Kapitola XCI.</head>
         <ref target="#t-1.body-1.div-1.div-88.p-1.pb-1">62r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-91.head-1">
+      <item corresp="#t-1.body-1.div-1.div-91">
         <head>XCII.</head>
         <ref target="#t-1.body-1.div-1.div-88.p-1.pb-1">62r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-92.head-1">
+      <item corresp="#t-1.body-1.div-1.div-92">
         <head>XCIII.</head>
         <ref target="#t-1.body-1.div-1.div-91.p-1.pb-2">63r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-93.head-1">
+      <item corresp="#t-1.body-1.div-1.div-93">
         <head>XCIV.</head>
         <ref target="#t-1.body-1.div-1.div-91.p-1.pb-2">63r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-94.head-1">
+      <item corresp="#t-1.body-1.div-1.div-94">
         <head>Kapitola XCV.</head>
         <ref target="#t-1.body-1.div-1.div-93.p-1.pb-1">63v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-95.head-1">
+      <item corresp="#t-1.body-1.div-1.div-95">
         <head>Kapitola XCVI.</head>
         <ref target="#t-1.body-1.div-1.div-94.p-1.pb-6">66v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-96.head-1">
+      <item corresp="#t-1.body-1.div-1.div-96">
         <head>Kapitola XCVII.</head>
         <ref target="#t-1.body-1.div-1.div-95.p-1.pb-2">67v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-97.head-1">
+      <item corresp="#t-1.body-1.div-1.div-97">
         <head>Kapitola XCVIII.</head>
         <ref target="#t-1.body-1.div-1.div-96.p-1.pb-1">68r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-98.head-1">
+      <item corresp="#t-1.body-1.div-1.div-98">
         <head>Kapitola XCIX.</head>
         <ref target="#t-1.body-1.div-1.div-96.p-1.pb-1">68r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-99.head-1">
+      <item corresp="#t-1.body-1.div-1.div-99">
         <head>Kapitola C.</head>
         <ref target="#t-1.body-1.div-1.div-98.p-1.pb-1">68v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-100.head-1">
+      <item corresp="#t-1.body-1.div-1.div-100">
         <head>Kapitola CI.</head>
         <ref target="#t-1.body-1.div-1.div-98.p-1.pb-1">68v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-101.head-1">
+      <item corresp="#t-1.body-1.div-1.div-101">
         <head>Kapitola CII.</head>
         <ref target="#t-1.body-1.div-1.div-100.p-1.pb-1">69r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-102.head-1">
+      <item corresp="#t-1.body-1.div-1.div-102">
         <head>Kapitola CIII.</head>
         <ref target="#t-1.body-1.div-1.div-100.p-1.pb-1">69r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-103.head-1">
+      <item corresp="#t-1.body-1.div-1.div-103">
         <head>Kapitola CIV.</head>
         <ref target="#t-1.body-1.div-1.div-102.p-1.pb-2">70r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-104.head-1">
+      <item corresp="#t-1.body-1.div-1.div-104">
         <head>Kapitola CV.</head>
         <ref target="#t-1.body-1.div-1.div-103.p-1.pb-1">70v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-105.head-1">
+      <item corresp="#t-1.body-1.div-1.div-105">
         <head>Kapitola CVI.</head>
         <ref target="#t-1.body-1.div-1.div-104.p-1.pb-1">71r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-106.head-1">
+      <item corresp="#t-1.body-1.div-1.div-106">
         <head>Kapitola CVII.</head>
         <ref target="#t-1.body-1.div-1.div-105.p-1.pb-1">71v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-107.head-1">
+      <item corresp="#t-1.body-1.div-1.div-107">
         <head>Kapitola CVIII.</head>
         <ref target="#t-1.body-1.div-1.div-105.p-1.pb-1">71v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-108.head-1">
+      <item corresp="#t-1.body-1.div-1.div-108">
         <head>Kapitola CIX.</head>
         <ref target="#t-1.body-1.div-1.div-105.p-1.pb-1">71v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-109.head-1">
+      <item corresp="#t-1.body-1.div-1.div-109">
         <head>Kapitola CX.</head>
         <ref target="#t-1.body-1.div-1.div-108.p-1.pb-1">72r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-110.head-1">
+      <item corresp="#t-1.body-1.div-1.div-110">
         <head>CXI.</head>
         <ref target="#t-1.body-1.div-1.div-108.p-1.pb-1">72r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-111.head-1">
+      <item corresp="#t-1.body-1.div-1.div-111">
         <head>CXIII.</head>
         <ref target="#t-1.body-1.div-1.div-108.p-1.pb-1">72r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-112.head-1">
+      <item corresp="#t-1.body-1.div-1.div-112">
         <head>Kapitola CXIII.</head>
         <ref target="#t-1.body-1.div-1.div-111.p-1.pb-4">74r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-113.head-1">
+      <item corresp="#t-1.body-1.div-1.div-113">
         <head>Kapitola CXIV.</head>
         <ref target="#t-1.body-1.div-1.div-112.p-1.pb-1">74v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-114.head-1">
+      <item corresp="#t-1.body-1.div-1.div-114">
         <head>Kapitola CXV.</head>
         <ref target="#t-1.body-1.div-1.div-112.p-1.pb-1">74v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-115.head-1">
+      <item corresp="#t-1.body-1.div-1.div-115">
         <head>Kapitola CXVI.</head>
         <ref target="#t-1.body-1.div-1.div-112.p-1.pb-1">74v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-116.head-1">
+      <item corresp="#t-1.body-1.div-1.div-116">
         <head>Kapitola CXVII.</head>
         <ref target="#t-1.body-1.div-1.div-115.p-1.pb-1">75r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-117.head-1">
+      <item corresp="#t-1.body-1.div-1.div-117">
         <head>Kapitola CXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-116.pb-1">75v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-118.head-1">
+      <item corresp="#t-1.body-1.div-1.div-118">
         <head>Kapitola CXVIX.</head>
         <ref target="#t-1.body-1.div-1.div-116.pb-1">75v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-119.head-1">
+      <item corresp="#t-1.body-1.div-1.div-119">
         <head>Kapitola CXX.</head>
         <ref target="#t-1.body-1.div-1.div-118.p-1.pb-1">76r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-120.head-1">
+      <item corresp="#t-1.body-1.div-1.div-120">
         <head>Kapitola CXXI.</head>
         <ref target="#t-1.body-1.div-1.div-118.p-1.pb-1">76r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-121.head-1">
+      <item corresp="#t-1.body-1.div-1.div-121">
         <head>Kapitola CXXII.</head>
         <ref target="#t-1.body-1.div-1.div-118.p-1.pb-1">76r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-122.head-1">
+      <item corresp="#t-1.body-1.div-1.div-122">
         <head>CXXIII.</head>
         <ref target="#t-1.body-1.div-1.div-121.p-1.pb-1">76v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-123.head-1">
+      <item corresp="#t-1.body-1.div-1.div-123">
         <head>Kapitola CXXIV.</head>
         <ref target="#t-1.body-1.div-1.div-121.p-1.pb-1">76v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-124.head-1">
+      <item corresp="#t-1.body-1.div-1.div-124">
         <head>Kapitola CXXV.</head>
         <ref target="#t-1.body-1.div-1.div-121.p-1.pb-1">76v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-125.head-1">
+      <item corresp="#t-1.body-1.div-1.div-125">
         <head>Kapitola CXXVI.</head>
         <ref target="#t-1.body-1.div-1.div-121.p-1.pb-1">76v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-126.head-1">
+      <item corresp="#t-1.body-1.div-1.div-126">
         <head>CXXVII</head>
         <ref target="#t-1.body-1.div-1.div-125.p-1.pb-1">77r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-127.head-1">
+      <item corresp="#t-1.body-1.div-1.div-127">
         <head>Kapitula CXXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-125.p-1.pb-1">77r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-128.head-1">
+      <item corresp="#t-1.body-1.div-1.div-128">
         <head>CXXVIX.</head>
         <ref target="#t-1.body-1.div-1.div-125.p-1.pb-1">77r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-129.head-1">
+      <item corresp="#t-1.body-1.div-1.div-129">
         <head>CXXVX.</head>
         <ref target="#t-1.body-1.div-1.div-125.p-1.pb-1">77r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-130.head-1">
+      <item corresp="#t-1.body-1.div-1.div-130">
         <head>Kapitola CXXXI.</head>
         <ref target="#t-1.body-1.div-1.div-125.p-1.pb-1">77r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-131.head-1">
+      <item corresp="#t-1.body-1.div-1.div-131">
         <head>Kapitola CXXXII.</head>
         <ref target="#t-1.body-1.div-1.div-130.p-1.pb-1">77v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-132.head-1">
+      <item corresp="#t-1.body-1.div-1.div-132">
         <head>Kapitola CXXXIII.</head>
         <ref target="#t-1.body-1.div-1.div-131.p-1.pb-1">78r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-133.head-1">
+      <item corresp="#t-1.body-1.div-1.div-133">
         <head>CXXXIV.</head>
         <ref target="#t-1.body-1.div-1.div-131.p-1.pb-1">78r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-134.head-1">
+      <item corresp="#t-1.body-1.div-1.div-134">
         <head>CXXXV.</head>
         <ref target="#t-1.body-1.div-1.div-133.p-1.pb-1">78v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-135.head-1">
+      <item corresp="#t-1.body-1.div-1.div-135">
         <head>CXXXVI.</head>
         <ref target="#t-1.body-1.div-1.div-133.p-1.pb-1">78v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-136.head-1">
+      <item corresp="#t-1.body-1.div-1.div-136">
         <head>CXXXVII.</head>
         <ref target="#t-1.body-1.div-1.div-133.p-1.pb-1">78v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-137.head-1">
+      <item corresp="#t-1.body-1.div-1.div-137">
         <head>CXXXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-136.p-1.pb-1">79r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-138.head-1">
+      <item corresp="#t-1.body-1.div-1.div-138">
         <head>CXXXVIX.</head>
         <ref target="#t-1.body-1.div-1.div-136.p-1.pb-1">79r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-139.head-1">
+      <item corresp="#t-1.body-1.div-1.div-139">
         <head>CXL.</head>
         <ref target="#t-1.body-1.div-1.div-138.p-1.pb-1">79v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-140.head-1">
+      <item corresp="#t-1.body-1.div-1.div-140">
         <head>Kapitola CXLI.</head>
         <ref target="#t-1.body-1.div-1.div-138.p-1.pb-1">79v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-141.head-1">
+      <item corresp="#t-1.body-1.div-1.div-141">
         <head>CXLII.</head>
         <ref target="#t-1.body-1.div-1.div-138.p-1.pb-1">79v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-142.head-1">
+      <item corresp="#t-1.body-1.div-1.div-142">
         <head>CXLIII.</head>
         <ref target="#t-1.body-1.div-1.div-141.p-1.pb-1">80r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-143.head-1">
+      <item corresp="#t-1.body-1.div-1.div-143">
         <head>Kapitola CXLIV.</head>
         <ref target="#t-1.body-1.div-1.div-141.p-1.pb-1">80r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-144.head-1">
+      <item corresp="#t-1.body-1.div-1.div-144">
         <head>Kapitola CXLV.</head>
         <ref target="#t-1.body-1.div-1.div-143.p-1.pb-1">80v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-145.head-1">
+      <item corresp="#t-1.body-1.div-1.div-145">
         <head>Kapitola CXLVI.</head>
         <ref target="#t-1.body-1.div-1.div-143.p-1.pb-1">80v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-146.head-1">
+      <item corresp="#t-1.body-1.div-1.div-146">
         <head>CXLVII.</head>
         <ref target="#t-1.body-1.div-1.div-143.p-1.pb-1">80v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-147.head-1">
+      <item corresp="#t-1.body-1.div-1.div-147">
         <head>Tuto se počíná rejistrum na všecky kníhy Alexandrovy a o čem která kapitola praví</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-148.head-1">
+      <item corresp="#t-1.body-1.div-1.div-148">
         <head>Prvá</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-149.head-1">
+      <item corresp="#t-1.body-1.div-1.div-149">
         <head>Druhá kapitola</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-150.head-1">
+      <item corresp="#t-1.body-1.div-1.div-150">
         <head>Kapitola III.</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-151.head-1">
+      <item corresp="#t-1.body-1.div-1.div-151">
         <head>Kapitola IIII.</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-152.head-1">
+      <item corresp="#t-1.body-1.div-1.div-152">
         <head>Kapitola V.</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-153.head-1">
+      <item corresp="#t-1.body-1.div-1.div-153">
         <head>Kapitola VI.</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-154.head-1">
+      <item corresp="#t-1.body-1.div-1.div-154">
         <head>Kapitola VII.</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-155.head-1">
+      <item corresp="#t-1.body-1.div-1.div-155">
         <head>Kapitola VIII.</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-156.head-1">
+      <item corresp="#t-1.body-1.div-1.div-156">
         <head>Kapitola IX.</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-157.head-1">
+      <item corresp="#t-1.body-1.div-1.div-157">
         <head>Kapitola X.</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-158.head-1">
+      <item corresp="#t-1.body-1.div-1.div-158">
         <head>Kapitola XI.</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-159.head-1">
+      <item corresp="#t-1.body-1.div-1.div-159">
         <head>Kapitola XII.</head>
         <ref target="#t-1.body-1.div-1.div-146.p-1.pb-1">81r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-160.head-1">
+      <item corresp="#t-1.body-1.div-1.div-160">
         <head>Kapitola XIII.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-161.head-1">
+      <item corresp="#t-1.body-1.div-1.div-161">
         <head>XIIII.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-162.head-1">
+      <item corresp="#t-1.body-1.div-1.div-162">
         <head>XV.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-163.head-1">
+      <item corresp="#t-1.body-1.div-1.div-163">
         <head>XVI.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-164.head-1">
+      <item corresp="#t-1.body-1.div-1.div-164">
         <head>XVII.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-165.head-1">
+      <item corresp="#t-1.body-1.div-1.div-165">
         <head>XVIII.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-166.head-1">
+      <item corresp="#t-1.body-1.div-1.div-166">
         <head>XIX.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-167.head-1">
+      <item corresp="#t-1.body-1.div-1.div-167">
         <head>XX.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-168.head-1">
+      <item corresp="#t-1.body-1.div-1.div-168">
         <head>XXI.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-169.head-1">
+      <item corresp="#t-1.body-1.div-1.div-169">
         <head>XXII.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-170.head-1">
+      <item corresp="#t-1.body-1.div-1.div-170">
         <head>XXIII.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-171.head-1">
+      <item corresp="#t-1.body-1.div-1.div-171">
         <head>XXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-172.head-1">
+      <item corresp="#t-1.body-1.div-1.div-172">
         <head>XXV.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-173.head-1">
+      <item corresp="#t-1.body-1.div-1.div-173">
         <head>XXVI.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-174.head-1">
+      <item corresp="#t-1.body-1.div-1.div-174">
         <head>XXVII.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-175.head-1">
+      <item corresp="#t-1.body-1.div-1.div-175">
         <head>XXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-176.head-1">
+      <item corresp="#t-1.body-1.div-1.div-176">
         <head>XXIX.</head>
         <ref target="#t-1.body-1.div-1.div-159.p-1.pb-1">81v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-177.head-1">
+      <item corresp="#t-1.body-1.div-1.div-177">
         <head>XXX.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-178.head-1">
+      <item corresp="#t-1.body-1.div-1.div-178">
         <head>XXXI.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-179.head-1">
+      <item corresp="#t-1.body-1.div-1.div-179">
         <head>XXXII.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-180.head-1">
+      <item corresp="#t-1.body-1.div-1.div-180">
         <head>XXXIII.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-181.head-1">
+      <item corresp="#t-1.body-1.div-1.div-181">
         <head>XXXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-182.head-1">
+      <item corresp="#t-1.body-1.div-1.div-182">
         <head>XXXV.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-183.head-1">
+      <item corresp="#t-1.body-1.div-1.div-183">
         <head>XXXVI.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-184.head-1">
+      <item corresp="#t-1.body-1.div-1.div-184">
         <head>XXXVII.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-185.head-1">
+      <item corresp="#t-1.body-1.div-1.div-185">
         <head>XXXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-186.head-1">
+      <item corresp="#t-1.body-1.div-1.div-186">
         <head>XXXIX.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-187.head-1">
+      <item corresp="#t-1.body-1.div-1.div-187">
         <head>XL.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-188.head-1">
+      <item corresp="#t-1.body-1.div-1.div-188">
         <head>XLI.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-189.head-1">
+      <item corresp="#t-1.body-1.div-1.div-189">
         <head>XLII.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-190.head-1">
+      <item corresp="#t-1.body-1.div-1.div-190">
         <head>XLIII.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-191.head-1">
+      <item corresp="#t-1.body-1.div-1.div-191">
         <head>XLIIII.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-192.head-1">
+      <item corresp="#t-1.body-1.div-1.div-192">
         <head>XLV.</head>
         <ref target="#t-1.body-1.div-1.div-176.p-1.pb-1">82r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-193.head-1">
+      <item corresp="#t-1.body-1.div-1.div-193">
         <head>Kapitola XLVI.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-194.head-1">
+      <item corresp="#t-1.body-1.div-1.div-194">
         <head>XLVII.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-195.head-1">
+      <item corresp="#t-1.body-1.div-1.div-195">
         <head>Kapitola XLVIII.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-196.head-1">
+      <item corresp="#t-1.body-1.div-1.div-196">
         <head>XLIX.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-197.head-1">
+      <item corresp="#t-1.body-1.div-1.div-197">
         <head>Kapitola L.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-198.head-1">
+      <item corresp="#t-1.body-1.div-1.div-198">
         <head>Kapitola LI.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-199.head-1">
+      <item corresp="#t-1.body-1.div-1.div-199">
         <head>Kapitola LII.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-200.head-1">
+      <item corresp="#t-1.body-1.div-1.div-200">
         <head>LIII.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-201.head-1">
+      <item corresp="#t-1.body-1.div-1.div-201">
         <head>LIIII.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-202.head-1">
+      <item corresp="#t-1.body-1.div-1.div-202">
         <head>LV.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-203.head-1">
+      <item corresp="#t-1.body-1.div-1.div-203">
         <head>LVI.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-204.head-1">
+      <item corresp="#t-1.body-1.div-1.div-204">
         <head>LVII.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-205.head-1">
+      <item corresp="#t-1.body-1.div-1.div-205">
         <head>LVIII.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-206.head-1">
+      <item corresp="#t-1.body-1.div-1.div-206">
         <head>Kapitola LIX.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-207.head-1">
+      <item corresp="#t-1.body-1.div-1.div-207">
         <head>Kapitola LX.</head>
         <ref target="#t-1.body-1.div-1.div-192.p-1.pb-1">82v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-208.head-1">
+      <item corresp="#t-1.body-1.div-1.div-208">
         <head>LXI.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-209.head-1">
+      <item corresp="#t-1.body-1.div-1.div-209">
         <head>LXII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-210.head-1">
+      <item corresp="#t-1.body-1.div-1.div-210">
         <head>LXIII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-211.head-1">
+      <item corresp="#t-1.body-1.div-1.div-211">
         <head>LXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-212.head-1">
+      <item corresp="#t-1.body-1.div-1.div-212">
         <head>LXV.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-213.head-1">
+      <item corresp="#t-1.body-1.div-1.div-213">
         <head>LXVI.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-214.head-1">
+      <item corresp="#t-1.body-1.div-1.div-214">
         <head>LXVII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-215.head-1">
+      <item corresp="#t-1.body-1.div-1.div-215">
         <head>LXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-216.head-1">
+      <item corresp="#t-1.body-1.div-1.div-216">
         <head>LXIX.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-217.head-1">
+      <item corresp="#t-1.body-1.div-1.div-217">
         <head>LXX.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-218.head-1">
+      <item corresp="#t-1.body-1.div-1.div-218">
         <head>LXXI.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-219.head-1">
+      <item corresp="#t-1.body-1.div-1.div-219">
         <head>LXXII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-220.head-1">
+      <item corresp="#t-1.body-1.div-1.div-220">
         <head>LXIII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-221.head-1">
+      <item corresp="#t-1.body-1.div-1.div-221">
         <head>LXXIIII</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-222.head-1">
+      <item corresp="#t-1.body-1.div-1.div-222">
         <head>LXXV.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-223.head-1">
+      <item corresp="#t-1.body-1.div-1.div-223">
         <head>LXXVI.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-224.head-1">
+      <item corresp="#t-1.body-1.div-1.div-224">
         <head>LXXVII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-225.head-1">
+      <item corresp="#t-1.body-1.div-1.div-225">
         <head>LXXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-226.head-1">
+      <item corresp="#t-1.body-1.div-1.div-226">
         <head>LXXIX.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-227.head-1">
+      <item corresp="#t-1.body-1.div-1.div-227">
         <head>LXXX.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-228.head-1">
+      <item corresp="#t-1.body-1.div-1.div-228">
         <head>LXXXI</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-229.head-1">
+      <item corresp="#t-1.body-1.div-1.div-229">
         <head>LXXXII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-230.head-1">
+      <item corresp="#t-1.body-1.div-1.div-230">
         <head>LXXXIII.</head>
         <ref target="#t-1.body-1.div-1.div-207.p-1.pb-1">83r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-231.head-1">
+      <item corresp="#t-1.body-1.div-1.div-231">
         <head>LXXXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-232.head-1">
+      <item corresp="#t-1.body-1.div-1.div-232">
         <head>LXXXV.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-233.head-1">
+      <item corresp="#t-1.body-1.div-1.div-233">
         <head>LXXXVI.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-234.head-1">
+      <item corresp="#t-1.body-1.div-1.div-234">
         <head>LXXXVII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-235.head-1">
+      <item corresp="#t-1.body-1.div-1.div-235">
         <head>LXXXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-236.head-1">
+      <item corresp="#t-1.body-1.div-1.div-236">
         <head>LXXXIX.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-237.head-1">
+      <item corresp="#t-1.body-1.div-1.div-237">
         <head>Kapitola XC.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-238.head-1">
+      <item corresp="#t-1.body-1.div-1.div-238">
         <head>Kapitola XCI.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-239.head-1">
+      <item corresp="#t-1.body-1.div-1.div-239">
         <head>Kapitola XCII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-240.head-1">
+      <item corresp="#t-1.body-1.div-1.div-240">
         <head>XCIII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-241.head-1">
+      <item corresp="#t-1.body-1.div-1.div-241">
         <head>XCIIII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-242.head-1">
+      <item corresp="#t-1.body-1.div-1.div-242">
         <head>XCV.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-243.head-1">
+      <item corresp="#t-1.body-1.div-1.div-243">
         <head>XCVI.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-244.head-1">
+      <item corresp="#t-1.body-1.div-1.div-244">
         <head>XCVII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-245.head-1">
+      <item corresp="#t-1.body-1.div-1.div-245">
         <head>XCVIII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-246.head-1">
+      <item corresp="#t-1.body-1.div-1.div-246">
         <head>XCIX.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-247.head-1">
+      <item corresp="#t-1.body-1.div-1.div-247">
         <head>C.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-248.head-1">
+      <item corresp="#t-1.body-1.div-1.div-248">
         <head>CI.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-249.head-1">
+      <item corresp="#t-1.body-1.div-1.div-249">
         <head>CII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-250.head-1">
+      <item corresp="#t-1.body-1.div-1.div-250">
         <head>CIII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-251.head-1">
+      <item corresp="#t-1.body-1.div-1.div-251">
         <head>CIIII.</head>
         <ref target="#t-1.body-1.div-1.div-230.p-1.pb-1">83v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-252.head-1">
+      <item corresp="#t-1.body-1.div-1.div-252">
         <head>CV.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-253.head-1">
+      <item corresp="#t-1.body-1.div-1.div-253">
         <head>CVI.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-254.head-1">
+      <item corresp="#t-1.body-1.div-1.div-254">
         <head>CVII.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-255.head-1">
+      <item corresp="#t-1.body-1.div-1.div-255">
         <head>CVIII.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-256.head-1">
+      <item corresp="#t-1.body-1.div-1.div-256">
         <head>CIX.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-257.head-1">
+      <item corresp="#t-1.body-1.div-1.div-257">
         <head>CX.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-258.head-1">
+      <item corresp="#t-1.body-1.div-1.div-258">
         <head>CXI.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-259.head-1">
+      <item corresp="#t-1.body-1.div-1.div-259">
         <head>CXII.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-260.head-1">
+      <item corresp="#t-1.body-1.div-1.div-260">
         <head>CXIII.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-261.head-1">
+      <item corresp="#t-1.body-1.div-1.div-261">
         <head>CXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-262.head-1">
+      <item corresp="#t-1.body-1.div-1.div-262">
         <head>CXV.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-263.head-1">
+      <item corresp="#t-1.body-1.div-1.div-263">
         <head>CXVI.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-264.head-1">
+      <item corresp="#t-1.body-1.div-1.div-264">
         <head>CXVII.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-265.head-1">
+      <item corresp="#t-1.body-1.div-1.div-265">
         <head>CXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-266.head-1">
+      <item corresp="#t-1.body-1.div-1.div-266">
         <head>CXIX.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-267.head-1">
+      <item corresp="#t-1.body-1.div-1.div-267">
         <head>CXX.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-268.head-1">
+      <item corresp="#t-1.body-1.div-1.div-268">
         <head>CXXI.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-269.head-1">
+      <item corresp="#t-1.body-1.div-1.div-269">
         <head>CXXII.</head>
         <ref target="#t-1.body-1.div-1.div-251.p-1.pb-1">84r</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-270.head-1">
+      <item corresp="#t-1.body-1.div-1.div-270">
         <head>Kapitola CXXIII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-271.head-1">
+      <item corresp="#t-1.body-1.div-1.div-271">
         <head>CXXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-272.head-1">
+      <item corresp="#t-1.body-1.div-1.div-272">
         <head>CXXV.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-273.head-1">
+      <item corresp="#t-1.body-1.div-1.div-273">
         <head>CXVI.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-274.head-1">
+      <item corresp="#t-1.body-1.div-1.div-274">
         <head>CXVII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-275.head-1">
+      <item corresp="#t-1.body-1.div-1.div-275">
         <head>CXXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-276.head-1">
+      <item corresp="#t-1.body-1.div-1.div-276">
         <head>CXXIX.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-277.head-1">
+      <item corresp="#t-1.body-1.div-1.div-277">
         <head>CXXIX.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-278.head-1">
+      <item corresp="#t-1.body-1.div-1.div-278">
         <head>CXXXI.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-279.head-1">
+      <item corresp="#t-1.body-1.div-1.div-279">
         <head>CXXXII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-280.head-1">
+      <item corresp="#t-1.body-1.div-1.div-280">
         <head>CXXXIII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-281.head-1">
+      <item corresp="#t-1.body-1.div-1.div-281">
         <head>CXXXIIII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-282.head-1">
+      <item corresp="#t-1.body-1.div-1.div-282">
         <head>CXXXV.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-283.head-1">
+      <item corresp="#t-1.body-1.div-1.div-283">
         <head>CXXXVI.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-284.head-1">
+      <item corresp="#t-1.body-1.div-1.div-284">
         <head>CXXXVII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-285.head-1">
+      <item corresp="#t-1.body-1.div-1.div-285">
         <head>CXXXVIII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-286.head-1">
+      <item corresp="#t-1.body-1.div-1.div-286">
         <head>CXXXIX.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-287.head-1">
+      <item corresp="#t-1.body-1.div-1.div-287">
         <head>CXL.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-288.head-1">
+      <item corresp="#t-1.body-1.div-1.div-288">
         <head>CXLI.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-289.head-1">
+      <item corresp="#t-1.body-1.div-1.div-289">
         <head>CXLII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-290.head-1">
+      <item corresp="#t-1.body-1.div-1.div-290">
         <head>CXLIII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-291.head-1">
+      <item corresp="#t-1.body-1.div-1.div-291">
         <head>CXLIIII.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-292.head-1">
+      <item corresp="#t-1.body-1.div-1.div-292">
         <head>CXLV.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
-      <item corresp="#t-1.body-1.div-1.div-293.head-1">
+      <item corresp="#t-1.body-1.div-1.div-293">
         <head>CXLVI.</head>
         <ref target="#t-1.body-1.div-1.div-269.p-1.pb-1">84v</ref>
       </item>
     </list>
   </itj:tableOfContent>
+  <itj:headwordsList />
   <itj:pages>
     <itj:page n="28r" xml:id="t-1.body-1.pb-1" resource="AlexPovD_0001.xml" />
     <itj:page n="29r" xml:id="t-1.body-1.div-1.div-2.p-1.pb-1" resource="AlexPovD_0002.xml" />

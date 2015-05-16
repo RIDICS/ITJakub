@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<itj:document doctype="Edition" versionId="61010fb9-b339-4ed2-a122-8e8c5f77c82c" xml:lang="cs" n="{2A100BE0-D058-486C-8E27-63801CDFDA22}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<itj:document doctype="Edition" versionId="9fb96e9a-de4d-4e84-a089-5b2a0cc1dd36" xml:lang="cs" n="{2A100BE0-D058-486C-8E27-63801CDFDA22}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <teiHeader xml:id="teiHeader-1">
     <fileDesc n="{2A100BE0-D058-486C-8E27-63801CDFDA22}">
       <titleStmt>
@@ -117,17 +117,19 @@
     <revisionDesc>
       <change n="Change_2015-05-06T14:18:06.0000000" when="2015-05-06T14:18:06">dasd</change>
       <change n="Change_2015-05-11T12:32:11.0000000" when="2015-05-11T12:32:11"></change>
-      <change n="61010fb9-b339-4ed2-a122-8e8c5f77c82c" when="2015-05-15T12:57:14.8383353Z"></change>
+      <change n="Change_2015-05-15T12:57:14.0000000" when="2015-05-15T12:57:14"></change>
+      <change n="9fb96e9a-de4d-4e84-a089-5b2a0cc1dd36" when="2015-05-15T23:41:09.9570539Z"></change>
     </revisionDesc>
   </teiHeader>
   <itj:tableOfContent>
     <list>
-      <item corresp="#t-1.body-1.div-1.div-1.head-1" type="title">
+      <item corresp="#t-1.body-1.div-1.div-1">
         <head>Knížky o řádném mluvení a mlčení mistra Albertana, kteréž jest napsal řečí latinskú synu svému, počínají se šťastně.</head>
         <ref target="#t-1.body-1.pb-1">1r</ref>
       </item>
     </list>
   </itj:tableOfContent>
+  <itj:headwordsList />
   <itj:pages>
     <itj:page n="1r" xml:id="t-1.body-1.pb-1" resource="Albetanus_Knizky_o_radnem_mluveni_0001.xml" />
     <itj:page n="2r" xml:id="t-1.body-1.div-1.div-1.p-2.pb-1" resource="Albetanus_Knizky_o_radnem_mluveni_0002.xml" />

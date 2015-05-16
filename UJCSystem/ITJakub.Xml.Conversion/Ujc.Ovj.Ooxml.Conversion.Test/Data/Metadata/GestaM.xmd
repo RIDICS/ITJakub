@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<itj:document doctype="Edition" versionId="6d0d8cdb-42a7-4a7c-b868-43b00cbf04bb" xml:lang="cs" n="{E494DBC5-F3C4-4841-B4D3-C52FE99839EB}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<itj:document doctype="Edition" versionId="83d13017-e30c-407c-bb4d-f105009b2efd" xml:lang="cs" n="{E494DBC5-F3C4-4841-B4D3-C52FE99839EB}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <teiHeader xml:id="teiHeader-1">
     <fileDesc n="{E494DBC5-F3C4-4841-B4D3-C52FE99839EB}">
       <titleStmt>
@@ -113,311 +113,26 @@
       </textClass>
     </profileDesc>
     <revisionDesc>
-      <change n="6d0d8cdb-42a7-4a7c-b868-43b00cbf04bb" when="2015-05-15T13:03:28.1832507Z"></change>
+      <change n="Change_2015-05-15T13:03:28.0000000" when="2015-05-15T13:03:28"></change>
+      <change n="Change_2015-05-15T22:22:53.0000000" when="2015-05-15T22:22:53"></change>
+      <change n="83d13017-e30c-407c-bb4d-f105009b2efd" when="2015-05-15T23:54:45.3883212Z"></change>
     </revisionDesc>
   </teiHeader>
   <itj:tableOfContent>
     <list>
-      <item corresp="#t-1.body-1.div-1.div-1.head-1" type="title">
+      <item corresp="#t-1.body-1.div-1.div-1">
         <head>Počínají se příkladi světští z kronik římských</head>
         <ref target="#t-1.body-1.pb-1">1r</ref>
         <list>
-          <item corresp="#t-1.body-1.div-1.div-1.div-1.div-1.head-1">
+          <item corresp="#t-1.body-1.div-1.div-1.div-1.div-1">
             <head>Z toho příkladu vejklad nebo rozum duchovní jest tento:</head>
             <ref target="#t-1.body-1.div-1.div-1.p-1.pb-1">1v</ref>
-          </item>
-          <item corresp="#t-1.body-1.div-1.div-1.div-2.div-1.head-1">
-            <head>Jiná</head>
-            <ref target="#t-1.body-1.div-1.div-1.div-1.div-1.p-1.pb-2">2v</ref>
-          </item>
-          <item corresp="#t-1.body-1.div-1.div-1.div-3.div-1.head-1">
-            <head>O lenosti tří synóv</head>
-            <ref target="#t-1.body-1.div-1.div-1.div-2.div-2.p-3.pb-1">6r</ref>
-          </item>
-          <item corresp="#t-1.body-1.div-1.div-1.div-4.div-1.head-1">
-            <head>O cizoložství</head>
-            <ref target="#t-1.body-1.div-1.div-1.div-3.div-2.p-1.pb-1">7v</ref>
-          </item>
-          <item corresp="#t-1.body-1.div-1.div-1.div-5.div-1.head-1">
-            <head>O třech synech</head>
-            <ref target="#t-1.body-1.div-1.div-1.div-4.div-3.p-1.pb-1">9v</ref>
-          </item>
-          <item corresp="#t-1.body-1.div-1.div-1.div-6.div-1.head-1">
-            <head>O obležení římském</head>
-            <ref target="#t-1.body-1.div-1.div-1.div-5.div-2.p-2.pb-1">10v</ref>
-            <list>
-              <item corresp="#t-1.body-1.div-1.div-1.div-7.head-1">
-                <head>O jednom pústeníku</head>
-                <ref target="#t-1.body-1.div-1.div-1.div-6.div-1.p-2.pb-1">11v</ref>
-                <list>
-                  <item corresp="#t-1.body-1.div-1.div-1.div-8.div-1.head-1">
-                    <head>Rozum toho</head>
-                    <ref target="#t-1.body-1.div-1.div-1.div-7.p-1.pb-1">12r</ref>
-                  </item>
-                  <item corresp="#t-1.body-1.div-1.div-1.div-9.div-1.head-1">
-                    <head>O jedné dceři</head>
-                    <ref target="#t-1.body-1.div-1.div-1.div-8.div-1.p-1.pb-1">12v</ref>
-                  </item>
-                  <item corresp="#t-1.body-1.div-1.div-1.div-10.div-1.head-1">
-                    <head>O súdcí</head>
-                    <ref target="#t-1.body-1.div-1.div-1.div-9.div-1.p-2.pb-1">13v</ref>
-                    <list>
-                      <item corresp="#t-1.body-1.div-1.div-1.div-11.head-1">
-                        <head>O vítězovi</head>
-                        <ref target="#t-1.body-1.div-1.div-1.div-10.div-1.p-2.pb-1">14r</ref>
-                        <list>
-                          <item corresp="#t-1.body-1.div-1.div-1.div-12.div-1.head-1">
-                            <head>Z té řeči tento rozum jest:</head>
-                            <ref target="#t-1.body-1.div-1.div-1.div-11.p-1.pb-1">14v</ref>
-                            <list>
-                              <item corresp="#t-1.body-1.div-1.div-1.div-13.head-1">
-                                <head>O sčastném dřevě</head>
-                                <ref target="#t-1.body-1.div-1.div-1.div-12.div-2.p-2.pb-1">16r</ref>
-                                <list>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-14.div-1.head-1">
-                                    <head>Z kteréžto řeči toto naučení jest</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-12.div-2.p-2.pb-1">16r</ref>
-                                  </item>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-15.div-1.head-1">
-                                    <head>O dvú synú</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-14.div-1.p-1.pb-2">17r</ref>
-                                  </item>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-16.div-1.head-1">
-                                    <head>O jednom dietěti</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-15.div-2.pb-1">18v</ref>
-                                  </item>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-17.div-1.head-1">
-                                    <head>O římské bohyni</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-16.div-1.p-2.pb-1">19v</ref>
-                                  </item>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-18.div-1.head-1">
-                                    <head>O zemi</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-17.div-2.p-2.pb-1">21r</ref>
-                                  </item>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-19.div-1.head-1">
-                                    <head>O sklenáři</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-18.div-1.pb-1">21v</ref>
-                                  </item>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-20.div-1.head-1">
-                                    <head>O čtyřech synech</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-19.div-3.p-1.pb-1">23r</ref>
-                                  </item>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-21.div-1.head-1">
-                                    <head>O zloději</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-20.div-1.p-2.pb-1">24v</ref>
-                                  </item>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-22.div-1.head-1">
-                                    <head>O ženské zlosti</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-21.div-1.p-1.pb-2">25v</ref>
-                                  </item>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-23.div-1.head-1">
-                                    <head>Rozum té řeči</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-22.div-5.p-1.pb-2">31v</ref>
-                                  </item>
-                                  <item corresp="#t-1.body-1.div-1.div-1.div-24.div-1.head-1">
-                                    <head>O jednom kováři</head>
-                                    <ref target="#t-1.body-1.div-1.div-1.div-23.div-2.p-1.pb-1">32v</ref>
-                                    <list>
-                                      <item corresp="#t-1.body-1.div-1.div-1.div-25.head-1">
-                                        <head>O zloději</head>
-                                        <ref target="#t-1.body-1.div-1.div-1.div-24.div-1.p-5.pb-3">36r</ref>
-                                        <list>
-                                          <item corresp="#t-1.body-1.div-1.div-1.div-26.div-1.head-1">
-                                            <head>Vejklad toho tento jest</head>
-                                            <ref target="#t-1.body-1.div-1.div-1.div-25.p-2.pb-1">36v</ref>
-                                          </item>
-                                          <item corresp="#t-1.body-1.div-1.div-1.div-27.div-1.head-1">
-                                            <head>Tuto znamenaj</head>
-                                            <ref target="#t-1.body-1.div-1.div-1.div-26.div-2.p-3.pb-2">39v</ref>
-                                            <list>
-                                              <item corresp="#t-1.body-1.div-1.div-1.div-28.head-1">
-                                                <head>Tento příklad jest o přílišné pejše a velmě pěkný</head>
-                                                <ref target="#t-1.body-1.div-1.div-1.div-27.div-1.p-3.pb-2">41v</ref>
-                                                <list>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-29.div-1.head-1">
-                                                    <head>Z této řeči naučení toto</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-28.p-4.pb-1">45v</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-30.div-1.head-1">
-                                                    <head>O jednom synu</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-29.div-1.p-1.pb-1">46r</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-31.div-1.head-1">
-                                                    <head>O jedné ženě</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-30.div-1.p-11.pb-2">53r</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-32.div-1.head-1">
-                                                    <head>O jednom mudrci</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-31.div-2.pb-1">54r</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-33.div-1.head-1">
-                                                    <head>O jedné krásné paní</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-32.div-1.p-4.pb-1">56r</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-34.div-1.head-1">
-                                                    <head>O hadu a žábě</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-33.div-1.p-3.pb-2">58r</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-35.div-1.head-1">
-                                                    <head>O jednom vepři</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.pb-1">59v</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-36.div-1.head-1">
-                                                    <head>O jedné paní a rytíři</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-35.div-2.p-4.pb-1">62v</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-37.div-1.head-1">
-                                                    <head>O tří snóv</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-36.div-1.p-2.pb-1">63v</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-38.div-1.head-1">
-                                                    <head>O zchovancích</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-37.div-1.p-2.pb-1">65v</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-39.div-1.head-1">
-                                                    <head>O jedné ženě a synu jejím</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-38.div-1.p-4.pb-1">67r</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-40.div-1.head-1">
-                                                    <head>O jednom kříži</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-39.div-1.p-2.pb-1">68r</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-41.div-1.head-1">
-                                                    <head>O jednom rytíři</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-40.div-1.p-2.pb-1">69v</ref>
-                                                  </item>
-                                                  <item corresp="#t-1.body-1.div-1.div-1.div-42.div-1.head-1">
-                                                    <head>O jedné panně</head>
-                                                    <ref target="#t-1.body-1.div-1.div-1.div-41.div-1.p-3.pb-2">71r</ref>
-                                                    <list>
-                                                      <item corresp="#t-1.body-1.div-1.div-1.div-43.head-1">
-                                                        <head>O zlé ženě a třech kohútech</head>
-                                                        <ref target="#t-1.body-1.div-1.div-1.div-42.div-2.p-2.pb-1">74r</ref>
-                                                        <list>
-                                                          <item corresp="#t-1.body-1.div-1.div-1.div-44.div-1.head-1">
-                                                            <head>Z té řeči rozum duchovní jest tento:</head>
-                                                            <ref target="#t-1.body-1.div-1.div-1.div-43.p-1.pb-1">74v</ref>
-                                                            <list>
-                                                              <item corresp="#t-1.body-1.div-1.div-1.div-45.head-1">
-                                                                <head>O jednom tesaři a o jeho věrné ženě</head>
-                                                                <ref target="#t-1.body-1.div-1.div-1.div-44.div-1.p-1.pb-1">75r</ref>
-                                                                <list>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-46.div-1.head-1">
-                                                                    <head>Rozum té řeči</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-45.p-6.pb-2">77v</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-47.div-1.head-1">
-                                                                    <head>O jednom, jenž sobě tři přítele učinil</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-46.div-5.p-2.pb-2">84v</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-48.div-1.head-1">
-                                                                    <head>O odpraveném</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-47.div-1.p-5.pb-1">86v</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-49.div-1.head-1">
-                                                                    <head>O slepém</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-48.div-1.p-5.pb-1">88r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-50.div-1.head-1">
-                                                                    <head>O jednom bláznu</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-49.div-1.p-1.pb-1">88v</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-51.div-1.head-1">
-                                                                    <head>O jednom pacholku</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-50.div-2.p-1.pb-1">91r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-52.div-1.head-1">
-                                                                    <head>Velmě pěkná o několika osobách etc.</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-51.div-1.pb-1">92r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-53.div-1.head-1">
-                                                                    <head>O jednom vepři</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-52.div-1.p-9.pb-1">98v</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-54.div-1.head-1">
-                                                                    <head>O strace a nevěrné ženě</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-53.div-4.p-2.pb-1">101r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-55.div-1.head-1">
-                                                                    <head>O jedné ženě, jenž mínila jiného milovati</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-54.div-1.p-2.pb-1">102r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-56.div-1.head-1">
-                                                                    <head>Tuto znamenaj o rozličných věcech a o některých chytrostech etc.</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-55.div-1.p-3.pb-2">104v</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-57.div-1.head-1">
-                                                                    <head>O sedmi mudrcích a o dietěti</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-56.div-2.p-3.pb-1">109r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-58.div-1.head-1">
-                                                                    <head>O jednom sluze</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-57.div-1.p-5.pb-1">111r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-59.div-1.head-1">
-                                                                    <head>O jednorožci</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-58.div-2.p-2.pb-1">114r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-60.div-1.head-1">
-                                                                    <head>O jednom rytíři, o nevěrné panně etc.</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-59.div-2.p-2.pb-1">115r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-61.div-1.head-1">
-                                                                    <head>O vrátném</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-60.div-6.p-1.pb-1">119v</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-62.div-1.head-1">
-                                                                    <head>Výpis člověka</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-61.div-2.p-2.pb-1">121r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-63.div-1.head-1">
-                                                                    <head>O jednom kupci</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-62.div-14.p-5.pb-2">133r</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-64.div-1.head-1">
-                                                                    <head>O jednom hrobu</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-63.div-1.p-6.pb-1">135v</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-65.div-1.head-1">
-                                                                    <head>O jedné arcibezectné ženě etc.</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-64.div-1.p-2.pb-1">136v</ref>
-                                                                  </item>
-                                                                  <item corresp="#t-1.body-1.div-1.div-1.div-66.div-1.head-1">
-                                                                    <head>O dvú věrných v manželství</head>
-                                                                    <ref target="#t-1.body-1.div-1.div-1.div-65.div-1.p-5.pb-2">139r</ref>
-                                                                  </item>
-                                                                </list>
-                                                              </item>
-                                                            </list>
-                                                          </item>
-                                                        </list>
-                                                      </item>
-                                                    </list>
-                                                  </item>
-                                                </list>
-                                              </item>
-                                            </list>
-                                          </item>
-                                        </list>
-                                      </item>
-                                    </list>
-                                  </item>
-                                </list>
-                              </item>
-                            </list>
-                          </item>
-                        </list>
-                      </item>
-                    </list>
-                  </item>
-                </list>
-              </item>
-            </list>
           </item>
         </list>
       </item>
     </list>
   </itj:tableOfContent>
+  <itj:headwordsList />
   <itj:pages>
     <itj:page n="1r" xml:id="t-1.body-1.pb-1" resource="GestaM_0001.xml" />
     <itj:page n="2r" xml:id="t-1.body-1.div-1.div-1.div-1.div-1.p-1.pb-1" resource="GestaM_0002.xml" />

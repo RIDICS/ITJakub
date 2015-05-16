@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<itj:document doctype="Dictionary" versionId="4a7d6b82-d430-439f-a21c-177dfedfb7b0" xml:lang="cs" n="{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<itj:document doctype="Dictionary" versionId="a65d5155-0e32-4a3e-89b3-04b183aa46c4" xml:lang="cs" n="{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" xmlns="http://www.tei-c.org/ns/1.0" xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <teiHeader>
     <fileDesc n="4E5DB418-B49B-4AC0-AE9F-78A53E9BE4FE">
       <titleStmt>
@@ -94,10 +94,16 @@
       <change n="Change_2015-05-15T11:01:01.0000000" when="2015-05-15T11:01:01"></change>
       <change n="Change_2015-05-15T11:15:41.0000000" when="2015-05-15T11:15:41"></change>
       <change n="Change_2015-05-15T12:08:40.0000000" when="2015-05-15T12:08:40"></change>
-      <change n="4a7d6b82-d430-439f-a21c-177dfedfb7b0" when="2015-05-15T12:45:37.2210956Z"></change>
+      <change n="Change_2015-05-15T12:45:37.0000000" when="2015-05-15T12:45:37"></change>
+      <change n="Change_2015-05-15T22:22:11.0000000" when="2015-05-15T22:22:11"></change>
+      <change n="Change_2015-05-15T23:43:56.0000000" when="2015-05-15T23:43:56"></change>
+      <change n="Change_2015-05-15T23:45:13.0000000" when="2015-05-15T23:45:13"></change>
+      <change n="Change_2015-05-15T23:47:07.0000000" when="2015-05-15T23:47:07"></change>
+      <change n="a65d5155-0e32-4a3e-89b3-04b183aa46c4" when="2015-05-15T23:52:18.8680341Z"></change>
     </revisionDesc>
   </teiHeader>
-  <itj:tableOfContent>
+  <itj:tableOfContent />
+  <itj:headwordsList>
     <list>
       <item corresp="#lt01">
         <head>A</head>
@@ -16821,6 +16827,6 @@
         </list>
       </item>
     </list>
-  </itj:tableOfContent>
+  </itj:headwordsList>
   <itj:pages />
 </itj:document>
