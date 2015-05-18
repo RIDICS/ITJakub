@@ -211,9 +211,10 @@ class DropDownSelect {
 
         $(filterInput).change(function() {
             if ($(this).val() == "") {
-                $(this).parents(".dropdown-select-body").children(".concrete-item").show();
+                $(this).parents(".dropdown-select-body").find(".concrete-item").show();
             } else {
-                $(this).parents(".dropdown-select-body").children(".concrete-item").hide().filter(":containsCI(" + $(this).val() + ")").show(); //TODO show cascade only of elements which contains input and their parents
+                $(this).parents(".dropdown-select-body").find(".concrete-item").hide(); 
+                $(this).parents(".dropdown-select-body").find(".concrete-item-name").filter(":containsCI(" + $(this).val() + ")").parents(".concrete-item").show();
             }
         });
 
