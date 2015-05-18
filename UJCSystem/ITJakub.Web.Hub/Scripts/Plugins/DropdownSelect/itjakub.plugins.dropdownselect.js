@@ -138,7 +138,7 @@ var DropDownSelect = (function () {
                 $(this).parents(".dropdown-select-body").children(".concrete-item").show();
             }
             else {
-                $(this).parents(".dropdown-select-body").children(".concrete-item").hide().filter(":contains(" + $(this).val() + ")").show();
+                $(this).parents(".dropdown-select-body").children(".concrete-item").hide().filter(":containsCI(" + $(this).val() + ")").show(); //TODO show cascade only of elements which contains input and their parents
             }
         });
         filterDiv.appendChild(filterInput);

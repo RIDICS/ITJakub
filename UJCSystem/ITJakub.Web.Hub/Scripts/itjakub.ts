@@ -18,3 +18,7 @@ function getQueryStringParameterByName(name) {
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
+
+// jQuery case-insensitive contains
+jQuery.expr[':'].containsCI = (a, i, m) => (jQuery(a).text().toLowerCase()
+    .indexOf(m[3].toLowerCase()) >= 0);
