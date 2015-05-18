@@ -186,11 +186,18 @@ var DropDownSelect = (function () {
         $(checkbox).change(function () {
             var items = $(dropDownItemsDiv).children(".concrete-item").children("input");
             if (this.checked) {
-                self.addToSelectedCategories(info);
-                $(items).prop('checked', false);
-                $(items).change();
-                $(items).prop('checked', true);
-                $(items).change();
+                if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
+                    self.addToSelectedCategories(info);
+                    $(items).prop('checked', false);
+                    $(items).change();
+                    $(dropDownItemsDiv).find(".concrete-item").find("input").prop('checked', true);
+                }
+                else {
+                    $(items).prop('checked', false);
+                    $(items).change();
+                    $(items).prop('checked', true);
+                    $(items).change();
+                }
             }
             else {
                 self.removeFromSelectedCategories(info);
@@ -213,6 +220,30 @@ var DropDownSelect = (function () {
             }
         }
     };
+    DropDownSelect.prototype.propagateSelectChange = function (concreteItemSource) {
+        var actualItem = $(concreteItemSource).parent().closest(".concrete-item");
+        var actualItemInput = $(actualItem).children("input");
+        var actualItemChilds = $(concreteItemSource).siblings(".concrete-item");
+        var checkedChilds = $(actualItemChilds).children("input:checked");
+        var info = this.createCallbackInfo(actualItem.data("id"), actualItem.data("name"), actualItem);
+        if (checkedChilds.length === actualItemChilds.length) {
+            var itemsInputs = $(actualItemChilds).children("input");
+            this.addToSelectedCategories(info);
+            $(itemsInputs).prop('checked', false);
+            $(itemsInputs).change([{ propagate: false }]);
+            $(actualItemChilds).find("input").prop('checked', true);
+            $(actualItemInput).prop('checked', true);
+        }
+        else {
+            this.removeFromSelectedCategories(info);
+            $(actualItemInput).prop('indeterminate', true);
+            if (checkedChilds.length === 0) {
+                $(actualItemInput).prop('checked', false);
+                $(actualItemInput).prop('indeterminate', false);
+            }
+        }
+        this.propagateSelectChange(actualItem[0]);
+    };
     DropDownSelect.prototype.makeCategoryItem = function (container, currentCategory, categories, leafItems) {
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
@@ -224,19 +255,29 @@ var DropDownSelect = (function () {
         checkbox.type = "checkbox";
         var info = this.createCallbackInfo(this.getCategoryId(currentCategory), this.getCategoryName(currentCategory), itemDiv);
         var self = this;
-        $(checkbox).change(function () {
+        $(checkbox).change(function (event, propagate) {
             var items = $(itemDiv).children(".child-items").children(".concrete-item").children("input");
             if (this.checked) {
-                self.addToSelectedCategories(info);
-                $(items).prop('checked', false);
-                $(items).change();
-                $(items).prop('checked', true);
-                $(items).change();
+                if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
+                    self.addToSelectedCategories(info);
+                    $(items).prop('checked', false);
+                    $(items).change();
+                    $(itemDiv).children(".child-items").find(".concrete-item").find("input").prop('checked', true);
+                }
+                else {
+                    $(items).prop('checked', false);
+                    $(items).change();
+                    $(items).prop('checked', true);
+                    $(items).change();
+                }
             }
             else {
                 self.removeFromSelectedCategories(info);
                 $(items).prop('checked', false);
                 $(items).change();
+            }
+            if (typeof propagate === "undefined" || propagate === null || propagate) {
+                self.propagateSelectChange($(this).parent(".concrete-item")[0]);
             }
         });
         itemDiv.appendChild(checkbox);
@@ -317,12 +358,15 @@ var DropDownSelect = (function () {
         checkbox.type = "checkbox";
         var info = this.createCallbackInfo(this.getLeafItemId(currentLeafItem), this.getLeafItemName(currentLeafItem), itemDiv);
         var self = this;
-        $(checkbox).change(function () {
+        $(checkbox).change(function (event, propagate) {
             if (this.checked) {
                 self.addToSelectedItems(info);
             }
             else {
                 self.removeFromSelectedItems(info);
+            }
+            if (typeof propagate === "undefined" || propagate === null || propagate) {
+                self.propagateSelectChange($(this).parent(".concrete-item")[0]);
             }
         });
         itemDiv.appendChild(checkbox);
@@ -352,7 +396,7 @@ var DropDownSelect = (function () {
         }
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("concrete-item-name");
-        nameSpan.innerText = this.getLeafItemName(currentLeafItem);
+        nameSpan.innerHTML = this.getLeafItemName(currentLeafItem);
         itemDiv.appendChild(nameSpan);
         container.appendChild(itemDiv);
     };
