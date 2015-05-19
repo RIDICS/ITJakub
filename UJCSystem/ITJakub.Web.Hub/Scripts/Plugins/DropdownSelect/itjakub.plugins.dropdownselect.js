@@ -222,24 +222,28 @@ var DropDownSelect = (function () {
     };
     DropDownSelect.prototype.propagateSelectChange = function (concreteItemSource) {
         var actualItem = $(concreteItemSource).parent().closest(".concrete-item");
+        if (actualItem.length === 0)
+            return;
         var actualItemInput = $(actualItem).children("input");
         var actualItemChilds = $(concreteItemSource).siblings(".concrete-item");
         var checkedChilds = $(actualItemChilds).children("input:checked");
         var info = this.createCallbackInfo(actualItem.data("id"), actualItem.data("name"), actualItem);
-        if (checkedChilds.length === actualItemChilds.length) {
-            var itemsInputs = $(actualItemChilds).children("input");
-            this.addToSelectedCategories(info);
-            $(itemsInputs).prop('checked', false);
-            $(itemsInputs).change([{ propagate: false }]);
-            $(actualItemChilds).find("input").prop('checked', true);
-            $(actualItemInput).prop('checked', true);
-        }
-        else {
-            this.removeFromSelectedCategories(info);
-            $(actualItemInput).prop('indeterminate', true);
-            if (checkedChilds.length === 0) {
-                $(actualItemInput).prop('checked', false);
-                $(actualItemInput).prop('indeterminate', false);
+        if (actualItemChilds.length !== 0) {
+            if (checkedChilds.length === actualItemChilds.length) {
+                var itemsInputs = $(actualItemChilds).children("input");
+                this.addToSelectedCategories(info);
+                $(itemsInputs).prop('checked', false);
+                $(itemsInputs).trigger("change", [false]);
+                $(actualItemChilds).find("input").prop('checked', true);
+                $(actualItemInput).prop('checked', true);
+            }
+            else {
+                this.removeFromSelectedCategories(info);
+                $(actualItemInput).prop('indeterminate', true);
+                if (checkedChilds.length === 0) {
+                    $(actualItemInput).prop('checked', false);
+                    $(actualItemInput).prop('indeterminate', false);
+                }
             }
         }
         this.propagateSelectChange(actualItem[0]);
@@ -416,8 +420,11 @@ var DropDownSelect = (function () {
         this.selectedChanged();
     };
     DropDownSelect.prototype.addToSelectedCategories = function (info) {
-        this.selectedCategories.push(new Category(info.ItemId, info.ItemText));
-        this.selectedChanged();
+        var isSelected = $.grep(this.selectedCategories, function (category) { return (category.Id === info.ItemId); }, false).length !== 0;
+        if (!isSelected) {
+            this.selectedCategories.push(new Category(info.ItemId, info.ItemText));
+            this.selectedChanged();
+        }
     };
     DropDownSelect.prototype.removeFromSelectedCategories = function (info) {
         this.selectedCategories = $.grep(this.selectedCategories, function (category) { return (category.Id !== info.ItemId); }, false);
