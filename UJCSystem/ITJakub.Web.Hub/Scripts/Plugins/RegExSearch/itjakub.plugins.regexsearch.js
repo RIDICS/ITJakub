@@ -78,6 +78,14 @@ var RegExSearch = (function (_super) {
         var arrayItem = this.regExConditions.pop();
         this.innerContainer.removeChild(arrayItem.htmlElement);
     };
+    RegExSearch.prototype.getConditionsString = function () {
+        var outputString = "";
+        for (var i = 0; i < this.regExConditions.length; i++) {
+            var regExConditions = this.regExConditions[i].regExConditions;
+            outputString += "(?=.*(" + regExConditions.getConditionsString() + "))";
+        }
+        return "^" + outputString + ".*$";
+    };
     return RegExSearch;
 })(RegExSearchBase);
 var RegExConditionsArrayItem = (function () {
@@ -199,6 +207,14 @@ var RegExConditions = (function (_super) {
             this.resetConditions();
         }
     };
+    RegExConditions.prototype.getConditionsString = function () {
+        var conditionsString = this.conditionsInputArray[0].regExInput.getConditionValue();
+        for (var i = 1; i < this.conditionsInputArray.length; i++) {
+            var regExInput = this.conditionsInputArray[i].regExInput;
+            conditionsString += "|" + regExInput.getConditionValue();
+        }
+        return conditionsString;
+    };
     return RegExConditions;
 })(RegExSearchBase);
 var RegExInput = (function (_super) {
@@ -254,14 +270,14 @@ var RegExEditor = (function (_super) {
     __extends(RegExEditor, _super);
     function RegExEditor(container, searchBox) {
         _super.call(this);
-        this.conditionType = {
+        this.conditionType = Object.freeze({
             StartsWith: "starts-with",
             NotStartsWith: "not-starts-with",
             Contains: "contains",
             NotContains: "not-contains",
             EndsWith: "ends-with",
             NotEndsWith: "not-ends-with"
-        };
+        });
         this.container = container;
         this.searchBox = searchBox;
     }
@@ -332,8 +348,31 @@ var RegExEditor = (function (_super) {
         //submitButton.style.marginLeft = "25px";
         commandButtonsDiv.appendChild(submitButton);
         $(submitButton).click(function () {
-            _this.searchBox.value = conditionInput.value;
-            // TODO more logic - using conditionType
+            var inputValue = conditionInput.value;
+            var outputValue;
+            switch (conditionSelect.value) {
+                case _this.conditionType.StartsWith:
+                    outputValue = "(" + inputValue + ")(.*)";
+                    break;
+                case _this.conditionType.NotStartsWith:
+                    outputValue = "(?!" + inputValue + ")(.*)";
+                    break;
+                case _this.conditionType.Contains:
+                    outputValue = "(.*)(" + inputValue + ")(.*)";
+                    break;
+                case _this.conditionType.NotContains:
+                    outputValue = "((?!" + inputValue + ").)*";
+                    break;
+                case _this.conditionType.EndsWith:
+                    outputValue = "(.*)(" + inputValue + ")";
+                    break;
+                case _this.conditionType.NotEndsWith:
+                    outputValue = "((?!" + inputValue + "$).)*";
+                    break;
+                default:
+                    outputValue = "";
+            }
+            _this.searchBox.value = "^" + outputValue + "$";
             $(_this.container).addClass("hidden");
         });
         $(this.container).append(mainRegExDiv);

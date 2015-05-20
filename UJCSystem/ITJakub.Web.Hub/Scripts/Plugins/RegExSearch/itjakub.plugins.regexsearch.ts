@@ -91,6 +91,17 @@ class RegExSearch extends RegExSearchBase {
         var arrayItem: RegExConditionsArrayItem = this.regExConditions.pop();
         this.innerContainer.removeChild(arrayItem.htmlElement);
     }
+
+    public getConditionsString(): string {
+        var outputString = "";
+
+        for (var i = 0; i < this.regExConditions.length; i++) {
+            var regExConditions = this.regExConditions[i].regExConditions;
+            outputString += "(?=.*(" + regExConditions.getConditionsString() + "))";
+        }
+
+        return "^" + outputString + ".*$";
+    }
 }
 
 class RegExConditionsArrayItem {
@@ -253,6 +264,16 @@ class RegExConditions extends RegExSearchBase {
             this.resetConditions();
         }
     }
+
+    public getConditionsString(): string {
+        var conditionsString = this.conditionsInputArray[0].regExInput.getConditionValue();
+        for (var i = 1; i < this.conditionsInputArray.length; i++) {
+            var regExInput = this.conditionsInputArray[i].regExInput;
+            conditionsString += "|" + regExInput.getConditionValue();
+        }
+
+        return conditionsString;
+    }
 }
 
 class RegExInput extends RegExSearchBase {
@@ -325,14 +346,14 @@ class RegExEditor extends RegExSearchBase {
         this.searchBox = searchBox;
     }
 
-    private conditionType = {
+    private conditionType = Object.freeze({
         StartsWith: "starts-with",
         NotStartsWith: "not-starts-with",
         Contains: "contains",
         NotContains: "not-contains",
         EndsWith: "ends-with",
         NotEndsWith: "not-ends-with"
-    };
+    });
 
     public makeRegExEditor() {
         $(this.container).empty();
@@ -421,8 +442,33 @@ class RegExEditor extends RegExSearchBase {
         //submitButton.style.marginLeft = "25px";
         commandButtonsDiv.appendChild(submitButton);
         $(submitButton).click(() => {
-            this.searchBox.value = conditionInput.value;
-            // TODO more logic - using conditionType
+            var inputValue: string = conditionInput.value;
+            var outputValue: string;
+            
+            switch (conditionSelect.value) {
+                case this.conditionType.StartsWith:
+                    outputValue = "(" + inputValue + ")(.*)";
+                    break;
+                case this.conditionType.NotStartsWith:
+                    outputValue = "(?!" + inputValue + ")(.*)";
+                    break;
+                case this.conditionType.Contains:
+                    outputValue = "(.*)(" + inputValue + ")(.*)";
+                    break;
+                case this.conditionType.NotContains:
+                    outputValue = "((?!" + inputValue + ").)*";
+                    break;
+                case this.conditionType.EndsWith:
+                    outputValue = "(.*)(" + inputValue + ")";
+                    break;
+                case this.conditionType.NotEndsWith:
+                    outputValue = "((?!" + inputValue + "$).)*";
+                    break;
+                default:
+                    outputValue = "";
+            }
+
+            this.searchBox.value = "^" + outputValue + "$";
 
             $(this.container).addClass("hidden");
         });
