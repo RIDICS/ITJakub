@@ -16,6 +16,11 @@ var DropDownSelectCallbackDelegate = (function () {
         };
         this.getRootCategoryCallback = function (categories) {
             return categories[""][0];
+            //var rootCategories = categories[""];
+            //if (typeof rootCategories !== "undefined" && rootCategories !==null && rootCategories.length > 0) {
+            //    return [0];   
+            //}
+            //return null;
         };
         this.getCategoryIdCallback = function (category) {
             return category["Id"];
@@ -183,26 +188,26 @@ var DropDownSelect = (function () {
         var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
         var info = this.createCallbackInfo(this.getCategoryId(rootCategory), this.getCategoryName(rootCategory), selectHeader);
         var self = this;
-        $(checkbox).change(function () {
+        $(checkbox).change(function (event, propagate) {
             var items = $(dropDownItemsDiv).children(".concrete-item").children("input");
             if (this.checked) {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
                     self.addToSelectedCategories(info);
                     $(items).prop('checked', false);
-                    $(items).change();
+                    $(items).trigger("change");
                     $(dropDownItemsDiv).find(".concrete-item").find("input").prop('checked', true);
                 }
                 else {
                     $(items).prop('checked', false);
-                    $(items).change();
+                    $(items).trigger("change");
                     $(items).prop('checked', true);
-                    $(items).change();
+                    $(items).trigger("change");
                 }
             }
             else {
                 self.removeFromSelectedCategories(info);
                 $(items).prop('checked', false);
-                $(items).change();
+                $(items).trigger("change");
             }
         });
         var childCategories = this.getChildCategories(categories, rootCategory);
@@ -225,13 +230,14 @@ var DropDownSelect = (function () {
         if (actualItem.length === 0)
             return;
         var actualItemInput = $(actualItem).children("input");
-        var actualItemChilds = $(concreteItemSource).siblings(".concrete-item");
+        var actualItemChilds = $(actualItem).children(".child-items").children(".concrete-item");
         var checkedChilds = $(actualItemChilds).children("input:checked");
         var info = this.createCallbackInfo(actualItem.data("id"), actualItem.data("name"), actualItem);
         if (actualItemChilds.length !== 0) {
             if (checkedChilds.length === actualItemChilds.length) {
                 var itemsInputs = $(actualItemChilds).children("input");
                 this.addToSelectedCategories(info);
+                $(actualItemInput).prop('indeterminate', false);
                 $(itemsInputs).prop('checked', false);
                 $(itemsInputs).trigger("change", [false]);
                 $(actualItemChilds).find("input").prop('checked', true);
@@ -239,10 +245,13 @@ var DropDownSelect = (function () {
             }
             else {
                 this.removeFromSelectedCategories(info);
-                $(actualItemInput).prop('indeterminate', true);
+                $(actualItemInput).prop('checked', false);
                 if (checkedChilds.length === 0) {
-                    $(actualItemInput).prop('checked', false);
                     $(actualItemInput).prop('indeterminate', false);
+                }
+                else {
+                    $(actualItemInput).prop('indeterminate', true);
+                    $(actualItemChilds).children("input:checked").trigger("change", [false]); //TODO could be call only when selectedChilds = childs - 1
                 }
             }
         }
@@ -265,20 +274,20 @@ var DropDownSelect = (function () {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
                     self.addToSelectedCategories(info);
                     $(items).prop('checked', false);
-                    $(items).change();
+                    $(items).trigger("change", [false]);
                     $(itemDiv).children(".child-items").find(".concrete-item").find("input").prop('checked', true);
                 }
                 else {
                     $(items).prop('checked', false);
-                    $(items).change();
+                    $(items).trigger("change", [false]);
                     $(items).prop('checked', true);
-                    $(items).change();
+                    $(items).trigger("change", [false]);
                 }
             }
             else {
                 self.removeFromSelectedCategories(info);
                 $(items).prop('checked', false);
-                $(items).change();
+                $(items).trigger("change", [false]);
             }
             if (typeof propagate === "undefined" || propagate === null || propagate) {
                 self.propagateSelectChange($(this).parent(".concrete-item")[0]);
@@ -412,8 +421,11 @@ var DropDownSelect = (function () {
         return info;
     };
     DropDownSelect.prototype.addToSelectedItems = function (info) {
-        this.selectedItems.push(new Item(info.ItemId, info.ItemText));
-        this.selectedChanged();
+        var isSelected = $.grep(this.selectedItems, function (item) { return (item.Id === info.ItemId); }, false).length !== 0;
+        if (!isSelected) {
+            this.selectedItems.push(new Item(info.ItemId, info.ItemText));
+            this.selectedChanged();
+        }
     };
     DropDownSelect.prototype.removeFromSelectedItems = function (info) {
         this.selectedItems = $.grep(this.selectedItems, function (item) { return (item.Id !== info.ItemId); }, false);
