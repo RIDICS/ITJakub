@@ -97,7 +97,6 @@ var DropDownSelect = (function () {
         $(checkBoxSpan).addClass("dropdown-select-checkbox");
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        //checkbox.indeterminate = true;
         checkBoxSpan.appendChild(checkbox);
         dropDownHeadDiv.appendChild(checkBoxSpan);
         var textSpan = document.createElement("span");
@@ -198,11 +197,13 @@ var DropDownSelect = (function () {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
                     self.addToSelectedCategories(info);
                     $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
                     $(items).trigger("change", [false]);
                     $(dropDownItemsDiv).find(".concrete-item").find("input").prop("checked", true);
                 }
                 else {
                     $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
                     $(items).trigger("change", [false]);
                     $(items).prop("checked", true);
                     $(items).trigger("change", [false]);
@@ -234,11 +235,13 @@ var DropDownSelect = (function () {
         var actualItemInput;
         var actualItemChilds;
         var checkedChilds;
+        var indeterminateChilds;
         if (actualItem.length === 0) {
             actualItem = $(concreteItemSource).parent().closest(".dropdown-select").children(".dropdown-select-header");
             actualItemInput = $(actualItem).children(".dropdown-select-checkbox").children("input");
             actualItemChilds = $(actualItem).parent().closest(".dropdown-select").children(".dropdown-select-body").children(".concrete-item");
             checkedChilds = $(actualItemChilds).children("input:checked");
+            indeterminateChilds = $.grep(actualItemChilds.get(), function (itemChild) { return ($(itemChild).children("input").prop("indeterminate") === true); }, false);
             if (!actualItem.data("id")) {
                 if (actualItemChilds.length !== 0) {
                     if (checkedChilds.length === actualItemChilds.length) {
@@ -246,7 +249,7 @@ var DropDownSelect = (function () {
                     }
                     else {
                         $(actualItemInput).prop("checked", false);
-                        if (checkedChilds.length === 0) {
+                        if (checkedChilds.length === 0 && indeterminateChilds.length === 0) {
                             $(actualItemInput).prop("indeterminate", false);
                         }
                         else {
@@ -261,6 +264,7 @@ var DropDownSelect = (function () {
             actualItemInput = $(actualItem).children("input");
             actualItemChilds = $(actualItem).children(".child-items").children(".concrete-item");
             checkedChilds = $(actualItemChilds).children("input:checked");
+            indeterminateChilds = $.grep(actualItemChilds.get(), function (itemChild) { return ($(itemChild).children("input").prop("indeterminate") === true); }, false);
         }
         var info = this.createCallbackInfo(actualItem.data("id"), actualItem.data("name"), actualItem);
         if (actualItemChilds.length !== 0) {
@@ -276,7 +280,7 @@ var DropDownSelect = (function () {
             else {
                 this.removeFromSelectedCategories(info);
                 $(actualItemInput).prop("checked", false);
-                if (checkedChilds.length === 0) {
+                if (checkedChilds.length === 0 && indeterminateChilds.length === 0) {
                     $(actualItemInput).prop("indeterminate", false);
                 }
                 else {
@@ -306,11 +310,13 @@ var DropDownSelect = (function () {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
                     self.addToSelectedCategories(info);
                     $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
                     $(items).trigger("change", [false]);
                     $(itemDiv).children(".child-items").find(".concrete-item").find("input").prop("checked", true);
                 }
                 else {
                     $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
                     $(items).trigger("change", [false]);
                     $(items).prop("checked", true);
                     $(items).trigger("change", [false]);
@@ -319,6 +325,7 @@ var DropDownSelect = (function () {
             else {
                 self.removeFromSelectedCategories(info);
                 $(items).prop("checked", false);
+                $(items).prop("indeterminate", false);
                 $(items).trigger("change", [false]);
             }
             if (typeof propagate === "undefined" || propagate === null || propagate) {

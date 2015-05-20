@@ -158,7 +158,6 @@ class DropDownSelect {
 
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        //checkbox.indeterminate = true;
 
         checkBoxSpan.appendChild(checkbox);
 
@@ -288,10 +287,12 @@ class DropDownSelect {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
                     self.addToSelectedCategories(info);
                     $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
                     $(items).trigger("change",[false]);
                     $(dropDownItemsDiv).find(".concrete-item").find("input").prop("checked", true);
                 } else {
                     $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
                     $(items).trigger("change", [false]);
                     $(items).prop("checked", true);
                     $(items).trigger("change", [false]);
@@ -326,11 +327,13 @@ class DropDownSelect {
         var actualItemInput: JQuery;
         var actualItemChilds: JQuery;
         var checkedChilds: JQuery;
+        var indeterminateChilds: JQuery;
         if (actualItem.length === 0) { //for checkbox in header
             actualItem = $(concreteItemSource).parent().closest(".dropdown-select").children(".dropdown-select-header");
             actualItemInput = $(actualItem).children(".dropdown-select-checkbox").children("input");
             actualItemChilds = $(actualItem).parent().closest(".dropdown-select").children(".dropdown-select-body").children(".concrete-item");
             checkedChilds = $(actualItemChilds).children("input:checked");
+            indeterminateChilds = <any>$.grep(actualItemChilds.get(),(itemChild) => ($(itemChild).children("input").prop("indeterminate") === true), false);
 
             if (!actualItem.data("id")) {
                 if (actualItemChilds.length !== 0) {
@@ -338,7 +341,7 @@ class DropDownSelect {
                         $(actualItemInput).prop("checked", true);
                     } else {
                         $(actualItemInput).prop("checked", false);
-                        if (checkedChilds.length === 0) {
+                        if (checkedChilds.length === 0 && indeterminateChilds.length === 0) {
                             $(actualItemInput).prop("indeterminate", false);
                         } else {
                             $(actualItemInput).prop("indeterminate", true);
@@ -352,6 +355,7 @@ class DropDownSelect {
             actualItemInput = $(actualItem).children("input");
             actualItemChilds = $(actualItem).children(".child-items").children(".concrete-item");
             checkedChilds = $(actualItemChilds).children("input:checked");
+            indeterminateChilds = <any>$.grep(actualItemChilds.get(),(itemChild) => ($(itemChild).children("input").prop("indeterminate") === true), false);
         }
 
         var info = this.createCallbackInfo(actualItem.data("id"), actualItem.data("name"), actualItem);
@@ -368,7 +372,7 @@ class DropDownSelect {
             } else {
                 this.removeFromSelectedCategories(info);
                 $(actualItemInput).prop("checked", false);
-                if (checkedChilds.length === 0) {
+                if (checkedChilds.length === 0 && indeterminateChilds.length === 0) {
                     $(actualItemInput).prop("indeterminate", false);
                 } else {
                     $(actualItemInput).prop("indeterminate", true);
@@ -405,10 +409,12 @@ class DropDownSelect {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
                     self.addToSelectedCategories(info);
                     $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
                     $(items).trigger("change", [false]);
                     $(itemDiv).children(".child-items").find(".concrete-item").find("input").prop("checked", true);
                 } else {
                     $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
                     $(items).trigger("change", [false]);
                     $(items).prop("checked", true);
                     $(items).trigger("change", [false]);
@@ -416,6 +422,7 @@ class DropDownSelect {
             } else {
                 self.removeFromSelectedCategories(info);
                 $(items).prop("checked", false);
+                $(items).prop("indeterminate", false);
                 $(items).trigger("change", [false]);
             }
 
