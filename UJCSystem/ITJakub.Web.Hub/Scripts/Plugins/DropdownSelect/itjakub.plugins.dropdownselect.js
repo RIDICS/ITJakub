@@ -15,12 +15,13 @@ var DropDownSelectCallbackDelegate = (function () {
             return response["books"];
         };
         this.getRootCategoryCallback = function (categories) {
-            return categories[""][0];
-            //var rootCategories = categories[""];
-            //if (typeof rootCategories !== "undefined" && rootCategories !==null && rootCategories.length > 0) {
-            //    return [0];   
-            //}
-            //return null;
+            if (typeof categories !== "undefined" && categories !== null) {
+                var rootCategories = categories[""];
+                if (typeof rootCategories !== "undefined" && rootCategories !== null && rootCategories.length > 0) {
+                    return rootCategories[0];
+                }
+            }
+            return null;
         };
         this.getCategoryIdCallback = function (category) {
             return category["Id"];

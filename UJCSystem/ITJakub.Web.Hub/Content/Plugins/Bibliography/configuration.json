@@ -282,9 +282,6 @@
             }
         },
         "right-panel": {
-            "info-button": {
-                "url": "\\CardFiles\\info\\{BookGuid}"
-            },
             "read-button": {
                 "url": "\\CardFiles\\CardFiles\\Listing?cardFileId={BookGuid}"
             },
