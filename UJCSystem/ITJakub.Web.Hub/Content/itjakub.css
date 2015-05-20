@@ -778,7 +778,7 @@ ul.bib-listing li.list-item .label {
 .delete-item {
   float: right;
   display: none;
-  color: #ffd700;
+  color: gold;
 }
 .dropdown-filter {
   margin-bottom: 5px;
@@ -995,4 +995,4 @@ ul {
 .navbar-login li a:hover {
   color: #84ced7;
 }
-/*# sourceMappingURL=ITJakub.css.map */
+/*# sourceMappingURL=itjakub.css.map */

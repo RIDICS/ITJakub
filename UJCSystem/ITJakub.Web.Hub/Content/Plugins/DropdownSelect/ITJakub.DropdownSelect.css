@@ -105,7 +105,7 @@ div.container {
 .delete-item {
   float: right;
   display: none;
-  color: #ffd700;
+  color: gold;
 }
 .dropdown-filter {
   margin-bottom: 5px;

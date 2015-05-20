@@ -79,10 +79,6 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Daliboris.Pomucky.Soubory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ITJakub.FileProcessing.Service\Bin\Daliboris.Pomucky.Soubory.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -105,6 +101,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Daliboris.Pomucky.Soubory\Daliboris.Pomucky.Soubory.csproj">
+      <Project>{e6f52bb8-df05-449b-964a-1e35d8f57304}</Project>
+      <Name>Daliboris.Pomucky.Soubory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Pomucky.Texty\Daliboris.Pomucky.Texty.csproj">
       <Project>{ee001376-f27f-4cf5-bca8-b25029b7d09c}</Project>
       <Name>Daliboris.Pomucky.Texty</Name>
