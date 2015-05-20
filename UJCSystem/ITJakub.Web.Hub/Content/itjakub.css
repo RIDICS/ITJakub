@@ -915,6 +915,10 @@ body {
   height: 48px;
   width: 48px;
 }
+.regexsearch-button-glyph {
+  font-size: 10px;
+  margin-left: 4px;
+}
 .regexsearch-button {
   margin-left: 3px;
   margin-right: 3px;
@@ -988,6 +992,7 @@ body {
   border-radius: 0;
   display: inline-block;
   margin-right: -40px;
+  padding-right: 44px;
 }
 .regexsearch-condition-main-div {
   margin: 10px 0 20px 0;
@@ -1170,12 +1175,6 @@ ul {
   background-color: #84ced7;
   color: white;
 }
-.searchbox-button {
-  border-radius: 0;
-  border-width: 0;
-  background-color: transparent;
-  color: #808080;
-}
 .top-offset-without-submenu {
   margin: -32px 0 0 0;
 }
@@ -1186,4 +1185,4 @@ ul {
 .navbar-login li a:hover {
   color: #84ced7;
 }
-/*# sourceMappingURL=ITJakub.css.map */
+/*# sourceMappingURL=itjakub.css.map */

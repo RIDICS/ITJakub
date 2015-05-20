@@ -17,11 +17,11 @@
                             </button>
                             <button id="advancedSearchButton" type="button" class="btn btn-default searchbar-button">
                                 Pokročilé
+                                <span class="glyphicon glyphicon-chevron-down regexsearch-button-glyph"></span>
                             </button>
                         </div>
                         <div class="searchbar-inputs">
                             <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
-                            @*<button id="openRegExEditorButton" type="button" class="btn btn-default searchbox-button">R</button>*@
                         </div>
                     </div>
                 </form>
@@ -197,11 +197,21 @@
 
 <script type="text/javascript">
     $("#advancedSearchButton").click(function () {
+        var glyph = $("#advancedSearchButton .regexsearch-button-glyph");
+        var regExSearchDiv = $("#regExSearchDiv");
         if (document.getElementById("regExSearchDiv").children.length === 0) {
+            glyph.removeClass("glyphicon-chevron-down");
+            glyph.addClass("glyphicon-chevron-up");
             var regExSearchPlugin = new RegExSearch("#regExSearchDiv");
             regExSearchPlugin.makeRegExSearch();
+        } else if (regExSearchDiv.hasClass("hidden")) {
+            regExSearchDiv.removeClass("hidden");
+            glyph.removeClass("glyphicon-chevron-down");
+            glyph.addClass("glyphicon-chevron-up");
         } else {
-            $("#regExSearchDiv").empty();
+            regExSearchDiv.addClass("hidden");
+            glyph.removeClass("glyphicon-chevron-up");
+            glyph.addClass("glyphicon-chevron-down");
         }
     });
 </script>

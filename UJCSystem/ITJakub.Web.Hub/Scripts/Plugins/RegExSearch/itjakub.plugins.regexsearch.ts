@@ -294,9 +294,10 @@ class RegExInput extends RegExSearchBase {
             if (!this.regExEditor || this.editorDiv.children.length === 0) {
                 this.regExEditor = new RegExEditor(this.editorDiv, this.conditionInput);
                 this.regExEditor.makeRegExEditor();
+            } else if ($(this.editorDiv).hasClass("hidden")) {
+                $(this.editorDiv).removeClass("hidden");
             } else {
-                this.regExEditor = null;
-                $(this.editorDiv).empty();
+                $(this.editorDiv).addClass("hidden");
             }
         });
         lineDiv.appendChild(regExButton);
@@ -410,20 +411,20 @@ class RegExEditor extends RegExSearchBase {
             $(this.container).empty();
         });
 
-        var backButton: HTMLButtonElement = this.createButton("Zpět");
-        commandButtonsDiv.appendChild(backButton);
+        //var backButton: HTMLButtonElement = this.createButton("Zpět");
+        //commandButtonsDiv.appendChild(backButton);
 
-        var nextButton: HTMLButtonElement = this.createButton("Další");
-        commandButtonsDiv.appendChild(nextButton);
+        //var nextButton: HTMLButtonElement = this.createButton("Další");
+        //commandButtonsDiv.appendChild(nextButton);
 
         var submitButton: HTMLButtonElement = this.createButton("Dokončit");
-        submitButton.style.marginLeft = "25px";
+        //submitButton.style.marginLeft = "25px";
         commandButtonsDiv.appendChild(submitButton);
         $(submitButton).click(() => {
             this.searchBox.value = conditionInput.value;
             // TODO more logic - using conditionType
 
-            $(this.container).empty();
+            $(this.container).addClass("hidden");
         });
 
 

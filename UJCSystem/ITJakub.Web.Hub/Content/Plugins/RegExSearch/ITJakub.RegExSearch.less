@@ -1,13 +1,19 @@
-﻿@regexsearch-column-width: 170px;
+﻿@import "../../ITJakub.DefaultTheme.less";
+@regexsearch-column-width: 170px;
 @regexsearch-margin-left: 196px;
 @regexsearch-checkbox-div-width: 19px;
 @regexsearch-gray-color: #9A9A9A;
+
+.regexsearch-button-glyph {
+    font-size: 10px;
+    margin-left: 4px;
+}
 
 .regexsearch-button {
     margin-left: 3px;
     margin-right: 3px;
     border-radius: 0;
-    background-color: #84ced7;
+    background-color: @item-background-color;
     color: white;
 }
 
@@ -90,6 +96,7 @@
     border-radius: 0;
     display: inline-block;
     margin-right: -40px;
+    padding-right: 44px;
 }
 
 .regexsearch-condition-main-div {
