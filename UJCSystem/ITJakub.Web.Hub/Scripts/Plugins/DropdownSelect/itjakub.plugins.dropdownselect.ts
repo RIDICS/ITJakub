@@ -1,4 +1,5 @@
-﻿ /// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
+﻿ 
+/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
 
 class DropDownSelectCallbackDelegate {
     //callbacks needs to be implemented
@@ -219,8 +220,8 @@ class DropDownSelect {
             if ($(this).val() == "") {
                 $(this).parents(".dropdown-select-body").find(".concrete-item").show();
             } else {
-                $(this).parents(".dropdown-select-body").find(".concrete-item").hide(); 
-                $(this).parents(".dropdown-select-body").find(".concrete-item-name").filter(":containsCI(" + $(this).val() + ")").parents(".concrete-item").show();
+                $(this).parents(".dropdown-select-body").find(".concrete-item").hide();
+                $(this).parents(".dropdown-select-body").find(".concrete-item-name").filter(`:containsCI(${$(this).val()})`).parents(".concrete-item").show();
             }
         });
 
@@ -274,32 +275,36 @@ class DropDownSelect {
         $(selectHeader).children(".dropdown-select-text").append(this.getCategoryName(rootCategory));
         $(selectHeader).children(".dropdown-select-text-loading").hide();
 
+        $(selectHeader).data("id", this.getCategoryId(rootCategory));
+        $(selectHeader).data("name", this.getCategoryName(rootCategory));
+        $(selectHeader).data("type", "category");
+
         var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
         var info = this.createCallbackInfo(this.getCategoryId(rootCategory), this.getCategoryName(rootCategory), selectHeader);
         var self = this;
-        $(checkbox).change(function (event:Event, propagate: boolean) {
+        $(checkbox).change(function(event: Event, propagate: boolean) {
             var items = $(dropDownItemsDiv).children(".concrete-item").children("input");
             if (this.checked) {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
                     self.addToSelectedCategories(info);
-                    $(items).prop('checked', false);
-                    $(items).trigger("change");
-                    $(dropDownItemsDiv).find(".concrete-item").find("input").prop('checked', true);
+                    $(items).prop("checked", false);
+                    $(items).trigger("change",[false]);
+                    $(dropDownItemsDiv).find(".concrete-item").find("input").prop("checked", true);
                 } else {
-                    $(items).prop('checked', false);
-                    $(items).trigger("change");
-                    $(items).prop('checked', true);
-                    $(items).trigger("change");
+                    $(items).prop("checked", false);
+                    $(items).trigger("change", [false]);
+                    $(items).prop("checked", true);
+                    $(items).trigger("change", [false]);
                 }
             } else {
                 self.removeFromSelectedCategories(info);
-                $(items).prop('checked', false);
-                $(items).trigger("change");
+                $(items).prop("checked", false);
+                $(items).trigger("change", [false]);
             }
         });
 
-        var childCategories: Array<any> = this.getChildCategories(categories, rootCategory);
-        var childLeafItems: Array<any> = this.getChildLeafItems(leafItems, rootCategory);
+        var childCategories = this.getChildCategories(categories, rootCategory);
+        var childLeafItems = this.getChildLeafItems(leafItems, rootCategory);
 
         if (typeof (childCategories) !== "undefined" && childCategories !== null) {
             for (var i = 0; i < childCategories.length; i++) {
@@ -318,10 +323,36 @@ class DropDownSelect {
 
     private propagateSelectChange(concreteItemSource: HTMLDivElement) {
         var actualItem = $(concreteItemSource).parent().closest(".concrete-item");
-        if (actualItem.length === 0) return;
-        var actualItemInput = $(actualItem).children("input");
-        var actualItemChilds = $(actualItem).children(".child-items").children(".concrete-item");
-        var checkedChilds = $(actualItemChilds).children("input:checked");
+        var actualItemInput: JQuery;
+        var actualItemChilds: JQuery;
+        var checkedChilds: JQuery;
+        if (actualItem.length === 0) { //for checkbox in header
+            actualItem = $(concreteItemSource).parent().closest(".dropdown-select").children(".dropdown-select-header");
+            actualItemInput = $(actualItem).children(".dropdown-select-checkbox").children("input");
+            actualItemChilds = $(actualItem).parent().closest(".dropdown-select").children(".dropdown-select-body").children(".concrete-item");
+            checkedChilds = $(actualItemChilds).children("input:checked");
+
+            if (!actualItem.data("id")) {
+                if (actualItemChilds.length !== 0) {
+                    if (checkedChilds.length === actualItemChilds.length) {
+                        $(actualItemInput).prop("checked", true);
+                    } else {
+                        $(actualItemInput).prop("checked", false);
+                        if (checkedChilds.length === 0) {
+                            $(actualItemInput).prop("indeterminate", false);
+                        } else {
+                            $(actualItemInput).prop("indeterminate", true);
+                        }
+                    }
+                }
+                return;
+            }
+
+        } else {
+            actualItemInput = $(actualItem).children("input");
+            actualItemChilds = $(actualItem).children(".child-items").children(".concrete-item");
+            checkedChilds = $(actualItemChilds).children("input:checked");
+        }
 
         var info = this.createCallbackInfo(actualItem.data("id"), actualItem.data("name"), actualItem);
 
@@ -329,24 +360,27 @@ class DropDownSelect {
             if (checkedChilds.length === actualItemChilds.length) {
                 var itemsInputs = $(actualItemChilds).children("input");
                 this.addToSelectedCategories(info);
-                $(actualItemInput).prop('indeterminate', false);
-                $(itemsInputs).prop('checked', false);
+                $(actualItemInput).prop("indeterminate", false);
+                $(itemsInputs).prop("checked", false);
                 $(itemsInputs).trigger("change", [false]);
-                $(actualItemChilds).find("input").prop('checked', true);
-                $(actualItemInput).prop('checked', true);
+                $(actualItemChilds).find("input").prop("checked", true);
+                $(actualItemInput).prop("checked", true);
             } else {
                 this.removeFromSelectedCategories(info);
-                $(actualItemInput).prop('checked', false);
+                $(actualItemInput).prop("checked", false);
                 if (checkedChilds.length === 0) {
-                    $(actualItemInput).prop('indeterminate', false);
+                    $(actualItemInput).prop("indeterminate", false);
                 } else {
-                    $(actualItemInput).prop('indeterminate', true);
+                    $(actualItemInput).prop("indeterminate", true);
                     $(actualItemChilds).children("input:checked").trigger("change", [false]); //TODO could be call only when selectedChilds = childs - 1
                 }
             }
         }
 
-        this.propagateSelectChange(<HTMLDivElement>actualItem[0]);
+        if (!actualItem.hasClass("dropdown-select-header")) {
+            this.propagateSelectChange(<HTMLDivElement>actualItem[0]);    
+        }
+        
     }
 
     private makeCategoryItem(container: HTMLDivElement, currentCategory: any, categories: any, leafItems: any) {
@@ -364,28 +398,28 @@ class DropDownSelect {
         var info = this.createCallbackInfo(this.getCategoryId(currentCategory), this.getCategoryName(currentCategory), itemDiv);
         var self = this;
 
-        $(checkbox).change(function (event: Event, propagate: boolean) {
+        $(checkbox).change(function(event: Event, propagate: boolean) {
             var items = $(itemDiv).children(".child-items").children(".concrete-item").children("input");
 
             if (this.checked) {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
                     self.addToSelectedCategories(info);
-                    $(items).prop('checked', false);
+                    $(items).prop("checked", false);
                     $(items).trigger("change", [false]);
-                    $(itemDiv).children(".child-items").find(".concrete-item").find("input").prop('checked', true);
+                    $(itemDiv).children(".child-items").find(".concrete-item").find("input").prop("checked", true);
                 } else {
-                    $(items).prop('checked', false);
+                    $(items).prop("checked", false);
                     $(items).trigger("change", [false]);
-                    $(items).prop('checked', true);
+                    $(items).prop("checked", true);
                     $(items).trigger("change", [false]);
                 }
             } else {
                 self.removeFromSelectedCategories(info);
-                $(items).prop('checked', false);
+                $(items).prop("checked", false);
                 $(items).trigger("change", [false]);
             }
 
-            if (typeof propagate === "undefined" || propagate === null || propagate) {        //Deafault behaviour is to propagate change
+            if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
                 self.propagateSelectChange(<HTMLDivElement>$(this).parent(".concrete-item")[0]);
             }
         });
@@ -490,17 +524,17 @@ class DropDownSelect {
 
         var info = this.createCallbackInfo(this.getLeafItemId(currentLeafItem), this.getLeafItemName(currentLeafItem), itemDiv);
         var self = this;
-        $(checkbox).change(function (event: Event, propagate: boolean) {
+        $(checkbox).change(function(event: Event, propagate: boolean) {
             if (this.checked) {
                 self.addToSelectedItems(info);
             } else {
                 self.removeFromSelectedItems(info);
             }
 
-            if (typeof propagate === "undefined" || propagate === null || propagate) {        //Deafault behaviour is to propagate change
+            if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
                 self.propagateSelectChange(<HTMLDivElement>$(this).parent(".concrete-item")[0]);
             }
-            
+
         });
 
         itemDiv.appendChild(checkbox);
@@ -555,7 +589,7 @@ class DropDownSelect {
     }
 
     private addToSelectedItems(info: CallbackInfo) {
-        var isSelected = $.grep(this.selectedItems,(item: Item) => (item.Id === info.ItemId), false).length !== 0;
+        var isSelected = $.grep(this.selectedItems, (item: Item) => (item.Id === info.ItemId), false).length !== 0;
         if (!isSelected) {
             this.selectedItems.push(new Item(info.ItemId, info.ItemText));
             this.selectedChanged();
@@ -563,7 +597,7 @@ class DropDownSelect {
     }
 
     private removeFromSelectedItems(info: CallbackInfo) {
-        this.selectedItems = $.grep(this.selectedItems, (item : Item) => (item.Id !== info.ItemId), false);
+        this.selectedItems = $.grep(this.selectedItems, (item: Item) => (item.Id !== info.ItemId), false);
         this.selectedChanged();
     }
 

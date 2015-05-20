@@ -186,6 +186,9 @@ var DropDownSelect = (function () {
         var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
         $(selectHeader).children(".dropdown-select-text").append(this.getCategoryName(rootCategory));
         $(selectHeader).children(".dropdown-select-text-loading").hide();
+        $(selectHeader).data("id", this.getCategoryId(rootCategory));
+        $(selectHeader).data("name", this.getCategoryName(rootCategory));
+        $(selectHeader).data("type", "category");
         var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
         var info = this.createCallbackInfo(this.getCategoryId(rootCategory), this.getCategoryName(rootCategory), selectHeader);
         var self = this;
@@ -194,21 +197,21 @@ var DropDownSelect = (function () {
             if (this.checked) {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
                     self.addToSelectedCategories(info);
-                    $(items).prop('checked', false);
-                    $(items).trigger("change");
-                    $(dropDownItemsDiv).find(".concrete-item").find("input").prop('checked', true);
+                    $(items).prop("checked", false);
+                    $(items).trigger("change", [false]);
+                    $(dropDownItemsDiv).find(".concrete-item").find("input").prop("checked", true);
                 }
                 else {
-                    $(items).prop('checked', false);
-                    $(items).trigger("change");
-                    $(items).prop('checked', true);
-                    $(items).trigger("change");
+                    $(items).prop("checked", false);
+                    $(items).trigger("change", [false]);
+                    $(items).prop("checked", true);
+                    $(items).trigger("change", [false]);
                 }
             }
             else {
                 self.removeFromSelectedCategories(info);
-                $(items).prop('checked', false);
-                $(items).trigger("change");
+                $(items).prop("checked", false);
+                $(items).trigger("change", [false]);
             }
         });
         var childCategories = this.getChildCategories(categories, rootCategory);
@@ -228,35 +231,63 @@ var DropDownSelect = (function () {
     };
     DropDownSelect.prototype.propagateSelectChange = function (concreteItemSource) {
         var actualItem = $(concreteItemSource).parent().closest(".concrete-item");
-        if (actualItem.length === 0)
-            return;
-        var actualItemInput = $(actualItem).children("input");
-        var actualItemChilds = $(actualItem).children(".child-items").children(".concrete-item");
-        var checkedChilds = $(actualItemChilds).children("input:checked");
+        var actualItemInput;
+        var actualItemChilds;
+        var checkedChilds;
+        if (actualItem.length === 0) {
+            actualItem = $(concreteItemSource).parent().closest(".dropdown-select").children(".dropdown-select-header");
+            actualItemInput = $(actualItem).children(".dropdown-select-checkbox").children("input");
+            actualItemChilds = $(actualItem).parent().closest(".dropdown-select").children(".dropdown-select-body").children(".concrete-item");
+            checkedChilds = $(actualItemChilds).children("input:checked");
+            if (!actualItem.data("id")) {
+                if (actualItemChilds.length !== 0) {
+                    if (checkedChilds.length === actualItemChilds.length) {
+                        $(actualItemInput).prop("checked", true);
+                    }
+                    else {
+                        $(actualItemInput).prop("checked", false);
+                        if (checkedChilds.length === 0) {
+                            $(actualItemInput).prop("indeterminate", false);
+                        }
+                        else {
+                            $(actualItemInput).prop("indeterminate", true);
+                        }
+                    }
+                }
+                return;
+            }
+        }
+        else {
+            actualItemInput = $(actualItem).children("input");
+            actualItemChilds = $(actualItem).children(".child-items").children(".concrete-item");
+            checkedChilds = $(actualItemChilds).children("input:checked");
+        }
         var info = this.createCallbackInfo(actualItem.data("id"), actualItem.data("name"), actualItem);
         if (actualItemChilds.length !== 0) {
             if (checkedChilds.length === actualItemChilds.length) {
                 var itemsInputs = $(actualItemChilds).children("input");
                 this.addToSelectedCategories(info);
-                $(actualItemInput).prop('indeterminate', false);
-                $(itemsInputs).prop('checked', false);
+                $(actualItemInput).prop("indeterminate", false);
+                $(itemsInputs).prop("checked", false);
                 $(itemsInputs).trigger("change", [false]);
-                $(actualItemChilds).find("input").prop('checked', true);
-                $(actualItemInput).prop('checked', true);
+                $(actualItemChilds).find("input").prop("checked", true);
+                $(actualItemInput).prop("checked", true);
             }
             else {
                 this.removeFromSelectedCategories(info);
-                $(actualItemInput).prop('checked', false);
+                $(actualItemInput).prop("checked", false);
                 if (checkedChilds.length === 0) {
-                    $(actualItemInput).prop('indeterminate', false);
+                    $(actualItemInput).prop("indeterminate", false);
                 }
                 else {
-                    $(actualItemInput).prop('indeterminate', true);
+                    $(actualItemInput).prop("indeterminate", true);
                     $(actualItemChilds).children("input:checked").trigger("change", [false]); //TODO could be call only when selectedChilds = childs - 1
                 }
             }
         }
-        this.propagateSelectChange(actualItem[0]);
+        if (!actualItem.hasClass("dropdown-select-header")) {
+            this.propagateSelectChange(actualItem[0]);
+        }
     };
     DropDownSelect.prototype.makeCategoryItem = function (container, currentCategory, categories, leafItems) {
         var itemDiv = document.createElement("div");
@@ -274,20 +305,20 @@ var DropDownSelect = (function () {
             if (this.checked) {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
                     self.addToSelectedCategories(info);
-                    $(items).prop('checked', false);
+                    $(items).prop("checked", false);
                     $(items).trigger("change", [false]);
-                    $(itemDiv).children(".child-items").find(".concrete-item").find("input").prop('checked', true);
+                    $(itemDiv).children(".child-items").find(".concrete-item").find("input").prop("checked", true);
                 }
                 else {
-                    $(items).prop('checked', false);
+                    $(items).prop("checked", false);
                     $(items).trigger("change", [false]);
-                    $(items).prop('checked', true);
+                    $(items).prop("checked", true);
                     $(items).trigger("change", [false]);
                 }
             }
             else {
                 self.removeFromSelectedCategories(info);
-                $(items).prop('checked', false);
+                $(items).prop("checked", false);
                 $(items).trigger("change", [false]);
             }
             if (typeof propagate === "undefined" || propagate === null || propagate) {
