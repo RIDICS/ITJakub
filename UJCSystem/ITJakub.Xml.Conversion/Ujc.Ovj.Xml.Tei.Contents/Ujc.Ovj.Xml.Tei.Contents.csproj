@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ujc.Ovj.Xml.Tei.Contents</RootNamespace>
     <AssemblyName>Ujc.Ovj.Xml.Tei.Contents</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -51,15 +53,19 @@
     <Compile Include="TableOfContentResult.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Daliboris.Pomucky.Databaze.Zaznamy\Daliboris.Pomucky.Databaze.Zaznamy.csproj">
+      <Project>{da551169-b52d-4403-944d-dc0da8d6edc4}</Project>
+      <Name>Daliboris.Pomucky.Databaze.Zaznamy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ujc.Ovj.Xml.Info\Ujc.Ovj.Xml.Info.csproj">
       <Project>{2f50f763-2aef-4647-918a-87b65af2a6c9}</Project>
       <Name>Ujc.Ovj.Xml.Info</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\CommonTEI.xsl">
+    <EmbeddedResource Include="Data\CommonTEI.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

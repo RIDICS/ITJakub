@@ -1,4 +1,4 @@
-﻿var __extends = this.__extends || function (d, b) {
+var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -21,7 +21,6 @@ var BibliographyFactoryResolver = (function () {
     };
     return BibliographyFactoryResolver;
 })();
-
 var BibliographyFactory = (function () {
     function BibliographyFactory(configuration) {
         this.configuration = configuration;
@@ -31,15 +30,12 @@ var BibliographyFactory = (function () {
         $(leftPanel).addClass('left-panel');
         return leftPanel;
     };
-
     BibliographyFactory.prototype.makeRightPanel = function (bookInfo) {
         if (!this.configuration.containsRightPanel())
             return null;
         var config = this.configuration.getRightPanelConfig();
-
         var rightPanel = document.createElement('div');
         $(rightPanel).addClass('right-panel');
-
         if (config.containsReadButton()) {
             var bookButton = document.createElement('button');
             bookButton.type = 'button';
@@ -52,7 +48,6 @@ var BibliographyFactory = (function () {
             });
             rightPanel.appendChild(bookButton);
         }
-
         if (config.containsInfoButton()) {
             var infoButton = document.createElement('button');
             infoButton.type = 'button';
@@ -65,7 +60,6 @@ var BibliographyFactory = (function () {
             });
             rightPanel.appendChild(infoButton);
         }
-
         if (this.configuration.containsBottomPanel()) {
             var contentButton = document.createElement('button');
             contentButton.type = 'button';
@@ -79,25 +73,20 @@ var BibliographyFactory = (function () {
             });
             rightPanel.appendChild(contentButton);
         }
-
         return rightPanel;
     };
-
     BibliographyFactory.prototype.makeMiddlePanel = function (bookInfo) {
         if (!this.configuration.containsMiddlePanel())
             return null;
         var config = this.configuration.getMidllePanelConfig();
-
         var middlePanel = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
-
         if (config.containsShortInfo()) {
             var middlePanelShortInfo = document.createElement('div');
             $(middlePanelShortInfo).addClass('short-info');
             middlePanelShortInfo.innerHTML = config.getShortInfo(bookInfo);
             middlePanel.appendChild(middlePanelShortInfo);
         }
-
         if (config.containsTitle()) {
             var middlePanelHeading = document.createElement('div');
             $(middlePanelHeading).addClass('heading');
@@ -110,44 +99,36 @@ var BibliographyFactory = (function () {
             middlePanelBody.innerHTML = config.getBody(bookInfo);
             middlePanel.appendChild(middlePanelBody);
         }
-
         if (config.containsCustom()) {
             var customDiv = document.createElement('div');
             $(customDiv).addClass('custom');
             customDiv.innerHTML = config.getCustom(bookInfo);
             middlePanel.appendChild(customDiv);
         }
-
         return middlePanel;
     };
-
     BibliographyFactory.prototype.makeBottomPanel = function (bookInfo) {
         if (!this.configuration.containsBottomPanel())
             return null;
         var config = this.configuration.getBottomPanelConfig();
-
         var bottomPanel = document.createElement('div');
         $(bottomPanel).addClass('bottom-panel');
-
         if (config.containsBody()) {
             var bottomPanelBody = document.createElement('div');
             $(bottomPanelBody).addClass('body');
             bottomPanelBody.innerHTML = config.getBody(bookInfo);
             bottomPanel.appendChild(bottomPanelBody);
         }
-
         if (config.containsCustom()) {
             var customDiv = document.createElement('div');
             $(customDiv).addClass('custom');
             customDiv.innerHTML = config.getCustom(bookInfo);
             bottomPanel.appendChild(customDiv);
         }
-
         return bottomPanel;
     };
     return BibliographyFactory;
 })();
-
 var OldCzechTextBankFactory = (function (_super) {
     __extends(OldCzechTextBankFactory, _super);
     function OldCzechTextBankFactory(configuration) {
@@ -155,7 +136,6 @@ var OldCzechTextBankFactory = (function (_super) {
     }
     return OldCzechTextBankFactory;
 })(BibliographyFactory);
-
 var DictionaryFactory = (function (_super) {
     __extends(DictionaryFactory, _super);
     function DictionaryFactory(configuration) {
@@ -164,12 +144,10 @@ var DictionaryFactory = (function (_super) {
     DictionaryFactory.prototype.makeLeftPanel = function (bookInfo) {
         var leftPanel = document.createElement('div');
         $(leftPanel).addClass('left-panel');
-
         var inputCheckbox = document.createElement('input');
         inputCheckbox.type = "checkbox";
         $(inputCheckbox).addClass('checkbox');
         leftPanel.appendChild(inputCheckbox);
-
         var starEmptyButton = document.createElement('button');
         starEmptyButton.type = 'button';
         $(starEmptyButton).addClass('btn btn-xs star-empty-button');
@@ -181,7 +159,6 @@ var DictionaryFactory = (function (_super) {
             $(this).hide();
         }); //TODO fill click action
         leftPanel.appendChild(starEmptyButton);
-
         var starButton = document.createElement('button');
         starButton.type = 'button';
         $(starButton).addClass('btn btn-xs star-button');
@@ -194,12 +171,10 @@ var DictionaryFactory = (function (_super) {
             $(this).hide();
         }); //TODO fill click action
         leftPanel.appendChild(starButton);
-
         return leftPanel;
     };
     return DictionaryFactory;
 })(BibliographyFactory);
-
 var CardFileFactory = (function (_super) {
     __extends(CardFileFactory, _super);
     function CardFileFactory(configuration) {
@@ -208,12 +183,10 @@ var CardFileFactory = (function (_super) {
     CardFileFactory.prototype.makeLeftPanel = function (bookInfo) {
         var leftPanel = document.createElement('div');
         $(leftPanel).addClass('left-panel');
-
         var inputCheckbox = document.createElement('input');
         inputCheckbox.type = "checkbox";
         $(inputCheckbox).addClass('checkbox');
         leftPanel.appendChild(inputCheckbox);
-
         var starEmptyButton = document.createElement('button');
         starEmptyButton.type = 'button';
         $(starEmptyButton).addClass('btn btn-xs star-empty-button');
@@ -225,7 +198,6 @@ var CardFileFactory = (function (_super) {
             $(this).hide();
         }); //TODO fill click action
         leftPanel.appendChild(starEmptyButton);
-
         var starButton = document.createElement('button');
         starButton.type = 'button';
         $(starButton).addClass('btn btn-xs star-button');
@@ -238,12 +210,10 @@ var CardFileFactory = (function (_super) {
             $(this).hide();
         }); //TODO fill click action
         leftPanel.appendChild(starButton);
-
         return leftPanel;
     };
     return CardFileFactory;
 })(BibliographyFactory);
-
 var EditionFactory = (function (_super) {
     __extends(EditionFactory, _super);
     function EditionFactory(configuration) {

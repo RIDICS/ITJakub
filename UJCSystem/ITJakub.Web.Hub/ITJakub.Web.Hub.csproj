@@ -23,7 +23,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.4</TypeScriptToolsVersion>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -212,11 +212,11 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.css">
+    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css">
       <DependentUpon>itjakub.bibliographies.less</DependentUpon>
     </Content>
-    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.min.css">
-      <DependentUpon>itjakub.dictionaries.css</DependentUpon>
+    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.min.css">
+      <DependentUpon>itjakub.bibliographies.css</DependentUpon>
     </Content>
     <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.css">
       <DependentUpon>itjakub.bohemiantextbank.less</DependentUpon>
@@ -275,9 +275,6 @@
     </Content>
     <Content Include="Areas\Bibliographies\Views\web.config" />
     <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.less" />
-    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.css.map">
-      <DependentUpon>itjakub.dictionaries.css</DependentUpon>
-    </Content>
     <Content Include="Areas\Bibliographies\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\List.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
@@ -516,6 +513,9 @@
     <Content Include="Areas\Dictionaries\Views\Dictionaries\TermsOfUse.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\List.cshtml" />
+    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css.map">
+      <DependentUpon>itjakub.bibliographies.css</DependentUpon>
+    </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>

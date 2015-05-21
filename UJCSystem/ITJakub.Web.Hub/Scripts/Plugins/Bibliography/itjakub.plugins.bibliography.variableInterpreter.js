@@ -1,4 +1,4 @@
-﻿var VariableInterpreter = (function () {
+var VariableInterpreter = (function () {
     function VariableInterpreter() {
         if (VariableInterpreter._instance) {
             throw new Error("Cannot instantiate...Use getInstance method instead");
@@ -11,7 +11,6 @@
         }
         return VariableInterpreter._instance;
     };
-
     VariableInterpreter.prototype.interpret = function (valueString, variables, bibItem) {
         if (typeof valueString === 'undefined' || typeof bibItem === 'undefined') {
             console.log("VariabeInterpreter: cannot interpret undefined type");
@@ -19,30 +18,27 @@
         }
         return this.interpretPattern("bibItem", valueString, variables, bibItem, true, "");
     };
-
     VariableInterpreter.prototype.resolveScope = function (interpretedVariable, scopedObject) {
         var scope = interpretedVariable["scope"];
         var actualScopedObject = scopedObject;
         if (typeof scope !== 'undefined') {
             if (scope === "{$parent}") {
                 actualScopedObject = this.getParentScope(actualScopedObject);
-            } else {
+            }
+            else {
                 actualScopedObject = this.changeToInnerScope(actualScopedObject, scope);
             }
         }
         return actualScopedObject;
     };
-
     VariableInterpreter.prototype.changeToInnerScope = function (actualScope, newScopeName) {
         var newScope = actualScope[newScopeName];
         this.setParentScope(newScope, actualScope);
         return newScope;
     };
-
     VariableInterpreter.prototype.changeToOuterScope = function (actualScope) {
         return this.getParentScope(actualScope);
     };
-
     VariableInterpreter.prototype.setParentScope = function (scope, parentScope) {
         if (typeof scope === 'undefined' || scope === null) {
             console.log("cannot set parent scope to undefined or null scope");
@@ -50,7 +46,6 @@
         }
         scope['parentScope'] = parentScope;
     };
-
     VariableInterpreter.prototype.getParentScope = function (scope) {
         var parentScope = scope['parentScope'];
         if (typeof parentScope !== 'undefined') {
@@ -58,7 +53,6 @@
         }
         return scope;
     };
-
     VariableInterpreter.prototype.interpretPattern = function (interpretedVariableName, pattern, variables, actualScopeObject, continueOnNullValue, replacementForNullValue) {
         var _this = this;
         if (typeof actualScopeObject === 'undefined') {
@@ -73,10 +67,12 @@
             if (varName.indexOf("$") === 0) {
                 if (varName === "$this") {
                     result = actualScopeObject; //if config variable is this, return this as value (can be used for primitive types like array of numbers or strings)
-                } else {
+                }
+                else {
                     result = _this.interpretConfigurationVariable(varName, variables, actualScopeObject);
                 }
-            } else {
+            }
+            else {
                 result = actualScopeObject[varName];
                 var tmpScope = actualScopeObject;
                 while (typeof result === 'undefined' && _this.getParentScope(tmpScope) !== tmpScope) {
@@ -84,9 +80,8 @@
                     result = tmpScope[varName];
                 }
             }
-
             if (typeof result !== 'undefined' && result !== null) {
-                result = String(result); //convert if typeof result was not string
+                result = String(result); //convert if typeof result was not string    
                 if (result.length > 0) {
                     return result;
                 }
@@ -101,7 +96,6 @@
         }
         return interpretedpattern;
     };
-
     VariableInterpreter.prototype.interpretConfigurationVariable = function (varName, variables, actualScopeObject) {
         if (typeof variables === 'undefined') {
             console.error("No variables are specified in bibliography configuration");
@@ -111,19 +105,16 @@
             console.log("Variable '" + varName + "' has null scope object");
             return "";
         }
-
         var interpretedVariable = variables[varName];
         if (typeof interpretedVariable === 'undefined') {
             console.error("Variable with name " + varName + " is not specidfied in bibliography configuration");
             return "";
         }
-
         var typeOfVariable = interpretedVariable['type'];
         if (typeof typeOfVariable === "undefined") {
             console.error("Variable with name " + varName + " does not have specified type");
             return "";
         }
-
         switch (typeOfVariable) {
             case "basic":
                 return this.interpretBasic(varName, interpretedVariable, variables, actualScopeObject);
@@ -140,7 +131,6 @@
                 return "";
         }
     };
-
     VariableInterpreter.prototype.interpretBasic = function (varName, interpretedVariable, variables, scopedObject) {
         var printIfNull = interpretedVariable["printIfNullValue"];
         var replacementForNullValue = interpretedVariable["replaceNullValueBy"];
@@ -149,11 +139,11 @@
         var value = this.interpretPattern(varName, pattern, variables, actualScopedObject, printIfNull, replacementForNullValue);
         if ((value === null || value.length <= 0) && !printIfNull) {
             return "";
-        } else {
+        }
+        else {
             return value;
         }
     };
-
     VariableInterpreter.prototype.interpretReplace = function (varName, interpretedVariable, variables, scopedObject) {
         var replacing = interpretedVariable["replacing"];
         var replacement = interpretedVariable["replacement"];
@@ -162,7 +152,6 @@
         var value = this.interpretPattern(varName, pattern, variables, actualScopedObject, true, "");
         return value.replace(new RegExp(replacing, 'g'), replacement);
     };
-
     VariableInterpreter.prototype.interpretIfStatement = function (varName, interpretedVariable, variables, scopedObject) {
         var pattern = interpretedVariable["pattern"];
         var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
@@ -174,7 +163,6 @@
         }
         return this.interpretPattern(varName, truePattern, variables, actualScopedObject, true, "");
     };
-
     VariableInterpreter.prototype.interpretArray = function (varName, interpretedVariable, variables, scopedObject) {
         var _this = this;
         var pattern = interpretedVariable["pattern"];
@@ -187,7 +175,7 @@
         var value = "";
         $.each(actualScopedObject, function (index, item) {
             if (typeof item === 'undefined' || item === null) {
-                return true;
+                return true; //continue
             }
             _this.setParentScope(item, actualScopedObject);
             var itemValue = _this.interpretPattern(varName, pattern, variables, item, true, "");
@@ -196,10 +184,8 @@
             }
             value += itemValue;
         });
-
         return value;
     };
-
     VariableInterpreter.prototype.interpretTable = function (varName, interpretedVariable, variables, scopedObject) {
         var _this = this;
         var printRowIfNullValue = interpretedVariable["printRowIfNullValue"];
@@ -207,26 +193,24 @@
         var rows = interpretedVariable["rows"];
         var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
         var tableBuilder = new TableBuilder();
-
         $.each(rows, function (index, item) {
             var label = item["label"];
             var pattern = item["pattern"];
             var value = _this.interpretPattern(varName, pattern, variables, actualScopedObject, true, "");
             if (typeof value !== 'undefined' && value !== null && value.length > 0) {
                 tableBuilder.makeTableRow(label, value);
-            } else {
+            }
+            else {
                 if (printRowIfNullValue) {
                     tableBuilder.makeTableRow(label, replaceNullValueBy);
                 }
             }
         });
-
         return tableBuilder.build().outerHTML;
     };
     VariableInterpreter._instance = null;
     return VariableInterpreter;
 })();
-
 var TableBuilder = (function () {
     function TableBuilder() {
         this.m_tableDiv = document.createElement('div');
@@ -245,7 +229,6 @@ var TableBuilder = (function () {
         rowDiv.appendChild(valueDiv);
         this.m_tableDiv.appendChild(rowDiv);
     };
-
     TableBuilder.prototype.build = function () {
         return this.m_tableDiv;
     };
