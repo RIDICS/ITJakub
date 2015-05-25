@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
@@ -23,8 +24,17 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             {
                 return new List<ConcreteInstanceProcessorBase<Category>>
                 {
-                    Container.Resolve<CategoryProcessor>(),
+                    Container.Resolve<CategoryProcessor>()
                 };
+            }
+        }
+
+        protected override void ProcessElement(Category parentCategory, XmlReader xmlReader)
+        {
+            var xmlId = xmlReader.GetAttribute("xml:id");
+            if (xmlId != null && xmlId.Equals("output"))
+            {
+                base.ProcessElement(parentCategory, xmlReader);
             }
         }
     }

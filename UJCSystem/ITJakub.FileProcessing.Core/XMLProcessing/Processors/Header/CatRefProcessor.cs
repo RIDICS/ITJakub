@@ -11,7 +11,8 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
     {
         private readonly CategoryRepository m_categoryRepository;
 
-        public CatRefProcessor(CategoryRepository categoryRepository, XsltTransformationManager xsltTransformationManager, IKernel container)
+        public CatRefProcessor(CategoryRepository categoryRepository,
+            XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
             m_categoryRepository = categoryRepository;
@@ -25,27 +26,23 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
         protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
         {
             var targetAttribute = xmlReader.GetAttribute("target");
-            string[] targets = targetAttribute.Split(' ');
-            for (int index = 0; index < targets.Length; index++)
+            var targets = targetAttribute.Split(' ');
+            var foundFirstCategory = false;
+            foreach (var target in targets)
             {
-                var target = targets[index];
-                if (target.StartsWith("#"))
+                if (!target.StartsWith("#")) continue;
+                var categoryXmlId = target.Remove(0, 1);
+                if (bookVersion.Book.LastVersion.Categories == null)
                 {
-                    var categoryXmlId = target.Remove(0, 1);
-                    if (bookVersion.Book.LastVersion.Categories == null)
-                    {
-                        bookVersion.Book.LastVersion.Categories = new List<Category>();
-                    }
-                    var category = m_categoryRepository.FindByXmlId(categoryXmlId);
-                    bookVersion.Book.LastVersion.Categories.Add(category);
-                    if (index == 0)
-                    {
-                        bookVersion.Book.LastVersion.DefaultBookType = m_categoryRepository.FindBookTypeByCategory(category);
-                    }
+                    bookVersion.Book.LastVersion.Categories = new List<Category>();
                 }
-                else
+                var category = m_categoryRepository.FindByXmlId(categoryXmlId);
+                if (category == null) continue;
+                bookVersion.Book.LastVersion.Categories.Add(category);
+                if (!foundFirstCategory)
                 {
-                    //TODO throw exception (not valid xml reference)
+                    bookVersion.Book.LastVersion.DefaultBookType = m_categoryRepository.FindBookTypeByCategory(category);
+                    foundFirstCategory = true;
                 }
             }
         }
