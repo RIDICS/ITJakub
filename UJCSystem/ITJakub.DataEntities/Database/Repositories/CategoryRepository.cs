@@ -104,5 +104,11 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return resultCategories;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookType FindBookTypeByCategory(Category category)
+        {
+            throw new System.NotImplementedException(); //TODO implement
+        }
     }
 }

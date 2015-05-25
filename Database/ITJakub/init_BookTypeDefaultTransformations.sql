@@ -44,5 +44,9 @@ BEGIN TRAN
 	  ('pageToHtml.xsl', 'def for paged', 1, 3, 1, 2),	    -- Mluvnice
 	  ('pageToHtml.xsl', 'def for paged', 1, 4, 1, 2)		    -- Odborna literatura
 
+
+
+	  --TODO add root categories with bookType relationship (i.e slovniky_cat_xmlId -> Dictionary)
+
 	--ROLLBACK
 COMMIT

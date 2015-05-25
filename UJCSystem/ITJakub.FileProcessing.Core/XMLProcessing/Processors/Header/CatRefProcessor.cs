@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
@@ -23,12 +24,30 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 
         protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
         {
-            var target = xmlReader.GetAttribute("target");
-            if (target.StartsWith("#"))
+            var targetAttribute = xmlReader.GetAttribute("target");
+            string[] targets = targetAttribute.Split(' ');
+            for (int index = 0; index < targets.Length; index++)
             {
-                target = target.Remove(0, 1);
+                var target = targets[index];
+                if (target.StartsWith("#"))
+                {
+                    var categoryXmlId = target.Remove(0, 1);
+                    if (bookVersion.Book.LastVersion.Categories == null)
+                    {
+                        bookVersion.Book.LastVersion.Categories = new List<Category>();
+                    }
+                    var category = m_categoryRepository.FindByXmlId(categoryXmlId);
+                    bookVersion.Book.LastVersion.Categories.Add(category);
+                    if (index == 0)
+                    {
+                        bookVersion.Book.LastVersion.DefaultBookType = m_categoryRepository.FindBookTypeByCategory(category);
+                    }
+                }
+                else
+                {
+                    //TODO throw exception (not valid xml reference)
+                }
             }
-            bookVersion.Book.Category = m_categoryRepository.FindByXmlId(target);
         }
     }
 }

@@ -43,6 +43,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             {
                 XmlId = xmlId,
                 ParentCategory = parentCategory,
+                BookType = parentCategory.BookType
             };
             m_categoryRepository.SaveOrUpdate(category);
             base.ProcessElement(category, xmlReader);

@@ -12,7 +12,7 @@ namespace ITJakub.DataEntities.Database.Entities {
         public virtual string XmlId { get; set; }
         public virtual string Description { get; set; }
         public virtual BookType BookType { get; set; }
-        public virtual IList<Book> Books { get; set; }
+        public virtual IList<BookVersion> BookVersions { get; set; }
         public virtual IList<Category> Categories { get; set; }
 
         public virtual bool Equals(Category other)
