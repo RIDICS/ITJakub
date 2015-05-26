@@ -108,7 +108,11 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual BookType FindBookTypeByCategory(Category category)
         {
-            throw new System.NotImplementedException(); //TODO implement
+            using (var session = GetSession())
+            {
+                var resultCategory = session.QueryOver<Category>().Where(cat => cat.Id == category.Id).SingleOrDefault();
+                return resultCategory == null ? null : resultCategory.BookType;
+            }
         }
     }
 }
