@@ -56,7 +56,8 @@ BEGIN TRAN
 	  ('pageToHtml.xsl', 'def for paged', 1, @EditionTypeId , 1, 2),				-- Edice
 	  ('dictionaryToHtml.xsl', 'def for dicts', 1, @DictionaryTypeId, 1, 2),	     -- Slovnik
 	  ('pageToHtml.xsl', 'def for paged', 1, @GrammarTypeId, 1, 2),			     -- Mluvnice
-	  ('pageToHtml.xsl', 'def for paged', 1, @ProfessionalLiteratureTypeId, 1, 2)	-- Odborna literatura
+	  ('pageToHtml.xsl', 'def for paged', 1, @ProfessionalLiteratureTypeId, 1, 2),	-- Odborna literatura
+	  ('pageToHtml.xsl', 'def for paged', 1, @TextBankTypeId, 1, 2)	-- Textova banka
 
 
 

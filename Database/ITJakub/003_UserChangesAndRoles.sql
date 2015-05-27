@@ -12,7 +12,7 @@ BEGIN TRAN
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)
 	VALUES
-		('002' )
+		('003' )
 		-- DatabaseVersion - varchar
 
 
