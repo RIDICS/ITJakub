@@ -16,9 +16,9 @@
     <many-to-one name="BookType" lazy="false">
       <column name="BookType" sql-type="int" not-null="false" />
     </many-to-one>
-    <bag name="Books" inverse="true">
+    <bag name="BookVersions" table="BookVersion_Category" inverse="true" lazy="true">
       <key column="Category" />
-      <one-to-many class="Book" />
+      <many-to-many class="BookVersion" column="BookVersion" />
     </bag>
     <bag name="Categories" inverse="true" cascade="none">
       <key column="ParentCategory" />

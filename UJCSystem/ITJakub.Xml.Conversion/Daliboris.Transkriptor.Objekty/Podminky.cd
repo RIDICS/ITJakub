@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Daliboris.Transkripce.Objekty.Podminka">
+    <Position X="0.75" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAgAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Podminky.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Podminky">
+    <Position X="4" Y="1.75" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>ACIAAAAAIAAAABgQAAAABAQAAAAAAAAAAAAAAABQIAA=</HashCode>
+      <FileName>Podminky.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

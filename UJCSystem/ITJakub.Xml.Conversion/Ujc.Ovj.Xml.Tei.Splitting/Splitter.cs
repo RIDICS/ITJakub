@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Daliboris.Pomucky.Xml;
+using Ujc.Ovj.Xml.Info;
 
 namespace Ujc.Ovj.Xml.Tei.Splitting
 {
@@ -111,7 +112,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 						if (!splittingStarted)
 							continue;
 
-						ElementInfo element = GetElementInfo(reader);
+						ElementInfo element = ElementInfo.GetElementInfo(reader); //GetElementInfo(reader);
 						elementQueue.Push(element);
 						WriteElementInfo(element, currentWriter);
 
@@ -212,7 +213,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 								continue;
 							if (reader.Name != "pb")
 							{
-								ElementInfo element = GetElementInfo(reader);
+								ElementInfo element = ElementInfo.GetElementInfo(reader);//GetElementInfo(reader);
 								if (element.Name == "div")
 								{
 									foreach (AttributeInfo attribute in element.Attributes)
@@ -248,7 +249,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 							}
 							else
 							{
-								if (currentSplitInfo != null)
+								if (currentSplitInfo != null && currentSplitInfo.Number == null)
 								{
 									currentSplitInfo.Id = reader.GetAttribute("xml:id");
 									currentSplitInfo.Number = reader.GetAttribute("n");
@@ -291,17 +292,19 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 								result.IsSplitted = true;
 								return result;
 							}
-
-							ElementInfo elementPeak = elementStack.Peek();
-							if (elementPeak.Name != name)
+							if (elementStack.Count > 0)
 							{
-								result.Errors = String.Format("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
-								//Console.WriteLine("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
-							}
-							else
-							{
-								Transformace.SerializeNode(reader, currentWriter);
-								elementStack.Pop();
+								ElementInfo elementPeak = elementStack.Peek();
+								if (elementPeak.Name != name)
+								{
+									result.Errors = String.Format("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
+									//Console.WriteLine("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
+								}
+								else
+								{
+									Transformace.SerializeNode(reader, currentWriter);
+									elementStack.Pop();
+								}
 							}
 						}
 						else
@@ -319,7 +322,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 			}
 			finally
 			{
-				if(currentWriter != null)
+				if (currentWriter != null)
 					currentWriter.Close();
 			}
 
@@ -361,13 +364,19 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 				currentWriter.WriteEndElement();
 				elementQueue.Pop();
 			}
-			currentWriter.WriteEndElement(); //tj. </vw:fragment>
-			currentWriter.WriteEndDocument();
-			currentWriter.Close();
+			if (currentWriter != null)
+			{
+				currentWriter.WriteEndElement(); //tj. </vw:fragment>
+				currentWriter.WriteEndDocument();
+				currentWriter.Close();
+			}
 			elementQueue.Clear();
 
-			result.PageBreaksSplitInfo.Add(currentSplitInfo);
-			currentSplitInfo = new PageBreakSplitInfo();
+			if (currentSplitInfo != null && currentSplitInfo.Id != null)
+			{
+				result.PageBreaksSplitInfo.Add(currentSplitInfo);
+				currentSplitInfo = new PageBreakSplitInfo();
+			}
 
 			return tempQueue;
 

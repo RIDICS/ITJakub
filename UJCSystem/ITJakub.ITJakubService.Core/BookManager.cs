@@ -31,7 +31,7 @@ namespace ITJakub.ITJakubService.Core
             OutputFormat outputFormat;
             var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, BookTypeEnum.Edition);
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
             return await m_searchServiceClient.GetBookPageByNameAsync(bookGuid, bookVersion.VersionId, pageName, transformationName, transformationLevel);
@@ -42,7 +42,7 @@ namespace ITJakub.ITJakubService.Core
             OutputFormat outputFormat;
             var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, BookTypeEnum.Edition);
             var transformationName = transformation.Name; 
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
             return await m_searchServiceClient.GetBookPagesByNameAsync(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName, transformationLevel);
@@ -53,7 +53,7 @@ namespace ITJakub.ITJakubService.Core
             OutputFormat outputFormat;
             var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, BookTypeEnum.Edition);
             var transformationName = transformation.Name; 
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
             return await m_searchServiceClient.GetBookPageByPositionAsync(bookGuid, bookVersion.VersionId, position, transformationName, transformationLevel);

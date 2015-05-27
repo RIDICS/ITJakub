@@ -29,20 +29,20 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             m_bookVersionRepository.Create(bookEntity);
 
-            var category = bookEntity.Book.Category;
-            while (category.ParentCategory != null)
-            {
-                category = category.ParentCategory;
-            }
+            //var category = bookEntity.Book.LastVersion.Categories.First(); //TODO roll over all categories
+            //while (category.ParentCategory != null)
+            //{
+            //    category = category.ParentCategory;
+            //}
 
-            try
-            {
-                m_categoryRepository.SetBookTypeToRootCategoryIfNotKnown(bookEntity.Book.BookType, category); //TODO resolve exception thrown due update
-            }
-            catch (BookTypeIsAlreadyAssociatedWithAnotherCategoryException ex)
-            {
-                m_log.Error(ex.Message);
-            }
+            //try
+            //{
+            //    m_categoryRepository.SetBookTypeToRootCategoryIfNotKnown(bookEntity.Book.LastVersion.DefaultBookType, category); //TODO resolve exception thrown due update
+            //}
+            //catch (BookTypeIsAlreadyAssociatedWithAnotherCategoryException ex)
+            //{
+            //    m_log.Error(ex.Message);
+            //}
             
         }
     }

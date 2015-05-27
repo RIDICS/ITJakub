@@ -9,7 +9,7 @@ var BibliographyFactoryResolver = (function () {
         this.factories = new Array();
         this.factories['Edition'] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
         this.factories['Dictionary'] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
-        this.factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new BookTypeConfiguration("OldCzechTextBank", booksConfigurations["OldCzechTextBank"]));
+        this.factories['TextBank'] = new TextBankFactory(new BookTypeConfiguration("TextBank", booksConfigurations["TextBank"]));
         this.factories['CardFile'] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
         this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
     }
@@ -129,12 +129,12 @@ var BibliographyFactory = (function () {
     };
     return BibliographyFactory;
 })();
-var OldCzechTextBankFactory = (function (_super) {
-    __extends(OldCzechTextBankFactory, _super);
-    function OldCzechTextBankFactory(configuration) {
+var TextBankFactory = (function (_super) {
+    __extends(TextBankFactory, _super);
+    function TextBankFactory(configuration) {
         _super.call(this, configuration);
     }
-    return OldCzechTextBankFactory;
+    return TextBankFactory;
 })(BibliographyFactory);
 var DictionaryFactory = (function (_super) {
     __extends(DictionaryFactory, _super);

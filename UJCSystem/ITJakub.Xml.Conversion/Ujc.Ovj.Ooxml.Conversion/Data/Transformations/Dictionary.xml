@@ -1,6 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <transformations directory="D:\!UJC\OVJ\Texty\Konverze\Xslt"
 	xmlns="http://vokabular.ujc.cas.cz/ns/xslt-transformation/1.0">
+	<transformation xml:id="essc-step01" >
+		<step file="ESSC_Rename.xsl" />
+	</transformation>
+	<transformation xml:id="essc-step02" >
+		<step file="Odstranit_mezery_mezi_elementy.xsl" />
+	</transformation>
+	<transformation xml:id="essc-step03" >
+		<step file="ESSC_OldToTeiP5.xsl" />
+	</transformation>
+
+	<transformation xml:id="stcs-step01" >
+		<step file="StcSRename.xsl" />
+	</transformation>
+
 	<transformation xml:id="body" >
 		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />
 	</transformation>

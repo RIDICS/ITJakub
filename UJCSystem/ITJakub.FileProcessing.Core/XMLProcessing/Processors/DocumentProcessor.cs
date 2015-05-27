@@ -52,12 +52,12 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
             string bookGuid = xmlReader.GetAttribute("n");
             Book book = m_bookRepository.FindBookByGuid(bookGuid) ?? new Book {Guid = bookGuid};
 
-            string docType = xmlReader.GetAttribute("doctype");
-            BookTypeEnum bookTypeEnum;
-            Enum.TryParse(docType, true, out bookTypeEnum);
-            var bookType = m_bookRepository.FindBookType(bookTypeEnum) ?? new BookType {Type = bookTypeEnum};
+            //string docType = xmlReader.GetAttribute("doctype");
+            //BookTypeEnum bookTypeEnum;
+            //Enum.TryParse(docType, true, out bookTypeEnum);
+            //var bookType = m_bookRepository.FindBookType(bookTypeEnum) ?? new BookType {Type = bookTypeEnum};
 
-            book.BookType = bookType;
+            //book.BookType = bookType;
             bookVersion.Book = book;
             book.LastVersion = bookVersion;
 

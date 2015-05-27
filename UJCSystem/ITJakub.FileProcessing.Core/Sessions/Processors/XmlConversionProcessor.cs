@@ -70,14 +70,31 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             };
 
             var converter = new DocxToTeiConverter();
-            converter.Convert(settings);
+						ConversionResult conversionResult = converter.Convert(settings);
 
-
+					if(conversionResult.IsConverted)
+					{ 
             resourceSessionDirector.Resources.Add(metaDataResource);
             resourceSessionDirector.Resources.Add(bookResource);
+					}
+					else
+					{
+                        throw new ConversionException(string.Format("Soubor se nepodařilo konvertovat. Viz vnitřní výjimka : '{0}'", conversionResult.Errors.FirstOrDefault()));
+					}
         }
     }
 
+	public class ConversionException : Exception
+	{
+
+		public ConversionException(string message) : base(message)
+		{
+		}
+
+		public ConversionException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+	}
     public class VersionProviderHelper
     {
         private readonly string m_message;

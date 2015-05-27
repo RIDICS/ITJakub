@@ -5,7 +5,8 @@
 	version="1.0">
   
   <xsl:strip-space elements="*"/>
-	<xsl:output indent="yes" />
+	<!--<xsl:preserve-space elements="text"/>-->
+	<xsl:output indent="no" />
   
 	<xd:doc scope="stylesheet">
 		<xd:desc>
@@ -23,25 +24,42 @@
     </xd:desc>
   </xd:doc>
 	
-<!--	<xsl:template match="body" priority="2">
-		<xsl:element name="body">
+	<xsl:template match="/">
+		<xsl:comment> Presunout_foliaci_pred_odstavec </xsl:comment>
+		<xsl:apply-templates />
+	</xsl:template>
+	
+	<xsl:template match="body" priority="10">
+		<xsl:copy>
 			<xsl:apply-templates />
-		</xsl:element>
-	</xsl:template>-->
-  
-	<xsl:template match="/body//*[name(child::*[position() = 1]) = 'foliace']">
+		</xsl:copy>
+	</xsl:template>
+	
+	<!--<xsl:template match="l[name(*[1]) = ('foliace' or 'pb')]">
     <xsl:copy-of select="child::*[1]"/>
     <xsl:element name="{local-name()}">
-      <xsl:apply-templates select="child::*[position() &gt; 1]"></xsl:apply-templates>
+      <xsl:apply-templates select="child::*[position() &gt; 1]" />
     </xsl:element>
-  </xsl:template>
+  </xsl:template>-->
 	
-	<xsl:template match="/body//*[name(child::*[position() = 1]) = 'pb']">
+	<xsl:template match="*[*[1]/self::pb] | *[*[1]/self::foliace]">
 		<xsl:copy-of select="child::*[1]"/>
-		<xsl:element name="{local-name()}">
-			<xsl:apply-templates select="@*" />
-			<xsl:apply-templates select="child::*[position() &gt; 1]"></xsl:apply-templates>
-		</xsl:element>
+		<xsl:choose>
+			<!-- po foliaci následuje poznámka, aniž je mezi nimi textový uzel -->
+			<xsl:when test="node()[2][self::note]">
+				<xsl:copy-of select="node()[2][self::*]"/>
+				<xsl:element name="{local-name()}">
+					<xsl:copy-of select="@*" />
+					<xsl:apply-templates select="node()[position() &gt; 2]" />
+				</xsl:element>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:element name="{local-name()}">
+					<xsl:copy-of select="@*" />
+					<xsl:apply-templates select="node()[position() &gt; 1]" />
+				</xsl:element>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 </xsl:stylesheet>

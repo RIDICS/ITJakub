@@ -12,13 +12,15 @@
   </xd:doc>
   <!--<xsl:include href="Prevod_stylu_na_TEI.xsl"/>-->
 	
+	<xsl:param name="exportovatTransliteraci" select="'false()'" />
+	
 	<xsl:include href="Prevod_stylu_na_TEI.xsl"/>
 	<xsl:include href="EM+EB_Prevod_stylu_na_TEI_spolecne.xsl"/>
 	<xsl:output omit-xml-declaration="no" indent="yes"/>
 	<xsl:strip-space elements="*"/>
 	
   <xsl:template match="/">
-  	<xsl:comment> EB_Prevod_stylu_na_TEI </xsl:comment>
+  	<xsl:comment> EB_Prevod_stylu_na_TEI; ; parameters: exportovatTransliteraci = '<xsl:value-of select="$exportovatTransliteraci"/>'  </xsl:comment>
     <xsl:apply-templates />
   </xsl:template>
   

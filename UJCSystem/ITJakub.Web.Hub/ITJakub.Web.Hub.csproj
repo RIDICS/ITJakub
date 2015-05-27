@@ -16,7 +16,7 @@
     <AssemblyName>ITJakub.Web.Hub</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort>44300</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -214,11 +214,11 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.css">
+    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css">
       <DependentUpon>itjakub.bibliographies.less</DependentUpon>
     </Content>
-    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.min.css">
-      <DependentUpon>itjakub.dictionaries.css</DependentUpon>
+    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.min.css">
+      <DependentUpon>itjakub.bibliographies.css</DependentUpon>
     </Content>
     <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.css">
       <DependentUpon>itjakub.bohemiantextbank.less</DependentUpon>
@@ -280,9 +280,6 @@
     </Content>
     <Content Include="Areas\Bibliographies\Views\web.config" />
     <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.less" />
-    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.css.map">
-      <DependentUpon>itjakub.dictionaries.css</DependentUpon>
-    </Content>
     <Content Include="Areas\Bibliographies\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\List.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
@@ -525,6 +522,9 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css.map">
+      <DependentUpon>itjakub.bibliographies.css</DependentUpon>
+    </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
@@ -675,7 +675,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2637</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2637/</IISUrl>
+          <IISUrl>http://localhost/ITJakub.Web.Hub</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://147.32.81.137/ITJakub.Web.Hub</CustomServerUrl>

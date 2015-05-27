@@ -59,5 +59,30 @@
 		</xsl:element>
 	</xsl:template>
 	
+	<xsl:template match="Signet">
+		<xsl:element name="Impresum">
+			<xsl:apply-templates/>
+		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="*[not(*) and text()]" priority="-5">
+			<xsl:copy>
+				<xsl:copy-of select="@*" />
+				<xsl:if test="' ' = substring(., string-length(.) - 1)">
+					<xsl:attribute name="xml:space"><xsl:text>preserve</xsl:text></xsl:attribute>
+				</xsl:if>
+				<xsl:apply-templates/>
+			</xsl:copy>
+	</xsl:template>
+
+	<xsl:template match="*[* and text()]" priority="-5">
+		<xsl:copy>
+			<xsl:copy-of select="@*" />
+			<xsl:if test="' ' = substring(., string-length(.) - 1)">
+				<xsl:attribute name="xml:space"><xsl:text>preserve</xsl:text></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates/>
+		</xsl:copy>
+	</xsl:template>
 	
 </xsl:stylesheet>

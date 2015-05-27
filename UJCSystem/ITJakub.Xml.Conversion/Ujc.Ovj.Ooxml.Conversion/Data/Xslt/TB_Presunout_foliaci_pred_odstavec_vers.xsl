@@ -38,7 +38,7 @@
 	<xsl:template match="/doc//*[name(child::*[position() = 1]) = 'pb']">
 		<xsl:copy-of select="child::*[1]"/>
 		<xsl:element name="{local-name()}">
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:apply-templates select="child::*[position() &gt; 1]"></xsl:apply-templates>
 		</xsl:element>
 	</xsl:template>

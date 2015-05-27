@@ -68114,4 +68114,80 @@
 		<Identifikator>355</Identifikator>
 		<TypPrepisu>edice</TypPrepisu>
 	</Prepis>
+<Prepis>
+  <Hlava>
+   <Pamatka>
+    <Titul>Elektronický slovník staré češtiny</Titul>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Ulozeni>
+      <Instituce/>
+      <Signatura/>
+     </Ulozeni>
+     <Datace>
+      <Stoleti>0</Stoleti>
+      <PolovinaStoleti>0</PolovinaStoleti>
+      <Desetileti>0</Desetileti>
+      <Rok>0</Rok>
+      <RelativniChronologie>0</RelativniChronologie>
+      <NePredRokem>0</NePredRokem>
+      <NePoRoce>0</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori/>
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy"/>
+   <Editori/>
+  </Hlava>
+  <Hlavicka>
+   <Titul>Elektronický slovník staré češtiny</Titul>
+   <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
+   <InstituceUlozeni/>
+   <Signatura/>
+   <EditoriPrepisuText>Boris Lehečka</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>Boris Lehečka</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>ESSC_A.docx</Nazev>
+   <Adresar>D:\Slovniky\Word</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2015-01-18T21:29:10.4946778+01:00</Zmeneno>
+   <Velikost>154276</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>3461BE1405ECEBA53DCBE2805EE3AA90</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{08BE3E56-77D0-46C1-80BB-C1346B757BE5}</GUID>
+   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty/>
+  	<ZpusobVyuziti>Slovnik</ZpusobVyuziti>
+   <PrvniExporty/>
+   <ObjemDat>0</ObjemDat>
+   <Transliterovane>false</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni/>
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace/>
+  </Zpracovani>
+  <Identifikator>1</Identifikator>
+  <TypPrepisu>slovník</TypPrepisu>
+ </Prepis>
 </Prepisy>
