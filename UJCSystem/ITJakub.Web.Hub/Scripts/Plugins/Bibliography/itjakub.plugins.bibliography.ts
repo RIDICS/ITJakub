@@ -18,7 +18,7 @@ class BibliographyModule {
             type: "GET",
             traditional: true,
             async: false,
-            url: "/Bibliography/GetConfiguration",
+            url: getBaseUrl()+"Bibliography/GetConfiguration",
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {

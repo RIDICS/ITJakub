@@ -595,7 +595,7 @@ class Bucket {
             type: "GET",
             traditional: true,
             data: { cardFileId: this.cardFileId, bucketId: this.id },
-            url: "/CardFiles/CardFiles/CardsShort",
+            url: getBaseUrl()+"CardFiles/CardFiles/CardsShort",
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
@@ -648,7 +648,7 @@ class Card {
             type: "GET",
             traditional: true,
             data: { cardFileId: this.parentBucket.getCardFileId(), bucketId: this.parentBucket.getId(), cardId: this.getId()},
-            url: "/CardFiles/CardFiles/Card",
+            url: getBaseUrl()+"CardFiles/CardFiles/Card",
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {

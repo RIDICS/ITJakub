@@ -36,7 +36,7 @@ function createSearch() {
                     type: "GET",
                     traditional: true,
                     data: { cardFileId: selectedCardFileItem.Id, headword: searchedHeadword },
-                    url: "/CardFiles/CardFiles/Buckets",
+                    url: getBaseUrl() + "CardFiles/CardFiles/Buckets",
                     dataType: 'json',
                     contentType: 'application/json',
                     success: function (response) {
@@ -116,7 +116,7 @@ function createListing() {
         type: "GET",
         traditional: true,
         data: {},
-        url: "/CardFiles/CardFiles/CardFiles",
+        url: getBaseUrl() + "CardFiles/CardFiles/CardFiles",
         dataType: 'json',
         contentType: 'application/json',
         success: function (response) {
@@ -155,7 +155,7 @@ function createListing() {
             type: "GET",
             traditional: true,
             data: { cardFileId: cardFileIdListed },
-            url: "/CardFiles/CardFiles/Buckets",
+            url: getBaseUrl() + "CardFiles/CardFiles/Buckets",
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
@@ -194,7 +194,7 @@ function createList() {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: "/CardFiles/CardFiles/SearchList",
+            url: getBaseUrl() + "CardFiles/CardFiles/SearchList",
             data: { term: text },
             dataType: 'json',
             contentType: 'application/json',

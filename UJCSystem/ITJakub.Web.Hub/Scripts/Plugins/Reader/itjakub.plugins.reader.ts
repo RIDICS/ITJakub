@@ -1095,7 +1095,7 @@ class TextPanel extends RightSidePanel {
             type: "GET",
             traditional: true,
             data: { bookId: this.parentReader.bookId, pageName: pageName },
-            url: "/Reader/GetBookPageByName",
+            url: getBaseUrl()+"Reader/GetBookPageByName",
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
