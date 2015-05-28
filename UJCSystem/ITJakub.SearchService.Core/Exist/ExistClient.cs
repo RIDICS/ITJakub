@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
+using log4net;
 
 namespace ITJakub.SearchService.Core.Exist
 {
@@ -10,6 +12,8 @@ namespace ITJakub.SearchService.Core.Exist
     {
         private readonly HttpClient m_httpClient;
         private readonly UriCache m_uriCache;
+
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ExistClient(UriCache uriCache, ExistConnectionSettingsSkeleton connectionSettings)
         {
@@ -28,6 +32,9 @@ namespace ITJakub.SearchService.Core.Exist
 
         public async Task UploadVersionFileAsync(string bookId, string bookVersionId, string fileName, Stream dataStream)
         {
+            if (m_log.IsDebugEnabled) 
+                m_log.DebugFormat("Begin upload of book '{0}' and version '{1}'", bookId, bookVersionId);
+           
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, bookVersionId, fileName);
@@ -35,6 +42,9 @@ namespace ITJakub.SearchService.Core.Exist
             {
                 Content = new StreamContent(dataStream)
             });
+
+            if (m_log.IsDebugEnabled) 
+                m_log.DebugFormat("End upload of book '{0}' and version '{1}'", bookId, bookVersionId);
         }
 
         public async Task UploadBookFileAsync(string bookId, string fileName, Stream dataStream)

@@ -15,7 +15,8 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public async Task<ActionResult> GetBookPageByName(string bookId, string pageName)
         {
-            return Json(new { pageText = await m_mainServiceClient.GetBookPageByNameAsync(bookId, pageName, OutputFormatEnumContract.Html) }, JsonRequestBehavior.AllowGet);
+            var text = await m_mainServiceClient.GetBookPageByNameAsync(bookId, pageName, OutputFormatEnumContract.Html);
+            return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> GetBookPageList(string bookId)
