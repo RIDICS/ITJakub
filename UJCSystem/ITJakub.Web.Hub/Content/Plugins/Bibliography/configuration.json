@@ -103,10 +103,10 @@
         },
         "right-panel": {
             "info-button": {
-                "url": "/Editions/Editions/Info?bookId={BookGuid}"
+                "url": "Editions/Editions/Info?bookId={BookGuid}"
             },
             "read-button": {
-                "url": "/Editions/Editions/Listing?bookId={BookGuid}"
+                "url": "Editions/Editions/Listing?bookId={BookGuid}"
             },
             "variables": {
                 "$test": {
@@ -162,10 +162,10 @@
         },
         "right-panel": {
             "info-button": {
-                "url": "\\Dictionary\\info\\{BookId}"
+                "url": "Dictionary\\info\\{BookId}"
             },
             "read-button": {
-                "url": "\\Dictionary\\read\\{$test}"
+                "url": "Dictionary\\read\\{$test}"
             },
             "variables": {
                 "$test": {
@@ -276,7 +276,10 @@
         },
         "right-panel": {
             "info-button": {
-                "url": "\\OldCzechTextBank\\info\\{BookGuid}"
+                "url": "Editions/Editions/Info?bookId={BookGuid}"
+            },
+            "read-button": {
+                "url": "Editions/Editions/Listing?bookId={BookGuid}"
             }
 
         }
@@ -306,7 +309,7 @@
         },
         "right-panel": {
             "read-button": {
-                "url": "\\CardFiles\\CardFiles\\Listing?cardFileId={BookGuid}"
+                "url": "CardFiles\\CardFiles\\Listing?cardFileId={BookGuid}"
             },
             "variables": {
                 "$test": {

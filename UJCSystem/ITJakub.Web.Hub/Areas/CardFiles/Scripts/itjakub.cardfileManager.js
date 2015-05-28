@@ -185,15 +185,15 @@ var CardFileViewer = (function () {
         var image = document.createElement("img");
         image.title = "Malý náhled";
         image.alt = "Malý náhled";
-        image.src = "/CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=thumbnail";
+        image.src = getBaseUrl() + "CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=thumbnail";
         imageAnchor.appendChild(image);
         cardFileImageDiv.appendChild(imageAnchor);
         return cardFileImageDiv;
     };
     CardFileViewer.prototype.changeDisplayedPreviewImage = function (cardId, imageId) {
         var cardFileImageDiv = $(this.htmlBody).find(".cardfile-image");
-        $(cardFileImageDiv).find("img").attr("src", "/CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=preview");
-        $(cardFileImageDiv).find("a").attr("href", "/CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=full");
+        $(cardFileImageDiv).find("img").attr("src", getBaseUrl() + "CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=preview");
+        $(cardFileImageDiv).find("a").attr("href", getBaseUrl() + "CardFiles/CardFiles/Image?cardFileId=" + this.cardFileId + "&bucketId=" + this.actualBucket.getId() + "&cardId=" + cardId + "&imageId=" + imageId + "&imageSize=full");
     };
     CardFileViewer.prototype.displayCardFileName = function (name) {
         $(this.htmlBody).find(".cardfile-name").html(name);

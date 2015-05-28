@@ -4,7 +4,7 @@
 class BibliographyModule {
 
     booksContainer: string;
-    sortBarContainer: string
+    sortBarContainer: string;
     bibliographyFactoryResolver: BibliographyFactoryResolver;
     configurationManager: ConfigurationManager;
 

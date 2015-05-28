@@ -10,8 +10,6 @@ $(document).ready(() => {
     var liTargetingActualPage = $('#main-plugins-menu').find("a[href='" + href.toString() + "']").parent('li');
     $(liTargetingActualPage).addClass('active');
     $(liTargetingActualPage).parents('li').addClass('active');
-
-    alert(getBaseUrl());
 });
 
 function getQueryStringParameterByName(name) {
