@@ -811,7 +811,7 @@ var ImagePanel = (function (_super) {
         var pagePosition = pageIndex + 1;
         $(this.innerContent).empty();
         var image = document.createElement("img");
-        image.src = "/Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
+        image.src = getBaseUrl() + "Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
         $(this.innerContent).append(image);
         if (typeof this.windowBody !== 'undefined') {
             $(this.windowBody).empty();

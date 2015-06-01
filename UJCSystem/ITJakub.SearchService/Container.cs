@@ -34,7 +34,7 @@ namespace ITJakub.SearchService
         {
             //configure log4net
 
-            var configPath = Path.Combine(GetAssemblyNamePrefix(), "log4net.config");
+            var configPath = "log4net.config";
             var fileInfo = new FileInfo(configPath);
             XmlConfigurator.Configure(fileInfo);
         }
