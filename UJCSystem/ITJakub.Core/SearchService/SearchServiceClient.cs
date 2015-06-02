@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
-using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
 using log4net;
 
@@ -13,11 +12,18 @@ namespace ITJakub.Core.SearchService
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public SearchServiceClient()
+        {
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("SearchServiceClient created.");
+        }
+
+        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return await Channel.GetBookPageByPositionAsync(bookId, versionId, pagePosition, transformationName, transformationLevel);
+                return Channel.GetBookPageByPosition(bookId, versionId, pagePosition, transformationName,
+                    transformationLevel);
             }
             catch (CommunicationException ex)
             {
@@ -39,11 +45,12 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return await Channel.GetBookPageByNameAsync(bookId, versionId, pageName, transformationName, transformationLevel);
+                return Channel.GetBookPageByName(bookId, versionId, pageName, transformationName,
+                    transformationLevel);
             }
             catch (CommunicationException ex)
             {
@@ -65,11 +72,12 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return await Channel.GetBookPagesByNameAsync(bookId, versionId, startPageName, endPageName, transformationName, transformationLevel);
+                return Channel.GetBookPagesByName(bookId, versionId, startPageName, endPageName, transformationName,
+                    transformationLevel);
             }
             catch (CommunicationException ex)
             {
@@ -91,11 +99,11 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookId, string versionId)
+        public IList<BookPageContract> GetBookPageList(string bookId, string versionId)
         {
             try
             {
-                return await Channel.GetBookPageListAsync(bookId, versionId);
+                return Channel.GetBookPageList(bookId, versionId);
             }
             catch (CommunicationException ex)
             {
@@ -117,11 +125,11 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public async Task UploadVersionFileAsync(VersionResourceUploadContract versionResourceUploadContract)
+        public void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract)
         {
             try
             {
-                await Channel.UploadVersionFileAsync(versionResourceUploadContract);
+                Channel.UploadVersionFile(versionResourceUploadContract);
             }
             catch (CommunicationException ex)
             {
@@ -143,11 +151,11 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public async Task UploadBookFileAsync(BookResourceUploadContract contract)
+        public void UploadBookFile(BookResourceUploadContract contract)
         {
             try
             {
-                await Channel.UploadBookFileAsync(contract);
+                Channel.UploadBookFile(contract);
             }
             catch (CommunicationException ex)
             {
@@ -169,11 +177,11 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public async Task UploadSharedFileAsync(ResourceUploadContract contract)
+        public void UploadSharedFile(ResourceUploadContract contract)
         {
             try
             {
-                await Channel.UploadSharedFileAsync(contract);
+                Channel.UploadSharedFile(contract);
             }
             catch (CommunicationException ex)
             {

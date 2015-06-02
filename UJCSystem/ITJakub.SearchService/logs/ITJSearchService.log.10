@@ -1,0 +1,4 @@
+2015-06-02 14:09:57,999 [22] DEBUG ITJakub.SearchService.Core.Exist.ExistClient - Start HTTPclient get page name '3v' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}' and version 'e0c70f89-ceec-4f37-a487-583bdf7c4e87'
+2015-06-02 14:09:58,200 [8] DEBUG ITJakub.SearchService.Core.Exist.ExistClient - End HTTPclient get page name '3v' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}' and version 'e0c70f89-ceec-4f37-a487-583bdf7c4e87'
+2015-06-02 14:10:57,319 [36] DEBUG ITJakub.SearchService.Core.Exist.ExistClient - Start HTTPclient get page name '3v' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}' and version 'e0c70f89-ceec-4f37-a487-583bdf7c4e87'
+2015-06-02 14:10:57,414 [15] DEBUG ITJakub.SearchService.Core.Exist.ExistClient - End HTTPclient get page name '3v' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}' and version 'e0c70f89-ceec-4f37-a487-583bdf7c4e87'

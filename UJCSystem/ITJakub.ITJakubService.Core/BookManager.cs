@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Reflection;
 using AutoMapper;
 using ITJakub.Core;
 using ITJakub.Core.SearchService;
@@ -10,6 +10,7 @@ using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
+using log4net;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -19,6 +20,8 @@ namespace ITJakub.ITJakubService.Core
         private readonly BookRepository m_bookRepository;
         private readonly FileSystemManager m_fileSystemManager;
 
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository, FileSystemManager fileSystemManager)
         {
             m_searchServiceClient = searchServiceClient;
@@ -26,18 +29,27 @@ namespace ITJakub.ITJakubService.Core
             m_fileSystemManager = fileSystemManager;
         }
 
-        public async Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
         {
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("Start MainService (BookManager) get page name '{0}' of book '{1}'", pageName, bookGuid);
+
+            var searchServiceClient = new SearchServiceClient();
             OutputFormat outputFormat;
             var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            return await m_searchServiceClient.GetBookPageByNameAsync(bookGuid, bookVersion.VersionId, pageName, transformationName, transformationLevel);
+            var pageText = searchServiceClient.GetBookPageByName(bookGuid, bookVersion.VersionId, pageName, transformationName, transformationLevel);
+
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("End MainService (BookManager) get page name '{0}' of book '{1}'", pageName, bookGuid);
+
+            return pageText;
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
             var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
@@ -45,10 +57,10 @@ namespace ITJakub.ITJakubService.Core
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name; 
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            return await m_searchServiceClient.GetBookPagesByNameAsync(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName, transformationLevel);
+            return m_searchServiceClient.GetBookPagesByName(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetBookPagesByPositionAsync(string bookGuid, int position, OutputFormatEnumContract resultFormat)
+        public string GetBookPagesByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
             var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
@@ -56,13 +68,13 @@ namespace ITJakub.ITJakubService.Core
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name; 
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            return await m_searchServiceClient.GetBookPageByPositionAsync(bookGuid, bookVersion.VersionId, position, transformationName, transformationLevel);
+            return m_searchServiceClient.GetBookPageByPosition(bookGuid, bookVersion.VersionId, position, transformationName, transformationLevel);
         }
 
-        public async Task<IList<BookPageContract>> GetBookPagesListAsync(string bookGuid)
+        public IList<BookPageContract> GetBookPagesList(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            return await m_searchServiceClient.GetBookPageListAsync(bookGuid, bookVersion.VersionId);
+            return m_searchServiceClient.GetBookPageList(bookGuid, bookVersion.VersionId);
         }
 
 

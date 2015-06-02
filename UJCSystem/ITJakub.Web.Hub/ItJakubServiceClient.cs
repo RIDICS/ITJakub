@@ -15,6 +15,12 @@ namespace ITJakub.Web.Hub
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public ItJakubServiceClient()
+        {
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("MainServiceClient created.");
+        }
+
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
         {
             try
@@ -55,11 +61,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public async Task<string> GetBookPageByNameAsync(string documentId, string pageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByNameAsync(string documentId, string pageName, OutputFormatEnumContract resultFormat)
         {
             try
             {
-                return await Channel.GetBookPageByNameAsync(documentId, pageName, resultFormat);
+                return Channel.GetBookPageByNameAsync(documentId, pageName, resultFormat);
             }
             catch (CommunicationException ex)
             {
@@ -75,62 +81,62 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string documentId, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
         {
             try
             {
-                return await Channel.GetBookPagesByNameAsync(documentId, startPageName, endPageName, resultFormat);
+                return Channel.GetBookPagesByName(documentId, startPageName, endPageName, resultFormat);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPagesByNameAsync failed with: {0}", ex);
+                    m_log.ErrorFormat("GetBookPagesByName failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPagesByNameAsync timeouted with: {0}", ex);
+                    m_log.ErrorFormat("GetBookPagesByName timeouted with: {0}", ex);
                 throw;
             }
         }
 
-        public async Task<string> GetBookPageByPositionAsync(string documentId, int position, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByPosition(string documentId, int position, OutputFormatEnumContract resultFormat)
         {
             try
             {
-                return await Channel.GetBookPageByPositionAsync(documentId, position, resultFormat);
+                return Channel.GetBookPageByPosition(documentId, position, resultFormat);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPageByPositionAsync failed with: {0}", ex);
+                    m_log.ErrorFormat("GetBookPageByPosition failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPageByPositionAsync timeouted with: {0}", ex);
+                    m_log.ErrorFormat("GetBookPageByPosition timeouted with: {0}", ex);
                 throw;
             }
         }
             
-        public async Task<IList<BookPageContract>> GetBookPageListAsync(string documentId)
+        public IList<BookPageContract> GetBookPageList(string documentId)
         {
             try
             {
-                return await Channel.GetBookPageListAsync(documentId);
+                return Channel.GetBookPageList(documentId);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPageListAsync failed with: {0}", ex);
+                    m_log.ErrorFormat("GetBookPageList failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPageListAsync timeouted with: {0}", ex);
+                    m_log.ErrorFormat("GetBookPageList timeouted with: {0}", ex);
                 throw;
             }
         }

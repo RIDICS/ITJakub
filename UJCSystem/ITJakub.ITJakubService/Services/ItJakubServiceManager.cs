@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
@@ -50,24 +49,24 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetBooksWithCategoriesByBookType(bookType);
         }
 
-        public async Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
         {
-            return await m_bookManager.GetBookPageByNameAsync(bookGuid, pageName, resultFormat);
+            return m_bookManager.GetBookPageByName(bookGuid, pageName, resultFormat);
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
         {
-            return await m_bookManager.GetBookPagesByNameAsync(bookGuid, startPageName, endPageName, resultFormat);
+            return m_bookManager.GetBookPagesByName(bookGuid, startPageName, endPageName, resultFormat);
         }
 
-        public async Task<string> GetBookPageByPositionAsync(string bookGuid, int position, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
         {
-            return await m_bookManager.GetBookPagesByPositionAsync(bookGuid, position, resultFormat);
+            return m_bookManager.GetBookPagesByPosition(bookGuid, position, resultFormat);
         }
 
-        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookGuid)
+        public IList<BookPageContract> GetBookPageList(string bookGuid)
         {
-            return await m_bookManager.GetBookPagesListAsync(bookGuid);
+            return m_bookManager.GetBookPagesList(bookGuid);
         }
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)

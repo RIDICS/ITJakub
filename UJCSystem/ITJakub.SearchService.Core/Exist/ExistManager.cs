@@ -18,10 +18,10 @@ namespace ITJakub.SearchService.Core.Exist
             m_existResourceManager = existResourceManager;
         }
 
-        public async Task<List<BookPageContract>> GetPageList(string bookId,string versionId, string xslPath = null)
+        public List<BookPageContract> GetPageList(string bookId,string versionId, string xslPath = null)
         {
             XDocument xmlDoc;
-            using (Stream pageStream = await m_client.GetPageListAsync(bookId, versionId, xslPath))
+            using (Stream pageStream = m_client.GetPageList(bookId, versionId, xslPath))
             {
                 xmlDoc = XDocument.Load(pageStream);
             }
@@ -37,37 +37,37 @@ namespace ITJakub.SearchService.Core.Exist
             return pageList;
         }
 
-        public async Task UploadBookFile(string bookId, string fileName, Stream dataStream)
+        public void UploadBookFile(string bookId, string fileName, Stream dataStream)
         {
-            await m_client.UploadBookFileAsync(bookId, fileName, dataStream);
+            m_client.UploadBookFile(bookId, fileName, dataStream);
         }
 
-        public async Task UploadVersionFile(string bookId, string versionId, string fileName, Stream filStream)
+        public void UploadVersionFile(string bookId, string versionId, string fileName, Stream filStream)
         {
-            await m_client.UploadVersionFileAsync(bookId, versionId, fileName, filStream);
+            m_client.UploadVersionFile(bookId, versionId, fileName, filStream);
         }
 
-        public async Task UploadSharedFile(string fileName, Stream filStream)
+        public void UploadSharedFile(string fileName, Stream filStream)
         {
-            await m_client.UploadSharedFileAsync(fileName, filStream);
+            m_client.UploadSharedFile(fileName, filStream);
         }
 
-        public async Task<string> GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
-            return await m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition, xslPath);
+            return m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition, xslPath);
         }
 
-        public async Task<string> GetPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
-            return await m_client.GetPageByName(bookId, versionId, pageName, xslPath);
+            return m_client.GetPageByName(bookId, versionId, pageName, xslPath);
         }
 
-        public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetPagesByName(string bookId, string versionId, string start, string end, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
-            return await m_client.GetPagesByName(bookId, versionId, start, end, xslPath);
+            return m_client.GetPagesByName(bookId, versionId, start, end, xslPath);
         }
     }
 }

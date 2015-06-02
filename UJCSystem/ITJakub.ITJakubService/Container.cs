@@ -34,7 +34,8 @@ namespace ITJakub.ITJakubService
             : base(new XmlInterpreter(configFile))
         {
             //configure log4net
-            XmlConfigurator.Configure(new FileInfo("log4net.config"));
+            //XmlConfigurator.Configure(new FileInfo("log4net.config"));
+            XmlConfigurator.Configure();
             //configure AutoMapper
             ConfigureAutoMapper();
         }

@@ -1099,6 +1099,7 @@ class TextPanel extends RightSidePanel {
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
+                $(pageContainer).empty();
                 $(pageContainer).append(response["pageText"]);
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).data('loaded', true);
@@ -1110,6 +1111,7 @@ class TextPanel extends RightSidePanel {
             },
             error: (response) => {
                 $(pageContainer).removeClass("loading");
+                $(pageContainer).append("Chyba při načítání stránky '"+pageName+"'");
             }
         });
     }

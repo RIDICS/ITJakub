@@ -919,6 +919,7 @@ var TextPanel = (function (_super) {
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
+                $(pageContainer).empty();
                 $(pageContainer).append(response["pageText"]);
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).data('loaded', true);
@@ -929,6 +930,7 @@ var TextPanel = (function (_super) {
             },
             error: function (response) {
                 $(pageContainer).removeClass("loading");
+                $(pageContainer).append("Chyba při načítání stránky '" + pageName + "'");
             }
         });
     };

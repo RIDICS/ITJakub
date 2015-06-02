@@ -1,0 +1,100 @@
+2015-06-02 15:11:43,401 [6] DEBUG ITJakub.Core.SearchService.SearchServiceClient - SearchServiceClient created.
+2015-06-02 15:11:43,535 [6] DEBUG ITJakub.CardFile.Core.CardFilesCommunicationManager - Creating CardFiles client
+2015-06-02 15:11:51,356 [19] DEBUG ITJakub.ITJakubService.Core.BookManager - Start MainService (BookManager) get page name '4v' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}'
+2015-06-02 15:11:51,356 [20] DEBUG ITJakub.ITJakubService.Core.BookManager - Start MainService (BookManager) get page name '3r' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}'
+2015-06-02 15:11:51,382 [20] DEBUG ITJakub.Core.SearchService.SearchServiceClient - SearchServiceClient created.
+2015-06-02 15:11:51,430 [19] DEBUG ITJakub.Core.SearchService.SearchServiceClient - SearchServiceClient created.
+2015-06-02 15:11:51,430 [11] DEBUG ITJakub.ITJakubService.Core.BookManager - Start MainService (BookManager) get page name '2v' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}'
+2015-06-02 15:11:51,461 [24] DEBUG ITJakub.ITJakubService.Core.BookManager - Start MainService (BookManager) get page name '4r' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}'
+2015-06-02 15:11:51,461 [11] DEBUG ITJakub.Core.SearchService.SearchServiceClient - SearchServiceClient created.
+2015-06-02 15:11:51,463 [24] DEBUG ITJakub.Core.SearchService.SearchServiceClient - SearchServiceClient created.
+2015-06-02 15:21:52,542 [61] DEBUG ITJakub.ITJakubService.Core.BookManager - Start MainService (BookManager) get page name '5r' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}'
+2015-06-02 15:21:52,542 [61] DEBUG ITJakub.Core.SearchService.SearchServiceClient - SearchServiceClient created.
+2015-06-02 15:21:52,542 [29] DEBUG ITJakub.ITJakubService.Core.BookManager - Start MainService (BookManager) get page name '3v' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}'
+2015-06-02 15:21:52,542 [29] DEBUG ITJakub.Core.SearchService.SearchServiceClient - SearchServiceClient created.
+2015-06-02 15:23:23,196 [11] ERROR ITJakub.Core.SearchService.SearchServiceClient - GetBookPageByNameAsync failed with: System.TimeoutException: The request channel timed out while waiting for a reply after 00:09:59.9909945. Increase the timeout value passed to the call to Request or increase the SendTimeout value on the Binding. The time allotted to this operation may have been a portion of a longer timeout. ---> System.TimeoutException: The HTTP request to 'http://localhost/SearchService/SearchService.svc' has exceeded the allotted timeout of 00:09:59.9930000. The time allotted to this operation may have been a portion of a longer timeout. ---> System.Net.WebException: The operation has timed out
+   at System.Net.HttpWebRequest.GetResponse()
+   at System.ServiceModel.Channels.HttpChannelFactory`1.HttpRequestChannel.HttpChannelRequest.WaitForReply(TimeSpan timeout)
+   --- End of inner exception stack trace ---
+   at System.ServiceModel.Channels.HttpChannelUtilities.ProcessGetResponseWebException(WebException webException, HttpWebRequest request, HttpAbortReason abortReason)
+   at System.ServiceModel.Channels.HttpChannelFactory`1.HttpRequestChannel.HttpChannelRequest.WaitForReply(TimeSpan timeout)
+   at System.ServiceModel.Channels.RequestChannel.Request(Message message, TimeSpan timeout)
+   --- End of inner exception stack trace ---
+
+Server stack trace: 
+   at System.ServiceModel.Channels.RequestChannel.Request(Message message, TimeSpan timeout)
+   at System.ServiceModel.Channels.ServiceChannel.Call(String action, Boolean oneway, ProxyOperationRuntime operation, Object[] ins, Object[] outs, TimeSpan timeout)
+   at System.ServiceModel.Channels.ServiceChannelProxy.InvokeService(IMethodCallMessage methodCall, ProxyOperationRuntime operation)
+   at System.ServiceModel.Channels.ServiceChannelProxy.Invoke(IMessage message)
+
+Exception rethrown at [0]: 
+   at System.Runtime.Remoting.Proxies.RealProxy.HandleReturnMessage(IMessage reqMsg, IMessage retMsg)
+   at System.Runtime.Remoting.Proxies.RealProxy.PrivateInvoke(MessageData& msgData, Int32 type)
+   at ITJakub.Shared.Contracts.ISearchService.GetBookPageByNameAsync(String bookId, String versionId, String pageName, String transformationName, ResourceLevelEnumContract transformationLevel)
+   at ITJakub.Core.SearchService.SearchServiceClient.GetBookPageByNameAsync(String bookId, String versionId, String pageName, String transformationName, ResourceLevelEnumContract transformationLevel) in d:\Pool\itjakub\UJCSystem\ITJakub.Core\SearchService\SearchServiceClient.cs:line 52
+2015-06-02 15:23:23,201 [24] ERROR ITJakub.Core.SearchService.SearchServiceClient - GetBookPageByNameAsync failed with: System.TimeoutException: The request channel timed out while waiting for a reply after 00:09:59.9979990. Increase the timeout value passed to the call to Request or increase the SendTimeout value on the Binding. The time allotted to this operation may have been a portion of a longer timeout. ---> System.TimeoutException: The HTTP request to 'http://localhost/SearchService/SearchService.svc' has exceeded the allotted timeout of 00:10:00. The time allotted to this operation may have been a portion of a longer timeout. ---> System.Net.WebException: The operation has timed out
+   at System.Net.HttpWebRequest.GetResponse()
+   at System.ServiceModel.Channels.HttpChannelFactory`1.HttpRequestChannel.HttpChannelRequest.WaitForReply(TimeSpan timeout)
+   --- End of inner exception stack trace ---
+   at System.ServiceModel.Channels.HttpChannelUtilities.ProcessGetResponseWebException(WebException webException, HttpWebRequest request, HttpAbortReason abortReason)
+   at System.ServiceModel.Channels.HttpChannelFactory`1.HttpRequestChannel.HttpChannelRequest.WaitForReply(TimeSpan timeout)
+   at System.ServiceModel.Channels.RequestChannel.Request(Message message, TimeSpan timeout)
+   --- End of inner exception stack trace ---
+
+Server stack trace: 
+   at System.ServiceModel.Channels.RequestChannel.Request(Message message, TimeSpan timeout)
+   at System.ServiceModel.Channels.ServiceChannel.Call(String action, Boolean oneway, ProxyOperationRuntime operation, Object[] ins, Object[] outs, TimeSpan timeout)
+   at System.ServiceModel.Channels.ServiceChannelProxy.InvokeService(IMethodCallMessage methodCall, ProxyOperationRuntime operation)
+   at System.ServiceModel.Channels.ServiceChannelProxy.Invoke(IMessage message)
+
+Exception rethrown at [0]: 
+   at System.Runtime.Remoting.Proxies.RealProxy.HandleReturnMessage(IMessage reqMsg, IMessage retMsg)
+   at System.Runtime.Remoting.Proxies.RealProxy.PrivateInvoke(MessageData& msgData, Int32 type)
+   at ITJakub.Shared.Contracts.ISearchService.GetBookPageByNameAsync(String bookId, String versionId, String pageName, String transformationName, ResourceLevelEnumContract transformationLevel)
+   at ITJakub.Core.SearchService.SearchServiceClient.GetBookPageByNameAsync(String bookId, String versionId, String pageName, String transformationName, ResourceLevelEnumContract transformationLevel) in d:\Pool\itjakub\UJCSystem\ITJakub.Core\SearchService\SearchServiceClient.cs:line 52
+2015-06-02 15:23:23,205 [20] ERROR ITJakub.Core.SearchService.SearchServiceClient - GetBookPageByNameAsync failed with: System.TimeoutException: The request channel timed out while waiting for a reply after 00:09:59.9889928. Increase the timeout value passed to the call to Request or increase the SendTimeout value on the Binding. The time allotted to this operation may have been a portion of a longer timeout. ---> System.TimeoutException: The HTTP request to 'http://localhost/SearchService/SearchService.svc' has exceeded the allotted timeout of 00:09:59.9950000. The time allotted to this operation may have been a portion of a longer timeout. ---> System.Net.WebException: The operation has timed out
+   at System.Net.HttpWebRequest.GetResponse()
+   at System.ServiceModel.Channels.HttpChannelFactory`1.HttpRequestChannel.HttpChannelRequest.WaitForReply(TimeSpan timeout)
+   --- End of inner exception stack trace ---
+   at System.ServiceModel.Channels.HttpChannelUtilities.ProcessGetResponseWebException(WebException webException, HttpWebRequest request, HttpAbortReason abortReason)
+   at System.ServiceModel.Channels.HttpChannelFactory`1.HttpRequestChannel.HttpChannelRequest.WaitForReply(TimeSpan timeout)
+   at System.ServiceModel.Channels.RequestChannel.Request(Message message, TimeSpan timeout)
+   --- End of inner exception stack trace ---
+
+Server stack trace: 
+   at System.ServiceModel.Channels.RequestChannel.Request(Message message, TimeSpan timeout)
+   at System.ServiceModel.Channels.ServiceChannel.Call(String action, Boolean oneway, ProxyOperationRuntime operation, Object[] ins, Object[] outs, TimeSpan timeout)
+   at System.ServiceModel.Channels.ServiceChannelProxy.InvokeService(IMethodCallMessage methodCall, ProxyOperationRuntime operation)
+   at System.ServiceModel.Channels.ServiceChannelProxy.Invoke(IMessage message)
+
+Exception rethrown at [0]: 
+   at System.Runtime.Remoting.Proxies.RealProxy.HandleReturnMessage(IMessage reqMsg, IMessage retMsg)
+   at System.Runtime.Remoting.Proxies.RealProxy.PrivateInvoke(MessageData& msgData, Int32 type)
+   at ITJakub.Shared.Contracts.ISearchService.GetBookPageByNameAsync(String bookId, String versionId, String pageName, String transformationName, ResourceLevelEnumContract transformationLevel)
+   at ITJakub.Core.SearchService.SearchServiceClient.GetBookPageByNameAsync(String bookId, String versionId, String pageName, String transformationName, ResourceLevelEnumContract transformationLevel) in d:\Pool\itjakub\UJCSystem\ITJakub.Core\SearchService\SearchServiceClient.cs:line 52
+2015-06-02 15:23:23,205 [19] ERROR ITJakub.Core.SearchService.SearchServiceClient - GetBookPageByNameAsync failed with: System.TimeoutException: The request channel timed out while waiting for a reply after 00:09:59.9899940. Increase the timeout value passed to the call to Request or increase the SendTimeout value on the Binding. The time allotted to this operation may have been a portion of a longer timeout. ---> System.TimeoutException: The HTTP request to 'http://localhost/SearchService/SearchService.svc' has exceeded the allotted timeout of 00:09:59.9960000. The time allotted to this operation may have been a portion of a longer timeout. ---> System.Net.WebException: The operation has timed out
+   at System.Net.HttpWebRequest.GetResponse()
+   at System.ServiceModel.Channels.HttpChannelFactory`1.HttpRequestChannel.HttpChannelRequest.WaitForReply(TimeSpan timeout)
+   --- End of inner exception stack trace ---
+   at System.ServiceModel.Channels.HttpChannelUtilities.ProcessGetResponseWebException(WebException webException, HttpWebRequest request, HttpAbortReason abortReason)
+   at System.ServiceModel.Channels.HttpChannelFactory`1.HttpRequestChannel.HttpChannelRequest.WaitForReply(TimeSpan timeout)
+   at System.ServiceModel.Channels.RequestChannel.Request(Message message, TimeSpan timeout)
+   --- End of inner exception stack trace ---
+
+Server stack trace: 
+   at System.ServiceModel.Channels.RequestChannel.Request(Message message, TimeSpan timeout)
+   at System.ServiceModel.Channels.ServiceChannel.Call(String action, Boolean oneway, ProxyOperationRuntime operation, Object[] ins, Object[] outs, TimeSpan timeout)
+   at System.ServiceModel.Channels.ServiceChannelProxy.InvokeService(IMethodCallMessage methodCall, ProxyOperationRuntime operation)
+   at System.ServiceModel.Channels.ServiceChannelProxy.Invoke(IMessage message)
+
+Exception rethrown at [0]: 
+   at System.Runtime.Remoting.Proxies.RealProxy.HandleReturnMessage(IMessage reqMsg, IMessage retMsg)
+   at System.Runtime.Remoting.Proxies.RealProxy.PrivateInvoke(MessageData& msgData, Int32 type)
+   at ITJakub.Shared.Contracts.ISearchService.GetBookPageByNameAsync(String bookId, String versionId, String pageName, String transformationName, ResourceLevelEnumContract transformationLevel)
+   at ITJakub.Core.SearchService.SearchServiceClient.GetBookPageByNameAsync(String bookId, String versionId, String pageName, String transformationName, ResourceLevelEnumContract transformationLevel) in d:\Pool\itjakub\UJCSystem\ITJakub.Core\SearchService\SearchServiceClient.cs:line 52
+2015-06-02 15:23:24,190 [11] DEBUG ITJakub.ITJakubService.Core.BookManager - Start MainService (BookManager) get page name '6r' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}'
+2015-06-02 15:23:24,191 [11] DEBUG ITJakub.Core.SearchService.SearchServiceClient - SearchServiceClient created.
+2015-06-02 15:23:24,192 [20] DEBUG ITJakub.ITJakubService.Core.BookManager - Start MainService (BookManager) get page name '6v' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}'
+2015-06-02 15:23:24,192 [64] DEBUG ITJakub.ITJakubService.Core.BookManager - Start MainService (BookManager) get page name '5v' of book '{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}'
+2015-06-02 15:23:24,192 [20] DEBUG ITJakub.Core.SearchService.SearchServiceClient - SearchServiceClient created.
+2015-06-02 15:23:24,192 [64] DEBUG ITJakub.Core.SearchService.SearchServiceClient - SearchServiceClient created.

@@ -33,10 +33,7 @@ namespace ITJakub.SearchService
             : base(new XmlInterpreter(configFile))
         {
             //configure log4net
-
-            var configPath = "log4net.config";
-            var fileInfo = new FileInfo(configPath);
-            XmlConfigurator.Configure(fileInfo);
+            XmlConfigurator.Configure();
         }
 
         static string GetAssembly()

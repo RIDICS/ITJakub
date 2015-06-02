@@ -92,9 +92,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <Content Include="packages.config" />
-    <Content Include="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <None Include="Web.Debug.config">
