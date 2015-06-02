@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AuthorContract.cs" />
     <Compile Include="BookContract.cs" />
+    <Compile Include="BookContentItemContract.cs" />
     <Compile Include="BookPageContract.cs" />
     <Compile Include="BookTypeEnumContract.cs" />
     <Compile Include="BookTypeSearchResultContract.cs" />
