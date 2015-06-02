@@ -29,12 +29,35 @@ namespace ITJakub.ITJakubService.Core
         public async Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
-            var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
+            
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
             return await m_searchServiceClient.GetBookPageByNameAsync(bookGuid, bookVersion.VersionId, pageName, transformationName, transformationLevel);
+        }
+
+        public async Task Test()
+        {
+            var bookId = "{D122AA8E-BE32-4EAF-B274-011CBBD2A01B}";
+            var bookVersionId = "1b70840d-29be-436e-bb61-61afe1866b1d";
+
+            OutputFormat outputFormat;
+            if (!Enum.TryParse(OutputFormatEnumContract.Html.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", OutputFormatEnumContract.Html));
+            }
+
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookId);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
+            var transformationName = transformation.Name;
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+            
+            await m_searchServiceClient.GetBookPageByNameAsync(bookId, bookVersion.VersionId, "2r", transformationName, transformationLevel);            
         }
 
         public async Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)

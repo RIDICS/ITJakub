@@ -71,7 +71,11 @@ BEGIN TRAN
 	      [BookType]  -- BookType - FK int
 	  )
 	  VALUES
-	  ('output-editions','Edice',NULL,@EditionTypeId),('output-dictionary','Slovnik',NULL,@DictionaryTypeId),('output-text_bank','Textova banka',NULL,@TextBankTypeId),('output-scholary_literature','Odborna literatura',NULL,@ProfessionalLiteratureTypeId),('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId)
+	  ('output-editions','Edice',NULL,@EditionTypeId),
+	  ('output-dictionary','Slovnik',NULL,@DictionaryTypeId),
+	  ('output-text_bank','Textova banka',NULL,@TextBankTypeId),
+	  ('output-scholary_literature','Odborna literatura',NULL,@ProfessionalLiteratureTypeId),
+	  ('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId)
 	  
 	--ROLLBACK
 COMMIT
