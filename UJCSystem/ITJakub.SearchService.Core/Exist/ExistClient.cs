@@ -25,6 +25,11 @@ namespace ITJakub.SearchService.Core.Exist
             m_httpClient = new HttpClient(clientHandler);
         }
 
+        public Stream GetBookContent(string bookId, string versionId)
+        {
+            return GetBookContent(bookId, versionId, null);
+        }
+        
         public Stream GetPageList(string bookId, string versionId)
         {
             return GetPageList(bookId, versionId, null);
@@ -84,6 +89,13 @@ namespace ITJakub.SearchService.Core.Exist
         }
 
         public Stream GetPageList(string bookId, string versionId, string xslPath)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId);
+            return Task.Run(() => m_httpClient.GetStreamAsync(completeUri)).Result;
+        }
+
+        public Stream GetBookContent(string bookId, string versionId, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId);

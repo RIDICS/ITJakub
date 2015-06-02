@@ -37,6 +37,25 @@ namespace ITJakub.SearchService.Core.Exist
             return pageList;
         }
 
+        public List<BookContentItemContract> GetBookContent(string bookId, string versionId, string xslPath = null)
+        {
+            XDocument xmlDoc;
+            using (Stream contentStream = m_client.GetBookContent(bookId, versionId, xslPath))
+            {
+                xmlDoc = XDocument.Load(contentStream);
+            }
+            IEnumerable<XElement> itemElements = xmlDoc.Root.Elements().Where(element => element.Name.LocalName == "item");
+            var contentItemList = new List<BookContentItemContract>();
+            foreach (XElement contentItemElement in itemElements)
+            {
+                string text = ""; //TODO element HEAD
+                string referredPageXmlId = ""; //TODO element REF attribute TARGET
+                contentItemList.Add(new BookContentItemContract { Text = text, ReferredPageXmlId = referredPageXmlId });
+            }
+
+            return contentItemList;
+        }
+
         public void UploadBookFile(string bookId, string fileName, Stream dataStream)
         {
             m_client.UploadBookFile(bookId, fileName, dataStream);
