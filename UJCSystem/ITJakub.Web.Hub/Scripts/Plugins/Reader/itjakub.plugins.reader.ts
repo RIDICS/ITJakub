@@ -1110,6 +1110,7 @@ class TextPanel extends RightSidePanel {
                 }
             },
             error: (response) => {
+                $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).append("Chyba při načítání stránky '"+pageName+"'");
             }

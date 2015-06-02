@@ -929,6 +929,7 @@ var TextPanel = (function (_super) {
                 }
             },
             error: function (response) {
+                $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).append("Chyba při načítání stránky '" + pageName + "'");
             }
