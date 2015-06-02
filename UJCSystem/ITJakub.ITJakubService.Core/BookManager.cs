@@ -36,7 +36,11 @@ namespace ITJakub.ITJakubService.Core
 
             var searchServiceClient = new SearchServiceClient();
             OutputFormat outputFormat;
-            var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
+            
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
@@ -49,10 +53,13 @@ namespace ITJakub.ITJakubService.Core
             return pageText;
         }
 
-        public string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPagesByName(string bookGuid,string startPageName,string endPageName,OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
-            var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name; 
@@ -63,7 +70,10 @@ namespace ITJakub.ITJakubService.Core
         public string GetBookPagesByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
-            var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name; 
