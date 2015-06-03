@@ -25,6 +25,12 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             var pages = m_mainServiceClient.GetBookPageList(bookId);
             return Json(new { pageList =  pages}, JsonRequestBehavior.AllowGet);
         }
+        
+        public ActionResult GetBookContent(string bookId)
+        {
+            var contentItems = m_mainServiceClient.GetBookContent(bookId);
+            return Json(new { content = contentItems }, JsonRequestBehavior.AllowGet);
+        }
 
         public async Task<ActionResult> GetBookPageByPosition(string bookId, int pagePosition)
         {

@@ -68,6 +68,10 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_bookManager.GetBookPagesList(bookGuid);
         }
+        public IList<BookContentItemContract> GetBookContent(string bookGuid)
+        {
+            return m_bookManager.GetBookContent(bookGuid);
+        }
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)
         {

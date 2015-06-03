@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+using ITJakub.SearchService.Core.Exist.XmlParser;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -11,49 +9,29 @@ namespace ITJakub.SearchService.Core.Exist
     {
         private readonly ExistClient m_client;
         private readonly IExistResourceManager m_existResourceManager;
+        private readonly XmlParserManager m_xmlParserManager;
 
-        public ExistManager(ExistClient existClient, IExistResourceManager existResourceManager)
+        public ExistManager(ExistClient existClient, IExistResourceManager existResourceManager, XmlParserManager xmlParserManager)
         {
             m_client = existClient;
             m_existResourceManager = existResourceManager;
+            m_xmlParserManager = xmlParserManager;
         }
 
-        public List<BookPageContract> GetPageList(string bookId,string versionId, string xslPath = null)
+        public List<BookPageContract> GetPageList(string bookId, string versionId, string xslPath = null)
         {
-            XDocument xmlDoc;
-            using (Stream pageStream = m_client.GetPageList(bookId, versionId, xslPath))
+            using (var pageListStream = m_client.GetPageList(bookId, versionId, xslPath))
             {
-                xmlDoc = XDocument.Load(pageStream);
+                return m_xmlParserManager.ParsePageList(pageListStream);
             }
-            IEnumerable<XElement> pageBreakElements = xmlDoc.Root.Elements().Where(element => element.Name.LocalName == "pb");
-            var pageList = new List<BookPageContract>();
-            int position = 0;
-            foreach (XElement pageBreakElement in pageBreakElements)
-            {
-                ++position;
-                pageList.Add(new BookPageContract {Position = position, Text = pageBreakElement.Attribute("n").Value});
-            }
-
-            return pageList;
         }
 
         public List<BookContentItemContract> GetBookContent(string bookId, string versionId, string xslPath = null)
         {
-            XDocument xmlDoc;
-            using (Stream contentStream = m_client.GetBookContent(bookId, versionId, xslPath))
+            using (var contentStream = m_client.GetBookContent(bookId, versionId, xslPath))
             {
-                xmlDoc = XDocument.Load(contentStream);
+                return m_xmlParserManager.ParseBookContent(contentStream);
             }
-            IEnumerable<XElement> itemElements = xmlDoc.Root.Elements().Where(element => element.Name.LocalName == "item");
-            var contentItemList = new List<BookContentItemContract>();
-            foreach (XElement contentItemElement in itemElements)
-            {
-                string text = ""; //TODO element HEAD
-                string referredPageXmlId = ""; //TODO element REF attribute TARGET
-                contentItemList.Add(new BookContentItemContract { Text = text, ReferredPageXmlId = referredPageXmlId });
-            }
-
-            return contentItemList;
         }
 
         public void UploadBookFile(string bookId, string fileName, Stream dataStream)
@@ -71,21 +49,27 @@ namespace ITJakub.SearchService.Core.Exist
             m_client.UploadSharedFile(fileName, filStream);
         }
 
-        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition,
+            string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId,
+                versionId);
             return m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition, xslPath);
         }
 
-        public string GetPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetPageByName(string bookId, string versionId, string pageName, string transformationName,
+            ResourceLevelEnumContract transformationLevel)
         {
-            string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId,
+                versionId);
             return m_client.GetPageByName(bookId, versionId, pageName, xslPath);
         }
 
-        public string GetPagesByName(string bookId, string versionId, string start, string end, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetPagesByName(string bookId, string versionId, string start, string end,
+            string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            string xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId, versionId);
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId,
+                versionId);
             return m_client.GetPagesByName(bookId, versionId, start, end, xslPath);
         }
     }

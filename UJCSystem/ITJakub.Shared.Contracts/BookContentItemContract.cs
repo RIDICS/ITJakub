@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace ITJakub.Shared.Contracts
 {
@@ -10,5 +11,11 @@ namespace ITJakub.Shared.Contracts
 
         [DataMember]
         public string ReferredPageXmlId { get; set; }
+
+        [DataMember]
+        public string ReferredPageName { get; set; }
+
+        [DataMember]
+        public List<BookContentItemContract> ChildContentItems { get; set; }
     }
 }

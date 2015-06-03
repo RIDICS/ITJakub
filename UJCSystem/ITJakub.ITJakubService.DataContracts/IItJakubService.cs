@@ -23,6 +23,9 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<BookPageContract> GetBookPageList(string bookGuid);
+        
+        [OperationContract]
+        IList<BookContentItemContract> GetBookContent(string bookGuid);
 
         #region Resource Import
         [OperationContract]       

@@ -140,6 +140,26 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+        
+        public IList<BookContentItemContract> GetBookContent(string documentId)
+        {
+            try
+            {
+                return Channel.GetBookContent(documentId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookContent failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookContent timeouted with: {0}", ex);
+                throw;
+            }
+        }
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)
         {

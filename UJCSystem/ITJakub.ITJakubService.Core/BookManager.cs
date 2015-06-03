@@ -86,6 +86,12 @@ namespace ITJakub.ITJakubService.Core
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             return m_searchServiceClient.GetBookPageList(bookGuid, bookVersion.VersionId);
         }
+        
+        public IList<BookContentItemContract> GetBookContent(string bookGuid)
+        {
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            return m_searchServiceClient.GetBookContent(bookGuid, bookVersion.VersionId);
+        }
 
 
         public BookInfoContract GetBookInfo(string bookGuid)

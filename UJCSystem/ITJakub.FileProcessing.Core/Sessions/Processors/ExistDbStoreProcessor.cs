@@ -23,7 +23,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var existFileResources =
                 resourceDirector.Resources.Where(
                     resource =>
-                        resource.ResourceType == ResourceType.Book || resource.ResourceType == ResourceType.Page ||
+                        resource.ResourceType == ResourceType.Book || resource.ResourceType == ResourceType.Metadata || resource.ResourceType == ResourceType.Page ||
                         resource.ResourceType == ResourceType.Transformation);
             
             foreach (var resource in existFileResources)
