@@ -65,3 +65,4 @@ packages/
 
 #logs
 [Ll]ogs/
+*.svclog
