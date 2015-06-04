@@ -16,6 +16,6 @@ namespace ITJakub.Shared.Contracts
         public string ReferredPageName { get; set; }
 
         [DataMember]
-        public List<BookContentItemContract> ChildContentItems { get; set; }
+        public List<BookContentItemContract> ChildBookContentItems { get; set; }
     }
 }

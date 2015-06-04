@@ -67,7 +67,7 @@ namespace ITJakub.ITJakubService.Core
             return m_searchServiceClient.GetBookPagesByName(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName, transformationLevel);
         }
 
-        public string GetBookPagesByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
@@ -84,13 +84,15 @@ namespace ITJakub.ITJakubService.Core
         public IList<BookPageContract> GetBookPagesList(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            return m_searchServiceClient.GetBookPageList(bookGuid, bookVersion.VersionId);
+            var pages = m_bookRepository.GetPageList(bookVersion);
+            return Mapper.Map<IList<BookPageContract>>(pages);
         }
         
         public IList<BookContentItemContract> GetBookContent(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            return m_searchServiceClient.GetBookContent(bookGuid, bookVersion.VersionId);
+            var bookContentItems = m_bookRepository.GetBookContentWithPages(bookVersion);
+            return Mapper.Map<IList<BookContentItemContract>>(bookContentItems);
         }
 
 

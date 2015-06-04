@@ -49,15 +49,6 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetBookPagesByName(bookId, versionId, startPageName, endPageName, transformationName, transformationLevel);
         }
 
-        public IList<BookPageContract> GetBookPageList(string bookId, string versionId)
-        {
-            return m_searchServiceManager.GetBookPageList(bookId, versionId);
-        }
-        
-        public IList<BookContentItemContract> GetBookContent(string bookId, string versionId)
-        {
-            return m_searchServiceManager.GetBookContent(bookId, versionId);
-        }
     }
 
     [ServiceContract]

@@ -4,6 +4,8 @@ using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist.XmlParser
 {
+
+    //TODO delete this Manager and other parsers and remove them from windsor castle config
     public class XmlParserManager
     {
         private readonly PageListParser m_pageListParser;

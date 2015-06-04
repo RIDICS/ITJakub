@@ -28,16 +28,6 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
             return m_existManager.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName, transformationLevel);
         }
 
-        public List<BookPageContract> GetBookPageList(string bookId, string versionId)
-        {
-            return m_existManager.GetPageList(bookId, versionId);
-        }
-        
-        public List<BookContentItemContract> GetBookContent(string bookId, string versionId)
-        {
-            return m_existManager.GetBookContent(bookId, versionId);
-        }
-
         public void UploadVersionFile(string bookId, string bookVersionid, string fileName, Stream dataStream)
         {
             m_existManager.UploadVersionFile(bookId, bookVersionid, fileName, dataStream);

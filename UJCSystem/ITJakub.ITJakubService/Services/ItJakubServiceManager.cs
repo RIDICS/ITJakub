@@ -61,7 +61,7 @@ namespace ITJakub.ITJakubService.Services
 
         public string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
         {
-            return m_bookManager.GetBookPagesByPosition(bookGuid, position, resultFormat);
+            return m_bookManager.GetBookPageByPosition(bookGuid, position, resultFormat);
         }
 
         public IList<BookPageContract> GetBookPageList(string bookGuid)

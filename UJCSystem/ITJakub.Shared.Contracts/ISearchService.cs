@@ -16,12 +16,6 @@ namespace ITJakub.Shared.Contracts
         string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
-        IList<BookPageContract> GetBookPageList(string bookId,string versionId);
-
-        [OperationContract]
-        IList<BookContentItemContract> GetBookContent(string bookId, string versionId);
-
-        [OperationContract]
         void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract);
 
         [OperationContract]

@@ -198,5 +198,32 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return bookPage;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookPage> GetPageList(BookVersion bookVersion)
+        {
+            using (var session = GetSession())
+            {
+                var bookPages =
+                    session.QueryOver<BookPage>()
+                        .Where(x => x.BookVersion.Id == bookVersion.Id)
+                        .List<BookPage>();
+                return bookPages;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookContentItem> GetBookContentWithPages(BookVersion bookVersion)
+        {
+            using (var session = GetSession())
+            {
+                var bookContentItems =
+                    session.QueryOver<BookContentItem>()
+                        .Fetch(x => x.Page).Eager
+                        .Where(item => item.BookVersion.Id == bookVersion.Id)
+                        .List<BookContentItem>();
+                return bookContentItems;
+            }
+        }
     }
 }

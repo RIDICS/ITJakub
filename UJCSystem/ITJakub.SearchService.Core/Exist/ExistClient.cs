@@ -25,16 +25,6 @@ namespace ITJakub.SearchService.Core.Exist
             m_httpClient = new HttpClient(clientHandler);
         }
 
-        public Stream GetBookContent(string bookId, string versionId)
-        {
-            return GetBookContent(bookId, versionId, null);
-        }
-        
-        public Stream GetPageList(string bookId, string versionId)
-        {
-            return GetPageList(bookId, versionId, null);
-        }
-
         public void UploadVersionFile(string bookId, string bookVersionId, string fileName, Stream dataStream)
         {
             if (m_log.IsDebugEnabled) 
@@ -86,20 +76,6 @@ namespace ITJakub.SearchService.Core.Exist
         public string GetPagesByName(string bookId, string versionId, string start, string end)
         {
             return GetPagesByName(bookId, versionId, start, end, null);
-        }
-
-        public Stream GetPageList(string bookId, string versionId, string xslPath)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId);
-            return Task.Run(() => m_httpClient.GetStreamAsync(completeUri)).Result;
-        }
-
-        public Stream GetBookContent(string bookId, string versionId, string xslPath)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId);
-            return Task.Run(() => m_httpClient.GetStreamAsync(completeUri)).Result;
         }
 
         public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition,

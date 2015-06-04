@@ -99,58 +99,6 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public IList<BookPageContract> GetBookPageList(string bookId, string versionId)
-        {
-            try
-            {
-                return Channel.GetBookPageList(bookId, versionId);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-        }
-        
-        public IList<BookContentItemContract> GetBookContent(string bookId, string versionId)
-        {
-            try
-            {
-                return Channel.GetBookContent(bookId, versionId);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-        }
-
         public void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract)
         {
             try

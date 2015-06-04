@@ -42,15 +42,5 @@ namespace ITJakub.SearchService
         {
             m_bookDao.UploadSharedFile(contract.FileName, contract.DataStream);
         }
-
-        public IList<BookPageContract> GetBookPageList(string bookId, string versionId)
-        {
-            return m_bookDao.GetBookPageList(bookId, versionId);
-        }
-        
-        public IList<BookContentItemContract> GetBookContent(string bookId, string versionId)
-        {
-            return m_bookDao.GetBookContent(bookId, versionId);
-        }
     }
 }

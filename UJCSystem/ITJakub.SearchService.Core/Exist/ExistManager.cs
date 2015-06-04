@@ -18,22 +18,6 @@ namespace ITJakub.SearchService.Core.Exist
             m_xmlParserManager = xmlParserManager;
         }
 
-        public List<BookPageContract> GetPageList(string bookId, string versionId, string xslPath = null)
-        {
-            using (var pageListStream = m_client.GetPageList(bookId, versionId, xslPath))
-            {
-                return m_xmlParserManager.ParsePageList(pageListStream);
-            }
-        }
-
-        public List<BookContentItemContract> GetBookContent(string bookId, string versionId, string xslPath = null)
-        {
-            using (var contentStream = m_client.GetBookContent(bookId, versionId, xslPath))
-            {
-                return m_xmlParserManager.ParseBookContent(contentStream);
-            }
-        }
-
         public void UploadBookFile(string bookId, string fileName, Stream dataStream)
         {
             m_client.UploadBookFile(bookId, fileName, dataStream);

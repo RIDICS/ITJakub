@@ -9,14 +9,6 @@ namespace ITJakub.SearchService.Core.Exist
     public interface IExistClient
     {
         [OperationContract]
-        [ExistQuery(XqueryName = "get-book-content.xquery")]
-        Stream GetBookContent(string bookId, string versionId);
-        
-        [OperationContract]
-        [ExistQuery(XqueryName = "get-page-list.xquery")]
-        Stream GetPageList(string bookId, string versionId);
-
-        [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
         string GetPageByPositionFromStart(string bookId, string versionId, int page);
 
