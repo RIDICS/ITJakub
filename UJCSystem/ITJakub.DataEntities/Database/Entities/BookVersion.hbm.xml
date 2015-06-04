@@ -55,11 +55,11 @@
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>
-    <bag name="BookPages" cascade="all-delete-orphan">
+    <bag name="BookPages" cascade="all-delete-orphan" lazy="extra">
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
     </bag>
-    <bag name="BookContentItems" cascade="all-delete-orphan">
+    <bag name="BookContentItems" cascade="all-delete-orphan" lazy="extra">
       <key column="BookVersion" />
       <one-to-many class="BookContentItem" />
     </bag>

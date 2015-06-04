@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
@@ -161,6 +162,8 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .WithSubquery
                     .WhereExists(maxSubquery)
                     .List<BookVersion>();
+
+                //var pagesCount = result.First().BookPages.Count;
                 return result;
             }
         }
