@@ -41,7 +41,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
                 return new List<ProcessorBase>
                 {
                     Container.Resolve<TeiHeaderProcessor>(),
-                    Container.Resolve<BookContentProcessor>(),
+                    Container.Resolve<TableOfContentProcessor>(),
                     Container.Resolve<PagesProcessor>(),
                 };
             }

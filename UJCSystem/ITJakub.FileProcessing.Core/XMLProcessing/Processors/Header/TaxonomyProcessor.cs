@@ -29,12 +29,12 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             }
         }
 
-        protected override void ProcessElement(Category parentCategory, XmlReader xmlReader)
+        protected override void ProcessElement(BookVersion bookVersion, Category parentCategory, XmlReader xmlReader)
         {
             var xmlId = xmlReader.GetAttribute("xml:id");
             if (xmlId != null && xmlId.Equals("output"))
             {
-                base.ProcessElement(parentCategory, xmlReader);
+                base.ProcessElement(bookVersion, parentCategory, xmlReader);
             }
         }
     }

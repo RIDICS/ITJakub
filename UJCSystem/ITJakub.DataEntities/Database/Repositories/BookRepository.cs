@@ -186,44 +186,6 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
-        public virtual BookPage FindBookPageByVersionAndPosition(long versionId, int position)
-        {
-            using (var session = GetSession())
-            {
-                var bookPage =
-                    session.QueryOver<BookPage>()
-                        .Where(x => x.BookVersion.Id == versionId && x.Position == position)
-                        .SingleOrDefault<BookPage>();
-                return bookPage;
-            }
-        }
-
-        [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookPage> GetPageList(BookVersion bookVersion)
-        {
-            using (var session = GetSession())
-            {
-                var bookPages =
-                    session.QueryOver<BookPage>()
-                        .Where(x => x.BookVersion.Id == bookVersion.Id)
-                        .List<BookPage>();
-                return bookPages;
-            }
-        }
-
-        [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookContentItem> GetBookContentWithPages(BookVersion bookVersion)
-        {
-            using (var session = GetSession())
-            {
-                var bookContentItems =
-                    session.QueryOver<BookContentItem>()
-                        .Fetch(x => x.Page).Eager
-                        .Where(item => item.BookVersion.Id == bookVersion.Id)
-                        .List<BookContentItem>();
-                return bookContentItems;
-            }
-        }
+       
     }
 }

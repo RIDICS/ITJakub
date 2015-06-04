@@ -64,10 +64,6 @@
     <Compile Include="Exist\AttributeResolver\IExistAttributeResolver.cs" />
     <Compile Include="Exist\IExistDao.cs" />
     <Compile Include="Exist\UriCache.cs" />
-    <Compile Include="Exist\XmlParser\BookContentParser.cs" />
-    <Compile Include="Exist\XmlParser\IXmlParser.cs" />
-    <Compile Include="Exist\XmlParser\PageListParser.cs" />
-    <Compile Include="Exist\XmlParser\XmlParserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

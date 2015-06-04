@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using ITJakub.SearchService.Core.Exist.XmlParser;
+﻿using System.IO;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -9,13 +7,11 @@ namespace ITJakub.SearchService.Core.Exist
     {
         private readonly ExistClient m_client;
         private readonly IExistResourceManager m_existResourceManager;
-        private readonly XmlParserManager m_xmlParserManager;
 
-        public ExistManager(ExistClient existClient, IExistResourceManager existResourceManager, XmlParserManager xmlParserManager)
+        public ExistManager(ExistClient existClient, IExistResourceManager existResourceManager)
         {
             m_client = existClient;
             m_existResourceManager = existResourceManager;
-            m_xmlParserManager = xmlParserManager;
         }
 
         public void UploadBookFile(string bookId, string fileName, Stream dataStream)

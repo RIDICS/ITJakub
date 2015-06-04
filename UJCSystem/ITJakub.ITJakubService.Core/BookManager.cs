@@ -18,14 +18,16 @@ namespace ITJakub.ITJakubService.Core
     {
         private readonly SearchServiceClient m_searchServiceClient;
         private readonly BookRepository m_bookRepository;
+        private readonly BookVersionRepository m_bookVersionRepository;
         private readonly FileSystemManager m_fileSystemManager;
 
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository, FileSystemManager fileSystemManager)
+        public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository, BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager)
         {
             m_searchServiceClient = searchServiceClient;
             m_bookRepository = bookRepository;
+            m_bookVersionRepository = bookVersionRepository;
             m_fileSystemManager = fileSystemManager;
         }
 
@@ -84,14 +86,14 @@ namespace ITJakub.ITJakubService.Core
         public IList<BookPageContract> GetBookPagesList(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var pages = m_bookRepository.GetPageList(bookVersion);
+            var pages = m_bookVersionRepository.GetPageList(bookVersion);
             return Mapper.Map<IList<BookPageContract>>(pages);
         }
         
         public IList<BookContentItemContract> GetBookContent(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var bookContentItems = m_bookRepository.GetBookContentWithPages(bookVersion);
+            var bookContentItems = m_bookVersionRepository.GetBookContentWithPages(bookVersion);
             return Mapper.Map<IList<BookContentItemContract>>(bookContentItems);
         }
 
@@ -105,7 +107,7 @@ namespace ITJakub.ITJakubService.Core
         public Stream GetBookPageImage(BookPageImageContract imageContract)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(imageContract.BookGuid);
-            var bookPage = m_bookRepository.FindBookPageByVersionAndPosition(bookVersion.Id, imageContract.Position);
+            var bookPage = m_bookVersionRepository.FindBookPageByVersionAndPosition(bookVersion, imageContract.Position);
             var imageFileName = bookPage.Image;
             imageFileName = "junslov.jpg"; //TODO test
             return m_fileSystemManager.GetResource(imageContract.BookGuid, bookVersion.VersionId,

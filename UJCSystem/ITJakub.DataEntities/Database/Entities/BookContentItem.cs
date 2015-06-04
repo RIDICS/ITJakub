@@ -11,7 +11,8 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual BookPage Page { get; set; }
         public virtual BookContentItem ParentBookContentItem { get; set; }
         public virtual IList<BookContentItem> ChildContentItems { get; set; }
-        
+        public virtual int ItemOrder { get; set; }
+
         public virtual bool Equals(BookContentItem other)
         {
             if (ReferenceEquals(null, other)) return false;

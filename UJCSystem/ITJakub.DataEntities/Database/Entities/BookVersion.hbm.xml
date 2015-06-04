@@ -51,13 +51,17 @@
       <key column="BookVersion" />
       <one-to-many class="Keyword" />
     </bag>
-    <bag name="BookBibls" cascade="all-delete-orphan" lazy="false">
+    <bag name="BookBibls" cascade="all-delete-orphan">
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>
-    <bag name="BookPages" cascade="all-delete-orphan" lazy="false"  fetch="select">
+    <bag name="BookPages" cascade="all-delete-orphan">
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
+    </bag>
+    <bag name="BookContentItems" cascade="all-delete-orphan">
+      <key column="BookVersion" />
+      <one-to-many class="BookContentItem" />
     </bag>
     <bag name="Authors" table="BookVersion_Author" cascade="save-update" lazy="false">
       <key column="BookVersion" />

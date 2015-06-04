@@ -4,16 +4,16 @@ using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
 {
-    public class BookContentProcessor : ProcessorBase
+    public class TableOfContentProcessor : ProcessorBase
     {
-        public BookContentProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+        public TableOfContentProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
         }
 
         protected override string NodeName
         {
-            get { return "bookContent"; }
+            get { return "tableOfContent"; }
         }
 
         protected override IEnumerable<ProcessorBase> SubProcessors
@@ -22,7 +22,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
             {
                 return new List<ProcessorBase>
                 {
-                    Container.Resolve<DivProcessor>()
+                    Container.Resolve<ListProcessor>()
                 };
             }
         }
