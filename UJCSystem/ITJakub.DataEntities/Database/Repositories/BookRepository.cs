@@ -4,10 +4,7 @@ using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
-using ITJakub.DataEntities.Database.Exceptions;
-using NHibernate;
 using NHibernate.Criterion;
-using NHibernate.Dialect.Function;
 using NHibernate.SqlCommand;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -85,16 +82,18 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual Transformation FindTransformation(BookVersion bookVersion, OutputFormat outputFormat)
+        public virtual Transformation FindTransformation(BookVersion bookVersion, OutputFormat outputFormat, BookTypeEnum requestedBookType)
         {
 
             BookVersion bookVersionAlias = null;
+            BookType bookTypeAlias = null;
 
             using (var session = GetSession())
             {
                 var transformation = session.QueryOver<Transformation>()
                     .JoinAlias( t => t.BookVersions, () => bookVersionAlias)
-                    .Where( t => t.OutputFormat == outputFormat && bookVersionAlias.Id == bookVersion.Id)
+                    .JoinAlias( t => t.BookType, () => bookTypeAlias)
+                    .Where( t => t.OutputFormat == outputFormat && bookVersionAlias.Id == bookVersion.Id && bookTypeAlias.Type == requestedBookType)
                     .SingleOrDefault<Transformation>();
 
                 //TODO could be looked up for specific book transformation (shared between version)
@@ -104,7 +103,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     transformation = session.QueryOver<Transformation>()
                         .Where(
                             t =>
-                                t.OutputFormat == outputFormat && t.BookType == bookVersion.Book.BookType && t.IsDefaultForBookType)
+                                t.OutputFormat == outputFormat && t.BookType.Id == bookVersion.DefaultBookType.Id && t.IsDefaultForBookType)
                         .SingleOrDefault<Transformation>();
                 }
 
@@ -170,30 +169,23 @@ namespace ITJakub.DataEntities.Database.Repositories
         public virtual IList<Book> FindBooksByBookType(BookTypeEnum bookType)
         {
             Book bookAlias = null;
+            BookVersion bookVersionAlias = null;
             BookType bookTypeAlias = null;
+            Category categoryAlias = null;
 
             using (var session = GetSession())
             {
                 var books = 
                     session.QueryOver(() => bookAlias)
-                        .JoinAlias(x => x.BookType, () => bookTypeAlias, JoinType.InnerJoin)
+                        .JoinAlias(x => x.LastVersion, () => bookVersionAlias, JoinType.InnerJoin)
+                        .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias, JoinType.InnerJoin)
+                        .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias, JoinType.InnerJoin)
                         .Where(() => bookTypeAlias.Type == bookType)
                         .List<Book>();
                 return books;
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
-        public virtual BookPage FindBookPageByVersionAndPosition(long versionId, int position)
-        {
-            using (var session = GetSession())
-            {
-                var bookPage =
-                    session.QueryOver<BookPage>()
-                        .Where(x => x.BookVersion.Id == versionId && x.Position == position)
-                        .SingleOrDefault<BookPage>();
-                return bookPage;
-            }
-        }
+       
     }
 }

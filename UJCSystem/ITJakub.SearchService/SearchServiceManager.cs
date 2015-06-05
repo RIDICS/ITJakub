@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using ITJakub.SearchService.Core.Exist.DAOs;
 using ITJakub.Shared.Contracts;
 
@@ -14,40 +13,34 @@ namespace ITJakub.SearchService
             m_bookDao = bookDao;
         }
 
-        public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition,
-            string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName, transformationLevel);
+            return m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName, transformationLevel);
+            return m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName, transformationLevel);
+            return m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName, transformationLevel);
         }
 
-        public async Task UploadVersionFileAsync(VersionResourceUploadContract contract)
+        public void UploadVersionFile(VersionResourceUploadContract contract)
         {
-            await m_bookDao.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
+            m_bookDao.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
         }
 
-        public async Task UploadBookFileAsync(BookResourceUploadContract contract)
+        public void UploadBookFile(BookResourceUploadContract contract)
         {
-            await m_bookDao.UploadBookFile(contract.BookId, contract.FileName, contract.DataStream);
+            m_bookDao.UploadBookFile(contract.BookId, contract.FileName, contract.DataStream);
         }
 
-        public async Task UploadSharedFileAsync(ResourceUploadContract contract)
+        public void UploadSharedFile(ResourceUploadContract contract)
         {
-            await m_bookDao.UploadSharedFile(contract.FileName, contract.DataStream);
-        }
-
-        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookId, string versionId)
-        {
-            return await m_bookDao.GetBookPageList(bookId, versionId);
+            m_bookDao.UploadSharedFile(contract.FileName, contract.DataStream);
         }
     }
 }

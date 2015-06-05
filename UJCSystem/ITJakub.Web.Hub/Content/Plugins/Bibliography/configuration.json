@@ -103,10 +103,10 @@
         },
         "right-panel": {
             "info-button": {
-                "url": "/Editions/Editions/Info?bookId={BookGuid}"
+                "url": "Editions/Editions/Info?bookId={BookGuid}"
             },
             "read-button": {
-                "url": "/Editions/Editions/Listing?bookId={BookGuid}"
+                "url": "Editions/Editions/Listing?bookId={BookGuid}"
             },
             "variables": {
                 "$test": {
@@ -162,10 +162,10 @@
         },
         "right-panel": {
             "info-button": {
-                "url": "\\Dictionary\\info\\{BookId}"
+                "url": "Dictionary\\info\\{BookId}"
             },
             "read-button": {
-                "url": "\\Dictionary\\read\\{$test}"
+                "url": "Dictionary\\read\\{$test}"
             },
             "variables": {
                 "$test": {
@@ -178,51 +178,75 @@
         }
     },
 
-    "OldCzechTextBank": {
+    "TextBank": {
         "middle-panel": {
             "title": "{Title}",
-            "body": "{$archive}{$sign}{$pages}{$century}",
+            "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
             "variables": {
-                "$litType": {
-                    "type": "array",
-                    "scope": "Pages",
-                    "pattern": "<a href='{BookId}'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>",
-                    "delimeter": " , "
-                },
-                "$LiteraryTypeStart": {
-                    "type": "basic",
-                    "pattern": "{Start}",
-                    "printIfNullValue": false,
-                    "replaceNullValueBy": ""
-                },
-                "$LiteraryTypeEnd": {
-                    "type": "basic",
-                    "pattern": "-{End}",
-                    "printIfNullValue": false,
-                    "replaceNullValueBy": ""
-                },
-                "$sign": {
-                    "type": "basic",
-                    "pattern": ", {Sign}",
-                    "printIfNullValue": false,
-                    "replaceNullValueBy": ""
-                },
-                "$archive": {
-                    "type": "basic",
-                    "scope": "Archive",
-                    "pattern": " {Name} ({City}, {State})",
-                    "printIfNullValue": false
-                },
-                "$century": {
-                    "type": "basic",
-                    "pattern": ", {Century}. století",
-                    "printIfNullValue": false
-                },
-                "$pages": {
-                    "type": "basic",
-                    "pattern": ", 155v- 166v,//TODO Pages?//167v-258v ",
-                    "printIfNullValue": false
-                }
+                "$manuscripts": {
+                        "type": "array",
+                        "scope": "Manuscripts",
+                        "pattern": "{Settlement}, {Repository}, {OriginDate}",
+                        "delimeter": " <br> "
+                    },                                             
+                    "$printAuthors": {
+                        "type": "basic",
+                        "pattern": "{$authors} : ",
+                        "printIfNullValue": false
+                    },
+                    "$authors": {
+                        "type": "array",
+                        "scope": "Authors",
+                        "pattern": "{Name}",
+                        "delimeter": ", "
+                    },                                
+                    "$publisher": {
+                        "type": "basic",
+                        "scope": "Publisher",
+                        "pattern": "{Text}",
+                        "printIfNullValue": false,
+                        "replaceNullValueBy": ""
+                    },
+                    "$litType": {
+                        "type": "array",
+                        "scope": "Pages",
+                        "pattern": "<a href='{BookId}'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>",
+                        "delimeter": " , "
+                    },
+                    "$LiteraryTypeStart": {
+                        "type": "basic",
+                        "pattern": "{Start}",
+                        "printIfNullValue": false,
+                        "replaceNullValueBy": ""
+                    },
+                    "$LiteraryTypeEnd": {
+                        "type": "basic",
+                        "pattern": "-{End}",
+                        "printIfNullValue": false,
+                        "replaceNullValueBy": ""
+                    },
+                    "$sign": {
+                        "type": "basic",
+                        "pattern": ", {Sign}",
+                        "printIfNullValue": false,
+                        "replaceNullValueBy": ""
+                    },
+                    "$archive": {
+                        "type": "basic",
+                        "scope": "Archive",
+                        "pattern": " {Name} ({City}, {State})",
+                        "printIfNullValue": false
+                    },
+                    "$century": {
+                        "type": "basic",
+                        "pattern": ", {Century}. století",
+                        "printIfNullValue": false
+                    },
+                    "$pages": {
+                        "type": "basic",
+                        "pattern": ", 5v- 6v, 11v-12v ",
+                        "printIfNullValue": false
+                    }
             }
         },
         "bottom-panel": {
@@ -233,40 +257,42 @@
                     "printRowIfNullValue": true,
                     "replaceNullValueBy": "&lt;Nezadáno&gt;",
                     "rows": [
-                        { "label": "Editor", "pattern": "{Editor}" },
+                        { "label": "Editor", "pattern": "{$editor}" },
                         { "label": "Předloha", "pattern": "{Pattern}" },
                         { "label": "Zkratka památky", "pattern": "{RelicAbbreviation}" },
                         { "label": "Zkratka pramene", "pattern": "{SourceAbbreviation}" },
                         { "label": "Literární druh", "pattern": "{LiteraryType}" },
                         { "label": "Literární žánr", "pattern": "{LiteraryGenre}" },
-                        { "label": "Poslední úprava edice", "pattern": "{LastEditation}" }
+                        { "label": "Poslední úprava edice", "pattern": "{CreateTimeString}" }
                     ]
+                },
+                "$editor": {
+                    "type": "array",
+                    "scope": "Editors",
+                    "pattern": "{Text}",
+                    "delimeter": ", "
                 }
             }
         },
         "right-panel": {
             "info-button": {
-                "url": "\\OldCzechTextBank\\info\\{BookId}"
+                "url": "Editions/Editions/Info?bookId={BookGuid}"
             },
-            "variables": {
-                "$test": {
-                    "type": "basic",
-                    "pattern": "{Name}",
-                    "printIfNullValue": false
-                }
+            "read-button": {
+                "url": "Editions/Editions/Listing?bookId={BookGuid}"
             }
 
         }
     },
     "CardFile": {
         "middle-panel": {
-            "title": "{Title} {$srcAbbreHref}",
-            "body": "{$authors}{$description}{$archive}{$year}",
+            "title": "{Title}",
+            "body": "{$description}",
             "variables": {
                 "$srcAbbreHref": {
                     "type": "basic",
-                    "pattern": "<a href='#'>[{SourceAbbreviation}]</a>",
-                    "printIfNullValue": false
+                    "pattern": "<a href='#'>[AAA]</a>",
+                    "printIfNullValue": true
                 },
                 "$authors": {
                     "type": "array",
@@ -276,28 +302,14 @@
                 },
                 "$description": {
                     "type": "basic",
-                    "pattern": ", {Description}",
-                    "printIfNullValue": false
-                },
-                "$archive": {
-                    "type": "basic",
-                    "scope": "Archive",
-                    "pattern": ", {City}",
-                    "printIfNullValue": false
-                },
-                "$year": {
-                    "type": "basic",
-                    "pattern": " {Year}.",
+                    "pattern": "{SubTitle}",
                     "printIfNullValue": false
                 }
             }
         },
         "right-panel": {
-            "info-button": {
-                "url": "\\CardFile\\info\\{BookId}"
-            },
             "read-button": {
-                "url": "\\CardFile\\read\\{$test}"
+                "url": "CardFiles\\CardFiles\\Listing?cardFileId={BookGuid}"
             },
             "variables": {
                 "$test": {

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
-using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
 
@@ -10,27 +9,23 @@ namespace ITJakub.ITJakubService.DataContracts
     [ServiceContract]
     public interface IItJakubService
     {
-        
-        [OperationContract]
-        CreateUserResultContract CreateUser(CreateUserContract createUserContract);
-
-        [OperationContract]
-        LoginUserResultContract LoginUser(LoginUserContract loginUserContract);
-        
         [OperationContract]
         IEnumerable<AuthorDetailContract> GetAllAuthors();
 
         [OperationContract]
-        Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat);
+        string GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
-        Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat);
+        string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
-        Task<string> GetBookPageByPositionAsync(string bookGuid, int position, OutputFormatEnumContract resultFormat);
+        string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
-        Task<IList<BookPageContract>> GetBookPageListAsync(string bookGuid);
+        IList<BookPageContract> GetBookPageList(string bookGuid);
+        
+        [OperationContract]
+        IList<BookContentItemContract> GetBookContent(string bookGuid);
 
         #region Resource Import
         [OperationContract]       
@@ -51,5 +46,32 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
+
+        #region CardFile methods
+
+        [OperationContract]
+        IEnumerable<CardFileContract> GetCardFiles();
+
+        [OperationContract]
+        IEnumerable<BucketShortContract> GetBuckets(string cardFileId);
+
+        [OperationContract]
+        IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword);
+
+        [OperationContract]
+        IEnumerable<CardContract> GetCards(string cardFileId, string bucketId);
+
+        [OperationContract]
+        IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId);
+        
+        [OperationContract]
+        CardContract GetCard(string cardFileId, string bucketId, string cardId);
+
+        [OperationContract]
+        Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize);
+
+        #endregion
+
+        
     }
 }

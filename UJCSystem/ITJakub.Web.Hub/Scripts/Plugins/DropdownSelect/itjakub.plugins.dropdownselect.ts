@@ -1,14 +1,8 @@
-﻿/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
+﻿ 
+/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
 
-
-class DropDownSelect {
-
-    private dropDownSelectContainer: string;
-    private dataUrl: string;
-    private showStar: boolean;
-    private type: string;
-    private selectedItemsIds: Array<string>;
-    private selectedCategoriesIds: Array<string>;
+class DropDownSelectCallbackDelegate {
+    //callbacks needs to be implemented
 
     starSaveItemCallback: (info: CallbackInfo) => void;
     starSaveCategoryCallback: (info: CallbackInfo) => void;
@@ -17,16 +11,134 @@ class DropDownSelect {
 
     selectedChangedCallback: (state: State) => void;
 
-    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean) {
+    getTypeFromResponseCallback: (response) => string;
+    getRootCategoryCallback: (categories) => any;
+    getCategoryIdCallback: (category) => string;
+    getCategoryTextCallback: (category) => string;
+
+    getLeafItemIdCallback: (category) => string;
+    getLeafItemTextCallback: (category) => string;
+
+    getCategoriesFromResponseCallback: (response) => any;
+    getLeafItemsFromResponseCallback: (response) => any;
+
+    getChildCategoriesCallback: (categories, currentCategory) => Array<any>;
+    getChildLeafItemsCallback: (leafItems, currentCategory) => Array<any>;
+
+    constructor() {
+        this.mockup();
+    }
+
+    //working callbacks for advanced search
+    private mockup() {
+        this.getTypeFromResponseCallback = (response): string => {
+            return response["type"];
+        };
+
+        this.getCategoriesFromResponseCallback = (response): any => {
+            return response["categories"];
+        };
+
+        this.getLeafItemsFromResponseCallback = (response): any => {
+            return response["books"];
+        };
+
+        this.getRootCategoryCallback = (categories): any => {
+            if (typeof categories !== "undefined" && categories !== null) {
+                var rootCategories = categories[""];
+                if (typeof rootCategories !== "undefined" && rootCategories !== null && rootCategories.length > 0) {
+                    return rootCategories[0];
+                }
+            }
+            return null;
+        };
+
+        this.getCategoryIdCallback = (category): string => {
+            return category["Id"];
+        };
+
+        this.getLeafItemIdCallback = (leafItem): string => {
+            return leafItem["Id"];
+        };
+
+        this.getChildCategoriesCallback = (categories, currentCategory): Array<any> => {
+            return categories[currentCategory["Id"]];
+        };
+
+        this.getChildLeafItemsCallback = (leafItems, currentCategory): Array<any> => {
+            return leafItems[currentCategory["Id"]];
+        };
+
+        this.getCategoryTextCallback = (category): string => {
+            return category["Description"];
+        };
+
+        this.getLeafItemTextCallback = (leafItem): string => {
+            return leafItem["Title"];
+        };
+    }
+}
+
+class DropDownSelect {
+
+    private dropDownSelectContainer: string;
+    private dataUrl: string;
+    private showStar: boolean;
+    private type: string;
+    private selectedItems: Array<Item>;
+    private selectedCategories: Array<Category>;
+    private callbackDelegate: DropDownSelectCallbackDelegate;
+
+    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         this.dropDownSelectContainer = dropDownSelectContainer;
         this.dataUrl = dataUrl;
         this.showStar = showStar;
-        this.selectedCategoriesIds = new Array();
-        this.selectedItemsIds = new Array();
+        this.callbackDelegate = callbackDelegate;
+        this.selectedCategories = new Array();
+        this.selectedItems = new Array();
+    }
+
+    private getType(response): string {
+        return this.callbackDelegate.getTypeFromResponseCallback(response);
+    }
+
+    private getRootCategory(categories): any {
+        return this.callbackDelegate.getRootCategoryCallback(categories);
+    }
+
+    private getCategoryId(category): string {
+        return this.callbackDelegate.getCategoryIdCallback(category);
+    }
+
+    private getCategoryName(category): string {
+        return this.callbackDelegate.getCategoryTextCallback(category);
+    }
+
+    private getLeafItemId(leafItem): string {
+        return this.callbackDelegate.getLeafItemIdCallback(leafItem);
+    }
+
+    private getLeafItemName(leafItem): string {
+        return this.callbackDelegate.getLeafItemTextCallback(leafItem);
+    }
+
+    private getCategories(response): any {
+        return this.callbackDelegate.getCategoriesFromResponseCallback(response);
+    }
+
+    private getLeafItems(response): any {
+        return this.callbackDelegate.getLeafItemsFromResponseCallback(response);
+    }
+
+    private getChildCategories(categories, currentCategory): Array<any> {
+        return this.callbackDelegate.getChildCategoriesCallback(categories, currentCategory);
+    }
+
+    private getChildLeafItems(leafItems, currentCategory): Array<any> {
+        return this.callbackDelegate.getChildLeafItemsCallback(leafItems, currentCategory);
     }
 
     makeDropdown() {
-
         var dropDownDiv = document.createElement("div");
         $(dropDownDiv).addClass("dropdown-select");
 
@@ -56,6 +168,11 @@ class DropDownSelect {
         textSpan.innerText = ""; //TODO read from parameter when root is not unique or is not description
 
         dropDownHeadDiv.appendChild(textSpan);
+
+        var loadSpan = document.createElement("span");
+        $(loadSpan).addClass("dropdown-select-text-loading");
+
+        dropDownHeadDiv.appendChild(loadSpan);
 
         var moreSpan = document.createElement("span");
         $(moreSpan).addClass("dropdown-select-more");
@@ -100,9 +217,10 @@ class DropDownSelect {
 
         $(filterInput).change(function() {
             if ($(this).val() == "") {
-                $(this).parents(".dropdown-select-body").children(".concrete-item").show();
+                $(this).parents(".dropdown-select-body").find(".concrete-item").show();
             } else {
-                $(this).parents(".dropdown-select-body").children(".concrete-item").hide().filter(":contains(" + $(this).val() + ")").show();
+                $(this).parents(".dropdown-select-body").find(".concrete-item").hide();
+                $(this).parents(".dropdown-select-body").find(".concrete-item-name").filter(`:containsCI(${$(this).val()})`).parents(".concrete-item").show();
             }
         });
 
@@ -138,72 +256,178 @@ class DropDownSelect {
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
-                self.type = response["type"];
-                var categories = response["categories"];
-                var books = response["books"];
+                self.type = this.getType(response);
+                var categories = this.getCategories(response);
+                var items = this.getLeafItems(response);
 
                 $(dropDownItemsDiv).children("div.loading").remove();
 
-                this.makeTreeStructure(categories, books, dropDownItemsDiv);
+                this.makeTreeStructure(categories, items, dropDownItemsDiv);
             }
         });
     }
 
-    private makeTreeStructure(categories, books, dropDownItemsDiv: HTMLDivElement) {
-        var rootCategory = categories[""][0];
+    private makeTreeStructure(categories, leafItems, dropDownItemsDiv: HTMLDivElement) {
+        var rootCategory = this.getRootCategory(categories);
 
         var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
-        $(selectHeader).children(".dropdown-select-text").append(rootCategory["Description"]);
+        $(selectHeader).children(".dropdown-select-text").append(this.getCategoryName(rootCategory));
+        $(selectHeader).children(".dropdown-select-text-loading").hide();
+
+        $(selectHeader).data("id", this.getCategoryId(rootCategory));
+        $(selectHeader).data("name", this.getCategoryName(rootCategory));
+        $(selectHeader).data("type", "category");
 
         var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
-        var info = this.createCallbackInfo(rootCategory["Id"], selectHeader);
+        var info = this.createCallbackInfo(this.getCategoryId(rootCategory), this.getCategoryName(rootCategory), selectHeader);
         var self = this;
-        $(checkbox).change(function() {
+        $(checkbox).change(function(event: Event, propagate: boolean) {
+            var items = $(dropDownItemsDiv).children(".concrete-item").children("input");
             if (this.checked) {
-                self.addToSelectedCategories(info);
+                if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
+                    self.addToSelectedCategories(info);
+                    $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
+                    $(items).trigger("change",[false]);
+                    $(dropDownItemsDiv).find(".concrete-item").find("input").prop("checked", true);
+                } else {
+                    $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
+                    $(items).trigger("change", [false]);
+                    $(items).prop("checked", true);
+                    $(items).trigger("change", [false]);
+                }
             } else {
                 self.removeFromSelectedCategories(info);
+                $(items).prop("checked", false);
+                $(items).trigger("change", [false]);
             }
         });
 
-        var childCategories = categories[rootCategory["Id"]];
-        var childBooks = books[rootCategory["Id"]];
+        var childCategories = this.getChildCategories(categories, rootCategory);
+        var childLeafItems = this.getChildLeafItems(leafItems, rootCategory);
 
-        if (typeof (childCategories) !== "undefined") {
+        if (typeof (childCategories) !== "undefined" && childCategories !== null) {
             for (var i = 0; i < childCategories.length; i++) {
                 var childCategory = childCategories[i];
-                this.makeCategoryItem(dropDownItemsDiv, childCategory, categories, books);
+                this.makeCategoryItem(dropDownItemsDiv, childCategory, categories, leafItems);
             }
         }
 
-        if (typeof (childBooks) !== "undefined") {
-            for (var i = 0; i < childBooks.length; i++) {
-                var childBook = childBooks[i];
-                this.makeBookItem(dropDownItemsDiv, childBook);
+        if (typeof (childLeafItems) !== "undefined" && childLeafItems !== null) {
+            for (var i = 0; i < childLeafItems.length; i++) {
+                var childBook = childLeafItems[i];
+                this.makeLeafItem(dropDownItemsDiv, childBook);
             }
         }
     }
 
+    private propagateSelectChange(concreteItemSource: HTMLDivElement) {
+        var actualItem = $(concreteItemSource).parent().closest(".concrete-item");
+        var actualItemInput: JQuery;
+        var actualItemChilds: JQuery;
+        var checkedChilds: JQuery;
+        var indeterminateChilds: JQuery;
+        if (actualItem.length === 0) { //for checkbox in header
+            actualItem = $(concreteItemSource).parent().closest(".dropdown-select").children(".dropdown-select-header");
+            actualItemInput = $(actualItem).children(".dropdown-select-checkbox").children("input");
+            actualItemChilds = $(actualItem).parent().closest(".dropdown-select").children(".dropdown-select-body").children(".concrete-item");
+            checkedChilds = $(actualItemChilds).children("input:checked");
+            indeterminateChilds = <any>$.grep(actualItemChilds.get(),(itemChild) => ($(itemChild).children("input").prop("indeterminate") === true), false);
 
-    private makeCategoryItem(container: HTMLDivElement, currentCategory: any, categories: any, books: any) {
+            if (!actualItem.data("id")) {
+                if (actualItemChilds.length !== 0) {
+                    if (checkedChilds.length === actualItemChilds.length) {
+                        $(actualItemInput).prop("checked", true);
+                    } else {
+                        $(actualItemInput).prop("checked", false);
+                        if (checkedChilds.length === 0 && indeterminateChilds.length === 0) {
+                            $(actualItemInput).prop("indeterminate", false);
+                        } else {
+                            $(actualItemInput).prop("indeterminate", true);
+                        }
+                    }
+                }
+                return;
+            }
+
+        } else {
+            actualItemInput = $(actualItem).children("input");
+            actualItemChilds = $(actualItem).children(".child-items").children(".concrete-item");
+            checkedChilds = $(actualItemChilds).children("input:checked");
+            indeterminateChilds = <any>$.grep(actualItemChilds.get(),(itemChild) => ($(itemChild).children("input").prop("indeterminate") === true), false);
+        }
+
+        var info = this.createCallbackInfo(actualItem.data("id"), actualItem.data("name"), actualItem);
+
+        if (actualItemChilds.length !== 0) {
+            if (checkedChilds.length === actualItemChilds.length) {
+                var itemsInputs = $(actualItemChilds).children("input");
+                this.addToSelectedCategories(info);
+                $(actualItemInput).prop("indeterminate", false);
+                $(itemsInputs).prop("checked", false);
+                $(itemsInputs).trigger("change", [false]);
+                $(actualItemChilds).find("input").prop("checked", true);
+                $(actualItemInput).prop("checked", true);
+            } else {
+                this.removeFromSelectedCategories(info);
+                $(actualItemInput).prop("checked", false);
+                if (checkedChilds.length === 0 && indeterminateChilds.length === 0) {
+                    $(actualItemInput).prop("indeterminate", false);
+                } else {
+                    $(actualItemInput).prop("indeterminate", true);
+                    $(actualItemChilds).children("input:checked").trigger("change", [false]); //TODO could be call only when selectedChilds = childs - 1
+                }
+            }
+        }
+
+        if (!actualItem.hasClass("dropdown-select-header")) {
+            this.propagateSelectChange(<HTMLDivElement>actualItem[0]);    
+        }
+        
+    }
+
+    private makeCategoryItem(container: HTMLDivElement, currentCategory: any, categories: any, leafItems: any) {
 
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
-        $(itemDiv).data("id", currentCategory["Id"]);
-        $(itemDiv).data("name", currentCategory["Description"]);
+        $(itemDiv).data("id", this.getCategoryId(currentCategory));
+        $(itemDiv).data("name", this.getCategoryName(currentCategory));
         $(itemDiv).data("type", "category");
 
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
 
-        var info = this.createCallbackInfo(currentCategory["Id"], itemDiv);
+        var info = this.createCallbackInfo(this.getCategoryId(currentCategory), this.getCategoryName(currentCategory), itemDiv);
         var self = this;
-        $(checkbox).change(function() {
+
+        $(checkbox).change(function(event: Event, propagate: boolean) {
+            var items = $(itemDiv).children(".child-items").children(".concrete-item").children("input");
+
             if (this.checked) {
-                self.addToSelectedCategories(info);
+                if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
+                    self.addToSelectedCategories(info);
+                    $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
+                    $(items).trigger("change", [false]);
+                    $(itemDiv).children(".child-items").find(".concrete-item").find("input").prop("checked", true);
+                } else {
+                    $(items).prop("checked", false);
+                    $(items).prop("indeterminate", false);
+                    $(items).trigger("change", [false]);
+                    $(items).prop("checked", true);
+                    $(items).trigger("change", [false]);
+                }
             } else {
                 self.removeFromSelectedCategories(info);
+                $(items).prop("checked", false);
+                $(items).prop("indeterminate", false);
+                $(items).trigger("change", [false]);
+            }
+
+            if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
+                self.propagateSelectChange(<HTMLDivElement>$(this).parent(".concrete-item")[0]);
             }
         });
 
@@ -241,8 +465,8 @@ class DropDownSelect {
                 $(this).siblings(".delete-item").show();
                 $(this).hide();
                 //TODO populate request on save to favorites
-                if (self.starSaveCategoryCallback) {
-                    self.starSaveCategoryCallback(info);
+                if (self.callbackDelegate.starSaveCategoryCallback) {
+                    self.callbackDelegate.starSaveCategoryCallback(info);
                 }
             });
 
@@ -255,8 +479,8 @@ class DropDownSelect {
                 $(this).siblings(".save-item").show();
                 $(this).hide();
                 //TODO populate request on delete from favorites
-                if (self.starDeleteCategoryCallback) {
-                    self.starDeleteCategoryCallback(info);
+                if (self.callbackDelegate.starDeleteCategoryCallback) {
+                    self.callbackDelegate.starDeleteCategoryCallback(info);
                 }
             });
 
@@ -265,7 +489,7 @@ class DropDownSelect {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("concrete-item-name");
-        nameSpan.innerText = currentCategory["Description"];
+        nameSpan.innerText = this.getCategoryName(currentCategory);
         itemDiv.appendChild(nameSpan);
 
         var childsDiv = document.createElement("div");
@@ -274,44 +498,50 @@ class DropDownSelect {
 
         container.appendChild(itemDiv);
 
-        var childCategories = categories[currentCategory["Id"]];
-        var childBooks = books[currentCategory["Id"]];
+        var childCategories = this.getChildCategories(categories, currentCategory);
+        var childLeafItems = this.getChildLeafItems(leafItems, currentCategory);
 
-        if (typeof (childCategories) !== "undefined") {
+        if (typeof (childCategories) !== "undefined" && childCategories !== null) {
             for (var i = 0; i < childCategories.length; i++) {
                 var childCategory = childCategories[i];
-                this.makeCategoryItem(childsDiv, childCategory, categories, books);
+                this.makeCategoryItem(childsDiv, childCategory, categories, leafItems);
             }
         }
 
-        if (typeof (childBooks) !== "undefined") {
-            for (var i = 0; i < childBooks.length; i++) {
-                var childBook = childBooks[i];
-                this.makeBookItem(childsDiv, childBook);
+        if (typeof (childLeafItems) !== "undefined" && childLeafItems !== null) {
+            for (var i = 0; i < childLeafItems.length; i++) {
+                var childLeafItem = childLeafItems[i];
+                this.makeLeafItem(childsDiv, childLeafItem);
             }
         }
 
     }
 
-    private makeBookItem(container: HTMLDivElement, currentBook: any) {
+    private makeLeafItem(container: HTMLDivElement, currentLeafItem: any) {
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
-        $(itemDiv).data("id", currentBook["Id"]);
-        $(itemDiv).data("name", currentBook["Title"]);
-        $(itemDiv).data("type", "book");
+
+        $(itemDiv).data("id", this.getLeafItemId(currentLeafItem));
+        $(itemDiv).data("name", this.getLeafItemName(currentLeafItem));
+        $(itemDiv).data("type", "item");
 
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
 
-        var info = this.createCallbackInfo(currentBook["Id"], itemDiv);
+        var info = this.createCallbackInfo(this.getLeafItemId(currentLeafItem), this.getLeafItemName(currentLeafItem), itemDiv);
         var self = this;
-        $(checkbox).change(function() {
+        $(checkbox).change(function(event: Event, propagate: boolean) {
             if (this.checked) {
                 self.addToSelectedItems(info);
             } else {
                 self.removeFromSelectedItems(info);
             }
+
+            if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
+                self.propagateSelectChange(<HTMLDivElement>$(this).parent(".concrete-item")[0]);
+            }
+
         });
 
         itemDiv.appendChild(checkbox);
@@ -325,8 +555,8 @@ class DropDownSelect {
                 $(this).siblings(".delete-item").show();
                 $(this).hide();
                 //TODO populate request on save to favorites
-                if (self.starSaveItemCallback) {
-                    self.starSaveItemCallback(info);
+                if (self.callbackDelegate.starSaveItemCallback) {
+                    self.callbackDelegate.starSaveItemCallback(info);
                 }
             });
 
@@ -339,8 +569,8 @@ class DropDownSelect {
                 $(this).siblings(".save-item").show();
                 $(this).hide();
                 //TODO populate request on delete from favorites
-                if (self.starDeleteItemCallback) {
-                    self.starDeleteItemCallback(info);
+                if (self.callbackDelegate.starDeleteItemCallback) {
+                    self.callbackDelegate.starDeleteItemCallback(info);
                 }
             });
 
@@ -349,7 +579,7 @@ class DropDownSelect {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("concrete-item-name");
-        nameSpan.innerText = currentBook["Title"];
+        nameSpan.innerHTML = this.getLeafItemName(currentLeafItem);
 
         itemDiv.appendChild(nameSpan);
 
@@ -357,60 +587,84 @@ class DropDownSelect {
     }
 
 
-    private createCallbackInfo(id: string, target: any): CallbackInfo {
+    private createCallbackInfo(itemId: string, itemText: string, target: any): CallbackInfo {
         var info = new CallbackInfo();
-        info.Id = id;
+        info.ItemId = itemId;
+        info.ItemText = itemText;
         info.Target = target;
         return info;
     }
 
     private addToSelectedItems(info: CallbackInfo) {
-        this.selectedItemsIds.push(info.Id);
-        this.selectedChanged();
+        var isSelected = $.grep(this.selectedItems, (item: Item) => (item.Id === info.ItemId), false).length !== 0;
+        if (!isSelected) {
+            this.selectedItems.push(new Item(info.ItemId, info.ItemText));
+            this.selectedChanged();
+        }
     }
 
     private removeFromSelectedItems(info: CallbackInfo) {
-        this.selectedItemsIds = $.grep(this.selectedItemsIds, function(valueId) {
-            return valueId !== info.Id;
-        }, false);
+        this.selectedItems = $.grep(this.selectedItems, (item: Item) => (item.Id !== info.ItemId), false);
         this.selectedChanged();
     }
 
     private addToSelectedCategories(info: CallbackInfo) {
-        this.selectedCategoriesIds.push(info.Id);
-        this.selectedChanged();
+        var isSelected = $.grep(this.selectedCategories, (category: Category) => (category.Id === info.ItemId), false).length !== 0;
+        if (!isSelected) {
+            this.selectedCategories.push(new Category(info.ItemId, info.ItemText));
+            this.selectedChanged();
+        }
     }
 
     private removeFromSelectedCategories(info: CallbackInfo) {
-        this.selectedCategoriesIds = $.grep(this.selectedCategoriesIds, function(valueId) {
-            return valueId !== info.Id;
-        }, false);
+        this.selectedCategories = $.grep(this.selectedCategories, (category: Category) => (category.Id !== info.ItemId), false);
         this.selectedChanged();
     }
 
     private selectedChanged() {
-        if (this.selectedChangedCallback) {
-            this.selectedChangedCallback(this.getState());
+        if (this.callbackDelegate.selectedChangedCallback) {
+            this.callbackDelegate.selectedChangedCallback(this.getState());
         }
     }
 
     getState(): State {
         var state = new State();
         state.Type = this.type;
-        state.SelectedCategoriesIds = this.selectedCategoriesIds;
-        state.SelectedItemsIds = this.selectedItemsIds;
+        state.SelectedCategories = this.selectedCategories;
+        state.SelectedItems = this.selectedItems;
         return state;
     }
 
 }
 
 class CallbackInfo {
-    Id: string; //id of item
+    ItemId: string; //id of item
+    ItemText: string; //text of item
     Target: any; //This in caller
 }
 
 class State {
     Type: string;
-    SelectedItemsIds: Array<string>;
-    SelectedCategoriesIds: Array<string>;
+    SelectedItems: Array<Item>;
+    SelectedCategories: Array<Category>;
+}
+
+class Item {
+    Id: string;
+    Name: string;
+
+    constructor(id: string, name: string) {
+        this.Id = id;
+        this.Name = name;
+    }
+}
+
+class Category {
+    Id: string;
+    Name: string;
+
+    constructor(id: string, name: string) {
+        this.Id = id;
+        this.Name = name;
+    }
 }

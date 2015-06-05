@@ -4,11 +4,14 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
+    <property name="UserName">
+      <column name="UserName" sql-type="varchar" not-null="true" unique="true" />
+    </property>
     <property name="FirstName">
-      <column name="FirstName" sql-type="varchar" not-null="true" />
+      <column name="FirstName" sql-type="varchar" not-null="false" />
     </property>
     <property name="LastName">
-      <column name="LastName" sql-type="varchar" not-null="true" />
+      <column name="LastName" sql-type="varchar" not-null="false" />
     </property>
     <property name="Email">
       <column name="Email" sql-type="varchar" not-null="true" unique="true" />

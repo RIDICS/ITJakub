@@ -1,4 +1,4 @@
-﻿var __extends = this.__extends || function (d, b) {
+var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -13,7 +13,6 @@ var ConfigurationManager = (function () {
     };
     return ConfigurationManager;
 })();
-
 var BookTypeConfiguration = (function () {
     function BookTypeConfiguration(bookType, bookTypeConfig) {
         this.bookType = bookType;
@@ -24,29 +23,23 @@ var BookTypeConfiguration = (function () {
     BookTypeConfiguration.prototype.containsMiddlePanel = function () {
         return this.middlePanelConfig.exist();
     };
-
     BookTypeConfiguration.prototype.containsBottomPanel = function () {
         return this.bottomPanelConfig.exist();
     };
-
     BookTypeConfiguration.prototype.containsRightPanel = function () {
         return this.rightPanelConfig.exist();
     };
-
     BookTypeConfiguration.prototype.getMidllePanelConfig = function () {
         return this.middlePanelConfig;
     };
-
     BookTypeConfiguration.prototype.getBottomPanelConfig = function () {
         return this.bottomPanelConfig;
     };
-
     BookTypeConfiguration.prototype.getRightPanelConfig = function () {
         return this.rightPanelConfig;
     };
     return BookTypeConfiguration;
 })();
-
 var Configuration = (function () {
     function Configuration(configObj) {
         this.configObject = configObj;
@@ -54,17 +47,14 @@ var Configuration = (function () {
     Configuration.prototype.exist = function () {
         return typeof this.configObject !== 'undefined';
     };
-
     Configuration.prototype.interpret = function (interpretedString, bibItem) {
         return VariableInterpreter.getInstance().interpret(interpretedString, this.getVariables(), bibItem);
     };
-
     Configuration.prototype.getVariables = function () {
         return this.configObject['variables'];
     };
     return Configuration;
 })();
-
 var RightPanelConfiguration = (function (_super) {
     __extends(RightPanelConfiguration, _super);
     function RightPanelConfiguration(configObj) {
@@ -76,16 +66,14 @@ var RightPanelConfiguration = (function (_super) {
     RightPanelConfiguration.prototype.containsReadButton = function () {
         return typeof this.configObject['read-button'] !== 'undefined';
     };
-
     RightPanelConfiguration.prototype.getInfoButton = function (bibItem) {
-        return this.interpret(this.configObject['info-button']['url'], bibItem);
+        return this.interpret(getBaseUrl() + this.configObject['info-button']['url'], bibItem);
     };
     RightPanelConfiguration.prototype.getReadButton = function (bibItem) {
-        return this.interpret(this.configObject["read-button"]["url"], bibItem);
+        return this.interpret(getBaseUrl() + this.configObject["read-button"]["url"], bibItem);
     };
     return RightPanelConfiguration;
 })(Configuration);
-
 var MiddlePanelConfiguration = (function (_super) {
     __extends(MiddlePanelConfiguration, _super);
     function MiddlePanelConfiguration(configObj) {
@@ -103,7 +91,6 @@ var MiddlePanelConfiguration = (function (_super) {
     MiddlePanelConfiguration.prototype.containsCustom = function () {
         return typeof this.configObject['custom'] !== 'undefined';
     };
-
     MiddlePanelConfiguration.prototype.getCustom = function (bibItem) {
         return this.interpret(this.configObject['custom'], bibItem);
     };
@@ -118,7 +105,6 @@ var MiddlePanelConfiguration = (function (_super) {
     };
     return MiddlePanelConfiguration;
 })(Configuration);
-
 var BottomPanelConfiguration = (function (_super) {
     __extends(BottomPanelConfiguration, _super);
     function BottomPanelConfiguration(configObj) {
@@ -130,7 +116,6 @@ var BottomPanelConfiguration = (function (_super) {
     BottomPanelConfiguration.prototype.containsCustom = function () {
         return typeof this.configObject['custom'] !== 'undefined';
     };
-
     BottomPanelConfiguration.prototype.getCustom = function (bibItem) {
         return this.interpret(this.configObject['custom'], bibItem);
     };

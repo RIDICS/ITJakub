@@ -73,6 +73,7 @@
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
     <Compile Include="Database\Entities\Author.cs" />
+    <Compile Include="Database\Entities\BookContentItem.cs" />
     <Compile Include="Database\Entities\BookPage.cs" />
     <Compile Include="Database\Entities\Enums\AuthenticationProvider.cs" />
     <Compile Include="Database\Entities\Enums\BookTypeEnum.cs" />
@@ -140,6 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\BookPage.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\BookContentItem.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -28,7 +28,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
             var pagesElements =
-                XDocument.Load(xmlReader).Descendants().Where(element => element.Name.LocalName == "page");
+                XDocument.Load(xmlReader).Descendants().Where(element => element.Name.LocalName == "page"); //TODO make pageProcessor and dont load all pages to memory
             var position = 0;
             if (bookVersion.BookPages == null)
             {
@@ -59,15 +59,6 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
             }
         }
 
-        private string GetAttributeValue(XElement pageElement, XName attributeName)
-        {
-            string faxValue = null;
-            var faxAttribute = pageElement.Attribute(attributeName);
-            if (faxAttribute != null)
-            {
-                faxValue = faxAttribute.Value;
-            }
-            return faxValue;
-        }
+
     }
 }

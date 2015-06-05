@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist.DAOs
@@ -14,39 +13,34 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
             m_existManager = existManager;
         }
 
-        public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetPagesByName(string bookId, string versionId, string start, string end, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_existManager.GetPagesByName(bookId, versionId, start, end, transformationName, transformationLevel);
+            return m_existManager.GetPagesByName(bookId, versionId, start, end, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_existManager.GetPageByName(bookId, versionId, pageName, transformationName, transformationLevel);
+            return m_existManager.GetPageByName(bookId, versionId, pageName, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_existManager.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName, transformationLevel);
+            return m_existManager.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName, transformationLevel);
         }
 
-        public async Task<List<BookPageContract>> GetBookPageList(string bookId, string versionId)
+        public void UploadVersionFile(string bookId, string bookVersionid, string fileName, Stream dataStream)
         {
-            return await m_existManager.GetPageList(bookId, versionId);
+            m_existManager.UploadVersionFile(bookId, bookVersionid, fileName, dataStream);
         }
 
-        public async Task UploadVersionFile(string bookId, string bookVersionid, string fileName, Stream dataStream)
+        public void UploadBookFile(string bookId, string fileName, Stream dataStream)
         {
-            await m_existManager.UploadVersionFile(bookId, bookVersionid, fileName, dataStream);
+            m_existManager.UploadBookFile(bookId, fileName, dataStream);
         }
 
-        public async Task UploadBookFile(string bookId, string fileName, Stream dataStream)
+        public void UploadSharedFile(string fileName, Stream dataStream)
         {
-            await m_existManager.UploadBookFile(bookId, fileName, dataStream);
-        }
-
-        public async Task UploadSharedFile(string fileName, Stream dataStream)
-        {
-            await m_existManager.UploadSharedFile(fileName, dataStream);
+            m_existManager.UploadSharedFile(fileName, dataStream);
         }
     }
 }

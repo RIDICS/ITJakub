@@ -36,16 +36,26 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             }
         }
 
-        protected override void ProcessElement(Category parentCategory, XmlReader xmlReader)
+        protected override void ProcessElement(BookVersion bookVersion, Category parentCategory, XmlReader xmlReader)
         {
             string xmlId = xmlReader.GetAttribute("xml:id");
-            var category = new Category
-            {
-                XmlId = xmlId,
-                ParentCategory = parentCategory,
-            };
-            m_categoryRepository.SaveOrUpdate(category);
-            base.ProcessElement(category, xmlReader);
+            var category = m_categoryRepository.FindByXmlId(xmlId);
+            if (category == null) { 
+                category = new Category
+                {
+                    XmlId = xmlId,
+                    ParentCategory = parentCategory
+                };
+
+                if (parentCategory != null)
+                {
+                    category.BookType = parentCategory.BookType;
+                }
+
+                m_categoryRepository.SaveOrUpdate(category);
+            }
+
+            base.ProcessElement(bookVersion, category, xmlReader);
             m_categoryRepository.SaveOrUpdate(category);
         }
     }

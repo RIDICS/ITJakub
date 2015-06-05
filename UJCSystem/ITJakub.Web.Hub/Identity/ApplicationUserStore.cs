@@ -1,135 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.WebPages;
+using ITJakub.ITJakubService.DataContracts;
 using Microsoft.AspNet.Identity;
 
 namespace ITJakub.Web.Hub.Identity
 {
-    // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
-
-    // Configure the application sign-in manager which is used in this application.
-
-    public class ApplicationUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>, IUserLockoutStore<ApplicationUser, string>, IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser, string>
-    {
-        public Task CreateAsync(ApplicationUser user)
-        {
-            return Task.FromResult(0L);
-        }
-
-        public Task UpdateAsync(ApplicationUser user)
-        {
-            return Task.FromResult(0L);
-        }
-
-        public Task DeleteAsync(ApplicationUser user)
-        {
-            return Task.FromResult(0L);
-        }
-
-        public async Task<ApplicationUser> FindByIdAsync(string userId)
-        {
-            if (userId.Contains("a"))
-            {
-                return await Task<ApplicationUser>.Factory.StartNew(() => null);
-            }
-            var task = Task<ApplicationUser>.Factory.StartNew(() => new ApplicationUser
-            {
-                Id = "uniqueId",
-                Email = "mini@mini.cz"
-            });
-            return await task;
-        }
-
-        public async Task<ApplicationUser> FindAsync(string userName, string password)
-        {
-            if (userName.Contains("a"))
-            {
-                return await Task<ApplicationUser>.Factory.StartNew(() => null);
-            }
-            var task = Task<ApplicationUser>.Factory.StartNew(() => new ApplicationUser
-            {
-                Id = "uniqueId",
-                Email = "mini@mini.cz"
-            });
-            return await task;
-        }
-
-        public async Task<ApplicationUser> FindByNameAsync(string userName)
-        {
-            if (userName.Contains("a"))
-            {
-                return await Task<ApplicationUser>.Factory.StartNew(() => null);
-            }
-            var task = Task<ApplicationUser>.Factory.StartNew(() => new ApplicationUser
-            {
-                Id = "uniqueId",
-                Email = "mini@mini.cz"
-            });
-            return await task;
-        }
-
-        public void Dispose()
-        {
-            //TODO dispose
-        }
-
-        public async Task SetPasswordHashAsync(ApplicationUser user, string passwordHash)
-        {
-            var task = Task.Factory.StartNew(() => user.PasswordHash = passwordHash);
-            await task;
-        }
-
-        public async Task<string> GetPasswordHashAsync(ApplicationUser user)
-        {
-
-            var task = Task<string>.Factory.StartNew(() => user.PasswordHash);
-            return await task;
-        }
-
-        public async Task<bool> HasPasswordAsync(ApplicationUser user)
-        {
-            var task = Task<bool>.Factory.StartNew(() => !user.PasswordHash.IsEmpty());
-            return await task;
-        }
-
-        public async Task<DateTimeOffset> GetLockoutEndDateAsync(ApplicationUser user)
-        {
-            var task = Task<DateTimeOffset>.Factory.StartNew(() => new DateTimeOffset());
-            return await task;
-        }
-
-        public Task SetLockoutEndDateAsync(ApplicationUser user, DateTimeOffset lockoutEnd)
-        {
-            return Task.FromResult(0L);
-        }
-
-        public async Task<int> IncrementAccessFailedCountAsync(ApplicationUser user)
-        {
-            var task = Task<int>.Factory.StartNew(() => 1);
-            return await task;
-        }
-
-        public Task ResetAccessFailedCountAsync(ApplicationUser user)
-        {
-            return Task.FromResult(0L);
-        }
-
-        public async Task<int> GetAccessFailedCountAsync(ApplicationUser user)
-        {
-            var task = Task<int>.Factory.StartNew(() => 0);
-            return await task;
-        }
-
-        public async Task<bool> GetLockoutEnabledAsync(ApplicationUser user)
-        {
-            var task = Task<bool>.Factory.StartNew(() => false);
-            return await task;
-        }
-
-        public Task SetLockoutEnabledAsync(ApplicationUser user, bool enabled)
-        {
-            return Task.FromResult(0L);
-        }
+    public class ApplicationUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>,IUserLockoutStore<ApplicationUser, string>, IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser, string> {
+        
+        private readonly ItJakubServiceUnauthorizedClient m_serviceUnauthorizedClient = new ItJakubServiceUnauthorizedClient();
 
         public async Task SetEmailAsync(ApplicationUser user, string email)
         {
@@ -151,26 +30,151 @@ namespace ITJakub.Web.Hub.Identity
 
         public Task SetEmailConfirmedAsync(ApplicationUser user, bool confirmed)
         {
-            return Task.FromResult(0L);
+            throw new NotSupportedException();
         }
 
-        public async Task<ApplicationUser> FindByEmailAsync(string email)
+        public Task<ApplicationUser> FindByEmailAsync(string email)
         {
-            if (email.Contains("a"))
+            throw new NotSupportedException();
+        }
+
+        public Task<DateTimeOffset> GetLockoutEndDateAsync(ApplicationUser user)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task SetLockoutEndDateAsync(ApplicationUser user, DateTimeOffset lockoutEnd)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task<int> IncrementAccessFailedCountAsync(ApplicationUser user)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task ResetAccessFailedCountAsync(ApplicationUser user)
+        {
+            throw new NotSupportedException();
+        }
+
+        public async Task<int> GetAccessFailedCountAsync(ApplicationUser user)
+        {
+            var task = Task<int>.Factory.StartNew(() => 0);
+            return await task;
+        }
+
+        public async Task<bool> GetLockoutEnabledAsync(ApplicationUser user)
+        {
+            var task = Task<bool>.Factory.StartNew(() => false);
+            return await task;
+        }
+
+        public Task SetLockoutEnabledAsync(ApplicationUser user, bool enabled)
+        {
+            throw new NotSupportedException();
+        }
+
+        public async Task SetPasswordHashAsync(ApplicationUser user, string passwordHash)
+        {
+            var task = Task.Factory.StartNew(() => user.PasswordHash = passwordHash);
+            await task;
+        }
+
+        public async Task<string> GetPasswordHashAsync(ApplicationUser user)
+        {
+            var task = Task<string>.Factory.StartNew(() => user.PasswordHash);
+            return await task;
+        }
+
+        public async Task<bool> HasPasswordAsync(ApplicationUser user)
+        {
+            var task = Task<bool>.Factory.StartNew(() => !user.PasswordHash.IsEmpty());
+            return await task;
+        }
+
+        public async Task CreateAsync(ApplicationUser user)
+        {
+            var task = Task.Factory.StartNew(() =>
             {
-                return await Task<ApplicationUser>.Factory.StartNew(() => null);
-            }
-            var task = Task<ApplicationUser>.Factory.StartNew(() => new ApplicationUser //TODO
+                var userContract = new UserContract
+                {
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    CreateTime = user.CreateTime,
+                    PasswordHash = user.PasswordHash
+                };
+                var result = m_serviceUnauthorizedClient.CreateUser(userContract);
+                user.Id = result.Id.ToString();
+            });
+            await task;
+        }
+
+        public Task UpdateAsync(ApplicationUser user)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task DeleteAsync(ApplicationUser user)
+        {
+            throw new NotSupportedException();
+        }
+
+        public async Task<ApplicationUser> FindByIdAsync(string userId)
+        {
+            var task = Task<ApplicationUser>.Factory.StartNew(() =>
             {
-                Id = "uniqueId",
-                Email = "mini@mini.cz"
+                var user = m_serviceUnauthorizedClient.FindUserById(Int32.Parse(userId));
+                if (user == null) return null;
+                return new ApplicationUser
+                {
+                    Id = user.Id.ToString(),
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    CreateTime = user.CreateTime,
+                    PasswordHash = user.PasswordHash
+                };
+            });
+
+            return await task;
+        }
+
+        public async Task<ApplicationUser> FindByNameAsync(string userName)
+        {
+            var task = Task<ApplicationUser>.Factory.StartNew(() =>
+            {
+                var user = m_serviceUnauthorizedClient.FindUserByUserName(userName);
+                if (user == null) return null;
+                return new ApplicationUser
+                {
+                    Id = user.Id.ToString(),
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    CreateTime = user.CreateTime,
+                    PasswordHash = user.PasswordHash
+                };
             });
             return await task;
         }
 
+        public async Task<ApplicationUser> FindAsync(string userName, string password)
+        {
+            return await FindByNameAsync(userName);
+        }
+
+        public void Dispose()
+        {
+        }
+
         public Task SetTwoFactorEnabledAsync(ApplicationUser user, bool enabled)
         {
-            return Task.FromResult(0L);
+            throw new NotSupportedException();
         }
 
         public async Task<bool> GetTwoFactorEnabledAsync(ApplicationUser user)

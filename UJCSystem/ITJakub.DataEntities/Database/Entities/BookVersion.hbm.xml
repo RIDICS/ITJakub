@@ -10,6 +10,9 @@
     <many-to-one name="Publisher" cascade="save-update" lazy="false">
       <column name="Publisher" sql-type="int" not-null="false" />
     </many-to-one>
+    <many-to-one name="DefaultBookType" lazy="false">
+      <column name="DefaultBookType" sql-type="int" not-null="false" />
+    </many-to-one>
     <property name="VersionId">
       <column name="VersionId" sql-type="varchar" not-null="true" />
     </property>
@@ -48,13 +51,17 @@
       <key column="BookVersion" />
       <one-to-many class="Keyword" />
     </bag>
-    <bag name="BookBibls" cascade="all-delete-orphan" lazy="false">
+    <bag name="BookBibls" cascade="all-delete-orphan">
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>
-    <bag name="BookPages" cascade="all-delete-orphan" lazy="false"  fetch="select">
+    <bag name="BookPages" cascade="all-delete-orphan">
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
+    </bag>
+    <bag name="BookContentItems" cascade="all-delete-orphan">
+      <key column="BookVersion" />
+      <one-to-many class="BookContentItem" />
     </bag>
     <bag name="Authors" table="BookVersion_Author" cascade="save-update" lazy="false">
       <key column="BookVersion" />
@@ -68,7 +75,10 @@
       <key column="BookVersion" />
       <many-to-many class="Transformation" column="Transformation" />
     </bag>
-    
+    <bag name="Categories" table="BookVersion_Category" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion" />
+      <many-to-many class="Category" column="Category" />
+    </bag>
     
   </class>
 </hibernate-mapping>

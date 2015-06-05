@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.ServiceModel;
-using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
+using log4net;
 
 namespace ITJakub.SearchService
 {
@@ -9,45 +10,45 @@ namespace ITJakub.SearchService
     {
         private readonly SearchServiceManager m_searchServiceManager;
 
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public SearchService()
         {
             m_searchServiceManager = Container.Current.Resolve<SearchServiceManager>();
         }
 
-        public async Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_searchServiceManager.GetBookPageByPositionAsync(bookId, versionId, pagePosition, transformationName, transformationLevel);
+            return m_searchServiceManager.GetBookPageByPosition(bookId, versionId, pagePosition, transformationName, transformationLevel);
         }
 
-        public async Task UploadVersionFileAsync(VersionResourceUploadContract versionResourceUploadContract)
+        public void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract)
         {
-            await m_searchServiceManager.UploadVersionFileAsync(versionResourceUploadContract);
+            m_searchServiceManager.UploadVersionFile(versionResourceUploadContract);
         }
 
-        public async Task UploadBookFileAsync(BookResourceUploadContract contract)
+        public void UploadBookFile(BookResourceUploadContract contract)
         {
-            await m_searchServiceManager.UploadBookFileAsync(contract);
+            m_searchServiceManager.UploadBookFile(contract);
         }
 
-        public async Task UploadSharedFileAsync(ResourceUploadContract contract)
+        public void UploadSharedFile(ResourceUploadContract contract)
         {
-            await m_searchServiceManager.UploadSharedFileAsync(contract);
+            m_searchServiceManager.UploadSharedFile(contract);
         }
 
-        public async Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_searchServiceManager.GetBookPageByNameAsync(bookId, versionId, pageName, transformationName, transformationLevel);
+            if(m_log.IsDebugEnabled)
+                m_log.DebugFormat("SearchService request recieved...");
+            return m_searchServiceManager.GetBookPageByName(bookId, versionId, pageName, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
-            return await m_searchServiceManager.GetBookPagesByNameAsync(bookId, versionId, startPageName, endPageName, transformationName, transformationLevel);
+            return m_searchServiceManager.GetBookPagesByName(bookId, versionId, startPageName, endPageName, transformationName, transformationLevel);
         }
 
-        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookId, string versionId)
-        {
-            return await m_searchServiceManager.GetBookPageListAsync(bookId, versionId);
-        }
     }
 
     [ServiceContract]

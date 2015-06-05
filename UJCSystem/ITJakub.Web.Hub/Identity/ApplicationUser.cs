@@ -8,7 +8,7 @@ namespace ITJakub.Web.Hub.Identity
     public class ApplicationUser : IUser<string>
     {
         public string Id { get; set; }
-        public string UserName { get; set; } //TODO add to db
+        public string UserName { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string FirstName { get; set; }
@@ -18,7 +18,6 @@ namespace ITJakub.Web.Hub.Identity
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
-            Id = Email; //TODO
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             return userIdentity;
         }

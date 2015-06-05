@@ -1,53 +1,239 @@
-﻿
-$(".cardfile-select-more").click(function () {
-    var body = $(this).parents(".cardfile-select").children(".cardfile-select-body");
-    if (body.is(":hidden")) {
-        $(this).children().removeClass("glyphicon-chevron-down");
-        $(this).children().addClass("glyphicon-chevron-up");
-        body.slideDown();
-    } else {
-        $(this).children().removeClass("glyphicon-chevron-up");
-        $(this).children().addClass("glyphicon-chevron-down");
-        body.slideUp();
+﻿function createSearch(){
+    var callbackDelegate = createDelegate();
+    var cardfileSelector = new DropDownSelect("div.cardfile-selects", getBaseUrl() +"CardFiles/CardFiles/CardFiles", true, callbackDelegate);
+    var cardFileManager = new CardFileManager("div.cardfile-result-area");
+    cardfileSelector.makeDropdown();
+
+    $("#searchButton").click(() => {
+        var noResultDiv = $("div.no-result");
+        $(noResultDiv).hide();
+        var nothingSelectedDiv = $("div.nothing-selected");
+        $(nothingSelectedDiv).hide();
+        var serverErrorDiv = $("div.server-error");
+        $(serverErrorDiv).hide();
+        var shouldShowErrorMessage = true;
+        var shouldShowNoResultMessage = true;
+
+        cardFileManager.clearContainer();
+        var selectedCardFiles = cardfileSelector.getState().SelectedItems;
+        var searchedHeadword = $("#searchbox").val();
+
+        if (selectedCardFiles.length === 0) {
+            $(nothingSelectedDiv).show();
+        } else {
+            var showMessage = () => {
+                if(shouldShowErrorMessage){
+                    $(serverErrorDiv).show();   
+                }
+                if (shouldShowNoResultMessage) {
+                    $(noResultDiv).show();
+                }
+            }
+            setTimeout(showMessage, 1000);
+        }
+
+        for (var cardFileIndex = 0; cardFileIndex < selectedCardFiles.length; cardFileIndex++) {
+            
+            var selectedCardFileItem: Item = selectedCardFiles[cardFileIndex];
+            ((selectedCardFileItem: Item) => {
+                $.ajax({
+                    type: "GET",
+                    traditional: true,
+                    data: { cardFileId: selectedCardFileItem.Id, headword: searchedHeadword },
+                    url: getBaseUrl()+"CardFiles/CardFiles/Buckets",
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: (response) => {
+                        shouldShowErrorMessage = false;
+                        $(serverErrorDiv).hide();
+                        var buckets = response["buckets"];
+
+                        if (buckets.length !== 0) {
+                            shouldShowNoResultMessage = false;
+                            $(noResultDiv).hide();
+                        }
+
+                        for (var bucketIndex = 0; bucketIndex < buckets.length; bucketIndex++) {
+                            var bucket = buckets[bucketIndex];
+                            var cards = bucket["Cards"];
+                            for (var cardIndex = 0; cardIndex < cards.length; cardIndex++) {
+                                var card = cards[cardIndex];
+                                cardFileManager.makeCardFile(selectedCardFileItem.Id, selectedCardFileItem.Name, bucket["Id"], bucket["Name"], card["Position"]);
+                            }
+                        }
+                    },
+                    error: (response) => {
+                        shouldShowNoResultMessage = false;
+                        $(noResultDiv).hide();
+                    }
+                });
+            })(selectedCardFileItem);
+        }
+        
+    });
+};
+
+function createDelegate() {
+    var callbackDelegate = new DropDownSelectCallbackDelegate();
+    callbackDelegate.getCategoriesFromResponseCallback = (response) => {
+        return null;
+    };
+
+    callbackDelegate.getLeafItemsFromResponseCallback = (response) => {
+        return response["cardFiles"];
+    };
+
+    callbackDelegate.getLeafItemIdCallback = (item) => {
+        return item["Id"];
+    };
+
+    callbackDelegate.getLeafItemTextCallback = (item) => {
+        return item["Name"];
+    };
+
+    callbackDelegate.getCategoryIdCallback = (category): string => {
+        return category["Id"];
+    };
+
+    callbackDelegate.getCategoryTextCallback = (category): string => {
+        return category["Name"];
+    };
+
+    callbackDelegate.getRootCategoryCallback = (categories): any => {
+        var rootCategory = new Object();
+        rootCategory["Name"] = "Kartotéky";
+        return rootCategory;
+    };
+
+    callbackDelegate.getChildCategoriesCallback = (categories, currentCategory): Array<any> => {
+        return null;
     }
-});
 
-$(".cardfile-clear-filter").click(function () {
-    $(this).siblings(".cardfile-filter-input").val('').change();
-});
-
-$(".cardfile-filter-input").keyup(function () {
-    $(this).change();
-});
-
-$(".cardfile-filter-input").change(function () {
-    if ($(this).val() == '') {
-        $(this).parents(".cardfile-select-body").children(".concrete-cardfile").show();
-    } else {
-        $(this).parents(".cardfile-select-body").children(".concrete-cardfile").hide().filter(':contains(' + $(this).val() + ')').show();
+    callbackDelegate.getChildLeafItemsCallback = (leaftItems, currentCategory): Array<any> => {
+        return leaftItems;
     }
-});
 
-$(".delete-cardfile").click(function () {
-    $(this).siblings(".save-cardfile").show();
-    $(this).hide();
-    //TODO populate request on delete from favorites
-});
+    callbackDelegate.getTypeFromResponseCallback = (response) => {
+        return "kartoteky";
+    }
 
-$(".save-cardfile").click(function () {
-    $(this).siblings(".delete-cardfile").show();
-    $(this).hide();
-    //TODO populate request on save to favorites
-});
+    return callbackDelegate;
+}
 
-$(".concrete-cardfile-checkbox").click(function () {
-    //TODO add cardfile to search criteria
-});
+function createListing() {
+    var cardFileSelector = $("#card-file-select");
+    var cardFileLoadingDiv = $("div.card-file-select div.loading");
+    var bucketSelector = $("#bucket-select");
+    var bucketLoadingDiv = $("div.bucket-select div.loading");
 
-$(document).ready(function () {
-    var cardsCreator = new CardFileCreator("div.cardfile-result-area");
-    cardsCreator.makeCardFile();
-    cardsCreator.makeCardFile();
-    cardsCreator.makeCardFile();
-});
+    $(cardFileSelector).hide();
+    $(bucketSelector).hide();
+    var cardFileManager = new CardFileManager("div.cardfile-result-area");
+    var cardFileIdListed: string = "";
+    var cardFileNameListed: string = "";
 
+    $.ajax({
+        type: "GET",
+        traditional: true,
+        data: { },
+        url: getBaseUrl()+"CardFiles/CardFiles/CardFiles",
+        dataType: 'json',
+        contentType: 'application/json',
+        success: (response) => {
+            var cardFiles = response["cardFiles"];
+            for (var i = 0; i < cardFiles.length; i++) {
+                var cardFile = cardFiles[i];
+                var optionElement: HTMLOptionElement = document.createElement("option");
+                if (i === 0) {
+                    optionElement.selected = true;
+                }
+                optionElement.value = cardFile["Id"];
+                optionElement.text = cardFile["Name"];
+                $(cardFileSelector).append(optionElement);
+            }
+
+            $(cardFileLoadingDiv).hide();
+
+            var cardFileId = getQueryStringParameterByName("cardFileId");
+            if(cardFileId){
+            $(cardFileSelector).find("option:selected").removeAttr('selected');
+            $(cardFileSelector).find("option[value =" + cardFileId + "]").prop('selected', 'selected');
+            }
+
+            $(cardFileSelector).show();
+            $(cardFileSelector).change();
+        },
+        error: (response) => {
+            //TODO resolve error
+        }
+    });
+
+    $(cardFileSelector).change(function() {
+        var optionSelected = $("option:selected", this);
+        cardFileIdListed = optionSelected.val();
+        cardFileNameListed = optionSelected.text();
+        $(bucketSelector).empty();
+        $(bucketSelector).hide();
+        $(bucketLoadingDiv).show();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { cardFileId: cardFileIdListed},
+            url: getBaseUrl()+"CardFiles/CardFiles/Buckets",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                var buckets = response["buckets"];
+                for (var i = 0; i < buckets.length; i++) {
+                    var bucket = buckets[i];
+                    var optionElement: HTMLOptionElement = document.createElement("option");
+                    if (i === 0) {
+                        optionElement.selected = true;
+                    }
+                    optionElement.value = bucket["Id"];
+                    optionElement.text = bucket["Name"];
+                    $(bucketSelector).append(optionElement);
+                }
+
+                $(bucketLoadingDiv).hide();
+                $(bucketSelector).show();
+                $(bucketSelector).change();
+            },
+            error: (response) => {
+                //TODO resolve error
+            }
+        });
+    });
+
+    $(bucketSelector).change(function() {
+        var optionSelected = $("option:selected", this);
+        var bucketId = optionSelected.val();
+        var bucketText = optionSelected.text();
+        cardFileManager.clearContainer();
+        cardFileManager.makeCardFile(cardFileIdListed, cardFileNameListed, bucketId, bucketText);
+    });
+
+}
+
+function createList() {
+    var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader");
+
+       $('#searchButton').click(() => {
+           var text = $('#searchbox').val();
+           $.ajax({
+               type: "GET",
+               traditional: true,
+               url: getBaseUrl()+"CardFiles/CardFiles/SearchList",
+               data: { term: text },
+               dataType: 'json',
+               contentType: 'application/json',
+               success(response) {
+                   bibliographyModule.showBooks(response.books);
+               }
+           });
+    });
+
+    $('#searchButton').click();
+
+}

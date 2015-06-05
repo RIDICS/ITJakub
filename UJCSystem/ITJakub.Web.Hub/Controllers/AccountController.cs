@@ -14,6 +14,7 @@ namespace ITJakub.Web.Hub.Controllers
     public class AccountController : Controller
     {
         private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
+        private readonly ItJakubServiceUnauthorizedClient m_serviceUnauthorizedClient = new ItJakubServiceUnauthorizedClient();
 
         private ApplicationSignInManager SignInManager
         {
@@ -52,13 +53,13 @@ namespace ITJakub.Web.Hub.Controllers
                 return View(model);
             }
 
-            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+            var result =
+                await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
 
             switch (result)
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
-                case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Přihlášení se nezdařilo.");
                     return View(model);
@@ -84,16 +85,14 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
-                var result = await UserManager.CreateAsync(user, model.Password);
-                m_serviceClient.CreateUser(new CreateUserContract
+                var user = new ApplicationUser
                 {
-                    AuthenticationProvider = AuthProviderEnumContract.ItJakub,
+                    UserName = model.UserName,
                     Email = model.Email,
-                    Password = model.Password,
                     FirstName = model.FirstName,
                     LastName = model.LastName
-                });
+                };
+                var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, false, false);

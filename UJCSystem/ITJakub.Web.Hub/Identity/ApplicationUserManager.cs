@@ -23,7 +23,7 @@ namespace ITJakub.Web.Hub.Identity
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
+                RequireUniqueEmail = false
             };
 
             // Configure validation logic for passwords
@@ -51,7 +51,7 @@ namespace ITJakub.Web.Hub.Identity
             //    Subject = "Security Code",
             //    BodyFormat = "Your security code is {0}"
             //});
-            manager.EmailService = new EmailService();
+            //manager.EmailService = new EmailService();
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
@@ -63,7 +63,6 @@ namespace ITJakub.Web.Hub.Identity
 
         public async override Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
         {
-            //user.PasswordHash = "heslo";    //TODO
             var isValid = await base.CheckPasswordAsync(user, password);
             return isValid;
         }
@@ -82,8 +81,6 @@ namespace ITJakub.Web.Hub.Identity
 
         public async override Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
         {
-            user.UserName = user.Email; //TODO
-            user.Id = user.UserName; //TODO
             var result = await base.CreateIdentityAsync(user, authenticationType);
             return result;
         }

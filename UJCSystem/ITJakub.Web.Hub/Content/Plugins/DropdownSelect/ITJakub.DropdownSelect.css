@@ -105,12 +105,13 @@ div.container {
 .delete-item {
   float: right;
   display: none;
-  color: #ffd700;
+  color: gold;
 }
 .dropdown-filter {
   margin-bottom: 5px;
   margin-top: 5px;
   padding: 5px;
+  background-color: white;
 }
 .dropdown-filter-input {
   margin-right: 5px;
@@ -151,5 +152,16 @@ div.container {
   margin: 0 auto;
   height: 48px;
   width: 48px;
+}
+.dropdown-select-text-loading {
+  width: 70%;
+  height: 18px;
+  /*margin-left: 40px;*/
+  text-align: center;
+  background-image: url(/Content/Images/small_trans_loading.gif);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
 }
 /*# sourceMappingURL=ITJakub.DropdownSelect.css.map */

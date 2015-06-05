@@ -6,7 +6,7 @@
         this.factories = new Array();
         this.factories['Edition'] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
         this.factories['Dictionary'] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
-        this.factories['OldCzechTextBank'] = new OldCzechTextBankFactory(new BookTypeConfiguration("OldCzechTextBank", booksConfigurations["OldCzechTextBank"]));
+        this.factories['TextBank'] = new TextBankFactory(new BookTypeConfiguration("TextBank", booksConfigurations["TextBank"]));
         this.factories['CardFile'] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
         this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
 
@@ -147,7 +147,7 @@ class BibliographyFactory {
     }
 }
 
-class OldCzechTextBankFactory extends BibliographyFactory {
+class TextBankFactory extends BibliographyFactory {
 
     constructor(configuration: BookTypeConfiguration) {
         super(configuration);
