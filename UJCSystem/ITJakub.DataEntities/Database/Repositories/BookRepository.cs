@@ -58,6 +58,38 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual BookVersion GetLastVersionForBookWithPages(string bookGuid)
+        {
+            using (var session = GetSession())
+            {
+                var book = FindBookByGuid(bookGuid);
+
+                BookVersion bookVersionAlias = null;
+
+                var lastVersionSubquery = QueryOver.Of<BookVersion>()
+                    .SelectList(l => l
+                        .SelectGroup(item => item.Book.Id)
+                        .SelectMax(item => item.CreateTime)
+                    )
+                    .Where(item => item.Book.Id == book.Id)
+                    .Where(Restrictions.EqProperty(
+                        Projections.Max<BookVersion>(item => item.CreateTime),
+                        Projections.Property(() => bookVersionAlias.CreateTime)
+                        ));
+
+
+                var result = session.QueryOver(() => bookVersionAlias)
+                    .WithSubquery
+                    .WhereExists(lastVersionSubquery)
+                    .Fetch(x => x.BookPages).Eager
+                    .SingleOrDefault<BookVersion>();
+
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual Book FindBookByGuid(string bookGuid)
         {
             using (var session = GetSession())

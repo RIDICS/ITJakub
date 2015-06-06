@@ -100,7 +100,7 @@ namespace ITJakub.ITJakubService.Core
 
         public BookInfoContract GetBookInfo(string bookGuid)
         {
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var bookVersion = m_bookRepository.GetLastVersionForBookWithPages(bookGuid);
             return Mapper.Map<BookInfoContract>(bookVersion);
         }
 
