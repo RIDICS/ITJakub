@@ -769,6 +769,7 @@ var ContentPanel = (function (_super) {
                 }
                 $(_this.panelBodyHtml).empty();
                 $(_this.panelBodyHtml).append(ulElement);
+                _this.innerContent = _this.panelBodyHtml;
                 if (typeof _this.windowBody !== 'undefined') {
                     $(_this.windowBody).empty();
                     $(_this.windowBody).append(ulElement);

@@ -942,8 +942,11 @@ class ContentPanel extends LeftSidePanel {
                     $(ulElement).append(this.makeContentItem(rootContentItems[i]));
                 }
 
+                
                 $(this.panelBodyHtml).empty();
                 $(this.panelBodyHtml).append(ulElement);
+
+                this.innerContent = this.panelBodyHtml;
 
                 if (typeof this.windowBody !== 'undefined') {
                     $(this.windowBody).empty();
