@@ -277,8 +277,6 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			XElement toc = GenerateToc(tableOfContentResult);
 			XElement hws = GenerateHwList(tableOfContentResult);
 
-			metada.Root.Add(toc);
-			metada.Root.Add(hws);
 
 			if (splittingResult != null) //generovat pouze v případě, že k rozdělení na strany došlo
 			{
@@ -294,6 +292,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 				metada.Root.Add(pages);
 			}
+			metada.Root.Add(toc);
+			metada.Root.Add(hws);
 			metada.Save(GetConversionMetadataFileFullPath(finalOutputFileName));
 
 		}
