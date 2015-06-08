@@ -93,8 +93,9 @@ namespace ITJakub.ITJakubService.Core
         public IList<BookContentItemContract> GetBookContent(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var bookContentItems = m_bookVersionRepository.GetBookContentWithPages(bookVersion);
-            return Mapper.Map<IList<BookContentItemContract>>(bookContentItems);
+            var bookContentItems = m_bookVersionRepository.GetRootBookContentItemsWithPagesAndAncestors(bookVersion);
+            var contentItemsContracts = Mapper.Map<IList<BookContentItemContract>>(bookContentItems);
+            return contentItemsContracts;
         }
 
 

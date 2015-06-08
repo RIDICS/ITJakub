@@ -370,7 +370,7 @@ class ReaderModule {
         $(contentButton).click((event: Event) => {
             var panelId = "ObsahPanel";
             if (!this.existSidePanel(panelId)) {
-                var contentPanel = new LeftSidePanel(panelId,"Obsah", this);
+                var contentPanel = new ContentPanel(panelId, this);
                 this.loadSidePanel(contentPanel.panelHtml);
                 this.leftSidePanels.push(contentPanel);
             }
@@ -909,6 +909,72 @@ class SettingsPanel extends LeftSidePanel {
         innerContent.appendChild(textButton);
         innerContent.appendChild(imagesButton);
         return innerContent;
+    }
+}
+
+class ContentPanel extends LeftSidePanel {
+
+    constructor(identificator: string, readerModule: ReaderModule) {
+        super(identificator, "Obsah", readerModule);
+    }
+
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var bodyDiv: HTMLDivElement = window.document.createElement('div');
+        $(bodyDiv).addClass('content-panel-container');
+        this.downloadBookContent();
+        return bodyDiv;
+    }
+
+    private downloadBookContent() {
+        
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.parentReader.bookId},
+            url: getBaseUrl() + "Reader/GetBookContent",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                var rootContentItems = response["content"];
+                var ulElement = document.createElement("ul");
+                $(ulElement).addClass("content-item-root-list");
+                for (var i = 0; i < rootContentItems.length; i++) {
+                    $(ulElement).append(this.makeContentItem(rootContentItems[i]));
+                }
+
+                $(this.panelBodyHtml).empty();
+                $(this.panelBodyHtml).append(ulElement);
+
+                if (typeof this.windowBody !== 'undefined') {
+                    $(this.windowBody).empty();
+                    $(this.windowBody).append(ulElement);
+                }
+            },
+            error: (response) => {
+                $(this.panelBodyHtml).empty();
+                $(this.panelBodyHtml).append("Chyba při načítání obsahu");
+            }
+        });
+    }
+
+    private makeContentItemChilds(contentItem): HTMLUListElement {
+        var childItems = contentItem["ChildBookContentItems"];
+        var ulElement = document.createElement("ul");
+        $(ulElement).addClass("content-item-list");
+        for (var i = 0; i < childItems.length; i++) {
+            $(ulElement).append(this.makeContentItem(childItems[i]));
+        }
+        return ulElement;
+    }
+
+    private makeContentItem(contentItem): HTMLLIElement {
+        var liElement = document.createElement("li");
+        $(liElement).addClass("content-item");
+        var spanElement = document.createElement("span");
+        $(spanElement).append(contentItem["Text"]);
+        $(liElement).append(spanElement);
+        $(liElement).append(this.makeContentItemChilds(contentItem));
+        return liElement;
     }
 }
 

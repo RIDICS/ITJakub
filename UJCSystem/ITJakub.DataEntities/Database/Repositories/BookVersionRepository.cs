@@ -128,14 +128,14 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookContentItem> GetBookContentWithPages(BookVersion bookVersion)
+        public virtual IList<BookContentItem> GetRootBookContentItemsWithPagesAndAncestors(BookVersion bookVersion)
         {
             using (var session = GetSession())
             {
                 var bookContentItems =
                     session.QueryOver<BookContentItem>()
-                        .Fetch(x => x.Page).Eager
-                        .Where(item => item.BookVersion.Id == bookVersion.Id)
+                        //.Fetch(x => x.Page).Eager
+                        .Where(item => item.BookVersion.Id == bookVersion.Id && item.ParentBookContentItem == null)
                         .List<BookContentItem>();
                 return bookContentItems;
             }

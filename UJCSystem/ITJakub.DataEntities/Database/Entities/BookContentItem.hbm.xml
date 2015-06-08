@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="BookContentItem" table="[BookContentItem]" lazy="true" >
+  <class name="BookContentItem" table="[BookContentItem]" lazy="true">
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
@@ -13,14 +13,14 @@
     <many-to-one name="BookVersion">
       <column name="BookVersion" sql-type="bigint" not-null="true" />
     </many-to-one>
-    <many-to-one name="Page">
+    <many-to-one name="Page" lazy="false">
       <column name="BookPage" sql-type="bigint" not-null="false" />
     </many-to-one>
-    <many-to-one name="ParentBookContentItem">
+    <many-to-one name="ParentBookContentItem" lazy="false">
       <column name="ParentBookContentItem" sql-type="bigint" not-null="false" />
     </many-to-one>
-    <bag name="ChildContentItems" inverse="true" cascade="none">
-      <key column="ParentContentItem" />
+    <bag name="ChildContentItems" inverse="true" cascade="none" lazy="false">
+      <key column="ParentBookContentItem" />
       <one-to-many class="BookContentItem" />
     </bag>
   </class>

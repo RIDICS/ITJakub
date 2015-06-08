@@ -12,7 +12,8 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text))
                 .ForMember(dest => dest.ReferredPageName, opt => opt.MapFrom(src => src.Page.Text))
                 .ForMember(dest => dest.ReferredPageXmlId, opt => opt.MapFrom(src => src.Page.XmlId))
-                .ForMember(dest => dest.ChildBookContentItems, opt => opt.MapFrom(src => src.ChildContentItems));
+                .ForMember(dest => dest.ChildBookContentItems, opt => opt.MapFrom(src => src.ChildContentItems))
+                .ForAllMembers(opt => opt.Condition(src => !src.IsSourceValueNull));
         }
     }
 }

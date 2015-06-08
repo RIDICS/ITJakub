@@ -299,7 +299,7 @@ var ReaderModule = (function () {
         $(contentButton).click(function (event) {
             var panelId = "ObsahPanel";
             if (!_this.existSidePanel(panelId)) {
-                var contentPanel = new LeftSidePanel(panelId, "Obsah", _this);
+                var contentPanel = new ContentPanel(panelId, _this);
                 _this.loadSidePanel(contentPanel.panelHtml);
                 _this.leftSidePanels.push(contentPanel);
             }
@@ -747,6 +747,66 @@ var SettingsPanel = (function (_super) {
         return innerContent;
     };
     return SettingsPanel;
+})(LeftSidePanel);
+var ContentPanel = (function (_super) {
+    __extends(ContentPanel, _super);
+    function ContentPanel(identificator, readerModule) {
+        _super.call(this, identificator, "Obsah", readerModule);
+    }
+    ContentPanel.prototype.makeBody = function (rootReference, window) {
+        var bodyDiv = window.document.createElement('div');
+        $(bodyDiv).addClass('content-panel-container');
+        this.downloadBookContent();
+        return bodyDiv;
+    };
+    ContentPanel.prototype.downloadBookContent = function () {
+        var _this = this;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.parentReader.bookId },
+            url: getBaseUrl() + "Reader/GetBookContent",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                var rootContentItems = response["content"];
+                var ulElement = document.createElement("ul");
+                $(ulElement).addClass("content-item-root-list");
+                for (var i = 0; i < rootContentItems.length; i++) {
+                    $(ulElement).append(_this.makeContentItem(rootContentItems[i]));
+                }
+                $(_this.panelBodyHtml).empty();
+                $(_this.panelBodyHtml).append(ulElement);
+                if (typeof _this.windowBody !== 'undefined') {
+                    $(_this.windowBody).empty();
+                    $(_this.windowBody).append(ulElement);
+                }
+            },
+            error: function (response) {
+                $(_this.panelBodyHtml).empty();
+                $(_this.panelBodyHtml).append("Chyba při načítání obsahu");
+            }
+        });
+    };
+    ContentPanel.prototype.makeContentItemChilds = function (contentItem) {
+        var childItems = contentItem["ChildBookContentItems"];
+        var ulElement = document.createElement("ul");
+        $(ulElement).addClass("content-item-list");
+        for (var i = 0; i < childItems.length; i++) {
+            $(ulElement).append(this.makeContentItem(childItems[i]));
+        }
+        return ulElement;
+    };
+    ContentPanel.prototype.makeContentItem = function (contentItem) {
+        var liElement = document.createElement("li");
+        $(liElement).addClass("content-item");
+        var spanElement = document.createElement("span");
+        $(spanElement).append(contentItem["Text"]);
+        $(liElement).append(spanElement);
+        $(liElement).append(this.makeContentItemChilds(contentItem));
+        return liElement;
+    };
+    return ContentPanel;
 })(LeftSidePanel);
 var RightSidePanel = (function (_super) {
     __extends(RightSidePanel, _super);
