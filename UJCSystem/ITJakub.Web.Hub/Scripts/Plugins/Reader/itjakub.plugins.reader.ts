@@ -754,10 +754,10 @@ class SidePanel {
     }
 
     public onMoveToPage(pageIndex: number, scrollTo:boolean) {
-        $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
-        if (typeof this.windowBody !== 'undefined') {
-            $(this.windowBody).append(" pageIndex is " + pageIndex);
-        }
+        //$(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
+        //if (typeof this.windowBody !== 'undefined') {
+        //    $(this.windowBody).append(" pageIndex is " + pageIndex);
+        //}
     }
 
     protected placeOnDragStartPosition(sidePanelDiv: HTMLDivElement) {
@@ -873,15 +873,15 @@ class LeftSidePanel extends SidePanel {
         }
     }
 
-    protected makeBody(rootReference: SidePanel, window : Window): HTMLElement {
-        var movePageButton: HTMLButtonElement = window.document.createElement('button');
-        movePageButton.textContent = "Move to page 15";
-        $(movePageButton).click((event: Event) => {
-            rootReference.parentReader.moveToPageNumber(15, true);
-        });
+    //protected makeBody(rootReference: SidePanel, window : Window): HTMLElement {
+    //    var movePageButton: HTMLButtonElement = window.document.createElement('button');
+    //    movePageButton.textContent = "Move to page 15";
+    //    $(movePageButton).click((event: Event) => {
+    //        rootReference.parentReader.moveToPageNumber(15, true);
+    //    });
 
-        return movePageButton;
-    }
+    //    return movePageButton;
+    //}
 }
 
 class SettingsPanel extends LeftSidePanel {
@@ -959,6 +959,7 @@ class ContentPanel extends LeftSidePanel {
 
     private makeContentItemChilds(contentItem): HTMLUListElement {
         var childItems = contentItem["ChildBookContentItems"];
+        if (childItems.length === 0 ) return null;
         var ulElement = document.createElement("ul");
         $(ulElement).addClass("content-item-list");
         for (var i = 0; i < childItems.length; i++) {
@@ -970,9 +971,14 @@ class ContentPanel extends LeftSidePanel {
     private makeContentItem(contentItem): HTMLLIElement {
         var liElement = document.createElement("li");
         $(liElement).addClass("content-item");
-        var spanElement = document.createElement("span");
-        $(spanElement).append(contentItem["Text"]);
-        $(liElement).append(spanElement);
+
+        var hrefElement = document.createElement("a");
+        hrefElement.href = "#";
+        $(hrefElement).append(contentItem["Text"]);
+        $(hrefElement).click(() => {
+            this.parentReader.moveToPage(contentItem["ReferredPageName"], true);
+        });
+        $(liElement).append(hrefElement);
         $(liElement).append(this.makeContentItemChilds(contentItem));
         return liElement;
     }

@@ -28,7 +28,7 @@ namespace ITJakub.SearchService.Core.Exist
         public void UploadVersionFile(string bookId, string bookVersionId, string fileName, Stream dataStream)
         {
             if (m_log.IsDebugEnabled) 
-                m_log.DebugFormat("Begin upload of book '{0}' and version '{1}'", bookId, bookVersionId);
+                m_log.DebugFormat("Begin upload file '{0}' of book '{1}' and version '{2}'", fileName, bookId, bookVersionId);
            
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
@@ -38,8 +38,8 @@ namespace ITJakub.SearchService.Core.Exist
                 Content = new StreamContent(dataStream)
             })); 
 
-            if (m_log.IsDebugEnabled) 
-                m_log.DebugFormat("End upload of book '{0}' and version '{1}'", bookId, bookVersionId);
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("End upload file '{0}' of book '{1}' and version '{2}'", fileName, bookId, bookVersionId);
         }
 
         public void UploadBookFile(string bookId, string fileName, Stream dataStream)

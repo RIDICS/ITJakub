@@ -606,10 +606,10 @@ var SidePanel = (function () {
         throw new Error("Not implemented");
     };
     SidePanel.prototype.onMoveToPage = function (pageIndex, scrollTo) {
-        $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
-        if (typeof this.windowBody !== 'undefined') {
-            $(this.windowBody).append(" pageIndex is " + pageIndex);
-        }
+        //$(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
+        //if (typeof this.windowBody !== 'undefined') {
+        //    $(this.windowBody).append(" pageIndex is " + pageIndex);
+        //}
     };
     SidePanel.prototype.placeOnDragStartPosition = function (sidePanelDiv) {
         var dispersion = Math.floor((Math.random() * 15) + 1) * 3;
@@ -713,14 +713,6 @@ var LeftSidePanel = (function (_super) {
             $(sidePanelDiv).hide('slide', { direction: 'left' });
         }
     };
-    LeftSidePanel.prototype.makeBody = function (rootReference, window) {
-        var movePageButton = window.document.createElement('button');
-        movePageButton.textContent = "Move to page 15";
-        $(movePageButton).click(function (event) {
-            rootReference.parentReader.moveToPageNumber(15, true);
-        });
-        return movePageButton;
-    };
     return LeftSidePanel;
 })(SidePanel);
 var SettingsPanel = (function (_super) {
@@ -790,6 +782,8 @@ var ContentPanel = (function (_super) {
     };
     ContentPanel.prototype.makeContentItemChilds = function (contentItem) {
         var childItems = contentItem["ChildBookContentItems"];
+        if (childItems.length === 0)
+            return null;
         var ulElement = document.createElement("ul");
         $(ulElement).addClass("content-item-list");
         for (var i = 0; i < childItems.length; i++) {
@@ -798,11 +792,16 @@ var ContentPanel = (function (_super) {
         return ulElement;
     };
     ContentPanel.prototype.makeContentItem = function (contentItem) {
+        var _this = this;
         var liElement = document.createElement("li");
         $(liElement).addClass("content-item");
-        var spanElement = document.createElement("span");
-        $(spanElement).append(contentItem["Text"]);
-        $(liElement).append(spanElement);
+        var hrefElement = document.createElement("a");
+        hrefElement.href = "#";
+        $(hrefElement).append(contentItem["Text"]);
+        $(hrefElement).click(function () {
+            _this.parentReader.moveToPage(contentItem["ReferredPageName"], true);
+        });
+        $(liElement).append(hrefElement);
         $(liElement).append(this.makeContentItemChilds(contentItem));
         return liElement;
     };

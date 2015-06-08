@@ -393,4 +393,10 @@ body {
 .reader-text .dummy-page {
   margin-top: calc(100% - 50px);
 }
+.reader-left-panel .content-item a:hover {
+  color: #84ced7;
+}
+.content-item-list li.content-item {
+  padding-left: 15px;
+}
 /*# sourceMappingURL=ITJakub.Reader.css.map */
