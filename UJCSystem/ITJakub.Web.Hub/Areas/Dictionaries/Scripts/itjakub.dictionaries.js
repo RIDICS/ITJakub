@@ -1,8 +1,8 @@
 $(document).ready(function () {
     var callbackDelegate = new DropDownSelectCallbackDelegate();
-    var dictionarySelector = new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
+    var dictionarySelector = new DropDownSelect("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeDropdown();
-    var editionSelector = new DropDownSelect("div.dictionary-selects", "/Dictionaries/Dictionaries/GetTextWithCategories", true, callbackDelegate);
+    var editionSelector = new DropDownSelect("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetTextWithCategories", true, callbackDelegate);
     editionSelector.makeDropdown();
     var array = new Array();
     array.push(dictionarySelector);
