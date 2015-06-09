@@ -670,7 +670,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2637</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Web</IISUrl>
+          <IISUrl>http://localhost</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://147.32.81.137/ITJakub.Web.Hub</CustomServerUrl>
