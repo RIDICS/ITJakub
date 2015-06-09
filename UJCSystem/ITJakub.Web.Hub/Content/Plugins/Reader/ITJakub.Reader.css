@@ -409,6 +409,7 @@ body {
   font-size: 1.5em;
   background-color: #84ced7;
   margin: 1px;
+  height: 28px;
 }
 .reader-settings-button:hover {
   color: black;
