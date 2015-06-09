@@ -399,4 +399,27 @@ body {
 .reader-left-panel-body .content-item-list li.content-item {
   padding-left: 15px;
 }
+.reader-settings-button {
+  color: white;
+  background: none;
+  border: none;
+  outline: 0;
+  text-align: center;
+  width: 72px;
+  font-size: 1.5em;
+  background-color: #84ced7;
+  margin: 1px;
+}
+.reader-settings-button:hover {
+  color: black;
+}
+.reader-settings-buttons-area {
+  text-align: center;
+}
+.reader-settings-checkboxes-area {
+  margin-top: 5px;
+}
+.reader-settings-checkboxes-area input {
+  margin-right: 5px;
+}
 /*# sourceMappingURL=ITJakub.Reader.css.map */

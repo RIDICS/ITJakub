@@ -890,24 +890,58 @@ class SettingsPanel extends LeftSidePanel {
         super(identificator, "Zobrazení", readerModule);
     }
     
-    protected makeBody(rootReference: SidePanel, window: Window):HTMLElement {
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var textButtonSpan = window.document.createElement("span");
+        $(textButtonSpan).addClass("glyphicon glyphicon-text-size");
         var textButton = window.document.createElement("button");
-        textButton.textContent = "Zobrazit/skrýt text";
+        $(textButton).addClass("reader-settings-button");
+        $(textButton).append(textButtonSpan);
+
         $(textButton).click((event: Event) => {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.textPanelIdentificator, "");
             rootReference.parentReader.setRightPanelsLayout();
         });
 
-        var imagesButton = window.document.createElement("button");
-        imagesButton.textContent = "Zobrazit/skrýt obrázky";
-        $(imagesButton).click((event: Event) => {
+        var imageButtonSpan = window.document.createElement("span");
+        $(imageButtonSpan).addClass("glyphicon glyphicon-picture");
+        var imageButton = window.document.createElement("button");
+        $(imageButton).addClass("reader-settings-button");
+        $(imageButton).append(imageButtonSpan);
+
+        $(imageButton).click((event: Event) => {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.imagePanelIdentificator, "");
             rootReference.parentReader.setRightPanelsLayout();
         });
 
+        var buttonsDiv = window.document.createElement("div");
+        $(buttonsDiv).addClass("reader-settings-buttons-area");
+        buttonsDiv.appendChild(textButton);
+        buttonsDiv.appendChild(imageButton);
+
+        var checkboxesDiv = window.document.createElement("div");
+        $(checkboxesDiv).addClass("reader-settings-checkboxes-area");
+
+        var showPageCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
+        showPageNameCheckbox.type = "checkbox";
+        var showPageNameSpan: HTMLSpanElement = window.document.createElement("span");
+        showPageNameSpan.innerText = "Zobrazit číslování stránek";
+        showPageCheckboxDiv.appendChild(showPageNameCheckbox);
+        showPageCheckboxDiv.appendChild(showPageNameSpan);
+
+        var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
+        showCommentCheckbox.type = "checkbox";
+        var showCommentSpan: HTMLSpanElement = window.document.createElement("span");
+        showCommentSpan.innerText = "Zobrazit komentáře";
+        showCommentCheckboxDiv.appendChild(showCommentCheckbox);
+        showCommentCheckboxDiv.appendChild(showCommentSpan);
+
+        checkboxesDiv.appendChild(showPageCheckboxDiv);
+        checkboxesDiv.appendChild(showCommentCheckboxDiv);
         var innerContent: HTMLDivElement = window.document.createElement("div");
-        innerContent.appendChild(textButton);
-        innerContent.appendChild(imagesButton);
+        innerContent.appendChild(buttonsDiv);
+        innerContent.appendChild(checkboxesDiv);
         return innerContent;
     }
 }
