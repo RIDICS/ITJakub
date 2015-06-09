@@ -925,7 +925,7 @@ class SettingsPanel extends LeftSidePanel {
         var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
         var showPageNameSpan: HTMLSpanElement = window.document.createElement("span");
-        showPageNameSpan.innerText = "Zobrazit číslování stránek";
+        showPageNameSpan.innerHTML = "Zobrazit číslování stránek";
         showPageCheckboxDiv.appendChild(showPageNameCheckbox);
         showPageCheckboxDiv.appendChild(showPageNameSpan);
 
@@ -933,7 +933,7 @@ class SettingsPanel extends LeftSidePanel {
         var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
         showCommentCheckbox.type = "checkbox";
         var showCommentSpan: HTMLSpanElement = window.document.createElement("span");
-        showCommentSpan.innerText = "Zobrazit komentáře";
+        showCommentSpan.innerHTML = "Zobrazit komentáře";
         showCommentCheckboxDiv.appendChild(showCommentCheckbox);
         showCommentCheckboxDiv.appendChild(showCommentSpan);
 

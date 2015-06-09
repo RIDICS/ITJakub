@@ -749,14 +749,14 @@ var SettingsPanel = (function (_super) {
         var showPageNameCheckbox = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
         var showPageNameSpan = window.document.createElement("span");
-        showPageNameSpan.innerText = "Zobrazit číslování stránek";
+        showPageNameSpan.innerHTML = "Zobrazit číslování stránek";
         showPageCheckboxDiv.appendChild(showPageNameCheckbox);
         showPageCheckboxDiv.appendChild(showPageNameSpan);
         var showCommentCheckboxDiv = window.document.createElement("div");
         var showCommentCheckbox = window.document.createElement("input");
         showCommentCheckbox.type = "checkbox";
         var showCommentSpan = window.document.createElement("span");
-        showCommentSpan.innerText = "Zobrazit komentáře";
+        showCommentSpan.innerHTML = "Zobrazit komentáře";
         showCommentCheckboxDiv.appendChild(showCommentCheckbox);
         showCommentCheckboxDiv.appendChild(showCommentSpan);
         checkboxesDiv.appendChild(showPageCheckboxDiv);
