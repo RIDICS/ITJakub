@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
@@ -32,7 +31,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             return Json(new { content = contentItems }, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<ActionResult> GetBookPageByPosition(string bookId, int pagePosition)
+        public ActionResult GetBookPageByPosition(string bookId, int pagePosition)
         {
             return Json(new { pageText = m_mainServiceClient.GetBookPageByPosition(bookId, pagePosition, OutputFormatEnumContract.Html) }, JsonRequestBehavior.AllowGet);
         }
