@@ -1011,10 +1011,22 @@ class ContentPanel extends LeftSidePanel {
 
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
-        $(hrefElement).append(contentItem["Text"]);
         $(hrefElement).click(() => {
             this.parentReader.moveToPage(contentItem["ReferredPageName"], true);
         });
+        
+
+        var textSpanElement = document.createElement("span");
+        $(textSpanElement).addClass("content-item-text");
+        textSpanElement.innerText = contentItem["Text"];
+
+        var pageNameSpanElement = document.createElement("span");
+        $(pageNameSpanElement).addClass("content-item-page-name");
+        pageNameSpanElement.innerText = "["+contentItem["ReferredPageName"]+"]";
+        
+        $(hrefElement).append(pageNameSpanElement);
+        $(hrefElement).append(textSpanElement);
+
         $(liElement).append(hrefElement);
         $(liElement).append(this.makeContentItemChilds(contentItem));
         return liElement;
