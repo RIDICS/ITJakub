@@ -122,20 +122,15 @@
     "Dictionary": {
         "middle-panel": {
             "short-info": "{$linked}",
-            "title": "{Name} {$srcAbbreHref}",
-            "body": "{$authors}{$description}{$archive}{$year}",
+            "title": "{Name} {Title}",
+            "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$authors}{$description}{$year}",
             "variables": {
                 "$linked": {
                     "type": "if",
                     "pattern": "{Linked}",
                     "onTrue": "zapojený slovník",
                     "onFalse": "nezapojený slovník"
-                },
-                "$srcAbbreHref": {
-                    "type": "basic",
-                    "pattern": "<a href='#'>[{SourceAbbreviation}]</a>",
-                    "printIfNullValue": false
-                },
+                },       
                 "$authors": {
                     "type": "array",
                     "scope": "Authors",
@@ -145,12 +140,6 @@
                 "$description": {
                     "type": "basic",
                     "pattern": ", {Description}",
-                    "printIfNullValue": false
-                },
-                "$archive": {
-                    "type": "basic",
-                    "scope": "Archive",
-                    "pattern": ", {City}",
                     "printIfNullValue": false
                 },
                 "$year": {
