@@ -31,6 +31,6 @@ namespace ITJakub.DataEntities.Database.Entities
 
     public class PageBookmark : FavoriteBase
     {
-        public virtual BookPage BookPage { get; set; }
+        public virtual string PageXmlId { get; set; }
     }
 }
