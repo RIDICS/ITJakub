@@ -88,6 +88,16 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.Search(term);
         }
 
+        public List<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
+        {
+            return m_searchManager.SearchBooksWithBookType(term, bookType);
+        }
+
+        public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
+        {
+            return m_searchManager.GetBooksByBookType(bookType);
+        }
+
         public Stream GetBookPageImage(BookPageImageContract bookPageImageContract)
         {
             return m_bookManager.GetBookPageImage(bookPageImageContract);

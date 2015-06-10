@@ -201,7 +201,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<Book> FindBooksByBookType(BookTypeEnum bookType)
+        public virtual IList<BookVersion> SearchByTitleAndBookType(string text, BookTypeEnum bookType)
         {
             Book bookAlias = null;
             BookVersion bookVersionAlias = null;
@@ -210,17 +210,36 @@ namespace ITJakub.DataEntities.Database.Repositories
 
             using (var session = GetSession())
             {
-                var books = 
-                    session.QueryOver(() => bookAlias)
-                        .JoinAlias(x => x.LastVersion, () => bookVersionAlias, JoinType.InnerJoin)
+                var bookVersions =
+                    session.QueryOver(() => bookVersionAlias)
                         .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias, JoinType.InnerJoin)
                         .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias, JoinType.InnerJoin)
-                        .Where(() => bookTypeAlias.Type == bookType)
-                        .List<Book>();
-                return books;
+                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias, JoinType.InnerJoin)
+                        .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id && bookVersionAlias.Title.IsLike(string.Format("%{0}%", text)))
+                        .List<BookVersion>();
+                return bookVersions;
             }
         }
 
-       
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> FindBooksLastVersionsByBookType(BookTypeEnum bookType)
+        {
+            Book bookAlias = null;
+            BookVersion bookVersionAlias = null;
+            BookType bookTypeAlias = null;
+            Category categoryAlias = null;
+
+            using (var session = GetSession())
+            {
+                var bookVersions =
+                    session.QueryOver(() => bookVersionAlias)
+                        .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias, JoinType.InnerJoin)
+                        .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias, JoinType.InnerJoin)
+                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias, JoinType.InnerJoin)
+                        .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                        .List<BookVersion>();
+                return bookVersions;
+            }
+        }
     }
 }

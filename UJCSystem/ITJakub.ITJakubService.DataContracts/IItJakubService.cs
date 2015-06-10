@@ -39,6 +39,12 @@ namespace ITJakub.ITJakubService.DataContracts
         List<SearchResultContract> Search(string term);
 
         [OperationContract]
+        List<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType);
+
+        [OperationContract]
+        List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType);
+
+        [OperationContract]
         BookInfoContract GetBookInfo(string bookGuid);
 
         [OperationContract]
@@ -72,6 +78,5 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
-        
     }
 }

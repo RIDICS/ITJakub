@@ -7,8 +7,33 @@
 }
 @section scripts{
     @Scripts.Render("~/itjakub/editions/javascript")
+    @Scripts.Render("~/itjakub/editions/searchjs")
 }
 
-<div class="content-container">
-    <h1>Vyhledávání</h1>
+<div id="listHeader">
+    <div id="listSearchDiv" style="float: left; width: 70%">
+        <form role="form" class="form-horizontal">
+            <div class="form-group searchbar">
+                <div class="searchbar-buttons">
+                    <button id="searchButton" type="button" class="btn btn-default searchbar-button">
+                        Vyhledat
+                    </button>
+                    <button type="button" class="btn btn-default searchbar-button">
+                        Pokročilé
+                    </button>
+                </div>
+                <div class="searchbar-inputs">
+                    <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="float: left; margin-left: 50px;">
+        Řadit podle
+        <div id="listResultsHeader" style="display: inline-block">
+        </div>
+    </div>
+</div>
+
+<div id="listResults" style="margin-top: 50px">
 </div>
