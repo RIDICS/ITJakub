@@ -151,24 +151,7 @@ namespace ITJakub.Web.Hub
                     m_log.ErrorFormat("GetPageBookmarks timeouted with: {0}", ex);
                 throw;
             }
-        }
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetPageBookmarks timeouted with: {0}", ex);
-                throw;
-            }
-        }
 
-        public void AddBookmark(string bookId, string pageXmlId, string username)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveBookmark(string bookId, string pageXmlId, string username)
-        {
-            throw new NotImplementedException();
         }
     }
 }

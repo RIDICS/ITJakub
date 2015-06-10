@@ -1007,7 +1007,7 @@ var TextPanel = (function (_super) {
             $(pageTextDiv).addClass('unloaded');
             $(pageTextDiv).data('page-name', page.text);
             $(pageTextDiv).data('page-xmlId', page.xmlId);
-            pageTextDiv.id = 'page_' + page.xmlId;
+            pageTextDiv.id = page.xmlId; //ID IS HERE
             var pageNameDiv = window.document.createElement('div');
             $(pageNameDiv).addClass('page-name');
             $(pageNameDiv).html("[" + page.text + "]");
@@ -1033,7 +1033,7 @@ var TextPanel = (function (_super) {
         this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
     };
     TextPanel.prototype.displayPage = function (page, scrollTo) {
-        var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + page.xmlId);
+        var pageDiv = document.getElementById(page.xmlId);
         var pageLoaded = !($(pageDiv).hasClass('unloaded'));
         var pageLoading = $(pageDiv).hasClass('loading');
         if (!pageLoaded && !pageLoading) {
@@ -1045,7 +1045,7 @@ var TextPanel = (function (_super) {
             this.scrollTextToPositionFromTop(topOffset);
             if (typeof this.childwindow !== 'undefined') {
                 $(".reader-text-container", this.childwindow.document).scrollTop(0);
-                var pageToScrollOffset = $('#page_' + page.xmlId, this.childwindow.document).offset().top;
+                var pageToScrollOffset = $('#' + page.xmlId, this.childwindow.document).offset().top;
                 $(".reader-text-container", this.childwindow.document).scrollTop(pageToScrollOffset);
             }
         }
@@ -1070,10 +1070,10 @@ var TextPanel = (function (_super) {
     };
     TextPanel.prototype.downloadPageByXmlId = function (page) {
         var _this = this;
-        var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + page.xmlId);
+        var pageContainer = document.getElementById(page.xmlId);
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== 'undefined') {
-            $(this.windowBody).find('#page_' + page.xmlId).addClass("loading");
+            $(this.windowBody).find('#' + page.xmlId).addClass("loading");
         }
         $.ajax({
             type: "GET",
@@ -1088,8 +1088,8 @@ var TextPanel = (function (_super) {
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).removeClass('unloaded');
                 if (typeof _this.windowBody !== 'undefined') {
-                    $(_this.windowBody).find('#page_' + page.xmlId).removeClass("loading");
-                    $(_this.windowBody).find('#page_' + page.xmlId).append(response["pageText"]);
+                    $(_this.windowBody).find('#' + page.xmlId).removeClass("loading");
+                    $(_this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
                 }
             },
             error: function (response) {

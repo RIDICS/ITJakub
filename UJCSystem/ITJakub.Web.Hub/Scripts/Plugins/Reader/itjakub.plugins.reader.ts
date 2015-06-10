@@ -1189,7 +1189,7 @@ class TextPanel extends RightSidePanel {
             $(pageTextDiv).addClass('unloaded');
             $(pageTextDiv).data('page-name', page.text);
             $(pageTextDiv).data('page-xmlId', page.xmlId);
-            pageTextDiv.id = 'page_' + page.xmlId;
+            pageTextDiv.id = page.xmlId; //ID IS HERE
 
             var pageNameDiv: HTMLDivElement = window.document.createElement('div');
             $(pageNameDiv).addClass('page-name');
@@ -1221,7 +1221,7 @@ class TextPanel extends RightSidePanel {
     }
 
     displayPage(page: BookPage, scrollTo: boolean) {
-        var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + page.xmlId);
+        var pageDiv = document.getElementById(page.xmlId);
         var pageLoaded: boolean = !($(pageDiv).hasClass('unloaded'));
         var pageLoading: boolean = $(pageDiv).hasClass('loading');
         if (!pageLoaded && !pageLoading) {
@@ -1234,7 +1234,7 @@ class TextPanel extends RightSidePanel {
 
             if (typeof this.childwindow !== 'undefined') {
                 $(".reader-text-container", this.childwindow.document).scrollTop(0);
-                var pageToScrollOffset = $('#page_' + page.xmlId, this.childwindow.document).offset().top;
+                var pageToScrollOffset = $('#'+ page.xmlId, this.childwindow.document).offset().top;
                 $(".reader-text-container", this.childwindow.document).scrollTop(pageToScrollOffset);
             }
         }
@@ -1261,10 +1261,10 @@ class TextPanel extends RightSidePanel {
     }
 
     private downloadPageByXmlId(page: BookPage) {
-        var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + page.xmlId);
+        var pageContainer = document.getElementById(page.xmlId);
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== 'undefined') {
-            $(this.windowBody).find('#page_' + page.xmlId).addClass("loading");
+            $(this.windowBody).find('#' + page.xmlId).addClass("loading");
         }
         $.ajax({
             type: "GET",
@@ -1280,8 +1280,8 @@ class TextPanel extends RightSidePanel {
                 $(pageContainer).removeClass('unloaded');
 
                 if (typeof this.windowBody !== 'undefined') {
-                    $(this.windowBody).find('#page_' + page.xmlId).removeClass("loading");
-                    $(this.windowBody).find('#page_' + page.xmlId).append(response["pageText"]);
+                    $(this.windowBody).find('#' + page.xmlId).removeClass("loading");
+                    $(this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
                 }
             },
             error: (response) => {
