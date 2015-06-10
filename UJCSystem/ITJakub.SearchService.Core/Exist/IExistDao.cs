@@ -15,6 +15,10 @@ namespace ITJakub.SearchService.Core.Exist
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
         string GetPageByName(string bookId, string versionId, string start);
+        
+        [OperationContract]
+        [ExistQuery(XqueryName = "get-pages.xquery")]
+        string GetPageByXmlId(string bookId, string versionId, string pageXmlId);
 
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]

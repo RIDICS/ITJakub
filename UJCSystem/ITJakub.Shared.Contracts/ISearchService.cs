@@ -13,6 +13,9 @@ namespace ITJakub.Shared.Contracts
         string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
+        string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, ResourceLevelEnumContract transformationLevel);
+
+        [OperationContract]
         string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
@@ -23,6 +26,5 @@ namespace ITJakub.Shared.Contracts
 
         [OperationContract]
         void UploadSharedFile(ResourceUploadContract contract);
-
     }
 }

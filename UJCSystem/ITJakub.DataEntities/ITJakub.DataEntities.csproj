@@ -79,13 +79,13 @@
     <Compile Include="Database\Entities\Enums\BookTypeEnum.cs" />
     <Compile Include="Database\Entities\Enums\OutputFormat.cs" />
     <Compile Include="Database\Entities\Enums\ResourceLevel.cs" />
+    <Compile Include="Database\Entities\FavoriteBase.cs" />
     <Compile Include="Database\Entities\Keyword.cs" />
     <Compile Include="Database\Entities\ManuscriptDescription.cs" />
     <Compile Include="Database\Entities\Enums\AvailabilityStatus.cs" />
     <Compile Include="Database\Entities\Enums\BiblType.cs" />
     <Compile Include="Database\Entities\Book.cs" />
     <Compile Include="Database\Entities\BookBibl.cs" />
-    <Compile Include="Database\Entities\Bookmark.cs" />
     <Compile Include="Database\Entities\BookType.cs" />
     <Compile Include="Database\Entities\BookVersion.cs" />
     <Compile Include="Database\Entities\Category.cs" />
@@ -97,6 +97,7 @@
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Exceptions\BookDoesNotExistException.cs" />
     <Compile Include="Database\Exceptions\BookTypeIsAlreadyAssociatedWithAnotherCategoryException.cs" />
+    <Compile Include="Database\Repositories\FavoritesRepository.cs" />
     <Compile Include="Database\Repositories\UserRepository.cs" />
     <Compile Include="Database\Repositories\CategoryRepository.cs" />
     <Compile Include="Database\Repositories\AuthorRepository.cs" />
@@ -112,8 +113,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Database\Entities\Book.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\Bookmark.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\BookVersion.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\BookVersion.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Database\Entities\Category.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\User.hbm.xml" />
   </ItemGroup>
@@ -144,6 +146,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\BookContentItem.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\FavoriteBase.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

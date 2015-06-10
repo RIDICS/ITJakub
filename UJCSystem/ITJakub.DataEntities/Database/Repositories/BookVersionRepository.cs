@@ -1,14 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using log4net;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
     [Transactional]
     public class BookVersionRepository : NHibernateTransactionalDao
     {
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public BookVersionRepository(ISessionManager sessManager)
             : base(sessManager)
         {
@@ -138,6 +143,26 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Where(item => item.BookVersion.Id == bookVersion.Id && item.ParentBookContentItem == null)
                         .List<BookContentItem>();
                 return bookContentItems;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookPage GetPageByXmlId(string bookId, string pageXmlId)
+        {
+            using (var session = GetSession())
+            {
+                BookPage page = null;
+                BookVersion version = null;
+
+                var resultPage =session.QueryOver<BookPage>(() => page)
+                    .JoinQueryOver(x => x.BookVersion, () => version)
+                    .JoinQueryOver(x => x.Book)
+                    .Where(book => book.Guid == bookId && version.Id == book.LastVersion.Id && page.XmlId == pageXmlId)
+                    .SingleOrDefault<BookPage>();
+
+               
+
+                return resultPage;
             }
         }
     }

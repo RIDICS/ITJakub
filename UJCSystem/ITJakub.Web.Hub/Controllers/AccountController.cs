@@ -13,7 +13,7 @@ namespace ITJakub.Web.Hub.Controllers
     public class AccountController : Controller
     {
         private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
-        private readonly ItJakubServiceUnauthorizedClient m_serviceUnauthorizedClient = new ItJakubServiceUnauthorizedClient();
+        private readonly ItJakubServiceEncryptedClient m_serviceEncryptedClient = new ItJakubServiceEncryptedClient();
 
         private ApplicationSignInManager SignInManager
         {
