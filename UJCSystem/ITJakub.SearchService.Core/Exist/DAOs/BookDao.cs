@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using ITJakub.Shared.Contracts;
 
@@ -41,6 +41,11 @@ namespace ITJakub.SearchService.Core.Exist.DAOs
         public void UploadSharedFile(string fileName, Stream dataStream)
         {
             m_existManager.UploadSharedFile(fileName, dataStream);
+        }
+
+        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        {
+            return m_existManager.GetPageByXmlId(bookId, versionId, pageXmlId, transformationName, transformationLevel);
         }
     }
 }

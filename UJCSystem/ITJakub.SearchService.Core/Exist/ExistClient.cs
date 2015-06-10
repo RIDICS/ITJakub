@@ -132,5 +132,24 @@ namespace ITJakub.SearchService.Core.Exist
         }
 
         #endregion
+
+        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string xslPath)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, pageXmlId);
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("Start HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}'", pageXmlId, bookId, versionId);
+            string pageText = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("End HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}'", pageXmlId, bookId, versionId);
+            return pageText;
+        }
+
+
+        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId)
+        {
+            return GetPageByXmlId(bookId, versionId, pageXmlId, null);
+        }
     }
 }

@@ -99,12 +99,12 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void AddBookmark(string bookId, string pageName, string username)
+        public void AddBookmark(string bookId, string pageXmlId, string username)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveBookmark(string bookId, string pageName, string username)
+        public void RemoveBookmark(string bookId, string pageXmlId, string username)
         {
             throw new NotImplementedException();
         }

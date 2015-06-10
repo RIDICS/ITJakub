@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.ServiceModel;
-using System.Threading.Tasks;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
@@ -61,22 +60,41 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public string GetBookPageByNameAsync(string documentId, string pageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByName(string documentId, string pageName, OutputFormatEnumContract resultFormat)
         {
             try
             {
-                return Channel.GetBookPageByNameAsync(documentId, pageName, resultFormat);
+                return Channel.GetBookPageByName(documentId, pageName, resultFormat);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPageByNameAsync failed with: {0}", ex);
+                    m_log.ErrorFormat("GetBookPageByName failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPageByNameAsync timeouted with: {0}", ex);
+                    m_log.ErrorFormat("GetBookPageByName timeouted with: {0}", ex);
+                throw;
+            }
+        }
+        public string GetBookPageByXmlId(string documentId, string pageXmlId, OutputFormatEnumContract resultFormat)
+        {
+            try
+            {
+                return Channel.GetBookPageByXmlId(documentId, pageXmlId, resultFormat);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPageByXmlId failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookPageByXmlId timeouted with: {0}", ex);
                 throw;
             }
         }

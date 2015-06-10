@@ -13,7 +13,10 @@ namespace ITJakub.ITJakubService.DataContracts
         IEnumerable<AuthorDetailContract> GetAllAuthors();
 
         [OperationContract]
-        string GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat);
+        string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat);
+
+        [OperationContract]
+        string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
         string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat);

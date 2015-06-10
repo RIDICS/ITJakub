@@ -6,7 +6,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
     public class ReaderController : Controller
     {
         private readonly ItJakubServiceClient m_mainServiceClient;
-        private ItJakubServiceEncryptedClient m_mainServiceEncryptedClient;
+        private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient;
 
         public ReaderController()
         {
@@ -17,7 +17,13 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         public ActionResult GetBookPageByName(string bookId, string pageName)
         {
             var mainServiceClient = new ItJakubServiceClient();
-            var text =  mainServiceClient.GetBookPageByNameAsync(bookId, pageName, OutputFormatEnumContract.Html);
+            var text =  mainServiceClient.GetBookPageByName(bookId, pageName, OutputFormatEnumContract.Html);
+            return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetBookPageByXmlId(string bookId, string pageXmlId)
+        {
+            var mainServiceClient = new ItJakubServiceClient();
+            var text = mainServiceClient.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html);
             return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
         }
 
@@ -38,14 +44,14 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             return Json(new { pageText = m_mainServiceClient.GetBookPageByPosition(bookId, pagePosition, OutputFormatEnumContract.Html) }, JsonRequestBehavior.AllowGet);
         }
 
-        public void AddBookmark(string bookId, string pageName)
+        public void AddBookmark(string bookId, string pageXmlId)
         {
-            m_mainServiceEncryptedClient.AddBookmark(bookId, pageName, HttpContext.User.Identity.Name);
+            m_mainServiceEncryptedClient.AddBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
         }
 
-        public void RemoveBookmark(string bookId, string pageName)
+        public void RemoveBookmark(string bookId, string pageXmlId)
         {
-            m_mainServiceEncryptedClient.RemoveBookmark(bookId, pageName, HttpContext.User.Identity.Name);
+            m_mainServiceEncryptedClient.RemoveBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
         }
 
         public void GetAllBookmarks(string bookId)

@@ -1,4 +1,3 @@
-using System.CodeDom;
 using System.Collections.Generic;
 using ITJakub.ITJakubService.DataContracts;
 
@@ -10,7 +9,7 @@ namespace ITJakub.ITJakubService.Core
         {
             return new List<PageBookmarkContract>
             {
-                new PageBookmarkContract{Test="TESTOVACI STRING PRO ZALOZKY"}
+                new PageBookmarkContract{ PageXmlId= "t-1.body-1.div-2.div-1.div-111.p-2.pb-1", PagePosition = 197} //TODO TEST DATA FROM LekChir
             };
 
         }

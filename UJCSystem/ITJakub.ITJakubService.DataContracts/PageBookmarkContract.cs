@@ -6,6 +6,10 @@ namespace ITJakub.ITJakubService.DataContracts
     public class PageBookmarkContract
     {
         [DataMember]
-        public string Test { get; set; }
+        public string PageXmlId { get; set; }
+
+
+        [DataMember]
+        public int PagePosition { get; set; }
     }
 }

@@ -49,9 +49,14 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetBooksWithCategoriesByBookType(bookType);
         }
 
-        public string GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
         {
             return m_bookManager.GetBookPageByName(bookGuid, pageName, resultFormat);
+        }
+
+        public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat)
+        {
+            return m_bookManager.GetBookPageByXmlId(bookGuid, pageXmlId, resultFormat);
         }
 
         public string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
