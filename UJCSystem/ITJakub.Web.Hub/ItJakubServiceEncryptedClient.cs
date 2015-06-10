@@ -98,5 +98,15 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public void AddBookmark(string bookId, string pageName, string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveBookmark(string bookId, string pageName, string username)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

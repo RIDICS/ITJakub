@@ -6,9 +6,12 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
     public class ReaderController : Controller
     {
         private readonly ItJakubServiceClient m_mainServiceClient;
+        private ItJakubServiceEncryptedClient m_mainServiceEncryptedClient;
+
         public ReaderController()
         {
             m_mainServiceClient = new ItJakubServiceClient();
+            m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
         }
 
         public ActionResult GetBookPageByName(string bookId, string pageName)
@@ -37,12 +40,17 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public void AddBookmark(string bookId, string pageName)
         {
-            m_mainServiceClient.AddBookmark(bookId, pageName, HttpContext.User.Identity.Name);
+            m_mainServiceEncryptedClient.AddBookmark(bookId, pageName, HttpContext.User.Identity.Name);
         }
 
         public void RemoveBookmark(string bookId, string pageName)
         {
-            m_mainServiceClient.RemoveBookmark(bookId, pageName, HttpContext.User.Identity.Name);
+            m_mainServiceEncryptedClient.RemoveBookmark(bookId, pageName, HttpContext.User.Identity.Name);
+        }
+
+        public void GetAllBookmarks(string bookId)
+        {
+            m_mainServiceEncryptedClient.GetPageBookmarks(bookId, HttpContext.User.Identity.Name);
         }
     }
 }
