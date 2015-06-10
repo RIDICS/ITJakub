@@ -1189,7 +1189,7 @@ class TextPanel extends RightSidePanel {
             $(pageTextDiv).addClass('unloaded');
             $(pageTextDiv).data('page-name', page.text);
             $(pageTextDiv).data('page-xmlId', page.xmlId);
-            pageTextDiv.id = page.xmlId; //ID IS HERE
+            pageTextDiv.id = page.xmlId; // each page has own id
 
             var pageNameDiv: HTMLDivElement = window.document.createElement('div');
             $(pageNameDiv).addClass('page-name');

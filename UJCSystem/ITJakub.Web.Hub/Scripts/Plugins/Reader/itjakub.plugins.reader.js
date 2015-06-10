@@ -1007,7 +1007,7 @@ var TextPanel = (function (_super) {
             $(pageTextDiv).addClass('unloaded');
             $(pageTextDiv).data('page-name', page.text);
             $(pageTextDiv).data('page-xmlId', page.xmlId);
-            pageTextDiv.id = page.xmlId; //ID IS HERE
+            pageTextDiv.id = page.xmlId; // each page has own id
             var pageNameDiv = window.document.createElement('div');
             $(pageNameDiv).addClass('page-name');
             $(pageNameDiv).html("[" + page.text + "]");
