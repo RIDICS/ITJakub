@@ -9,17 +9,21 @@
     </id>
 
     <discriminator column="FavoriteType"
-                   not-null="true" />
+                   not-null="true" 
+                   type="System.String"/>
 
-    <many-to-one name="User">
-      <column name="User" not-null="true" />
-    </many-to-one>
+
+    <many-to-one name="User"
+                column="[User]"
+                class="User"/>
 
     <subclass
       name="PageBookmark"
       discriminator-value="PageBookmark">
 
       <property name="PageXmlId" />
+      
+      <property name="PagePosition"/>
 
     </subclass>
   </class>
