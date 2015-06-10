@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
@@ -26,11 +27,9 @@ namespace ITJakub.ITJakubService.Core
 
         public List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName)
         {
-            return new List<PageBookmarkContract>
-            {
-                new PageBookmarkContract{ PageXmlId= "t-1.body-1.div-2.div-1.div-111.p-2.pb-1", PagePosition = 197} //TODO TEST DATA FROM LekChir
-            };
 
+            var allBookmarks = m_favoritesRepository.GetAllPageBookmarksByBookId(bookId, userName);
+            return Mapper.Map<List<PageBookmarkContract>>(allBookmarks);
         }
 
         public void AddBookmark(string bookId, string pageXmlId, string userName)

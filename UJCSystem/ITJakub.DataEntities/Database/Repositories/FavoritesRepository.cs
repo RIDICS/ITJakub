@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
@@ -39,6 +40,24 @@ namespace ITJakub.DataEntities.Database.Repositories
                 }
 
                 Delete(bookmark);
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<PageBookmark> GetAllPageBookmarksByBookId(string bookId, string userName)
+        {
+            using (var session = GetSession())
+            {
+                
+                 PageBookmark pageBookmarkAlias = null;
+                User userAlias = null;
+                Book bookAlias = null;
+
+                return session.QueryOver<PageBookmark>(() => pageBookmarkAlias)
+                    .JoinQueryOver(() => pageBookmarkAlias.Book, () => bookAlias)
+                    .JoinQueryOver(() => pageBookmarkAlias.User, () => userAlias)
+                    .Where(() => userAlias.UserName == userName && bookAlias.Guid == bookId)
+                    .List<PageBookmark>();
             }
         }
     }
