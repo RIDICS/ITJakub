@@ -99,6 +99,68 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public void AddBookmark(string bookId, string pageName, string userName)
+        {
+            try
+            {
+                Channel.AddBookmark(bookId,pageName, userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetPageBookmarks timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public void RemoveBookmark(string bookId, string pageName, string userName)
+        {
+            try
+            {
+                Channel.RemoveBookmark(bookId,pageName, userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetPageBookmarks timeouted with: {0}", ex);
+                throw;
+            }
+        }
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetPageBookmarks timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
         public void AddBookmark(string bookId, string pageXmlId, string username)
         {
             throw new NotImplementedException();

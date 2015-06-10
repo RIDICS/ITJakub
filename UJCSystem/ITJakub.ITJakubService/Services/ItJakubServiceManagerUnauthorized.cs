@@ -39,6 +39,16 @@ namespace ITJakub.ITJakubService.Services
             return m_favoriteManager.GetPageBookmarks(bookId, userName);
         }
 
+        public void AddBookmark(string bookId, string pageName, string userName)
+        {
+           m_favoriteManager.AddBookmark(bookId,pageName, userName);
+        }
+
+        public void RemoveBookmark(string bookId, string pageName, string userName)
+        {
+            m_favoriteManager.RemoveBookmark(bookId, pageName, userName);
+        }
+
         #endregion
     }
 }

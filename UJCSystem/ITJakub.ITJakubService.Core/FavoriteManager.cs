@@ -13,5 +13,15 @@ namespace ITJakub.ITJakubService.Core
             };
 
         }
+
+        public void AddBookmark(string bookId, string pageName, string userName)
+        {
+            return;
+        }
+
+        public void RemoveBookmark(string bookId, string pageName, string userName)
+        {
+            return;
+        }
     }
 }

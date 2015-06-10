@@ -112,7 +112,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Database\Entities\Book.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\BookVersion.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\BookVersion.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Database\Entities\Category.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\User.hbm.xml" />
   </ItemGroup>
