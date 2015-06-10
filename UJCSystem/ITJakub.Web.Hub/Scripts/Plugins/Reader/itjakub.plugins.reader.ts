@@ -5,7 +5,7 @@ class ReaderModule {
     readerContainer: string;
     sliderOnPage: number;
     actualPageIndex: number;
-    pages: Array<string>;
+    pages: Array<BookPage>;
     pagerDisplayPages: number;
     preloadPagesBefore: number;
     preloadPagesAfter: number;
@@ -28,7 +28,7 @@ class ReaderModule {
         this.bookId = bookId;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
-        this.pages = new Array<string>();
+        this.pages = new Array<BookPage>();
         this.leftSidePanels = new Array<SidePanel>();
         this.rightSidePanels = new Array<SidePanel>();
 
@@ -43,7 +43,8 @@ class ReaderModule {
         });
         
         for (var i = 0; i < pageList.length; i++) { //load pageList
-            this.pages.push(pageList[i]["Text"]);
+            var page = pageList[i];
+            this.pages.push(new BookPage(page["XmlId"],page["Text"],page["Position"]));
         }
 
         $(this.readerContainer).empty();
@@ -119,7 +120,7 @@ class ReaderModule {
             slide: (event, ui) => {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
-                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[ui.value]);
+                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[ui.value].text);
 
             },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
@@ -137,7 +138,7 @@ class ReaderModule {
 
         var innerTooltip: HTMLDivElement = document.createElement('div');
         $(innerTooltip).addClass('tooltip-inner');
-        $(innerTooltip).html("Strana: " + this.pages[0]);
+        $(innerTooltip).html("Strana: " + this.pages[0].text);
         sliderTooltip.appendChild(innerTooltip);
         $(sliderTooltip).hide();
 
@@ -168,7 +169,17 @@ class ReaderModule {
         pageInputButton.innerHTML = "Přejít na stránku";
         $(pageInputButton).addClass('page-input-button');
         $(pageInputButton).click((event: Event) => {
-            this.moveToPage($('#pageInputText').val(), true);
+            var pageName = $('#pageInputText').val();
+            var pageIndex: number = -1;
+            for (var i = 0; i < this.pages.length; i++) {
+                if (this.pages[i].text === pageName) {
+                    pageIndex = i;
+                    break;
+                }
+            }
+            //TODO log pageIndex not exist
+            var page: BookPage = this.pages[pageIndex];
+            this.moveToPage(page.xmlId, true);
         });
         pageInputDiv.appendChild(pageInputButton);
 
@@ -227,10 +238,10 @@ class ReaderModule {
             $(liElement).data('page-index', index);
             anchor = document.createElement('a');
             anchor.href = '#';
-            anchor.innerHTML = page;
+            anchor.innerHTML = page.text;
             $(anchor).click((event: Event) => {
                 event.stopPropagation();
-                this.moveToPage(page, true);
+                this.moveToPage(page.xmlId, true);
                 return false;
             });
             liElement.appendChild(anchor);
@@ -480,13 +491,19 @@ class ReaderModule {
         }
     }
 
-    moveToPage(page: string, scrollTo: boolean) {
-        var pageIndex: number = $.inArray(page, this.pages);
+    moveToPage(pageXmlId: string, scrollTo: boolean) {
+        var pageIndex: number = -1;
+        for (var i = 0; i < this.pages.length; i++) {
+            if (this.pages[i].xmlId === pageXmlId) {
+                pageIndex = i;
+                break;
+            }
+        }
         if (pageIndex >= 0 && pageIndex < this.pages.length) {
             this.moveToPageNumber(pageIndex, scrollTo);
             
         } else {
-            console.log("Page '" + page + "' does not exist");
+            console.log("Page with id '" + pageXmlId + "' does not exist");
             //TODO tell user page not exist  
         }
     }
@@ -494,7 +511,7 @@ class ReaderModule {
     actualizeSlider(pageIndex: number) {
         var slider = $(this.readerContainer).find('.slider');
         $(slider).slider().slider('value', pageIndex);
-        $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex]);
+        $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex].text);
     }
 
     actualizePagination(pageIndex: number) {
@@ -543,10 +560,11 @@ class ReaderModule {
     addBookmark() {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
-        var actualPageName = this.pages[this.actualPageIndex];
+        var actualPage: BookPage = this.pages[this.actualPageIndex];
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
         $(bookmarkSpan).data('page-index', this.actualPageIndex);
-        $(bookmarkSpan).data('page-name', actualPageName);
+        $(bookmarkSpan).data('page-name', actualPage.text);
+        $(bookmarkSpan).data('page-xmlId', actualPage.xmlId);
 
         var computedPosition = (positionStep * this.actualPageIndex);
         $(bookmarkSpan).css('left', computedPosition + '%');
@@ -554,7 +572,7 @@ class ReaderModule {
         $.ajax({
             type: "POST",
             traditional: true,
-            data: JSON.stringify({ bookId: this.bookId, pageName: actualPageName}),
+            data: JSON.stringify({ bookId: this.bookId, pageXmlId: actualPage.xmlId}),
             url: getBaseUrl() + "Reader/AddBookmark",
             dataType: 'json',
             contentType: 'application/json',
@@ -574,9 +592,9 @@ class ReaderModule {
             return false;
         }
 
-        var actualPageName = this.pages[this.actualPageIndex];
+        var actualPage: BookPage = this.pages[this.actualPageIndex];
         var targetBookmark = $(bookmarks).filter(function(index) {
-            return $(this).data("page-name") === actualPageName;
+            return $(this).data("page-xmlId") === actualPage.xmlId;
         });
 
         if (typeof targetBookmark === 'undefined' || targetBookmark == null|| targetBookmark.length === 0) {
@@ -586,7 +604,7 @@ class ReaderModule {
         $.ajax({
             type: "POST",
             traditional: true,
-            data: JSON.stringify({ bookId: this.bookId, pageName: actualPageName }),
+            data: JSON.stringify({ bookId: this.bookId, pageXmlId: actualPage.xmlId }),
             url: getBaseUrl() + "Reader/RemoveBookmark",
             dataType: 'json',
             contentType: 'application/json',
@@ -986,11 +1004,12 @@ class ContentPanel extends LeftSidePanel {
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
-                var rootContentItems = response["content"];
+                var rootContentItems: JSON[] = response["content"];
                 var ulElement = document.createElement("ul");
                 $(ulElement).addClass("content-item-root-list");
                 for (var i = 0; i < rootContentItems.length; i++) {
-                    $(ulElement).append(this.makeContentItem(rootContentItems[i]));
+                    var jsonItem: JSON = rootContentItems[i];
+                    $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
                 }
                 
                 $(this.panelBodyHtml).empty();
@@ -1010,35 +1029,41 @@ class ContentPanel extends LeftSidePanel {
         });
     }
 
-    private makeContentItemChilds(contentItem): HTMLUListElement {
-        var childItems = contentItem["ChildBookContentItems"];
+    private parseJsonItemToContentItem(jsonItem: JSON): ContentItem {
+        return new ContentItem(jsonItem["Text"], jsonItem["ReferredPageXmlId"],
+            jsonItem["ReferredPageName"], jsonItem["ChildBookContentItems"]);
+    }
+
+    private makeContentItemChilds(contentItem: ContentItem): HTMLUListElement {
+        var childItems:JSON[] = contentItem.childBookContentItems;
         if (childItems.length === 0 ) return null;
         var ulElement = document.createElement("ul");
         $(ulElement).addClass("content-item-list");
         for (var i = 0; i < childItems.length; i++) {
-            $(ulElement).append(this.makeContentItem(childItems[i]));
+            var jsonItem:JSON = childItems[i];
+            $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
         }
         return ulElement;
     }
 
-    private makeContentItem(contentItem): HTMLLIElement {
+    private makeContentItem(contentItem: ContentItem): HTMLLIElement {
         var liElement = document.createElement("li");
         $(liElement).addClass("content-item");
 
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            this.parentReader.moveToPage(contentItem["ReferredPageName"], true);
+            this.parentReader.moveToPage(contentItem.referredPageXmlId, true);
         });
         
 
         var textSpanElement = document.createElement("span");
         $(textSpanElement).addClass("content-item-text");
-        textSpanElement.innerHTML = contentItem["Text"];
+        textSpanElement.innerHTML = contentItem.text;
 
         var pageNameSpanElement = document.createElement("span");
         $(pageNameSpanElement).addClass("content-item-page-name");
-        pageNameSpanElement.innerHTML = "["+contentItem["ReferredPageName"]+"]";
+        pageNameSpanElement.innerHTML = "["+contentItem.referredPageName+"]";
         
         $(hrefElement).append(pageNameSpanElement);
         $(hrefElement).append(textSpanElement);
@@ -1151,21 +1176,24 @@ class TextPanel extends RightSidePanel {
                 }
             });
 
-            rootReference.parentReader.moveToPage($(pageWithMinOffset).data('page-name'), false);
+            rootReference.parentReader.moveToPage($(pageWithMinOffset).data('page-xmlId'), false);
         });
 
         var textAreaDiv: HTMLDivElement = window.document.createElement('div');
         $(textAreaDiv).addClass('reader-text');
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
+            var page: BookPage = rootReference.parentReader.pages[i];
+
             var pageTextDiv: HTMLDivElement = window.document.createElement('div');
             $(pageTextDiv).addClass('page');
             $(pageTextDiv).addClass('unloaded');
-            $(pageTextDiv).data('page-name', rootReference.parentReader.pages[i]);
-            pageTextDiv.id = 'page_' + rootReference.parentReader.pages[i];
+            $(pageTextDiv).data('page-name', page.text);
+            $(pageTextDiv).data('page-xmlId', page.xmlId);
+            pageTextDiv.id = 'page_' + page.xmlId;
 
             var pageNameDiv: HTMLDivElement = window.document.createElement('div');
             $(pageNameDiv).addClass('page-name');
-            $(pageNameDiv).html("[" + rootReference.parentReader.pages[i] + "]");
+            $(pageNameDiv).html("[" + page.text + "]");
 
             var pageDiv: HTMLDivElement = window.document.createElement('div');
             $(pageDiv).addClass("page-wrapper");
@@ -1192,12 +1220,12 @@ class TextPanel extends RightSidePanel {
         this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
     }
 
-    displayPage(pageName: string, scrollTo: boolean) {
-        var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
+    displayPage(page: BookPage, scrollTo: boolean) {
+        var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + page.xmlId);
         var pageLoaded: boolean = !($(pageDiv).hasClass('unloaded'));
         var pageLoading: boolean = $(pageDiv).hasClass('loading');
         if (!pageLoaded && !pageLoading) {
-            this.downloadPageByName(pageName);
+            this.downloadPageByXmlId(page);
         }
         if (scrollTo) {
             this.scrollTextToPositionFromTop(0);
@@ -1206,7 +1234,7 @@ class TextPanel extends RightSidePanel {
 
             if (typeof this.childwindow !== 'undefined') {
                 $(".reader-text-container", this.childwindow.document).scrollTop(0);
-                var pageToScrollOffset = $('#page_' + pageName, this.childwindow.document).offset().top;
+                var pageToScrollOffset = $('#page_' + page.xmlId, this.childwindow.document).offset().top;
                 $(".reader-text-container", this.childwindow.document).scrollTop(pageToScrollOffset);
             }
         }
@@ -1232,17 +1260,17 @@ class TextPanel extends RightSidePanel {
         this.parentReader.moveToPageNumber(pageIndex, true);
     }
 
-    private downloadPageByName(pageName: string) {
-        var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
+    private downloadPageByXmlId(page: BookPage) {
+        var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + page.xmlId);
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== 'undefined') {
-            $(this.windowBody).find('#page_' + pageName).addClass("loading");
+            $(this.windowBody).find('#page_' + page.xmlId).addClass("loading");
         }
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId, pageName: pageName },
-            url: getBaseUrl()+"Reader/GetBookPageByName",
+            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            url: getBaseUrl() +"Reader/GetBookPageByXmlId",
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
@@ -1252,15 +1280,70 @@ class TextPanel extends RightSidePanel {
                 $(pageContainer).removeClass('unloaded');
 
                 if (typeof this.windowBody !== 'undefined') {
-                    $(this.windowBody).find('#page_' + pageName).removeClass("loading");
-                    $(this.windowBody).find('#page_' + pageName).append(response["pageText"]);
+                    $(this.windowBody).find('#page_' + page.xmlId).removeClass("loading");
+                    $(this.windowBody).find('#page_' + page.xmlId).append(response["pageText"]);
                 }
             },
             error: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
-                $(pageContainer).append("Chyba při načítání stránky '"+pageName+"'");
+                $(pageContainer).append("Chyba při načítání stránky '"+page.text+"'");
             }
         });
+    }
+}
+
+
+class BookPage {
+    private _xmlId: string;
+    private _text: string;
+    private _position: number;
+
+    constructor(xmlId: string, text: string, position: number) {
+        this._xmlId = xmlId;
+        this._text = text;
+        this._position = position;
+    }
+
+    get xmlId(): string {
+        return this._xmlId;
+    }
+
+    get text(): string {
+        return this._text;
+    }
+
+    get position(): number {
+        return this._position;
+    }
+}
+
+class ContentItem {
+    private _referredPageXmlId: string;
+    private _referredPageName: string;
+    private _text: string;
+    private _childBookContentItems: JSON[];
+
+    constructor(text: string, referredPageXmlId: string, referredPageName: string, childBookContentItems: JSON[]) {
+        this._referredPageXmlId = referredPageXmlId;
+        this._referredPageName = referredPageName;
+        this._text = text;
+        this._childBookContentItems = childBookContentItems;
+    }
+
+    get referredPageXmlId(): string {
+        return this._referredPageXmlId;
+    }
+
+    get referredPageName(): string {
+        return this._referredPageName;
+    }
+
+    get text(): string {
+        return this._text;
+    }
+
+    get childBookContentItems(): JSON[] {
+        return this._childBookContentItems;
     }
 }
