@@ -1,7 +1,8 @@
 ﻿
 $(document).ready(() => {
 
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader");
+    var bookType = $("#listResults").data("book-type");
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", bookType);
 
     $('#searchButton').click(() => {
         var text = $('#searchbox').val();

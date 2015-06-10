@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader");
+    var bookType = $("#listResults").data("book-type");
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", bookType);
     $('#searchButton').click(function () {
         var text = $('#searchbox').val();
         $.ajax({
