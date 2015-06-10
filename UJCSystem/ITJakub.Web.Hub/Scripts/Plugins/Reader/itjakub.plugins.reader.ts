@@ -1,6 +1,5 @@
 ﻿/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
 
-
 class ReaderModule {
 
     readerContainer: string;
@@ -450,7 +449,6 @@ class ReaderModule {
 
         bodyContainerDiv.appendChild(textPanel.panelHtml);
 
-        // Image Panel
         var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
 
@@ -545,23 +543,34 @@ class ReaderModule {
     addBookmark() {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
+        var actualPageName = this.pages[this.actualPageIndex];
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
         $(bookmarkSpan).data('page-index', this.actualPageIndex);
-        $(bookmarkSpan).data('page-name', this.pages[this.actualPageIndex]);
+        $(bookmarkSpan).data('page-name', actualPageName);
 
         var computedPosition = (positionStep * this.actualPageIndex);
         $(bookmarkSpan).css('left', computedPosition + '%');
 
-        $(this.readerContainer).find('.slider').append(bookmarkSpan);
-        //TODO populate request on service for adding bookmark to DB
-
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageName: actualPageName}),
+            url: getBaseUrl() + "Reader/AddBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                $(this.readerContainer).find('.slider').append(bookmarkSpan);
+            },
+            error: (response) => {
+            }
+        });
     }
 
     removeBookmark(): boolean {
         var slider = $(this.readerContainer).find('.slider');
         var bookmarks = $(slider).find('.bookmark');
 
-        if (typeof bookmarks === 'undefined' || bookmarks.length == 0) {
+        if (typeof bookmarks === 'undefined' || bookmarks == null || bookmarks.length === 0) {
             return false;
         }
 
@@ -570,12 +579,24 @@ class ReaderModule {
             return $(this).data("page-name") === actualPageName;
         });
 
-        if (typeof targetBookmark === 'undefined' || targetBookmark.length == 0) {
+        if (typeof targetBookmark === 'undefined' || targetBookmark == null|| targetBookmark.length === 0) {
             return false;
         }
 
-        $(targetBookmark).remove();
-        //TODO populate request on service for removing bookmark from DB
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageName: actualPageName }),
+            url: getBaseUrl() + "Reader/RemoveBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                $(targetBookmark).remove();
+            },
+            error: (response) => {
+            }
+        });
+
         return true;
 
 
@@ -754,10 +775,6 @@ class SidePanel {
     }
 
     public onMoveToPage(pageIndex: number, scrollTo:boolean) {
-        //$(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
-        //if (typeof this.windowBody !== 'undefined') {
-        //    $(this.windowBody).append(" pageIndex is " + pageIndex);
-        //}
     }
 
     protected placeOnDragStartPosition(sidePanelDiv: HTMLDivElement) {
@@ -772,31 +789,14 @@ class SidePanel {
 
     makePanelWindow(documentWindow: Window): HTMLDivElement {
         return this.makePanelBody($(this.innerContent).clone(true), this, window);
-        //var innerContent = this.makeBody(this, documentWindow);
-        //return this.makePanelBody(innerContent, this, documentWindow);
     }
 
     decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
 
     onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
-
-        //var scripts = document.getElementsByTagName('script');
-        //var links = document.getElementsByTagName('link');
         this.closeButton.click();
         var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
         newWindow.document.open();
-
-        //newWindow.document.write("<head>");
-
-        //for (var i = 0; i < scripts.length; i++) {
-        //    newWindow.document.write(scripts[i].outerHTML);
-        //}
-
-        //for (var i = 0; i < links.length; i++) {
-        //    newWindow.document.write(links[i].outerHTML);
-        //}
-
-        //newWindow.document.write("</head>");
         newWindow.document.close();
 
         $(newWindow).on("beforeunload",(event: Event) => {
@@ -826,8 +826,6 @@ class SidePanel {
     onPinButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
 
     onCloseButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
-
-
 }
 
 
@@ -872,16 +870,6 @@ class LeftSidePanel extends SidePanel {
             $(sidePanelDiv).hide('slide', { direction: 'left' });
         }
     }
-
-    //protected makeBody(rootReference: SidePanel, window : Window): HTMLElement {
-    //    var movePageButton: HTMLButtonElement = window.document.createElement('button');
-    //    movePageButton.textContent = "Move to page 15";
-    //    $(movePageButton).click((event: Event) => {
-    //        rootReference.parentReader.moveToPageNumber(15, true);
-    //    });
-
-    //    return movePageButton;
-    //}
 }
 
 class SettingsPanel extends LeftSidePanel {
@@ -1004,7 +992,6 @@ class ContentPanel extends LeftSidePanel {
                 for (var i = 0; i < rootContentItems.length; i++) {
                     $(ulElement).append(this.makeContentItem(rootContentItems[i]));
                 }
-
                 
                 $(this.panelBodyHtml).empty();
                 $(this.panelBodyHtml).append(ulElement);

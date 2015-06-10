@@ -371,7 +371,6 @@ var ReaderModule = (function () {
         var textPanel = new TextPanel(this.textPanelIdentificator, this);
         this.rightSidePanels.push(textPanel);
         bodyContainerDiv.appendChild(textPanel.panelHtml);
-        // Image Panel
         var imagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
         $(imagePanel.panelHtml).hide();
@@ -451,31 +450,55 @@ var ReaderModule = (function () {
         $(actualPage).addClass('page-active');
     };
     ReaderModule.prototype.addBookmark = function () {
+        var _this = this;
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
+        var actualPageName = this.pages[this.actualPageIndex];
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
         $(bookmarkSpan).data('page-index', this.actualPageIndex);
-        $(bookmarkSpan).data('page-name', this.pages[this.actualPageIndex]);
+        $(bookmarkSpan).data('page-name', actualPageName);
         var computedPosition = (positionStep * this.actualPageIndex);
         $(bookmarkSpan).css('left', computedPosition + '%');
-        $(this.readerContainer).find('.slider').append(bookmarkSpan);
-        //TODO populate request on service for adding bookmark to DB
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageName: actualPageName }),
+            url: getBaseUrl() + "Reader/AddBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $(_this.readerContainer).find('.slider').append(bookmarkSpan);
+            },
+            error: function (response) {
+            }
+        });
     };
     ReaderModule.prototype.removeBookmark = function () {
         var slider = $(this.readerContainer).find('.slider');
         var bookmarks = $(slider).find('.bookmark');
-        if (typeof bookmarks === 'undefined' || bookmarks.length == 0) {
+        if (typeof bookmarks === 'undefined' || bookmarks == null || bookmarks.length === 0) {
             return false;
         }
         var actualPageName = this.pages[this.actualPageIndex];
         var targetBookmark = $(bookmarks).filter(function (index) {
             return $(this).data("page-name") === actualPageName;
         });
-        if (typeof targetBookmark === 'undefined' || targetBookmark.length == 0) {
+        if (typeof targetBookmark === 'undefined' || targetBookmark == null || targetBookmark.length === 0) {
             return false;
         }
-        $(targetBookmark).remove();
-        //TODO populate request on service for removing bookmark from DB
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageName: actualPageName }),
+            url: getBaseUrl() + "Reader/RemoveBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $(targetBookmark).remove();
+            },
+            error: function (response) {
+            }
+        });
         return true;
     };
     ReaderModule.prototype.repaint = function () {
@@ -606,10 +629,6 @@ var SidePanel = (function () {
         throw new Error("Not implemented");
     };
     SidePanel.prototype.onMoveToPage = function (pageIndex, scrollTo) {
-        //$(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
-        //if (typeof this.windowBody !== 'undefined') {
-        //    $(this.windowBody).append(" pageIndex is " + pageIndex);
-        //}
     };
     SidePanel.prototype.placeOnDragStartPosition = function (sidePanelDiv) {
         var dispersion = Math.floor((Math.random() * 15) + 1) * 3;
@@ -621,27 +640,15 @@ var SidePanel = (function () {
     };
     SidePanel.prototype.makePanelWindow = function (documentWindow) {
         return this.makePanelBody($(this.innerContent).clone(true), this, window);
-        //var innerContent = this.makeBody(this, documentWindow);
-        //return this.makePanelBody(innerContent, this, documentWindow);
     };
     SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
         throw new Error("Not implemented");
     };
     SidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
         var _this = this;
-        //var scripts = document.getElementsByTagName('script');
-        //var links = document.getElementsByTagName('link');
         this.closeButton.click();
         var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
         newWindow.document.open();
-        //newWindow.document.write("<head>");
-        //for (var i = 0; i < scripts.length; i++) {
-        //    newWindow.document.write(scripts[i].outerHTML);
-        //}
-        //for (var i = 0; i < links.length; i++) {
-        //    newWindow.document.write(links[i].outerHTML);
-        //}
-        //newWindow.document.write("</head>");
         newWindow.document.close();
         $(newWindow).on("beforeunload", function (event) {
             _this.onUnloadWindowMode();

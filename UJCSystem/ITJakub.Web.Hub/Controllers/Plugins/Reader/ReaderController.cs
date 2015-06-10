@@ -6,7 +6,6 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
     public class ReaderController : Controller
     {
         private readonly ItJakubServiceClient m_mainServiceClient;
-
         public ReaderController()
         {
             m_mainServiceClient = new ItJakubServiceClient();
@@ -34,6 +33,16 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         public ActionResult GetBookPageByPosition(string bookId, int pagePosition)
         {
             return Json(new { pageText = m_mainServiceClient.GetBookPageByPosition(bookId, pagePosition, OutputFormatEnumContract.Html) }, JsonRequestBehavior.AllowGet);
+        }
+
+        public void AddBookmark(string bookId, string pageName)
+        {
+            m_mainServiceClient.AddBookmark(bookId, pageName, HttpContext.User.Identity.Name);
+        }
+
+        public void RemoveBookmark(string bookId, string pageName)
+        {
+            m_mainServiceClient.RemoveBookmark(bookId, pageName, HttpContext.User.Identity.Name);
         }
     }
 }
