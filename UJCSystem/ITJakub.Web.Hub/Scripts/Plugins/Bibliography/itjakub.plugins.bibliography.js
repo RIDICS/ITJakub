@@ -2,9 +2,10 @@
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
 var BibliographyModule = (function () {
-    function BibliographyModule(booksContainer, sortBarContainer) {
+    function BibliographyModule(booksContainer, sortBarContainer, forcedBookType) {
         this.booksContainer = booksContainer;
         this.sortBarContainer = sortBarContainer;
+        this.forcedBookType = forcedBookType;
         //Download configuration
         var configObj;
         $.ajax({
@@ -57,7 +58,13 @@ var BibliographyModule = (function () {
         //$(liElement).data('century', bibItem.Century); //TODO add values for sorting
         var visibleContent = document.createElement('div');
         $(visibleContent).addClass('visible-content');
-        var bibFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
+        var bibFactory;
+        if (typeof this.forcedBookType == 'undefined') {
+            bibFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
+        }
+        else {
+            bibFactory = this.bibliographyFactoryResolver.getFactoryForType(this.forcedBookType);
+        }
         var panel = bibFactory.makeLeftPanel(bibItem);
         if (panel != null)
             visibleContent.appendChild(panel);

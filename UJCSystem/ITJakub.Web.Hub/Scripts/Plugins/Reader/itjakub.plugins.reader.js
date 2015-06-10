@@ -371,7 +371,6 @@ var ReaderModule = (function () {
         var textPanel = new TextPanel(this.textPanelIdentificator, this);
         this.rightSidePanels.push(textPanel);
         bodyContainerDiv.appendChild(textPanel.panelHtml);
-        // Image Panel
         var imagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
         $(imagePanel.panelHtml).hide();
@@ -451,31 +450,55 @@ var ReaderModule = (function () {
         $(actualPage).addClass('page-active');
     };
     ReaderModule.prototype.addBookmark = function () {
+        var _this = this;
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
+        var actualPageName = this.pages[this.actualPageIndex];
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
         $(bookmarkSpan).data('page-index', this.actualPageIndex);
-        $(bookmarkSpan).data('page-name', this.pages[this.actualPageIndex]);
+        $(bookmarkSpan).data('page-name', actualPageName);
         var computedPosition = (positionStep * this.actualPageIndex);
         $(bookmarkSpan).css('left', computedPosition + '%');
-        $(this.readerContainer).find('.slider').append(bookmarkSpan);
-        //TODO populate request on service for adding bookmark to DB
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageName: actualPageName }),
+            url: getBaseUrl() + "Reader/AddBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $(_this.readerContainer).find('.slider').append(bookmarkSpan);
+            },
+            error: function (response) {
+            }
+        });
     };
     ReaderModule.prototype.removeBookmark = function () {
         var slider = $(this.readerContainer).find('.slider');
         var bookmarks = $(slider).find('.bookmark');
-        if (typeof bookmarks === 'undefined' || bookmarks.length == 0) {
+        if (typeof bookmarks === 'undefined' || bookmarks == null || bookmarks.length === 0) {
             return false;
         }
         var actualPageName = this.pages[this.actualPageIndex];
         var targetBookmark = $(bookmarks).filter(function (index) {
             return $(this).data("page-name") === actualPageName;
         });
-        if (typeof targetBookmark === 'undefined' || targetBookmark.length == 0) {
+        if (typeof targetBookmark === 'undefined' || targetBookmark == null || targetBookmark.length === 0) {
             return false;
         }
-        $(targetBookmark).remove();
-        //TODO populate request on service for removing bookmark from DB
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageName: actualPageName }),
+            url: getBaseUrl() + "Reader/RemoveBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $(targetBookmark).remove();
+            },
+            error: function (response) {
+            }
+        });
         return true;
     };
     ReaderModule.prototype.repaint = function () {
@@ -606,10 +629,6 @@ var SidePanel = (function () {
         throw new Error("Not implemented");
     };
     SidePanel.prototype.onMoveToPage = function (pageIndex, scrollTo) {
-        //$(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
-        //if (typeof this.windowBody !== 'undefined') {
-        //    $(this.windowBody).append(" pageIndex is " + pageIndex);
-        //}
     };
     SidePanel.prototype.placeOnDragStartPosition = function (sidePanelDiv) {
         var dispersion = Math.floor((Math.random() * 15) + 1) * 3;
@@ -621,27 +640,15 @@ var SidePanel = (function () {
     };
     SidePanel.prototype.makePanelWindow = function (documentWindow) {
         return this.makePanelBody($(this.innerContent).clone(true), this, window);
-        //var innerContent = this.makeBody(this, documentWindow);
-        //return this.makePanelBody(innerContent, this, documentWindow);
     };
     SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
         throw new Error("Not implemented");
     };
     SidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
         var _this = this;
-        //var scripts = document.getElementsByTagName('script');
-        //var links = document.getElementsByTagName('link');
         this.closeButton.click();
         var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
         newWindow.document.open();
-        //newWindow.document.write("<head>");
-        //for (var i = 0; i < scripts.length; i++) {
-        //    newWindow.document.write(scripts[i].outerHTML);
-        //}
-        //for (var i = 0; i < links.length; i++) {
-        //    newWindow.document.write(links[i].outerHTML);
-        //}
-        //newWindow.document.write("</head>");
         newWindow.document.close();
         $(newWindow).on("beforeunload", function (event) {
             _this.onUnloadWindowMode();
@@ -721,6 +728,7 @@ var SettingsPanel = (function (_super) {
         _super.call(this, identificator, "Zobrazení", readerModule);
     }
     SettingsPanel.prototype.makeBody = function (rootReference, window) {
+        var _this = this;
         var textButtonSpan = window.document.createElement("span");
         $(textButtonSpan).addClass("glyphicon glyphicon-text-size");
         var textButton = window.document.createElement("button");
@@ -748,10 +756,37 @@ var SettingsPanel = (function (_super) {
         var showPageCheckboxDiv = window.document.createElement("div");
         var showPageNameCheckbox = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
+        $(showPageNameCheckbox).change(function (eventData) {
+            var readerText = $("#" + _this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget = (eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-show-page-names");
+            }
+            else {
+                $(readerText).removeClass("reader-text-show-page-names");
+            }
+        });
         var showPageNameSpan = window.document.createElement("span");
         showPageNameSpan.innerHTML = "Zobrazit číslování stránek";
         showPageCheckboxDiv.appendChild(showPageNameCheckbox);
         showPageCheckboxDiv.appendChild(showPageNameSpan);
+        var showPageOnNewLineDiv = window.document.createElement("div");
+        var showPageOnNewLineCheckbox = window.document.createElement("input");
+        showPageOnNewLineCheckbox.type = "checkbox";
+        $(showPageOnNewLineCheckbox).change(function (eventData) {
+            var readerText = $("#" + _this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget = (eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-page-new-line");
+            }
+            else {
+                $(readerText).removeClass("reader-text-page-new-line");
+            }
+        });
+        var showPageOnNewLineSpan = window.document.createElement("span");
+        showPageOnNewLineSpan.innerHTML = "Zalamovat stránky";
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineSpan);
         var showCommentCheckboxDiv = window.document.createElement("div");
         var showCommentCheckbox = window.document.createElement("input");
         showCommentCheckbox.type = "checkbox";
@@ -760,6 +795,7 @@ var SettingsPanel = (function (_super) {
         showCommentCheckboxDiv.appendChild(showCommentCheckbox);
         showCommentCheckboxDiv.appendChild(showCommentSpan);
         checkboxesDiv.appendChild(showPageCheckboxDiv);
+        checkboxesDiv.appendChild(showPageOnNewLineDiv);
         checkboxesDiv.appendChild(showCommentCheckboxDiv);
         var innerContent = window.document.createElement("div");
         innerContent.appendChild(buttonsDiv);
@@ -942,10 +978,18 @@ var TextPanel = (function (_super) {
         var textAreaDiv = window.document.createElement('div');
         $(textAreaDiv).addClass('reader-text');
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
+            var pageTextDiv = window.document.createElement('div');
+            $(pageTextDiv).addClass('page');
+            $(pageTextDiv).addClass('unloaded');
+            $(pageTextDiv).data('page-name', rootReference.parentReader.pages[i]);
+            pageTextDiv.id = 'page_' + rootReference.parentReader.pages[i];
+            var pageNameDiv = window.document.createElement('div');
+            $(pageNameDiv).addClass('page-name');
+            $(pageNameDiv).html("[" + rootReference.parentReader.pages[i] + "]");
             var pageDiv = window.document.createElement('div');
-            $(pageDiv).addClass('page');
-            $(pageDiv).data('page-name', rootReference.parentReader.pages[i]);
-            pageDiv.id = 'page_' + rootReference.parentReader.pages[i];
+            $(pageDiv).addClass("page-wrapper");
+            $(pageDiv).append(pageTextDiv);
+            $(pageDiv).append(pageNameDiv);
             textAreaDiv.appendChild(pageDiv);
         }
         var dummyPage = window.document.createElement('div');
@@ -965,9 +1009,9 @@ var TextPanel = (function (_super) {
     };
     TextPanel.prototype.displayPage = function (pageName, scrollTo) {
         var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
-        var pageLoaded = $(pageDiv).data('loaded');
+        var pageLoaded = !($(pageDiv).hasClass('unloaded'));
         var pageLoading = $(pageDiv).hasClass('loading');
-        if ((typeof pageLoaded === 'undefined' || !pageLoaded) && !pageLoading) {
+        if (!pageLoaded && !pageLoading) {
             this.downloadPageByName(pageName);
         }
         if (scrollTo) {
@@ -1017,7 +1061,7 @@ var TextPanel = (function (_super) {
                 $(pageContainer).empty();
                 $(pageContainer).append(response["pageText"]);
                 $(pageContainer).removeClass("loading");
-                $(pageContainer).data('loaded', true);
+                $(pageContainer).removeClass('unloaded');
                 if (typeof _this.windowBody !== 'undefined') {
                     $(_this.windowBody).find('#page_' + pageName).removeClass("loading");
                     $(_this.windowBody).find('#page_' + pageName).append(response["pageText"]);

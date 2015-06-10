@@ -21,10 +21,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(m => m.Password, new {@class = "col-md-3 control-label"})
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
                         <div class="col-md-8">
-                            @Html.PasswordFor(m => m.Password, new {@class = "form-control"})
-                            @Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -44,9 +44,9 @@
                         @Html.ActionLink("Registrovat se jako nový uživatel", "Register")
                     </p>
                     @* Enable this once you have account confirmation enabled for password reset functionality
-                        <p>
-                            @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                        </p>*@
+                <p>
+                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                </p>*@
                 }
             </section>
         </div>

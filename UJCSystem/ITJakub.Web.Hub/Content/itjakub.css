@@ -869,6 +869,32 @@ body {
   float: right;
   margin-left: 5px;
 }
+.reader-text div {
+  display: inline;
+}
+.reader-text div.page-name {
+  text-align: center;
+  font-size: 1.1em;
+  display: none;
+}
+.reader-text-show-page-names div.page-name {
+  display: inline;
+}
+.reader-text div.page.unloaded {
+  display: block;
+}
+.reader-text-page-new-line div {
+  display: block;
+}
+.reader-text-page-new-line div.page-name {
+  display: none;
+}
+.reader-text-page-new-line.reader-text-show-page-names div.page-name {
+  display: block;
+}
+.page-wrapper {
+  margin-bottom: 5px;
+}
 .dropdown-select {
   margin-right: 5px;
   float: left;
@@ -1012,6 +1038,9 @@ a.main_logo_href img {
 .main-navbar-container a:hover {
   color: #afdee4;
   text-decoration: none;
+}
+ul.navbar-right.navbar-login {
+  margin-right: 20px!important;
 }
 .navbar-login li,
 ul {

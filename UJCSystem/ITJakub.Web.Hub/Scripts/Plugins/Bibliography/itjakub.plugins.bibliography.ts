@@ -5,12 +5,14 @@ class BibliographyModule {
 
     booksContainer: string;
     sortBarContainer: string;
+    forcedBookType: string;
     bibliographyFactoryResolver: BibliographyFactoryResolver;
     configurationManager: ConfigurationManager;
 
-    constructor(booksContainer: string, sortBarContainer: string) {
+    constructor(booksContainer: string, sortBarContainer: string, forcedBookType?: string) {
         this.booksContainer = booksContainer;
         this.sortBarContainer = sortBarContainer;
+        this.forcedBookType = forcedBookType;
 
         //Download configuration
         var configObj;
@@ -68,7 +70,12 @@ class BibliographyModule {
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
 
-        var bibFactory: BibliographyFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
+        var bibFactory: BibliographyFactory;
+        if (typeof this.forcedBookType == 'undefined') {
+            bibFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
+        } else {
+            bibFactory = this.bibliographyFactoryResolver.getFactoryForType(this.forcedBookType);
+        }
 
         var panel = bibFactory.makeLeftPanel(bibItem);
         if (panel != null) visibleContent.appendChild(panel);

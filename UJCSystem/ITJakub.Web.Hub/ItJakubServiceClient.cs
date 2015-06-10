@@ -241,6 +241,60 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public List<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
+        {
+            try
+            {
+                return Channel.SearchBooksWithBookType(term, bookType);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchBooksWithBookType failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchBooksWithBookType failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchBooksWithBookType timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
+        {
+            try
+            {
+                return Channel.GetBooksByBookType(bookType);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBooksByBookType failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBooksByBookType failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBooksByBookType timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
         {
             try
