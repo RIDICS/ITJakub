@@ -973,6 +973,7 @@ var TextPanel = (function (_super) {
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
             var pageTextDiv = window.document.createElement('div');
             $(pageTextDiv).addClass('page');
+            $(pageTextDiv).addClass('unloaded');
             $(pageTextDiv).data('page-name', rootReference.parentReader.pages[i]);
             pageTextDiv.id = 'page_' + rootReference.parentReader.pages[i];
             var pageNameDiv = window.document.createElement('div');
@@ -1001,9 +1002,9 @@ var TextPanel = (function (_super) {
     };
     TextPanel.prototype.displayPage = function (pageName, scrollTo) {
         var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
-        var pageLoaded = $(pageDiv).data('loaded');
+        var pageLoaded = !($(pageDiv).hasClass('unloaded'));
         var pageLoading = $(pageDiv).hasClass('loading');
-        if ((typeof pageLoaded === 'undefined' || !pageLoaded) && !pageLoading) {
+        if (!pageLoaded && !pageLoading) {
             this.downloadPageByName(pageName);
         }
         if (scrollTo) {
@@ -1053,7 +1054,7 @@ var TextPanel = (function (_super) {
                 $(pageContainer).empty();
                 $(pageContainer).append(response["pageText"]);
                 $(pageContainer).removeClass("loading");
-                $(pageContainer).data('loaded', true);
+                $(pageContainer).removeClass('unloaded');
                 if (typeof _this.windowBody !== 'undefined') {
                     $(_this.windowBody).find('#page_' + pageName).removeClass("loading");
                     $(_this.windowBody).find('#page_' + pageName).append(response["pageText"]);

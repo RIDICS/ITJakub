@@ -1172,6 +1172,7 @@ class TextPanel extends RightSidePanel {
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
             var pageTextDiv: HTMLDivElement = window.document.createElement('div');
             $(pageTextDiv).addClass('page');
+            $(pageTextDiv).addClass('unloaded');
             $(pageTextDiv).data('page-name', rootReference.parentReader.pages[i]);
             pageTextDiv.id = 'page_' + rootReference.parentReader.pages[i];
 
@@ -1206,9 +1207,9 @@ class TextPanel extends RightSidePanel {
 
     displayPage(pageName: string, scrollTo: boolean) {
         var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
-        var pageLoaded: boolean = $(pageDiv).data('loaded');
+        var pageLoaded: boolean = !($(pageDiv).hasClass('unloaded'));
         var pageLoading: boolean = $(pageDiv).hasClass('loading');
-        if ( (typeof pageLoaded === 'undefined' || !pageLoaded) && !pageLoading ) {
+        if (!pageLoaded && !pageLoading) {
             this.downloadPageByName(pageName);
         }
         if (scrollTo) {
@@ -1261,7 +1262,7 @@ class TextPanel extends RightSidePanel {
                 $(pageContainer).empty();
                 $(pageContainer).append(response["pageText"]);
                 $(pageContainer).removeClass("loading");
-                $(pageContainer).data('loaded', true);
+                $(pageContainer).removeClass('unloaded');
 
                 if (typeof this.windowBody !== 'undefined') {
                     $(this.windowBody).find('#page_' + pageName).removeClass("loading");
