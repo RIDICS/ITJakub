@@ -1,10 +1,12 @@
+using System.Collections.Generic;
 using System.ServiceModel;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
     [ServiceContract]
-    public interface IItJakubServiceUnauthorized
+    public interface IItJakubServiceEncrypted
     {
+        #region User Operations
         [OperationContract]
         UserContract FindUserById(int userId);
         
@@ -13,5 +15,13 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         UserContract CreateUser(UserContract user);
+        #endregion
+
+        #region Favorite Items
+
+        [OperationContract]
+        List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);
+
+        #endregion
     }
 }

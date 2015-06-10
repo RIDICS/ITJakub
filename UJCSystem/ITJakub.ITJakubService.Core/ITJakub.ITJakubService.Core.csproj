@@ -64,6 +64,7 @@
     <Compile Include="AutoMapperProfiles\CardFileContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\SearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
+    <Compile Include="FavoriteManager.cs" />
     <Compile Include="Resources\FileProcessingServiceClient.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="CardFileManager.cs" />

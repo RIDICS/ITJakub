@@ -1,17 +1,20 @@
-﻿using Castle.Windsor;
+﻿using System.Collections.Generic;
+using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
 
 namespace ITJakub.ITJakubService.Services
 {
-    public class ItJakubServiceManagerUnauthorized : IItJakubServiceUnauthorized
+    public class ItJakubServiceAuthenticatedManager : IItJakubServiceEncrypted
     {
-        private readonly UserManager m_userManager;
         private readonly WindsorContainer m_container = Container.Current;
+        private readonly UserManager m_userManager;
+        private readonly FavoriteManager m_favoriteManager;
 
-        public ItJakubServiceManagerUnauthorized()
+        public ItJakubServiceAuthenticatedManager()
         {
             m_userManager = m_container.Resolve<UserManager>();
+            m_favoriteManager = m_container.Resolve<FavoriteManager>();
         }
 
         public UserContract FindUserById(int userId)
@@ -28,5 +31,14 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_userManager.CreateLocalUser(user);
         }
+
+        #region Favorite Items
+
+        public List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName)
+        {
+            return m_favoriteManager.GetPageBookmarks(bookId, userName);
+        }
+
+        #endregion
     }
 }

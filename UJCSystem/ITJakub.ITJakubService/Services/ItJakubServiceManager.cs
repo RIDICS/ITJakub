@@ -16,7 +16,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly AuthorManager m_authorManager;
         private readonly ResourceManager m_resourceManager;
         private readonly SearchManager m_searchManager;
-        private readonly CardFileManager m_cardFileManager;
+        private readonly CardFileManager m_cardFileManager;        
         private readonly WindsorContainer m_container = Container.Current;
 
         public ItJakubServiceManager()
@@ -68,6 +68,7 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_bookManager.GetBookPagesList(bookGuid);
         }
+
         public IList<BookContentItemContract> GetBookContent(string bookGuid)
         {
             return m_bookManager.GetBookContent(bookGuid);
@@ -128,7 +129,11 @@ namespace ITJakub.ITJakubService.Services
             return m_cardFileManager.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
         }
 
+        
+
         #endregion
 
+
+     
     }
 }

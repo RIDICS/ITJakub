@@ -72,6 +72,6 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
-        
+      
     }
 }
