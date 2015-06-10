@@ -2,28 +2,35 @@
 
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities"
                    xmlns="urn:nhibernate-mapping-2.2">
-  <class name="FavoriteBase" table="[FavoriteBase]">
+  <class name="FavoriteBase" table="[Favorites]">
 
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
 
     <discriminator column="FavoriteType"
-                   not-null="true" 
-                   type="System.String"/>
+                   not-null="true"
+                   type="System.String" />
 
 
     <many-to-one name="User"
-                column="[User]"
-                class="User"/>
+                 column="[User]"
+                 class="User"
+                 lazy="proxy"/>
 
     <subclass
       name="PageBookmark"
       discriminator-value="PageBookmark">
 
       <property name="PageXmlId" />
+
+      <property name="PagePosition" />
       
-      <property name="PagePosition"/>
+      <many-to-one name="Book"
+                   column="BookmarkBook"
+                   class="Book" 
+                   lazy="proxy"/>
+                   
 
     </subclass>
   </class>

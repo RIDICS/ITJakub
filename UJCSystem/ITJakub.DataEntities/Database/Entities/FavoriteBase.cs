@@ -6,7 +6,7 @@ namespace ITJakub.DataEntities.Database.Entities
     {
         public virtual int Id { get; set; }
 
-        public virtual int User { get; set; }
+        public virtual User User { get; set; }
 
         public virtual bool Equals(FavoriteBase other)
         {
@@ -34,5 +34,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string PageXmlId { get; set; }
 
         public virtual int PagePosition { get; set; }
+
+        public virtual Book Book { get; set; }
     }
 }

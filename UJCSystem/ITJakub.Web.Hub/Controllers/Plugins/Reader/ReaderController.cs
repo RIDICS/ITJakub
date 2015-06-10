@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Helpers;
+using System.Web.Mvc;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
@@ -44,14 +45,16 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             return Json(new { pageText = m_mainServiceClient.GetBookPageByPosition(bookId, pagePosition, OutputFormatEnumContract.Html) }, JsonRequestBehavior.AllowGet);
         }
 
-        public void AddBookmark(string bookId, string pageXmlId)
+        public ActionResult AddBookmark(string bookId, string pageXmlId)
         {
             m_mainServiceEncryptedClient.AddBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
+            return Json(new {});
         }
 
-        public void RemoveBookmark(string bookId, string pageXmlId)
+        public ActionResult RemoveBookmark(string bookId, string pageXmlId)
         {
             m_mainServiceEncryptedClient.RemoveBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
+            return Json(new { });
         }
 
         public void GetAllBookmarks(string bookId)

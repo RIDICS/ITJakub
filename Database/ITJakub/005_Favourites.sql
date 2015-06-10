@@ -11,7 +11,7 @@ BEGIN TRAN
 	   [FavoriteType] [varchar](255) NOT NULL,	   
 	   [PageXmlId] varchar(255) NULL,
 	   [PagePosition] int NULL,
-
+	   [BookmarkBook] bigint NULL FOREIGN KEY REFERENCES dbo.Book (Id),
     )
         
 

@@ -151,7 +151,9 @@ namespace ITJakub.Web.Hub
                     m_log.ErrorFormat("GetPageBookmarks timeouted with: {0}", ex);
                 throw;
             }
-
-        }
+        
+            
+        
+        }        
     }
 }
