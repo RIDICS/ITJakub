@@ -721,6 +721,7 @@ var SettingsPanel = (function (_super) {
         _super.call(this, identificator, "Zobrazení", readerModule);
     }
     SettingsPanel.prototype.makeBody = function (rootReference, window) {
+        var _this = this;
         var textButtonSpan = window.document.createElement("span");
         $(textButtonSpan).addClass("glyphicon glyphicon-text-size");
         var textButton = window.document.createElement("button");
@@ -748,10 +749,37 @@ var SettingsPanel = (function (_super) {
         var showPageCheckboxDiv = window.document.createElement("div");
         var showPageNameCheckbox = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
+        $(showPageNameCheckbox).change(function (eventData) {
+            var readerText = $("#" + _this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget = (eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-show-page-names");
+            }
+            else {
+                $(readerText).removeClass("reader-text-show-page-names");
+            }
+        });
         var showPageNameSpan = window.document.createElement("span");
         showPageNameSpan.innerHTML = "Zobrazit číslování stránek";
         showPageCheckboxDiv.appendChild(showPageNameCheckbox);
         showPageCheckboxDiv.appendChild(showPageNameSpan);
+        var showPageOnNewLineDiv = window.document.createElement("div");
+        var showPageOnNewLineCheckbox = window.document.createElement("input");
+        showPageOnNewLineCheckbox.type = "checkbox";
+        $(showPageOnNewLineCheckbox).change(function (eventData) {
+            var readerText = $("#" + _this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget = (eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-page-new-line");
+            }
+            else {
+                $(readerText).removeClass("reader-text-page-new-line");
+            }
+        });
+        var showPageOnNewLineSpan = window.document.createElement("span");
+        showPageOnNewLineSpan.innerHTML = "Zalamovat stránky";
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineSpan);
         var showCommentCheckboxDiv = window.document.createElement("div");
         var showCommentCheckbox = window.document.createElement("input");
         showCommentCheckbox.type = "checkbox";
@@ -760,6 +788,7 @@ var SettingsPanel = (function (_super) {
         showCommentCheckboxDiv.appendChild(showCommentCheckbox);
         showCommentCheckboxDiv.appendChild(showCommentSpan);
         checkboxesDiv.appendChild(showPageCheckboxDiv);
+        checkboxesDiv.appendChild(showPageOnNewLineDiv);
         checkboxesDiv.appendChild(showCommentCheckboxDiv);
         var innerContent = window.document.createElement("div");
         innerContent.appendChild(buttonsDiv);
@@ -942,10 +971,17 @@ var TextPanel = (function (_super) {
         var textAreaDiv = window.document.createElement('div');
         $(textAreaDiv).addClass('reader-text');
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
+            var pageTextDiv = window.document.createElement('div');
+            $(pageTextDiv).addClass('page');
+            $(pageTextDiv).data('page-name', rootReference.parentReader.pages[i]);
+            pageTextDiv.id = 'page_' + rootReference.parentReader.pages[i];
+            var pageNameDiv = window.document.createElement('div');
+            $(pageNameDiv).addClass('page-name');
+            $(pageNameDiv).html("[" + rootReference.parentReader.pages[i] + "]");
             var pageDiv = window.document.createElement('div');
-            $(pageDiv).addClass('page');
-            $(pageDiv).data('page-name', rootReference.parentReader.pages[i]);
-            pageDiv.id = 'page_' + rootReference.parentReader.pages[i];
+            $(pageDiv).addClass("page-wrapper");
+            $(pageDiv).append(pageTextDiv);
+            $(pageDiv).append(pageNameDiv);
             textAreaDiv.appendChild(pageDiv);
         }
         var dummyPage = window.document.createElement('div');

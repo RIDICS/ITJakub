@@ -924,10 +924,38 @@ class SettingsPanel extends LeftSidePanel {
         var showPageCheckboxDiv: HTMLDivElement = window.document.createElement("div");
         var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
+        $(showPageNameCheckbox).change((eventData: Event) => {
+            var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-show-page-names");
+            } else {
+                $(readerText).removeClass("reader-text-show-page-names");
+            }
+            
+        });
         var showPageNameSpan: HTMLSpanElement = window.document.createElement("span");
         showPageNameSpan.innerHTML = "Zobrazit číslování stránek";
         showPageCheckboxDiv.appendChild(showPageNameCheckbox);
         showPageCheckboxDiv.appendChild(showPageNameSpan);
+
+        var showPageOnNewLineDiv: HTMLDivElement = window.document.createElement("div");
+        var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
+        showPageOnNewLineCheckbox.type = "checkbox";
+        $(showPageOnNewLineCheckbox).change((eventData: Event) => {
+            var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-page-new-line");
+            } else {
+                $(readerText).removeClass("reader-text-page-new-line");
+            }
+
+        });
+        var showPageOnNewLineSpan: HTMLSpanElement = window.document.createElement("span");
+        showPageOnNewLineSpan.innerHTML = "Zalamovat stránky";
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineSpan);
 
         var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
         var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
@@ -938,6 +966,7 @@ class SettingsPanel extends LeftSidePanel {
         showCommentCheckboxDiv.appendChild(showCommentSpan);
 
         checkboxesDiv.appendChild(showPageCheckboxDiv);
+        checkboxesDiv.appendChild(showPageOnNewLineDiv);
         checkboxesDiv.appendChild(showCommentCheckboxDiv);
         var innerContent: HTMLDivElement = window.document.createElement("div");
         innerContent.appendChild(buttonsDiv);
@@ -1141,10 +1170,19 @@ class TextPanel extends RightSidePanel {
         var textAreaDiv: HTMLDivElement = window.document.createElement('div');
         $(textAreaDiv).addClass('reader-text');
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
+            var pageTextDiv: HTMLDivElement = window.document.createElement('div');
+            $(pageTextDiv).addClass('page');
+            $(pageTextDiv).data('page-name', rootReference.parentReader.pages[i]);
+            pageTextDiv.id = 'page_' + rootReference.parentReader.pages[i];
+
+            var pageNameDiv: HTMLDivElement = window.document.createElement('div');
+            $(pageNameDiv).addClass('page-name');
+            $(pageNameDiv).html("[" + rootReference.parentReader.pages[i] + "]");
+
             var pageDiv: HTMLDivElement = window.document.createElement('div');
-            $(pageDiv).addClass('page');
-            $(pageDiv).data('page-name', rootReference.parentReader.pages[i]);
-            pageDiv.id = 'page_' + rootReference.parentReader.pages[i];
+            $(pageDiv).addClass("page-wrapper");
+            $(pageDiv).append(pageTextDiv);
+            $(pageDiv).append(pageNameDiv);
             textAreaDiv.appendChild(pageDiv);
         }
 
