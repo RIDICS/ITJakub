@@ -1039,6 +1039,9 @@ a.main_logo_href img {
   color: #afdee4;
   text-decoration: none;
 }
+ul.navbar-right.navbar-login {
+  margin-right: 20px!important;
+}
 .navbar-login li,
 ul {
   display: inline;
@@ -1160,4 +1163,4 @@ ul {
 .navbar-login li a:hover {
   color: #84ced7;
 }
-/*# sourceMappingURL=itjakub.css.map */
+/*# sourceMappingURL=ITJakub.css.map */
