@@ -63,6 +63,7 @@ var ReaderModule = (function () {
         var readerBodyDiv = this.makeReaderBody();
         readerDiv.appendChild(readerBodyDiv);
         $(this.readerContainer).append(readerDiv);
+        this.loadBookmarks();
         this.moveToPageNumber(0, false); //load first page
     };
     ReaderModule.prototype.makeTitle = function (bookTitle) {
@@ -321,6 +322,33 @@ var ReaderModule = (function () {
         controlsDiv.appendChild(pagingDiv);
         return controlsDiv;
     };
+    ReaderModule.prototype.loadBookmarks = function () {
+        var _this = this;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.bookId },
+            url: getBaseUrl() + "Reader/GetAllBookmarks",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                var bookmarks = response["bookmarks"];
+                for (var i = 0; i < bookmarks.length; i++) {
+                    var actualBookmark = bookmarks[i];
+                    for (var pageIndex = 0; pageIndex < _this.pages.length; pageIndex++) {
+                        var actualPage = _this.pages[pageIndex];
+                        if (actualBookmark["PageXmlId"] === actualPage.xmlId) {
+                            var bookmarkSpan = _this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId);
+                            _this.showBookmark(bookmarkSpan);
+                            break;
+                        }
+                    }
+                }
+            },
+            error: function (response) {
+            }
+        });
+    };
     ReaderModule.prototype.existSidePanel = function (sidePanelIdentificator) {
         var sidePanel = document.getElementById(sidePanelIdentificator);
         return ($(sidePanel).length > 0 && sidePanel != null);
@@ -466,26 +494,34 @@ var ReaderModule = (function () {
         $(displayedPages).css('display', 'inherit');
         $(actualPage).addClass('page-active');
     };
-    ReaderModule.prototype.addBookmark = function () {
-        var _this = this;
+    ReaderModule.prototype.createBookmarkSpan = function (pageIndex, pageName, pageXmlId) {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
-        var actualPage = this.pages[this.actualPageIndex];
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
-        $(bookmarkSpan).data('page-index', this.actualPageIndex);
-        $(bookmarkSpan).data('page-name', actualPage.text);
-        $(bookmarkSpan).data('page-xmlId', actualPage.xmlId);
-        var computedPosition = (positionStep * this.actualPageIndex);
+        $(bookmarkSpan).data('page-index', pageIndex);
+        $(bookmarkSpan).data('page-name', pageName);
+        $(bookmarkSpan).data('page-xmlId', pageXmlId);
+        var computedPosition = (positionStep * pageIndex);
         $(bookmarkSpan).css('left', computedPosition + '%');
+        return bookmarkSpan;
+    };
+    ReaderModule.prototype.showBookmark = function (bookmarkHtml) {
+        $(this.readerContainer).find('.slider').append(bookmarkHtml);
+    };
+    ReaderModule.prototype.addBookmark = function () {
+        var _this = this;
+        var pageIndex = this.actualPageIndex;
+        var page = this.pages[pageIndex];
+        var bookmarkSpan = this.createBookmarkSpan(pageIndex, page.text, page.xmlId);
         $.ajax({
             type: "POST",
             traditional: true,
-            data: JSON.stringify({ bookId: this.bookId, pageXmlId: actualPage.xmlId }),
+            data: JSON.stringify({ bookId: this.bookId, pageXmlId: page.xmlId }),
             url: getBaseUrl() + "Reader/AddBookmark",
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                $(_this.readerContainer).find('.slider').append(bookmarkSpan);
+                _this.showBookmark(bookmarkSpan);
             },
             error: function (response) {
             }

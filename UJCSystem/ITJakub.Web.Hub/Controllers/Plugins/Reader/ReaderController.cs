@@ -57,9 +57,10 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             return Json(new { });
         }
 
-        public void GetAllBookmarks(string bookId)
+        public ActionResult GetAllBookmarks(string bookId)
         {
-            m_mainServiceEncryptedClient.GetPageBookmarks(bookId, HttpContext.User.Identity.Name);
+            var bookmarsList = m_mainServiceEncryptedClient.GetPageBookmarks(bookId, HttpContext.User.Identity.Name);
+            return Json(new { bookmarks = bookmarsList }, JsonRequestBehavior.AllowGet);
         }
     }
 }
