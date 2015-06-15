@@ -323,6 +323,14 @@ class RegExInput extends RegExSearchBase {
         });
         lineDiv.appendChild(regExButton);
 
+        var removeButton: HTMLButtonElement = this.createButton("");
+        var removeGlyph: HTMLSpanElement = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon");
+        $(removeGlyph).addClass("glyphicon-trash");
+        removeButton.appendChild(removeGlyph);
+
+        lineDiv.appendChild(removeButton);
+
         $(this.container).append(lineDiv);
         $(this.container).append(this.editorDiv);
     }

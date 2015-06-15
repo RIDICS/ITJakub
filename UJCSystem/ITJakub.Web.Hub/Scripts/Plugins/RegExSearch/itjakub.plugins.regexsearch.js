@@ -255,6 +255,12 @@ var RegExInput = (function (_super) {
             }
         });
         lineDiv.appendChild(regExButton);
+        var removeButton = this.createButton("");
+        var removeGlyph = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon");
+        $(removeGlyph).addClass("glyphicon-trash");
+        removeButton.appendChild(removeGlyph);
+        lineDiv.appendChild(removeButton);
         $(this.container).append(lineDiv);
         $(this.container).append(this.editorDiv);
     };
