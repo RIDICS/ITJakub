@@ -2,7 +2,6 @@
 using ITJakub.MobileApps.Client.Books.Manager;
 using ITJakub.MobileApps.Client.Books.Service;
 using ITJakub.MobileApps.Client.Books.Service.Client;
-using ITJakub.MobileApps.MobileContracts;
 using Microsoft.Practices.Unity;
 
 namespace ITJakub.MobileApps.Client.Books
@@ -33,7 +32,7 @@ namespace ITJakub.MobileApps.Client.Books
             container.RegisterType<IDataService, DataService>(WithLifetime.ContainerControlled(typeof (DataService)));
             container.RegisterType<INavigationService, NavigationService>(WithLifetime.ContainerControlled(typeof (NavigationService)));
             container.RegisterType<IErrorService, ErrorService>(WithLifetime.ContainerControlled(typeof (ErrorService)));
-            container.RegisterType<IMobileAppsService, ServiceClient>(WithLifetime.ContainerControlled(typeof (IMobileAppsService)));
+            container.RegisterType<IServiceClient, ServiceClient>(WithLifetime.ContainerControlled(typeof (IServiceClient)));
             container.RegisterType<BookManager>(WithLifetime.ContainerControlled(typeof (BookManager)));
         }
     }

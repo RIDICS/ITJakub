@@ -1,13 +1,11 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     var bibliographyModule = new BibliographyModule("#biblListResults", "#biblListResultsHeader");
-
     $('#searchButton').click(function () {
         var text = $('#searchbox').val();
-
         $.ajax({
             type: "GET",
             traditional: true,
-            url: "/Bibliographies/Bibliographies/Search",
+            url: getBaseUrl() + "Bibliographies/Bibliographies/Search",
             data: { term: text },
             dataType: 'json',
             contentType: 'application/json',

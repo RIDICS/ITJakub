@@ -1,65 +1,50 @@
 ﻿/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
 
-
 class ReaderModule {
 
     readerContainer: string;
     sliderOnPage: number;
     actualPageIndex: number;
-    pages: Array<string>;
+    pages: Array<BookPage>;
     pagerDisplayPages: number;
     preloadPagesBefore: number;
     preloadPagesAfter: number;
     bookId: string;
     loadedBookContent: boolean;
 
+    leftSidePanels: Array<SidePanel>;
+    rightSidePanels: Array<SidePanel>;
+
+
+    imagePanelIdentificator: string = "ImagePanel";
+    textPanelIdentificator: string = "TextPanel";
+
     constructor(readerContainer: string) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
-        this.preloadPagesBefore = 2;
-        this.preloadPagesAfter = 2;
-    }
-
-    private downloadPageByPosition(pagePosition: number, pageContainer: JQuery) {
-        $(pageContainer).addClass("loading");
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { bookId: this.bookId, pagePosition: pagePosition },
-            url: "/Reader/GetBookPageByPosition",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: (response) => {
-                $(pageContainer).append(response["pageText"]);
-                $(pageContainer).removeClass("loading");
-            }
-        });
-    }
-
-    private downloadPageByName(pageName: string, pageContainer: JQuery) {
-        $(pageContainer).addClass("loading");
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { bookId: this.bookId, pageName: pageName },
-            url: "/Reader/GetBookPageByName",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: (response) => {
-                $(pageContainer).append(response["pageText"]);
-                $(pageContainer).removeClass("loading");
-            }
-        });
     }
 
     public makeReader(bookId : string, bookTitle : string, pageList) {
         this.bookId = bookId;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
-        this.pages = new Array<string>();
+        this.pages = new Array<BookPage>();
+        this.leftSidePanels = new Array<SidePanel>();
+        this.rightSidePanels = new Array<SidePanel>();
+
+        $(window).on("beforeunload",(event: Event) => {
+            for (var k = 0; k < this.leftSidePanels.length; k++) {
+                this.leftSidePanels[k].childwindow.close();
+            }
+
+            for (var k = 0; k < this.rightSidePanels.length; k++) {
+                this.rightSidePanels[k].childwindow.close();
+            }
+        });
         
         for (var i = 0; i < pageList.length; i++) { //load pageList
-            this.pages.push(pageList[i]["Text"]);
+            var page = pageList[i];
+            this.pages.push(new BookPage(page["XmlId"],page["Text"],page["Position"]));
         }
 
         $(this.readerContainer).empty();
@@ -105,8 +90,9 @@ class ReaderModule {
 
         $(this.readerContainer).append(readerDiv);
 
+        this.loadBookmarks();
+
         this.moveToPageNumber(0, false); //load first page
-        this.scrollTextToPositionFromTop(0);
     }
 
     private makeTitle(bookTitle : string): HTMLDivElement {
@@ -136,7 +122,7 @@ class ReaderModule {
             slide: (event, ui) => {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
-                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[ui.value]);
+                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[ui.value].text);
 
             },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
@@ -154,7 +140,7 @@ class ReaderModule {
 
         var innerTooltip: HTMLDivElement = document.createElement('div');
         $(innerTooltip).addClass('tooltip-inner');
-        $(innerTooltip).html("Strana: " + this.pages[0]);
+        $(innerTooltip).html("Strana: " + this.pages[0].text);
         sliderTooltip.appendChild(innerTooltip);
         $(sliderTooltip).hide();
 
@@ -185,7 +171,17 @@ class ReaderModule {
         pageInputButton.innerHTML = "Přejít na stránku";
         $(pageInputButton).addClass('page-input-button');
         $(pageInputButton).click((event: Event) => {
-            this.moveToPage($('#pageInputText').val(), true);
+            var pageName = $('#pageInputText').val();
+            var pageIndex: number = -1;
+            for (var i = 0; i < this.pages.length; i++) {
+                if (this.pages[i].text === pageName) {
+                    pageIndex = i;
+                    break;
+                }
+            }
+            //TODO log pageIndex not exist
+            var page: BookPage = this.pages[pageIndex];
+            this.moveToPage(page.xmlId, true);
         });
         pageInputDiv.appendChild(pageInputButton);
 
@@ -244,10 +240,10 @@ class ReaderModule {
             $(liElement).data('page-index', index);
             anchor = document.createElement('a');
             anchor.href = '#';
-            anchor.innerHTML = page;
+            anchor.innerHTML = page.text;
             $(anchor).click((event: Event) => {
                 event.stopPropagation();
-                this.moveToPage(page, true);
+                this.moveToPage(page.xmlId, true);
                 return false;
             });
             liElement.appendChild(anchor);
@@ -336,12 +332,13 @@ class ReaderModule {
         $(commentButton).append(commentSpanText);
 
         $(commentButton).click((event: Event) => {
-            var innerContent = "Obsah editacniho panelu";
             var panelId = "EditacniPanel";
             if (!this.existSidePanel(panelId)) {
-                this.loadSidePanel(this.makeSidePanel(innerContent, panelId));
+                var editPanel: SettingsPanel = new SettingsPanel(panelId , this);
+                this.loadSidePanel(editPanel.panelHtml);
+                this.leftSidePanels.push(editPanel);
             }
-            this.changeSidePanelVisibility("EditacniPanel");
+            this.changeSidePanelVisibility("EditacniPanel", 'left');
         });
 
         buttonsDiv.appendChild(commentButton);
@@ -359,12 +356,13 @@ class ReaderModule {
         $(searchResultButton).append(searchSpanText);
 
         $(searchResultButton).click((event: Event) => {
-            var innerContent = "Obsah vyhledavaciho panelu";
             var panelId = "SearchPanel";
             if (!this.existSidePanel(panelId)) {
-                this.loadSidePanel(this.makeSidePanel(innerContent, panelId));
+                var searchPanel = new LeftSidePanel(panelId,"Vyhlédávání", this);
+                this.loadSidePanel(searchPanel.panelHtml);
+                this.leftSidePanels.push(searchPanel);
             }
-            this.changeSidePanelVisibility("SearchPanel");
+            this.changeSidePanelVisibility("SearchPanel", 'left');
         });
 
         buttonsDiv.appendChild(searchResultButton);
@@ -382,12 +380,13 @@ class ReaderModule {
         $(contentButton).append(contentSpanText);
 
         $(contentButton).click((event: Event) => {
-            var innerContent = "Obsah";
             var panelId = "ObsahPanel";
             if (!this.existSidePanel(panelId)) {
-                this.loadSidePanel(this.makeSidePanel(innerContent, panelId));
+                var contentPanel: ContentPanel = new ContentPanel(panelId, this);
+                this.loadSidePanel(contentPanel.panelHtml);
+                this.leftSidePanels.push(contentPanel);
             }
-            this.changeSidePanelVisibility("ObsahPanel");
+            this.changeSidePanelVisibility("ObsahPanel",'left');
         });
 
         buttonsDiv.appendChild(contentButton);
@@ -398,67 +397,32 @@ class ReaderModule {
         return controlsDiv;
     }
 
-    private makeSidePanel(innerContent, identificator: string): HTMLDivElement {
+    private loadBookmarks() {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.bookId },
+            url: getBaseUrl() + "Reader/GetAllBookmarks",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
 
-        var sidePanelDiv: HTMLDivElement = document.createElement('div');
-        sidePanelDiv.id = identificator;
-        $(sidePanelDiv).addClass('reader-left-panel');
-        $(sidePanelDiv).resizable({
-            handles: "e",
-            maxWidth: 250,
-            minWidth: 100
-        });
-
-        var leftPanelHeaderDiv: HTMLDivElement = document.createElement('div');
-        $(leftPanelHeaderDiv).addClass('reader-left-panel-header');
-
-        var sidePanelCloseButton = document.createElement("button");
-        $(sidePanelCloseButton).addClass('close-button');
-        $(sidePanelCloseButton).click((event: Event) => {
-            if ($(sidePanelDiv).data('ui-draggable')) {
-                $(sidePanelDiv).hide();
-            } else {
-                $(sidePanelDiv).hide('slide', { direction: 'left' });
-            }
-
-        });
-
-        var closeSpan = document.createElement("span");
-        $(closeSpan).addClass('glyphicon glyphicon-remove');
-        $(sidePanelCloseButton).append(closeSpan);
-
-        leftPanelHeaderDiv.appendChild(sidePanelCloseButton);
-
-        var leftPanelPinButton = document.createElement("button");
-        $(leftPanelPinButton).addClass('pin-button');
-        $(leftPanelPinButton).click((event: Event) => {
-            if ($(sidePanelDiv).data('ui-draggable')) {
-                $(sidePanelDiv).draggable("destroy");
-                $(sidePanelDiv).css('top', '');
-                $(sidePanelDiv).css('left', '');
-                $(sidePanelDiv).css('width', "");
-                $(sidePanelDiv).css('height', "");
-                $(sidePanelDiv).resizable("destroy");
-                $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
-
-            } else {
-                $(sidePanelDiv).draggable({ containment: "body", appendTo: "body" });
-                $(sidePanelDiv).resizable("destroy");
-                $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+                var bookmarks = response["bookmarks"];
+                for (var i = 0; i < bookmarks.length; i++) {
+                    var actualBookmark = bookmarks[i];
+                    for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
+                        var actualPage = this.pages[pageIndex];
+                        if (actualBookmark["PageXmlId"] === actualPage.xmlId) {
+                            var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId);
+                            this.showBookmark(bookmarkSpan);
+                            break;
+                        }
+                    }
+                }
+            },
+            error: (response) => {
             }
         });
-
-        var pinSpan = document.createElement("span");
-        $(pinSpan).addClass('glyphicon glyphicon-pushpin');
-        $(leftPanelPinButton).append(pinSpan);
-
-        leftPanelHeaderDiv.appendChild(leftPanelPinButton);
-
-        sidePanelDiv.appendChild(leftPanelHeaderDiv);
-
-        $(sidePanelDiv).append(innerContent);
-
-        return sidePanelDiv;
     }
 
     private existSidePanel(sidePanelIdentificator: string): boolean {
@@ -472,60 +436,66 @@ class ReaderModule {
         $(bodyContainerDiv).prepend(sidePanel);
     }
 
-    private changeSidePanelVisibility(sidePanelIdentificator: string) {
+    changeSidePanelVisibility(sidePanelIdentificator: string, slideDirection: string) {
         var sidePanel = document.getElementById(sidePanelIdentificator);
         if ($(sidePanel).is(':visible')) {
-            if ($(sidePanel).data('ui-draggable')) {
+            if ($(sidePanel).hasClass('ui-draggable')) {
                 $(sidePanel).hide();
             } else {
-                $(sidePanel).hide('slide', { direction: 'left' });
+                if (slideDirection) {
+                    $(sidePanel).hide('slide', { direction: slideDirection });
+                } else {
+                    $(sidePanel).hide();
+                }
             }
         } else {
-            if ($(sidePanel).data('ui-draggable')) {
+            if ($(sidePanel).hasClass("windowed")) {
+                var panelInstance = this.findPanelInstanceById(sidePanelIdentificator);
+                panelInstance.childwindow.focus();
+            }
+            else if ($(sidePanel).hasClass('ui-draggable')) {
                 $(sidePanel).show();
             } else {
-                $(sidePanel).show('slide', { direction: 'left' });
+                if (slideDirection) {
+                    $(sidePanel).show('slide', { direction: slideDirection });
+                } else {
+                    $(sidePanel).css('display', '');
+                }
+            }
+        }
+    }
+
+    findPanelInstanceById(panelIdentificator: string): SidePanel {
+        for (var k = 0; k < this.leftSidePanels.length; k++) {
+            if (this.leftSidePanels[k].identificator === panelIdentificator) {
+                return this.leftSidePanels[k];
             }
         }
 
+        for (var k = 0; k < this.rightSidePanels.length; k++) {
+            if (this.rightSidePanels[k].identificator === panelIdentificator) {
+                return this.rightSidePanels[k];
+            }
+        }
+
+        return null;
     }
 
     private makeReaderBody(): HTMLDivElement {
         var bodyContainerDiv: HTMLDivElement = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
 
+        var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this);
+        this.rightSidePanels.push(textPanel);
 
-        var textContainerDiv: HTMLDivElement = document.createElement('div');
-        $(textContainerDiv).addClass('reader-text-container');
+        bodyContainerDiv.appendChild(textPanel.panelHtml);
 
-        $(textContainerDiv).scroll((event: Event) => { //TODO make better scroll event
-            var pages = $(this.readerContainer).find('.reader-text-container').find('.page');
-            var minOffset = Number.MAX_VALUE;
-            var pageWithMinOffset;
-            $.each(pages, (index, page) => {
-                var pageOfsset = Math.abs($(page).offset().top);
-                if (minOffset > pageOfsset) {
-                    minOffset = pageOfsset;
-                    pageWithMinOffset = page;
-                }
-            });
+        var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this);
+        this.rightSidePanels.push(imagePanel);
 
-            this.moveToPage($(pageWithMinOffset).data('page-name'), false);
-        });
+        $(imagePanel.panelHtml).hide();
+        bodyContainerDiv.appendChild(imagePanel.panelHtml);
 
-        var textAreaDiv: HTMLDivElement = document.createElement('div');
-        $(textAreaDiv).addClass('reader-text');
-        for (var i = 0; i < this.pages.length; i++) {
-            var pageDiv: HTMLDivElement = document.createElement('div');
-            $(pageDiv).addClass('page');
-            $(pageDiv).data('page-name', this.pages[i]);
-            pageDiv.id = 'page_' + this.pages[i];
-            textAreaDiv.appendChild(pageDiv);
-        }
-
-        textContainerDiv.appendChild(textAreaDiv);
-
-        bodyContainerDiv.appendChild(textContainerDiv);
         return bodyContainerDiv;
     }
 
@@ -538,21 +508,32 @@ class ReaderModule {
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
-        for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
-            this.displayPage(this.pages[pageIndex - j], false);
+        this.notifyPanelsMovePage(pageIndex, scrollTo);
+    }
+
+    notifyPanelsMovePage(pageIndex : number, scrollTo: boolean) {
+        for (var k = 0; k < this.leftSidePanels.length; k++) {
+            this.leftSidePanels[k].onMoveToPage(pageIndex, scrollTo);
         }
-        this.displayPage(this.pages[pageIndex], scrollTo);
-        for (var i = 1; pageIndex + i < this.pages.length && i <= this.preloadPagesAfter; i++) {
-            this.displayPage(this.pages[pageIndex + i], false);
+
+        for (var k = 0; k < this.rightSidePanels.length; k++) {
+            this.rightSidePanels[k].onMoveToPage(pageIndex, scrollTo);
         }
     }
 
-    moveToPage(page: string, scrollTo: boolean) {
-        var pageIndex: number = $.inArray(page, this.pages);
+    moveToPage(pageXmlId: string, scrollTo: boolean) {
+        var pageIndex: number = -1;
+        for (var i = 0; i < this.pages.length; i++) {
+            if (this.pages[i].xmlId === pageXmlId) {
+                pageIndex = i;
+                break;
+            }
+        }
         if (pageIndex >= 0 && pageIndex < this.pages.length) {
             this.moveToPageNumber(pageIndex, scrollTo);
+            
         } else {
-            console.log("Page '" + page + "' does not exist");
+            console.log("Page with id '" + pageXmlId + "' does not exist");
             //TODO tell user page not exist  
         }
     }
@@ -560,7 +541,7 @@ class ReaderModule {
     actualizeSlider(pageIndex: number) {
         var slider = $(this.readerContainer).find('.slider');
         $(slider).slider().slider('value', pageIndex);
-        $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex]);
+        $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex].text);
     }
 
     actualizePagination(pageIndex: number) {
@@ -604,61 +585,802 @@ class ReaderModule {
 
     }
 
-    displayPage(page: string, scrollTo: boolean) {
-        var pageDiv = $(this.readerContainer).find('div.reader-text').find('#page_' + page);
-        var pageLoaded: boolean = $(pageDiv).data('loaded');
-        if (typeof pageLoaded === 'undefined' || !pageLoaded) {
-            this.downloadPageByName(page, $(pageDiv));
-            $(pageDiv).data('loaded', true);
-        }
-        if (scrollTo) {
-            this.scrollTextToPositionFromTop(0);
-            var topOffset = $(pageDiv).offset().top;
-            this.scrollTextToPositionFromTop(topOffset);
-        }
-    }
-
-    scrollTextToPositionFromTop(topOffset: number) {
-        var scrollableContainer = $(this.readerContainer).find('div.reader-text-container');
-        $(scrollableContainer).scrollTop(topOffset);
-    }
-
-    addBookmark() {
+    createBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string):HTMLSpanElement {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
-        $(bookmarkSpan).data('page-index', this.actualPageIndex);
-        $(bookmarkSpan).data('page-name', this.pages[this.actualPageIndex]);
-
-        var computedPosition = (positionStep * this.actualPageIndex);
+        $(bookmarkSpan).data('page-index', pageIndex);
+        $(bookmarkSpan).data('page-name', pageName);
+        $(bookmarkSpan).data('page-xmlId', pageXmlId);
+        var computedPosition = (positionStep * pageIndex);
         $(bookmarkSpan).css('left', computedPosition + '%');
+        return bookmarkSpan;
+    }
 
-        $(this.readerContainer).find('.slider').append(bookmarkSpan);
-        //TODO populate request on service for adding bookmark to DB
+    showBookmark(bookmarkHtml: HTMLSpanElement) {
+        $(this.readerContainer).find('.slider').append(bookmarkHtml);
+    }
 
+    addBookmark() {
+        var pageIndex:number = this.actualPageIndex;
+        var page: BookPage = this.pages[pageIndex];
+        var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, page.text, page.xmlId);
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageXmlId: page.xmlId}),
+            url: getBaseUrl() + "Reader/AddBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                this.showBookmark(bookmarkSpan);
+            },
+            error: (response) => {
+            }
+        });
     }
 
     removeBookmark(): boolean {
         var slider = $(this.readerContainer).find('.slider');
         var bookmarks = $(slider).find('.bookmark');
 
-        if (typeof bookmarks === 'undefined' || bookmarks.length == 0) {
+        if (typeof bookmarks === 'undefined' || bookmarks == null || bookmarks.length === 0) {
             return false;
         }
 
-        var actualPageName = this.pages[this.actualPageIndex];
+        var actualPage: BookPage = this.pages[this.actualPageIndex];
         var targetBookmark = $(bookmarks).filter(function(index) {
-            return $(this).data("page-name") === actualPageName;
+            return $(this).data("page-xmlId") === actualPage.xmlId;
         });
 
-        if (typeof targetBookmark === 'undefined' || targetBookmark.length == 0) {
+        if (typeof targetBookmark === 'undefined' || targetBookmark == null|| targetBookmark.length === 0) {
             return false;
         }
 
-        $(targetBookmark).remove();
-        //TODO populate request on service for removing bookmark from DB
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageXmlId: actualPage.xmlId }),
+            url: getBaseUrl() + "Reader/RemoveBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                $(targetBookmark).remove();
+            },
+            error: (response) => {
+            }
+        });
+
         return true;
 
 
+    }
+
+    repaint() {
+        for (var i = 0; i < this.leftSidePanels.length; i++) {
+            if ($(this.leftSidePanels[i]).is(":visible")) {
+                $(this.leftSidePanels[i]).hide();
+                $(this.leftSidePanels[i]).show();
+            }
+        }
+
+        for (var i = 0; i < this.rightSidePanels.length; i++) {
+            if ($(this.rightSidePanels[i]).is(":visible")) {
+                $(this.rightSidePanels[i]).hide();
+                $(this.rightSidePanels[i]).show();
+            }
+        }
+    }
+
+    setRightPanelsLayout() {
+        var rightPanels = this.rightSidePanels;
+        var allPinned = true;
+        for (var i = 0; i < rightPanels.length; i++) {
+            var panel = rightPanels[i].panelHtml;
+            if (!$(panel).is(':visible') || $(panel).hasClass('ui-draggable')) {
+                allPinned = false;
+            }
+        }
+
+        if (allPinned) {
+            $(".reader-body-container").addClass("both-pinned");
+            var leftPanels = this.leftSidePanels;
+            for (var i = 0; i < leftPanels.length; i++) {
+                var leftPanel = leftPanels[i];
+                if (!leftPanel.isDraggable) {
+                    leftPanel.pinButton.click();
+                }
+            }
+
+        } else {
+            $(".reader-body-container").removeClass("both-pinned");
+        }
+    }
+
+    populatePanelOnTop(panel: SidePanel) {
+        if (!panel.isDraggable) {
+            return;
+        }
+
+        var max: number = 0;
+        var leftPanels = this.leftSidePanels;
+        for (var i = 0; i < leftPanels.length; i++) {
+            var leftPanel = leftPanels[i];
+            var zIndex = parseInt($(leftPanel.panelHtml).css('z-index'));
+            if (zIndex > max) {
+                max = zIndex;
+            }
+        }
+
+        var rightPanels = this.rightSidePanels;
+        for (var i = 0; i < rightPanels.length; i++) {
+            var rightPanel = rightPanels[i];
+            var zIndex = parseInt($(rightPanel.panelHtml).css('z-index'));
+            if (zIndex > max) {
+                max = zIndex;
+            }
+        }
+
+        $(panel.panelHtml).css('z-index', max + 1);
+    }
+}
+
+
+class SidePanel {
+    panelHtml : HTMLDivElement;
+    panelBodyHtml: HTMLDivElement;
+    closeButton : HTMLButtonElement;
+    pinButton : HTMLButtonElement;
+    newWindowButton: HTMLButtonElement;
+    identificator: string;
+    headerName: string;
+    innerContent: HTMLElement;
+    parentReader: ReaderModule;
+    windowBody: HTMLDivElement;
+    childwindow: Window;
+    isDraggable: boolean;
+    documentWindow: Window;
+
+    public constructor(identificator: string, headerName: string, parentReader: ReaderModule) {
+        this.parentReader = parentReader;
+        this.identificator = identificator;
+        this.headerName = headerName;
+        this.isDraggable = false;
+        var sidePanelDiv: HTMLDivElement = document.createElement('div');
+        sidePanelDiv.id = identificator;
+        this.decorateSidePanel(sidePanelDiv);
+
+        var panelHeaderDiv: HTMLDivElement = document.createElement('div');
+        $(panelHeaderDiv).addClass('reader-left-panel-header');
+
+        var nameSpan = document.createElement("span");
+        $(nameSpan).addClass('panel-header-name');
+        $(nameSpan).append(headerName);
+        $(panelHeaderDiv).append(nameSpan);
+
+        var sidePanelCloseButton = document.createElement("button");
+        $(sidePanelCloseButton).addClass('close-button');
+        $(sidePanelCloseButton).click((event: Event) => {
+            this.onCloseButtonClick(sidePanelDiv);
+        });
+
+        var closeSpan = document.createElement("span");
+        $(closeSpan).addClass('glyphicon glyphicon-remove');
+        $(sidePanelCloseButton).append(closeSpan);
+
+        this.closeButton = sidePanelCloseButton;
+
+        panelHeaderDiv.appendChild(sidePanelCloseButton);
+
+        var panelPinButton = document.createElement("button");
+        $(panelPinButton).addClass('pin-button');
+        $(panelPinButton).click((event: Event) => {
+            this.onPinButtonClick(sidePanelDiv);
+        });
+
+        var pinSpan = document.createElement("span");
+        $(pinSpan).addClass('glyphicon glyphicon-pushpin');
+        $(panelPinButton).append(pinSpan);
+
+        this.pinButton = panelPinButton;
+
+        panelHeaderDiv.appendChild(panelPinButton);
+
+        var newWindowButton = document.createElement("button");
+        $(newWindowButton).addClass('new-window-button');
+        $(newWindowButton).click((event: Event) => {
+            this.onNewWindowButtonClick(sidePanelDiv);
+        });
+
+        var windowSpan = document.createElement("span");
+        $(windowSpan).addClass('glyphicon glyphicon-new-window');
+        $(newWindowButton).append(windowSpan);
+
+        this.newWindowButton = newWindowButton;
+
+        panelHeaderDiv.appendChild(newWindowButton);
+
+        sidePanelDiv.appendChild(panelHeaderDiv);
+
+        this.innerContent = this.makeBody(this,window);
+        var panelBodyDiv = this.makePanelBody(this.innerContent, this, window);
+
+        $(sidePanelDiv).append(panelBodyDiv);
+
+        $(sidePanelDiv).mousedown((event:Event)=> {
+            this.parentReader.populatePanelOnTop(this);
+        });
+
+        this.panelHtml = sidePanelDiv;
+        this.panelBodyHtml = panelBodyDiv;
+
+        
+    }
+
+    protected  makePanelBody(innerContent, rootReference, window: Window) : HTMLDivElement {
+        var panelBodyDiv: HTMLDivElement = window.document.createElement('div');
+        $(panelBodyDiv).addClass('reader-left-panel-body');
+        $(panelBodyDiv).append(innerContent);
+        return panelBodyDiv;
+    }
+
+    protected makeBody(rootReference: SidePanel, window:Window): HTMLElement {
+        throw new Error("Not implemented");
+    }
+
+    public onMoveToPage(pageIndex: number, scrollTo:boolean) {
+    }
+
+    protected placeOnDragStartPosition(sidePanelDiv: HTMLDivElement) {
+        var dispersion = Math.floor((Math.random() * 15) + 1) * 3;
+        $(sidePanelDiv).css('top', 135 + dispersion);  //TODO kick out magic number
+        $(sidePanelDiv).css('left', dispersion);
+    }
+
+    protected setRightPanelsLayout(sidePanelDiv: HTMLDivElement) {
+        this.parentReader.setRightPanelsLayout();
+    }
+
+    makePanelWindow(documentWindow: Window): HTMLDivElement {
+        return this.makePanelBody($(this.innerContent).clone(true), this, window);
+    }
+
+    decorateSidePanel(htmlDivElement: HTMLDivElement) { throw new Error("Not implemented"); }
+
+    onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
+        this.closeButton.click();
+        var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
+        newWindow.document.open();
+        newWindow.document.close();
+
+        $(newWindow).on("beforeunload",(event: Event) => {
+            this.onUnloadWindowMode();
+        });
+
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone(true));
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone(true));
+
+        var panelWindow = this.makePanelWindow(newWindow);
+
+        $(newWindow.document.getElementsByTagName('body')[0]).append(panelWindow);
+        $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
+        $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
+        newWindow.document.title = this.headerName;
+        $(document.getElementById(this.identificator)).addClass("windowed");
+        this.windowBody = panelWindow;
+        this.childwindow = newWindow;
+    }
+
+    onUnloadWindowMode() {
+        $(document.getElementById(this.identificator)).removeClass("windowed");
+        $(this.windowBody).val('');
+        $(this.childwindow).val('');
+    }
+
+    onPinButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
+
+    onCloseButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
+}
+
+
+class LeftSidePanel extends SidePanel {
+    decorateSidePanel(sidePanelDiv: HTMLDivElement) {
+        $(sidePanelDiv).addClass('reader-left-panel');
+        $(sidePanelDiv).resizable({
+            handles: "e",
+            maxWidth: 250,
+            minWidth: 100
+        });
+    }
+
+    onPinButtonClick(sidePanelDiv: HTMLDivElement) {
+        if ($(sidePanelDiv).data('ui-draggable')) {
+            $(sidePanelDiv).draggable("destroy");
+            $(sidePanelDiv).css('top', '');
+            $(sidePanelDiv).css('left', '');
+            $(sidePanelDiv).css('width', "");
+            $(sidePanelDiv).css('height', "");
+            $(sidePanelDiv).resizable("destroy");
+            $(sidePanelDiv).resizable({ handles: "e", maxWidth: 250, minWidth: 100 });
+            this.isDraggable = false;
+            $(sidePanelDiv).css('z-index', 9999);
+
+        } else {
+            $(sidePanelDiv).draggable({ containment: "body", appendTo: "body", cursor: "move" });
+            $(sidePanelDiv).resizable("destroy");
+            $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+            this.placeOnDragStartPosition(sidePanelDiv);
+            this.isDraggable = true;
+            this.parentReader.populatePanelOnTop(this);
+        }
+
+        this.setRightPanelsLayout(sidePanelDiv);
+    }
+
+    onCloseButtonClick(sidePanelDiv: HTMLDivElement) {
+        if ($(sidePanelDiv).data('ui-draggable')) {
+            $(sidePanelDiv).hide();
+        } else {
+            $(sidePanelDiv).hide('slide', { direction: 'left' });
+        }
+    }
+}
+
+class SettingsPanel extends LeftSidePanel {
+
+    constructor(identificator: string, readerModule: ReaderModule) {
+        super(identificator, "Zobrazení", readerModule);
+    }
+    
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var textButtonSpan = window.document.createElement("span");
+        $(textButtonSpan).addClass("glyphicon glyphicon-text-size");
+        var textButton = window.document.createElement("button");
+        $(textButton).addClass("reader-settings-button");
+        $(textButton).append(textButtonSpan);
+
+        $(textButton).click((event: Event) => {
+            rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.textPanelIdentificator, "");
+            rootReference.parentReader.setRightPanelsLayout();
+        });
+
+        var imageButtonSpan = window.document.createElement("span");
+        $(imageButtonSpan).addClass("glyphicon glyphicon-picture");
+        var imageButton = window.document.createElement("button");
+        $(imageButton).addClass("reader-settings-button");
+        $(imageButton).append(imageButtonSpan);
+
+        $(imageButton).click((event: Event) => {
+            rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.imagePanelIdentificator, "");
+            rootReference.parentReader.setRightPanelsLayout();
+        });
+
+        var buttonsDiv = window.document.createElement("div");
+        $(buttonsDiv).addClass("reader-settings-buttons-area");
+        buttonsDiv.appendChild(textButton);
+        buttonsDiv.appendChild(imageButton);
+
+        var checkboxesDiv = window.document.createElement("div");
+        $(checkboxesDiv).addClass("reader-settings-checkboxes-area");
+
+        var showPageCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
+        showPageNameCheckbox.type = "checkbox";
+        $(showPageNameCheckbox).change((eventData: Event) => {
+            var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-show-page-names");
+            } else {
+                $(readerText).removeClass("reader-text-show-page-names");
+            }
+            
+        });
+        var showPageNameSpan: HTMLSpanElement = window.document.createElement("span");
+        showPageNameSpan.innerHTML = "Zobrazit číslování stránek";
+        showPageCheckboxDiv.appendChild(showPageNameCheckbox);
+        showPageCheckboxDiv.appendChild(showPageNameSpan);
+
+        var showPageOnNewLineDiv: HTMLDivElement = window.document.createElement("div");
+        var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
+        showPageOnNewLineCheckbox.type = "checkbox";
+        $(showPageOnNewLineCheckbox).change((eventData: Event) => {
+            var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-page-new-line");
+            } else {
+                $(readerText).removeClass("reader-text-page-new-line");
+            }
+
+        });
+        var showPageOnNewLineSpan: HTMLSpanElement = window.document.createElement("span");
+        showPageOnNewLineSpan.innerHTML = "Zalamovat stránky";
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineSpan);
+
+        var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
+        showCommentCheckbox.type = "checkbox";
+        var showCommentSpan: HTMLSpanElement = window.document.createElement("span");
+        showCommentSpan.innerHTML = "Zobrazit komentáře";
+        showCommentCheckboxDiv.appendChild(showCommentCheckbox);
+        showCommentCheckboxDiv.appendChild(showCommentSpan);
+
+        checkboxesDiv.appendChild(showPageCheckboxDiv);
+        checkboxesDiv.appendChild(showPageOnNewLineDiv);
+        checkboxesDiv.appendChild(showCommentCheckboxDiv);
+        var innerContent: HTMLDivElement = window.document.createElement("div");
+        innerContent.appendChild(buttonsDiv);
+        innerContent.appendChild(checkboxesDiv);
+        return innerContent;
+    }
+}
+
+class ContentPanel extends LeftSidePanel {
+
+    constructor(identificator: string, readerModule: ReaderModule) {
+        super(identificator, "Obsah", readerModule);
+    }
+
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var bodyDiv: HTMLDivElement = window.document.createElement('div');
+        $(bodyDiv).addClass('content-panel-container');
+        this.downloadBookContent();
+        return bodyDiv;
+    }
+
+    private downloadBookContent() {
+        
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.parentReader.bookId},
+            url: getBaseUrl() + "Reader/GetBookContent",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                var rootContentItems: JSON[] = response["content"];
+                var ulElement = document.createElement("ul");
+                $(ulElement).addClass("content-item-root-list");
+                for (var i = 0; i < rootContentItems.length; i++) {
+                    var jsonItem: JSON = rootContentItems[i];
+                    $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
+                }
+                
+                $(this.panelBodyHtml).empty();
+                $(this.panelBodyHtml).append(ulElement);
+
+                this.innerContent = this.panelBodyHtml;
+
+                if (typeof this.windowBody !== 'undefined') {
+                    $(this.windowBody).empty();
+                    $(this.windowBody).append(ulElement);
+                }
+            },
+            error: (response) => {
+                $(this.panelBodyHtml).empty();
+                $(this.panelBodyHtml).append("Chyba při načítání obsahu");
+            }
+        });
+    }
+
+    private parseJsonItemToContentItem(jsonItem: JSON): ContentItem {
+        return new ContentItem(jsonItem["Text"], jsonItem["ReferredPageXmlId"],
+            jsonItem["ReferredPageName"], jsonItem["ChildBookContentItems"]);
+    }
+
+    private makeContentItemChilds(contentItem: ContentItem): HTMLUListElement {
+        var childItems:JSON[] = contentItem.childBookContentItems;
+        if (childItems.length === 0 ) return null;
+        var ulElement = document.createElement("ul");
+        $(ulElement).addClass("content-item-list");
+        for (var i = 0; i < childItems.length; i++) {
+            var jsonItem:JSON = childItems[i];
+            $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
+        }
+        return ulElement;
+    }
+
+    private makeContentItem(contentItem: ContentItem): HTMLLIElement {
+        var liElement = document.createElement("li");
+        $(liElement).addClass("content-item");
+
+        var hrefElement = document.createElement("a");
+        hrefElement.href = "#";
+        $(hrefElement).click(() => {
+            this.parentReader.moveToPage(contentItem.referredPageXmlId, true);
+        });
+        
+
+        var textSpanElement = document.createElement("span");
+        $(textSpanElement).addClass("content-item-text");
+        textSpanElement.innerHTML = contentItem.text;
+
+        var pageNameSpanElement = document.createElement("span");
+        $(pageNameSpanElement).addClass("content-item-page-name");
+        pageNameSpanElement.innerHTML = "["+contentItem.referredPageName+"]";
+        
+        $(hrefElement).append(pageNameSpanElement);
+        $(hrefElement).append(textSpanElement);
+
+        $(liElement).append(hrefElement);
+        $(liElement).append(this.makeContentItemChilds(contentItem));
+        return liElement;
+    }
+}
+
+
+class RightSidePanel extends SidePanel {
+    decorateSidePanel(sidePanelDiv: HTMLDivElement) {
+        $(sidePanelDiv).addClass('reader-right-panel');
+    }
+
+    onPinButtonClick(sidePanelDiv: HTMLDivElement) {
+        if ($(sidePanelDiv).data('ui-draggable')) {
+            $(sidePanelDiv).draggable("destroy");
+            $(sidePanelDiv).css('top', '');
+            $(sidePanelDiv).css('left', '');
+            $(sidePanelDiv).css('width', "");
+            $(sidePanelDiv).css('position', "");
+            $(sidePanelDiv).css('height', "");
+            $(sidePanelDiv).resizable('destroy');
+            this.isDraggable = false;
+            $(sidePanelDiv).css('z-index', 9999);
+
+        } else {
+            var height = $(sidePanelDiv).css("height");
+            var width = $(sidePanelDiv).css("width");
+            $(sidePanelDiv).draggable({ containment: "body", appendTo: "body", cursor: "move" });
+            $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
+            $(sidePanelDiv).css("width",width);
+            $(sidePanelDiv).css("height", height);
+            this.placeOnDragStartPosition(sidePanelDiv);
+            this.isDraggable = true;
+            this.parentReader.populatePanelOnTop(this);
+        }
+
+        this.setRightPanelsLayout(sidePanelDiv);
+    }
+
+    onCloseButtonClick(sidePanelDiv: HTMLDivElement) {
+        $(sidePanelDiv).hide();
+        this.setRightPanelsLayout(sidePanelDiv);
+    }
+
+    onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
+        super.onNewWindowButtonClick(sidePanelDiv);
+        this.setRightPanelsLayout(sidePanelDiv);
+    }
+
+    protected  makePanelBody(innerContent, rootReference, window: Window): HTMLDivElement {
+        var panelBodyDiv: HTMLDivElement = window.document.createElement('div');
+        $(panelBodyDiv).addClass('reader-right-panel-body');
+        $(panelBodyDiv).append(innerContent);
+        return panelBodyDiv;
+    }
+}
+
+class ImagePanel extends RightSidePanel {
+
+    constructor(identificator: string, readerModule: ReaderModule) {
+        super(identificator, "Obrázky", readerModule);
+    }
+
+    protected makeBody(rootReference: SidePanel, window: Window):HTMLElement {
+        var imageContainerDiv: HTMLDivElement = window.document.createElement('div');
+        $(imageContainerDiv).addClass('reader-image-container');
+        return imageContainerDiv;
+    }
+
+    public onMoveToPage(pageIndex: number, scrollTo: boolean) { 
+        var pagePosition = pageIndex + 1;
+        $(this.innerContent).empty();
+        var image : HTMLImageElement = document.createElement("img");
+        image.src = getBaseUrl()+"Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
+        $(this.innerContent).append(image);
+        if (typeof this.windowBody !== 'undefined') {
+            $(this.windowBody).empty();
+            $(this.windowBody).append(image);
+        }
+    }
+}
+
+class TextPanel extends RightSidePanel {
+    preloadPagesBefore:number;
+    preloadPagesAfter:number;
+
+    constructor(identificator: string, readerModule: ReaderModule) {
+        super(identificator, "Text", readerModule);
+        this.preloadPagesBefore = 5;
+        this.preloadPagesAfter = 10;
+    }
+
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var textContainerDiv: HTMLDivElement = window.document.createElement('div');
+        $(textContainerDiv).addClass('reader-text-container');
+
+        $(textContainerDiv).scroll(function(event: Event) {
+            var pages = $(this).find('.page');
+            var minOffset = Number.MAX_VALUE;
+            var pageWithMinOffset;
+            $.each(pages,(index, page) => {
+                var pageOfsset = Math.abs($(page).offset().top - $(this).offset().top);
+                if (minOffset > pageOfsset) {
+                    minOffset = pageOfsset;
+                    pageWithMinOffset = page;
+                }
+            });
+
+            rootReference.parentReader.moveToPage($(pageWithMinOffset).data('page-xmlId'), false);
+        });
+
+        var textAreaDiv: HTMLDivElement = window.document.createElement('div');
+        $(textAreaDiv).addClass('reader-text');
+        for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
+            var page: BookPage = rootReference.parentReader.pages[i];
+
+            var pageTextDiv: HTMLDivElement = window.document.createElement('div');
+            $(pageTextDiv).addClass('page');
+            $(pageTextDiv).addClass('unloaded');
+            $(pageTextDiv).data('page-name', page.text);
+            $(pageTextDiv).data('page-xmlId', page.xmlId);
+            pageTextDiv.id = page.xmlId; // each page has own id
+
+            var pageNameDiv: HTMLDivElement = window.document.createElement('div');
+            $(pageNameDiv).addClass('page-name');
+            $(pageNameDiv).html("[" + page.text + "]");
+
+            var pageDiv: HTMLDivElement = window.document.createElement('div');
+            $(pageDiv).addClass("page-wrapper");
+            $(pageDiv).append(pageTextDiv);
+            $(pageDiv).append(pageNameDiv);
+            textAreaDiv.appendChild(pageDiv);
+        }
+
+        var dummyPage: HTMLDivElement = window.document.createElement('div');
+        $(dummyPage).addClass('dummy-page');
+        textAreaDiv.appendChild(dummyPage);
+
+        textContainerDiv.appendChild(textAreaDiv);
+        return textContainerDiv;
+    }
+
+    public onMoveToPage(pageIndex: number, scrollTo: boolean) {
+        for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
+            this.displayPage(this.parentReader.pages[pageIndex - j], false);
+        }
+        for (var i = 1; pageIndex + i < this.parentReader.pages.length && i <= this.preloadPagesAfter; i++) {
+            this.displayPage(this.parentReader.pages[pageIndex + i], false);
+        }
+        this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
+    }
+
+    displayPage(page: BookPage, scrollTo: boolean) {
+        var pageDiv = document.getElementById(page.xmlId);
+        var pageLoaded: boolean = !($(pageDiv).hasClass('unloaded'));
+        var pageLoading: boolean = $(pageDiv).hasClass('loading');
+        if (!pageLoaded && !pageLoading) {
+            this.downloadPageByXmlId(page);
+        }
+        if (scrollTo) {
+            this.scrollTextToPositionFromTop(0);
+            var topOffset = $(pageDiv).offset().top;
+            this.scrollTextToPositionFromTop(topOffset);
+
+            if (typeof this.childwindow !== 'undefined') {
+                $(".reader-text-container", this.childwindow.document).scrollTop(0);
+                var pageToScrollOffset = $('#'+ page.xmlId, this.childwindow.document).offset().top;
+                $(".reader-text-container", this.childwindow.document).scrollTop(pageToScrollOffset);
+            }
+        }
+    }
+
+    scrollTextToPositionFromTop(topOffset: number) {
+        var scrollableContainer = $(this.innerContent);
+        var containerTopOffset = $(scrollableContainer).offset().top;
+        $(scrollableContainer).scrollTop(topOffset - containerTopOffset);
+    }
+
+    onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
+        super.onNewWindowButtonClick(sidePanelDiv);
+        var pageIndex = this.parentReader.actualPageIndex;
+        $(this.childwindow.document).ready(() => {
+            this.parentReader.moveToPageNumber(pageIndex, true);
+        });
+    }
+
+    onUnloadWindowMode() {
+        super.onUnloadWindowMode();
+        var pageIndex = this.parentReader.actualPageIndex;
+        this.parentReader.moveToPageNumber(pageIndex, true);
+    }
+
+    private downloadPageByXmlId(page: BookPage) {
+        var pageContainer = document.getElementById(page.xmlId);
+        $(pageContainer).addClass("loading");
+        if (typeof this.windowBody !== 'undefined') {
+            $(this.windowBody).find('#' + page.xmlId).addClass("loading");
+        }
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            url: getBaseUrl() +"Reader/GetBookPageByXmlId",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                $(pageContainer).empty();
+                $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
+                $(pageContainer).removeClass('unloaded');
+
+                if (typeof this.windowBody !== 'undefined') {
+                    $(this.windowBody).find('#' + page.xmlId).removeClass("loading");
+                    $(this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
+                }
+            },
+            error: (response) => {
+                $(pageContainer).empty();
+                $(pageContainer).removeClass("loading");
+                $(pageContainer).append("Chyba při načítání stránky '"+page.text+"'");
+            }
+        });
+    }
+}
+
+
+class BookPage {
+    private _xmlId: string;
+    private _text: string;
+    private _position: number;
+
+    constructor(xmlId: string, text: string, position: number) {
+        this._xmlId = xmlId;
+        this._text = text;
+        this._position = position;
+    }
+
+    get xmlId(): string {
+        return this._xmlId;
+    }
+
+    get text(): string {
+        return this._text;
+    }
+
+    get position(): number {
+        return this._position;
+    }
+}
+
+class ContentItem {
+    private _referredPageXmlId: string;
+    private _referredPageName: string;
+    private _text: string;
+    private _childBookContentItems: JSON[];
+
+    constructor(text: string, referredPageXmlId: string, referredPageName: string, childBookContentItems: JSON[]) {
+        this._referredPageXmlId = referredPageXmlId;
+        this._referredPageName = referredPageName;
+        this._text = text;
+        this._childBookContentItems = childBookContentItems;
+    }
+
+    get referredPageXmlId(): string {
+        return this._referredPageXmlId;
+    }
+
+    get referredPageName(): string {
+        return this._referredPageName;
+    }
+
+    get text(): string {
+        return this._text;
+    }
+
+    get childBookContentItems(): JSON[] {
+        return this._childBookContentItems;
     }
 }

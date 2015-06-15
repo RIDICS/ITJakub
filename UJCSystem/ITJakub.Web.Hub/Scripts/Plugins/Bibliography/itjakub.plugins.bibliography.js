@@ -1,18 +1,18 @@
-﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
+/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
 var BibliographyModule = (function () {
-    function BibliographyModule(booksContainer, sortBarContainer) {
+    function BibliographyModule(booksContainer, sortBarContainer, forcedBookType) {
         this.booksContainer = booksContainer;
         this.sortBarContainer = sortBarContainer;
-
+        this.forcedBookType = forcedBookType;
         //Download configuration
         var configObj;
         $.ajax({
             type: "GET",
             traditional: true,
             async: false,
-            url: "/Bibliography/GetConfiguration",
+            url: getBaseUrl() + "Bibliography/GetConfiguration",
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
@@ -36,14 +36,14 @@ var BibliographyModule = (function () {
                 rootElement.appendChild(bibliographyHtml);
             });
             $(this.booksContainer).append(rootElement);
-        } else {
+        }
+        else {
             var divElement = document.createElement('div');
             $(divElement).addClass('bib-listing-empty');
             divElement.innerHTML = "Žádné výsledky k zobrazení";
             $(this.booksContainer).append(divElement);
         }
     };
-
     BibliographyModule.prototype.makeBibliography = function (bibItem) {
         var liElement = document.createElement('li');
         $(liElement).addClass('list-item');
@@ -51,7 +51,6 @@ var BibliographyModule = (function () {
         $(liElement).attr("data-booktype", bibItem.BookType);
         $(liElement).attr("data-name", bibItem.Title);
         $(liElement).attr("data-century", bibItem.Century);
-
         //TODO toggle uncommented with commented code after testing
         //$(liElement).data('bookid', bibItem.BookGuid);
         //$(liElement).data('booktype', bibItem.BookType);
@@ -59,37 +58,33 @@ var BibliographyModule = (function () {
         //$(liElement).data('century', bibItem.Century); //TODO add values for sorting
         var visibleContent = document.createElement('div');
         $(visibleContent).addClass('visible-content');
-
-        var bibFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
-
+        var bibFactory;
+        if (typeof this.forcedBookType == 'undefined') {
+            bibFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
+        }
+        else {
+            bibFactory = this.bibliographyFactoryResolver.getFactoryForType(this.forcedBookType);
+        }
         var panel = bibFactory.makeLeftPanel(bibItem);
         if (panel != null)
             visibleContent.appendChild(panel);
-
         panel = bibFactory.makeRightPanel(bibItem);
         if (panel != null)
             visibleContent.appendChild(panel);
-
         panel = bibFactory.makeMiddlePanel(bibItem);
         if (panel != null)
             visibleContent.appendChild(panel);
-
         $(liElement).append(visibleContent);
-
         var hiddenContent = document.createElement('div');
         $(hiddenContent).addClass('hidden-content');
-
         panel = bibFactory.makeBottomPanel(bibItem);
         if (panel != null)
             hiddenContent.appendChild(panel);
-
         $(liElement).append(hiddenContent);
-
         return liElement;
     };
     return BibliographyModule;
 })();
-
 //TODO remove or move to separated file
 var BookInfo = (function () {
     function BookInfo() {

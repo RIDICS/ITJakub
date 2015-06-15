@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Comment CommentText="Základní informace o aktuálním a budoucím zpracování přepisu">
+    <Position X="4.287" Y="2.969" Height="0.49" Width="3.46" />
+  </Comment>
+  <Comment CommentText="Informace o proběhnuvších exportech přepisu do pro další využití">
+    <Position X="8.829" Y="2.896" Height="0.375" Width="4.21" />
+  </Comment>
+  <Comment CommentText="Základní údaje o přepisovaném textu a o přepisu. Tyto informace se nacházejí v dokumentu s přepisem v podobě tabulky, dále ve vlastnostech dokumentu a v databázi s evidencí textů.">
+    <Position X="0.5" Y="2.625" Height="0.792" Width="3.2" />
+  </Comment>
+  <Comment CommentText="Základní informace o dokumentu, který obsahuje přepis textu">
+    <Position X="4.246" Y="9.427" Height="0.448" Width="2.971" />
+  </Comment>
+  <Class Name="Daliboris.Texty.Evidence.Datace" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="6.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAACBAAIAAQFAIEAIAEAACAAQgBAABDAgAAACWg=</HashCode>
+      <FileName>Datace.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Daliboris.Texty.Evidence.AnalyzatorDatace">
+    <Position X="11.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIIAABAAMAAABAIAAAAAAACAA4ABAABAAgAAACSg=</HashCode>
+      <FileName>Datace.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.Texty.Evidence.Export" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="3.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAEgAAAAAAAAAAAAAAAQAAAAAIAAAg=</HashCode>
+      <FileName>Export.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Daliboris.Texty.Evidence.Hlavicka">
+    <Position X="0.5" Y="3.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>iGiICIAoCAiEQAwAwEAAAAAMVAAIAARACAAAaAgAAzE=</HashCode>
+      <FileName>Hlavicka.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.Texty.Evidence.Zpracovani">
+    <Position X="4.25" Y="3.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AgBBEABAAABAAAASAAgAAQQAAAAAAEAEAAAAAAAgKjg=</HashCode>
+      <FileName>Zpracovani.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.Texty.Evidence.Soubor">
+    <Position X="4.25" Y="10" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AgAAARAAAAAAAAAAAAAAAAAAAAIAAAQAAAAAAAAgAiA=</HashCode>
+      <FileName>Soubor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

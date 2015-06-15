@@ -42,7 +42,7 @@ body {
   text-decoration: none;
 }
 .module-content {
-  margin: 125px 0 0 0;
+  margin: 115px 0 0 0;
 }
 .content-container {
   background-color: white;
@@ -113,7 +113,7 @@ div.container {
 .delete-cardfile {
   float: right;
   display: none;
-  color: #ffd700;
+  color: gold;
 }
 .cardfile-filter {
   margin-bottom: 5px;
@@ -143,5 +143,49 @@ div.container {
 .cardfile-result-area {
   margin-top: 5px;
   clear: both;
+}
+.no-result,
+.nothing-selected,
+.server-error {
+  display: none;
+}
+.card-file-listing .card-file-select,
+.card-file-listing .bucket-select {
+  min-width: 200px;
+  float: left;
+  display: inline;
+  margin-right: 20px;
+}
+.card-file-listing {
+  display: inline-block;
+  margin-bottom: 5px;
+}
+.card-file-listing .select-header {
+  padding: 5px;
+  border-radius: 0;
+  background-color: #84ced7;
+  color: white;
+  padding-left: 5%;
+}
+.card-file-listing .select-body {
+  padding: 5px;
+  background-color: white;
+  min-width: 100%;
+  border-left: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
+  text-align: center;
+}
+.card-file-listing .select-body select {
+  width: 90%;
+}
+.card-file-listing .loading {
+  margin: 0 auto;
+  padding: 0;
+  background-color: white;
+  width: 20px;
+  height: 20px;
+  background: url(/Content/Images/loading.gif) no-repeat center;
+  background-size: contain;
 }
 /*# sourceMappingURL=itjakub.cardfiles.css.map */

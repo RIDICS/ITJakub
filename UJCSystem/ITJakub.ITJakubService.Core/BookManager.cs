@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Reflection;
 using AutoMapper;
 using ITJakub.Core;
 using ITJakub.Core.SearchService;
@@ -10,7 +10,8 @@ using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
-using MobilePageContract = ITJakub.MobileApps.MobileContracts.PageContract;
+using MobileContracts = ITJakub.MobileApps.MobileContracts;
+using log4net;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -18,93 +19,142 @@ namespace ITJakub.ITJakubService.Core
     {
         private readonly SearchServiceClient m_searchServiceClient;
         private readonly BookRepository m_bookRepository;
+        private readonly BookVersionRepository m_bookVersionRepository;
         private readonly FileSystemManager m_fileSystemManager;
 
-        public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository, FileSystemManager fileSystemManager)
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository, BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager)
         {
             m_searchServiceClient = searchServiceClient;
             m_bookRepository = bookRepository;
+            m_bookVersionRepository = bookVersionRepository;
             m_fileSystemManager = fileSystemManager;
         }
 
-        public async Task<string> GetBookPageByXmlIdAsync(string bookGuid, string xmlId, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
         {
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("Start MainService (BookManager) get page name '{0}' of book '{1}'", pageName, bookGuid);
+
+            var searchServiceClient = new SearchServiceClient();
             OutputFormat outputFormat;
-            var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
+            
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            return await m_searchServiceClient.GetBookPageByXmlIdAsync(bookGuid, bookVersion.VersionId, xmlId, transformationName, transformationLevel);
+            var pageText = searchServiceClient.GetBookPageByName(bookGuid, bookVersion.VersionId, pageName, transformationName, transformationLevel);
+
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("End MainService (BookManager) get page name '{0}' of book '{1}'", pageName, bookGuid);
+
+            return pageText;
         }
 
-        public async Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat)
         {
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("Start MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId, bookGuid);
+
+            var searchServiceClient = new SearchServiceClient();
             OutputFormat outputFormat;
-            var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
+
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            return await m_searchServiceClient.GetBookPageByNameAsync(bookGuid, bookVersion.VersionId, pageName, transformationName, transformationLevel);
+            var pageText = searchServiceClient.GetBookPageByXmlId(bookGuid, bookVersion.VersionId, pageXmlId, transformationName, transformationLevel);
+
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("End MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId, bookGuid);
+
+            return pageText;
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPagesByName(string bookGuid,string startPageName,string endPageName,OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
-            var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name; 
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            return await m_searchServiceClient.GetBookPagesByNameAsync(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName, transformationLevel);
+            return m_searchServiceClient.GetBookPagesByName(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName, transformationLevel);
         }
 
-        public async Task<string> GetBookPagesByPositionAsync(string bookGuid, int position, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
-            var successfullyConverted = Enum.TryParse(resultFormat.ToString(), true, out outputFormat);
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name; 
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            return await m_searchServiceClient.GetBookPageByPositionAsync(bookGuid, bookVersion.VersionId, position, transformationName, transformationLevel);
+            return m_searchServiceClient.GetBookPageByPosition(bookGuid, bookVersion.VersionId, position, transformationName, transformationLevel);
         }
 
-        public async Task<IList<BookPageContract>> GetBookPagesListAsync(string bookGuid)
+        public IList<BookPageContract> GetBookPagesList(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            return await m_searchServiceClient.GetBookPageListAsync(bookGuid, bookVersion.VersionId);
+            var pages = m_bookVersionRepository.GetPageList(bookVersion);
+            return Mapper.Map<IList<BookPageContract>>(pages);
         }
 
-        public async Task<IList<MobilePageContract>> GetBookPageListMobileAsync(string bookGuid)
+        public IList<MobileContracts.PageContract> GetBookPagesListMobile(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var bookPageList = await m_searchServiceClient.GetBookPageListAsync(bookGuid, bookVersion.VersionId);
-            return Mapper.Map<IList<MobilePageContract>>(bookPageList);
+            var pages = m_bookVersionRepository.GetPageList(bookVersion);
+            return Mapper.Map<IList<MobileContracts.PageContract>>(pages);
+        } 
+        
+        public IList<BookContentItemContract> GetBookContent(string bookGuid)
+        {
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var bookContentItems = m_bookVersionRepository.GetRootBookContentItemsWithPagesAndAncestors(bookVersion);
+            var contentItemsContracts = Mapper.Map<IList<BookContentItemContract>>(bookContentItems);
+            return contentItemsContracts;
         }
 
 
         public BookInfoContract GetBookInfo(string bookGuid)
         {
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var bookVersion = m_bookRepository.GetLastVersionForBookWithPages(bookGuid);
             return Mapper.Map<BookInfoContract>(bookVersion);
         }
 
         public Stream GetBookPageImage(BookPageImageContract imageContract)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(imageContract.BookGuid);
-            var bookPage = m_bookRepository.FindBookPageByVersionAndPosition(bookVersion.Id, imageContract.Position);
+            var bookPage = m_bookVersionRepository.FindBookPageByVersionAndPosition(bookVersion, imageContract.Position);
+            var imageFileName = bookPage.Image;
+            imageFileName = "junslov.jpg"; //TODO test
             return m_fileSystemManager.GetResource(imageContract.BookGuid, bookVersion.VersionId,
-                bookPage.Image, ResourceType.Image);
+                imageFileName, ResourceType.Image);
         }
 
         public Stream GetBookPageImage(string bookGuid, string pageId)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var bookPage = m_bookRepository.FindBookPageByVersionAndXmlId(bookVersion.Id, pageId);
+            var bookPage = m_bookVersionRepository.FindBookPageByVersionAndXmlId(bookVersion.Id, pageId);
+            var imageFileName = bookPage.Image;
+            imageFileName = "junslov.jpg"; //TODO test
             return m_fileSystemManager.GetResource(bookGuid, bookVersion.VersionId,
-                bookPage.Image, ResourceType.Image);
+                imageFileName, ResourceType.Image);
         }
     }
 }

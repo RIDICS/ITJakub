@@ -29,7 +29,7 @@
 
 	<xsl:template match="div">
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:choose>
 				<xsl:when test="head">
 					<xsl:for-each-group group-starting-with="head" select="*">

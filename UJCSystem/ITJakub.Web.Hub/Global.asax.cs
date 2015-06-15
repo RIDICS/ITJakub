@@ -10,7 +10,7 @@ using System.Web.Routing;
 
 namespace ITJakub.Web.Hub
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         protected void Application_Start()
         {
@@ -19,7 +19,7 @@ namespace ITJakub.Web.Hub
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Email; //TODO use another unique identifier
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
         }
     }
 }

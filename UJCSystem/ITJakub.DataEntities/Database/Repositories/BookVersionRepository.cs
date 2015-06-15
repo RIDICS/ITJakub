@@ -1,25 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
-using NHibernate;
+using log4net;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
     [Transactional]
     public class BookVersionRepository : NHibernateTransactionalDao
     {
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public BookVersionRepository(ISessionManager sessManager)
             : base(sessManager)
         {
         }
 
-
         [Transaction(TransactionMode.Requires)]
         public virtual long Create(BookVersion bookVersion)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return (long) session.Save(bookVersion);
             }
@@ -28,7 +31,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual void Delete(BookVersion bookVersion)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 session.Delete(bookVersion);
             }
@@ -37,7 +40,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual BookVersion FindBookVersionByGuid(string bookVersionGuid)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return
                     session.QueryOver<BookVersion>()
@@ -49,7 +52,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual Publisher FindPublisherByText(string text)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return
                     session.QueryOver<Publisher>()
@@ -61,10 +64,9 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual Responsible FindResponsible(string text, ResponsibleType type)
         {
-            
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
-                ResponsibleType responsibleType = FindResponsibleType(type) ?? type;
+                var responsibleType = FindResponsibleType(type) ?? type;
                 return
                     session.QueryOver<Responsible>()
                         .Where(
@@ -78,7 +80,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual ResponsibleType FindResponsibleType(ResponsibleType responsibleType)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return
                     session.QueryOver<ResponsibleType>()
@@ -88,6 +90,92 @@ namespace ITJakub.DataEntities.Database.Repositories
                                 respType.Type == responsibleType.Type)
                         .Take(1)
                         .SingleOrDefault<ResponsibleType>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookPage GetPageByVersionAndXmlId(BookVersion bookVersion, string pageXmlId)
+        {
+            using (var session = GetSession())
+            {
+                var bookPage =
+                    session.QueryOver<BookPage>()
+                        .Where(x => x.BookVersion.Id == bookVersion.Id && x.XmlId == pageXmlId)
+                        .SingleOrDefault<BookPage>();
+                return bookPage;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookPage FindBookPageByVersionAndPosition(BookVersion bookVersion, int position)
+        {
+            using (var session = GetSession())
+            {
+                var bookPage =
+                    session.QueryOver<BookPage>()
+                        .Where(x => x.BookVersion.Id == bookVersion.Id && x.Position == position)
+                        .SingleOrDefault<BookPage>();
+                return bookPage;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookPage FindBookPageByVersionAndXmlId(long versionId, string xmlId)
+        {
+            using (var session = GetSession())
+            {
+                var bookPage =
+                    session.QueryOver<BookPage>()
+                        .Where(x => x.BookVersion.Id == versionId && x.XmlId == xmlId)
+                        .SingleOrDefault<BookPage>();
+                return bookPage;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookPage> GetPageList(BookVersion bookVersion)
+        {
+            using (var session = GetSession())
+            {
+                var bookPages =
+                    session.QueryOver<BookPage>()
+                        .Where(x => x.BookVersion.Id == bookVersion.Id)
+                        .List<BookPage>();
+                return bookPages;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookContentItem> GetRootBookContentItemsWithPagesAndAncestors(BookVersion bookVersion)
+        {
+            using (var session = GetSession())
+            {
+                var bookContentItems =
+                    session.QueryOver<BookContentItem>()
+                        //.Fetch(x => x.Page).Eager
+                        .Where(item => item.BookVersion.Id == bookVersion.Id && item.ParentBookContentItem == null)
+                        .List<BookContentItem>();
+                return bookContentItems;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookPage GetPageByXmlId(string bookId, string pageXmlId)
+        {
+            using (var session = GetSession())
+            {
+                BookPage page = null;
+                BookVersion version = null;
+
+                var resultPage =session.QueryOver<BookPage>(() => page)
+                    .JoinQueryOver(x => x.BookVersion, () => version)
+                    .JoinQueryOver(x => x.Book)
+                    .Where(book => book.Guid == bookId && version.Id == book.LastVersion.Id && page.XmlId == pageXmlId)
+                    .SingleOrDefault<BookPage>();
+
+               
+
+                return resultPage;
             }
         }
     }

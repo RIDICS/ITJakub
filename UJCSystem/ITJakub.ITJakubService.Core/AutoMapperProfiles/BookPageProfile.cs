@@ -8,10 +8,15 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<BookPage, BookPageContract>();
+            CreateMap<BookPage, BookPageContract>()
+                .ForMember(m => m.XmlId, opt => opt.MapFrom(src => src.XmlId))
+                .ForMember(m => m.Text, opt => opt.MapFrom(src => src.Text))
+                .ForMember(m => m.Position, opt => opt.MapFrom(src => src.Position));
 
-            CreateMap<BookPageContract, MobileApps.MobileContracts.PageContract>()
-                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Text));
+            CreateMap<BookPage, MobileApps.MobileContracts.PageContract>()
+                .ForMember(m => m.XmlId, opt => opt.MapFrom(src => src.XmlId))
+                .ForMember(m => m.Name, opt => opt.MapFrom(src => src.Text))
+                .ForMember(m => m.Position, opt => opt.MapFrom(src => src.Position));
         }
     }
 }

@@ -4,22 +4,14 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    <many-to-one name="Category">
-      <column name="Category" sql-type="int" not-null="false" />
-    </many-to-one>
-    <many-to-one name="BookType" cascade="all-delete-orphan" lazy="false">
-      <column name="BookType" sql-type="int" not-null="false" />
-    </many-to-one>
     <many-to-one name="LastVersion" lazy="false" fetch="join">
       <column name="LastVersion" sql-type="bigint" not-null="false" />
     </many-to-one>
     <property name="Guid">
       <column name="Guid" sql-type="varchar" not-null="true" />
     </property>
-    <bag name="Bookmarks" inverse="true">
-      <key column="Book" />
-      <one-to-many class="Bookmark" />
-    </bag>
+     
+    
     <bag name="BookVersions" cascade="all-delete-orphan" inverse="true">
       <key column="Book" />
       <one-to-many class="BookVersion" />

@@ -34,7 +34,7 @@
 
 	<xsl:template match="body/div">
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:choose>
 				<xsl:when test="count(child::*[(starts-with(name(), 'head'))]) &gt; 0">
 					<xsl:variable name="uroven">

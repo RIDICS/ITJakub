@@ -24,30 +24,48 @@
 	</xsl:template>
 	
 	<xsl:template match="tei:text|tei:teiHeader">
+		<xsl:variable name="name">
+			<xsl:call-template name="nameShortCut">
+				<xsl:with-param name="name" select="name()" />
+			</xsl:call-template>
+		</xsl:variable>
+		
 		<xsl:copy>
 			<xsl:attribute name="xml:id">
-				<xsl:value-of select="name()"/>-<xsl:number format="1" level="single"/>
+				<xsl:value-of select="$name"/>-<xsl:number format="1" level="single"/>
 			</xsl:attribute>
 			<xsl:apply-templates select="@*|node()">
 				<xsl:with-param name="prev_id">
-					<xsl:value-of select="name()"/>-<xsl:number format="1" level="single"/>
+					<xsl:value-of select="$name"/>-<xsl:number format="1" level="single"/>
 				</xsl:with-param>
 			</xsl:apply-templates>
 		</xsl:copy>
 	</xsl:template>
 	
-	<!--	<xsl:template match="tei:pb">
-		<xsl:apply-templates select="@*" />
+<!--	<xsl:template match="tei:pb">
+		<xsl:copy-of select="@*" />
 	</xsl:template>
 -->	
-	<xsl:template match="tei:body | tei:front | tei:back | tei:div | tei:head | tei:note | tei:p | tei:l | tei:w | tei:pb">
+	<xsl:template match="tei:body | tei:front | tei:back | tei:div | tei:head | 
+		tei:note | tei:p | tei:l | tei:w | tei:pb | tei:app | tei:item | tei:figure | tei:list |
+		tei:table | tei:row | tei:cell | tei:seg	| tei:fw	| tei:supplied | tei:add | tei:app | 
+		tei:unclear	| tei:foreign | tei:del | tei:rdg | tei:orig | tei:choice |
+		tei:encodingDesc | tei:projectDesc">
+	<!-- <xsl:template match="tei:note[ancestor-or-self::*]">-->
 		<xsl:param name="prev_id"/>
+
+		<xsl:variable name="name">
+			<xsl:call-template name="nameShortCut">
+				<xsl:with-param name="name" select="name()" />
+			</xsl:call-template>
+		</xsl:variable>
+
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:variable name="cur_id">
 				<xsl:choose>
 					<xsl:when test="$prev_id = ''">
-						<xsl:value-of select="name()"/>-<xsl:number format="1" level="single"/>
+						<xsl:value-of select="$name"/>-<xsl:number format="1" level="single"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="concat($prev_id,'.',name())"/>-<xsl:number format="1" level="single"/>
@@ -59,6 +77,30 @@
 				<xsl:with-param name="prev_id" select="$cur_id"/>
 			</xsl:apply-templates>
 		</xsl:copy>
+	</xsl:template>
+	
+	<xsl:template name="nameShortCut">
+		<xsl:param name="name" />
+			<xsl:choose>
+				<xsl:when test="$name = 'back'">
+					<xsl:value-of select="$name"/>
+				</xsl:when>
+				<xsl:when test="$name = 'pb'">
+					<xsl:value-of select="$name"/>
+				</xsl:when>
+				<xsl:when test="$name = 'teiHeader'">
+					<xsl:value-of select="$name"/>
+				</xsl:when>
+				<xsl:when test="$name = 'list'">
+					<xsl:value-of select="$name"/>
+				</xsl:when>
+				<xsl:when test="$name = 'supplied'">
+					<xsl:value-of select="'supp'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="substring($name, 1, 1)"/>
+				</xsl:otherwise>
+			</xsl:choose>
 	</xsl:template>
 	
 </xsl:stylesheet>

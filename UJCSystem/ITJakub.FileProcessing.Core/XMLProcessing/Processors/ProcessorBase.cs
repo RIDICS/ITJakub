@@ -86,5 +86,16 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         {
             return SubProcessors.ToDictionary(x => x.NodeName);
         }
+
+        protected string GetAttributeValue(XElement pageElement, XName attributeName)
+        {
+            string attributeValue = null;
+            var attribute = pageElement.Attribute(attributeName);
+            if (attribute != null)
+            {
+                attributeValue = attribute.Value;
+            }
+            return attributeValue;
+        }
     }
 }

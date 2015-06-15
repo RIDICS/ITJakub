@@ -2,14 +2,24 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
+using System.Text;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using Daliboris.OOXML.Word.Transform;
 using Daliboris.Texty.Evidence;
 using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export;
 using Daliboris.Texty.Export.Rozhrani;
+using Daliboris.Texty.Export.SlovnikovyModul;
+using Daliboris.Transkripce.Objekty;
+using JetBrains.Annotations;
+using Ujc.Ovj.Xml.Tei.Contents;
 using Ujc.Ovj.Xml.Tei.Splitting;
+using Prepis = Daliboris.Texty.Evidence.Prepis;
+using Prepisy = Daliboris.Texty.Evidence.Prepisy;
 
 namespace Ujc.Ovj.Ooxml.Conversion
 {
@@ -29,7 +39,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:System.Object"/> class.
 		/// </summary>
-		public VersionInfoSkeleton(string message, DateTime creation) : this()
+		public VersionInfoSkeleton(string message, DateTime creation)
+			: this()
 		{
 			Message = message;
 			Creation = creation;
@@ -40,7 +51,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:System.Object"/> class.
 		/// </summary>
-		public VersionInfoSkeleton(string message, DateTime creation, string id) : this(message, creation)
+		public VersionInfoSkeleton(string message, DateTime creation, string id)
+			: this(message, creation)
 		{
 			Id = id;
 		}
@@ -51,13 +63,20 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 		private static string GenerateId(DateTime dateTime)
 		{
-		 return	String.Format("Change_{0:O}", dateTime);
+			return String.Format("Change_{0:O}", dateTime);
 		}
 
 	}
 
 	public class DocxToTeiConverter
 	{
+
+		XNamespace nsTei = "http://www.tei-c.org/ns/1.0";
+		XNamespace nsXml = "http://www.w3.org/XML/1998/namespace";
+		XNamespace nsItj = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0";
+		XNamespace nsNlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
+
+
 		private ConversionResult _result;
 		private const string XmlExtension = ".xml";
 		private string _documentId = null;
@@ -86,7 +105,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			{
 				//dokument v evidenci neexistuje, nabídnout zanesení dokumentu do evidence
 				// mělo by stačit přiřazení typu dokumentu
-				_result.Errors = "Dokument s uvedeným jménem souboru neexistuje v evidenci.";
+				_result.Errors.Add(new DocumentNotInEvidenceException("Dokument s uvedeným jménem souboru neexistuje v evidenci."));
 				return _result;
 			}
 
@@ -98,7 +117,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			if (documentType == null)
 			{
 				//dokument má v evidenci přiřazen typ dokumentu, který není podporován
-				_result.Errors = "Dokument má v evidenci přiřazen typ dokumentu, který není podporován.";
+				_result.Errors.Add(new NotSupportedFileFormatException("Dokument má v evidenci přiřazen typ dokumentu, který není podporován."));
 				return _result;
 			}
 
@@ -128,7 +147,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			}
 			catch (Exception exception)
 			{
-				_result.Errors = exception.Message;
+				_result.Errors.Add(exception);
 				return _result;
 			}
 
@@ -151,7 +170,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			}
 			catch (Exception exception)
 			{
-				_result.Errors = exception.Message;
+				_result.Errors.Add(exception);
 				return _result;
 			}
 
@@ -177,12 +196,17 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				if (!splittingResult.IsSplitted)
 				{
 					_result.IsConverted = false;
-					_result.Errors = "Vyskytla se chyba při rozdělení souboru podle hranice stran.\r\n" + _result.Errors;
+					_result.Errors.Add(new DocumentSplittingException("Vyskytla se chyba při rozdělení souboru podle hranice stran."));
 				}
-
 			}
 
-			GenerateConversionMetadataFile(splittingResult, documentType, settings.OutputFilePath);
+			TableOfContentResult tocResult = null;
+			ContentInfoBuilder tocBuilder = new ContentInfoBuilder();
+			tocBuilder.XmlFile = settings.OutputFilePath;
+			tocBuilder.StartingElement = "body";
+			tocResult = tocBuilder.MakeTableOfContent();
+
+			GenerateConversionMetadataFile(splittingResult, tocResult, documentType, settings.OutputFilePath);
 
 			if (!settings.Debug)
 			{
@@ -205,8 +229,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// <param name="settings"></param>
 		private void ResolveDefaultSettingsValues(DocxToTeiConverterSettings settings)
 		{
-			if(settings == null) return;
-			if(settings.InputFilePath == null) return;
+			if (settings == null) return;
+			if (settings.InputFilePath == null) return;
 			FileInfo fileInfo = new FileInfo(settings.InputFilePath);
 			DirectoryInfo directoryInfo = new DirectoryInfo(fileInfo.DirectoryName);
 			if (settings.OutputFilePath == null)
@@ -219,19 +243,17 @@ namespace Ujc.Ovj.Ooxml.Conversion
 					Directory.CreateDirectory(tempDirectory);
 				settings.TempDirectoryPath = tempDirectory;
 			}
-
-
-
 		}
 
 		private void GenerateConversionMetadataFile(SplittingResult splittingResult,
 			string documentType,
 			string finalOutputFileName)
 		{
-			XNamespace nsTei = "http://www.tei-c.org/ns/1.0";
-			XNamespace nsXml = "http://www.w3.org/XML/1998/namespace";
-			XNamespace nsItj = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0";
-			XNamespace nsNlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
+			GenerateConversionMetadataFile(splittingResult, new TableOfContentResult(), documentType, finalOutputFileName);
+		}
+
+		private void GenerateConversionMetadataFile(SplittingResult splittingResult, TableOfContentResult tableOfContentResult, string documentType, string finalOutputFileName)
+		{
 
 			XDocument metada = new XDocument();
 
@@ -252,23 +274,148 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			XElement header = teiDocument.Descendants(nsTei + "teiHeader").FirstOrDefault();
 			metada.Root.Add(header);
 
-			XElement toc = new XElement(nsItj + "tableOfContents");
+			XElement toc = GenerateToc(tableOfContentResult);
+			XElement hws = GenerateHwList(tableOfContentResult);
+
+
+			if (splittingResult != null) //generovat pouze v případě, že k rozdělení na strany došlo
+			{
+				XElement pages = new XElement(nsItj + "pages",
+					from info in splittingResult.PageBreaksSplitInfo
+					select new XElement(nsItj + "page",
+						info.Number == null ? null : new XAttribute("n", info.Number),
+						info.Id == null ? null : new XAttribute(nsXml + "id", info.Id),
+						info.FileName == null ? null : new XAttribute("resource", info.FileName),
+						info.Facsimile == null ? null : new XAttribute("facs", info.Facsimile)
+						)
+					);
+
+				metada.Root.Add(pages);
+			}
 			metada.Root.Add(toc);
-
-			XElement pages = new XElement(nsItj + "pages",
-				from info in splittingResult.PageBreaksSplitInfo
-				select new XElement(nsItj + "page",
-					info.Number == null ? null : new XAttribute("n", info.Number),
-					info.Id == null ? null : new XAttribute(nsXml + "id", info.Id),
-					info.FileName == null ? null : new XAttribute("resource", info.FileName),
-					info.Facsimile == null ? null : new XAttribute("facs", info.Facsimile)
-					)
-				);
-
-			metada.Root.Add(pages);
+			metada.Root.Add(hws);
 			metada.Save(GetConversionMetadataFileFullPath(finalOutputFileName));
 
 		}
+
+
+		private XElement GenerateToc(TableOfContentResult result)
+		{
+			XDocument doc = new XDocument(new XElement(nsItj + "tableOfContent"));
+			doc.Root.Add(GenerateList(result.Sections));
+			return doc.Root;
+		}
+
+		private XElement GenerateHwList(TableOfContentResult result)
+		{
+			XDocument doc = new XDocument(new XElement(nsItj + "headwordsList"));
+			doc.Root.Add(GenerateList(result.HeadwordsList));
+			return doc.Root;
+		}
+
+		private XElement GenerateList(List<HeadwordsListItem> items)
+		{
+			if (items.Count > 0)
+			{
+				XElement list = new XElement(nsTei + "list");
+				foreach (HeadwordsListItem item in items)
+				{
+					list.Add(GenerateList(item));
+				}
+				if (list.IsEmpty)
+					return null;
+				return list;
+			}
+			return null;
+		}
+
+		private XElement GenerateList(List<ItemBase> items)
+		{
+			if (items.Count > 0)
+			{
+				XElement list = new XElement(nsTei + "list");
+				foreach (ItemBase item in items)
+				{
+					if (item is TableOfContentItem)
+					{
+						list.Add(GenerateList(item as TableOfContentItem));
+					}
+					if (item is HeadwordsListItem)
+					{
+						list.Add(GenerateList(item as HeadwordsListItem));
+					}
+				}
+				if (list.IsEmpty)
+					return null;
+				return list;
+			}
+			return null;
+		}
+
+		private XElement GenerateList(HeadwordsListItem item)
+		{
+			if (item == null) return null;
+			string corresp = item.HeadwordInfo.FormXmlId ?? item.DivXmlId;
+			XAttribute type = null;
+			if (item.HeadwordInfo.Type != null)
+				type = new XAttribute("type", item.HeadwordInfo.Type);
+			XElement it =
+				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp),
+					type,
+					new XElement(nsTei + "head", new XText(item.HeadInfo.HeadText)),
+					item.PageBreakInfo.PageBreak == null
+						? null
+						: new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakInfo.PageBreakXmlId),
+							new XText(item.PageBreakInfo.PageBreak)),
+					GenerateList(item.Sections)
+					);
+			return it;
+		}
+
+
+		private  XElement GenerateList(List<TableOfContentItem> items)
+		{
+			if (items.Count > 0)
+			{
+				XElement list = new XElement(nsTei + "list");
+				foreach (TableOfContentItem item in items)
+				{
+					list.Add(GenerateList(item));
+				}
+				if (list.IsEmpty)
+					return null;
+				return list;
+			}
+			return null;
+		}
+
+		private XElement GenerateList(TableOfContentItem item)
+		{
+			if (item == null || item.PageBreakInfo.PageBreakXmlId == null) return null;
+			string corresp = item.DivXmlId;
+			XElement it =
+				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp),
+						new XElement(nsTei + "head", new XText(item.HeadInfo.HeadText)),
+						item.PageBreakInfo.PageBreak == null ? null : new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakInfo.PageBreakXmlId), new XText(item.PageBreakInfo.PageBreak)),
+						GenerateList(item.Sections)
+					);
+			return it;
+		}
+
+		/*
+		private XElement GenerateList(TableOfContentItem item)
+		{
+			if (item == null) return null;
+			string corresp = item.FormXmlId ?? item.DivXmlId;
+			XElement it =
+				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp), (item.Type == null) ? null : new XAttribute("type", item.Type),
+						new XElement(nsTei + "head", new XText(item.Head)),
+						item.PageBreak == null ? null : new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakXmlId), new XText(item.PageBreak)),
+						GenerateList(item.Sections)
+					);
+			return it;
+		}
+		*/
 
 		private static string GetConversionMetadataFileFullPath(string outputFilePath)
 		{
@@ -287,7 +434,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			Splitter splitter = new Splitter(fileFullPath, outputDirectory);
 			splitter.StartingElement = "body";
-			
+
 			SplittingResult splittingResult = splitter.SplitOnPageBreak();
 			return splittingResult;
 		}
@@ -319,6 +466,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				case "Edition":
 				case "ProfessionalLiterature":
 					return new EdicniModul(exportSettings);
+				case "Dictionary":
+					return new SlovnikovyModul(exportSettings);
 			}
 
 			return null;
@@ -340,6 +489,10 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				case "ProfessionalLiterature":
 					exportSettings = GetEdicniModulNastaveni(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, glsPrepisy);
 					break;
+				case "Dictionary":
+					exportSettings = GetDictionarySettings(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads,
+						glsPrepisy);
+					break;
 			}
 			return exportSettings;
 		}
@@ -349,6 +502,24 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			AdresarovaStruktura ads, List<IPrepis> glsPrepisy)
 		{
 			IExportNastaveni nastaveni = new EdicniModulNastaveni();
+			nastaveni.SouborTransformaci = xsltTransformationFilePath;
+			nastaveni.SlozkaXslt = xsltTemplatesPath;
+			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;
+			nastaveni.VystupniSlozka = ads.DejVystup;
+			nastaveni.DocasnaSlozka = ads.DejTemp;
+			nastaveni.Prepisy = glsPrepisy;
+			nastaveni.SmazatDocasneSoubory = !settings.Debug;
+
+			nastaveni.SouborMetadat = settings.MetadataFilePath;
+			return nastaveni;
+		}
+
+		private static IExportNastaveni GetDictionarySettings(DocxToTeiConverterSettings settings,
+			string xsltTransformationFilePath,
+			string xsltTemplatesPath,
+			AdresarovaStruktura ads, List<IPrepis> glsPrepisy)
+		{
+			IExportNastaveni nastaveni = new SlovnikovyModulNastaveni();
 			nastaveni.SouborTransformaci = xsltTransformationFilePath;
 			nastaveni.SlozkaXslt = xsltTemplatesPath;
 			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;

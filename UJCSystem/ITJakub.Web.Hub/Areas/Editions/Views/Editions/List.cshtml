@@ -1,10 +1,12 @@
-﻿@section styles{
+﻿@using ITJakub.Shared.Contracts
+@section styles{
     @Styles.Render("~/itjakub/editions/css")
 }
 @section scripts{
     @Scripts.Render("~/itjakub/editions/javascript")
+    @Scripts.Render("~/itjakub/editions/listjs")
 }
 
-<div class="content-container">
-    <h1>Seznam</h1>
+
+<div id="listResults" data-book-type="@BookTypeEnumContract.Edition">
 </div>

@@ -6,12 +6,12 @@ namespace ITJakub.Shared.Contracts
     public class BookPageContract
     {
         [DataMember]
+        public string XmlId { get; set; }
+
+        [DataMember]
         public string Text { get; set; }
 
         [DataMember]
         public int Position { get; set; }
-
-        [DataMember]
-        public string XmlId { get; set; }
     }
 }

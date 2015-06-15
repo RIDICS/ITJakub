@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
+using log4net;
 
 namespace ITJakub.SearchService.Core.Exist
 {
@@ -10,6 +12,8 @@ namespace ITJakub.SearchService.Core.Exist
     {
         private readonly HttpClient m_httpClient;
         private readonly UriCache m_uriCache;
+
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ExistClient(UriCache uriCache, ExistConnectionSettingsSkeleton connectionSettings)
         {
@@ -21,103 +25,85 @@ namespace ITJakub.SearchService.Core.Exist
             m_httpClient = new HttpClient(clientHandler);
         }
 
-        public async Task<Stream> GetPageListAsync(string bookId, string versionId)
+        public void UploadVersionFile(string bookId, string bookVersionId, string fileName, Stream dataStream)
         {
-            return await GetPageListAsync(bookId, versionId, null);
-        }
-        
-        public async Task UploadVersionFileAsync(string bookId, string bookVersionId, string fileName, Stream dataStream)
-        {
+            if (m_log.IsDebugEnabled) 
+                m_log.DebugFormat("Begin upload file '{0}' of book '{1}' and version '{2}'", fileName, bookId, bookVersionId);
+           
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, bookVersionId, fileName);
-            await m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
+            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
-            });
+            })); 
+
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("End upload file '{0}' of book '{1}' and version '{2}'", fileName, bookId, bookVersionId);
         }
 
-        public async Task UploadBookFileAsync(string bookId, string fileName, Stream dataStream)
+        public void UploadBookFile(string bookId, string fileName, Stream dataStream)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, fileName);
-            await m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
+            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
-            });
+            })); 
         }
 
-        public async Task UploadSharedFileAsync(string fileName, Stream dataStream)
+        public void UploadSharedFile(string fileName, Stream dataStream)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-
             var uri = SetParamsToUri(commInfo.UriTemplate, fileName);
-            await m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
+            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
-            });
+            }));
         }
 
-        public async Task<string> GetPageByPositionFromStart(string bookId, string versionId, int pagePosition)
+        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition)
         {
-            return await GetPageByPositionFromStart(bookId, versionId, pagePosition, null);
+            return GetPageByPositionFromStart(bookId, versionId, pagePosition, null);
         }
 
-        public async Task<string> GetPageByName(string bookId, string versionId, string start)
+        public string GetPageByName(string bookId, string versionId, string start)
         {
-            return await GetPageByName(bookId, versionId, start, null);
+            return GetPageByName(bookId, versionId, start, null);
         }
 
-        public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end)
+        public string GetPagesByName(string bookId, string versionId, string start, string end)
         {
-            return await GetPagesByName(bookId, versionId, start, end, null);
+            return GetPagesByName(bookId, versionId, start, end, null);
         }
 
-        public Task<string> GetPageByXmlIdAsync(string bookId, string versionId, string xmlId)
-        {
-            return GetPageByXmlIdAsync(bookId, versionId, xmlId, null);
-        }
-
-        public async Task<Stream> GetPageListAsync(string bookId, string versionId, string xslPath)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-
-            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId);
-            var response = await m_httpClient.GetAsync(completeUri);
-            return await response.Content.ReadAsStreamAsync();
-        }
-
-        public async Task<string> GetPageByPositionFromStart(string bookId, string versionId, int pagePosition,
+        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition,
             string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-
-            var response = await m_httpClient.GetStringAsync(GetCompleteUri(commInfo, xslPath, bookId, versionId, pagePosition));
-            return response;
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, pagePosition);
+            return Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
         }
 
-        public async Task<string> GetPageByName(string bookId, string versionId, string start, string xslPath)
+        public string GetPageByName(string bookId, string versionId, string start, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
             var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, start);
-            return await m_httpClient.GetStringAsync(completeUri);
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("Start HTTPclient get page name '{0}' of book '{1}' and version '{2}'", start, bookId, versionId);
+            string pageText = Task.Run(()=>m_httpClient.GetStringAsync(completeUri)).Result;
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("End HTTPclient get page name '{0}' of book '{1}' and version '{2}'", start, bookId, versionId);
+            return pageText;
         }
 
-        public async Task<string> GetPagesByName(string bookId, string versionId, string start, string end, string xslPath)
+        public string GetPagesByName(string bookId, string versionId, string start, string end, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-
-            return await m_httpClient.GetStringAsync(GetCompleteUri(commInfo, xslPath, bookId, versionId, start, end));
-        }
-
-        public async Task<string> GetPageByXmlIdAsync(string bookId, string versionId, string xmlId, string xslPath)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-
-            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, xmlId);
-            return await m_httpClient.GetStringAsync(completeUri);
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, start, end);
+            return Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
         }
 
 
@@ -146,5 +132,24 @@ namespace ITJakub.SearchService.Core.Exist
         }
 
         #endregion
+
+        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string xslPath)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, pageXmlId);
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("Start HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}'", pageXmlId, bookId, versionId);
+            string pageText = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("End HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}'", pageXmlId, bookId, versionId);
+            return pageText;
+        }
+
+
+        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId)
+        {
+            return GetPageByXmlId(bookId, versionId, pageXmlId, null);
+        }
     }
 }

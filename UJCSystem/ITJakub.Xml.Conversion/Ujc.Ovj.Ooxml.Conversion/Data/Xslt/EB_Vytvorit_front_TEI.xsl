@@ -39,6 +39,7 @@
 			<xsl:apply-templates select="ev:Hlavicka/ev:Autor" />
 			<xsl:apply-templates select="ev:Hlavicka" />
 			<xsl:apply-templates select="ev:Hlavicka/ev:EditoriPrepisu" />
+			<xsl:call-template name="hlavni-editor" />
 			<!--<xsl:call-template name="logo" />-->
 			<xsl:call-template name="copyright" >
 				<xsl:with-param name="vroceni" select="ev:Zpracovani/ev:Publikace/ev:Vydani[1]/ev:Vroceni/text()" />
@@ -78,6 +79,10 @@
 			<!-- TODO: generovat ISBN z evidenčního souboru -->
 			<!--<p>ISBN XX-XXXX-XXX-XX (SSČ AV ČR, Praha)</p>-->
 		
+	</xsl:template>
+	
+	<xsl:template name="hlavni-editor">
+		<p>Odpovědný redaktor ediční řady: Štěpán Šimek</p>
 	</xsl:template>
 	
 	<xsl:template match="ev:EditoriPrepisu" mode="copyright">

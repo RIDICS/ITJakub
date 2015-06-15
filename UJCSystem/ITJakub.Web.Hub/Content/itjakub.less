@@ -65,11 +65,16 @@ a.main_logo_href img {
     .hovered-link;
 }
 
+ul.navbar-right.navbar-login {
+  margin-right: 20px!important;
+}
+
 .navbar-login li, ul {
     display: inline;
     margin-left: 5px;
     list-style: none;
     margin-top: 20px;
+    margin-right: 5px!important; 
 }
 
 .file-upload-metadata label, .file-upload-metadata input[type='submit'] {
@@ -187,7 +192,6 @@ a.main_logo_href img {
 
 .searchbar-buttons {
     float: right;
-    /*width:16%;*/
 }
 
 .searchbar-button {
@@ -197,9 +201,13 @@ a.main_logo_href img {
 }
 
 .top-offset-without-submenu {
-    margin: -25px 0 0 0;
+    margin: -32px 0 0 0;
 }
 
 .navbar-login li a,.navbar-login li a:visited{
     color: white;
+}
+
+.navbar-login li a:hover{
+    color: @item-background-color;
 }

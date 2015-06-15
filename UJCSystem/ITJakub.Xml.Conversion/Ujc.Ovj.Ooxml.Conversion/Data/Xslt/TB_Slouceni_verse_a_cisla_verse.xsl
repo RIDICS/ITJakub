@@ -3,6 +3,7 @@
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
 	exclude-result-prefixes="xd"
 	version="1.0">
+<xsl:import href="Kopirovani_prvku.xsl"/>
 	<xd:doc scope="stylesheet">
 		<xd:desc>
 			<xd:p><xd:b>Created on:</xd:b> Dec 8, 2010</xd:p>
@@ -11,11 +12,15 @@
 		</xd:desc>
 	</xd:doc>
 
-<xsl:include href="Kopirovani_prvku.xsl"/>
 
 
 	<xsl:output omit-xml-declaration="no" indent="yes"/>
 	<xsl:strip-space elements="*"/>
+	
+	<xsl:template match="/">
+		<xsl:comment> TB_Slouceni_verse_a_cisla_verse </xsl:comment>
+		<xsl:apply-templates />
+	</xsl:template>
 	
 	<xsl:template match="/doc/vers[child::*[1] = cislo_verse]">
 		<xsl:element name="vers">

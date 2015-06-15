@@ -1,4 +1,4 @@
-﻿var SearchModule = (function () {
+var SearchModule = (function () {
     function SearchModule(bibModule) {
         this.bibliographyModule = bibModule;
     }
@@ -8,7 +8,7 @@
         $.ajax({
             type: "GET",
             traditional: true,
-            url: "/Search/Books",
+            url: getBaseUrl() + "Search/Books",
             data: { bookIds: bookIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -17,13 +17,12 @@
             }
         });
     };
-
     SearchModule.prototype.getBookWithType = function (type) {
         var _this = this;
         $.ajax({
             type: "GET",
             traditional: true,
-            url: "/Search/BooksWithType",
+            url: getBaseUrl() + "Search/BooksWithType",
             data: { type: type },
             dataType: 'json',
             contentType: 'application/json',

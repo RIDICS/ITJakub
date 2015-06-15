@@ -9,9 +9,9 @@ using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Service.Client
 {
-    public class ServiceClient : ClientBase<IMobileAppsService>, IMobileAppsService
+    public class ServiceClient : ClientBase<IMobileAppsService>, IServiceClient
     {
-        private const string EndpointAddress = "http://localhost:11186/MobileApps.svc";
+        private const string EndpointAddress = "http://localhost/MainService/MobileApps.svc";
         //private const string EndpointAddress = "http://147.32.81.136/ITJakub.ITJakubService/MobileApps.svc";
 
         public ServiceClient() : base(GetDefaultBinding(), GetDefaultEndpointAddress())
@@ -19,124 +19,139 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
             
         }
 
-        public async Task<IList<BookContract>> GetBookListAsync(BookTypeContract category)
+        public Task<IList<BookContract>> GetBookListAsync(BookTypeContract category)
         {
-            try
+            return Task.Run(() =>
             {
-                return await Channel.GetBookListAsync(category);
-            }
-            catch (FaultException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (CommunicationException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (TimeoutException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (ObjectDisposedException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
+                try
+                {
+                    return Channel.GetBookList(category);
+                }
+                catch (FaultException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+            });
         }
 
-        public async Task<IList<BookContract>> SearchForBookAsync(BookTypeContract category, SearchDestinationContract searchBy, string query)
+        public Task<IList<BookContract>> SearchForBookAsync(BookTypeContract category, SearchDestinationContract searchBy, string query)
         {
-            try
+            return Task.Run(() =>
             {
-                return await Channel.SearchForBookAsync(category, searchBy, query);
-            }
-            catch (FaultException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (CommunicationException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (TimeoutException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (ObjectDisposedException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
+                try
+                {
+                    return Channel.SearchForBook(category, searchBy, query);
+                }
+                catch (FaultException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+            });
         }
 
-        public async Task<IList<PageContract>> GetPageListAsync(string bookGuid)
+        public Task<IList<PageContract>> GetPageListAsync(string bookGuid)
         {
-            try
+            return Task.Run(() =>
             {
-                return await Channel.GetPageListAsync(bookGuid);
-            }
-            catch (FaultException ex)
-            {
-                throw new NotFoundException(ex);
-            }
-            catch (CommunicationException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (TimeoutException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (ObjectDisposedException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
+                try
+                {
+                    return Channel.GetPageList(bookGuid);
+                }
+                catch (FaultException ex)
+                {
+                    throw new NotFoundException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+            });
         }
 
-        public async Task<string> GetPageAsRtfAsync(string bookGuid, string pageId)
+        public Task<string> GetPageAsRtfAsync(string bookGuid, string pageId)
         {
-            try
+            return Task.Run(() =>
             {
-                return await Channel.GetPageAsRtfAsync(bookGuid, pageId);
-            }
-            catch (FaultException ex)
-            {
-                throw new NotFoundException(ex);
-            }
-            catch (CommunicationException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (TimeoutException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (ObjectDisposedException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
+                try
+                {
+                    return Channel.GetPageAsRtf(bookGuid, pageId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new NotFoundException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+            });
         }
 
-        public async Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
+        public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
         {
-            try
+            return Task.Run(() =>
             {
-                return await Channel.GetPagePhotoAsync(bookGuid, pageId);
-            }
-            catch (FaultException ex)
-            {
-                throw new NotFoundException(ex);
-            }
-            catch (CommunicationException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (TimeoutException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
-            catch (ObjectDisposedException ex)
-            {
-                throw new MobileCommunicationException(ex);
-            }
+                try
+                {
+                    return Channel.GetPagePhoto(bookGuid, pageId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new NotFoundException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+            });
         }
 
         #region enpoint settings

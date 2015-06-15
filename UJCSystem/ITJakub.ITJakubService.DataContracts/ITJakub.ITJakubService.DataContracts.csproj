@@ -45,19 +45,33 @@
     <Compile Include="AuthProviderEnumContract.cs" />
     <Compile Include="BookInfoContract.cs" />
     <Compile Include="BookPageImageContract.cs" />
+    <Compile Include="BucketContract.cs" />
+    <Compile Include="CardShortContract.cs" />
+    <Compile Include="ImageSizeEnumContract.cs" />
+    <Compile Include="ImageContract.cs" />
+    <Compile Include="CardContract.cs" />
+    <Compile Include="BucketShortContract.cs" />
+    <Compile Include="CardFileContract.cs" />
+    <Compile Include="IItJakubServiceEncrypted.cs" />
     <Compile Include="LoginUserContract.cs" />
     <Compile Include="CreateUserContract.cs" />
     <Compile Include="LoginUserResultContract.cs" />
     <Compile Include="CreateUserResultContract.cs" />
     <Compile Include="IItJakubService.cs" />
+    <Compile Include="PageBookmarkContract.cs" />
     <Compile Include="ProcessedFileInfoContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserContract.cs" />
     <Compile Include="UserDetailContract.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jewelery\Jewelery.csproj">
+      <Project>{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}</Project>
+      <Name>Jewelery</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

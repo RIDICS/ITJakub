@@ -4,25 +4,35 @@ namespace ITJakub.Web.Hub.Models
 {
     public class LoginViewModel
     {
-        [Required]
-        [Display(Name = "Email")]
-        [EmailAddress(ErrorMessage = "Vyplněný e-mail neni validní")]
-        public string Email { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Uživatelské jméno nemůže být prázdné")]
+        [DataType(DataType.Text)]
+        [Display(Name = "Uživatelské jméno")]
+        public string UserName { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Heslo nemůže být prázdné")]
         [DataType(DataType.Password)]
         [Display(Name = "Heslo")]
         public string Password { get; set; }
+
+        [Display(Name = "Zůstat přihlášen po vypnutí prohlížeče")]
+        public bool RememberMe { get; set; }
+
+
     }
 
     public class RegisterViewModel
     {
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Uživatelské jméno nemůže být prázdné")]
+        [DataType(DataType.Text)]
+        [Display(Name = "Uživatelské jméno")]
+        public string UserName { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Email musí být vyplněn")]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Heslo nemůže být prázdné")]
         [StringLength(100, ErrorMessage = "{0} musí obsahovat alespoň {2} znaků.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Heslo")]

@@ -2,15 +2,14 @@
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Books.Service.Client;
-using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Manager.Cache
 {
     public class PhotoCache : CacheBase<BitmapImage>
     {
-        private readonly IMobileAppsService m_serviceClient;
+        private readonly IServiceClient m_serviceClient;
 
-        public PhotoCache(IMobileAppsService serviceClient, int maxSize) : base(maxSize)
+        public PhotoCache(IServiceClient serviceClient, int maxSize) : base(maxSize)
         {
             m_serviceClient = serviceClient;
         }

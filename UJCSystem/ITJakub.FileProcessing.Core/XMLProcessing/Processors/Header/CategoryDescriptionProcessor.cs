@@ -16,7 +16,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "catDesc"; }
         }
 
-        protected override void ProcessElement(Category category, XmlReader xmlReader)
+        protected override void ProcessElement(BookVersion bookVersion, Category category, XmlReader xmlReader)
         {
             category.Description = GetInnerContentAsString(xmlReader);
         }

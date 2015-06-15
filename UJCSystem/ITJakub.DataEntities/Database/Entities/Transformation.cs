@@ -1,8 +1,6 @@
 using System;
-using System.Text;
 using System.Collections.Generic;
 using ITJakub.DataEntities.Database.Entities.Enums;
-
 
 namespace ITJakub.DataEntities.Database.Entities {
     

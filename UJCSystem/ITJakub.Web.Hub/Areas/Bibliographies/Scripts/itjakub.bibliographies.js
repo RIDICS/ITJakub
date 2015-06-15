@@ -1,1 +1,1 @@
-﻿//# sourceMappingURL=itjakub.bibliographies.js.map
+//# sourceMappingURL=itjakub.bibliographies.js.map

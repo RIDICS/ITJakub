@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Daliboris.OOXML.Word.BodyEventArgs" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>BodyEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.DocxReader" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAiASMCWADIAAIAEAAAVRBEtlAoAAABAZgIAQwAVAAA=</HashCode>
+      <FileName>DocxReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.FontEventArgs" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>FontEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.FootnoteEventArgs" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>FootnoteEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.ParagraphEventArgs" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAEAAAA=</HashCode>
+      <FileName>ParagraphEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.PrimeFormatovaniEventArgs" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAABAAAAAAAIAAAAACAEAAAA=</HashCode>
+      <FileName>PrimeFormatovaniEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.ProgressEventArgs" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAACEAAAABAAAAAAAAAAAAAAACAAAIAA=</HashCode>
+      <FileName>ProgressEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.SectionEventArgs" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>SectionEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.Structures" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BBgABAACCABBAQAAAAAAQABACEAgAEAABVAAAAAAoQA=</HashCode>
+      <FileName>Structures.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.Style" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQAAQAACQAAgAAAAIAAAAQAAAAAAAAAAQAAQAABAAA=</HashCode>
+      <FileName>Styles.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.Styles" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AKIAYAAgIAAAARAQASAABAQAAAAAEIAAAAAAEQBxIIA=</HashCode>
+      <FileName>Styles.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.TableCellEventArgs" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>TableCellEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.TableEventArgs" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAEAAAEAAAA=</HashCode>
+      <FileName>TableEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.TableRowEventArgs" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>TableRowEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Word.TextRunEventArgs" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAgAAAAAAABAAACAEAAAA=</HashCode>
+      <FileName>TextRunEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.OOXML.Pomucky.Dokument" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAgAAAAAAAhAAAAAAgQBAAAgAAIIBABAAA=</HashCode>
+      <FileName>V:\Projekty\Daliboris\OOXML\Pomucky\Pomucky.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Daliboris.OOXML.Word.StyleType" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAFAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Styles.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

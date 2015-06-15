@@ -1,24 +1,39 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNet.Identity;
-using Microsoft.Owin;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize] 
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
+        private readonly ItJakubServiceEncryptedClient m_serviceEncryptedClient = new ItJakubServiceEncryptedClient();
+
+        private ApplicationSignInManager SignInManager
+        {
+            get { return HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
+        }
+
+        private ApplicationUserManager UserManager
+        {
+            get { return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get { return HttpContext.GetOwinContext().Authentication; }
+        }
 
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        [RequireHttps]
+        //[RequireHttps]
         public ActionResult Login()
         {
             return View();
@@ -27,46 +42,33 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/Login
         [HttpPost]
+        //[RequireHttps]
         [AllowAnonymous]
-        [RequireHttps]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model)
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            LoginUserResultContract result = m_serviceClient.LoginUser(new LoginUserContract
-            {
-                AuthenticationProvider = AuthProviderEnumContract.ItJakub,
-                Email = model.Email,
-                Password = model.Password
-            });
+            var result =
+                await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
 
-            if (result == null || !result.Successfull)
+            switch (result)
             {
-                ModelState.AddModelError("", "Invalid login attempt.");
-                return View(model);
+                case SignInStatus.Success:
+                    return RedirectToLocal(returnUrl);
+                default:
+                    ModelState.AddModelError("", "Přihlášení se nezdařilo.");
+                    return View(model);
             }
-
-
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, "Brock"));
-            claims.Add(new Claim(ClaimTypes.Email, "brockallen@gmail.com"));
-            var id = new ClaimsIdentity(claims,
-                                        DefaultAuthenticationTypes.ApplicationCookie);
-
-            var ctx = Request.GetOwinContext();
-            var authenticationManager = ctx.Authentication;
-            authenticationManager.SignIn(id);
-            return View(model);
         }
 
         //
         // GET: /Account/Register
         [AllowAnonymous]
-        [RequireHttps]
+        //[RequireHttps]
         public ActionResult Register()
         {
             return View();
@@ -75,22 +77,31 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
+        //[RequireHttps]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                m_serviceClient.CreateUser(new CreateUserContract
+                var user = new ApplicationUser
                 {
-                    AuthenticationProvider = AuthProviderEnumContract.ItJakub,
+                    UserName = model.UserName,
                     Email = model.Email,
-                    Password = model.Password,
                     FirstName = model.FirstName,
                     LastName = model.LastName
-                });
+                };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignInAsync(user, false, false);
+                    return RedirectToLocal("");
+                }
+                AddErrors(result);
             }
-            return View("Login");
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         //
@@ -99,9 +110,24 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOut()
         {
-            var ctx = Request.GetOwinContext();
-            var authenticationManager = ctx.Authentication;
-            authenticationManager.SignOut();
+            AuthenticationManager.SignOut();
+            return RedirectToLocal("");
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
+        }
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction("Index", "Home");
         }
     }

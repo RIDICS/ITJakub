@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts;
 using ITJakub.Web.Hub.Areas.Editions.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 {
@@ -24,6 +26,17 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         public ActionResult Search()
         {
             return View();
+        }
+
+        public ActionResult SearchEditions(string term)
+        {
+            List<SearchResultContract> listBooks = term.IsNullOrWhiteSpace() ? m_serviceClient.GetBooksByBookType(BookTypeEnumContract.Edition) : m_serviceClient.SearchBooksWithBookType(term,BookTypeEnumContract.Edition);
+            
+            foreach (var list in listBooks)
+            {
+                list.CreateTimeString = list.CreateTime.ToString();
+            }
+            return Json(new { books = listBooks }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Listing(string bookId)

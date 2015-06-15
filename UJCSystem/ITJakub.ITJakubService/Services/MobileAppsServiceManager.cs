@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.MobileApps.MobileContracts;
@@ -20,29 +19,29 @@ namespace ITJakub.ITJakubService.Services
             m_searchManager = m_container.Resolve<SearchManager>();
         }
 
-        public Task<IList<BookContract>> GetBookListAsync(BookTypeContract category)
+        public IList<BookContract> GetBookList(BookTypeContract category)
         {
-            return Task.Run(() => m_searchManager.GetBooksByBookType(category));
+            return m_searchManager.GetBooksByBookType(category);
         }
 
-        public Task<IList<BookContract>> SearchForBookAsync(BookTypeContract category, SearchDestinationContract searchBy, string query)
+        public IList<BookContract> SearchForBook(BookTypeContract category, SearchDestinationContract searchBy, string query)
         {
-            return Task.Run(() => m_searchManager.Search(category, searchBy, query));
+            return m_searchManager.Search(category, searchBy, query);
         }
 
-        public Task<IList<PageContract>> GetPageListAsync(string bookGuid)
+        public IList<PageContract> GetPageList(string bookGuid)
         {
-            return m_bookManager.GetBookPageListMobileAsync(bookGuid);
+            return m_bookManager.GetBookPagesListMobile(bookGuid);
         }
 
-        public Task<string> GetPageAsRtfAsync(string bookGuid, string pageId)
+        public string GetPageAsRtf(string bookGuid, string pageId)
         {
-            return m_bookManager.GetBookPageByXmlIdAsync(bookGuid, pageId, OutputFormatEnumContract.Html); //TODO switch to RTF transformation
+            return m_bookManager.GetBookPageByXmlId(bookGuid, pageId, OutputFormatEnumContract.Html); //TODO switch to RTF transformation
         }
 
-        public Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId)
+        public Stream GetPagePhoto(string bookGuid, string pageId)
         {
-            return Task.Run(() => m_bookManager.GetBookPageImage(bookGuid, pageId));
+            return m_bookManager.GetBookPageImage(bookGuid, pageId);
         }
     }
 }

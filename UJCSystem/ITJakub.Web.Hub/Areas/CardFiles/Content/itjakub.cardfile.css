@@ -42,7 +42,7 @@ body {
   text-decoration: none;
 }
 .module-content {
-  margin: 125px 0 0 0;
+  margin: 115px 0 0 0;
 }
 .content-container {
   background-color: white;
@@ -81,7 +81,7 @@ div.container {
 .card-file-listing-left-panel {
   background-color: white;
   height: 100%;
-  width: 700px;
+  width: 765px;
   float: left;
 }
 .headword-description {
@@ -93,9 +93,10 @@ div.container {
 .cardfile-image {
   width: 560px;
   height: 343px;
-  margin-left: auto ;
-  margin-right: auto ;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
+  padding-bottom: 2px;
 }
 .cardfile-image img {
   width: 99%;
@@ -104,7 +105,7 @@ div.container {
 .card-file-listing-right-panel {
   background-color: #84ced7;
   height: 100%;
-  width: 300px;
+  width: 325px;
   float: left;
   padding: 5px;
   color: white;
@@ -113,9 +114,41 @@ div.container {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+.cardfile-pagination {
+  display: inline-block;
+}
+.cardfile-pagination > li {
+  display: inline;
+}
+.cardfile-pagination > li > a {
+  color: white;
+  float: left;
+  padding: 6px 6px;
+  font-weight: bolder;
+  font-size: medium;
+}
+.cardfile-pagination > li > a:hover {
+  color: black;
+}
+.cardfile-pagination > li.card-position-text > a {
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 40px;
+  text-align: center;
+}
+.cardfile-pagination > li.card-position-text > a:hover {
+  color: white;
+  cursor: default;
+}
 .cardfile-pages {
   margin-top: 10px;
   margin-bottom: 10px;
+  display: inline-block;
+  height: 30px;
+}
+.cardfile-image-thumbnail {
+  display: inline;
+  padding-left: 5px;
 }
 .cardfile-description {
   font-size: 1.3em;
@@ -149,5 +182,25 @@ div.container {
 }
 .cardfile-paging-controls .tooltip-arrow {
   border-top-color: white !important;
+}
+.loading {
+  margin: 0 auto;
+  margin-bottom: 5px;
+  width: 1090px;
+  height: 380px;
+  background-color: white;
+}
+.error {
+  margin: 0 auto;
+  margin-bottom: 5px;
+  width: 1090px;
+  height: 20px;
+  background-color: grey;
+  color: white;
+  padding-left: 5px;
+}
+.cardfile-scrollable-part-right-panel {
+  overflow-y: auto;
+  max-height: 150px;
 }
 /*# sourceMappingURL=itjakub.cardfile.css.map */
