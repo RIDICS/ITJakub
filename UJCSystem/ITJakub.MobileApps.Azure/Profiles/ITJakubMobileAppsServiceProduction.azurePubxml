@@ -2,21 +2,21 @@
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <AzureCredentials>{"ServiceManagementEndpoint":"https:\/\/management.core.windows.net\/","SubscriptionId":"52abfe94-121d-4e6f-b013-d79c71791f4e"}</AzureCredentials>
-    <AzureDeleteDeploymentOnFailure>False</AzureDeleteDeploymentOnFailure>
+    <AzureDeleteDeploymentOnFailure>True</AzureDeleteDeploymentOnFailure>
     <AzureDeploymentLabel>ITJakub.MobileApps.Azure</AzureDeploymentLabel>
     <AzureDeploymentReplacementMethod>AutomaticUpgrade</AzureDeploymentReplacementMethod>
     <AzureSlot>Production</AzureSlot>
     <AzureEnableRemoteDesktop>True</AzureEnableRemoteDesktop>
-    <AzureEnableWebDeploy>False</AzureEnableWebDeploy>
+    <AzureEnableWebDeploy>True</AzureEnableWebDeploy>
     <AzureFallbackToDeleteAndRecreateIfUpgradeFails>False</AzureFallbackToDeleteAndRecreateIfUpgradeFails>
-    <AzureHostedServiceLabel>ITJakubMobileAppsService</AzureHostedServiceLabel>
-    <AzureHostedServiceName>itjakubmobileappsservice</AzureHostedServiceName>
+    <AzureHostedServiceLabel>ITJakubMobileApps</AzureHostedServiceLabel>
+    <AzureHostedServiceName>itjakubmobileapps</AzureHostedServiceName>
     <AzureEnableIntelliTrace>False</AzureEnableIntelliTrace>
     <AzureEnableProfiling>False</AzureEnableProfiling>
     <AzureServiceConfiguration>Cloud</AzureServiceConfiguration>
     <AzureSolutionConfiguration>Debug</AzureSolutionConfiguration>
-    <AzureStorageAccountLabel>mobileazuretables</AzureStorageAccountLabel>
-    <AzureStorageAccountName>mobileazuretables</AzureStorageAccountName>
+    <AzureStorageAccountLabel>ITJakubMobileApps</AzureStorageAccountLabel>
+    <AzureStorageAccountName>itjakubmobileapps</AzureStorageAccountName>
     <AzureAppendTimestampToDeploymentLabel>True</AzureAppendTimestampToDeploymentLabel>
     <EnableRemoteDebugger>True</EnableRemoteDebugger>
     <RemoteDebuggerConnectorCertificateThumbprint>FDBC2C585A0FDAEBB982F730F07AC5AD2205184C</RemoteDebuggerConnectorCertificateThumbprint>
