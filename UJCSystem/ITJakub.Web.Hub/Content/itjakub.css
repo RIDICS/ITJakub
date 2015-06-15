@@ -896,22 +896,22 @@ body {
   margin-bottom: 5px;
 }
 /* CSS block for hide/show notes in text */
-.reader-text .page-notes .page-note {
+.reader-text .itj-page-notes .itj-page-note {
   display: none;
 }
-.reader-text.show-notes .page {
+.reader-text.show-notes .itj-page {
   display: flex;
 }
-.reader-text.show-notes .page-text {
+.reader-text.show-notes .itj-page-text {
   width: 75%;
 }
-.reader-text.show-notes .page-notes {
+.reader-text.show-notes .itj-page-notes {
   width: 25%;
 }
-.reader-text.show-notes .page-notes .page-note {
+.reader-text.show-notes .itj-page-notes .itj-page-note {
   display: inherit;
 }
-.reader-text div.page-note {
+.reader-text div.itj-page-note {
   display: inherit;
   border-radius: 10px;
   background-color: gold;
