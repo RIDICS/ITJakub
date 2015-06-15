@@ -1127,6 +1127,27 @@ var TextPanel = (function (_super) {
                     $(_this.windowBody).find('#' + page.xmlId).removeClass("loading");
                     $(_this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
                 }
+                //TODO in text will be comments and notes too. Styles for css classes are in reader less files already. Structure will be as follows:
+                /*
+                  <div class="page-wrapper">
+                     <div class="page" id="t-1.body-1.div-2.div-1.div-1.p-1.pb-1">
+                        <div> //THIS DIV WILL BE FROM EXIST HTML XSLT
+                           <div class="page-text">
+                                <span class="info pb space" data-title="číslo strany rukopisu" data-page-name="2v"></span>ten nebude dokonalý lékař, aniž muož býti. Ale máť býti nazván nedouk, a to proto, že se jest tomu nenaučil, neboť mnozí hojie, a nevědie, co hojie. A to proto, že sú se tomu neučili, i protož tomu právě vyrozuměti nemohú, nebo v tom obyčeje nemají. I protož mistr Anton praví a přikazuje a řka: „Radím každému lékaři takovému, a zvláště neumělému, aby se v takové věci neznámé všetečně neuvazoval a nepletl se v to, což provésti neumie, aby svým neuměním člověka nezavedl a nebo jeho
+                            </div>
+                            <div class="page-notes">
+                                <div class="page-note">Moje malinkata poznamka o zrozeni divu</div>
+                                <div class="page-note">Moje malinkata poznamka o zrozeni divu 2</div>
+                                <div class="page-note">Moje malinkata poznamka o zrozeni divu 2</div>
+                                <div class="page-note">Moje malinkata dosnvfoirhogidhfbibhuidrfsbhidhbfgibhnighd9fsg poznamka o zrozeni divu 2</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-name">[2v]</div>
+                  </div>
+                  
+                 */
+                //TODO if we add class "show-notes" to div with class "reader-text" notes will be showed.If class "show-notes" is removed then notes are hidden;
             },
             error: function (response) {
                 $(pageContainer).empty();
