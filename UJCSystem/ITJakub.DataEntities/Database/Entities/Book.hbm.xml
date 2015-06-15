@@ -10,10 +10,8 @@
     <property name="Guid">
       <column name="Guid" sql-type="varchar" not-null="true" />
     </property>
-    <bag name="Bookmarks" inverse="true">
-      <key column="Book" />
-      <one-to-many class="Bookmark" />
-    </bag>
+     
+    
     <bag name="BookVersions" cascade="all-delete-orphan" inverse="true">
       <key column="Book" />
       <one-to-many class="BookVersion" />

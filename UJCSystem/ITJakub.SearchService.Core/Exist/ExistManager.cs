@@ -52,5 +52,12 @@ namespace ITJakub.SearchService.Core.Exist
                 versionId);
             return m_client.GetPagesByName(bookId, versionId, start, end, xslPath);
         }
+
+        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        {
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId,
+                versionId);
+            return m_client.GetPageByXmlId(bookId, versionId, pageXmlId, xslPath);
+        }
     }
 }

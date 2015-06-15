@@ -29,7 +29,8 @@ var ReaderModule = (function () {
             }
         });
         for (var i = 0; i < pageList.length; i++) {
-            this.pages.push(pageList[i]["Text"]);
+            var page = pageList[i];
+            this.pages.push(new BookPage(page["XmlId"], page["Text"], page["Position"]));
         }
         $(this.readerContainer).empty();
         var readerDiv = document.createElement('div');
@@ -62,6 +63,7 @@ var ReaderModule = (function () {
         var readerBodyDiv = this.makeReaderBody();
         readerDiv.appendChild(readerBodyDiv);
         $(this.readerContainer).append(readerDiv);
+        this.loadBookmarks();
         this.moveToPageNumber(0, false); //load first page
     };
     ReaderModule.prototype.makeTitle = function (bookTitle) {
@@ -89,7 +91,7 @@ var ReaderModule = (function () {
             slide: function (event, ui) {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
-                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + _this.pages[ui.value]);
+                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + _this.pages[ui.value].text);
             },
             change: function (event, ui) {
                 if (_this.actualPageIndex !== ui.value) {
@@ -104,7 +106,7 @@ var ReaderModule = (function () {
         sliderTooltip.appendChild(arrowTooltip);
         var innerTooltip = document.createElement('div');
         $(innerTooltip).addClass('tooltip-inner');
-        $(innerTooltip).html("Strana: " + this.pages[0]);
+        $(innerTooltip).html("Strana: " + this.pages[0].text);
         sliderTooltip.appendChild(innerTooltip);
         $(sliderTooltip).hide();
         var sliderHandle = $(slider).find('.ui-slider-handle');
@@ -130,7 +132,17 @@ var ReaderModule = (function () {
         pageInputButton.innerHTML = "Přejít na stránku";
         $(pageInputButton).addClass('page-input-button');
         $(pageInputButton).click(function (event) {
-            _this.moveToPage($('#pageInputText').val(), true);
+            var pageName = $('#pageInputText').val();
+            var pageIndex = -1;
+            for (var i = 0; i < _this.pages.length; i++) {
+                if (_this.pages[i].text === pageName) {
+                    pageIndex = i;
+                    break;
+                }
+            }
+            //TODO log pageIndex not exist
+            var page = _this.pages[pageIndex];
+            _this.moveToPage(page.xmlId, true);
         });
         pageInputDiv.appendChild(pageInputButton);
         pagingDiv.appendChild(pageInputDiv);
@@ -182,10 +194,10 @@ var ReaderModule = (function () {
             $(liElement).data('page-index', index);
             anchor = document.createElement('a');
             anchor.href = '#';
-            anchor.innerHTML = page;
+            anchor.innerHTML = page.text;
             $(anchor).click(function (event) {
                 event.stopPropagation();
-                _this.moveToPage(page, true);
+                _this.moveToPage(page.xmlId, true);
                 return false;
             });
             liElement.appendChild(anchor);
@@ -310,6 +322,33 @@ var ReaderModule = (function () {
         controlsDiv.appendChild(pagingDiv);
         return controlsDiv;
     };
+    ReaderModule.prototype.loadBookmarks = function () {
+        var _this = this;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.bookId },
+            url: getBaseUrl() + "Reader/GetAllBookmarks",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                var bookmarks = response["bookmarks"];
+                for (var i = 0; i < bookmarks.length; i++) {
+                    var actualBookmark = bookmarks[i];
+                    for (var pageIndex = 0; pageIndex < _this.pages.length; pageIndex++) {
+                        var actualPage = _this.pages[pageIndex];
+                        if (actualBookmark["PageXmlId"] === actualPage.xmlId) {
+                            var bookmarkSpan = _this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId);
+                            _this.showBookmark(bookmarkSpan);
+                            break;
+                        }
+                    }
+                }
+            },
+            error: function (response) {
+            }
+        });
+    };
     ReaderModule.prototype.existSidePanel = function (sidePanelIdentificator) {
         var sidePanel = document.getElementById(sidePanelIdentificator);
         return ($(sidePanel).length > 0 && sidePanel != null);
@@ -371,7 +410,6 @@ var ReaderModule = (function () {
         var textPanel = new TextPanel(this.textPanelIdentificator, this);
         this.rightSidePanels.push(textPanel);
         bodyContainerDiv.appendChild(textPanel.panelHtml);
-        // Image Panel
         var imagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
         $(imagePanel.panelHtml).hide();
@@ -398,19 +436,25 @@ var ReaderModule = (function () {
             this.rightSidePanels[k].onMoveToPage(pageIndex, scrollTo);
         }
     };
-    ReaderModule.prototype.moveToPage = function (page, scrollTo) {
-        var pageIndex = $.inArray(page, this.pages);
+    ReaderModule.prototype.moveToPage = function (pageXmlId, scrollTo) {
+        var pageIndex = -1;
+        for (var i = 0; i < this.pages.length; i++) {
+            if (this.pages[i].xmlId === pageXmlId) {
+                pageIndex = i;
+                break;
+            }
+        }
         if (pageIndex >= 0 && pageIndex < this.pages.length) {
             this.moveToPageNumber(pageIndex, scrollTo);
         }
         else {
-            console.log("Page '" + page + "' does not exist");
+            console.log("Page with id '" + pageXmlId + "' does not exist");
         }
     };
     ReaderModule.prototype.actualizeSlider = function (pageIndex) {
         var slider = $(this.readerContainer).find('.slider');
         $(slider).slider().slider('value', pageIndex);
-        $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex]);
+        $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex].text);
     };
     ReaderModule.prototype.actualizePagination = function (pageIndex) {
         var pager = $(this.readerContainer).find('ul.pagination');
@@ -450,32 +494,65 @@ var ReaderModule = (function () {
         $(displayedPages).css('display', 'inherit');
         $(actualPage).addClass('page-active');
     };
-    ReaderModule.prototype.addBookmark = function () {
+    ReaderModule.prototype.createBookmarkSpan = function (pageIndex, pageName, pageXmlId) {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
-        $(bookmarkSpan).data('page-index', this.actualPageIndex);
-        $(bookmarkSpan).data('page-name', this.pages[this.actualPageIndex]);
-        var computedPosition = (positionStep * this.actualPageIndex);
+        $(bookmarkSpan).data('page-index', pageIndex);
+        $(bookmarkSpan).data('page-name', pageName);
+        $(bookmarkSpan).data('page-xmlId', pageXmlId);
+        var computedPosition = (positionStep * pageIndex);
         $(bookmarkSpan).css('left', computedPosition + '%');
-        $(this.readerContainer).find('.slider').append(bookmarkSpan);
-        //TODO populate request on service for adding bookmark to DB
+        return bookmarkSpan;
+    };
+    ReaderModule.prototype.showBookmark = function (bookmarkHtml) {
+        $(this.readerContainer).find('.slider').append(bookmarkHtml);
+    };
+    ReaderModule.prototype.addBookmark = function () {
+        var _this = this;
+        var pageIndex = this.actualPageIndex;
+        var page = this.pages[pageIndex];
+        var bookmarkSpan = this.createBookmarkSpan(pageIndex, page.text, page.xmlId);
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageXmlId: page.xmlId }),
+            url: getBaseUrl() + "Reader/AddBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                _this.showBookmark(bookmarkSpan);
+            },
+            error: function (response) {
+            }
+        });
     };
     ReaderModule.prototype.removeBookmark = function () {
         var slider = $(this.readerContainer).find('.slider');
         var bookmarks = $(slider).find('.bookmark');
-        if (typeof bookmarks === 'undefined' || bookmarks.length == 0) {
+        if (typeof bookmarks === 'undefined' || bookmarks == null || bookmarks.length === 0) {
             return false;
         }
-        var actualPageName = this.pages[this.actualPageIndex];
+        var actualPage = this.pages[this.actualPageIndex];
         var targetBookmark = $(bookmarks).filter(function (index) {
-            return $(this).data("page-name") === actualPageName;
+            return $(this).data("page-xmlId") === actualPage.xmlId;
         });
-        if (typeof targetBookmark === 'undefined' || targetBookmark.length == 0) {
+        if (typeof targetBookmark === 'undefined' || targetBookmark == null || targetBookmark.length === 0) {
             return false;
         }
-        $(targetBookmark).remove();
-        //TODO populate request on service for removing bookmark from DB
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageXmlId: actualPage.xmlId }),
+            url: getBaseUrl() + "Reader/RemoveBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $(targetBookmark).remove();
+            },
+            error: function (response) {
+            }
+        });
         return true;
     };
     ReaderModule.prototype.repaint = function () {
@@ -606,10 +683,6 @@ var SidePanel = (function () {
         throw new Error("Not implemented");
     };
     SidePanel.prototype.onMoveToPage = function (pageIndex, scrollTo) {
-        //$(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
-        //if (typeof this.windowBody !== 'undefined') {
-        //    $(this.windowBody).append(" pageIndex is " + pageIndex);
-        //}
     };
     SidePanel.prototype.placeOnDragStartPosition = function (sidePanelDiv) {
         var dispersion = Math.floor((Math.random() * 15) + 1) * 3;
@@ -621,27 +694,15 @@ var SidePanel = (function () {
     };
     SidePanel.prototype.makePanelWindow = function (documentWindow) {
         return this.makePanelBody($(this.innerContent).clone(true), this, window);
-        //var innerContent = this.makeBody(this, documentWindow);
-        //return this.makePanelBody(innerContent, this, documentWindow);
     };
     SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
         throw new Error("Not implemented");
     };
     SidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
         var _this = this;
-        //var scripts = document.getElementsByTagName('script');
-        //var links = document.getElementsByTagName('link');
         this.closeButton.click();
         var newWindow = window.open("//" + document.domain, '_blank', 'width=400,height=600,resizable=yes');
         newWindow.document.open();
-        //newWindow.document.write("<head>");
-        //for (var i = 0; i < scripts.length; i++) {
-        //    newWindow.document.write(scripts[i].outerHTML);
-        //}
-        //for (var i = 0; i < links.length; i++) {
-        //    newWindow.document.write(links[i].outerHTML);
-        //}
-        //newWindow.document.write("</head>");
         newWindow.document.close();
         $(newWindow).on("beforeunload", function (event) {
             _this.onUnloadWindowMode();
@@ -822,7 +883,8 @@ var ContentPanel = (function (_super) {
                 var ulElement = document.createElement("ul");
                 $(ulElement).addClass("content-item-root-list");
                 for (var i = 0; i < rootContentItems.length; i++) {
-                    $(ulElement).append(_this.makeContentItem(rootContentItems[i]));
+                    var jsonItem = rootContentItems[i];
+                    $(ulElement).append(_this.makeContentItem(_this.parseJsonItemToContentItem(jsonItem)));
                 }
                 $(_this.panelBodyHtml).empty();
                 $(_this.panelBodyHtml).append(ulElement);
@@ -838,14 +900,18 @@ var ContentPanel = (function (_super) {
             }
         });
     };
+    ContentPanel.prototype.parseJsonItemToContentItem = function (jsonItem) {
+        return new ContentItem(jsonItem["Text"], jsonItem["ReferredPageXmlId"], jsonItem["ReferredPageName"], jsonItem["ChildBookContentItems"]);
+    };
     ContentPanel.prototype.makeContentItemChilds = function (contentItem) {
-        var childItems = contentItem["ChildBookContentItems"];
+        var childItems = contentItem.childBookContentItems;
         if (childItems.length === 0)
             return null;
         var ulElement = document.createElement("ul");
         $(ulElement).addClass("content-item-list");
         for (var i = 0; i < childItems.length; i++) {
-            $(ulElement).append(this.makeContentItem(childItems[i]));
+            var jsonItem = childItems[i];
+            $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
         }
         return ulElement;
     };
@@ -856,14 +922,14 @@ var ContentPanel = (function (_super) {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(function () {
-            _this.parentReader.moveToPage(contentItem["ReferredPageName"], true);
+            _this.parentReader.moveToPage(contentItem.referredPageXmlId, true);
         });
         var textSpanElement = document.createElement("span");
         $(textSpanElement).addClass("content-item-text");
-        textSpanElement.innerHTML = contentItem["Text"];
+        textSpanElement.innerHTML = contentItem.text;
         var pageNameSpanElement = document.createElement("span");
         $(pageNameSpanElement).addClass("content-item-page-name");
-        pageNameSpanElement.innerHTML = "[" + contentItem["ReferredPageName"] + "]";
+        pageNameSpanElement.innerHTML = "[" + contentItem.referredPageName + "]";
         $(hrefElement).append(pageNameSpanElement);
         $(hrefElement).append(textSpanElement);
         $(liElement).append(hrefElement);
@@ -966,19 +1032,21 @@ var TextPanel = (function (_super) {
                     pageWithMinOffset = page;
                 }
             });
-            rootReference.parentReader.moveToPage($(pageWithMinOffset).data('page-name'), false);
+            rootReference.parentReader.moveToPage($(pageWithMinOffset).data('page-xmlId'), false);
         });
         var textAreaDiv = window.document.createElement('div');
         $(textAreaDiv).addClass('reader-text');
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
+            var page = rootReference.parentReader.pages[i];
             var pageTextDiv = window.document.createElement('div');
             $(pageTextDiv).addClass('page');
             $(pageTextDiv).addClass('unloaded');
-            $(pageTextDiv).data('page-name', rootReference.parentReader.pages[i]);
-            pageTextDiv.id = 'page_' + rootReference.parentReader.pages[i];
+            $(pageTextDiv).data('page-name', page.text);
+            $(pageTextDiv).data('page-xmlId', page.xmlId);
+            pageTextDiv.id = page.xmlId; // each page has own id
             var pageNameDiv = window.document.createElement('div');
             $(pageNameDiv).addClass('page-name');
-            $(pageNameDiv).html("[" + rootReference.parentReader.pages[i] + "]");
+            $(pageNameDiv).html("[" + page.text + "]");
             var pageDiv = window.document.createElement('div');
             $(pageDiv).addClass("page-wrapper");
             $(pageDiv).append(pageTextDiv);
@@ -1000,12 +1068,12 @@ var TextPanel = (function (_super) {
         }
         this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
     };
-    TextPanel.prototype.displayPage = function (pageName, scrollTo) {
-        var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
+    TextPanel.prototype.displayPage = function (page, scrollTo) {
+        var pageDiv = document.getElementById(page.xmlId);
         var pageLoaded = !($(pageDiv).hasClass('unloaded'));
         var pageLoading = $(pageDiv).hasClass('loading');
         if (!pageLoaded && !pageLoading) {
-            this.downloadPageByName(pageName);
+            this.downloadPageByXmlId(page);
         }
         if (scrollTo) {
             this.scrollTextToPositionFromTop(0);
@@ -1013,7 +1081,7 @@ var TextPanel = (function (_super) {
             this.scrollTextToPositionFromTop(topOffset);
             if (typeof this.childwindow !== 'undefined') {
                 $(".reader-text-container", this.childwindow.document).scrollTop(0);
-                var pageToScrollOffset = $('#page_' + pageName, this.childwindow.document).offset().top;
+                var pageToScrollOffset = $('#' + page.xmlId, this.childwindow.document).offset().top;
                 $(".reader-text-container", this.childwindow.document).scrollTop(pageToScrollOffset);
             }
         }
@@ -1036,18 +1104,18 @@ var TextPanel = (function (_super) {
         var pageIndex = this.parentReader.actualPageIndex;
         this.parentReader.moveToPageNumber(pageIndex, true);
     };
-    TextPanel.prototype.downloadPageByName = function (pageName) {
+    TextPanel.prototype.downloadPageByXmlId = function (page) {
         var _this = this;
-        var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
+        var pageContainer = document.getElementById(page.xmlId);
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== 'undefined') {
-            $(this.windowBody).find('#page_' + pageName).addClass("loading");
+            $(this.windowBody).find('#' + page.xmlId).addClass("loading");
         }
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId, pageName: pageName },
-            url: getBaseUrl() + "Reader/GetBookPageByName",
+            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            url: getBaseUrl() + "Reader/GetBookPageByXmlId",
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
@@ -1056,17 +1124,83 @@ var TextPanel = (function (_super) {
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).removeClass('unloaded');
                 if (typeof _this.windowBody !== 'undefined') {
-                    $(_this.windowBody).find('#page_' + pageName).removeClass("loading");
-                    $(_this.windowBody).find('#page_' + pageName).append(response["pageText"]);
+                    $(_this.windowBody).find('#' + page.xmlId).removeClass("loading");
+                    $(_this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
                 }
             },
             error: function (response) {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
-                $(pageContainer).append("Chyba při načítání stránky '" + pageName + "'");
+                $(pageContainer).append("Chyba při načítání stránky '" + page.text + "'");
             }
         });
     };
     return TextPanel;
 })(RightSidePanel);
+var BookPage = (function () {
+    function BookPage(xmlId, text, position) {
+        this._xmlId = xmlId;
+        this._text = text;
+        this._position = position;
+    }
+    Object.defineProperty(BookPage.prototype, "xmlId", {
+        get: function () {
+            return this._xmlId;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BookPage.prototype, "text", {
+        get: function () {
+            return this._text;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BookPage.prototype, "position", {
+        get: function () {
+            return this._position;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return BookPage;
+})();
+var ContentItem = (function () {
+    function ContentItem(text, referredPageXmlId, referredPageName, childBookContentItems) {
+        this._referredPageXmlId = referredPageXmlId;
+        this._referredPageName = referredPageName;
+        this._text = text;
+        this._childBookContentItems = childBookContentItems;
+    }
+    Object.defineProperty(ContentItem.prototype, "referredPageXmlId", {
+        get: function () {
+            return this._referredPageXmlId;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ContentItem.prototype, "referredPageName", {
+        get: function () {
+            return this._referredPageName;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ContentItem.prototype, "text", {
+        get: function () {
+            return this._text;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ContentItem.prototype, "childBookContentItems", {
+        get: function () {
+            return this._childBookContentItems;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return ContentItem;
+})();
 //# sourceMappingURL=itjakub.plugins.reader.js.map

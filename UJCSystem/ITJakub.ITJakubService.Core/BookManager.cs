@@ -55,6 +55,30 @@ namespace ITJakub.ITJakubService.Core
             return pageText;
         }
 
+        public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat)
+        {
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("Start MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId, bookGuid);
+
+            var searchServiceClient = new SearchServiceClient();
+            OutputFormat outputFormat;
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
+
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
+            var transformationName = transformation.Name;
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+            var pageText = searchServiceClient.GetBookPageByXmlId(bookGuid, bookVersion.VersionId, pageXmlId, transformationName, transformationLevel);
+
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("End MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId, bookGuid);
+
+            return pageText;
+        }
+
         public string GetBookPagesByName(string bookGuid,string startPageName,string endPageName,OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;

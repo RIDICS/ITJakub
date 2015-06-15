@@ -23,6 +23,11 @@ namespace ITJakub.SearchService
             return m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName, transformationLevel);
         }
 
+        public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        {
+            return m_bookDao.GetPageByXmlId(bookId, versionId, pageXmlId, transformationName, transformationLevel);
+        }
+
         public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
         {
             return m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName, transformationLevel);

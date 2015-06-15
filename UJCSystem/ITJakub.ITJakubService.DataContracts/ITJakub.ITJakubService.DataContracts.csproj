@@ -52,12 +52,13 @@
     <Compile Include="CardContract.cs" />
     <Compile Include="BucketShortContract.cs" />
     <Compile Include="CardFileContract.cs" />
-    <Compile Include="IItJakubServiceUnauthorized.cs" />
+    <Compile Include="IItJakubServiceEncrypted.cs" />
     <Compile Include="LoginUserContract.cs" />
     <Compile Include="CreateUserContract.cs" />
     <Compile Include="LoginUserResultContract.cs" />
     <Compile Include="CreateUserResultContract.cs" />
     <Compile Include="IItJakubService.cs" />
+    <Compile Include="PageBookmarkContract.cs" />
     <Compile Include="ProcessedFileInfoContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserContract.cs" />

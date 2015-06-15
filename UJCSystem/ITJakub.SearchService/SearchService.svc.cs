@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 using log4net;
@@ -42,6 +41,12 @@ namespace ITJakub.SearchService
             if(m_log.IsDebugEnabled)
                 m_log.DebugFormat("SearchService request recieved...");
             return m_searchServiceManager.GetBookPageByName(bookId, versionId, pageName, transformationName, transformationLevel);
+        }
+        public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        {
+            if(m_log.IsDebugEnabled)
+                m_log.DebugFormat("SearchService request recieved...");
+            return m_searchServiceManager.GetBookPageByXmlId(bookId, versionId, pageXmlId, transformationName, transformationLevel);
         }
 
         public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
