@@ -39,7 +39,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             SearchCommand = new RelayCommand(Search);
             ReloadCommand = new RelayCommand(LoadData);
             
-            m_selectedCategory = BookTypeContract.Grammar;
+            m_selectedCategory = BookTypeContract.Edition;
 
             LoadData();
         }

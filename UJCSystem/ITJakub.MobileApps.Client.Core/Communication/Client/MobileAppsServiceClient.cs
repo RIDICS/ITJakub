@@ -17,7 +17,7 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
     {
         private const string EndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
         //private const string EndpointAddress = "http://147.32.81.136/ITJakub.MobileApps.Service/MobileAppsService.svc";
-        //private const string EndpointAddress = "http://itjakubmobileappsservice.cloudapp.net/MobileAppsService.svc";
+        //private const string EndpointAddress = "http://itjakubmobileapps.cloudapp.net/MobileAppsService.svc";
 
         private readonly ClientMessageInspector m_clientMessageInspector;
 
