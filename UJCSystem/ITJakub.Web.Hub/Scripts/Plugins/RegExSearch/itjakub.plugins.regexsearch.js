@@ -90,6 +90,12 @@ var RegExConditions = (function (_super) {
             HyperlemmaOld: "hyperlemma-old",
             Stemma: "stemma"
         };
+        this.searchType = {
+            Text: "text",
+            Author: "author",
+            Title: "title",
+            Responsible: "responsible"
+        };
         this.parent = parent;
     }
     RegExConditions.prototype.getHtml = function () {
@@ -123,7 +129,14 @@ var RegExConditions = (function (_super) {
         var searchDestinationSelect = document.createElement("select");
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
-        searchDestinationSelect.appendChild(this.createOption("Fulltext", "fulltext"));
+        searchDestinationSelect.appendChild(this.createOption("Text", this.searchType.Text));
+        searchDestinationSelect.appendChild(this.createOption("Autor", this.searchType.Author));
+        searchDestinationSelect.appendChild(this.createOption("Titul", this.searchType.Title));
+        searchDestinationSelect.appendChild(this.createOption("Editor", this.searchType.Responsible));
+        this.selectedSearchType = this.searchType.Text;
+        //$(searchDestinationSelect).change(() => { //TODO make change method
+        //    this.selectedSearchType = 
+        //});
         var wordFormDiv = document.createElement("div");
         $(wordFormDiv).addClass("regexsearch-word-form-div");
         mainSearchDiv.appendChild(wordFormDiv);
@@ -138,6 +151,7 @@ var RegExConditions = (function (_super) {
         wordFormSelect.appendChild(this.createOption("Hyperlemma - nové", this.wordFormType.HyperlemmaNew));
         wordFormSelect.appendChild(this.createOption("Hyperlemma - staré", this.wordFormType.HyperlemmaOld));
         wordFormSelect.appendChild(this.createOption("Stemma", this.wordFormType.Stemma));
+        this.selectedWordFormType = this.wordFormType.Lemma;
         this.conditionsContainerDiv = document.createElement("div");
         $(this.conditionsContainerDiv).addClass("regexsearch-condition-list-div");
         mainSearchDiv.appendChild(this.conditionsContainerDiv);

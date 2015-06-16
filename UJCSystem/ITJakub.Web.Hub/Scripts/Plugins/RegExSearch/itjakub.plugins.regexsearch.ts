@@ -93,7 +93,9 @@ class RegExConditions extends RegExSearchBase {
     private html: HTMLDivElement;
     private conditionsContainerDiv: HTMLDivElement;
     private conditionsInputArray: Array<RegExInput>;
-    private parent : RegExSearch;
+    private parent: RegExSearch;
+    private selectedSearchType: string;
+    private selectedWordFormType: string;
 
     constructor(parent: RegExSearch) {
         super();
@@ -118,6 +120,13 @@ class RegExConditions extends RegExSearchBase {
         HyperlemmaNew: "hyperlemma-new",
         HyperlemmaOld: "hyperlemma-old",
         Stemma: "stemma"
+    }
+
+    private searchType = {
+        Text: "text",
+        Author: "author",
+        Title: "title",
+        Responsible: "responsible"
     }
 
     public makeRegExCondition() {
@@ -150,7 +159,16 @@ class RegExConditions extends RegExSearchBase {
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
 
-        searchDestinationSelect.appendChild(this.createOption("Fulltext", "fulltext"));
+        searchDestinationSelect.appendChild(this.createOption("Text", this.searchType.Text));
+        searchDestinationSelect.appendChild(this.createOption("Autor", this.searchType.Author));
+        searchDestinationSelect.appendChild(this.createOption("Titul", this.searchType.Title));
+        searchDestinationSelect.appendChild(this.createOption("Editor", this.searchType.Responsible));
+
+        this.selectedSearchType = this.searchType.Text;
+
+        //$(searchDestinationSelect).change(() => { //TODO make change method
+        //    this.selectedSearchType = 
+        //});
 
         var wordFormDiv: HTMLDivElement = document.createElement("div");
         $(wordFormDiv).addClass("regexsearch-word-form-div");
@@ -169,6 +187,8 @@ class RegExConditions extends RegExSearchBase {
         wordFormSelect.appendChild(this.createOption("Hyperlemma - nové", this.wordFormType.HyperlemmaNew));
         wordFormSelect.appendChild(this.createOption("Hyperlemma - staré", this.wordFormType.HyperlemmaOld));
         wordFormSelect.appendChild(this.createOption("Stemma", this.wordFormType.Stemma));
+
+        this.selectedWordFormType = this.wordFormType.Lemma;
 
         this.conditionsContainerDiv = document.createElement("div");
         $(this.conditionsContainerDiv).addClass("regexsearch-condition-list-div");
