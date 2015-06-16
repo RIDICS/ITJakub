@@ -22,7 +22,7 @@
 class RegExSearch extends RegExSearchBase {
     container: HTMLDivElement;
     innerContainer: HTMLDivElement;
-    regExConditions: Array<RegExConditionsArrayItem>;
+    regExConditions: Array<RegExConditions>;
 
     constructor(container: HTMLDivElement) {
         super();
@@ -60,43 +60,28 @@ class RegExSearch extends RegExSearchBase {
     }
 
     private addNewConditions(useDelimiter:boolean = true) {
-        var mainDiv = document.createElement("div");
-
-        if (useDelimiter)
-        {
-            var andInfoDiv = document.createElement("div");
-            $(andInfoDiv).addClass("regexsearch-delimiter");
-            andInfoDiv.innerHTML = "A zároveň";
-            mainDiv.appendChild(andInfoDiv);
-        }
-
-        var conditionsDiv = document.createElement("div");
-        $(conditionsDiv).addClass("regexsearch-condition-main-div");
-        mainDiv.appendChild(conditionsDiv);
-
-        var newRegExConditions = new RegExConditions(conditionsDiv);
+        var newRegExConditions = new RegExConditions(this);
         newRegExConditions.makeRegExCondition();
-
-        var arrayItem = new RegExConditionsArrayItem(mainDiv, newRegExConditions);
-        this.regExConditions.push(arrayItem);
-
-
-        $(this.innerContainer).append(mainDiv);
+        if (!useDelimiter) {
+            newRegExConditions.removeDelimeter();
+        }
+        this.regExConditions.push(newRegExConditions);
+        $(this.innerContainer).append(newRegExConditions.getHtml());
     }
 
     private removeLastConditions() {
         if (this.regExConditions.length <= 1)
             return;
 
-        var arrayItem: RegExConditionsArrayItem = this.regExConditions.pop();
-        this.innerContainer.removeChild(arrayItem.htmlElement);
+        var arrayItem: RegExConditions = this.regExConditions.pop();
+        this.innerContainer.removeChild(arrayItem.getHtml());
     }
 
     public getConditionsString(): string {
         var outputString = "";
 
         for (var i = 0; i < this.regExConditions.length; i++) {
-            var regExConditions = this.regExConditions[i].regExConditions;
+            var regExConditions = this.regExConditions[i];
             outputString += "(?=.*(" + regExConditions.getConditionsString() + "))";
         }
 
@@ -104,34 +89,28 @@ class RegExSearch extends RegExSearchBase {
     }
 }
 
-class RegExConditionsArrayItem {
-    htmlElement: HTMLDivElement;
-    regExConditions: RegExConditions;
-
-    constructor(htmlElement: HTMLDivElement, regExConditions: RegExConditions) {
-        this.htmlElement = htmlElement;
-        this.regExConditions = regExConditions;
-    }
-}
-
-class RegExInputArrayItem {
-    htmlElement: HTMLDivElement;
-    regExInput: RegExInput;
-
-    constructor(htmlElement: HTMLDivElement, regExInput: RegExInput) {
-        this.htmlElement = htmlElement;
-        this.regExInput = regExInput;
-    }
-}
-
 class RegExConditions extends RegExSearchBase {
-    container: HTMLDivElement;
-    conditionsContainerDiv: HTMLDivElement;
-    conditionsInputArray: Array<RegExInputArrayItem>;
+    private html: HTMLDivElement;
+    private conditionsContainerDiv: HTMLDivElement;
+    private conditionsInputArray: Array<RegExInput>;
+    private parent : RegExSearch;
 
-    constructor(container: HTMLDivElement) {
+    constructor(parent: RegExSearch) {
         super();
-        this.container = container;
+        this.parent = parent;
+    }
+
+    public getHtml(): HTMLDivElement {
+        return this.html;
+    }
+
+    public removeDelimeter() {
+        $(this.html).find(".regexsearch-delimiter").remove();
+    }
+
+    public hasDelimeter(): boolean {
+        var delimeter = $(this.html).find(".regexsearch-delimiter");
+        return (typeof delimeter != 'undefined' && delimeter != null);
     }
 
     private wordFormType = {
@@ -142,8 +121,20 @@ class RegExConditions extends RegExSearchBase {
     }
 
     public makeRegExCondition() {
-        $(this.container).empty();
 
+        var mainDiv = document.createElement("div");
+
+        var andInfoDiv = document.createElement("div");
+        $(andInfoDiv).addClass("regexsearch-delimiter");
+        andInfoDiv.innerHTML = "A zároveň";
+        mainDiv.appendChild(andInfoDiv);
+  
+
+        var conditionsDiv = document.createElement("div");
+        $(conditionsDiv).addClass("regexsearch-condition-main-div");
+        conditionsDiv.appendChild(mainDiv);
+
+        
         var mainSearchDiv: HTMLDivElement = document.createElement("div");
 
         var searchDestinationDiv: HTMLDivElement = document.createElement("div");
@@ -187,88 +178,56 @@ class RegExConditions extends RegExSearchBase {
         $(commandsDiv).addClass("regexsearch-conditions-commands");
         mainSearchDiv.appendChild(commandsDiv);
 
-        var addConditionButton: HTMLButtonElement = this.createButton("Přidat");
+        var addConditionButton: HTMLButtonElement = this.createButton("Přidat výraz");
         $(addConditionButton).click(() => {
-            this.addConditions();
+            this.addCondition();
         });
         commandsDiv.appendChild(addConditionButton);
 
-        var removeConditionButton: HTMLButtonElement = this.createButton("Odebrat");
-        $(removeConditionButton).click(() => {
-            this.removeSelectedConditions();
-        });
-        commandsDiv.appendChild(removeConditionButton);
-
-
         this.resetConditions();
-        $(this.container).append(mainSearchDiv);
+        $(conditionsDiv).append(mainSearchDiv);
+        this.html = conditionsDiv;
     }
 
-    private resetConditions() {
+    public resetConditions() {
         $(this.conditionsContainerDiv).empty();
         this.conditionsInputArray = [];
-
-        var lineDiv = document.createElement("div");
-
-        var newRegExInput = new RegExInput(lineDiv);
+        var newRegExInput = new RegExInput(this);
         newRegExInput.makeRegExInput();
-        
-        var arrayItem = new RegExInputArrayItem(lineDiv, newRegExInput);
-        this.conditionsInputArray.push(arrayItem);
-        
-        this.conditionsContainerDiv.appendChild(lineDiv);
+        newRegExInput.removeDelimeter();
+        this.conditionsInputArray.push(newRegExInput);        
+        this.conditionsContainerDiv.appendChild(newRegExInput.getHtml());
     }
 
-    private addConditions() {
-        var mainDiv: HTMLDivElement = document.createElement("div");
-
-        var labelDiv = document.createElement("div");
-        labelDiv.innerHTML = "Nebo";
-        $(labelDiv).addClass("regexsearch-or-delimiter");
-        mainDiv.appendChild(labelDiv);
-
-        var lineDiv = document.createElement("div");
-        mainDiv.appendChild(lineDiv);
-
-        var newRegExInput = new RegExInput(lineDiv);
+    public addCondition() {
+        var newRegExInput = new RegExInput(this);
         newRegExInput.makeRegExInput();
-        
-        var arrayItem = new RegExInputArrayItem(mainDiv, newRegExInput);
-        this.conditionsInputArray.push(arrayItem);
-        
-        
-        this.conditionsContainerDiv.appendChild(mainDiv);
+        this.conditionsInputArray.push(newRegExInput);
+        this.conditionsContainerDiv.appendChild(newRegExInput.getHtml());
     }
 
-    private removeSelectedConditions() {
-        var uncheckedItems: Array<RegExInputArrayItem> = [];
-        var arrayItem: RegExInputArrayItem;
+    public removeCondition(condition: RegExInput) {
 
-        for (var i = 0; i < this.conditionsInputArray.length; i++) {
-            arrayItem = this.conditionsInputArray[i];
-            if (arrayItem.regExInput.isChecked()) {
-                this.conditionsContainerDiv.removeChild(arrayItem.htmlElement);
-            } else {
-                uncheckedItems.push(arrayItem);
-            }
+        var index = this.conditionsInputArray.indexOf(condition, 0);
+        if (index != undefined) {
+            var arrayItem = this.conditionsInputArray[index];
+            this.conditionsContainerDiv.removeChild(arrayItem.getHtml());
+            this.conditionsInputArray.splice(index, 1);
         }
-
-        // Remove "Or" label from first condition field
-        if (this.conditionsInputArray[0].regExInput.isChecked() && uncheckedItems.length > 0) {
-            uncheckedItems[0].htmlElement.removeChild(uncheckedItems[0].htmlElement.firstChild);
-        }
-
-        this.conditionsInputArray = uncheckedItems;
 
         if (this.conditionsInputArray.length === 0) {
             this.resetConditions();
         }
+
+        if (this.conditionsInputArray[0].hasDelimeter) {
+            this.conditionsInputArray[0].removeDelimeter();
+        }
     }
 
     public getConditionsString(): string {
-        var conditionsString = this.conditionsInputArray[0].regExInput.getConditionValue();
+        var conditionsString = this.conditionsInputArray[0].getConditionValue();
         for (var i = 1; i < this.conditionsInputArray.length; i++) {
-            var regExInput = this.conditionsInputArray[i].regExInput;
+            var regExInput = this.conditionsInputArray[i];
             conditionsString += "|" + regExInput.getConditionValue();
         }
 
@@ -277,34 +236,46 @@ class RegExConditions extends RegExSearchBase {
 }
 
 class RegExInput extends RegExSearchBase {
-    private container: HTMLDivElement;
+    private html: HTMLDivElement;
     private editorDiv: HTMLDivElement;
-    private checkBox: HTMLInputElement;
     private conditionInput: HTMLInputElement;
     private regExEditor: RegExEditor;
+    private parentRegExConditions: RegExConditions;
 
-    constructor(container: HTMLDivElement) {
+    constructor(parent: RegExConditions) {
         super();
-        this.container = container;
+        this.parentRegExConditions = parent;
+    }
+
+    public getHtml(): HTMLDivElement {
+        return this.html;
+    }
+
+    public removeDelimeter() {
+        $(this.html).find(".regexsearch-or-delimiter").remove();
+    }
+
+    public hasDelimeter(): boolean {
+        var delimeter = $(this.html).find(".regexsearch-or-delimiter");
+        return (typeof delimeter != 'undefined' && delimeter != null) ;
     }
 
     public makeRegExInput() {
-        $(this.container).empty();
+        var mainDiv: HTMLDivElement = document.createElement("div");
 
-        var lineDiv: HTMLDivElement = document.createElement("div");
+        var labelDiv = document.createElement("div");
+        labelDiv.innerHTML = "Nebo";
+        $(labelDiv).addClass("regexsearch-or-delimiter");
+        mainDiv.appendChild(labelDiv);
+
+        var lineDiv = document.createElement("div");
         this.editorDiv = document.createElement("div");
-
-        this.checkBox = document.createElement("input");
-        this.checkBox.type = "checkbox";
-        $(this.checkBox).addClass("regexsearch-checkbox");
-        lineDiv.appendChild(this.checkBox);
 
         this.conditionInput = document.createElement("input");
         this.conditionInput.type = "text";
         $(this.conditionInput).addClass("form-control");
         $(this.conditionInput).addClass("regexsearch-condition-input");
         lineDiv.appendChild(this.conditionInput);
-
 
         var regExButton: HTMLButtonElement = document.createElement("button");
         regExButton.innerText = "R";
@@ -328,15 +299,15 @@ class RegExInput extends RegExSearchBase {
         $(removeGlyph).addClass("glyphicon");
         $(removeGlyph).addClass("glyphicon-trash");
         removeButton.appendChild(removeGlyph);
+        $(removeButton).click(() => {
+            this.parentRegExConditions.removeCondition(this);
+        });
 
         lineDiv.appendChild(removeButton);
 
-        $(this.container).append(lineDiv);
-        $(this.container).append(this.editorDiv);
-    }
-
-    public isChecked(): boolean {
-        return this.checkBox.checked;
+        mainDiv.appendChild(lineDiv);
+        mainDiv.appendChild(this.editorDiv);
+        this.html = mainDiv;
     }
 
     public getConditionValue(): string {
@@ -440,14 +411,7 @@ class RegExEditor extends RegExSearchBase {
             $(this.container).empty();
         });
 
-        //var backButton: HTMLButtonElement = this.createButton("Zpět");
-        //commandButtonsDiv.appendChild(backButton);
-
-        //var nextButton: HTMLButtonElement = this.createButton("Další");
-        //commandButtonsDiv.appendChild(nextButton);
-
         var submitButton: HTMLButtonElement = this.createButton("Dokončit");
-        //submitButton.style.marginLeft = "25px";
         commandButtonsDiv.appendChild(submitButton);
         $(submitButton).click(() => {
             var inputValue: string = conditionInput.value;

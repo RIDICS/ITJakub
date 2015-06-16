@@ -956,7 +956,7 @@ body {
   margin-top: 3px;
 }
 .regexsearch-input {
-  width: 100%;
+  width: 350px;
 }
 .regexsearch-command-buttons-div {
   text-align: right;
@@ -966,6 +966,7 @@ body {
   color: white;
   background-color: #9a9a9a;
   padding: 0 10px 0 10px;
+  margin-bottom: 5px;
 }
 .regexsearch-destination-div {
   float: left;
@@ -988,7 +989,7 @@ body {
   width: 100%;
 }
 .regexsearch-condition-input {
-  width: 340px;
+  width: 320px;
   border-radius: 0;
   display: inline-block;
   margin-right: -40px;
@@ -1005,11 +1006,11 @@ input.regexsearch-checkbox {
   margin-left: 19px;
 }
 .regexsearch-conditions-commands {
-  margin-left: 196px;
-  margin-top: 5px;
+  margin-left: 178px;
+  margin-top: 10px;
 }
 .regexsearch-editor-container {
-  margin: 3px 0 10px 19px;
+  margin: 3px 15px 10px 10px;
 }
 .regexsearch-editor-title {
   font-size: 150%;
