@@ -48,7 +48,7 @@ var RegExSearch = (function (_super) {
         var sentButton = this.createButton("Vyhledat");
         commandsDiv.appendChild(sentButton);
         $(sentButton).click(function () {
-            _this.getConditionsResultJSON(); //TODO send ajax request
+            _this.processSearch();
         });
         this.innerContainer = document.createElement("div");
         this.addNewCondition(false);
@@ -98,8 +98,22 @@ var RegExSearch = (function (_super) {
     };
     RegExSearch.prototype.getConditionsResultJSON = function () {
         var jsonString = JSON.stringify(this.getConditionsResultObject());
-        alert(jsonString);
         return jsonString;
+    };
+    RegExSearch.prototype.processSearch = function () {
+        var json = this.getConditionsResultJSON();
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: json,
+            url: "/Dictionaries/Dictionaries/SearchCriteria",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+            },
+            error: function (response) {
+            }
+        });
     };
     return RegExSearch;
 })(RegExSearchBase);

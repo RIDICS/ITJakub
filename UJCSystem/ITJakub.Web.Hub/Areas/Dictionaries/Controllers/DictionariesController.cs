@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Web.Mvc;
 using ITJakub.Shared.Contracts;
 
@@ -77,5 +76,20 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             return View();
         }
+
+
+        public ActionResult SearchCriteria(SearchCriteriaRoot searchData)
+        {
+            var jsonString = searchData;
+            return Json(new {});
+        }
+    }
+
+    public class SearchCriteriaRoot
+    {
+        public List<string> text { get; set; }
+        public List<string> author { get; set; }
+        public List<string> title { get; set; }
+        public List<string> responsible { get; set; }
     }
 }

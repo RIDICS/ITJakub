@@ -50,7 +50,7 @@ class RegExSearch extends RegExSearchBase {
         var sentButton: HTMLButtonElement = this.createButton("Vyhledat");
         commandsDiv.appendChild(sentButton);
         $(sentButton).click(() => {
-            this.getConditionsResultJSON(); //TODO send ajax request
+            this.processSearch();
         });
 
         this.innerContainer = document.createElement("div");
@@ -112,8 +112,25 @@ class RegExSearch extends RegExSearchBase {
 
     public getConditionsResultJSON(): string {
         var jsonString = JSON.stringify(this.getConditionsResultObject());
-        alert(jsonString);
         return jsonString;
+    }
+
+    public processSearch() {
+        var json = this.getConditionsResultJSON();
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: json,
+            url: "/Dictionaries/Dictionaries/SearchCriteria", //TODO add getBaseUrl
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+            },
+            error: (response) => {
+            }
+        });
+
     }
 }
 
