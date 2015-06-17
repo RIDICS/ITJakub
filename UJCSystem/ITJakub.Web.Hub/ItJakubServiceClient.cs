@@ -268,5 +268,10 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public void SearchByCriteria(List<SearchCriteriaContract> searchCriterias)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

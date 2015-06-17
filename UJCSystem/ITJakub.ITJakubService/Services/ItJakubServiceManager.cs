@@ -88,5 +88,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageImage(bookPageImageContract);
         }
 
+        public void SearchByCriteria(List<SearchCriteriaContract> searchCriterias)
+        {
+            m_searchManager.SearchByCriteria(searchCriterias);
+        }
     }
 }

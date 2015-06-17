@@ -1,8 +1,13 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.ITJakubService.Core.Search;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using NHibernate;
+using NHibernate.Criterion;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -10,11 +15,13 @@ namespace ITJakub.ITJakubService.Core
     {
         private readonly BookRepository m_bookRepository;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly SearchCriteriaDirector m_searchCriteriaDirector;
 
-        public SearchManager(BookRepository bookRepository, CategoryRepository categoryRepository)
+        public SearchManager(BookRepository bookRepository, CategoryRepository categoryRepository, SearchCriteriaDirector searchCriteriaDirector)
         {
             m_bookRepository = bookRepository;
             m_categoryRepository = categoryRepository;
+            m_searchCriteriaDirector = searchCriteriaDirector;
         }
 
         public List<SearchResultContract> Search(string term)
@@ -35,6 +42,15 @@ namespace ITJakub.ITJakubService.Core
                 Books = Mapper.Map<IList<BookContract>>(books),
                 Categories = Mapper.Map<IList<CategoryContract>>(categories)
             };
+        }
+
+        public void SearchByCriteria(List<SearchCriteriaContract> searchCriterias)
+        {
+            var databaseCriteria = DetachedCriteria.For<BookVersion>();
+            foreach (var searchCriteriaContract in searchCriterias)
+            {
+                m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract, databaseCriteria);
+            }
         }
     }
 }

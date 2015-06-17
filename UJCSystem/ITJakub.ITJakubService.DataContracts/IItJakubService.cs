@@ -44,5 +44,8 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
+
+        [OperationContract]
+        void SearchByCriteria(List<SearchCriteriaContract> searchCriterias);
     }
 }

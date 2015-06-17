@@ -53,6 +53,7 @@
     <Compile Include="IItJakubService.cs" />
     <Compile Include="ProcessedFileInfoContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchCriteriaContract.cs" />
     <Compile Include="UserContract.cs" />
     <Compile Include="UserDetailContract.cs" />
   </ItemGroup>
