@@ -166,9 +166,9 @@ class RegExConditions extends RegExSearchBase {
 
         this.selectedSearchType = this.searchType.Text;
 
-        //$(searchDestinationSelect).change(() => { //TODO make change method
-        //    this.selectedSearchType = 
-        //});
+        $(searchDestinationSelect).change((eventData: Event) => {
+            this.selectedSearchType = $(eventData.target).val();
+        });
 
         var wordFormDiv: HTMLDivElement = document.createElement("div");
         $(wordFormDiv).addClass("regexsearch-word-form-div");
@@ -189,6 +189,10 @@ class RegExConditions extends RegExSearchBase {
         wordFormSelect.appendChild(this.createOption("Stemma", this.wordFormType.Stemma));
 
         this.selectedWordFormType = this.wordFormType.Lemma;
+
+        $(wordFormSelect).change((eventData: Event) => {
+            this.selectedWordFormType = $(eventData.target).val();
+        });
 
         this.conditionsContainerDiv = document.createElement("div");
         $(this.conditionsContainerDiv).addClass("regexsearch-condition-list-div");
