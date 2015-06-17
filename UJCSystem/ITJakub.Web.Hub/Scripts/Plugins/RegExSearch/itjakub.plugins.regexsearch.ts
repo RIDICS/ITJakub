@@ -22,7 +22,7 @@
 class RegExSearch extends RegExSearchBase {
     container: HTMLDivElement;
     innerContainer: HTMLDivElement;
-    regExConditions: Array<RegExConditions>;
+    regExConditions: Array<RegExCondition>;
 
     constructor(container: HTMLDivElement) {
         super();
@@ -38,17 +38,23 @@ class RegExSearch extends RegExSearchBase {
         var addConditionsButton: HTMLButtonElement = this.createButton("Přidat podmínku");
         commandsDiv.appendChild(addConditionsButton);
         $(addConditionsButton).click(() => {
-            this.addNewConditions();
+            this.addNewCondition();
         });
 
         var removeConditionsButton: HTMLButtonElement = this.createButton("Odebrat podmínku");
         $(removeConditionsButton).click(() => {
-            this.removeLastConditions();
+            this.removeLastCondition();
         });
         commandsDiv.appendChild(removeConditionsButton);
 
+        var sentButton: HTMLButtonElement = this.createButton("Vyhledat");
+        commandsDiv.appendChild(sentButton);
+        $(sentButton).click(() => {
+            this.getConditionsResultJSON(); //TODO send ajax request
+        });
+
         this.innerContainer = document.createElement("div");
-        this.addNewConditions(false);
+        this.addNewCondition(false);
         
         var endDelimiter: HTMLDivElement = document.createElement("div");
         endDelimiter.innerHTML = "&nbsp;";
@@ -59,8 +65,8 @@ class RegExSearch extends RegExSearchBase {
         $(this.container).append(endDelimiter);
     }
 
-    private addNewConditions(useDelimiter:boolean = true) {
-        var newRegExConditions = new RegExConditions(this);
+    private addNewCondition(useDelimiter:boolean = true) {
+        var newRegExConditions = new RegExCondition(this);
         newRegExConditions.makeRegExCondition();
         if (!useDelimiter) {
             newRegExConditions.removeDelimeter();
@@ -69,30 +75,52 @@ class RegExSearch extends RegExSearchBase {
         $(this.innerContainer).append(newRegExConditions.getHtml());
     }
 
-    private removeLastConditions() {
+    private removeLastCondition() {
         if (this.regExConditions.length <= 1)
             return;
 
-        var arrayItem: RegExConditions = this.regExConditions.pop();
+        var arrayItem: RegExCondition = this.regExConditions.pop();
         this.innerContainer.removeChild(arrayItem.getHtml());
     }
 
-    public getConditionsString(): string {
+    public getConditionsResultString(): string {
         var outputString = "";
 
         for (var i = 0; i < this.regExConditions.length; i++) {
             var regExConditions = this.regExConditions[i];
-            outputString += "(?=.*(" + regExConditions.getConditionsString() + "))";
+            outputString += "(?=.*(" + regExConditions.getConditionString() + "))";
         }
 
         return "^" + outputString + ".*$";
     }
+
+    public getConditionsResultObject(): Object {
+        var resultObject = new Object();
+
+        for (var i = 0; i < this.regExConditions.length; i++) {
+            var regExCondition: RegExCondition = this.regExConditions[i];
+            var resultArrayForType: Array<Object> = resultObject[regExCondition.getSearchType()];
+            if (typeof resultArrayForType == 'undefined' || resultArrayForType == null) {
+                resultArrayForType = new Array();
+                resultObject[regExCondition.getSearchType()] = resultArrayForType;
+            }
+            resultArrayForType.push(regExCondition.getConditionString());
+        }
+
+        return resultObject;
+    }
+
+    public getConditionsResultJSON(): string {
+        var jsonString = JSON.stringify(this.getConditionsResultObject());
+        alert(jsonString);
+        return jsonString;
+    }
 }
 
-class RegExConditions extends RegExSearchBase {
+class RegExCondition extends RegExSearchBase {
     private html: HTMLDivElement;
-    private conditionsContainerDiv: HTMLDivElement;
-    private conditionsInputArray: Array<RegExInput>;
+    private conditionContainerDiv: HTMLDivElement;
+    private conditionInputArray: Array<RegExInput>;
     private parent: RegExSearch;
     private selectedSearchType: string;
     private selectedWordFormType: string;
@@ -113,6 +141,14 @@ class RegExConditions extends RegExSearchBase {
     public hasDelimeter(): boolean {
         var delimeter = $(this.html).find(".regexsearch-delimiter");
         return (typeof delimeter != 'undefined' && delimeter != null);
+    }
+
+    public getWordFormType(): string {
+        return this.selectedWordFormType;
+    }
+
+    public getSearchType(): string {
+        return this.selectedSearchType;
     }
 
     private wordFormType = {
@@ -194,9 +230,9 @@ class RegExConditions extends RegExSearchBase {
             this.selectedWordFormType = $(eventData.target).val();
         });
 
-        this.conditionsContainerDiv = document.createElement("div");
-        $(this.conditionsContainerDiv).addClass("regexsearch-condition-list-div");
-        mainSearchDiv.appendChild(this.conditionsContainerDiv);
+        this.conditionContainerDiv = document.createElement("div");
+        $(this.conditionContainerDiv).addClass("regexsearch-condition-list-div");
+        mainSearchDiv.appendChild(this.conditionContainerDiv);
 
         var commandsDiv: HTMLDivElement = document.createElement("div");
         $(commandsDiv).addClass("regexsearch-conditions-commands");
@@ -208,54 +244,54 @@ class RegExConditions extends RegExSearchBase {
         });
         commandsDiv.appendChild(addConditionButton);
 
-        this.resetConditions();
+        this.resetCondition();
         $(conditionsDiv).append(mainSearchDiv);
         this.html = conditionsDiv;
     }
 
-    public resetConditions() {
-        $(this.conditionsContainerDiv).empty();
-        this.conditionsInputArray = [];
+    public resetCondition() {
+        $(this.conditionContainerDiv).empty();
+        this.conditionInputArray = [];
         var newRegExInput = new RegExInput(this);
         newRegExInput.makeRegExInput();
         newRegExInput.removeDelimeter();
-        this.conditionsInputArray.push(newRegExInput);        
-        this.conditionsContainerDiv.appendChild(newRegExInput.getHtml());
+        this.conditionInputArray.push(newRegExInput);        
+        this.conditionContainerDiv.appendChild(newRegExInput.getHtml());
     }
 
     public addCondition() {
         var newRegExInput = new RegExInput(this);
         newRegExInput.makeRegExInput();
-        this.conditionsInputArray.push(newRegExInput);
-        this.conditionsContainerDiv.appendChild(newRegExInput.getHtml());
+        this.conditionInputArray.push(newRegExInput);
+        this.conditionContainerDiv.appendChild(newRegExInput.getHtml());
     }
 
     public removeCondition(condition: RegExInput) {
 
-        var index = this.conditionsInputArray.indexOf(condition, 0);
+        var index = this.conditionInputArray.indexOf(condition, 0);
         if (index != undefined) {
-            var arrayItem = this.conditionsInputArray[index];
-            this.conditionsContainerDiv.removeChild(arrayItem.getHtml());
-            this.conditionsInputArray.splice(index, 1);
+            var arrayItem = this.conditionInputArray[index];
+            this.conditionContainerDiv.removeChild(arrayItem.getHtml());
+            this.conditionInputArray.splice(index, 1);
         }
 
-        if (this.conditionsInputArray.length === 0) {
-            this.resetConditions();
+        if (this.conditionInputArray.length === 0) {
+            this.resetCondition();
         }
 
-        if (this.conditionsInputArray[0].hasDelimeter) {
-            this.conditionsInputArray[0].removeDelimeter();
+        if (this.conditionInputArray[0].hasDelimeter) {
+            this.conditionInputArray[0].removeDelimeter();
         }
     }
 
-    public getConditionsString(): string {
-        var conditionsString = this.conditionsInputArray[0].getConditionValue();
-        for (var i = 1; i < this.conditionsInputArray.length; i++) {
-            var regExInput = this.conditionsInputArray[i];
-            conditionsString += "|" + regExInput.getConditionValue();
+    public getConditionString(): string {
+        var conditionString = this.conditionInputArray[0].getConditionValue();
+        for (var i = 1; i < this.conditionInputArray.length; i++) {
+            var regExInput = this.conditionInputArray[i];
+            conditionString += "|" + regExInput.getConditionValue();
         }
 
-        return conditionsString;
+        return conditionString;
     }
 }
 
@@ -264,9 +300,9 @@ class RegExInput extends RegExSearchBase {
     private editorDiv: HTMLDivElement;
     private conditionInput: HTMLInputElement;
     private regExEditor: RegExEditor;
-    private parentRegExConditions: RegExConditions;
+    private parentRegExConditions: RegExCondition;
 
-    constructor(parent: RegExConditions) {
+    constructor(parent: RegExCondition) {
         super();
         this.parentRegExConditions = parent;
     }

@@ -38,15 +38,20 @@ var RegExSearch = (function (_super) {
         var addConditionsButton = this.createButton("Přidat podmínku");
         commandsDiv.appendChild(addConditionsButton);
         $(addConditionsButton).click(function () {
-            _this.addNewConditions();
+            _this.addNewCondition();
         });
         var removeConditionsButton = this.createButton("Odebrat podmínku");
         $(removeConditionsButton).click(function () {
-            _this.removeLastConditions();
+            _this.removeLastCondition();
         });
         commandsDiv.appendChild(removeConditionsButton);
+        var sentButton = this.createButton("Vyhledat");
+        commandsDiv.appendChild(sentButton);
+        $(sentButton).click(function () {
+            _this.getConditionsResultJSON(); //TODO send ajax request
+        });
         this.innerContainer = document.createElement("div");
-        this.addNewConditions(false);
+        this.addNewCondition(false);
         var endDelimiter = document.createElement("div");
         endDelimiter.innerHTML = "&nbsp;";
         $(endDelimiter).addClass("regexsearch-delimiter");
@@ -54,9 +59,9 @@ var RegExSearch = (function (_super) {
         $(this.container).append(this.innerContainer);
         $(this.container).append(endDelimiter);
     };
-    RegExSearch.prototype.addNewConditions = function (useDelimiter) {
+    RegExSearch.prototype.addNewCondition = function (useDelimiter) {
         if (useDelimiter === void 0) { useDelimiter = true; }
-        var newRegExConditions = new RegExConditions(this);
+        var newRegExConditions = new RegExCondition(this);
         newRegExConditions.makeRegExCondition();
         if (!useDelimiter) {
             newRegExConditions.removeDelimeter();
@@ -64,25 +69,43 @@ var RegExSearch = (function (_super) {
         this.regExConditions.push(newRegExConditions);
         $(this.innerContainer).append(newRegExConditions.getHtml());
     };
-    RegExSearch.prototype.removeLastConditions = function () {
+    RegExSearch.prototype.removeLastCondition = function () {
         if (this.regExConditions.length <= 1)
             return;
         var arrayItem = this.regExConditions.pop();
         this.innerContainer.removeChild(arrayItem.getHtml());
     };
-    RegExSearch.prototype.getConditionsString = function () {
+    RegExSearch.prototype.getConditionsResultString = function () {
         var outputString = "";
         for (var i = 0; i < this.regExConditions.length; i++) {
             var regExConditions = this.regExConditions[i];
-            outputString += "(?=.*(" + regExConditions.getConditionsString() + "))";
+            outputString += "(?=.*(" + regExConditions.getConditionString() + "))";
         }
         return "^" + outputString + ".*$";
     };
+    RegExSearch.prototype.getConditionsResultObject = function () {
+        var resultObject = new Object();
+        for (var i = 0; i < this.regExConditions.length; i++) {
+            var regExCondition = this.regExConditions[i];
+            var resultArrayForType = resultObject[regExCondition.getSearchType()];
+            if (typeof resultArrayForType == 'undefined' || resultArrayForType == null) {
+                resultArrayForType = new Array();
+                resultObject[regExCondition.getSearchType()] = resultArrayForType;
+            }
+            resultArrayForType.push(regExCondition.getConditionString());
+        }
+        return resultObject;
+    };
+    RegExSearch.prototype.getConditionsResultJSON = function () {
+        var jsonString = JSON.stringify(this.getConditionsResultObject());
+        alert(jsonString);
+        return jsonString;
+    };
     return RegExSearch;
 })(RegExSearchBase);
-var RegExConditions = (function (_super) {
-    __extends(RegExConditions, _super);
-    function RegExConditions(parent) {
+var RegExCondition = (function (_super) {
+    __extends(RegExCondition, _super);
+    function RegExCondition(parent) {
         _super.call(this);
         this.wordFormType = {
             Lemma: "lemma",
@@ -98,17 +121,23 @@ var RegExConditions = (function (_super) {
         };
         this.parent = parent;
     }
-    RegExConditions.prototype.getHtml = function () {
+    RegExCondition.prototype.getHtml = function () {
         return this.html;
     };
-    RegExConditions.prototype.removeDelimeter = function () {
+    RegExCondition.prototype.removeDelimeter = function () {
         $(this.html).find(".regexsearch-delimiter").remove();
     };
-    RegExConditions.prototype.hasDelimeter = function () {
+    RegExCondition.prototype.hasDelimeter = function () {
         var delimeter = $(this.html).find(".regexsearch-delimiter");
         return (typeof delimeter != 'undefined' && delimeter != null);
     };
-    RegExConditions.prototype.makeRegExCondition = function () {
+    RegExCondition.prototype.getWordFormType = function () {
+        return this.selectedWordFormType;
+    };
+    RegExCondition.prototype.getSearchType = function () {
+        return this.selectedSearchType;
+    };
+    RegExCondition.prototype.makeRegExCondition = function () {
         var _this = this;
         var mainDiv = document.createElement("div");
         var andInfoDiv = document.createElement("div");
@@ -155,9 +184,9 @@ var RegExConditions = (function (_super) {
         $(wordFormSelect).change(function (eventData) {
             _this.selectedWordFormType = $(eventData.target).val();
         });
-        this.conditionsContainerDiv = document.createElement("div");
-        $(this.conditionsContainerDiv).addClass("regexsearch-condition-list-div");
-        mainSearchDiv.appendChild(this.conditionsContainerDiv);
+        this.conditionContainerDiv = document.createElement("div");
+        $(this.conditionContainerDiv).addClass("regexsearch-condition-list-div");
+        mainSearchDiv.appendChild(this.conditionContainerDiv);
         var commandsDiv = document.createElement("div");
         $(commandsDiv).addClass("regexsearch-conditions-commands");
         mainSearchDiv.appendChild(commandsDiv);
@@ -166,48 +195,48 @@ var RegExConditions = (function (_super) {
             _this.addCondition();
         });
         commandsDiv.appendChild(addConditionButton);
-        this.resetConditions();
+        this.resetCondition();
         $(conditionsDiv).append(mainSearchDiv);
         this.html = conditionsDiv;
     };
-    RegExConditions.prototype.resetConditions = function () {
-        $(this.conditionsContainerDiv).empty();
-        this.conditionsInputArray = [];
+    RegExCondition.prototype.resetCondition = function () {
+        $(this.conditionContainerDiv).empty();
+        this.conditionInputArray = [];
         var newRegExInput = new RegExInput(this);
         newRegExInput.makeRegExInput();
         newRegExInput.removeDelimeter();
-        this.conditionsInputArray.push(newRegExInput);
-        this.conditionsContainerDiv.appendChild(newRegExInput.getHtml());
+        this.conditionInputArray.push(newRegExInput);
+        this.conditionContainerDiv.appendChild(newRegExInput.getHtml());
     };
-    RegExConditions.prototype.addCondition = function () {
+    RegExCondition.prototype.addCondition = function () {
         var newRegExInput = new RegExInput(this);
         newRegExInput.makeRegExInput();
-        this.conditionsInputArray.push(newRegExInput);
-        this.conditionsContainerDiv.appendChild(newRegExInput.getHtml());
+        this.conditionInputArray.push(newRegExInput);
+        this.conditionContainerDiv.appendChild(newRegExInput.getHtml());
     };
-    RegExConditions.prototype.removeCondition = function (condition) {
-        var index = this.conditionsInputArray.indexOf(condition, 0);
+    RegExCondition.prototype.removeCondition = function (condition) {
+        var index = this.conditionInputArray.indexOf(condition, 0);
         if (index != undefined) {
-            var arrayItem = this.conditionsInputArray[index];
-            this.conditionsContainerDiv.removeChild(arrayItem.getHtml());
-            this.conditionsInputArray.splice(index, 1);
+            var arrayItem = this.conditionInputArray[index];
+            this.conditionContainerDiv.removeChild(arrayItem.getHtml());
+            this.conditionInputArray.splice(index, 1);
         }
-        if (this.conditionsInputArray.length === 0) {
-            this.resetConditions();
+        if (this.conditionInputArray.length === 0) {
+            this.resetCondition();
         }
-        if (this.conditionsInputArray[0].hasDelimeter) {
-            this.conditionsInputArray[0].removeDelimeter();
+        if (this.conditionInputArray[0].hasDelimeter) {
+            this.conditionInputArray[0].removeDelimeter();
         }
     };
-    RegExConditions.prototype.getConditionsString = function () {
-        var conditionsString = this.conditionsInputArray[0].getConditionValue();
-        for (var i = 1; i < this.conditionsInputArray.length; i++) {
-            var regExInput = this.conditionsInputArray[i];
-            conditionsString += "|" + regExInput.getConditionValue();
+    RegExCondition.prototype.getConditionString = function () {
+        var conditionString = this.conditionInputArray[0].getConditionValue();
+        for (var i = 1; i < this.conditionInputArray.length; i++) {
+            var regExInput = this.conditionInputArray[i];
+            conditionString += "|" + regExInput.getConditionValue();
         }
-        return conditionsString;
+        return conditionString;
     };
-    return RegExConditions;
+    return RegExCondition;
 })(RegExSearchBase);
 var RegExInput = (function (_super) {
     __extends(RegExInput, _super);
