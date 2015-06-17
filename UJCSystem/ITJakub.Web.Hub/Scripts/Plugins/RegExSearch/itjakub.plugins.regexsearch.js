@@ -51,13 +51,13 @@ var RegExSearch = (function (_super) {
             _this.processSearch();
         });
         this.innerContainer = document.createElement("div");
-        this.addNewCondition(false);
-        var endDelimiter = document.createElement("div");
-        endDelimiter.innerHTML = "&nbsp;";
-        $(endDelimiter).addClass("regexsearch-delimiter");
+        this.addNewCondition(true);
+        //var endDelimiter: HTMLDivElement = document.createElement("div");
+        //endDelimiter.innerHTML = "&nbsp;";
+        //$(endDelimiter).addClass("regexsearch-delimiter");
         $(this.container).append(commandsDiv);
         $(this.container).append(this.innerContainer);
-        $(this.container).append(endDelimiter);
+        //$(this.container).append(endDelimiter);
     };
     RegExSearch.prototype.addNewCondition = function (useDelimiter) {
         if (useDelimiter === void 0) { useDelimiter = true; }
@@ -74,6 +74,20 @@ var RegExSearch = (function (_super) {
             return;
         var arrayItem = this.regExConditions.pop();
         this.innerContainer.removeChild(arrayItem.getHtml());
+    };
+    RegExSearch.prototype.removeCondition = function (condition) {
+        var index = this.regExConditions.indexOf(condition, 0);
+        if (index != undefined) {
+            var arrayItem = this.regExConditions[index];
+            this.innerContainer.removeChild(arrayItem.getHtml());
+            this.regExConditions.splice(index, 1);
+        }
+        if (this.regExConditions.length === 0) {
+            this.addNewCondition(true);
+        }
+        //if (this.regExConditions[0].hasDelimeter) { //TODO change last delimeter
+        //    this.regExConditions[0].removeDelimeter();
+        //}
     };
     RegExSearch.prototype.getConditionsResultString = function () {
         var outputString = "";
@@ -153,14 +167,8 @@ var RegExCondition = (function (_super) {
     };
     RegExCondition.prototype.makeRegExCondition = function () {
         var _this = this;
-        var mainDiv = document.createElement("div");
-        var andInfoDiv = document.createElement("div");
-        $(andInfoDiv).addClass("regexsearch-delimiter");
-        andInfoDiv.innerHTML = "A zároveň";
-        mainDiv.appendChild(andInfoDiv);
         var conditionsDiv = document.createElement("div");
         $(conditionsDiv).addClass("regexsearch-condition-main-div");
-        conditionsDiv.appendChild(mainDiv);
         var mainSearchDiv = document.createElement("div");
         var searchDestinationDiv = document.createElement("div");
         $(searchDestinationDiv).addClass("regexsearch-destination-div");
@@ -210,7 +218,23 @@ var RegExCondition = (function (_super) {
         });
         commandsDiv.appendChild(addConditionButton);
         this.resetCondition();
+        var mainDiv = document.createElement("div");
+        var andInfoDiv = document.createElement("div");
+        $(andInfoDiv).addClass("regexsearch-delimiter");
+        andInfoDiv.innerHTML = "A zároveň";
+        mainDiv.appendChild(andInfoDiv);
+        var trashButton = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon");
+        $(removeGlyph).addClass("glyphicon-trash");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(function () {
+            _this.parent.removeCondition(_this);
+        });
+        andInfoDiv.appendChild(trashButton);
         $(conditionsDiv).append(mainSearchDiv);
+        $(conditionsDiv).append(mainDiv);
         this.html = conditionsDiv;
     };
     RegExCondition.prototype.resetCondition = function () {

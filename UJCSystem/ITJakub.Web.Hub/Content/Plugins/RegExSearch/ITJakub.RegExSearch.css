@@ -170,4 +170,13 @@ input.regexsearch-checkbox {
   font-size: 150%;
   display: block;
 }
+.regexsearch-delimiter-remove-button {
+  float: right;
+  font-size: 13px;
+  border-radius: 0;
+  color: white;
+  background-color: transparent;
+  border-style: none;
+  margin-top: 2px;
+}
 /*# sourceMappingURL=ITJakub.RegExSearch.css.map */
