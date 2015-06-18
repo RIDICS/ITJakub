@@ -962,14 +962,17 @@ body {
   text-align: right;
   margin-top: 30px;
 }
-.regexsearch-delimiter {
+.regexsearch-delimiter,
+.regexsearch-or-delimiter {
   color: white;
   background-color: #9a9a9a;
   padding: 0 10px 0 10px;
   margin-bottom: 5px;
 }
+.regexsearch-or-delimiter {
+  /*margin-left: @regexsearch-checkbox-div-width;*/
+}
 .regexsearch-destination-div {
-  float: left;
   width: 170px;
 }
 .regexsearch-word-form-div {
@@ -977,7 +980,7 @@ body {
   width: 170px;
 }
 .regexsearch-condition-list-div {
-  margin-left: 180px;
+  margin-left: 30px;
   padding-top: 5px;
 }
 .regexsearch-upper-select-label {
@@ -994,6 +997,7 @@ body {
   display: inline-block;
   margin-right: -40px;
   padding-right: 44px;
+  margin-left: 20px;
 }
 .regexsearch-condition-main-div {
   margin: 10px 0 20px 0;
@@ -1002,12 +1006,10 @@ input.regexsearch-checkbox {
   vertical-align: middle;
   margin: 3px;
 }
-.regexsearch-or-delimiter {
-  margin-left: 19px;
-}
 .regexsearch-conditions-commands {
-  margin-left: 178px;
-  margin-top: 10px;
+  /*margin-left: @regexsearch-margin-left;*/
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 .regexsearch-editor-container {
   margin: 3px 15px 10px 10px;
@@ -1024,6 +1026,13 @@ input.regexsearch-checkbox {
   background-color: transparent;
   border-style: none;
   margin-top: 2px;
+}
+.regexsearch-add-input-button {
+  font-size: 0.8em;
+}
+.regex-clickable-text:hover {
+  cursor: pointer;
+  color: #84ced7;
 }
 .main_logo {
   margin: 10px;

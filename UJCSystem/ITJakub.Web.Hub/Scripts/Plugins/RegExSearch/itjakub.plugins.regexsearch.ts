@@ -155,7 +155,7 @@ class RegExSearch extends RegExSearchBase {
 class RegExCondition extends RegExSearchBase {
     private html: HTMLDivElement;
     private conditionContainerDiv: HTMLDivElement;
-    private conditionInputArray: Array<RegExInput>;
+    private conditionInputArray: Array<RegExWordCondition>;
     private parent: RegExSearch;
     private selectedSearchType: string;
     private selectedWordFormType: string;
@@ -205,8 +205,6 @@ class RegExCondition extends RegExSearchBase {
         var conditionsDiv = document.createElement("div");
         $(conditionsDiv).addClass("regexsearch-condition-main-div");
         
-
-        
         var mainSearchDiv: HTMLDivElement = document.createElement("div");
 
         var searchDestinationDiv: HTMLDivElement = document.createElement("div");
@@ -235,7 +233,7 @@ class RegExCondition extends RegExSearchBase {
 
         var wordFormDiv: HTMLDivElement = document.createElement("div");
         $(wordFormDiv).addClass("regexsearch-word-form-div");
-        mainSearchDiv.appendChild(wordFormDiv);
+        //mainSearchDiv.appendChild(wordFormDiv); //TODO implement after it iss implemented on server side
 
         var wordFormSpan: HTMLSpanElement = document.createElement("span");
         wordFormSpan.innerHTML = "Tvar slova";
@@ -261,17 +259,7 @@ class RegExCondition extends RegExSearchBase {
         $(this.conditionContainerDiv).addClass("regexsearch-condition-list-div");
         mainSearchDiv.appendChild(this.conditionContainerDiv);
 
-        var commandsDiv: HTMLDivElement = document.createElement("div");
-        $(commandsDiv).addClass("regexsearch-conditions-commands");
-        mainSearchDiv.appendChild(commandsDiv);
-
-        var addConditionButton: HTMLButtonElement = this.createButton("Přidat výraz");
-        $(addConditionButton).click(() => {
-            this.addCondition();
-        });
-        commandsDiv.appendChild(addConditionButton);
-
-        this.resetCondition();
+        this.resetWords();
 
         var mainDiv = document.createElement("div");
 
@@ -296,24 +284,26 @@ class RegExCondition extends RegExSearchBase {
         this.html = conditionsDiv;
     }
 
-    public resetCondition() {
+    public resetWords() {
         $(this.conditionContainerDiv).empty();
         this.conditionInputArray = [];
-        var newRegExInput = new RegExInput(this);
-        newRegExInput.makeRegExInput();
-        newRegExInput.removeDelimeter();
-        this.conditionInputArray.push(newRegExInput);        
-        this.conditionContainerDiv.appendChild(newRegExInput.getHtml());
+        var newWordCondition = new RegExWordCondition(this);
+        newWordCondition.makeRegExWordCondition();
+        newWordCondition.setClickableDelimeter();
+        this.conditionInputArray.push(newWordCondition);        
+        this.conditionContainerDiv.appendChild(newWordCondition.getHtml());
     }
 
-    public addCondition() {
-        var newRegExInput = new RegExInput(this);
-        newRegExInput.makeRegExInput();
-        this.conditionInputArray.push(newRegExInput);
-        this.conditionContainerDiv.appendChild(newRegExInput.getHtml());
+    public addWord() {
+        this.conditionInputArray[this.conditionInputArray.length-1].setTextDelimeter();
+        var newWordCondition = new RegExWordCondition(this);
+        newWordCondition.makeRegExWordCondition();
+        newWordCondition.setClickableDelimeter();
+        this.conditionInputArray.push(newWordCondition);
+        this.conditionContainerDiv.appendChild(newWordCondition.getHtml());
     }
 
-    public removeCondition(condition: RegExInput) {
+    public removeWord(condition: RegExWordCondition) {
 
         var index = this.conditionInputArray.indexOf(condition, 0);
         if (index != undefined) {
@@ -322,139 +312,221 @@ class RegExCondition extends RegExSearchBase {
             this.conditionInputArray.splice(index, 1);
         }
 
-        if (this.conditionInputArray.length === 0) {
-            this.resetCondition();
+        if (this.conditionInputArray.length === 1) {
+            this.conditionInputArray[0].setClickableDelimeter();
         }
 
-        if (this.conditionInputArray[0].hasDelimeter) {
-            this.conditionInputArray[0].removeDelimeter();
+        if (this.conditionInputArray.length === 0) {
+            this.resetWords();
         }
     }
 
     public getConditionString(): string {
-        var conditionString = this.conditionInputArray[0].getConditionValue();
+        var conditionString = this.conditionInputArray[0].getConditionsValue();
         for (var i = 1; i < this.conditionInputArray.length; i++) {
             var regExInput = this.conditionInputArray[i];
-            conditionString += "|" + regExInput.getConditionValue();
+            conditionString += "&" + regExInput.getConditionsValue(); //TODO change to AND
         }
 
         return conditionString;
     }
 }
 
-class RegExInput extends RegExSearchBase {
+
+class RegExWordCondition extends RegExSearchBase {
     private html: HTMLDivElement;
-    private editorDiv: HTMLDivElement;
-    private conditionInput: HTMLInputElement;
-    private regExEditor: RegExEditor;
-    private parentRegExConditions: RegExCondition;
+    private parentRegExCondition: RegExCondition;
+    private inputsArray: Array<RegExWordInput>;
+    private inputsContainerDiv: HTMLDivElement;
 
     constructor(parent: RegExCondition) {
         super();
-        this.parentRegExConditions = parent;
+        this.parentRegExCondition = parent;
     }
 
     public getHtml(): HTMLDivElement {
         return this.html;
     }
 
-    public removeDelimeter() {
-        $(this.html).find(".regexsearch-or-delimiter").remove();
+    private removeDelimeter() {
+        $(this.html).find(".regexsearch-or-delimiter").empty();
+    }
+
+    private hasDelimeter(): boolean {
+        var isEmpty = $(this.html).find(".regexsearch-or-delimiter").is(':empty');
+        return !isEmpty;
+    }
+
+    public setTextDelimeter() {
+        var textDelimeter = this.createTextDelimeter();
+        if (this.hasDelimeter()) {
+            this.removeDelimeter();
+        }
+        $(this.html).find(".regexsearch-or-delimiter").append(textDelimeter);
+    }
+
+    public setClickableDelimeter() {
+        var clickableDelimeter = this.createClickableDelimeter();
+        if (this.hasDelimeter()) {
+            this.removeDelimeter();
+        }
+        $(this.html).find(".regexsearch-or-delimiter").append(clickableDelimeter);
+    }
+
+    private createClickableDelimeter(): HTMLDivElement {
+        var delimeterDiv = document.createElement("div");
+        var addWordSpan = document.createElement("span");
+        $(addWordSpan).addClass("regex-clickable-text");
+        addWordSpan.innerHTML = "+";
+        $(addWordSpan).click(() => {
+            this.parentRegExCondition.addWord();
+        });
+
+        delimeterDiv.appendChild(addWordSpan);
+        $(delimeterDiv).addClass("regexsearch-or-delimiter");
+
+        var trashButton: HTMLButtonElement = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph: HTMLSpanElement = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(() => {
+            this.parentRegExCondition.removeWord(this);
+        });
+
+        delimeterDiv.appendChild(trashButton);
+
+        return delimeterDiv;
+    }
+
+    private createTextDelimeter(): HTMLDivElement {
+        var delimeterDiv = document.createElement("div");
+        delimeterDiv.innerHTML = "Nebo";
+        $(delimeterDiv).addClass("regexsearch-or-delimiter");
+
+        var trashButton: HTMLButtonElement = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph: HTMLSpanElement = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(() => {
+            this.parentRegExCondition.removeWord(this);
+        });
+
+        delimeterDiv.appendChild(trashButton);
+
+        return delimeterDiv;
+    }
+
+    public makeRegExWordCondition() {
+        var mainDiv: HTMLDivElement = document.createElement("div");
+        $(mainDiv).addClass("reg-ex-word-condition");
+
+        this.inputsContainerDiv = document.createElement("div");
+        $(this.inputsContainerDiv).addClass("regexsearch-word-input-list-div");
+        mainDiv.appendChild(this.inputsContainerDiv);
+
+        var commandsDiv: HTMLDivElement = document.createElement("div");
+        $(commandsDiv).addClass("regexsearch-conditions-commands");
+        mainDiv.appendChild(commandsDiv);
+
+        var addConditionButton: HTMLButtonElement = this.createButton("+");
+        $(addConditionButton).addClass("regexsearch-add-input-button");
+        $(addConditionButton).click(() => {
+            this.addInput();
+        });
+        commandsDiv.appendChild(addConditionButton);
+        mainDiv.appendChild(this.createTextDelimeter());
+        this.resetInputs();
+        this.html = mainDiv;
+    }
+
+    public resetInputs() {
+        $(this.inputsContainerDiv).empty();
+        this.inputsArray = [];
+        var newInput = new RegExWordInput(this);
+        newInput.makeRegExInput();
+        //newInput.removeDelimeter();
+        this.inputsArray.push(newInput);
+        this.inputsContainerDiv.appendChild(newInput.getHtml());
+    }
+
+    public addInput() {
+        var newInput = new RegExWordInput(this);
+        newInput.makeRegExInput();
+        this.inputsArray.push(newInput);
+        this.inputsContainerDiv.appendChild(newInput.getHtml());
+    }
+
+    public removeInput(input: RegExWordInput) {
+
+        var index = this.inputsArray.indexOf(input, 0);
+        if (index != undefined) {
+            var arrayItem = this.inputsArray[index];
+            this.inputsContainerDiv.removeChild(arrayItem.getHtml());
+            this.inputsArray.splice(index, 1);
+        }
+
+        if (this.inputsArray.length === 0) {
+            this.resetInputs();
+        }
+
+        //if (this.inputsArray[0].hasDelimeter) {
+        //    this.inputsArray[0].removeDelimeter();
+        //}
+    }
+
+    public getConditionsValue(): string {
+        //for (var i = 0; i < LENGTH; i++) {
+            
+            
+        //}
+        //TODO implement
+        return "";
+    }
+
+}
+
+class RegExWordInput extends RegExSearchBase {
+    private html: HTMLDivElement;
+    private editorDiv: HTMLDivElement;
+    private conditionInput: HTMLInputElement;
+    private parentRegExWordCondition: RegExWordCondition;
+
+    constructor(parent: RegExWordCondition) {
+        super();
+        this.parentRegExWordCondition = parent;
+    }
+
+    private conditionType = Object.freeze({
+        StartsWith: "starts-with",
+        Contains: "contains",
+        EndsWith: "ends-with"
+    });
+
+    public getHtml(): HTMLDivElement {
+        return this.html;
     }
 
     public hasDelimeter(): boolean {
-        var delimeter = $(this.html).find(".regexsearch-or-delimiter");
+        var delimeter = $(this.html).find(".regexsearch-input-and-delimiter");
         return (typeof delimeter != 'undefined' && delimeter != null) ;
     }
 
     public makeRegExInput() {
         var mainDiv: HTMLDivElement = document.createElement("div");
+        $(mainDiv).addClass("reg-ex-word-input");
 
-        var labelDiv = document.createElement("div");
-        labelDiv.innerHTML = "Nebo";
-        $(labelDiv).addClass("regexsearch-or-delimiter");
-        mainDiv.appendChild(labelDiv);
+        //var labelDiv = document.createElement("div");
+        //labelDiv.innerHTML = "A zároveň";
+        //$(labelDiv).addClass("regexsearch-input-and-delimiter");
+        //mainDiv.appendChild(labelDiv);
 
         var lineDiv = document.createElement("div");
-        this.editorDiv = document.createElement("div");
+        $(lineDiv).addClass("regex-word-input-textbox");
 
-        this.conditionInput = document.createElement("input");
-        this.conditionInput.type = "text";
-        $(this.conditionInput).addClass("form-control");
-        $(this.conditionInput).addClass("regexsearch-condition-input");
-        lineDiv.appendChild(this.conditionInput);
-
-        var regExButton: HTMLButtonElement = document.createElement("button");
-        regExButton.innerText = "R";
-        regExButton.type = "button";
-        $(regExButton).addClass("btn");
-        $(regExButton).addClass("regexsearch-condition-input-button");
-        $(regExButton).click(() => {
-            if (!this.regExEditor || this.editorDiv.children.length === 0) {
-                this.regExEditor = new RegExEditor(this.editorDiv, this.conditionInput);
-                this.regExEditor.makeRegExEditor();
-            } else if ($(this.editorDiv).hasClass("hidden")) {
-                $(this.editorDiv).removeClass("hidden");
-            } else {
-                $(this.editorDiv).addClass("hidden");
-            }
-        });
-        lineDiv.appendChild(regExButton);
-
-        var removeButton: HTMLButtonElement = this.createButton("");
-        var removeGlyph: HTMLSpanElement = document.createElement("span");
-        $(removeGlyph).addClass("glyphicon");
-        $(removeGlyph).addClass("glyphicon-trash");
-        removeButton.appendChild(removeGlyph);
-        $(removeButton).click(() => {
-            this.parentRegExConditions.removeCondition(this);
-        });
-
-        lineDiv.appendChild(removeButton);
-
-        mainDiv.appendChild(lineDiv);
-        mainDiv.appendChild(this.editorDiv);
-        this.html = mainDiv;
-    }
-
-    public getConditionValue(): string {
-        return this.conditionInput.value;
-    }
-}
-
-class RegExEditor extends RegExSearchBase {
-    container: HTMLDivElement;
-    searchBox: HTMLInputElement;
-
-    constructor(container: HTMLDivElement, searchBox: HTMLInputElement) {
-        super();
-        this.container = container;
-        this.searchBox = searchBox;
-    }
-
-    private conditionType = Object.freeze({
-        StartsWith: "starts-with",
-        NotStartsWith: "not-starts-with",
-        Contains: "contains",
-        NotContains: "not-contains",
-        EndsWith: "ends-with",
-        NotEndsWith: "not-ends-with"
-    });
-
-    public makeRegExEditor() {
-        $(this.container).empty();
-        
-        var mainRegExDiv: HTMLDivElement = document.createElement("div");
-        $(mainRegExDiv).addClass("content-container");
-        $(mainRegExDiv).addClass("regexsearch-editor-container");
-
-        var titleHeading: HTMLSpanElement = document.createElement("span");
-        titleHeading.innerHTML = "Editor regulárního výrazu";
-        $(titleHeading).addClass("regexsearch-editor-title");
-        mainRegExDiv.appendChild(titleHeading);
-
-        var editorDiv: HTMLDivElement = document.createElement("div");
-        mainRegExDiv.appendChild(editorDiv);
+        var editorDiv = document.createElement("div");
+        this.editorDiv = editorDiv;
 
         var conditionTitleDiv: HTMLDivElement = document.createElement("div");
         conditionTitleDiv.innerHTML = "Podmínka";
@@ -470,89 +542,188 @@ class RegExEditor extends RegExSearchBase {
         conditionTypeDiv.appendChild(conditionSelect);
 
         conditionSelect.appendChild(this.createOption("Začíná na", this.conditionType.StartsWith));
-        conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
+        //conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
         conditionSelect.appendChild(this.createOption("Obsahuje", this.conditionType.Contains));
-        conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
+        //conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
         conditionSelect.appendChild(this.createOption("Končí na", this.conditionType.EndsWith));
-        conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
+        //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
 
+        this.conditionInput = document.createElement("input");
+        this.conditionInput.type = "text";
+        $(this.conditionInput).addClass("form-control");
+        $(this.conditionInput).addClass("regexsearch-condition-input");
+        lineDiv.appendChild(this.conditionInput);
 
-        var conditionDiv: HTMLDivElement = document.createElement("div");
-        $(conditionDiv).addClass("regexsearch-condition-div");
-        editorDiv.appendChild(conditionDiv);
+        var regExButton: HTMLButtonElement = document.createElement("button");
+        regExButton.innerText = "R";
+        regExButton.type = "button";
+        $(regExButton).addClass("btn");
+        $(regExButton).addClass("regexsearch-condition-input-button");
+        //$(regExButton).click(() => {
+        //    if (!this.regExEditor || this.editorDiv.children.length === 0) {
+        //        this.regExEditor = new RegExEditor(this.editorDiv, this.conditionInput);
+        //        this.regExEditor.makeRegExEditor();
+        //    } else if ($(this.editorDiv).hasClass("hidden")) {
+        //        $(this.editorDiv).removeClass("hidden");
+        //    } else {
+        //        $(this.editorDiv).addClass("hidden");
+        //    }
+        //});
+        lineDiv.appendChild(regExButton);
 
-        var conditionInputDiv: HTMLDivElement = document.createElement("div");
-        conditionDiv.appendChild(conditionInputDiv);
-
-        var conditionInput: HTMLInputElement = document.createElement("input");
-        conditionInput.type = "text";
-        $(conditionInput).addClass("regexsearch-input");
-        conditionInputDiv.appendChild(conditionInput);
-
-        var conditionButtonsDiv: HTMLDivElement = document.createElement("div");
-        conditionDiv.appendChild(conditionButtonsDiv);
-
-        var anythingButton: HTMLButtonElement = this.createButton("Cokoliv");
-        conditionButtonsDiv.appendChild(anythingButton);
-        $(anythingButton).addClass("regexsearch-editor-button");
-        $(anythingButton).click(() => {
-            conditionInput.value += ".*";
+        var removeButton: HTMLButtonElement = this.createButton("");
+        var removeGlyph: HTMLSpanElement = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon");
+        $(removeGlyph).addClass("glyphicon-trash");
+        removeButton.appendChild(removeGlyph);
+        $(removeButton).click(() => {
+            this.parentRegExWordCondition.removeInput(this);
         });
 
-        var orButton: HTMLButtonElement = this.createButton("Nebo");
-        conditionButtonsDiv.appendChild(orButton);
-        orButton.style.cssFloat = "right";
-        $(orButton).addClass("regexsearch-editor-button");
-        $(orButton).click(() => {
-            conditionInput.value += "|";
-        });
+        lineDiv.appendChild(removeButton);
+        mainDiv.appendChild(this.editorDiv);
+        mainDiv.appendChild(lineDiv);
+        
+        this.html = mainDiv;
+    }
 
-
-        var commandButtonsDiv: HTMLDivElement = document.createElement("div");
-        $(commandButtonsDiv).addClass("regexsearch-command-buttons-div");
-        editorDiv.appendChild(commandButtonsDiv);
-
-        var stornoButton: HTMLButtonElement = this.createButton("Zrušit");
-        commandButtonsDiv.appendChild(stornoButton);
-        $(stornoButton).click(() => {
-            $(this.container).empty();
-        });
-
-        var submitButton: HTMLButtonElement = this.createButton("Dokončit");
-        commandButtonsDiv.appendChild(submitButton);
-        $(submitButton).click(() => {
-            var inputValue: string = conditionInput.value;
-            var outputValue: string;
-            
-            switch (conditionSelect.value) {
-                case this.conditionType.StartsWith:
-                    outputValue = "(" + inputValue + ")(.*)";
-                    break;
-                case this.conditionType.NotStartsWith:
-                    outputValue = "(?!" + inputValue + ")(.*)";
-                    break;
-                case this.conditionType.Contains:
-                    outputValue = "(.*)(" + inputValue + ")(.*)";
-                    break;
-                case this.conditionType.NotContains:
-                    outputValue = "((?!" + inputValue + ").)*";
-                    break;
-                case this.conditionType.EndsWith:
-                    outputValue = "(.*)(" + inputValue + ")";
-                    break;
-                case this.conditionType.NotEndsWith:
-                    outputValue = "((?!" + inputValue + "$).)*";
-                    break;
-                default:
-                    outputValue = "";
-            }
-
-            this.searchBox.value = "^" + outputValue + "$";
-
-            $(this.container).addClass("hidden");
-        });
-
-
-        $(this.container).append(mainRegExDiv);
+    public getConditionValue(): string {
+        return this.conditionInput.value;
     }
 }
+
+
+//class RegExEditor extends RegExSearchBase {
+//    container: HTMLDivElement;
+//    searchBox: HTMLInputElement;
+
+//    constructor(container: HTMLDivElement, searchBox: HTMLInputElement) {
+//        super();
+//        this.container = container;
+//        this.searchBox = searchBox;
+//    }
+
+//    private conditionType = Object.freeze({
+//        StartsWith: "starts-with",
+//        NotStartsWith: "not-starts-with",
+//        Contains: "contains",
+//        NotContains: "not-contains",
+//        EndsWith: "ends-with",
+//        NotEndsWith: "not-ends-with"
+//    });
+
+//    public makeRegExEditor() {
+//        $(this.container).empty();
+        
+//        var mainRegExDiv: HTMLDivElement = document.createElement("div");
+//        $(mainRegExDiv).addClass("content-container");
+//        $(mainRegExDiv).addClass("regexsearch-editor-container");
+
+//        var titleHeading: HTMLSpanElement = document.createElement("span");
+//        titleHeading.innerHTML = "Editor regulárního výrazu";
+//        $(titleHeading).addClass("regexsearch-editor-title");
+//        mainRegExDiv.appendChild(titleHeading);
+
+//        var editorDiv: HTMLDivElement = document.createElement("div");
+//        mainRegExDiv.appendChild(editorDiv);
+
+//        var conditionTitleDiv: HTMLDivElement = document.createElement("div");
+//        conditionTitleDiv.innerHTML = "Podmínka";
+//        editorDiv.appendChild(conditionTitleDiv);
+
+
+//        var conditionTypeDiv: HTMLDivElement = document.createElement("div");
+//        $(conditionTypeDiv).addClass("regexsearch-condition-type-div");
+//        editorDiv.appendChild(conditionTypeDiv);
+
+//        var conditionSelect: HTMLSelectElement = document.createElement("select");
+//        $(conditionSelect).addClass("regexsearch-condition-select");
+//        conditionTypeDiv.appendChild(conditionSelect);
+
+//        conditionSelect.appendChild(this.createOption("Začíná na", this.conditionType.StartsWith));
+//        conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
+//        conditionSelect.appendChild(this.createOption("Obsahuje", this.conditionType.Contains));
+//        conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
+//        conditionSelect.appendChild(this.createOption("Končí na", this.conditionType.EndsWith));
+//        conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
+
+
+//        var conditionDiv: HTMLDivElement = document.createElement("div");
+//        $(conditionDiv).addClass("regexsearch-condition-div");
+//        editorDiv.appendChild(conditionDiv);
+
+//        var conditionInputDiv: HTMLDivElement = document.createElement("div");
+//        conditionDiv.appendChild(conditionInputDiv);
+
+//        var conditionInput: HTMLInputElement = document.createElement("input");
+//        conditionInput.type = "text";
+//        $(conditionInput).addClass("regexsearch-input");
+//        conditionInputDiv.appendChild(conditionInput);
+
+//        var conditionButtonsDiv: HTMLDivElement = document.createElement("div");
+//        conditionDiv.appendChild(conditionButtonsDiv);
+
+//        var anythingButton: HTMLButtonElement = this.createButton("Cokoliv");
+//        conditionButtonsDiv.appendChild(anythingButton);
+//        $(anythingButton).addClass("regexsearch-editor-button");
+//        $(anythingButton).click(() => {
+//            conditionInput.value += ".*";
+//        });
+
+//        var orButton: HTMLButtonElement = this.createButton("Nebo");
+//        conditionButtonsDiv.appendChild(orButton);
+//        orButton.style.cssFloat = "right";
+//        $(orButton).addClass("regexsearch-editor-button");
+//        $(orButton).click(() => {
+//            conditionInput.value += "|";
+//        });
+
+
+//        var commandButtonsDiv: HTMLDivElement = document.createElement("div");
+//        $(commandButtonsDiv).addClass("regexsearch-command-buttons-div");
+//        editorDiv.appendChild(commandButtonsDiv);
+
+//        var stornoButton: HTMLButtonElement = this.createButton("Zrušit");
+//        commandButtonsDiv.appendChild(stornoButton);
+//        $(stornoButton).click(() => {
+//            $(this.container).empty();
+//        });
+
+//        var submitButton: HTMLButtonElement = this.createButton("Dokončit");
+//        commandButtonsDiv.appendChild(submitButton);
+//        $(submitButton).click(() => {
+//            var inputValue: string = conditionInput.value;
+//            var outputValue: string;
+            
+//            switch (conditionSelect.value) {
+//                case this.conditionType.StartsWith:
+//                    outputValue = "(" + inputValue + ")(.*)";
+//                    break;
+//                case this.conditionType.NotStartsWith:
+//                    outputValue = "(?!" + inputValue + ")(.*)";
+//                    break;
+//                case this.conditionType.Contains:
+//                    outputValue = "(.*)(" + inputValue + ")(.*)";
+//                    break;
+//                case this.conditionType.NotContains:
+//                    outputValue = "((?!" + inputValue + ").)*";
+//                    break;
+//                case this.conditionType.EndsWith:
+//                    outputValue = "(.*)(" + inputValue + ")";
+//                    break;
+//                case this.conditionType.NotEndsWith:
+//                    outputValue = "((?!" + inputValue + "$).)*";
+//                    break;
+//                default:
+//                    outputValue = "";
+//            }
+
+//            this.searchBox.value = "^" + outputValue + "$";
+
+//            $(this.container).addClass("hidden");
+//        });
+
+
+//        $(this.container).append(mainRegExDiv);
+//    }
+//}
