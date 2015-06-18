@@ -50,10 +50,6 @@
       <column name="BiblText" sql-type="varchar" not-null="false" />
     </property>
 
-    <property name="NotBefore" />
-
-    <property name="NotAfter" />
-
     <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="false">
       <key column="BookVersion" />
       <one-to-many class="ManuscriptDescription" />

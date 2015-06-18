@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Generic;
 using System.Reflection;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
@@ -183,7 +182,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual IList<BookVersion> SearchByCriteria(DetachedCriteria databaseCriteria)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return databaseCriteria.GetExecutableCriteria(session).List<BookVersion>();
             }

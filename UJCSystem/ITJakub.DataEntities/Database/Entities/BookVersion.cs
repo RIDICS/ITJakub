@@ -31,9 +31,6 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual IList<BookPage> BookPages { get; set; }
         public virtual IList<BookContentItem> BookContentItems { get; set; }
 
-        public virtual DateTime NotBefore { get; set; }
-
-        public virtual DateTime NotAfter { get; set; }
 
         public virtual bool Equals(BookVersion other)
         {
