@@ -19,6 +19,8 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVersion, ManuscriptDescription msDesc, XmlReader xmlReader)
         {
+            msDesc.NotBefore = xmlReader.GetAttribute("notBefore");
+            msDesc.NotAfter = xmlReader.GetAttribute("notAfter");
             msDesc.OriginDate = GetInnerContentAsString(xmlReader);
         }
     
