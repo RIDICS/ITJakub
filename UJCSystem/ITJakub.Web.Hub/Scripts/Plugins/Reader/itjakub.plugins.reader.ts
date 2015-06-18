@@ -322,7 +322,7 @@ class ReaderModule {
         $(commentButton).click((event: Event) => {
             var panelId = "EditacniPanel";
             if (!this.existSidePanel(panelId)) {
-                var editPanel = new SettingsPanel(panelId , this);
+                var editPanel: SettingsPanel = new SettingsPanel(panelId , this);
                 this.loadSidePanel(editPanel.panelHtml);
                 this.leftSidePanels.push(editPanel);
             }
@@ -346,7 +346,7 @@ class ReaderModule {
         $(searchResultButton).click((event: Event) => {
             var panelId = "SearchPanel";
             if (!this.existSidePanel(panelId)) {
-                var searchPanel = new LeftSidePanel(panelId,"Vyhlédávání", this);
+                var searchPanel: LeftSidePanel = new LeftSidePanel(panelId,"Vyhlédávání", this);
                 this.loadSidePanel(searchPanel.panelHtml);
                 this.leftSidePanels.push(searchPanel);
             }
@@ -370,7 +370,7 @@ class ReaderModule {
         $(contentButton).click((event: Event) => {
             var panelId = "ObsahPanel";
             if (!this.existSidePanel(panelId)) {
-                var contentPanel = new LeftSidePanel(panelId,"Obsah", this);
+                var contentPanel: LeftSidePanel = new LeftSidePanel(panelId,"Obsah", this);
                 this.loadSidePanel(contentPanel.panelHtml);
                 this.leftSidePanels.push(contentPanel);
             }
@@ -445,13 +445,13 @@ class ReaderModule {
         var bodyContainerDiv: HTMLDivElement = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
 
-        var textPanel = new TextPanel(this.textPanelIdentificator, this);
+        var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this);
         this.rightSidePanels.push(textPanel);
 
         bodyContainerDiv.appendChild(textPanel.panelHtml);
 
         // Image Panel
-        var imagePanel = new ImagePanel(this.imagePanelIdentificator, this);
+        var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
 
         $(imagePanel.panelHtml).hide();
