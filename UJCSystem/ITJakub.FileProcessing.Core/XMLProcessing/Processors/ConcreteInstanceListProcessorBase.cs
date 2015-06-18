@@ -28,5 +28,6 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         {
             throw new NotSupportedException();
         }
+        
     }
 }

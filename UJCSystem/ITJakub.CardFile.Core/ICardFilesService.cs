@@ -2,9 +2,9 @@
 using System.IO;
 using System.ServiceModel;
 using System.ServiceModel.Web;
-using Ujc.Naki.CardFile.Core.DataContractEntities;
+using ITJakub.CardFile.Core.DataContractEntities;
 
-namespace Ujc.Naki.CardFile.Core
+namespace ITJakub.CardFile.Core
 {
     [ServiceContract]
     [XmlSerializerFormat]
@@ -15,9 +15,12 @@ namespace Ujc.Naki.CardFile.Core
         files GetFiles();
 
         [OperationContract]
-        [WebInvoke(UriTemplate = "/files/{fileId}/buckets?heslo={heslo}", Method = "GET", ResponseFormat = WebMessageFormat.Xml)]
-        buckets GetBuckets(string fileId, string heslo);
+        [WebInvoke(UriTemplate = "/files/{fileId}/buckets?heslo={headword}", Method = "GET", ResponseFormat = WebMessageFormat.Xml)]
+        buckets GetBucketsByHeadword(string fileId, string headword);
 
+        [OperationContract]
+        [WebInvoke(UriTemplate = "/files/{fileId}/buckets", Method = "GET", ResponseFormat = WebMessageFormat.Xml)]
+        buckets GetBuckets(string fileId);
 
         [OperationContract]
         [WebInvoke(UriTemplate = "/files/{fileId}/buckets/{bucketId}", Method = "GET", ResponseFormat = WebMessageFormat.Xml)]
@@ -41,9 +44,13 @@ namespace Ujc.Naki.CardFile.Core
             return Channel.GetFiles();
         }
 
-        public buckets GetBuckets(string fileId, string heslo)
+        public buckets GetBucketsByHeadword(string fileId, string headword)
         {
-            return Channel.GetBuckets(fileId, heslo);
+            return Channel.GetBucketsByHeadword(fileId, headword);
+        }
+        public buckets GetBuckets(string fileId)
+        {
+            return Channel.GetBuckets(fileId);
         }
 
         public buckets GetCardsFromBucket(string fileId, string bucketId)
@@ -59,6 +66,7 @@ namespace Ujc.Naki.CardFile.Core
         public Stream GetImageForCard(string fileId, string bucketId, string cardId, string imageId, string imageSize)
         {
             return Channel.GetImageForCard(fileId, bucketId, cardId, imageId, imageSize);
+
         }
     }
 }

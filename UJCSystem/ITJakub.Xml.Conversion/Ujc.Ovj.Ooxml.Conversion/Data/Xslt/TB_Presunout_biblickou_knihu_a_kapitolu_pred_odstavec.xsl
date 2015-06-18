@@ -3,7 +3,8 @@
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
 	exclude-result-prefixes="xd"
 	version="1.0">
-  
+	<xsl:import href="Kopirovani_prvku.xsl"/>
+	
   <xsl:strip-space elements="*"/>
   
 	<xd:doc scope="stylesheet">
@@ -14,7 +15,12 @@
 		</xd:desc>
 	</xd:doc>
   
-	<xsl:include href="Kopirovani_prvku.xsl"/>
+  
+	<xsl:template match="/">
+		<xsl:comment> TB_Presunout_biblickou_knihu_a_kapitolu_pred_odstavec </xsl:comment>
+		<xsl:apply-templates />
+	</xsl:template>
+	
   
   <xd:doc>
     <xd:desc>
@@ -38,7 +44,7 @@
 	<xsl:template match="/doc//*[name(child::*[position() = 1]) = 'kapitola']">
 		<xsl:copy-of select="child::*[1]"/>
 		<xsl:element name="{local-name()}">
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:apply-templates select="child::*[position() &gt; 1]"></xsl:apply-templates>
 		</xsl:element>
 	</xsl:template>

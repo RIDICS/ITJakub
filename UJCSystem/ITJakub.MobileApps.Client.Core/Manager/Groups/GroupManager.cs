@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Core.Communication.Client;
+using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
-using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
-using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Comparer;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -28,6 +28,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         private GroupDetailContract m_currentGroupInfoModel;
 
         public long CurrentGroupId { get; set; }
+        public GroupType CurrentGroupType { get; set; }
 
         public bool RestoreLastState { get; set; }
 
@@ -205,7 +206,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 {
                     group.Task = new TaskViewModel
                     {
-                        Application = m_applicationIdManager.GetApplicationType(task.ApplicationId),
+                        Application = await m_applicationIdManager.GetApplicationType(task.ApplicationId),
                         Id = task.Id,
                         Name = task.Name,
                         CreateTime = task.CreateTime

@@ -50,6 +50,7 @@
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.MobileApps.Configuration.Container.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

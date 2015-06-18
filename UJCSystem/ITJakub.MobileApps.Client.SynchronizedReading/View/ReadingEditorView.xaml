@@ -53,10 +53,10 @@
                         <Run Text="{Binding BookAuthor}" />
                         <LineBreak />
                         <Run Text="Rok vydání: " />
-                        <Run Text="{Binding BookYear}" />
+                        <Run Text="{Binding PublishDate}" />
                         <LineBreak />
                         <Run Text="Zvolená výchozí strana: " />
-                        <Run Text="{Binding DefaultPageId}" />
+                        <Run Text="{Binding PageName}" />
                     </TextBlock>
                 </StackPanel>
 
@@ -119,6 +119,7 @@
                       Header="Zobrazit fotografii stránky"
                       OnContent="Ano"
                       OffContent="Ne"
+                      IsEnabled="{Binding IsBookSelected}"
                       IsOn="{Binding IsShowPhotoEnabled, Mode=TwoWay}" />
 
         <Border Grid.Row="1"
@@ -142,6 +143,18 @@
                    HorizontalAlignment="Center"
                    Stretch="Uniform"
                    Source="{Binding BookPagePhoto}" />
+
+            <Grid Margin="40,20,40,20"
+                  Background="#AAFFFFFF"
+                  VerticalAlignment="Center">
+
+                <TextBlock HorizontalAlignment="Center"
+                           Text="Fotografie této strany nebyla nalezena."
+                           Foreground="DarkRed"
+                           FontSize="17"
+                           Margin="3"
+                           Visibility="{Binding IsPhotoLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
 
             <ProgressRing HorizontalAlignment="Center"
                           VerticalAlignment="Center"

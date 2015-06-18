@@ -108,19 +108,15 @@
     <Compile Include="Database\Entities\AuthenticationProvider.cs" />
     <Compile Include="Database\Entities\GroupState.cs" />
     <Compile Include="Database\Repositories\ApplicationRepository.cs" />
-    <Compile Include="Database\Repositories\TaskRepository.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
     <Compile Include="Database\Entities\Application.cs" />
     <Compile Include="Database\Entities\Group.cs" />
     <Compile Include="Database\Entities\Institution.cs" />
-    <Compile Include="Database\Entities\SynchronizedObject.cs" />
+    <Compile Include="Database\Entities\SynchronizedObjectBase.cs" />
     <Compile Include="Database\Entities\Task.cs" />
     <Compile Include="Database\Entities\User.cs" />
-    <Compile Include="Database\Repositories\GroupRepository.cs" />
-    <Compile Include="Database\Repositories\InstitutionRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Database\Repositories\SynchronizedObjectRepository.cs" />
     <Compile Include="Database\Repositories\UsersRepository.cs" />
     <Compile Include="CreateEntityFailedException.cs" />
   </ItemGroup>

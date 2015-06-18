@@ -30,6 +30,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private readonly IErrorService m_errorService;
 
         private readonly List<GroupInfoViewModel> m_selectedGroups;
+        private readonly HashSet<long> m_ownedGroupIds;
         private GroupInfoViewModel m_selectedGroup;
         private ObservableCollection<GroupInfoViewModel> m_groups;
         private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
@@ -43,6 +44,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private bool m_canRemoveSelected;
         private bool m_canPauseSelected;
         private bool m_canStartSelected;
+        private bool m_isGroupListEmpty;
 
         public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
@@ -51,8 +53,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_pollingService = pollingService;
             m_errorService = errorService;
 
+            m_ownedGroupIds = new HashSet<long>();
             m_selectedGroups = new List<GroupInfoViewModel>();
-            GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>();
             m_userRole = UserRoleContract.Student;
             
             Messenger.Default.Register<LogOutMessage>(this, message =>
@@ -91,7 +93,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             {
                 m_groupList = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(() => IsGroupListEmpty);
+                IsGroupListEmpty = m_groupList.Count == 0;
             }
         }
 
@@ -137,7 +139,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         public bool IsGroupListEmpty
         {
-            get { return m_groupList.Count == 0; }
+            get { return m_isGroupListEmpty; }
+            set
+            {
+                m_isGroupListEmpty = value;
+                RaisePropertyChanged();
+            }
         }
 
         public bool Loading
@@ -291,6 +298,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
                 m_groups = groupList;
                 DisplayGroupList(m_groups);
+                CreateOwnedGroupSet();
 
                 m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_groups, GroupUpdate);
             });
@@ -302,7 +310,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 RaisePropertyChanged(() => IsTeacherAndGroupSelected);
             });
         }
-
+        
         private void GroupUpdate(Exception exception)
         {
             m_errorService.ShowConnectionWarning();
@@ -318,7 +326,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         {
             if (group != null)
             {
-                m_dataService.SetCurrentGroup(group.GroupId);
+                var ownCurrentGroup = m_ownedGroupIds.Contains(group.GroupId);
+                m_dataService.SetCurrentGroup(group.GroupId, ownCurrentGroup ? GroupType.Owner : GroupType.Member);
 
                 var viewType = group.GroupType == GroupType.Member
                     ? typeof (ApplicationHostView)
@@ -385,6 +394,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void DisplayGroupList(ObservableCollection<GroupInfoViewModel> groupList)
         {
+            if (groupList == null)
+                return;
+
             IEnumerable<GroupInfoViewModel> filteredList = groupList;
             if (CurrentFilter != null)
                 filteredList = groupList.Where(group => group.State == CurrentFilter);
@@ -414,7 +426,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private void CreateNewTask()
         {
             m_dataService.SetAppSelectionTarget(SelectApplicationTarget.CreateTask);
-            m_navigationService.Navigate<SelectApplicationView>();
+            Navigate(typeof (SelectApplicationView));
+        }
+
+        private void CreateOwnedGroupSet()
+        {
+            m_ownedGroupIds.Clear();
+            foreach (var groupInfoViewModel in m_groups.Where(x => x.GroupType == GroupType.Owner))
+            {
+                m_ownedGroupIds.Add(groupInfoViewModel.GroupId);
+            }
         }
     }
 }

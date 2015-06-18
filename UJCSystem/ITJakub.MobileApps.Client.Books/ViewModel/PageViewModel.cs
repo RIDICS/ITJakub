@@ -2,6 +2,10 @@
 {
     public class PageViewModel
     {
-        public string PageId { get; set; }
+        public string Name { get; set; }
+
+        public int Position { get; set; }
+
+        public string XmlId { get; set; }
     }
 }

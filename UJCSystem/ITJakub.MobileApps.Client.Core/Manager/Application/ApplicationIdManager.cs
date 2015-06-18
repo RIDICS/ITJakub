@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
+using System.Threading.Tasks;
+using ITJakub.MobileApps.Client.Core.Communication.Client;
 using ITJakub.MobileApps.Client.Shared.Enum;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Application
@@ -16,9 +17,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Application
             m_serviceClient = serviceClient;
         }
 
-        private void LoadAllApplicationId()
+        private async Task LoadAllApplicationId()
         {
-            var appList = m_serviceClient.GetAllApplicationAsync().Result;
+            var appList = await m_serviceClient.GetAllApplicationAsync();
             
             m_applicationTypeToId = new Dictionary<ApplicationType, int>();
             m_applicaitonIdToType = new Dictionary<int, ApplicationType>();
@@ -40,10 +41,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Application
             return Enum.TryParse(applicationName, true, out appType) ? appType : ApplicationType.Unknown;
         }
 
-        public int GetApplicationId(ApplicationType applicationType)
+        public async Task LoadAllApplications()
         {
             if (m_applicationTypeToId == null)
-                LoadAllApplicationId();
+                await LoadAllApplicationId();
+        }
+
+        public async Task<int> GetApplicationId(ApplicationType applicationType)
+        {
+            if (m_applicationTypeToId == null)
+                await LoadAllApplicationId();
 
             if (m_applicationTypeToId.ContainsKey(applicationType))
                 return m_applicationTypeToId[applicationType];
@@ -51,10 +58,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Application
             throw new ArgumentException("Server doesn't know this application type.");
         }
 
-        public ApplicationType GetApplicationType(int applicationId)
+        public async Task<ApplicationType> GetApplicationType(int applicationId)
         {
             if (m_applicaitonIdToType == null)
-                LoadAllApplicationId();
+                await LoadAllApplicationId();
 
             if (m_applicaitonIdToType.ContainsKey(applicationId))
                 return m_applicaitonIdToType[applicationId];

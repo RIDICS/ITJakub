@@ -8,6 +8,7 @@ using ITJakub.MobileApps.Client.Books.Enum;
 using ITJakub.MobileApps.Client.Books.Message;
 using ITJakub.MobileApps.Client.Books.Service;
 using ITJakub.MobileApps.Client.Books.View;
+using ITJakub.MobileApps.Client.Books.ViewModel.ComboBoxItem;
 using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.ViewModel
@@ -16,25 +17,30 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
+        private readonly IErrorService m_errorService;
         private ObservableCollection<BookViewModel> m_bookList;
         private bool m_loading;
         private bool m_isSearchResult;
         private bool m_searching;
         private ObservableCollection<BookViewModel> m_originalBookList;
-        private CategoryContract m_selectedCategory;
+        private BookTypeContract m_selectedCategory;
         private SortByType m_selectedSortType;
         private int m_filterFromYear;
         private int m_filterToYear;
 
-        public SelectBookViewModel(IDataService dataService, INavigationService navigationService)
+        public SelectBookViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
+            m_errorService = errorService;
 
             GoBackCommand = new RelayCommand(GoBack);
             BookClickCommand = new RelayCommand<ItemClickEventArgs>(BookClick);
             SearchCommand = new RelayCommand(Search);
+            ReloadCommand = new RelayCommand(LoadData);
             
+            m_selectedCategory = BookTypeContract.Edition;
+
             LoadData();
         }
 
@@ -43,6 +49,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         public RelayCommand<ItemClickEventArgs> BookClickCommand { get; private set; }
 
         public RelayCommand SearchCommand { get; private set; }
+
+        public RelayCommand ReloadCommand { get; private set; }
         
         public ObservableCollection<BookViewModel> BookList
         {
@@ -87,11 +95,14 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             }
         }
 
-        public CategoryContract SelectedCategory
+        public BookTypeContract SelectedCategory
         {
             get { return m_selectedCategory; }
             set
             {
+                if (m_selectedCategory == value)
+                    return;
+
                 m_selectedCategory = value;
                 if (IsSearchResult)
                     Search();
@@ -149,14 +160,45 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             }
         }
 
+        public ObservableCollection<CategoryItem> BookCategoryList
+        {
+            get
+            { 
+                return new ObservableCollection<CategoryItem>
+                {
+                    new CategoryItem{Category = BookTypeContract.Edition, Name = "Edice"},
+                    new CategoryItem{Category = BookTypeContract.Grammar, Name = "Mluvnice"},
+                    new CategoryItem{Category = BookTypeContract.Dictionary, Name = "Slovníky"},
+                    new CategoryItem{Category = BookTypeContract.ProfessionalLiterature, Name = "Odborná literatura"},
+                };
+            }
+        }
+
+        public ObservableCollection<SortItem> SortTypeList
+        {
+            get
+            {
+                return new ObservableCollection<SortItem>
+                {
+                    new SortItem{Type = SortByType.Name, Name = "Seřadit podle názvu"},
+                    new SortItem{Type = SortByType.Author, Name = "Seřadit podle autora"},
+                    new SortItem{Type = SortByType.Year, Name = "Seřadit podle roku"},
+                };
+            }
+        }
+        
         private void LoadData()
         {
+            IsSearchResult = false;
             Loading = true;
             m_dataService.GetBookList(SelectedCategory, (bookList, exception) =>
             {
                 Loading = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowCommunicationWarning();
                     return;
+                }
 
                 m_originalBookList = bookList;
                 Filter();
@@ -189,7 +231,10 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             {
                 Searching = false;
                 if (exception != null)
+                {
+                    m_errorService.ShowCommunicationWarning();
                     return;
+                }
 
                 IsSearchResult = true;
                 RaisePropertyChanged(() => SearchQuery);
@@ -207,13 +252,13 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             switch (SelectedSortType)
             {
                 case SortByType.Author:
-                    sortedList = BookList.OrderBy(book => book.Author);
+                    sortedList = BookList.OrderBy(book => book.Authors);
                     break;
                 case SortByType.Name:
                     sortedList = BookList.OrderBy(book => book.Title);
                     break;
                 case SortByType.Year:
-                    sortedList = BookList.OrderBy(book => book.Year);
+                    sortedList = BookList.OrderBy(book => book.PublishDate);
                     break;
                 default:
                     sortedList = BookList.OrderBy(book => book.Title);
@@ -228,8 +273,10 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
             if (m_originalBookList == null)
                 return;
 
-            var filteredList = m_originalBookList.Where(book => FilterFromYear <= book.Year && book.Year <= FilterToYear);
-            m_bookList = new ObservableCollection<BookViewModel>(filteredList);
+            //TODO fix filter
+            //var filteredList = m_originalBookList.Where(book => FilterFromYear <= book.PublishDate && book.PublishDate <= FilterToYear);
+            //m_bookList = new ObservableCollection<BookViewModel>(filteredList);
+            m_bookList = m_originalBookList;
 
             Sort();
         }

@@ -8,7 +8,7 @@ var SearchModule = (function () {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: "/Search/Books",
+            url: getBaseUrl() + "Search/Books",
             data: { bookIds: bookIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -22,7 +22,7 @@ var SearchModule = (function () {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: "/Search/BooksWithType",
+            url: getBaseUrl() + "Search/BooksWithType",
             data: { type: type },
             dataType: 'json',
             contentType: 'application/json',

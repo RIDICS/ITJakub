@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Graphics.Display;
@@ -54,10 +55,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 
         public static readonly DependencyProperty PointerCalibrationYProperty = DependencyProperty.Register("PointerCalibrationY", typeof (double), typeof (ReaderRichEditBox), new PropertyMetadata(0.0));
         
-        public static readonly DependencyProperty IsExternalZoomEnabledProperty = DependencyProperty.Register("IsExternalZoomEnabled", typeof (bool), typeof (ReaderRichEditBox), new PropertyMetadata(false));
+        public static readonly DependencyProperty ZoomProperty = DependencyProperty.Register("Zoom", typeof (double), typeof (ReaderRichEditBox), new PropertyMetadata(1.0, OnZoomChanged));
         
-        public static readonly DependencyProperty ZoomProperty = DependencyProperty.Register("Zoom", typeof (double), typeof (ReaderRichEditBox), new PropertyMetadata(1.0));
-
         public string DocumentRtf
         {
             get { return (string) GetValue(DocumentRtfProperty); }
@@ -104,12 +103,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
         {
             get { return (double) GetValue(PointerCalibrationYProperty); }
             set { SetValue(PointerCalibrationYProperty, value); }
-        }
-
-        public bool IsExternalZoomEnabled
-        {
-            get { return (bool) GetValue(IsExternalZoomEnabledProperty); }
-            set { SetValue(IsExternalZoomEnabledProperty, value); }
         }
 
         public double Zoom
@@ -217,7 +210,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             m_scrollBarGrid = GetTemplateChild("ScrollBarGrid") as Grid;
 
             if (m_richEditBox != null)
+            {
                 m_richEditBox.SelectionChanged += OnSelectionChanged;
+                m_richEditBox.DocumentLoaded += OnDocumentLoaded;
+            }
 
             OnModeChanged(this, null);
         }
@@ -294,6 +290,31 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             var properties = e.GetCurrentPoint(this).Properties;
             var delta = properties.MouseWheelDelta;
             m_scrollViewer.ChangeView(null, m_scrollViewer.VerticalOffset - delta, null);
+        }
+
+        private void OnDocumentLoaded(object sender, EventArgs e)
+        {
+            //m_richEditBox.Document.GetDefaultCharacterFormat().
+        }
+
+        private static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var readerRichEditBox = d as ReaderRichEditBox;
+            if (readerRichEditBox == null)
+                return;
+
+            var richEditBox = readerRichEditBox.m_richEditBox;
+
+            var defaultFormat = richEditBox.Document.GetDefaultCharacterFormat();
+            var textRange = richEditBox.Document.GetRange(0, richEditBox.Document.Selection.StoryLength);
+
+            var isReadOnly = richEditBox.IsReadOnly;
+            richEditBox.IsReadOnly = false;
+            textRange.CharacterFormat.Size = (float) (defaultFormat.Size*readerRichEditBox.Zoom);
+            richEditBox.IsReadOnly = isReadOnly;
+
+            // TODO improve logic
+            OnCursorPositionChanged(d, null);
         }
         
         public enum Modes

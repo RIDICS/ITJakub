@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<pismena>
+		<pismeno id="A" text="lt01" />
+		<pismeno id="B" text="lt02" />
+		<pismeno id="C" text="lt03" />
+		<pismeno id="Č" text="lt04" />
+		<pismeno id="D" text="lt05" />
+		<pismeno id="D Ď" text="lt05" />
+		<pismeno id="E" text="lt06" />
+		<pismeno id="F" text="lt07" />
+		<pismeno id="G" text="lt08" />
+		<pismeno id="H" text="lt09" />
+		<pismeno id="CH" text="lt10" />
+		<pismeno id="I" text="lt11" />
+		<pismeno id="J" text="lt12" />
+		<pismeno id="K" text="lt13" />
+		<pismeno id="L Ľ" text="lt14" />
+		<pismeno id="L" text="lt14" />
+		<pismeno id="M" text="lt15" />
+		<pismeno id="N" text="lt16" />
+		<pismeno id="N Ň" text="lt16" />
+		<pismeno id="O" text="lt17" />
+		<pismeno id="P" text="lt18" />
+		<pismeno id="Q" text="lt19" />
+		<pismeno id="R" text="lt20" />
+		<pismeno id="Ř" text="lt21" />
+		<pismeno id="S" text="lt22" />
+		<pismeno id="Š" text="lt23" />
+		<pismeno id="T" text="lt24" />
+		<pismeno id="T Ť" text="lt24" />
+		<pismeno id="U" text="lt25" />
+		<pismeno id="V" text="lt26" />
+		<pismeno id="W" text="lt27" />
+		<pismeno id="X" text="lt28" />
+		<pismeno id="Y" text="lt29" />
+		<pismeno id="Z" text="lt30" />
+		<pismeno id="Ž" text="lt31" />
+		<!--<pismeno id="XX" text="ltXX" />-->
+	</pismena>
+	
+		<akronymy>
+		<akronym id="HesStčS" text="HesStcS" />
+		<akronym id="StčSMat" text="StcSMat" />
+		<akronym id="MSS" text="MSS" />
+		<akronym id="ESSČ" text="ESSC" />
+		<akronym id="GbSlov" text="GbSlov" />
+		<akronym id="StčS" text="StcS" />
+		<akronym id="StčSSlov" text="StcSSlov" />
+		<akronym id="ŠimekSlov" text="SimekSlov" />
+		<akronym id="IndexSvob" text="IndexSvob" />
+	</akronymy>	
+	
+	<zdroje>
+		<zdroj text="HesStcS" id="1" zkratka="HesStčS" akronym="HesStcS" />
+		<zdroj text="StcSMat" id="1" zkratka="StčSMat" akronym="StcSMat" pomocny="true" />
+		<zdroj text="MSS" id="2" zkratka="MSS" akronym="MSS" />
+		<zdroj text="ESSC" id="4" zkratka="ESSČ" akronym="ESSC" />
+		<zdroj text="GbSlov" id="8" zkratka="GbSlov" akronym="GbSlov" />
+		<zdroj text="StcS" id="16" zkratka="StčS" akronym="StcS" />
+		<zdroj text="StcSSlov" id="16" zkratka="StčSSlov" akronym="StcSSlov" pomocny="true" />
+		<zdroj text="SimekSlov" id="32" zkratka="ŠimekSlov" akronym="SimekSlov" />
+		<zdroj text="IndexSvob" id="64" zkratka="IndexSvob" akronym="IndexSvob" />
+	</zdroje>
+
+	<typyHeslovehoSlova>
+		<typHeslovehoSlova text="norm" id="1" popis="plné heslo" />
+		<typHeslovehoSlova text="restored" id="2" popis="rozepsané heslo" />
+		<typHeslovehoSlova text="short" id="4" popis="zkrácené heslo" />
+	</typyHeslovehoSlova>
+	<typyHesloveStati>
+		<typHesloveStati text="norm" id="1" popis="heslo v rámci hesláře" />
+		<typHesloveStati text="full" id="2" popis="plnohodnotná heslová stať" />
+		<typHesloveStati text="ref" id="4" popis="heslová stať obsahující pouze odkaz(y)" />
+		<typHesloveStati text="excl" id="8" popis="vyloučené heslo ze slovníku" />
+	</typyHesloveStati>
+	<zpusobyVyuziti>
+		<zpusobVyuziti text="internal" id="1" />
+		<zpusobVyuziti text="public" id="2" />
+	</zpusobyVyuziti>
+
+	<!--
+			private static char[] mchSeparatory = new Char[] { ',', ':', ';', '?', '+', '=', '…', '$', '×', '†', '“', '„', '\t' };
+		private static char[] mchIndexyCislic = new Char[] { '\u00B9', '\u00B2', '\u00B3' };
+
+	-->
+	<separatory>
+		<separator text="," />
+		<separator text=":" />
+		<separator text=";" />
+		<separator text="?" />
+		<separator text="+" />
+		<separator text="=" />
+		<separator text="…" />
+		<separator text="$" />
+		<separator text="×" />
+		<separator text="†" />
+		<separator text="“" />
+		<separator text="„" />
+		<separator text="	" /> <!--tabulátor -->
+		<!-- Dodat ještě jednoduché uvozovky? -->
+	</separatory>
+	<indexy>
+		<index text="¹" />
+		<index text="²" />
+		<index text="³" />
+	</indexy>
+	<prefixy>
+		<prefix text="*" />
+		<prefix text="ˣ" />
+	</prefixy>
+	
+</data>

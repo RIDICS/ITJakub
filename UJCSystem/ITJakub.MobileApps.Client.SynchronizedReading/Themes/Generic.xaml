@@ -14,9 +14,7 @@
                                       Background="White"
                                       BorderBrush="{TemplateBinding BorderBrush}"
                                       BorderThickness="{TemplateBinding BorderThickness}"
-                                      ZoomMode="Disabled"
-                                      control:ScrollViewerHelper.IsExternalZoomEnabled="True"
-                                      control:ScrollViewerHelper.Zoom="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Zoom, Mode=TwoWay}">
+                                      ZoomMode="Disabled">
                             
                             <Grid VerticalAlignment="Top">
                                 <control:BindableRichEditBox

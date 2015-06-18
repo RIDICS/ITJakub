@@ -17,13 +17,13 @@
 	
 	
 	<xsl:template match="/">
-		<xsl:comment> EM_Seskupit_polozky_rejstriku </xsl:comment>
+		<xsl:comment> EM_Seskupit_polozky_rejstriku_2.0_x </xsl:comment>
 		<xsl:apply-templates />
 	</xsl:template>
 	
 	<xsl:template match="div">
-		<div>
-			<xsl:apply-templates select="@*" />
+		<xsl:copy>
+			<xsl:copy-of select="@*" />
 			<xsl:choose>
 				<xsl:when test="item">
 					<xsl:for-each-group select="*" group-adjacent="if(self::item and not(parent::cell)) then 
@@ -35,7 +35,7 @@
 					<xsl:apply-templates  />
 				</xsl:otherwise>
 			</xsl:choose>
-		</div>
+		</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="item">
@@ -44,18 +44,28 @@
 				<xsl:apply-templates mode="item-group" />
 			</xsl:when>
 			<xsl:otherwise>
-				<div>
-					<list type="index">
-						<xsl:apply-templates select="current-group()" mode="item-group" />
-					</list>
-				</div>
+				<xsl:choose>
+					<xsl:when test="parent::*/self::div">
+							<list type="index">
+								<xsl:apply-templates select="current-group()" mode="item-group" />
+							</list>
+					</xsl:when>
+					<xsl:otherwise>
+						<div>
+							<list type="index">
+							<xsl:apply-templates select="current-group()" mode="item-group" />
+						</list>
+						</div>
+					</xsl:otherwise>
+				</xsl:choose>
+				
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="item" mode="item-group">
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:apply-templates />
 		</xsl:copy>
 	</xsl:template>

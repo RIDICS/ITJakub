@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Search";
+    ViewBag.Title = "Book reader";
 }
 
 @section styles{
@@ -8,8 +8,6 @@
 @section scripts{
     @Scripts.Render("~/itjakub/editions/javascript")
 }
-
-@using System.Web.Helpers
 @model ITJakub.Web.Hub.Areas.Editions.Models.BookListingModel
 
 <div id="Reader" data-bookid="@Model.BookId" class="top-offset-without-submenu">

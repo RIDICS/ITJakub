@@ -49,6 +49,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\log4net1.2.12\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -59,18 +63,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapperProfiles\BookContentItemProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookInfoProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookPageProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookTypeEnumProfile.cs" />
+    <Compile Include="AutoMapperProfiles\BucketShortContractProfile.cs" />
+    <Compile Include="AutoMapperProfiles\CardContractProfile.cs" />
+    <Compile Include="AutoMapperProfiles\ImageContractProfile.cs" />
+    <Compile Include="AutoMapperProfiles\CardShortContractProfile.cs" />
+    <Compile Include="AutoMapperProfiles\BucketContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\CategoryProfile.cs" />
     <Compile Include="AutoMapperProfiles\ManuscriptProfile.cs" />
     <Compile Include="AutoMapperProfiles\PublisherProfile.cs" />
     <Compile Include="AutoMapperProfiles\EditorProfile.cs" />
+    <Compile Include="AutoMapperProfiles\CardFileContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\SearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
+    <Compile Include="FavoriteManager.cs" />
     <Compile Include="Resources\FileProcessingServiceClient.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
+    <Compile Include="CardFileManager.cs" />
     <Compile Include="SearchManager.cs" />
     <Compile Include="Search\ICriteriaImplementationBase.cs" />
     <Compile Include="Search\SearchCriteriaDirector.cs" />
@@ -84,6 +97,10 @@
     <EmbeddedResource Include="ITJakub.ITJakubService.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.CardFile.Core\ITJakub.CardFile.Core.csproj">
+      <Project>{F00801BF-D6B2-4F6C-B808-68BABF177055}</Project>
+      <Name>ITJakub.CardFile.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
       <Project>{92E907E3-ACE0-4FC6-8919-040031E5192E}</Project>
       <Name>ITJakub.Core</Name>
@@ -104,9 +121,17 @@
       <Project>{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}</Project>
       <Name>ITJakub.ITJakubService.DataContracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.MobileContracts\ITJakub.MobileApps.MobileContracts.csproj">
+      <Project>{67b4dda0-4340-4d05-9a22-831da43e70f8}</Project>
+      <Name>ITJakub.MobileApps.MobileContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jewelery\Jewelery.csproj">
+      <Project>{246eadf4-905a-4fbd-b939-c88bdefdc4a7}</Project>
+      <Name>Jewelery</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -66,8 +66,8 @@ class RightPanelConfiguration extends Configuration {
     containsInfoButton() { return typeof this.configObject['info-button'] !== 'undefined'; }
     containsReadButton() { return typeof this.configObject['read-button'] !== 'undefined'; }
 
-    getInfoButton(bibItem: IBookInfo): string { return this.interpret(this.configObject['info-button']['url'], bibItem); }
-    getReadButton(bibItem: IBookInfo): string { return this.interpret(this.configObject["read-button"]["url"], bibItem); }
+    getInfoButton(bibItem: IBookInfo): string { return this.interpret(getBaseUrl()+this.configObject['info-button']['url'], bibItem); }
+    getReadButton(bibItem: IBookInfo): string { return this.interpret(getBaseUrl()+this.configObject["read-button"]["url"], bibItem); }
 
 
 }

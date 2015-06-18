@@ -73,7 +73,7 @@
     
     <xsl:template match="tei:TEI">
         <xsl:element name="TEI" namespace="http://www.tei-c.org/ns/1.0" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0">
-            <xsl:apply-templates select="@*" />
+            <xsl:copy-of select="@*" />
             <xsl:attribute name="n">
                 <xsl:choose>
                     <xsl:when test="tei:teiHeader/tei:fileDesc/@n">
@@ -95,7 +95,7 @@
                     <xsl:value-of select="$guid"/>
                 </xsl:attribute>
             </xsl:if>
-            <xsl:apply-templates select="@*" />
+            <xsl:copy-of select="@*" />
             
             <xsl:apply-templates />
         </xsl:copy>
@@ -109,7 +109,7 @@
     
     <xsl:template match="tei:sourceDesc">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:copy-of select="@*" />
         <xsl:if test="not(tei:listBibl) and ($monumentAcronym or $sourceAcronym)">
             <xsl:call-template name="InsertListBiblAcronyms">
                 <xsl:with-param name="sourceAcronym" select="$sourceAcronym"/>

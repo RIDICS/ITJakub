@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Books.Manager.Cache;
 using ITJakub.MobileApps.Client.Books.Service.Client;
@@ -33,26 +35,42 @@ namespace ITJakub.MobileApps.Client.Books.Manager
             { 
                 return new BookViewModel
                 {
-                    Author = m_currentBook.Author,
+                    Authors = m_currentBook.Authors,
                     Guid = m_currentBook.Guid,
                     Title = m_currentBook.Title,
-                    Year =  m_currentBook.Year
+                    PublishDate =  m_currentBook.PublishDate
                 };
             }
             set { m_currentBook = value; }
         }
 
-        public async void GetBookList(CategoryContract category, Action<ObservableCollection<BookViewModel>, Exception> callback)
+        private string GetAuthorStringFromList(IEnumerable<AuthorContract> authors)
+        {
+            const string authorDelimiter = ", ";
+            var stringBuilder = new StringBuilder();
+            foreach (var authorContract in authors)
+            {
+                stringBuilder.Append(authorContract.Name).Append(authorDelimiter);
+            }
+            if (stringBuilder.Length > 0)
+            {
+                stringBuilder.Length -= authorDelimiter.Length;
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        public async void GetBookList(BookTypeContract category, Action<ObservableCollection<BookViewModel>, Exception> callback)
         {
             try
             {
                 var list = await m_serviceClient.GetBookListAsync(category);
                 var viewModelList = list.Select(contract => new BookViewModel
                 {
-                    Author = contract.Author,
+                    Authors = GetAuthorStringFromList(contract.Authors),
                     Guid = contract.Guid,
                     Title = contract.Title,
-                    Year = contract.Year
+                    PublishDate = contract.PublishDate
                 });
                 callback(new ObservableCollection<BookViewModel>(viewModelList), null);
             }
@@ -62,17 +80,19 @@ namespace ITJakub.MobileApps.Client.Books.Manager
             }
         }
 
-        public async void SearchForBook(CategoryContract category, SearchDestinationContract searchDestination, string query, Action<ObservableCollection<BookViewModel>, Exception> callback)
+        public async void SearchForBook(BookTypeContract category, SearchDestinationContract searchDestination, string query, Action<ObservableCollection<BookViewModel>, Exception> callback)
         {
             try
             {
-                var list = await m_serviceClient.SearchForBookAsync(category, searchDestination, query);
+                var list = await m_serviceClient.SearchForBookAsync(category, searchDestination, query) ??
+                           new List<BookContract>();
+
                 var viewModelList = list.Select(contract => new BookViewModel
                 {
-                    Author = contract.Author,
+                    Authors = GetAuthorStringFromList(contract.Authors),
                     Guid = contract.Guid,
                     Title = contract.Title,
-                    Year = contract.Year
+                    PublishDate = contract.PublishDate
                 });
                 callback(new ObservableCollection<BookViewModel>(viewModelList), null);
             }
@@ -89,10 +109,16 @@ namespace ITJakub.MobileApps.Client.Books.Manager
                 var list = await m_serviceClient.GetPageListAsync(bookGuid);
                 var viewModels = new ObservableCollection<PageViewModel>(list.Select(page => new PageViewModel
                 {
-                    PageId = page,
+                    Name = page.Name,
+                    Position = page.Position,
+                    XmlId = page.XmlId
                 }));
 
                 callback(viewModels, null);
+            }
+            catch (NotFoundException exception)
+            {
+                callback(null, exception);
             }
             catch (MobileCommunicationException exception)
             {
@@ -107,6 +133,10 @@ namespace ITJakub.MobileApps.Client.Books.Manager
                 var textRtf = await m_documentCache.Get(bookGuid, pageId);
                 callback(textRtf, null);
             }
+            catch (NotFoundException exception)
+            {
+                callback(null, exception);
+            }
             catch (MobileCommunicationException exception)
             {
                 callback(null, exception);
@@ -119,6 +149,11 @@ namespace ITJakub.MobileApps.Client.Books.Manager
             {
                 var photo = await m_photoCache.Get(bookGuid, pageId);
                 callback(photo, null);
+
+            }
+            catch (NotFoundException exception)
+            {
+                callback(null, exception);
             }
             catch (MobileCommunicationException exception)
             {

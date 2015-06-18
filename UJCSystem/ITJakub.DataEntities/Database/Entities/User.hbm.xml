@@ -1,45 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
   <class name="User" table="[User]" lazy="true" >
+    
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
+    
     <property name="UserName">
       <column name="UserName" sql-type="varchar" not-null="true" unique="true" />
     </property>
+    
     <property name="FirstName">
       <column name="FirstName" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="LastName">
       <column name="LastName" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="Email">
       <column name="Email" sql-type="varchar" not-null="true" unique="true" />
     </property>
+    
     <property name="AuthenticationProvider">
       <column name="AuthenticationProvider" sql-type="tinyint" not-null="true" unique="true" />
     </property>
+    
     <property name="CommunicationToken">
       <column name="CommunicationToken" sql-type="varchar" not-null="true" unique="true"/>
     </property>
+    
     <property name="CommunicationTokenCreateTime">
       <column name="CommunicationTokenCreateTime" sql-type="datetime" not-null="false" />
     </property>
+    
     <property name="PasswordHash">
       <column name="PasswordHash" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="Salt">
       <column name="Salt" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="CreateTime">
       <column name="CreateTime" sql-type="datetime" not-null="true" />
     </property>
+    
     <property name="AvatarUrl">
       <column name="AvatarUrl" sql-type="varchar" not-null="false" />
     </property>
-    <bag name="Bookmarks" inverse="true">
+    
+    <bag name="FavoriteItems" inverse="true">
       <key column="User" />
-      <one-to-many class="Bookmark" />
+      <one-to-many class="FavoriteBase" />
     </bag>
   </class>
 </hibernate-mapping>

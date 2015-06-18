@@ -16,6 +16,7 @@ let $end := request:get-parameter("end", "")
 let $documentId := request:get-parameter("bookId", "")
 let $versionId := request:get-parameter("versionId", "")
 let $pagePosition := request:get-parameter("page", 1)
+let $pageXmlId := request:get-parameter("pageXmlId", "")
 let $document := if (string-length($versionId) > 0) then 
                     vwcollection:getDocumentVersion($documentId, $versionId)
                  else
@@ -27,5 +28,8 @@ let $result :=
         else
             vwpaging:getPage($document, $start)
     else
-        vwpaging:getPageInPosition($document, $pagePosition)
+		if(string-length($pageXmlId) > 0) then
+			vwpaging:getPageByXmlId($document, $pageXmlId)
+		else
+			vwpaging:getPageInPosition($document, $pagePosition)
 return $result

@@ -12,6 +12,8 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string OriginDate { get; set; }
         public virtual string Repository { get; set; }
         public virtual BookVersion BookVersion { get; set; }
+        public virtual string NotBefore { get; set; }
+        public virtual string NotAfter { get; set; }
 
 
         public virtual bool Equals(ManuscriptDescription other)

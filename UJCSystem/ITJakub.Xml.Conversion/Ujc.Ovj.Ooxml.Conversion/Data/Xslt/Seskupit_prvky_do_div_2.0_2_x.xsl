@@ -27,7 +27,7 @@
 
 	<xsl:template match="body/div">
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:choose>
 				<xsl:when test="thead">
 					<xsl:for-each-group group-starting-with="thead" select="*">
@@ -55,7 +55,7 @@
 
 	<xsl:template match="thead" mode="group">
 		<div>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<head>
 				<xsl:apply-templates select="child::*" />
 			</head>
@@ -67,7 +67,7 @@
 
 	<xsl:template match="head" mode="group">
 		<div>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<head>
 				<xsl:apply-templates select="child::*" />
 			</head>
@@ -79,7 +79,7 @@
 
 	<xsl:template match="head1" mode="group">
 		<div>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<head>
 				<xsl:apply-templates select="child::*" />
 			</head>

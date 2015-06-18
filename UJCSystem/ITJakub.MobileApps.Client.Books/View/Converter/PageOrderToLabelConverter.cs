@@ -29,7 +29,7 @@ namespace ITJakub.MobileApps.Client.Books.View.Converter
             if (m_pageList == null)
                 return numValue;
 
-            return m_pageList[numValue - 1].PageId;
+            return m_pageList[numValue - 1].Name;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

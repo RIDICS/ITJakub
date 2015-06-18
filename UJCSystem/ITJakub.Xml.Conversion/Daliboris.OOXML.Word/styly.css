@@ -1,0 +1,13 @@
+﻿body
+{
+	text-transform: uppercase;
+	font-weight: bold;
+	font-style: italic;
+	font-variant: small-caps;
+	font-size: 10pt;
+	color: #333333;
+	list-style-type: square;
+	list-style-position: outside;
+	background-color: #DDDDDD;
+	border: thin none #000000 !important;
+}

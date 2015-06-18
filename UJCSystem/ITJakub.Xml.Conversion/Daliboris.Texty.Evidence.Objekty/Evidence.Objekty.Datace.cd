@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Daliboris.Texty.Evidence.Datace">
+    <Position X="5.75" Y="1.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAACBAAIAAQFAIEAIAEAACAAQgBAABDAgAAACWg=</HashCode>
+      <FileName>Datace.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Texty.Evidence.AnalyzatorDatace">
+    <Position X="2" Y="1.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAIIAABAAMAAABAIAAAAAAACAA4ABAABAAgAAACSg=</HashCode>
+      <FileName>Datace.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

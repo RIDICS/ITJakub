@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNet.Identity;
@@ -14,7 +13,7 @@ namespace ITJakub.Web.Hub.Controllers
     public class AccountController : Controller
     {
         private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
-        private readonly ItJakubServiceUnauthorizedClient m_serviceUnauthorizedClient = new ItJakubServiceUnauthorizedClient();
+        private readonly ItJakubServiceEncryptedClient m_serviceEncryptedClient = new ItJakubServiceEncryptedClient();
 
         private ApplicationSignInManager SignInManager
         {

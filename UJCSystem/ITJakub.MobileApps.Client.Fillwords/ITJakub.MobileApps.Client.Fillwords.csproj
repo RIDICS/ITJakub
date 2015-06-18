@@ -108,9 +108,12 @@
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
     <Compile Include="DataContract\FillwordsEvaluationContract.cs" />
+    <Compile Include="DataContract\FillwordsAnswerContract.cs" />
     <Compile Include="DataContract\FillwordsTaskContract.cs" />
     <Compile Include="DataService\FillwordsDataService.cs" />
+    <Compile Include="DataService\ProgressManager.cs" />
     <Compile Include="DataService\TaskManager.cs" />
+    <Compile Include="ViewModel\AnswerViewModel.cs" />
     <Compile Include="ViewModel\Enum\AnswerState.cs" />
     <Compile Include="ViewModel\TaskFinishedViewModel.cs" />
     <Compile Include="View\Control\OpaqueComboBox.cs" />

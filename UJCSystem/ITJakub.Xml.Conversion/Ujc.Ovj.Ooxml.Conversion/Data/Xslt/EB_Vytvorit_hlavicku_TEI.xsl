@@ -47,7 +47,7 @@
 					<publisher>oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.<email>vyvoj@ujc.cas.cz</email>
 					</publisher>
 					<pubPlace>Praha</pubPlace>
-										<!-- TODO: načítat datum publikace programově -->
+                    <!-- TODO: načítat datum publikace programově -->
 					<!--<date><xsl:value-of select="'2012'"/></date>-->
 					<date><xsl:value-of select="ev:Zpracovani/ev:Publikace/ev:Vydani[1]/ev:Vroceni"/></date>
 					<!--<publisher>Manuscriptorium.com</publisher>-->
@@ -55,7 +55,7 @@
 						<p>Tato edice je autorské dílo chráněné ve smyslu zákona č. 121/2000 Sb., o právu autorském, a je určena pouze k nekomerčním účelům.</p>
 					</availability>
 
-										<!-- TODO: načíst ISBN z evidenčního souboru -->
+                    <!-- TODO: načíst ISBN z evidenčního souboru -->
 					<!-- ISBN přidělené elektronické verzi publikace -->
 					<idno type="ISBN_EPUB" ><xsl:value-of select="ev:Zpracovani/ev:Publikace/ev:Vydani[1]/ev:EvidencniCisla/ev:Isbn[ev:Format/text() = 'EPUB']/ev:Cislo"/></idno>
 					<idno type="ISBN_PDF" ><xsl:value-of select="ev:Zpracovani/ev:Publikace/ev:Vydani[1]/ev:EvidencniCisla/ev:Isbn[ev:Format/text() = 'PDF']/ev:Cislo"/></idno>
@@ -103,7 +103,7 @@
 			</revisionDesc>-->
 		</teiHeader>
 	</xsl:template>
-
+	
 	<xsl:template name="encodingDesc">
 		<encodingDesc>
 			<classDecl>
@@ -147,9 +147,9 @@
 				</keywords>
 			</textClass>
 		</profileDesc>
-
+		
 	</xsl:template>
-
+	
 	<xsl:template name="catRef">
 		<xsl:element name="catRef">
 			<xsl:attribute name="target">
@@ -164,12 +164,12 @@
 						<xsl:text>#taxonomy-scholary_text</xsl:text>
 					</xsl:when>
 				</xsl:choose>
-
+				
 			</xsl:attribute>
 		</xsl:element>
-
+		
 	</xsl:template>
-
+	
 	<xsl:template match="ev:LiterarniDruh | ev:LiterarniZanr" mode="term">
 		<term>
 			<xsl:apply-templates />

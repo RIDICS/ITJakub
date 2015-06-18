@@ -1,34 +1,47 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Castle.Windsor;
+using ITJakub.ITJakubService.Core;
 using ITJakub.MobileApps.MobileContracts;
+using OutputFormatEnumContract = ITJakub.Shared.Contracts.OutputFormatEnumContract;
 
 namespace ITJakub.ITJakubService.Services
 {
     public class MobileAppsServiceManager : IMobileAppsService
     {
-        public IList<BookContract> GetBookList(CategoryContract category)
+        private readonly BookManager m_bookManager;
+        private readonly SearchManager m_searchManager;
+        private readonly WindsorContainer m_container = Container.Current;
+
+        public MobileAppsServiceManager()
         {
-            return new List<BookContract> {new BookContract{Author = "Pepa", Title = "Aaaaa"}};
+            m_bookManager = m_container.Resolve<BookManager>();
+            m_searchManager = m_container.Resolve<SearchManager>();
         }
 
-        public IList<BookContract> SearchForBook(CategoryContract category, SearchDestinationContract searchBy, string query)
+        public IList<BookContract> GetBookList(BookTypeContract category)
         {
-            throw new System.NotImplementedException();
+            return m_searchManager.GetBooksByBookType(category);
         }
 
-        public IList<string> GetPageList(string bookGuid)
+        public IList<BookContract> SearchForBook(BookTypeContract category, SearchDestinationContract searchBy, string query)
         {
-            throw new System.NotImplementedException();
+            return m_searchManager.Search(category, searchBy, query);
         }
 
-        public Stream GetPageAsRtf(string bookGuid, string pageId)
+        public IList<PageContract> GetPageList(string bookGuid)
         {
-            throw new System.NotImplementedException();
+            return m_bookManager.GetBookPagesListMobile(bookGuid);
+        }
+
+        public string GetPageAsRtf(string bookGuid, string pageId)
+        {
+            return m_bookManager.GetBookPageByXmlId(bookGuid, pageId, OutputFormatEnumContract.Html); //TODO switch to RTF transformation
         }
 
         public Stream GetPagePhoto(string bookGuid, string pageId)
         {
-            throw new System.NotImplementedException();
+            return m_bookManager.GetBookPageImage(bookGuid, pageId);
         }
     }
 }

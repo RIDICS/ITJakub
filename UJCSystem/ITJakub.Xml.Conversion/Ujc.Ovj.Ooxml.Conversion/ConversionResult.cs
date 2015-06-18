@@ -1,4 +1,7 @@
-﻿namespace Ujc.Ovj.Ooxml.Conversion
+﻿using System;
+using System.Collections.Generic;
+
+namespace Ujc.Ovj.Ooxml.Conversion
 {
 	public class ConversionResult
 	{
@@ -7,6 +10,7 @@
 
 		public ConversionResult()
 		{
+			Errors = new List<Exception>();
 		}
 
 		#endregion
@@ -15,7 +19,7 @@
 
 		public bool IsConverted { get; set; }
 
-		public string Errors { get; set; }
+		public List<Exception> Errors { get; set; }
 
 		/// <summary>
 		/// Path to the file with metadata about converted texts.

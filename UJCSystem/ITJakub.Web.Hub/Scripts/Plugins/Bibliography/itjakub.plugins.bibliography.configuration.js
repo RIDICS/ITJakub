@@ -67,10 +67,10 @@ var RightPanelConfiguration = (function (_super) {
         return typeof this.configObject['read-button'] !== 'undefined';
     };
     RightPanelConfiguration.prototype.getInfoButton = function (bibItem) {
-        return this.interpret(this.configObject['info-button']['url'], bibItem);
+        return this.interpret(getBaseUrl() + this.configObject['info-button']['url'], bibItem);
     };
     RightPanelConfiguration.prototype.getReadButton = function (bibItem) {
-        return this.interpret(this.configObject["read-button"]["url"], bibItem);
+        return this.interpret(getBaseUrl() + this.configObject["read-button"]["url"], bibItem);
     };
     return RightPanelConfiguration;
 })(Configuration);

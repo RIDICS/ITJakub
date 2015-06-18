@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-using System.Threading.Tasks;
 
 namespace ITJakub.Shared.Contracts
 {
@@ -8,25 +7,24 @@ namespace ITJakub.Shared.Contracts
     public interface ISearchService
     {
         [OperationContract]
-        Task<string> GetBookPageByPositionAsync(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel);
+        string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
-        Task<string> GetBookPageByNameAsync(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel);
+        string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
-        Task<string> GetBookPagesByNameAsync(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel);
+        string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
-        Task<IList<BookPageContract>> GetBookPageListAsync(string bookId,string versionId);
+        string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
-        Task UploadVersionFileAsync(VersionResourceUploadContract versionResourceUploadContract);
+        void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract);
 
         [OperationContract]
-        Task UploadBookFileAsync(BookResourceUploadContract contract);
+        void UploadBookFile(BookResourceUploadContract contract);
 
         [OperationContract]
-        Task UploadSharedFileAsync(ResourceUploadContract contract);
-
+        void UploadSharedFile(ResourceUploadContract contract);
     }
 }

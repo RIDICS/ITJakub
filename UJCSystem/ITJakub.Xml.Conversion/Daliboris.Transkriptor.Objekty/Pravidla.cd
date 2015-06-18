@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Daliboris.Transkripce.Objekty.Pravidlo" BaseTypeListCollapsed="true">
+    <Position X="2.75" Y="0.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAGQAgEAoAAAAAAAAAIDAIAAAAIAAQiA=</HashCode>
+      <FileName>Pravidlo.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Pravidla" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="0.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>ACJAAAAAAAAAABhQCAAQBAQAAAAAAAAAQAAAAABQIAQ=</HashCode>
+      <FileName>Pravidla.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.19" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Transkripce">
+    <Position X="2.75" Y="11.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAgAACAAAA=</HashCode>
+      <FileName>Transkripce.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Doklady">
+    <Position X="7.75" Y="6.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>ACIAAAAAAAAAABhQCAAQBAQAAQAAIAAIAAAAAABQIAA=</HashCode>
+      <FileName>Doklady.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Doklad">
+    <Position X="2.75" Y="7.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEQEgAAgAAAAABAAAAAAAAAAAAAAQgA=</HashCode>
+      <FileName>Doklad.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

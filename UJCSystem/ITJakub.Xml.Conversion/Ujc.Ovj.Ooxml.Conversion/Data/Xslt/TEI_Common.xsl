@@ -6,39 +6,11 @@
     xmlns:b="#default"
     exclude-result-prefixes="xd b tei"
     version="1.0">
+	<xsl:include href="TEI_ClassificationDeclarations.xsl"/>
+	
 	<xsl:template name="InsertEndocingDesc" xmlns="http://www.tei-c.org/ns/1.0">
 		<encodingDesc>
-			<classDecl>
-				<taxonomy xml:id="taxonomy">
-					<category xml:id="taxonomy-dictionary">
-						<catDesc xml:lang="cs-cz">slovník</catDesc>
-						<category xml:id="taxonomy-dictionary-contemporary">
-							<catDesc xml:lang="cs-cz">soudobý</catDesc>
-						</category>
-						<category xml:id="taxonomy-dictionary-historical">
-							<catDesc xml:lang="cs-cz">dobový</catDesc>
-						</category>
-					</category>
-					<category xml:id="taxonomy-historical_text">
-						<catDesc xml:lang="cs-cz">historický text</catDesc>
-						<category xml:id="taxonomy-historical_text-old_czech">
-							<catDesc xml:lang="cs-cz">staročeský</catDesc>
-						</category>
-						<category xml:id="taxonomy-historical_text-medieval_czech">
-							<catDesc xml:lang="cs-cz">středněčeský</catDesc>
-						</category>
-					</category>
-					<category xml:id="taxonomy-scholary_text">
-						<catDesc xml:lang="cs-cz">odborný text</catDesc>
-					</category>
-					<category xml:id="taxonomy-digitized-grammar">
-						<catDesc xml:lang="cs-cz">digitalizovaná mluvnice</catDesc>
-					</category>
-					<category xml:id="taxonomy-card-index">
-						<catDesc xml:lang="cs-cz">lístková kartotéka</catDesc>
-					</category>
-				</taxonomy>
-			</classDecl>
+			<xsl:call-template name="classificationDeclarations" />
 		</encodingDesc>
 	</xsl:template>
 </xsl:stylesheet>

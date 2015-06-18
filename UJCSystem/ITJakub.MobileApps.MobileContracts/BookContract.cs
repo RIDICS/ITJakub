@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace ITJakub.MobileApps.MobileContracts
 {
@@ -12,9 +13,9 @@ namespace ITJakub.MobileApps.MobileContracts
         public string Title { get; set; }
 
         [DataMember]
-        public string Author { get; set; }
+        public IList<AuthorContract> Authors { get; set; }
 
         [DataMember]
-        public int Year { get; set; }
+        public string PublishDate { get; set; }
     }
 }

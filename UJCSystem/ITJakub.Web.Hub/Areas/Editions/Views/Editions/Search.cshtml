@@ -1,4 +1,5 @@
-﻿@{
+﻿@using ITJakub.Shared.Contracts
+@{
     ViewBag.Title = "Search";
 }
 
@@ -7,20 +8,33 @@
 }
 @section scripts{
     @Scripts.Render("~/itjakub/editions/javascript")
+    @Scripts.Render("~/itjakub/editions/searchjs")
 }
 
-@*TODO html below is for testing purposes of Bibliography module*@
-<div class="content-container">
-    <h2>Vyhledavani</h2>
-    <button id="fillBibList10"> Search mocked bibliographies (10)</button>
-    <button id="fillBibList3"> Search mocked bibliographies (3)</button>
-    <button id="fillBibList1000"> Search mocked bibliographies (1000)</button>
-    <button id="fillBibListTypeEdition"> Search mocked bibliographies from Editions</button>
-    <button id="fillBibListTypeDictionary"> Search mocked bibliographies from Dictionaries</button>
+<div id="listHeader">
+    <div id="listSearchDiv" style="float: left; width: 70%">
+        <form role="form" class="form-horizontal">
+            <div class="form-group searchbar">
+                <div class="searchbar-buttons">
+                    <button id="searchButton" type="button" class="btn btn-default searchbar-button">
+                        Vyhledat
+                    </button>
+                    <button type="button" class="btn btn-default searchbar-button">
+                        Pokročilé
+                    </button>
+                </div>
+                <div class="searchbar-inputs">
+                    <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="float: left; margin-left: 50px;">
+        Řadit podle
+        <div id="listResultsHeader" style="display: inline-block">
+        </div>
+    </div>
 </div>
-<div id="sortBarBibList">
 
-</div>
-<div id="bibliographyList">
-    
+<div id="listResults" data-book-type="@BookTypeEnumContract.Edition" style="margin-top: 50px">
 </div>
