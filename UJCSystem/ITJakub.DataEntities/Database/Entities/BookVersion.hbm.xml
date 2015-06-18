@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="BookVersion" table="[BookVersion]" lazy="true" >
+
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities"
+                   xmlns="urn:nhibernate-mapping-2.2">
+  <class name="BookVersion" table="[BookVersion]" lazy="true">
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
+    
     <many-to-one name="Book" cascade="save-update" lazy="false">
       <column name="Book" sql-type="bigint" not-null="true" />
     </many-to-one>
+    
     <many-to-one name="Publisher" cascade="save-update" lazy="false">
       <column name="Publisher" sql-type="int" not-null="false" />
     </many-to-one>
-    <property name="VersionId">
-      <column name="VersionId" sql-type="varchar" not-null="true" />
-    </property>
-    <property name="Title">
-      <column name="Title" sql-type="varchar" not-null="false" />
-    </property>
-    <property name="SubTitle">
-      <column name="SubTitle" sql-type="varchar" not-null="false" />
-    </property>
-    <property name="CreateTime">
-      <column name="CreateTime" sql-type="datetime" not-null="true" />
-    </property>
-    <property name="Description">
-      <column name="Description" sql-type="varchar" not-null="false" />
-    </property>
-    <property name="PublishPlace">
-      <column name="PublishPlace" sql-type="varchar" not-null="false" />
-    </property>
-    <property name="PublishDate">
-      <column name="PublishDate" sql-type="varchar" not-null="false" />
-    </property>
-    <property name="Copyright">
-      <column name="Copyright" sql-type="varchar" not-null="false" />
-    </property>
-    <property name="AvailabilityStatus">
-      <column name="AvailabilityStatus" sql-type="smallint" not-null="false" />
-    </property>
-    <property name="BiblText">
-      <column name="BiblText" sql-type="varchar" not-null="false" />
-    </property>
+
+    <property name="VersionId" not-null="true" />
+
+    <property name="Title" />
+
+    <property name="SubTitle" />
+
+    <property name="CreateTime" />
+
+    <property name="Description" />
+
+    <property name="PublishPlace" />
+
+    <property name="PublishDate" />
+
+
+    <property name="Copyright" />
+
+    <property name="AvailabilityStatus" />
+
+    <property name="BiblText" />
+
+    <property name="NotBefore" />
+
+    <property name="NotAfter" />
+
     <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="false">
       <key column="BookVersion" />
       <one-to-many class="ManuscriptDescription" />
@@ -52,7 +52,7 @@
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>
-    <bag name="BookPages" cascade="all-delete-orphan" lazy="false"  fetch="select">
+    <bag name="BookPages" cascade="all-delete-orphan" lazy="false" fetch="select">
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
     </bag>
@@ -68,7 +68,7 @@
       <key column="BookVersion" />
       <many-to-many class="Transformation" column="Transformation" />
     </bag>
-    
-    
+
+
   </class>
 </hibernate-mapping>
