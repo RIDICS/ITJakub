@@ -34,7 +34,7 @@ namespace ITJakub.Core
             var fullPath = GetFullPath(relativePath);
 		        if (File.Exists(fullPath))
 							return File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-			      return null;
+			      return Stream.Null;
         }
 
         public void SaveResource(string bookId, string bookVersionId, Resource resource)
