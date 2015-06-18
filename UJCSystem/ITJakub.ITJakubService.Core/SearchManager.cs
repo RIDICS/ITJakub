@@ -48,12 +48,12 @@ namespace ITJakub.ITJakubService.Core
 
         public void SearchByCriteria(List<SearchCriteriaContract> searchCriterias)
         {
-            var databaseCriteria = DetachedCriteria.For<BookVersion>();
+            var databaseCriteria = DetachedCriteria.For<Book>().CreateCriteria("LastVersion", "lastVersion");
             foreach (var searchCriteriaContract in searchCriterias)
             {
                 m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract, databaseCriteria);
             }
-
+            
             var databaseSearchResult = m_bookVersionRepository.SearchByCriteria(databaseCriteria);
         }
 

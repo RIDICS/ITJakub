@@ -6,6 +6,7 @@ using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using log4net;
 using NHibernate.Criterion;
+using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -180,11 +181,27 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookVersion> SearchByCriteria(DetachedCriteria databaseCriteria)
+        public virtual IList<BookVersionPair> SearchByCriteria(DetachedCriteria databaseCriteria)
         {
             using (var session = GetSession())
             {
-                return databaseCriteria.GetExecutableCriteria(session).List<BookVersion>();
+                //databaseCriteria
+                //    .SetProjection(Projections.ProjectionList()
+                //        .Add(Projections.GroupProperty("Guid"), "Guid")
+                //        .Add(Projections.Min("lastVersion.VersionId"), "VersionId"));
+
+                //return databaseCriteria
+                //    .GetExecutableCriteria(session)
+                //    .SetResultTransformer(Transformers.AliasToBean<BookVersionPair>())
+                //    .List<BookVersionPair>();
+
+                var query = "select b.Guid as Guid, bv.VersionId as VersionId from Book b inner join b.LastVersion bv";
+                
+                var result = session.CreateQuery(query)
+                    .SetResultTransformer(Transformers.AliasToBean<BookVersionPair>())
+                    .List<BookVersionPair>();
+
+                return result;
             }
         }
     }
