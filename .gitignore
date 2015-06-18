@@ -29,7 +29,6 @@ ipch/
 [Bb]in
 [Dd]ebug*/
 [Rr]elease*/
-[Aa]ppPackages*/
 Ankh.NoLoad
 
 #MonoDevelop
@@ -64,6 +63,4 @@ _ReSharper*/
 #Test files
 *.testsettings
 
-#logs
-[Ll]ogs/
-*.svclog
+#Logs
