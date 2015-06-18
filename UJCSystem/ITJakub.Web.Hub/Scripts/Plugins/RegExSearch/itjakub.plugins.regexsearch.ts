@@ -35,18 +35,6 @@ class RegExSearch extends RegExSearchBase {
 
         var commandsDiv: HTMLDivElement = document.createElement("div");
 
-        var addConditionsButton: HTMLButtonElement = this.createButton("Přidat podmínku");
-        commandsDiv.appendChild(addConditionsButton);
-        $(addConditionsButton).click(() => {
-            this.addNewCondition();
-        });
-
-        var removeConditionsButton: HTMLButtonElement = this.createButton("Odebrat podmínku");
-        $(removeConditionsButton).click(() => {
-            this.removeLastCondition();
-        });
-        commandsDiv.appendChild(removeConditionsButton);
-
         var sentButton: HTMLButtonElement = this.createButton("Vyhledat");
         commandsDiv.appendChild(sentButton);
         $(sentButton).click(() => {
@@ -65,9 +53,13 @@ class RegExSearch extends RegExSearchBase {
         //$(this.container).append(endDelimiter);
     }
 
-    public addNewCondition(useDelimiter:boolean = true) {
+    public addNewCondition(useDelimiter: boolean = true) {
+        if (this.regExConditions.length > 0) {
+            this.regExConditions[this.regExConditions.length - 1].setTextDelimeter();
+        }
         var newRegExConditions = new RegExCondition(this);
         newRegExConditions.makeRegExCondition();
+        newRegExConditions.setClickableDelimeter();
         if (!useDelimiter) {
             newRegExConditions.removeDelimeter();
         }
@@ -93,6 +85,8 @@ class RegExSearch extends RegExSearchBase {
 
         if (this.regExConditions.length === 0) {
             this.addNewCondition(true);
+        } else {
+            this.regExConditions[this.regExConditions.length - 1].setClickableDelimeter();
         }
 
         //if (this.regExConditions[0].hasDelimeter) { //TODO change last delimeter

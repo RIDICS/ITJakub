@@ -35,16 +35,6 @@ var RegExSearch = (function (_super) {
         $(this.container).empty();
         this.regExConditions = [];
         var commandsDiv = document.createElement("div");
-        var addConditionsButton = this.createButton("Přidat podmínku");
-        commandsDiv.appendChild(addConditionsButton);
-        $(addConditionsButton).click(function () {
-            _this.addNewCondition();
-        });
-        var removeConditionsButton = this.createButton("Odebrat podmínku");
-        $(removeConditionsButton).click(function () {
-            _this.removeLastCondition();
-        });
-        commandsDiv.appendChild(removeConditionsButton);
         var sentButton = this.createButton("Vyhledat");
         commandsDiv.appendChild(sentButton);
         $(sentButton).click(function () {
@@ -61,8 +51,12 @@ var RegExSearch = (function (_super) {
     };
     RegExSearch.prototype.addNewCondition = function (useDelimiter) {
         if (useDelimiter === void 0) { useDelimiter = true; }
+        if (this.regExConditions.length > 0) {
+            this.regExConditions[this.regExConditions.length - 1].setTextDelimeter();
+        }
         var newRegExConditions = new RegExCondition(this);
         newRegExConditions.makeRegExCondition();
+        newRegExConditions.setClickableDelimeter();
         if (!useDelimiter) {
             newRegExConditions.removeDelimeter();
         }
@@ -84,6 +78,9 @@ var RegExSearch = (function (_super) {
         }
         if (this.regExConditions.length === 0) {
             this.addNewCondition(true);
+        }
+        else {
+            this.regExConditions[this.regExConditions.length - 1].setClickableDelimeter();
         }
         //if (this.regExConditions[0].hasDelimeter) { //TODO change last delimeter
         //    this.regExConditions[0].removeDelimeter();
