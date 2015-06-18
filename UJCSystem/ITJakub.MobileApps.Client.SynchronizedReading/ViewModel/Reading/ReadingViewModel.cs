@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
+using ITJakub.MobileApps.Client.Books.Service.Client;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
@@ -27,6 +28,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private string m_goToPageText;
         private bool m_isPageNotFoundError;
         private bool m_isEnd;
+        private bool m_isUpdateProgrammatically;
 
         public ReadingViewModel(ReaderDataService dataService)
         {
@@ -50,6 +52,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         {
             UpdateMode();
             SetDataLoaded();
+            TextReaderViewModel.Loading = true;
 
             LoadingPageList = true;
             m_dataService.GetPageList((pages, exception) =>
@@ -57,15 +60,17 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 LoadingPageList = false;
                 if (exception != null)
                 {
-                    m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    if (exception is NotFoundException)
+                        m_dataService.ErrorService.ShowError("Pro zvolenou knihu se nepodařilo načíst seznam stran.", "Nelze se načíst data", GoBack);
+                    else
+                        m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    
                     return;
                 }
 
                 PageList = pages;
-                UpdateSelectedPage();
+                LoadPage(); // don't wait for control update
             });
-
-            LoadPage();
 
             m_dataService.StartPollingControlUpdates((model, exception) =>
             {
@@ -209,7 +214,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 var lastPage = m_selectedPage;
                 m_selectedPage = value;
                 RaisePropertyChanged();
-                UpdateCurrentPage(lastPage, value);
+
+                if (!m_isUpdateProgrammatically)
+                    TryUpdateCurrentPage(lastPage, value);
             }
         }
 
@@ -332,17 +339,27 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         {
             IsPageNotFoundError = false;
             TextReaderViewModel.Loading = true;
+            TextReaderViewModel.IsLoadError = false;
+            TextReaderViewModel.DocumentRtf = string.Empty;
             m_dataService.GetPageAsRtf((textRtf, exception) =>
             {
                 TextReaderViewModel.Loading = false;
+                TextReaderViewModel.DocumentRtf = textRtf;
+
                 if (exception != null)
                 {
-                    m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    if (exception is NotFoundException)
+                    {
+                        TextReaderViewModel.IsLoadError = true;
+                    }
+                    else
+                    {
+                        m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    }
+                    
                     return;
                 }
 
-                TextReaderViewModel.DocumentRtf = textRtf;
-                
                 if (m_pageList != null)
                     UpdateSelectedPage();
             });
@@ -352,6 +369,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
         private void LoadPhoto()
         {
+            ImageReaderViewModel.IsLoadError = false;
+            ImageReaderViewModel.Photo = null;
             if (!IsPhotoDisplayed)
                 return;
 
@@ -359,13 +378,15 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             m_dataService.GetPagePhoto((image, exception) =>
             {
                 ImageReaderViewModel.Loading = false;
+                ImageReaderViewModel.Photo = image;
+
                 if (exception != null)
                 {
-                    m_dataService.ErrorService.ShowConnectionError();
-                    return;
+                    if (exception is NotFoundException)
+                        ImageReaderViewModel.IsLoadError = true;
+                    else
+                        m_dataService.ErrorService.ShowConnectionError();
                 }
-
-                ImageReaderViewModel.Photo = image;
             });
         }
 
@@ -373,7 +394,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         {
             m_dataService.GetCurrentPage(pageId =>
             {
-                SelectedPage = m_pageList.FirstOrDefault(pageViewModel => pageViewModel.PageId == pageId);
+                m_isUpdateProgrammatically = true;
+                SelectedPage = m_pageList.FirstOrDefault(pageViewModel => pageViewModel.XmlId == pageId);
+                m_isUpdateProgrammatically = false;
             });
         }
 
@@ -392,7 +415,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             if (string.IsNullOrEmpty(GoToPageText))
                 return;
 
-            var pageViewModel = m_pageList.FirstOrDefault(page => page.PageId.Equals(GoToPageText, StringComparison.OrdinalIgnoreCase));
+            var pageViewModel = m_pageList.FirstOrDefault(page => page.PageName.Equals(GoToPageText, StringComparison.OrdinalIgnoreCase));
             if (pageViewModel == null)
             {
                 IsPageNotFoundError = true;
@@ -402,16 +425,17 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             SelectedPage = pageViewModel;
         }
 
-        private void UpdateCurrentPage(PageViewModel lastPage, PageViewModel newPage)
+        private void TryUpdateCurrentPage(PageViewModel lastPage, PageViewModel newPage)
         {
-            m_dataService.UpdateCurrentPage(newPage.PageId, exception =>
+            m_dataService.UpdateCurrentPage(newPage.XmlId, exception =>
             {
                 if (exception != null)
                 {
                     //rollback change current page
-                    m_dataService.SetCurrentBook(m_dataService.GetCurrentBookGuid(), lastPage.PageId);
-                    m_selectedPage = lastPage;
-                    RaisePropertyChanged(() => SelectedPage);
+                    m_dataService.SetCurrentBook(m_dataService.GetCurrentBookGuid(), lastPage.XmlId);
+                    m_isUpdateProgrammatically = true;
+                    SelectedPage = lastPage;
+                    m_isUpdateProgrammatically = false;
                     LoadPage();
                 }
 

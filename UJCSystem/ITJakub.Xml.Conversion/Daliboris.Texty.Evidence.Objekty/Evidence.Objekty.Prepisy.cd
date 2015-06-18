@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Comment CommentText="Informace elektronickém o dokumentu, který obsahuje přepis textu">
+    <Position X="3.319" Y="1.042" Height="0.521" Width="4.2" />
+  </Comment>
+  <Comment CommentText="Kolekce přepisů">
+    <Position X="10.538" Y="1.042" Height="0.375" Width="1.7" />
+  </Comment>
+  <Class Name="Daliboris.Texty.Evidence.Prepis">
+    <Position X="0.5" Y="1" Width="7.5" />
+    <TypeIdentifier>
+      <HashCode>AgxBEAQkCAAABAiSoAgAAQAA0AAAIIAEAAAAAgAgIBk=</HashCode>
+      <FileName>Prepis.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Texty.Evidence.PrepisComparer&lt;Prepis&gt;">
+    <Position X="0.5" Y="10.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAABAAAA=</HashCode>
+      <FileName>PrepisComparer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Texty.Evidence.Prepisy">
+    <Position X="8.25" Y="1" Width="4.75" />
+    <TypeIdentifier>
+      <HashCode>gFYAAEAIANSQBBAQmESQNAQgoRAIQCAMKAARADhwJDQ=</HashCode>
+      <FileName>Prepisy.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -8,6 +8,7 @@ using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using NHibernate;
 using NHibernate.Criterion;
+using MobileContracts = ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -29,11 +30,11 @@ namespace ITJakub.ITJakubService.Core
             var bookVersionResults = m_bookRepository.SearchByTitle(term);
             return Mapper.Map<List<SearchResultContract>>(bookVersionResults);
         }
-
+        
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
         {
             var type = Mapper.Map<BookTypeEnum>(bookType);
-            var books = m_bookRepository.FindBooksByBookType(type);
+            var books = m_bookRepository.FindBooksLastVersionsByBookType(type);
             var categories = m_categoryRepository.FindCategoriesByBookType(type);
 
             return new BookTypeSearchResultContract
@@ -51,6 +52,44 @@ namespace ITJakub.ITJakubService.Core
             {
                 m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract, databaseCriteria);
             }
+        }
+
+        public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
+        {
+            var type = Mapper.Map<BookTypeEnum>(bookType);
+            var bookVersions = m_bookRepository.FindBooksLastVersionsByBookType(type);
+            return Mapper.Map<List<SearchResultContract>>(bookVersions);
+        }
+
+        public List<MobileContracts.BookContract> GetBooksByBookType(MobileContracts.BookTypeContract bookType)
+        {
+            var type = Mapper.Map<BookTypeEnum>(bookType);
+            var bookVersions = m_bookRepository.FindBooksLastVersionsByBookType(type);
+            return Mapper.Map<List<MobileContracts.BookContract>>(bookVersions);
+        }
+
+        public List<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
+        {
+            var type = Mapper.Map<BookTypeEnum>(bookType);
+            var bookVersions = m_bookRepository.SearchByTitleAndBookType(term, type);
+            return Mapper.Map<List<SearchResultContract>>(bookVersions);
+        }
+
+        public IList<MobileContracts.BookContract> Search(MobileContracts.BookTypeContract category, MobileContracts.SearchDestinationContract searchBy, string query)
+        {
+            var type = Mapper.Map<BookTypeEnum>(category);
+            IList<BookVersion> bookList = null;
+
+            switch (searchBy)
+            {
+                case MobileContracts.SearchDestinationContract.Author:
+                    //TODO search by author
+                    break;
+                default:
+                    bookList = m_bookRepository.SearchByTitleAndBookType(query, type);
+                    break;
+            }
+            return Mapper.Map<IList<MobileContracts.BookContract>>(bookList);
         }
     }
 }

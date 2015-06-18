@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
+using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared;
@@ -110,7 +111,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
                 GroupCode = "Code",
                 GroupName = "Název",
                 Members = new ObservableCollection<GroupMemberViewModel>(),
-                MemberCount = 0
+                MemberCount = 0,
+                State = GroupStateContract.AcceptMembers
             }, null);
         }
 
@@ -198,15 +200,15 @@ namespace ITJakub.MobileApps.Client.Core.Service
             callback(null);
         }
 
-        public void SetCurrentGroup(long groupId) { }
+        public void SetCurrentGroup(long groupId, GroupType groupType) { }
 
         public void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback) { }
 
         public void RemoveGroup(long groupId, Action<Exception> callback) { }
 
-        public void GetCurrentGroupId(Action<long> callback)
+        public void GetCurrentGroupId(Action<long, GroupType> callback)
         {
-            callback(1);
+            callback(1, GroupType.Owner);
         }
 
         public void SetCurrentApplication(ApplicationType selectedApp)

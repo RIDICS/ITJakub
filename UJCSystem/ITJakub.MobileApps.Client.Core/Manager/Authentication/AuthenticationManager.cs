@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ITJakub.MobileApps.Client.Core.Communication.Client;
+using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders;
-using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
-using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
@@ -155,7 +155,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
                 FirstName = UserLoginInfo.FirstName,
                 LastName = UserLoginInfo.LastName,
                 Email = UserLoginInfo.Email,
-                UserRole = UserRoleContract.Teacher // TODO direct Teacher role assignment for testing
+                UserRole = UserLoginInfo.UserRole
             };
             return viewModel;
         }

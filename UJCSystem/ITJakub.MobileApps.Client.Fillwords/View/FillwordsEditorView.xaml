@@ -56,7 +56,7 @@
                     </TextBlock>
                     <TextBlock FontSize="{StaticResource LabelFontSize}">
                         <Run Text="Rok vydání: " />
-                        <Run Text="{Binding BookYear}" />
+                        <Run Text="{Binding PublishDate}" />
                     </TextBlock>
                 </StackPanel>
                 

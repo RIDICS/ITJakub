@@ -35,14 +35,14 @@
 	
 	<xsl:template match="div[@type='editorial' and @subtype='grant'] | div[@type='editorial' and @subtype='title'] | div[@type='editorial' and @subtype='annotation']" mode="seskupit"  priority="10">
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 		<xsl:apply-templates />
 		</xsl:copy>
 	</xsl:template>
 
 	<xsl:template match="thead[@type='editorial'] | head[@type='editorial'] | head1[@type='editorial']" mode="seskupit">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:copy-of select="@*" />
             <xsl:apply-templates />
         </xsl:copy>
     </xsl:template>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://gebauer.ujc.cas.cz/schema/WDoc2Xml.xsd" xmlns:wd2x="http://gebauer.ujc.cas.cz/schema/WDoc2Xml.xsd">
+  <xs:element name="transformace">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="wd2x:tagy"/>
+        <xs:element ref="wd2x:citace"/>
+        <xs:element ref="wd2x:nahrady"/>
+      </xs:sequence>
+      <xs:attribute name="posledniZmena" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tagy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="wd2x:tag"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tag">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="wd2x:atribut"/>
+      </xs:sequence>
+      <xs:attribute name="bezZnacky" use="required" type="xs:NCName"/>
+      <xs:attribute name="ignorovat" use="required" type="xs:NCName"/>
+      <xs:attribute name="namespace" use="required"/>
+      <xs:attribute name="nazev" use="required" type="xs:NCName"/>
+      <xs:attribute name="prazdnyElement" use="required" type="xs:NCName"/>
+      <xs:attribute name="predchoziStyl" use="required"/>
+      <xs:attribute name="sloucitSPredchazejicim" use="required" type="xs:NCName"/>
+      <xs:attribute name="styl" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="atribut">
+    <xs:complexType>
+      <xs:attribute name="hodnota" use="required"/>
+      <xs:attribute name="nazev" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="citace">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="wd2x:citac"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="citac">
+    <xs:complexType>
+      <xs:attribute name="format" use="required" type="xs:integer"/>
+      <xs:attribute name="hodnota" use="required" type="xs:integer"/>
+      <xs:attribute name="inkrement" use="required" type="xs:integer"/>
+      <xs:attribute name="inkrementator" use="required" type="xs:NCName"/>
+      <xs:attribute name="nazev" use="required" type="xs:NCName"/>
+      <xs:attribute name="postfix" use="required"/>
+      <xs:attribute name="prefix" use="required" type="xs:NCName"/>
+      <xs:attribute name="resetator" use="required"/>
+      <xs:attribute name="vychoziHodnota" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="nahrady">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="wd2x:nahrada"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="nahrada">
+    <xs:complexType>
+      <xs:attribute name="cim" use="required" type="xs:NCName"/>
+      <xs:attribute name="co" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

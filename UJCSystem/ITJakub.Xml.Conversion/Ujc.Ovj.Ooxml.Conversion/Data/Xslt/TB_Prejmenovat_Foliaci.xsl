@@ -3,6 +3,8 @@
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
 	exclude-result-prefixes="xd"
 	version="1.0">
+	<xsl:import href="Kopirovani_prvku.xsl"/>
+
 	<xd:doc scope="stylesheet">
 		<xd:desc>
 			<xd:p><xd:b>Created on:</xd:b> Feb 6, 2011</xd:p>
@@ -14,8 +16,8 @@
 	<xsl:output method="xml" indent="yes"/>
 	
 	
-	<xsl:include href="Kopirovani_prvku.xsl"/>
 	<xsl:template match="/">
+		<xsl:comment> TB_Prejmenovat_Foliaci </xsl:comment>
 		<xsl:apply-templates />
 	</xsl:template>
 

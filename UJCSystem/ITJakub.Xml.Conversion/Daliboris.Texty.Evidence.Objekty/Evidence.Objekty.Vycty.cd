@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Comment CommentText="Informace o základním časovém zařazení přepsaného pramene, popř. památky">
+    <Position X="2.75" Y="4.25" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Informace o fázi zpracování, v níž se přepis nachází">
+    <Position X="7.038" Y="4.146" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Informace o formátu dokumentu, který obsahuje přepis tetu">
+    <Position X="1.152" Y="0.646" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Identifikace metadat ukládaných s dokumentem ve Windows">
+    <Position X="3.225" Y="0.646" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Informaco o předloze, která posloužila pro přepis textu">
+    <Position X="0.75" Y="4.25" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Informace o dalším využití přepsaného textu">
+    <Position X="4.75" Y="4.25" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Informace o změnách přepisu (aktuální verze versus verze na disku)">
+    <Position X="5.5" Y="0.5" Height="0.75" Width="1.7" />
+  </Comment>
+  <Enum Name="Daliboris.Texty.Evidence.CasoveZarazeni">
+    <Position X="2.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgIAABAAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Daliboris.Texty.Evidence.FazeZpracovani">
+    <Position X="7" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACQBCAAAAACAAAAAAAAAAAAAAAAEEAAAAAAAAAAgA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Daliboris.Texty.Evidence.FormatSouboru">
+    <Position X="1.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAACAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Daliboris.Texty.Evidence.Metaudaje">
+    <Position X="3.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAEAAAAAAAAIAAAAAAIEgAACEAAAAAAAAAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Daliboris.Texty.Evidence.StatusAktualizace">
+    <Position X="5.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAgAAAAAAAAAAgAAAAAAAEAAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Daliboris.Texty.Evidence.TypPredlohy">
+    <Position X="0.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAgAAAAACAABAAAAAIAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Daliboris.Texty.Evidence.ZpusobVyuziti">
+    <Position X="4.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAQAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Security.Principal;
 using System.ServiceModel;
-using Ujc.Naki.CardFile.Core.DataContractEntities;
+using ITJakub.CardFile.Core.DataContractEntities;
 using log4net;
 
-namespace Ujc.Naki.CardFile.Core
+namespace ITJakub.CardFile.Core
 {
     public class CardFilesCommunicationManager:IDisposable
     {
@@ -48,9 +47,14 @@ namespace Ujc.Naki.CardFile.Core
             return m_serviceClient.GetFiles();
         }
 
-        public buckets GetBuckets(string fileId, string keyword)
+        public buckets GetBuckets(string fileId)
         {
-            return m_serviceClient.GetBuckets(fileId, keyword);
+            return m_serviceClient.GetBuckets(fileId);
+        }
+
+        public buckets GetBucketsByHeadword(string fileId, string headword)
+        {
+            return m_serviceClient.GetBucketsByHeadword(fileId, headword);
         }
 
         public buckets GetCardsFromBucket(string fileId, string bucketId)
@@ -63,13 +67,9 @@ namespace Ujc.Naki.CardFile.Core
             return m_serviceClient.GetCardFromBucket(fileId, bucketId, cardId);
         }
 
-        public Image GetImageForCard(string fileId, string bucketId, string cardId, string imageId, string imageSize)
+        public Stream GetImageForCard(string fileId, string bucketId, string cardId, string imageId, string imageSize)
         {
-            Stream imageStream = m_serviceClient.GetImageForCard(fileId, bucketId, cardId, imageId, imageSize);
-            MemoryStream memImageStream = new MemoryStream();
-            imageStream.CopyTo(memImageStream);
-
-            return Image.FromStream(memImageStream);
+            return m_serviceClient.GetImageForCard(fileId, bucketId, cardId, imageId, imageSize);
         }
 
         public void Dispose()

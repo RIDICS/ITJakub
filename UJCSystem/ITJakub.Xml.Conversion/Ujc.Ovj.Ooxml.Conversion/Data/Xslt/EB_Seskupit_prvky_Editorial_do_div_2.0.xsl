@@ -23,13 +23,13 @@
 	</xd:doc>
 
 	<xsl:template match="/">
-		<xsl:comment> Seskupit_prvky_Editorial_do_div_2.0 </xsl:comment>
+		<xsl:comment> EB_Seskupit_prvky_Editorial_do_div_2.0 </xsl:comment>
 		<xsl:apply-templates />
 	</xsl:template>
 
 	<xsl:template match="div[@type='editorial' and @subtype='comment']">
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:choose>
 				<xsl:when test="thead[@type='editorial' and @subtype='comment']">
 					<xsl:for-each-group group-starting-with="thead" select="*">

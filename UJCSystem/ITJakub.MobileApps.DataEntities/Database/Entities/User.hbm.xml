@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <hibernate-mapping assembly="ITJakub.MobileApps.DataEntities"
                    namespace="ITJakub.MobileApps.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="User" table="[User]" lazy="false">
+  <class name="User" table="[User]" lazy="true">
 
     <id name="Id" column="Id">
       <generator class="identity" />
@@ -60,7 +60,7 @@
 
     <bag name="CreatedSynchronizedObjects" lazy="true">
       <key column="AuthorId" />
-      <one-to-many class="SynchronizedObject" />
+      <one-to-many class="SynchronizedObjectBase" />
     </bag>
 
     <bag name="CreatedTasks" lazy="true">

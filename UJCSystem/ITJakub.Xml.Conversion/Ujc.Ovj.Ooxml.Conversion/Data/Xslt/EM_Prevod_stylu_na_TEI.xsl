@@ -12,13 +12,15 @@
 		</xd:desc>
 	</xd:doc>
 
+	<xsl:param name="exportovatTransliteraci" /> <!-- 'true()' nebo 'false()' -->
+	
 	<xsl:include href="Prevod_stylu_na_TEI.xsl"/>
 	<xsl:include href="EM+EB_Prevod_stylu_na_TEI_spolecne.xsl"/>
 	<xsl:output omit-xml-declaration="no" indent="yes"/>
 	<xsl:strip-space elements="*"/>
 
 	<xsl:template match="/">
-		<xsl:comment> EM_Prevod_stylu_na_TEI </xsl:comment>
+		<xsl:comment> EM_Prevod_stylu_na_TEI; parameters: exportovatTransliteraci = '<xsl:value-of select="$exportovatTransliteraci"/>' </xsl:comment>
 		<xsl:apply-templates/>
 	</xsl:template>
 	
@@ -28,5 +30,11 @@
 	<xsl:template match="Anotace" />
 	
 	<xsl:template match="Komercni_titul" />
+
+	<xsl:template match="comment()" >
+		<xsl:copy-of select="."/>
+	</xsl:template>
+	
+	<xsl:template match="annotation_reference" />
 
 </xsl:stylesheet>

@@ -17,6 +17,7 @@
 	<xsl:output indent="yes" />
 	
 	<xsl:strip-space elements="*" />
+	<xsl:preserve-space elements="unclear text"/>
 	
 	<xsl:include href="Kopirovani_prvku.xsl" />
 
@@ -25,10 +26,11 @@
 </xd:doc>
 	<xsl:template match="/">
 		<xsl:comment> Seskupit_prvky_do_div_2.0_x </xsl:comment>
+		<xsl:apply-templates select="comment()" />
 		<xsl:apply-templates select="body" />
 	</xsl:template>
 	
-	<xsl:template match="body">
+	<!--<xsl:template match="body">
 		<body>
 			<xsl:choose>
 				<xsl:when test="*[@type='editorial' and @subtype='comment']">
@@ -53,6 +55,33 @@
 			</xsl:choose>
 		</body>
 	</xsl:template>
+	-->
+	
+	<xsl:template match="body">
+		<body>
+			<xsl:choose>
+				<xsl:when test="*[@type='editorial' and @subtype='comment']">
+					<xsl:for-each-group select="*" group-adjacent="
+						if(self::*[@type='editorial' ]) then
+						(if (self::*[@subtype='comment']) then 0 else 1)
+						else 
+						(if(self::*[not(@type='editorial')]) then 3 else 4)">
+						<xsl:apply-templates select="." />
+					</xsl:for-each-group>
+				</xsl:when>
+				<xsl:when test="*[@type='editorial' and @subtype='grant']">
+					<xsl:for-each-group select="*" group-adjacent="if(self::*[@type='editorial' and @subtype='grant']) then 2 else 5">
+						<xsl:apply-templates select="." />
+					</xsl:for-each-group>
+				</xsl:when>
+				<xsl:when test="*[not(@type='editorial')]">
+					<xsl:for-each-group select="*" group-adjacent="if(self::*[not(@type='editorial')]) then 3 else 6">
+						<xsl:apply-templates select="." />
+					</xsl:for-each-group>
+				</xsl:when>
+			</xsl:choose>
+		</body>
+	</xsl:template>
 	
 	
 	<xsl:template match="*[@type='editorial' and @subtype='comment']">
@@ -69,7 +98,7 @@
 	<xsl:template match="*[@type='editorial' and @subtype='comment']" mode="editorial-group">
 <!--		<xsl:comment> <xsl:value-of select="current-grouping-key()"></xsl:value-of> </xsl:comment>-->
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:apply-templates />
 		</xsl:copy>
 	</xsl:template>
@@ -77,7 +106,7 @@
 	<xsl:template match="*[not(@type='editorial')]" mode="not-editorial-group">
 <!--		<xsl:comment> <xsl:value-of select="current-grouping-key()"></xsl:value-of> </xsl:comment>-->
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:apply-templates />
 		</xsl:copy>
 	</xsl:template>

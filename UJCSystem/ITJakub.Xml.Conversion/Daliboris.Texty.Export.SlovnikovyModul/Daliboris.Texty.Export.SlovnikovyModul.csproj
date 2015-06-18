@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6C5853B2-9D04-417D-8B24-CE1B696216A0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Daliboris.Texty.Export.SlovnikovyModul</RootNamespace>
+    <AssemblyName>Daliboris.Texty.Export.SlovnikovyModul</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SlovnikovyModul.cs" />
+    <Compile Include="SlovnikovyModulNastaveni.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Daliboris.Texty.Evidence.Rozhrani\Daliboris.Texty.Evidence.Rozhrani.csproj">
+      <Project>{A612C779-BE2B-44F2-9C86-BD5324F1F8B6}</Project>
+      <Name>Daliboris.Texty.Evidence.Rozhrani</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Base\Daliboris.Texty.Export.Base.csproj">
+      <Project>{3179D827-1C9E-4291-8399-9D9A2BAFE374}</Project>
+      <Name>Daliboris.Texty.Export.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Rozhrani\Daliboris.Texty.Export.Rozhrani.csproj">
+      <Project>{585C72E8-10A8-4DFA-8A5C-467C5DD4C98C}</Project>
+      <Name>Daliboris.Texty.Export.Rozhrani</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.ESSC\Daliboris.Texty.Export.Slovniky.ESSC.csproj">
+      <Project>{2FCB6B55-EE90-4664-BF98-2249B9BC94D3}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.ESSC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.Slovnik\Daliboris.Texty.Export.Slovniky.Slovnik.csproj">
+      <Project>{56B8BC06-0BE8-4045-94DF-6844AA49E523}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.Slovnik</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Transformace\Daliboris.Texty.Export.Transformace.csproj">
+      <Project>{9339ED5B-312F-4AAF-9DF6-31B6C3169C48}</Project>
+      <Name>Daliboris.Texty.Export.Transformace</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Tools.Xml.XsltTransformation.Interface\Ujc.Ovj.Tools.Xml.XsltTransformation.Interface.csproj">
+      <Project>{3E64D878-8E98-465B-9FA9-A90D1D3B97B1}</Project>
+      <Name>Ujc.Ovj.Tools.Xml.XsltTransformation.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Tools.Xml.XsltTransformation\Ujc.Ovj.Tools.Xml.XsltTransformation.csproj">
+      <Project>{70259678-bea1-44d4-bd7f-85a60d683b8b}</Project>
+      <Name>Ujc.Ovj.Tools.Xml.XsltTransformation</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -13,14 +13,31 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             m_dataService = dataService;
 
             SimpleCrosswordsViewModel = new SimpleCrosswordsViewModel(dataService);
-            SimpleCrosswordsViewModel.GoBack = GoBack;
+            SimpleCrosswordsViewModel.GoBack = () => GoBack();
         }
 
         public SimpleCrosswordsViewModel SimpleCrosswordsViewModel { get; set; }
 
         public override void InitializeCommunication()
         {
-            // TODO try fix slow loading
+            m_dataService.GetGuessHistory((list, exception) =>
+            {
+                if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    return;
+                }
+
+                SimpleCrosswordsViewModel.UpdateProgress(list);
+                m_dataService.GetIsWin(isWin => SimpleCrosswordsViewModel.SetWin(isWin));
+                
+                SetDataLoaded();
+                StartPollingProgress();
+            });
+        }
+
+        private void StartPollingProgress()
+        {
             m_dataService.StartPollingProgress((list, exception) =>
             {
                 if (exception != null)
@@ -31,7 +48,6 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
                 SimpleCrosswordsViewModel.UpdateProgress(list);
                 m_dataService.GetIsWin(isWin => SimpleCrosswordsViewModel.SetWin(isWin));
-                SetDataLoaded();
             });
         }
 

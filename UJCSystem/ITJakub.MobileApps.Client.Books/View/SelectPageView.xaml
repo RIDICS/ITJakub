@@ -93,6 +93,7 @@
                     <Button Grid.Column="1"
                             Content="Vybrat"
                             MinWidth="130"
+                            IsEnabled="{Binding CanSubmit}"
                             Command="{Binding SelectCommand}" />
                 </Grid>
 
@@ -146,10 +147,23 @@
                     </ScrollViewer>
                 </Border>
 
+                <Grid Grid.Row="0"
+                      Margin="40,20,40,20"
+                      Background="#20000000"
+                      VerticalAlignment="Center">
+                    
+                    <TextBlock HorizontalAlignment="Center"
+                               Text="Zvolená strana nebyla nalezena."
+                               Foreground="DarkRed"
+                               FontSize="17"
+                               Margin="3"
+                               Visibility="{Binding IsLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </Grid>
+
                 <control:ZoomBarControl Grid.Row="1"
                                         CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
-                                        ZoomInCommand="{Binding ZoomInCommand}"
-                                        ZoomOutCommand="{Binding ZoomOutCommand}" />
+                                        Minimum="-7"
+                                        Maximum="17" />
             </Grid>
             <ProgressRing Grid.Row="2"
                           Grid.Column="0"
@@ -179,11 +193,22 @@
                            Source="{Binding PagePhoto}" />
                 </ScrollViewer>
 
+                <Grid Grid.Row="0"
+                      Margin="40,20,40,20"
+                      Background="#AAFFFFFF"
+                      VerticalAlignment="Center">
+                    
+                    <TextBlock HorizontalAlignment="Center"
+                               Text="Fotografie této strany nebyla nalezena."
+                               Foreground="DarkRed"
+                               FontSize="17"
+                               Margin="3"
+                               Visibility="{Binding IsLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </Grid>
+
                 <control:ZoomBarControl Grid.Row="1"
                                         Visibility="{Binding IsShowEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
-                                        ZoomInCommand="{Binding ZoomInCommand}"
-                                        ZoomOutCommand="{Binding ZoomOutCommand}" />
+                                        CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}" />
                 
             </Grid>
             
@@ -213,7 +238,7 @@
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <Grid MinWidth="20">
-                            <TextBlock Text="{Binding PageId}"
+                            <TextBlock Text="{Binding Name}"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center">
                                 

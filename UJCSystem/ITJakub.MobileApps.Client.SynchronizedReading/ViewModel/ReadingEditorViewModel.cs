@@ -1,6 +1,7 @@
 ﻿using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books;
+using ITJakub.MobileApps.Client.Books.Service.Client;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
 
@@ -11,7 +12,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private readonly ReaderDataService m_dataService;
         private string m_bookName;
         private string m_bookAuthor;
-        private int? m_bookYear;
+        private string m_publishDate;
         private string m_defaultPageId;
         private string m_pageRtfText;
         private bool m_isSaveFlyoutOpen;
@@ -20,6 +21,9 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private bool m_isShowPhotoEnabled;
         private ImageSource m_bookPagePhoto;
         private bool m_loadingPhoto;
+        private string m_pageName;
+        private bool m_isBookSelected;
+        private bool m_isPhotoLoadError;
 
         public ReadingEditorViewModel(ReaderDataService dataService)
         {
@@ -37,6 +41,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         public RelayCommand CancelCommand { get; private set; }
 
         public string TaskName { get; set; }
+
+        public bool IsBookSelected
+        {
+            get { return m_isBookSelected; }
+            set
+            {
+                m_isBookSelected = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public string BookName
         {
@@ -58,22 +72,22 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             }
         }
 
-        public int? BookYear
+        public string PublishDate
         {
-            get { return m_bookYear; }
+            get { return m_publishDate; }
             set
             {
-                m_bookYear = value;
+                m_publishDate = value;
                 RaisePropertyChanged();
             }
         }
 
-        public string DefaultPageId
+        public string PageName
         {
-            get { return m_defaultPageId; }
+            get { return m_pageName; }
             set
             {
-                m_defaultPageId = value;
+                m_pageName = value;
                 RaisePropertyChanged();
             }
         }
@@ -124,6 +138,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             set
             {
                 m_isShowPhotoEnabled = value;
+                IsPhotoLoadError = false;
                 RaisePropertyChanged();
                 LoadPhoto();
             }
@@ -148,7 +163,17 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 RaisePropertyChanged();
             }
         }
-        
+
+        public bool IsPhotoLoadError
+        {
+            get { return m_isPhotoLoadError; }
+            set
+            {
+                m_isPhotoLoadError = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private void HideErrors()
         {
             ErrorBookNotSelected = false;
@@ -162,11 +187,13 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             if (book == null)
                 return;
 
-            m_dataService.SetCurrentBook(book.BookInfo.Guid, book.PageId);
-            BookAuthor = book.BookInfo.Author;
+            IsBookSelected = true;
+            m_dataService.SetCurrentBook(book.BookInfo.Guid, book.XmlId);
+            BookAuthor = book.BookInfo.Authors;
             BookName = book.BookInfo.Title;
-            BookYear = book.BookInfo.Year;
-            DefaultPageId = book.PageId;
+            PublishDate = book.BookInfo.PublishDate;
+            PageName = book.PageName;
+            m_defaultPageId = book.XmlId;
             PageRtfText = book.RtfText;
             BookPagePhoto = book.PagePhoto;
 
@@ -186,7 +213,14 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                     LoadingPhoto = false;
                     if (exception != null)
                     {
-                        m_dataService.ErrorService.ShowConnectionError(() => IsShowPhotoEnabled = false);
+                        if (exception is NotFoundException)
+                        {
+                            IsPhotoLoadError = true;
+                        }
+                        else
+                        {
+                            m_dataService.ErrorService.ShowConnectionError(() => IsShowPhotoEnabled = false);
+                        }
                         return;
                     }
 
@@ -210,7 +244,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 isAnyError = true;
             }
 
-            if (DefaultPageId == null)
+            if (m_defaultPageId == null)
             {
                 ErrorBookNotSelected = true;
                 isAnyError = true;
@@ -227,7 +261,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 return;
 
             Saving = true;
-            m_dataService.CreateTask(TaskName, DefaultPageId, exception =>
+            m_dataService.CreateTask(TaskName, m_defaultPageId, exception =>
             {
                 Saving = false;
                 if (exception != null)

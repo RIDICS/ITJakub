@@ -156,7 +156,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
 
                 await
                     m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, UpdateObjectType,
-                        serializedContract);
+                        serializedContract, SynchronizationType.SingleObject);
                 callback(null);
             }
             catch (ClientCommunicationException exception)
@@ -178,7 +178,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
                 var serializedControlContract = JsonConvert.SerializeObject(latestControlContract);
                 m_latestControlContract = latestControlContract;
 
-                await m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, ControlObjectType, serializedControlContract);
+                await m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, ControlObjectType, serializedControlContract, SynchronizationType.SingleObject);
                 callback(null);
             }
             catch (ClientCommunicationException exception)
@@ -199,18 +199,21 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             if (latestControlContract == null)
                 return;
 
+            m_bookManager.PageId = pageId;
+
             // check if current user is reader and also can control changing pages
+            var currentUser = await m_applicationCommunication.GetCurrentUserInfo();
             var latestControlObject = await m_applicationCommunication.GetLatestObjectAsync(ApplicationType.SynchronizedReading, new DateTime(1970, 1, 1), ControlObjectType);
-            if (!latestControlObject.Author.IsMe)
+            var deserializedControl = JsonConvert.DeserializeObject<ControlContract>(latestControlObject.Data);
+            if (deserializedControl.ReaderUser.UserId != currentUser.Id)
                 return;
 
-            m_bookManager.PageId = pageId;
             latestControlContract.PageId = pageId;
             var serializedContract = JsonConvert.SerializeObject(latestControlContract);
 
             try
             {
-                await m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, ControlObjectType, serializedContract);
+                await m_applicationCommunication.SendObjectAsync(ApplicationType.SynchronizedReading, ControlObjectType, serializedContract, SynchronizationType.SingleObject);
                 callback(null);
             }
             catch (ClientCommunicationException exception)

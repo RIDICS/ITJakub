@@ -80,7 +80,7 @@
 
 	<xsl:template match="thead[@type='editorial' and @subtype='comment']" mode="group">
 		<div>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 				<xsl:apply-templates select="child::*" />
 			<xsl:for-each-group group-starting-with="head1" select="current-group() except .">
 				<xsl:apply-templates mode="group" select="." />
@@ -91,9 +91,9 @@
 
 	<xsl:template match="thead" mode="group">
 		<div>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<head>
-				<xsl:apply-templates select="@*" />
+				<xsl:copy-of select="@*" />
 				<xsl:apply-templates select="child::*" />
 			</head>
 			<xsl:for-each-group group-starting-with="head|head1" select="current-group() except .">
@@ -104,9 +104,9 @@
 
 	<xsl:template match="head" mode="group">
 		<div>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<head>
-				<xsl:apply-templates select="@*" />
+				<xsl:copy-of select="@*" />
 				<xsl:apply-templates select="child::*" />
 			</head>
 			<xsl:for-each-group group-starting-with="head1" select="current-group() except .">
@@ -117,9 +117,9 @@
 
 	<xsl:template match="head1" mode="group">
 		<div>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<head>
-				<xsl:apply-templates select="@*" />
+				<xsl:copy-of select="@*" />
 				<xsl:apply-templates select="child::*" />
 			</head>
 			<xsl:copy-of select="current-group() except ." />

@@ -12,7 +12,8 @@
             <xd:p>Převod dokumentu TEI na prostý text (pro JavaScript), pro potřeby testování nového VW v NAKI.</xd:p>
         </xd:desc>
     </xd:doc>
-    
+	
+	<xsl:strip-space elements="*"/>
     <xsl:output method="text" encoding="UTF-8" />
     <xsl:template match="/">
         <xsl:apply-templates select="tei:TEI/tei:text/tei:body" />
@@ -25,7 +26,9 @@
     <xsl:template match="tei:p | tei:head | tei:item">
          <xsl:apply-templates />
 <!--          <xsl:text>\r\n</xsl:text>-->
-    	<xsl:text> </xsl:text>
+<xsl:text>
+</xsl:text>
+<!--    	<xsl:text> </xsl:text>-->
     </xsl:template>
     
     <xsl:template match="tei:note" />

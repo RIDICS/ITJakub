@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
@@ -17,6 +16,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly AuthorManager m_authorManager;
         private readonly ResourceManager m_resourceManager;
         private readonly SearchManager m_searchManager;
+        private readonly CardFileManager m_cardFileManager;        
         private readonly WindsorContainer m_container = Container.Current;
 
         public ItJakubServiceManager()
@@ -26,6 +26,7 @@ namespace ITJakub.ITJakubService.Services
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
+            m_cardFileManager = m_container.Resolve<CardFileManager>();
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -48,24 +49,34 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetBooksWithCategoriesByBookType(bookType);
         }
 
-        public async Task<string> GetBookPageByNameAsync(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
         {
-            return await m_bookManager.GetBookPageByNameAsync(bookGuid, pageName, resultFormat);
+            return m_bookManager.GetBookPageByName(bookGuid, pageName, resultFormat);
         }
 
-        public async Task<string> GetBookPagesByNameAsync(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat)
         {
-            return await m_bookManager.GetBookPagesByNameAsync(bookGuid, startPageName, endPageName, resultFormat);
+            return m_bookManager.GetBookPageByXmlId(bookGuid, pageXmlId, resultFormat);
         }
 
-        public async Task<string> GetBookPageByPositionAsync(string bookGuid, int position, OutputFormatEnumContract resultFormat)
+        public string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
         {
-            return await m_bookManager.GetBookPagesByPositionAsync(bookGuid, position, resultFormat);
+            return m_bookManager.GetBookPagesByName(bookGuid, startPageName, endPageName, resultFormat);
         }
 
-        public async Task<IList<BookPageContract>> GetBookPageListAsync(string bookGuid)
+        public string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
         {
-            return await m_bookManager.GetBookPagesListAsync(bookGuid);
+            return m_bookManager.GetBookPageByPosition(bookGuid, position, resultFormat);
+        }
+
+        public IList<BookPageContract> GetBookPageList(string bookGuid)
+        {
+            return m_bookManager.GetBookPagesList(bookGuid);
+        }
+
+        public IList<BookContentItemContract> GetBookContent(string bookGuid)
+        {
+            return m_bookManager.GetBookContent(bookGuid);
         }
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)
@@ -83,6 +94,16 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.Search(term);
         }
 
+        public List<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
+        {
+            return m_searchManager.SearchBooksWithBookType(term, bookType);
+        }
+
+        public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
+        {
+            return m_searchManager.GetBooksByBookType(bookType);
+        }
+
         public Stream GetBookPageImage(BookPageImageContract bookPageImageContract)
         {
             return m_bookManager.GetBookPageImage(bookPageImageContract);
@@ -92,5 +113,46 @@ namespace ITJakub.ITJakubService.Services
         {
             m_searchManager.SearchByCriteria(searchCriterias);
         }
+        #region CardFile methods
+        public IEnumerable<CardFileContract> GetCardFiles()
+        {
+            return m_cardFileManager.GetCardFiles();
+        }
+        
+        public IEnumerable<BucketShortContract> GetBuckets(string cardFileId)
+        {
+            return m_cardFileManager.GetBuckets(cardFileId);
+        }        
+        public IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword)
+        {
+            return m_cardFileManager.GetBucketsByHeadword(cardFileId, headword);
+        }        
+
+        public IEnumerable<CardContract> GetCards(string cardFileId, string bucketId)
+        {
+            return m_cardFileManager.GetCards(cardFileId, bucketId);
+        }
+
+        public IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
+        {
+            return m_cardFileManager.GetCardsShort(cardFileId, bucketId);
+        }
+
+        public CardContract GetCard(string cardFileId, string bucketId, string cardId)
+        {
+            return m_cardFileManager.GetCard(cardFileId, bucketId, cardId);
+        }
+
+        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize)
+        {
+            return m_cardFileManager.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
+        }
+
+        
+
+        #endregion
+
+
+     
     }
 }

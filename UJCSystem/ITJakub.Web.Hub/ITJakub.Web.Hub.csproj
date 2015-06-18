@@ -16,7 +16,7 @@
     <AssemblyName>ITJakub.Web.Hub</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort>44300</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -56,6 +56,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -206,18 +207,18 @@
     <Compile Include="Identity\ApplicationUserStore.cs" />
     <Compile Include="Identity\EmailService.cs" />
     <Compile Include="ItJakubServiceClient.cs" />
-    <Compile Include="ItJakubServiceUnauthorizedClient.cs" />
+    <Compile Include="ItJakubServiceEncryptedClient.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\UploadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.css">
+    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css">
       <DependentUpon>itjakub.bibliographies.less</DependentUpon>
     </Content>
-    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.min.css">
-      <DependentUpon>itjakub.dictionaries.css</DependentUpon>
+    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.min.css">
+      <DependentUpon>itjakub.bibliographies.css</DependentUpon>
     </Content>
     <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.css">
       <DependentUpon>itjakub.bohemiantextbank.less</DependentUpon>
@@ -261,6 +262,7 @@
     <Content Include="Content\Images\mlceni.jpg" />
     <Content Include="Content\Images\news_background.png" />
     <Content Include="Content\Images\Plugins\Reader\loading.gif" />
+    <Content Include="Content\Images\small_trans_loading.gif" />
     <Content Include="Content\ITJakub.css.map">
       <DependentUpon>ITJakub.css</DependentUpon>
     </Content>
@@ -278,9 +280,6 @@
     </Content>
     <Content Include="Areas\Bibliographies\Views\web.config" />
     <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.less" />
-    <Content Include="Areas\Bibliographies\Content\itjakub.dictionaries.css.map">
-      <DependentUpon>itjakub.dictionaries.css</DependentUpon>
-    </Content>
     <Content Include="Areas\Bibliographies\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\List.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
@@ -529,6 +528,9 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css.map">
+      <DependentUpon>itjakub.bibliographies.css</DependentUpon>
+    </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
@@ -554,17 +556,12 @@
     </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
     <Content Include="Scripts\dropzone\dropzone.js" />
     <Content Include="Scripts\dropzone\dropzone.min.js" />
     <Content Include="Scripts\dropzone\images\spritemap%402x.png" />
     <Content Include="Scripts\dropzone\images\spritemap.png" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js.map">
-      <DependentUpon>jquery-1.10.2.min.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
     <Content Include="Scripts\jquery-2.1.3.min.map" />
@@ -628,9 +625,11 @@
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.List.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.ts" />
-    <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileCreator.ts" />
+    <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileManager.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfiles.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
+    <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />
+    <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.search.ts" />
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.sorting.ts" />
@@ -657,6 +656,10 @@
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Jewelery\Jewelery.csproj">
+      <Project>{246eadf4-905a-4fbd-b939-c88bdefdc4a7}</Project>
+      <Name>Jewelery</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -680,7 +683,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2637</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2637/</IISUrl>
+          <IISUrl>http://localhost</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://147.32.81.137/ITJakub.Web.Hub</CustomServerUrl>

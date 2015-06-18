@@ -21,7 +21,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
 
         public virtual GroupState State { get; set; }
 
-        public virtual IList<SynchronizedObject> SynchronizedObjects { get; set; }
+        public virtual IList<SynchronizedObjectBase> SynchronizedObjects { get; set; }
 
         public virtual IList<User> Members { get; set; }
 

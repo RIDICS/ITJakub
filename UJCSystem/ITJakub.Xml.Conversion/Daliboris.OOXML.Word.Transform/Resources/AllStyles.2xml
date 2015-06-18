@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<transformace 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns="http://schema.brus.cz/2010/WDoc2Xml.xsd"
+	posledniZmena="2009-08-14T12:53:27.64656+01:00" 
+	>
+	<koren nazev="body" />
+	<tagy>
+	  
+	  <!--
+	     zástupný styl - pokud se použije hvězdička u stylu, platí pravidlo na všechny styly, které nebyly definované
+	     pokud atribut nazev obsahuje hvězdičku, znamená to, že se jako název značky použije název stylu - předtím 
+	     se ale upraví tak, aby to odpovídalo standardnům XML (mezery); odstranit diaktitiku?
+	  -->
+	  <tag bezZnacky="false" ignorovat="false" nazev="*" styl="*" /> 
+	  
+		<!-- odstavcové styly -->
+		  
+	  <tag bezZnacky="false" ignorovat="false" nazev="Nadpis" styl="Nadpis"/>
+	  <tag bezZnacky="false" ignorovat="false" nazev="Titul" styl="Titul"/>
+	  <tag bezZnacky="false" ignorovat="false" nazev="Bible_Nadpis_kapitoly" styl="Bible_Nadpis_kapitoly"/>
+	  <tag bezZnacky="false" ignorovat="false" nazev="Podnadpis" styl="Podnadpis"/>
+	  <!--<tag bezZnacky="false" ignorovat="false" nazev="Polozka_rejstriku" predchoziStyl="Polozka_rejstriku" styl="Podnadpis"/>-->
+	  <tag bezZnacky="false" ignorovat="false" nazev="Normalni" styl="Normální"/>
+	  <tag bezZnacky="false" ignorovat="false" nazev="Volny_radek" prazdnyElement="true" styl="Volny_radek"/>
+	  <tag bezZnacky="false" ignorovat="false" nazev="Vers" styl="Vers"/>
+	  <tag bezZnacky="false" ignorovat="false" nazev="Polozka_rejstriku" styl="Polozka_rejstriku"/>
+	  <tag bezZnacky="false" ignorovat="false" nazev="Bible_Incipit" styl="Bible_Incipit" />
+	  <tag bezZnacky="false" ignorovat="false" nazev="Bible_Explicit" styl="Bible_Explicit" />
+	  <tag bezZnacky="false" ignorovat="false" nazev="Edicni_komentar" styl="Edicni_komentar" />
+	  
+		<!-- znakové styly -->
+	  
+	  <!-- 
+		<tag bezZnacky="false" ignorovat="false" nazev="supplied" styl="bible_zkratka_knihy">
+			<atribut nazev="n" hodnota="^\o"/>
+			<atribut nazev="reason" hodnota="bible"/>
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="supplied" styl="bible_cislo_kapitoly" sloucitSNasledujicim="true">
+			<atribut nazev="n" hodnota="^\o"/>
+			<atribut nazev="reason" hodnota="bible"/>
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="supplied" styl="bible_cislo_verse">
+			<atribut nazev="n" hodnota="^\o"/>
+			<atribut nazev="reason" hodnota="bible"/>
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="supplied" predchoziStyl="bible_cislo_kapitoly" sloucitSPredchozim="true" styl="bible_cislo_verse">
+			<atribut nazev="n" hodnota="^\o"/>
+			<atribut nazev="reason" hodnota="bible"/>
+			</tag>
+			
+	  -->			
+		<tag bezZnacky="false" ignorovat="false" nazev="text" styl="Text"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="text" styl="Standardní písmo odstavce"/>
+		<!-- Výchozí styl po konverzi pomocí b2xtranslatoru -->
+		<tag bezZnacky="false" ignorovat="false" nazev="text" styl="NormalCharacter"/>
+	  <!--
+		<tag bezZnacky="false" ignorovat="false" nazev="lb" prazdnyElement="true" styl="cislo_verse">
+			<atribut nazev="n" hodnota="^\o"/>
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="pb" prazdnyElement="true" styl="foliace">
+			<atribut nazev="n" hodnota="^\o"/>
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="sic" styl="pramen"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="hi" styl="pramen_horni_index" sloucitSPredchozim="true">
+			<atribut nazev="rend" hodnota="superscript" />
+		</tag>
+		
+		<tag bezZnacky="false" ignorovat="false" nazev="corr" styl="emendace"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="supplied" styl="doplneny_text"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="note" styl="poznamka_pod_carou"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="note" styl="poznamka"/>-->
+<!--		<tag bezZnacky="false" ignorovat="false" nazev="hi" styl="poznamka_kurziva" sloucitSPredchozim="true">
+			<atribut nazev="rend" hodnota="italic" />
+			</tag>-->
+		<!--<tag bezZnacky="true" ignorovat="false" nazev="kurziva" styl="poznamka_kurziva" sloucitSPredchozim="true" />
+		
+		
+		<tag bezZnacky="false" ignorovat="false" nazev="note" styl="poznamka_horni_index">
+			<atribut nazev="rend" hodnota="sup" />
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="item" styl="polozka"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="foreign" styl="cizi_jazyk"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="supplied" styl="cizi_jazyk_doplneny_text" sloucitSPredchozim="true" />
+		<tag bezZnacky="false" ignorovat="false" nazev="hi" styl="cizi_jazyk_horni_index" sloucitSPredchozim="true" >
+			<atribut nazev="rend" hodnota="superscript" />
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="add" styl="pripisek_marginalni_mladsi">
+			<atribut nazev="place" hodnota="margin"/>
+			<atribut nazev="type" hodnota="non-contemporaneous"/>
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="add" styl="pripisek_marginalni_soucasny">
+			<atribut nazev="place" hodnota="margin"/>
+			<atribut nazev="type" hodnota="contemporaneous"/>
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="add" styl="pripisek_interlinearni_mladsi">
+			<atribut nazev="place" hodnota="inline"/>
+			<atribut nazev="type" hodnota="non-contemporaneous"/>
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="add" styl="pripisek_interlinearni_soucasny">
+			<atribut nazev="place" hodnota="inline"/>
+			<atribut nazev="type" hodnota="contemporaneous"/>
+		</tag>
+		<tag bezZnacky="false" ignorovat="false" nazev="torzo" styl="torzo"/>-->
+
+		<!-- Proroci.doc
+		<tag bezZnacky="true" ignorovat="false" nazev="cislo_verse" styl="Bible_Cislo_verse"/> -->
+		<!-- HusDcerkaH 
+		<tag bezZnacky="true" ignorovat="false" nazev="kod" styl="kod"/>-->
+		
+		<!-- BechNeub 
+		<tag bezZnacky="true" ignorovat="false" nazev="FootnoteReference" styl="FootnoteReference"/>-->
+		
+		<!-- Hemming 
+			<tag bezZnacky="true" ignorovat="false" nazev="AnnotationReference" styl="AnnotationReference"/> -->
+		
+		<!-- PisOstr 
+			<tag bezZnacky="true" ignorovat="false" nazev="EndnoteReference" styl="EndnoteReference"/> -->
+		
+		
+		
+
+		<!--<tag bezZnacky="false" ignorovat="false" nazev="delimeq" styl="delimitator_ekvivalentu"/>--> <!-- svislice ve slovnících mezi ekvivalenty -->
+		<!--<tag bezZnacky="false" ignorovat="false" nazev="hyperlemma" styl="hyperlemma"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="lemma" styl="lemma"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="transliterace" styl="transliterace"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="transliterace" styl="transliterace_rozepsani_zkratky"/>
+		<tag bezZnacky="false" ignorovat="false" nazev="transliterace" styl="transliterace_cizi_jazyk"/>-->
+		
+		<!-- ignorované styly -->
+		<tag bezZnacky="false" ignorovat="true" nazev="hlavicka" styl="Hlavicka"/>
+		<tag bezZnacky="false" ignorovat="true" nazev="hlavicka" styl="Elegantní tabulka"/>
+<!--		<tag bezZnacky="false" ignorovat="true" nazev="note" styl="interni_poznamka"/>
+		<tag bezZnacky="false" ignorovat="true" nazev="note" styl="interni_poznamka_kurziva"/>
+		<tag bezZnacky="false" ignorovat="true" nazev="add" styl="pripisek"/>
+-->		
+		
+		<!-- styl, který se objevuje po transformaci dokumentu Doc 2 Docx -->
+		<!--  <tag bezZnacky="true" ignorovat="true" nazev="character" styl="NormalCharacter"/> --> 
+		
+		
+	</tagy>
+	<!-- Způsob zpracování tabulek -->
+	<tabulky tabulka="table" radek="row" bunka="cell" cislovatElementy="true" />
+	<!-- <tabulky tabulka="table" radek="tr" bunka="td" obsahPrazdneBunky="&amp;nbsp;" textMistoTabulky="" /> -->
+	
+</transformace>

@@ -14,13 +14,13 @@
 			<xd:p>Přesune ediční komentáře z těla do hlavičky dokumentu.</xd:p>
 		</xd:desc>
 	</xd:doc>
-	
-	<xsl:output method="xml" indent="yes"/>
+
+<xsl:output method="xml" indent="yes"/>
 	<xsl:output indent="yes" />
 	<xsl:strip-space elements="*"/>
 	
 	<xsl:include href="Kopirovani_prvku.xsl"/>
-	
+
 	<xsl:template match="/">
 		<xsl:comment> EM_Presunout_edicni_komentar_x </xsl:comment>
 		<xsl:apply-templates />
@@ -48,7 +48,7 @@
 	<xsl:template match="t:body/t:div[@type='editorial' and @subtype='comment']" mode="copy">
 		<xsl:apply-templates />
 	</xsl:template>
-	
+
 	<xsl:template match="t:body/t:div[@type='editorial' and @subtype='grant']" />
 	<xsl:template match="t:body/t:div[@type='editorial' and @subtype='grant']" mode="copy">
 		<xsl:apply-templates />

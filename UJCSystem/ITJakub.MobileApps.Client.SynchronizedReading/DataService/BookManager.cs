@@ -40,7 +40,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
                 }
                 else
                 {
-                    callback(new ObservableCollection<PageViewModel>(pages.Select(page => new PageViewModel { PageId = page.PageId })), null);
+                    callback(new ObservableCollection<PageViewModel>(pages.Select(page => new PageViewModel
+                    {
+                        PageName = page.Name,
+                        Position = page.Position,
+                        XmlId = page.XmlId
+                    })), null);
                 }
             });
         }

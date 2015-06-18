@@ -17,7 +17,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "settlement"; }
         }
 
-        protected override void ProcessElement(ManuscriptDescription msDesc, XmlReader xmlReader)
+        protected override void ProcessElement(BookVersion bookVersion, ManuscriptDescription msDesc, XmlReader xmlReader)
         {
             msDesc.Settlement = GetInnerContentAsString(xmlReader);
         }

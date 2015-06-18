@@ -6,9 +6,11 @@ namespace ITJakub.DataEntities.Database.Entities
 {
     public class BookVersion : IEquatable<BookVersion>
     {
+
         public virtual long Id { get; set; }
         public virtual Book Book { get; set; }
         public virtual Publisher Publisher { get; set; }
+        public virtual BookType DefaultBookType { get; set; }
         public virtual string VersionId { get; set; }
         public virtual string Title { get; set; }
         public virtual string SubTitle { get; set; }
@@ -19,6 +21,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string Copyright { get; set; }
         public virtual AvailabilityStatus AvailabilityStatus { get; set; }
         public virtual string BiblText { get; set; }
+        public virtual IList<Category> Categories { get; set; }
         public virtual IList<ManuscriptDescription> ManuscriptDescriptions { get; set; }
         public virtual IList<BookBibl> BookBibls { get; set; }
         public virtual IList<Keyword> Keywords { get; set; }
@@ -26,6 +29,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual IList<Responsible> Responsibles { get; set; }
         public virtual IList<Transformation> Transformations { get; set; }
         public virtual IList<BookPage> BookPages { get; set; }
+        public virtual IList<BookContentItem> BookContentItems { get; set; }
 
         public virtual DateTime NotBefore { get; set; }
 

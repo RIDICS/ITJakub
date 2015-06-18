@@ -5,7 +5,7 @@ $(document).ready(function () {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: "/Bibliographies/Bibliographies/Search",
+            url: getBaseUrl() + "Bibliographies/Bibliographies/Search",
             data: { term: text },
             dataType: 'json',
             contentType: 'application/json',

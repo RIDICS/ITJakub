@@ -10,6 +10,14 @@ declare namespace util = "http://exist-db.org/xquery/util";
 declare namespace exist = "http://exist.sourceforge.net/NS/exist";
 
 
+declare function vw:getPageByXmlId($document as node(), $pageXmlId as xs:string)
+    as element() {
+    let $startPoint := $document/descendant::tei:pb[@xml:id=$pageXmlId]    
+    let $endPoint := $startPoint/following::tei:pb[1]    
+    return vw:getPagesProcess($startPoint, $endPoint)
+    
+};
+
 declare function vw:getPageInPosition($document as node(), $pagePosition as xs:integer)
     as element() {
     let $startPoint := $document/descendant::tei:pb[$pagePosition]    
