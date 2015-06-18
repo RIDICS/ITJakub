@@ -32,8 +32,13 @@ namespace ITJakub.Core
             var pathResolver = GetPathResolver(resourceType);
             var relativePath = pathResolver.ResolvePath(bookId, bookVersionId, fileName);
             var fullPath = GetFullPath(relativePath);
+            if (File.Exists(fullPath))
+                return File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 
-            return File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            if (m_log.IsWarnEnabled)
+                m_log.WarnFormat("Trying to access non existing resource file: '{0}'", fullPath);
+
+            return Stream.Null;
         }
 
         public void SaveResource(string bookId, string bookVersionId, Resource resource)

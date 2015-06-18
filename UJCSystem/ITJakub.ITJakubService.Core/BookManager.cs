@@ -144,7 +144,7 @@ namespace ITJakub.ITJakubService.Core
                 return m_fileSystemManager.GetResource(imageContract.BookGuid, bookVersion.VersionId,
                     bookPage.Image, ResourceType.Image);
 
-            return null;
+            return Stream.Null;
         }
 
         public Stream GetBookPageImage(string bookGuid, string pageId)
@@ -155,7 +155,7 @@ namespace ITJakub.ITJakubService.Core
                 return m_fileSystemManager.GetResource(bookGuid, bookVersion.VersionId,
                     bookPage.Image, ResourceType.Image);
 
-            return null;
+            return Stream.Null;
         }
     }
 }
