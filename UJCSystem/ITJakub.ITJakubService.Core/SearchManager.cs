@@ -6,7 +6,6 @@ using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.Core.Search;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
-using NHibernate;
 using NHibernate.Criterion;
 
 namespace ITJakub.ITJakubService.Core
@@ -14,12 +13,14 @@ namespace ITJakub.ITJakubService.Core
     public class SearchManager
     {
         private readonly BookRepository m_bookRepository;
+        private readonly BookVersionRepository m_bookVersionRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly SearchCriteriaDirector m_searchCriteriaDirector;
 
-        public SearchManager(BookRepository bookRepository, CategoryRepository categoryRepository, SearchCriteriaDirector searchCriteriaDirector)
+        public SearchManager(BookRepository bookRepository, BookVersionRepository bookVersionRepository, CategoryRepository categoryRepository, SearchCriteriaDirector searchCriteriaDirector)
         {
             m_bookRepository = bookRepository;
+            m_bookVersionRepository = bookVersionRepository;
             m_categoryRepository = categoryRepository;
             m_searchCriteriaDirector = searchCriteriaDirector;
         }
@@ -51,6 +52,8 @@ namespace ITJakub.ITJakubService.Core
             {
                 m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract, databaseCriteria);
             }
+
+            var databaseSearchResult = m_bookVersionRepository.SearchByCriteria(databaseCriteria);
         }
     }
 }

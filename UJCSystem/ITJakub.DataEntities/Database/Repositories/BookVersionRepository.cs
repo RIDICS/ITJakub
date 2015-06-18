@@ -1,9 +1,10 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using NHibernate;
+using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -88,6 +89,15 @@ namespace ITJakub.DataEntities.Database.Repositories
                                 respType.Type == responsibleType.Type)
                         .Take(1)
                         .SingleOrDefault<ResponsibleType>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> SearchByCriteria(DetachedCriteria databaseCriteria)
+        {
+            using (ISession session = GetSession())
+            {
+                return databaseCriteria.GetExecutableCriteria(session).List<BookVersion>();
             }
         }
     }
