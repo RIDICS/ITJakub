@@ -153,11 +153,61 @@ var RegExCondition = (function (_super) {
         return this.html;
     };
     RegExCondition.prototype.removeDelimeter = function () {
-        $(this.html).find(".regexsearch-delimiter").remove();
+        $(this.html).find(".regexsearch-delimiter").empty();
     };
     RegExCondition.prototype.hasDelimeter = function () {
-        var delimeter = $(this.html).find(".regexsearch-delimiter");
-        return (typeof delimeter != 'undefined' && delimeter != null);
+        var isEmpty = $(this.html).find(".regexsearch-delimiter").is(':empty');
+        return !isEmpty;
+    };
+    RegExCondition.prototype.setTextDelimeter = function () {
+        var textDelimeter = this.createTextDelimeter();
+        if (this.hasDelimeter()) {
+            this.removeDelimeter();
+        }
+        $(this.html).find(".regexsearch-delimiter").append(textDelimeter);
+    };
+    RegExCondition.prototype.setClickableDelimeter = function () {
+        var clickableDelimeter = this.createClickableDelimeter();
+        if (this.hasDelimeter()) {
+            this.removeDelimeter();
+        }
+        $(this.html).find(".regexsearch-delimiter").append(clickableDelimeter);
+    };
+    RegExCondition.prototype.createClickableDelimeter = function () {
+        var _this = this;
+        var delimeterDiv = document.createElement("div");
+        var addWordSpan = document.createElement("span");
+        $(addWordSpan).addClass("regex-clickable-text");
+        addWordSpan.innerHTML = "Přidat podmínku";
+        $(addWordSpan).click(function () {
+            _this.parent.addNewCondition();
+        });
+        delimeterDiv.appendChild(addWordSpan);
+        var trashButton = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(function () {
+            _this.parent.removeCondition(_this);
+        });
+        delimeterDiv.appendChild(trashButton);
+        return delimeterDiv;
+    };
+    RegExCondition.prototype.createTextDelimeter = function () {
+        var _this = this;
+        var delimeterDiv = document.createElement("div");
+        delimeterDiv.innerHTML = "A zároveň";
+        var trashButton = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(function () {
+            _this.parent.removeCondition(_this);
+        });
+        delimeterDiv.appendChild(trashButton);
+        return delimeterDiv;
     };
     RegExCondition.prototype.getWordFormType = function () {
         return this.selectedWordFormType;
@@ -209,25 +259,13 @@ var RegExCondition = (function (_super) {
         this.conditionContainerDiv = document.createElement("div");
         $(this.conditionContainerDiv).addClass("regexsearch-condition-list-div");
         mainSearchDiv.appendChild(this.conditionContainerDiv);
-        this.resetWords();
-        var mainDiv = document.createElement("div");
-        var andInfoDiv = document.createElement("div");
-        $(andInfoDiv).addClass("regexsearch-delimiter");
-        andInfoDiv.innerHTML = "A zároveň";
-        mainDiv.appendChild(andInfoDiv);
-        var trashButton = document.createElement("button");
-        $(trashButton).addClass("regexsearch-delimiter-remove-button");
-        var removeGlyph = document.createElement("span");
-        $(removeGlyph).addClass("glyphicon");
-        $(removeGlyph).addClass("glyphicon-trash");
-        trashButton.appendChild(removeGlyph);
-        $(trashButton).click(function () {
-            _this.parent.removeCondition(_this);
-        });
-        andInfoDiv.appendChild(trashButton);
         $(conditionsDiv).append(mainSearchDiv);
-        $(conditionsDiv).append(mainDiv);
+        var delimeterDiv = document.createElement("div");
+        $(delimeterDiv).addClass("regexsearch-delimiter");
+        $(conditionsDiv).append(delimeterDiv);
+        this.resetWords();
         this.html = conditionsDiv;
+        this.setClickableDelimeter();
     };
     RegExCondition.prototype.resetWords = function () {
         $(this.conditionContainerDiv).empty();
@@ -305,7 +343,7 @@ var RegExWordCondition = (function (_super) {
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "+";
+        addWordSpan.innerHTML = "Přidat podmínku";
         $(addWordSpan).click(function () {
             _this.parentRegExCondition.addWord();
         });

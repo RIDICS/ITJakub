@@ -1029,6 +1029,7 @@ input.regexsearch-checkbox {
 }
 .regexsearch-add-input-button {
   font-size: 0.8em;
+  margin-left: 180px;
 }
 .regex-clickable-text:hover {
   cursor: pointer;

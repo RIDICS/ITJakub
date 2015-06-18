@@ -65,7 +65,7 @@ class RegExSearch extends RegExSearchBase {
         //$(this.container).append(endDelimiter);
     }
 
-    private addNewCondition(useDelimiter:boolean = true) {
+    public addNewCondition(useDelimiter:boolean = true) {
         var newRegExConditions = new RegExCondition(this);
         newRegExConditions.makeRegExCondition();
         if (!useDelimiter) {
@@ -170,13 +170,74 @@ class RegExCondition extends RegExSearchBase {
     }
 
     public removeDelimeter() {
-        $(this.html).find(".regexsearch-delimiter").remove();
+        $(this.html).find(".regexsearch-delimiter").empty();
     }
 
-    public hasDelimeter(): boolean {
-        var delimeter = $(this.html).find(".regexsearch-delimiter");
-        return (typeof delimeter != 'undefined' && delimeter != null);
+    private hasDelimeter(): boolean {
+        var isEmpty = $(this.html).find(".regexsearch-delimiter").is(':empty');
+        return !isEmpty;
     }
+
+    public setTextDelimeter() {
+        var textDelimeter = this.createTextDelimeter();
+        if (this.hasDelimeter()) {
+            this.removeDelimeter();
+        }
+        $(this.html).find(".regexsearch-delimiter").append(textDelimeter);
+    }
+
+    public setClickableDelimeter() {
+        var clickableDelimeter = this.createClickableDelimeter();
+        if (this.hasDelimeter()) {
+            this.removeDelimeter();
+        }
+        $(this.html).find(".regexsearch-delimiter").append(clickableDelimeter);
+    }
+
+    private createClickableDelimeter(): HTMLDivElement {
+        var delimeterDiv = document.createElement("div");
+        var addWordSpan = document.createElement("span");
+        $(addWordSpan).addClass("regex-clickable-text");
+        addWordSpan.innerHTML = "Přidat podmínku";
+        $(addWordSpan).click(() => {
+            this.parent.addNewCondition();
+        });
+
+        delimeterDiv.appendChild(addWordSpan);
+
+        var trashButton: HTMLButtonElement = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph: HTMLSpanElement = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(() => {
+            this.parent.removeCondition(this);
+        });
+
+        delimeterDiv.appendChild(trashButton);
+
+        return delimeterDiv;
+    }
+
+    private createTextDelimeter(): HTMLDivElement {
+        var delimeterDiv = document.createElement("div");
+        delimeterDiv.innerHTML = "A zároveň";
+
+        var trashButton: HTMLButtonElement = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph: HTMLSpanElement = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(() => {
+            this.parent.removeCondition(this);
+        });
+
+        delimeterDiv.appendChild(trashButton);
+
+        return delimeterDiv;
+    }
+
+
 
     public getWordFormType(): string {
         return this.selectedWordFormType;
@@ -259,29 +320,15 @@ class RegExCondition extends RegExSearchBase {
         $(this.conditionContainerDiv).addClass("regexsearch-condition-list-div");
         mainSearchDiv.appendChild(this.conditionContainerDiv);
 
-        this.resetWords();
-
-        var mainDiv = document.createElement("div");
-
-        var andInfoDiv = document.createElement("div");
-        $(andInfoDiv).addClass("regexsearch-delimiter");
-        andInfoDiv.innerHTML = "A zároveň";
-        mainDiv.appendChild(andInfoDiv);
-
-        var trashButton: HTMLButtonElement = document.createElement("button");
-        $(trashButton).addClass("regexsearch-delimiter-remove-button");
-        var removeGlyph: HTMLSpanElement = document.createElement("span");
-        $(removeGlyph).addClass("glyphicon");
-        $(removeGlyph).addClass("glyphicon-trash");
-        trashButton.appendChild(removeGlyph);
-        $(trashButton).click(() => {
-            this.parent.removeCondition(this);
-        });
-        andInfoDiv.appendChild(trashButton);
-        
         $(conditionsDiv).append(mainSearchDiv);
-        $(conditionsDiv).append(mainDiv);
+
+        var delimeterDiv = document.createElement("div");
+        $(delimeterDiv).addClass("regexsearch-delimiter");
+        $(conditionsDiv).append(delimeterDiv);
+        this.resetWords();
         this.html = conditionsDiv;
+
+        this.setClickableDelimeter();
     }
 
     public resetWords() {
@@ -377,7 +424,7 @@ class RegExWordCondition extends RegExSearchBase {
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "+";
+        addWordSpan.innerHTML = "Přidat podmínku";
         $(addWordSpan).click(() => {
             this.parentRegExCondition.addWord();
         });
