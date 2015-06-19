@@ -5,8 +5,8 @@ using System.Runtime.Serialization;
 namespace ITJakub.ITJakubService.DataContracts
 {
     [DataContract]
-    [KnownType(typeof(StringListCriteriaContract))]
-    [KnownType(typeof(DatationCriteriaContract))]
+    [KnownType(typeof (StringListCriteriaContract))]
+    [KnownType(typeof (DatationCriteriaContract))]
     public abstract class SearchCriteriaContract
     {
         [DataMember]
@@ -30,11 +30,12 @@ namespace ITJakub.ITJakubService.DataContracts
         public DateTime NotAfter { get; set; }
     }
 
+    [DataContract]
     public enum CriteriaKey
     {
-        Author,
-        Title,
-        Editor,
-        Datation
+        [EnumMember] Author,
+        [EnumMember] Title,
+        [EnumMember] Editor,
+        [EnumMember] Datation
     }
 }
