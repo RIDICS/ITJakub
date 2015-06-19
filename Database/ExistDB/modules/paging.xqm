@@ -75,6 +75,23 @@ declare function vw:getPageNamesList($document as node())
     let $result := $document//tei:pb
     return $result 
 };
+
+declare function vw:get-document-fragment($document as node(), $start as xs:string, 
+$end as xs:string, $pageXmlId as xs:string, $pagePosition as xs:string) as node() {
+	let $documentFragment :=
+	if (string-length($start) > 0) then
+        if (string-length($end) > 0) then
+            vw:getPages($document, $start, $end)
+        else
+            vw:getPage($document, $start)
+    else
+		if(string-length($pageXmlId) > 0) then
+			vw:getPageByXmlId($document, $pageXmlId)
+		else
+			vw:getPageInPosition($document, $pagePosition)
+			
+	return $documentFragment
+};
     
 
     

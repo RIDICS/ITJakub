@@ -6,13 +6,18 @@ declare namespace itj = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0";
 
 declare variable $vw:collectionPath := "apps/jacob/data";
 
-declare function vw:getDocument($documentId as xs:string)
-    as node() {    
-    let $collection := collection($vw:collectionPath)
+declare function vw:getDocument($documentId as xs:string, $documentVersionId as xs:string?)
+    as node() {
+    let $result := if (string-length($documentVersionId) > 0) then
+    	vw:getDocumentVersion($documentId, $documentVersionId)
+    else
+     (let $collection := collection($vw:collectionPath)
     let $document := $collection//tei:TEI[tei:teiHeader/tei:fileDesc[@n=$documentId]]   
     return $document[1] (: get first version :)
+    )
+    return $result
 };
-
+(: identická funkce jako getDocument (kde je versionId volitelný parametr), časem odstranit :)
 declare function vw:getDocumentVersion($documentId as xs:string, $documentVersionId as xs:string)
     as node() { 
     let $collection := collection($vw:collectionPath)
