@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.Core.Search;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
-using NHibernate.Criterion;
 using MobileContracts = ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.ITJakubService.Core
@@ -48,13 +48,15 @@ namespace ITJakub.ITJakubService.Core
 
         public void SearchByCriteria(List<SearchCriteriaContract> searchCriterias)
         {
-            var databaseCriteria = DetachedCriteria.For<Book>().CreateCriteria("LastVersion", "lastVersion");
+            var conjunction = new List<SearchCriteriaQuery>();
             foreach (var searchCriteriaContract in searchCriterias)
             {
-                m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract, databaseCriteria);
+                var criteriaQuery = m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract);
+                conjunction.Add(criteriaQuery);
             }
             
-            var databaseSearchResult = m_bookVersionRepository.SearchByCriteria(databaseCriteria);
+            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(conjunction);
+            // TODO
         }
 
         public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using log4net;
-using NHibernate.Criterion;
 using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -181,24 +181,37 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookVersionPair> SearchByCriteria(DetachedCriteria databaseCriteria)
+        public virtual IList<BookVersionPair> SearchByCriteriaQuery(List<SearchCriteriaQuery> criteriaQueries)
         {
+            var queryString = "select b.Guid as Guid, min(bv.VersionId) as VersionId from Book b inner join b.LastVersion bv";
+            var joinBuilder = new StringBuilder();
+            var whereBuilder = new StringBuilder();
+            foreach (var criteriaQuery in criteriaQueries)
+            {
+                if (!string.IsNullOrEmpty(criteriaQuery.Join))
+                    joinBuilder.Append(' ').Append(criteriaQuery.Join);
+
+                if (whereBuilder.Length > 0)
+                    whereBuilder.Append(" and");
+                whereBuilder.Append(" (").Append(criteriaQuery.Where).Append(')');
+            }
+
+            queryString = string.Format("{0}{1} where{2} group by b.Guid", queryString, joinBuilder, whereBuilder);
+
             using (var session = GetSession())
             {
-                //databaseCriteria
-                //    .SetProjection(Projections.ProjectionList()
-                //        .Add(Projections.GroupProperty("Guid"), "Guid")
-                //        .Add(Projections.Min("lastVersion.VersionId"), "VersionId"));
-
-                //return databaseCriteria
-                //    .GetExecutableCriteria(session)
-                //    .SetResultTransformer(Transformers.AliasToBean<BookVersionPair>())
-                //    .List<BookVersionPair>();
-
-                var query = "select b.Guid as Guid, bv.VersionId as VersionId from Book b inner join b.LastVersion bv";
+                var paramIndex = 0;
+                var query = session.CreateQuery(queryString);
+                foreach (var criteriaQuery in criteriaQueries)
+                {
+                    foreach (var parameterValue in criteriaQuery.Parameters)
+                    {
+                        query.SetParameter(paramIndex, parameterValue);
+                        paramIndex++;
+                    }
+                }
                 
-                var result = session.CreateQuery(query)
-                    .SetResultTransformer(Transformers.AliasToBean<BookVersionPair>())
+                var result = query.SetResultTransformer(Transformers.AliasToBean<BookVersionPair>())
                     .List<BookVersionPair>();
 
                 return result;

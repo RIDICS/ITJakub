@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.MicroKernel;
+using ITJakub.DataEntities.Database;
 using ITJakub.ITJakubService.DataContracts;
-using NHibernate.Criterion;
 
 namespace ITJakub.ITJakubService.Core.Search
 {
@@ -17,14 +17,14 @@ namespace ITJakub.ITJakubService.Core.Search
             m_criteriaImplementations = criteria.ToDictionary(x => x.CriteriaKey);
         }
 
-        public void ProcessCriteria(SearchCriteriaContract searchCriteriaContract, DetachedCriteria databaseCriteria)
+        public SearchCriteriaQuery ProcessCriteria(SearchCriteriaContract searchCriteriaContract)
         {
             ICriteriaImplementationBase criteriaImplementation;
             if (!m_criteriaImplementations.TryGetValue(searchCriteriaContract.Key, out criteriaImplementation))
             {
                 throw new ArgumentException("Criteria key not found");
             }
-            criteriaImplementation.ProcessCriteria(searchCriteriaContract, databaseCriteria);
+            return criteriaImplementation.CreateCriteriaQuery(searchCriteriaContract);
         }
     }
 }

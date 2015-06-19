@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\SearchCriteriaQuery.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
     <Compile Include="Database\Entities\Author.cs" />
