@@ -55,6 +55,42 @@
 			</fileset>
 		</xdb:store>
 		
+		<xdb:store xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}/transformations/xsl-fo"
+			createcollection="true"
+			user="${user}" password="${password}">
+			<fileset dir="${save-path}/transformations/xsl-fo"> 
+				<include name="*.xml"/>
+				<include name="*.xsl"/>
+				<include name="*.xqm"/>
+				<include name="*.xquery"/>
+			</fileset>
+		</xdb:store>
+		
+		<xdb:store xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}/transformations/xsl-fo/common2"
+			createcollection="true"
+			user="${user}" password="${password}">
+			<fileset dir="${save-path}/transformations/xsl-fo/common2"> 
+				<include name="*.xml"/>
+				<include name="*.xsl"/>
+				<include name="*.xqm"/>
+				<include name="*.xquery"/>
+			</fileset>
+		</xdb:store>
+		
+		<xdb:store xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}/transformations/xsl-fo/fo2"
+			createcollection="true"
+			user="${user}" password="${password}">
+			<fileset dir="${save-path}/transformations/xsl-fo/fo2"> 
+				<include name="*.xml"/>
+				<include name="*.xsl"/>
+				<include name="*.xqm"/>
+				<include name="*.xquery"/>
+			</fileset>
+		</xdb:store>
+		
 		
 		<echo message="Loading to ${uri}/queries"/>
 		<xdb:store xmlns:xdb="http://exist-db.org/ant"
