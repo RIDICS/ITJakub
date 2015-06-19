@@ -360,8 +360,8 @@ class RegExCondition extends RegExSearchBase {
     public getConditionString(): string {
         var conditionString = this.conditionInputArray[0].getConditionsValue();
         for (var i = 1; i < this.conditionInputArray.length; i++) {
-            var regExInput = this.conditionInputArray[i];
-            conditionString += "&" + regExInput.getConditionsValue(); //TODO change to AND
+            var regExWordCondition = this.conditionInputArray[i];
+            conditionString += "|" + regExWordCondition.getConditionsValue(); //TODO change to another char meaning OR ???
         }
 
         return conditionString;
@@ -482,7 +482,6 @@ class RegExWordCondition extends RegExSearchBase {
         this.inputsArray = [];
         var newInput = new RegExWordInput(this);
         newInput.makeRegExInput();
-        //newInput.removeDelimeter();
         this.inputsArray.push(newInput);
         this.inputsContainerDiv.appendChild(newInput.getHtml());
     }
@@ -506,19 +505,15 @@ class RegExWordCondition extends RegExSearchBase {
         if (this.inputsArray.length === 0) {
             this.resetInputs();
         }
-
-        //if (this.inputsArray[0].hasDelimeter) {
-        //    this.inputsArray[0].removeDelimeter();
-        //}
     }
 
     public getConditionsValue(): string {
-        //for (var i = 0; i < LENGTH; i++) {
-            
-            
-        //}
-        //TODO implement
-        return "";
+        var conditionString = this.inputsArray[0].getConditionValue();
+        for (var i = 0; i < this.inputsArray.length; i++) {
+            var wordInput = this.inputsArray[i];
+            conditionString += "&" + wordInput.getConditionValue(); //TODO Change & to another char meaning AND ???
+        }
+        return conditionString;
     }
 
 }
@@ -552,11 +547,6 @@ class RegExWordInput extends RegExSearchBase {
     public makeRegExInput() {
         var mainDiv: HTMLDivElement = document.createElement("div");
         $(mainDiv).addClass("reg-ex-word-input");
-
-        //var labelDiv = document.createElement("div");
-        //labelDiv.innerHTML = "A zároveň";
-        //$(labelDiv).addClass("regexsearch-input-and-delimiter");
-        //mainDiv.appendChild(labelDiv);
 
         var lineDiv = document.createElement("div");
         $(lineDiv).addClass("regex-word-input-textbox");
