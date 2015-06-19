@@ -1,22 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
     [DataContract]
-    [KnownType(typeof(StringCriteriaContract))]
     [KnownType(typeof(StringListCriteriaContract))]
+    [KnownType(typeof(DatationCriteriaContract))]
     public abstract class SearchCriteriaContract
     {
         [DataMember]
         public CriteriaKey Key { get; set; }
-    }
-
-    [DataContract]
-    public class StringCriteriaContract : SearchCriteriaContract
-    {
-        [DataMember]
-        public string Value { get; set; }
     }
 
     [DataContract]
@@ -26,10 +20,21 @@ namespace ITJakub.ITJakubService.DataContracts
         public List<string> Values { get; set; }
     }
 
+    [DataContract]
+    public class DatationCriteriaContract : SearchCriteriaContract
+    {
+        [DataMember]
+        public DateTime NotBefore { get; set; }
+
+        [DataMember]
+        public DateTime NotAfter { get; set; }
+    }
+
     public enum CriteriaKey
     {
         Author,
         Title,
-        Editor
+        Editor,
+        Datation
     }
 }

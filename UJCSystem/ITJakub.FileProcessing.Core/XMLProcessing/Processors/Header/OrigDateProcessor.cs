@@ -1,3 +1,4 @@
+using System;
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
@@ -19,8 +20,8 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVersion, ManuscriptDescription msDesc, XmlReader xmlReader)
         {
-            msDesc.NotBefore = xmlReader.GetAttribute("notBefore");
-            msDesc.NotAfter = xmlReader.GetAttribute("notAfter");
+            msDesc.NotBefore = DateTime.Parse(xmlReader.GetAttribute("notBefore"));
+            msDesc.NotAfter = DateTime.Parse(xmlReader.GetAttribute("notAfter"));
             msDesc.OriginDate = GetInnerContentAsString(xmlReader);
         }
     
