@@ -1,4 +1,8 @@
 ﻿@import "../../../Content/ITJakub.DefaultTheme.less";
+@cardfile-viewer-height: 380px;
+@cardfile-viewer-width: @max-body-width - 10px;
+@cardfile-viewer-right-panel-width: 325px;
+@cardfile-viewer-left-panel-width: @cardfile-viewer-width - @cardfile-viewer-right-panel-width;
 
 .cardfile-header {
     background-color: @item-background-color;
@@ -7,14 +11,14 @@
 }
 
 .cardfile-listing {
-    height: 380px;
+    height: @cardfile-viewer-height;
     margin-bottom: 5px;
 }
 
 .card-file-listing-left-panel {
     background-color: white;    
     height: 100%;
-    width: 700px;
+    width: @cardfile-viewer-left-panel-width;
     float: left;
 }
 
@@ -28,9 +32,10 @@
 .cardfile-image {
     width: 560px;
     height: 343px;
-    margin-left: auto ;
-    margin-right: auto ;
+    margin-left: auto;
+    margin-right: auto;
     text-align : center;
+    padding-bottom: 2px;
 }
 
 .cardfile-image img {
@@ -41,7 +46,7 @@
 .card-file-listing-right-panel {
     background-color: @item-background-color;
     height: 100%;
-    width: 300px;
+    width: @cardfile-viewer-right-panel-width;
     float: left;
     padding: 5px;
     color: white;
@@ -52,9 +57,49 @@
     margin-bottom: 10px;
 }
 
+.cardfile-pagination {
+    display: inline-block;
+}
+
+.cardfile-pagination > li {
+    display: inline;
+}
+
+.cardfile-pagination > li > a {
+    color: white;
+    float: left;
+    padding: 6px 6px;
+    font-weight: bolder;
+    font-size: medium;
+}
+
+.cardfile-pagination > li > a:hover {
+    color: black;
+}
+
+.cardfile-pagination > li.card-position-text > a {
+    margin-left:5px;
+    margin-right:5px;
+    width: 40px;
+    text-align: center;
+}
+
+.cardfile-pagination > li.card-position-text > a:hover {
+    color: white;
+    cursor: default;
+}
+
+
 .cardfile-pages {
     margin-top: 10px;
     margin-bottom: 10px;
+    display: inline-block;
+    height: 30px;
+}
+
+.cardfile-image-thumbnail {
+  display: inline;
+  padding-left: 5px;
 }
 
 .cardfile-description {
@@ -98,4 +143,27 @@
 
 .cardfile-paging-controls .tooltip-arrow {
     border-top-color: white !important;
+}
+
+.loading {
+    margin: 0 auto;
+    margin-bottom: 5px;
+    width: @cardfile-viewer-width;
+    height: @cardfile-viewer-height;
+    background-color: white;
+}
+
+.error {
+    margin: 0 auto;
+    margin-bottom: 5px;
+    width: @cardfile-viewer-width;
+    height: 20px;
+    background-color: grey;
+    color: white;
+    padding-left : 5px;
+}
+
+.cardfile-scrollable-part-right-panel{
+    overflow-y : auto;
+    max-height: 150px;
 }

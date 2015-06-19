@@ -20,7 +20,7 @@
     </Page.Resources>
     
     <Page.TopAppBar>
-        <AppBar Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+        <AppBar Visibility="{Binding IsOwnerMode, Converter={StaticResource BooleanToVisibilityConverter}}"
                 IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -174,7 +174,7 @@
                           Background="White"
                           Visibility="{Binding WaitingForData, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <TextBlock VerticalAlignment="Center"
-                                   Text="Čekání na data"
+                                   Text="Stahování uživatelovi historie"
                                    Foreground="Black"
                                    FontSize="30" />
                     </Grid>

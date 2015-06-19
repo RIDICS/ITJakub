@@ -40,7 +40,7 @@
 	
 	<xsl:template match="div[@type='editorial']" mode="samostatne">
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:apply-templates />
 		</xsl:copy>
 	</xsl:template>

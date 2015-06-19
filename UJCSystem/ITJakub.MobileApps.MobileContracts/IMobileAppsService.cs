@@ -8,16 +8,16 @@ namespace ITJakub.MobileApps.MobileContracts
     public interface IMobileAppsService
     {
         [OperationContract]
-        IList<BookContract> GetBookList(CategoryContract category);
+        IList<BookContract> GetBookList(BookTypeContract category);
 
         [OperationContract]
-        IList<BookContract> SearchForBook(CategoryContract category, SearchDestinationContract searchBy, string query);
+        IList<BookContract> SearchForBook(BookTypeContract category, SearchDestinationContract searchBy, string query);
 
         [OperationContract]
-        IList<string> GetPageList(string bookGuid);
+        IList<PageContract> GetPageList(string bookGuid);
 
         [OperationContract]
-        Stream GetPageAsRtf(string bookGuid, string pageId);
+        string GetPageAsRtf(string bookGuid, string pageId);
 
         [OperationContract]
         Stream GetPagePhoto(string bookGuid, string pageId);

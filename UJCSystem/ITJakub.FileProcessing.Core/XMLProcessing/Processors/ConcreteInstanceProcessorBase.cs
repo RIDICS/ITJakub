@@ -35,7 +35,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         protected override sealed void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
             var instance = LoadInstance(bookVersion);
-            Process(instance, xmlReader);
+            Process(bookVersion, instance, xmlReader);
             SaveInstance(instance, bookVersion);
         }
 
@@ -48,19 +48,19 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         {
         }
 
-        protected virtual void ProcessElement(T instance, XmlReader xmlReader)
+        protected virtual void ProcessElement(BookVersion bookVersion, T instance, XmlReader xmlReader)
         {
             while (xmlReader.Read())
             {
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
                     m_concreteInstaceProcessors.ContainsKey(xmlReader.LocalName))
                 {
-                    m_concreteInstaceProcessors[xmlReader.LocalName].Process(instance, GetSubtree(xmlReader));
+                    m_concreteInstaceProcessors[xmlReader.LocalName].Process(bookVersion, instance, GetSubtree(xmlReader));
                 }
             }
         }
 
-        public void Process(T instance, XmlReader xmlReader)
+        public void Process(BookVersion bookVersion,T instance, XmlReader xmlReader)
         {
             if (!m_initialized)
             {
@@ -68,7 +68,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
             }
             PreprocessSetup(instance);
             ProcessAttributes(instance, xmlReader);
-            ProcessElement(instance, xmlReader);
+            ProcessElement(bookVersion, instance, xmlReader);
         }
 
         private void Init()

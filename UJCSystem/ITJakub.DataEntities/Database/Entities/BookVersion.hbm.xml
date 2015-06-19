@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="BookVersion" table="[BookVersion]" lazy="true" >
+
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities"
+                   xmlns="urn:nhibernate-mapping-2.2">
+  <class name="BookVersion" table="[BookVersion]" lazy="true">
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
+    
     <many-to-one name="Book" cascade="save-update" lazy="false">
       <column name="Book" sql-type="bigint" not-null="true" />
     </many-to-one>
+    
     <many-to-one name="Publisher" cascade="save-update" lazy="false">
       <column name="Publisher" sql-type="int" not-null="false" />
     </many-to-one>
+    
+    <many-to-one name="DefaultBookType" lazy="false">
+      <column name="DefaultBookType" sql-type="int" not-null="false" />
+    </many-to-one>
+    
     <property name="VersionId">
       <column name="VersionId" sql-type="varchar" not-null="true" />
     </property>
@@ -40,6 +49,7 @@
     <property name="BiblText">
       <column name="BiblText" sql-type="varchar" not-null="false" />
     </property>
+
     <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="false">
       <key column="BookVersion" />
       <one-to-many class="ManuscriptDescription" />
@@ -48,13 +58,17 @@
       <key column="BookVersion" />
       <one-to-many class="Keyword" />
     </bag>
-    <bag name="BookBibls" cascade="all-delete-orphan" lazy="false">
+    <bag name="BookBibls" cascade="all-delete-orphan">
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>
-    <bag name="BookPages" cascade="all-delete-orphan" lazy="false"  fetch="select">
+    <bag name="BookPages" cascade="all-delete-orphan" lazy="false"> <!-- TODO use lazy extra -->
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
+    </bag>
+    <bag name="BookContentItems" cascade="all-delete-orphan" lazy="false"> <!-- TODO use lazy extra -->
+      <key column="BookVersion" />
+      <one-to-many class="BookContentItem" />
     </bag>
     <bag name="Authors" table="BookVersion_Author" cascade="save-update" lazy="false">
       <key column="BookVersion" />
@@ -68,7 +82,10 @@
       <key column="BookVersion" />
       <many-to-many class="Transformation" column="Transformation" />
     </bag>
-    
+    <bag name="Categories" table="BookVersion_Category" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion" />
+      <many-to-many class="Category" column="Category" />
+    </bag>
     
   </class>
 </hibernate-mapping>

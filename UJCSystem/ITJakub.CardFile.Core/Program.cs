@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Net;
-using System.Security.Principal;
 using Jewelery;
 
-namespace Ujc.Naki.CardFile.Core
+namespace ITJakub.CardFile.Core
 {
     internal static class Program
     {

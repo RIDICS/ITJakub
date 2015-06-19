@@ -7,6 +7,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
     {
         private readonly Action<GroupStateContract> m_changeStateAction;
         private bool m_isEnabled;
+        private bool m_isCurrentState;
 
         public GroupStateViewModel(GroupStateContract state, Action<GroupStateContract> changeStateAction)
         {
@@ -35,6 +36,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         public bool CanChangeBack
         {
             get { return GroupState == GroupStateContract.Paused; }
+        }
+
+        public bool IsCurrentState
+        {
+            get { return m_isCurrentState; }
+            set
+            {
+                m_isCurrentState = value;
+                RaisePropertyChanged();
+            }
         }
     }
 }

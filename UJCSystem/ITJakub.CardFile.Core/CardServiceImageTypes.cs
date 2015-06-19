@@ -1,6 +1,6 @@
 ﻿using Jewelery;
 
-namespace Ujc.Naki.CardFile.Core
+namespace ITJakub.CardFile.Core
 {
     public enum CardServiceImageTypes
     {

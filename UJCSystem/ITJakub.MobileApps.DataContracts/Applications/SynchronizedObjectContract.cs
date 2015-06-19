@@ -10,5 +10,18 @@ namespace ITJakub.MobileApps.DataContracts.Applications
 
         [DataMember]
         public string Data { get; set; }
+
+        [DataMember]
+        public SynchronizationTypeContract SynchronizationType { get; set; }
+    }
+
+    [DataContract]
+    public enum SynchronizationTypeContract
+    {
+        [EnumMember]
+        HistoryTrackingObject = 0,
+
+        [EnumMember]
+        SingleObject = 1
     }
 }

@@ -44,6 +44,7 @@
 	
 	<xsl:template match="text">
 		<text>
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
 		</text>
 	</xsl:template>
@@ -52,6 +53,7 @@
 	<xsl:template match="Titul">
 		<xsl:comment> Titul </xsl:comment>
 		<xsl:element name="thead">
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
 		</xsl:element>
 	</xsl:template>
@@ -59,6 +61,7 @@
 	<xsl:template match="Nadpis | Bible_Nadpis_kapitoly">
 		<xsl:comment> Nadpis </xsl:comment>
 		<xsl:element name="head">
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
 		</xsl:element>
 	</xsl:template>
@@ -67,6 +70,7 @@
 	<xsl:template match="Podnadpis">
 		<xsl:comment> Podnadpis </xsl:comment>
 		<xsl:element name="head1">
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
 		</xsl:element>
 	</xsl:template>
@@ -74,6 +78,7 @@
 
 	<xsl:template match="Vers">
 		<xsl:element name="l">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="id" namespace="http://www.w3.org/XML/1998/namespace">
 				<xsl:value-of select="concat(generate-id(), '.', position())"/>
 			</xsl:attribute>
@@ -83,6 +88,7 @@
 
 	<xsl:template match="Volny_radek">
 		<xsl:element name="p">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="rend"><xsl:text>vspace</xsl:text></xsl:attribute>
 			<xsl:attribute name="id" namespace="http://www.w3.org/XML/1998/namespace">
 				<xsl:value-of select="concat(generate-id(), '.', position())"/>
@@ -92,6 +98,7 @@
 	
 	<xsl:template match="Normalni">
 		<xsl:element name="p">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="id" namespace="http://www.w3.org/XML/1998/namespace">
 				<xsl:value-of select="generate-id()"/>
 			</xsl:attribute>
@@ -101,6 +108,7 @@
 
 	<xsl:template match="Doprava">
 		<xsl:element name="p">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="rend">right</xsl:attribute>
 			<xsl:attribute name="id" namespace="http://www.w3.org/XML/1998/namespace">
 				<xsl:value-of select="generate-id()"/>
@@ -173,15 +181,15 @@
 	-->
 	<xsl:template match="cizi_jazyk">
 		<xsl:element name="foreign">
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates />
 		</xsl:element>
 	</xsl:template>
 
 	<xsl:template match="cislo_verse">
 		<xsl:element name="lb">
-			<xsl:attribute name="n">
-				<xsl:value-of select="."/>
-			</xsl:attribute>
+			<xsl:copy-of select="@*"/>
+			<xsl:attribute name="n"><xsl:value-of select="."/></xsl:attribute>
 		</xsl:element>
 	</xsl:template>
 
@@ -191,6 +199,15 @@
 			<!--<xsl:apply-templates />-->
 		</xsl:element>
 	</xsl:template>
+
+	<xsl:template match="pramen_preskrtnute">
+		<xsl:element name="sic">
+			<xsl:element name="del">
+				<xsl:value-of select="normalize-space(.)"/>
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
+	
 
 	<xsl:template match="pramen_horni_index">
 		<xsl:element name="sic">
@@ -215,12 +232,26 @@
 
 	<xsl:template match="doplneny_text">
 		<xsl:element name="supplied">
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
 		</xsl:element>
 	</xsl:template>
+	
+<!-- Vzniklo rozložení poznamka_preskrtnute na poznamka a preskrtnute, kvůli sloučení -->
+	<xsl:template match="preskrtnute">
+			<xsl:element name="hi">
+				<xsl:copy-of select="@*"/>
+				<xsl:attribute name="rend">
+					<xsl:text>strikethrough</xsl:text>
+				</xsl:attribute>
+				<xsl:apply-templates/>
+			</xsl:element>
+	</xsl:template>
+	
 
 	<xsl:template match="poznamka">
 		<xsl:element name="note">
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
 		</xsl:element>
 	</xsl:template>
@@ -228,6 +259,7 @@
 	<xsl:template match="poznamka_kurziva">
 		<xsl:element name="note">
 			<xsl:element name="hi">
+				<xsl:copy-of select="@*"/>
 				<xsl:attribute name="rend">
 					<xsl:text>italic</xsl:text>
 				</xsl:attribute>
@@ -235,10 +267,25 @@
 			</xsl:element>
 		</xsl:element>
 	</xsl:template>
+	
+	
+	<xsl:template match="poznamka_preskrtnute">
+		<xsl:element name="note">
+			<xsl:element name="hi">
+				<xsl:copy-of select="@*"/>
+				<xsl:attribute name="rend">
+					<xsl:text>strikethrough</xsl:text>
+				</xsl:attribute>
+				<xsl:apply-templates/>
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
+	
 
 	<xsl:template match="poznamka_horni_index">
 		<xsl:element name="note">
 			<xsl:element name="hi">
+				<xsl:copy-of select="@*"/>
 				<xsl:attribute name="rend">
 					<xsl:text>sup</xsl:text>
 				</xsl:attribute>
@@ -249,6 +296,7 @@
 	
 	<xsl:template match="pripisek_marginalni_mladsi">
 		<xsl:element name="add">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="place">
 				<xsl:text>margin</xsl:text>
 			</xsl:attribute>
@@ -261,6 +309,7 @@
 
 	<xsl:template match="pripisek_interlinearni_mladsi">
 		<xsl:element name="add">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="place">
 				<xsl:text>inline</xsl:text>
 			</xsl:attribute>
@@ -275,6 +324,7 @@
 
 	<xsl:template match="pripisek_marginalni_soudoby">
 		<xsl:element name="add">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="place">
 				<xsl:text>margin</xsl:text>
 			</xsl:attribute>
@@ -287,6 +337,7 @@
 	
 	<xsl:template match="pripisek_interlinearni_soudoby">
 		<xsl:element name="add">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="place">
 				<xsl:text>inline</xsl:text>
 			</xsl:attribute>
@@ -299,6 +350,7 @@
 	
 	<xsl:template match="pripisek_marginalni_mladsi_cizi_jazyk">
 		<xsl:element name="add">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="place">
 				<xsl:text>margin</xsl:text>
 			</xsl:attribute>
@@ -311,8 +363,25 @@
 		</xsl:element>
 	</xsl:template>
 	
+	
+	<xsl:template match="pripisek_marginalni_soudoby_cizi_jazyk">
+		<xsl:element name="add">
+			<xsl:copy-of select="@*"/>
+			<xsl:attribute name="place">
+				<xsl:text>margin</xsl:text>
+			</xsl:attribute>
+			<xsl:attribute name="type">
+				<xsl:text>contemporaneous</xsl:text>
+			</xsl:attribute>
+			<xsl:element name="foreign">
+				<xsl:apply-templates />
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
+	
 	<xsl:template match="pripisek_interlinearni_mladsi_cizi_jazyk">
 		<xsl:element name="add">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="place">
 				<xsl:text>inline</xsl:text>
 			</xsl:attribute>
@@ -324,9 +393,41 @@
 			</xsl:element>
 		</xsl:element>
 	</xsl:template>
+	
+	<xsl:template match="pripisek_interlinearni_soudoby_cizi_jazyk">
+		<xsl:element name="add">
+			<xsl:copy-of select="@*"/>
+			<xsl:attribute name="place">
+				<xsl:text>inline</xsl:text>
+			</xsl:attribute>
+			<xsl:attribute name="type">
+				<xsl:text>contemporaneous</xsl:text>
+			</xsl:attribute>
+			<xsl:element name="foreign">
+				<xsl:apply-templates />
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
+	
+	
+	<xsl:template match="marginalni_poznamka_cizi_jazyk">
+		<xsl:element name="add">
+			<xsl:attribute name="place">
+				<xsl:copy-of select="@*"/>
+				<xsl:text>margin</xsl:text>
+			</xsl:attribute>
+			<xsl:attribute name="type">
+				<xsl:text>contemporaneous-print</xsl:text>
+			</xsl:attribute>
+			<xsl:element name="foreign">
+				<xsl:apply-templates />
+			</xsl:element>
+		</xsl:element>	
+	</xsl:template>
 
 	<xsl:template match="table">
 		<xsl:element name="table">
+			<xsl:copy-of select="@*"/>
 			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates />
 		</xsl:element>
@@ -352,6 +453,7 @@
 	
 	<xsl:template match="druhy_preklad">
 		<xsl:element name="add">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="place"><xsl:text>inline</xsl:text></xsl:attribute>
 			<xsl:attribute name="type"><xsl:text>contemporaneous</xsl:text></xsl:attribute>
 			<xsl:attribute name="hand"><xsl:text>#XY</xsl:text></xsl:attribute>
@@ -361,6 +463,7 @@
 	
 	<xsl:template match="soudoby_korektor">
 		<xsl:element name="add">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="place"><xsl:text>inline</xsl:text></xsl:attribute>
 			<xsl:attribute name="type"><xsl:text>contemporaneous</xsl:text></xsl:attribute>
 			<xsl:attribute name="hand"><xsl:text>#XY</xsl:text></xsl:attribute>
@@ -370,6 +473,7 @@
 	
 	<xsl:template match="relator">
 		<xsl:element name="anchor">
+			<xsl:copy-of select="@*"/>
 			<xsl:attribute name="type">
 				<xsl:choose>
 					<xsl:when test="text() = '{'">
@@ -384,11 +488,34 @@
 				<xsl:text>ra.</xsl:text><xsl:value-of select="generate-id()"/><xsl:text>.</xsl:text><xsl:value-of select="position()"/>
 			</xsl:attribute>
 		</xsl:element>
+<!--		<xsl:if test="substring(., string-length(.), 1) = ' '">
+			<text xml:space="preserve"> </text>
+		</xsl:if>
+-->
 	</xsl:template>
 	
 	<xsl:template match="zive_zahlavi">
 		<xsl:element name="fw">
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+
+	<xsl:template match="rekonstrukce">
+			<xsl:element name="unclear">
+				<xsl:element name="supplied">
+					<xsl:apply-templates />
+				</xsl:element>
+			</xsl:element>
+	</xsl:template>
+
+	<xsl:template match="rekonstrukce_cizi_jazyk">
+		<xsl:element name="foreign">
+			<xsl:element name="unclear">
+				<xsl:element name="supplied">
+					<xsl:apply-templates />
+				</xsl:element>
+			</xsl:element>
 		</xsl:element>
 	</xsl:template>
 
@@ -404,6 +531,7 @@
 	<xsl:template match="interni_poznamka"/>
 	<xsl:template match="interni_poznamka_horni_index"/>
 	<xsl:template match="interni_poznamka_kurziva"/>
+	<xsl:template match="interni_poznamka_preskrtnute" />
 	<xsl:template match="hyperlemma"/>
 	<xsl:template match="lemma"/>
 	<xsl:template match="pripisek"/>

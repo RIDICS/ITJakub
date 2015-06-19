@@ -32,8 +32,7 @@
                     IsSticky="True">
 
             <AppBarButton Icon="Filter"
-                          Label="Filtrovat"
-                          Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                          Label="Filtrovat">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Všechny"

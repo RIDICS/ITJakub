@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Daliboris.Transkripce.Objekty.Korelaty" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="4.25" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>ACIAAAAAAAAAAJgQAAAQBAQAAAAAAAAAAQAAAABQIAA=</HashCode>
+      <FileName>Korelaty.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Segment">
+    <Position X="6.5" Y="1" Width="4" />
+    <TypeIdentifier>
+      <HashCode>ABABAAAAAAAAAAQEgAIAAAAAAAAAAIAAAAAACQAAAiA=</HashCode>
+      <FileName>Segment.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Daliboris.Transkripce.Objekty.Korelat" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="1" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAEQAgAAAAAAAAAAAAIAAAAAAAAAAQiA=</HashCode>
+      <FileName>Korelat.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="msgTranskripce" />
+      <Field Name="msgTransliterace" />
+      <Property Name="Transkripce" />
+      <Property Name="Transliterace" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

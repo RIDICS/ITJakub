@@ -6,7 +6,11 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
     {
         public BookViewModel BookInfo { get; set; }
 
-        public string PageId { get; set; }
+        public string PageName { get; set; }
+
+        public string XmlId { get; set; }
+
+        public int PagePosition { get; set; }
 
         public string RtfText { get; set; }
 

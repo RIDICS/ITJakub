@@ -27,9 +27,25 @@
 		<xsl:apply-templates />
 	</xsl:template>
 
+	<xsl:template match="body">
+		<xsl:copy>
+			<xsl:copy-of select="@*" />
+			<xsl:choose>
+				<xsl:when test="head1">
+					<xsl:for-each-group group-starting-with="head1" select="*">
+						<xsl:apply-templates select="." mode="group" />
+					</xsl:for-each-group>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:copy>
+	</xsl:template>
+
 	<xsl:template match="div">
 		<xsl:copy>
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:choose>
 				<xsl:when test="head1">
 					<xsl:for-each-group group-starting-with="head1" select="*">

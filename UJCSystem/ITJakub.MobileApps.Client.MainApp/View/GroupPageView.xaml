@@ -19,7 +19,8 @@
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         <converter:NotChosenStringConverter x:Key="NotChosenStringConverter" />
         <converter:GroupStateToNameConverter x:Key="GroupStateToNameConverter" />
-        <converter:BooleanToColorConverter x:Key="BooleanToColorConverter" />
+        <converter:BooleanToColorConverter IsDefaultWhite="True" x:Key="BooleanToColorConverterWhite" />
+        <converter:BooleanToColorConverter IsDefaultWhite="False" x:Key="BooleanToColorConverterTransparent" />
         <converter:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
@@ -31,6 +32,7 @@
         </Style>
         <x:Double x:Key="ArrowThickness">2</x:Double>
         <SolidColorBrush x:Key="ArrowColor" Color="Black" />
+        <Color x:Key="SelectedStateBackgroundColor">#40FFFF00</Color>
     </Page.Resources>
     
     <Page.BottomAppBar>
@@ -255,7 +257,8 @@
                                             HorizontalAlignment="Center"
                                             Style="{StaticResource EllipseButtonStyle}"
                                             IsEnabled="{Binding IsEnabled}"
-                                            Foreground="{Binding IsFlyoutOpen, Converter={StaticResource BooleanToColorConverter}}"
+                                            Foreground="{Binding IsFlyoutOpen, Converter={StaticResource BooleanToColorConverterWhite}}"
+                                            Background="{Binding IsCurrentState, Converter={StaticResource BooleanToColorConverterTransparent}, ConverterParameter={StaticResource SelectedStateBackgroundColor}}"
                                             x:Name="ChangeGroupStateButton">
                                         <Button.Flyout>
                                             <Flyout control:FlyoutHelpers.IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}"

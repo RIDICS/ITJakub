@@ -1,35 +1,50 @@
+using System;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Books.Service;
+using ITJakub.MobileApps.Client.Books.Service.Client;
 
 namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
 {
     public class PageTextViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
+        private readonly IErrorService m_errorService;
+        private readonly Action m_pageLoadedCallback;
         private string m_rtfText;
         private bool m_loading;
         private double m_currentZoom;
+        private bool m_isLoadError;
 
-        public PageTextViewModel(IDataService dataService)
+        public PageTextViewModel(IDataService dataService, IErrorService errorService, Action pageLoadedCallback)
         {
             m_dataService = dataService;
-
-            ZoomInCommand = new RelayCommand(() => CurrentZoom++);
-            ZoomOutCommand = new RelayCommand(() => CurrentZoom--);
+            m_errorService = errorService;
+            m_pageLoadedCallback = pageLoadedCallback;
         }
 
         public void OpenPage(PageViewModel page)
         {
             RtfText = null;
+            IsLoadError = false;
             Loading = true;
-            m_dataService.GetPageAsRtf(Book.Guid, page.PageId, (rtfText, exception) =>
+            m_dataService.GetPageAsRtf(Book.Guid, page.XmlId, (rtfText, exception) =>
             {
                 Loading = false;
                 if (exception != null)
+                {
+                    if (exception is NotFoundException)
+                    {
+                        IsLoadError = true;
+                    }
+                    else
+                    {
+                        m_errorService.ShowCommunicationWarning();
+                    }
                     return;
+                }
 
                 RtfText = rtfText;
+                m_pageLoadedCallback();
             });
         }
         
@@ -65,8 +80,14 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             }
         }
 
-        public RelayCommand ZoomInCommand { get; private set; }
-
-        public RelayCommand ZoomOutCommand { get; private set; }
+        public bool IsLoadError
+        {
+            get { return m_isLoadError; }
+            set
+            {
+                m_isLoadError = value;
+                RaisePropertyChanged();
+            }
+        }
     }
 }

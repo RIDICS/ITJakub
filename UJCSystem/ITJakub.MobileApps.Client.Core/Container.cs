@@ -1,9 +1,9 @@
 ﻿using System;
+using ITJakub.MobileApps.Client.Core.Communication.Client;
 using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders;
-using ITJakub.MobileApps.Client.Core.Manager.Communication.Client;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Manager.Tasks;
 using ITJakub.MobileApps.Client.Core.Service;

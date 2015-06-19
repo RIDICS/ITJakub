@@ -22,14 +22,15 @@ var ReaderModule = (function () {
         this.rightSidePanels = new Array();
         $(window).on("beforeunload", function (event) {
             for (var k = 0; k < _this.leftSidePanels.length; k++) {
-                _this.leftSidePanels[k].window.close();
+                _this.leftSidePanels[k].childwindow.close();
             }
             for (var k = 0; k < _this.rightSidePanels.length; k++) {
-                _this.rightSidePanels[k].window.close();
+                _this.rightSidePanels[k].childwindow.close();
             }
         });
         for (var i = 0; i < pageList.length; i++) {
-            this.pages.push(pageList[i]["Text"]);
+            var page = pageList[i];
+            this.pages.push(new BookPage(page["XmlId"], page["Text"], page["Position"]));
         }
         $(this.readerContainer).empty();
         var readerDiv = document.createElement('div');
@@ -62,6 +63,7 @@ var ReaderModule = (function () {
         var readerBodyDiv = this.makeReaderBody();
         readerDiv.appendChild(readerBodyDiv);
         $(this.readerContainer).append(readerDiv);
+        this.loadBookmarks();
         this.moveToPageNumber(0, false); //load first page
     };
     ReaderModule.prototype.makeTitle = function (bookTitle) {
@@ -89,7 +91,7 @@ var ReaderModule = (function () {
             slide: function (event, ui) {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
-                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + _this.pages[ui.value]);
+                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + _this.pages[ui.value].text);
             },
             change: function (event, ui) {
                 if (_this.actualPageIndex !== ui.value) {
@@ -104,7 +106,7 @@ var ReaderModule = (function () {
         sliderTooltip.appendChild(arrowTooltip);
         var innerTooltip = document.createElement('div');
         $(innerTooltip).addClass('tooltip-inner');
-        $(innerTooltip).html("Strana: " + this.pages[0]);
+        $(innerTooltip).html("Strana: " + this.pages[0].text);
         sliderTooltip.appendChild(innerTooltip);
         $(sliderTooltip).hide();
         var sliderHandle = $(slider).find('.ui-slider-handle');
@@ -130,7 +132,17 @@ var ReaderModule = (function () {
         pageInputButton.innerHTML = "Přejít na stránku";
         $(pageInputButton).addClass('page-input-button');
         $(pageInputButton).click(function (event) {
-            _this.moveToPage($('#pageInputText').val(), true);
+            var pageName = $('#pageInputText').val();
+            var pageIndex = -1;
+            for (var i = 0; i < _this.pages.length; i++) {
+                if (_this.pages[i].text === pageName) {
+                    pageIndex = i;
+                    break;
+                }
+            }
+            //TODO log pageIndex not exist
+            var page = _this.pages[pageIndex];
+            _this.moveToPage(page.xmlId, true);
         });
         pageInputDiv.appendChild(pageInputButton);
         pagingDiv.appendChild(pageInputDiv);
@@ -182,10 +194,10 @@ var ReaderModule = (function () {
             $(liElement).data('page-index', index);
             anchor = document.createElement('a');
             anchor.href = '#';
-            anchor.innerHTML = page;
+            anchor.innerHTML = page.text;
             $(anchor).click(function (event) {
                 event.stopPropagation();
-                _this.moveToPage(page, true);
+                _this.moveToPage(page.xmlId, true);
                 return false;
             });
             liElement.appendChild(anchor);
@@ -299,7 +311,7 @@ var ReaderModule = (function () {
         $(contentButton).click(function (event) {
             var panelId = "ObsahPanel";
             if (!_this.existSidePanel(panelId)) {
-                var contentPanel = new LeftSidePanel(panelId, "Obsah", _this);
+                var contentPanel = new ContentPanel(panelId, _this);
                 _this.loadSidePanel(contentPanel.panelHtml);
                 _this.leftSidePanels.push(contentPanel);
             }
@@ -309,6 +321,33 @@ var ReaderModule = (function () {
         pagingDiv.appendChild(buttonsDiv);
         controlsDiv.appendChild(pagingDiv);
         return controlsDiv;
+    };
+    ReaderModule.prototype.loadBookmarks = function () {
+        var _this = this;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.bookId },
+            url: getBaseUrl() + "Reader/GetAllBookmarks",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                var bookmarks = response["bookmarks"];
+                for (var i = 0; i < bookmarks.length; i++) {
+                    var actualBookmark = bookmarks[i];
+                    for (var pageIndex = 0; pageIndex < _this.pages.length; pageIndex++) {
+                        var actualPage = _this.pages[pageIndex];
+                        if (actualBookmark["PageXmlId"] === actualPage.xmlId) {
+                            var bookmarkSpan = _this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId);
+                            _this.showBookmark(bookmarkSpan);
+                            break;
+                        }
+                    }
+                }
+            },
+            error: function (response) {
+            }
+        });
     };
     ReaderModule.prototype.existSidePanel = function (sidePanelIdentificator) {
         var sidePanel = document.getElementById(sidePanelIdentificator);
@@ -337,7 +376,7 @@ var ReaderModule = (function () {
         else {
             if ($(sidePanel).hasClass("windowed")) {
                 var panelInstance = this.findPanelInstanceById(sidePanelIdentificator);
-                panelInstance.window.focus();
+                panelInstance.childwindow.focus();
             }
             else if ($(sidePanel).hasClass('ui-draggable')) {
                 $(sidePanel).show();
@@ -371,7 +410,6 @@ var ReaderModule = (function () {
         var textPanel = new TextPanel(this.textPanelIdentificator, this);
         this.rightSidePanels.push(textPanel);
         bodyContainerDiv.appendChild(textPanel.panelHtml);
-        // Image Panel
         var imagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
         $(imagePanel.panelHtml).hide();
@@ -398,19 +436,25 @@ var ReaderModule = (function () {
             this.rightSidePanels[k].onMoveToPage(pageIndex, scrollTo);
         }
     };
-    ReaderModule.prototype.moveToPage = function (page, scrollTo) {
-        var pageIndex = $.inArray(page, this.pages);
+    ReaderModule.prototype.moveToPage = function (pageXmlId, scrollTo) {
+        var pageIndex = -1;
+        for (var i = 0; i < this.pages.length; i++) {
+            if (this.pages[i].xmlId === pageXmlId) {
+                pageIndex = i;
+                break;
+            }
+        }
         if (pageIndex >= 0 && pageIndex < this.pages.length) {
             this.moveToPageNumber(pageIndex, scrollTo);
         }
         else {
-            console.log("Page '" + page + "' does not exist");
+            console.log("Page with id '" + pageXmlId + "' does not exist");
         }
     };
     ReaderModule.prototype.actualizeSlider = function (pageIndex) {
         var slider = $(this.readerContainer).find('.slider');
         $(slider).slider().slider('value', pageIndex);
-        $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex]);
+        $(slider).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[pageIndex].text);
     };
     ReaderModule.prototype.actualizePagination = function (pageIndex) {
         var pager = $(this.readerContainer).find('ul.pagination');
@@ -450,32 +494,65 @@ var ReaderModule = (function () {
         $(displayedPages).css('display', 'inherit');
         $(actualPage).addClass('page-active');
     };
-    ReaderModule.prototype.addBookmark = function () {
+    ReaderModule.prototype.createBookmarkSpan = function (pageIndex, pageName, pageXmlId) {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
-        $(bookmarkSpan).data('page-index', this.actualPageIndex);
-        $(bookmarkSpan).data('page-name', this.pages[this.actualPageIndex]);
-        var computedPosition = (positionStep * this.actualPageIndex);
+        $(bookmarkSpan).data('page-index', pageIndex);
+        $(bookmarkSpan).data('page-name', pageName);
+        $(bookmarkSpan).data('page-xmlId', pageXmlId);
+        var computedPosition = (positionStep * pageIndex);
         $(bookmarkSpan).css('left', computedPosition + '%');
-        $(this.readerContainer).find('.slider').append(bookmarkSpan);
-        //TODO populate request on service for adding bookmark to DB
+        return bookmarkSpan;
+    };
+    ReaderModule.prototype.showBookmark = function (bookmarkHtml) {
+        $(this.readerContainer).find('.slider').append(bookmarkHtml);
+    };
+    ReaderModule.prototype.addBookmark = function () {
+        var _this = this;
+        var pageIndex = this.actualPageIndex;
+        var page = this.pages[pageIndex];
+        var bookmarkSpan = this.createBookmarkSpan(pageIndex, page.text, page.xmlId);
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageXmlId: page.xmlId }),
+            url: getBaseUrl() + "Reader/AddBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                _this.showBookmark(bookmarkSpan);
+            },
+            error: function (response) {
+            }
+        });
     };
     ReaderModule.prototype.removeBookmark = function () {
         var slider = $(this.readerContainer).find('.slider');
         var bookmarks = $(slider).find('.bookmark');
-        if (typeof bookmarks === 'undefined' || bookmarks.length == 0) {
+        if (typeof bookmarks === 'undefined' || bookmarks == null || bookmarks.length === 0) {
             return false;
         }
-        var actualPageName = this.pages[this.actualPageIndex];
+        var actualPage = this.pages[this.actualPageIndex];
         var targetBookmark = $(bookmarks).filter(function (index) {
-            return $(this).data("page-name") === actualPageName;
+            return $(this).data("page-xmlId") === actualPage.xmlId;
         });
-        if (typeof targetBookmark === 'undefined' || targetBookmark.length == 0) {
+        if (typeof targetBookmark === 'undefined' || targetBookmark == null || targetBookmark.length === 0) {
             return false;
         }
-        $(targetBookmark).remove();
-        //TODO populate request on service for removing bookmark from DB
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: this.bookId, pageXmlId: actualPage.xmlId }),
+            url: getBaseUrl() + "Reader/RemoveBookmark",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $(targetBookmark).remove();
+            },
+            error: function (response) {
+            }
+        });
         return true;
     };
     ReaderModule.prototype.repaint = function () {
@@ -587,8 +664,8 @@ var SidePanel = (function () {
         this.newWindowButton = newWindowButton;
         panelHeaderDiv.appendChild(newWindowButton);
         sidePanelDiv.appendChild(panelHeaderDiv);
-        this.innerContent = this.makeBody(this);
-        var panelBodyDiv = this.makePanelBody(this.innerContent, this);
+        this.innerContent = this.makeBody(this, window);
+        var panelBodyDiv = this.makePanelBody(this.innerContent, this, window);
         $(sidePanelDiv).append(panelBodyDiv);
         $(sidePanelDiv).mousedown(function (event) {
             _this.parentReader.populatePanelOnTop(_this);
@@ -596,20 +673,16 @@ var SidePanel = (function () {
         this.panelHtml = sidePanelDiv;
         this.panelBodyHtml = panelBodyDiv;
     }
-    SidePanel.prototype.makePanelBody = function (innerContent, rootReference) {
-        var panelBodyDiv = document.createElement('div');
+    SidePanel.prototype.makePanelBody = function (innerContent, rootReference, window) {
+        var panelBodyDiv = window.document.createElement('div');
         $(panelBodyDiv).addClass('reader-left-panel-body');
         $(panelBodyDiv).append(innerContent);
         return panelBodyDiv;
     };
-    SidePanel.prototype.makeBody = function (rootReference) {
+    SidePanel.prototype.makeBody = function (rootReference, window) {
         throw new Error("Not implemented");
     };
     SidePanel.prototype.onMoveToPage = function (pageIndex, scrollTo) {
-        $(this.panelBodyHtml).append(" pageIndex is " + pageIndex);
-        if (typeof this.windowBody !== 'undefined') {
-            $(this.windowBody).append(" pageIndex is " + pageIndex);
-        }
     };
     SidePanel.prototype.placeOnDragStartPosition = function (sidePanelDiv) {
         var dispersion = Math.floor((Math.random() * 15) + 1) * 3;
@@ -619,6 +692,12 @@ var SidePanel = (function () {
     SidePanel.prototype.setRightPanelsLayout = function (sidePanelDiv) {
         this.parentReader.setRightPanelsLayout();
     };
+    SidePanel.prototype.makePanelWindow = function (documentWindow) {
+        return this.makePanelBody($(this.innerContent).clone(true), this, window);
+    };
+    SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
+        throw new Error("Not implemented");
+    };
     SidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
         var _this = this;
         this.closeButton.click();
@@ -626,26 +705,23 @@ var SidePanel = (function () {
         newWindow.document.open();
         newWindow.document.close();
         $(newWindow).on("beforeunload", function (event) {
-            $(document.getElementById(_this.identificator)).removeClass("windowed");
-            $(_this.windowBody).val('');
-            $(_this.window).val('');
+            _this.onUnloadWindowMode();
         });
-        $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone());
-        $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone());
-        var panelWindow = this.makePanelWindow();
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("script").clone(true));
+        $(newWindow.document.getElementsByTagName('head')[0]).append($("link").clone(true));
+        var panelWindow = this.makePanelWindow(newWindow);
         $(newWindow.document.getElementsByTagName('body')[0]).append(panelWindow);
         $(newWindow.document.getElementsByTagName('body')[0]).css("padding", 0);
         $(newWindow.document.getElementsByTagName('body')[0]).css("background-color", "white");
         newWindow.document.title = this.headerName;
         $(document.getElementById(this.identificator)).addClass("windowed");
         this.windowBody = panelWindow;
-        this.window = newWindow;
+        this.childwindow = newWindow;
     };
-    SidePanel.prototype.makePanelWindow = function () {
-        return this.makePanelBody($(this.innerContent).clone(true), this);
-    };
-    SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
-        throw new Error("Not implemented");
+    SidePanel.prototype.onUnloadWindowMode = function () {
+        $(document.getElementById(this.identificator)).removeClass("windowed");
+        $(this.windowBody).val('');
+        $(this.childwindow).val('');
     };
     SidePanel.prototype.onPinButtonClick = function (sidePanelDiv) {
         throw new Error("Not implemented");
@@ -698,14 +774,6 @@ var LeftSidePanel = (function (_super) {
             $(sidePanelDiv).hide('slide', { direction: 'left' });
         }
     };
-    LeftSidePanel.prototype.makeBody = function (rootReference) {
-        var movePageButton = document.createElement('button');
-        movePageButton.textContent = "Move to page 15";
-        $(movePageButton).click(function (event) {
-            rootReference.parentReader.moveToPageNumber(15, true);
-        });
-        return movePageButton;
-    };
     return LeftSidePanel;
 })(SidePanel);
 var SettingsPanel = (function (_super) {
@@ -713,25 +781,162 @@ var SettingsPanel = (function (_super) {
     function SettingsPanel(identificator, readerModule) {
         _super.call(this, identificator, "Zobrazení", readerModule);
     }
-    SettingsPanel.prototype.makeBody = function (rootReference) {
-        var textButton = document.createElement("button");
-        textButton.textContent = "Zobrazit/skrýt text";
+    SettingsPanel.prototype.makeBody = function (rootReference, window) {
+        var _this = this;
+        var textButtonSpan = window.document.createElement("span");
+        $(textButtonSpan).addClass("glyphicon glyphicon-text-size");
+        var textButton = window.document.createElement("button");
+        $(textButton).addClass("reader-settings-button");
+        $(textButton).append(textButtonSpan);
         $(textButton).click(function (event) {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.textPanelIdentificator, "");
             rootReference.parentReader.setRightPanelsLayout();
         });
-        var imagesButton = document.createElement("button");
-        imagesButton.textContent = "Zobrazit/skrýt obrázky";
-        $(imagesButton).click(function (event) {
+        var imageButtonSpan = window.document.createElement("span");
+        $(imageButtonSpan).addClass("glyphicon glyphicon-picture");
+        var imageButton = window.document.createElement("button");
+        $(imageButton).addClass("reader-settings-button");
+        $(imageButton).append(imageButtonSpan);
+        $(imageButton).click(function (event) {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.imagePanelIdentificator, "");
             rootReference.parentReader.setRightPanelsLayout();
         });
-        var innerContent = document.createElement("div");
-        innerContent.appendChild(textButton);
-        innerContent.appendChild(imagesButton);
+        var buttonsDiv = window.document.createElement("div");
+        $(buttonsDiv).addClass("reader-settings-buttons-area");
+        buttonsDiv.appendChild(textButton);
+        buttonsDiv.appendChild(imageButton);
+        var checkboxesDiv = window.document.createElement("div");
+        $(checkboxesDiv).addClass("reader-settings-checkboxes-area");
+        var showPageCheckboxDiv = window.document.createElement("div");
+        var showPageNameCheckbox = window.document.createElement("input");
+        showPageNameCheckbox.type = "checkbox";
+        $(showPageNameCheckbox).change(function (eventData) {
+            var readerText = $("#" + _this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget = (eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-show-page-names");
+            }
+            else {
+                $(readerText).removeClass("reader-text-show-page-names");
+            }
+        });
+        var showPageNameSpan = window.document.createElement("span");
+        showPageNameSpan.innerHTML = "Zobrazit číslování stránek";
+        showPageCheckboxDiv.appendChild(showPageNameCheckbox);
+        showPageCheckboxDiv.appendChild(showPageNameSpan);
+        var showPageOnNewLineDiv = window.document.createElement("div");
+        var showPageOnNewLineCheckbox = window.document.createElement("input");
+        showPageOnNewLineCheckbox.type = "checkbox";
+        $(showPageOnNewLineCheckbox).change(function (eventData) {
+            var readerText = $("#" + _this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget = (eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-page-new-line");
+            }
+            else {
+                $(readerText).removeClass("reader-text-page-new-line");
+            }
+        });
+        var showPageOnNewLineSpan = window.document.createElement("span");
+        showPageOnNewLineSpan.innerHTML = "Zalamovat stránky";
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineSpan);
+        var showCommentCheckboxDiv = window.document.createElement("div");
+        var showCommentCheckbox = window.document.createElement("input");
+        showCommentCheckbox.type = "checkbox";
+        var showCommentSpan = window.document.createElement("span");
+        showCommentSpan.innerHTML = "Zobrazit komentáře";
+        showCommentCheckboxDiv.appendChild(showCommentCheckbox);
+        showCommentCheckboxDiv.appendChild(showCommentSpan);
+        checkboxesDiv.appendChild(showPageCheckboxDiv);
+        checkboxesDiv.appendChild(showPageOnNewLineDiv);
+        checkboxesDiv.appendChild(showCommentCheckboxDiv);
+        var innerContent = window.document.createElement("div");
+        innerContent.appendChild(buttonsDiv);
+        innerContent.appendChild(checkboxesDiv);
         return innerContent;
     };
     return SettingsPanel;
+})(LeftSidePanel);
+var ContentPanel = (function (_super) {
+    __extends(ContentPanel, _super);
+    function ContentPanel(identificator, readerModule) {
+        _super.call(this, identificator, "Obsah", readerModule);
+    }
+    ContentPanel.prototype.makeBody = function (rootReference, window) {
+        var bodyDiv = window.document.createElement('div');
+        $(bodyDiv).addClass('content-panel-container');
+        this.downloadBookContent();
+        return bodyDiv;
+    };
+    ContentPanel.prototype.downloadBookContent = function () {
+        var _this = this;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.parentReader.bookId },
+            url: getBaseUrl() + "Reader/GetBookContent",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                var rootContentItems = response["content"];
+                var ulElement = document.createElement("ul");
+                $(ulElement).addClass("content-item-root-list");
+                for (var i = 0; i < rootContentItems.length; i++) {
+                    var jsonItem = rootContentItems[i];
+                    $(ulElement).append(_this.makeContentItem(_this.parseJsonItemToContentItem(jsonItem)));
+                }
+                $(_this.panelBodyHtml).empty();
+                $(_this.panelBodyHtml).append(ulElement);
+                _this.innerContent = _this.panelBodyHtml;
+                if (typeof _this.windowBody !== 'undefined') {
+                    $(_this.windowBody).empty();
+                    $(_this.windowBody).append(ulElement);
+                }
+            },
+            error: function (response) {
+                $(_this.panelBodyHtml).empty();
+                $(_this.panelBodyHtml).append("Chyba při načítání obsahu");
+            }
+        });
+    };
+    ContentPanel.prototype.parseJsonItemToContentItem = function (jsonItem) {
+        return new ContentItem(jsonItem["Text"], jsonItem["ReferredPageXmlId"], jsonItem["ReferredPageName"], jsonItem["ChildBookContentItems"]);
+    };
+    ContentPanel.prototype.makeContentItemChilds = function (contentItem) {
+        var childItems = contentItem.childBookContentItems;
+        if (childItems.length === 0)
+            return null;
+        var ulElement = document.createElement("ul");
+        $(ulElement).addClass("content-item-list");
+        for (var i = 0; i < childItems.length; i++) {
+            var jsonItem = childItems[i];
+            $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
+        }
+        return ulElement;
+    };
+    ContentPanel.prototype.makeContentItem = function (contentItem) {
+        var _this = this;
+        var liElement = document.createElement("li");
+        $(liElement).addClass("content-item");
+        var hrefElement = document.createElement("a");
+        hrefElement.href = "#";
+        $(hrefElement).click(function () {
+            _this.parentReader.moveToPage(contentItem.referredPageXmlId, true);
+        });
+        var textSpanElement = document.createElement("span");
+        $(textSpanElement).addClass("content-item-text");
+        textSpanElement.innerHTML = contentItem.text;
+        var pageNameSpanElement = document.createElement("span");
+        $(pageNameSpanElement).addClass("content-item-page-name");
+        pageNameSpanElement.innerHTML = "[" + contentItem.referredPageName + "]";
+        $(hrefElement).append(pageNameSpanElement);
+        $(hrefElement).append(textSpanElement);
+        $(liElement).append(hrefElement);
+        $(liElement).append(this.makeContentItemChilds(contentItem));
+        return liElement;
+    };
+    return ContentPanel;
 })(LeftSidePanel);
 var RightSidePanel = (function (_super) {
     __extends(RightSidePanel, _super);
@@ -774,8 +979,8 @@ var RightSidePanel = (function (_super) {
         _super.prototype.onNewWindowButtonClick.call(this, sidePanelDiv);
         this.setRightPanelsLayout(sidePanelDiv);
     };
-    RightSidePanel.prototype.makePanelBody = function (innerContent, rootReference) {
-        var panelBodyDiv = document.createElement('div');
+    RightSidePanel.prototype.makePanelBody = function (innerContent, rootReference, window) {
+        var panelBodyDiv = window.document.createElement('div');
         $(panelBodyDiv).addClass('reader-right-panel-body');
         $(panelBodyDiv).append(innerContent);
         return panelBodyDiv;
@@ -787,8 +992,8 @@ var ImagePanel = (function (_super) {
     function ImagePanel(identificator, readerModule) {
         _super.call(this, identificator, "Obrázky", readerModule);
     }
-    ImagePanel.prototype.makeBody = function (rootReference) {
-        var imageContainerDiv = document.createElement('div');
+    ImagePanel.prototype.makeBody = function (rootReference, window) {
+        var imageContainerDiv = window.document.createElement('div');
         $(imageContainerDiv).addClass('reader-image-container');
         return imageContainerDiv;
     };
@@ -796,7 +1001,7 @@ var ImagePanel = (function (_super) {
         var pagePosition = pageIndex + 1;
         $(this.innerContent).empty();
         var image = document.createElement("img");
-        image.src = "/Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
+        image.src = getBaseUrl() + "Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
         $(this.innerContent).append(image);
         if (typeof this.windowBody !== 'undefined') {
             $(this.windowBody).empty();
@@ -812,8 +1017,8 @@ var TextPanel = (function (_super) {
         this.preloadPagesBefore = 5;
         this.preloadPagesAfter = 10;
     }
-    TextPanel.prototype.makeBody = function (rootReference) {
-        var textContainerDiv = document.createElement('div');
+    TextPanel.prototype.makeBody = function (rootReference, window) {
+        var textContainerDiv = window.document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
         $(textContainerDiv).scroll(function (event) {
             var _this = this;
@@ -827,18 +1032,28 @@ var TextPanel = (function (_super) {
                     pageWithMinOffset = page;
                 }
             });
-            rootReference.parentReader.moveToPage($(pageWithMinOffset).data('page-name'), false);
+            rootReference.parentReader.moveToPage($(pageWithMinOffset).data('page-xmlId'), false);
         });
-        var textAreaDiv = document.createElement('div');
+        var textAreaDiv = window.document.createElement('div');
         $(textAreaDiv).addClass('reader-text');
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
-            var pageDiv = document.createElement('div');
-            $(pageDiv).addClass('page');
-            $(pageDiv).data('page-name', rootReference.parentReader.pages[i]);
-            pageDiv.id = 'page_' + rootReference.parentReader.pages[i];
+            var page = rootReference.parentReader.pages[i];
+            var pageTextDiv = window.document.createElement('div');
+            $(pageTextDiv).addClass('page');
+            $(pageTextDiv).addClass('unloaded');
+            $(pageTextDiv).data('page-name', page.text);
+            $(pageTextDiv).data('page-xmlId', page.xmlId);
+            pageTextDiv.id = page.xmlId; // each page has own id
+            var pageNameDiv = window.document.createElement('div');
+            $(pageNameDiv).addClass('page-name');
+            $(pageNameDiv).html("[" + page.text + "]");
+            var pageDiv = window.document.createElement('div');
+            $(pageDiv).addClass("page-wrapper");
+            $(pageDiv).append(pageTextDiv);
+            $(pageDiv).append(pageNameDiv);
             textAreaDiv.appendChild(pageDiv);
         }
-        var dummyPage = document.createElement('div');
+        var dummyPage = window.document.createElement('div');
         $(dummyPage).addClass('dummy-page');
         textAreaDiv.appendChild(dummyPage);
         textContainerDiv.appendChild(textAreaDiv);
@@ -848,26 +1063,26 @@ var TextPanel = (function (_super) {
         for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
             this.displayPage(this.parentReader.pages[pageIndex - j], false);
         }
-        this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
         for (var i = 1; pageIndex + i < this.parentReader.pages.length && i <= this.preloadPagesAfter; i++) {
             this.displayPage(this.parentReader.pages[pageIndex + i], false);
         }
+        this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
     };
-    TextPanel.prototype.displayPage = function (pageName, scrollTo) {
-        var pageDiv = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
-        var pageLoaded = $(pageDiv).data('loaded');
+    TextPanel.prototype.displayPage = function (page, scrollTo) {
+        var pageDiv = document.getElementById(page.xmlId);
+        var pageLoaded = !($(pageDiv).hasClass('unloaded'));
         var pageLoading = $(pageDiv).hasClass('loading');
-        if ((typeof pageLoaded === 'undefined' || !pageLoaded) && !pageLoading) {
-            this.downloadPageByName(pageName);
+        if (!pageLoaded && !pageLoading) {
+            this.downloadPageByXmlId(page);
         }
         if (scrollTo) {
             this.scrollTextToPositionFromTop(0);
             var topOffset = $(pageDiv).offset().top;
             this.scrollTextToPositionFromTop(topOffset);
-            if (typeof this.windowBody !== 'undefined') {
-                $(this.windowBody).find(".reader-text-container").scrollTop(0);
-                var pageToScrollOffset = $(this.windowBody).find('#page_' + pageName).offset().top;
-                $(this.windowBody).find(".reader-text-container").scrollTop(pageToScrollOffset);
+            if (typeof this.childwindow !== 'undefined') {
+                $(".reader-text-container", this.childwindow.document).scrollTop(0);
+                var pageToScrollOffset = $('#' + page.xmlId, this.childwindow.document).offset().top;
+                $(".reader-text-container", this.childwindow.document).scrollTop(pageToScrollOffset);
             }
         }
     };
@@ -876,34 +1091,116 @@ var TextPanel = (function (_super) {
         var containerTopOffset = $(scrollableContainer).offset().top;
         $(scrollableContainer).scrollTop(topOffset - containerTopOffset);
     };
-    TextPanel.prototype.downloadPageByName = function (pageName) {
+    TextPanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
         var _this = this;
-        var pageContainer = $(this.parentReader.readerContainer).find('div.reader-text').find('#page_' + pageName);
+        _super.prototype.onNewWindowButtonClick.call(this, sidePanelDiv);
+        var pageIndex = this.parentReader.actualPageIndex;
+        $(this.childwindow.document).ready(function () {
+            _this.parentReader.moveToPageNumber(pageIndex, true);
+        });
+    };
+    TextPanel.prototype.onUnloadWindowMode = function () {
+        _super.prototype.onUnloadWindowMode.call(this);
+        var pageIndex = this.parentReader.actualPageIndex;
+        this.parentReader.moveToPageNumber(pageIndex, true);
+    };
+    TextPanel.prototype.downloadPageByXmlId = function (page) {
+        var _this = this;
+        var pageContainer = document.getElementById(page.xmlId);
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== 'undefined') {
-            $(this.windowBody).find('#page_' + pageName).addClass("loading");
+            $(this.windowBody).find('#' + page.xmlId).addClass("loading");
         }
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId, pageName: pageName },
-            url: "/Reader/GetBookPageByName",
+            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            url: getBaseUrl() + "Reader/GetBookPageByXmlId",
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
+                $(pageContainer).empty();
                 $(pageContainer).append(response["pageText"]);
                 $(pageContainer).removeClass("loading");
-                $(pageContainer).data('loaded', true);
+                $(pageContainer).removeClass('unloaded');
                 if (typeof _this.windowBody !== 'undefined') {
-                    $(_this.windowBody).find('#page_' + pageName).removeClass("loading");
-                    $(_this.windowBody).find('#page_' + pageName).append(response["pageText"]);
+                    $(_this.windowBody).find('#' + page.xmlId).removeClass("loading");
+                    $(_this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
                 }
             },
             error: function (response) {
+                $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
+                $(pageContainer).append("Chyba při načítání stránky '" + page.text + "'");
             }
         });
     };
     return TextPanel;
 })(RightSidePanel);
+var BookPage = (function () {
+    function BookPage(xmlId, text, position) {
+        this._xmlId = xmlId;
+        this._text = text;
+        this._position = position;
+    }
+    Object.defineProperty(BookPage.prototype, "xmlId", {
+        get: function () {
+            return this._xmlId;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BookPage.prototype, "text", {
+        get: function () {
+            return this._text;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BookPage.prototype, "position", {
+        get: function () {
+            return this._position;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return BookPage;
+})();
+var ContentItem = (function () {
+    function ContentItem(text, referredPageXmlId, referredPageName, childBookContentItems) {
+        this._referredPageXmlId = referredPageXmlId;
+        this._referredPageName = referredPageName;
+        this._text = text;
+        this._childBookContentItems = childBookContentItems;
+    }
+    Object.defineProperty(ContentItem.prototype, "referredPageXmlId", {
+        get: function () {
+            return this._referredPageXmlId;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ContentItem.prototype, "referredPageName", {
+        get: function () {
+            return this._referredPageName;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ContentItem.prototype, "text", {
+        get: function () {
+            return this._text;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ContentItem.prototype, "childBookContentItems", {
+        get: function () {
+            return this._childBookContentItems;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return ContentItem;
+})();
 //# sourceMappingURL=itjakub.plugins.reader.js.map

@@ -4,26 +4,24 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    <many-to-one name="BookVersion">
-      <column name="BookVersion" sql-type="bigint" not-null="false" />
-    </many-to-one>
-    <property name="Title">
-      <column name="Title" sql-type="varchar" not-null="false"/>
-    </property>
-    <property name="Idno">
-      <column name="Idno" sql-type="varchar" not-null="false"/>
-    </property>   
-    <property name="Settlement">
-      <column name="Settlement" sql-type="varchar" not-null="false"/>
-    </property>
-    <property name="Country">
-      <column name="Country" sql-type="varchar" not-null="false"/>
-    </property>
-    <property name="Repository">
-      <column name="Repository" sql-type="varchar" not-null="false" />
-    </property>
-    <property name="OriginDate">
-      <column name="OriginDate" sql-type="varchar" not-null="false" />
-    </property>
+    <many-to-one name="BookVersion"/>
+      
+    
+    <property name="Title"/>
+      
+    <property name="Idno"/>
+
+    <property name="Settlement"/>
+
+    <property name="Country"/>
+
+    <property name="Repository"/>
+
+    <property name="OriginDate"/>
+
+    <property name="NotBefore" />
+
+    <property name="NotAfter" />
+
   </class>
 </hibernate-mapping>

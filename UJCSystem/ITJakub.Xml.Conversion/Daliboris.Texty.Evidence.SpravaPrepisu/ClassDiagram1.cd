@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Daliboris.Texty.Evidence.Prepis">
+    <Position X="0.5" Y="0.5" Width="4.75" />
+    <TypeIdentifier>
+      <HashCode>AgwAEAAgAAAAAAiAAAgAAAAA0AAAAAAAAAAAAgAAIBk=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Daliboris.Texty.Evidence.Zaznam">
+    <Position X="0.5" Y="6.25" Width="4.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Daliboris.Texty.Evidence.Hlavicka">
+    <Position X="6.5" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>iEiICIAICAiEQAgAQEAAAAAMVAAIAARACAAAaAgAARE=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Daliboris.Texty.Evidence.Soubor">
+    <Position X="14.75" Y="4.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AgAAAQAAAAAAAAAAAAAAAAAAAAIAAAQAAAAAAAAgAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Daliboris.Texty.Evidence.Zpracovani">
+    <Position X="14.75" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AgBBEABAAABAAAAAAAgAAQQAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Daliboris.Texty.Evidence.Datace">
+    <Position X="10" Y="3.25" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAACBAAIAAAFAIEAIAEAACAAQgBAABDAgAAACWg=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Daliboris.Texty.Evidence.Export">
+    <Position X="10" Y="0.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAEAAAAAAAAAAAAAAAAQAAAAAIAAAg=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="Daliboris.Texty.Evidence.FormatSouboru">
+    <Position X="6.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAACAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Daliboris.Texty.Evidence.TypPredlohy">
+    <Position X="16.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAgAAAAACAABAAAAAIAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Daliboris.Texty.Evidence.ZpusobVyuziti">
+    <Position X="0.5" Y="8.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAQAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Daliboris.Texty.Evidence.FazeZpracovani">
+    <Position X="14.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACQBCAAAAACAAAAAAAAAAAAAAAAEEAAAAAAAAAAgA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Daliboris.Texty.Evidence.CasoveZarazeni">
+    <Position X="2.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgIAABAAAA=</HashCode>
+      <FileName>Objekty.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -17,8 +17,10 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "origDate"; }
         }
 
-        protected override void ProcessElement(ManuscriptDescription msDesc, XmlReader xmlReader)
+        protected override void ProcessElement(BookVersion bookVersion, ManuscriptDescription msDesc, XmlReader xmlReader)
         {
+            msDesc.NotBefore = xmlReader.GetAttribute("notBefore");
+            msDesc.NotAfter = xmlReader.GetAttribute("notAfter");
             msDesc.OriginDate = GetInnerContentAsString(xmlReader);
         }
     

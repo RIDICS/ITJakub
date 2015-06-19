@@ -246,7 +246,7 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
-        public TaskContract GetTaskForGroup(long groupId)
+        public TaskDataContract GetTaskForGroup(long groupId)
         {
             try
             {

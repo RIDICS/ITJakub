@@ -28,7 +28,7 @@
 		<xsl:if test="local-name(preceding-sibling::*[position()=1]) != $name">
 			<xsl:element name="div">
 					<xsl:element name="{$name}">
-						<xsl:apply-templates select="@*" />
+						<xsl:copy-of select="@*" />
 						<xsl:apply-templates />
 					</xsl:element>
 					<!-- Match the next sibling if it has the same name -->
@@ -42,7 +42,7 @@
 	<xsl:template match="body/p | body/l" mode="next">
 		<xsl:variable name="name" select="local-name()"/>
 		<xsl:element name="{$name}">
-			<xsl:apply-templates select="@*" />
+			<xsl:copy-of select="@*" />
 			<xsl:apply-templates />
 			</xsl:element>
 		<xsl:apply-templates select="following-sibling::*[1][local-name()=$name]" mode="next"/>

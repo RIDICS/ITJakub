@@ -43,23 +43,16 @@ namespace ITJakub.MobileApps.Core.Tasks
         public IList<TaskDetailContract> GetTasksByApplication(int applicationId)
         {
             var tasks = m_usersRepository.GetTasksByApplication(applicationId);
-
-            foreach (var task in tasks) //TODO try to find some better way how to fill Data property
-            {
-                TaskEntity taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(Convert.ToString(task.Id), Convert.ToString(applicationId));
-                if (taskEntity != null)
-                    task.Data = taskEntity.Data;
-            }
             return Mapper.Map<IList<TaskDetailContract>>(tasks);
         }
 
-        public TaskContract GetTaskForGroup(long groupId)
+        public TaskDataContract GetTaskForGroup(long groupId)
         {
             var group = m_usersRepository.GetGroupWithTask(groupId);
             if (group == null)
                 return null;
 
-            var task = Mapper.Map<Task, TaskContract>(group.Task);
+            var task = Mapper.Map<Task, TaskDataContract>(group.Task);
             if (task == null)
                 return null;
 

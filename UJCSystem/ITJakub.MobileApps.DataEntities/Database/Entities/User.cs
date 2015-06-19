@@ -33,7 +33,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
 
         public virtual IList<Group> CreatedGroups { get; set; }
 
-        protected virtual IList<SynchronizedObject> CreatedSynchronizedObjects { get; set; }
+        protected virtual IList<SynchronizedObjectBase> CreatedSynchronizedObjects { get; set; }
 
         public virtual IList<Task> CreatedTasks { get; set; }
 

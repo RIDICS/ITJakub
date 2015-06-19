@@ -3,8 +3,8 @@ using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
-using ITJakub.MobileApps.Client.Core.Manager.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -50,7 +50,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             GroupRemoveViewModel = new GroupRemoveViewModel(RemoveGroup);
             GroupInfo = new GroupInfoViewModel();
 
-            m_dataService.GetCurrentGroupId(groupId =>
+            m_dataService.GetCurrentGroupId((groupId, groupType) =>
             {
                 m_groupId = groupId;
                 LoadData();
@@ -141,6 +141,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                     groupStateViewModel.IsEnabled = false;
                 else
                     groupStateViewModel.IsEnabled = stateUpdate < groupStateViewModel.GroupState || (stateUpdate == GroupStateContract.Paused && groupStateViewModel.GroupState == GroupStateContract.Running);
+
+                groupStateViewModel.IsCurrentState = groupStateViewModel.GroupState == stateUpdate;
             }
 
             GroupInfo.State = stateUpdate;
