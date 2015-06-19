@@ -10,7 +10,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
     {
         private readonly ItJakubServiceClient m_mainServiceClient;
 
-
         public DictionariesController()
         {
             m_mainServiceClient = new ItJakubServiceClient();
@@ -78,18 +77,24 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         }
 
 
-        public ActionResult SearchCriteria(SearchCriteriaRoot searchData)
+        public ActionResult SearchCriteria(IList<ConditionCriteriaDescription> searchData)
         {
             var jsonString = searchData;
             return Json(new {});
         }
     }
 
-    public class SearchCriteriaRoot
+    //TODO move to plugins directory
+    public class WordCriteriaDescription
     {
-        public List<string> text { get; set; }
-        public List<string> author { get; set; }
-        public List<string> title { get; set; }
-        public List<string> responsible { get; set; }
+        public string startsWith { get; set; }
+        public IList<string> contains { get; set; }
+        public string endsWith { get; set; }
+    }
+
+    public class ConditionCriteriaDescription
+    {
+        public IList<WordCriteriaDescription> wordCriteriaDescription { get; set; }
+        public string searchType { get; set; }
     }
 }

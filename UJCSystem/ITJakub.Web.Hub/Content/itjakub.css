@@ -832,6 +832,69 @@ body {
 .reader-text .dummy-page {
   margin-top: calc(100% - 50px);
 }
+.reader-left-panel-body .content-item a:hover {
+  color: #84ced7;
+}
+.reader-left-panel-body .content-item-list li.content-item {
+  padding-left: 15px;
+}
+.reader-settings-button {
+  color: white;
+  background: none;
+  border: none;
+  outline: 0;
+  text-align: center;
+  width: 72px;
+  font-size: 1.5em;
+  background-color: #84ced7;
+  margin: 1px;
+  height: 28px;
+}
+.reader-settings-button:hover {
+  color: black;
+}
+.reader-settings-buttons-area {
+  text-align: center;
+}
+.reader-settings-checkboxes-area {
+  margin-top: 5px;
+}
+.reader-settings-checkboxes-area input {
+  margin-right: 5px;
+}
+.content-item {
+  clear: both;
+}
+.content-item-page-name {
+  float: right;
+  margin-left: 5px;
+}
+.reader-text div {
+  display: inline;
+}
+.reader-text div.page-name {
+  text-align: center;
+  font-size: 1.1em;
+  display: none;
+}
+.reader-text-show-page-names div.page-name {
+  display: inline;
+}
+.reader-text div.page.unloaded {
+  display: block;
+}
+.reader-text-page-new-line div {
+  display: block;
+}
+.reader-text-page-new-line div.page-name {
+  display: none;
+}
+.reader-text-page-new-line.reader-text-show-page-names div.page-name {
+  display: block;
+}
+.page-wrapper {
+  margin-bottom: 5px;
+}
 .dropdown-select {
   margin-right: 5px;
   float: left;
@@ -874,6 +937,7 @@ body {
   margin-bottom: 5px;
   margin-top: 5px;
   padding: 5px;
+  background-color: white;
 }
 .dropdown-filter-input {
   margin-right: 5px;
@@ -914,6 +978,17 @@ body {
   margin: 0 auto;
   height: 48px;
   width: 48px;
+}
+.dropdown-select-text-loading {
+  width: 70%;
+  height: 18px;
+  /*margin-left: 40px;*/
+  text-align: center;
+  background-image: url(/Content/Images/small_trans_loading.gif);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
 }
 .regexsearch-button-glyph {
   font-size: 10px;
@@ -1087,6 +1162,9 @@ a.main_logo_href img {
 .main-navbar-container a:hover {
   color: #afdee4;
   text-decoration: none;
+}
+ul.navbar-right.navbar-login {
+  margin-right: 20px!important;
 }
 .navbar-login li,
 ul {

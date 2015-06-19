@@ -83,38 +83,27 @@ class RegExSearch extends RegExSearchBase {
         } else {
             this.regExConditions[this.regExConditions.length - 1].setClickableDelimeter();
         }
-
-        //if (this.regExConditions[0].hasDelimeter) { //TODO change last delimeter
-        //    this.regExConditions[0].removeDelimeter();
-        //}
-    }
-
-
-    public getConditionsResultString(): string {
-        var outputString = "";
-
-        for (var i = 0; i < this.regExConditions.length; i++) {
-            var regExConditions = this.regExConditions[i];
-            outputString += "(?=.*(" + regExConditions.getConditionString() + "))";
-        }
-
-        return "^" + outputString + ".*$";
     }
 
     public getConditionsResultObject(): Object {
-        var resultObject = new Object();
+        var resultArray = new Array();
+        //for (var i = 0; i < this.regExConditions.length; i++) {
+        //    var regExCondition: RegExCondition = this.regExConditions[i];
+        //    var resultArrayForType: Array<Object> = resultObject[regExCondition.getSearchType()];
+        //    if (typeof resultArrayForType == 'undefined' || resultArrayForType == null) {
+        //        resultArrayForType = new Array();
+        //        resultObject[regExCondition.getSearchType()] = resultArrayForType;
+        //    }
+        //    resultArrayForType.push(regExCondition.getConditionValue());
+        //}
 
         for (var i = 0; i < this.regExConditions.length; i++) {
             var regExCondition: RegExCondition = this.regExConditions[i];
-            var resultArrayForType: Array<Object> = resultObject[regExCondition.getSearchType()];
-            if (typeof resultArrayForType == 'undefined' || resultArrayForType == null) {
-                resultArrayForType = new Array();
-                resultObject[regExCondition.getSearchType()] = resultArrayForType;
-            }
-            resultArrayForType.push(regExCondition.getConditionString());
+            resultArray.push(regExCondition.getConditionValue());
+
         }
 
-        return resultObject;
+        return resultArray;
     }
 
     public getConditionsResultJSON(): string {
@@ -357,14 +346,14 @@ class RegExCondition extends RegExSearchBase {
         }
     }
 
-    public getConditionString(): string {
-        var conditionString = this.conditionInputArray[0].getConditionsValue();
-        for (var i = 1; i < this.conditionInputArray.length; i++) {
+    public getConditionValue(): WordsCriteriaConditionDescription {
+        var criteriaDescriptions = new WordsCriteriaConditionDescription();
+        criteriaDescriptions.searchType = this.getSearchType();
+        for (var i = 0; i < this.conditionInputArray.length; i++) {
             var regExWordCondition = this.conditionInputArray[i];
-            conditionString += "|" + regExWordCondition.getConditionsValue(); //TODO change to another char meaning OR ???
+            criteriaDescriptions.wordCriteriaDescription.push(regExWordCondition.getConditionsValue());
         }
-
-        return conditionString;
+        return criteriaDescriptions;
     }
 }
 
@@ -479,11 +468,8 @@ class RegExWordCondition extends RegExSearchBase {
 
     public resetInputs() {
         $(this.inputsContainerDiv).empty();
-        this.inputsArray = [];
-        var newInput = new RegExWordInput(this);
-        newInput.makeRegExInput();
-        this.inputsArray.push(newInput);
-        this.inputsContainerDiv.appendChild(newInput.getHtml());
+        this.inputsArray = new Array<RegExWordInput>();
+        this.addInput();
     }
 
     public addInput() {
@@ -494,7 +480,6 @@ class RegExWordCondition extends RegExSearchBase {
     }
 
     public removeInput(input: RegExWordInput) {
-
         var index = this.inputsArray.indexOf(input, 0);
         if (index != undefined) {
             var arrayItem = this.inputsArray[index];
@@ -507,13 +492,26 @@ class RegExWordCondition extends RegExSearchBase {
         }
     }
 
-    public getConditionsValue(): string {
-        var conditionString = this.inputsArray[0].getConditionValue();
+    public getConditionsValue(): WordCriteriaDescription {
+        var wordCriteriaDescription = new WordCriteriaDescription();
         for (var i = 0; i < this.inputsArray.length; i++) {
             var wordInput = this.inputsArray[i];
-            conditionString += "&" + wordInput.getConditionValue(); //TODO Change & to another char meaning AND ???
+            var inputValue = wordInput.getConditionValue();
+            switch (wordInput.getConditionType()) {
+                case WordInputType.startsWith:
+                    wordCriteriaDescription.startsWith = inputValue;
+                    break;
+                case WordInputType.contains:
+                    wordCriteriaDescription.contains.push(inputValue);
+                    break;
+                case WordInputType.endsWith:
+                    wordCriteriaDescription.endsWith = inputValue;
+                    break;
+                default:
+                    break;
+            }
         }
-        return conditionString;
+        return wordCriteriaDescription;
     }
 
 }
@@ -522,18 +520,13 @@ class RegExWordInput extends RegExSearchBase {
     private html: HTMLDivElement;
     private editorDiv: HTMLDivElement;
     private conditionInput: HTMLInputElement;
+    private conditionInputType: string;
     private parentRegExWordCondition: RegExWordCondition;
 
     constructor(parent: RegExWordCondition) {
         super();
         this.parentRegExWordCondition = parent;
     }
-
-    private conditionType = Object.freeze({
-        StartsWith: "starts-with",
-        Contains: "contains",
-        EndsWith: "ends-with"
-    });
 
     public getHtml(): HTMLDivElement {
         return this.html;
@@ -567,12 +560,16 @@ class RegExWordInput extends RegExSearchBase {
         $(conditionSelect).addClass("regexsearch-condition-select");
         conditionTypeDiv.appendChild(conditionSelect);
 
-        conditionSelect.appendChild(this.createOption("Začíná na", this.conditionType.StartsWith));
+        conditionSelect.appendChild(this.createOption("Začíná na", WordInputType.startsWith));
         //conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
-        conditionSelect.appendChild(this.createOption("Obsahuje", this.conditionType.Contains));
+        conditionSelect.appendChild(this.createOption("Obsahuje", WordInputType.contains));
         //conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
-        conditionSelect.appendChild(this.createOption("Končí na", this.conditionType.EndsWith));
+        conditionSelect.appendChild(this.createOption("Končí na", WordInputType.endsWith));
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
+
+        $(conditionSelect).change((eventData: Event) => {
+            this.conditionInputType = $(eventData.target).val();
+        });
 
         this.conditionInput = document.createElement("input");
         this.conditionInput.type = "text";
@@ -615,6 +612,35 @@ class RegExWordInput extends RegExSearchBase {
 
     public getConditionValue(): string {
         return this.conditionInput.value;
+    }
+
+    public getConditionType(): string {
+        return this.conditionInputType;
+    }
+}
+
+class WordInputType {
+    public static startsWith = "starts";
+    public static contains = "contains";
+    public static endsWith = "ends"; 
+}
+
+class WordCriteriaDescription {
+    public startsWith: string;
+    public contains: Array<string>;
+    public endsWith: string;
+
+    constructor() {
+        this.contains = new Array<string>();
+    }
+}
+
+class WordsCriteriaConditionDescription {
+    public searchType: string;
+    public wordCriteriaDescription: Array<WordCriteriaDescription>;
+
+    constructor() {
+        this.wordCriteriaDescription = new Array<WordCriteriaDescription>();
     }
 }
 
@@ -753,3 +779,4 @@ class RegExWordInput extends RegExSearchBase {
 //        $(this.container).append(mainRegExDiv);
 //    }
 //}
+
