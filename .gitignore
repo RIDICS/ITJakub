@@ -66,3 +66,4 @@ packages/
 #logs
 [Ll]ogs/
 *.svclog
+Database/Extist-Development/local.properties
