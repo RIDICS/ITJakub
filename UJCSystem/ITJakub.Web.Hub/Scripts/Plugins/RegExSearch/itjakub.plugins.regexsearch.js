@@ -36,18 +36,15 @@ var RegExSearch = (function (_super) {
         this.regExConditions = [];
         var commandsDiv = document.createElement("div");
         var sentButton = this.createButton("Vyhledat");
+        $(sentButton).addClass("regex-search-button");
         commandsDiv.appendChild(sentButton);
         $(sentButton).click(function () {
             _this.processSearch();
         });
         this.innerContainer = document.createElement("div");
         this.addNewCondition(true);
-        //var endDelimiter: HTMLDivElement = document.createElement("div");
-        //endDelimiter.innerHTML = "&nbsp;";
-        //$(endDelimiter).addClass("regexsearch-delimiter");
-        $(this.container).append(commandsDiv);
         $(this.container).append(this.innerContainer);
-        //$(this.container).append(endDelimiter);
+        $(this.container).append(commandsDiv);
     };
     RegExSearch.prototype.addNewCondition = function (useDelimiter) {
         if (useDelimiter === void 0) { useDelimiter = true; }
@@ -175,7 +172,7 @@ var RegExCondition = (function (_super) {
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "Přidat podmínku";
+        addWordSpan.innerHTML = "+ A zároveň";
         $(addWordSpan).click(function () {
             _this.parent.addNewCondition();
         });
@@ -340,7 +337,7 @@ var RegExWordCondition = (function (_super) {
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "Přidat podmínku";
+        addWordSpan.innerHTML = "+ Nebo";
         $(addWordSpan).click(function () {
             _this.parentRegExCondition.addWord();
         });

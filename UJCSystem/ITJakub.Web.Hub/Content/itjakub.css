@@ -981,6 +981,7 @@ body {
 }
 .regexsearch-condition-list-div {
   margin-left: 30px;
+  margin-right: 30px;
   padding-top: 5px;
 }
 .regexsearch-upper-select-label {
@@ -1034,6 +1035,9 @@ input.regexsearch-checkbox {
 .regex-clickable-text:hover {
   cursor: pointer;
   color: #84ced7;
+}
+.regex-search-button {
+  float: right;
 }
 .main_logo {
   margin: 10px;

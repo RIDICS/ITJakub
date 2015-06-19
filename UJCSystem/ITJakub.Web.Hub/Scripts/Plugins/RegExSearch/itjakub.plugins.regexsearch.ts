@@ -36,6 +36,7 @@ class RegExSearch extends RegExSearchBase {
         var commandsDiv: HTMLDivElement = document.createElement("div");
 
         var sentButton: HTMLButtonElement = this.createButton("Vyhledat");
+        $(sentButton).addClass("regex-search-button");
         commandsDiv.appendChild(sentButton);
         $(sentButton).click(() => {
             this.processSearch();
@@ -43,14 +44,8 @@ class RegExSearch extends RegExSearchBase {
 
         this.innerContainer = document.createElement("div");
         this.addNewCondition(true);
-        
-        //var endDelimiter: HTMLDivElement = document.createElement("div");
-        //endDelimiter.innerHTML = "&nbsp;";
-        //$(endDelimiter).addClass("regexsearch-delimiter");
-
-        $(this.container).append(commandsDiv);
         $(this.container).append(this.innerContainer);
-        //$(this.container).append(endDelimiter);
+        $(this.container).append(commandsDiv);
     }
 
     public addNewCondition(useDelimiter: boolean = true) {
@@ -192,7 +187,7 @@ class RegExCondition extends RegExSearchBase {
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "Přidat podmínku";
+        addWordSpan.innerHTML = "+ A zároveň";
         $(addWordSpan).click(() => {
             this.parent.addNewCondition();
         });
@@ -418,7 +413,7 @@ class RegExWordCondition extends RegExSearchBase {
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "Přidat podmínku";
+        addWordSpan.innerHTML = "+ Nebo";
         $(addWordSpan).click(() => {
             this.parentRegExCondition.addWord();
         });
