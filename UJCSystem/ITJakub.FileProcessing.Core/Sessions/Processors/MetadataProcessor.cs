@@ -54,16 +54,20 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             foreach (var transResource in trans)
             {
+
+               
+
                 var transformation = new Transformation
                 {
                     IsDefaultForBookType = false,
                     Description = string.Empty,
                     Name = transResource.FileName,
                     OutputFormat = OutputFormat.Html,
-                    ResourceLevel = ResourceLevel.Book //TODO add support for version?
-                };
+                    ResourceLevel = ResourceLevel.Book,
+                    BookType = bookVersion.DefaultBookType //TODO add support multiple transformation for different book types
+                };                
 
-                if (transformation.Name.ToLower().Contains("rtf")) //TODO make resolver
+                if (transformation.Name.ToLower().StartsWith("RTF"))
                 {
                     transformation.OutputFormat = OutputFormat.Rtf;
                 }
