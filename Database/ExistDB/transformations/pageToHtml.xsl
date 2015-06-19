@@ -13,7 +13,7 @@
             <xsl:apply-templates/>
         </div>
         <div class="itj-notes">
-            <xsl:apply-templates mode="notes"/>
+            <xsl:apply-templates select="//tei:note" mode="notes"/>
         </div>
     </xsl:template>
 </xsl:stylesheet>

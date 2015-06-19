@@ -9,6 +9,10 @@
         </xd:desc>
     </xd:doc>
     <xsl:output method="html" indent="yes" encoding="UTF-8"/>
+    <xsl:variable name="svislice" select="']'"/>
+    <xsl:variable name="svisliceSMezerou" select="concat($svislice, ' ')"/>
+    <xsl:variable name="zacatekRelace" select="'‹'"/>
+    <xsl:variable name="konecRelace" select="'›'"/>
     <xd:doc>
         <xd:desc>Šablona pro interpunkci.</xd:desc>
     </xd:doc>
@@ -46,7 +50,7 @@
             <xsl:apply-templates/>
         </span>
     </xsl:template>
-    <xsl:template match="tei:note[@n]">
+	<xsl:template match="tei:note[@n]">
         <xsl:element name="span">
             <xsl:attribute name="class">
                 <xsl:text>note-ref</xsl:text>
@@ -57,11 +61,20 @@
             <xsl:value-of select="@n"/>
         </xsl:element>
     </xsl:template>
-    <xsl:template match="tei:note/tei:choice">
+	<xsl:template match="tei:corr" mode="notes">
         <span class="corr">
-            <xsl:apply-templates select="tei:choice/tei:corr"/>
-        </span>] <span class="sic">
-            <xsl:apply-templates select="tei:choice/tei:sic"/>
+            <xsl:apply-templates/>
+        </span>
+        <xsl:choose>
+            <xsl:when test="following-sibling::*[1][self::tei:sic]">
+                <xsl:value-of select="$svisliceSMezerou"/>
+            </xsl:when>
+            <xsl:otherwise> </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+	<xsl:template match="tei:sic" mode="notes">
+        <span class="sic">
+            <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xd:doc>

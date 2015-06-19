@@ -148,7 +148,7 @@
                 <xsl:value-of select="@n"/>
             </xsl:element>
             <xsl:text> </xsl:text>
-            <xsl:apply-templates/>
+            <xsl:apply-templates mode="notes"/>
         </xsl:element>
     </xsl:template>
 </xsl:stylesheet>
