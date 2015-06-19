@@ -8,6 +8,6 @@ namespace ITJakub.DataEntities.Database
         
         public string Where { get; set; }
 
-        public List<string> Parameters { get; set; }
+        public List<object> Parameters { get; set; }
     }
 }
