@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using ITJakub.DataEntities.Database;
 using ITJakub.ITJakubService.DataContracts;
@@ -22,22 +21,25 @@ namespace ITJakub.ITJakubService.Core.Search
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
         {
+            var wordListCriteria = (WordListCriteriaContract) searchCriteriaContract;
             var authorAlias = string.Format("a{0}", Guid.NewGuid().ToString("N"));
             var whereBuilder = new StringBuilder();
+            var parameters = new List<object>();
 
-            for (int i = 0; i < ((StringListCriteriaContract) searchCriteriaContract).Values.Count; i++)
+            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Values)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
 
                 whereBuilder.AppendFormat(" {0}.Name like ?", authorAlias);
+                parameters.Add(CriteriaConditionBuilder.Create(wordCriteria));
             }
 
             return new SearchCriteriaQuery
             {
                 Join = string.Format("inner join bv.Authors {0}", authorAlias),
                 Where = whereBuilder.ToString(),
-                Parameters = ((StringListCriteriaContract)searchCriteriaContract).Values.ToList<object>()
+                Parameters = parameters
             };
         }
     }
@@ -51,21 +53,24 @@ namespace ITJakub.ITJakubService.Core.Search
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
         {
+            var wordListCriteria = (WordListCriteriaContract) searchCriteriaContract;
             var whereBuilder = new StringBuilder();
+            var parameters = new List<object>();
 
-            for (int i = 0; i < ((StringListCriteriaContract) searchCriteriaContract).Values.Count; i++)
+            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Values)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
 
                 whereBuilder.Append("bv.Title like ?");
+                parameters.Add(CriteriaConditionBuilder.Create(wordCriteria));
             }
 
             return new SearchCriteriaQuery
             {
                 Join = string.Empty,
                 Where = whereBuilder.ToString(),
-                Parameters = ((StringListCriteriaContract)searchCriteriaContract).Values.ToList<object>()
+                Parameters = parameters
             };
         }
     }
@@ -79,22 +84,26 @@ namespace ITJakub.ITJakubService.Core.Search
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
         {
+            var wordListCriteria = (WordListCriteriaContract) searchCriteriaContract;
             var responsiblesAlias = string.Format("r{0}", Guid.NewGuid().ToString("N"));
             var responsibleTypeAlias = string.Format("t{0}", Guid.NewGuid().ToString("N"));
             var whereBuilder = new StringBuilder();
+            var parameters = new List<object>();
 
-            for (int i = 0; i < ((StringListCriteriaContract) searchCriteriaContract).Values.Count; i++)
+            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Values)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
+
                 whereBuilder.AppendFormat(" {0}.Text like ?", responsiblesAlias);
+                parameters.Add(CriteriaConditionBuilder.Create(wordCriteria));
             }
 
             return new SearchCriteriaQuery
             {
                 Join = string.Format("inner join bv.Responsibles {0} inner join {0}.ResponsibleType {1}", responsiblesAlias, responsibleTypeAlias),
                 Where = string.Format("{0}.Text like 'Editor' and ({1})", responsibleTypeAlias, whereBuilder),
-                Parameters = ((StringListCriteriaContract)searchCriteriaContract).Values.ToList<object>()
+                Parameters = parameters
             };
         }
     }
