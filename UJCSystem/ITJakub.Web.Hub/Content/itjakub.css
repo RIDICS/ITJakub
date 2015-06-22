@@ -990,6 +990,139 @@ body {
   background-size: contain;
   display: inline-block;
 }
+.regexsearch-button-glyph {
+  font-size: 10px;
+  margin-left: 4px;
+}
+.regexsearch-button {
+  margin-left: 3px;
+  margin-right: 3px;
+  border-radius: 0;
+  background-color: #84ced7;
+  color: white;
+}
+.regexsearch-condition-input-button {
+  width: 40px;
+  height: 34px;
+  margin-top: -2px;
+  background-color: transparent;
+  border-style: none;
+  font-weight: bold;
+  color: #9a9a9a;
+}
+.regexsearch-condition-select,
+.regexsearch-input {
+  height: 24px;
+}
+.regexsearch-condition-type-div {
+  float: left;
+}
+.regexsearch-condition-select {
+  width: 160px;
+}
+.regexsearch-condition-div {
+  width: 200px;
+  margin-left: 170px;
+  margin-right: 50px;
+}
+.regexsearch-editor-button {
+  width: 48%;
+  margin: 0;
+  margin-top: 3px;
+}
+.regexsearch-input {
+  width: 350px;
+}
+.regexsearch-command-buttons-div {
+  text-align: right;
+  margin-top: 30px;
+}
+.regexsearch-delimiter {
+  color: white;
+  background-color: #9a9a9a;
+  padding: 0 10px 0 10px;
+  margin-bottom: 5px;
+}
+.regexsearch-destination-div {
+  float: left;
+  width: 170px;
+}
+.regexsearch-word-form-div {
+  float: right;
+  width: 170px;
+}
+.regexsearch-condition-list-div {
+  margin-left: 180px;
+  padding-top: 5px;
+}
+.regexsearch-upper-select-label {
+  display: block;
+  font-weight: bold;
+  font-size: 90%;
+}
+.regexsearch-select {
+  width: 100%;
+}
+.regexsearch-condition-input {
+  width: 320px;
+  border-radius: 0;
+  display: inline-block;
+  margin-right: -40px;
+  padding-right: 44px;
+}
+.regexsearch-condition-main-div {
+  margin: 10px 0 20px 0;
+}
+input.regexsearch-checkbox {
+  vertical-align: middle;
+  margin: 3px;
+}
+.regexsearch-or-delimiter {
+  margin-left: 19px;
+}
+.regexsearch-conditions-commands {
+  margin-left: 178px;
+  margin-top: 10px;
+}
+.regexsearch-editor-container {
+  margin: 3px 15px 10px 10px;
+}
+.regexsearch-editor-title {
+  font-size: 150%;
+  display: block;
+}
+.tt-input,
+.tt-hint {
+  width: 396px;
+  height: 30px;
+  padding: 8px 12px;
+  font-size: 24px;
+  line-height: 30px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+.tt-input {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+.tt-hint {
+  color: #999;
+}
+.tt-menu {
+  width: 422px;
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+}
 .main_logo {
   margin: 10px;
   margin-left: 0;
@@ -1163,4 +1296,4 @@ ul {
 .navbar-login li a:hover {
   color: #84ced7;
 }
-/*# sourceMappingURL=itjakub.css.map */
+/*# sourceMappingURL=ITJakub.css.map */
