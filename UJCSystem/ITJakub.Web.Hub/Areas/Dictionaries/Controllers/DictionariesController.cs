@@ -83,18 +83,4 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(new {});
         }
     }
-
-    //TODO move to plugins directory
-    public class WordCriteriaDescription
-    {
-        public string startsWith { get; set; }
-        public IList<string> contains { get; set; }
-        public string endsWith { get; set; }
-    }
-
-    public class ConditionCriteriaDescription
-    {
-        public IList<WordCriteriaDescription> wordCriteriaDescription { get; set; }
-        public string searchType { get; set; }
-    }
 }
