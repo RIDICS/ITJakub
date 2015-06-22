@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AutoMapper;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
@@ -80,7 +84,17 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult SearchCriteria(IList<ConditionCriteriaDescription> searchData)
         {
             var jsonString = searchData;
-            return Json(new {});
+            try
+            {
+                var contract = Mapper.Map<WordListCriteriaContract>(searchData.First());
+                var contracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
+                return Json(new {}, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+                return Json(new {}, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

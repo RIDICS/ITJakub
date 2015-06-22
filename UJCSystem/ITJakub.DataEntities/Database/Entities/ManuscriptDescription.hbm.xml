@@ -19,9 +19,9 @@
 
     <property name="OriginDate"/>
 
-    <property name="NotBefore" />
+    <property name="NotBefore" type="Date" />
 
-    <property name="NotAfter" />
+    <property name="NotAfter" type="Date" />
 
   </class>
 </hibernate-mapping>
