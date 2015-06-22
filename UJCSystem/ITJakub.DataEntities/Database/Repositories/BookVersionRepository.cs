@@ -191,12 +191,12 @@ namespace ITJakub.DataEntities.Database.Repositories
                 if (!string.IsNullOrEmpty(criteriaQuery.Join))
                     joinBuilder.Append(' ').Append(criteriaQuery.Join);
 
-                if (whereBuilder.Length > 0)
-                    whereBuilder.Append(" and");
+                whereBuilder.Append(whereBuilder.Length > 0 ? " and" : " where");
+
                 whereBuilder.Append(" (").Append(criteriaQuery.Where).Append(')');
             }
 
-            queryString = string.Format("{0}{1} where{2} group by b.Guid", queryString, joinBuilder, whereBuilder);
+            queryString = string.Format("{0}{1}{2} group by b.Guid", queryString, joinBuilder, whereBuilder);
 
             using (var session = GetSession())
             {

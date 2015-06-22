@@ -6,7 +6,8 @@ namespace ITJakub.ITJakubService.DataContracts
 {
     [DataContract]
     [KnownType(typeof(StringListCriteriaContract))]
-    [KnownType(typeof(DatationCriteriaContract))]
+    [KnownType(typeof(DatingCriteriaContract))]
+    [KnownType(typeof(WordListCriteriaContract))]
     public abstract class SearchCriteriaContract
     {
         [DataMember]
@@ -21,7 +22,7 @@ namespace ITJakub.ITJakubService.DataContracts
     }
 
     [DataContract]
-    public class DatationCriteriaContract : SearchCriteriaContract
+    public class DatingCriteriaContract : SearchCriteriaContract
     {
         [DataMember]
         public DateTime NotBefore { get; set; }
@@ -30,11 +31,31 @@ namespace ITJakub.ITJakubService.DataContracts
         public DateTime NotAfter { get; set; }
     }
 
+    [DataContract]
+    public class WordListCriteriaContract : SearchCriteriaContract
+    {
+        [DataMember]
+        public List<WordCriteriaContract> Values { get; set; }
+    }
+
+    [DataContract]
+    public class WordCriteriaContract
+    {
+        [DataMember]
+        public string StartsWith { get; set; }
+
+        [DataMember]
+        public List<string> Contains { get; set; }
+
+        [DataMember]
+        public string EndsWith { get; set; }
+    }
+
     public enum CriteriaKey
     {
         Author,
         Title,
         Editor,
-        Datation
+        Dating
     }
 }

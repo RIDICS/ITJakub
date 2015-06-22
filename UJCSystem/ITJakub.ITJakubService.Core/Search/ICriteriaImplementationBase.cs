@@ -99,38 +99,38 @@ namespace ITJakub.ITJakubService.Core.Search
         }
     }
 
-    public class DatationCriteriaImplementation : ICriteriaImplementationBase
+    public class DatingCriteriaImplementation : ICriteriaImplementationBase
     {
         public CriteriaKey CriteriaKey
         {
-            get { return CriteriaKey.Datation; }
+            get { return CriteriaKey.Dating; }
         }
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
         {
-            var datationCriteriaContract = (DatationCriteriaContract) searchCriteriaContract;
-            var datationParameters = new List<object>();
+            var datingCriteriaContract = (DatingCriteriaContract) searchCriteriaContract;
+            var datingParameters = new List<object>();
             var manuscriptAlias = string.Format("m{0}", Guid.NewGuid().ToString("N"));
             var whereBuilder = new StringBuilder();
 
-            if (datationCriteriaContract.NotBefore.ToBinary() != 0)
+            if (datingCriteriaContract.NotBefore.ToBinary() != 0)
             {
                 whereBuilder.AppendFormat("{0}.NotBefore >= ?", manuscriptAlias);
-                datationParameters.Add(datationCriteriaContract.NotBefore);
+                datingParameters.Add(datingCriteriaContract.NotBefore);
             }
-            if (datationCriteriaContract.NotAfter.ToBinary() != 0)
+            if (datingCriteriaContract.NotAfter.ToBinary() != 0)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" and ");
                 whereBuilder.AppendFormat("{0}.NotAfter <= ?", manuscriptAlias);
-                datationParameters.Add(datationCriteriaContract.NotAfter);
+                datingParameters.Add(datingCriteriaContract.NotAfter);
             }
             
             return new SearchCriteriaQuery
             {
                 Join = string.Format("inner join bv.ManuscriptDescriptions {0}", manuscriptAlias),
                 Where = whereBuilder.ToString(),
-                Parameters = datationParameters
+                Parameters = datingParameters
             };
         }
     }
