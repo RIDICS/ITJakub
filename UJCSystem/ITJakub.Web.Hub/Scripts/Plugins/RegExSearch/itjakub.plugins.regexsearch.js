@@ -370,6 +370,7 @@ var RegExWordCondition = (function (_super) {
         this.html = mainDiv;
     };
     RegExWordCondition.prototype.resetInputs = function () {
+        this.hiddenWordInputSelects = new Array();
         $(this.inputsContainerDiv).empty();
         this.inputsArray = new Array();
         this.addInput();
@@ -377,12 +378,19 @@ var RegExWordCondition = (function (_super) {
     RegExWordCondition.prototype.addInput = function () {
         var newInput = new RegExWordInput(this);
         newInput.makeRegExInput();
+        for (var i = 0; i < this.hiddenWordInputSelects.length; i++) {
+            newInput.hideSelectCondition(this.hiddenWordInputSelects[i]);
+        }
+        if (!(newInput.getConditionType() === 1 /* Contains */)) {
+            this.hiddenWordInputSelects.push(newInput.getConditionType());
+        }
         this.inputsArray.push(newInput);
         this.inputsContainerDiv.appendChild(newInput.getHtml());
     };
     RegExWordCondition.prototype.removeInput = function (input) {
+        this.wordInpuConditionRemoved(input.getConditionType());
         var index = this.inputsArray.indexOf(input, 0);
-        if (index != undefined) {
+        if (index >= 0) {
             var arrayItem = this.inputsArray[index];
             this.inputsContainerDiv.removeChild(arrayItem.getHtml());
             this.inputsArray.splice(index, 1);
@@ -412,8 +420,30 @@ var RegExWordCondition = (function (_super) {
         }
         return wordCriteriaDescription;
     };
-    RegExWordCondition.prototype.wordInputConditionChanged = function (wordInput) {
-        var condition = wordInput.getConditionType();
+    RegExWordCondition.prototype.wordInputConditionChanged = function (wordInput, oldWordInputType) {
+        var newWordInputType = wordInput.getConditionType();
+        if (typeof oldWordInputType !== 'undefined') {
+            this.wordInpuConditionRemoved(oldWordInputType);
+        }
+        if (!(newWordInputType === 1 /* Contains */)) {
+            for (var i = 0; i < this.inputsArray.length; i++) {
+                if (this.inputsArray[i] === wordInput)
+                    continue;
+                this.inputsArray[i].hideSelectCondition(newWordInputType);
+            }
+            this.hiddenWordInputSelects.push(newWordInputType);
+        }
+    };
+    RegExWordCondition.prototype.wordInpuConditionRemoved = function (wordInputType) {
+        if (!(wordInputType === 1 /* Contains */)) {
+            for (var i = 0; i < this.inputsArray.length; i++) {
+                this.inputsArray[i].showSelectCondition(wordInputType);
+            }
+        }
+        var index = this.hiddenWordInputSelects.indexOf(wordInputType, 0);
+        if (index >= 0) {
+            this.hiddenWordInputSelects.splice(index, 1);
+        }
     };
     return RegExWordCondition;
 })(RegExSearchBase);
@@ -453,11 +483,12 @@ var RegExWordInput = (function (_super) {
         //conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
         conditionSelect.appendChild(this.createOption("Končí na", 2 /* EndsWith */.toString()));
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
-        this.conditionInputType = 0 /* StartsWith */;
         $(conditionSelect).change(function (eventData) {
+            var oldConditonType = _this.conditionInputType;
             _this.conditionInputType = parseInt($(eventData.target).val());
-            _this.parentRegExWordCondition.wordInputConditionChanged(_this);
+            _this.parentRegExWordCondition.wordInputConditionChanged(_this, oldConditonType);
         });
+        this.conditionSelectbox = conditionSelect;
         this.conditionInput = document.createElement("input");
         this.conditionInput.type = "text";
         $(this.conditionInput).addClass("form-control");
@@ -506,12 +537,20 @@ var RegExWordInput = (function (_super) {
         $(this.regexButtonsDiv).hide();
         mainDiv.appendChild(regexButtonsDiv);
         this.html = mainDiv;
+        $(this.conditionSelectbox).val(1 /* Contains */.toString());
+        $(this.conditionSelectbox).change();
     };
     RegExWordInput.prototype.getConditionValue = function () {
         return this.conditionInput.value;
     };
     RegExWordInput.prototype.getConditionType = function () {
         return this.conditionInputType;
+    };
+    RegExWordInput.prototype.showSelectCondition = function (wordInputType) {
+        $(this.conditionSelectbox).find("option[value=" + (wordInputType.toString()) + "]").show();
+    };
+    RegExWordInput.prototype.hideSelectCondition = function (wordInputType) {
+        $(this.conditionSelectbox).find("option[value=" + (wordInputType.toString()) + "]").hide();
     };
     return RegExWordInput;
 })(RegExSearchBase);

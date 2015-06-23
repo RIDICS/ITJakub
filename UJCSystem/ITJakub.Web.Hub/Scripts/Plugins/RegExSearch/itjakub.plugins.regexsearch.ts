@@ -346,6 +346,7 @@ class RegExWordCondition extends RegExSearchBase {
     private html: HTMLDivElement;
     private parentRegExCondition: RegExCondition;
     private inputsArray: Array<RegExWordInput>;
+    private hiddenWordInputSelects: Array<WordInputType>;
     private inputsContainerDiv: HTMLDivElement;
 
     constructor(parent: RegExCondition) {
@@ -451,6 +452,7 @@ class RegExWordCondition extends RegExSearchBase {
     }
 
     public resetInputs() {
+        this.hiddenWordInputSelects = new Array<WordInputType>();
         $(this.inputsContainerDiv).empty();
         this.inputsArray = new Array<RegExWordInput>();
         this.addInput();
@@ -459,13 +461,21 @@ class RegExWordCondition extends RegExSearchBase {
     public addInput() {
         var newInput = new RegExWordInput(this);
         newInput.makeRegExInput();
+        for (var i = 0; i < this.hiddenWordInputSelects.length; i++) {
+            newInput.hideSelectCondition(this.hiddenWordInputSelects[i]);
+        }
+        if (!(newInput.getConditionType() === WordInputType.Contains)) {
+            this.hiddenWordInputSelects.push(newInput.getConditionType());    
+        }
+
         this.inputsArray.push(newInput);
         this.inputsContainerDiv.appendChild(newInput.getHtml());
     }
 
     public removeInput(input: RegExWordInput) {
+        this.wordInpuConditionRemoved(input.getConditionType());
         var index = this.inputsArray.indexOf(input, 0);
-        if (index != undefined) {
+        if (index >= 0) {
             var arrayItem = this.inputsArray[index];
             this.inputsContainerDiv.removeChild(arrayItem.getHtml());
             this.inputsArray.splice(index, 1);
@@ -498,8 +508,36 @@ class RegExWordCondition extends RegExSearchBase {
         return wordCriteriaDescription;
     }
 
-    wordInputConditionChanged(wordInput: RegExWordInput) {
-        var condition = wordInput.getConditionType()
+    
+    wordInputConditionChanged(wordInput: RegExWordInput, oldWordInputType: WordInputType) {
+        var newWordInputType = wordInput.getConditionType();
+
+        if (typeof oldWordInputType !== 'undefined') {
+            this.wordInpuConditionRemoved(oldWordInputType);   
+        }
+
+        if (!(newWordInputType === WordInputType.Contains)) {
+            for (var i = 0; i < this.inputsArray.length; i++) {
+                if(this.inputsArray[i] === wordInput) continue;
+                this.inputsArray[i].hideSelectCondition(newWordInputType);
+            }
+
+            this.hiddenWordInputSelects.push(newWordInputType);
+        }
+    }
+
+    wordInpuConditionRemoved(wordInputType: WordInputType) {
+        
+        if (!(wordInputType === WordInputType.Contains)) {
+            for (var i = 0; i < this.inputsArray.length; i++) {
+                this.inputsArray[i].showSelectCondition(wordInputType);
+            }
+        }
+
+        var index = this.hiddenWordInputSelects.indexOf(wordInputType, 0);
+        if (index >= 0) {
+            this.hiddenWordInputSelects.splice(index, 1);
+        }
     }
 }
 
@@ -510,6 +548,7 @@ class RegExWordInput extends RegExSearchBase {
     private conditionInputType: WordInputType;
     private parentRegExWordCondition: RegExWordCondition;
     private regexButtonsDiv: HTMLDivElement;
+    private conditionSelectbox: HTMLSelectElement;
 
     constructor(parent: RegExWordCondition) {
         super();
@@ -555,12 +594,15 @@ class RegExWordInput extends RegExSearchBase {
         conditionSelect.appendChild(this.createOption("Končí na", WordInputType.EndsWith.toString()));
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
 
-        this.conditionInputType = WordInputType.StartsWith;
+        
 
         $(conditionSelect).change((eventData: Event) => {
+            var oldConditonType = this.conditionInputType;
             this.conditionInputType = parseInt($(eventData.target).val());
-            this.parentRegExWordCondition.wordInputConditionChanged(this);
+            this.parentRegExWordCondition.wordInputConditionChanged(this, oldConditonType);
         });
+
+        this.conditionSelectbox = conditionSelect;
 
         this.conditionInput = document.createElement("input");
         this.conditionInput.type = "text";
@@ -618,6 +660,9 @@ class RegExWordInput extends RegExSearchBase {
         mainDiv.appendChild(regexButtonsDiv);
         
         this.html = mainDiv;
+
+        $(this.conditionSelectbox).val(WordInputType.Contains.toString());
+        $(this.conditionSelectbox).change();
     }
 
     public getConditionValue(): string {
@@ -627,6 +672,15 @@ class RegExWordInput extends RegExSearchBase {
     public getConditionType(): WordInputType {
         return this.conditionInputType;
     }
+
+    showSelectCondition(wordInputType: WordInputType) {
+        $(this.conditionSelectbox).find("option[value=" + (wordInputType.toString())+"]").show();
+    }
+
+    hideSelectCondition(wordInputType: WordInputType) {
+        $(this.conditionSelectbox).find("option[value=" + (wordInputType.toString()) + "]").hide();
+    }
+
 
 }
 
