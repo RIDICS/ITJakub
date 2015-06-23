@@ -581,6 +581,32 @@ namespace ITJakub.Web.Hub
             }
         }
 
-    
+
+        public IList<string> GetTypeaheadAuthors(string query)
+        {
+            try
+            {
+                return Channel.GetTypeaheadAuthors(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthors failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthors failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthors timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

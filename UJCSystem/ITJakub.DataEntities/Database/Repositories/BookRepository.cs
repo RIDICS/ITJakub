@@ -241,5 +241,35 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return bookVersions;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastAuthors(int prefetchRecordCount)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<Author>()
+                    .Select(x => x.Name)
+                    .Take(prefetchRecordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadAuthors(string query, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Author authorAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Authors, () => authorAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => authorAlias.Name)))
+                    .WhereRestrictionOn(() => authorAlias.Name).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
     }
 }

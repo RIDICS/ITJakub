@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Entities;
@@ -17,6 +18,7 @@ namespace ITJakub.ITJakubService.Core
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly SearchCriteriaDirector m_searchCriteriaDirector;
+        private const int PrefetchRecordCount = 5;
 
         public SearchManager(BookRepository bookRepository, BookVersionRepository bookVersionRepository, CategoryRepository categoryRepository, SearchCriteriaDirector searchCriteriaDirector)
         {
@@ -95,6 +97,17 @@ namespace ITJakub.ITJakubService.Core
                     break;
             }
             return Mapper.Map<IList<MobileContracts.BookContract>>(bookList);
+        }
+
+        public IList<string> GetTypeaheadAuthors(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastAuthors(PrefetchRecordCount);
+
+            query = query.TrimStart().TrimEnd().Replace(" ", "% %");
+            query = string.Format("%{0}%", query);
+            
+            return m_bookRepository.GetTypeaheadAuthors(query, PrefetchRecordCount);
         }
     }
 }

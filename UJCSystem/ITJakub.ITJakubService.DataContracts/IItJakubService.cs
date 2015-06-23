@@ -19,23 +19,26 @@ namespace ITJakub.ITJakubService.DataContracts
         string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
-        string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat);
+        string GetBookPagesByName(string bookGuid, string startPageName, string endPageName,
+            OutputFormatEnumContract resultFormat);
 
         [OperationContract]
         string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
         IEnumerable<BookPageContract> GetBookPageList(string bookGuid);
-        
+
         [OperationContract]
         IEnumerable<BookContentItemContract> GetBookContent(string bookGuid);
 
         #region Resource Import
-        [OperationContract]       
+
+        [OperationContract]
         void AddResource(UploadResourceContract uploadFileInfoSkeleton);
 
         [OperationContract]
         bool ProcessSession(string resourceSessionId, string uploadMessage);
+
         #endregion
 
         [OperationContract]
@@ -59,7 +62,6 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
 
-
         #region CardFile methods
 
         [OperationContract]
@@ -76,7 +78,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId);
-        
+
         [OperationContract]
         CardContract GetCard(string cardFileId, string bucketId, string cardId);
 
@@ -85,5 +87,11 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
+        #region Typeahead methods
+
+        [OperationContract]
+        IList<string> GetTypeaheadAuthors(string query);
+
+        #endregion
     }
 }

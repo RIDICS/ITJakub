@@ -7,7 +7,7 @@ var SearchBox = (function () {
         this.options = {
             hint: true,
             highlight: true,
-            minLength: 2
+            minLength: 1
         };
     }
     SearchBox.prototype.create = function () {
@@ -18,7 +18,7 @@ var SearchBox = (function () {
     };
     SearchBox.prototype.addDataSet = function (name, groupHeader) {
         var prefetchUrl = this.urlWithController + "/GetTypeahead" + name;
-        var remoteUrl = this.urlWithController + "/GetTypeahead" + name + "ForQuery?query=%QUERY";
+        var remoteUrl = this.urlWithController + "/GetTypeahead" + name + "?query=%QUERY";
         var remoteOptions = {
             url: remoteUrl,
             wildcard: "%QUERY"

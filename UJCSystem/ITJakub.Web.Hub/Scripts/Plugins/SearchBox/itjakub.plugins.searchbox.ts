@@ -14,7 +14,7 @@
          this.options = {
              hint: true,
              highlight: true,
-             minLength: 2
+             minLength: 1
          };
      }
 
@@ -28,7 +28,7 @@
 
      addDataSet(name: string, groupHeader: string): void {
          var prefetchUrl: string = this.urlWithController + "/GetTypeahead" + name;
-         var remoteUrl: string = this.urlWithController + "/GetTypeahead" + name + "ForQuery?query=%QUERY";
+         var remoteUrl: string = this.urlWithController + "/GetTypeahead" + name + "?query=%QUERY";
 
          var remoteOptions: Bloodhound.RemoteOptions<string> = {
              url: remoteUrl,

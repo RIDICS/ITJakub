@@ -147,12 +147,13 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_cardFileManager.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
         }
-
         
-
         #endregion
-
-
+        
+        public IList<string> GetTypeaheadAuthors(string query)
+        {
+            return m_searchManager.GetTypeaheadAuthors(query);
+        }
      
     }
 }
