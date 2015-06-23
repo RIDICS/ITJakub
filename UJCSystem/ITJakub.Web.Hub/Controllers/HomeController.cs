@@ -9,7 +9,7 @@ namespace ITJakub.Web.Hub.Controllers
             return View();
         }
 
-        public ActionResult GetTypeaheadData()
+        public ActionResult GetTypeaheadAuthor()
         {
             //TODO test data
             return Json(new[]
@@ -26,8 +26,9 @@ namespace ITJakub.Web.Hub.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetTypeaheadDataForQuery(string query)
+        public ActionResult GetTypeaheadAuthorForQuery(string query)
         {
+            //TODO
             return Json(new string[0], JsonRequestBehavior.AllowGet);
         }
     }
