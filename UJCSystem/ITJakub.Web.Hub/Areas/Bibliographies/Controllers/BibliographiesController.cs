@@ -37,7 +37,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult Search(string term)
         {
-            List<SearchResultContract> listBooks = m_serviceClient.Search(term);
+            IEnumerable<SearchResultContract> listBooks = m_serviceClient.Search(term);
             foreach (var list in listBooks)
             {
                 list.CreateTimeString = list.CreateTime.ToString();

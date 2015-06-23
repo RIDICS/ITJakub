@@ -69,12 +69,12 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageByPosition(bookGuid, position, resultFormat);
         }
 
-        public IList<BookPageContract> GetBookPageList(string bookGuid)
+        public IEnumerable<BookPageContract> GetBookPageList(string bookGuid)
         {
             return m_bookManager.GetBookPagesList(bookGuid);
         }
 
-        public IList<BookContentItemContract> GetBookContent(string bookGuid)
+        public IEnumerable<BookContentItemContract> GetBookContent(string bookGuid)
         {
             return m_bookManager.GetBookContent(bookGuid);
         }
@@ -89,17 +89,17 @@ namespace ITJakub.ITJakubService.Services
             return m_resourceManager.ProcessSession(resourceSessionId, uploadMessage);
         }
 
-        public List<SearchResultContract> Search(string term)
+        public IEnumerable<SearchResultContract> Search(string term)
         {
             return m_searchManager.Search(term);
         }
 
-        public List<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
+        public IEnumerable<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
         {
             return m_searchManager.SearchBooksWithBookType(term, bookType);
         }
 
-        public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
+        public IEnumerable<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
         {
             return m_searchManager.GetBooksByBookType(bookType);
         }
@@ -109,7 +109,7 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageImage(bookPageImageContract);
         }
 
-        public void SearchByCriteria(List<SearchCriteriaContract> searchCriterias)
+        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             m_searchManager.SearchByCriteria(searchCriterias);
         }

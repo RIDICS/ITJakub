@@ -57,6 +57,7 @@ namespace ITJakub.ITJakubService.DataContracts
         [EnumMember] Author = 0,
         [EnumMember] Title = 1,
         [EnumMember] Editor = 2,
-        [EnumMember] Dating = 3
+        [EnumMember] Dating = 3,
+        [EnumMember] Text = 4
     }
 }

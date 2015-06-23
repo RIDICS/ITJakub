@@ -30,7 +30,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult SearchEditions(string term)
         {
-            List<SearchResultContract> listBooks = term.IsNullOrWhiteSpace() ? m_serviceClient.GetBooksByBookType(BookTypeEnumContract.Edition) : m_serviceClient.SearchBooksWithBookType(term,BookTypeEnumContract.Edition);
+            IEnumerable<SearchResultContract> listBooks = term.IsNullOrWhiteSpace() ? m_serviceClient.GetBooksByBookType(BookTypeEnumContract.Edition) : m_serviceClient.SearchBooksWithBookType(term, BookTypeEnumContract.Edition);
             
             foreach (var list in listBooks)
             {

@@ -135,7 +135,7 @@ class RegExCondition extends RegExSearchBase {
     private conditionContainerDiv: HTMLDivElement;
     private conditionInputArray: Array<RegExWordCondition>;
     private parent: RegExSearch;
-    private selectedSearchType: string;
+    private selectedSearchType: number;
     private selectedWordFormType: string;
 
     constructor(parent: RegExSearch) {
@@ -221,7 +221,7 @@ class RegExCondition extends RegExSearchBase {
         return this.selectedWordFormType;
     }
 
-    public getSearchType(): string {
+    public getSearchType(): number {
         return this.selectedSearchType;
     }
 
@@ -232,11 +232,22 @@ class RegExCondition extends RegExSearchBase {
         Stemma: "stemma"
     }
 
+    
+/*
+ * CriteriaKey C# Enum values must match with searchType number values
+        [EnumMember] Author = 0,
+        [EnumMember] Title = 1,
+        [EnumMember] Editor = 2,
+        [EnumMember] Dating = 3,
+        [EnumMember] Text = 4
+ * 
+ */
     private searchType = {
-        Text: "text",
-        Author: "author",
-        Title: "title",
-        Responsible: "responsible"
+        Author: 0,
+        Title: 1,
+        Responsible: 2,
+        Dating: 3,
+        Text: 4
     }
 
     public makeRegExCondition() {
@@ -259,15 +270,15 @@ class RegExCondition extends RegExSearchBase {
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
 
-        searchDestinationSelect.appendChild(this.createOption("Text", this.searchType.Text));
-        searchDestinationSelect.appendChild(this.createOption("Autor", this.searchType.Author));
-        searchDestinationSelect.appendChild(this.createOption("Titul", this.searchType.Title));
-        searchDestinationSelect.appendChild(this.createOption("Editor", this.searchType.Responsible));
+        searchDestinationSelect.appendChild(this.createOption("Text", this.searchType.Text.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Autor", this.searchType.Author.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Titul", this.searchType.Title.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Editor", this.searchType.Responsible.toString()));
 
         this.selectedSearchType = this.searchType.Text;
 
         $(searchDestinationSelect).change((eventData: Event) => {
-            this.selectedSearchType = $(eventData.target).val();
+            this.selectedSearchType = parseInt($(eventData.target).val());
         });
 
         var wordFormDiv: HTMLDivElement = document.createElement("div");
@@ -567,6 +578,8 @@ class RegExWordInput extends RegExSearchBase {
         conditionSelect.appendChild(this.createOption("Končí na", WordInputType.endsWith));
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
 
+        this.conditionInputType = WordInputType.startsWith;
+
         $(conditionSelect).change((eventData: Event) => {
             this.conditionInputType = $(eventData.target).val();
         });
@@ -635,8 +648,9 @@ class WordCriteriaDescription {
     }
 }
 
+
 class WordsCriteriaConditionDescription {
-    public searchType: string;
+    public searchType: number;
     public wordCriteriaDescription: Array<WordCriteriaDescription>;
 
     constructor() {

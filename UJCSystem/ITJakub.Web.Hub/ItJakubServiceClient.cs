@@ -138,8 +138,8 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
-            
-        public IList<BookPageContract> GetBookPageList(string documentId)
+
+        public IEnumerable<BookPageContract> GetBookPageList(string documentId)
         {
             try
             {
@@ -158,8 +158,8 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
-        
-        public IList<BookContentItemContract> GetBookContent(string documentId)
+
+        public IEnumerable<BookContentItemContract> GetBookContent(string documentId)
         {
             try
             {
@@ -232,7 +232,7 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public List<SearchResultContract> Search(string term)
+        public IEnumerable<SearchResultContract> Search(string term)
         {
             try
             {
@@ -259,7 +259,7 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public List<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
+        public IEnumerable<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
         {
             try
             {
@@ -286,7 +286,7 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
+        public IEnumerable<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
         {
             try
             {
@@ -367,9 +367,31 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void SearchByCriteria(List<SearchCriteriaContract> searchCriterias)
+        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Channel.SearchByCriteria(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchByCriteria failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchByCriteria failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchByCriteria timeouted with: {0}", ex);
+                throw;
+            }
         }
 
         public IEnumerable<CardFileContract> GetCardFiles()

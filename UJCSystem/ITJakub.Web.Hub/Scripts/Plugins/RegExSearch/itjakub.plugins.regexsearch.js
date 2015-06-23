@@ -119,11 +119,21 @@ var RegExCondition = (function (_super) {
             HyperlemmaOld: "hyperlemma-old",
             Stemma: "stemma"
         };
+        /*
+         * CriteriaKey C# Enum values must match with searchType number values
+                [EnumMember] Author = 0,
+                [EnumMember] Title = 1,
+                [EnumMember] Editor = 2,
+                [EnumMember] Dating = 3,
+                [EnumMember] Text = 4
+         *
+         */
         this.searchType = {
-            Text: "text",
-            Author: "author",
-            Title: "title",
-            Responsible: "responsible"
+            Author: 0,
+            Title: 1,
+            Responsible: 2,
+            Dating: 3,
+            Text: 4
         };
         this.parent = parent;
     }
@@ -208,13 +218,13 @@ var RegExCondition = (function (_super) {
         var searchDestinationSelect = document.createElement("select");
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
-        searchDestinationSelect.appendChild(this.createOption("Text", this.searchType.Text));
-        searchDestinationSelect.appendChild(this.createOption("Autor", this.searchType.Author));
-        searchDestinationSelect.appendChild(this.createOption("Titul", this.searchType.Title));
-        searchDestinationSelect.appendChild(this.createOption("Editor", this.searchType.Responsible));
+        searchDestinationSelect.appendChild(this.createOption("Text", this.searchType.Text.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Autor", this.searchType.Author.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Titul", this.searchType.Title.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Editor", this.searchType.Responsible.toString()));
         this.selectedSearchType = this.searchType.Text;
         $(searchDestinationSelect).change(function (eventData) {
-            _this.selectedSearchType = $(eventData.target).val();
+            _this.selectedSearchType = parseInt($(eventData.target).val());
         });
         var wordFormDiv = document.createElement("div");
         $(wordFormDiv).addClass("regexsearch-word-form-div");
@@ -456,6 +466,7 @@ var RegExWordInput = (function (_super) {
         //conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
         conditionSelect.appendChild(this.createOption("Končí na", WordInputType.endsWith));
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
+        this.conditionInputType = WordInputType.startsWith;
         $(conditionSelect).change(function (eventData) {
             _this.conditionInputType = $(eventData.target).val();
         });
