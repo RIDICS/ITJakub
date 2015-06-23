@@ -47,7 +47,7 @@ namespace ITJakub.ITJakubService.Core
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            var pageText = searchServiceClient.GetBookPageByName(bookGuid, bookVersion.VersionId, pageName, transformationName, transformationLevel);
+            var pageText = searchServiceClient.GetBookPageByName(bookGuid, bookVersion.VersionId, pageName, transformationName, resultFormat, transformationLevel);
 
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("End MainService (BookManager) get page name '{0}' of book '{1}'", pageName, bookGuid);
@@ -71,7 +71,7 @@ namespace ITJakub.ITJakubService.Core
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            var pageText = searchServiceClient.GetBookPageByXmlId(bookGuid, bookVersion.VersionId, pageXmlId, transformationName, transformationLevel);
+						var pageText = searchServiceClient.GetBookPageByXmlId(bookGuid, bookVersion.VersionId, pageXmlId, transformationName, resultFormat, transformationLevel);
 
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("End MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId, bookGuid);
@@ -90,7 +90,7 @@ namespace ITJakub.ITJakubService.Core
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name; 
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            return m_searchServiceClient.GetBookPagesByName(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName, transformationLevel);
+            return m_searchServiceClient.GetBookPagesByName(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName, resultFormat, transformationLevel);
         }
 
         public string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
@@ -104,7 +104,7 @@ namespace ITJakub.ITJakubService.Core
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name; 
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            return m_searchServiceClient.GetBookPageByPosition(bookGuid, bookVersion.VersionId, position, transformationName, transformationLevel);
+						return m_searchServiceClient.GetBookPageByPosition(bookGuid, bookVersion.VersionId, position, transformationName, resultFormat, transformationLevel);
         }
 
         public IList<BookPageContract> GetBookPagesList(string bookGuid)

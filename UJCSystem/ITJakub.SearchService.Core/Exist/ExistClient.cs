@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using ITJakub.Shared.Contracts;
 using log4net;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -28,7 +29,7 @@ namespace ITJakub.SearchService.Core.Exist
         public void UploadVersionFile(string bookId, string bookVersionId, string fileName, Stream dataStream)
         {
             if (m_log.IsDebugEnabled) 
-                m_log.DebugFormat("Begin upload file '{0}' of book '{1}' and version '{2}'", fileName, bookId, bookVersionId);
+                m_log.DebugFormat("Start upload file '{0}' of book '{1}' and version '{2}'", fileName, bookId, bookVersionId);
            
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
@@ -63,34 +64,33 @@ namespace ITJakub.SearchService.Core.Exist
             }));
         }
 
-        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition)
+        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string outputFormat)
         {
-            return GetPageByPositionFromStart(bookId, versionId, pagePosition, null);
+            return GetPageByPositionFromStart(bookId, versionId, pagePosition, outputFormat, null);
         }
 
-        public string GetPageByName(string bookId, string versionId, string start)
+				public string GetPageByName(string bookId, string versionId, string start, string outputFormat)
         {
-            return GetPageByName(bookId, versionId, start, null);
+					return GetPageByName(bookId, versionId, start, outputFormat, null);
         }
 
-        public string GetPagesByName(string bookId, string versionId, string start, string end)
+        public string GetPagesByName(string bookId, string versionId, string start, string end, string outputFormat)
         {
-            return GetPagesByName(bookId, versionId, start, end, null);
+            return GetPagesByName(bookId, versionId, start, end, outputFormat, null);
         }
 
-        public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition,
-            string xslPath)
+				public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string outputFormat, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, pagePosition);
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, pagePosition, outputFormat);
             return Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
         }
 
-        public string GetPageByName(string bookId, string versionId, string start, string xslPath)
+				public string GetPageByName(string bookId, string versionId, string start, string outputFormat, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
-            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, start);
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, start, outputFormat);
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("Start HTTPclient get page name '{0}' of book '{1}' and version '{2}'", start, bookId, versionId);
             string pageText = Task.Run(()=>m_httpClient.GetStringAsync(completeUri)).Result;
@@ -99,10 +99,10 @@ namespace ITJakub.SearchService.Core.Exist
             return pageText;
         }
 
-        public string GetPagesByName(string bookId, string versionId, string start, string end, string xslPath)
+				public string GetPagesByName(string bookId, string versionId, string start, string end, string outputFormat, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, start, end);
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, start, end, outputFormat);
             return Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
         }
 
@@ -133,23 +133,26 @@ namespace ITJakub.SearchService.Core.Exist
 
         #endregion
 
-        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string xslPath)
+				public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string outputFormat, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
-            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, pageXmlId);
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, pageXmlId, outputFormat);
+						const string logFormat = "HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}' and outputFormat '{3}'";
+						if (m_log.IsDebugEnabled)
+            {
+	            m_log.DebugFormat("Start " + logFormat, pageXmlId, bookId, versionId, outputFormat);
+            }
+					string pageText = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
             if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("Start HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}'", pageXmlId, bookId, versionId);
-            string pageText = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
-            if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("End HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}'", pageXmlId, bookId, versionId);
+                m_log.DebugFormat("End " + logFormat, pageXmlId, bookId, versionId, outputFormat);
             return pageText;
         }
 
 
-        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId)
+        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string outputFormat)
         {
-            return GetPageByXmlId(bookId, versionId, pageXmlId, null);
+            return GetPageByXmlId(bookId, versionId, pageXmlId, outputFormat, null);
         }
     }
 }

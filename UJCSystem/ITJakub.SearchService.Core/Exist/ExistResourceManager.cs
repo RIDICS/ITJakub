@@ -49,7 +49,7 @@ namespace ITJakub.SearchService.Core.Exist
                 m_existSettings.ResourceRelativeUri);
         }
 
-        public string GetTransformationUri(string transformationName, ResourceLevelEnumContract transformationLevel, string bookGuid, string bookVersion)
+        public string GetTransformationUri(string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel, string bookGuid, string bookVersion)
         {
             switch (transformationLevel)
             {
