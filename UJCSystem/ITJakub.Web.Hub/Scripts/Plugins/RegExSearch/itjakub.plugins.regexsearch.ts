@@ -482,13 +482,13 @@ class RegExWordCondition extends RegExSearchBase {
             var wordInput = this.inputsArray[i];
             var inputValue = wordInput.getConditionValue();
             switch (wordInput.getConditionType()) {
-                case WordInputType.startsWith:
+                case WordInputType.StartsWith:
                     wordCriteriaDescription.startsWith = inputValue;
                     break;
-                case WordInputType.contains:
+                case WordInputType.Contains:
                     wordCriteriaDescription.contains.push(inputValue);
                     break;
-                case WordInputType.endsWith:
+                case WordInputType.EndsWith:
                     wordCriteriaDescription.endsWith = inputValue;
                     break;
                 default:
@@ -498,13 +498,16 @@ class RegExWordCondition extends RegExSearchBase {
         return wordCriteriaDescription;
     }
 
+    wordInputConditionChanged(wordInput: RegExWordInput) {
+        var condition = wordInput.getConditionType()
+    }
 }
 
 class RegExWordInput extends RegExSearchBase {
     private html: HTMLDivElement;
     private editorDiv: HTMLDivElement;
     private conditionInput: HTMLInputElement;
-    private conditionInputType: string;
+    private conditionInputType: WordInputType;
     private parentRegExWordCondition: RegExWordCondition;
     private regexButtonsDiv: HTMLDivElement;
 
@@ -545,17 +548,18 @@ class RegExWordInput extends RegExSearchBase {
         $(conditionSelect).addClass("regexsearch-condition-select");
         conditionTypeDiv.appendChild(conditionSelect);
 
-        conditionSelect.appendChild(this.createOption("Začíná na", WordInputType.startsWith));
+        conditionSelect.appendChild(this.createOption("Začíná na", WordInputType.StartsWith.toString()));
         //conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
-        conditionSelect.appendChild(this.createOption("Obsahuje", WordInputType.contains));
+        conditionSelect.appendChild(this.createOption("Obsahuje", WordInputType.Contains.toString()));
         //conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
-        conditionSelect.appendChild(this.createOption("Končí na", WordInputType.endsWith));
+        conditionSelect.appendChild(this.createOption("Končí na", WordInputType.EndsWith.toString()));
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
 
-        this.conditionInputType = WordInputType.startsWith;
+        this.conditionInputType = WordInputType.StartsWith;
 
         $(conditionSelect).change((eventData: Event) => {
-            this.conditionInputType = $(eventData.target).val();
+            this.conditionInputType = parseInt($(eventData.target).val());
+            this.parentRegExWordCondition.wordInputConditionChanged(this);
         });
 
         this.conditionInput = document.createElement("input");
@@ -620,16 +624,10 @@ class RegExWordInput extends RegExSearchBase {
         return this.conditionInput.value;
     }
 
-    public getConditionType(): string {
+    public getConditionType(): WordInputType {
         return this.conditionInputType;
     }
 
-}
-
-class WordInputType {
-    public static startsWith = "starts";
-    public static contains = "contains";
-    public static endsWith = "ends"; 
 }
 
 class WordCriteriaDescription {
@@ -652,7 +650,12 @@ class WordsCriteriaConditionDescription {
     }
 }
 
-    
+enum WordInputType {
+    StartsWith = 0,
+    Contains = 1,
+    EndsWith = 2
+}
+  
 /*
  * CriteriaKey C# Enum values must match with searchType number values
         [EnumMember] Author = 0,
