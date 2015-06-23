@@ -27,7 +27,7 @@ namespace ITJakub.ITJakubService.DataContracts
     public class WordListCriteriaContract : SearchCriteriaContract
     {
         [DataMember]
-        public List<WordCriteriaContract> Values { get; set; }
+        public IList<WordCriteriaContract> Values { get; set; }
     }
 
     [DataContract]
@@ -37,17 +37,19 @@ namespace ITJakub.ITJakubService.DataContracts
         public string StartsWith { get; set; }
 
         [DataMember]
-        public List<string> Contains { get; set; }
+        public IList<string> Contains { get; set; }
 
         [DataMember]
         public string EndsWith { get; set; }
     }
 
+	[DataContract]
     public enum CriteriaKey
     {
-        Author,
-        Title,
-        Editor,
-        Dating
+        [EnumMember] Author = 0,
+        [EnumMember] Title = 1,
+        [EnumMember] Editor = 2,
+        [EnumMember] Dating = 3,
+        [EnumMember] Text = 4
     }
 }

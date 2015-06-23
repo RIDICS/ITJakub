@@ -46,7 +46,7 @@ namespace ITJakub.ITJakubService.Core
             };
         }
 
-        public void SearchByCriteria(List<SearchCriteriaContract> searchCriterias)
+        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             var conjunction = new List<SearchCriteriaQuery>();
             foreach (var searchCriteriaContract in searchCriterias)

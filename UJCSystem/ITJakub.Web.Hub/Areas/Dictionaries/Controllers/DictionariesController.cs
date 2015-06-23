@@ -1,8 +1,11 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Web.Mvc;
+using AutoMapper;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
@@ -10,7 +13,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
     public class DictionariesController : Controller
     {
         private readonly ItJakubServiceClient m_mainServiceClient;
-
 
         public DictionariesController()
         {
@@ -49,18 +51,42 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetTextWithCategories()
         {
-            var dictionariesAndCategories = m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
-            var booksDictionary = dictionariesAndCategories.Books.GroupBy(x => x.CategoryId).ToDictionary(x => x.Key.ToString(), x => x.ToList());
-            var categoriesDictionary = dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId).ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
-            return Json(new { type = BookTypeEnumContract.Edition, books = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
+            var dictionariesAndCategories =
+                m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
+            var booksDictionary =
+                dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
+                    .ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            var categoriesDictionary =
+                dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
+                    .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
+            return
+                Json(
+                    new
+                    {
+                        type = BookTypeEnumContract.Edition,
+                        books = booksDictionary,
+                        categories = categoriesDictionary
+                    }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetDictionariesWithCategories()
         {
-            var dictionariesAndCategories = m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
-            var booksDictionary = dictionariesAndCategories.Books.GroupBy(x => x.CategoryId).ToDictionary(x => x.Key.ToString(), x => x.ToList());
-            var categoriesDictionary  = dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId).ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
-            return Json(new { type = BookTypeEnumContract.Dictionary, books = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
+            var dictionariesAndCategories =
+                m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
+            var booksDictionary =
+                dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
+                    .ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            var categoriesDictionary =
+                dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
+                    .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
+            return
+                Json(
+                    new
+                    {
+                        type = BookTypeEnumContract.Dictionary,
+                        books = booksDictionary,
+                        categories = categoriesDictionary
+                    }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Information()
@@ -76,6 +102,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult FeedBack()
         {
             return View();
+        }
+
+        public ActionResult SearchCriteria(IList<ConditionCriteriaDescription> searchData)
+        {
+            var wordListCriteriaContracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
+            m_mainServiceClient.SearchByCriteria(wordListCriteriaContracts);
+            return Json(new {}, JsonRequestBehavior.AllowGet);
         }
     }
 }

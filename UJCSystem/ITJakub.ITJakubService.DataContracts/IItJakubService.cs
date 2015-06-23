@@ -25,10 +25,10 @@ namespace ITJakub.ITJakubService.DataContracts
         string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
-        IList<BookPageContract> GetBookPageList(string bookGuid);
+        IEnumerable<BookPageContract> GetBookPageList(string bookGuid);
         
         [OperationContract]
-        IList<BookContentItemContract> GetBookContent(string bookGuid);
+        IEnumerable<BookContentItemContract> GetBookContent(string bookGuid);
 
         #region Resource Import
         [OperationContract]       
@@ -39,13 +39,13 @@ namespace ITJakub.ITJakubService.DataContracts
         #endregion
 
         [OperationContract]
-        List<SearchResultContract> Search(string term);
+        IEnumerable<SearchResultContract> Search(string term);
 
         [OperationContract]
-        List<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType);
+        IEnumerable<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType);
 
         [OperationContract]
-        List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType);
+        IEnumerable<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType);
 
         [OperationContract]
         BookInfoContract GetBookInfo(string bookGuid);
@@ -57,7 +57,7 @@ namespace ITJakub.ITJakubService.DataContracts
         Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
 
         [OperationContract]
-        void SearchByCriteria(List<SearchCriteriaContract> searchCriterias);
+        void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
 
 
         #region CardFile methods
