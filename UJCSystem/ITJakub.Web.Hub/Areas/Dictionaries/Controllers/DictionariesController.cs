@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -51,18 +50,42 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetTextWithCategories()
         {
-            var dictionariesAndCategories = m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
-            var booksDictionary = dictionariesAndCategories.Books.GroupBy(x => x.CategoryId).ToDictionary(x => x.Key.ToString(), x => x.ToList());
-            var categoriesDictionary = dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId).ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
-            return Json(new { type = BookTypeEnumContract.Edition, books = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
+            var dictionariesAndCategories =
+                m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
+            var booksDictionary =
+                dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
+                    .ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            var categoriesDictionary =
+                dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
+                    .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
+            return
+                Json(
+                    new
+                    {
+                        type = BookTypeEnumContract.Edition,
+                        books = booksDictionary,
+                        categories = categoriesDictionary
+                    }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetDictionariesWithCategories()
         {
-            var dictionariesAndCategories = m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
-            var booksDictionary = dictionariesAndCategories.Books.GroupBy(x => x.CategoryId).ToDictionary(x => x.Key.ToString(), x => x.ToList());
-            var categoriesDictionary  = dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId).ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
-            return Json(new { type = BookTypeEnumContract.Dictionary, books = booksDictionary, categories = categoriesDictionary }, JsonRequestBehavior.AllowGet);
+            var dictionariesAndCategories =
+                m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
+            var booksDictionary =
+                dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
+                    .ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            var categoriesDictionary =
+                dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
+                    .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
+            return
+                Json(
+                    new
+                    {
+                        type = BookTypeEnumContract.Dictionary,
+                        books = booksDictionary,
+                        categories = categoriesDictionary
+                    }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Information()
@@ -80,21 +103,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-
         public ActionResult SearchCriteria(IList<ConditionCriteriaDescription> searchData)
         {
-            var jsonString = searchData;
-            try
-            {
-                var contract = Mapper.Map<WordListCriteriaContract>(searchData.First());
-                var contracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
-                return Json(new {}, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                var a = ex;
-                return Json(new {}, JsonRequestBehavior.AllowGet);
-            }
+            var contracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
+            return Json(new {}, JsonRequestBehavior.AllowGet);
         }
     }
 }
