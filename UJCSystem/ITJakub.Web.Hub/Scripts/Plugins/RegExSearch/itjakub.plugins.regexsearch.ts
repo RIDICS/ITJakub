@@ -87,15 +87,6 @@ class RegExSearch extends RegExSearchBase {
 
     public getConditionsResultObject(): Object {
         var resultArray = new Array();
-        //for (var i = 0; i < this.regExConditions.length; i++) {
-        //    var regExCondition: RegExCondition = this.regExConditions[i];
-        //    var resultArrayForType: Array<Object> = resultObject[regExCondition.getSearchType()];
-        //    if (typeof resultArrayForType == 'undefined' || resultArrayForType == null) {
-        //        resultArrayForType = new Array();
-        //        resultObject[regExCondition.getSearchType()] = resultArrayForType;
-        //    }
-        //    resultArrayForType.push(regExCondition.getConditionValue());
-        //}
 
         for (var i = 0; i < this.regExConditions.length; i++) {
             var regExCondition: RegExCondition = this.regExConditions[i];
@@ -232,24 +223,6 @@ class RegExCondition extends RegExSearchBase {
         Stemma: "stemma"
     }
 
-    
-/*
- * CriteriaKey C# Enum values must match with searchType number values
-        [EnumMember] Author = 0,
-        [EnumMember] Title = 1,
-        [EnumMember] Editor = 2,
-        [EnumMember] Dating = 3,
-        [EnumMember] Text = 4
- * 
- */
-    private searchType = {
-        Author: 0,
-        Title: 1,
-        Responsible: 2,
-        Dating: 3,
-        Text: 4
-    }
-
     public makeRegExCondition() {
 
         var conditionsDiv = document.createElement("div");
@@ -270,12 +243,12 @@ class RegExCondition extends RegExSearchBase {
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
 
-        searchDestinationSelect.appendChild(this.createOption("Text", this.searchType.Text.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Autor", this.searchType.Author.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Titul", this.searchType.Title.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Editor", this.searchType.Responsible.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Text", SearchType.Text.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Autor", SearchType.Author.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Titul", SearchType.Title.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Editor", SearchType.Responsible.toString()));
 
-        this.selectedSearchType = this.searchType.Text;
+        this.selectedSearchType = SearchType.Text;
 
         $(searchDestinationSelect).change((eventData: Event) => {
             this.selectedSearchType = parseInt($(eventData.target).val());
@@ -533,6 +506,7 @@ class RegExWordInput extends RegExSearchBase {
     private conditionInput: HTMLInputElement;
     private conditionInputType: string;
     private parentRegExWordCondition: RegExWordCondition;
+    private regexButtonsDiv: HTMLDivElement;
 
     constructor(parent: RegExWordCondition) {
         super();
@@ -595,16 +569,13 @@ class RegExWordInput extends RegExSearchBase {
         regExButton.type = "button";
         $(regExButton).addClass("btn");
         $(regExButton).addClass("regexsearch-condition-input-button");
-        //$(regExButton).click(() => {
-        //    if (!this.regExEditor || this.editorDiv.children.length === 0) {
-        //        this.regExEditor = new RegExEditor(this.editorDiv, this.conditionInput);
-        //        this.regExEditor.makeRegExEditor();
-        //    } else if ($(this.editorDiv).hasClass("hidden")) {
-        //        $(this.editorDiv).removeClass("hidden");
-        //    } else {
-        //        $(this.editorDiv).addClass("hidden");
-        //    }
-        //});
+        $(regExButton).click(() => {
+            if ($(this.regexButtonsDiv).is(":hidden")) {
+                $(this.regexButtonsDiv).show();
+            } else {
+                $(this.regexButtonsDiv).hide();
+            }
+        });
         lineDiv.appendChild(regExButton);
 
         var removeButton: HTMLButtonElement = this.createButton("");
@@ -619,6 +590,28 @@ class RegExWordInput extends RegExSearchBase {
         lineDiv.appendChild(removeButton);
         mainDiv.appendChild(this.editorDiv);
         mainDiv.appendChild(lineDiv);
+
+
+        var regexButtonsDiv: HTMLDivElement = document.createElement("div");
+        $(regexButtonsDiv).addClass("regexsearch-regex-buttons-div");
+
+        var anythingButton: HTMLButtonElement = this.createButton("Cokoliv");
+        regexButtonsDiv.appendChild(anythingButton);
+        $(anythingButton).addClass("regexsearch-editor-button");
+        $(anythingButton).click(() => {
+            this.conditionInput.value += "%";
+        });
+
+        var oneCharButton: HTMLButtonElement = this.createButton("Jeden znak");
+        regexButtonsDiv.appendChild(oneCharButton);
+        $(oneCharButton).addClass("regexsearch-editor-button");
+        $(oneCharButton).click(() => {
+            this.conditionInput.value += "_";
+        });
+
+        this.regexButtonsDiv = regexButtonsDiv;
+        $(this.regexButtonsDiv).hide();
+        mainDiv.appendChild(regexButtonsDiv);
         
         this.html = mainDiv;
     }
@@ -630,6 +623,7 @@ class RegExWordInput extends RegExSearchBase {
     public getConditionType(): string {
         return this.conditionInputType;
     }
+
 }
 
 class WordInputType {
@@ -658,139 +652,20 @@ class WordsCriteriaConditionDescription {
     }
 }
 
-
-//class RegExEditor extends RegExSearchBase {
-//    container: HTMLDivElement;
-//    searchBox: HTMLInputElement;
-
-//    constructor(container: HTMLDivElement, searchBox: HTMLInputElement) {
-//        super();
-//        this.container = container;
-//        this.searchBox = searchBox;
-//    }
-
-//    private conditionType = Object.freeze({
-//        StartsWith: "starts-with",
-//        NotStartsWith: "not-starts-with",
-//        Contains: "contains",
-//        NotContains: "not-contains",
-//        EndsWith: "ends-with",
-//        NotEndsWith: "not-ends-with"
-//    });
-
-//    public makeRegExEditor() {
-//        $(this.container).empty();
-        
-//        var mainRegExDiv: HTMLDivElement = document.createElement("div");
-//        $(mainRegExDiv).addClass("content-container");
-//        $(mainRegExDiv).addClass("regexsearch-editor-container");
-
-//        var titleHeading: HTMLSpanElement = document.createElement("span");
-//        titleHeading.innerHTML = "Editor regulárního výrazu";
-//        $(titleHeading).addClass("regexsearch-editor-title");
-//        mainRegExDiv.appendChild(titleHeading);
-
-//        var editorDiv: HTMLDivElement = document.createElement("div");
-//        mainRegExDiv.appendChild(editorDiv);
-
-//        var conditionTitleDiv: HTMLDivElement = document.createElement("div");
-//        conditionTitleDiv.innerHTML = "Podmínka";
-//        editorDiv.appendChild(conditionTitleDiv);
-
-
-//        var conditionTypeDiv: HTMLDivElement = document.createElement("div");
-//        $(conditionTypeDiv).addClass("regexsearch-condition-type-div");
-//        editorDiv.appendChild(conditionTypeDiv);
-
-//        var conditionSelect: HTMLSelectElement = document.createElement("select");
-//        $(conditionSelect).addClass("regexsearch-condition-select");
-//        conditionTypeDiv.appendChild(conditionSelect);
-
-//        conditionSelect.appendChild(this.createOption("Začíná na", this.conditionType.StartsWith));
-//        conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
-//        conditionSelect.appendChild(this.createOption("Obsahuje", this.conditionType.Contains));
-//        conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
-//        conditionSelect.appendChild(this.createOption("Končí na", this.conditionType.EndsWith));
-//        conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
-
-
-//        var conditionDiv: HTMLDivElement = document.createElement("div");
-//        $(conditionDiv).addClass("regexsearch-condition-div");
-//        editorDiv.appendChild(conditionDiv);
-
-//        var conditionInputDiv: HTMLDivElement = document.createElement("div");
-//        conditionDiv.appendChild(conditionInputDiv);
-
-//        var conditionInput: HTMLInputElement = document.createElement("input");
-//        conditionInput.type = "text";
-//        $(conditionInput).addClass("regexsearch-input");
-//        conditionInputDiv.appendChild(conditionInput);
-
-//        var conditionButtonsDiv: HTMLDivElement = document.createElement("div");
-//        conditionDiv.appendChild(conditionButtonsDiv);
-
-//        var anythingButton: HTMLButtonElement = this.createButton("Cokoliv");
-//        conditionButtonsDiv.appendChild(anythingButton);
-//        $(anythingButton).addClass("regexsearch-editor-button");
-//        $(anythingButton).click(() => {
-//            conditionInput.value += ".*";
-//        });
-
-//        var orButton: HTMLButtonElement = this.createButton("Nebo");
-//        conditionButtonsDiv.appendChild(orButton);
-//        orButton.style.cssFloat = "right";
-//        $(orButton).addClass("regexsearch-editor-button");
-//        $(orButton).click(() => {
-//            conditionInput.value += "|";
-//        });
-
-
-//        var commandButtonsDiv: HTMLDivElement = document.createElement("div");
-//        $(commandButtonsDiv).addClass("regexsearch-command-buttons-div");
-//        editorDiv.appendChild(commandButtonsDiv);
-
-//        var stornoButton: HTMLButtonElement = this.createButton("Zrušit");
-//        commandButtonsDiv.appendChild(stornoButton);
-//        $(stornoButton).click(() => {
-//            $(this.container).empty();
-//        });
-
-//        var submitButton: HTMLButtonElement = this.createButton("Dokončit");
-//        commandButtonsDiv.appendChild(submitButton);
-//        $(submitButton).click(() => {
-//            var inputValue: string = conditionInput.value;
-//            var outputValue: string;
-            
-//            switch (conditionSelect.value) {
-//                case this.conditionType.StartsWith:
-//                    outputValue = "(" + inputValue + ")(.*)";
-//                    break;
-//                case this.conditionType.NotStartsWith:
-//                    outputValue = "(?!" + inputValue + ")(.*)";
-//                    break;
-//                case this.conditionType.Contains:
-//                    outputValue = "(.*)(" + inputValue + ")(.*)";
-//                    break;
-//                case this.conditionType.NotContains:
-//                    outputValue = "((?!" + inputValue + ").)*";
-//                    break;
-//                case this.conditionType.EndsWith:
-//                    outputValue = "(.*)(" + inputValue + ")";
-//                    break;
-//                case this.conditionType.NotEndsWith:
-//                    outputValue = "((?!" + inputValue + "$).)*";
-//                    break;
-//                default:
-//                    outputValue = "";
-//            }
-
-//            this.searchBox.value = "^" + outputValue + "$";
-
-//            $(this.container).addClass("hidden");
-//        });
-
-
-//        $(this.container).append(mainRegExDiv);
-//    }
-//}
-
+    
+/*
+ * CriteriaKey C# Enum values must match with searchType number values
+        [EnumMember] Author = 0,
+        [EnumMember] Title = 1,
+        [EnumMember] Editor = 2,
+        [EnumMember] Dating = 3,
+        [EnumMember] Text = 4
+ * 
+ */
+enum SearchType {
+    Author = 0,
+    Title = 1,
+    Responsible = 2,
+    Dating = 3,
+    Text = 4
+}

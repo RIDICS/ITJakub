@@ -1,6 +1,10 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+@section scripts{
+    @Scripts.Render("~/bundles/typeahead")
+    @Scripts.Render("~/itjakub/home/javascript")
+}
 <div class="top-offset-without-submenu">
     <form role="form" class="form-horizontal">
         <div class="form-group searchbar">

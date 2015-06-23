@@ -343,6 +343,12 @@
     <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.min.css">
       <DependentUpon>ITJakub.RegExSearch.css</DependentUpon>
     </Content>
+    <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.css">
+      <DependentUpon>ITJakub.SearchBox.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.min.css">
+      <DependentUpon>ITJakub.SearchBox.css</DependentUpon>
+    </Content>
     <Content Include="Content\Site.min.css">
       <DependentUpon>Site.css</DependentUpon>
     </Content>
@@ -572,6 +578,10 @@
     <Content Include="ITJakub.Web.Hub.Container.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.less" />
+    <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.css.map">
+      <DependentUpon>ITJakub.SearchBox.css</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
@@ -595,6 +605,8 @@
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\typeahead.bundle.js" />
+    <Content Include="Scripts\typeahead.bundle.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -650,6 +662,8 @@
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.search.ts" />
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.ts" />
+    <TypeScriptCompile Include="Scripts\Home\itjakub.home.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.searchbox.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.sorting.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.configuration.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.factories.ts" />
@@ -664,6 +678,7 @@
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\typeahead\typeahead.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">

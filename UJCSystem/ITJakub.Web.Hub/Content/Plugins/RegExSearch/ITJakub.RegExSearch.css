@@ -193,4 +193,8 @@ input.regexsearch-checkbox {
 .regex-search-button {
   float: right;
 }
+.regexsearch-regex-buttons-div {
+  width: 200px;
+  margin-left: 308px;
+}
 /*# sourceMappingURL=ITJakub.RegExSearch.css.map */

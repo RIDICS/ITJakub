@@ -5,20 +5,12 @@ using System.Runtime.Serialization;
 namespace ITJakub.ITJakubService.DataContracts
 {
     [DataContract]
-    [KnownType(typeof(StringListCriteriaContract))]
     [KnownType(typeof(DatingCriteriaContract))]
     [KnownType(typeof(WordListCriteriaContract))]
     public abstract class SearchCriteriaContract
     {
         [DataMember]
         public CriteriaKey Key { get; set; }
-    }
-
-    [DataContract]
-    public class StringListCriteriaContract : SearchCriteriaContract
-    {
-        [DataMember]
-        public List<string> Values { get; set; }
     }
 
     [DataContract]

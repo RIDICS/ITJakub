@@ -28,6 +28,9 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/bundles/dropzonescripts").Include(
                      "~/Scripts/dropzone/dropzone.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/typeahead").Include(
+                "~/Scripts/typeahead.bundle.js"));
+
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
                 "~/Scripts/Plugins/Search/itjakub.plugins.search.js",
@@ -38,7 +41,11 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js",
                 "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.js",
                 "~/Scripts/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js",
-                "~/Scripts/Plugins/RegExSearch/itjakub.plugins.regexsearch.js"));
+                "~/Scripts/Plugins/RegExSearch/itjakub.plugins.regexsearch.js",
+                "~/Scripts/Plugins/SearchBox/itjakub.plugins.searchbox.js"));
+
+            bundles.Add(new ScriptBundle("~/itjakub/home/javascript").Include(
+                "~/Scripts/Home/itjakub.home.js"));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
