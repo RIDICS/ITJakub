@@ -1,21 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet 
-    xmlns:xd="http://www.pnp-software.com/XSLTdoc" 
-    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" 
-    xmlns="http://www.w3.org/1999/XSL/Format" 
-    xmlns:rng="http://relaxng.org/ns/structure/1.0" 
-    xmlns:tei="http://www.tei-c.org/ns/1.0" 
-    xmlns:teix="http://www.tei-c.org/ns/Examples" 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-    exclude-result-prefixes="xd  a rng tei teix" 
-    version="2.0">
-  <xd:doc type="stylesheet">
-    <xd:short>
+<xsl:stylesheet xmlns="http://www.w3.org/1999/XSL/Format" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:teix="http://www.tei-c.org/ns/Examples" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xd="http://www.pnp-software.com/XSLTdoc" exclude-result-prefixes="xd  a rng tei teix" version="2.0">
+    <xd:doc type="stylesheet">
+        <xd:short>
     TEI stylesheet
     dealing  with elements from the
       verse module, making XSL-FO output.
       </xd:short>
-    <xd:detail>
+        <xd:detail>
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
@@ -33,8 +23,8 @@
    
    
       </xd:detail>
-    <xd:author>See AUTHORS</xd:author>
-    <xd:cvsId>$Id: verse.xsl 6981 2009-11-12 17:47:40Z rahtz $</xd:cvsId>
-    <xd:copyright>2008, TEI Consortium</xd:copyright>
-  </xd:doc>
+        <xd:author>See AUTHORS</xd:author>
+        <xd:cvsId>$Id: verse.xsl 6981 2009-11-12 17:47:40Z rahtz $</xd:cvsId>
+        <xd:copyright>2008, TEI Consortium</xd:copyright>
+    </xd:doc>
 </xsl:stylesheet>

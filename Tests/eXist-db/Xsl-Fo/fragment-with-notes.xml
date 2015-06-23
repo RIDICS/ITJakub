@@ -84,13 +84,10 @@
 			<region-after extent="14pt"/>
 		</simple-page-master>
 		<page-sequence-master master-name="zacatek1">
-			<repeatable-page-master-alternatives>
-<!--				<conditional-page-master-reference master-reference="obalka" page-position="first"/>-->
-				<conditional-page-master-reference master-reference="uvod1"/>
-			</repeatable-page-master-alternatives>
+			<single-page-master-reference master-reference="uvod1"/>
 		</page-sequence-master>
 	</layout-master-set>
-	<page-sequence format="1" text-align="justify" hyphenate="false" language="cs" initial-page-number="1" master-reference="uvod1">
+	<page-sequence format="1" text-align="justify" hyphenate="false" language="cs" initial-page-number="1" master-reference="simple1">
 		<static-content flow-name="xsl-region-before">
 			<block color="gray" height="14pt" font-family="FreeSans" font-size="7pt" text-align="center" overflow="hidden"><inline/></block>
 		</static-content>
@@ -109,7 +106,7 @@
 		<flow flow-name="xsl-region-body" font-family="FreeSerif" font-size="12pt">
 
 			<block keep-with-next.within-page="always" id="t-1.body-1.div-1" text-align="left" font-family="FreeSerif" hyphenate="false" color="#383C98" font-size="16pt"
-				font-weight="bold" space-after.optimum="3pt" space-after.maximum="6pt" space-before.optimum="9pt" space-before.maximum="12pt" text-indent="0em" page-break-before="always"/>
+				font-weight="bold" space-after.optimum="3pt" space-after.maximum="6pt" space-before.optimum="9pt" space-before.maximum="12pt" text-indent="0em"/>
 
 			<block keep-with-next.within-page="auto" id="t-1.body-1.div-1.div-1" text-align="left" font-family="FreeSerif" color="#383C98" font-size="14pt" space-after.optimum="5pt"
 				space-after.maximum="7pt" space-before.optimum="9pt" space-before.maximum="12pt" text-indent="0em"/>

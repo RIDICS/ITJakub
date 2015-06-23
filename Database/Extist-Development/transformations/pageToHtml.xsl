@@ -4,7 +4,6 @@
     <xsl:strip-space elements="*"/>
     <xsl:template match="tei:w">
         <span data-nlp-type="{name()}" data-nlp-lemma="{@nlp:lemma}">
-
             <xsl:apply-templates/>
         </span>
     </xsl:template>

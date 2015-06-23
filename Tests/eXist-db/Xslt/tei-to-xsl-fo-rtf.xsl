@@ -122,11 +122,42 @@
 			<region-after extent="{$regionAfterExtent}"/>
 		</simple-page-master>
 		<page-sequence-master master-name="zacatek1">
-			<repeatable-page-master-alternatives>
+			<single-page-master-reference master-reference="uvod1"/>
+			<!--<repeatable-page-master-alternatives>
 				<conditional-page-master-reference master-reference="obalka" page-position="first"/>
 				<conditional-page-master-reference master-reference="uvod1"/>
-			</repeatable-page-master-alternatives>
+			</repeatable-page-master-alternatives>-->
 		</page-sequence-master>
+	</xsl:template>
+	
+	<xsl:template name="setupDiv0">
+		<!--<xsl:attribute name="font-size">14pt</xsl:attribute>-->
+		<xsl:attribute name="hyphenate">
+			<xsl:text>false</xsl:text>
+		</xsl:attribute>
+		<xsl:attribute name="color">
+			<xsl:value-of select="$barvaLoga"/>
+		</xsl:attribute>
+		<xsl:attribute name="font-size">16pt</xsl:attribute>
+		<xsl:attribute name="text-align">left</xsl:attribute>
+		<xsl:attribute name="font-weight">bold</xsl:attribute>
+		<!--<xsl:attribute name="space-after.minimum">2pt</xsl:attribute>-->
+		<xsl:attribute name="space-after.optimum">3pt</xsl:attribute>
+		<xsl:attribute name="space-after.maximum">6pt</xsl:attribute>
+		<!--		<xsl:attribute name="space-before.minimum">6pt</xsl:attribute>-->
+		<xsl:attribute name="space-before.optimum">9pt</xsl:attribute>
+		<xsl:attribute name="space-before.maximum">12pt</xsl:attribute>
+		<xsl:attribute name="text-indent">
+			<xsl:value-of select="$headingOutdent"/>
+			<!-- zalomení stránky před oddílem -->
+		</xsl:attribute>
+		<xsl:attribute name="keep-with-next.within-page">always</xsl:attribute>
+<!--		<xsl:attribute name="page-break-before">always</xsl:attribute>-->
+		<xsl:if test="@xml:id">
+			<xsl:attribute name="id">
+				<xsl:value-of select="@xml:id"/>
+			</xsl:attribute>
+		</xsl:if>
 	</xsl:template>
 
 </xsl:stylesheet>
