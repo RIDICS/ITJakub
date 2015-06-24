@@ -8,6 +8,8 @@ namespace ITJakub.Shared.Contracts
         [EnumMember] Edition = 0, //Edice
         [EnumMember] Dictionary = 1, //Slovnik
         [EnumMember] Grammar = 2, //Mluvnice
-        [EnumMember] ProfessionalLiterature = 3 //Odborna literatura
+        [EnumMember] ProfessionalLiterature = 3, //Odborna literatura
+        [EnumMember] TextBank = 4, //Textova banka
+        [EnumMember] BibliographicalItem = 5
     }
 }

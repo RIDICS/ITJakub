@@ -98,6 +98,12 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         IList<string> GetTypeaheadDictionaryEntries(string query);
 
+        [OperationContract]
+        IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType);
+
+        [OperationContract]
+        IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType);
+
         #endregion
     }
 }

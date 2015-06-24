@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 {
@@ -35,13 +36,13 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            var result = m_serviceClient.GetTypeaheadAuthors(query);
+            var result = m_serviceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.ProfessionalLiterature);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            var result = m_serviceClient.GetTypeaheadTitles(query);
+            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.ProfessionalLiterature);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

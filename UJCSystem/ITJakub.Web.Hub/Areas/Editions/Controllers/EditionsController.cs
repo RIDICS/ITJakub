@@ -78,13 +78,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            var result = m_serviceClient.GetTypeaheadAuthors(query);
+            var result = m_serviceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Edition);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            var result = m_serviceClient.GetTypeaheadTitles(query);
+            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Edition);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

@@ -254,6 +254,28 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastAuthorsByBookType(int recordCount, BookTypeEnum bookType)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Author authorAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => bookVersionAlias.Authors, () => authorAlias)
+                    .JoinQueryOver(x => bookVersionAlias.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => authorAlias.Name)))
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual IList<string> GetTypeaheadAuthors(string query, int recordCount)
         {
             using (var session = GetSession())
@@ -266,6 +288,29 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.Authors, () => authorAlias)
                     .Select(Projections.Distinct(Projections.Property(() => authorAlias.Name)))
                     .WhereRestrictionOn(() => authorAlias.Name).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnum bookType, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Author authorAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Authors, () => authorAlias)
+                    .JoinQueryOver(x => bookVersionAlias.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => authorAlias.Name)))
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .AndRestrictionOn(() => authorAlias.Name).IsInsensitiveLike(query)
                     .Take(recordCount)
                     .List<string>();
             }
@@ -288,6 +333,27 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastTitlesByBookType(int recordCount, BookTypeEnum bookType)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .Select(x => bookVersionAlias.Title)
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .OrderBy(() => bookVersionAlias.CreateTime).Desc
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual IList<string> GetTypeaheadTitles(string query, int recordCount)
         {
             using (var session = GetSession())
@@ -298,6 +364,27 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .Select(x => bookVersionAlias.Title)
                     .WhereRestrictionOn(() => bookVersionAlias.Title).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+        
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnum bookType, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .Select(x => bookVersionAlias.Title)
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .AndRestrictionOn(() => bookVersionAlias.Title).IsInsensitiveLike(query)
                     .Take(recordCount)
                     .List<string>();
             }

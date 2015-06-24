@@ -662,5 +662,59 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+        
+        public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType)
+        {
+            try
+            {
+                return Channel.GetTypeaheadAuthorsByBookType(query, bookType);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthorsByBookType failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthorsByBookType failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthorsByBookType timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType)
+        {
+            try
+            {
+                return Channel.GetTypeaheadTitlesByBookType(query, bookType);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitlesByBookType failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitlesByBookType failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitlesByBookType timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

@@ -113,6 +113,16 @@ namespace ITJakub.ITJakubService.Core
             return m_bookRepository.GetTypeaheadAuthors(query, PrefetchRecordCount);
         }
 
+        public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookTypeContract)
+        {
+            var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastAuthorsByBookType(PrefetchRecordCount, bookType);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadAuthorsByBookType(query, bookType, PrefetchRecordCount);
+        }
+
         public IList<string> GetTypeaheadTitles(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
@@ -122,6 +132,16 @@ namespace ITJakub.ITJakubService.Core
             return m_bookRepository.GetTypeaheadTitles(query, PrefetchRecordCount);
         }
 
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookTypeContract)
+        {
+            var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastTitlesByBookType(PrefetchRecordCount, bookType);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadTitlesByBookType(query, bookType, PrefetchRecordCount);
+        }
+        
         public IList<string> GetTypeaheadDictionaryEntries(string query)
         {
             return new List<string> {"TODO"}; // TODO search dictionary entries
