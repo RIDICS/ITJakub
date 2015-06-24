@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
@@ -243,13 +242,13 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<string> GetLastAuthors(int prefetchRecordCount)
+        public virtual IList<string> GetLastAuthors(int recordCount)
         {
             using (var session = GetSession())
             {
                 return session.QueryOver<Author>()
                     .Select(x => x.Name)
-                    .Take(prefetchRecordCount)
+                    .Take(recordCount)
                     .List<string>();
             }
         }
@@ -267,6 +266,38 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.Authors, () => authorAlias)
                     .Select(Projections.Distinct(Projections.Property(() => authorAlias.Name)))
                     .WhereRestrictionOn(() => authorAlias.Name).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastTitles(int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .Select(x => bookVersionAlias.Title)
+                    .OrderBy(() => bookVersionAlias.CreateTime).Desc
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadTitles(string query, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .Select(x => bookVersionAlias.Title)
+                    .WhereRestrictionOn(() => bookVersionAlias.Title).IsInsensitiveLike(query)
                     .Take(recordCount)
                     .List<string>();
             }

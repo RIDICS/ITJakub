@@ -608,5 +608,32 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public IList<string> GetTypeaheadTitles(string query)
+        {
+            try
+            {
+                return Channel.GetTypeaheadTitles(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitles failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitles failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitles timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

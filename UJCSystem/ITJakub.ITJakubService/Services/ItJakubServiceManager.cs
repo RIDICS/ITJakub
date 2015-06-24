@@ -154,6 +154,10 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.GetTypeaheadAuthors(query);
         }
-     
+
+        public IList<string> GetTypeaheadTitles(string query)
+        {
+            return m_searchManager.GetTypeaheadTitles(query);
+        }
     }
 }

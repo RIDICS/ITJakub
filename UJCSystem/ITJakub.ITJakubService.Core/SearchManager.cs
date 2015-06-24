@@ -99,15 +99,28 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<MobileContracts.BookContract>>(bookList);
         }
 
+        private string PrepareQuery(string query)
+        {
+            query = query.TrimStart().TrimEnd().Replace(" ", "% %");
+            return string.Format("%{0}%", query);
+        }
+
         public IList<string> GetTypeaheadAuthors(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
                 return m_bookRepository.GetLastAuthors(PrefetchRecordCount);
 
-            query = query.TrimStart().TrimEnd().Replace(" ", "% %");
-            query = string.Format("%{0}%", query);
-            
+            query = PrepareQuery(query);
             return m_bookRepository.GetTypeaheadAuthors(query, PrefetchRecordCount);
+        }
+
+        public IList<string> GetTypeaheadTitles(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastTitles(PrefetchRecordCount);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadTitles(query, PrefetchRecordCount);
         }
     }
 }
