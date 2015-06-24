@@ -51,7 +51,7 @@ var RegExSearch = (function (_super) {
         if (this.regExConditions.length > 0) {
             this.regExConditions[this.regExConditions.length - 1].setTextDelimeter();
         }
-        var newRegExConditions = new RegExCondition(this);
+        var newRegExConditions = new RegExConditionListItem(this);
         newRegExConditions.makeRegExCondition();
         newRegExConditions.setClickableDelimeter();
         if (!useDelimiter) {
@@ -99,8 +99,8 @@ var RegExSearch = (function (_super) {
             traditional: true,
             data: json,
             url: "/Dictionaries/Dictionaries/SearchCriteria",
-            dataType: 'json',
-            contentType: 'application/json',
+            dataType: "json",
+            contentType: "application/json",
             success: function (response) {
             },
             error: function (response) {
@@ -109,43 +109,37 @@ var RegExSearch = (function (_super) {
     };
     return RegExSearch;
 })(RegExSearchBase);
-var RegExCondition = (function (_super) {
-    __extends(RegExCondition, _super);
-    function RegExCondition(parent) {
+var RegExConditionListItem = (function (_super) {
+    __extends(RegExConditionListItem, _super);
+    function RegExConditionListItem(parent) {
         _super.call(this);
-        this.wordFormType = {
-            Lemma: "lemma",
-            HyperlemmaNew: "hyperlemma-new",
-            HyperlemmaOld: "hyperlemma-old",
-            Stemma: "stemma"
-        };
         this.parent = parent;
     }
-    RegExCondition.prototype.getHtml = function () {
+    RegExConditionListItem.prototype.getHtml = function () {
         return this.html;
     };
-    RegExCondition.prototype.removeDelimeter = function () {
+    RegExConditionListItem.prototype.removeDelimeter = function () {
         $(this.html).find(".regexsearch-delimiter").empty();
     };
-    RegExCondition.prototype.hasDelimeter = function () {
-        var isEmpty = $(this.html).find(".regexsearch-delimiter").is(':empty');
+    RegExConditionListItem.prototype.hasDelimeter = function () {
+        var isEmpty = $(this.html).find(".regexsearch-delimiter").is(":empty");
         return !isEmpty;
     };
-    RegExCondition.prototype.setTextDelimeter = function () {
+    RegExConditionListItem.prototype.setTextDelimeter = function () {
         var textDelimeter = this.createTextDelimeter();
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
         $(this.html).find(".regexsearch-delimiter").append(textDelimeter);
     };
-    RegExCondition.prototype.setClickableDelimeter = function () {
+    RegExConditionListItem.prototype.setClickableDelimeter = function () {
         var clickableDelimeter = this.createClickableDelimeter();
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
         $(this.html).find(".regexsearch-delimiter").append(clickableDelimeter);
     };
-    RegExCondition.prototype.createClickableDelimeter = function () {
+    RegExConditionListItem.prototype.createClickableDelimeter = function () {
         var _this = this;
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
@@ -166,7 +160,7 @@ var RegExCondition = (function (_super) {
         delimeterDiv.appendChild(trashButton);
         return delimeterDiv;
     };
-    RegExCondition.prototype.createTextDelimeter = function () {
+    RegExConditionListItem.prototype.createTextDelimeter = function () {
         var _this = this;
         var delimeterDiv = document.createElement("div");
         delimeterDiv.innerHTML = "A zároveň";
@@ -181,13 +175,10 @@ var RegExCondition = (function (_super) {
         delimeterDiv.appendChild(trashButton);
         return delimeterDiv;
     };
-    RegExCondition.prototype.getWordFormType = function () {
-        return this.selectedWordFormType;
-    };
-    RegExCondition.prototype.getSearchType = function () {
+    RegExConditionListItem.prototype.getSearchType = function () {
         return this.selectedSearchType;
     };
-    RegExCondition.prototype.makeRegExCondition = function () {
+    RegExConditionListItem.prototype.makeRegExCondition = function () {
         var _this = this;
         var conditionsDiv = document.createElement("div");
         $(conditionsDiv).addClass("regexsearch-condition-main-div");
@@ -210,9 +201,61 @@ var RegExCondition = (function (_super) {
         $(searchDestinationSelect).change(function (eventData) {
             _this.selectedSearchType = parseInt($(eventData.target).val());
         });
+        $(conditionsDiv).append(mainSearchDiv);
+        this.innerConditionContainer = document.createElement("div");
+        $(this.innerConditionContainer).addClass("regex-inner-conditon-container");
+        this.makeDefaultCondition();
+        $(conditionsDiv).append(this.innerConditionContainer);
+        var delimeterDiv = document.createElement("div");
+        $(delimeterDiv).addClass("regexsearch-delimiter");
+        $(conditionsDiv).append(delimeterDiv);
+        this.setClickableDelimeter();
+        this.html = conditionsDiv;
+    };
+    RegExConditionListItem.prototype.makeDefaultCondition = function () {
+        $(this.innerConditionContainer).empty();
+        this.innerCondition = new RegExWordConditionList(this);
+        this.innerCondition.makeRegExCondition(this.innerConditionContainer);
+    };
+    RegExConditionListItem.prototype.getConditionValue = function () {
+        var conditionResult = this.innerCondition.getConditionValue();
+        conditionResult.searchType = this.getSearchType();
+        return conditionResult;
+    };
+    return RegExConditionListItem;
+})(RegExSearchBase);
+var RegExConditionBase = (function (_super) {
+    __extends(RegExConditionBase, _super);
+    function RegExConditionBase(parent) {
+        _super.call(this);
+        this.parentRegExConditionList = parent;
+    }
+    RegExConditionBase.prototype.makeRegExCondition = function (conditionContainerDiv) {
+    };
+    RegExConditionBase.prototype.getConditionValue = function () {
+        return null;
+    };
+    return RegExConditionBase;
+})(RegExSearchBase);
+var RegExWordConditionList = (function (_super) {
+    __extends(RegExWordConditionList, _super);
+    function RegExWordConditionList(parent) {
+        _super.call(this, parent);
+        this.wordFormType = {
+            Lemma: "lemma",
+            HyperlemmaNew: "hyperlemma-new",
+            HyperlemmaOld: "hyperlemma-old",
+            Stemma: "stemma"
+        };
+    }
+    RegExWordConditionList.prototype.getWordFormType = function () {
+        return this.selectedWordFormType;
+    };
+    RegExWordConditionList.prototype.makeRegExCondition = function (conditionContainerDiv) {
+        var _this = this;
         var wordFormDiv = document.createElement("div");
         $(wordFormDiv).addClass("regexsearch-word-form-div");
-        //mainSearchDiv.appendChild(wordFormDiv); //TODO implement after it iss implemented on server side
+        //wordListContainerDiv.appendChild(wordFormDiv); //TODO implement after it iss implemented on server side
         var wordFormSpan = document.createElement("span");
         wordFormSpan.innerHTML = "Tvar slova";
         $(wordFormSpan).addClass("regexsearch-upper-select-label");
@@ -228,39 +271,41 @@ var RegExCondition = (function (_super) {
         $(wordFormSelect).change(function (eventData) {
             _this.selectedWordFormType = $(eventData.target).val();
         });
-        this.conditionContainerDiv = document.createElement("div");
-        $(this.conditionContainerDiv).addClass("regexsearch-condition-list-div");
-        mainSearchDiv.appendChild(this.conditionContainerDiv);
-        $(conditionsDiv).append(mainSearchDiv);
-        var delimeterDiv = document.createElement("div");
-        $(delimeterDiv).addClass("regexsearch-delimiter");
-        $(conditionsDiv).append(delimeterDiv);
+        this.wordListContainerDiv = document.createElement("div");
+        $(this.wordListContainerDiv).addClass("regexsearch-condition-list-div");
+        conditionContainerDiv.appendChild(this.wordListContainerDiv);
         this.resetWords();
-        this.html = conditionsDiv;
-        this.setClickableDelimeter();
     };
-    RegExCondition.prototype.resetWords = function () {
-        $(this.conditionContainerDiv).empty();
+    RegExWordConditionList.prototype.getConditionValue = function () {
+        var criteriaDescriptions = new WordsCriteriaListDescription();
+        for (var i = 0; i < this.conditionInputArray.length; i++) {
+            var regExWordCondition = this.conditionInputArray[i];
+            criteriaDescriptions.wordCriteriaDescription.push(regExWordCondition.getConditionsValue());
+        }
+        return criteriaDescriptions;
+    };
+    RegExWordConditionList.prototype.resetWords = function () {
+        $(this.wordListContainerDiv).empty();
         this.conditionInputArray = [];
         var newWordCondition = new RegExWordCondition(this);
         newWordCondition.makeRegExWordCondition();
         newWordCondition.setClickableDelimeter();
         this.conditionInputArray.push(newWordCondition);
-        this.conditionContainerDiv.appendChild(newWordCondition.getHtml());
+        this.wordListContainerDiv.appendChild(newWordCondition.getHtml());
     };
-    RegExCondition.prototype.addWord = function () {
+    RegExWordConditionList.prototype.addWord = function () {
         this.conditionInputArray[this.conditionInputArray.length - 1].setTextDelimeter();
         var newWordCondition = new RegExWordCondition(this);
         newWordCondition.makeRegExWordCondition();
         newWordCondition.setClickableDelimeter();
         this.conditionInputArray.push(newWordCondition);
-        this.conditionContainerDiv.appendChild(newWordCondition.getHtml());
+        this.wordListContainerDiv.appendChild(newWordCondition.getHtml());
     };
-    RegExCondition.prototype.removeWord = function (condition) {
+    RegExWordConditionList.prototype.removeWord = function (condition) {
         var index = this.conditionInputArray.indexOf(condition, 0);
         if (index != undefined) {
             var arrayItem = this.conditionInputArray[index];
-            this.conditionContainerDiv.removeChild(arrayItem.getHtml());
+            this.wordListContainerDiv.removeChild(arrayItem.getHtml());
             this.conditionInputArray.splice(index, 1);
         }
         if (this.conditionInputArray.length === 1) {
@@ -270,22 +315,18 @@ var RegExCondition = (function (_super) {
             this.resetWords();
         }
     };
-    RegExCondition.prototype.getConditionValue = function () {
-        var criteriaDescriptions = new WordsCriteriaConditionDescription();
-        criteriaDescriptions.searchType = this.getSearchType();
-        for (var i = 0; i < this.conditionInputArray.length; i++) {
-            var regExWordCondition = this.conditionInputArray[i];
-            criteriaDescriptions.wordCriteriaDescription.push(regExWordCondition.getConditionsValue());
-        }
-        return criteriaDescriptions;
-    };
-    return RegExCondition;
-})(RegExSearchBase);
-var RegExWordCondition = (function (_super) {
-    __extends(RegExWordCondition, _super);
+    return RegExWordConditionList;
+})(RegExConditionBase);
+var RegExDatingCondition = (function (_super) {
+    __extends(RegExDatingCondition, _super);
+    function RegExDatingCondition(parent) {
+        _super.call(this, parent);
+    }
+    return RegExDatingCondition;
+})(RegExConditionBase);
+var RegExWordCondition = (function () {
     function RegExWordCondition(parent) {
-        _super.call(this);
-        this.parentRegExCondition = parent;
+        this.parent = parent;
     }
     RegExWordCondition.prototype.getHtml = function () {
         return this.html;
@@ -294,7 +335,7 @@ var RegExWordCondition = (function (_super) {
         $(this.html).find(".regexsearch-or-delimiter").empty();
     };
     RegExWordCondition.prototype.hasDelimeter = function () {
-        var isEmpty = $(this.html).find(".regexsearch-or-delimiter").is(':empty');
+        var isEmpty = $(this.html).find(".regexsearch-or-delimiter").is(":empty");
         return !isEmpty;
     };
     RegExWordCondition.prototype.setTextDelimeter = function () {
@@ -318,7 +359,7 @@ var RegExWordCondition = (function (_super) {
         $(addWordSpan).addClass("regex-clickable-text");
         addWordSpan.innerHTML = "+ Nebo";
         $(addWordSpan).click(function () {
-            _this.parentRegExCondition.addWord();
+            _this.parent.addWord();
         });
         delimeterDiv.appendChild(addWordSpan);
         $(delimeterDiv).addClass("regexsearch-or-delimiter");
@@ -328,7 +369,7 @@ var RegExWordCondition = (function (_super) {
         $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
         trashButton.appendChild(removeGlyph);
         $(trashButton).click(function () {
-            _this.parentRegExCondition.removeWord(_this);
+            _this.parent.removeWord(_this);
         });
         delimeterDiv.appendChild(trashButton);
         return delimeterDiv;
@@ -344,7 +385,7 @@ var RegExWordCondition = (function (_super) {
         $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
         trashButton.appendChild(removeGlyph);
         $(trashButton).click(function () {
-            _this.parentRegExCondition.removeWord(_this);
+            _this.parent.removeWord(_this);
         });
         delimeterDiv.appendChild(trashButton);
         return delimeterDiv;
@@ -359,7 +400,12 @@ var RegExWordCondition = (function (_super) {
         var commandsDiv = document.createElement("div");
         $(commandsDiv).addClass("regexsearch-conditions-commands");
         mainDiv.appendChild(commandsDiv);
-        var addConditionButton = this.createButton("+");
+        var addConditionButton = document.createElement("button");
+        addConditionButton.type = "button";
+        addConditionButton.innerHTML = "+";
+        $(addConditionButton).addClass("btn");
+        $(addConditionButton).addClass("btn-default");
+        $(addConditionButton).addClass("regexsearch-button");
         $(addConditionButton).addClass("regexsearch-add-input-button");
         $(addConditionButton).click(function () {
             _this.addInput();
@@ -422,7 +468,7 @@ var RegExWordCondition = (function (_super) {
     };
     RegExWordCondition.prototype.wordInputConditionChanged = function (wordInput, oldWordInputType) {
         var newWordInputType = wordInput.getConditionType();
-        if (typeof oldWordInputType !== 'undefined') {
+        if (typeof oldWordInputType !== "undefined") {
             this.wordInpuConditionRemoved(oldWordInputType);
         }
         if (!(newWordInputType === 1 /* Contains */)) {
@@ -446,7 +492,7 @@ var RegExWordCondition = (function (_super) {
         }
     };
     return RegExWordCondition;
-})(RegExSearchBase);
+})();
 var RegExWordInput = (function (_super) {
     __extends(RegExWordInput, _super);
     function RegExWordInput(parent) {
@@ -458,7 +504,7 @@ var RegExWordInput = (function (_super) {
     };
     RegExWordInput.prototype.hasDelimeter = function () {
         var delimeter = $(this.html).find(".regexsearch-input-and-delimiter");
-        return (typeof delimeter != 'undefined' && delimeter != null);
+        return (typeof delimeter != "undefined" && delimeter != null);
     };
     RegExWordInput.prototype.makeRegExInput = function () {
         var _this = this;
@@ -547,24 +593,31 @@ var RegExWordInput = (function (_super) {
         return this.conditionInputType;
     };
     RegExWordInput.prototype.showSelectCondition = function (wordInputType) {
-        $(this.conditionSelectbox).find("option[value=" + (wordInputType.toString()) + "]").show();
+        $(this.conditionSelectbox).find("option[value=" + wordInputType.toString() + "]").show();
     };
     RegExWordInput.prototype.hideSelectCondition = function (wordInputType) {
-        $(this.conditionSelectbox).find("option[value=" + (wordInputType.toString()) + "]").hide();
+        $(this.conditionSelectbox).find("option[value=" + wordInputType.toString() + "]").hide();
     };
     return RegExWordInput;
 })(RegExSearchBase);
+var ConditionResult = (function () {
+    function ConditionResult() {
+    }
+    return ConditionResult;
+})();
+var WordsCriteriaListDescription = (function (_super) {
+    __extends(WordsCriteriaListDescription, _super);
+    function WordsCriteriaListDescription() {
+        _super.call(this);
+        this.wordCriteriaDescription = new Array();
+    }
+    return WordsCriteriaListDescription;
+})(ConditionResult);
 var WordCriteriaDescription = (function () {
     function WordCriteriaDescription() {
         this.contains = new Array();
     }
     return WordCriteriaDescription;
-})();
-var WordsCriteriaConditionDescription = (function () {
-    function WordsCriteriaConditionDescription() {
-        this.wordCriteriaDescription = new Array();
-    }
-    return WordsCriteriaConditionDescription;
 })();
 var WordInputType;
 (function (WordInputType) {
