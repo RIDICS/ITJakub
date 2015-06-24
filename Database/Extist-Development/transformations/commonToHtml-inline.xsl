@@ -9,8 +9,8 @@
         </xd:desc>
     </xd:doc>
     <xsl:output method="html" indent="yes" encoding="UTF-8"/>
-    <xsl:variable name="svislice" select="']'"/>
-    <xsl:variable name="svisliceSMezerou" select="concat($svislice, ' ')"/>
+    <xsl:variable name="skoba" select="']'"/>
+    <xsl:variable name="skobaSMezerou" select="concat($skoba, ' ')"/>
     <xsl:variable name="zacatekRelace" select="'‹'"/>
     <xsl:variable name="konecRelace" select="'›'"/>
     <xd:doc>
@@ -67,7 +67,7 @@
         </span>
         <xsl:choose>
             <xsl:when test="following-sibling::*[1][self::tei:sic]">
-                <xsl:value-of select="$svisliceSMezerou"/>
+                <xsl:value-of select="$skobaSMezerou"/>
             </xsl:when>
             <xsl:otherwise> </xsl:otherwise>
         </xsl:choose>
