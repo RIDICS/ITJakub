@@ -122,17 +122,17 @@ namespace ITJakub.ITJakubService.Core.Search
             var manuscriptAlias = string.Format("m{0}", Guid.NewGuid().ToString("N"));
             var whereBuilder = new StringBuilder();
 
-            if (datingCriteriaContract.NotBefore.ToBinary() != 0)
+            if (datingCriteriaContract.NotBefore != null)
             {
-                whereBuilder.AppendFormat("{0}.NotBefore >= ?", manuscriptAlias);
-                datingParameters.Add(datingCriteriaContract.NotBefore);
+                whereBuilder.AppendFormat("{0}.NotAfter >= ?", manuscriptAlias);
+                datingParameters.Add(datingCriteriaContract.NotBefore.Value);
             }
-            if (datingCriteriaContract.NotAfter.ToBinary() != 0)
+            if (datingCriteriaContract.NotAfter != null)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" and ");
-                whereBuilder.AppendFormat("{0}.NotAfter <= ?", manuscriptAlias);
-                datingParameters.Add(datingCriteriaContract.NotAfter);
+                whereBuilder.AppendFormat("{0}.NotBefore <= ?", manuscriptAlias);
+                datingParameters.Add(datingCriteriaContract.NotAfter.Value);
             }
             
             return new SearchCriteriaQuery

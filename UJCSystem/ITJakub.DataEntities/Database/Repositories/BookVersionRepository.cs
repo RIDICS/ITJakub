@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Castle.Facilities.NHibernateIntegration;
@@ -7,6 +8,7 @@ using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using log4net;
 using NHibernate.Transform;
+using NHibernate.Type;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -206,7 +208,12 @@ namespace ITJakub.DataEntities.Database.Repositories
                 {
                     foreach (var parameterValue in criteriaQuery.Parameters)
                     {
-                        query.SetParameter(paramIndex, parameterValue);
+                        if (parameterValue is DateTime)
+                            //set parameter as DateTime2 otherwise comparison years before 1753 doesn't work
+                            query.SetDateTime2(paramIndex, (DateTime)parameterValue);
+                        else
+                            query.SetParameter(paramIndex, parameterValue);
+
                         paramIndex++;
                     }
                 }
