@@ -197,9 +197,14 @@ var RegExConditionListItem = (function (_super) {
         searchDestinationSelect.appendChild(this.createOption("Autor", 0 /* Author */.toString()));
         searchDestinationSelect.appendChild(this.createOption("Titul", 1 /* Title */.toString()));
         searchDestinationSelect.appendChild(this.createOption("Editor", 2 /* Responsible */.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Datace", 3 /* Dating */.toString()));
         this.selectedSearchType = 4 /* Text */;
         $(searchDestinationSelect).change(function (eventData) {
+            var oldSelectedSearchType = _this.selectedSearchType;
             _this.selectedSearchType = parseInt($(eventData.target).val());
+            if (_this.selectedSearchType !== oldSelectedSearchType) {
+                _this.changeConditionType(_this.selectedSearchType, oldSelectedSearchType);
+            }
         });
         $(conditionsDiv).append(mainSearchDiv);
         this.innerConditionContainer = document.createElement("div");
@@ -211,6 +216,18 @@ var RegExConditionListItem = (function (_super) {
         $(conditionsDiv).append(delimeterDiv);
         this.setClickableDelimeter();
         this.html = conditionsDiv;
+    };
+    RegExConditionListItem.prototype.changeConditionType = function (newSearchType, oldSearchType) {
+        if (this.innerCondition instanceof RegExWordConditionList && newSearchType === 3 /* Dating */) {
+            $(this.innerConditionContainer).empty();
+            this.innerCondition = new RegExDatingCondition(this);
+            this.innerCondition.makeRegExCondition(this.innerConditionContainer);
+        }
+        else if (this.innerCondition instanceof RegExDatingCondition && newSearchType !== 3 /* Dating */) {
+            $(this.innerConditionContainer).empty();
+            this.innerCondition = new RegExWordConditionList(this);
+            this.innerCondition.makeRegExCondition(this.innerConditionContainer);
+        }
     };
     RegExConditionListItem.prototype.makeDefaultCondition = function () {
         $(this.innerConditionContainer).empty();
@@ -322,6 +339,54 @@ var RegExDatingCondition = (function (_super) {
     function RegExDatingCondition(parent) {
         _super.call(this, parent);
     }
+    RegExDatingCondition.prototype.makeRegExCondition = function (conditionContainerDiv) {
+        var datingDiv = document.createElement('div');
+        $(datingDiv).addClass("regex-dating-condition");
+        var slider = document.createElement('div');
+        $(slider).addClass('slider');
+        $(slider).slider({
+            min: 0,
+            max: 5,
+            value: 0,
+            start: function (event, ui) {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
+            },
+            stop: function (event, ui) {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').fadeOut(1000);
+            },
+            slide: function (event, ui) {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
+                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html((ui.value + 1) + " . století");
+            },
+            change: function (event, ui) {
+            }
+        });
+        var sliderTooltip = document.createElement('div');
+        $(sliderTooltip).addClass('tooltip top slider-tip');
+        var arrowTooltip = document.createElement('div');
+        $(arrowTooltip).addClass('tooltip-arrow');
+        sliderTooltip.appendChild(arrowTooltip);
+        var innerTooltip = document.createElement('div');
+        $(innerTooltip).addClass('tooltip-inner');
+        $(innerTooltip).html("6" + " .století ");
+        sliderTooltip.appendChild(innerTooltip);
+        $(sliderTooltip).hide();
+        var sliderHandle = $(slider).find('.ui-slider-handle');
+        $(sliderHandle).append(sliderTooltip);
+        $(sliderHandle).hover(function (event) {
+            $(event.target).find('.slider-tip').stop(true, true);
+            $(event.target).find('.slider-tip').show();
+        });
+        $(sliderHandle).mouseout(function (event) {
+            $(event.target).find('.slider-tip').fadeOut(1000);
+        });
+        datingDiv.appendChild(slider);
+        $(conditionContainerDiv).append(datingDiv);
+    };
+    RegExDatingCondition.prototype.getConditionValue = function () {
+        return null; //TODO
+    };
     return RegExDatingCondition;
 })(RegExConditionBase);
 var RegExWordCondition = (function () {

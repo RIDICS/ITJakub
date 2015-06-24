@@ -211,6 +211,7 @@ class RegExConditionListItem extends RegExSearchBase {
     }
 
     makeRegExCondition() {
+
         var conditionsDiv = document.createElement("div");
         $(conditionsDiv).addClass("regexsearch-condition-main-div");
 
@@ -233,11 +234,17 @@ class RegExConditionListItem extends RegExSearchBase {
         searchDestinationSelect.appendChild(this.createOption("Autor", SearchType.Author.toString()));
         searchDestinationSelect.appendChild(this.createOption("Titul", SearchType.Title.toString()));
         searchDestinationSelect.appendChild(this.createOption("Editor", SearchType.Responsible.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Datace", SearchType.Dating.toString()));
 
         this.selectedSearchType = SearchType.Text;
 
         $(searchDestinationSelect).change((eventData: Event) => {
+            var oldSelectedSearchType = this.selectedSearchType;
             this.selectedSearchType = parseInt($(eventData.target).val());
+
+            if (this.selectedSearchType !== oldSelectedSearchType) {
+                this.changeConditionType(this.selectedSearchType, oldSelectedSearchType);
+            }
         });
 
         $(conditionsDiv).append(mainSearchDiv);
@@ -252,8 +259,20 @@ class RegExConditionListItem extends RegExSearchBase {
         $(delimeterDiv).addClass("regexsearch-delimiter");
         $(conditionsDiv).append(delimeterDiv);
         this.setClickableDelimeter();
-
         this.html = conditionsDiv;
+
+    }
+
+    private changeConditionType(newSearchType : SearchType, oldSearchType: SearchType) {
+        if (this.innerCondition instanceof RegExWordConditionList && newSearchType === SearchType.Dating) {
+            $(this.innerConditionContainer).empty();
+            this.innerCondition = new RegExDatingCondition(this);
+            this.innerCondition.makeRegExCondition(this.innerConditionContainer);
+        } else if (this.innerCondition instanceof RegExDatingCondition && newSearchType !== SearchType.Dating) {
+            $(this.innerConditionContainer).empty();
+            this.innerCondition = new RegExWordConditionList(this);
+            this.innerCondition.makeRegExCondition(this.innerConditionContainer);
+        }
     }
 
     private makeDefaultCondition() {
@@ -270,9 +289,11 @@ class RegExConditionListItem extends RegExSearchBase {
 }
 
 interface IRegExConditionBase {
+
     makeRegExCondition(conditionContainerDiv: HTMLDivElement);
 
     getConditionValue(): ConditionResult;
+
 }
 
 class RegExConditionBase extends RegExSearchBase implements IRegExConditionBase {
@@ -388,11 +409,67 @@ class RegExWordConditionList extends RegExConditionBase {
     }
 }
 
-
 class RegExDatingCondition extends RegExConditionBase {
 
     constructor(parent: RegExConditionListItem) {
         super(parent);
+    }
+
+    makeRegExCondition(conditionContainerDiv: HTMLDivElement) {
+        var datingDiv = document.createElement('div');
+        $(datingDiv).addClass("regex-dating-condition");
+
+        var slider: HTMLDivElement = document.createElement('div');
+        $(slider).addClass('slider');
+        $(slider).slider({
+            min: 0,
+            max: 5, //TODO
+            value: 0,
+            start: (event, ui) => {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
+            },
+            stop: (event, ui) => {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').fadeOut(1000);
+            },
+            slide: (event, ui) => {
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
+                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
+                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html((ui.value + 1) + " . století");
+
+            },
+            change: (event: Event, ui: JQueryUI.SliderUIParams) => {
+
+            }
+        });
+
+        var sliderTooltip: HTMLDivElement = document.createElement('div');
+        $(sliderTooltip).addClass('tooltip top slider-tip');
+        var arrowTooltip: HTMLDivElement = document.createElement('div');
+        $(arrowTooltip).addClass('tooltip-arrow');
+        sliderTooltip.appendChild(arrowTooltip);
+
+        var innerTooltip: HTMLDivElement = document.createElement('div');
+        $(innerTooltip).addClass('tooltip-inner');
+        $(innerTooltip).html("6"+" .století ");
+        sliderTooltip.appendChild(innerTooltip);
+        $(sliderTooltip).hide();
+
+        var sliderHandle = $(slider).find('.ui-slider-handle');
+        $(sliderHandle).append(sliderTooltip);
+        $(sliderHandle).hover((event) => {
+            $(event.target).find('.slider-tip').stop(true, true);
+            $(event.target).find('.slider-tip').show();
+        });
+        $(sliderHandle).mouseout((event) => {
+            $(event.target).find('.slider-tip').fadeOut(1000);
+        });
+        datingDiv.appendChild(slider);
+
+        $(conditionContainerDiv).append(datingDiv);
+    }
+
+    getConditionValue(): ConditionResult {
+        return null; //TODO
     }
 }
 
