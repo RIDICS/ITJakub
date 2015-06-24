@@ -32,5 +32,17 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         {
             return View();
         }
+        
+        public ActionResult GetTypeaheadAuthor(string query)
+        {
+            var result = m_serviceClient.GetTypeaheadAuthors(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetTypeaheadTitle(string query)
+        {
+            var result = m_serviceClient.GetTypeaheadTitles(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -8,7 +8,6 @@ using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using log4net;
 using NHibernate.Transform;
-using NHibernate.Type;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {

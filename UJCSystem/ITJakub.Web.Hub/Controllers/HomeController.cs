@@ -30,8 +30,8 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadDictionaryEntry(string query)
         {
-            //TODO get dictionary entries
-            return Json(new [] {"TODO"}, JsonRequestBehavior.AllowGet);
+            var result = m_mainServiceClient.GetTypeaheadDictionaryEntries(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

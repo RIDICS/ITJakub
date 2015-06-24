@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -109,6 +108,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var wordListCriteriaContracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
             m_mainServiceClient.SearchByCriteria(wordListCriteriaContracts);
             return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetTypeaheadDictionaryEntry(string query)
+        {
+            var result = m_mainServiceClient.GetTypeaheadDictionaryEntries(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

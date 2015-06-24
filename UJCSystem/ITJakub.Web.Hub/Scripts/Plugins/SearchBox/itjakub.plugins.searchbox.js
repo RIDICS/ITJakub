@@ -1,8 +1,7 @@
 var SearchBox = (function () {
-    function SearchBox(inputFieldElement, controllerName) {
+    function SearchBox(inputFieldElement, controllerPath) {
         this.inputField = inputFieldElement;
-        this.controllerName = controllerName;
-        this.urlWithController = getBaseUrl() + controllerName;
+        this.urlWithController = getBaseUrl() + controllerPath;
         this.datasets = [];
         this.options = {
             hint: true,
@@ -30,7 +29,7 @@ var SearchBox = (function () {
             remote: remoteOptions
         });
         var dataset = {
-            name: this.controllerName,
+            name: name,
             limit: 5,
             source: bloodhound,
             templates: {

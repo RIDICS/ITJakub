@@ -21,4 +21,8 @@ $(document).ready(() => {
         });
     });
 
+    var searchBox = new SearchBox("#searchbox", "Editions/Editions");
+    searchBox.addDataSet("Title", "Názvy");
+    searchBox.addDataSet("Author", "Autoři");
+    searchBox.create();
 });

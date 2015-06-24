@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Entities;
@@ -121,6 +120,11 @@ namespace ITJakub.ITJakubService.Core
 
             query = PrepareQuery(query);
             return m_bookRepository.GetTypeaheadTitles(query, PrefetchRecordCount);
+        }
+
+        public IList<string> GetTypeaheadDictionaryEntries(string query)
+        {
+            return new List<string> {"TODO"}; // TODO search dictionary entries
         }
     }
 }

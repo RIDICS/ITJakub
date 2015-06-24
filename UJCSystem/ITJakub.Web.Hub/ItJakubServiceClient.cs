@@ -635,5 +635,32 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public IList<string> GetTypeaheadDictionaryEntries(string query)
+        {
+            try
+            {
+                return Channel.GetTypeaheadDictionaryEntries(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadDictionaryEntries failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadDictionaryEntries failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadDictionaryEntries timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

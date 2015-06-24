@@ -95,6 +95,9 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         IList<string> GetTypeaheadTitles(string query);
 
+        [OperationContract]
+        IList<string> GetTypeaheadDictionaryEntries(string query);
+
         #endregion
     }
 }
