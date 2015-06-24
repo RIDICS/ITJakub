@@ -1,22 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Xml;
+using System.Xml.Linq;
 using ITJakub.Core.Resources;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.FileProcessing.Core.XMLProcessing;
 using ITJakub.Shared.Contracts.Resources;
+using log4net;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class MetadataProcessor : IResourceProcessor
     {
-        private readonly XmlMetadataProcessingManager m_xmlMetadataProcessingManager;
+			private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+			private readonly XmlMetadataProcessingManager m_xmlMetadataProcessingManager;
+			private readonly CategoryRepository m_categoryRepository;
 
-        public MetadataProcessor(XmlMetadataProcessingManager xmlMetadataProcessingManager)
+			public MetadataProcessor(XmlMetadataProcessingManager xmlMetadataProcessingManager, CategoryRepository categoryRepository)
         {
             m_xmlMetadataProcessingManager = xmlMetadataProcessingManager;
+						m_categoryRepository = categoryRepository;
         }
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
@@ -54,6 +63,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             foreach (var transResource in trans)
             {
+							var transfo = GetTransformationObject(transResource);
+
                 var transformation = new Transformation
                 {
                     IsDefaultForBookType = false,
@@ -71,5 +82,111 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 bookVersion.Transformations.Add(transformation);
             }
         }
+
+	    private Transformation GetTransformationObject(Resource resource)
+	    {
+
+		    const string logFormat = "{0} processing instruction in XSLT document not found.";
+		    const string logValidValueFormat = "{0} processing instruction in XSLT document is not valid. Current value: {1}";
+
+				const string itjBookType = "itj-book-type";
+				const string itjOutputFormat = "itj-output-format";
+
+				var transformation = new Transformation
+				{
+					IsDefaultForBookType = false,
+					Description = string.Empty,
+					Name = resource.FileName,
+					OutputFormat = OutputFormat.Html,
+					ResourceLevel = ResourceLevel.Book //TODO add support for version?
+				};
+
+				XDocument document = XDocument.Load(resource.FullPath);
+
+		    XProcessingInstruction bookType = (from node in document.Root.Nodes()
+					where node.NodeType == XmlNodeType.ProcessingInstruction && ((XProcessingInstruction)node).Target == itjBookType
+					select (XProcessingInstruction)node).FirstOrDefault();
+
+		    var transformationBookType = GetTransformationBookType(bookType, logFormat, logValidValueFormat);
+
+		    OutputFormat transformationOutputFormat;
+		    XProcessingInstruction outputFormat = (from node in document.Root.Nodes()
+					where node.NodeType == XmlNodeType.ProcessingInstruction && ((XProcessingInstruction)node).Target == itjOutputFormat
+					select (XProcessingInstruction)node).FirstOrDefault();
+				
+
+				transformationOutputFormat = GetTransformationOutputFormat(outputFormat, logFormat, logValidValueFormat);
+
+
+		    transformation.BookType = transformationBookType;
+		    transformation.OutputFormat = transformationOutputFormat;
+		    return transformation;
+	    }
+
+	    private static OutputFormat GetTransformationOutputFormat(XProcessingInstruction outputFormat, string logFormat,
+		    string logValidValueFormat)
+	    {
+		    OutputFormat transformationOutputFormat = OutputFormat.Unknown;
+		    const string outputformatName = "OutputFormat";
+				const string invalidXsltTransformation = "Xslt tranformation without output format processing instruction.";
+
+		    if (outputFormat == null)
+		    {
+			    if (m_log.IsErrorEnabled)
+				    m_log.ErrorFormat(logFormat, outputformatName);
+					throw new InvalidXsltTransformation(invalidXsltTransformation);
+		    }
+		    else
+		    {
+			    OutputFormat value;
+			    if (Enum.TryParse(outputFormat.Data.Trim(), true, out value))
+			    {
+				    transformationOutputFormat = value;
+			    }
+			    else
+			    {
+				    if (m_log.IsErrorEnabled)
+					    m_log.ErrorFormat(logValidValueFormat, outputformatName, outputFormat.Data);
+				    throw new InvalidEnumArgumentException();
+			    }
+		    }
+		    return transformationOutputFormat;
+	    }
+
+	    private BookType GetTransformationBookType(XProcessingInstruction bookType, string logFormat, string logValidValueFormat)
+	    {
+		    BookType transformationBookType = null;
+		    const string bookTypeName = "BookType";
+				const string invalidXsltTransformation = "Xslt tranformation without book type processing instruction.";
+				if (bookType == null)
+		    {
+			    if (m_log.IsErrorEnabled)
+				    m_log.ErrorFormat(logFormat, bookTypeName);
+
+			    throw new InvalidXsltTransformation(invalidXsltTransformation);
+		    }
+		    else
+		    {
+			    BookTypeEnum value;
+			    if (Enum.TryParse(bookType.Data.Trim(), true, out value))
+			    {
+				    transformationBookType = m_categoryRepository.FindBookTypeByType(value);
+			    }
+			    else
+			    {
+				    if (m_log.IsErrorEnabled)
+					    m_log.ErrorFormat(logValidValueFormat, bookTypeName, bookType.Data);
+				    throw new InvalidEnumArgumentException();
+			    }
+		    }
+		    return transformationBookType;
+	    }
     }
+
+	internal class InvalidXsltTransformation : Exception
+	{
+		public InvalidXsltTransformation(string message) : base(message)
+		{
+		}
+	}
 }

@@ -1,4 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:exist="http://exist.sourceforge.net/NS/exist" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" exclude-result-prefixes="xd tei nlp exist" version="2.0">
+	<?itj-book-type Dictionary?>
+	<?itj-output-format Html?>	
     <xsl:output method="html"/>
     <xsl:strip-space elements="*"/>
     <xsl:template match="tei:TEI">

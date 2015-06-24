@@ -114,5 +114,16 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return resultCategory == null ? null : resultCategory.BookType;
             }
         }
+
+				[Transaction(TransactionMode.Requires)]
+				public virtual BookType FindBookTypeByType(BookTypeEnum bookTypeEnum)
+				{
+						using (var session = GetSession())
+						{
+								return session.QueryOver<BookType>()
+										.Where(x => x.Type == bookTypeEnum)
+										.SingleOrDefault();
+						}
+				}
     }
 }

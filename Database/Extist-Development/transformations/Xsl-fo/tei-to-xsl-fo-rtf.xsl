@@ -1,4 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/XSL/Format" xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" exclude-result-prefixes="xs xd nlp tei" version="2.0">
+	<?itj-book-type Edition?>
+	<?itj-output-format Rtf?>	
     <xsl:import href="fo2/tei.xsl"/>
     <xsl:import href="ujc-ovj-rozmery-a4.xsl"/>
     <xsl:import href="ujc-ovj-xsl-fo.xsl"/>
