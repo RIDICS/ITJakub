@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Entities;
@@ -47,7 +48,7 @@ namespace ITJakub.ITJakubService.Core
             };
         }
 
-        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             var conjunction = new List<SearchCriteriaQuery>();
             foreach (var searchCriteriaContract in searchCriterias)
@@ -57,7 +58,13 @@ namespace ITJakub.ITJakubService.Core
             }
             
             var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(conjunction);
-            // TODO
+            
+            // TODO search in eXist
+
+            var guidList = databaseSearchResult.Select(x => x.Guid);
+            var result = m_bookVersionRepository.GetBookVersionsByGuid(guidList);
+
+            return Mapper.Map<List<SearchResultContract>>(result);
         }
 
         public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)

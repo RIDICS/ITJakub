@@ -223,5 +223,21 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return result;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> GetBookVersionsByGuid(IEnumerable<string> bookGuidList)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+
+                return session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .Select(x => x.LastVersion)
+                    .WhereRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
+                    .List<BookVersion>();
+            }
+        }
     }
 }

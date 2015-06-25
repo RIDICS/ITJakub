@@ -367,11 +367,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             try
             {
-                Channel.SearchByCriteria(searchCriterias);
+                return Channel.SearchByCriteria(searchCriterias);
             }
             catch (CommunicationException ex)
             {

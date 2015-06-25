@@ -109,9 +109,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageImage(bookPageImageContract);
         }
 
-        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            m_searchManager.SearchByCriteria(searchCriterias);
+            return m_searchManager.SearchByCriteria(searchCriterias);
         }
         #region CardFile methods
         public IEnumerable<CardFileContract> GetCardFiles()

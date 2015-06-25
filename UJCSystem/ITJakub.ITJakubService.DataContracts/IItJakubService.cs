@@ -60,7 +60,7 @@ namespace ITJakub.ITJakubService.DataContracts
         Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
 
         [OperationContract]
-        void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
+        IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
 
         #region CardFile methods
 
