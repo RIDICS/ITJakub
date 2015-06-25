@@ -344,6 +344,12 @@ var RegExDatingCondition = (function (_super) {
         var datingDiv = document.createElement('div');
         $(datingDiv).addClass("regex-dating-condition");
         datingDiv.appendChild(this.makeTopSelectionDiv());
+        var centuryCheckboxDiv = window.document.createElement("div");
+        $(centuryCheckboxDiv).addClass("regex-dating-century-div");
+        var centuryNameSpan = window.document.createElement("span");
+        centuryNameSpan.innerHTML = "Století";
+        centuryCheckboxDiv.appendChild(centuryNameSpan);
+        datingDiv.appendChild(centuryCheckboxDiv);
         var centuryArray = new Array();
         for (var century = 8; century <= 21; century++) {
             centuryArray.push(new DatingSliderValue(century.toString(), century * 100 - 100, century * 100 - 1)); //calculate century low and high values (i.e 18. century is 1700 - 1799)
@@ -351,19 +357,65 @@ var RegExDatingCondition = (function (_super) {
         var sliderCentury = this.makeSlider(centuryArray, ". století", function (selectedValue) {
             _this.centuryChanged(selectedValue);
         });
-        datingDiv.appendChild(sliderCentury);
+        centuryCheckboxDiv.appendChild(sliderCentury);
+        var periodCheckboxDiv = window.document.createElement("div");
+        $(periodCheckboxDiv).addClass("regex-dating-period-div");
+        var periodValueCheckbox = window.document.createElement("input");
+        periodValueCheckbox.type = "checkbox";
+        $(periodValueCheckbox).change(function (eventData) {
+            var currentTarget = (eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(eventData.target).siblings(".slider").slider("option", "disabled", false);
+                $(eventData.target).siblings(".slider").find(".slider-tip").show();
+                _this.periodEnabled = true;
+            }
+            else {
+                $(eventData.target).siblings(".slider").slider("option", "disabled", true);
+                $(eventData.target).siblings(".slider").find(".slider-tip").hide();
+                _this.periodEnabled = false;
+            }
+            _this.refreshDisplayedDate();
+        });
+        var periodNameSpan = window.document.createElement("span");
+        periodNameSpan.innerHTML = "Přibližná doba";
+        periodCheckboxDiv.appendChild(periodValueCheckbox);
+        periodCheckboxDiv.appendChild(periodNameSpan);
+        datingDiv.appendChild(periodCheckboxDiv);
         var sliderPeriod = this.makeSlider(new Array(new DatingSliderValue("zacatek", 0, -85), new DatingSliderValue("ctvrtina", 0, -75), new DatingSliderValue("tretina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0)), "", function (selectedValue) {
             _this.periodChanged(selectedValue);
         });
-        datingDiv.appendChild(sliderPeriod);
+        periodCheckboxDiv.appendChild(sliderPeriod);
+        var decadesCheckboxDiv = window.document.createElement("div");
+        $(periodCheckboxDiv).addClass("regex-dating-decades-div");
+        var decadesCheckbox = window.document.createElement("input");
+        decadesCheckbox.type = "checkbox";
+        $(decadesCheckbox).change(function (eventData) {
+            var currentTarget = (eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(eventData.target).siblings(".slider").slider("option", "disabled", false);
+                $(eventData.target).siblings(".slider").find(".slider-tip").show();
+                _this.decadeEnabled = true;
+            }
+            else {
+                $(eventData.target).siblings(".slider").slider("option", "disabled", true);
+                $(eventData.target).siblings(".slider").find(".slider-tip").hide();
+                _this.decadeEnabled = false;
+            }
+            _this.refreshDisplayedDate();
+        });
+        var decadesNameSpan = window.document.createElement("span");
+        decadesNameSpan.innerHTML = "Léta";
+        decadesCheckboxDiv.appendChild(decadesCheckbox);
+        decadesCheckboxDiv.appendChild(decadesNameSpan);
+        datingDiv.appendChild(decadesCheckboxDiv);
         var decadesArray = new Array();
         for (var decades = 0; decades <= 90; decades += 10) {
-            decadesArray.push(new DatingSliderValue(decades.toString(), decades, (100 - (decades + 9)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
+            decadesArray.push(new DatingSliderValue(decades.toString(), decades, -(100 - (decades + 10)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
         }
         var sliderDecades = this.makeSlider(decadesArray, ". léta", function (selectedValue) {
             _this.decadeChanged(selectedValue);
         });
-        datingDiv.appendChild(sliderDecades);
+        decadesCheckboxDiv.appendChild(sliderDecades);
         var datingDisplayedValueDiv = document.createElement('div');
         $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");
         this.dateDisplayDiv = datingDisplayedValueDiv;
@@ -388,8 +440,16 @@ var RegExDatingCondition = (function (_super) {
     };
     RegExDatingCondition.prototype.refreshDisplayedDate = function () {
         $(this.dateDisplayDiv).empty();
-        var lower = this.selectedCenturyLowerValue + this.selectedPeriodLowerValue + this.selectedDecadeLowerValue;
-        var higher = this.selectedCenturyHigherValue + this.selectedPeriodHigherValue + this.selectedDecadeHigherValue;
+        var lower = this.selectedCenturyLowerValue;
+        var higher = this.selectedCenturyHigherValue;
+        if (this.periodEnabled) {
+            lower += this.selectedPeriodLowerValue;
+            higher += this.selectedPeriodHigherValue;
+        }
+        if (this.decadeEnabled) {
+            lower += this.selectedDecadeLowerValue;
+            higher += this.selectedDecadeHigherValue;
+        }
         $(this.dateDisplayDiv).html("(" + lower + "-" + higher + ")");
     };
     RegExDatingCondition.prototype.makeSlider = function (valuesArray, nameEnding, callbackFunction) {

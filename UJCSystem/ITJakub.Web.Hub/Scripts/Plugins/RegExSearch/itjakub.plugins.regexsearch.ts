@@ -417,6 +417,9 @@ class RegExDatingCondition extends RegExConditionBase {
     private selectedDecadeLowerValue : number;
     private selectedDecadeHigherValue: number;
 
+    private periodEnabled: boolean;
+    private decadeEnabled: boolean;
+
     dateDisplayDiv: HTMLDivElement;
 
     constructor(parent: RegExConditionListItem) {
@@ -429,6 +432,12 @@ class RegExDatingCondition extends RegExConditionBase {
 
         datingDiv.appendChild(this.makeTopSelectionDiv());
 
+        var centuryCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        $(centuryCheckboxDiv).addClass("regex-dating-century-div");
+        var centuryNameSpan: HTMLSpanElement = window.document.createElement("span");
+        centuryNameSpan.innerHTML = "Století";
+        centuryCheckboxDiv.appendChild(centuryNameSpan);
+        datingDiv.appendChild(centuryCheckboxDiv);
 
         var centuryArray = new Array<DatingSliderValue>();
         for (var century = 8; century <= 21; century++) {
@@ -436,18 +445,67 @@ class RegExDatingCondition extends RegExConditionBase {
         }
 
         var sliderCentury = this.makeSlider(centuryArray, ". století",(selectedValue: DatingSliderValue) => { this.centuryChanged(selectedValue) });
-        datingDiv.appendChild(sliderCentury);
+        centuryCheckboxDiv.appendChild(sliderCentury);
+
+        var periodCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        $(periodCheckboxDiv).addClass("regex-dating-period-div");
+        var periodValueCheckbox: HTMLInputElement = window.document.createElement("input");
+        periodValueCheckbox.type = "checkbox";
+        $(periodValueCheckbox).change((eventData: Event) => {
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(eventData.target).siblings(".slider").slider("option", "disabled", false);
+                $(eventData.target).siblings(".slider").find(".slider-tip").show();
+                this.periodEnabled = true;
+            } else {
+                $(eventData.target).siblings(".slider").slider("option", "disabled", true);
+                $(eventData.target).siblings(".slider").find(".slider-tip").hide();
+                this.periodEnabled = false;
+            }
+
+            this.refreshDisplayedDate();
+        });
+
+        var periodNameSpan: HTMLSpanElement = window.document.createElement("span");
+        periodNameSpan.innerHTML = "Přibližná doba";
+        periodCheckboxDiv.appendChild(periodValueCheckbox);
+        periodCheckboxDiv.appendChild(periodNameSpan);
+        datingDiv.appendChild(periodCheckboxDiv);
 
         var sliderPeriod = this.makeSlider(new Array<DatingSliderValue>(new DatingSliderValue("zacatek", 0, -85), new DatingSliderValue("ctvrtina", 0, -75), new DatingSliderValue("tretina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0)), "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
-        datingDiv.appendChild(sliderPeriod);
+        periodCheckboxDiv.appendChild(sliderPeriod);
+        
+        var decadesCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        $(periodCheckboxDiv).addClass("regex-dating-decades-div");
+        var decadesCheckbox: HTMLInputElement = window.document.createElement("input");
+        decadesCheckbox.type = "checkbox";
+        $(decadesCheckbox).change((eventData: Event) => {
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(eventData.target).siblings(".slider").slider("option", "disabled", false);
+                $(eventData.target).siblings(".slider").find(".slider-tip").show();
+                this.decadeEnabled = true;
+            } else {
+                $(eventData.target).siblings(".slider").slider("option", "disabled", true);
+                $(eventData.target).siblings(".slider").find(".slider-tip").hide();
+                this.decadeEnabled = false;
+            }
 
+            this.refreshDisplayedDate();
+        });
+
+        var decadesNameSpan: HTMLSpanElement = window.document.createElement("span");
+        decadesNameSpan.innerHTML = "Léta";
+        decadesCheckboxDiv.appendChild(decadesCheckbox);
+        decadesCheckboxDiv.appendChild(decadesNameSpan);
+        datingDiv.appendChild(decadesCheckboxDiv);
 
         var decadesArray = new Array<DatingSliderValue>();
         for (var decades = 0; decades <= 90; decades+=10) {
-            decadesArray.push(new DatingSliderValue(decades.toString(), decades, (100 - (decades+9)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
+            decadesArray.push(new DatingSliderValue(decades.toString(), decades, -(100 - (decades+10)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
         }
         var sliderDecades = this.makeSlider(decadesArray, ". léta",(selectedValue: DatingSliderValue) => { this.decadeChanged(selectedValue)});
-        datingDiv.appendChild(sliderDecades);
+        decadesCheckboxDiv.appendChild(sliderDecades);
 
         var datingDisplayedValueDiv = document.createElement('div');
         $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");
@@ -479,8 +537,19 @@ class RegExDatingCondition extends RegExConditionBase {
 
     private refreshDisplayedDate() {
         $(this.dateDisplayDiv).empty();
-        var lower = this.selectedCenturyLowerValue + this.selectedPeriodLowerValue + this.selectedDecadeLowerValue;
-        var higher = this.selectedCenturyHigherValue + this.selectedPeriodHigherValue + this.selectedDecadeHigherValue;
+        var lower = this.selectedCenturyLowerValue;
+        var higher = this.selectedCenturyHigherValue;
+
+        if (this.periodEnabled) {
+            lower += this.selectedPeriodLowerValue;
+            higher += this.selectedPeriodHigherValue;
+        }
+
+        if (this.decadeEnabled) {
+            lower += this.selectedDecadeLowerValue;
+            higher += this.selectedDecadeHigherValue;
+        }
+        
         $(this.dateDisplayDiv).html("("+lower+"-"+higher+")");
     }
 
