@@ -106,6 +106,7 @@
     <Compile Include="XMLProcessing\Processors\BookContent\TableOfContentProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TitleProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\PublicationStmtProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Pages\PageProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Pages\PagesProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TeiHeaderProcessor.cs" />
