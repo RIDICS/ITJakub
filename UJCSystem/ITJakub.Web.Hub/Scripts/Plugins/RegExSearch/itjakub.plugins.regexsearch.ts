@@ -432,12 +432,17 @@ class RegExDatingCondition extends RegExConditionBase {
 
         datingDiv.appendChild(this.makeTopSelectionDiv());
 
+        var centurySliderDiv: HTMLDivElement = window.document.createElement("div");
+        $(centurySliderDiv).addClass("regex-dating-century-div regex-slider-div");
+
         var centuryCheckboxDiv: HTMLDivElement = window.document.createElement("div");
-        $(centuryCheckboxDiv).addClass("regex-dating-century-div");
+        $(centuryCheckboxDiv).addClass("regex-dating-checkbox-div");
+
         var centuryNameSpan: HTMLSpanElement = window.document.createElement("span");
         centuryNameSpan.innerHTML = "Století";
         centuryCheckboxDiv.appendChild(centuryNameSpan);
-        datingDiv.appendChild(centuryCheckboxDiv);
+        centurySliderDiv.appendChild(centuryCheckboxDiv);
+        datingDiv.appendChild(centurySliderDiv);
 
         var centuryArray = new Array<DatingSliderValue>();
         for (var century = 8; century <= 21; century++) {
@@ -445,21 +450,26 @@ class RegExDatingCondition extends RegExConditionBase {
         }
 
         var sliderCentury = this.makeSlider(centuryArray, ". století",(selectedValue: DatingSliderValue) => { this.centuryChanged(selectedValue) });
-        centuryCheckboxDiv.appendChild(sliderCentury);
+        centurySliderDiv.appendChild(sliderCentury);
+
+        var periodSliderDiv: HTMLDivElement = window.document.createElement("div");
+        $(periodSliderDiv).addClass("regex-dating-period-div regex-slider-div");
 
         var periodCheckboxDiv: HTMLDivElement = window.document.createElement("div");
-        $(periodCheckboxDiv).addClass("regex-dating-period-div");
+        $(periodCheckboxDiv).addClass("regex-dating-checkbox-div");
         var periodValueCheckbox: HTMLInputElement = window.document.createElement("input");
         periodValueCheckbox.type = "checkbox";
         $(periodValueCheckbox).change((eventData: Event) => {
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
-                $(eventData.target).siblings(".slider").slider("option", "disabled", false);
-                $(eventData.target).siblings(".slider").find(".slider-tip").show();
+                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", false);
+                $(eventData.target).parent().siblings(".slider").find(".slider-tip").show();
                 this.periodEnabled = true;
+
+                $(eventData.target).parents(".regex-slider-div").siblings(".regex-slider-div").find(".regex-dating-checkbox-div").find("input").prop('checked', false).change();//uncheck other checboxes 
             } else {
-                $(eventData.target).siblings(".slider").slider("option", "disabled", true);
-                $(eventData.target).siblings(".slider").find(".slider-tip").hide();
+                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", true);
+                $(eventData.target).parent().siblings(".slider").find(".slider-tip").hide();
                 this.periodEnabled = false;
             }
 
@@ -470,24 +480,33 @@ class RegExDatingCondition extends RegExConditionBase {
         periodNameSpan.innerHTML = "Přibližná doba";
         periodCheckboxDiv.appendChild(periodValueCheckbox);
         periodCheckboxDiv.appendChild(periodNameSpan);
-        datingDiv.appendChild(periodCheckboxDiv);
+        periodSliderDiv.appendChild(periodCheckboxDiv);
+        datingDiv.appendChild(periodSliderDiv);
 
         var sliderPeriod = this.makeSlider(new Array<DatingSliderValue>(new DatingSliderValue("zacatek", 0, -85), new DatingSliderValue("ctvrtina", 0, -75), new DatingSliderValue("tretina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0)), "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
-        periodCheckboxDiv.appendChild(sliderPeriod);
+        $(sliderPeriod).slider("option", "disabled", true);
+        $(sliderPeriod).parent().siblings(".slider").find(".slider-tip").hide();
+        periodSliderDiv.appendChild(sliderPeriod);
         
-        var decadesCheckboxDiv: HTMLDivElement = window.document.createElement("div");
-        $(periodCheckboxDiv).addClass("regex-dating-decades-div");
+        var decadesSliderDiv: HTMLDivElement = window.document.createElement("div");
+        $(decadesSliderDiv).addClass("regex-dating-decades-div regex-slider-div");
+
+        var decadeCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        $(decadeCheckboxDiv).addClass("regex-dating-checkbox-div");
+
         var decadesCheckbox: HTMLInputElement = window.document.createElement("input");
         decadesCheckbox.type = "checkbox";
         $(decadesCheckbox).change((eventData: Event) => {
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
-                $(eventData.target).siblings(".slider").slider("option", "disabled", false);
-                $(eventData.target).siblings(".slider").find(".slider-tip").show();
+                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", false);
+                $(eventData.target).parent().siblings(".slider").find(".slider-tip").show();
                 this.decadeEnabled = true;
+
+                $(eventData.target).parents(".regex-slider-div").siblings(".regex-slider-div").find(".regex-dating-checkbox-div").find("input").prop('checked', false).change();//uncheck other checboxes 
             } else {
-                $(eventData.target).siblings(".slider").slider("option", "disabled", true);
-                $(eventData.target).siblings(".slider").find(".slider-tip").hide();
+                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", true);
+                $(eventData.target).parent().siblings(".slider").find(".slider-tip").hide();
                 this.decadeEnabled = false;
             }
 
@@ -496,16 +515,19 @@ class RegExDatingCondition extends RegExConditionBase {
 
         var decadesNameSpan: HTMLSpanElement = window.document.createElement("span");
         decadesNameSpan.innerHTML = "Léta";
-        decadesCheckboxDiv.appendChild(decadesCheckbox);
-        decadesCheckboxDiv.appendChild(decadesNameSpan);
-        datingDiv.appendChild(decadesCheckboxDiv);
+        decadeCheckboxDiv.appendChild(decadesCheckbox);
+        decadeCheckboxDiv.appendChild(decadesNameSpan);
+        decadesSliderDiv.appendChild(decadeCheckboxDiv);
+        datingDiv.appendChild(decadesSliderDiv);
 
         var decadesArray = new Array<DatingSliderValue>();
         for (var decades = 0; decades <= 90; decades+=10) {
             decadesArray.push(new DatingSliderValue(decades.toString(), decades, -(100 - (decades+10)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
         }
-        var sliderDecades = this.makeSlider(decadesArray, ". léta",(selectedValue: DatingSliderValue) => { this.decadeChanged(selectedValue)});
-        decadesCheckboxDiv.appendChild(sliderDecades);
+        var sliderDecades = this.makeSlider(decadesArray, ". léta",(selectedValue: DatingSliderValue) => { this.decadeChanged(selectedValue) });
+        $(sliderDecades).slider("option", "disabled", true);
+        $(sliderDecades).parent().siblings(".slider").find(".slider-tip").hide();
+        decadesSliderDiv.appendChild(sliderDecades);
 
         var datingDisplayedValueDiv = document.createElement('div');
         $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");

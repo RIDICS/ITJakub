@@ -344,12 +344,15 @@ var RegExDatingCondition = (function (_super) {
         var datingDiv = document.createElement('div');
         $(datingDiv).addClass("regex-dating-condition");
         datingDiv.appendChild(this.makeTopSelectionDiv());
+        var centurySliderDiv = window.document.createElement("div");
+        $(centurySliderDiv).addClass("regex-dating-century-div regex-slider-div");
         var centuryCheckboxDiv = window.document.createElement("div");
-        $(centuryCheckboxDiv).addClass("regex-dating-century-div");
+        $(centuryCheckboxDiv).addClass("regex-dating-checkbox-div");
         var centuryNameSpan = window.document.createElement("span");
         centuryNameSpan.innerHTML = "Století";
         centuryCheckboxDiv.appendChild(centuryNameSpan);
-        datingDiv.appendChild(centuryCheckboxDiv);
+        centurySliderDiv.appendChild(centuryCheckboxDiv);
+        datingDiv.appendChild(centurySliderDiv);
         var centuryArray = new Array();
         for (var century = 8; century <= 21; century++) {
             centuryArray.push(new DatingSliderValue(century.toString(), century * 100 - 100, century * 100 - 1)); //calculate century low and high values (i.e 18. century is 1700 - 1799)
@@ -357,21 +360,24 @@ var RegExDatingCondition = (function (_super) {
         var sliderCentury = this.makeSlider(centuryArray, ". století", function (selectedValue) {
             _this.centuryChanged(selectedValue);
         });
-        centuryCheckboxDiv.appendChild(sliderCentury);
+        centurySliderDiv.appendChild(sliderCentury);
+        var periodSliderDiv = window.document.createElement("div");
+        $(periodSliderDiv).addClass("regex-dating-period-div regex-slider-div");
         var periodCheckboxDiv = window.document.createElement("div");
-        $(periodCheckboxDiv).addClass("regex-dating-period-div");
+        $(periodCheckboxDiv).addClass("regex-dating-checkbox-div");
         var periodValueCheckbox = window.document.createElement("input");
         periodValueCheckbox.type = "checkbox";
         $(periodValueCheckbox).change(function (eventData) {
             var currentTarget = (eventData.currentTarget);
             if (currentTarget.checked) {
-                $(eventData.target).siblings(".slider").slider("option", "disabled", false);
-                $(eventData.target).siblings(".slider").find(".slider-tip").show();
+                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", false);
+                $(eventData.target).parent().siblings(".slider").find(".slider-tip").show();
                 _this.periodEnabled = true;
+                $(eventData.target).parents(".regex-slider-div").siblings(".regex-slider-div").find(".regex-dating-checkbox-div").find("input").prop('checked', false).change(); //uncheck other checboxes 
             }
             else {
-                $(eventData.target).siblings(".slider").slider("option", "disabled", true);
-                $(eventData.target).siblings(".slider").find(".slider-tip").hide();
+                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", true);
+                $(eventData.target).parent().siblings(".slider").find(".slider-tip").hide();
                 _this.periodEnabled = false;
             }
             _this.refreshDisplayedDate();
@@ -380,34 +386,41 @@ var RegExDatingCondition = (function (_super) {
         periodNameSpan.innerHTML = "Přibližná doba";
         periodCheckboxDiv.appendChild(periodValueCheckbox);
         periodCheckboxDiv.appendChild(periodNameSpan);
-        datingDiv.appendChild(periodCheckboxDiv);
+        periodSliderDiv.appendChild(periodCheckboxDiv);
+        datingDiv.appendChild(periodSliderDiv);
         var sliderPeriod = this.makeSlider(new Array(new DatingSliderValue("zacatek", 0, -85), new DatingSliderValue("ctvrtina", 0, -75), new DatingSliderValue("tretina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0)), "", function (selectedValue) {
             _this.periodChanged(selectedValue);
         });
-        periodCheckboxDiv.appendChild(sliderPeriod);
-        var decadesCheckboxDiv = window.document.createElement("div");
-        $(periodCheckboxDiv).addClass("regex-dating-decades-div");
+        $(sliderPeriod).slider("option", "disabled", true);
+        $(sliderPeriod).parent().siblings(".slider").find(".slider-tip").hide();
+        periodSliderDiv.appendChild(sliderPeriod);
+        var decadesSliderDiv = window.document.createElement("div");
+        $(decadesSliderDiv).addClass("regex-dating-decades-div regex-slider-div");
+        var decadeCheckboxDiv = window.document.createElement("div");
+        $(decadeCheckboxDiv).addClass("regex-dating-checkbox-div");
         var decadesCheckbox = window.document.createElement("input");
         decadesCheckbox.type = "checkbox";
         $(decadesCheckbox).change(function (eventData) {
             var currentTarget = (eventData.currentTarget);
             if (currentTarget.checked) {
-                $(eventData.target).siblings(".slider").slider("option", "disabled", false);
-                $(eventData.target).siblings(".slider").find(".slider-tip").show();
+                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", false);
+                $(eventData.target).parent().siblings(".slider").find(".slider-tip").show();
                 _this.decadeEnabled = true;
+                $(eventData.target).parents(".regex-slider-div").siblings(".regex-slider-div").find(".regex-dating-checkbox-div").find("input").prop('checked', false).change(); //uncheck other checboxes 
             }
             else {
-                $(eventData.target).siblings(".slider").slider("option", "disabled", true);
-                $(eventData.target).siblings(".slider").find(".slider-tip").hide();
+                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", true);
+                $(eventData.target).parent().siblings(".slider").find(".slider-tip").hide();
                 _this.decadeEnabled = false;
             }
             _this.refreshDisplayedDate();
         });
         var decadesNameSpan = window.document.createElement("span");
         decadesNameSpan.innerHTML = "Léta";
-        decadesCheckboxDiv.appendChild(decadesCheckbox);
-        decadesCheckboxDiv.appendChild(decadesNameSpan);
-        datingDiv.appendChild(decadesCheckboxDiv);
+        decadeCheckboxDiv.appendChild(decadesCheckbox);
+        decadeCheckboxDiv.appendChild(decadesNameSpan);
+        decadesSliderDiv.appendChild(decadeCheckboxDiv);
+        datingDiv.appendChild(decadesSliderDiv);
         var decadesArray = new Array();
         for (var decades = 0; decades <= 90; decades += 10) {
             decadesArray.push(new DatingSliderValue(decades.toString(), decades, -(100 - (decades + 10)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
@@ -415,7 +428,9 @@ var RegExDatingCondition = (function (_super) {
         var sliderDecades = this.makeSlider(decadesArray, ". léta", function (selectedValue) {
             _this.decadeChanged(selectedValue);
         });
-        decadesCheckboxDiv.appendChild(sliderDecades);
+        $(sliderDecades).slider("option", "disabled", true);
+        $(sliderDecades).parent().siblings(".slider").find(".slider-tip").hide();
+        decadesSliderDiv.appendChild(sliderDecades);
         var datingDisplayedValueDiv = document.createElement('div');
         $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");
         this.dateDisplayDiv = datingDisplayedValueDiv;

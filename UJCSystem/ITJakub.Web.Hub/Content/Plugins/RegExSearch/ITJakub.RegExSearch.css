@@ -203,13 +203,14 @@ input.regexsearch-checkbox {
   background-color: white;
 }
 .regex-dating-condition .slider {
-  margin-top: 50px;
-  margin-bottom: 50px;
+  display: inline-block;
+  /*width: 300px!important;*/
 }
 .regex-dating-condition .ui-slider {
   background: #84ced7;
   height: 5px;
-  width: 95%;
+  /*width: 95%;*/
+  width: 70%;
   margin-left: 2.5%;
   border: none;
 }
@@ -239,5 +240,17 @@ input.regexsearch-checkbox {
   margin-top: -68px;
   margin-left: 200px;
   width: 200px;
+}
+.regex-slider-div {
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+.regex-dating-checkbox-div {
+  width: 150px;
+  display: inline-block;
+}
+.regex-dating-condition-displayed-value {
+  margin-left: 50%;
+  font-size: 1.3em;
 }
 /*# sourceMappingURL=ITJakub.RegExSearch.css.map */
