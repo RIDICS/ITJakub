@@ -203,8 +203,8 @@ input.regexsearch-checkbox {
   background-color: white;
 }
 .regex-dating-condition .slider {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 .regex-dating-condition .ui-slider {
   background: #84ced7;
@@ -234,5 +234,10 @@ input.regexsearch-checkbox {
 }
 .regex-dating-condition .tooltip-arrow {
   border-top-color: #84ced7 !important;
+}
+.regex-dating-condition .regex-dating-condition-select {
+  margin-top: -68px;
+  margin-left: 200px;
+  width: 200px;
 }
 /*# sourceMappingURL=ITJakub.RegExSearch.css.map */

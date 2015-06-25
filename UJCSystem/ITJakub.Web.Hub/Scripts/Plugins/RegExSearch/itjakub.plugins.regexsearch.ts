@@ -234,7 +234,7 @@ class RegExConditionListItem extends RegExSearchBase {
         searchDestinationSelect.appendChild(this.createOption("Autor", SearchType.Author.toString()));
         searchDestinationSelect.appendChild(this.createOption("Titul", SearchType.Title.toString()));
         searchDestinationSelect.appendChild(this.createOption("Editor", SearchType.Responsible.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Datace", SearchType.Dating.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Období vzniku", SearchType.Dating.toString()));
 
         this.selectedSearchType = SearchType.Text;
 
@@ -410,6 +410,14 @@ class RegExWordConditionList extends RegExConditionBase {
 }
 
 class RegExDatingCondition extends RegExConditionBase {
+    private selectedCenturyLowerValue : number;
+    private selectedCenturyHigherValue : number;
+    private selectedPeriodLowerValue : number;
+    private selectedPeriodHigherValue : number;
+    private selectedDecadeLowerValue : number;
+    private selectedDecadeHigherValue: number;
+
+    dateDisplayDiv: HTMLDivElement;
 
     constructor(parent: RegExConditionListItem) {
         super(parent);
@@ -419,28 +427,80 @@ class RegExDatingCondition extends RegExConditionBase {
         var datingDiv = document.createElement('div');
         $(datingDiv).addClass("regex-dating-condition");
 
+        datingDiv.appendChild(this.makeTopSelectionDiv());
+
+
+        var centuryArray = new Array<DatingSliderValue>();
+        for (var century = 8; century <= 21; century++) {
+            centuryArray.push(new DatingSliderValue(century.toString(), century*100 -100, century*100-1)); //calculate century low and high values (i.e 18. century is 1700 - 1799)
+        }
+
+        var sliderCentury = this.makeSlider(centuryArray, ". století",(selectedValue: DatingSliderValue) => { this.centuryChanged(selectedValue) });
+        datingDiv.appendChild(sliderCentury);
+
+        var sliderPeriod = this.makeSlider(new Array<DatingSliderValue>(new DatingSliderValue("zacatek", 0, -85), new DatingSliderValue("ctvrtina", 0, -75), new DatingSliderValue("tretina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0)), "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
+        datingDiv.appendChild(sliderPeriod);
+
+
+        var decadesArray = new Array<DatingSliderValue>();
+        for (var decades = 0; decades <= 90; decades+=10) {
+            decadesArray.push(new DatingSliderValue(decades.toString(), decades, (100 - (decades+9)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
+        }
+        var sliderDecades = this.makeSlider(decadesArray, ". léta",(selectedValue: DatingSliderValue) => { this.decadeChanged(selectedValue)});
+        datingDiv.appendChild(sliderDecades);
+
+        var datingDisplayedValueDiv = document.createElement('div');
+        $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");
+        this.dateDisplayDiv = datingDisplayedValueDiv;
+        datingDiv.appendChild(datingDisplayedValueDiv);
+
+        $(conditionContainerDiv).append(datingDiv);
+
+        this.refreshDisplayedDate();
+    }
+
+    private centuryChanged(sliderValue: DatingSliderValue) {
+        this.selectedCenturyLowerValue = sliderValue.lowNumberValue;
+        this.selectedCenturyHigherValue = sliderValue.highNumberValue;
+        this.refreshDisplayedDate();
+    }
+
+    private periodChanged(sliderValue: DatingSliderValue) {
+        this.selectedPeriodLowerValue = sliderValue.lowNumberValue;
+        this.selectedPeriodHigherValue = sliderValue.highNumberValue;
+        this.refreshDisplayedDate();
+    }
+
+    private decadeChanged(sliderValue: DatingSliderValue) {
+        this.selectedDecadeLowerValue = sliderValue.lowNumberValue;
+        this.selectedDecadeHigherValue = sliderValue.highNumberValue;
+        this.refreshDisplayedDate();
+    }
+
+    private refreshDisplayedDate() {
+        $(this.dateDisplayDiv).empty();
+        var lower = this.selectedCenturyLowerValue + this.selectedPeriodLowerValue + this.selectedDecadeLowerValue;
+        var higher = this.selectedCenturyHigherValue + this.selectedPeriodHigherValue + this.selectedDecadeHigherValue;
+        $(this.dateDisplayDiv).html("("+lower+"-"+higher+")");
+    }
+
+    private makeSlider(valuesArray: Array<DatingSliderValue>, nameEnding: string, callbackFunction: (selectedValue: DatingSliderValue) => void) {
         var slider: HTMLDivElement = document.createElement('div');
         $(slider).addClass('slider');
         $(slider).slider({
             min: 0,
-            max: 5, //TODO
+            max: valuesArray.length-1,
             value: 0,
-            start: (event, ui) => {
-                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
-            },
-            stop: (event, ui) => {
-                $(event.target).find('.ui-slider-handle').find('.slider-tip').fadeOut(1000);
-            },
             slide: (event, ui) => {
-                $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
-                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
-                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html((ui.value + 1) + " . století");
+                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html(valuesArray[ui.value].name + nameEnding);
 
             },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
-
+                callbackFunction(valuesArray[ui.value]);
             }
         });
+
+        callbackFunction(valuesArray[0]); //default is first
 
         var sliderTooltip: HTMLDivElement = document.createElement('div');
         $(sliderTooltip).addClass('tooltip top slider-tip');
@@ -450,26 +510,76 @@ class RegExDatingCondition extends RegExConditionBase {
 
         var innerTooltip: HTMLDivElement = document.createElement('div');
         $(innerTooltip).addClass('tooltip-inner');
-        $(innerTooltip).html("6"+" .století ");
+        $(innerTooltip).html(valuesArray[0].name + nameEnding);
         sliderTooltip.appendChild(innerTooltip);
-        $(sliderTooltip).hide();
 
         var sliderHandle = $(slider).find('.ui-slider-handle');
         $(sliderHandle).append(sliderTooltip);
-        $(sliderHandle).hover((event) => {
-            $(event.target).find('.slider-tip').stop(true, true);
-            $(event.target).find('.slider-tip').show();
-        });
-        $(sliderHandle).mouseout((event) => {
-            $(event.target).find('.slider-tip').fadeOut(1000);
-        });
-        datingDiv.appendChild(slider);
 
-        $(conditionContainerDiv).append(datingDiv);
+        return slider;
+    }
+
+    public makeTopSelectionDiv() : HTMLDivElement {
+        var datingFormDiv = document.createElement("div");
+        $(datingFormDiv).addClass("regex-dating-condition-select");
+
+        var datingFormSpan = document.createElement("span");
+        datingFormSpan.innerHTML = "Zadání rozmezí";
+        $(datingFormSpan).addClass("regexsearch-upper-select-label");
+        datingFormDiv.appendChild(datingFormSpan);
+
+        var datingFormSelect = document.createElement("select");
+        $(datingFormSelect).addClass("regexsearch-select");
+        datingFormDiv.appendChild(datingFormSelect);
+
+        datingFormSelect.appendChild(this.createOption("Starší než", ""));
+        datingFormSelect.appendChild(this.createOption("Mladší než", ""));
+        datingFormSelect.appendChild(this.createOption("Mezi roky", ""));
+        datingFormSelect.appendChild(this.createOption("Kolem roku", ""));
+
+        $(datingFormSelect).change((eventData: Event) => {
+            //this.selectedWordFormType = $(eventData.target).val();
+        });
+
+
+        var preciseValueCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        var preciseValueCheckbox: HTMLInputElement = window.document.createElement("input");
+        preciseValueCheckbox.type = "checkbox";
+        $(preciseValueCheckbox).change((eventData: Event) => {
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                
+            } else {
+                
+            }
+        });
+
+        var preciseValueNameSpan: HTMLSpanElement = window.document.createElement("span");
+        preciseValueNameSpan.innerHTML = "Přesná hodnota";
+        preciseValueCheckboxDiv.appendChild(preciseValueCheckbox);
+        preciseValueCheckboxDiv.appendChild(preciseValueNameSpan);
+
+        datingFormDiv.appendChild(preciseValueCheckboxDiv);
+
+        return datingFormDiv;
     }
 
     getConditionValue(): ConditionResult {
         return null; //TODO
+    }
+
+
+}
+
+class DatingSliderValue {
+    name: string; //displayed name i.e 18 (century) or prelom
+    lowNumberValue: number; // lower value i.e. 1700 or -10
+    highNumberValue: number; // higher value i.e 1799 or +10
+
+    constructor(name: string, lowNumberValue: number, highNumberValue: number) {
+        this.name = name;
+        this.lowNumberValue = lowNumberValue;
+        this.highNumberValue = highNumberValue;
     }
 }
 
