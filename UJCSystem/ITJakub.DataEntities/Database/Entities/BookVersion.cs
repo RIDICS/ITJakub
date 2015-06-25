@@ -30,6 +30,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual IList<Transformation> Transformations { get; set; }
         public virtual IList<BookPage> BookPages { get; set; }
         public virtual IList<BookContentItem> BookContentItems { get; set; }
+        public virtual IList<BookHeadword> BookHeadwords { get; set; } 
 
 
         public virtual bool Equals(BookVersion other)

@@ -86,6 +86,10 @@
       <key column="BookVersion" />
       <many-to-many class="Category" column="Category" />
     </bag>
+    <bag name="BookHeadwords" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion" />
+      <one-to-many class="BookHeadword" />
+    </bag>
     
   </class>
 </hibernate-mapping>

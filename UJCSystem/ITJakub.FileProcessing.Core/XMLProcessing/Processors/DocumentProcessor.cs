@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header;
+using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
@@ -43,6 +42,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
                     Container.Resolve<TeiHeaderProcessor>(),
                     Container.Resolve<TableOfContentProcessor>(),
                     Container.Resolve<PagesProcessor>(),
+                    Container.Resolve<HeadwordsTableProcessor>()
                 };
             }
         }
