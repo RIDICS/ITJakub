@@ -10,19 +10,19 @@ namespace ITJakub.SearchService.Core.Exist
     {
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPageByPositionFromStart(string bookId, string versionId, int page);
+        string GetPageByPositionFromStart(string bookId, string versionId, int page, string outputFormat);
 
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPageByName(string bookId, string versionId, string start);
+				string GetPageByName(string bookId, string versionId, string start, string outputFormat);
         
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPageByXmlId(string bookId, string versionId, string pageXmlId);
+				string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string outputFormat);
 
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPagesByName(string bookId, string versionId, string start, string end);
+				string GetPagesByName(string bookId, string versionId, string start, string end, string outputFormat);
         
         [OperationContract]
         [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Version)]

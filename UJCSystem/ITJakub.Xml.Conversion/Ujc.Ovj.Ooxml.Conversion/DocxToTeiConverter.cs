@@ -276,6 +276,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			XElement toc = GenerateToc(tableOfContentResult);
 			XElement hws = GenerateHwList(tableOfContentResult);
+			XElement hwt = GenerateHwTable(hws);
 
 
 			if (splittingResult != null) //generovat pouze v případě, že k rozdělení na strany došlo
@@ -293,6 +294,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				metada.Root.Add(pages);
 			}
 			metada.Root.Add(toc);
+			metada.Root.Add(hwt);
 			metada.Root.Add(hws);
 			metada.Save(GetConversionMetadataFileFullPath(finalOutputFileName));
 
@@ -313,6 +315,39 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			return doc.Root;
 		}
 
+		private XElement GenerateHwTable(TableOfContentResult result)
+		{
+			XDocument doc = new XDocument(new XElement(nsItj + "headwordsTable"));
+			doc.Root.Add(GenerateTable(result.HeadwordsList));
+			return doc.Root;
+		}
+
+		private XElement GenerateHwTable(XElement result)
+		{
+			XDocument doc = new XDocument(new XElement(nsItj + "headwordsTable"));
+
+			var items = from item in result.Descendants(nsTei + "item").Where(item => item.Element(nsTei + "list") == null)
+									select new
+									{
+										EntryId = item.Parent.Parent.Attribute("corresp").Value.Replace("#", ""),
+										DefaultHw = item.Parent.Parent.Element(nsTei + "head").Value,
+										Headword = item.Element(nsTei + "head").Value,
+										Visibility = item.Parent.Parent.Attribute("type") != null ? item.Parent.Parent.Attribute("type").Value : null,
+										Type = item.Attribute("type") != null ? item.Attribute("type").Value : null
+									};
+			foreach (var item in items)
+			{
+				doc.Root.Add(new XElement(nsItj + "headword",
+						new XAttribute("entryId", item.EntryId),
+						new XAttribute("defaultHw", item.DefaultHw),
+						new XAttribute("hw", item.Headword),
+						item.Visibility != null ? new XAttribute("visibility", item.Visibility) : null,
+						item.Type != null ? new XAttribute("type", item.Type) : null
+						));
+			}
+			return doc.Root;
+		}
+
 		private XElement GenerateList(List<HeadwordsListItem> items)
 		{
 			if (items.Count > 0)
@@ -327,6 +362,85 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				return list;
 			}
 			return null;
+		}
+
+		private IEnumerable<XElement> GenerateTable(List<HeadwordsListItem> items)
+		{
+			if (items.Count > 0)
+			{
+
+				var elements = from item in items
+					where item.Sections.Count == 0
+						select new
+						{
+							EntryId = item.Parent.DivXmlId,
+							DefaultHw = item.Parent.HeadInfo.HeadText,
+							Headword = item.HeadInfo.HeadText
+						}
+				;
+
+				List<XElement> result = new List<XElement>();
+				foreach (var element in elements)
+				{
+					result.Add(new XElement(nsItj + "headword",
+						new XAttribute("entryId", element.EntryId),
+						new XAttribute("defaultHw", element.DefaultHw),
+						new XAttribute("hw", element.Headword)));
+				}
+				
+				return result;
+			}
+			return null;
+		}
+
+		private XElement GenerateTable(List<ItemBase> items)
+		{
+			if (items.Count > 0)
+			{
+				XElement list = new XElement(nsTei + "list");
+				foreach (ItemBase item in items)
+				{
+					if (item is TableOfContentItem)
+					{
+						//list.Add(GenerateTable(item as TableOfContentItem));
+					}
+					if (item is HeadwordsListItem)
+					{
+						list.Add(GenerateTable(item as HeadwordsListItem));
+					}
+				}
+				if (list.IsEmpty)
+					return null;
+				return list;
+			}
+			return null;
+		}
+
+		private object GenerateTable(HeadwordsListItem item)
+		{
+			if (item == null) return null;
+			string corresp = item.HeadwordInfo.FormXmlId ?? item.DivXmlId;
+			XAttribute type = null;
+			if (item.HeadwordInfo.Type != null)
+				type = new XAttribute("type", item.HeadwordInfo.Type);
+			XElement it =
+				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp),
+					type,
+					new XAttribute("defaulthw", item.HeadInfo.HeadText),
+					item.PageBreakInfo.PageBreak == null
+						? null
+						: GetPbInfo(item.PageBreakInfo));
+			return it;
+			//GenerateTable(item.Sections)
+		}
+
+		private List<XAttribute> GetPbInfo(PageBreakInfo item)
+		{
+			return new List<XAttribute>()
+			{
+				new XAttribute("pb-id", item.PageBreakXmlId),
+				new XAttribute("pb", item.PageBreak)
+			};
 		}
 
 		private XElement GenerateList(List<ItemBase> items)
