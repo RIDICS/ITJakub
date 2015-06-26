@@ -1157,10 +1157,15 @@ input.regexsearch-checkbox {
 .regex-dating-condition .tooltip-arrow {
   border-top-color: #84ced7 !important;
 }
-.regex-dating-condition .regex-dating-condition-select {
+.regex-dating-condition .regex-dating-condition-selects {
   margin-top: -68px;
   margin-left: 200px;
+  width: 500px;
+}
+.regex-dating-condition-selects .regex-dating-condition-select {
   width: 200px;
+  margin-left: 30px;
+  display: inline-block;
 }
 .regex-slider-div {
   margin-top: 30px;

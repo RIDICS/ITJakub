@@ -430,7 +430,7 @@ class RegExDatingCondition extends RegExConditionBase {
         var datingDiv = document.createElement('div');
         $(datingDiv).addClass("regex-dating-condition");
 
-        datingDiv.appendChild(this.makeTopSelectionDiv());
+        datingDiv.appendChild(this.makeTopSelectBoxes());
 
         var centurySliderDiv: HTMLDivElement = window.document.createElement("div");
         $(centurySliderDiv).addClass("regex-dating-century-div regex-slider-div");
@@ -483,7 +483,7 @@ class RegExDatingCondition extends RegExConditionBase {
         periodSliderDiv.appendChild(periodCheckboxDiv);
         datingDiv.appendChild(periodSliderDiv);
 
-        var sliderPeriod = this.makeSlider(new Array<DatingSliderValue>(new DatingSliderValue("zacatek", 0, -85), new DatingSliderValue("ctvrtina", 0, -75), new DatingSliderValue("tretina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0)), "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
+        var sliderPeriod = this.makeSlider(new Array<DatingSliderValue>(new DatingSliderValue("začátek", 0, -85), new DatingSliderValue("čtvrtina", 0, -75), new DatingSliderValue("třetina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0)), "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
         $(sliderPeriod).slider("option", "disabled", true);
         $(sliderPeriod).parent().siblings(".slider").find(".slider-tip").hide();
         periodSliderDiv.appendChild(sliderPeriod);
@@ -610,47 +610,54 @@ class RegExDatingCondition extends RegExConditionBase {
         return slider;
     }
 
-    public makeTopSelectionDiv() : HTMLDivElement {
+    public makeTopSelectBoxes() : HTMLDivElement {
         var datingFormDiv = document.createElement("div");
-        $(datingFormDiv).addClass("regex-dating-condition-select");
+        $(datingFormDiv).addClass("regex-dating-condition-selects");
+
+        var datingSelectDiv = document.createElement("div");
+        $(datingSelectDiv).addClass("regex-dating-condition-select");
 
         var datingFormSpan = document.createElement("span");
         datingFormSpan.innerHTML = "Zadání rozmezí";
         $(datingFormSpan).addClass("regexsearch-upper-select-label");
-        datingFormDiv.appendChild(datingFormSpan);
+        datingSelectDiv.appendChild(datingFormSpan);
 
         var datingFormSelect = document.createElement("select");
         $(datingFormSelect).addClass("regexsearch-select");
-        datingFormDiv.appendChild(datingFormSelect);
+        datingSelectDiv.appendChild(datingFormSelect);
 
         datingFormSelect.appendChild(this.createOption("Starší než", ""));
         datingFormSelect.appendChild(this.createOption("Mladší než", ""));
-        datingFormSelect.appendChild(this.createOption("Mezi roky", ""));
-        datingFormSelect.appendChild(this.createOption("Kolem roku", ""));
+        datingFormSelect.appendChild(this.createOption("Mezi", ""));
+        datingFormSelect.appendChild(this.createOption("Kolem", ""));
 
         $(datingFormSelect).change((eventData: Event) => {
             //this.selectedWordFormType = $(eventData.target).val();
         });
 
+        var precisionSelectDiv = document.createElement("div");
+        $(precisionSelectDiv).addClass("regex-dating-condition-select");
 
-        var preciseValueCheckboxDiv: HTMLDivElement = window.document.createElement("div");
-        var preciseValueCheckbox: HTMLInputElement = window.document.createElement("input");
-        preciseValueCheckbox.type = "checkbox";
-        $(preciseValueCheckbox).change((eventData: Event) => {
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
-            if (currentTarget.checked) {
-                
-            } else {
-                
-            }
+        var precisionFormSpan = document.createElement("span");
+        precisionFormSpan.innerHTML = "Zadání přesnosti";
+        $(precisionFormSpan).addClass("regexsearch-upper-select-label");
+        precisionSelectDiv.appendChild(precisionFormSpan);
+
+        var precisionFormSelect = document.createElement("select");
+        $(precisionFormSelect).addClass("regexsearch-select");
+        precisionSelectDiv.appendChild(precisionFormSelect);
+
+        precisionFormSelect.appendChild(this.createOption("Období", ""));
+        precisionFormSelect.appendChild(this.createOption("Rok", ""));
+
+        $(precisionFormSelect).change((eventData: Event) => {
+            //this.selectedWordFormType = $(eventData.target).val();
         });
 
-        var preciseValueNameSpan: HTMLSpanElement = window.document.createElement("span");
-        preciseValueNameSpan.innerHTML = "Přesná hodnota";
-        preciseValueCheckboxDiv.appendChild(preciseValueCheckbox);
-        preciseValueCheckboxDiv.appendChild(preciseValueNameSpan);
+        precisionSelectDiv.appendChild(precisionFormSelect);
 
-        datingFormDiv.appendChild(preciseValueCheckboxDiv);
+        datingFormDiv.appendChild(datingSelectDiv);
+        datingFormDiv.appendChild(precisionSelectDiv);
 
         return datingFormDiv;
     }
