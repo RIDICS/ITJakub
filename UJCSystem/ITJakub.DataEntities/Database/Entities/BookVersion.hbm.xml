@@ -49,6 +49,9 @@
     <property name="BiblText">
       <column name="BiblText" sql-type="varchar" not-null="false" />
     </property>
+    <property name="Acronym">
+      <column name="Acronym" sql-type="varchar" not-null="false" />
+    </property>
 
     <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="false">
       <key column="BookVersion" />

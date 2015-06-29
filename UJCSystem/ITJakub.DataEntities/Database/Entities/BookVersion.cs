@@ -21,6 +21,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string Copyright { get; set; }
         public virtual AvailabilityStatus AvailabilityStatus { get; set; }
         public virtual string BiblText { get; set; }
+        public virtual string Acronym { get; set; }
         public virtual IList<Category> Categories { get; set; }
         public virtual IList<ManuscriptDescription> ManuscriptDescriptions { get; set; }
         public virtual IList<BookBibl> BookBibls { get; set; }
