@@ -1720,7 +1720,7 @@
                     suggestions = suggestions || [];
                     if (!canceled && rendered < that.limit) {
                         that.cancel = $.noop;
-                        rendered += suggestions.length;
+                        //rendered += suggestions.length;
                         that._append(query, suggestions.slice(0, that.limit - rendered));
                         that.async && that.trigger("asyncReceived", query);
                     }
