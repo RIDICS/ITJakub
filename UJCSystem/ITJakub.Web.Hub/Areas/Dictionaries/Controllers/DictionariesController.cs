@@ -110,9 +110,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetTypeaheadDictionaryEntry(string query)
+        public ActionResult GetTypeaheadDictionaryHeadword(string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadDictionaryEntries(query);
+            var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(query);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

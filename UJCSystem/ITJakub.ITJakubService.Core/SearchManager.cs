@@ -149,9 +149,13 @@ namespace ITJakub.ITJakubService.Core
             return m_bookRepository.GetTypeaheadTitlesByBookType(query, bookType, PrefetchRecordCount);
         }
         
-        public IList<string> GetTypeaheadDictionaryEntries(string query)
+        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
         {
-            return new List<string> {"TODO"}; // TODO search dictionary entries
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastTypeaheadHeadwords(PrefetchRecordCount);
+
+            query = string.Format("{0}%", query);
+            return m_bookRepository.GetTypeaheadHeadwords(query, PrefetchRecordCount);
         }
     }
 }

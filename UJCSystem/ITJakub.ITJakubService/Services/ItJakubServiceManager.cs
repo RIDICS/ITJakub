@@ -160,9 +160,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetTypeaheadTitles(query);
         }
 
-        public IList<string> GetTypeaheadDictionaryEntries(string query)
+        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
         {
-            return m_searchManager.GetTypeaheadDictionaryEntries(query);
+            return m_searchManager.GetTypeaheadDictionaryHeadwords(query);
         }
 
         public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType)

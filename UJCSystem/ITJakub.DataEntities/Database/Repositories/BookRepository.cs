@@ -389,5 +389,42 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .List<string>();
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastTypeaheadHeadwords(int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                BookHeadword bookHeadwordAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
+                    .Select(x => bookHeadwordAlias.Headword)
+                    .Where(x => x.Visibility == VisibilityEnum.Public)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadHeadwords(string query, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                BookHeadword bookHeadwordAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
+                    .Select(x => bookHeadwordAlias.Headword)
+                    .Where(x => x.Visibility == VisibilityEnum.Public)
+                    .AndRestrictionOn(x => x.Headword).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
     }
 }

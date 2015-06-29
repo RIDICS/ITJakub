@@ -636,29 +636,29 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IList<string> GetTypeaheadDictionaryEntries(string query)
+        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
         {
             try
             {
-                return Channel.GetTypeaheadDictionaryEntries(query);
+                return Channel.GetTypeaheadDictionaryHeadwords(query);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetTypeaheadDictionaryEntries failed with: {0}", ex);
+                    m_log.ErrorFormat("GetTypeaheadDictionaryHeadwords failed with: {0}", ex);
                 throw;
             }
 
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetTypeaheadDictionaryEntries failed with: {0}", ex);
+                    m_log.ErrorFormat("GetTypeaheadDictionaryHeadwords failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetTypeaheadDictionaryEntries timeouted with: {0}", ex);
+                    m_log.ErrorFormat("GetTypeaheadDictionaryHeadwords timeouted with: {0}", ex);
                 throw;
             }
         }

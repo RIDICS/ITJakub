@@ -14,7 +14,7 @@ $(document).ready(function () {
         }
     });
     var searchBox = new SearchBox("#searchbox", "Dictionaries/Dictionaries");
-    searchBox.addDataSet("DictionaryEntry", "Slovníková hesla");
+    searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
     searchBox.create();
 });
 function showStateInAlertBox(state) {
