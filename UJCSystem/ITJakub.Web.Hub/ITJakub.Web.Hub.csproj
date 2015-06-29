@@ -656,6 +656,7 @@
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileManager.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfiles.ts" />
+    <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesViewer.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.search.ts" />

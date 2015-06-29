@@ -11,10 +11,43 @@ $(document).ready(() => {
     array.push(dictionarySelector);
     array.push(editionSelector);
 
+    var dictionariesViewer = new DictionaryViewer("#headwordList", "#headwordDescription");
+
     $("#searchButton").click(() => {
-        for (var i = 0; i < array.length; i++) {
-            var state = array[i].getState();
-            showStateInAlertBox(state);
+        //for (var i = 0; i < array.length; i++) {
+        //    var state = array[i].getState();
+        //    showStateInAlertBox(state);
+        //}
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchHeadword",
+            data: {query: $("#searchbox").val()},
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                dictionariesViewer.showHeadwords(response);
+            }
+        });
+    });
+
+    $("#advancedSearchButton").click(() => {
+        var glyph = $("#advancedSearchButton .regexsearch-button-glyph");
+        var regExSearchDiv = document.getElementById("regExSearchDiv");
+        if (document.getElementById("regExSearchDiv").children.length === 0) {
+            glyph.removeClass("glyphicon-chevron-down");
+            glyph.addClass("glyphicon-chevron-up");
+            var regExSearchPlugin = new RegExSearch(<HTMLDivElement>regExSearchDiv);
+            regExSearchPlugin.makeRegExSearch();
+        } else if ($(regExSearchDiv).hasClass("hidden")) {
+            $(regExSearchDiv).removeClass("hidden");
+            glyph.removeClass("glyphicon-chevron-down");
+            glyph.addClass("glyphicon-chevron-up");
+        } else {
+            $(regExSearchDiv).addClass("hidden");
+            glyph.removeClass("glyphicon-chevron-up");
+            glyph.addClass("glyphicon-chevron-down");
         }
     });
 
@@ -22,6 +55,7 @@ $(document).ready(() => {
     searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
     searchBox.create();
 });
+
 
 function showStateInAlertBox(state : State) {
     var itemIds = "";

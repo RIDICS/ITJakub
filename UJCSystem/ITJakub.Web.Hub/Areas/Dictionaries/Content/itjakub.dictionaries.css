@@ -74,6 +74,9 @@ div.container {
   color: white;
   padding: 5px;
 }
+.dictionary-subheader {
+  margin-top: 1px;
+}
 .search-with-saved-word-area {
   height: 20vh;
   padding: 5px;
@@ -107,12 +110,28 @@ div.container {
   width: 20%;
   float: left;
 }
+.dictionary-result-word-search-list-body {
+  padding: 5px;
+}
+.dictionary-result-pagination {
+  text-align: center;
+}
 .dictionary-result-word-search-description {
   background-color: white;
   margin-left: 1%;
   height: 100%;
   width: 79%;
   float: left;
+}
+.dictionary-result-word-search-description-body {
+  padding: 5px;
+}
+a.dictionary-result-headword-book {
+  margin-left: 5px;
+  color: #84ced7;
+}
+.dictionary-result-headword-favorite {
+  float: right;
 }
 .saved-words-body {
   padding: 5px;

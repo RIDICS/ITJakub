@@ -716,5 +716,32 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public IList<HeadwordContract> SearchHeadword(string query)
+        {
+            try
+            {
+                return null; // TODO
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchHeadword failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchHeadword failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchHeadword timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }
