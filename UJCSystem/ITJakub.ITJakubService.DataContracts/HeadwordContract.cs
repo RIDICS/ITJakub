@@ -4,6 +4,16 @@ using System.Runtime.Serialization;
 namespace ITJakub.ITJakubService.DataContracts
 {
     [DataContract]
+    public class HeadwordSearchResultContract
+    {
+        [DataMember]
+        public int HeadwordCount { get; set; }
+
+        [DataMember]
+        public int FulltextCount { get; set; }
+    }
+
+    [DataContract]
     public class HeadwordContract
     {
         [DataMember]

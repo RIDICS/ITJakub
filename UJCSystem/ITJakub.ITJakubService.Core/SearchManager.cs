@@ -194,6 +194,7 @@ namespace ITJakub.ITJakubService.Core
         {
             query = string.Format("%{0}%", query);
             var databaseResult = m_bookVersionRepository.SearchHeadword(query, dictionaryGuidList, page, pageSize);
+            var resultCount = m_bookVersionRepository.GetCountOfSearchHeadword(query, dictionaryGuidList); //TODO
             var resultList = ConvertHeadwordSearchToContract(databaseResult);
 
             return resultList;

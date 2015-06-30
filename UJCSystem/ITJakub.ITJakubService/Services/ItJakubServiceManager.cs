@@ -175,9 +175,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetTypeaheadTitlesByBookType(query, bookType);
         }
 
-        public IList<HeadwordContract> SearchHeadword(string query)
+        public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
         {
-            return m_searchManager.SearchHeadword(query, new List<string> { "{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" }, 10, 10);
+            return m_searchManager.SearchHeadword(query, dictionaryGuidList, page, pageSize);
         }
     }
 }

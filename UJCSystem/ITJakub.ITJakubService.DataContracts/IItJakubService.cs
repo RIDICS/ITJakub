@@ -107,6 +107,6 @@ namespace ITJakub.ITJakubService.DataContracts
         #endregion
 
         [OperationContract]
-        IList<HeadwordContract> SearchHeadword(string query);
+        IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize);
     }
 }

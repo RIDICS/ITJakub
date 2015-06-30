@@ -717,11 +717,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IList<HeadwordContract> SearchHeadword(string query)
+        public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
         {
             try
             {
-                return Channel.SearchHeadword(query);
+                return Channel.SearchHeadword(query, dictionaryGuidList, page, pageSize);
             }
             catch (CommunicationException ex)
             {

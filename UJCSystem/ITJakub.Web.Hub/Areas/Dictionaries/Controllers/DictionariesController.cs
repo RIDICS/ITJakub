@@ -110,9 +110,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SearchHeadword(string query)
+        public ActionResult SearchHeadword(string query, int page, int pageSize)
         {
-            var result = m_mainServiceClient.SearchHeadword(query);
+            //TODO
+            var result = m_mainServiceClient.SearchHeadword(query, new List<string> { "{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" }, page, pageSize);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

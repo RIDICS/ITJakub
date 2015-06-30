@@ -17,7 +17,11 @@ $(document).ready(function () {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/SearchHeadword",
-            data: { query: $("#searchbox").val() },
+            data: {
+                query: $("#searchbox").val(),
+                page: 10,
+                pageSize: 10
+            },
             dataType: "json",
             contentType: "application/json",
             success: function (response) {

@@ -401,7 +401,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return session.QueryOver<Book>()
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
-                    .Select(x => bookHeadwordAlias.Headword)
+                    .Select(Projections.Distinct(Projections.Property(() => bookHeadwordAlias.Headword)))
                     .Where(x => x.Visibility == VisibilityEnum.Public)
                     .Take(recordCount)
                     .List<string>();
@@ -419,7 +419,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return session.QueryOver<Book>()
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
-                    .Select(x => bookHeadwordAlias.Headword)
+                    .Select(Projections.Distinct(Projections.Property(() => bookHeadwordAlias.Headword)))
                     .Where(x => x.Visibility == VisibilityEnum.Public)
                     .AndRestrictionOn(x => x.Headword).IsInsensitiveLike(query)
                     .Take(recordCount)

@@ -272,11 +272,32 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Select(x => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid)
                         .Select(x => bookVersionAlias.VersionId).WithAlias(() => resultAlias.BookVersionId)
                         .Select(x => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym)
-                        .Select(x => bookHeadwordAlias.Headword).WithAlias(() => resultAlias.Headword)
+                        .Select(x => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword)
                         .Select(x => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
-                    .OrderBy(x => x.Headword).Asc
+                    .OrderBy(x => x.DefaultHeadword).Asc
                     .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
                     .List<HeadwordSearchResult>();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual int GetCountOfSearchHeadword(string query, IList<string> dictionaryGuidList)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                BookHeadword bookHeadwordAlias = null;
+
+                var result = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
+                    .Select(Projections.CountDistinct(() => bookHeadwordAlias.DefaultHeadword))
+                    .WhereRestrictionOn(x => x.Headword).IsInsensitiveLike(query)
+                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(dictionaryGuidList)
+                    .SingleOrDefault<int>();
 
                 return result;
             }
