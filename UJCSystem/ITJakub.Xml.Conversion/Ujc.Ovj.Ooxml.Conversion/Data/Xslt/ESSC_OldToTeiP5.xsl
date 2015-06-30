@@ -14,9 +14,9 @@
     <xsl:strip-space elements="*"/>
     
     <xsl:template match="/">
-        <TEI n="4E5DB418-B49B-4AC0-AE9F-78A53E9BE4FE">
+        <TEI n="{08BE3E56-77D0-46C1-80BB-C1346B757BE5}">
             <teiHeader>
-                <fileDesc n="4E5DB418-B49B-4AC0-AE9F-78A53E9BE4FE">
+                <fileDesc n="{08BE3E56-77D0-46C1-80BB-C1346B757BE5}">
                     <titleStmt>
                         <title>Elektronický slovník staré češtiny</title>
                     </titleStmt>
