@@ -5,7 +5,7 @@ BEGIN TRAN
 
     ALTER TABLE [dbo].[Favorites] ADD
 	   [Category] int NULL FOREIGN KEY REFERENCES [dbo].[Category] (Id),
-	   [XmlEntryId] varchar(max) NULL
+	   [XmlEntryId] varchar(255) NULL
 
     ALTER TABLE [dbo].[BookVersion] ADD
 	   [Acronym] varchar(255) NULL
