@@ -36,7 +36,7 @@ namespace ITJakub.ITJakubService.Services
 
         public string GetPageAsRtf(string bookGuid, string pageId)
         {
-            return m_bookManager.GetBookPageByXmlId(bookGuid, pageId, OutputFormatEnumContract.Html); //TODO switch to RTF transformation
+            return m_bookManager.GetBookPageByXmlId(bookGuid, pageId, OutputFormatEnumContract.Rtf);
         }
 
         public Stream GetPagePhoto(string bookGuid, string pageId)
