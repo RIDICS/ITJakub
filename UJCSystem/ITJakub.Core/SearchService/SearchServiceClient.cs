@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
@@ -184,6 +183,33 @@ namespace ITJakub.Core.SearchService
             try
             {
                 Channel.UploadSharedFile(contract);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string transformationName,
+            OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        {
+            try
+            {
+                return Channel.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId, transformationName, outputFormat, transformationLevel);
             }
             catch (CommunicationException ex)
             {
