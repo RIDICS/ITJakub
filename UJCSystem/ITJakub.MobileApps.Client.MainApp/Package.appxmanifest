@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="2ca547d9-70ea-4741-88ea-4ddddbd4c936" Publisher="CN=Vladimír" Version="1.0.0.0" />
+  <Identity Name="60834MartinMudra.Kiosekstaroesk" Publisher="CN=019A62BF-42F9-440B-9B11-1C323DB86C8B" Version="0.0.1.1" />
   <Properties>
-    <DisplayName>ITJakub.MobileApps.MainApp</DisplayName>
-    <PublisherDisplayName>Vladimír</PublisherDisplayName>
+    <DisplayName>Kiosek staročeský</DisplayName>
+    <PublisherDisplayName>Martin Mudra</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
