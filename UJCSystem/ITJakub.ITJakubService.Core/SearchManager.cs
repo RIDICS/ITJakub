@@ -4,6 +4,7 @@ using AutoMapper;
 using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.Core.Search;
 using ITJakub.ITJakubService.DataContracts;
@@ -156,6 +157,46 @@ namespace ITJakub.ITJakubService.Core
 
             query = string.Format("{0}%", query);
             return m_bookRepository.GetTypeaheadHeadwords(query, PrefetchRecordCount);
+        }
+
+        private IList<HeadwordContract> ConvertHeadwordSearchToContract(IList<HeadwordSearchResult> databaseResult)
+        {
+            var resultList = new List<HeadwordContract>();
+            var headwordContract = new HeadwordContract();
+            foreach (var headword in databaseResult)
+            {
+                var bookInfoContract = new HeadwordBookInfoContract
+                {
+                    BookAcronym = headword.BookAcronym,
+                    BookVersionId = headword.BookVersionId,
+                    BookGuid = headword.BookGuid,
+                    XmlEntryId = headword.XmlEntryId
+                };
+
+                if (headword.Headword == headwordContract.Headword)
+                {
+                    headwordContract.Dictionaries.Add(bookInfoContract);
+                }
+                else
+                {
+                    headwordContract = new HeadwordContract
+                    {
+                        Dictionaries = new List<HeadwordBookInfoContract> { bookInfoContract },
+                        Headword = headword.Headword
+                    };
+                    resultList.Add(headwordContract);
+                }
+            }
+            return resultList;
+        } 
+
+        public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
+        {
+            query = string.Format("%{0}%", query);
+            var databaseResult = m_bookVersionRepository.SearchHeadword(query, dictionaryGuidList, page, pageSize);
+            var resultList = ConvertHeadwordSearchToContract(databaseResult);
+
+            return resultList;
         }
     }
 }

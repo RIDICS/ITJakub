@@ -721,7 +721,7 @@ namespace ITJakub.Web.Hub
         {
             try
             {
-                return null; // TODO
+                return Channel.SearchHeadword(query);
             }
             catch (CommunicationException ex)
             {

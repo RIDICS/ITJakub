@@ -105,5 +105,8 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType);
 
         #endregion
+
+        [OperationContract]
+        IList<HeadwordContract> SearchHeadword(string query);
     }
 }

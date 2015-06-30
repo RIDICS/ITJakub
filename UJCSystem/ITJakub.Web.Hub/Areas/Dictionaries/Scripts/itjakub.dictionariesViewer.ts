@@ -25,14 +25,20 @@
                 .addClass("glyphicon-star-empty")
                 .addClass("dictionary-result-headword-favorite");
 
-            var aLink = document.createElement("a");
-            aLink.href = "?guid=" + record.BookInfo.Guid;
-            aLink.innerText = record.BookInfo.Acronym;
-            $(aLink).addClass("dictionary-result-headword-book");
-
             headwordLi.appendChild(headwordSpan);
             headwordLi.appendChild(favoriteGlyphSpan);
-            headwordLi.appendChild(aLink);
+
+            for (var j = 0; j < record.Dictionaries.length; j++) {
+                var dictionary = record.Dictionaries[j];
+
+                var aLink = document.createElement("a");
+                aLink.href = "?guid=" + dictionary.BookGuid + "&xmlEntryId=" + dictionary.XmlEntryId;
+                aLink.innerText = dictionary.BookAcronym;
+                $(aLink).addClass("dictionary-result-headword-book");
+                
+                headwordLi.appendChild(aLink);
+            }
+            
             listUl.appendChild(headwordLi);
         }
 
@@ -45,12 +51,13 @@
 } 
 
 interface IHeadwordBookInfo {
-    Guid: string;
-    Acronym: string;
+    BookGuid: string;
+    BookAcronym: string;
+    BookVersionId: string;
+    XmlEntryId: string;
 }
 
 interface IHeadword {
-    XmlEntryId: string;
     Headword: string;
-    BookInfo: IHeadwordBookInfo;
+    Dictionaries: Array<IHeadwordBookInfo>;
 }

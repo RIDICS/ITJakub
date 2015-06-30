@@ -1,4 +1,4 @@
-namespace ITJakub.DataEntities.Database.Entities
+namespace ITJakub.DataEntities.Database.Entities.SelectResults
 {
     public class BookVersionPair
     {
