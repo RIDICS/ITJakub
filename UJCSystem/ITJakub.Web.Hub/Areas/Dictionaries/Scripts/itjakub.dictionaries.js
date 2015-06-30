@@ -7,27 +7,13 @@ $(document).ready(function () {
     var array = new Array();
     array.push(dictionarySelector);
     array.push(editionSelector);
-    var dictionariesViewer = new DictionaryViewer("#headwordList", "#headwordDescription");
+    var dictionariesViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription");
     $("#searchButton").click(function () {
         //for (var i = 0; i < array.length; i++) {
         //    var state = array[i].getState();
         //    showStateInAlertBox(state);
         //}
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchHeadword",
-            data: {
-                query: $("#searchbox").val(),
-                page: 10,
-                pageSize: 10
-            },
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                dictionariesViewer.showHeadwords(response);
-            }
-        });
+        dictionariesViewer.search($("#searchbox").val());
     });
     $("#advancedSearchButton").click(function () {
         var glyph = $("#advancedSearchButton .regexsearch-button-glyph");
