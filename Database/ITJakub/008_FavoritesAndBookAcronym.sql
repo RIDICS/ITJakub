@@ -16,5 +16,5 @@ BEGIN TRAN
 		('008' )
 		-- DatabaseVersion - varchar
 
-ROLLBACK
---COMMIT 
+--ROLLBACK
+COMMIT 
