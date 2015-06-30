@@ -36,7 +36,13 @@ namespace ITJakub.SearchService
             m_searchServiceManager.UploadSharedFile(contract);
         }
 
-				public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        public string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string transformationName,
+            OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        {
+            return m_searchServiceManager.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId, transformationName, outputFormat, transformationLevel);
+        }
+
+        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
             if(m_log.IsDebugEnabled)
                 m_log.DebugFormat("SearchService request recieved...");
