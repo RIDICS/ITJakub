@@ -24,14 +24,14 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            //TODO get titles
-            return Json(new [] {"TODO"}, JsonRequestBehavior.AllowGet);
+            var result = m_mainServiceClient.GetTypeaheadTitles(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetTypeaheadDictionaryEntry(string query)
+        public ActionResult GetTypeaheadDictionaryHeadword(string query)
         {
-            //TODO get dictionary entries
-            return Json(new [] {"TODO"}, JsonRequestBehavior.AllowGet);
+            var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

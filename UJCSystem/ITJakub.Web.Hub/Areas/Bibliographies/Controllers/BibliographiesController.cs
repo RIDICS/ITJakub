@@ -44,6 +44,17 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             }
             return Json(new { books = listBooks }, JsonRequestBehavior.AllowGet);
         }
+        
+        public ActionResult GetTypeaheadAuthor(string query)
+        {
+            var result = m_serviceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.BibliographicalItem);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
+        public ActionResult GetTypeaheadTitle(string query)
+        {
+            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.BibliographicalItem);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

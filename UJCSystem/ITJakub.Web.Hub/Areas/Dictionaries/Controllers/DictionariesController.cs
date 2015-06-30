@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -109,6 +108,39 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var wordListCriteriaContracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
             m_mainServiceClient.SearchByCriteria(wordListCriteriaContracts);
             return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SearchHeadword(string query)
+        {
+            var result = m_mainServiceClient.SearchHeadword(query);
+            result = new List<HeadwordContract>
+            {
+                new HeadwordContract
+                {
+                    Headword = "Test",
+                    XmlEntryId = "x123456",
+                    BookInfo = new HeadwordBookInfoContract{Acronym = "T", Guid = "Guuiiidddd"}
+                },
+                new HeadwordContract
+                {
+                    Headword = "Tohle",
+                    XmlEntryId = "x123457",
+                    BookInfo = new HeadwordBookInfoContract{Acronym = "T", Guid = "Guuiiidddd"}
+                },
+                new HeadwordContract
+                {
+                    Headword = "Toto",
+                    XmlEntryId = "x123458",
+                    BookInfo = new HeadwordBookInfoContract{Acronym = "T", Guid = "Guuiiidddd"}
+                },
+            };
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetTypeaheadDictionaryHeadword(string query)
+        {
+            var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

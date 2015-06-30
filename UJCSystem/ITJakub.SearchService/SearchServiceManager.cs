@@ -13,24 +13,24 @@ namespace ITJakub.SearchService
             m_bookDao = bookDao;
         }
 
-        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            return m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName, transformationLevel);
+					return m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName, outputFormat, transformationLevel);
         }
 
-        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+				public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            return m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName, transformationLevel);
+					return m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName, outputFormat, transformationLevel);
         }
 
-        public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+				public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            return m_bookDao.GetPageByXmlId(bookId, versionId, pageXmlId, transformationName, transformationLevel);
+					return m_bookDao.GetPageByXmlId(bookId, versionId, pageXmlId, transformationName, outputFormat, transformationLevel);
         }
 
-        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+				public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            return m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName, transformationLevel);
+					return m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName, outputFormat, transformationLevel);
         }
 
         public void UploadVersionFile(VersionResourceUploadContract contract)

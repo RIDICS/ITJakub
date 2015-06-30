@@ -606,7 +606,6 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\typeahead.bundle.js" />
-    <Content Include="Scripts\typeahead.bundle.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -657,6 +656,7 @@
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileManager.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfiles.ts" />
+    <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesViewer.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.search.ts" />

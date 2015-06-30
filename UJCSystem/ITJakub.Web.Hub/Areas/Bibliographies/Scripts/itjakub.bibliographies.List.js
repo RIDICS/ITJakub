@@ -14,5 +14,9 @@ $(document).ready(function () {
             }
         });
     });
+    var searchBox = new SearchBox("#searchbox", "Bibliographies/Bibliographies");
+    searchBox.addDataSet("Title", "Názvy");
+    searchBox.addDataSet("Author", "Autoři");
+    searchBox.create();
 });
 //# sourceMappingURL=itjakub.bibliographies.List.js.map

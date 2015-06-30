@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Entities;
@@ -48,7 +48,7 @@ namespace ITJakub.ITJakubService.Core
             };
         }
 
-        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             var conjunction = new List<SearchCriteriaQuery>();
             foreach (var searchCriteriaContract in searchCriterias)
@@ -58,7 +58,13 @@ namespace ITJakub.ITJakubService.Core
             }
             
             var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(conjunction);
-            // TODO
+            
+            // TODO search in eXist
+
+            var guidList = databaseSearchResult.Select(x => x.Guid);
+            var result = m_bookVersionRepository.GetBookVersionsByGuid(guidList);
+
+            return Mapper.Map<List<SearchResultContract>>(result);
         }
 
         public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
@@ -99,15 +105,57 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<MobileContracts.BookContract>>(bookList);
         }
 
+        private string PrepareQuery(string query)
+        {
+            query = query.TrimStart().TrimEnd().Replace(" ", "% %");
+            return string.Format("%{0}%", query);
+        }
+
         public IList<string> GetTypeaheadAuthors(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
                 return m_bookRepository.GetLastAuthors(PrefetchRecordCount);
 
-            query = query.TrimStart().TrimEnd().Replace(" ", "% %");
-            query = string.Format("%{0}%", query);
-            
+            query = PrepareQuery(query);
             return m_bookRepository.GetTypeaheadAuthors(query, PrefetchRecordCount);
+        }
+
+        public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookTypeContract)
+        {
+            var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastAuthorsByBookType(PrefetchRecordCount, bookType);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadAuthorsByBookType(query, bookType, PrefetchRecordCount);
+        }
+
+        public IList<string> GetTypeaheadTitles(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastTitles(PrefetchRecordCount);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadTitles(query, PrefetchRecordCount);
+        }
+
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookTypeContract)
+        {
+            var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastTitlesByBookType(PrefetchRecordCount, bookType);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadTitlesByBookType(query, bookType, PrefetchRecordCount);
+        }
+        
+        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastTypeaheadHeadwords(PrefetchRecordCount);
+
+            query = string.Format("{0}%", query);
+            return m_bookRepository.GetTypeaheadHeadwords(query, PrefetchRecordCount);
         }
     }
 }

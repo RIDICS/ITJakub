@@ -100,10 +100,13 @@
     <Compile Include="XMLProcessing\Processors\Header\TermProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TextClassProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TitleStmtProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Headwords\HeadwordProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Headwords\HeadwordsTableProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ListProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\BookContent\TableOfContentProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TitleProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\PublicationStmtProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Pages\PageProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Pages\PagesProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TeiHeaderProcessor.cs" />

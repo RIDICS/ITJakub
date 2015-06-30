@@ -60,7 +60,7 @@ namespace ITJakub.ITJakubService.DataContracts
         Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
 
         [OperationContract]
-        void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
+        IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
 
         #region CardFile methods
 
@@ -91,6 +91,18 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<string> GetTypeaheadAuthors(string query);
+
+        [OperationContract]
+        IList<string> GetTypeaheadTitles(string query);
+
+        [OperationContract]
+        IList<string> GetTypeaheadDictionaryHeadwords(string query);
+
+        [OperationContract]
+        IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType);
+
+        [OperationContract]
+        IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType);
 
         #endregion
     }

@@ -79,7 +79,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 var rootCategory = session.QueryOver(() => categoryAlias)
                     .JoinAlias(x => x.BookType, () => bookTypeAlias)
-                    .Where(() => bookTypeAlias.Type == type)
+                    .Where(() => bookTypeAlias.Type == type && categoryAlias.ParentCategory == null)
                     .SingleOrDefault<Category>();
 
                 if (rootCategory == null)
@@ -114,5 +114,16 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return resultCategory == null ? null : resultCategory.BookType;
             }
         }
+
+				[Transaction(TransactionMode.Requires)]
+				public virtual BookType FindBookTypeByType(BookTypeEnum bookTypeEnum)
+				{
+						using (var session = GetSession())
+						{
+								return session.QueryOver<BookType>()
+										.Where(x => x.Type == bookTypeEnum)
+										.SingleOrDefault();
+						}
+				}
     }
 }

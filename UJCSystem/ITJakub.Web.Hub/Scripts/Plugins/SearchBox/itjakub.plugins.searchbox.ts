@@ -1,14 +1,12 @@
 ﻿ class SearchBox {
      private inputField: string;
-     private controllerName: string;
      private urlWithController: string;
      private options: Twitter.Typeahead.Options;
      private datasets: Array<Twitter.Typeahead.Dataset>;
 
-     constructor(inputFieldElement: string, controllerName: string) {
+     constructor(inputFieldElement: string, controllerPath: string) {
          this.inputField = inputFieldElement;
-         this.controllerName = controllerName;
-         this.urlWithController = getBaseUrl() + controllerName;
+         this.urlWithController = getBaseUrl() + controllerPath;
          this.datasets = [];
 
          this.options = {
@@ -43,7 +41,7 @@
          });
 
          var dataset: Twitter.Typeahead.Dataset = {
-             name: this.controllerName,
+             name: name,
              limit: 5,
              source: bloodhound,
              templates: {

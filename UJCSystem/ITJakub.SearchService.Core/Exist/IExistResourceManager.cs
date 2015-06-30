@@ -8,6 +8,7 @@ namespace ITJakub.SearchService.Core.Exist
 
         string GetQueryUriTemplate(string xqueryName, string queryStringParams);
 
-        string GetTransformationUri(string transformationName, ResourceLevelEnumContract transformationLevel, string bookGuid, string bookVersion);
+        string GetTransformationUri(string transformationName, OutputFormatEnumContract outputFormat, 
+					ResourceLevelEnumContract transformationLevel, string bookGuid, string bookVersion);
     }
 }

@@ -17,10 +17,10 @@ namespace ITJakub.ITJakubService.DataContracts
     public class DatingCriteriaContract : SearchCriteriaContract
     {
         [DataMember]
-        public DateTime NotBefore { get; set; }
+        public DateTime? NotBefore { get; set; }
 
         [DataMember]
-        public DateTime NotAfter { get; set; }
+        public DateTime? NotAfter { get; set; }
     }
 
     [DataContract]

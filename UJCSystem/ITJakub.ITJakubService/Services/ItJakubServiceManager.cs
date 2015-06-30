@@ -109,9 +109,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageImage(bookPageImageContract);
         }
 
-        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            m_searchManager.SearchByCriteria(searchCriterias);
+            return m_searchManager.SearchByCriteria(searchCriterias);
         }
         #region CardFile methods
         public IEnumerable<CardFileContract> GetCardFiles()
@@ -154,6 +154,25 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.GetTypeaheadAuthors(query);
         }
-     
+
+        public IList<string> GetTypeaheadTitles(string query)
+        {
+            return m_searchManager.GetTypeaheadTitles(query);
+        }
+
+        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
+        {
+            return m_searchManager.GetTypeaheadDictionaryHeadwords(query);
+        }
+
+        public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType)
+        {
+            return m_searchManager.GetTypeaheadAuthorsByBookType(query, bookType);
+        }
+
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType)
+        {
+            return m_searchManager.GetTypeaheadTitlesByBookType(query, bookType);
+        }
     }
 }

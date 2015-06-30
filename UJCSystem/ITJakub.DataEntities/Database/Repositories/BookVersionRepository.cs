@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Castle.Facilities.NHibernateIntegration;
@@ -206,7 +207,12 @@ namespace ITJakub.DataEntities.Database.Repositories
                 {
                     foreach (var parameterValue in criteriaQuery.Parameters)
                     {
-                        query.SetParameter(paramIndex, parameterValue);
+                        if (parameterValue is DateTime)
+                            //set parameter as DateTime2 otherwise comparison years before 1753 doesn't work
+                            query.SetDateTime2(paramIndex, (DateTime)parameterValue);
+                        else
+                            query.SetParameter(paramIndex, parameterValue);
+
                         paramIndex++;
                     }
                 }
@@ -215,6 +221,22 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .List<BookVersionPair>();
 
                 return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> GetBookVersionsByGuid(IEnumerable<string> bookGuidList)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+
+                return session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .Select(x => x.LastVersion)
+                    .WhereRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
+                    .List<BookVersion>();
             }
         }
     }
