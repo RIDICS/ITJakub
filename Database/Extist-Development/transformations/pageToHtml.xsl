@@ -4,6 +4,7 @@
     <xsl:import href="commonToHtml-block.xsl"/>
     <xsl:import href="commonToHtml-inline.xsl"/>
     <xsl:strip-space elements="*"/>
+    <xsl:variable name="book-type" select="''"/>
     <xsl:template match="tei:w">
         <span data-nlp-type="{name()}" data-nlp-lemma="{@nlp:lemma}">
             <xsl:apply-templates/>

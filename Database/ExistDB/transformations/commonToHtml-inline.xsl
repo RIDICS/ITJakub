@@ -50,7 +50,7 @@
             <xsl:apply-templates/>
         </span>
     </xsl:template>
-	<xsl:template match="tei:note[@n]">
+    <xsl:template match="tei:note[@n]">
         <xsl:element name="span">
             <xsl:attribute name="class">
                 <xsl:text>note-ref</xsl:text>
@@ -61,7 +61,7 @@
             <xsl:value-of select="@n"/>
         </xsl:element>
     </xsl:template>
-	<xsl:template match="tei:corr" mode="notes">
+    <xsl:template match="tei:corr" mode="notes">
         <span class="corr">
             <xsl:apply-templates/>
         </span>
@@ -72,7 +72,7 @@
             <xsl:otherwise> </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-	<xsl:template match="tei:sic" mode="notes">
+    <xsl:template match="tei:sic" mode="notes">
         <span class="sic">
             <xsl:apply-templates/>
         </span>
@@ -88,7 +88,6 @@
                 <xsl:text>info</xsl:text>
                 <xsl:text> </xsl:text>
                 <xsl:text>itj-pb</xsl:text>
-				
                 <xsl:if test="@rend='space'">
                     <xsl:text> space</xsl:text>
                 </xsl:if>

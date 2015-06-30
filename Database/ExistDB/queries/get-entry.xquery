@@ -15,29 +15,29 @@ declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
 
 
 
-let $start := request:get-parameter("start", "")
-let $end := request:get-parameter("end", "")
 let $documentId := request:get-parameter("bookId", "")
 let $versionId := request:get-parameter("versionId", "")
-let $pagePosition := request:get-parameter("page", 1)
-let $pageXmlId := request:get-parameter("pageXmlId", "")
+let $entryXmlId := request:get-parameter("xmlEntryId", "")
 let $outputFormat := request:get-parameter("outputFormat", "")
 let $xslPath := request:get-parameter("_xsl", "")
+
+
 let $document := vwcoll:getDocument($documentId, $versionId)
 
-let $documentFragment := vwpaging:get-document-fragment($document, $start, $end, $pageXmlId, $pagePosition)
+let $entryFragment := $document/id($entryXmlId)
+
 
 (:let $xslPath := "/db/apps/jacob/transformations/pageToHtml.xsl":)
 let $template := doc($xslPath) 
 (:let $transformation := transform:transform($documentFragment, $template, ()):)
 let $transformation := 
 	if($outputFormat = "Html") 
-	then transform:stream-transform($documentFragment, $template, ())
+	then transform:stream-transform($entryFragment, $template, ())
 	else if($outputFormat = "Rtf") 
-		then vwtrans:transform-document-to-rtf($documentFragment, $template)
+		then vwtrans:transform-document-to-rtf($entryFragment, $template)
 (:		then vwtrans:transform-document-to-pdf($documentFragment, $template, ()):)
 		else if($outputFormat = "Pdf") 
-		then vwtrans:transform-document-to-pdf($documentFragment, $template)
+		then vwtrans:transform-document-to-pdf($entryFragment, $template)
 		(:then vwtrans:transform-document-to-pdf($documentFragment, $template, (), ()):)
 		else()
 
