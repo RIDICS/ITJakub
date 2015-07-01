@@ -6,7 +6,9 @@ var DictionaryViewer = (function () {
         this.headwordListContainer = headwordListContainer;
         this.pagination = new Pagination(paginationContainer);
     }
-    DictionaryViewer.prototype.createViewer = function (query, recordCount, searchUrl) {
+    DictionaryViewer.prototype.createViewer = function (recordCount, searchUrl, categories, query) {
+        if (query === void 0) { query = null; }
+        this.categoriesSelect = categories;
         this.currentQuery = query;
         this.recordCount = recordCount;
         this.searchUrl = searchUrl;
@@ -16,14 +18,15 @@ var DictionaryViewer = (function () {
     DictionaryViewer.prototype.searchAndDisplay = function (pageNumber) {
         var _this = this;
         $.ajax({
-            type: "GET",
+            type: "POST",
             traditional: true,
             url: this.searchUrl,
-            data: {
+            data: JSON.stringify({
                 query: this.currentQuery,
                 page: pageNumber,
-                pageSize: this.pageSize
-            },
+                pageSize: this.pageSize,
+                categories: this.categoriesSelect.getState()
+            }),
             dataType: "json",
             contentType: "application/json",
             success: function (response) {

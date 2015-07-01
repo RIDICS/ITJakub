@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database;
@@ -188,13 +189,25 @@ namespace ITJakub.ITJakubService.Core
                 }
             }
             return resultList;
-        } 
+        }
+
+        public int GetHeadwordCount()
+        {
+            return m_bookVersionRepository.GetHeadwordCount();
+        }
+
+        public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
+        {
+            query = string.Format("%{0}%", query);
+            var databaseResult = m_bookVersionRepository.GetCountOfSearchHeadword(query, new [] {"{08BE3E56-77D0-46C1-80BB-C1346B757BE5}"});
+
+            return null; //TODO
+        }
 
         public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
         {
             query = string.Format("%{0}%", query);
             var databaseResult = m_bookVersionRepository.SearchHeadword(query, dictionaryGuidList, page, pageSize);
-            var resultCount = m_bookVersionRepository.GetCountOfSearchHeadword(query, dictionaryGuidList); //TODO
             var resultList = ConvertHeadwordSearchToContract(databaseResult);
 
             return resultList;

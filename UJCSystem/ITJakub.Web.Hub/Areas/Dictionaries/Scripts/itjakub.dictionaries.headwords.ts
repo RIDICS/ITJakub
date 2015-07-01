@@ -1,21 +1,45 @@
 ﻿$(document).ready(() => {
+    var callbackDelegate = new DropDownSelectCallbackDelegate();
+    var dictionarySelector = new DropDownSelect("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
+    dictionarySelector.makeDropdown();
+
     var dictionariesViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription");
 
-    $("#searchButton").click(() => {
-        var query = $("#searchbox").val();
-        var searchUrl = getBaseUrl() + "Dictionaries/Dictionaries/SearchHeadword";
+    
+
+    $("#loadButton").click(() => {
+        var headwordsListUrl = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordList";
         $.ajax({
-            type: "GET",
+            type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/GetSearchResultCount",
-            data: {
-                query: query
-            },
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordCount",
+            data: JSON.stringify(dictionarySelector.getState()),
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
-                dictionariesViewer.createViewer(query, 190, searchUrl); //TODO
+                //todo show first page
+                var resultCount = response;
+                dictionariesViewer.createViewer(resultCount, headwordsListUrl, dictionarySelector);
             }
         });
     });
+
+    //$("#searchButton").click(() => {
+    //    var query = $("#searchbox").val();
+    //    var searchUrl = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwords";
+    //    $.ajax({
+    //        type: "GET",
+    //        traditional: true,
+    //        url: getBaseUrl() + "Dictionaries/Dictionaries/GetSearchResultCount",
+    //        data: {
+    //            query: query
+    //        },
+    //        dataType: "json",
+    //        contentType: "application/json",
+    //        success: (response) => {
+    //            var resultCount = response;
+    //            dictionariesViewer.createViewer(query, resultCount, searchUrl);
+    //        }
+    //    });
+    //});
 }); 

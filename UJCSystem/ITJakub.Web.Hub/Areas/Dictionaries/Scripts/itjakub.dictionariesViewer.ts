@@ -3,6 +3,7 @@
     private paginationContainer: string;
     private headwordListContainer: string;
     private pagination: Pagination;
+    private categoriesSelect: DropDownSelect;
     private currentQuery: string;
     private recordCount: number;
     private searchUrl: string;
@@ -15,7 +16,8 @@
         this.pagination = new Pagination(paginationContainer);
     }
 
-    public createViewer(query:string, recordCount: number, searchUrl: string) {
+    public createViewer(recordCount: number, searchUrl: string, categories: DropDownSelect, query: string = null) {
+        this.categoriesSelect = categories;
         this.currentQuery = query;
         this.recordCount = recordCount;
         this.searchUrl = searchUrl;
@@ -26,14 +28,15 @@
 
     private searchAndDisplay(pageNumber: number) {
         $.ajax({
-            type: "GET",
+            type: "POST",
             traditional: true,
             url: this.searchUrl,
-            data: {
+            data: JSON.stringify({
                 query: this.currentQuery,
                 page: pageNumber,
-                pageSize: this.pageSize
-            },
+                pageSize: this.pageSize,
+                categories: this.categoriesSelect.getState()
+            }),
             dataType: "json",
             contentType: "application/json",
             success: (response) => {

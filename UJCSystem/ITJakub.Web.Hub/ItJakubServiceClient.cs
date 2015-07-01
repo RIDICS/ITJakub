@@ -717,6 +717,87 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public int GetHeadwordCount()
+        {
+            try
+            {
+                return Channel.GetHeadwordCount();
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordCount failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordCount failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordCount timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public IList<HeadwordContract> GetHeadwordList(int page, int pageSize)
+        {
+            try
+            {
+                return null; //TODO
+                //return Channel.GetHeadwordList(page, pageSize);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordList failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordList failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordList timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
+        {
+            try
+            {
+                return Channel.GetHeadwordSearchResultCount(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordSearchResultCount failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordSearchResultCount failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordSearchResultCount timeouted with: {0}", ex);
+                throw;
+            }
+        }
         public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
         {
             try

@@ -283,6 +283,23 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual int GetHeadwordCount()
+        {
+            BookHeadword bookHeadwordAlias = null;
+
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion)
+                    .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
+                    .Select(Projections.CountDistinct(() => bookHeadwordAlias.DefaultHeadword))
+                    .SingleOrDefault<int>();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual int GetCountOfSearchHeadword(string query, IList<string> dictionaryGuidList)
         {
             using (var session = GetSession())

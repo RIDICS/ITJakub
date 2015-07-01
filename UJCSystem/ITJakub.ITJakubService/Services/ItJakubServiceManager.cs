@@ -174,6 +174,15 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.GetTypeaheadTitlesByBookType(query, bookType);
         }
+        public int GetHeadwordCount()
+        {
+            return m_searchManager.GetHeadwordCount();
+        }
+
+        public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
+        {
+            return m_searchManager.GetHeadwordSearchResultCount(query);
+        }
 
         public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
         {

@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
@@ -110,9 +111,24 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetHeadwordCount(SelectedCategoriesDescription categories)
+        {
+            //TODO search with category filter
+            var resultCount = m_mainServiceClient.GetHeadwordCount();
+            return Json(resultCount, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetHeadwordList(SelectedCategoriesWithPagesDescription description)
+        {
+            //TODO search with category filter
+            var result = m_mainServiceClient.GetHeadwordList(description.Page, description.PageSize);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetSearchResultCount(string query)
         {
-            //TODO return correct count
+            //TODO search with category filter
+            var result = m_mainServiceClient.GetHeadwordSearchResultCount(query);
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
