@@ -416,7 +416,7 @@
     <Content Include="Content\ITJakub.DefaultTheme.less" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\List.cshtml" />
-    <Content Include="Areas\Dictionaries\Views\Dictionaries\Passwords.cshtml" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\Headwords.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Search.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
@@ -656,6 +656,8 @@
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileManager.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfiles.ts" />
+    <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.headwords.ts" />
+    <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.search.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesViewer.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />

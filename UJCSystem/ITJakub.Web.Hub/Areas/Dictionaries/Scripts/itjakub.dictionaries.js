@@ -7,47 +7,11 @@ $(document).ready(function () {
     var array = new Array();
     array.push(dictionarySelector);
     array.push(editionSelector);
-    var dictionariesViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription");
     $("#searchButton").click(function () {
         //for (var i = 0; i < array.length; i++) {
         //    var state = array[i].getState();
         //    showStateInAlertBox(state);
         //}
-        var query = $("#searchbox").val();
-        var searchUrl = getBaseUrl() + "Dictionaries/Dictionaries/SearchHeadword";
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/GetSearchResultCount",
-            data: {
-                query: query
-            },
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                dictionariesViewer.createViewer(query, 190, searchUrl); //TODO
-            }
-        });
-    });
-    $("#advancedSearchButton").click(function () {
-        var glyph = $("#advancedSearchButton .regexsearch-button-glyph");
-        var regExSearchDiv = document.getElementById("regExSearchDiv");
-        if (document.getElementById("regExSearchDiv").children.length === 0) {
-            glyph.removeClass("glyphicon-chevron-down");
-            glyph.addClass("glyphicon-chevron-up");
-            var regExSearchPlugin = new RegExSearch(regExSearchDiv);
-            regExSearchPlugin.makeRegExSearch();
-        }
-        else if ($(regExSearchDiv).hasClass("hidden")) {
-            $(regExSearchDiv).removeClass("hidden");
-            glyph.removeClass("glyphicon-chevron-down");
-            glyph.addClass("glyphicon-chevron-up");
-        }
-        else {
-            $(regExSearchDiv).addClass("hidden");
-            glyph.removeClass("glyphicon-chevron-up");
-            glyph.addClass("glyphicon-chevron-down");
-        }
     });
     var searchBox = new SearchBox("#searchbox", "Dictionaries/Dictionaries");
     searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
