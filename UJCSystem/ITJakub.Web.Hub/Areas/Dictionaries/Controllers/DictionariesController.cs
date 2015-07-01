@@ -110,6 +110,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetSearchResultCount(string query)
+        {
+            //TODO return correct count
+            return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult SearchHeadword(string query, int page, int pageSize)
         {
             //TODO
