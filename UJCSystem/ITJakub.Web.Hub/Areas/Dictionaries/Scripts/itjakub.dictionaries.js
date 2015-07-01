@@ -13,7 +13,21 @@ $(document).ready(function () {
         //    var state = array[i].getState();
         //    showStateInAlertBox(state);
         //}
-        dictionariesViewer.search($("#searchbox").val());
+        var query = $("#searchbox").val();
+        var searchUrl = getBaseUrl() + "Dictionaries/Dictionaries/SearchHeadword";
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetSearchResultCount",
+            data: {
+                query: query
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                dictionariesViewer.createViewer(query, 190, searchUrl); //TODO
+            }
+        });
     });
     $("#advancedSearchButton").click(function () {
         var glyph = $("#advancedSearchButton .regexsearch-button-glyph");
