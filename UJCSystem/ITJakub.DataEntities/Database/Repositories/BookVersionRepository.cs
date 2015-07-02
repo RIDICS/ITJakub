@@ -283,8 +283,9 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int GetHeadwordCount()
+        public virtual int GetHeadwordCount(IList<long> selectedBookIds)
         {
+            Book bookAlias = null;
             BookHeadword bookHeadwordAlias = null;
 
             using (var session = GetSession())
@@ -293,7 +294,37 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.LastVersion)
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
                     .Select(Projections.CountDistinct(() => bookHeadwordAlias.DefaultHeadword))
+                    .WhereRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds)
                     .SingleOrDefault<int>();
+
+                return result;
+            }
+        }
+
+        public virtual IList<HeadwordSearchResult> GetHeadwordList(IList<long> selectedBookIds, int page, int pageSize)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                BookHeadword bookHeadwordAlias = null;
+                HeadwordSearchResult resultAlias = null;
+
+                var result = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
+                    .WhereRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds)
+                    .SelectList(list => list
+                        .Select(x => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid)
+                        .Select(x => bookVersionAlias.VersionId).WithAlias(() => resultAlias.BookVersionId)
+                        .Select(x => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym)
+                        .Select(x => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword)
+                        .Select(x => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
+                    .OrderBy(x => x.DefaultHeadword).Asc
+                    .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .List<HeadwordSearchResult>();
 
                 return result;
             }

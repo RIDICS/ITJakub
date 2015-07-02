@@ -190,9 +190,17 @@ namespace ITJakub.ITJakubService.Core
             return resultList;
         }
 
-        public int GetHeadwordCount()
+        public int GetHeadwordCount(IList<long> selectedBookIds)
         {
-            return m_bookVersionRepository.GetHeadwordCount();
+            return m_bookVersionRepository.GetHeadwordCount(selectedBookIds);
+        }
+
+        public IList<HeadwordContract> GetHeadwordList(IList<long> selectedBookIds, int page, int pageSize)
+        {
+            var databaseResult = m_bookVersionRepository.GetHeadwordList(selectedBookIds, page, pageSize);
+            var result = ConvertHeadwordSearchToContract(databaseResult);
+
+            return result;
         }
 
         public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)

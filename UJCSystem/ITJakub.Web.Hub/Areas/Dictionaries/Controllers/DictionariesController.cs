@@ -113,17 +113,17 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetHeadwordCount(SelectedCategoriesDescription categories)
+        public ActionResult GetHeadwordCount(GetHeadwordsDescription description)
         {
             //TODO search with category filter
-            var resultCount = m_mainServiceClient.GetHeadwordCount();
+            var resultCount = m_mainServiceClient.GetHeadwordCount(description.SelectedBookIds);
             return Json(resultCount, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetHeadwordList(SelectedCategoriesWithPagesDescription description)
+        public ActionResult GetHeadwordList(GetHeadwordsDescription description)
         {
             //TODO search with category filter
-            var result = m_mainServiceClient.GetHeadwordList(description.Page, description.PageSize);
+            var result = m_mainServiceClient.GetHeadwordList(description.SelectedBookIds, description.Page, description.PageSize);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

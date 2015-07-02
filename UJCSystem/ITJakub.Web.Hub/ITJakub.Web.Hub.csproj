@@ -184,8 +184,7 @@
     <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
     <Compile Include="Areas\CardFiles\RouteConfig.cs" />
     <Compile Include="Areas\Dictionaries\BundleConfig.cs" />
-    <Compile Include="Areas\Dictionaries\Models\SelectedCategoriesDescription.cs" />
-    <Compile Include="Areas\Dictionaries\Models\SelectedCategoriesWithPagesDescription.cs" />
+    <Compile Include="Areas\Dictionaries\Models\GetHeadwordsDescription.cs" />
     <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\ConditionCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />

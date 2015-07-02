@@ -107,7 +107,10 @@ namespace ITJakub.ITJakubService.DataContracts
         #endregion
 
         [OperationContract]
-        int GetHeadwordCount();
+        int GetHeadwordCount(IList<long> selectedBookIds);
+
+        [OperationContract]
+        IList<HeadwordContract> GetHeadwordList(IList<long> selectedBookIds, int page, int pageSize);
 
         [OperationContract]
         HeadwordSearchResultContract GetHeadwordSearchResultCount(string query);
