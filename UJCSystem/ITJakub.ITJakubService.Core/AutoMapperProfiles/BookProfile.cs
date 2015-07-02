@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
@@ -11,12 +12,9 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         {
             CreateMap<Book, BookContract>()
                 .ForMember(m => m.Title, opt => opt.MapFrom(src => src.LastVersion.Title))
-                .ForMember(m => m.SubTitle, opt => opt.MapFrom(src => src.LastVersion.SubTitle));
-
-            CreateMap<Book, MobileApps.MobileContracts.BookContract>()
-                .ForMember(m => m.Title, opt => opt.MapFrom(src => src.LastVersion.Title))
-                .ForMember(m => m.Authors, opt => opt.MapFrom(src => src.LastVersion.Authors))
-                .ForMember(m => m.PublishDate, opt => opt.MapFrom(src => src.LastVersion.PublishDate));
+                .ForMember(m => m.SubTitle, opt => opt.MapFrom(src => src.LastVersion.SubTitle))
+                .ForMember(m => m.Guid, opt => opt.MapFrom(src => src.Guid))
+                .ForMember(m => m.CategoryIds, opt => opt.MapFrom(src => src.LastVersion.Categories.Select(x => x.Id)));
         }
     }
 

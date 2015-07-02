@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
@@ -6,6 +7,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
+using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -230,13 +232,22 @@ namespace ITJakub.DataEntities.Database.Repositories
 
             using (var session = GetSession())
             {
+                //var categories = session.QueryOver(() => categoryAlias)
+                //    //.JoinQueryOver(x => x.BookType)
+                //    //.Where(x => x.Type == bookType)
+                //    .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
+                //    .Where(() => bookTypeAlias.Type == bookType)
+                //    // .Future<Category>();
+                //    .List<Category>();
+
                 var bookVersions =
                     session.QueryOver(() => bookVersionAlias)
-                        .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias, JoinType.InnerJoin)
-                        .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias, JoinType.InnerJoin)
-                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias, JoinType.InnerJoin)
+                        .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias)
+                        .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
+                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
                         .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
                         .List<BookVersion>();
+
                 return bookVersions;
             }
         }

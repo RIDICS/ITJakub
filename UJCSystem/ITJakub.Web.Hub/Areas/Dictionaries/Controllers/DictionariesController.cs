@@ -53,9 +53,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var dictionariesAndCategories =
                 m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
-            var booksDictionary =
-                dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
-                    .ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            //var booksDictionary =
+            //    dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
+            //        .ToDictionary(x => x.Key.ToString(), x => x.ToList());
             var categoriesDictionary =
                 dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
                     .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
@@ -64,7 +64,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                     new
                     {
                         type = BookTypeEnumContract.Edition,
-                        books = booksDictionary,
+                        //books = booksDictionary,
                         categories = categoriesDictionary
                     }, JsonRequestBehavior.AllowGet);
         }
@@ -73,9 +73,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var dictionariesAndCategories =
                 m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
-            var booksDictionary =
-                dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
-                    .ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            //TODO fix loading books
+            //var booksDictionary =
+            //    dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
+            //        .ToDictionary(x => x.Key.ToString(), x => x.ToList());
             var categoriesDictionary =
                 dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
                     .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
@@ -84,7 +85,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                     new
                     {
                         type = BookTypeEnumContract.Dictionary,
-                        books = booksDictionary,
+                        //books = booksDictionary,
+                        books = new object[0],
                         categories = categoriesDictionary
                     }, JsonRequestBehavior.AllowGet);
         }
