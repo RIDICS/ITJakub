@@ -67,6 +67,10 @@
       <Project>{56B8BC06-0BE8-4045-94DF-6844AA49E523}</Project>
       <Name>Daliboris.Texty.Export.Slovniky.Slovnik</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.StcS\Daliboris.Texty.Export.Slovniky.StcS.csproj">
+      <Project>{132f9406-f111-478f-9325-d312c401ebbb}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.StcS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Export.Transformace\Daliboris.Texty.Export.Transformace.csproj">
       <Project>{9339ED5B-312F-4AAF-9DF6-31B6C3169C48}</Project>
       <Name>Daliboris.Texty.Export.Transformace</Name>

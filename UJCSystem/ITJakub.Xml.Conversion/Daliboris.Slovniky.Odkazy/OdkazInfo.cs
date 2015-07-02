@@ -101,9 +101,12 @@ namespace Daliboris.Slovniky {
 			int iKonec = sbHeslo.ToString().IndexOfAny(",(1234567890“".ToCharArray());
 			if (iKonec > -1)
 				sbHeslo.Remove(iKonec, sbHeslo.Length - iKonec);
-			
+
+			//TODO Nemělo by se stávat: chyba proznačení ve slovníku
+			if (sbHeslo.Length == 0)
+				return oi;
 			//TODO Neměl by se oddělit i křížek, popř. pomlčka (ta by se ale v odkaze vyskytovat neměla - i když možná ano)?
-			if(sbHeslo[0] == '*' || sbHeslo[0]  == 'ˣ')
+			if (sbHeslo[0] == '*' || sbHeslo[0] == 'ˣ')
 			{
 				oi.Prefix = sbHeslo[0].ToString();
 				sbHeslo.Remove(0, 1);

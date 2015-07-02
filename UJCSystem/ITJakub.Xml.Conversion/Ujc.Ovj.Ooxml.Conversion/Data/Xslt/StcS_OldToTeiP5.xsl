@@ -14,26 +14,25 @@
     <xsl:strip-space elements="*"/>
     
     <xsl:template match="/">
-    	<TEI n="{{08BE3E56-77D0-46C1-80BB-C1346B757BE5}}">
+        <TEI n="{{1ADA5193-4375-4269-8222-D8BE81D597DB}}">
             <teiHeader>
-            	<fileDesc n="{{08BE3E56-77D0-46C1-80BB-C1346B757BE5}}">
+                <fileDesc n="{{1ADA5193-4375-4269-8222-D8BE81D597DB}}">
                     <titleStmt>
-                        <title>Elektronický slovník staré češtiny</title>
+                        <title>Staročeský slovník</title>
                     </titleStmt>
                     <publicationStmt>
                         <publisher>Ústav pro jazyk český AV ČR, v. v. i.</publisher>
                         <pubPlace>Praha</pubPlace>
-                        <date>2006–2012</date>
+                        <date>1968–2006</date>
                         <availability status="restricted">
                             <p>Tato elektronická edice je autorské dílo chráněné ve smyslu zákona č. 121/2000 Sb., o právu autorském, a je určena pouze k nekomerčním účelům.</p> 
                         </availability>
                     </publicationStmt>
                     <sourceDesc>
                         <listBibl>
-                            <bibl type="acronym" subtype="source">ESSČ</bibl> 
+                            <bibl type="acronym" subtype="source">StčS</bibl> 
                         </listBibl>
-                        <bibl>Elektronický slovník staré češtiny. Hesla s náslovním <hi rend="italic">R</hi>–<hi rend="italic">Ž</hi> a <hi rend="italic">A</hi>–<hi rend="italic">G</hi>. oddělení vývoje jazyka ÚJČ AV ČR, v. v. i., 2006–2012. 
-                        </bibl>
+                        <bibl>Staročeský slovník. Hesla s náslovním <hi rend="italic">N</hi>–<hi rend="italic">při-</hi> a <hi rend="italic">A</hi>–<hi rend="italic">G</hi>. 1968–2006.</bibl>
                     </sourceDesc>
                 </fileDesc>
                 <xsl:call-template name="InsertEndocingDesc"/>

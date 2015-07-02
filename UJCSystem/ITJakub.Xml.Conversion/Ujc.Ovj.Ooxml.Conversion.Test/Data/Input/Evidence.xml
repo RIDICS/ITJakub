@@ -68190,4 +68190,80 @@
   <Identifikator>1</Identifikator>
   <TypPrepisu>slovník</TypPrepisu>
  </Prepis>
+	<Prepis>
+		<Hlava>
+			<Pamatka>
+				<Titul>Staročeský slovník</Titul>
+				<Datace>
+					<Stoleti>0</Stoleti>
+					<PolovinaStoleti>0</PolovinaStoleti>
+					<Desetileti>0</Desetileti>
+					<Rok>0</Rok>
+					<RelativniChronologie>0</RelativniChronologie>
+					<NePredRokem>0</NePredRokem>
+					<NePoRoce>0</NePoRoce>
+				</Datace>
+				<Pramen>
+					<Ulozeni>
+						<Instituce/>
+						<Signatura/>
+					</Ulozeni>
+					<Datace>
+						<Stoleti>0</Stoleti>
+						<PolovinaStoleti>0</PolovinaStoleti>
+						<Desetileti>0</Desetileti>
+						<Rok>0</Rok>
+						<RelativniChronologie>0</RelativniChronologie>
+						<NePredRokem>0</NePredRokem>
+						<NePoRoce>0</NePoRoce>
+					</Datace>
+					<Typ>Rukopis</Typ>
+				</Pramen>
+				<Edice>
+					<Editori/>
+					<Typ>Edice</Typ>
+				</Edice>
+			</Pamatka>
+			<Predloha typ="Neznamy"/>
+			<Editori/>
+		</Hlava>
+		<Hlavicka>
+			<Titul>Staročeský slovník</Titul>
+			<TypPredlohy>Neznamy</TypPredlohy>
+			<TypPredlohyText>neznámý</TypPredlohyText>
+			<InstituceUlozeni/>
+			<Signatura/>
+			<EditoriPrepisuText>Boris Lehečka</EditoriPrepisuText>
+			<EditoriPrepisu>
+				<string>Boris Lehečka</string>
+			</EditoriPrepisu>
+		</Hlavicka>
+		<Soubor>
+			<Nazev>StcS_N.docx</Nazev>
+			<Adresar>D:\Slovniky\Word</Adresar>
+			<FormatWordu>Docx</FormatWordu>
+			<Zmeneno>2015-01-18T21:29:10.4946778+01:00</Zmeneno>
+			<Velikost>154276</Velikost>
+			<CisloRevize>0</CisloRevize>
+			<KontrolniSoucet>3461BE1405ECEBA53DCBE2805EE3AA90</KontrolniSoucet>
+		</Soubor>
+		<Zpracovani>
+			<GUID>{1ADA5193-4375-4269-8222-D8BE81D597DB}</GUID>
+			<FazeZpracovani>Odlozeno</FazeZpracovani>
+			<CasoveZarazeni>Nezarazeno</CasoveZarazeni>
+			<Neexportovat>false</Neexportovat>
+			<Exporty/>
+			<ZpusobVyuziti>Slovnik</ZpusobVyuziti>
+			<PrvniExporty/>
+			<ObjemDat>0</ObjemDat>
+			<Transliterovane>false</Transliterovane>
+			<MaEdicniPoznamku>false</MaEdicniPoznamku>
+			<Zabezpeceni/>
+			<PocetTokenu>0</PocetTokenu>
+			<PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+			<Publikace/>
+		</Zpracovani>
+		<Identifikator>2</Identifikator>
+		<TypPrepisu>slovník</TypPrepisu>
+	</Prepis>
 </Prepisy>

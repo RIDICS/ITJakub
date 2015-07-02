@@ -15,7 +15,7 @@ using Ujc.Ovj.Xml.Info;
 
 namespace Daliboris.Slovniky
 {
-	public class Slovnik : IUpravy
+	public abstract class Slovnik : IUpravy
 	{
 
 		private string mstrChyby;
@@ -175,13 +175,12 @@ namespace Daliboris.Slovniky
 			}
 
 		}
-		public virtual void UpravitHraniceHesloveStati()
-		{
-		}
+
+		public abstract void UpravitHraniceHesloveStati();
 
 
 		//jak zajistit, aby dědící třídy tuto metodu přepsaly, i když není abstraktní?
-		public virtual void KonsolidovatHeslovouStat() { }
+		public abstract void KonsolidovatHeslovouStat();
 		#endregion
 
 		/// <summary>
