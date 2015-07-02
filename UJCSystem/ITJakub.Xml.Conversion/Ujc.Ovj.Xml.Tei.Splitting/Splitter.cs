@@ -17,17 +17,36 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 		const string XmlNamespace = "http://www.w3.org/XML/1998/namespace";
 		const string TeiNamespace = "http://www.tei-c.org/ns/1.0";
 		private const string ItJakubTeiNamespace = "http://vokabular.ujc.cas.cz/ns/it-jakub/tei/1.0";
+		const string ErrorInfoFormat = "Chyba {0} × {1} (element × reader)";
+		const string VwNamespacePrefix = "vw";
+		const string XmlnsAttributeName = "xmlns";
+		const string ContinueAttributeName = "continue";
+		const string TrueValue = "true";
+
+		const string NAttributeName = "n";
+		const string XmlIdAttributeName = "xml:id";
+		const string DivElementName = "div";
+		const string PbElementName = "pb";
+		const string IdAttributeName = "id";
+		const string XmlNamespacePrefix = "xml";
+		const string PElementName = "p";
+		const string LElementName = "l";
+		const string FragmentElementlName = "fragment";
+
+		readonly List<string> _divElementNames  = new List<string>() {DivElementName};
+		readonly List<string> _blockElementNames = new List<string>() { PElementName, LElementName };
+
 
 		const string NumberedXmlPattern = "_{0:0000}.xml";
 
-		private XmlWriter currentWriter;
+		private XmlWriter _currentWriter;
 
 
-		private OutputManager outputManager;
+		private OutputManager _outputManager;
 
-		private SplittingResult result;
+		private SplittingResult _result;
 
-		private PageBreakSplitInfo currentSplitInfo;
+		private PageBreakSplitInfo _currentSplitInfo;
 
 		#region Vlastnosti
 		/// <summary>
@@ -76,16 +95,16 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 
 			bool splittingStarted = (StartingElement == null);
 
-			ElementInfos elementQueue = new ElementInfos();
+			ElementInfos elementStack = new ElementInfos();
 			FileInfo xmlFileInfo = new FileInfo(XmlFile);
 
 
 			string newFileFormat = xmlFileInfo.Name.Substring(0, xmlFileInfo.Name.Length - xmlFileInfo.Extension.Length) + NumberedXmlPattern;
 
 
-			outputManager = new OutputManager();
-			outputManager.OutputDirectory = OutputDirectory;
-			outputManager.FileNameFormat = newFileFormat;
+			_outputManager = new OutputManager();
+			_outputManager.OutputDirectory = OutputDirectory;
+			_outputManager.FileNameFormat = newFileFormat;
 
 
 
@@ -104,21 +123,21 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 							if (reader.Name == StartingElement)
 							{
 								splittingStarted = true;
-								currentWriter = outputManager.GetXmlWriter();
-								currentWriter.WriteStartDocument();
-								currentWriter.WriteStartElement("fragment", TeiNamespace);
+								_currentWriter = _outputManager.GetXmlWriter();
+								_currentWriter.WriteStartDocument();
+								_currentWriter.WriteStartElement(FragmentElementlName, TeiNamespace);
 							}
 
 						if (!splittingStarted)
 							continue;
 
 						ElementInfo element = ElementInfo.GetElementInfo(reader); //GetElementInfo(reader);
-						elementQueue.Push(element);
-						WriteElementInfo(element, currentWriter);
+						elementStack.Push(element);
+						WriteElementInfo(element, _currentWriter);
 
 						if (!isEmpty)
 							continue;
-						elementQueue.Pop();
+						elementStack.Pop();
 					}
 
 					else if (reader.NodeType == XmlNodeType.EndElement)
@@ -126,27 +145,27 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 						if (!splittingStarted)
 							continue;
 						string name = reader.Name;
-						ElementInfo elementPeak = elementQueue.Peek();
+						ElementInfo elementPeak = elementStack.Peek();
 						if (elementPeak.Name != name)
 						{
 							Console.WriteLine("Chyba element × reader ({0} × {1})", elementPeak.Name, name);
 						}
 						else
 						{
-							Transformace.SerializeNode(reader, currentWriter);
-							elementQueue.Pop();
+							Transformace.SerializeNode(reader, _currentWriter);
+							elementStack.Pop();
 						}
 						if (name == StartingElement)
 						{
-							elementQueue.CloneReverse();
+							elementStack.CloneReverse();
 
-							while (elementQueue.Count > 0)
+							while (elementStack.Count > 0)
 							{
-								currentWriter.WriteEndElement();
-								elementQueue.Pop();
+								_currentWriter.WriteEndElement();
+								elementStack.Pop();
 							}
-							currentWriter.WriteFullEndElement();
-							currentWriter.Close();
+							_currentWriter.WriteFullEndElement();
+							_currentWriter.Close();
 
 							splittingStarted = false;
 							//currentWriter = outputManager.GetXmlWriter();
@@ -155,7 +174,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 					else
 					{
 						if (splittingStarted)
-							Transformace.SerializeNode(reader, currentWriter);
+							Transformace.SerializeNode(reader, _currentWriter);
 					}
 				}
 
@@ -165,7 +184,8 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 		public SplittingResult SplitOnPageBreak()
 		{
 
-			result = new SplittingResult(XmlFile, OutputDirectory);
+
+			_result = new SplittingResult(XmlFile, OutputDirectory);
 
 			bool splittingStarted = (StartingElement == null);
 
@@ -180,9 +200,9 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 			string newFileFormat = xmlFileInfo.Name.Substring(0, xmlFileInfo.Name.Length - xmlFileInfo.Extension.Length) + NumberedXmlPattern;
 
 
-			outputManager = new OutputManager();
-			outputManager.OutputDirectory = OutputDirectory;
-			outputManager.FileNameFormat = newFileFormat;
+			_outputManager = new OutputManager();
+			_outputManager.OutputDirectory = OutputDirectory;
+			_outputManager.FileNameFormat = newFileFormat;
 
 			string divId = null;
 			int paragraphId = 0;
@@ -194,140 +214,124 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 					reader.MoveToContent();
 					while (reader.Read())
 					{
-						string name = reader.Name;
-						if (reader.NodeType == XmlNodeType.Element)
+						switch (reader.NodeType)
 						{
-							ElementInfo element = ElementInfo.GetElementInfo(reader);
+							case XmlNodeType.Element:
+								ElementInfo element = ElementInfo.GetElementInfo(reader);
 
-							if (!splittingStarted)
-								if (ShouldSplittingStart(element, startElement))
+								if (!splittingStarted)
 								{
-									startElement = new ElementInfo(element.Name);
-									startElement.Depth = element.Depth;
+									if (!ShouldSplittingStart(element, startElement)) continue;
+								}
+								if (!splittingStarted)
+								{
+									startElement = element.Clone();
 									splittingStarted = true;
-									currentSplitInfo = new PageBreakSplitInfo();
+									_currentSplitInfo = new PageBreakSplitInfo();
 								}
 
-							if (!splittingStarted)
-								continue;
-							if (reader.Name == "pb")
-							{
-								if (currentSplitInfo != null && currentSplitInfo.Number == null)
+								if (element.Name == PbElementName)
 								{
-									currentSplitInfo.Id = reader.GetAttribute("xml:id");
-									currentSplitInfo.Number = reader.GetAttribute("n");
-								}
 
-								if (outputManager.CurrentChunk == 0)
-								{
-									StartNewSplit(elementStack, null);
-									currentSplitInfo.Number = reader.GetAttribute("n");
-								}
-								else
-								{
-									//ukončit předchozí sekvenci
-									ElementInfos tempQueue = CloseCurrentSplit(elementStack);
+									if (_currentSplitInfo != null && _currentSplitInfo.Number == null)
+									{
+										_currentSplitInfo.Id = element.Attributes.GetAttributeByLocalName(XmlNamespacePrefix, IdAttributeName).Value;
+										_currentSplitInfo.Number = element.Attributes.GetAttributeByLocalName(String.Empty, NAttributeName).Value;
+									}
+
+									ElementInfos tempQueue = null;
+									if (_outputManager.CurrentChunk > 0)
+									{
+										tempQueue = CloseCurrentSplit(elementStack);
+									}
 									StartNewSplit(elementStack, tempQueue);
-									currentSplitInfo.Number = reader.GetAttribute("n");
+									_currentSplitInfo.Number = element.Attributes.GetAttributeByLocalName(String.Empty, NAttributeName).Value;
+									_currentSplitInfo.Id = element.Attributes.GetAttributeByLocalName(XmlNamespacePrefix, IdAttributeName).Value;
+
+									Transformace.SerializeNode(reader, _currentWriter);
+									//goto Begin;
 								}
-								Transformace.SerializeNode(reader, currentWriter);
-								//goto Begin;
-							}
-							else  //(reader.Name == "pb")
-							{
-								 //GetElementInfo(reader);
-								if (element.Name == "div")
+								else  //(reader.Name == "pb")
 								{
-									foreach (AttributeInfo attribute in element.Attributes)
+									if (_divElementNames.Contains(element.Name))
 									{
-										if (attribute.LocalName == "id")
-											divId = attribute.Value;
+										foreach (AttributeInfo attribute in element.Attributes)
+										{
+											if (attribute.LocalName == IdAttributeName)
+												divId = attribute.Value;
+										}
 									}
-								}
-								if (element.Name == "p" || element.Name == "l")
-								{
-									if (!element.Attributes.Exists(a => a.Prefix == "xml" && a.LocalName == "id"))
+									if (_blockElementNames.Contains(element.Name))
 									{
-										string id = divId + "." + element.Name + ++paragraphId;
-										element.Attributes.Add(new AttributeInfo("xml", "id", XmlNamespace, id));
+										if (!element.Attributes.Exists(a => a.Prefix == XmlNamespacePrefix && a.LocalName == IdAttributeName))
+										{
+											string id = divId + "." + element.Name + ++paragraphId;
+											element.Attributes.Add(new AttributeInfo(XmlNamespacePrefix, IdAttributeName, XmlNamespace, id));
+										}
 									}
-								}
-
-
-								if (currentWriter != null)
-								{
-									elementStack.Push(element);
-									WriteElementInfo(element, currentWriter);
-
-									if (element.IsEmpty)
+									if (_currentWriter != null)
 									{
-										elementStack.Pop();
+										if (!element.IsEmpty)
+											elementStack.Push(element);
 										//pokud je element prázdný, při jeho přečtení se XmlReader přesune na další prvek
-										//goto Begin;
+										WriteElementInfo(element, _currentWriter);
 									}
 								}
-							}
-						}
-						else if (reader.NodeType == XmlNodeType.EndElement)
-						{
-							ElementInfo endElementInfo = new ElementInfo(reader.Name);
-							endElementInfo.Depth = reader.Depth;
+								break;
+							case XmlNodeType.EndElement:
+								ElementInfo endElementInfo = ElementInfo.GetElementInfo(reader);
 
-							if (!splittingStarted || startElement == null)
-								continue;
+								if (!splittingStarted || startElement == null)
+									continue;
 
-							if (reader.Name == "div")
-							{
-								divId = null;
-								paragraphId = 0;
-							}
-
-							if (ShouldSplittingEnd(endElementInfo, startElement))
-							{
-								CloseCurrentSplit(elementStack);
-								startElement = null;
-								splittingStarted = false;
-							}
-							if (!splittingStarted)
-							{
-								result.IsSplitted = true;
-								return result;
-							}
-							if (elementStack.Count > 0)
-							{
-								ElementInfo elementPeak = elementStack.Peek();
-								if (elementPeak.Name != name)
+								if (_divElementNames.Contains(reader.Name))
 								{
-									result.Errors = String.Format("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
-									//Console.WriteLine("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
+									divId = null;
+									paragraphId = 0;
 								}
-								else
+
+								if (ShouldSplittingEnd(endElementInfo, startElement))
 								{
-									Transformace.SerializeNode(reader, currentWriter);
-									elementStack.Pop();
+									CloseCurrentSplit(elementStack);
+									_result.IsSplitted = true;
+									return _result;
 								}
-							}
-						}
-						else
-						{
-							if (splittingStarted && currentWriter != null)
-								Transformace.SerializeNode(reader, currentWriter);
+
+								if (elementStack.Count > 0)
+								{
+									ElementInfo elementPeak = elementStack.Peek();
+									if (elementPeak.Name != endElementInfo.Name)
+									{
+										_result.Errors = String.Format(ErrorInfoFormat, elementPeak.Name, endElementInfo.Name);
+										//Console.WriteLine("Chyba {0} × {1} (element × reader)", elementPeak.Name, name);
+									}
+									else
+									{
+										Transformace.SerializeNode(reader, _currentWriter);
+										elementStack.Pop();
+									}
+								}
+								break;
+							default:
+								if (splittingStarted && _currentWriter != null)
+									Transformace.SerializeNode(reader, _currentWriter);
+								break;
 						}
 					}
 				}
-				result.IsSplitted = true;
+				_result.IsSplitted = true;
 			}
 			catch (Exception exception)
 			{
-				result.Errors = exception.Message;
+				_result.Errors = exception.Message;
 			}
 			finally
 			{
-				if (currentWriter != null)
-					currentWriter.Close();
+				if (_currentWriter != null)
+					_currentWriter.Close();
 			}
 
-			return result;
+			return _result;
 
 		}
 
@@ -335,21 +339,22 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 		private void StartNewSplit(ElementInfos elementQueue, IEnumerable<ElementInfo> tempQueue)
 		{
 
-			currentWriter = outputManager.GetXmlWriter();
+			_currentWriter = _outputManager.GetXmlWriter();
 
-			currentSplitInfo.FileName = outputManager.CurrentFileName;
-			currentSplitInfo.FullPath = outputManager.CurrentFileFullPath;
+			_currentSplitInfo.FileName = _outputManager.CurrentFileName;
+			_currentSplitInfo.FullPath = _outputManager.CurrentFileFullPath;
 
-			currentWriter.WriteStartDocument();
-			currentWriter.WriteStartElement("vw", "fragment", ItJakubTeiNamespace);
-			currentWriter.WriteAttributeString("xmlns", TeiNamespace);
+			_currentWriter.WriteStartDocument();
+			_currentWriter.WriteStartElement(VwNamespacePrefix, FragmentElementlName, ItJakubTeiNamespace);
+			_currentWriter.WriteAttributeString(XmlnsAttributeName, TeiNamespace);
 			if (tempQueue == null)
 				return;
 			foreach (ElementInfo elementInfo in tempQueue)
 			{
 				ElementInfo newElementInfo = elementInfo.Clone();
-				newElementInfo.Attributes.Add(new AttributeInfo("vw", "continue", ItJakubTeiNamespace, "true"));
-				WriteElementInfo(newElementInfo, currentWriter);
+
+				newElementInfo.Attributes.Add(new AttributeInfo(VwNamespacePrefix, ContinueAttributeName, ItJakubTeiNamespace, TrueValue));
+				WriteElementInfo(newElementInfo, _currentWriter);
 				elementQueue.Push(elementInfo);
 			}
 		}
@@ -362,21 +367,21 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 
 			while (elementQueue.Count > 0)
 			{
-				currentWriter.WriteEndElement();
+				_currentWriter.WriteEndElement();
 				elementQueue.Pop();
 			}
-			if (currentWriter != null)
+			if (_currentWriter != null)
 			{
-				currentWriter.WriteEndElement(); //tj. </vw:fragment>
-				currentWriter.WriteEndDocument();
-				currentWriter.Close();
+				_currentWriter.WriteEndElement(); //tj. </vw:fragment>
+				_currentWriter.WriteEndDocument();
+				_currentWriter.Close();
 			}
 			elementQueue.Clear();
 
-			if (currentSplitInfo != null && currentSplitInfo.Id != null)
+			if (_currentSplitInfo != null && _currentSplitInfo.Id != null)
 			{
-				result.PageBreaksSplitInfo.Add(currentSplitInfo);
-				currentSplitInfo = new PageBreakSplitInfo();
+				_result.PageBreaksSplitInfo.Add(_currentSplitInfo);
+				_currentSplitInfo = new PageBreakSplitInfo();
 			}
 
 			return tempQueue;
@@ -433,28 +438,6 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 			}
 			if (element.IsEmpty)
 				writer.WriteEndElement();
-		}
-
-		private ElementInfo GetElementInfo(XmlReader reader)
-		{
-			if (reader.NodeType != XmlNodeType.Element)
-				return null;
-
-			ElementInfo element = new ElementInfo(reader.Name);
-			element.IsEmpty = reader.IsEmptyElement;
-			element.Depth = reader.Depth;
-			for (int i = 0; i < reader.AttributeCount; i++)
-			{
-				reader.MoveToAttribute(i);
-				AttributeInfo attribute = new AttributeInfo();
-				attribute.Prefix = reader.Prefix;
-				attribute.LocalName = reader.LocalName;
-				attribute.NamespaceUri = reader.NamespaceURI;
-				attribute.Value = reader.Value;
-
-				element.Attributes.Add(attribute);
-			}
-			return element;
 		}
 
 		#endregion

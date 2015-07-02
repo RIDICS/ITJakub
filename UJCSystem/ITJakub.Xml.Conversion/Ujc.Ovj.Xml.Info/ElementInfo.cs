@@ -23,9 +23,9 @@ namespace Ujc.Ovj.Xml.Info
 		}
 
 		public string Name { get; set; }
-		private List<AttributeInfo> attributes = new List<AttributeInfo>();
+		private AttributeInfos attributes = new AttributeInfos();
 
-		public List<AttributeInfo> Attributes
+		public AttributeInfos Attributes
 		{
 			get { return attributes; }
 			set { attributes = value; }
@@ -37,7 +37,7 @@ namespace Ujc.Ovj.Xml.Info
 		public ElementInfo Clone()
 		{
 			ElementInfo element = (ElementInfo)this.MemberwiseClone();
-			element.Attributes = new List<AttributeInfo>(Attributes);
+			element.Attributes = new AttributeInfos(Attributes);
 			return element;
 		}
 
@@ -48,12 +48,14 @@ namespace Ujc.Ovj.Xml.Info
 
 		public static ElementInfo GetElementInfo(XmlReader reader)
 		{
-			if (reader.NodeType != XmlNodeType.Element)
+			if(!(reader.NodeType == XmlNodeType.Element || reader.NodeType == XmlNodeType.EndElement))
 				return null;
 
 			ElementInfo element = new ElementInfo(reader.Name);
-			element.IsEmpty = reader.IsEmptyElement;
 			element.Depth = reader.Depth;
+			if (reader.NodeType == XmlNodeType.EndElement)
+				return element;
+			element.IsEmpty = reader.IsEmptyElement;
 			if (reader.HasAttributes)
 			{
 				for (int i = 0; i < reader.AttributeCount; i++)
