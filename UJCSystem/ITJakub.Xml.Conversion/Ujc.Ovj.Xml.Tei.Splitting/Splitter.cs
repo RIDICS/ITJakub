@@ -197,23 +197,45 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 						string name = reader.Name;
 						if (reader.NodeType == XmlNodeType.Element)
 						{
-
-							bool isEmpty = reader.IsEmptyElement;
+							ElementInfo element = ElementInfo.GetElementInfo(reader);
 
 							if (!splittingStarted)
-								if (ShouldSplittingStart(reader, startElement))
+								if (ShouldSplittingStart(element, startElement))
 								{
-									startElement = new ElementInfo(reader.LocalName);
-									startElement.Depth = reader.Depth;
+									startElement = new ElementInfo(element.Name);
+									startElement.Depth = element.Depth;
 									splittingStarted = true;
 									currentSplitInfo = new PageBreakSplitInfo();
 								}
 
 							if (!splittingStarted)
 								continue;
-							if (reader.Name != "pb")
+							if (reader.Name == "pb")
 							{
-								ElementInfo element = ElementInfo.GetElementInfo(reader);//GetElementInfo(reader);
+								if (currentSplitInfo != null && currentSplitInfo.Number == null)
+								{
+									currentSplitInfo.Id = reader.GetAttribute("xml:id");
+									currentSplitInfo.Number = reader.GetAttribute("n");
+								}
+
+								if (outputManager.CurrentChunk == 0)
+								{
+									StartNewSplit(elementStack, null);
+									currentSplitInfo.Number = reader.GetAttribute("n");
+								}
+								else
+								{
+									//ukončit předchozí sekvenci
+									ElementInfos tempQueue = CloseCurrentSplit(elementStack);
+									StartNewSplit(elementStack, tempQueue);
+									currentSplitInfo.Number = reader.GetAttribute("n");
+								}
+								Transformace.SerializeNode(reader, currentWriter);
+								//goto Begin;
+							}
+							else  //(reader.Name == "pb")
+							{
+								 //GetElementInfo(reader);
 								if (element.Name == "div")
 								{
 									foreach (AttributeInfo attribute in element.Attributes)
@@ -237,41 +259,20 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 									elementStack.Push(element);
 									WriteElementInfo(element, currentWriter);
 
-									if (isEmpty)
+									if (element.IsEmpty)
 									{
 										elementStack.Pop();
 										//pokud je element prázdný, při jeho přečtení se XmlReader přesune na další prvek
 										//goto Begin;
 									}
 								}
-
-
-							}
-							else
-							{
-								if (currentSplitInfo != null && currentSplitInfo.Number == null)
-								{
-									currentSplitInfo.Id = reader.GetAttribute("xml:id");
-									currentSplitInfo.Number = reader.GetAttribute("n");
-								}
-
-								if (outputManager.CurrentChunk == 0)
-								{
-									StartNewSplit(elementStack, null);
-								}
-								else
-								{
-									//ukončit předchozí sekvenci
-									ElementInfos tempQueue = CloseCurrentSplit(elementStack);
-									StartNewSplit(elementStack, tempQueue);
-								}
-								Transformace.SerializeNode(reader, currentWriter);
-								//goto Begin;
 							}
 						}
-
 						else if (reader.NodeType == XmlNodeType.EndElement)
 						{
+							ElementInfo endElementInfo = new ElementInfo(reader.Name);
+							endElementInfo.Depth = reader.Depth;
+
 							if (!splittingStarted || startElement == null)
 								continue;
 
@@ -281,7 +282,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 								paragraphId = 0;
 							}
 
-							if (ShouldSplittingEnd(reader, startElement))
+							if (ShouldSplittingEnd(endElementInfo, startElement))
 							{
 								CloseCurrentSplit(elementStack);
 								startElement = null;
@@ -387,27 +388,27 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 
 		#region Informace o úseku
 
-		private static bool ShouldSplittingEnd(XmlReader reader, ElementInfo startElement)
+		private static bool ShouldSplittingEnd(ElementInfo currentElement, ElementInfo startElement)
 		{
 			if (startElement == null)
 				return false;
-			if (reader.Name == startElement.Name && reader.Depth == startElement.Depth)
+			if (currentElement.Name == startElement.Name && currentElement.Depth == startElement.Depth)
 				return true;
 			return false;
 		}
 
-		private bool ShouldSplittingStart(XmlReader reader, ElementInfo startElement)
+		private bool ShouldSplittingStart(ElementInfo currentElement, ElementInfo startElement)
 		{
 			if (StartingElement == null)
 				return true;
 
-			if (reader.LocalName == StartingElement)
+			if (currentElement.Name == StartingElement)
 			{
 				if (startElement != null)
 					return false;
 
-				startElement = new ElementInfo(reader.LocalName);
-				startElement.Depth = reader.Depth;
+				startElement = new ElementInfo(currentElement.Name);
+				startElement.Depth = currentElement.Depth;
 
 				return true;
 			}

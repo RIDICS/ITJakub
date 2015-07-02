@@ -6,19 +6,22 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Daliboris.Pomucky.Soubory.MetaInfo;
+using NLog;
 
 namespace Ujc.Ovj.Ooxml.Conversion.Test
 {
 	class Program
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 		static void Main(string[] args)
 		{
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
-			MakeBulkConversion();
-			//MakeConversion();
+			logger.Info("Conversion started at {0}.", DateTime.UtcNow);
+			//MakeBulkConversion();
+			MakeConversion();
 			//TestMetadata();
-			Console.WriteLine("Conversion finished in {0}.", stopwatch.Elapsed);
+			logger.Info("Conversion finished in {0}.", stopwatch.Elapsed);
 			Console.ReadLine();
 		}
 
@@ -31,7 +34,7 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 			FileInfo[] files = inputDirectoryInfo.GetFiles("*.docx", SearchOption.TopDirectoryOnly);
 			foreach (FileInfo fileInfo in files)
 			{
-				Console.WriteLine("{0}", fileInfo.Name);
+				logger.Info("{0}", fileInfo.Name);
 				string[] propertyNames = new[] { "Autor", "Kategorie", "Titul", "Předmět", "Komentář" };
 				object[] properties = Metadata.NactiZabudovaneVlastnosti(fileInfo.FullName, propertyNames);
 
@@ -40,14 +43,14 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 
 				for (int i = 0; i < propertyNames.Length; i++)
 				{
-					Console.WriteLine("{0}:\t{1}", propertyNames[i], properties[i]);
+					logger.Info("{0}:\t{1}", propertyNames[i], properties[i]);
 				}
 
 				for (int i = 0; i < customPropertyNames.Length; i++)
 				{
-					Console.WriteLine("{0}:\t{1}", customPropertyNames[i], customProperties[i]);
+					logger.Info("{0}:\t{1}", customPropertyNames[i], customProperties[i]);
 				}
-				Console.WriteLine();
+				
 			}
 		}
 
@@ -103,12 +106,12 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 			ConversionResult result = converter.Convert(settings);
 			if (result.IsConverted)
 			{
-				Console.WriteLine("File {0} converted.", settings.InputFilePath);
+				logger.Info("File {0} converted.", settings.InputFilePath);
 			}
 			else
 			{
-				Console.WriteLine("File {0} not converted.", settings.InputFilePath);
-				Console.WriteLine("Errors: {0}", result.Errors);
+				logger.Info("File {0} not converted.", settings.InputFilePath);
+				logger.Info("Errors: {0}", result.Errors);
 			}
 		}
 
@@ -125,13 +128,14 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 			string dataDirectory = GetDataDirectory();
 
 			DocxToTeiConverterSettings settings = new DocxToTeiConverterSettings();
-
+			string name = "Albetanus_Knizky_o_radnem_mluveni";
 			settings.TempDirectoryPath = Path.Combine(dataDirectory, "Temp");
 			settings.MetadataFilePath = Path.Combine(dataDirectory, "Input", "Evidence.xml");
-			settings.InputFilePath = Path.Combine(dataDirectory, "Input", "AlexPovD.docx");
-			settings.OutputFilePath = Path.Combine(dataDirectory, "Output", "AlexPovD.xml");
+			settings.InputFilePath = Path.Combine(dataDirectory, "Input", name + ".docx");
+			settings.OutputFilePath = Path.Combine(dataDirectory, "Output", name + ".xml");
 			String.Format("Úprava souboru k {0:g}", DateTime.Now);
 			settings.SplitDocumentByPageBreaks = true;
+			settings.GetVersionList = GetVersions();
 			DoConversion(settings);
 		}
 
@@ -141,12 +145,16 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 			ConversionResult result = converter.Convert(settings);
 			if (result.IsConverted)
 			{
-				Console.WriteLine("File {0} converted.", settings.InputFilePath);
+				logger.Info("File {0} converted.", settings.InputFilePath);
 			}
 			else
 			{
-				Console.WriteLine("File {0} not converted.", settings.InputFilePath);
-				Console.WriteLine("Errors: {0}", result.Errors);
+				logger.Info("File {0} not converted.", settings.InputFilePath);
+				logger.Error("Errors: {0}", result.Errors.Count);
+				foreach (Exception error in result.Errors)
+				{
+					logger.Error("\tError: {0}", error.Message);
+				}
 			}
 		}
 
