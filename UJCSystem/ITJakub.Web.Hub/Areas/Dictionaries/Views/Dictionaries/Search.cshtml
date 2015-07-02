@@ -3,6 +3,7 @@
 }
 @section scripts{
     @Scripts.Render("~/itjakub/dictionaries/javascript")
+    @Scripts.Render("~/itjakub/dictionaries/searchjs")
 }
 
 <div class="transparent-content-container">
@@ -192,7 +193,7 @@
                     <li>pes</li>
                 </ul>
             </div>
-            <div class="dictionary-result-pagination">
+            <div class="dictionary-result-pagination" id="pagination">
                 <ul class="pagination pagination-sm">
                     <li><a href="#">1</a></li>
                     <li><a href="#">2</a></li>

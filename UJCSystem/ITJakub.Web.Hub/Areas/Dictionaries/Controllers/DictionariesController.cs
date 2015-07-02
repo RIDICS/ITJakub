@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
@@ -34,7 +35,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult Passwords()
+        public ActionResult Headwords()
         {
             return View();
         }
@@ -110,30 +111,31 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SearchHeadword(string query)
+        public ActionResult GetHeadwordCount(SelectedCategoriesDescription categories)
         {
-            var result = m_mainServiceClient.SearchHeadword(query);
-            result = new List<HeadwordContract>
-            {
-                new HeadwordContract
-                {
-                    Headword = "Test",
-                    XmlEntryId = "x123456",
-                    BookInfo = new HeadwordBookInfoContract{Acronym = "T", Guid = "Guuiiidddd"}
-                },
-                new HeadwordContract
-                {
-                    Headword = "Tohle",
-                    XmlEntryId = "x123457",
-                    BookInfo = new HeadwordBookInfoContract{Acronym = "T", Guid = "Guuiiidddd"}
-                },
-                new HeadwordContract
-                {
-                    Headword = "Toto",
-                    XmlEntryId = "x123458",
-                    BookInfo = new HeadwordBookInfoContract{Acronym = "T", Guid = "Guuiiidddd"}
-                },
-            };
+            //TODO search with category filter
+            var resultCount = m_mainServiceClient.GetHeadwordCount();
+            return Json(resultCount, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetHeadwordList(SelectedCategoriesWithPagesDescription description)
+        {
+            //TODO search with category filter
+            var result = m_mainServiceClient.GetHeadwordList(description.Page, description.PageSize);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetSearchResultCount(string query)
+        {
+            //TODO search with category filter
+            var result = m_mainServiceClient.GetHeadwordSearchResultCount(query);
+            return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SearchHeadword(string query, int page, int pageSize)
+        {
+            //TODO
+            var result = m_mainServiceClient.SearchHeadword(query, new List<string> { "{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" }, page, pageSize);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

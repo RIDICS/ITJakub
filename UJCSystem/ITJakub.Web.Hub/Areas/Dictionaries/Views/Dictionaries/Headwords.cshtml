@@ -1,0 +1,73 @@
+﻿@section styles{
+    @Styles.Render("~/itjakub/dictionaries/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/dictionaries/javascript")
+    @Scripts.Render("~/itjakub/dictionaries/headwordsjs")
+}
+
+<div class="transparent-content-container">
+    <div class="search-with-saved-word-area">
+        <div class="search-area transparent-content-container">
+            <div id="dictionarySearchDiv">
+                <form role="form" class="form-horizontal">
+                    <div class="form-group searchbar">
+                        <div class="searchbar-buttons">
+                            <button id="searchButton" type="button" class="btn btn-default searchbar-button">
+                                Vyhledat
+                            </button>
+                            <button id="loadButton" type="button">
+                                Load
+                            </button>
+                        </div>
+                        <div class="searchbar-inputs">
+                            <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="regExSearchDiv"></div>
+        </div>
+        <div class="saved-word-area">
+            <div class="dictionary-header">
+                Uložená hesla
+                <span class="saved-word-area-more"><span class="glyphicon glyphicon-collapse-down"></span></span>
+            </div>
+            <div class="saved-words-body">
+                <span class="saved-word">
+                    <span class="saved-word-remove glyphicon glyphicon glyphicon-remove-circle"></span>
+                    <span class="saved-word-text">pes</span>
+                </span>
+                <span class="saved-word">
+                    <span class="saved-word-remove glyphicon glyphicon glyphicon-remove-circle"></span>
+                    <span class="saved-word-text">starocesky slovnik</span>
+                </span>
+                <span class="saved-word">
+                    <span class="saved-word-remove glyphicon glyphicon glyphicon-remove-circle"></span>
+                    <span class="saved-word-text">novocesky slovnik</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="dictionary-selects transparent-content-container">
+
+    </div>
+    <div class="dictionary-result-area transparent-content-container">
+        <div class="dictionary-result-word-search-list">
+            <div class="dictionary-header">
+                Seznam hesel
+            </div>
+            <div class="dictionary-result-word-search-list-body" id="headwordList">
+            </div>
+            <div class="dictionary-result-pagination" id="pagination">
+            </div>
+        </div>
+        <div class="dictionary-result-word-search-description">
+            <div class="dictionary-header">
+                Heslové stati
+            </div>
+            <div class="dictionary-result-word-search-description-body" id="headwordDescription">
+            </div>
+        </div>
+    </div>
+</div>

@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Database\Entities\BookHeadword.cs" />
     <Compile Include="Database\Entities\Enums\VisibilityEnum.cs" />
+    <Compile Include="Database\Entities\SelectResults\HeadwordSearchResult.cs" />
     <Compile Include="Database\SearchCriteriaQuery.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
@@ -100,7 +101,7 @@
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Exceptions\BookDoesNotExistException.cs" />
     <Compile Include="Database\Exceptions\BookTypeIsAlreadyAssociatedWithAnotherCategoryException.cs" />
-    <Compile Include="Database\Entities\BookVersionPair.cs" />
+    <Compile Include="Database\Entities\SelectResults\BookVersionPair.cs" />
     <Compile Include="Database\Repositories\FavoritesRepository.cs" />
     <Compile Include="Database\Repositories\UserRepository.cs" />
     <Compile Include="Database\Repositories\CategoryRepository.cs" />

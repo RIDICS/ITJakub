@@ -1,27 +1,41 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
     [DataContract]
-    public class HeadwordContract
+    public class HeadwordSearchResultContract
     {
         [DataMember]
-        public string XmlEntryId { get; set; }
-        
+        public int HeadwordCount { get; set; }
+
+        [DataMember]
+        public int FulltextCount { get; set; }
+    }
+
+    [DataContract]
+    public class HeadwordContract
+    {
         [DataMember]
         public string Headword { get; set; }
 
         [DataMember]
-        public HeadwordBookInfoContract BookInfo { get; set; }
+        public IList<HeadwordBookInfoContract> Dictionaries { get; set; }
     }
 
     [DataContract]
     public class HeadwordBookInfoContract
     {
         [DataMember]
-        public string Guid { get; set; }
+        public string XmlEntryId { get; set; }
 
         [DataMember]
-        public string Acronym { get; set; }
+        public string BookGuid { get; set; }
+
+        [DataMember]
+        public string BookVersionId { get; set; }
+
+        [DataMember]
+        public string BookAcronym { get; set; }
     }
 }
