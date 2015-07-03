@@ -18,8 +18,8 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 			logger.Info("Conversion started at {0}.", DateTime.UtcNow);
-			//MakeBulkConversion();
-			MakeConversion();
+			MakeBulkConversion();
+			//MakeConversion();
 			//TestMetadata();
 			logger.Info("Conversion finished in {0}.", stopwatch.Elapsed);
 			Console.ReadLine();
