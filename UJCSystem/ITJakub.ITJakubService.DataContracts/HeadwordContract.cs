@@ -33,7 +33,7 @@ namespace ITJakub.ITJakubService.DataContracts
         public string BookGuid { get; set; }
 
         [DataMember]
-        public string BookVersionId { get; set; }
+        public string BookTitle { get; set; }
 
         [DataMember]
         public string BookAcronym { get; set; }

@@ -5,23 +5,20 @@
 
     var dictionariesViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription");
 
-    var bookIdList = [4]; //TODO get ids from dictionarySelector
+    var bookIdList = [4,5]; //TODO get ids from dictionarySelector
 
-    $("#loadButton").click(() => {
-        var headwordsListUrl = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordList";
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordCount",
-            data: JSON.stringify(bookIdList),
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                //todo show first page
-                var resultCount = response;
-                dictionariesViewer.createViewer(resultCount, headwordsListUrl, dictionarySelector);
-            }
-        });
+    var headwordsListUrl = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordList";
+    $.ajax({
+        type: "POST",
+        traditional: true,
+        url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordCount",
+        data: JSON.stringify(bookIdList),
+        dataType: "json",
+        contentType: "application/json",
+        success: (response) => {
+            var resultCount = response;
+            dictionariesViewer.createViewer(resultCount, headwordsListUrl, bookIdList);
+        }
     });
 
     //$("#searchButton").click(() => {

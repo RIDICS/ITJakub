@@ -6,6 +6,6 @@ namespace ITJakub.DataEntities.Database.Entities.SelectResults
         public string Headword { get; set; }
         public string BookGuid { get; set; }
         public string BookAcronym { get; set; }
-        public string BookVersionId { get; set; }
+        public string BookTitle { get; set; }
     }
 }

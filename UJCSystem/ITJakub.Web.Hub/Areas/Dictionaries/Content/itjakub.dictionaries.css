@@ -106,7 +106,7 @@ div.container {
 .dictionary-result-word-search-list {
   background-color: white;
   min-height: 100%;
-  width: 20%;
+  width: 21%;
   float: left;
 }
 .dictionary-result-word-search-list-body {
@@ -119,7 +119,7 @@ div.container {
   background-color: white;
   margin-left: 1%;
   min-height: 100%;
-  width: 79%;
+  width: 78%;
   float: left;
 }
 .dictionary-result-word-search-description-body {
@@ -195,6 +195,9 @@ a.dictionary-result-headword-book {
 .pagination-sm li span {
   padding-left: 4px;
   padding-right: 4px;
+}
+ul.pagination-sm {
+  margin-right: 0 !important;
 }
 .loading {
   background: url(../../../Content/Images/loading.gif) no-repeat center;

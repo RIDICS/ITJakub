@@ -3,7 +3,7 @@
     private paginationContainer: string;
     private headwordListContainer: string;
     private pagination: Pagination;
-    private categoriesSelect: DropDownSelect;
+    private selectedBookIds: number[];
     private currentQuery: string;
     private recordCount: number;
     private searchUrl: string;
@@ -16,8 +16,8 @@
         this.pagination = new Pagination(paginationContainer);
     }
 
-    public createViewer(recordCount: number, searchUrl: string, categories: DropDownSelect, query: string = null) {
-        this.categoriesSelect = categories;
+    public createViewer(recordCount: number, searchUrl: string, selectedBookIds: number[], query: string = null) {
+        this.selectedBookIds = selectedBookIds;
         this.currentQuery = query;
         this.recordCount = recordCount;
         this.searchUrl = searchUrl;
@@ -35,7 +35,7 @@
                 query: this.currentQuery,
                 page: pageNumber,
                 pageSize: this.pageSize,
-                selectedBookIds: [4] //TODO get from categories DropDownSelect
+                selectedBookIds: this.selectedBookIds
             }),
             dataType: "json",
             contentType: "application/json",
@@ -88,7 +88,7 @@
 
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
-                dictionaryLink.innerText = dictionary.BookAcronym; //TODO full name
+                dictionaryLink.innerText = dictionary.BookTitle;
                 dictionaryLink.href = "?guid=" + dictionary.BookGuid;
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
@@ -288,7 +288,7 @@ class Pagination {
 interface IHeadwordBookInfo {
     BookGuid: string;
     BookAcronym: string;
-    BookVersionId: string;
+    BookTitle: string;
     XmlEntryId: string;
 }
 

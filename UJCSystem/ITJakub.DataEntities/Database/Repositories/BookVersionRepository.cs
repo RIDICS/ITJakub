@@ -270,7 +270,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .WhereProperty(x => x.Headword).In(subquery)
                     .SelectList(list => list
                         .Select(x => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid)
-                        .Select(x => bookVersionAlias.VersionId).WithAlias(() => resultAlias.BookVersionId)
+                        .Select(x => bookVersionAlias.Title).WithAlias(() => resultAlias.BookTitle)
                         .Select(x => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym)
                         .Select(x => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword)
                         .Select(x => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
@@ -317,7 +317,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .WhereRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds)
                     .Select(Projections.Distinct(Projections.ProjectionList()
                         .Add(Projections.Property(() => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid))
-                        .Add(Projections.Property(() => bookVersionAlias.VersionId).WithAlias(() => resultAlias.BookVersionId))
+                        .Add(Projections.Property(() => bookVersionAlias.Title).WithAlias(() => resultAlias.BookTitle))
                         .Add(Projections.Property(() => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym))
                         .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
                         .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))))

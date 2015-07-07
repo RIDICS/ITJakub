@@ -6,9 +6,9 @@ var DictionaryViewer = (function () {
         this.headwordListContainer = headwordListContainer;
         this.pagination = new Pagination(paginationContainer);
     }
-    DictionaryViewer.prototype.createViewer = function (recordCount, searchUrl, categories, query) {
+    DictionaryViewer.prototype.createViewer = function (recordCount, searchUrl, selectedBookIds, query) {
         if (query === void 0) { query = null; }
-        this.categoriesSelect = categories;
+        this.selectedBookIds = selectedBookIds;
         this.currentQuery = query;
         this.recordCount = recordCount;
         this.searchUrl = searchUrl;
@@ -25,7 +25,7 @@ var DictionaryViewer = (function () {
                 query: this.currentQuery,
                 page: pageNumber,
                 pageSize: this.pageSize,
-                selectedBookIds: [4] //TODO get from categories DropDownSelect
+                selectedBookIds: this.selectedBookIds
             }),
             dataType: "json",
             contentType: "application/json",
@@ -66,7 +66,7 @@ var DictionaryViewer = (function () {
                 commentsDiv.appendChild(commentsLink);
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
-                dictionaryLink.innerText = dictionary.BookAcronym; //TODO full name
+                dictionaryLink.innerText = dictionary.BookTitle;
                 dictionaryLink.href = "?guid=" + dictionary.BookGuid;
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);

@@ -168,7 +168,7 @@ namespace ITJakub.ITJakubService.Core
                 var bookInfoContract = new HeadwordBookInfoContract
                 {
                     BookAcronym = headword.BookAcronym,
-                    BookVersionId = headword.BookVersionId,
+                    BookTitle = headword.BookTitle,
                     BookGuid = headword.BookGuid,
                     XmlEntryId = headword.XmlEntryId
                 };
