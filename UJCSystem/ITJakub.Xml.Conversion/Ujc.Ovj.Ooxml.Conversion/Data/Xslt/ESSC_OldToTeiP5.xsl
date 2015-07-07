@@ -14,14 +14,14 @@
     <xsl:strip-space elements="*"/>
     
     <xsl:template match="/">
-        <TEI n="4E5DB418-B49B-4AC0-AE9F-78A53E9BE4FE">
+    	<TEI n="{{08BE3E56-77D0-46C1-80BB-C1346B757BE5}}">
             <teiHeader>
-                <fileDesc n="4E5DB418-B49B-4AC0-AE9F-78A53E9BE4FE">
+            	<fileDesc n="{{08BE3E56-77D0-46C1-80BB-C1346B757BE5}}">
                     <titleStmt>
                         <title>Elektronický slovník staré češtiny</title>
                     </titleStmt>
                     <publicationStmt>
-                        <publisher>Ústavu pro jazyk český AV ČR, v. v. i.</publisher>
+                        <publisher>Ústav pro jazyk český AV ČR, v. v. i.</publisher>
                         <pubPlace>Praha</pubPlace>
                         <date>2006–2012</date>
                         <availability status="restricted">
@@ -32,7 +32,7 @@
                         <listBibl>
                             <bibl type="acronym" subtype="source">ESSČ</bibl> 
                         </listBibl>
-                        <bibl>Elektronický slovník slovník staré češtiny. Hesla s náslovním <hi rend="italic">R</hi>–<hi rend="italic">Ž</hi> a <hi rend="italic">A</hi>–<hi rend="italic">G</hi>. oddělení vývoje jazyka ÚJČ AV ČR, v. v. i., 2006–2012. 
+                        <bibl>Elektronický slovník staré češtiny. Hesla s náslovním <hi rend="italic">R</hi>–<hi rend="italic">Ž</hi> a <hi rend="italic">A</hi>–<hi rend="italic">G</hi>. oddělení vývoje jazyka ÚJČ AV ČR, v. v. i., 2006–2012. 
                         </bibl>
                     </sourceDesc>
                 </fileDesc>

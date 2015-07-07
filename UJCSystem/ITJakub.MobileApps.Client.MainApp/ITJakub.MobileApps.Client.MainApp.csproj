@@ -14,9 +14,12 @@
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>ITJakub.MobileApps.MainApp_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>ITJakub.MobileApps.Client.MainApp_StoreKey.pfx</PackageCertificateKeyFile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <PackageCertificateThumbprint>153302954D6EFF9105839A8268696CA8E5482F19</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -207,6 +210,8 @@
     <Content Include="Icon\LogoMobileApps_128x128.png" />
     <Content Include="Icon\user-32.png" />
     <Content Include="Icon\windows8-128.png" />
+    <None Include="ITJakub.MobileApps.Client.MainApp_StoreKey.pfx" />
+    <None Include="Package.StoreAssociation.xml" />
     <None Include="Common\ReadMe.txt" />
     <None Include="ITJakub.MobileApps.MainApp_TemporaryKey.pfx" />
     <None Include="packages.config" />

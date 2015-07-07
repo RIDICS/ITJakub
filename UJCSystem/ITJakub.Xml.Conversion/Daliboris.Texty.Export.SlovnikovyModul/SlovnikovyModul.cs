@@ -57,28 +57,32 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 						step00File, step01, Nastaveni.DocasnaSlozka, parameters);
 					vystupniSoubor = step00File;
 
+					Slovnik slovnik = GetDictionaryObject(start);
+
 					string step01File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					ESSC essc = new ESSC(vystupniSoubor, step01File);
-					essc.SeskupitHeslaPismene();
+					slovnik.VstupniSoubor = vystupniSoubor;
+					slovnik.VystupniSoubor = step01File;
+
+					slovnik.SeskupitHeslaPismene();
 
 					string step02File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					essc.VstupniSoubor = step01File;
-					essc.VystupniSoubor = step02File;
-					essc.UpravitHraniceHesloveStati();
+					slovnik.VstupniSoubor = step01File;
+					slovnik.VystupniSoubor = step02File;
+					slovnik.UpravitHraniceHesloveStati();
 
 					string step03File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					essc.VstupniSoubor = step02File;
-					essc.VystupniSoubor = step03File;
-					essc.KonsolidovatHeslovouStat();
+					slovnik.VstupniSoubor = step02File;
+					slovnik.VystupniSoubor = step03File;
+					slovnik.KonsolidovatHeslovouStat();
 
 					string step04File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					essc.VstupniSoubor = step03File;
-					essc.VystupniSoubor = step04File;
-					essc.UpravitOdkazy();
+					slovnik.VstupniSoubor = step03File;
+					slovnik.VystupniSoubor = step04File;
+					slovnik.UpravitOdkazy();
 
 					string step05File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					essc.VstupniSoubor = step04File;
-					essc.VystupniSoubor = step05File;
+					slovnik.VstupniSoubor = step04File;
+					slovnik.VystupniSoubor = step05File;
 					//essc.IdentifikovatZkratky(Nastaveni.);
 
 					parameters = new NameValueCollection();
@@ -110,6 +114,22 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 					}
 				}
 			}
+		}
+
+		Slovnik GetDictionaryObject(string dictionaryAcronym)
+		{
+			Slovnik slovnik = null;
+			switch (dictionaryAcronym)
+			{
+				case "stcs":
+					slovnik = new StcS();
+				break;
+				case "essc":
+					slovnik = new ESSC();
+					break;
+			}
+
+			return slovnik;
 		}
 	}
 }

@@ -12,9 +12,15 @@
 	</transformation>
 
 	<transformation xml:id="stcs-step01" >
-		<step file="StcSRename.xsl" />
+		<step file="StcS_Rename.xsl" />
 	</transformation>
-
+	<transformation xml:id="stcs-step02" >
+		<step file="Odstranit_mezery_mezi_elementy.xsl" />
+	</transformation>
+	<transformation xml:id="stcs-step03" >
+		<step file="StcS_OldToTeiP5.xsl" />
+	</transformation>
+	
 	<transformation xml:id="body" >
 		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />
 	</transformation>

@@ -37,7 +37,7 @@ namespace Daliboris.Slovniky
 		/// Upraví hranice heslové stati, seskupí všechny prvky heslové stati do elementu &lt;entry&gt;. Využívá při tom značku &lt;entryend&gt;
 		/// </summary>
 		/// <exception cref="ArgumentNullException">Vyvolá výjimku, pokud nejsou zadány vstupní nebo výstupní soubor.</exception>
-		public new void UpravitHraniceHesloveStati()
+		public override void UpravitHraniceHesloveStati()
 		{
 			//výchozí imnplementace se hodí pro ESSČ
 			string sChyba = null;
@@ -176,7 +176,7 @@ namespace Daliboris.Slovniky
 		/// <summary>
 		/// Konsoliduje heslovou stať. Přidá informace, seskupí významy.
 		/// </summary>
-		public new void KonsolidovatHeslovouStat()
+		public override void KonsolidovatHeslovouStat()
 		{
 			KonsolidovatHeslovouStat(1);
 		}
