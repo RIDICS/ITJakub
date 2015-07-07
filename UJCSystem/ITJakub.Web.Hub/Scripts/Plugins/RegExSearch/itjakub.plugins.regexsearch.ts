@@ -230,13 +230,13 @@ class RegExConditionListItem extends RegExSearchBase {
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
 
-        searchDestinationSelect.appendChild(this.createOption("Text", SearchType.Text.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Autor", SearchType.Author.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Titul", SearchType.Title.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Editor", SearchType.Responsible.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Období vzniku", SearchType.Dating.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Text", SearchTypeEnum.Text.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Autor", SearchTypeEnum.Author.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Titul", SearchTypeEnum.Title.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Editor", SearchTypeEnum.Responsible.toString()));
+        searchDestinationSelect.appendChild(this.createOption("Období vzniku", SearchTypeEnum.Dating.toString()));
 
-        this.selectedSearchType = SearchType.Text;
+        this.selectedSearchType = SearchTypeEnum.Text;
 
         $(searchDestinationSelect).change((eventData: Event) => {
             var oldSelectedSearchType = this.selectedSearchType;
@@ -263,12 +263,12 @@ class RegExConditionListItem extends RegExSearchBase {
 
     }
 
-    private changeConditionType(newSearchType : SearchType, oldSearchType: SearchType) {
-        if (this.innerCondition instanceof RegExWordConditionList && newSearchType === SearchType.Dating) {
+    private changeConditionType(newSearchType : SearchTypeEnum, oldSearchType: SearchTypeEnum) {
+        if (this.innerCondition instanceof RegExWordConditionList && newSearchType === SearchTypeEnum.Dating) {
             $(this.innerConditionContainer).empty();
             this.innerCondition = new RegExDatingCondition(this);
             this.innerCondition.makeRegExCondition(this.innerConditionContainer);
-        } else if (this.innerCondition instanceof RegExDatingCondition && newSearchType !== SearchType.Dating) {
+        } else if (this.innerCondition instanceof RegExDatingCondition && newSearchType !== SearchTypeEnum.Dating) {
             $(this.innerConditionContainer).empty();
             this.innerCondition = new RegExWordConditionList(this);
             this.innerCondition.makeRegExCondition(this.innerConditionContainer);
@@ -409,29 +409,25 @@ class RegExWordConditionList extends RegExConditionBase {
     }
 }
 
-class RegExDatingCondition extends RegExConditionBase {
-    private selectedCenturyLowerValue : number;
-    private selectedCenturyHigherValue : number;
-    private selectedPeriodLowerValue : number;
-    private selectedPeriodHigherValue : number;
-    private selectedDecadeLowerValue : number;
+interface IRegExDatingConditionView {
+    makeRangeView(container: HTMLDivElement);
+}
+
+class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
+    private selectedCenturyLowerValue: number;
+    private selectedCenturyHigherValue: number;
+    private selectedPeriodLowerValue: number;
+    private selectedPeriodHigherValue: number;
+    private selectedDecadeLowerValue: number;
     private selectedDecadeHigherValue: number;
 
     private periodEnabled: boolean;
     private decadeEnabled: boolean;
 
-    dateDisplayDiv: HTMLDivElement;
+    private dateDisplayDiv: HTMLDivElement;
 
-    constructor(parent: RegExConditionListItem) {
-        super(parent);
-    }
-
-    makeRegExCondition(conditionContainerDiv: HTMLDivElement) {
-        var datingDiv = document.createElement('div');
-        $(datingDiv).addClass("regex-dating-condition");
-
-        datingDiv.appendChild(this.makeTopSelectBoxes());
-
+    public makeRangeView(container : HTMLDivElement) {
+        var precisionInpuDiv = container;
         var centurySliderDiv: HTMLDivElement = window.document.createElement("div");
         $(centurySliderDiv).addClass("regex-dating-century-div regex-slider-div");
 
@@ -442,11 +438,11 @@ class RegExDatingCondition extends RegExConditionBase {
         centuryNameSpan.innerHTML = "Století";
         centuryCheckboxDiv.appendChild(centuryNameSpan);
         centurySliderDiv.appendChild(centuryCheckboxDiv);
-        datingDiv.appendChild(centurySliderDiv);
+        precisionInpuDiv.appendChild(centurySliderDiv);
 
         var centuryArray = new Array<DatingSliderValue>();
         for (var century = 8; century <= 21; century++) {
-            centuryArray.push(new DatingSliderValue(century.toString(), century*100 -100, century*100-1)); //calculate century low and high values (i.e 18. century is 1700 - 1799)
+            centuryArray.push(new DatingSliderValue(century.toString(), century * 100 - 100, century * 100 - 1)); //calculate century low and high values (i.e 18. century is 1700 - 1799)
         }
 
         var sliderCentury = this.makeSlider(centuryArray, ". století",(selectedValue: DatingSliderValue) => { this.centuryChanged(selectedValue) });
@@ -481,13 +477,13 @@ class RegExDatingCondition extends RegExConditionBase {
         periodCheckboxDiv.appendChild(periodValueCheckbox);
         periodCheckboxDiv.appendChild(periodNameSpan);
         periodSliderDiv.appendChild(periodCheckboxDiv);
-        datingDiv.appendChild(periodSliderDiv);
+        precisionInpuDiv.appendChild(periodSliderDiv);
 
         var sliderPeriod = this.makeSlider(new Array<DatingSliderValue>(new DatingSliderValue("začátek", 0, -85), new DatingSliderValue("čtvrtina", 0, -75), new DatingSliderValue("třetina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0)), "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
         $(sliderPeriod).slider("option", "disabled", true);
         $(sliderPeriod).parent().siblings(".slider").find(".slider-tip").hide();
         periodSliderDiv.appendChild(sliderPeriod);
-        
+
         var decadesSliderDiv: HTMLDivElement = window.document.createElement("div");
         $(decadesSliderDiv).addClass("regex-dating-decades-div regex-slider-div");
 
@@ -518,11 +514,11 @@ class RegExDatingCondition extends RegExConditionBase {
         decadeCheckboxDiv.appendChild(decadesCheckbox);
         decadeCheckboxDiv.appendChild(decadesNameSpan);
         decadesSliderDiv.appendChild(decadeCheckboxDiv);
-        datingDiv.appendChild(decadesSliderDiv);
+        precisionInpuDiv.appendChild(decadesSliderDiv);
 
         var decadesArray = new Array<DatingSliderValue>();
-        for (var decades = 0; decades <= 90; decades+=10) {
-            decadesArray.push(new DatingSliderValue(decades.toString(), decades, -(100 - (decades+10)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
+        for (var decades = 0; decades <= 90; decades += 10) {
+            decadesArray.push(new DatingSliderValue(decades.toString(), decades, -(100 - (decades + 10)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
         }
         var sliderDecades = this.makeSlider(decadesArray, ". léta",(selectedValue: DatingSliderValue) => { this.decadeChanged(selectedValue) });
         $(sliderDecades).slider("option", "disabled", true);
@@ -532,9 +528,7 @@ class RegExDatingCondition extends RegExConditionBase {
         var datingDisplayedValueDiv = document.createElement('div');
         $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");
         this.dateDisplayDiv = datingDisplayedValueDiv;
-        datingDiv.appendChild(datingDisplayedValueDiv);
-
-        $(conditionContainerDiv).append(datingDiv);
+        precisionInpuDiv.appendChild(datingDisplayedValueDiv);
 
         this.refreshDisplayedDate();
     }
@@ -571,8 +565,8 @@ class RegExDatingCondition extends RegExConditionBase {
             lower += this.selectedDecadeLowerValue;
             higher += this.selectedDecadeHigherValue;
         }
-        
-        $(this.dateDisplayDiv).html("("+lower+"-"+higher+")");
+
+        $(this.dateDisplayDiv).html("(" + lower + "-" + higher + ")");
     }
 
     private makeSlider(valuesArray: Array<DatingSliderValue>, nameEnding: string, callbackFunction: (selectedValue: DatingSliderValue) => void) {
@@ -580,7 +574,7 @@ class RegExDatingCondition extends RegExConditionBase {
         $(slider).addClass('slider');
         $(slider).slider({
             min: 0,
-            max: valuesArray.length-1,
+            max: valuesArray.length - 1,
             value: 0,
             slide: (event, ui) => {
                 $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html(valuesArray[ui.value].name + nameEnding);
@@ -609,6 +603,55 @@ class RegExDatingCondition extends RegExConditionBase {
 
         return slider;
     }
+}
+
+class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
+
+    makeRangeView(container: HTMLDivElement) {
+        var precisionInpuDiv = container;
+        var textInput = document.createElement("input");
+        textInput.type = "text";
+
+        precisionInpuDiv.appendChild(textInput);
+    }
+}
+
+class RegExDatingCondition extends RegExConditionBase {
+    private datingPrecision: DatingPrecisionEnum;
+    private datingRange: DatingRangeEnum;
+
+    private precisionInpuDiv: HTMLDivElement;
+
+    constructor(parent: RegExConditionListItem) {
+        super(parent);
+    }
+
+    makeRegExCondition(conditionContainerDiv: HTMLDivElement) {
+        var datingDiv = document.createElement('div');
+        $(datingDiv).addClass("regex-dating-condition");
+
+        datingDiv.appendChild(this.makeTopSelectBoxes());
+
+        var precisionInpuDiv: HTMLDivElement = window.document.createElement("div");
+        $(precisionInpuDiv).addClass("regex-dating-precision-div");
+        this.precisionInpuDiv = precisionInpuDiv;
+        datingDiv.appendChild(precisionInpuDiv);
+
+        this.makePeriodInputRange();
+        $(conditionContainerDiv).append(datingDiv);
+
+
+    }
+
+    private makeYearInputRange() {
+        new RegExDatingConditionRangeYearView().makeRangeView(this.precisionInpuDiv);
+    }
+
+    private makePeriodInputRange() {
+        new RegExDatingConditionRangePeriodView().makeRangeView(this.precisionInpuDiv);
+    }
+
+    
 
     public makeTopSelectBoxes() : HTMLDivElement {
         var datingFormDiv = document.createElement("div");
@@ -626,13 +669,13 @@ class RegExDatingCondition extends RegExConditionBase {
         $(datingFormSelect).addClass("regexsearch-select");
         datingSelectDiv.appendChild(datingFormSelect);
 
-        datingFormSelect.appendChild(this.createOption("Starší než", ""));
-        datingFormSelect.appendChild(this.createOption("Mladší než", ""));
-        datingFormSelect.appendChild(this.createOption("Mezi", ""));
-        datingFormSelect.appendChild(this.createOption("Kolem", ""));
+        datingFormSelect.appendChild(this.createOption("Starší než", DatingRangeEnum.OlderThen.toString()));
+        datingFormSelect.appendChild(this.createOption("Mladší než", DatingRangeEnum.YoungerThen.toString()));
+        datingFormSelect.appendChild(this.createOption("Mezi", DatingRangeEnum.Between.toString()));
+        datingFormSelect.appendChild(this.createOption("Kolem", DatingRangeEnum.Around.toString()));
 
         $(datingFormSelect).change((eventData: Event) => {
-            //this.selectedWordFormType = $(eventData.target).val();
+            this.datingRange = parseInt($(eventData.target).val());
         });
 
         var precisionSelectDiv = document.createElement("div");
@@ -647,11 +690,21 @@ class RegExDatingCondition extends RegExConditionBase {
         $(precisionFormSelect).addClass("regexsearch-select");
         precisionSelectDiv.appendChild(precisionFormSelect);
 
-        precisionFormSelect.appendChild(this.createOption("Období", ""));
-        precisionFormSelect.appendChild(this.createOption("Rok", ""));
+        precisionFormSelect.appendChild(this.createOption("Období", DatingPrecisionEnum.Period.toString()));
+        precisionFormSelect.appendChild(this.createOption("Rok", DatingPrecisionEnum.Year.toString()));
 
         $(precisionFormSelect).change((eventData: Event) => {
-            //this.selectedWordFormType = $(eventData.target).val();
+            var oldPrecision = this.datingPrecision;
+            this.datingPrecision = parseInt($(eventData.target).val());
+
+            if (oldPrecision !== this.datingPrecision) {
+                $(this.precisionInpuDiv).empty();   
+                if (this.datingPrecision === DatingPrecisionEnum.Period) {
+                    this.makePeriodInputRange();
+                } else {
+                    this.makeYearInputRange();
+                }
+            }
         });
 
         precisionSelectDiv.appendChild(precisionFormSelect);
@@ -684,7 +737,7 @@ class DatingSliderValue {
 class RegExWordCondition {
     private html: HTMLDivElement;
     private inputsArray: Array<RegExWordInput>;
-    private hiddenWordInputSelects: Array<WordInputType>;
+    private hiddenWordInputSelects: Array<WordInputTypeEnum>;
     private inputsContainerDiv: HTMLDivElement;
     private parent: RegExWordConditionList;
 
@@ -795,7 +848,7 @@ class RegExWordCondition {
     }
 
     resetInputs() {
-        this.hiddenWordInputSelects = new Array<WordInputType>();
+        this.hiddenWordInputSelects = new Array<WordInputTypeEnum>();
         $(this.inputsContainerDiv).empty();
         this.inputsArray = new Array<RegExWordInput>();
         this.addInput();
@@ -807,7 +860,7 @@ class RegExWordCondition {
         for (var i = 0; i < this.hiddenWordInputSelects.length; i++) {
             newInput.hideSelectCondition(this.hiddenWordInputSelects[i]);
         }
-        if (!(newInput.getConditionType() === WordInputType.Contains)) {
+        if (!(newInput.getConditionType() === WordInputTypeEnum.Contains)) {
             this.hiddenWordInputSelects.push(newInput.getConditionType());
         }
 
@@ -835,13 +888,13 @@ class RegExWordCondition {
             var wordInput = this.inputsArray[i];
             var inputValue = wordInput.getConditionValue();
             switch (wordInput.getConditionType()) {
-            case WordInputType.StartsWith:
+            case WordInputTypeEnum.StartsWith:
                 wordCriteriaDescription.startsWith = inputValue;
                 break;
-            case WordInputType.Contains:
+            case WordInputTypeEnum.Contains:
                 wordCriteriaDescription.contains.push(inputValue);
                 break;
-            case WordInputType.EndsWith:
+            case WordInputTypeEnum.EndsWith:
                 wordCriteriaDescription.endsWith = inputValue;
                 break;
             default:
@@ -852,14 +905,14 @@ class RegExWordCondition {
     }
 
 
-    wordInputConditionChanged(wordInput: RegExWordInput, oldWordInputType: WordInputType) {
+    wordInputConditionChanged(wordInput: RegExWordInput, oldWordInputType: WordInputTypeEnum) {
         var newWordInputType = wordInput.getConditionType();
 
         if (typeof oldWordInputType !== "undefined") {
             this.wordInpuConditionRemoved(oldWordInputType);
         }
 
-        if (!(newWordInputType === WordInputType.Contains)) {
+        if (!(newWordInputType === WordInputTypeEnum.Contains)) {
             for (var i = 0; i < this.inputsArray.length; i++) {
                 if (this.inputsArray[i] === wordInput) continue;
                 this.inputsArray[i].hideSelectCondition(newWordInputType);
@@ -869,9 +922,9 @@ class RegExWordCondition {
         }
     }
 
-    wordInpuConditionRemoved(wordInputType: WordInputType) {
+    wordInpuConditionRemoved(wordInputType: WordInputTypeEnum) {
 
-        if (!(wordInputType === WordInputType.Contains)) {
+        if (!(wordInputType === WordInputTypeEnum.Contains)) {
             for (var i = 0; i < this.inputsArray.length; i++) {
                 this.inputsArray[i].showSelectCondition(wordInputType);
             }
@@ -889,7 +942,7 @@ class RegExWordInput extends RegExSearchBase {
     private html: HTMLDivElement;
     private editorDiv: HTMLDivElement;
     private conditionInput: HTMLInputElement;
-    private conditionInputType: WordInputType;
+    private conditionInputType: WordInputTypeEnum;
     private parentRegExWordCondition: RegExWordCondition;
     private regexButtonsDiv: HTMLDivElement;
     private conditionSelectbox: HTMLSelectElement;
@@ -931,11 +984,11 @@ class RegExWordInput extends RegExSearchBase {
         $(conditionSelect).addClass("regexsearch-condition-select");
         conditionTypeDiv.appendChild(conditionSelect);
 
-        conditionSelect.appendChild(this.createOption("Začíná na", WordInputType.StartsWith.toString()));
+        conditionSelect.appendChild(this.createOption("Začíná na", WordInputTypeEnum.StartsWith.toString()));
         //conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
-        conditionSelect.appendChild(this.createOption("Obsahuje", WordInputType.Contains.toString()));
+        conditionSelect.appendChild(this.createOption("Obsahuje", WordInputTypeEnum.Contains.toString()));
         //conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
-        conditionSelect.appendChild(this.createOption("Končí na", WordInputType.EndsWith.toString()));
+        conditionSelect.appendChild(this.createOption("Končí na", WordInputTypeEnum.EndsWith.toString()));
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
 
 
@@ -1004,7 +1057,7 @@ class RegExWordInput extends RegExSearchBase {
 
         this.html = mainDiv;
 
-        $(this.conditionSelectbox).val(WordInputType.Contains.toString());
+        $(this.conditionSelectbox).val(WordInputTypeEnum.Contains.toString());
         $(this.conditionSelectbox).change();
     }
 
@@ -1012,15 +1065,15 @@ class RegExWordInput extends RegExSearchBase {
         return this.conditionInput.value;
     }
 
-    getConditionType(): WordInputType {
+    getConditionType(): WordInputTypeEnum {
         return this.conditionInputType;
     }
 
-    showSelectCondition(wordInputType: WordInputType) {
+    showSelectCondition(wordInputType: WordInputTypeEnum) {
         $(this.conditionSelectbox).find(`option[value=${wordInputType.toString()}]`).show();
     }
 
-    hideSelectCondition(wordInputType: WordInputType) {
+    hideSelectCondition(wordInputType: WordInputTypeEnum) {
         $(this.conditionSelectbox).find(`option[value=${wordInputType.toString()}]`).hide();
     }
 
@@ -1051,7 +1104,7 @@ class WordCriteriaDescription {
     }
 }
 
-enum WordInputType {
+enum WordInputTypeEnum {
     StartsWith = 0,
     Contains = 1,
     EndsWith = 2
@@ -1066,10 +1119,22 @@ enum WordInputType {
         [EnumMember] Text = 4
  * 
  */
-enum SearchType {
+enum SearchTypeEnum {
     Author = 0,
     Title = 1,
     Responsible = 2,
     Dating = 3,
     Text = 4
+}
+
+enum DatingPrecisionEnum {
+    Year = 0,
+    Period = 1
+}
+
+enum DatingRangeEnum {
+    OlderThen = 0,
+    YoungerThen = 1,
+    Between = 2,
+    Around = 3
 }
