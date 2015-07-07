@@ -157,5 +157,23 @@ namespace ITJakub.ITJakubService.Core
 
             return Stream.Null;
         }
+
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+        {
+            var searchServiceClient = new SearchServiceClient();
+            OutputFormat outputFormat;
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
+
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
+            var transformationName = transformation.Name;
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+            var dictionaryEntryText = searchServiceClient.GetDictionaryEntryByXmlId(bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
+
+            return dictionaryEntryText;
+        }
     }
 }

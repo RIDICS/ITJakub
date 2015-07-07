@@ -823,5 +823,31 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+        {
+            try
+            {
+                return Channel.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetDictionaryEntryByXmlId failed with: {0}", ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetDictionaryEntryByXmlId failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetDictionaryEntryByXmlId timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

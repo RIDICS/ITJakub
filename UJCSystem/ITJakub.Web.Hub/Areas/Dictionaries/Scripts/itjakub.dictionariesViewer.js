@@ -38,6 +38,7 @@ var DictionaryViewer = (function () {
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
         var listUl = document.createElement("ul");
+        var descriptionsDiv = document.createElement("div");
         for (var i = 0; i < headwords.length; i++) {
             var headwordLi = document.createElement("li");
             var record = headwords[i];
@@ -54,14 +55,38 @@ var DictionaryViewer = (function () {
                 aLink.href = "?guid=" + dictionary.BookGuid + "&xmlEntryId=" + dictionary.XmlEntryId;
                 aLink.innerHTML = dictionary.BookAcronym;
                 $(aLink).addClass("dictionary-result-headword-book");
+                var descriptionDiv = document.createElement("div");
+                descriptionDiv.innerText = "Loading";
+                this.getAndShowHeadwordDescription(record.Headword, dictionary, descriptionDiv);
                 headwordLi.appendChild(aLink);
+                descriptionsDiv.appendChild(descriptionDiv);
+                descriptionsDiv.appendChild(document.createElement("hr"));
             }
             listUl.appendChild(headwordLi);
         }
         $(this.headwordListContainer).append(listUl);
+        $(this.headwordDescriptionContainer).append(descriptionsDiv);
     };
-    DictionaryViewer.prototype.showHeadwordDescription = function (headword) {
-        //TODO
+    DictionaryViewer.prototype.getAndShowHeadwordDescription = function (headword, headwordInfo, container) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordDescription",
+            data: {
+                bookGuid: headwordInfo.BookGuid,
+                xmlEntryId: headwordInfo.XmlEntryId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                $(container).empty();
+                container.innerHTML = response;
+            },
+            error: function () {
+                $(container).empty();
+                container.innerText = "Chyba při náčítání hesla '" + headword + "'.";
+            }
+        });
     };
     return DictionaryViewer;
 })();

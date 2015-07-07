@@ -193,5 +193,10 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.SearchHeadword(query, dictionaryGuidList, page, pageSize);
         }
+
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+        {
+            return m_bookManager.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat);
+        }
     }
 }

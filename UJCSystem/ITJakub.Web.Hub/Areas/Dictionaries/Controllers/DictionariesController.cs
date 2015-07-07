@@ -113,6 +113,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)
+        {
+            var result = m_mainServiceClient.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetHeadwordCount(IList<long> selectedBookIds)
         {
             //TODO search with category filter

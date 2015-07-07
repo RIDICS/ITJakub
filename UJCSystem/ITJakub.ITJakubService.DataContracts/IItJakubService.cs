@@ -117,5 +117,8 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize);
+
+        [OperationContract]
+        string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
     }
 }
