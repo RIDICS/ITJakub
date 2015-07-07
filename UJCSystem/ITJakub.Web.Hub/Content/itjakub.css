@@ -1182,6 +1182,9 @@ input.regexsearch-checkbox {
 .regex-dating-precision-div {
   margin-top: 30px;
 }
+.regex-dating-input-span {
+  margin-right: 10px;
+}
 .tt-input,
 .tt-hint {
   width: 396px;

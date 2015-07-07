@@ -609,9 +609,26 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
 
     makeRangeView(container: HTMLDivElement) {
         var precisionInpuDiv = container;
-        var textInput = document.createElement("input");
-        textInput.type = "text";
+        var textInput : HTMLInputElement = document.createElement("input");
+        textInput.type = "number";
+        textInput.min = "800";
+        textInput.max = "2100";
+        textInput.value = "800";
+        textInput.id = "800";
 
+        // allows only digits input
+        $(textInput).keyup(function (e) {
+            var value = $(this).val();
+            value.replace(/[^0-9]/g, '');
+            $(this).val(value);
+            $(this).text(value);   
+        });
+
+        var spanInput: HTMLSpanElement = document.createElement("span");
+        $(spanInput).addClass("regex-dating-input-span");
+        spanInput.innerHTML = "Rok:";
+        
+        precisionInpuDiv.appendChild(spanInput);
         precisionInpuDiv.appendChild(textInput);
     }
 }
@@ -621,6 +638,9 @@ class RegExDatingCondition extends RegExConditionBase {
     private datingRange: DatingRangeEnum;
 
     private precisionInpuDiv: HTMLDivElement;
+
+    private firstDateView: IRegExDatingConditionView;
+    private secondDateView: IRegExDatingConditionView;
 
     constructor(parent: RegExConditionListItem) {
         super(parent);
@@ -639,8 +659,6 @@ class RegExDatingCondition extends RegExConditionBase {
 
         this.makePeriodInputRange();
         $(conditionContainerDiv).append(datingDiv);
-
-
     }
 
     private makeYearInputRange() {
@@ -650,8 +668,6 @@ class RegExDatingCondition extends RegExConditionBase {
     private makePeriodInputRange() {
         new RegExDatingConditionRangePeriodView().makeRangeView(this.precisionInpuDiv);
     }
-
-    
 
     public makeTopSelectBoxes() : HTMLDivElement {
         var datingFormDiv = document.createElement("div");
@@ -676,6 +692,10 @@ class RegExDatingCondition extends RegExConditionBase {
 
         $(datingFormSelect).change((eventData: Event) => {
             this.datingRange = parseInt($(eventData.target).val());
+
+            if (this.datingRange === DatingRangeEnum.Between && this.secondDateView === null) {
+                //TODO duplicate
+            }
         });
 
         var precisionSelectDiv = document.createElement("div");
@@ -698,21 +718,24 @@ class RegExDatingCondition extends RegExConditionBase {
             this.datingPrecision = parseInt($(eventData.target).val());
 
             if (oldPrecision !== this.datingPrecision) {
-                $(this.precisionInpuDiv).empty();   
-                if (this.datingPrecision === DatingPrecisionEnum.Period) {
-                    this.makePeriodInputRange();
-                } else {
-                    this.makeYearInputRange();
-                }
+                $(this.precisionInpuDiv).empty();
+                this.makeInputRangeView();
             }
         });
-
         precisionSelectDiv.appendChild(precisionFormSelect);
 
         datingFormDiv.appendChild(datingSelectDiv);
         datingFormDiv.appendChild(precisionSelectDiv);
 
         return datingFormDiv;
+    }
+
+    private makeInputRangeView(){
+        if (this.datingPrecision === DatingPrecisionEnum.Period) {
+            this.makePeriodInputRange();
+        } else {
+            this.makeYearInputRange();
+        }
     }
 
     getConditionValue(): ConditionResult {

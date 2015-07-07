@@ -498,7 +498,22 @@ var RegExDatingConditionRangeYearView = (function () {
     RegExDatingConditionRangeYearView.prototype.makeRangeView = function (container) {
         var precisionInpuDiv = container;
         var textInput = document.createElement("input");
-        textInput.type = "text";
+        textInput.type = "number";
+        textInput.min = "800";
+        textInput.max = "2100";
+        textInput.value = "800";
+        textInput.id = "800";
+        // allows only digits input
+        $(textInput).keyup(function (e) {
+            var value = $(this).val();
+            value.replace(/[^0-9]/g, '');
+            $(this).val(value);
+            $(this).text(value);
+        });
+        var spanInput = document.createElement("span");
+        $(spanInput).addClass("regex-dating-input-span");
+        spanInput.innerHTML = "Rok:";
+        precisionInpuDiv.appendChild(spanInput);
         precisionInpuDiv.appendChild(textInput);
     };
     return RegExDatingConditionRangeYearView;
@@ -544,6 +559,8 @@ var RegExDatingCondition = (function (_super) {
         datingFormSelect.appendChild(this.createOption("Kolem", 3 /* Around */.toString()));
         $(datingFormSelect).change(function (eventData) {
             _this.datingRange = parseInt($(eventData.target).val());
+            if (_this.datingRange === 2 /* Between */ && _this.secondDateView === null) {
+            }
         });
         var precisionSelectDiv = document.createElement("div");
         $(precisionSelectDiv).addClass("regex-dating-condition-select");
@@ -561,18 +578,21 @@ var RegExDatingCondition = (function (_super) {
             _this.datingPrecision = parseInt($(eventData.target).val());
             if (oldPrecision !== _this.datingPrecision) {
                 $(_this.precisionInpuDiv).empty();
-                if (_this.datingPrecision === 1 /* Period */) {
-                    _this.makePeriodInputRange();
-                }
-                else {
-                    _this.makeYearInputRange();
-                }
+                _this.makeInputRangeView();
             }
         });
         precisionSelectDiv.appendChild(precisionFormSelect);
         datingFormDiv.appendChild(datingSelectDiv);
         datingFormDiv.appendChild(precisionSelectDiv);
         return datingFormDiv;
+    };
+    RegExDatingCondition.prototype.makeInputRangeView = function () {
+        if (this.datingPrecision === 1 /* Period */) {
+            this.makePeriodInputRange();
+        }
+        else {
+            this.makeYearInputRange();
+        }
     };
     RegExDatingCondition.prototype.getConditionValue = function () {
         return null; //TODO
