@@ -35,7 +35,7 @@
                 query: this.currentQuery,
                 page: pageNumber,
                 pageSize: this.pageSize,
-                categories: this.categoriesSelect.getState()
+                selectedBookIds: [4] //TODO get from categories DropDownSelect
             }),
             dataType: "json",
             contentType: "application/json",

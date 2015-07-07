@@ -290,10 +290,10 @@ namespace ITJakub.DataEntities.Database.Repositories
 
             using (var session = GetSession())
             {
-                var result = session.QueryOver<Book>()
+                var result = session.QueryOver(() => bookAlias)
                     .JoinQueryOver(x => x.LastVersion)
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
-                    .Select(Projections.CountDistinct(() => bookHeadwordAlias.DefaultHeadword))
+                    .Select(Projections.CountDistinct(() => bookHeadwordAlias.XmlEntryId))
                     .WhereRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds)
                     .SingleOrDefault<int>();
 
@@ -301,6 +301,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
+        [Transaction(TransactionMode.Requires)]
         public virtual IList<HeadwordSearchResult> GetHeadwordList(IList<long> selectedBookIds, int page, int pageSize)
         {
             using (var session = GetSession())
@@ -314,12 +315,12 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
                     .WhereRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds)
-                    .SelectList(list => list
-                        .Select(x => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid)
-                        .Select(x => bookVersionAlias.VersionId).WithAlias(() => resultAlias.BookVersionId)
-                        .Select(x => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym)
-                        .Select(x => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword)
-                        .Select(x => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
+                    .Select(Projections.Distinct(Projections.ProjectionList()
+                        .Add(Projections.Property(() => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid))
+                        .Add(Projections.Property(() => bookVersionAlias.VersionId).WithAlias(() => resultAlias.BookVersionId))
+                        .Add(Projections.Property(() => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym))
+                        .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
+                        .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))))
                     .OrderBy(x => x.DefaultHeadword).Asc
                     .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
                     .Skip((page - 1) * pageSize)
@@ -327,6 +328,16 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .List<HeadwordSearchResult>();
 
                 return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual int GetPageNumberForHeadword(IList<long> selectedBookIds, string headwordQuery, int page, int pageSize)
+        {
+            using (var session = GetSession())
+            {
+
+                return 2; //TODO
             }
         }
 
