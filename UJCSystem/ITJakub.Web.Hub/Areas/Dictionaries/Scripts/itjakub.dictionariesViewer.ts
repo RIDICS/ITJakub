@@ -76,11 +76,27 @@
                 $(aLink).addClass("dictionary-result-headword-book");
 
                 var descriptionDiv = document.createElement("div");
-                descriptionDiv.innerText = "Loading";
+                $(descriptionDiv).addClass("loading");
                 this.getAndShowHeadwordDescription(record.Headword, dictionary, descriptionDiv);
-                
+
+                var commentsDiv = document.createElement("div");
+                var commentsLink = document.createElement("a");
+                commentsLink.innerText = "Připomínky";
+                commentsLink.href = "#";
+                $(commentsDiv).addClass("dictionary-entry-comments");
+                commentsDiv.appendChild(commentsLink);
+
+                var dictionaryDiv = document.createElement("div");
+                var dictionaryLink = document.createElement("a");
+                dictionaryLink.innerText = dictionary.BookAcronym; //TODO full name
+                dictionaryLink.href = "?guid=" + dictionary.BookGuid;
+                $(dictionaryDiv).addClass("dictionary-entry-name");
+                dictionaryDiv.appendChild(dictionaryLink);
+
                 headwordLi.appendChild(aLink);
                 descriptionsDiv.appendChild(descriptionDiv);
+                descriptionsDiv.appendChild(commentsDiv);
+                descriptionsDiv.appendChild(dictionaryDiv);
                 descriptionsDiv.appendChild(document.createElement("hr"));
             }
             
@@ -104,10 +120,12 @@
             contentType: "application/json",
             success: (response) => {
                 $(container).empty();
+                $(container).removeClass("loading");
                 container.innerHTML = response;
             },
             error: () => {
                 $(container).empty();
+                $(container).removeClass("loading");
                 container.innerText = "Chyba při náčítání hesla '" + headword + "'.";
             }
         });
@@ -206,7 +224,7 @@ class Pagination {
             .addClass("three-dots");
 
         var contentElement = document.createElement("span");
-        contentElement.innerText = "...";
+        contentElement.innerHTML = "&hellip;";
 
         element.appendChild(contentElement);
         return element;

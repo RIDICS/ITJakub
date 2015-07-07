@@ -1,4 +1,5 @@
 ﻿@import "../../../Content/ITJakub.DefaultTheme.less";
+@dictionary-entry-margin: 15px;
 
 .dictionary-header {
     background-color: @item-background-color;
@@ -16,7 +17,6 @@
 }
 
 .search-area {
-    /*height: 100%;*/
     width: 70%;
     float: left;
 }
@@ -45,7 +45,7 @@
 
 .dictionary-result-word-search-list {
     background-color: white;
-    height: 100%;
+    min-height: 100%;
     width: 20%;
     float: left;
 }
@@ -61,7 +61,7 @@
 .dictionary-result-word-search-description {
     background-color: white;
     margin-left: 1%;
-    height: 100%;
+    min-height: 100%;
     width: 79%;
     float: left;
 }
@@ -116,4 +116,50 @@ a.dictionary-result-headword-book {
 
 .saved-word-area-more:hover {
     cursor: pointer;
+}
+
+.entryFree {
+    padding-left: @dictionary-entry-margin;
+    padding-right: @dictionary-entry-margin;
+}
+
+.bo {
+    position: relative;
+    left: -@dictionary-entry-margin;
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.note {
+    font-style: italic;
+}
+
+.dictionary-entry-comments {
+    float: right;
+    margin-right: @dictionary-entry-margin;
+    width: 200px;
+    text-align: right;
+}
+
+.dictionary-entry-name {
+    margin-left: @dictionary-entry-margin;
+    margin-right: 200px + @dictionary-entry-margin;
+}
+
+.dictionary-entry-comments, .dictionary-entry-name {
+    margin-top: 10px;
+}
+
+.dictionary-entry-comments a, .dictionary-entry-name a {
+    color: @item-background-color;
+}
+
+.pagination-sm li a, .pagination-sm li span {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.loading {
+    background: url(../../../Content/Images/loading.gif) no-repeat center;
+    margin: 0 auto;
 }
