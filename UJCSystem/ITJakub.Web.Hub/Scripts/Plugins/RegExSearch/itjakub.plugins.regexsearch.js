@@ -531,14 +531,8 @@ var RegExDatingCondition = (function (_super) {
         $(precisionInpuDiv).addClass("regex-dating-precision-div");
         this.precisionInpuDiv = precisionInpuDiv;
         datingDiv.appendChild(precisionInpuDiv);
-        this.makePeriodInputRange();
+        this.changeViews();
         $(conditionContainerDiv).append(datingDiv);
-    };
-    RegExDatingCondition.prototype.makeYearInputRange = function () {
-        new RegExDatingConditionRangeYearView().makeRangeView(this.precisionInpuDiv);
-    };
-    RegExDatingCondition.prototype.makePeriodInputRange = function () {
-        new RegExDatingConditionRangePeriodView().makeRangeView(this.precisionInpuDiv);
     };
     RegExDatingCondition.prototype.makeTopSelectBoxes = function () {
         var _this = this;
@@ -557,9 +551,12 @@ var RegExDatingCondition = (function (_super) {
         datingFormSelect.appendChild(this.createOption("Mladší než", 1 /* YoungerThen */.toString()));
         datingFormSelect.appendChild(this.createOption("Mezi", 2 /* Between */.toString()));
         datingFormSelect.appendChild(this.createOption("Kolem", 3 /* Around */.toString()));
+        this.datingRange = 1 /* YoungerThen */;
         $(datingFormSelect).change(function (eventData) {
+            var oldRange = _this.datingRange;
             _this.datingRange = parseInt($(eventData.target).val());
-            if (_this.datingRange === 2 /* Between */ && _this.secondDateView === null) {
+            if (oldRange !== _this.datingRange) {
+                _this.changeViews();
             }
         });
         var precisionSelectDiv = document.createElement("div");
@@ -573,12 +570,12 @@ var RegExDatingCondition = (function (_super) {
         precisionSelectDiv.appendChild(precisionFormSelect);
         precisionFormSelect.appendChild(this.createOption("Období", 1 /* Period */.toString()));
         precisionFormSelect.appendChild(this.createOption("Rok", 0 /* Year */.toString()));
+        this.datingPrecision = 1 /* Period */;
         $(precisionFormSelect).change(function (eventData) {
             var oldPrecision = _this.datingPrecision;
             _this.datingPrecision = parseInt($(eventData.target).val());
             if (oldPrecision !== _this.datingPrecision) {
-                $(_this.precisionInpuDiv).empty();
-                _this.makeInputRangeView();
+                _this.changeViews();
             }
         });
         precisionSelectDiv.appendChild(precisionFormSelect);
@@ -586,12 +583,27 @@ var RegExDatingCondition = (function (_super) {
         datingFormDiv.appendChild(precisionSelectDiv);
         return datingFormDiv;
     };
-    RegExDatingCondition.prototype.makeInputRangeView = function () {
-        if (this.datingPrecision === 1 /* Period */) {
-            this.makePeriodInputRange();
+    RegExDatingCondition.prototype.changeViews = function () {
+        $(this.precisionInpuDiv).empty();
+        this.firstDateView = this.createInputRangeView();
+        this.firstDateView.makeRangeView(this.precisionInpuDiv);
+        if (this.datingRange === 2 /* Between */) {
+            var delimeter = document.createElement("div");
+            delimeter.innerHTML = "až";
+            this.precisionInpuDiv.appendChild(delimeter);
+            this.secondDateView = this.createInputRangeView();
+            this.secondDateView.makeRangeView(this.precisionInpuDiv);
         }
         else {
-            this.makeYearInputRange();
+            this.secondDateView = null;
+        }
+    };
+    RegExDatingCondition.prototype.createInputRangeView = function () {
+        if (this.datingPrecision === 1 /* Period */) {
+            return new RegExDatingConditionRangePeriodView();
+        }
+        else {
+            return new RegExDatingConditionRangeYearView();
         }
     };
     RegExDatingCondition.prototype.getConditionValue = function () {

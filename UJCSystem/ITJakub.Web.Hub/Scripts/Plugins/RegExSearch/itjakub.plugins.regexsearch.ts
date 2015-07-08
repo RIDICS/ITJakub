@@ -24,7 +24,7 @@ class RegExSearch extends RegExSearchBase {
     container: HTMLDivElement;
     innerContainer: HTMLDivElement;
     regExConditions: Array<RegExConditionListItem>;
-
+        
     constructor(container: HTMLDivElement) {
         super();
         this.container = container;
@@ -657,16 +657,9 @@ class RegExDatingCondition extends RegExConditionBase {
         this.precisionInpuDiv = precisionInpuDiv;
         datingDiv.appendChild(precisionInpuDiv);
 
-        this.makePeriodInputRange();
+
+        this.changeViews();
         $(conditionContainerDiv).append(datingDiv);
-    }
-
-    private makeYearInputRange() {
-        new RegExDatingConditionRangeYearView().makeRangeView(this.precisionInpuDiv);
-    }
-
-    private makePeriodInputRange() {
-        new RegExDatingConditionRangePeriodView().makeRangeView(this.precisionInpuDiv);
     }
 
     public makeTopSelectBoxes() : HTMLDivElement {
@@ -690,11 +683,14 @@ class RegExDatingCondition extends RegExConditionBase {
         datingFormSelect.appendChild(this.createOption("Mezi", DatingRangeEnum.Between.toString()));
         datingFormSelect.appendChild(this.createOption("Kolem", DatingRangeEnum.Around.toString()));
 
+        this.datingRange = DatingRangeEnum.YoungerThen;
+
         $(datingFormSelect).change((eventData: Event) => {
+            var oldRange = this.datingRange;
             this.datingRange = parseInt($(eventData.target).val());
 
-            if (this.datingRange === DatingRangeEnum.Between && this.secondDateView === null) {
-                //TODO duplicate
+            if (oldRange !== this.datingRange) {
+                this.changeViews();
             }
         });
 
@@ -713,13 +709,14 @@ class RegExDatingCondition extends RegExConditionBase {
         precisionFormSelect.appendChild(this.createOption("Období", DatingPrecisionEnum.Period.toString()));
         precisionFormSelect.appendChild(this.createOption("Rok", DatingPrecisionEnum.Year.toString()));
 
+        this.datingPrecision = DatingPrecisionEnum.Period;
+
         $(precisionFormSelect).change((eventData: Event) => {
             var oldPrecision = this.datingPrecision;
             this.datingPrecision = parseInt($(eventData.target).val());
 
             if (oldPrecision !== this.datingPrecision) {
-                $(this.precisionInpuDiv).empty();
-                this.makeInputRangeView();
+                this.changeViews();
             }
         });
         precisionSelectDiv.appendChild(precisionFormSelect);
@@ -730,11 +727,29 @@ class RegExDatingCondition extends RegExConditionBase {
         return datingFormDiv;
     }
 
-    private makeInputRangeView(){
-        if (this.datingPrecision === DatingPrecisionEnum.Period) {
-            this.makePeriodInputRange();
+    private changeViews() {
+        $(this.precisionInpuDiv).empty();
+
+        this.firstDateView = this.createInputRangeView();
+
+        this.firstDateView.makeRangeView(this.precisionInpuDiv);
+
+        if (this.datingRange === DatingRangeEnum.Between) {
+            var delimeter = document.createElement("div");
+            delimeter.innerHTML = "až";
+            this.precisionInpuDiv.appendChild(delimeter);
+            this.secondDateView = this.createInputRangeView();
+            this.secondDateView.makeRangeView(this.precisionInpuDiv);
         } else {
-            this.makeYearInputRange();
+            this.secondDateView = null;
+        }
+    }
+
+    private createInputRangeView(): IRegExDatingConditionView{
+        if (this.datingPrecision === DatingPrecisionEnum.Period) {
+            return new RegExDatingConditionRangePeriodView();
+        } else {
+            return new RegExDatingConditionRangeYearView();
         }
     }
 
