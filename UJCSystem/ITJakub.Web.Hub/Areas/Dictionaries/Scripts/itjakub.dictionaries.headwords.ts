@@ -3,7 +3,7 @@
     var dictionarySelector = new DropDownSelect("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeDropdown();
 
-    var dictionariesViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription");
+    var dictionariesViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription", true);
 
     var bookIdList = [];
     var headwordsListUrl = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordList";
@@ -18,6 +18,10 @@
             var resultCount = response;
             dictionariesViewer.createViewer(resultCount, headwordsListUrl, bookIdList);
         }
+    });
+
+    $("#printDescription").click(() => {
+        dictionariesViewer.print();
     });
 
     //$("#searchButton").click(() => {

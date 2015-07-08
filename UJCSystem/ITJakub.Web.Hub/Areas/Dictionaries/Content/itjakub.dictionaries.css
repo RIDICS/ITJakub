@@ -77,6 +77,14 @@ div.container {
 .dictionary-subheader {
   margin-top: 1px;
 }
+.dictionary-header-buttons {
+  float: right;
+  margin-right: 2px;
+}
+.dictionary-header-buttons a,
+.dictionary-header-buttons a:hover {
+  color: white;
+}
 .search-with-saved-word-area {
   height: 20vh;
   padding: 5px;

@@ -12,3 +12,4 @@
 /// <reference path="npm.js" />
 /// <reference path="jquery-ui-1.11.4.min.js" />
 /// <reference path="typeahead.bundle.js" />
+/// <reference path="jquery.appear.js" />

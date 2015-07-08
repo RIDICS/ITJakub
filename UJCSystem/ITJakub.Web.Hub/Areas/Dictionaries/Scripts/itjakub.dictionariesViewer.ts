@@ -7,13 +7,16 @@
     private currentQuery: string;
     private recordCount: number;
     private searchUrl: string;
-    private pageSize = 20;
+    private pageSize = 50;
+    private isLazyLoad: boolean;
+    private isRequestToPrint = false;
     private headwordDescriptionDivs: HTMLDivElement[];
 
-    constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string) {
+    constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean = false) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
         this.paginationContainer = paginationContainer;
         this.headwordListContainer = headwordListContainer;
+        this.isLazyLoad = lazyLoad;
         this.pagination = new Pagination(paginationContainer);
     }
 
@@ -28,6 +31,7 @@
     }
 
     private searchAndDisplay(pageNumber: number) {
+        this.isRequestToPrint = false;
         $.ajax({
             type: "POST",
             traditional: true,
@@ -72,30 +76,16 @@
             for (var j = 0; j < record.Dictionaries.length; j++) {
                 var dictionary = record.Dictionaries[j];
 
-                // create link
-                var aLink = document.createElement("a");
-                aLink.href = "#";
-                aLink.innerHTML = dictionary.BookAcronym;
-                aLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
-                $(aLink).addClass("dictionary-result-headword-book");
-                $(aLink).click(event => {
-                    event.preventDefault();
-                    var index: number = $(event.target).data("entry-index");
-                    var headwordDiv = this.headwordDescriptionDivs[index];
-
-                    for (var k = 0; k < this.headwordDescriptionDivs.length; k++) {
-                        $(this.headwordDescriptionDivs[k]).addClass("hidden");
-                    }
-                    $(headwordDiv).removeClass("hidden");
-                });
-
-                headwordLi.appendChild(aLink);
-
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
                 var descriptionDiv = document.createElement("div");
                 $(descriptionDiv).addClass("loading");
-                this.getAndShowHeadwordDescription(record.Headword, dictionary, descriptionDiv);
+
+                if (this.isLazyLoad) {
+                    this.prepareLazyLoad(record.Headword, dictionary, descriptionDiv);
+                } else {
+                    this.getAndShowHeadwordDescription(record.Headword, dictionary, descriptionDiv);
+                }
 
                 var commentsDiv = document.createElement("div");
                 var commentsLink = document.createElement("a");
@@ -119,6 +109,16 @@
                 this.headwordDescriptionDivs.push(mainHeadwordDiv);
 
                 descriptionsDiv.appendChild(mainHeadwordDiv);
+
+                // create link
+                var aLink = document.createElement("a");
+                aLink.href = "#";
+                aLink.innerHTML = dictionary.BookAcronym;
+                aLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length-1));
+                $(aLink).addClass("dictionary-result-headword-book");
+                this.createLinkListener(aLink, record.Headword, dictionary, descriptionDiv);
+
+                headwordLi.appendChild(aLink);
             }
             
             listUl.appendChild(headwordLi);
@@ -128,7 +128,32 @@
         $(this.headwordDescriptionContainer).append(descriptionsDiv);
     }
 
+    private createLinkListener(aLink: HTMLAnchorElement, headword: string, headwordInfo: IHeadwordBookInfo, container: HTMLDivElement) {
+        $(aLink).click(event => {
+            event.preventDefault();
+            var index: number = $(event.target).data("entry-index");
+            var headwordDiv = this.headwordDescriptionDivs[index];
+
+            for (var k = 0; k < this.headwordDescriptionDivs.length; k++) {
+                $(this.headwordDescriptionDivs[k]).addClass("hidden");
+            }
+            $(headwordDiv).removeClass("hidden");
+
+            if ($(headwordDiv).children().hasClass("loading")) {
+                this.getAndShowHeadwordDescription(headword, headwordInfo, container);
+            }
+        });
+    }
+
+    private prepareLazyLoad(headword: string, headwordInfo: IHeadwordBookInfo, container: HTMLDivElement) {
+        $(container).addClass("dictionary-lazy-loading");
+        $(container).bind("appearing", () => {
+            this.getAndShowHeadwordDescription(headword, headwordInfo, container);
+        });
+    }
+
     private getAndShowHeadwordDescription(headword: string, headwordInfo: IHeadwordBookInfo, container: HTMLDivElement) {
+        $(container).unbind("appearing");
         $.ajax({
             type: "GET",
             traditional: true,
@@ -143,13 +168,57 @@
                 $(container).empty();
                 $(container).removeClass("loading");
                 container.innerHTML = response;
+                if (this.isRequestToPrint)
+                    this.print();
             },
             error: () => {
                 $(container).empty();
                 $(container).removeClass("loading");
                 container.innerText = "Chyba při náčítání hesla '" + headword + "'.";
+                if (this.isRequestToPrint)
+                    this.print();
             }
         });
+    }
+
+    private isAllLoaded(): boolean {
+        var descriptions = $(this.headwordDescriptionContainer);
+        var notLoaded = $(".loading", descriptions);
+        var notLoadedVisible = notLoaded.parent(":not(.hidden)");
+        return notLoadedVisible.length === 0;
+    }
+
+    public print() {
+        // check if all entries are loaded
+        this.isRequestToPrint = false;
+        if (!this.isAllLoaded()) {
+            this.isRequestToPrint = true;
+
+            if (this.isLazyLoad) {
+                //TODO load ALL
+            }
+
+            return;
+        }
+
+        var printWindow = window.open("", "", "left=0,top=0,toolbar=0,scrollbars=0,status=0");
+
+        var headwordsHtml = $(this.headwordDescriptionContainer).html();
+        printWindow.document.write(headwordsHtml);
+        printWindow.document.close();
+
+        var styleCss =
+            ".hidden {display: none;}" +
+            ".dictionary-entry-comments {display: none;}";
+
+        var styleElement = document.createElement("style");
+        styleElement.innerHTML = styleCss;
+        printWindow.document.head.appendChild(styleElement);
+        
+        printWindow.document.title = "Heslové stati";
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close(); 
     }
 }
 
