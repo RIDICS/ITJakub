@@ -3,7 +3,7 @@ $(document).ready(function () {
     var dictionarySelector = new DropDownSelect("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeDropdown();
     var dictionariesViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription");
-    var bookIdList = [4, 5]; //TODO get ids from dictionarySelector
+    var bookIdList = [];
     var headwordsListUrl = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordList";
     $.ajax({
         type: "POST",

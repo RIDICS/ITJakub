@@ -8,6 +8,7 @@
     private recordCount: number;
     private searchUrl: string;
     private pageSize = 20;
+    private headwordDescriptionDivs: HTMLDivElement[];
 
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
@@ -48,6 +49,7 @@
     private showHeadwords(headwords: IHeadword[]) {
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
+        this.headwordDescriptionDivs = [];
 
         var listUl = document.createElement("ul");
         var descriptionsDiv = document.createElement("div");
@@ -70,11 +72,27 @@
             for (var j = 0; j < record.Dictionaries.length; j++) {
                 var dictionary = record.Dictionaries[j];
 
+                // create link
                 var aLink = document.createElement("a");
-                aLink.href = "?guid=" + dictionary.BookGuid + "&xmlEntryId=" + dictionary.XmlEntryId;
+                aLink.href = "#";
                 aLink.innerHTML = dictionary.BookAcronym;
+                aLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
                 $(aLink).addClass("dictionary-result-headword-book");
+                $(aLink).click(event => {
+                    event.preventDefault();
+                    var index: number = $(event.target).data("entry-index");
+                    var headwordDiv = this.headwordDescriptionDivs[index];
 
+                    for (var k = 0; k < this.headwordDescriptionDivs.length; k++) {
+                        $(this.headwordDescriptionDivs[k]).addClass("hidden");
+                    }
+                    $(headwordDiv).removeClass("hidden");
+                });
+
+                headwordLi.appendChild(aLink);
+
+                // create description
+                var mainHeadwordDiv = document.createElement("div");
                 var descriptionDiv = document.createElement("div");
                 $(descriptionDiv).addClass("loading");
                 this.getAndShowHeadwordDescription(record.Headword, dictionary, descriptionDiv);
@@ -93,11 +111,14 @@
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
 
-                headwordLi.appendChild(aLink);
-                descriptionsDiv.appendChild(descriptionDiv);
-                descriptionsDiv.appendChild(commentsDiv);
-                descriptionsDiv.appendChild(dictionaryDiv);
-                descriptionsDiv.appendChild(document.createElement("hr"));
+                
+                mainHeadwordDiv.appendChild(descriptionDiv);
+                mainHeadwordDiv.appendChild(commentsDiv);
+                mainHeadwordDiv.appendChild(dictionaryDiv);
+                mainHeadwordDiv.appendChild(document.createElement("hr"));
+                this.headwordDescriptionDivs.push(mainHeadwordDiv);
+
+                descriptionsDiv.appendChild(mainHeadwordDiv);
             }
             
             listUl.appendChild(headwordLi);

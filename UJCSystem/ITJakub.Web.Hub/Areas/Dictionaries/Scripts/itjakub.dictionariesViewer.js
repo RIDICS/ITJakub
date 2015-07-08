@@ -35,8 +35,10 @@ var DictionaryViewer = (function () {
         });
     };
     DictionaryViewer.prototype.showHeadwords = function (headwords) {
+        var _this = this;
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
+        this.headwordDescriptionDivs = [];
         var listUl = document.createElement("ul");
         var descriptionsDiv = document.createElement("div");
         for (var i = 0; i < headwords.length; i++) {
@@ -51,10 +53,24 @@ var DictionaryViewer = (function () {
             headwordLi.appendChild(favoriteGlyphSpan);
             for (var j = 0; j < record.Dictionaries.length; j++) {
                 var dictionary = record.Dictionaries[j];
+                // create link
                 var aLink = document.createElement("a");
-                aLink.href = "?guid=" + dictionary.BookGuid + "&xmlEntryId=" + dictionary.XmlEntryId;
+                aLink.href = "#";
                 aLink.innerHTML = dictionary.BookAcronym;
+                aLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
                 $(aLink).addClass("dictionary-result-headword-book");
+                $(aLink).click(function (event) {
+                    event.preventDefault();
+                    var index = $(event.target).data("entry-index");
+                    var headwordDiv = _this.headwordDescriptionDivs[index];
+                    for (var k = 0; k < _this.headwordDescriptionDivs.length; k++) {
+                        $(_this.headwordDescriptionDivs[k]).addClass("hidden");
+                    }
+                    $(headwordDiv).removeClass("hidden");
+                });
+                headwordLi.appendChild(aLink);
+                // create description
+                var mainHeadwordDiv = document.createElement("div");
                 var descriptionDiv = document.createElement("div");
                 $(descriptionDiv).addClass("loading");
                 this.getAndShowHeadwordDescription(record.Headword, dictionary, descriptionDiv);
@@ -70,11 +86,12 @@ var DictionaryViewer = (function () {
                 dictionaryLink.href = "?guid=" + dictionary.BookGuid;
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
-                headwordLi.appendChild(aLink);
-                descriptionsDiv.appendChild(descriptionDiv);
-                descriptionsDiv.appendChild(commentsDiv);
-                descriptionsDiv.appendChild(dictionaryDiv);
-                descriptionsDiv.appendChild(document.createElement("hr"));
+                mainHeadwordDiv.appendChild(descriptionDiv);
+                mainHeadwordDiv.appendChild(commentsDiv);
+                mainHeadwordDiv.appendChild(dictionaryDiv);
+                mainHeadwordDiv.appendChild(document.createElement("hr"));
+                this.headwordDescriptionDivs.push(mainHeadwordDiv);
+                descriptionsDiv.appendChild(mainHeadwordDiv);
             }
             listUl.appendChild(headwordLi);
         }
