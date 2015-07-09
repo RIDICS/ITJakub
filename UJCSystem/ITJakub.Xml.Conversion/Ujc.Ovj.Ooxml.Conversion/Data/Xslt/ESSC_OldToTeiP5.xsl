@@ -446,7 +446,7 @@
     <xsl:template match="hwcolloc">
         <form type="compound">
         	<xsl:attribute name="id" namespace="http://www.w3.org/XML/1998/namespace">
-        	<xsl:value-of select="concat(preceding::entry[1]/@id, '.hc')"/>
+        	<xsl:value-of select="concat(ancestor::entry[1]/@id, '.hc')"/>
         	<xsl:number from="entry" level="any"  format="1"/>
         </xsl:attribute>
             <xsl:apply-templates />
