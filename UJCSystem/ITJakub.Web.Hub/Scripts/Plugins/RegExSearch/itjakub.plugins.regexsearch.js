@@ -376,7 +376,7 @@ var RegExDatingConditionRangePeriodView = (function () {
                 $(eventData.target).parent().siblings(".slider").find(".slider-tip").hide();
                 _this.periodEnabled = false;
             }
-            _this.refreshDisplayedDate();
+            _this.changedValue();
         });
         var periodNameSpan = window.document.createElement("span");
         periodNameSpan.innerHTML = "Přibližná doba";
@@ -409,7 +409,7 @@ var RegExDatingConditionRangePeriodView = (function () {
                 $(eventData.target).parent().siblings(".slider").find(".slider-tip").hide();
                 _this.decadeEnabled = false;
             }
-            _this.refreshDisplayedDate();
+            _this.changedValue();
         });
         var decadesNameSpan = window.document.createElement("span");
         decadesNameSpan.innerHTML = "Léta";
@@ -431,24 +431,24 @@ var RegExDatingConditionRangePeriodView = (function () {
         $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");
         this.dateDisplayDiv = datingDisplayedValueDiv;
         precisionInpuDiv.appendChild(datingDisplayedValueDiv);
-        this.refreshDisplayedDate();
+        this.changedValue();
     };
     RegExDatingConditionRangePeriodView.prototype.centuryChanged = function (sliderValue) {
         this.selectedCenturyLowerValue = sliderValue.lowNumberValue;
         this.selectedCenturyHigherValue = sliderValue.highNumberValue;
-        this.refreshDisplayedDate();
+        this.changedValue();
     };
     RegExDatingConditionRangePeriodView.prototype.periodChanged = function (sliderValue) {
         this.selectedPeriodLowerValue = sliderValue.lowNumberValue;
         this.selectedPeriodHigherValue = sliderValue.highNumberValue;
-        this.refreshDisplayedDate();
+        this.changedValue();
     };
     RegExDatingConditionRangePeriodView.prototype.decadeChanged = function (sliderValue) {
         this.selectedDecadeLowerValue = sliderValue.lowNumberValue;
         this.selectedDecadeHigherValue = sliderValue.highNumberValue;
-        this.refreshDisplayedDate();
+        this.changedValue();
     };
-    RegExDatingConditionRangePeriodView.prototype.refreshDisplayedDate = function () {
+    RegExDatingConditionRangePeriodView.prototype.changedValue = function () {
         $(this.dateDisplayDiv).empty();
         var lower = this.selectedCenturyLowerValue;
         var higher = this.selectedCenturyHigherValue;
@@ -460,6 +460,8 @@ var RegExDatingConditionRangePeriodView = (function () {
             lower += this.selectedDecadeLowerValue;
             higher += this.selectedDecadeHigherValue;
         }
+        this.lowerValue = lower;
+        this.higherValue = higher;
         $(this.dateDisplayDiv).html("(" + lower + "-" + higher + ")");
     };
     RegExDatingConditionRangePeriodView.prototype.makeSlider = function (valuesArray, nameEnding, callbackFunction) {
@@ -490,12 +492,19 @@ var RegExDatingConditionRangePeriodView = (function () {
         $(sliderHandle).append(sliderTooltip);
         return slider;
     };
+    RegExDatingConditionRangePeriodView.prototype.getLowerValue = function () {
+        return this.lowerValue;
+    };
+    RegExDatingConditionRangePeriodView.prototype.getHigherValue = function () {
+        return this.higherValue;
+    };
     return RegExDatingConditionRangePeriodView;
 })();
 var RegExDatingConditionRangeYearView = (function () {
     function RegExDatingConditionRangeYearView() {
     }
     RegExDatingConditionRangeYearView.prototype.makeRangeView = function (container) {
+        var _this = this;
         var precisionInpuDiv = container;
         var textInput = document.createElement("input");
         textInput.type = "number";
@@ -505,10 +514,11 @@ var RegExDatingConditionRangeYearView = (function () {
         textInput.id = "800";
         // allows only digits input
         $(textInput).keyup(function (e) {
-            var value = $(this).val();
+            var value = $(e.target).val();
             value.replace(/[^0-9]/g, '');
-            $(this).val(value);
-            $(this).text(value);
+            $(e.target).val(value);
+            $(e.target).text(value);
+            _this.value = value;
         });
         var spanInput = document.createElement("span");
         $(spanInput).addClass("regex-dating-input-span");
@@ -516,12 +526,19 @@ var RegExDatingConditionRangeYearView = (function () {
         precisionInpuDiv.appendChild(spanInput);
         precisionInpuDiv.appendChild(textInput);
     };
+    RegExDatingConditionRangeYearView.prototype.getLowerValue = function () {
+        return this.value;
+    };
+    RegExDatingConditionRangeYearView.prototype.getHigherValue = function () {
+        return this.value;
+    };
     return RegExDatingConditionRangeYearView;
 })();
 var RegExDatingCondition = (function (_super) {
     __extends(RegExDatingCondition, _super);
     function RegExDatingCondition(parent) {
         _super.call(this, parent);
+        this.DATING_AROUND = 3; //const
     }
     RegExDatingCondition.prototype.makeRegExCondition = function (conditionContainerDiv) {
         var datingDiv = document.createElement('div');
@@ -607,7 +624,26 @@ var RegExDatingCondition = (function (_super) {
         }
     };
     RegExDatingCondition.prototype.getConditionValue = function () {
-        return null; //TODO
+        var datingValue = new DatingCriteriaDescription();
+        switch (this.datingRange) {
+            case 1 /* YoungerThen */:
+                datingValue.notAfter = this.firstDateView.getLowerValue();
+                break;
+            case 0 /* OlderThen */:
+                datingValue.notBefore = this.firstDateView.getHigherValue();
+                break;
+            case 3 /* Around */:
+                datingValue.notAfter = this.firstDateView.getHigherValue() + this.DATING_AROUND;
+                datingValue.notBefore = this.firstDateView.getLowerValue() - this.DATING_AROUND;
+                break;
+            case 2 /* Between */:
+                datingValue.notBefore = this.firstDateView.getLowerValue();
+                datingValue.notAfter = this.secondDateView.getHigherValue();
+                break;
+            default:
+                break;
+        }
+        return datingValue;
     };
     return RegExDatingCondition;
 })(RegExConditionBase);
@@ -900,6 +936,13 @@ var ConditionResult = (function () {
     }
     return ConditionResult;
 })();
+var DatingCriteriaDescription = (function (_super) {
+    __extends(DatingCriteriaDescription, _super);
+    function DatingCriteriaDescription() {
+        _super.apply(this, arguments);
+    }
+    return DatingCriteriaDescription;
+})(ConditionResult);
 var WordsCriteriaListDescription = (function (_super) {
     __extends(WordsCriteriaListDescription, _super);
     function WordsCriteriaListDescription() {

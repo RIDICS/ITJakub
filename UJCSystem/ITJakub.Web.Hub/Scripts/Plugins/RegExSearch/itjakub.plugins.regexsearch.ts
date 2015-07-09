@@ -411,6 +411,9 @@ class RegExWordConditionList extends RegExConditionBase {
 
 interface IRegExDatingConditionView {
     makeRangeView(container: HTMLDivElement);
+
+    getLowerValue(): number;
+    getHigherValue(): number;
 }
 
 class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
@@ -420,6 +423,9 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
     private selectedPeriodHigherValue: number;
     private selectedDecadeLowerValue: number;
     private selectedDecadeHigherValue: number;
+
+    private lowerValue: number;
+    private higherValue: number;
 
     private periodEnabled: boolean;
     private decadeEnabled: boolean;
@@ -469,7 +475,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
                 this.periodEnabled = false;
             }
 
-            this.refreshDisplayedDate();
+            this.changedValue();
         });
 
         var periodNameSpan: HTMLSpanElement = window.document.createElement("span");
@@ -506,7 +512,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
                 this.decadeEnabled = false;
             }
 
-            this.refreshDisplayedDate();
+            this.changedValue();
         });
 
         var decadesNameSpan: HTMLSpanElement = window.document.createElement("span");
@@ -530,28 +536,28 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         this.dateDisplayDiv = datingDisplayedValueDiv;
         precisionInpuDiv.appendChild(datingDisplayedValueDiv);
 
-        this.refreshDisplayedDate();
+        this.changedValue();
     }
 
     private centuryChanged(sliderValue: DatingSliderValue) {
         this.selectedCenturyLowerValue = sliderValue.lowNumberValue;
         this.selectedCenturyHigherValue = sliderValue.highNumberValue;
-        this.refreshDisplayedDate();
+        this.changedValue();
     }
 
     private periodChanged(sliderValue: DatingSliderValue) {
         this.selectedPeriodLowerValue = sliderValue.lowNumberValue;
         this.selectedPeriodHigherValue = sliderValue.highNumberValue;
-        this.refreshDisplayedDate();
+        this.changedValue();
     }
 
     private decadeChanged(sliderValue: DatingSliderValue) {
         this.selectedDecadeLowerValue = sliderValue.lowNumberValue;
         this.selectedDecadeHigherValue = sliderValue.highNumberValue;
-        this.refreshDisplayedDate();
+        this.changedValue();
     }
 
-    private refreshDisplayedDate() {
+    private changedValue() {
         $(this.dateDisplayDiv).empty();
         var lower = this.selectedCenturyLowerValue;
         var higher = this.selectedCenturyHigherValue;
@@ -566,6 +572,8 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
             higher += this.selectedDecadeHigherValue;
         }
 
+        this.lowerValue = lower;
+        this.higherValue = higher;
         $(this.dateDisplayDiv).html("(" + lower + "-" + higher + ")");
     }
 
@@ -603,9 +611,15 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         return slider;
     }
+
+    getLowerValue(): number { return this.lowerValue; }
+
+    getHigherValue(): number { return this.higherValue; }
 }
 
 class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
+
+    private value: number;
 
     makeRangeView(container: HTMLDivElement) {
         var precisionInpuDiv = container;
@@ -617,11 +631,13 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
         textInput.id = "800";
 
         // allows only digits input
-        $(textInput).keyup(function (e) {
-            var value = $(this).val();
+        $(textInput).keyup((e: Event)=> {
+            var value = $(e.target).val();
             value.replace(/[^0-9]/g, '');
-            $(this).val(value);
-            $(this).text(value);   
+            $(e.target).val(value);
+            $(e.target).text(value);
+
+            this.value = value;
         });
 
         var spanInput: HTMLSpanElement = document.createElement("span");
@@ -631,9 +647,16 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
         precisionInpuDiv.appendChild(spanInput);
         precisionInpuDiv.appendChild(textInput);
     }
+
+
+    getLowerValue(): number { return this.value; }
+
+    getHigherValue(): number { return this.value; }
 }
 
 class RegExDatingCondition extends RegExConditionBase {
+    private DATING_AROUND: number = 3; //const
+
     private datingPrecision: DatingPrecisionEnum;
     private datingRange: DatingRangeEnum;
 
@@ -754,7 +777,30 @@ class RegExDatingCondition extends RegExConditionBase {
     }
 
     getConditionValue(): ConditionResult {
-        return null; //TODO
+
+        var datingValue = new DatingCriteriaDescription();
+
+        switch (this.datingRange) {
+            case DatingRangeEnum.YoungerThen:
+                datingValue.notAfter = this.firstDateView.getLowerValue();
+                break;
+            case DatingRangeEnum.OlderThen:
+                datingValue.notBefore = this.firstDateView.getHigherValue();
+                break;
+            case DatingRangeEnum.Around:
+                datingValue.notAfter = this.firstDateView.getHigherValue() + this.DATING_AROUND;
+                datingValue.notBefore = this.firstDateView.getLowerValue() - this.DATING_AROUND;
+                break;
+            case DatingRangeEnum.Between:
+                datingValue.notBefore = this.firstDateView.getLowerValue();
+                datingValue.notAfter = this.secondDateView.getHigherValue();
+                break;
+            
+            default:
+                break;
+        }
+
+        return datingValue;
     }
 
 
@@ -1122,6 +1168,10 @@ class ConditionResult {
     searchType: number;   
 }
 
+class DatingCriteriaDescription extends ConditionResult {
+    notBefore: number;
+    notAfter: number;
+}
 
 class WordsCriteriaListDescription extends ConditionResult {
     wordCriteriaDescription: Array<WordCriteriaDescription>;
