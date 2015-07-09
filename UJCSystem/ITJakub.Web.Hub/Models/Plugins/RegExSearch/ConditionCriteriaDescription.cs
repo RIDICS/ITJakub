@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace ITJakub.Web.Hub.Models.Plugins.RegExSearch
 {
-    [JsonConverter(typeof(ConditionCriteriaDescriptionConverter))]
+    [JsonConverter(typeof(ConditionCriteriaWrapperConverter))]
+    public class ConditonCriteriaDescriptionWrapper
+    {
+        public ConditionTypeEnum ConditionType { get; set; }
+        public ConditionCriteriaDescription ConditionDescription { get; set; }
+    }
+
     public class ConditionCriteriaDescription
     {
         public int SearchType { get; set; }
-        public int ConditionType { get; set; }
     }
 
     public class WordListCriteriaDescription : ConditionCriteriaDescription
@@ -44,38 +48,54 @@ namespace ITJakub.Web.Hub.Models.Plugins.RegExSearch
     }
 
 
-    public class ConditionCriteriaDescriptionConverter : CustomCreationConverter<ConditionCriteriaDescription>
+    public class ConditionCriteriaWrapperConverter : JsonConverter
     {
-        public ConditionCriteriaDescription Create(Type objectType, JObject jObject)
+        public override bool CanConvert(Type objectType)
         {
-            var type = (string) jObject.Property("conditionType");
-            ConditionTypeEnum conditionTypeEnum;
-
-            if (Enum.TryParse(type, out conditionTypeEnum))
-            {
-                switch (conditionTypeEnum)
-                {
-                    case ConditionTypeEnum.DatingList:
-                        return new DatingListCriteriaDescription();
-                    case ConditionTypeEnum.WordList:
-                        return new WordListCriteriaDescription();
-                }
-            }
-
-            throw new ApplicationException(string.Format("The type {0} is not supported!", type));
+            return (objectType == typeof(ConditonCriteriaDescriptionWrapper));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var jObject = JObject.Load(reader);
-            var target = Create(objectType, jObject);
-            serializer.Populate(jObject.CreateReader(), target);
-            return target;
+            var result = new ConditonCriteriaDescriptionWrapper();
+            JObject jObject = JObject.Load(reader);
+            var type = (string)jObject["conditionType"];
+            ConditionTypeEnum conditionTypeEnum;
+
+            if (Enum.TryParse(type, out conditionTypeEnum))
+            {
+                result.ConditionType = conditionTypeEnum;
+                var conditonDescription = jObject["conditionDescription"]; //TODO add to json
+                switch (conditionTypeEnum)
+                {
+                    case ConditionTypeEnum.DatingList:
+                        result.ConditionDescription = conditonDescription.ToObject<DatingListCriteriaDescription>(serializer);
+                        //return new DatingListCriteriaDescription();
+                        break;
+                    case ConditionTypeEnum.WordList:
+                        result.ConditionDescription = conditonDescription.ToObject<WordListCriteriaDescription>(serializer);
+                        //return new WordListCriteriaDescription();
+                        break;
+                }
+            }
+
+            return result;
         }
 
-        public override ConditionCriteriaDescription Create(Type objectType)
+        public override bool CanRead
+        {
+            get { return true; }
+        }
+
+        public override bool CanWrite
+        {
+            get { return false; }
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }
     }
+
 }

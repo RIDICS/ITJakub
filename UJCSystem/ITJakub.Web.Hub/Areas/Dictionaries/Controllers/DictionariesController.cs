@@ -106,11 +106,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         }
 
 
-        public ActionResult SearchCriteria(IList<ConditionCriteriaDescription> searchData)
+        public ActionResult SearchCriteria(ConditonCriteriaDescriptions searchData)
         {
-            var dating = searchData.First() as DatingListCriteriaDescription;
-            var wordListCriteriaContracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
-            m_mainServiceClient.SearchByCriteria(wordListCriteriaContracts);
+            var dating = searchData.Descriptions.FirstOrDefault() as DatingListCriteriaDescription;
+            //var wordListCriteriaContracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
+            //m_mainServiceClient.SearchByCriteria(wordListCriteriaContracts);
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
