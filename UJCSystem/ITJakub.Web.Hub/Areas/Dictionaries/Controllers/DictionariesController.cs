@@ -6,6 +6,7 @@ using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
@@ -104,8 +105,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
+
         public ActionResult SearchCriteria(IList<ConditionCriteriaDescription> searchData)
         {
+            var dating = searchData.First() as DatingListCriteriaDescription;
             var wordListCriteriaContracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
             m_mainServiceClient.SearchByCriteria(wordListCriteriaContracts);
             return Json(new {}, JsonRequestBehavior.AllowGet);

@@ -237,6 +237,7 @@ var RegExConditionListItem = (function (_super) {
     RegExConditionListItem.prototype.getConditionValue = function () {
         var conditionResult = this.innerCondition.getConditionValue();
         conditionResult.searchType = this.getSearchType();
+        conditionResult.conditionType = this.innerCondition.getConditionType();
         return conditionResult;
     };
     return RegExConditionListItem;
@@ -250,6 +251,9 @@ var RegExConditionBase = (function (_super) {
     RegExConditionBase.prototype.makeRegExCondition = function (conditionContainerDiv) {
     };
     RegExConditionBase.prototype.getConditionValue = function () {
+        return null;
+    };
+    RegExConditionBase.prototype.getConditionType = function () {
         return null;
     };
     return RegExConditionBase;
@@ -297,9 +301,12 @@ var RegExWordConditionList = (function (_super) {
         var criteriaDescriptions = new WordsCriteriaListDescription();
         for (var i = 0; i < this.conditionInputArray.length; i++) {
             var regExWordCondition = this.conditionInputArray[i];
-            criteriaDescriptions.wordCriteriaDescription.push(regExWordCondition.getConditionsValue());
+            criteriaDescriptions.wordListCriteriaDescription.push(regExWordCondition.getConditionsValue());
         }
         return criteriaDescriptions;
+    };
+    RegExWordConditionList.prototype.getConditionType = function () {
+        return 0 /* WordList */;
     };
     RegExWordConditionList.prototype.resetWords = function () {
         $(this.wordListContainerDiv).empty();
@@ -518,7 +525,7 @@ var RegExDatingConditionRangeYearView = (function () {
             value.replace(/[^0-9]/g, '');
             $(e.target).val(value);
             $(e.target).text(value);
-            _this.value = value;
+            _this.value = parseInt(value);
         });
         var spanInput = document.createElement("span");
         $(spanInput).addClass("regex-dating-input-span");
@@ -624,6 +631,7 @@ var RegExDatingCondition = (function (_super) {
         }
     };
     RegExDatingCondition.prototype.getConditionValue = function () {
+        var datingList = new DatingCriteriaListDescription();
         var datingValue = new DatingCriteriaDescription();
         switch (this.datingRange) {
             case 1 /* YoungerThen */:
@@ -643,7 +651,11 @@ var RegExDatingCondition = (function (_super) {
             default:
                 break;
         }
-        return datingValue;
+        datingList.datingListCriteriaDescription.push(datingValue); //TODO make array of datingValues (logical OR between datings is possible)
+        return datingList;
+    };
+    RegExDatingCondition.prototype.getConditionType = function () {
+        return 1 /* DatingList */;
     };
     return RegExDatingCondition;
 })(RegExConditionBase);
@@ -936,18 +948,24 @@ var ConditionResult = (function () {
     }
     return ConditionResult;
 })();
-var DatingCriteriaDescription = (function (_super) {
-    __extends(DatingCriteriaDescription, _super);
+var DatingCriteriaListDescription = (function (_super) {
+    __extends(DatingCriteriaListDescription, _super);
+    function DatingCriteriaListDescription() {
+        _super.call(this);
+        this.datingListCriteriaDescription = new Array();
+    }
+    return DatingCriteriaListDescription;
+})(ConditionResult);
+var DatingCriteriaDescription = (function () {
     function DatingCriteriaDescription() {
-        _super.apply(this, arguments);
     }
     return DatingCriteriaDescription;
-})(ConditionResult);
+})();
 var WordsCriteriaListDescription = (function (_super) {
     __extends(WordsCriteriaListDescription, _super);
     function WordsCriteriaListDescription() {
         _super.call(this);
-        this.wordCriteriaDescription = new Array();
+        this.wordListCriteriaDescription = new Array();
     }
     return WordsCriteriaListDescription;
 })(ConditionResult);
@@ -980,6 +998,17 @@ var SearchTypeEnum;
     SearchTypeEnum[SearchTypeEnum["Dating"] = 3] = "Dating";
     SearchTypeEnum[SearchTypeEnum["Text"] = 4] = "Text";
 })(SearchTypeEnum || (SearchTypeEnum = {}));
+/*
+ * ConditionTypeEnum must match with ConditionTypeEnum number values in C#
+        [EnumMember] WordList = 0,
+        [EnumMember] DatingList = 1,
+ *
+ */
+var ConditionTypeEnum;
+(function (ConditionTypeEnum) {
+    ConditionTypeEnum[ConditionTypeEnum["WordList"] = 0] = "WordList";
+    ConditionTypeEnum[ConditionTypeEnum["DatingList"] = 1] = "DatingList";
+})(ConditionTypeEnum || (ConditionTypeEnum = {}));
 var DatingPrecisionEnum;
 (function (DatingPrecisionEnum) {
     DatingPrecisionEnum[DatingPrecisionEnum["Year"] = 0] = "Year";

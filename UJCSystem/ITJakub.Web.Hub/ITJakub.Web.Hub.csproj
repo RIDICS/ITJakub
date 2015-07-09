@@ -188,7 +188,6 @@
     <Compile Include="AutoMapperProfiles\ConditionCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescription.cs" />
-    <Compile Include="Models\Plugins\RegExSearch\WordCriteriaDescription.cs" />
     <Compile Include="Areas\Dictionaries\RouteConfig.cs" />
     <Compile Include="Areas\Editions\BundleConfig.cs" />
     <Compile Include="Areas\Dictionaries\Controllers\DictionariesController.cs" />

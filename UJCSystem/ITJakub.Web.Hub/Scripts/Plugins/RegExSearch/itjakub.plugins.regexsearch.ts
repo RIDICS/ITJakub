@@ -206,7 +206,7 @@ class RegExConditionListItem extends RegExSearchBase {
         return delimeterDiv;
     }
 
-    getSearchType(): number {
+    getSearchType(): SearchTypeEnum {
         return this.selectedSearchType;
     }
 
@@ -284,6 +284,7 @@ class RegExConditionListItem extends RegExSearchBase {
     getConditionValue(): ConditionResult {
         var conditionResult: ConditionResult = this.innerCondition.getConditionValue();
         conditionResult.searchType = this.getSearchType();
+        conditionResult.conditionType = this.innerCondition.getConditionType();
         return conditionResult;
     }
 }
@@ -293,6 +294,8 @@ interface IRegExConditionBase {
     makeRegExCondition(conditionContainerDiv: HTMLDivElement);
 
     getConditionValue(): ConditionResult;
+
+    getConditionType(): ConditionTypeEnum;
 
 }
 
@@ -306,7 +309,9 @@ class RegExConditionBase extends RegExSearchBase implements IRegExConditionBase 
 
     makeRegExCondition(conditionContainerDiv: HTMLDivElement) { }
 
-    getConditionValue() : ConditionResult { return null; }
+    getConditionValue(): ConditionResult { return null; }
+
+    getConditionType(): ConditionTypeEnum { return null; }
 }
 
 class RegExWordConditionList extends RegExConditionBase {
@@ -366,9 +371,13 @@ class RegExWordConditionList extends RegExConditionBase {
         var criteriaDescriptions = new WordsCriteriaListDescription();
         for (var i = 0; i < this.conditionInputArray.length; i++) {
             var regExWordCondition = this.conditionInputArray[i];
-            criteriaDescriptions.wordCriteriaDescription.push(regExWordCondition.getConditionsValue());
+            criteriaDescriptions.wordListCriteriaDescription.push(regExWordCondition.getConditionsValue());
         }
         return criteriaDescriptions;
+    }
+
+    getConditionType(): ConditionTypeEnum {
+        return ConditionTypeEnum.WordList;
     }
 
     resetWords() {
@@ -637,7 +646,7 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
             $(e.target).val(value);
             $(e.target).text(value);
 
-            this.value = value;
+            this.value = parseInt(value);
         });
 
         var spanInput: HTMLSpanElement = document.createElement("span");
@@ -778,6 +787,7 @@ class RegExDatingCondition extends RegExConditionBase {
 
     getConditionValue(): ConditionResult {
 
+        var datingList = new DatingCriteriaListDescription();
         var datingValue = new DatingCriteriaDescription();
 
         switch (this.datingRange) {
@@ -800,10 +810,13 @@ class RegExDatingCondition extends RegExConditionBase {
                 break;
         }
 
-        return datingValue;
+        datingList.datingListCriteriaDescription.push(datingValue); //TODO make array of datingValues (logical OR between datings is possible)
+        return datingList;
     }
 
-
+    getConditionType(): ConditionTypeEnum {
+        return ConditionTypeEnum.DatingList;
+    }
 }
 
 class DatingSliderValue {
@@ -1165,20 +1178,30 @@ class RegExWordInput extends RegExSearchBase {
 }
 
 class ConditionResult {
-    searchType: number;   
+    searchType: SearchTypeEnum;         //enum Author, Text, Editor etc.
+    conditionType: ConditionTypeEnum;      //type of derived class ie WordList = WordList
 }
 
-class DatingCriteriaDescription extends ConditionResult {
+class DatingCriteriaListDescription extends ConditionResult {
+    datingListCriteriaDescription: Array<DatingCriteriaDescription>;
+
+    constructor() {
+        super();
+        this.datingListCriteriaDescription = new Array<DatingCriteriaDescription>();
+    }
+}
+
+class DatingCriteriaDescription  {
     notBefore: number;
     notAfter: number;
 }
 
 class WordsCriteriaListDescription extends ConditionResult {
-    wordCriteriaDescription: Array<WordCriteriaDescription>;
+    wordListCriteriaDescription: Array<WordCriteriaDescription>;
 
     constructor() {
         super();
-        this.wordCriteriaDescription = new Array<WordCriteriaDescription>();
+        this.wordListCriteriaDescription = new Array<WordCriteriaDescription>();
     }
 }
 
@@ -1213,6 +1236,17 @@ enum SearchTypeEnum {
     Responsible = 2,
     Dating = 3,
     Text = 4
+}
+
+/*
+ * ConditionTypeEnum must match with ConditionTypeEnum number values in C#
+        [EnumMember] WordList = 0,
+        [EnumMember] DatingList = 1,
+ * 
+ */
+enum ConditionTypeEnum {
+    WordList = 0,
+    DatingList = 1,
 }
 
 enum DatingPrecisionEnum {
