@@ -24,7 +24,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         public ActionResult GetBookPageByXmlId(string bookId, string pageXmlId)
         {
             var mainServiceClient = new ItJakubServiceClient();
-            var text = mainServiceClient.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html);
+            var text = mainServiceClient.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html, BookTypeEnumContract.Edition);
             return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
         }
 

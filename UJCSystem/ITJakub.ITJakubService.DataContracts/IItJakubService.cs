@@ -16,7 +16,7 @@ namespace ITJakub.ITJakubService.DataContracts
         string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
-        string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat);
+				string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract);
 
         [OperationContract]
         string GetBookPagesByName(string bookGuid, string startPageName, string endPageName,
