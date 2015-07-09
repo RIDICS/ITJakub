@@ -3,6 +3,8 @@ using System.IO;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.MobileApps.MobileContracts;
+using ITJakub.Shared.Contracts;
+using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 using OutputFormatEnumContract = ITJakub.Shared.Contracts.OutputFormatEnumContract;
 
 namespace ITJakub.ITJakubService.Services
@@ -34,9 +36,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPagesListMobile(bookGuid);
         }
 
-        public string GetPageAsRtf(string bookGuid, string pageId)
+		public string GetPageAsRtf(string bookGuid, string pageId)
         {
-            return m_bookManager.GetBookPageByXmlId(bookGuid, pageId, OutputFormatEnumContract.Rtf);
+            return m_bookManager.GetBookPageByXmlId(bookGuid, pageId, OutputFormatEnumContract.Rtf, BookTypeEnumContract.Edition);
         }
 
         public Stream GetPagePhoto(string bookGuid, string pageId)

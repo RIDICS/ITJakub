@@ -79,11 +79,11 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
-        public string GetBookPageByXmlId(string documentId, string pageXmlId, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByXmlId(string documentId, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
             try
             {
-                return Channel.GetBookPageByXmlId(documentId, pageXmlId, resultFormat);
+                return Channel.GetBookPageByXmlId(documentId, pageXmlId, resultFormat, bookTypeContract);
             }
             catch (CommunicationException ex)
             {
