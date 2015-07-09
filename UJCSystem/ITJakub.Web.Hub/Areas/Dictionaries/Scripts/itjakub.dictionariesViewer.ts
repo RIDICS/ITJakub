@@ -11,6 +11,8 @@
     private isLazyLoad: boolean;
     private isRequestToPrint = false;
     private headwordDescriptionDivs: HTMLDivElement[];
+    private dictionariesInfo: IHeadwordBookInfo[];
+    private headwordList: string[];
 
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean = false) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
@@ -18,6 +20,12 @@
         this.headwordListContainer = headwordListContainer;
         this.isLazyLoad = lazyLoad;
         this.pagination = new Pagination(paginationContainer);
+
+        window.matchMedia("print").addListener(mql => {
+            if (mql.matches) {
+                this.loadAllHeadwords();
+            }
+        });
     }
 
     public createViewer(recordCount: number, searchUrl: string, selectedBookIds: number[], query: string = null) {
@@ -54,6 +62,8 @@
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
         this.headwordDescriptionDivs = [];
+        this.dictionariesInfo = [];
+        this.headwordList = [];
 
         var listUl = document.createElement("ul");
         var descriptionsDiv = document.createElement("div");
@@ -79,12 +89,13 @@
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
                 var descriptionDiv = document.createElement("div");
-                $(descriptionDiv).addClass("loading");
+                $(descriptionDiv).addClass("loading")
+                    .addClass("dictionary-entry-description-container");
 
                 if (this.isLazyLoad) {
-                    this.prepareLazyLoad(record.Headword, dictionary, descriptionDiv);
+                    this.prepareLazyLoad(mainHeadwordDiv);
                 } else {
-                    this.getAndShowHeadwordDescription(record.Headword, dictionary, descriptionDiv);
+                    this.getAndShowHeadwordDescription(record.Headword, dictionary.BookGuid, dictionary.XmlEntryId, descriptionDiv);
                 }
 
                 var commentsDiv = document.createElement("div");
@@ -106,7 +117,10 @@
                 mainHeadwordDiv.appendChild(commentsDiv);
                 mainHeadwordDiv.appendChild(dictionaryDiv);
                 mainHeadwordDiv.appendChild(document.createElement("hr"));
+                mainHeadwordDiv.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
                 this.headwordDescriptionDivs.push(mainHeadwordDiv);
+                this.dictionariesInfo.push(dictionary);
+                this.headwordList.push(record.Headword);
 
                 descriptionsDiv.appendChild(mainHeadwordDiv);
 
@@ -139,28 +153,31 @@
             }
             $(headwordDiv).removeClass("hidden");
 
-            if ($(headwordDiv).children().hasClass("loading")) {
-                this.getAndShowHeadwordDescription(headword, headwordInfo, container);
+            if ($(headwordDiv).hasClass("lazy-loading")) {
+                this.loadHeadwordDescription(index);
             }
         });
     }
 
-    private prepareLazyLoad(headword: string, headwordInfo: IHeadwordBookInfo, container: HTMLDivElement) {
-        $(container).addClass("dictionary-lazy-loading");
-        $(container).bind("appearing", () => {
-            this.getAndShowHeadwordDescription(headword, headwordInfo, container);
+    private prepareLazyLoad(mainDescriptionElement: HTMLDivElement) {
+        $(mainDescriptionElement).addClass("lazy-loading");
+        $(mainDescriptionElement).bind("appearing", event => {
+            var descriptionDiv = event.target;
+            var index = $(descriptionDiv).data("entry-index");
+            this.loadHeadwordDescription(index);
         });
     }
 
-    private getAndShowHeadwordDescription(headword: string, headwordInfo: IHeadwordBookInfo, container: HTMLDivElement) {
+    private getAndShowHeadwordDescription(headword: string, bookGuid: string, xmlEntryId: string, container: HTMLDivElement) {
+        console.log("load: " + headword);
         $(container).unbind("appearing");
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordDescription",
             data: {
-                bookGuid: headwordInfo.BookGuid,
-                xmlEntryId: headwordInfo.XmlEntryId
+                bookGuid: bookGuid,
+                xmlEntryId: xmlEntryId
             },
             dataType: "json",
             contentType: "application/json",
@@ -181,11 +198,30 @@
         });
     }
 
+    private loadHeadwordDescription(index: number) {
+        var mainDescriptionDiv = this.headwordDescriptionDivs[index];
+        var headword = this.headwordList[index];
+        var dictionaryInfo = this.dictionariesInfo[index];
+        var descriptionContainer = $(".dictionary-entry-description-container", mainDescriptionDiv).get(0);
+
+        $(mainDescriptionDiv).removeClass("lazy-loading");
+        this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookGuid, dictionaryInfo.XmlEntryId, <HTMLDivElement>descriptionContainer);
+    }
+
     private isAllLoaded(): boolean {
         var descriptions = $(this.headwordDescriptionContainer);
         var notLoaded = $(".loading", descriptions);
         var notLoadedVisible = notLoaded.parent(":not(.hidden)");
         return notLoadedVisible.length === 0;
+    }
+
+    private loadAllHeadwords() {
+        for (var i = 0; i < this.headwordDescriptionDivs.length; i++) {
+            var descriptionDiv = this.headwordDescriptionDivs[i];
+            if ($(descriptionDiv).hasClass("lazy-loading") && !$(descriptionDiv).hasClass("hidden")) {
+                this.loadHeadwordDescription(i);
+            }
+        }
     }
 
     public print() {

@@ -1,5 +1,6 @@
 var DictionaryViewer = (function () {
     function DictionaryViewer(headwordListContainer, paginationContainer, headwordDescriptionContainer, lazyLoad) {
+        var _this = this;
         if (lazyLoad === void 0) { lazyLoad = false; }
         this.pageSize = 50;
         this.isRequestToPrint = false;
@@ -8,6 +9,11 @@ var DictionaryViewer = (function () {
         this.headwordListContainer = headwordListContainer;
         this.isLazyLoad = lazyLoad;
         this.pagination = new Pagination(paginationContainer);
+        window.matchMedia("print").addListener(function (mql) {
+            if (mql.matches) {
+                _this.loadAllHeadwords();
+            }
+        });
     }
     DictionaryViewer.prototype.createViewer = function (recordCount, searchUrl, selectedBookIds, query) {
         if (query === void 0) { query = null; }
@@ -42,6 +48,8 @@ var DictionaryViewer = (function () {
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
         this.headwordDescriptionDivs = [];
+        this.dictionariesInfo = [];
+        this.headwordList = [];
         var listUl = document.createElement("ul");
         var descriptionsDiv = document.createElement("div");
         for (var i = 0; i < headwords.length; i++) {
@@ -59,12 +67,12 @@ var DictionaryViewer = (function () {
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
                 var descriptionDiv = document.createElement("div");
-                $(descriptionDiv).addClass("loading");
+                $(descriptionDiv).addClass("loading").addClass("dictionary-entry-description-container");
                 if (this.isLazyLoad) {
-                    this.prepareLazyLoad(record.Headword, dictionary, descriptionDiv);
+                    this.prepareLazyLoad(mainHeadwordDiv);
                 }
                 else {
-                    this.getAndShowHeadwordDescription(record.Headword, dictionary, descriptionDiv);
+                    this.getAndShowHeadwordDescription(record.Headword, dictionary.BookGuid, dictionary.XmlEntryId, descriptionDiv);
                 }
                 var commentsDiv = document.createElement("div");
                 var commentsLink = document.createElement("a");
@@ -82,7 +90,10 @@ var DictionaryViewer = (function () {
                 mainHeadwordDiv.appendChild(commentsDiv);
                 mainHeadwordDiv.appendChild(dictionaryDiv);
                 mainHeadwordDiv.appendChild(document.createElement("hr"));
+                mainHeadwordDiv.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
                 this.headwordDescriptionDivs.push(mainHeadwordDiv);
+                this.dictionariesInfo.push(dictionary);
+                this.headwordList.push(record.Headword);
                 descriptionsDiv.appendChild(mainHeadwordDiv);
                 // create link
                 var aLink = document.createElement("a");
@@ -108,19 +119,21 @@ var DictionaryViewer = (function () {
                 $(_this.headwordDescriptionDivs[k]).addClass("hidden");
             }
             $(headwordDiv).removeClass("hidden");
-            if ($(headwordDiv).children().hasClass("loading")) {
-                _this.getAndShowHeadwordDescription(headword, headwordInfo, container);
+            if ($(headwordDiv).hasClass("lazy-loading")) {
+                _this.loadHeadwordDescription(index);
             }
         });
     };
-    DictionaryViewer.prototype.prepareLazyLoad = function (headword, headwordInfo, container) {
+    DictionaryViewer.prototype.prepareLazyLoad = function (mainDescriptionElement) {
         var _this = this;
-        $(container).addClass("dictionary-lazy-loading");
-        $(container).bind("appearing", function () {
-            _this.getAndShowHeadwordDescription(headword, headwordInfo, container);
+        $(mainDescriptionElement).addClass("lazy-loading");
+        $(mainDescriptionElement).bind("appearing", function (event) {
+            var descriptionDiv = event.target;
+            var index = $(descriptionDiv).data("entry-index");
+            _this.loadHeadwordDescription(index);
         });
     };
-    DictionaryViewer.prototype.getAndShowHeadwordDescription = function (headword, headwordInfo, container) {
+    DictionaryViewer.prototype.getAndShowHeadwordDescription = function (headword, bookGuid, xmlEntryId, container) {
         var _this = this;
         $(container).unbind("appearing");
         $.ajax({
@@ -128,8 +141,8 @@ var DictionaryViewer = (function () {
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordDescription",
             data: {
-                bookGuid: headwordInfo.BookGuid,
-                xmlEntryId: headwordInfo.XmlEntryId
+                bookGuid: bookGuid,
+                xmlEntryId: xmlEntryId
             },
             dataType: "json",
             contentType: "application/json",
@@ -149,11 +162,27 @@ var DictionaryViewer = (function () {
             }
         });
     };
+    DictionaryViewer.prototype.loadHeadwordDescription = function (index) {
+        var mainDescriptionDiv = this.headwordDescriptionDivs[index];
+        var headword = this.headwordList[index];
+        var dictionaryInfo = this.dictionariesInfo[index];
+        var descriptionContainer = $(".dictionary-entry-description-container", mainDescriptionDiv).get(0);
+        $(mainDescriptionDiv).removeClass("lazy-loading");
+        this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookGuid, dictionaryInfo.XmlEntryId, descriptionContainer);
+    };
     DictionaryViewer.prototype.isAllLoaded = function () {
         var descriptions = $(this.headwordDescriptionContainer);
         var notLoaded = $(".loading", descriptions);
         var notLoadedVisible = notLoaded.parent(":not(.hidden)");
         return notLoadedVisible.length === 0;
+    };
+    DictionaryViewer.prototype.loadAllHeadwords = function () {
+        for (var i = 0; i < this.headwordDescriptionDivs.length; i++) {
+            var descriptionDiv = this.headwordDescriptionDivs[i];
+            if ($(descriptionDiv).hasClass("lazy-loading") && !$(descriptionDiv).hasClass("hidden")) {
+                this.loadHeadwordDescription(i);
+            }
+        }
     };
     DictionaryViewer.prototype.print = function () {
         // check if all entries are loaded
