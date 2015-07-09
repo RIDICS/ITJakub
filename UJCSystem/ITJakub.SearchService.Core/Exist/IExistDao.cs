@@ -39,5 +39,9 @@ namespace ITJakub.SearchService.Core.Exist
         [OperationContract]
         [ExistQuery(XqueryName = "get-entry.xquery")]
         string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string outputFormat);
+
+        [OperationContract]
+        [ExistQuery(XqueryName = "list-search-editions.xquery")]
+        string ListSearchEditionsResults(string serializedSearchCriteria);
     }
 }

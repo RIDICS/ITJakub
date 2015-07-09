@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
@@ -10,6 +10,7 @@ using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.Core.Search;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching;
 using MobileContracts = ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.ITJakubService.Core
@@ -19,15 +20,17 @@ namespace ITJakub.ITJakubService.Core
         private readonly BookRepository m_bookRepository;
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly CategoryRepository m_categoryRepository;
-        private readonly SearchCriteriaDirector m_searchCriteriaDirector;
+        private readonly MetadataSearchCriteriaDirector m_searchCriteriaDirector;
+        private readonly SearchServiceClient m_searchServiceClient;
         private const int PrefetchRecordCount = 5;
 
-        public SearchManager(BookRepository bookRepository, BookVersionRepository bookVersionRepository, CategoryRepository categoryRepository, SearchCriteriaDirector searchCriteriaDirector)
+        public SearchManager(BookRepository bookRepository, BookVersionRepository bookVersionRepository, CategoryRepository categoryRepository, MetadataSearchCriteriaDirector searchCriteriaDirector, SearchServiceClient searchServiceClient)
         {
             m_bookRepository = bookRepository;
             m_bookVersionRepository = bookVersionRepository;
             m_categoryRepository = categoryRepository;
             m_searchCriteriaDirector = searchCriteriaDirector;
+            m_searchServiceClient = searchServiceClient;
         }
 
         public List<SearchResultContract> Search(string term)
@@ -52,16 +55,34 @@ namespace ITJakub.ITJakubService.Core
 
         public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
+            var nonMetadataCriterias = new List<SearchCriteriaContract>();
             var conjunction = new List<SearchCriteriaQuery>();
             foreach (var searchCriteriaContract in searchCriterias)
             {
-                var criteriaQuery = m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract);
-                conjunction.Add(criteriaQuery);
+                if (m_searchCriteriaDirector.IsCriteriaSupported(searchCriteriaContract))
+                {
+                    var criteriaQuery = m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract);
+                    conjunction.Add(criteriaQuery);
+                }
+                else
+                {
+                    nonMetadataCriterias.Add(searchCriteriaContract);
+                }
             }
             
-            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(conjunction);
-            
-            // TODO search in eXist
+            IList<BookVersionPairContract> databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(conjunction);
+            if (databaseSearchResult.Count == 0)
+                return new List<SearchResultContract>();
+
+            var resultContract = new ResultRestrictionCriteriaContract
+            {
+                ResultBooks = databaseSearchResult
+            };
+            nonMetadataCriterias.Add(resultContract);
+
+            m_searchServiceClient.ListSearchEditionsResults(nonMetadataCriterias);
+
+            //TODO return correct results
 
             var guidList = databaseSearchResult.Select(x => x.Guid);
             var result = m_bookVersionRepository.GetBookVersionsByGuid(guidList);

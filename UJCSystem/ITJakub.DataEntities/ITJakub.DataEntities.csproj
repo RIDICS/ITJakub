@@ -101,7 +101,6 @@
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Exceptions\BookDoesNotExistException.cs" />
     <Compile Include="Database\Exceptions\BookTypeIsAlreadyAssociatedWithAnotherCategoryException.cs" />
-    <Compile Include="Database\Entities\SelectResults\BookVersionPair.cs" />
     <Compile Include="Database\Repositories\FavoritesRepository.cs" />
     <Compile Include="Database\Repositories\UserRepository.cs" />
     <Compile Include="Database\Repositories\CategoryRepository.cs" />
@@ -157,6 +156,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\BookHeadword.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
+      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
+      <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

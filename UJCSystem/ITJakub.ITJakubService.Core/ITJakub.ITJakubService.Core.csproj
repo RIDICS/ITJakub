@@ -75,7 +75,7 @@
     <Compile Include="SearchManager.cs" />
     <Compile Include="Search\CriteriaConditionBuilder.cs" />
     <Compile Include="Search\ICriteriaImplementationBase.cs" />
-    <Compile Include="Search\SearchCriteriaDirector.cs" />
+    <Compile Include="Search\MetadataSearchCriteriaDirector.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="AuthorManager.cs" />
     <Compile Include="AutoMapperProfiles\AuthorProfile.cs" />

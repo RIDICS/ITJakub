@@ -6,6 +6,7 @@ using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
+using ITJakub.Shared.Contracts.Searching;
 using log4net;
 
 namespace ITJakub.Web.Hub

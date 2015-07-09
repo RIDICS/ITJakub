@@ -6,6 +6,7 @@ using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
+using ITJakub.Shared.Contracts.Searching;
 
 namespace ITJakub.ITJakubService.Services
 {
