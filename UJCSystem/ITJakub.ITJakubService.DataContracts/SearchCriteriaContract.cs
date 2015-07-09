@@ -50,6 +50,8 @@ namespace ITJakub.ITJakubService.DataContracts
         [EnumMember] Title = 1,
         [EnumMember] Editor = 2,
         [EnumMember] Dating = 3,
-        [EnumMember] Text = 4
+        [EnumMember] Fulltext = 4,
+        [EnumMember] Heading = 5,
+        [EnumMember] Sentence = 6
     }
 }

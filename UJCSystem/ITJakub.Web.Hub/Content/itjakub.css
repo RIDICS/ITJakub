@@ -1118,6 +1118,73 @@ input.regexsearch-checkbox {
   width: 200px;
   margin-left: 308px;
 }
+.regex-dating-condition {
+  margin: 20px;
+  padding: 10px 5px 10px 5px;
+  background-color: white;
+}
+.regex-dating-condition .slider {
+  display: inline-block;
+  /*width: 300px!important;*/
+}
+.regex-dating-condition .ui-slider {
+  background: #84ced7;
+  height: 5px;
+  /*width: 95%;*/
+  width: 70%;
+  margin-left: 2.5%;
+  border: none;
+}
+.regex-dating-condition .ui-slider > .ui-slider-handle {
+  background: gray;
+  border-radius: 50%;
+  border: none;
+  top: -0.5em;
+}
+.regex-dating-condition span.ui-slider-handle:focus {
+  outline: 0;
+}
+.regex-dating-condition .slider-tip {
+  opacity: 1;
+  width: 100px;
+  bottom: 120%;
+  margin-left: -3.5em;
+}
+.regex-dating-condition .tooltip-inner {
+  background-color: #84ced7;
+  color: white;
+}
+.regex-dating-condition .tooltip-arrow {
+  border-top-color: #84ced7 !important;
+}
+.regex-dating-condition .regex-dating-condition-selects {
+  margin-top: -68px;
+  margin-left: 200px;
+  width: 500px;
+}
+.regex-dating-condition-selects .regex-dating-condition-select {
+  width: 200px;
+  margin-left: 30px;
+  display: inline-block;
+}
+.regex-slider-div {
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+.regex-dating-checkbox-div {
+  width: 150px;
+  display: inline-block;
+}
+.regex-dating-condition-displayed-value {
+  margin-left: 50%;
+  font-size: 1.3em;
+}
+.regex-dating-precision-div {
+  margin-top: 30px;
+}
+.regex-dating-input-span {
+  margin-right: 10px;
+}
 .tt-input,
 .tt-hint {
   outline: none;
