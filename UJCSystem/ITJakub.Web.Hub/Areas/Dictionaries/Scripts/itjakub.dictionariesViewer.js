@@ -48,7 +48,7 @@ var DictionaryViewer = (function () {
             var headwordLi = document.createElement("li");
             var record = headwords[i];
             var headwordSpan = document.createElement("span");
-            headwordSpan.innerText = record.Headword;
+            $(headwordSpan).text(record.Headword);
             $(headwordSpan).addClass("dictionary-result-headword");
             var favoriteGlyphSpan = document.createElement("span");
             $(favoriteGlyphSpan).addClass("glyphicon").addClass("glyphicon-star-empty").addClass("dictionary-result-headword-favorite");
@@ -68,13 +68,13 @@ var DictionaryViewer = (function () {
                 }
                 var commentsDiv = document.createElement("div");
                 var commentsLink = document.createElement("a");
-                commentsLink.innerText = "Připomínky";
+                $(commentsLink).text("Připomínky");
                 commentsLink.href = "#";
                 $(commentsDiv).addClass("dictionary-entry-comments");
                 commentsDiv.appendChild(commentsLink);
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
-                dictionaryLink.innerText = dictionary.BookTitle;
+                $(dictionaryLink).text(dictionary.BookTitle);
                 dictionaryLink.href = "?guid=" + dictionary.BookGuid;
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
@@ -143,7 +143,7 @@ var DictionaryViewer = (function () {
             error: function () {
                 $(container).empty();
                 $(container).removeClass("loading");
-                container.innerText = "Chyba při náčítání hesla '" + headword + "'.";
+                $(container).text("Chyba při náčítání hesla '" + headword + "'.");
                 if (_this.isRequestToPrint)
                     _this.print();
             }
