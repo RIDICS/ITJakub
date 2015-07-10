@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 
 namespace ITJakub.Web.Hub.AutoMapperProfiles

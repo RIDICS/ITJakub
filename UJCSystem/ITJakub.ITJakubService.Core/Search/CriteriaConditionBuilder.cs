@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts.Searching;
 
 namespace ITJakub.ITJakubService.Core.Search
 {
@@ -14,9 +15,12 @@ namespace ITJakub.ITJakubService.Core.Search
                 stringBuilder.Append(word.StartsWith).Append("%");
             }
 
-            foreach (var innerWord in word.Contains.Where(innerWord => !string.IsNullOrEmpty(innerWord)))
+            if (word.Contains != null)
             {
-                stringBuilder.Append("%").Append(innerWord).Append("%");
+                foreach (var innerWord in word.Contains.Where(innerWord => !string.IsNullOrEmpty(innerWord)))
+                {
+                    stringBuilder.Append("%").Append(innerWord).Append("%");
+                }
             }
 
             if (!string.IsNullOrEmpty(word.EndsWith))

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching;
 using log4net;
 
 namespace ITJakub.Core.SearchService
@@ -231,10 +233,35 @@ namespace ITJakub.Core.SearchService
             }
         }
 
+        public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                Channel.ListSearchEditionsResults(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;
         }
-
     }
 }

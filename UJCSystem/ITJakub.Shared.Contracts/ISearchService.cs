@@ -1,4 +1,6 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
+using ITJakub.Shared.Contracts.Searching;
 
 namespace ITJakub.Shared.Contracts
 {
@@ -34,5 +36,8 @@ namespace ITJakub.Shared.Contracts
         [OperationContract]
         string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string transformationName,
             OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel);
+
+        [OperationContract]
+        void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias);
     }
 }

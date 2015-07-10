@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ITJakub.DataEntities.Database;
-using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts.Searching;
 
 namespace ITJakub.ITJakubService.Core.Search
 {
@@ -62,7 +62,7 @@ namespace ITJakub.ITJakubService.Core.Search
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
 
-                whereBuilder.Append("bv.Title like ?");
+                whereBuilder.Append(" bv.Title like ?");
                 parameters.Add(CriteriaConditionBuilder.Create(wordCriteria));
             }
 
