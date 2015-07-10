@@ -53,6 +53,28 @@ namespace ITJakub.ITJakubService.Core
             };
         }
 
+        private string ConvertWildcardToRegex(string stringWithWildcard)
+        {
+            return stringWithWildcard == null
+                ? null
+                : stringWithWildcard.Replace(".", "\\.")
+                    .Replace("_", ".")
+                    .Replace("%", ".*");
+        }
+
+        private void ConvertWildcardToRegex(IList<SearchCriteriaContract> searchCriterias)
+        {
+            foreach (var wordListCriteria in searchCriterias.OfType<WordListCriteriaContract>())
+            {
+                foreach (var wordCriteria in wordListCriteria.Values)
+                {
+                    wordCriteria.StartsWith = ConvertWildcardToRegex(wordCriteria.StartsWith);
+                    wordCriteria.EndsWith = ConvertWildcardToRegex(wordCriteria.EndsWith);
+                    wordCriteria.Contains = wordCriteria.Contains.Select(ConvertWildcardToRegex).ToList();
+                }
+            }
+        }
+
         public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             var nonMetadataCriterias = new List<SearchCriteriaContract>();
@@ -74,6 +96,7 @@ namespace ITJakub.ITJakubService.Core
             if (databaseSearchResult.Count == 0)
                 return new List<SearchResultContract>();
 
+            ConvertWildcardToRegex(nonMetadataCriterias);
             var resultContract = new ResultRestrictionCriteriaContract
             {
                 ResultBooks = databaseSearchResult

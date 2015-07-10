@@ -103,9 +103,9 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     },
                     new WordCriteriaContract
                     {
-                        StartsWith = "[Sbírka",
+                        StartsWith = "_Sbírka",
                         Contains = new List<string> {"založených", "na"},
-                        EndsWith = "legendách]"
+                        EndsWith = "legendách_"
                     }
                 }
             };
@@ -118,7 +118,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 {
                     new WordCriteriaContract
                     {
-                        Contains = new List<string> {"Ge%", "%oman", "Ge"}
+                        Contains = new List<string> {"Ge%", "%oman"}
                     },
                     new WordCriteriaContract
                     {
@@ -151,7 +151,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 {
                     new WordCriteriaContract
                     {
-                        Contains = new List<string> {"Kateřina"}
+                        Contains = new List<string> {"Kate_ina"}
                     },
                     new WordCriteriaContract
                     {
