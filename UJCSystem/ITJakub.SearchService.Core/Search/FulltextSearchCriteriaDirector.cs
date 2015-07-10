@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Shared.Contracts.Searching;
 
-namespace ITJakub.SearchService.Core.Exist
+namespace ITJakub.SearchService.Core.Search
 {
     public class FulltextSearchCriteriaDirector
     {

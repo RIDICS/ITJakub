@@ -63,9 +63,10 @@
     <Compile Include="Exist\AttributeResolver\ExistResourceResolver.cs" />
     <Compile Include="Exist\AttributeResolver\IExistAttributeResolver.cs" />
     <Compile Include="Exist\IExistDao.cs" />
-    <Compile Include="Exist\ResultSearchCriteriaContract.cs" />
+    <Compile Include="Search\RegexCriteriaBuilder.cs" />
+    <Compile Include="Search\DataContract\ResultSearchCriteriaContract.cs" />
     <Compile Include="Exist\UriCache.cs" />
-    <Compile Include="Exist\FulltextSearchCriteriaDirector.cs" />
+    <Compile Include="Search\FulltextSearchCriteriaDirector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

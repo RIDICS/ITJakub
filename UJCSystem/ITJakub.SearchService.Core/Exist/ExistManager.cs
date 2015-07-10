@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using ITJakub.SearchService.Core.Search;
+using ITJakub.SearchService.Core.Search.DataContract;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
 
@@ -90,7 +92,10 @@ namespace ITJakub.SearchService.Core.Exist
             {
                 if (m_searchCriteriaDirector.IsCriteriaSupported(searchCriteriaContract))
                 {
-                    filteredCriterias.Add(searchCriteriaContract);
+                    var wordListContract = searchCriteriaContract as WordListCriteriaContract;
+                    filteredCriterias.Add(wordListContract != null
+                        ? RegexCriteriaBuilder.ConvertToRegexCriteria(wordListContract)
+                        : searchCriteriaContract);
                 }
                 else if (searchCriteriaContract.Key == CriteriaKey.ResultRestriction)
                 {

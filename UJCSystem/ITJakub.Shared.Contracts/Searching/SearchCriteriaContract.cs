@@ -10,6 +10,7 @@ namespace ITJakub.Shared.Contracts.Searching
     [KnownType(typeof(WordListCriteriaContract))]
     [KnownType(typeof(ResultCriteriaContract))]
     [KnownType(typeof(ResultRestrictionCriteriaContract))]
+    [KnownType(typeof(RegexWordCriteriaContract))]
     public abstract class SearchCriteriaContract
     {
         [DataMember]
@@ -80,6 +81,13 @@ namespace ITJakub.Shared.Contracts.Searching
 
         [DataMember]
         public IList<BookVersionPairContract> ResultBooks { get; set; }
+    }
+
+    [DataContract]
+    public class RegexWordCriteriaContract : SearchCriteriaContract
+    {
+        [DataMember]
+        public string RegexContent { get; set; }
     }
 
 	[DataContract]

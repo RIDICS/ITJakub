@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using ITJakub.Shared.Contracts.Searching;
 
-namespace ITJakub.SearchService.Core.Exist
+namespace ITJakub.SearchService.Core.Search.DataContract
 {
     [DataContract]
     public class ResultSearchCriteriaContract
