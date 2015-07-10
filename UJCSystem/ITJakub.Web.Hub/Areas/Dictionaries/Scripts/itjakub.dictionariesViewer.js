@@ -198,6 +198,9 @@ var DictionaryViewer = (function () {
             }
             return;
         }
+        window.print();
+    };
+    DictionaryViewer.prototype.printInNewWindow = function () {
         var printWindow = window.open("", "", "left=0,top=0,toolbar=0,scrollbars=0,status=0");
         var headwordsHtml = $(this.headwordDescriptionContainer).html();
         printWindow.document.write(headwordsHtml);

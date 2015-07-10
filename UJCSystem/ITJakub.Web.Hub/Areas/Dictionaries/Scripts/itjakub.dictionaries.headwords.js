@@ -23,6 +23,7 @@ $(document).ready(function () {
     $("#printDescription").click(function () {
         dictionariesViewer.print();
     });
+    $("#print-modal").modal();
     $("#searchButton").click(function () {
         var query = $("#searchbox").val();
         $.ajax({

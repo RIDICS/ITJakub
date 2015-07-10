@@ -241,6 +241,10 @@
             return;
         }
 
+        window.print();
+    }
+
+    private printInNewWindow() {
         var printWindow = window.open("", "", "left=0,top=0,toolbar=0,scrollbars=0,status=0");
 
         var headwordsHtml = $(this.headwordDescriptionContainer).html();
@@ -254,7 +258,7 @@
         var styleElement = document.createElement("style");
         styleElement.innerHTML = styleCss;
         printWindow.document.head.appendChild(styleElement);
-        
+
         printWindow.document.title = "Heslové stati";
         printWindow.focus();
         printWindow.print();

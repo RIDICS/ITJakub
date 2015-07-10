@@ -176,3 +176,34 @@ ul.pagination-sm {
     background: url(../../../Content/Images/loading.gif) no-repeat center;
     margin: 0 auto;
 }
+
+@media print {
+    .navbar, .footer, .search-with-saved-word-area, .dictionary-selects {
+        display: none;
+    }
+
+    body {
+        padding: 0;
+    }
+
+    .module-content {
+        margin: 0;
+    }
+
+    .dictionary-entry-comments, .dictionary-result-word-search-list, .dictionary-header-buttons {
+        display: none;
+    }
+
+    .dictionary-entry-name {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+    .dictionary-result-word-search-description {
+        width: 100%;
+    }
+
+    a:link:after, a:visited:after {  
+        content: normal;  
+    }
+}
