@@ -5,16 +5,13 @@ using Newtonsoft.Json.Linq;
 
 namespace ITJakub.Web.Hub.Models.Plugins.RegExSearch
 {
-    [JsonConverter(typeof(ConditionCriteriaWrapperConverter))]
-    public class ConditonCriteriaDescriptionWrapper
-    {
-        public ConditionTypeEnum ConditionType { get; set; }
-        public ConditionCriteriaDescription ConditionDescription { get; set; }
-    }
-
+    [JsonConverter(typeof(ConditionCriteriaDescriptionConverter))]
     public class ConditionCriteriaDescription
     {
         public int SearchType { get; set; }
+
+        public ConditionTypeEnum ConditionType { get; set; }
+
     }
 
     public class WordListCriteriaDescription : ConditionCriteriaDescription
@@ -48,35 +45,43 @@ namespace ITJakub.Web.Hub.Models.Plugins.RegExSearch
     }
 
 
-    public class ConditionCriteriaWrapperConverter : JsonConverter
+    public class ConditionCriteriaDescriptionConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(ConditonCriteriaDescriptionWrapper));
+            return (objectType == typeof(ConditionCriteriaDescription));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var result = new ConditonCriteriaDescriptionWrapper();
             JObject jObject = JObject.Load(reader);
             var type = (string)jObject["conditionType"];
             ConditionTypeEnum conditionTypeEnum;
+            ConditionCriteriaDescription result = null;
 
             if (Enum.TryParse(type, out conditionTypeEnum))
             {
-                result.ConditionType = conditionTypeEnum;
-                var conditonDescription = jObject["conditionDescription"]; //TODO add to json
+                
+                var conditions = jObject["conditions"];
                 switch (conditionTypeEnum)
                 {
                     case ConditionTypeEnum.DatingList:
-                        result.ConditionDescription = conditonDescription.ToObject<DatingListCriteriaDescription>(serializer);
+                        var datingList = new DatingListCriteriaDescription();
+                        var list = conditions.ToObject<IList<DatingCriteriaDescription>>(serializer);
+                        datingList.DatingCriteriaDescription = list;
+                        result = datingList;
                         //return new DatingListCriteriaDescription();
                         break;
                     case ConditionTypeEnum.WordList:
-                        result.ConditionDescription = conditonDescription.ToObject<WordListCriteriaDescription>(serializer);
+                        var wordList = new WordListCriteriaDescription();
+                        var wordDescriptions = conditions.ToObject<IList<WordCriteriaDescription>>(serializer);
+                        wordList.WordCriteriaDescription = wordDescriptions;
+                        result = wordList;
                         //return new WordListCriteriaDescription();
                         break;
                 }
+                var searchType = (int)jObject["searchType"];
+                if (result != null) result.SearchType = searchType;
             }
 
             return result;

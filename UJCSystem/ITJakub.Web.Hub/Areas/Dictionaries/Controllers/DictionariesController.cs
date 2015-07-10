@@ -106,9 +106,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         }
 
 
-        public ActionResult SearchCriteria(ConditonCriteriaDescriptions searchData)
+        public ActionResult SearchCriteria(IList<ConditionCriteriaDescription> searchData)
         {
-            var dating = searchData.Descriptions.FirstOrDefault() as DatingListCriteriaDescription;
+            //var dating = searchData.FirstOrDefault().ConditionDescription as DatingListCriteriaDescription;
+            string json = "[{conditions: [{\"notAfter\":963}],\"searchType\":3,\"conditionType\":1}]";
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescription>>(json, new ConditionCriteriaDescriptionConverter());
             //var wordListCriteriaContracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
             //m_mainServiceClient.SearchByCriteria(wordListCriteriaContracts);
             return Json(new {}, JsonRequestBehavior.AllowGet);
