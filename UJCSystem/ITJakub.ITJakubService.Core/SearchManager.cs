@@ -206,6 +206,11 @@ namespace ITJakub.ITJakubService.Core
 
             return result;
         }
+        
+        public int GetHeadwordPageNumber(IList<long> selectedBookIds, string query, int pageSize)
+        {
+            return m_bookVersionRepository.GetPageNumberForHeadword(selectedBookIds, query, pageSize);
+        }
 
         public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
         {

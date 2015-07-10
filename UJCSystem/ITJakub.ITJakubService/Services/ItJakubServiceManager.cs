@@ -184,6 +184,11 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetHeadwordList(selectedBookIds, page, pageSize);
         }
 
+        public int GetHeadwordPageNumber(IList<long> selectedBookIds, string query, int pageSize)
+        {
+            return m_searchManager.GetHeadwordPageNumber(selectedBookIds, query, pageSize);
+        }
+
         public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
         {
             return m_searchManager.GetHeadwordSearchResultCount(query);

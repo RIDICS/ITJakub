@@ -7,7 +7,7 @@
     private currentQuery: string;
     private recordCount: number;
     private searchUrl: string;
-    private pageSize = 50;
+    private pageSize: number;
     private isLazyLoad: boolean;
     private isRequestToPrint = false;
     private headwordDescriptionDivs: HTMLDivElement[];
@@ -28,28 +28,33 @@
         });
     }
 
-    public createViewer(recordCount: number, searchUrl: string, selectedBookIds: number[], query: string = null) {
+    public createViewer(recordCount: number, searchUrl: string, selectedBookIds: number[], query: string = null, pageSize: number = 50) {
         this.selectedBookIds = selectedBookIds;
         this.currentQuery = query;
         this.recordCount = recordCount;
         this.searchUrl = searchUrl;
+        this.pageSize = pageSize;
 
         var pageCount = Math.ceil(this.recordCount / this.pageSize);
         this.pagination.createPagination(pageCount, this.searchAndDisplay.bind(this));
     }
 
+    public goToPage(pageNumber: number) {
+        this.pagination.goToPage(pageNumber);
+    }
+
     private searchAndDisplay(pageNumber: number) {
         this.isRequestToPrint = false;
         $.ajax({
-            type: "POST",
+            type: "GET",
             traditional: true,
             url: this.searchUrl,
-            data: JSON.stringify({
+            data: {
+                selectedBookIds: this.selectedBookIds,
                 query: this.currentQuery,
                 page: pageNumber,
-                pageSize: this.pageSize,
-                selectedBookIds: this.selectedBookIds
-            }),
+                pageSize: this.pageSize
+            },
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
@@ -169,8 +174,6 @@
     }
 
     private getAndShowHeadwordDescription(headword: string, bookGuid: string, xmlEntryId: string, container: HTMLDivElement) {
-        console.log("load: " + headword);
-        $(container).unbind("appearing");
         $.ajax({
             type: "GET",
             traditional: true,
@@ -204,6 +207,7 @@
         var dictionaryInfo = this.dictionariesInfo[index];
         var descriptionContainer = $(".dictionary-entry-description-container", mainDescriptionDiv).get(0);
 
+        $(mainDescriptionDiv).unbind("appearing");
         $(mainDescriptionDiv).removeClass("lazy-loading");
         this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookGuid, dictionaryInfo.XmlEntryId, <HTMLDivElement>descriptionContainer);
     }
@@ -231,7 +235,7 @@
             this.isRequestToPrint = true;
 
             if (this.isLazyLoad) {
-                //TODO load ALL
+                this.loadAllHeadwords();
             }
 
             return;
@@ -407,6 +411,12 @@ class Pagination {
                 $(paginationListUl[centerIndex - k]).removeClass("hidden");
                 $(paginationListUl[centerIndex + k]).removeClass("hidden");
             }
+        }
+    }
+
+    public goToPage(pageNumber: number) {
+        if (pageNumber > 0 && pageNumber <= this.pageCount) {
+            this.updateCurrentPage(pageNumber);
         }
     }
 }

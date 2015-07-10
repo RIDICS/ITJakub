@@ -2,7 +2,6 @@ var DictionaryViewer = (function () {
     function DictionaryViewer(headwordListContainer, paginationContainer, headwordDescriptionContainer, lazyLoad) {
         var _this = this;
         if (lazyLoad === void 0) { lazyLoad = false; }
-        this.pageSize = 50;
         this.isRequestToPrint = false;
         this.headwordDescriptionContainer = headwordDescriptionContainer;
         this.paginationContainer = paginationContainer;
@@ -15,28 +14,33 @@ var DictionaryViewer = (function () {
             }
         });
     }
-    DictionaryViewer.prototype.createViewer = function (recordCount, searchUrl, selectedBookIds, query) {
+    DictionaryViewer.prototype.createViewer = function (recordCount, searchUrl, selectedBookIds, query, pageSize) {
         if (query === void 0) { query = null; }
+        if (pageSize === void 0) { pageSize = 50; }
         this.selectedBookIds = selectedBookIds;
         this.currentQuery = query;
         this.recordCount = recordCount;
         this.searchUrl = searchUrl;
+        this.pageSize = pageSize;
         var pageCount = Math.ceil(this.recordCount / this.pageSize);
         this.pagination.createPagination(pageCount, this.searchAndDisplay.bind(this));
+    };
+    DictionaryViewer.prototype.goToPage = function (pageNumber) {
+        this.pagination.goToPage(pageNumber);
     };
     DictionaryViewer.prototype.searchAndDisplay = function (pageNumber) {
         var _this = this;
         this.isRequestToPrint = false;
         $.ajax({
-            type: "POST",
+            type: "GET",
             traditional: true,
             url: this.searchUrl,
-            data: JSON.stringify({
+            data: {
+                selectedBookIds: this.selectedBookIds,
                 query: this.currentQuery,
                 page: pageNumber,
-                pageSize: this.pageSize,
-                selectedBookIds: this.selectedBookIds
-            }),
+                pageSize: this.pageSize
+            },
             dataType: "json",
             contentType: "application/json",
             success: function (response) {
@@ -135,7 +139,6 @@ var DictionaryViewer = (function () {
     };
     DictionaryViewer.prototype.getAndShowHeadwordDescription = function (headword, bookGuid, xmlEntryId, container) {
         var _this = this;
-        $(container).unbind("appearing");
         $.ajax({
             type: "GET",
             traditional: true,
@@ -167,6 +170,7 @@ var DictionaryViewer = (function () {
         var headword = this.headwordList[index];
         var dictionaryInfo = this.dictionariesInfo[index];
         var descriptionContainer = $(".dictionary-entry-description-container", mainDescriptionDiv).get(0);
+        $(mainDescriptionDiv).unbind("appearing");
         $(mainDescriptionDiv).removeClass("lazy-loading");
         this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookGuid, dictionaryInfo.XmlEntryId, descriptionContainer);
     };
@@ -190,6 +194,7 @@ var DictionaryViewer = (function () {
         if (!this.isAllLoaded()) {
             this.isRequestToPrint = true;
             if (this.isLazyLoad) {
+                this.loadAllHeadwords();
             }
             return;
         }
@@ -325,6 +330,11 @@ var Pagination = (function () {
                 $(paginationListUl[centerIndex - k]).removeClass("hidden");
                 $(paginationListUl[centerIndex + k]).removeClass("hidden");
             }
+        }
+    };
+    Pagination.prototype.goToPage = function (pageNumber) {
+        if (pageNumber > 0 && pageNumber <= this.pageCount) {
+            this.updateCurrentPage(pageNumber);
         }
     };
     return Pagination;

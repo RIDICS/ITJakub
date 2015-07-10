@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
-using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
@@ -125,10 +124,16 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(resultCount, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetHeadwordList(GetHeadwordsDescription description)
+        public ActionResult GetHeadwordList(IList<long> selectedBookIds, int page, int pageSize)
         {
-            var result = m_mainServiceClient.GetHeadwordList(description.SelectedBookIds, description.Page, description.PageSize);
+            var result = m_mainServiceClient.GetHeadwordList(selectedBookIds, page, pageSize);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetHeadwordPageNumber(IList<long> selectedBookIds, string query, int pageSize)
+        {
+            var resultPageNumber = m_mainServiceClient.GetHeadwordPageNumber(selectedBookIds, query, pageSize);
+            return Json(resultPageNumber, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetSearchResultCount(string query)

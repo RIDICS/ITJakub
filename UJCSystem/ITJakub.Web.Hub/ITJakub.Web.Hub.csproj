@@ -184,7 +184,6 @@
     <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
     <Compile Include="Areas\CardFiles\RouteConfig.cs" />
     <Compile Include="Areas\Dictionaries\BundleConfig.cs" />
-    <Compile Include="Areas\Dictionaries\Models\GetHeadwordsDescription.cs" />
     <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\ConditionCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
@@ -638,6 +637,7 @@
     <Folder Include="Areas\BohemianTextBank\Views\Shared\" />
     <Folder Include="Areas\CardFiles\Models\" />
     <Folder Include="Areas\CardFiles\Views\Shared\" />
+    <Folder Include="Areas\Dictionaries\Models\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
     <Folder Include="Areas\OldGrammar\Models\" />

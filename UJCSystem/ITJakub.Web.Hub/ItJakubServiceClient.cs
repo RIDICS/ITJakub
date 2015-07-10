@@ -771,6 +771,33 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public int GetHeadwordPageNumber(IList<long> selectedBookIds, string query, int pageSize)
+        {
+            try
+            {
+                return Channel.GetHeadwordPageNumber(selectedBookIds, query, pageSize);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordPageNumber failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordPageNumber failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordPageNumber timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
         public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
         {
             try
