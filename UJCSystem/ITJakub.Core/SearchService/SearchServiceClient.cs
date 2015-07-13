@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
 
 namespace ITJakub.Core.SearchService
@@ -19,94 +20,11 @@ namespace ITJakub.Core.SearchService
                 m_log.DebugFormat("SearchServiceClient created.");
         }
 
-        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
-        {
-            try
-            {
-                return Channel.GetBookPageByPosition(bookId, versionId, pagePosition, transformationName, outputFormat,
-                    transformationLevel);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-        }
-
-				public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
-        {
-            try
-            {
-                return Channel.GetBookPageByName(bookId, versionId, pageName, transformationName, 
-									outputFormat, transformationLevel);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-        }
-
-
-				public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+		public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
 							return Channel.GetBookPageByXmlId(bookId, versionId, pageXmlId, transformationName, outputFormat, transformationLevel);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-        }
-
-
-				public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
-        {
-            try
-            {
-                return Channel.GetBookPagesByName(bookId, versionId, startPageName, endPageName, transformationName,
-                    outputFormat, transformationLevel);
             }
             catch (CommunicationException ex)
             {

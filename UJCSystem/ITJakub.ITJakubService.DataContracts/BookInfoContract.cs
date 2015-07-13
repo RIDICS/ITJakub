@@ -8,7 +8,7 @@ namespace ITJakub.ITJakubService.DataContracts
     public class BookInfoContract
     {
         [DataMember]
-        public string Guid { get; set; }
+        public string BookXmlId { get; set; }
 
         [DataMember]
         public string Title { get; set; }

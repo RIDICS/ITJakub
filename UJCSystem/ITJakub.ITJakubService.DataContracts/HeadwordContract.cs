@@ -27,13 +27,13 @@ namespace ITJakub.ITJakubService.DataContracts
     public class HeadwordBookInfoContract
     {
         [DataMember]
-        public string XmlEntryId { get; set; }
+        public string EntryXmlId { get; set; }
 
         [DataMember]
-        public string BookGuid { get; set; }
+        public string BookXmlId { get; set; }
 
         [DataMember]
-        public string BookVersionId { get; set; }
+        public string BookVersionXmlId { get; set; }
 
         [DataMember]
         public string BookAcronym { get; set; }

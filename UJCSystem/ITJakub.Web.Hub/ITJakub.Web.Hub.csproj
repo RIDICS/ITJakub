@@ -67,6 +67,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Xml" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.DynamicData" />
@@ -211,7 +213,6 @@
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\Plugins\Bibliography\BibliographyController.cs" />
     <Compile Include="Controllers\Plugins\Reader\ReaderController.cs" />
-    <Compile Include="Controllers\Plugins\Search\SearchController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Global.asax.cs">
@@ -674,7 +675,6 @@
     <TypeScriptCompile Include="Scripts\Plugins\DropdownSelect\itjakub.plugins.dropdownselect.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Reader\itjakub.plugins.reader.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\RegExSearch\itjakub.plugins.regexsearch.ts" />
-    <TypeScriptCompile Include="Scripts\Plugins\Search\itjakub.plugins.search.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.ts" />

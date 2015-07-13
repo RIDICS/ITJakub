@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Runtime.Serialization;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Areas.Editions.Models;
 using Microsoft.Ajax.Utilities;
 
@@ -31,27 +36,34 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult SearchEditions(string term)
         {
-            IEnumerable<SearchResultContract> listBooks = term.IsNullOrWhiteSpace() ? m_serviceClient.GetBooksByBookType(BookTypeEnumContract.Edition) : m_serviceClient.SearchBooksWithBookType(term, BookTypeEnumContract.Edition);
-            
+            IEnumerable<SearchResultContract> listBooks = term.IsNullOrWhiteSpace()
+                ? m_serviceClient.GetBooksByBookType(BookTypeEnumContract.Edition)
+                : m_serviceClient.SearchBooksWithBookType(term, BookTypeEnumContract.Edition);
+
             foreach (var list in listBooks)
             {
                 list.CreateTimeString = list.CreateTime.ToString();
             }
-            return Json(new { books = listBooks }, JsonRequestBehavior.AllowGet);
+            return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Listing(string bookId)
         {
             var book = m_serviceClient.GetBookInfo(bookId);
-            return View(new BookListingModel { BookId = book.Guid, BookTitle = book.Title, BookPages = book.BookPages});
+            return
+                View(new BookListingModel
+                {
+                    BookXmlId = book.BookXmlId,
+                    BookTitle = book.Title,
+                    BookPages = book.BookPages
+                });
         }
-
 
         public FileResult GetBookImage(string bookId, int position)
         {
             var imageDataStream = m_serviceClient.GetBookPageImage(new BookPageImageContract
             {
-                BookGuid = bookId,
+                BookXmlId = bookId,
                 Position = position
             });
             return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
@@ -71,7 +83,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             return View();
         }
-        
+
         public ActionResult FeedBack()
         {
             return View();
@@ -123,7 +135,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     new WordCriteriaContract
                     {
                         Contains = new List<string> {"al_žený"} //založených
-                    },
+                    }
                 }
             };
 
@@ -156,7 +168,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     new WordCriteriaContract
                     {
                         Contains = new List<string> {"Barbora"}
-                    },
+                    }
                 }
             };
 
@@ -172,7 +184,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     new WordCriteriaContract
                     {
                         Contains = new List<string> {"p%st_n%"} // pústeník
-                    },
+                    }
                 }
             };
 
@@ -186,7 +198,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         StartsWith = "Ti",
                         Contains = new List<string> {"tu", "tus"},
                         EndsWith = "s"
-                    },
+                    }
                 }
             };
 
@@ -203,7 +215,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     },
                     new WordCriteriaContract
                     {
-                         Contains = new List<string> {"zavinil"}
+                        Contains = new List<string> {"zavinil"}
                     }
                 }
             };
@@ -216,7 +228,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     new WordCriteriaContract
                     {
                         Contains = new List<string> {"prvorození"}
-                    },
+                    }
                 }
             };
 
@@ -228,7 +240,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     new WordCriteriaContract
                     {
                         Contains = new List<string> {"lenosti"}
-                    },
+                    }
                 }
             };
 
@@ -240,7 +252,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     new WordCriteriaContract
                     {
                         Contains = new List<string> {"synóv"}
-                    },
+                    }
                 }
             };
 
@@ -280,9 +292,115 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 }
             };
 
-            var wordListCriteriaContracts = new List<SearchCriteriaContract> { title1, title2, editor1, editor2, fulltext1, fulltext2, sentence1, sentence2, heading1, heading2, tokens };
+            //Mockup of search result 
+            var createTime = DateTime.Today;
+            var resultSearchCrit = new SearchResultContract
+            {
+                Authors =
+                    new List<AuthorContract>
+                    {
+                        new AuthorContract {Name = "autor1"},
+                        new AuthorContract {Name = "autor2"}
+                    },
+                BookXmlId = "xmlIdKnihy",
+                VersionXmlId = "xmlVerzeKnihy",
+                BookType = BookTypeEnumContract.Edition,
+                Copyright = "text copyrightu",
+                CreateTime = createTime,
+                CreateTimeString = createTime.ToString(CultureInfo.InvariantCulture),
+                PublishDate = "Publikovano roku 1989",
+                Editors =
+                    new List<EditorContract>
+                    {
+                        new EditorContract {Text = "editor1"},
+                        new EditorContract {Text = "editor2"}
+                    },
+                Keywords = new List<string> {"pes", "kocka"},
+                Manuscripts =
+                    new List<ManuscriptContract>
+                    {
+                        new ManuscriptContract
+                        {
+                            Title = "Titul",
+                            Country = "Zeme",
+                            Idno = "Idno",
+                            OriginDate = "Datum",
+                            Repository = "repositar",
+                            Settlement = "Osada"
+                        }
+                    },
+                PageCount = 426,
+                PublishPlace = "Praha",
+                Publisher = new PublisherContract {Email = "a@a.cz", Text = "publikator"},
+                Title = "Titul dila",
+                SubTitle = "Podtitul dila",
+                TotalHitCount = 15,
+                Results = new List<PageResultContext>
+                {
+                    new PageResultContext
+                    {
+                        ContextStructure = new KwicStructure
+                        {
+                            Before = "...zacalo to pred malym ",
+                            Match = "psem",
+                            After = ", ktery nemel rad kocky..."
+                        },
+                        PageName = "2r",
+                        PageXmlId = "div1.pb2"
+                    },
+                    new PageResultContext
+                    {
+                        ContextStructure = new KwicStructure
+                        {
+                            Before = "...zacalo to po malem ",
+                            Match = "psu",
+                            After = ", ktery nikdy nebyl venku..."
+                        },
+                        PageName = "145r",
+                        PageXmlId = "div145.pb55"
+                    },
+                    new PageResultContext
+                    {
+                        ContextStructure = new KwicStructure
+                        {
+                            Before = "...skoncilo to ",
+                            Match = "psem",
+                            After = ", ktery byl stasten..."
+                        },
+                        PageName = "210v",
+                        PageXmlId = "div5.pb45"
+                    }
+                }
+            };
+
+            //string bResult = string.Empty;
+
+            //using (Stream stream = new MemoryStream())
+            //{
+            //    //Serialize the Record object to a memory stream using DataContractSerializer. 
+            //    DataContractSerializer serializer = new DataContractSerializer(typeof(SearchResultContract));
+            //    serializer.WriteObject(stream, resultSearchCrit);
+            //    stream.Position = 0;
+            //    string result = new StreamReader(stream).ReadToEnd();
+            //    bResult = result;
+            //}
+
+            var wordListCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                title1,
+                title2,
+                editor1,
+                editor2,
+                fulltext1,
+                fulltext2,
+                sentence1,
+                sentence2,
+                heading1,
+                heading2,
+                tokens
+            };
             m_serviceClient.SearchByCriteria(wordListCriteriaContracts);
-            return Json(new { }, JsonRequestBehavior.AllowGet);
+            return Json(new {}, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ITJakub.SearchService.Core.Exist;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.SearchService
 {

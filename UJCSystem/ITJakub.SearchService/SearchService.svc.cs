@@ -3,6 +3,7 @@ using System.Reflection;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
 
 namespace ITJakub.SearchService
