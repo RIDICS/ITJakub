@@ -10,7 +10,9 @@ namespace ITJakub.Shared.Contracts.Searching
     [KnownType(typeof(WordListCriteriaContract))]
     [KnownType(typeof(ResultCriteriaContract))]
     [KnownType(typeof(ResultRestrictionCriteriaContract))]
-    [KnownType(typeof(RegexWordCriteriaContract))]
+    [KnownType(typeof(TokenDistanceListCriteriaContract))]
+    [KnownType(typeof(RegexSearchCriteriaContract))]
+    [KnownType(typeof(RegexTokenListCriteriaContract))]
     public abstract class SearchCriteriaContract
     {
         [DataMember]
@@ -31,7 +33,7 @@ namespace ITJakub.Shared.Contracts.Searching
     public class WordListCriteriaContract : SearchCriteriaContract
     {
         [DataMember]
-        public IList<WordCriteriaContract> Values { get; set; }
+        public IList<WordCriteriaContract> Disjunctions { get; set; }
     }
 
     [DataContract]
@@ -84,10 +86,23 @@ namespace ITJakub.Shared.Contracts.Searching
     }
 
     [DataContract]
-    public class RegexWordCriteriaContract : SearchCriteriaContract
+    public class TokenDistanceCriteriaContract
     {
         [DataMember]
-        public string RegexContent { get; set; }
+        public int Distance { get; set; }
+
+        [DataMember]
+        public WordCriteriaContract First { get; set; }
+
+        [DataMember]
+        public WordCriteriaContract Second { get; set; }
+    }
+
+    [DataContract]
+    public class TokenDistanceListCriteriaContract : SearchCriteriaContract
+    {
+        [DataMember]
+        public IList<TokenDistanceCriteriaContract> Disjunctions { get; set; } 
     }
 
 	[DataContract]
@@ -102,6 +117,7 @@ namespace ITJakub.Shared.Contracts.Searching
         [EnumMember] Sentence = 6,
         [EnumMember] Result = 7,
         [EnumMember] ResultRestriction = 8,
+        [EnumMember] TokenDistance = 9,
     }
     
     [DataContract]

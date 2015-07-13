@@ -12,7 +12,7 @@ namespace ITJakub.SearchService.Core.Search.DataContract
         public IList<BookVersionPairContract> ResultBooks { get; set; }
 
         [DataMember]
-        public IList<SearchCriteriaContract> SearchCriterias { get; set; }
+        public IList<SearchCriteriaContract> ConjunctionSearchCriterias { get; set; }
 
 
         public virtual string ToXml()

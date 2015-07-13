@@ -26,7 +26,7 @@ namespace ITJakub.ITJakubService.Core.Search
             var whereBuilder = new StringBuilder();
             var parameters = new List<object>();
 
-            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Values)
+            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
@@ -57,7 +57,7 @@ namespace ITJakub.ITJakubService.Core.Search
             var whereBuilder = new StringBuilder();
             var parameters = new List<object>();
 
-            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Values)
+            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
@@ -90,7 +90,7 @@ namespace ITJakub.ITJakubService.Core.Search
             var whereBuilder = new StringBuilder();
             var parameters = new List<object>();
 
-            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Values)
+            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");

@@ -62,6 +62,7 @@
     <Compile Include="ISearchService.cs" />
     <Compile Include="Resources\ResourceType.cs" />
     <Compile Include="Resources\UploadResourceContract.cs" />
+    <Compile Include="Searching\RegexSearchCriteriaContract.cs" />
     <Compile Include="Searching\SearchCriteriaContract.cs" />
     <Compile Include="Searching\SearchResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

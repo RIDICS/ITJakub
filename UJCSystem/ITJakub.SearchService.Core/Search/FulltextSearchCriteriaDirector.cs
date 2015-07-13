@@ -13,7 +13,8 @@ namespace ITJakub.SearchService.Core.Search
             {
                 CriteriaKey.Fulltext,
                 CriteriaKey.Heading,
-                CriteriaKey.Sentence
+                CriteriaKey.Sentence,
+                CriteriaKey.TokenDistance
             };
         }
 

@@ -94,7 +94,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var title1 = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Title,
-                Values = new List<WordCriteriaContract>
+                Disjunctions = new List<WordCriteriaContract>
                 {
                     new WordCriteriaContract
                     {
@@ -114,7 +114,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var title2 = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Title,
-                Values = new List<WordCriteriaContract>
+                Disjunctions = new List<WordCriteriaContract>
                 {
                     new WordCriteriaContract
                     {
@@ -130,7 +130,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var editor1 = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Editor,
-                Values = new List<WordCriteriaContract>
+                Disjunctions = new List<WordCriteriaContract>
                 {
                     new WordCriteriaContract
                     {
@@ -147,7 +147,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var editor2 = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Editor,
-                Values = new List<WordCriteriaContract>
+                Disjunctions = new List<WordCriteriaContract>
                 {
                     new WordCriteriaContract
                     {
@@ -163,7 +163,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var fulltext1 = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Fulltext,
-                Values = new List<WordCriteriaContract>
+                Disjunctions = new List<WordCriteriaContract>
                 {
                     //new WordCriteriaContract
                     //{
@@ -179,7 +179,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var fulltext2 = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Fulltext,
-                Values = new List<WordCriteriaContract>
+                Disjunctions = new List<WordCriteriaContract>
                 {
                     new WordCriteriaContract
                     {
@@ -193,7 +193,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var sentence1 = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Sentence,
-                Values = new List<WordCriteriaContract>
+                Disjunctions = new List<WordCriteriaContract>
                 {
                     new WordCriteriaContract
                     {
@@ -211,7 +211,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var sentence2 = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Sentence,
-                Values = new List<WordCriteriaContract>
+                Disjunctions = new List<WordCriteriaContract>
                 {
                     new WordCriteriaContract
                     {
@@ -223,7 +223,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var heading1 = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Heading,
-                Values = new List<WordCriteriaContract>
+                Disjunctions = new List<WordCriteriaContract>
                 {
                     new WordCriteriaContract
                     {
@@ -235,7 +235,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var heading2 = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Heading,
-                Values = new List<WordCriteriaContract>
+                Disjunctions = new List<WordCriteriaContract>
                 {
                     new WordCriteriaContract
                     {
@@ -244,7 +244,43 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 }
             };
 
-            var wordListCriteriaContracts = new List<WordListCriteriaContract> { title1, title2, editor1, editor2, fulltext1, fulltext2, sentence1, sentence2, heading1, heading2 };
+            var tokens = new TokenDistanceListCriteriaContract
+            {
+                Key = CriteriaKey.TokenDistance,
+                Disjunctions = new List<TokenDistanceCriteriaContract>
+                {
+                    new TokenDistanceCriteriaContract
+                    {
+                        Distance = 3,
+                        First = new WordCriteriaContract
+                        {
+                            StartsWith = "Dor",
+                            Contains = new List<string> {"ote", "us"},
+                            EndsWith = "%"
+                        },
+                        Second = new WordCriteriaContract
+                        {
+                            Contains = new List<string> {"zákon"}
+                        }
+                    },
+                    new TokenDistanceCriteriaContract
+                    {
+                        Distance = 10,
+                        First = new WordCriteriaContract
+                        {
+                            StartsWith = "Gor",
+                            Contains = new List<string> {"gon", "iu"},
+                            EndsWith = "%"
+                        },
+                        Second = new WordCriteriaContract
+                        {
+                            Contains = new List<string> {"bíše"}
+                        }
+                    }
+                }
+            };
+
+            var wordListCriteriaContracts = new List<SearchCriteriaContract> { title1, title2, editor1, editor2, fulltext1, fulltext2, sentence1, sentence2, heading1, heading2, tokens };
             m_serviceClient.SearchByCriteria(wordListCriteriaContracts);
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
