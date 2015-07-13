@@ -114,7 +114,7 @@ div.container {
 .dictionary-result-word-search-list {
   background-color: white;
   min-height: 100%;
-  width: 21%;
+  width: 22%;
   float: left;
 }
 .dictionary-result-word-search-list-body {
@@ -127,7 +127,7 @@ div.container {
   background-color: white;
   margin-left: 1%;
   min-height: 100%;
-  width: 78%;
+  width: 77%;
   float: left;
 }
 .dictionary-result-word-search-description-body {
@@ -201,8 +201,10 @@ a.dictionary-result-headword-book {
 }
 .pagination-sm li a,
 .pagination-sm li span {
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: 2px;
+  padding-right: 2px;
+  font-size: 80%;
+  min-width: 17px;
 }
 ul.pagination-sm {
   margin-right: 0 !important;

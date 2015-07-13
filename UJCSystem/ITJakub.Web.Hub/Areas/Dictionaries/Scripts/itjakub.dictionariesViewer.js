@@ -217,7 +217,7 @@ var DictionaryViewer = (function () {
 })();
 var Pagination = (function () {
     function Pagination(paginationContainer, maxVisiblePageElements) {
-        if (maxVisiblePageElements === void 0) { maxVisiblePageElements = 7; }
+        if (maxVisiblePageElements === void 0) { maxVisiblePageElements = 9; }
         this.usePaginationDots = false;
         this.maxPageElements = maxVisiblePageElements;
         this.paginationContainer = paginationContainer;

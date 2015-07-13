@@ -270,7 +270,7 @@ class Pagination {
     private currentPage: number;
     private usePaginationDots = false;
 
-    constructor(paginationContainer: string, maxVisiblePageElements = 7) {
+    constructor(paginationContainer: string, maxVisiblePageElements = 9) {
         this.maxPageElements = maxVisiblePageElements;
         this.paginationContainer = paginationContainer;
     }
