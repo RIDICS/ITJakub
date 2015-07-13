@@ -211,6 +211,10 @@ ul.pagination-sm {
   background: url(../../../Content/Images/loading.gif) no-repeat center;
   margin: 0 auto;
 }
+.loading-modal {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 @media print {
   .navbar,
   .footer,

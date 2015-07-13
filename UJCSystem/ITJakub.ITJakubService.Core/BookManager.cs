@@ -5,7 +5,6 @@ using System.Reflection;
 using AutoMapper;
 using ITJakub.Core;
 using ITJakub.Core.SearchService;
-using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;

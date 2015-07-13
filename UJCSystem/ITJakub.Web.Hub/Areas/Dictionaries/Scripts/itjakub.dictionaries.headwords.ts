@@ -25,10 +25,7 @@
     
     $("#printDescription").click(() => {
         dictionariesViewer.print();
-
     });
-
-    $("#print-modal").modal();
 
     $("#searchButton").click(() => {
         var query = $("#searchbox").val();

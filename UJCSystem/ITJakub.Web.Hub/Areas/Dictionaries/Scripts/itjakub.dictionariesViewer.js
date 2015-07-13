@@ -188,31 +188,30 @@ var DictionaryViewer = (function () {
             }
         }
     };
+    DictionaryViewer.prototype.showPrintModal = function () {
+        if (this.isRequestToPrint)
+            return;
+        $("#print-modal").modal({
+            backdrop: "static",
+            show: true
+        });
+    };
+    DictionaryViewer.prototype.hidePrintModal = function () {
+        $("#print-modal").modal("hide");
+    };
     DictionaryViewer.prototype.print = function () {
         // check if all entries are loaded
-        this.isRequestToPrint = false;
         if (!this.isAllLoaded()) {
+            this.showPrintModal();
             this.isRequestToPrint = true;
             if (this.isLazyLoad) {
                 this.loadAllHeadwords();
             }
             return;
         }
+        this.isRequestToPrint = false;
+        this.hidePrintModal();
         window.print();
-    };
-    DictionaryViewer.prototype.printInNewWindow = function () {
-        var printWindow = window.open("", "", "left=0,top=0,toolbar=0,scrollbars=0,status=0");
-        var headwordsHtml = $(this.headwordDescriptionContainer).html();
-        printWindow.document.write(headwordsHtml);
-        printWindow.document.close();
-        var styleCss = ".hidden {display: none;}" + ".dictionary-entry-comments {display: none;}";
-        var styleElement = document.createElement("style");
-        styleElement.innerHTML = styleCss;
-        printWindow.document.head.appendChild(styleElement);
-        printWindow.document.title = "Heslové stati";
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
     };
     return DictionaryViewer;
 })();
