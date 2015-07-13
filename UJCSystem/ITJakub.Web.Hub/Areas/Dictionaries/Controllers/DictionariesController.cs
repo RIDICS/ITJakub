@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -72,10 +73,23 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var dictionariesAndCategories =
                 m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
-            //TODO fix loading books
+            //TODO better fix loading books
             //var booksDictionary =
             //    dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
             //        .ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            var booksDictionary = new Dictionary<string, IList<BookContract>>();
+            foreach (var book in dictionariesAndCategories.Books)
+            {
+                foreach (var categoryId in book.CategoryIds)
+                {
+                    IList<BookContract> booksInCategory;
+                    if (booksDictionary.TryGetValue(Convert.ToString(categoryId), out booksInCategory))
+                        booksInCategory.Add(book);
+                    else
+                        booksDictionary.Add(Convert.ToString(categoryId), new List<BookContract> {book});
+                }
+            }
+
             var categoriesDictionary =
                 dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
                     .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
@@ -84,8 +98,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                     new
                     {
                         type = BookTypeEnumContract.Dictionary,
-                        //books = booksDictionary,
-                        books = new object[0],
+                        books = booksDictionary,
                         categories = categoriesDictionary
                     }, JsonRequestBehavior.AllowGet);
         }

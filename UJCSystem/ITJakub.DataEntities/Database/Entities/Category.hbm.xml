@@ -17,6 +17,10 @@
     <property name="Description">
       <column name="Description" sql-type="varchar" not-null="false" />
     </property>
+
+    <property name="Path">
+      <column name="Path" sql-type="varchar" not-null="true" />
+    </property>
     
     <many-to-one name="BookType" lazy="false">
       <column name="BookType" sql-type="int" not-null="false" />
