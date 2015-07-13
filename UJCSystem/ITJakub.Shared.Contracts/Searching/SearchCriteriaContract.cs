@@ -64,7 +64,7 @@ namespace ITJakub.Shared.Contracts.Searching
         public int? Start { get; set; }
 
         [DataMember]
-        public int? End { get; set; }
+        public int? Count { get; set; }
 
         [DataMember]
         public SortEnum? Sorting { get; set; }
