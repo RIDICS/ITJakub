@@ -51,7 +51,7 @@ namespace ITJakub.SearchService.Core.Search
         {
             var regexBuilder = new StringBuilder();
 
-            regexBuilder.Append("(^");
+            regexBuilder.Append("^");
             if (!string.IsNullOrEmpty(word.StartsWith))
             {
                 regexBuilder.Append("(").Append(word.StartsWith).Append(").*");
@@ -69,7 +69,7 @@ namespace ITJakub.SearchService.Core.Search
             {
                 regexBuilder.Append(".*(").Append(word.EndsWith).Append(")");
             }
-            regexBuilder.Append("$)");
+            regexBuilder.Append("$");
 
             return regexBuilder.ToString();
         }
@@ -89,21 +89,16 @@ namespace ITJakub.SearchService.Core.Search
 
         private static RegexSearchCriteriaContract ConvertToRegexCriteria(WordListCriteriaContract criteriaContract)
         {
-            var regexBuilder = new StringBuilder();
+            var regexList = new List<string>();
             foreach (var word in criteriaContract.Disjunctions)
             {
-                if (regexBuilder.Length > 0)
-                {
-                    regexBuilder.Append("|");
-                }
-
-                regexBuilder.Append(CreateRegex(word));
+                regexList.Add(CreateRegex(word));
             }
 
             return new RegexSearchCriteriaContract
             {
                 Key = criteriaContract.Key,
-                RegexContent = regexBuilder.ToString()
+                Disjunctions = regexList
             };
         }
 

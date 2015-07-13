@@ -7,7 +7,7 @@ namespace ITJakub.Shared.Contracts.Searching
     public class RegexSearchCriteriaContract : SearchCriteriaContract
     {
         [DataMember]
-        public string RegexContent { get; set; }
+        public IList<string> Disjunctions { get; set; } 
     }
 
     [DataContract]
