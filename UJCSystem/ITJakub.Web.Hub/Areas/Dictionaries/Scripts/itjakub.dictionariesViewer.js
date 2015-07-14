@@ -14,10 +14,11 @@ var DictionaryViewer = (function () {
             }
         });
     }
-    DictionaryViewer.prototype.createViewer = function (recordCount, searchUrl, selectedBookIds, query, pageSize) {
+    DictionaryViewer.prototype.createViewer = function (recordCount, searchUrl, state, query, pageSize) {
         if (query === void 0) { query = null; }
         if (pageSize === void 0) { pageSize = 50; }
-        this.selectedBookIds = selectedBookIds;
+        this.selectedBookIds = DropDownSelect.getBookIdsFromState(state);
+        this.selectedCategoryIds = DropDownSelect.getCategoryIdsFromState(state);
         this.currentQuery = query;
         this.recordCount = recordCount;
         this.searchUrl = searchUrl;

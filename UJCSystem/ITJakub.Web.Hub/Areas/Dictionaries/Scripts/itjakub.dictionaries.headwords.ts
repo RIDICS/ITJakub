@@ -1,27 +1,35 @@
 ﻿$(document).ready(() => {
-    var callbackDelegate = new DropDownSelectCallbackDelegate();
-    var dictionarySelector = new DropDownSelect("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
-    dictionarySelector.makeDropdown();
-
     var pageSize = 50;
+    var headwordsListUrl = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordList";
     var dictionariesViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription", true);
 
-    var bookIdList = [];
-    var headwordsListUrl = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordList";
-    $.ajax({
-        type: "GET",
-        traditional: true,
-        url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordCount",
-        data: {
-            selectedBookIds: bookIdList
-        },
-        dataType: "json",
-        contentType: "application/json",
-        success: (response) => {
-            var resultCount = response;
-            dictionariesViewer.createViewer(resultCount, headwordsListUrl, bookIdList, null, pageSize);
-        }
-    });
+    var loadHeadwordsFunction = (state: State) => {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordCount",
+            data: {
+                selectedBookIds: DropDownSelect.getBookIdsFromState(state),
+                selectedCategoryIds: DropDownSelect.getCategoryIdsFromState(state)
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                var resultCount = response;
+                dictionariesViewer.createViewer(resultCount, headwordsListUrl, state, null, pageSize);
+            }
+        });
+    };
+
+
+    var callbackDelegate = new DropDownSelectCallbackDelegate();
+    callbackDelegate.selectedChangedCallback = (state) => {
+        loadHeadwordsFunction(state);
+    };
+
+    var dictionarySelector = new DropDownSelect("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
+    dictionarySelector.makeDropdown();
+    
     
     $("#printDescription").click(() => {
         dictionariesViewer.print();
@@ -34,7 +42,8 @@
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordPageNumber",
             data: {
-                selectedBookIds: [4,5], //TODO get correct ids
+                selectedBookIds: DropDownSelect.getBookIdsFromState(dictionarySelector.getState()),
+                selectedCategoryIds: DropDownSelect.getCategoryIdsFromState(dictionarySelector.getState()),
                 query: query,
                 pageSize: pageSize
             },
@@ -46,4 +55,6 @@
             }
         });
     });
+
+    loadHeadwordsFunction(dictionarySelector.getState());
 }); 

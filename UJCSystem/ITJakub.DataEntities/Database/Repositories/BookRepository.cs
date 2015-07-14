@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
@@ -232,20 +231,13 @@ namespace ITJakub.DataEntities.Database.Repositories
 
             using (var session = GetSession())
             {
-                //var categories = session.QueryOver(() => categoryAlias)
-                //    //.JoinQueryOver(x => x.BookType)
-                //    //.Where(x => x.Type == bookType)
-                //    .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
-                //    .Where(() => bookTypeAlias.Type == bookType)
-                //    // .Future<Category>();
-                //    .List<Category>();
-
                 var bookVersions =
                     session.QueryOver(() => bookVersionAlias)
                         .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias)
                         .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
                         .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
                         .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                        .TransformUsing(Transformers.DistinctRootEntity)
                         .List<BookVersion>();
 
                 return bookVersions;

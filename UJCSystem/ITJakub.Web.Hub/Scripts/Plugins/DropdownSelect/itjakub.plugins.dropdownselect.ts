@@ -635,6 +635,21 @@ class DropDownSelect {
         return state;
     }
 
+    static getBookIdsFromState(state: State): number[] {
+        var bookIdList = new Array(state.SelectedItems.length);
+        for (var i = 0; i < state.SelectedItems.length; i++) {
+            bookIdList[i] = state.SelectedItems[i].Id;
+        }
+        return bookIdList;
+    }
+
+    static getCategoryIdsFromState(state: State): number[] {
+        var categoryIdList = new Array(state.SelectedCategories.length);
+        for (var i = 0; i < state.SelectedCategories.length; i++) {
+            categoryIdList[i] = state.SelectedCategories[i].Id;
+        }
+        return categoryIdList;
+    }
 }
 
 class CallbackInfo {

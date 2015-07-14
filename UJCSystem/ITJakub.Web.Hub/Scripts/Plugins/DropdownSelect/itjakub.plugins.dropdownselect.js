@@ -493,6 +493,20 @@ var DropDownSelect = (function () {
         state.SelectedItems = this.selectedItems;
         return state;
     };
+    DropDownSelect.getBookIdsFromState = function (state) {
+        var bookIdList = new Array(state.SelectedItems.length);
+        for (var i = 0; i < state.SelectedItems.length; i++) {
+            bookIdList[i] = state.SelectedItems[i].Id;
+        }
+        return bookIdList;
+    };
+    DropDownSelect.getCategoryIdsFromState = function (state) {
+        var categoryIdList = new Array(state.SelectedCategories.length);
+        for (var i = 0; i < state.SelectedCategories.length; i++) {
+            categoryIdList[i] = state.SelectedCategories[i].Id;
+        }
+        return categoryIdList;
+    };
     return DropDownSelect;
 })();
 var CallbackInfo = (function () {

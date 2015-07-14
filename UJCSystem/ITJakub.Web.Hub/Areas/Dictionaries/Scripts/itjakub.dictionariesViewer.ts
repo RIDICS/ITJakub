@@ -4,6 +4,7 @@
     private headwordListContainer: string;
     private pagination: Pagination;
     private selectedBookIds: number[];
+    private selectedCategoryIds: number[];
     private currentQuery: string;
     private recordCount: number;
     private searchUrl: string;
@@ -28,8 +29,9 @@
         });
     }
 
-    public createViewer(recordCount: number, searchUrl: string, selectedBookIds: number[], query: string = null, pageSize: number = 50) {
-        this.selectedBookIds = selectedBookIds;
+    public createViewer(recordCount: number, searchUrl: string, state: State, query: string = null, pageSize: number = 50) {
+        this.selectedBookIds = DropDownSelect.getBookIdsFromState(state);
+        this.selectedCategoryIds = DropDownSelect.getCategoryIdsFromState(state);
         this.currentQuery = query;
         this.recordCount = recordCount;
         this.searchUrl = searchUrl;
