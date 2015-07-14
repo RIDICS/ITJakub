@@ -115,15 +115,43 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-				[Transaction(TransactionMode.Requires)]
-				public virtual BookType FindBookTypeByType(BookTypeEnum bookTypeEnum)
-				{
-						using (var session = GetSession())
-						{
-								return session.QueryOver<BookType>()
-										.Where(x => x.Type == bookTypeEnum)
-										.SingleOrDefault();
-						}
-				}
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookType FindBookTypeByType(BookTypeEnum bookTypeEnum)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<BookType>()
+                    .Where(x => x.Type == bookTypeEnum)
+                    .SingleOrDefault();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<int> GetAllSubcategoryIds(IList<int> categoryIds)
+        {
+            using (var session = GetSession())
+            {
+                if (categoryIds == null || categoryIds.Count == 0)
+                    return new List<int>();
+
+                return session.GetNamedQuery("GetCategoryHierarchy")
+                    .SetParameterList("categoryIds", categoryIds)
+                    .List<int>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<long> GetBookIdsFromCategory(IList<int> categoryIds)
+        {
+            using (var session = GetSession())
+            {
+                if (categoryIds == null || categoryIds.Count == 0)
+                    return new List<long>();
+
+                return session.GetNamedQuery("GetBookIdsFromCategoryHierarchy")
+                    .SetParameterList("categoryIds", categoryIds)
+                    .List<long>();
+            }
+        }
     }
 }

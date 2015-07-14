@@ -39,6 +39,9 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 
                 if (bookVersion.BookBibls == null) bookVersion.BookBibls = new List<BookBibl>();
                 bookVersion.BookBibls.Add(bookBibl);
+
+                if (bookBibl.Type == "acronym")
+                    bookVersion.Acronym = bookBibl.Text;
             }
         }
     }
