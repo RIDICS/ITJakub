@@ -174,19 +174,19 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.GetTypeaheadTitlesByBookType(query, bookType);
         }
-        public int GetHeadwordCount(IList<long> selectedBookIds)
+        public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
-            return m_searchManager.GetHeadwordCount(selectedBookIds);
+            return m_searchManager.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
         }
 
-        public IList<HeadwordContract> GetHeadwordList(IList<long> selectedBookIds, int page, int pageSize)
+        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
         {
-            return m_searchManager.GetHeadwordList(selectedBookIds, page, pageSize);
+            return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, page, pageSize);
         }
 
-        public int GetHeadwordPageNumber(IList<long> selectedBookIds, string query, int pageSize)
+        public int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
         {
-            return m_searchManager.GetHeadwordPageNumber(selectedBookIds, query, pageSize);
+            return m_searchManager.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query, pageSize);
         }
 
         public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)

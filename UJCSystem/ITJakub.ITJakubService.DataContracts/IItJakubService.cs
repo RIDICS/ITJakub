@@ -16,11 +16,10 @@ namespace ITJakub.ITJakubService.DataContracts
         string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
-				string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract);
+        string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract);
 
         [OperationContract]
-        string GetBookPagesByName(string bookGuid, string startPageName, string endPageName,
-            OutputFormatEnumContract resultFormat);
+        string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
         string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat);
@@ -107,13 +106,13 @@ namespace ITJakub.ITJakubService.DataContracts
         #endregion
 
         [OperationContract]
-        int GetHeadwordCount(IList<long> selectedBookIds);
+        int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds);
 
         [OperationContract]
-        IList<HeadwordContract> GetHeadwordList(IList<long> selectedBookIds, int page, int pageSize);
+        IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize);
 
         [OperationContract]
-        int GetHeadwordPageNumber(IList<long> selectedBookIds, string query, int pageSize);
+        int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize);
 
         [OperationContract]
         HeadwordSearchResultContract GetHeadwordSearchResultCount(string query);

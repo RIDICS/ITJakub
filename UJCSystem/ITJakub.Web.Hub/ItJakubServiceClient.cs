@@ -717,11 +717,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public int GetHeadwordCount(IList<long> selectedBookIds)
+        public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
             try
             {
-                return Channel.GetHeadwordCount(selectedBookIds);
+                return Channel.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
             }
             catch (CommunicationException ex)
             {
@@ -744,11 +744,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IList<HeadwordContract> GetHeadwordList(IList<long> selectedBookIds, int page, int pageSize)
+        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
         {
             try
             {
-                return Channel.GetHeadwordList(selectedBookIds, page, pageSize);
+                return Channel.GetHeadwordList(selectedCategoryIds, selectedBookIds, page, pageSize);
             }
             catch (CommunicationException ex)
             {
@@ -771,11 +771,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public int GetHeadwordPageNumber(IList<long> selectedBookIds, string query, int pageSize)
+        public int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
         {
             try
             {
-                return Channel.GetHeadwordPageNumber(selectedBookIds, query, pageSize);
+                return Channel.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query, pageSize);
             }
             catch (CommunicationException ex)
             {

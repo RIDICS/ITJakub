@@ -131,21 +131,21 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetHeadwordCount(IList<long> selectedBookIds)
+        public ActionResult GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
-            var resultCount = m_mainServiceClient.GetHeadwordCount(selectedBookIds);
+            var resultCount = m_mainServiceClient.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
             return Json(resultCount, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetHeadwordList(IList<long> selectedBookIds, int page, int pageSize)
+        public ActionResult GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
         {
-            var result = m_mainServiceClient.GetHeadwordList(selectedBookIds, page, pageSize);
+            var result = m_mainServiceClient.GetHeadwordList(selectedCategoryIds, selectedBookIds, page, pageSize);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetHeadwordPageNumber(IList<long> selectedBookIds, string query, int pageSize)
+        public ActionResult GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
         {
-            var resultPageNumber = m_mainServiceClient.GetHeadwordPageNumber(selectedBookIds, query, pageSize);
+            var resultPageNumber = m_mainServiceClient.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query, pageSize);
             return Json(resultPageNumber, JsonRequestBehavior.AllowGet);
         }
 

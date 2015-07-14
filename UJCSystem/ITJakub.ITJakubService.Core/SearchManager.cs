@@ -190,26 +190,40 @@ namespace ITJakub.ITJakubService.Core
             return resultList;
         }
 
-        public int GetHeadwordCount(IList<long> selectedBookIds)
+        private IList<long> GetCompleteBookIdList(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
-            return selectedBookIds == null || selectedBookIds.Count == 0
-                ? m_bookVersionRepository.GetHeadwordCount()
-                : m_bookVersionRepository.GetHeadwordCount(selectedBookIds);
+            var bookIdsFromCategory = m_categoryRepository.GetBookIdsFromCategory(selectedCategoryIds);
+            return selectedBookIds != null
+                ? bookIdsFromCategory.Concat(selectedBookIds).ToList()
+                : bookIdsFromCategory;
         }
 
-        public IList<HeadwordContract> GetHeadwordList(IList<long> selectedBookIds, int page, int pageSize)
+        public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
-            var databaseResult = selectedBookIds == null || selectedBookIds.Count == 0
+            var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            return bookIds.Count == 0
+                ? m_bookVersionRepository.GetHeadwordCount()
+                : m_bookVersionRepository.GetHeadwordCount(bookIds);
+        }
+
+        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
+        {
+            var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            var databaseResult = bookIds.Count == 0
                 ? m_bookVersionRepository.GetHeadwordList(page, pageSize)
-                : m_bookVersionRepository.GetHeadwordList(page, pageSize, selectedBookIds);
+                : m_bookVersionRepository.GetHeadwordList(page, pageSize, bookIds);
             var result = ConvertHeadwordSearchToContract(databaseResult);
 
             return result;
         }
         
-        public int GetHeadwordPageNumber(IList<long> selectedBookIds, string query, int pageSize)
+        public int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
         {
-            return m_bookVersionRepository.GetPageNumberForHeadword(selectedBookIds, query, pageSize);
+            var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            return m_bookVersionRepository.GetPageNumberForHeadword(bookIds, query, pageSize);
         }
 
         public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
