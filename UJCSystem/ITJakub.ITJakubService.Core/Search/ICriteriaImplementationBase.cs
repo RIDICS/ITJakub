@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ITJakub.DataEntities.Database;
 using ITJakub.ITJakubService.DataContracts;
@@ -117,7 +118,8 @@ namespace ITJakub.ITJakubService.Core.Search
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
         {
-            var datingCriteriaContract = (DatingCriteriaContract) searchCriteriaContract;
+            var datingListCriteriaContract = (DatingListCriteriaContract) searchCriteriaContract; //TODO added list in contracts
+            var datingCriteriaContract = datingListCriteriaContract.Values.FirstOrDefault();
             var datingParameters = new List<object>();
             var manuscriptAlias = string.Format("m{0}", Guid.NewGuid().ToString("N"));
             var whereBuilder = new StringBuilder();

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -40,15 +39,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             return View();
         }
-
-        //public ActionResult SaveItem(string itemmType, string itemId, string bookType)
-        //{
-        //    var actionType = action == "add" ? ActionType.Save : ActionType.Delete;
-        //    var itemType = action == "add" ? ItemmTypeContract.Book : ItemmTypeContract.Category;
-
-        //    m_mainServiceClient.SaveFavorite(action, bookType);
-
-        //}
 
         public ActionResult GetTextWithCategories()
         {
@@ -105,15 +95,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-
-        public ActionResult SearchCriteria(IList<ConditionCriteriaDescription> searchData)
+        [HttpPost]
+        public ActionResult SearchCriteria(string json)
         {
-            //var dating = searchData.FirstOrDefault().ConditionDescription as DatingListCriteriaDescription;
-            string json = "[{conditions: [{\"notAfter\":963}],\"searchType\":3,\"conditionType\":1}]";
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescription>>(json, new ConditionCriteriaDescriptionConverter());
-            //var wordListCriteriaContracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
-            //m_mainServiceClient.SearchByCriteria(wordListCriteriaContracts);
-            return Json(new {}, JsonRequestBehavior.AllowGet);
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new {});
         }
 
         public ActionResult SearchCriteriaMocked()

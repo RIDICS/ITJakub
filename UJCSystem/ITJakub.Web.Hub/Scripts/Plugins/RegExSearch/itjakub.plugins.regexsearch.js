@@ -93,17 +93,20 @@ var RegExSearch = (function (_super) {
         return jsonString;
     };
     RegExSearch.prototype.processSearch = function () {
+        var _this = this;
         var json = this.getConditionsResultJSON();
         $.ajax({
             type: "POST",
             traditional: true,
-            data: json,
+            data: JSON.stringify({ "json": json }),
             url: "/Dictionaries/Dictionaries/SearchCriteria",
-            dataType: "json",
-            contentType: "application/json",
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
             success: function (response) {
             },
             error: function (response) {
+                $(_this.container).empty();
+                _this.container.innerHTML = response.responseText;
             }
         });
     };
@@ -301,7 +304,7 @@ var RegExWordConditionList = (function (_super) {
         var criteriaDescriptions = new WordsCriteriaListDescription();
         for (var i = 0; i < this.conditionInputArray.length; i++) {
             var regExWordCondition = this.conditionInputArray[i];
-            criteriaDescriptions.wordListCriteriaDescription.push(regExWordCondition.getConditionsValue());
+            criteriaDescriptions.conditions.push(regExWordCondition.getConditionsValue());
         }
         return criteriaDescriptions;
     };
@@ -651,7 +654,7 @@ var RegExDatingCondition = (function (_super) {
             default:
                 break;
         }
-        datingList.datingListCriteriaDescription.push(datingValue); //TODO make array of datingValues (logical OR between datings is possible)
+        datingList.conditions.push(datingValue); //TODO make array of datingValues (logical OR between datings is possible)
         return datingList;
     };
     RegExDatingCondition.prototype.getConditionType = function () {
@@ -952,7 +955,7 @@ var DatingCriteriaListDescription = (function (_super) {
     __extends(DatingCriteriaListDescription, _super);
     function DatingCriteriaListDescription() {
         _super.call(this);
-        this.datingListCriteriaDescription = new Array();
+        this.conditions = new Array();
     }
     return DatingCriteriaListDescription;
 })(ConditionResult);
@@ -965,7 +968,7 @@ var WordsCriteriaListDescription = (function (_super) {
     __extends(WordsCriteriaListDescription, _super);
     function WordsCriteriaListDescription() {
         _super.call(this);
-        this.wordListCriteriaDescription = new Array();
+        this.conditions = new Array();
     }
     return WordsCriteriaListDescription;
 })(ConditionResult);

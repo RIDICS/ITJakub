@@ -109,13 +109,15 @@ class RegExSearch extends RegExSearchBase {
         $.ajax({
             type: "POST",
             traditional: true,
-            data: json,
+            data: JSON.stringify({ "json": json }),
             url: "/Dictionaries/Dictionaries/SearchCriteria", //TODO add getBaseUrl
-            dataType: "json",
-            contentType: "application/json",
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
             success: (response) => {
             },
-            error: (response) => {
+            error: (response : JQueryXHR) => {
+                $(this.container).empty();
+                this.container.innerHTML = response.responseText;
             }
         });
 
@@ -371,7 +373,7 @@ class RegExWordConditionList extends RegExConditionBase {
         var criteriaDescriptions = new WordsCriteriaListDescription();
         for (var i = 0; i < this.conditionInputArray.length; i++) {
             var regExWordCondition = this.conditionInputArray[i];
-            criteriaDescriptions.wordListCriteriaDescription.push(regExWordCondition.getConditionsValue());
+            criteriaDescriptions.conditions.push(regExWordCondition.getConditionsValue());
         }
         return criteriaDescriptions;
     }
@@ -810,7 +812,7 @@ class RegExDatingCondition extends RegExConditionBase {
                 break;
         }
 
-        datingList.datingListCriteriaDescription.push(datingValue); //TODO make array of datingValues (logical OR between datings is possible)
+        datingList.conditions.push(datingValue); //TODO make array of datingValues (logical OR between datings is possible)
         return datingList;
     }
 
@@ -1183,11 +1185,11 @@ class ConditionResult {
 }
 
 class DatingCriteriaListDescription extends ConditionResult {
-    datingListCriteriaDescription: Array<DatingCriteriaDescription>;
+    conditions: Array<DatingCriteriaDescription>;
 
     constructor() {
         super();
-        this.datingListCriteriaDescription = new Array<DatingCriteriaDescription>();
+        this.conditions = new Array<DatingCriteriaDescription>();
     }
 }
 
@@ -1197,11 +1199,11 @@ class DatingCriteriaDescription  {
 }
 
 class WordsCriteriaListDescription extends ConditionResult {
-    wordListCriteriaDescription: Array<WordCriteriaDescription>;
+    conditions: Array<WordCriteriaDescription>;
 
     constructor() {
         super();
-        this.wordListCriteriaDescription = new Array<WordCriteriaDescription>();
+        this.conditions = new Array<WordCriteriaDescription>();
     }
 }
 
