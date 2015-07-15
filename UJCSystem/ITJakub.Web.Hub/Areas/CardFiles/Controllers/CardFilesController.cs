@@ -5,8 +5,8 @@ using System.Web.Mvc;
 using System.Web.WebPages;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching.Results;
 using Microsoft.Ajax.Utilities;
-using WebGrease.Css.Ast;
 
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 {
@@ -47,9 +47,9 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
                     result.Add(new SearchResultContract()
                     {
                         Title = cardFile.Name,
-                        BookGuid = cardFile.Id,
+                        BookXmlId = cardFile.Id,
                         SubTitle = cardFile.Description,
-                        BookType = "CardFile"
+                        BookType = BookTypeEnumContract.CardFile
                     });
                 }
             }

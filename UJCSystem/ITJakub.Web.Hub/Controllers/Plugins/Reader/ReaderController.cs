@@ -15,12 +15,6 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
         }
 
-        public ActionResult GetBookPageByName(string bookId, string pageName)
-        {
-            var mainServiceClient = new ItJakubServiceClient();
-            var text =  mainServiceClient.GetBookPageByName(bookId, pageName, OutputFormatEnumContract.Html);
-            return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
-        }
         public ActionResult GetBookPageByXmlId(string bookId, string pageXmlId)
         {
             var mainServiceClient = new ItJakubServiceClient();
@@ -38,11 +32,6 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         {
             var contentItems = m_mainServiceClient.GetBookContent(bookId);
             return Json(new { content = contentItems }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult GetBookPageByPosition(string bookId, int pagePosition)
-        {
-            return Json(new { pageText = m_mainServiceClient.GetBookPageByPosition(bookId, pagePosition, OutputFormatEnumContract.Html) }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddBookmark(string bookId, string pageXmlId)

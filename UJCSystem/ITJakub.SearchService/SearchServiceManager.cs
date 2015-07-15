@@ -1,36 +1,39 @@
 ﻿using System;
-using ITJakub.SearchService.Core.Exist.DAOs;
+using System.Collections.Generic;
+using ITJakub.SearchService.Core.Exist;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.SearchService
 {
     public class SearchServiceManager : ISearchService
     {
-        private readonly BookDao m_bookDao;
+        private readonly ExistManager m_existManager;
 
-        public SearchServiceManager(BookDao bookDao)
+        public SearchServiceManager(ExistManager existManager)
         {
-            m_bookDao = bookDao;
+            m_existManager = existManager;
         }
 
         public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName,
             OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            return m_bookDao.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName,
+            return m_existManager.GetPageByPositionFromStart(bookId, versionId, pagePosition, transformationName,
                 outputFormat, transformationLevel);
         }
 
         public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName,
             OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            return m_bookDao.GetPageByName(bookId, versionId, pageName, transformationName, outputFormat,
+            return m_existManager.GetPageByName(bookId, versionId, pageName, transformationName, outputFormat,
                 transformationLevel);
         }
 
         public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName,
             OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            return m_bookDao.GetPageByXmlId(bookId, versionId, pageXmlId, transformationName, outputFormat,
+            return m_existManager.GetPageByXmlId(bookId, versionId, pageXmlId, transformationName, outputFormat,
                 transformationLevel);
         }
 
@@ -38,31 +41,36 @@ namespace ITJakub.SearchService
             string transformationName, OutputFormatEnumContract outputFormat,
             ResourceLevelEnumContract transformationLevel)
         {
-            return m_bookDao.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName,
+            return m_existManager.GetPagesByName(bookId, versionId, startPageName, endPageName, transformationName,
                 outputFormat, transformationLevel);
         }
 
         public void UploadVersionFile(VersionResourceUploadContract contract)
         {
-            m_bookDao.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
+            m_existManager.UploadVersionFile(contract.BookId, contract.BookVersionId, contract.FileName, contract.DataStream);
         }
 
         public void UploadBookFile(BookResourceUploadContract contract)
         {
-            m_bookDao.UploadBookFile(contract.BookId, contract.FileName, contract.DataStream);
+            m_existManager.UploadBookFile(contract.BookId, contract.FileName, contract.DataStream);
         }
 
         public void UploadSharedFile(ResourceUploadContract contract)
         {
-            m_bookDao.UploadSharedFile(contract.FileName, contract.DataStream);
+            m_existManager.UploadSharedFile(contract.FileName, contract.DataStream);
         }
 
         public string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId,
             string transformationName, OutputFormatEnumContract outputFormat,
             ResourceLevelEnumContract transformationLevel)
         {
-            return m_bookDao.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId, transformationName, outputFormat,
+            return m_existManager.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId, transformationName, outputFormat,
                 transformationLevel);
+        }
+
+        public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
+        {
+            m_existManager.ListSearchEditionsResults(searchCriterias);
         }
     }
 }

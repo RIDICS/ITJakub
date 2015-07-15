@@ -2,6 +2,7 @@
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching.Results;
 using ResponsibleType = ITJakub.DataEntities.Database.Entities.Enums.ResponsibleType;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles

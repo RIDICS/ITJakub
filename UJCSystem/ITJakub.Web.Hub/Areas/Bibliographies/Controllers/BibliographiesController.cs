@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching.Results;
 
 namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 {

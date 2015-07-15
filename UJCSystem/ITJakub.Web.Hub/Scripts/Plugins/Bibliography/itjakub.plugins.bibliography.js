@@ -52,7 +52,7 @@ var BibliographyModule = (function () {
         $(liElement).attr("data-name", bibItem.Title);
         $(liElement).attr("data-century", bibItem.Century);
         //TODO toggle uncommented with commented code after testing
-        //$(liElement).data('bookid', bibItem.BookGuid);
+        //$(liElement).data('bookid', bibItem.BookXmlId);
         //$(liElement).data('booktype', bibItem.BookType);
         //$(liElement).data('name', bibItem.Title);
         //$(liElement).data('century', bibItem.Century); //TODO add values for sorting
@@ -93,4 +93,24 @@ var BookInfo = (function () {
     }
     return BookInfo;
 })();
+/*
+ *      [EnumMember] Edition = 0, //Edice
+        [EnumMember] Dictionary = 1, //Slovnik
+        [EnumMember] Grammar = 2, //Mluvnice
+        [EnumMember] ProfessionalLiterature = 3, //Odborna literatura
+        [EnumMember] TextBank = 4, //Textova banka
+        [EnumMember] BibliographicalItem = 5,
+        [EnumMember] CardFile = 6,
+ *
+ */
+var BookTypeEnum;
+(function (BookTypeEnum) {
+    BookTypeEnum[BookTypeEnum["Edition"] = 0] = "Edition";
+    BookTypeEnum[BookTypeEnum["Dictionary"] = 1] = "Dictionary";
+    BookTypeEnum[BookTypeEnum["Grammar"] = 2] = "Grammar";
+    BookTypeEnum[BookTypeEnum["ProfessionalLiterature"] = 3] = "ProfessionalLiterature";
+    BookTypeEnum[BookTypeEnum["TextBank"] = 4] = "TextBank";
+    BookTypeEnum[BookTypeEnum["BibliographicalItem"] = 5] = "BibliographicalItem";
+    BookTypeEnum[BookTypeEnum["CardFile"] = 6] = "CardFile";
+})(BookTypeEnum || (BookTypeEnum = {}));
 //# sourceMappingURL=itjakub.plugins.bibliography.js.map

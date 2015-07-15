@@ -7,6 +7,7 @@ using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
+using ITJakub.Shared.Contracts.Searching;
 using log4net;
 using NHibernate.Criterion;
 using NHibernate.Transform;
@@ -185,7 +186,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookVersionPair> SearchByCriteriaQuery(List<SearchCriteriaQuery> criteriaQueries)
+        public virtual IList<BookVersionPairContract> SearchByCriteriaQuery(List<SearchCriteriaQuery> criteriaQueries)
         {
             var queryString = "select b.Guid as Guid, min(bv.VersionId) as VersionId from Book b inner join b.LastVersion bv";
             var joinBuilder = new StringBuilder();
@@ -220,8 +221,8 @@ namespace ITJakub.DataEntities.Database.Repositories
                     }
                 }
                 
-                var result = query.SetResultTransformer(Transformers.AliasToBean<BookVersionPair>())
-                    .List<BookVersionPair>();
+                var result = query.SetResultTransformer(Transformers.AliasToBean<BookVersionPairContract>())
+                    .List<BookVersionPairContract>();
 
                 return result;
             }

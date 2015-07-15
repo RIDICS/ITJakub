@@ -5,11 +5,11 @@ class BibliographyModule {
 
     booksContainer: string;
     sortBarContainer: string;
-    forcedBookType: string;
+    forcedBookType: BookTypeEnum;
     bibliographyFactoryResolver: BibliographyFactoryResolver;
     configurationManager: ConfigurationManager;
 
-    constructor(booksContainer: string, sortBarContainer: string, forcedBookType?: string) {
+    constructor(booksContainer: string, sortBarContainer: string, forcedBookType?: BookTypeEnum) {
         this.booksContainer = booksContainer;
         this.sortBarContainer = sortBarContainer;
         this.forcedBookType = forcedBookType;
@@ -61,7 +61,7 @@ class BibliographyModule {
         $(liElement).attr("data-name", bibItem.Title);
         $(liElement).attr("data-century", bibItem.Century);
         //TODO toggle uncommented with commented code after testing
-        //$(liElement).data('bookid', bibItem.BookGuid);
+        //$(liElement).data('bookid', bibItem.BookXmlId);
         //$(liElement).data('booktype', bibItem.BookType);
         //$(liElement).data('name', bibItem.Title);
         //$(liElement).data('century', bibItem.Century); //TODO add values for sorting
@@ -104,7 +104,7 @@ class BibliographyModule {
 
 interface IBookInfo {
     BookId: string;
-    BookType: string;
+    BookType: BookTypeEnum;
     Title: string;
     Editor: string;
     Pattern: string;
@@ -128,8 +128,8 @@ interface IBookInfo {
 //TODO remove or move to separated file
 class BookInfo implements IBookInfo {
     BookId = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
-    //BookId = "%7BFA10177B-25E6-4BB6-B061-0DB988AD3840%7D";
-    BookType: string;
+    //BookXmlId = "%7BFA10177B-25E6-4BB6-B061-0DB988AD3840%7D";
+    BookType: BookTypeEnum;
     Title = "PasKal";
     Editor: string;
     Pattern: string;
@@ -148,6 +148,26 @@ class BookInfo implements IBookInfo {
     Description: string;
     Year: number;
 
+}
+
+/*
+ *      [EnumMember] Edition = 0, //Edice
+        [EnumMember] Dictionary = 1, //Slovnik
+        [EnumMember] Grammar = 2, //Mluvnice
+        [EnumMember] ProfessionalLiterature = 3, //Odborna literatura
+        [EnumMember] TextBank = 4, //Textova banka
+        [EnumMember] BibliographicalItem = 5,
+        [EnumMember] CardFile = 6,
+ * 
+ */
+enum BookTypeEnum {
+    Edition = 0, //Edice
+    Dictionary = 1, //Slovnik
+    Grammar = 2, //Mluvnice
+    ProfessionalLiterature = 3, //Odborna literatura
+    TextBank = 4, //Textova banka
+    BibliographicalItem = 5,
+    CardFile = 6, 
 }
 
 interface IPage {

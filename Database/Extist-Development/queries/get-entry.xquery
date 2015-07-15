@@ -29,16 +29,14 @@ let $entryFragment := $document/id($entryXmlId)
 
 (:let $xslPath := "/db/apps/jacob/transformations/pageToHtml.xsl":)
 let $template := doc(escape-html-uri($xslPath)) 
-(:let $transformation := transform:transform($documentFragment, $template, ()):)
+
 let $transformation := 
 	if($outputFormat = "Html") 
 	then transform:stream-transform($entryFragment, $template, ())
 	else if($outputFormat = "Rtf") 
 		then vwtrans:transform-document-to-rtf($entryFragment, $template)
-(:		then vwtrans:transform-document-to-pdf($documentFragment, $template, ()):)
 		else if($outputFormat = "Pdf") 
 		then vwtrans:transform-document-to-pdf($entryFragment, $template)
-		(:then vwtrans:transform-document-to-pdf($documentFragment, $template, (), ()):)
 		else()
 
 return $transformation

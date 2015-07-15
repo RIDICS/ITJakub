@@ -7,10 +7,10 @@ var __extends = this.__extends || function (d, b) {
 var BibliographyFactoryResolver = (function () {
     function BibliographyFactoryResolver(booksConfigurations) {
         this.factories = new Array();
-        this.factories['Edition'] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
-        this.factories['Dictionary'] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
-        this.factories['TextBank'] = new TextBankFactory(new BookTypeConfiguration("TextBank", booksConfigurations["TextBank"]));
-        this.factories['CardFile'] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
+        this.factories[0 /* Edition */] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
+        this.factories[1 /* Dictionary */] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
+        this.factories[4 /* TextBank */] = new TextBankFactory(new BookTypeConfiguration("TextBank", booksConfigurations["TextBank"]));
+        this.factories[6 /* CardFile */] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
         this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
     }
     BibliographyFactoryResolver.prototype.getFactoryForType = function (bookType) {

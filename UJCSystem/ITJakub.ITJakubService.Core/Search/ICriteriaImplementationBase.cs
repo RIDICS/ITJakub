@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ITJakub.DataEntities.Database;
-using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.ITJakubService.Core.Search
 {
@@ -27,7 +28,7 @@ namespace ITJakub.ITJakubService.Core.Search
             var whereBuilder = new StringBuilder();
             var parameters = new List<object>();
 
-            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Values)
+            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
@@ -58,12 +59,12 @@ namespace ITJakub.ITJakubService.Core.Search
             var whereBuilder = new StringBuilder();
             var parameters = new List<object>();
 
-            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Values)
+            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
 
-                whereBuilder.Append("bv.Title like ?");
+                whereBuilder.Append(" bv.Title like ?");
                 parameters.Add(CriteriaConditionBuilder.Create(wordCriteria));
             }
 
@@ -91,7 +92,7 @@ namespace ITJakub.ITJakubService.Core.Search
             var whereBuilder = new StringBuilder();
             var parameters = new List<object>();
 
-            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Values)
+            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
@@ -122,7 +123,7 @@ namespace ITJakub.ITJakubService.Core.Search
             
             //TODO make OR between items in list as in WordList
 
-            foreach (DatingCriteriaContract datingCriteriaContract in datingListCriteriaContract.Values)
+            foreach (DatingCriteriaContract datingCriteriaContract in datingListCriteriaContract.Disjunctions)
             {
                 throw new NotImplementedException();
                 var datingParameters = new List<object>();

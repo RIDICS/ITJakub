@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database;
-using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.ITJakubService.Core.Search
 {
-    public class SearchCriteriaDirector
+    public class MetadataSearchCriteriaDirector
     {
         private readonly Dictionary<CriteriaKey, ICriteriaImplementationBase> m_criteriaImplementations;
 
-        public SearchCriteriaDirector(IKernel container)
+        public MetadataSearchCriteriaDirector(IKernel container)
         {
             var criteria = container.ResolveAll<ICriteriaImplementationBase>();
             m_criteriaImplementations = criteria.ToDictionary(x => x.CriteriaKey);
@@ -25,6 +26,12 @@ namespace ITJakub.ITJakubService.Core.Search
                 throw new ArgumentException("Criteria key not found");
             }
             return criteriaImplementation.CreateCriteriaQuery(searchCriteriaContract);
+        }
+
+        public bool IsCriteriaSupported(SearchCriteriaContract searchCriteriaContract)
+        {
+            var criteriaKey = searchCriteriaContract.Key;
+            return m_criteriaImplementations.ContainsKey(criteriaKey);
         }
     }
 }

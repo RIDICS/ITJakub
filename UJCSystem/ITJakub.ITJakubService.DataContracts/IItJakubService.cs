@@ -3,6 +3,8 @@ using System.IO;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
+using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
@@ -13,16 +15,7 @@ namespace ITJakub.ITJakubService.DataContracts
         IEnumerable<AuthorDetailContract> GetAllAuthors();
 
         [OperationContract]
-        string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat);
-
-        [OperationContract]
         string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract);
-
-        [OperationContract]
-        string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat);
-
-        [OperationContract]
-        string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
         IEnumerable<BookPageContract> GetBookPageList(string bookGuid);

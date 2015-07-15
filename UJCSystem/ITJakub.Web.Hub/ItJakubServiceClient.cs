@@ -6,6 +6,8 @@ using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
+using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
 
 namespace ITJakub.Web.Hub
@@ -60,25 +62,6 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public string GetBookPageByName(string documentId, string pageName, OutputFormatEnumContract resultFormat)
-        {
-            try
-            {
-                return Channel.GetBookPageByName(documentId, pageName, resultFormat);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPageByName failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPageByName timeouted with: {0}", ex);
-                throw;
-            }
-        }
         public string GetBookPageByXmlId(string documentId, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
             try
@@ -95,46 +78,6 @@ namespace ITJakub.Web.Hub
             {
                 if (m_log.IsErrorEnabled)
                     m_log.ErrorFormat("GetBookPageByXmlId timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
-        public string GetBookPagesByName(string documentId, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
-        {
-            try
-            {
-                return Channel.GetBookPagesByName(documentId, startPageName, endPageName, resultFormat);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPagesByName failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPagesByName timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
-        public string GetBookPageByPosition(string documentId, int position, OutputFormatEnumContract resultFormat)
-        {
-            try
-            {
-                return Channel.GetBookPageByPosition(documentId, position, resultFormat);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPageByPosition failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookPageByPosition timeouted with: {0}", ex);
                 throw;
             }
         }

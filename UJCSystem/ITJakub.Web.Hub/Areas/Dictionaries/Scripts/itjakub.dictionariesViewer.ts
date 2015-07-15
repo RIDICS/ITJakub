@@ -102,7 +102,7 @@
                 if (this.isLazyLoad) {
                     this.prepareLazyLoad(mainHeadwordDiv);
                 } else {
-                    this.getAndShowHeadwordDescription(record.Headword, dictionary.BookGuid, dictionary.XmlEntryId, descriptionDiv);
+                    this.getAndShowHeadwordDescription(record.Headword, dictionary.BookXmlId, dictionary.XmlEntryId, descriptionDiv);
                 }
 
                 var commentsDiv = document.createElement("div");
@@ -115,7 +115,7 @@
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
                 $(dictionaryLink).text(dictionary.BookTitle);
-                dictionaryLink.href = "?guid=" + dictionary.BookGuid;
+                dictionaryLink.href = "?guid=" + dictionary.BookXmlId;
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
 
@@ -211,7 +211,7 @@
 
         $(mainDescriptionDiv).unbind("appearing");
         $(mainDescriptionDiv).removeClass("lazy-loading");
-        this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookGuid, dictionaryInfo.XmlEntryId, <HTMLDivElement>descriptionContainer);
+        this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookXmlId, dictionaryInfo.XmlEntryId, <HTMLDivElement>descriptionContainer);
     }
 
     private isAllLoaded(): boolean {
@@ -424,7 +424,7 @@ class Pagination {
 }
 
 interface IHeadwordBookInfo {
-    BookGuid: string;
+    BookXmlId: string;
     BookAcronym: string;
     BookTitle: string;
     XmlEntryId: string;

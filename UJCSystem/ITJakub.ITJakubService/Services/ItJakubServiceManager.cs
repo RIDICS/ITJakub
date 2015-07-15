@@ -6,6 +6,9 @@ using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
+using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 
 namespace ITJakub.ITJakubService.Services
 {
@@ -49,24 +52,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetBooksWithCategoriesByBookType(bookType);
         }
 
-        public string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
-        {
-            return m_bookManager.GetBookPageByName(bookGuid, pageName, resultFormat);
-        }
-
         public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
             return m_bookManager.GetBookPageByXmlId(bookGuid, pageXmlId, resultFormat, bookTypeContract);
-        }
-
-        public string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
-        {
-            return m_bookManager.GetBookPagesByName(bookGuid, startPageName, endPageName, resultFormat);
-        }
-
-        public string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
-        {
-            return m_bookManager.GetBookPageByPosition(bookGuid, position, resultFormat);
         }
 
         public IEnumerable<BookPageContract> GetBookPageList(string bookGuid)
