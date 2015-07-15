@@ -1044,6 +1044,15 @@ body {
   padding: 0 10px 0 10px;
   margin-bottom: 5px;
 }
+.regexsearch-dating-or-delimiter {
+  color: white;
+  background-color: #9a9a9a;
+  padding: 0 10px 0 10px;
+  margin-bottom: 70px;
+}
+.regexsearch-condition-list-div .regex-dating-condition:last-child .regexsearch-dating-or-delimiter {
+  margin-bottom: 5px;
+}
 .regexsearch-or-delimiter {
   /*margin-left: @regexsearch-checkbox-div-width;*/
 }
@@ -1118,7 +1127,7 @@ input.regexsearch-checkbox {
   width: 200px;
   margin-left: 308px;
 }
-.regex-dating-condition {
+.regex-dating-condition-value-select {
   margin: 20px;
   padding: 10px 5px 10px 5px;
   background-color: white;

@@ -1,6 +1,6 @@
-﻿class RegExSearchBase {
+﻿class HtmlItemsFactory {
 
-    protected createOption(label: string, value: string): HTMLOptionElement {
+    public static createOption(label: string, value: string): HTMLOptionElement {
         var conditionOption = document.createElement("option");
         conditionOption.innerHTML = label;
         conditionOption.value = value;
@@ -8,7 +8,7 @@
         return conditionOption;
     }
 
-    protected createButton(label: string): HTMLButtonElement {
+    public static createButton(label: string): HTMLButtonElement {
         var button = document.createElement("button");
         button.type = "button";
         button.innerHTML = label;
@@ -20,13 +20,12 @@
     }
 }
 
-class RegExSearch extends RegExSearchBase {
+class RegExSearch {
     container: HTMLDivElement;
     innerContainer: HTMLDivElement;
     regExConditions: Array<RegExConditionListItem>;
         
     constructor(container: HTMLDivElement) {
-        super();
         this.container = container;
     }
 
@@ -36,7 +35,7 @@ class RegExSearch extends RegExSearchBase {
 
         var commandsDiv = document.createElement("div");
 
-        var sentButton = this.createButton("Vyhledat");
+        var sentButton = HtmlItemsFactory.createButton("Vyhledat");
         $(sentButton).addClass("regex-search-button");
         commandsDiv.appendChild(sentButton);
         $(sentButton).click(() => {
@@ -124,15 +123,14 @@ class RegExSearch extends RegExSearchBase {
     }
 }
 
-class RegExConditionListItem extends RegExSearchBase {
+class RegExConditionListItem {
     private html: HTMLDivElement;
     private parent: RegExSearch;
     private selectedSearchType: number;
     private innerConditionContainer: HTMLDivElement;
-    private innerCondition: RegExConditionBase;
+    private innerCondition: IRegExConditionBase;
 
     constructor(parent: RegExSearch) {
-        super();
         this.parent = parent;
     }
 
@@ -232,13 +230,13 @@ class RegExConditionListItem extends RegExSearchBase {
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
 
-        searchDestinationSelect.appendChild(this.createOption("Text", SearchTypeEnum.Text.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Autor", SearchTypeEnum.Author.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Titul", SearchTypeEnum.Title.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Editor", SearchTypeEnum.Responsible.toString()));
-        searchDestinationSelect.appendChild(this.createOption("Období vzniku", SearchTypeEnum.Dating.toString()));
+        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Text", SearchTypeEnum.Fulltext.toString()));
+        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Autor", SearchTypeEnum.Author.toString()));
+        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Titul", SearchTypeEnum.Title.toString()));
+        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Editor", SearchTypeEnum.Editor.toString()));
+        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Období vzniku", SearchTypeEnum.Dating.toString()));
 
-        this.selectedSearchType = SearchTypeEnum.Text;
+        this.selectedSearchType = SearchTypeEnum.Fulltext;
 
         $(searchDestinationSelect).change((eventData: Event) => {
             var oldSelectedSearchType = this.selectedSearchType;
@@ -262,19 +260,24 @@ class RegExConditionListItem extends RegExSearchBase {
         $(conditionsDiv).append(delimeterDiv);
         this.setClickableDelimeter();
         this.html = conditionsDiv;
-
     }
 
     private changeConditionType(newSearchType : SearchTypeEnum, oldSearchType: SearchTypeEnum) {
-        if (this.innerCondition instanceof RegExWordConditionList && newSearchType === SearchTypeEnum.Dating) {
-            $(this.innerConditionContainer).empty();
-            this.innerCondition = new RegExDatingCondition(this);
-            this.innerCondition.makeRegExCondition(this.innerConditionContainer);
-        } else if (this.innerCondition instanceof RegExDatingCondition && newSearchType !== SearchTypeEnum.Dating) {
+        if ( !(this.innerCondition instanceof RegExWordConditionList) && (newSearchType === SearchTypeEnum.Author || newSearchType === SearchTypeEnum.Editor || newSearchType === SearchTypeEnum.Fulltext || newSearchType === SearchTypeEnum.Title)) {
             $(this.innerConditionContainer).empty();
             this.innerCondition = new RegExWordConditionList(this);
             this.innerCondition.makeRegExCondition(this.innerConditionContainer);
         }
+        else if (!(this.innerCondition instanceof RegExDatingConditionList) && (newSearchType === SearchTypeEnum.Dating)) {
+            $(this.innerConditionContainer).empty();
+            this.innerCondition = new RegExDatingConditionList(this);
+            this.innerCondition.makeRegExCondition(this.innerConditionContainer);
+        }
+        //else if (!(this.innerCondition instanceof RegExTokenDistanceConditionList) && (newSearchType === SearchTypeEnum.TokenDistance)) { //TODO
+        //    $(this.innerConditionContainer).empty();
+        //    this.innerCondition = new RegExTokenDistanceConditionList(this);
+        //    this.innerCondition.makeRegExCondition(this.innerConditionContainer);
+        //}
     }
 
     private makeDefaultCondition() {
@@ -292,6 +295,7 @@ class RegExConditionListItem extends RegExSearchBase {
 }
 
 interface IRegExConditionBase {
+    parentRegExConditionListItem: RegExConditionListItem;
 
     makeRegExCondition(conditionContainerDiv: HTMLDivElement);
 
@@ -301,29 +305,15 @@ interface IRegExConditionBase {
 
 }
 
-class RegExConditionBase extends RegExSearchBase implements IRegExConditionBase {
-    protected parentRegExConditionList: RegExConditionListItem;
-
-    constructor(parent: RegExConditionListItem) {
-        super();
-        this.parentRegExConditionList = parent;
-    }
-
-    makeRegExCondition(conditionContainerDiv: HTMLDivElement) { }
-
-    getConditionValue(): ConditionResult { return null; }
-
-    getConditionType(): ConditionTypeEnum { return null; }
-}
-
-class RegExWordConditionList extends RegExConditionBase {
+class RegExWordConditionList implements IRegExConditionBase {
+    parentRegExConditionListItem: RegExConditionListItem;
     private html: HTMLDivElement;
     private selectedWordFormType: string;
     private wordListContainerDiv: HTMLDivElement;
     private conditionInputArray: Array<RegExWordCondition>;
 
     constructor(parent: RegExConditionListItem) {
-        super(parent);
+        this.parentRegExConditionListItem = parent;
     }
 
     getWordFormType(): string {
@@ -351,10 +341,10 @@ class RegExWordConditionList extends RegExConditionBase {
         $(wordFormSelect).addClass("regexsearch-select");
         wordFormDiv.appendChild(wordFormSelect);
 
-        wordFormSelect.appendChild(this.createOption("Lemma", this.wordFormType.Lemma));
-        wordFormSelect.appendChild(this.createOption("Hyperlemma - nové", this.wordFormType.HyperlemmaNew));
-        wordFormSelect.appendChild(this.createOption("Hyperlemma - staré", this.wordFormType.HyperlemmaOld));
-        wordFormSelect.appendChild(this.createOption("Stemma", this.wordFormType.Stemma));
+        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Lemma", this.wordFormType.Lemma));
+        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Hyperlemma - nové", this.wordFormType.HyperlemmaNew));
+        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Hyperlemma - staré", this.wordFormType.HyperlemmaOld));
+        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Stemma", this.wordFormType.Stemma));
 
         this.selectedWordFormType = this.wordFormType.Lemma;
 
@@ -665,7 +655,75 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
     getHigherValue(): number { return this.value; }
 }
 
-class RegExDatingCondition extends RegExConditionBase {
+class RegExDatingConditionList implements IRegExConditionBase {
+    parentRegExConditionListItem: RegExConditionListItem;
+    private html: HTMLDivElement;
+    private datingListContainerDiv: HTMLDivElement;
+    private conditionInputArray: Array<RegExDatingCondition>;
+
+    constructor(parent: RegExConditionListItem) {
+        this.parentRegExConditionListItem = parent;
+    }
+
+    makeRegExCondition(conditionContainerDiv: HTMLDivElement) {
+        this.datingListContainerDiv = document.createElement("div");
+        $(this.datingListContainerDiv).addClass("regexsearch-condition-list-div");
+        conditionContainerDiv.appendChild(this.datingListContainerDiv);
+        this.resetDatingConditions();
+    }
+
+    getConditionValue(): DatingCriteriaListDescription {
+        var criteriaDescriptions = new DatingCriteriaListDescription();
+        for (var i = 0; i < this.conditionInputArray.length; i++) {
+            var regExDatingCondition = this.conditionInputArray[i];
+            criteriaDescriptions.conditions.push(regExDatingCondition.getConditionValue());
+        }
+        return criteriaDescriptions;
+    }
+
+    getConditionType(): ConditionTypeEnum {
+        return ConditionTypeEnum.DatingList;
+    }
+
+    resetDatingConditions() {
+        $(this.datingListContainerDiv).empty();
+        this.conditionInputArray = [];
+        var newDatingCondition = new RegExDatingCondition(this);
+        newDatingCondition.makeRegExCondition();
+        newDatingCondition.setClickableDelimeter();
+        this.conditionInputArray.push(newDatingCondition);
+        this.datingListContainerDiv.appendChild(newDatingCondition.getHtml());
+    }
+
+    addDatingCondition() {
+        this.conditionInputArray[this.conditionInputArray.length - 1].setTextDelimeter();
+        var newDatingCondition = new RegExDatingCondition(this);
+        newDatingCondition.makeRegExCondition();
+        newDatingCondition.setClickableDelimeter();
+        this.conditionInputArray.push(newDatingCondition);
+        this.datingListContainerDiv.appendChild(newDatingCondition.getHtml());
+    }
+
+    removeDatingCondition(condition: RegExDatingCondition) {
+
+        var index = this.conditionInputArray.indexOf(condition, 0);
+        if (index != undefined) {
+            var arrayItem = this.conditionInputArray[index];
+            this.datingListContainerDiv.removeChild(arrayItem.getHtml());
+            this.conditionInputArray.splice(index, 1);
+        }
+
+        if (this.conditionInputArray.length === 1) {
+            this.conditionInputArray[0].setClickableDelimeter();
+        }
+
+        if (this.conditionInputArray.length === 0) {
+            this.resetDatingConditions();
+        }
+    }
+}
+
+class RegExDatingCondition  {
     private DATING_AROUND: number = 3; //const
 
     private datingPrecision: DatingPrecisionEnum;
@@ -676,13 +734,95 @@ class RegExDatingCondition extends RegExConditionBase {
     private firstDateView: IRegExDatingConditionView;
     private secondDateView: IRegExDatingConditionView;
 
-    constructor(parent: RegExConditionListItem) {
-        super(parent);
+    private parent: RegExDatingConditionList;
+    private html: HTMLDivElement;
+
+    private delimeterClass: string = "regexsearch-dating-or-delimiter";
+
+    constructor(parent: RegExDatingConditionList) {
+        this.parent = parent;
     }
 
-    makeRegExCondition(conditionContainerDiv: HTMLDivElement) {
+    getHtml(): HTMLDivElement {
+        return this.html;
+    }
+
+    private removeDelimeter() {
+        $(this.html).find("."+this.delimeterClass).empty();
+    }
+
+    private hasDelimeter(): boolean {
+        var isEmpty = $(this.html).find("."+this.delimeterClass).is(":empty");
+        return !isEmpty;
+    }
+
+    setTextDelimeter() {
+        var textDelimeter = this.createTextDelimeter();
+        if (this.hasDelimeter()) {
+            this.removeDelimeter();
+        }
+        $(this.html).find("."+this.delimeterClass).append(textDelimeter);
+    }
+
+    setClickableDelimeter() {
+        var clickableDelimeter = this.createClickableDelimeter();
+        if (this.hasDelimeter()) {
+            this.removeDelimeter();
+        }
+        $(this.html).find("."+this.delimeterClass).append(clickableDelimeter);
+    }
+
+    private createClickableDelimeter(): HTMLDivElement {
+        var delimeterDiv = document.createElement("div");
+        var addWordSpan = document.createElement("span");
+        $(addWordSpan).addClass("regex-clickable-text");
+        addWordSpan.innerHTML = "+ Nebo";
+        $(addWordSpan).click(() => {
+            this.parent.addDatingCondition();
+        });
+
+        delimeterDiv.appendChild(addWordSpan);
+        $(delimeterDiv).addClass("regexsearch-or-delimiter");
+
+        var trashButton = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(() => {
+            this.parent.removeDatingCondition(this);
+        });
+
+        delimeterDiv.appendChild(trashButton);
+
+        return delimeterDiv;
+    }
+
+    private createTextDelimeter(): HTMLDivElement {
+        var delimeterDiv = document.createElement("div");
+        delimeterDiv.innerHTML = "Nebo";
+        $(delimeterDiv).addClass(this.delimeterClass);
+
+        var trashButton = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(() => {
+            this.parent.removeDatingCondition(this);
+        });
+
+        delimeterDiv.appendChild(trashButton);
+
+        return delimeterDiv;
+    }
+
+    makeRegExCondition() {
+        var datingConditionDiv = document.createElement('div');
+        $(datingConditionDiv).addClass("regex-dating-condition");
+
         var datingDiv = document.createElement('div');
-        $(datingDiv).addClass("regex-dating-condition");
+        $(datingDiv).addClass("regex-dating-condition-value-select");
 
         datingDiv.appendChild(this.makeTopSelectBoxes());
 
@@ -691,9 +831,10 @@ class RegExDatingCondition extends RegExConditionBase {
         this.precisionInpuDiv = precisionInpuDiv;
         datingDiv.appendChild(precisionInpuDiv);
 
-
         this.changeViews();
-        $(conditionContainerDiv).append(datingDiv);
+        datingConditionDiv.appendChild(datingDiv);
+        datingConditionDiv.appendChild(this.createTextDelimeter());
+        this.html = datingConditionDiv;
     }
 
     public makeTopSelectBoxes() : HTMLDivElement {
@@ -712,10 +853,10 @@ class RegExDatingCondition extends RegExConditionBase {
         $(datingFormSelect).addClass("regexsearch-select");
         datingSelectDiv.appendChild(datingFormSelect);
 
-        datingFormSelect.appendChild(this.createOption("Starší než", DatingRangeEnum.OlderThen.toString()));
-        datingFormSelect.appendChild(this.createOption("Mladší než", DatingRangeEnum.YoungerThen.toString()));
-        datingFormSelect.appendChild(this.createOption("Mezi", DatingRangeEnum.Between.toString()));
-        datingFormSelect.appendChild(this.createOption("Kolem", DatingRangeEnum.Around.toString()));
+        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Starší než", DatingRangeEnum.OlderThen.toString()));
+        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Mladší než", DatingRangeEnum.YoungerThen.toString()));
+        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Mezi", DatingRangeEnum.Between.toString()));
+        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Kolem", DatingRangeEnum.Around.toString()));
 
         this.datingRange = DatingRangeEnum.YoungerThen;
 
@@ -740,8 +881,8 @@ class RegExDatingCondition extends RegExConditionBase {
         $(precisionFormSelect).addClass("regexsearch-select");
         precisionSelectDiv.appendChild(precisionFormSelect);
 
-        precisionFormSelect.appendChild(this.createOption("Období", DatingPrecisionEnum.Period.toString()));
-        precisionFormSelect.appendChild(this.createOption("Rok", DatingPrecisionEnum.Year.toString()));
+        precisionFormSelect.appendChild(HtmlItemsFactory.createOption("Období", DatingPrecisionEnum.Period.toString()));
+        precisionFormSelect.appendChild(HtmlItemsFactory.createOption("Rok", DatingPrecisionEnum.Year.toString()));
 
         this.datingPrecision = DatingPrecisionEnum.Period;
 
@@ -787,9 +928,7 @@ class RegExDatingCondition extends RegExConditionBase {
         }
     }
 
-    getConditionValue(): ConditionResult {
-
-        var datingList = new DatingCriteriaListDescription();
+    getConditionValue(): DatingCriteriaDescription {
         var datingValue = new DatingCriteriaDescription();
 
         switch (this.datingRange) {
@@ -811,13 +950,7 @@ class RegExDatingCondition extends RegExConditionBase {
             default:
                 break;
         }
-
-        datingList.conditions.push(datingValue); //TODO make array of datingValues (logical OR between datings is possible)
-        return datingList;
-    }
-
-    getConditionType(): ConditionTypeEnum {
-        return ConditionTypeEnum.DatingList;
+        return datingValue;
     }
 }
 
@@ -1037,7 +1170,7 @@ class RegExWordCondition {
 }
 
 
-class RegExWordInput extends RegExSearchBase {
+class RegExWordInput {
     private html: HTMLDivElement;
     private editorDiv: HTMLDivElement;
     private conditionInput: HTMLInputElement;
@@ -1047,7 +1180,6 @@ class RegExWordInput extends RegExSearchBase {
     private conditionSelectbox: HTMLSelectElement;
 
     constructor(parent: RegExWordCondition) {
-        super();
         this.parentRegExWordCondition = parent;
     }
 
@@ -1083,11 +1215,11 @@ class RegExWordInput extends RegExSearchBase {
         $(conditionSelect).addClass("regexsearch-condition-select");
         conditionTypeDiv.appendChild(conditionSelect);
 
-        conditionSelect.appendChild(this.createOption("Začíná na", WordInputTypeEnum.StartsWith.toString()));
+        conditionSelect.appendChild(HtmlItemsFactory.createOption("Začíná na", WordInputTypeEnum.StartsWith.toString()));
         //conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
-        conditionSelect.appendChild(this.createOption("Obsahuje", WordInputTypeEnum.Contains.toString()));
+        conditionSelect.appendChild(HtmlItemsFactory.createOption("Obsahuje", WordInputTypeEnum.Contains.toString()));
         //conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
-        conditionSelect.appendChild(this.createOption("Končí na", WordInputTypeEnum.EndsWith.toString()));
+        conditionSelect.appendChild(HtmlItemsFactory.createOption("Končí na", WordInputTypeEnum.EndsWith.toString()));
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
 
 
@@ -1119,7 +1251,7 @@ class RegExWordInput extends RegExSearchBase {
         });
         lineDiv.appendChild(regExButton);
 
-        var removeButton = this.createButton("");
+        var removeButton = HtmlItemsFactory.createButton("");
         var removeGlyph = document.createElement("span");
         $(removeGlyph).addClass("glyphicon");
         $(removeGlyph).addClass("glyphicon-trash");
@@ -1136,14 +1268,14 @@ class RegExWordInput extends RegExSearchBase {
         var regexButtonsDiv = document.createElement("div");
         $(regexButtonsDiv).addClass("regexsearch-regex-buttons-div");
 
-        var anythingButton = this.createButton("Cokoliv");
+        var anythingButton = HtmlItemsFactory.createButton("Cokoliv");
         regexButtonsDiv.appendChild(anythingButton);
         $(anythingButton).addClass("regexsearch-editor-button");
         $(anythingButton).click(() => {
             this.conditionInput.value += "%";
         });
 
-        var oneCharButton = this.createButton("Jeden znak");
+        var oneCharButton = HtmlItemsFactory.createButton("Jeden znak");
         regexButtonsDiv.appendChild(oneCharButton);
         $(oneCharButton).addClass("regexsearch-editor-button");
         $(oneCharButton).click(() => {
@@ -1217,6 +1349,21 @@ class WordCriteriaDescription {
     }
 }
 
+class TokenDistanceCriteriaListDescription extends ConditionResult {
+    conditions: Array<TokenDistanceCriteriaDescription>;
+
+    constructor() {
+        super();
+        this.conditions = new Array<TokenDistanceCriteriaDescription>();
+    }
+}
+
+class TokenDistanceCriteriaDescription {
+    distance: number;
+    first: WordCriteriaDescription;
+    second: WordCriteriaDescription;
+}
+
 enum WordInputTypeEnum {
     StartsWith = 0,
     Contains = 1,
@@ -1229,15 +1376,25 @@ enum WordInputTypeEnum {
         [EnumMember] Title = 1,
         [EnumMember] Editor = 2,
         [EnumMember] Dating = 3,
-        [EnumMember] Text = 4
+        [EnumMember] Fulltext = 4,
+        [EnumMember] Heading = 5,
+        [EnumMember] Sentence = 6,
+        [EnumMember] Result = 7,
+        [EnumMember] ResultRestriction = 8,
+        [EnumMember] TokenDistance = 9,
  * 
  */
 enum SearchTypeEnum {
     Author = 0,
     Title = 1,
-    Responsible = 2,
+    Editor = 2,
     Dating = 3,
-    Text = 4
+    Fulltext = 4,
+    Heading = 5,
+    Sentence = 6,
+    Result = 7,
+    ResultRestriction = 8,
+    TokenDistance = 9,
 }
 
 /*
