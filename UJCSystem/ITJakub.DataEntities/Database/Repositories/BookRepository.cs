@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
@@ -7,6 +6,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
+using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -233,12 +233,200 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 var bookVersions =
                     session.QueryOver(() => bookVersionAlias)
-                        .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias, JoinType.InnerJoin)
-                        .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias, JoinType.InnerJoin)
-                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias, JoinType.InnerJoin)
+                        .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias)
+                        .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
+                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
                         .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                        .TransformUsing(Transformers.DistinctRootEntity)
                         .List<BookVersion>();
+
                 return bookVersions;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastAuthors(int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<Author>()
+                    .Select(x => x.Name)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastAuthorsByBookType(int recordCount, BookTypeEnum bookType)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Author authorAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => bookVersionAlias.Authors, () => authorAlias)
+                    .JoinQueryOver(x => bookVersionAlias.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => authorAlias.Name)))
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadAuthors(string query, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Author authorAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Authors, () => authorAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => authorAlias.Name)))
+                    .WhereRestrictionOn(() => authorAlias.Name).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnum bookType, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Author authorAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Authors, () => authorAlias)
+                    .JoinQueryOver(x => bookVersionAlias.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => authorAlias.Name)))
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .AndRestrictionOn(() => authorAlias.Name).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastTitles(int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .Select(x => bookVersionAlias.Title)
+                    .OrderBy(() => bookVersionAlias.CreateTime).Desc
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastTitlesByBookType(int recordCount, BookTypeEnum bookType)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .Select(x => bookVersionAlias.Title)
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .OrderBy(() => bookVersionAlias.CreateTime).Desc
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadTitles(string query, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .Select(x => bookVersionAlias.Title)
+                    .WhereRestrictionOn(() => bookVersionAlias.Title).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+        
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnum bookType, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .Select(x => bookVersionAlias.Title)
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .AndRestrictionOn(() => bookVersionAlias.Title).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastTypeaheadHeadwords(int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                BookHeadword bookHeadwordAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => bookHeadwordAlias.Headword)))
+                    .Where(x => x.Visibility == VisibilityEnum.Public)
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadHeadwords(string query, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                BookHeadword bookHeadwordAlias = null;
+
+                return session.QueryOver<Book>()
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => bookHeadwordAlias.Headword)))
+                    .Where(x => x.Visibility == VisibilityEnum.Public)
+                    .AndRestrictionOn(x => x.Headword).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<string>();
             }
         }
     }

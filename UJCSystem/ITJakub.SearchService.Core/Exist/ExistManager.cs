@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -30,34 +31,51 @@ namespace ITJakub.SearchService.Core.Exist
         }
 
         public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition,
-            string transformationName, ResourceLevelEnumContract transformationLevel)
+            string transformationName, OutputFormatEnumContract outputFormat,
+            ResourceLevelEnumContract transformationLevel)
         {
-            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId,
-                versionId);
-            return m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition, xslPath);
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
+                transformationLevel, bookId, versionId);
+            return m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition,
+                Enum.GetName(typeof (OutputFormatEnumContract), outputFormat), xslPath);
         }
 
         public string GetPageByName(string bookId, string versionId, string pageName, string transformationName,
-            ResourceLevelEnumContract transformationLevel)
+            OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId,
-                versionId);
-            return m_client.GetPageByName(bookId, versionId, pageName, xslPath);
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
+                transformationLevel, bookId, versionId);
+            return m_client.GetPageByName(bookId, versionId, pageName,
+                Enum.GetName(typeof (OutputFormatEnumContract), outputFormat), xslPath);
         }
 
         public string GetPagesByName(string bookId, string versionId, string start, string end,
-            string transformationName, ResourceLevelEnumContract transformationLevel)
+            string transformationName, OutputFormatEnumContract outputFormat,
+            ResourceLevelEnumContract transformationLevel)
         {
-            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId,
-                versionId);
-            return m_client.GetPagesByName(bookId, versionId, start, end, xslPath);
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
+                transformationLevel, bookId, versionId);
+            return m_client.GetPagesByName(bookId, versionId, start, end,
+                Enum.GetName(typeof (OutputFormatEnumContract), outputFormat), xslPath);
         }
 
-        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName,
+            OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, transformationLevel, bookId,
-                versionId);
-            return m_client.GetPageByXmlId(bookId, versionId, pageXmlId, xslPath);
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
+                transformationLevel, bookId, versionId);
+            return m_client.GetPageByXmlId(bookId, versionId, pageXmlId,
+                Enum.GetName(typeof (OutputFormatEnumContract), outputFormat), xslPath);
+        }
+
+        public string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId,
+            string transformationName, OutputFormatEnumContract outputFormat,
+            ResourceLevelEnumContract transformationLevel)
+        {
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
+               transformationLevel, bookId, versionId);
+            return m_client.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId,
+                Enum.GetName(typeof(OutputFormatEnumContract), outputFormat), xslPath);
         }
     }
 }

@@ -131,15 +131,15 @@ namespace ITJakub.ITJakubService.Core.Search
 
                 if (datingCriteriaContract.NotBefore.Value.ToBinary() != 0)
                 {
-                    whereBuilder.AppendFormat("{0}.NotBefore >= ?", manuscriptAlias);
-                    datingParameters.Add(datingCriteriaContract.NotBefore);
+                whereBuilder.AppendFormat("{0}.NotAfter >= ?", manuscriptAlias);
+                datingParameters.Add(datingCriteriaContract.NotBefore.Value);
                 }
                 if (datingCriteriaContract.NotAfter.Value.ToBinary() != 0)
                 {
                     if (whereBuilder.Length > 0)
                         whereBuilder.Append(" and ");
-                    whereBuilder.AppendFormat("{0}.NotAfter <= ?", manuscriptAlias);
-                    datingParameters.Add(datingCriteriaContract.NotAfter);
+                whereBuilder.AppendFormat("{0}.NotBefore <= ?", manuscriptAlias);
+                datingParameters.Add(datingCriteriaContract.NotAfter.Value);
                 }
 
                 return new SearchCriteriaQuery

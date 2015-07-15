@@ -54,9 +54,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageByName(bookGuid, pageName, resultFormat);
         }
 
-        public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
-            return m_bookManager.GetBookPageByXmlId(bookGuid, pageXmlId, resultFormat);
+            return m_bookManager.GetBookPageByXmlId(bookGuid, pageXmlId, resultFormat, bookTypeContract);
         }
 
         public string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
@@ -109,9 +109,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageImage(bookPageImageContract);
         }
 
-        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            m_searchManager.SearchByCriteria(searchCriterias);
+            return m_searchManager.SearchByCriteria(searchCriterias);
         }
         #region CardFile methods
         public IEnumerable<CardFileContract> GetCardFiles()
@@ -147,12 +147,61 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_cardFileManager.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
         }
-
         
-
         #endregion
+        
+        public IList<string> GetTypeaheadAuthors(string query)
+        {
+            return m_searchManager.GetTypeaheadAuthors(query);
+        }
 
+        public IList<string> GetTypeaheadTitles(string query)
+        {
+            return m_searchManager.GetTypeaheadTitles(query);
+        }
 
-     
+        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
+        {
+            return m_searchManager.GetTypeaheadDictionaryHeadwords(query);
+        }
+
+        public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType)
+        {
+            return m_searchManager.GetTypeaheadAuthorsByBookType(query, bookType);
+        }
+
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType)
+        {
+            return m_searchManager.GetTypeaheadTitlesByBookType(query, bookType);
+        }
+        public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        {
+            return m_searchManager.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
+        }
+
+        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
+        {
+            return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, page, pageSize);
+        }
+
+        public int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
+        {
+            return m_searchManager.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query, pageSize);
+        }
+
+        public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
+        {
+            return m_searchManager.GetHeadwordSearchResultCount(query);
+        }
+
+        public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
+        {
+            return m_searchManager.SearchHeadword(query, dictionaryGuidList, page, pageSize);
+        }
+
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+        {
+            return m_bookManager.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat);
+        }
     }
 }

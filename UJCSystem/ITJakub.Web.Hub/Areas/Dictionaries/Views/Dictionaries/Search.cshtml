@@ -3,6 +3,7 @@
 }
 @section scripts{
     @Scripts.Render("~/itjakub/dictionaries/javascript")
+    @Scripts.Render("~/itjakub/dictionaries/searchjs")
 }
 
 <div class="transparent-content-container">
@@ -182,9 +183,22 @@
                 <span class="words-result">Hesla (<span class="words-result-numbers">0</span>x)</span>
                 <span class="fulltext-result">Fulltext (<span class="fulltext-result-numbers">0</span>x)</span>
             </div>
-            <div class="dictionary-result-word-search-list-body">
+            <div class="dictionary-header dictionary-subheader">
+                <span>Vše ()</span>
+                <span>Zapojené ()</span>
+                <span>Nezapojené ()</span>
+            </div>
+            <div class="dictionary-result-word-search-list-body" id="headwordList">
                 <ul>
                     <li>pes</li>
+                </ul>
+            </div>
+            <div class="dictionary-result-pagination" id="pagination">
+                <ul class="pagination pagination-sm">
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">...</a></li>
                 </ul>
             </div>
         </div>
@@ -192,29 +206,8 @@
             <div class="dictionary-header">
                 Heslové stati
             </div>
-            <div class="dictionary-result-word-search-description-body">
+            <div class="dictionary-result-word-search-description-body" id="headwordDescription">
             </div>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $("#advancedSearchButton").click(function () {
-        var glyph = $("#advancedSearchButton .regexsearch-button-glyph");
-        var regExSearchDiv = $("#regExSearchDiv");
-        if (document.getElementById("regExSearchDiv").children.length === 0) {
-            glyph.removeClass("glyphicon-chevron-down");
-            glyph.addClass("glyphicon-chevron-up");
-            var regExSearchPlugin = new RegExSearch("#regExSearchDiv");
-            regExSearchPlugin.makeRegExSearch();
-        } else if (regExSearchDiv.hasClass("hidden")) {
-            regExSearchDiv.removeClass("hidden");
-            glyph.removeClass("glyphicon-chevron-down");
-            glyph.addClass("glyphicon-chevron-up");
-        } else {
-            regExSearchDiv.addClass("hidden");
-            glyph.removeClass("glyphicon-chevron-up");
-            glyph.addClass("glyphicon-chevron-down");
-        }
-    });
-</script>

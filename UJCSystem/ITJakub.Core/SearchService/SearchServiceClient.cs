@@ -17,11 +17,11 @@ namespace ITJakub.Core.SearchService
                 m_log.DebugFormat("SearchServiceClient created.");
         }
 
-        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPageByPosition(string bookId, string versionId, int pagePosition, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return Channel.GetBookPageByPosition(bookId, versionId, pagePosition, transformationName,
+                return Channel.GetBookPageByPosition(bookId, versionId, pagePosition, transformationName, outputFormat,
                     transformationLevel);
             }
             catch (CommunicationException ex)
@@ -44,12 +44,12 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+				public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return Channel.GetBookPageByName(bookId, versionId, pageName, transformationName,
-                    transformationLevel);
+                return Channel.GetBookPageByName(bookId, versionId, pageName, transformationName, 
+									outputFormat, transformationLevel);
             }
             catch (CommunicationException ex)
             {
@@ -72,11 +72,11 @@ namespace ITJakub.Core.SearchService
         }
 
 
-        public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, ResourceLevelEnumContract transformationLevel)
+				public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return Channel.GetBookPageByXmlId(bookId, versionId, pageXmlId, transformationName, transformationLevel);
+							return Channel.GetBookPageByXmlId(bookId, versionId, pageXmlId, transformationName, outputFormat, transformationLevel);
             }
             catch (CommunicationException ex)
             {
@@ -98,12 +98,13 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, ResourceLevelEnumContract transformationLevel)
+
+				public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
                 return Channel.GetBookPagesByName(bookId, versionId, startPageName, endPageName, transformationName,
-                    transformationLevel);
+                    outputFormat, transformationLevel);
             }
             catch (CommunicationException ex)
             {
@@ -182,6 +183,33 @@ namespace ITJakub.Core.SearchService
             try
             {
                 Channel.UploadSharedFile(contract);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string transformationName,
+            OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        {
+            try
+            {
+                return Channel.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId, transformationName, outputFormat, transformationLevel);
             }
             catch (CommunicationException ex)
             {

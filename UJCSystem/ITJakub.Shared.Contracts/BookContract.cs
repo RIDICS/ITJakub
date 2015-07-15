@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.Shared.Contracts
@@ -9,7 +10,10 @@ namespace ITJakub.Shared.Contracts
         public long Id { get; set; }
 
         [DataMember]
-        public int CategoryId { get; set; }
+        public string Guid { get; set; }
+
+        [DataMember]
+        public IList<int> CategoryIds { get; set; }
 
         [DataMember]
         public string Title { get; set; }

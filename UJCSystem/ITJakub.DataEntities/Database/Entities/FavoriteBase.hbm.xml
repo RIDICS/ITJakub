@@ -16,7 +16,7 @@
     <many-to-one name="User"
                  column="[User]"
                  class="User"
-                 lazy="proxy"/>
+                 lazy="proxy" />
 
     <subclass
       name="PageBookmark"
@@ -25,12 +25,47 @@
       <property name="PageXmlId" />
 
       <property name="PagePosition" />
-      
+
       <many-to-one name="Book"
                    column="BookmarkBook"
-                   class="Book" 
-                   lazy="proxy"/>
-                   
+                   class="Book"
+                   lazy="proxy" />
+
+
+    </subclass>
+
+    <subclass
+      name="FavoriteCategory"
+      discriminator-value="FavoriteCategory">
+
+      <many-to-one name="Category"
+                   column="FavoriteCategory"
+                   class="Category"
+                   lazy="proxy" />
+
+    </subclass>
+
+    <subclass
+      name="FavoriteBook"
+      discriminator-value="FavoriteBook">
+
+      <many-to-one name="Book"
+                   column="BookmarkBook"
+                   class="Book"
+                   lazy="proxy" />
+
+    </subclass>
+
+    <subclass
+      name="HeadwordBookmark"
+      discriminator-value="HeadwordBookmark">
+
+      <property name="XmlEntryId" />
+
+      <many-to-one name="Book"
+                   column="BookmarkBook"
+                   class="Book"
+                   lazy="proxy" />
 
     </subclass>
   </class>

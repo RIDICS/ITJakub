@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xdb="http://exist-db.org/ant" basedir="." name="eXistDbDevelopment" default="extract-resources-to-disk">
+	<property file="local.properties"/>
+	<path id="classpath.core">
+		<fileset dir="${exist-home}/lib/core">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement path="${exist-home}/exist.jar"/>
+		<pathelement path="${exist-home}/exist-optional.jar"/>
+	</path>
+
+	<typedef resource="org/exist/ant/antlib.xml" uri="http://exist-db.org/ant">
+		<classpath refid="classpath.core"/>
+	</typedef>
+	
+	<!-- Install ant-contrib: -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="${ant-contrib-dir}\ant-contrib-1.0b3.jar"/>
+		</classpath>
+	</taskdef>
+	
+	
+	<target name="extract-resources-to-disk">
+		<echo message="Saving documents to local disk."/>
+		<echo message="Saving ${uri}/transformations to ${save-path}\transformations"/>
+		<xdb:extract xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}/transformations" destdir
+			="${save-path}/transformations" subcollections="true" createdirectories="true"/>
+		<echo message="Saving ${uri}/queries to ${save-path}\queries"/>
+		<xdb:extract xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}/queries" destdir="${save-path}/queries"
+			subcollections="true" createdirectories="true"/>
+		<echo message="Saving ${uri}/modules to ${save-path}\modules"/>
+		<xdb:extract xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}/modules" destdir
+			="${save-path}/modules" subcollections="true" createdirectories="true"/>
+	</target>
+	
+	<target name="load-resources-from-disk">
+		<echo message="Loading documents from local disk."/>
+		
+		<echo message="Removing ${uri}/transformations"/>
+		
+		<echo message="Loading to ${uri}/transformations"/>
+		<xdb:store xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}/transformations"
+			createcollection="true"
+			createsubcollections="true"
+			user="${user}" password="${password}">
+			<fileset dir="${save-path}/transformations"> 
+				<include name="**/*.xml"/>
+				<include name="**/*.xsl"/>
+				<include name="**/*.xqm"/>
+				<include name="**/*.xquery"/>
+			</fileset>
+		</xdb:store>
+		
+		<echo message="Loading to ${uri}/queries"/>
+		<xdb:store xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}/queries"
+			createcollection="true"
+			user="${user}" password="${password}">
+			<fileset dir="${save-path}/queries"> 
+				<include name="*.xml"/>
+				<include name="*.xsl"/>
+				<include name="*.xqm"/>
+				<include name="*.xquery"/>
+			</fileset>
+		</xdb:store>
+		
+		
+		<echo message="Loading to ${uri}/modules"/>
+		<xdb:store xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}/modules"
+			createcollection="true"
+			user="${user}" password="${password}">
+			<fileset dir="${save-path}/modules"> 
+				<include name="*.xml"/>
+				<include name="*.xsl"/>
+				<include name="*.xqm"/>
+				<include name="*.xquery"/>
+			</fileset>
+		</xdb:store>
+		
+	</target>
+</project>

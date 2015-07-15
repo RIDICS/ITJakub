@@ -1,9 +1,23 @@
 ﻿@import "../../../Content/ITJakub.DefaultTheme.less";
+@dictionary-entry-margin: 15px;
 
 .dictionary-header {
     background-color: @item-background-color;
     color: white;
     padding: 5px;
+}
+
+.dictionary-subheader {
+    margin-top: 1px;
+}
+
+.dictionary-header-buttons {
+    float: right;
+    margin-right: 2px;
+}
+
+.dictionary-header-buttons a, .dictionary-header-buttons a:hover {
+    color: white;
 }
 
 .search-with-saved-word-area {
@@ -12,9 +26,12 @@
 }
 
 .search-area {
-    /*height: 100%;*/
     width: 70%;
     float: left;
+}
+
+.searchbar-inputs {
+    margin-right: 188px;
 }
 
 .saved-word-area {
@@ -37,17 +54,42 @@
 
 .dictionary-result-word-search-list {
     background-color: white;
-    height: 100%;
-    width: 20%;
+    min-height: 100%;
+    width: 22%;
     float: left;
+}
+
+.dictionary-result-word-search-list-body {
+    padding: 5px;
+}
+
+.dictionary-result-pagination {
+    text-align: center;
 }
 
 .dictionary-result-word-search-description {
     background-color: white;
     margin-left: 1%;
-    height: 100%;
-    width: 79%;
+    min-height: 100%;
+    width: 77%;
     float: left;
+}
+
+.dictionary-result-word-search-description-body {
+    padding: 5px;
+}
+
+.dictionary-result-headword {
+
+}
+
+a.dictionary-result-headword-book {
+    margin-left: 5px;
+    color: @item-background-color;
+}
+
+.dictionary-result-headword-favorite {
+    float: right;
 }
 
 .saved-words-body {
@@ -83,4 +125,92 @@
 
 .saved-word-area-more:hover {
     cursor: pointer;
+}
+
+.entryFree {
+    padding-left: @dictionary-entry-margin;
+    padding-right: @dictionary-entry-margin;
+}
+
+.bo {
+    position: relative;
+    left: -@dictionary-entry-margin;
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.note {
+    font-style: italic;
+}
+
+.dictionary-entry-comments {
+    float: right;
+    margin-right: @dictionary-entry-margin;
+    width: 200px;
+    text-align: right;
+}
+
+.dictionary-entry-name {
+    margin-left: @dictionary-entry-margin;
+    margin-right: 200px + @dictionary-entry-margin;
+}
+
+.dictionary-entry-comments, .dictionary-entry-name {
+    margin-top: 10px;
+}
+
+.dictionary-entry-comments a, .dictionary-entry-name a {
+    color: @item-background-color;
+}
+
+.pagination-sm li a, .pagination-sm li span {
+    padding-left: 2px;
+    padding-right: 2px;
+    font-size: 80%;
+    min-width: 17px;
+}
+
+ul.pagination-sm {
+    margin-right: 0 !important;
+}
+
+.loading {
+    background: url(../../../Content/Images/loading.gif) no-repeat center;
+    margin: 0 auto;
+}
+
+.loading-modal {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+@media print {
+    .navbar, .footer, .search-with-saved-word-area, .dictionary-selects {
+        display: none;
+    }
+
+    body {
+        padding: 0;
+    }
+
+    .module-content {
+        margin: 0;
+    }
+
+    .dictionary-entry-comments, .dictionary-result-word-search-list, .dictionary-header-buttons {
+        display: none;
+    }
+
+    .dictionary-entry-name {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+    .dictionary-result-word-search-description {
+        width: 100%;
+    }
+
+    a:link:after, a:visited:after {  
+        content: normal;  
+    }
 }

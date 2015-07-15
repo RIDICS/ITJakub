@@ -37,4 +37,21 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual Book Book { get; set; }
     }
+
+    public class FavoriteCategory : FavoriteBase
+    {
+        public virtual Category Category { get; set; }
+    }
+
+    public class FavoriteBook : FavoriteBase
+    {
+        public virtual Book Book { get; set; }
+    }
+
+    public class HeadwordBookmark : FavoriteBase
+    {
+        public virtual Book Book { get; set; }
+
+        public virtual string XmlEntryId { get; set; }
+    }
 }

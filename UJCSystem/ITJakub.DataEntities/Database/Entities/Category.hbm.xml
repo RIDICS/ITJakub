@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="Category" table="[Category]" lazy="true" >
+  <class name="Category" table="[Category]" >
     
     <id name="Id" column="Id">
       <generator class="identity" />
@@ -16,6 +16,10 @@
     
     <property name="Description">
       <column name="Description" sql-type="varchar" not-null="false" />
+    </property>
+
+    <property name="Path">
+      <column name="Path" sql-type="varchar" not-null="true" />
     </property>
     
     <many-to-one name="BookType" lazy="false">
@@ -33,4 +37,25 @@
     </bag>
     
   </class>
+
+  <sql-query name="GetCategoryHierarchy">
+    <![CDATA[
+      select c2.Id
+      from Category c1
+      join Category c2 on c2.Path like (c1.Path + '%')
+      where c1.Id in (:categoryIds)
+    ]]>
+  </sql-query>
+  
+  <sql-query name="GetBookIdsFromCategoryHierarchy">
+    <![CDATA[
+      select distinct(b.Id)
+      from Category c1
+      join Category c2 on c2.Path like (c1.Path + '%')
+      join BookVersion_Category bvc on c2.Id = bvc.Category
+      join BookVersion bv on bvc.BookVersion = bv.Id
+	    join Book b on bv.Id = b.LastVersion
+      where c1.Id in (:categoryIds)
+    ]]>
+  </sql-query>
 </hibernate-mapping>

@@ -16,7 +16,7 @@ namespace ITJakub.ITJakubService.DataContracts
         string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat);
 
         [OperationContract]
-        string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat);
+        string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract);
 
         [OperationContract]
         string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat);
@@ -26,16 +26,18 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IEnumerable<BookPageContract> GetBookPageList(string bookGuid);
-        
+
         [OperationContract]
         IEnumerable<BookContentItemContract> GetBookContent(string bookGuid);
 
         #region Resource Import
-        [OperationContract]       
+
+        [OperationContract]
         void AddResource(UploadResourceContract uploadFileInfoSkeleton);
 
         [OperationContract]
         bool ProcessSession(string resourceSessionId, string uploadMessage);
+
         #endregion
 
         [OperationContract]
@@ -57,8 +59,7 @@ namespace ITJakub.ITJakubService.DataContracts
         Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
 
         [OperationContract]
-        void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
-
+        IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
 
         #region CardFile methods
 
@@ -76,7 +77,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId);
-        
+
         [OperationContract]
         CardContract GetCard(string cardFileId, string bucketId, string cardId);
 
@@ -85,5 +86,41 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
+        #region Typeahead methods
+
+        [OperationContract]
+        IList<string> GetTypeaheadAuthors(string query);
+
+        [OperationContract]
+        IList<string> GetTypeaheadTitles(string query);
+
+        [OperationContract]
+        IList<string> GetTypeaheadDictionaryHeadwords(string query);
+
+        [OperationContract]
+        IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType);
+
+        [OperationContract]
+        IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType);
+
+        #endregion
+
+        [OperationContract]
+        int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds);
+
+        [OperationContract]
+        IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize);
+
+        [OperationContract]
+        int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize);
+
+        [OperationContract]
+        HeadwordSearchResultContract GetHeadwordSearchResultCount(string query);
+
+        [OperationContract]
+        IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize);
+
+        [OperationContract]
+        string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
     }
 }

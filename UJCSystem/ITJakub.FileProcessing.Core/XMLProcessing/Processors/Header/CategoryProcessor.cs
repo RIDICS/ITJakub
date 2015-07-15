@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
@@ -50,6 +51,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                 if (parentCategory != null)
                 {
                     category.BookType = parentCategory.BookType;
+                    category.Path = string.Format("{0}{1}/", parentCategory.Path, xmlId);
+                }
+                else
+                {
+                    category.Path = string.Format("/{0}/", xmlId);
                 }
 
                 m_categoryRepository.SaveOrUpdate(category);

@@ -75,5 +75,17 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             return View();
         }
+
+        public ActionResult GetTypeaheadAuthor(string query)
+        {
+            var result = m_serviceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Edition);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetTypeaheadTitle(string query)
+        {
+            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Edition);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

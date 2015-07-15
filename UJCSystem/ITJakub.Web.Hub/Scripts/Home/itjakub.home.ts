@@ -1,3 +1,7 @@
 ﻿$(document).ready(() => {
-    new SearchBox("#searchbox", "Home").create();
+    var searchBox = new SearchBox("#searchbox", "Home");
+    searchBox.addDataSet("Title", "Názvy");
+    searchBox.addDataSet("Author", "Autoři");
+    searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+    searchBox.create();
 });

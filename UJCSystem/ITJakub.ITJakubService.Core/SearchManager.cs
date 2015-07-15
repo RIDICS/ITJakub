@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.Core.Search;
 using ITJakub.ITJakubService.DataContracts;
@@ -17,6 +19,7 @@ namespace ITJakub.ITJakubService.Core
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly SearchCriteriaDirector m_searchCriteriaDirector;
+        private const int PrefetchRecordCount = 5;
 
         public SearchManager(BookRepository bookRepository, BookVersionRepository bookVersionRepository, CategoryRepository categoryRepository, SearchCriteriaDirector searchCriteriaDirector)
         {
@@ -46,7 +49,7 @@ namespace ITJakub.ITJakubService.Core
             };
         }
 
-        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             var conjunction = new List<SearchCriteriaQuery>();
             foreach (var searchCriteriaContract in searchCriterias)
@@ -56,7 +59,13 @@ namespace ITJakub.ITJakubService.Core
             }
             
             var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(conjunction);
-            // TODO
+            
+            // TODO search in eXist
+
+            var guidList = databaseSearchResult.Select(x => x.Guid);
+            var result = m_bookVersionRepository.GetBookVersionsByGuid(guidList);
+
+            return Mapper.Map<List<SearchResultContract>>(result);
         }
 
         public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
@@ -95,6 +104,143 @@ namespace ITJakub.ITJakubService.Core
                     break;
             }
             return Mapper.Map<IList<MobileContracts.BookContract>>(bookList);
+        }
+
+        private string PrepareQuery(string query)
+        {
+            query = query.TrimStart().TrimEnd().Replace(" ", "% %");
+            return string.Format("%{0}%", query);
+        }
+
+        public IList<string> GetTypeaheadAuthors(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastAuthors(PrefetchRecordCount);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadAuthors(query, PrefetchRecordCount);
+        }
+
+        public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookTypeContract)
+        {
+            var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastAuthorsByBookType(PrefetchRecordCount, bookType);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadAuthorsByBookType(query, bookType, PrefetchRecordCount);
+        }
+
+        public IList<string> GetTypeaheadTitles(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastTitles(PrefetchRecordCount);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadTitles(query, PrefetchRecordCount);
+        }
+
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookTypeContract)
+        {
+            var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastTitlesByBookType(PrefetchRecordCount, bookType);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadTitlesByBookType(query, bookType, PrefetchRecordCount);
+        }
+        
+        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastTypeaheadHeadwords(PrefetchRecordCount);
+
+            query = string.Format("{0}%", query);
+            return m_bookRepository.GetTypeaheadHeadwords(query, PrefetchRecordCount);
+        }
+
+        private IList<HeadwordContract> ConvertHeadwordSearchToContract(IList<HeadwordSearchResult> databaseResult)
+        {
+            var resultList = new List<HeadwordContract>();
+            var headwordContract = new HeadwordContract();
+            foreach (var headword in databaseResult)
+            {
+                var bookInfoContract = new HeadwordBookInfoContract
+                {
+                    BookAcronym = headword.BookAcronym,
+                    BookTitle = headword.BookTitle,
+                    BookGuid = headword.BookGuid,
+                    XmlEntryId = headword.XmlEntryId
+                };
+
+                if (headword.Headword == headwordContract.Headword)
+                {
+                    headwordContract.Dictionaries.Add(bookInfoContract);
+                }
+                else
+                {
+                    headwordContract = new HeadwordContract
+                    {
+                        Dictionaries = new List<HeadwordBookInfoContract> { bookInfoContract },
+                        Headword = headword.Headword
+                    };
+                    resultList.Add(headwordContract);
+                }
+            }
+            return resultList;
+        }
+
+        private IList<long> GetCompleteBookIdList(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        {
+            var bookIdsFromCategory = m_categoryRepository.GetBookIdsFromCategory(selectedCategoryIds);
+            return selectedBookIds != null
+                ? bookIdsFromCategory.Concat(selectedBookIds).ToList()
+                : bookIdsFromCategory;
+        }
+
+        public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        {
+            var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            return bookIds.Count == 0
+                ? m_bookVersionRepository.GetHeadwordCount()
+                : m_bookVersionRepository.GetHeadwordCount(bookIds);
+        }
+
+        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
+        {
+            var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            var databaseResult = bookIds.Count == 0
+                ? m_bookVersionRepository.GetHeadwordList(page, pageSize)
+                : m_bookVersionRepository.GetHeadwordList(page, pageSize, bookIds);
+            var result = ConvertHeadwordSearchToContract(databaseResult);
+
+            return result;
+        }
+        
+        public int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
+        {
+            var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            return m_bookVersionRepository.GetPageNumberForHeadword(bookIds, query, pageSize);
+        }
+
+        public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
+        {
+            query = string.Format("%{0}%", query);
+            var databaseResult = m_bookVersionRepository.GetCountOfSearchHeadword(query, new [] {"{08BE3E56-77D0-46C1-80BB-C1346B757BE5}"});
+
+            return null; //TODO
+        }
+
+        public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
+        {
+            query = string.Format("%{0}%", query);
+            var databaseResult = m_bookVersionRepository.SearchHeadword(query, dictionaryGuidList, page, pageSize);
+            var resultList = ConvertHeadwordSearchToContract(databaseResult);
+
+            return resultList;
         }
     }
 }

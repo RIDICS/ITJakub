@@ -79,11 +79,11 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
-        public string GetBookPageByXmlId(string documentId, string pageXmlId, OutputFormatEnumContract resultFormat)
+        public string GetBookPageByXmlId(string documentId, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
             try
             {
-                return Channel.GetBookPageByXmlId(documentId, pageXmlId, resultFormat);
+                return Channel.GetBookPageByXmlId(documentId, pageXmlId, resultFormat, bookTypeContract);
             }
             catch (CommunicationException ex)
             {
@@ -367,11 +367,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             try
             {
-                Channel.SearchByCriteria(searchCriterias);
+                return Channel.SearchByCriteria(searchCriterias);
             }
             catch (CommunicationException ex)
             {
@@ -581,6 +581,300 @@ namespace ITJakub.Web.Hub
             }
         }
 
-    
+
+        public IList<string> GetTypeaheadAuthors(string query)
+        {
+            try
+            {
+                return Channel.GetTypeaheadAuthors(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthors failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthors failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthors timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public IList<string> GetTypeaheadTitles(string query)
+        {
+            try
+            {
+                return Channel.GetTypeaheadTitles(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitles failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitles failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitles timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
+        {
+            try
+            {
+                return Channel.GetTypeaheadDictionaryHeadwords(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadDictionaryHeadwords failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadDictionaryHeadwords failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadDictionaryHeadwords timeouted with: {0}", ex);
+                throw;
+            }
+        }
+        
+        public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType)
+        {
+            try
+            {
+                return Channel.GetTypeaheadAuthorsByBookType(query, bookType);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthorsByBookType failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthorsByBookType failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadAuthorsByBookType timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType)
+        {
+            try
+            {
+                return Channel.GetTypeaheadTitlesByBookType(query, bookType);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitlesByBookType failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitlesByBookType failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTitlesByBookType timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        {
+            try
+            {
+                return Channel.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordCount failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordCount failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordCount timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
+        {
+            try
+            {
+                return Channel.GetHeadwordList(selectedCategoryIds, selectedBookIds, page, pageSize);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordList failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordList failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordList timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
+        {
+            try
+            {
+                return Channel.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query, pageSize);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordPageNumber failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordPageNumber failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordPageNumber timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
+        {
+            try
+            {
+                return Channel.GetHeadwordSearchResultCount(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordSearchResultCount failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordSearchResultCount failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordSearchResultCount timeouted with: {0}", ex);
+                throw;
+            }
+        }
+        public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
+        {
+            try
+            {
+                return Channel.SearchHeadword(query, dictionaryGuidList, page, pageSize);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchHeadword failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchHeadword failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchHeadword timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+        {
+            try
+            {
+                return Channel.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetDictionaryEntryByXmlId failed with: {0}", ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetDictionaryEntryByXmlId failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetDictionaryEntryByXmlId timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

@@ -54,7 +54,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 var rootCategoryWithBookType =
                     session.QueryOver<Category>()
-                        .Where(cat => cat.ParentCategory == null && cat.BookType == bookType)
+                        .Where(cat => cat.ParentCategory == null && cat.BookType.Id == bookType.Id)
                         .SingleOrDefault<Category>();
 
                 if (rootCategoryWithBookType != null && rootCategoryWithBookType.Id != rootCategory.Id)
@@ -79,7 +79,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 var rootCategory = session.QueryOver(() => categoryAlias)
                     .JoinAlias(x => x.BookType, () => bookTypeAlias)
-                    .Where(() => bookTypeAlias.Type == type)
+                    .Where(() => bookTypeAlias.Type == type && categoryAlias.ParentCategory == null)
                     .SingleOrDefault<Category>();
 
                 if (rootCategory == null)
@@ -87,7 +87,6 @@ namespace ITJakub.DataEntities.Database.Repositories
                   return new List<Category>();  
                 }
 
-                IList<int> parentCategoriesIds;
                 var resultCategories = new List<Category>();
                 IList<Category> childCategories = new List<Category> {rootCategory};
                 
@@ -95,9 +94,10 @@ namespace ITJakub.DataEntities.Database.Repositories
                 {
                     resultCategories.AddRange(childCategories);
 
-                    parentCategoriesIds = childCategories.Select(childCategory => childCategory.Id).ToList();
+                    IList<int> parentCategoriesIds = childCategories.Select(childCategory => childCategory.Id).ToList();
+                    var ids = parentCategoriesIds;
                     childCategories = session.QueryOver(() => categoryAlias)
-                        .Where(() => categoryAlias.ParentCategory.Id.IsIn(parentCategoriesIds.ToArray()))
+                        .Where(() => categoryAlias.ParentCategory.Id.IsIn(ids.ToArray()))
                         .List<Category>();
                 }
 
@@ -112,6 +112,45 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 var resultCategory = session.QueryOver<Category>().Where(cat => cat.Id == category.Id).SingleOrDefault();
                 return resultCategory == null ? null : resultCategory.BookType;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookType FindBookTypeByType(BookTypeEnum bookTypeEnum)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<BookType>()
+                    .Where(x => x.Type == bookTypeEnum)
+                    .SingleOrDefault();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<int> GetAllSubcategoryIds(IList<int> categoryIds)
+        {
+            using (var session = GetSession())
+            {
+                if (categoryIds == null || categoryIds.Count == 0)
+                    return new List<int>();
+
+                return session.GetNamedQuery("GetCategoryHierarchy")
+                    .SetParameterList("categoryIds", categoryIds)
+                    .List<int>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<long> GetBookIdsFromCategory(IList<int> categoryIds)
+        {
+            using (var session = GetSession())
+            {
+                if (categoryIds == null || categoryIds.Count == 0)
+                    return new List<long>();
+
+                return session.GetNamedQuery("GetBookIdsFromCategoryHierarchy")
+                    .SetParameterList("categoryIds", categoryIds)
+                    .List<long>();
             }
         }
     }

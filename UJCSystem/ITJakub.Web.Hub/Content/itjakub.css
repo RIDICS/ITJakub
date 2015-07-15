@@ -1187,13 +1187,6 @@ input.regexsearch-checkbox {
 }
 .tt-input,
 .tt-hint {
-  width: 396px;
-  height: 30px;
-  padding: 8px 12px;
-  font-size: 24px;
-  line-height: 30px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
   outline: none;
 }
 .tt-input {
@@ -1203,19 +1196,34 @@ input.regexsearch-checkbox {
   color: #999;
 }
 .tt-menu {
-  width: 422px;
-  margin-top: 12px;
-  padding: 8px 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  width: 100%;
+  margin-top: 2px;
+  padding: 4px 0;
+  background-color: white;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  max-height: 300px;
+  overflow-y: scroll;
 }
 .tt-suggestion {
-  padding: 3px 20px;
-  font-size: 18px;
-  line-height: 24px;
+  color: #555555;
+  padding: 3px 12px;
+  line-height: 20px;
+}
+.tt-suggestion:hover {
+  background-color: #e5e5e5;
+  color: black;
+  cursor: default;
+}
+.twitter-typeahead {
+  width: 100%;
+}
+.tt-suggestions-header {
+  font-size: 120%;
+  margin: 10px 12px 3px 12px;
+  font-weight: bold;
+  border-bottom: solid 1px #cccccc;
 }
 .main_logo {
   margin: 10px;
@@ -1364,7 +1372,7 @@ ul {
 }
 .searchbar-inputs {
   display: block;
-  overflow: hidden;
+  margin-right: 164px;
   padding-right: 10px;
 }
 .searchbar-input {

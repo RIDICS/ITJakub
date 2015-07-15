@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<result>
+<tei:TEI xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:tei="http://www.tei-c.org/ns/1.0" xml:lang="cs" change="#bac7c459-3bfe-4441-b086-c39cda0d9455">
+	<tei:text xml:id="t-1">
+		<tei:body xml:id="t-1.body-1">
+			<tei:div xml:id="t-1.body-1.div-1">
+				<tei:div xml:id="t-1.body-1.div-1.div-1">
+					<tei:div xml:id="t-1.body-1.div-1.div-1.div-2">
+						<tei:div rend="vspace" xml:id="t-1.body-1.div-1.div-1.div-2.div-1">
+							<tei:p xml:id="t-1.body-1.div-1.div-1.div-2.div-1.p-2">
+								<tei:pb n="3v" rend="space" xml:id="t-1.body-1.div-1.div-1.div-2.div-1.p-2.pb-2"/>ale ne též přirození v tobě a v ní. Nebo cožkoli sem já tobě učinil, za vděk s’ to přijal. A když sem všel do tvé síni, znamenitě polepšil s’ se. Ale když mě macecha uzří, pohorší se. Budu li s ní mluviti, v bolesti se zaže. Dotknu li se jí, bez ní bude. A protož nic více neprospívá nemocným, než léčenu od toho býti, jehož milují a jeho žádají.“ A tak takými duovody odbyl nechuti otcovy a umřela jest macecha.</tei:p>
+							<tei:p xml:id="t-1.body-1.div-1.div-1.div-2.div-1.p-3">Najmilejší! Tento císař móž řečen býti Adam, prvý otec náš, jenž říši mějíše, totižto ráj<tei:note n="a" xml:id="t-1.body-1.div-1.div-1.div-2.div-1.p-3.note-1">
+								<tei:choice xml:id="t-1.body-1.div-1.div-1.div-2.div-1.p-3.note-1.choice-1">
+									<tei:corr>ráj</tei:corr>
+									<tei:sic>Rug</tei:sic>
+								</tei:choice>
+							</tei:note>. V němžto měl chválu i čest a pána všeho světa jej ustavil Hospodin podlé Davidova písma: „Chválou i ctí korunoval si jej, Hospodine, na dílu rukú tvých.“ Ten císař pojal sobě pěknú ženu, totižto duši k obrazu božímu stvořenú, z nížto porodil syna, totižto našeho Pána Jezukrista, z svého těla vyvedeného, totižto z člověčenství k obrazu božímu stvořeného. Ale žena, totižto duše, umře sprostně mluvíce pro hřích, jehož se dopustil. Ihned jinú ženu pojal sobě, totižto zlost, skrze kerúž z ráje </tei:p>
+						</tei:div>
+					</tei:div>
+				</tei:div>
+			</tei:div>
+		</tei:body>
+	</tei:text>
+</tei:TEI>
+</result>

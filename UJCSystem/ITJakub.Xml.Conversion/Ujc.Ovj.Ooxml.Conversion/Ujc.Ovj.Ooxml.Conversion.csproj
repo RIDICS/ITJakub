@@ -89,13 +89,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConversionResult.cs" />
-    <Compile Include="CoversionExceptions.cs" />
+    <Compile Include="ConversionExceptions.cs" />
     <Compile Include="DocxToTeiConverter.cs" />
     <Compile Include="DocxToTeiConverterSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\AllStylesConvert.2xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\StcS_OldToTeiP5.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Xslt\TEI_CategoryReference.xsl">
@@ -196,7 +199,7 @@
     <Content Include="Data\Xslt\Seskupit_prvky_pred_nadpisem_2.0.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Xslt\StcSRename.xsl">
+    <Content Include="Data\Xslt\StcS_Rename.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Xslt\Subsumovat_elementy_k_predchozimu_prvku.xsl">

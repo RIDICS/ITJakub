@@ -10,20 +10,20 @@ namespace ITJakub.SearchService.Core.Exist
     {
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPageByPositionFromStart(string bookId, string versionId, int page);
+        string GetPageByPositionFromStart(string bookId, string versionId, int page, string outputFormat);
 
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPageByName(string bookId, string versionId, string start);
-        
-        [OperationContract]
-        [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPageByXmlId(string bookId, string versionId, string pageXmlId);
+        string GetPageByName(string bookId, string versionId, string start, string outputFormat);
 
         [OperationContract]
         [ExistQuery(XqueryName = "get-pages.xquery")]
-        string GetPagesByName(string bookId, string versionId, string start, string end);
-        
+        string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string outputFormat);
+
+        [OperationContract]
+        [ExistQuery(XqueryName = "get-pages.xquery")]
+        string GetPagesByName(string bookId, string versionId, string start, string end, string outputFormat);
+
         [OperationContract]
         [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Version)]
         void UploadVersionFile(string bookId, string versionId, string fileName, Stream dataStream);
@@ -35,5 +35,9 @@ namespace ITJakub.SearchService.Core.Exist
         [OperationContract]
         [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Shared)]
         void UploadSharedFile(string fileName, Stream dataStream);
+
+        [OperationContract]
+        [ExistQuery(XqueryName = "get-entry.xquery")]
+        string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string outputFormat);
     }
 }

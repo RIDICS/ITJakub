@@ -1,23 +1,28 @@
 ﻿
 $(document).ready(() => {
-    var callbackDelegate = new DropDownSelectCallbackDelegate();
-    var dictionarySelector = new DropDownSelect("div.dictionary-selects", getBaseUrl()+"Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
-    dictionarySelector.makeDropdown();
+    //var callbackDelegate = new DropDownSelectCallbackDelegate();
+    //var dictionarySelector = new DropDownSelect("div.dictionary-selects", getBaseUrl()+"Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
+    //dictionarySelector.makeDropdown();
 
-    var editionSelector = new DropDownSelect("div.dictionary-selects", getBaseUrl() +"Dictionaries/Dictionaries/GetTextWithCategories", true, callbackDelegate);
-    editionSelector.makeDropdown();
+    //var editionSelector = new DropDownSelect("div.dictionary-selects", getBaseUrl() +"Dictionaries/Dictionaries/GetTextWithCategories", true, callbackDelegate);
+    //editionSelector.makeDropdown();
 
-    var array = new Array();
-    array.push(dictionarySelector);
-    array.push(editionSelector);
+    //var array = new Array();
+    //array.push(dictionarySelector);
+    //array.push(editionSelector);
 
-    $("#searchButton").click(() => {
-        for (var i = 0; i < array.length; i++) {
-            var state = array[i].getState();
-            showStateInAlertBox(state);
-        }
-    });
+    //$("#searchButton").click(() => {
+    //    for (var i = 0; i < array.length; i++) {
+    //        var state = array[i].getState();
+    //        showStateInAlertBox(state);
+    //    }
+    //});
+
+    var searchBox = new SearchBox("#searchbox", "Dictionaries/Dictionaries");
+    searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+    searchBox.create();
 });
+
 
 function showStateInAlertBox(state : State) {
     var itemIds = "";

@@ -36,7 +36,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult Passwords()
+        public ActionResult Headwords()
         {
             return View();
         }
@@ -45,9 +45,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var dictionariesAndCategories =
                 m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
-            var booksDictionary =
-                dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
-                    .ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            //var booksDictionary =
+            //    dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
+            //        .ToDictionary(x => x.Key.ToString(), x => x.ToList());
             var categoriesDictionary =
                 dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
                     .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
@@ -56,7 +56,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                     new
                     {
                         type = BookTypeEnumContract.Edition,
-                        books = booksDictionary,
+                        //books = booksDictionary,
                         categories = categoriesDictionary
                     }, JsonRequestBehavior.AllowGet);
         }
@@ -65,9 +65,23 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var dictionariesAndCategories =
                 m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
-            var booksDictionary =
-                dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
-                    .ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            //TODO better fix loading books
+            //var booksDictionary =
+            //    dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
+            //        .ToDictionary(x => x.Key.ToString(), x => x.ToList());
+            var booksDictionary = new Dictionary<string, IList<BookContract>>();
+            foreach (var book in dictionariesAndCategories.Books)
+            {
+                foreach (var categoryId in book.CategoryIds)
+                {
+                    IList<BookContract> booksInCategory;
+                    if (booksDictionary.TryGetValue(Convert.ToString(categoryId), out booksInCategory))
+                        booksInCategory.Add(book);
+                    else
+                        booksDictionary.Add(Convert.ToString(categoryId), new List<BookContract> {book});
+                }
+            }
+
             var categoriesDictionary =
                 dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
                     .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
@@ -264,6 +278,50 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var wordListCriteriaContracts = new List<WordListCriteriaContract>{title1, title2, editor1, editor2, fulltext1, fulltext2, sentence1, sentence2, heading1, heading2};
             m_mainServiceClient.SearchByCriteria(wordListCriteriaContracts);
             return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)
+        {
+            var result = m_mainServiceClient.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        {
+            var resultCount = m_mainServiceClient.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
+            return Json(resultCount, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
+        {
+            var result = m_mainServiceClient.GetHeadwordList(selectedCategoryIds, selectedBookIds, page, pageSize);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
+        {
+            var resultPageNumber = m_mainServiceClient.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query, pageSize);
+            return Json(resultPageNumber, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetSearchResultCount(string query)
+        {
+            //TODO search with category filter
+            var result = m_mainServiceClient.GetHeadwordSearchResultCount(query);
+            return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SearchHeadword(string query, int page, int pageSize)
+        {
+            //TODO
+            var result = m_mainServiceClient.SearchHeadword(query, new List<string> { "{08BE3E56-77D0-46C1-80BB-C1346B757BE5}" }, page, pageSize);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetTypeaheadDictionaryHeadword(string query)
+        {
+            var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

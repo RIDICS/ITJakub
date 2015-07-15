@@ -133,6 +133,9 @@
     <None Include="Data\Metadata\ESSC_A.xmd" />
     <None Include="Data\Metadata\KazLeg.xmd" />
     <None Include="Data\Metadata\LekChir.xmd" />
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
