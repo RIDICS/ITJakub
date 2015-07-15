@@ -77,7 +77,7 @@ var DictionaryViewer = (function () {
                     this.prepareLazyLoad(mainHeadwordDiv);
                 }
                 else {
-                    this.getAndShowHeadwordDescription(record.Headword, dictionary.BookGuid, dictionary.XmlEntryId, descriptionDiv);
+                    this.getAndShowHeadwordDescription(record.Headword, dictionary.BookXmlId, dictionary.XmlEntryId, descriptionDiv);
                 }
                 var commentsDiv = document.createElement("div");
                 var commentsLink = document.createElement("a");
@@ -88,7 +88,7 @@ var DictionaryViewer = (function () {
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
                 $(dictionaryLink).text(dictionary.BookTitle);
-                dictionaryLink.href = "?guid=" + dictionary.BookGuid;
+                dictionaryLink.href = "?guid=" + dictionary.BookXmlId;
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
                 mainHeadwordDiv.appendChild(descriptionDiv);
@@ -173,7 +173,7 @@ var DictionaryViewer = (function () {
         var descriptionContainer = $(".dictionary-entry-description-container", mainDescriptionDiv).get(0);
         $(mainDescriptionDiv).unbind("appearing");
         $(mainDescriptionDiv).removeClass("lazy-loading");
-        this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookGuid, dictionaryInfo.XmlEntryId, descriptionContainer);
+        this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookXmlId, dictionaryInfo.XmlEntryId, descriptionContainer);
     };
     DictionaryViewer.prototype.isAllLoaded = function () {
         var descriptions = $(this.headwordDescriptionContainer);

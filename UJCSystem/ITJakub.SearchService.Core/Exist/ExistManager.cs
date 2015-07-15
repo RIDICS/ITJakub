@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using ITJakub.SearchService.Core.Search;
+using ITJakub.SearchService.Core.Search.DataContract;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.SearchService.Core.Exist
 {
@@ -8,11 +13,13 @@ namespace ITJakub.SearchService.Core.Exist
     {
         private readonly ExistClient m_client;
         private readonly IExistResourceManager m_existResourceManager;
+        private readonly FulltextSearchCriteriaDirector m_searchCriteriaDirector;
 
-        public ExistManager(ExistClient existClient, IExistResourceManager existResourceManager)
+        public ExistManager(ExistClient existClient, IExistResourceManager existResourceManager, FulltextSearchCriteriaDirector searchCriteriaDirector)
         {
             m_client = existClient;
             m_existResourceManager = existResourceManager;
+            m_searchCriteriaDirector = searchCriteriaDirector;
         }
 
         public void UploadBookFile(string bookId, string fileName, Stream dataStream)
@@ -76,6 +83,35 @@ namespace ITJakub.SearchService.Core.Exist
                transformationLevel, bookId, versionId);
             return m_client.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId,
                 Enum.GetName(typeof(OutputFormatEnumContract), outputFormat), xslPath);
+        }
+
+        public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
+        {
+            ResultRestrictionCriteriaContract resultRestrictionCriteriaContract = null;
+            RegexCriteriaBuilder.ConvertWildcardToRegex(searchCriterias);
+            var filteredCriterias = new List<SearchCriteriaContract>();
+            foreach (var searchCriteriaContract in searchCriterias)
+            {
+                if (m_searchCriteriaDirector.IsCriteriaSupported(searchCriteriaContract))
+                {
+                    filteredCriterias.Add(RegexCriteriaBuilder.ConvertToRegexCriteria(searchCriteriaContract));
+                }
+                else if (searchCriteriaContract.Key == CriteriaKey.ResultRestriction)
+                {
+                    resultRestrictionCriteriaContract = (ResultRestrictionCriteriaContract) searchCriteriaContract;
+                }
+            }
+
+            if (resultRestrictionCriteriaContract == null)
+                return;
+
+            var searchCriteria = new ResultSearchCriteriaContract
+            {
+                ResultBooks = resultRestrictionCriteriaContract.ResultBooks,
+                ConjunctionSearchCriterias = filteredCriterias
+            };
+
+            var stringResult = m_client.ListSearchEditionsResults(searchCriteria.ToXml());
         }
     }
 }

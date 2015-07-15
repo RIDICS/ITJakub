@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace ITJakub.Shared.Contracts
+namespace ITJakub.Shared.Contracts.Searching.Results
 {
     [DataContract]
     public class SearchResultContract
     {
         [DataMember]
-        public string BookGuid { get; set; }
+        public string BookXmlId { get; set; }
 
         [DataMember]
-        public string VersionId { get; set; }
+        public string VersionXmlId { get; set; }
 
         [DataMember]
-        public string BookType { get; set; }
+        public BookTypeEnumContract BookType { get; set; }
 
         [DataMember]
         public string Title { get; set; }
@@ -54,5 +54,11 @@ namespace ITJakub.Shared.Contracts
 
         [DataMember]
         public List<ManuscriptContract> Manuscripts { get; set; }
+
+        [DataMember]
+        public int TotalHitCount { get; set; }
+
+        [DataMember]
+        public IList<PageResultContext> Results { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class ContainerConfig
     {
-        public static void InitializeContainer()
+        public static void InitializeContainers()
         {
             var container = Container.Current;
         }

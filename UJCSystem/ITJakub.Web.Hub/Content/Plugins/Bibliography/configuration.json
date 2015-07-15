@@ -37,7 +37,7 @@
                     "$litType": {
                         "type": "array",
                         "scope": "Pages",
-                        "pattern": "<a href='{BookId}'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>",
+                        "pattern": "<a href='{BookXmlId}'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>",
                         "delimeter": " , "
                     },
                     "$LiteraryTypeStart": {
@@ -103,10 +103,10 @@
         },
         "right-panel": {
             "info-button": {
-                "url": "Editions/Editions/Info?bookId={BookGuid}"
+                "url": "Editions/Editions/Info?bookId={BookXmlId}"
             },
             "read-button": {
-                "url": "Editions/Editions/Listing?bookId={BookGuid}"
+                "url": "Editions/Editions/Listing?bookId={BookXmlId}"
             },
             "variables": {
                 "$test": {
@@ -151,7 +151,7 @@
         },
         "right-panel": {
             "info-button": {
-                "url": "Dictionary\\info\\{BookId}"
+                "url": "Dictionary\\info\\{BookXmlId}"
             },
             "read-button": {
                 "url": "Dictionary\\read\\{$test}"
@@ -199,7 +199,7 @@
                     "$litType": {
                         "type": "array",
                         "scope": "Pages",
-                        "pattern": "<a href='{BookId}'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>",
+                        "pattern": "<a href='{BookXmlId}'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>",
                         "delimeter": " , "
                     },
                     "$LiteraryTypeStart": {
@@ -265,10 +265,10 @@
         },
         "right-panel": {
             "info-button": {
-                "url": "Editions/Editions/Info?bookId={BookGuid}"
+                "url": "Editions/Editions/Info?bookId={BookXmlId}"
             },
             "read-button": {
-                "url": "Editions/Editions/Listing?bookId={BookGuid}"
+                "url": "Editions/Editions/Listing?bookId={BookXmlId}"
             }
 
         }
@@ -282,13 +282,7 @@
                     "type": "basic",
                     "pattern": "<a href='#'>[AAA]</a>",
                     "printIfNullValue": true
-                },
-                "$authors": {
-                    "type": "array",
-                    "scope": "Authors",
-                    "pattern": "{Name}",
-                    "delimeter": ", "
-                },
+                },            
                 "$description": {
                     "type": "basic",
                     "pattern": "{SubTitle}",
@@ -298,7 +292,7 @@
         },
         "right-panel": {
             "read-button": {
-                "url": "CardFiles\\CardFiles\\Listing?cardFileId={BookGuid}"
+                "url": "CardFiles\\CardFiles\\Listing?cardFileId={BookXmlId}"
             },
             "variables": {
                 "$test": {

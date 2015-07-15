@@ -64,9 +64,19 @@
       <HintPath>..\..\Libs\log4net1.2.12\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Xml" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.DynamicData" />
@@ -75,6 +85,14 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
@@ -125,9 +143,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -184,11 +199,13 @@
     <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
     <Compile Include="Areas\CardFiles\RouteConfig.cs" />
     <Compile Include="Areas\Dictionaries\BundleConfig.cs" />
-    <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\ConditionCriteriaDescriptionProfile.cs" />
+    <Compile Include="AutoMapperProfiles\DatingCriteriaDescriptionProfile.cs" />
+    <Compile Include="AutoMapperProfiles\DatingListCriteriaDescriptionProfile.cs" />
+    <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
+    <Compile Include="AutoMapperProfiles\WordListCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescription.cs" />
-    <Compile Include="Models\Plugins\RegExSearch\WordCriteriaDescription.cs" />
     <Compile Include="Areas\Dictionaries\RouteConfig.cs" />
     <Compile Include="Areas\Editions\BundleConfig.cs" />
     <Compile Include="Areas\Dictionaries\Controllers\DictionariesController.cs" />
@@ -209,7 +226,6 @@
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\Plugins\Bibliography\BibliographyController.cs" />
     <Compile Include="Controllers\Plugins\Reader\ReaderController.cs" />
-    <Compile Include="Controllers\Plugins\Search\SearchController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Global.asax.cs">
@@ -224,6 +240,7 @@
     <Compile Include="ItJakubServiceClient.cs" />
     <Compile Include="ItJakubServiceEncryptedClient.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionConverter.cs" />
     <Compile Include="Models\UploadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -675,7 +692,6 @@
     <TypeScriptCompile Include="Scripts\Plugins\DropdownSelect\itjakub.plugins.dropdownselect.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Reader\itjakub.plugins.reader.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\RegExSearch\itjakub.plugins.regexsearch.ts" />
-    <TypeScriptCompile Include="Scripts\Plugins\Search\itjakub.plugins.search.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.ts" />

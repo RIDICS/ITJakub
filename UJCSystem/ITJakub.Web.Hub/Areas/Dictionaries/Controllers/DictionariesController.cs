@@ -5,7 +5,9 @@ using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
@@ -39,15 +41,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             return View();
         }
-
-        //public ActionResult SaveItem(string itemmType, string itemId, string bookType)
-        //{
-        //    var actionType = action == "add" ? ActionType.Save : ActionType.Delete;
-        //    var itemType = action == "add" ? ItemmTypeContract.Book : ItemmTypeContract.Category;
-
-        //    m_mainServiceClient.SaveFavorite(action, bookType);
-
-        //}
 
         public ActionResult GetTextWithCategories()
         {
@@ -92,11 +85,14 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult SearchCriteria(IList<ConditionCriteriaDescription> searchData)
+        [HttpPost]
+        public ActionResult SearchCriteria(string json)
         {
-            var wordListCriteriaContracts = Mapper.Map<IList<WordListCriteriaContract>>(searchData);
-            m_mainServiceClient.SearchByCriteria(wordListCriteriaContracts);
-            return Json(new {}, JsonRequestBehavior.AllowGet);
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescription>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { });
+
         }
 
         public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)
@@ -142,5 +138,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(query);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+
     }
 }

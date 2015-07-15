@@ -1,6 +1,9 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
 
 namespace ITJakub.SearchService
@@ -42,22 +45,35 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId, transformationName, outputFormat, transformationLevel);
         }
 
-        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
-            if(m_log.IsDebugEnabled)
-                m_log.DebugFormat("SearchService request recieved...");
-						return m_searchServiceManager.GetBookPageByName(bookId, versionId, pageName, transformationName, outputFormat, transformationLevel);
-        }
-				public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
-        {
-            if(m_log.IsDebugEnabled)
-                m_log.DebugFormat("SearchService request recieved...");
-            return m_searchServiceManager.GetBookPageByXmlId(bookId, versionId, pageXmlId, transformationName, outputFormat, transformationLevel);
+            m_searchServiceManager.ListSearchEditionsResults(searchCriterias);
         }
 
-				public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName,
+            OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            return m_searchServiceManager.GetBookPagesByName(bookId, versionId, startPageName, endPageName, transformationName, outputFormat, transformationLevel);
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("SearchService request recieved...");
+            return m_searchServiceManager.GetBookPageByName(bookId, versionId, pageName, transformationName,
+                outputFormat, transformationLevel);
+        }
+
+        public string GetBookPageByXmlId(string bookId, string versionId, string pageXmlId, string transformationName,
+            OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        {
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("SearchService request recieved...");
+            return m_searchServiceManager.GetBookPageByXmlId(bookId, versionId, pageXmlId, transformationName,
+                outputFormat, transformationLevel);
+        }
+
+        public string GetBookPagesByName(string bookId, string versionId, string startPageName, string endPageName,
+            string transformationName, OutputFormatEnumContract outputFormat,
+            ResourceLevelEnumContract transformationLevel)
+        {
+            return m_searchServiceManager.GetBookPagesByName(bookId, versionId, startPageName, endPageName,
+                transformationName, outputFormat, transformationLevel);
         }
 
     }

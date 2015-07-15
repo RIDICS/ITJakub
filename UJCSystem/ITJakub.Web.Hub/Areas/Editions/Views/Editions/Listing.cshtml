@@ -10,13 +10,13 @@
 }
 @model ITJakub.Web.Hub.Areas.Editions.Models.BookListingModel
 
-<div id="Reader" data-bookid="@Model.BookId" class="top-offset-without-submenu">
+<div id="Reader" data-bookid="@Model.BookXmlId" class="top-offset-without-submenu">
 
 </div>
 
 <script type="text/javascript">
     $(document).ready(function() {
         var readerPlugin = new ReaderModule('#Reader');
-        readerPlugin.makeReader("@Model.BookId", "@Model.BookTitle",@Html.Raw(Json.Encode(@Model.BookPages)));
+        readerPlugin.makeReader("@Model.BookXmlId", "@Model.BookTitle",@Html.Raw(Json.Encode(@Model.BookPages)));
     });
 </script>

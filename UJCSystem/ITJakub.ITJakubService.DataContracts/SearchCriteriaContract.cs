@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace ITJakub.ITJakubService.DataContracts
 {
     [DataContract]
-    [KnownType(typeof(DatingCriteriaContract))]
+    [KnownType(typeof(DatingListCriteriaContract))]
     [KnownType(typeof(WordListCriteriaContract))]
     public abstract class SearchCriteriaContract
     {
@@ -14,7 +14,14 @@ namespace ITJakub.ITJakubService.DataContracts
     }
 
     [DataContract]
-    public class DatingCriteriaContract : SearchCriteriaContract
+    public class DatingListCriteriaContract : SearchCriteriaContract
+    {
+        [DataMember]
+        public IList<DatingCriteriaContract> Values { get; set; }
+    }
+
+    [DataContract]
+    public class DatingCriteriaContract
     {
         [DataMember]
         public DateTime? NotBefore { get; set; }
@@ -50,6 +57,8 @@ namespace ITJakub.ITJakubService.DataContracts
         [EnumMember] Title = 1,
         [EnumMember] Editor = 2,
         [EnumMember] Dating = 3,
-        [EnumMember] Text = 4
+        [EnumMember] Fulltext = 4,
+        [EnumMember] Heading = 5,
+        [EnumMember] Sentence = 6
     }
 }

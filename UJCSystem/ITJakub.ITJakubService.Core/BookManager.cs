@@ -31,30 +31,6 @@ namespace ITJakub.ITJakubService.Core
             m_fileSystemManager = fileSystemManager;
         }
 
-        public string GetBookPageByName(string bookGuid, string pageName, OutputFormatEnumContract resultFormat)
-        {
-            if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("Start MainService (BookManager) get page name '{0}' of book '{1}'", pageName, bookGuid);
-
-            var searchServiceClient = new SearchServiceClient();
-            OutputFormat outputFormat;
-            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
-            {
-                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
-            }
-
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
-            var transformationName = transformation.Name;
-            var transformationLevel = (ResourceLevelEnumContract) transformation.ResourceLevel;
-            var pageText = searchServiceClient.GetBookPageByName(bookGuid, bookVersion.VersionId, pageName, transformationName, resultFormat, transformationLevel);
-
-            if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("End MainService (BookManager) get page name '{0}' of book '{1}'", pageName, bookGuid);
-
-            return pageText;
-        }
-
         public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
             if (m_log.IsDebugEnabled)
@@ -83,34 +59,6 @@ namespace ITJakub.ITJakubService.Core
                 m_log.DebugFormat("End MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId, bookGuid);
 
             return pageText;
-        }
-
-        public string GetBookPagesByName(string bookGuid, string startPageName, string endPageName, OutputFormatEnumContract resultFormat)
-        {
-            OutputFormat outputFormat;
-            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
-            {
-                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
-            }
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
-            var transformationName = transformation.Name;
-            var transformationLevel = (ResourceLevelEnumContract) transformation.ResourceLevel;
-            return m_searchServiceClient.GetBookPagesByName(bookGuid, bookVersion.VersionId, startPageName, endPageName, transformationName, resultFormat, transformationLevel);
-        }
-
-        public string GetBookPageByPosition(string bookGuid, int position, OutputFormatEnumContract resultFormat)
-        {
-            OutputFormat outputFormat;
-            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
-            {
-                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
-            }
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
-            var transformationName = transformation.Name;
-            var transformationLevel = (ResourceLevelEnumContract) transformation.ResourceLevel;
-						return m_searchServiceClient.GetBookPageByPosition(bookGuid, bookVersion.VersionId, position, transformationName, resultFormat, transformationLevel);
         }
 
         public IList<BookPageContract> GetBookPagesList(string bookGuid)
@@ -143,11 +91,11 @@ namespace ITJakub.ITJakubService.Core
 
         public Stream GetBookPageImage(BookPageImageContract imageContract)
         {
-            var bookVersion = m_bookRepository.GetLastVersionForBook(imageContract.BookGuid);
+            var bookVersion = m_bookRepository.GetLastVersionForBook(imageContract.BookXmlId);
             var bookPage = m_bookVersionRepository.FindBookPageByVersionAndPosition(bookVersion, imageContract.Position);
 
             if (bookPage.Image != null)
-                return m_fileSystemManager.GetResource(imageContract.BookGuid, bookVersion.VersionId,
+                return m_fileSystemManager.GetResource(imageContract.BookXmlId, bookVersion.VersionId,
                     bookPage.Image, ResourceType.Image);
 
             return Stream.Null;
@@ -171,7 +119,7 @@ namespace ITJakub.ITJakubService.Core
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
             {
                 throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
-            }
+    }
 
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
