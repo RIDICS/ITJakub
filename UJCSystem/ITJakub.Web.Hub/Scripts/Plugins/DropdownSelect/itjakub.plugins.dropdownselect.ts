@@ -82,12 +82,12 @@ class DropDownSelectCallbackDelegate {
 class DropDownSelect {
 
     private dropDownSelectContainer: string;
-    private dataUrl: string;
-    private showStar: boolean;
+    protected dataUrl: string;
+    protected showStar: boolean;
     private type: string;
     private selectedItems: Array<Item>;
     private selectedCategories: Array<Category>;
-    private callbackDelegate: DropDownSelectCallbackDelegate;
+    protected callbackDelegate: DropDownSelectCallbackDelegate;
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         this.dropDownSelectContainer = dropDownSelectContainer;
@@ -242,7 +242,7 @@ class DropDownSelect {
         this.downloadData(dropDownBodyDiv);
     }
 
-    private downloadData(dropDownItemsDiv: HTMLDivElement) {
+    protected downloadData(dropDownItemsDiv: HTMLDivElement) {
         var loadDiv = document.createElement("div");
         $(loadDiv).addClass("loading");
         $(dropDownItemsDiv).append(loadDiv);
@@ -267,7 +267,7 @@ class DropDownSelect {
         });
     }
 
-    private makeTreeStructure(categories, leafItems, dropDownItemsDiv: HTMLDivElement) {
+    protected makeTreeStructure(categories, leafItems, dropDownItemsDiv: HTMLDivElement) {
         var rootCategory = this.getRootCategory(categories);
 
         var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
@@ -322,7 +322,7 @@ class DropDownSelect {
         }
     }
 
-    private propagateSelectChange(concreteItemSource: HTMLDivElement) {
+    protected propagateSelectChange(concreteItemSource: HTMLDivElement) {
         var actualItem = $(concreteItemSource).parent().closest(".concrete-item");
         var actualItemInput: JQuery;
         var actualItemChilds: JQuery;
@@ -517,7 +517,7 @@ class DropDownSelect {
 
     }
 
-    private makeLeafItem(container: HTMLDivElement, currentLeafItem: any) {
+    protected makeLeafItem(container: HTMLDivElement, currentLeafItem: any) {
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
 
@@ -587,7 +587,7 @@ class DropDownSelect {
     }
 
 
-    private createCallbackInfo(itemId: string, itemText: string, target: any): CallbackInfo {
+    protected createCallbackInfo(itemId: string, itemText: string, target: any): CallbackInfo {
         var info = new CallbackInfo();
         info.ItemId = itemId;
         info.ItemText = itemText;
@@ -595,7 +595,7 @@ class DropDownSelect {
         return info;
     }
 
-    private addToSelectedItems(info: CallbackInfo) {
+    protected addToSelectedItems(info: CallbackInfo) {
         var isSelected = $.grep(this.selectedItems, (item: Item) => (item.Id === info.ItemId), false).length !== 0;
         if (!isSelected) {
             this.selectedItems.push(new Item(info.ItemId, info.ItemText));
@@ -603,7 +603,7 @@ class DropDownSelect {
         }
     }
 
-    private removeFromSelectedItems(info: CallbackInfo) {
+    protected removeFromSelectedItems(info: CallbackInfo) {
         this.selectedItems = $.grep(this.selectedItems, (item: Item) => (item.Id !== info.ItemId), false);
         this.selectedChanged();
     }

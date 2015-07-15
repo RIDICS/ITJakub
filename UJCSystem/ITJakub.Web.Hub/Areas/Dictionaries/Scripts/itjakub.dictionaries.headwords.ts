@@ -28,8 +28,8 @@
     };
 
     // TODO add selection changed callback
-    var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true);
-    dictionarySelector.makeDropDown();
+    var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
+    dictionarySelector.makeDropdown();
     
     
     $("#printDescription").click(() => {
