@@ -1242,13 +1242,15 @@ enum SearchTypeEnum {
 
 /*
  * ConditionTypeEnum must match with ConditionTypeEnum number values in C#
-        [EnumMember] WordList = 0,
-        [EnumMember] DatingList = 1,
+        WordList = 0,
+        DatingList = 1,
+        TokenDistanceList = 2,
  * 
  */
 enum ConditionTypeEnum {
     WordList = 0,
     DatingList = 1,
+    TokenDistanceList = 2
 }
 
 enum DatingPrecisionEnum {

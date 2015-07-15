@@ -6,6 +6,7 @@ using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
 
@@ -114,7 +115,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         [HttpPost]
         public ActionResult SearchCriteria(string json)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescription>>(json, new ConditionCriteriaDescriptionConverter());
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
             m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
             return Json(new { });

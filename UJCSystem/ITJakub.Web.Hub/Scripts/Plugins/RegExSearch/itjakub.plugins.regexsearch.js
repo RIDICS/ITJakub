@@ -1003,14 +1003,16 @@ var SearchTypeEnum;
 })(SearchTypeEnum || (SearchTypeEnum = {}));
 /*
  * ConditionTypeEnum must match with ConditionTypeEnum number values in C#
-        [EnumMember] WordList = 0,
-        [EnumMember] DatingList = 1,
+        WordList = 0,
+        DatingList = 1,
+        TokenDistanceList = 2,
  *
  */
 var ConditionTypeEnum;
 (function (ConditionTypeEnum) {
     ConditionTypeEnum[ConditionTypeEnum["WordList"] = 0] = "WordList";
     ConditionTypeEnum[ConditionTypeEnum["DatingList"] = 1] = "DatingList";
+    ConditionTypeEnum[ConditionTypeEnum["TokenDistanceList"] = 2] = "TokenDistanceList";
 })(ConditionTypeEnum || (ConditionTypeEnum = {}));
 var DatingPrecisionEnum;
 (function (DatingPrecisionEnum) {
