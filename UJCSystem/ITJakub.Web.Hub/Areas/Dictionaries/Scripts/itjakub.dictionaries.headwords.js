@@ -23,8 +23,9 @@ $(document).ready(function () {
     callbackDelegate.selectedChangedCallback = function (state) {
         loadHeadwordsFunction(state);
     };
-    var dictionarySelector = new DropDownSelect("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
-    dictionarySelector.makeDropdown();
+    // TODO add selection changed callback
+    var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true);
+    dictionarySelector.makeDropDown();
     $("#printDescription").click(function () {
         dictionariesViewer.print();
     });

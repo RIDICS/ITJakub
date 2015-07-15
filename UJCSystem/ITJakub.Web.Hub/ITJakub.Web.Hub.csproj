@@ -666,6 +666,7 @@
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.ts" />
     <TypeScriptCompile Include="Scripts\Home\itjakub.home.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\DropdownSelect\itjakub.plugins.dropdownselect2.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.searchbox.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.sorting.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.configuration.ts" />

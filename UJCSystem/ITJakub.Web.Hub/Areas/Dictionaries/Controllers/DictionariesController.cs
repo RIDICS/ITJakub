@@ -73,34 +73,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var dictionariesAndCategories =
                 m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
-            //TODO better fix loading books
-            //var booksDictionary =
-            //    dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
-            //        .ToDictionary(x => x.Key.ToString(), x => x.ToList());
-            var booksDictionary = new Dictionary<string, IList<BookContract>>();
-            foreach (var book in dictionariesAndCategories.Books)
-            {
-                foreach (var categoryId in book.CategoryIds)
-                {
-                    IList<BookContract> booksInCategory;
-                    if (booksDictionary.TryGetValue(Convert.ToString(categoryId), out booksInCategory))
-                        booksInCategory.Add(book);
-                    else
-                        booksDictionary.Add(Convert.ToString(categoryId), new List<BookContract> {book});
-                }
-            }
 
-            var categoriesDictionary =
-                dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
-                    .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
-            return
-                Json(
-                    new
-                    {
-                        type = BookTypeEnumContract.Dictionary,
-                        books = booksDictionary,
-                        categories = categoriesDictionary
-                    }, JsonRequestBehavior.AllowGet);
+            return Json(dictionariesAndCategories, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Information()
