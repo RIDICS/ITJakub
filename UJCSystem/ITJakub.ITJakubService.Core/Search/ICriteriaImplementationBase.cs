@@ -119,30 +119,38 @@ namespace ITJakub.ITJakubService.Core.Search
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
         {
             var datingListCriteriaContract = (DatingListCriteriaContract) searchCriteriaContract; //TODO added list in contracts
-            var datingCriteriaContract = datingListCriteriaContract.Values.FirstOrDefault();
-            var datingParameters = new List<object>();
-            var manuscriptAlias = string.Format("m{0}", Guid.NewGuid().ToString("N"));
-            var whereBuilder = new StringBuilder();
-
-            if (datingCriteriaContract.NotBefore.ToBinary() != 0)
-            {
-                whereBuilder.AppendFormat("{0}.NotBefore >= ?", manuscriptAlias);
-                datingParameters.Add(datingCriteriaContract.NotBefore);
-            }
-            if (datingCriteriaContract.NotAfter.ToBinary() != 0)
-            {
-                if (whereBuilder.Length > 0)
-                    whereBuilder.Append(" and ");
-                whereBuilder.AppendFormat("{0}.NotAfter <= ?", manuscriptAlias);
-                datingParameters.Add(datingCriteriaContract.NotAfter);
-            }
             
-            return new SearchCriteriaQuery
+            //TODO make OR between items in list as in WordList
+
+            foreach (DatingCriteriaContract datingCriteriaContract in datingListCriteriaContract.Values)
             {
-                Join = string.Format("inner join bv.ManuscriptDescriptions {0}", manuscriptAlias),
-                Where = whereBuilder.ToString(),
-                Parameters = datingParameters
-            };
+                throw new NotImplementedException();
+                var datingParameters = new List<object>();
+                var manuscriptAlias = string.Format("m{0}", Guid.NewGuid().ToString("N"));
+                var whereBuilder = new StringBuilder();
+
+                if (datingCriteriaContract.NotBefore.Value.ToBinary() != 0)
+                {
+                    whereBuilder.AppendFormat("{0}.NotBefore >= ?", manuscriptAlias);
+                    datingParameters.Add(datingCriteriaContract.NotBefore);
+                }
+                if (datingCriteriaContract.NotAfter.Value.ToBinary() != 0)
+                {
+                    if (whereBuilder.Length > 0)
+                        whereBuilder.Append(" and ");
+                    whereBuilder.AppendFormat("{0}.NotAfter <= ?", manuscriptAlias);
+                    datingParameters.Add(datingCriteriaContract.NotAfter);
+                }
+
+                return new SearchCriteriaQuery
+                {
+                    Join = string.Format("inner join bv.ManuscriptDescriptions {0}", manuscriptAlias),
+                    Where = whereBuilder.ToString(),
+                    Parameters = datingParameters
+                };
+            }
+
+            return null; //TODO remove
         }
     }
 }

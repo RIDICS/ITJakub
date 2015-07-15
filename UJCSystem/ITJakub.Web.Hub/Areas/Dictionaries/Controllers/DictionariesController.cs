@@ -100,17 +100,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult SearchCriteria(string json)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescription>>(json, new ConditionCriteriaDescriptionConverter());
-            try
-            {
-                var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-                m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new { });
-            }
-            catch (Exception ex)
-            {
-                
-                throw;
-            }
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { });
+
         }
 
         public ActionResult SearchCriteriaMocked()

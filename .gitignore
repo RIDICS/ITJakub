@@ -63,6 +63,6 @@ _ReSharper*/
 #Test files
 *.testsettings
 
-#logs
+#Logs
 [Ll]ogs/
 *.svclog

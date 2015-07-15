@@ -10,8 +10,8 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<DatingCriteriaDescription, DatingCriteriaContract>()
-                .ForMember(dest => dest.NotAfter, opt => opt.MapFrom(src => src.NotAfter.HasValue? new DateTime().AddYears(src.NotAfter.Value): null))
-                .ForMember(dest => dest.NotBefore, opt => opt.MapFrom(src => new DateTime().AddYears(src.NotBefore.Value))) 
+                .ForMember(dest => dest.NotAfter, opt => opt.MapFrom(src => src.NotAfter.HasValue ? new DateTime?(new DateTime(src.NotAfter.Value,1,1)) : null))
+                .ForMember(dest => dest.NotBefore, opt => opt.MapFrom(src => src.NotBefore.HasValue ? new DateTime?(new DateTime(src.NotBefore.Value,1,1)) : null))
                 .ForAllMembers(opt => opt.Condition(src => !src.IsSourceValueNull));
         }
     }
