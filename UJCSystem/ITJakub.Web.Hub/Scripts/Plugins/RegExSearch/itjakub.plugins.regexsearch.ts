@@ -117,7 +117,7 @@ class RegExSearch extends RegExSearchBase {
             },
             error: (response : JQueryXHR) => {
                 $(this.container).empty();
-                this.container.innerHTML = response.responseText;
+                $(this.container).append(response.responseText);
             }
         });
 

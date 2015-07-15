@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -99,9 +100,17 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult SearchCriteria(string json)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescription>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-            m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new {});
+            try
+            {
+                var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+                m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+                return Json(new { });
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
         }
 
         public ActionResult SearchCriteriaMocked()
