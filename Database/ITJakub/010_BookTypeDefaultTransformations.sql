@@ -68,14 +68,15 @@ BEGIN TRAN
 	      [XmlId], -- XmlId - varchar
 	      [Description], -- Description - varchar
 	      [ParentCategory],  -- ParentCategory - FK int
-	      [BookType]  -- BookType - FK int
+	      [BookType],  -- BookType - FK int
+		 [Path]
 	  )
 	  VALUES
-	  ('output-editions','Edice',NULL,@EditionTypeId),
-	  ('output-dictionary','Slovnik',NULL,@DictionaryTypeId),
-	  ('output-text_bank','Textova banka',NULL,@TextBankTypeId),
-	  ('output-scholary_literature','Odborna literatura',NULL,@ProfessionalLiteratureTypeId),
-	  ('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId)
+	  ('output-editions','Edice',NULL,@EditionTypeId, '/output-editions/'),
+	  ('output-dictionary','Slovnik',NULL,@DictionaryTypeId, '/output-dictionary/'),
+	  ('output-text_bank','Textova banka',NULL,@TextBankTypeId, '/output-text_bank/'),
+	  ('output-scholary_literature','Odborna literatura',NULL,@ProfessionalLiteratureTypeId, '/output-scholary_literature/'),
+	  ('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId, '/output-digitized-grammar/')
 	  
 	--ROLLBACK
 COMMIT
