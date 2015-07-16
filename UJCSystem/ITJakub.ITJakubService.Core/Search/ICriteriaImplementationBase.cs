@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using ITJakub.DataEntities.Database;
-using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.ITJakubService.Core.Search
@@ -119,39 +117,42 @@ namespace ITJakub.ITJakubService.Core.Search
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
         {
-            var datingListCriteriaContract = (DatingListCriteriaContract) searchCriteriaContract; //TODO added list in contracts
-            
-            //TODO make OR between items in list as in WordList
+            var datingListCriteriaContract = (DatingListCriteriaContract) searchCriteriaContract;
+            var manuscriptAlias = string.Format("m{0}", Guid.NewGuid().ToString("N"));
+            var whereBuilder = new StringBuilder();
+            var datingParameters = new List<object>();
 
             foreach (DatingCriteriaContract datingCriteriaContract in datingListCriteriaContract.Disjunctions)
             {
-                throw new NotImplementedException();
-                var datingParameters = new List<object>();
-                var manuscriptAlias = string.Format("m{0}", Guid.NewGuid().ToString("N"));
-                var whereBuilder = new StringBuilder();
+                if (whereBuilder.Length > 0)
+                    whereBuilder.Append(" or ");
 
-                if (datingCriteriaContract.NotBefore.Value.ToBinary() != 0)
+                var notBeforeUsed = false;
+                whereBuilder.Append("(");
+
+                if (datingCriteriaContract.NotBefore != null)
                 {
-                whereBuilder.AppendFormat("{0}.NotAfter >= ?", manuscriptAlias);
-                datingParameters.Add(datingCriteriaContract.NotBefore.Value);
+                    notBeforeUsed = true;
+                    whereBuilder.AppendFormat("{0}.NotAfter >= ?", manuscriptAlias);
+                    datingParameters.Add(datingCriteriaContract.NotBefore.Value);
                 }
-                if (datingCriteriaContract.NotAfter.Value.ToBinary() != 0)
+
+                if (datingCriteriaContract.NotAfter != null)
                 {
-                    if (whereBuilder.Length > 0)
+                    if (notBeforeUsed)
                         whereBuilder.Append(" and ");
-                whereBuilder.AppendFormat("{0}.NotBefore <= ?", manuscriptAlias);
-                datingParameters.Add(datingCriteriaContract.NotAfter.Value);
+                    whereBuilder.AppendFormat("{0}.NotBefore <= ?", manuscriptAlias);
+                    datingParameters.Add(datingCriteriaContract.NotAfter.Value);
                 }
-
-                return new SearchCriteriaQuery
-                {
-                    Join = string.Format("inner join bv.ManuscriptDescriptions {0}", manuscriptAlias),
-                    Where = whereBuilder.ToString(),
-                    Parameters = datingParameters
-                };
+                whereBuilder.Append(")");
             }
 
-            return null; //TODO remove
+            return new SearchCriteriaQuery
+            {
+                Join = string.Format("inner join bv.ManuscriptDescriptions {0}", manuscriptAlias),
+                Where = whereBuilder.ToString(),
+                Parameters = datingParameters
+            };
         }
     }
 }

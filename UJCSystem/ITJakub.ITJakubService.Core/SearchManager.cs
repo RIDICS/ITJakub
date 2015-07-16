@@ -63,9 +63,9 @@ namespace ITJakub.ITJakubService.Core
             {
                 if (m_searchCriteriaDirector.IsCriteriaSupported(searchCriteriaContract))
                 {
-                var criteriaQuery = m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract);
-                conjunction.Add(criteriaQuery);
-            }
+                    var criteriaQuery = m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract);
+                    conjunction.Add(criteriaQuery);
+                }
                 else
                 {
                     nonMetadataCriterias.Add(searchCriteriaContract);
