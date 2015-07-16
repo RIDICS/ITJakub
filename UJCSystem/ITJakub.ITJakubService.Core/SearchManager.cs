@@ -11,6 +11,8 @@ using ITJakub.ITJakubService.Core.Search;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 using MobileContracts = ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.ITJakubService.Core
@@ -190,9 +192,9 @@ namespace ITJakub.ITJakubService.Core
                 var bookInfoContract = new HeadwordBookInfoContract
                 {
                     BookAcronym = headword.BookAcronym,
-                    BookVersionId = headword.BookVersionId,
-                    BookGuid = headword.BookGuid,
-                    XmlEntryId = headword.XmlEntryId
+                    BookVersionXmlId = headword.BookVersionId,
+                    BookXmlId = headword.BookGuid,
+                    EntryXmlId = headword.XmlEntryId
                 };
 
                 if (headword.Headword == headwordContract.Headword)

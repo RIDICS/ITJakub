@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text;
 using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.ITJakubService.Core.Search
 {

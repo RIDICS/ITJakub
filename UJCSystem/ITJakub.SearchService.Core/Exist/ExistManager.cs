@@ -5,6 +5,7 @@ using ITJakub.SearchService.Core.Search;
 using ITJakub.SearchService.Core.Search.DataContract;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.SearchService.Core.Exist
 {

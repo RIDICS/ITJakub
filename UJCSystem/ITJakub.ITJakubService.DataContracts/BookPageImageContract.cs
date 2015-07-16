@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.DataContracts
     public class BookPageImageContract
     {
         [DataMember]
-        public string BookGuid { get; set; }
+        public string BookXmlId { get; set; }
 
         [DataMember]
         public int Position { get; set; }

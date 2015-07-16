@@ -4,15 +4,15 @@
 
     constructor(booksConfigurations: Object) {
         this.factories = new Array();
-        this.factories['Edition'] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
-        this.factories['Dictionary'] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
-        this.factories['TextBank'] = new TextBankFactory(new BookTypeConfiguration("TextBank", booksConfigurations["TextBank"]));
-        this.factories['CardFile'] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
+        this.factories[BookTypeEnum.Edition] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
+        this.factories[BookTypeEnum.Dictionary] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
+        this.factories[BookTypeEnum.TextBank] = new TextBankFactory(new BookTypeConfiguration("TextBank", booksConfigurations["TextBank"]));
+        this.factories[BookTypeEnum.CardFile] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
         this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
 
     }
 
-    public getFactoryForType(bookType: string): BibliographyFactory {
+    public getFactoryForType(bookType: BookTypeEnum): BibliographyFactory {
         if (typeof this.factories[bookType]!== 'undefined'){
             return this.factories[bookType];
         }

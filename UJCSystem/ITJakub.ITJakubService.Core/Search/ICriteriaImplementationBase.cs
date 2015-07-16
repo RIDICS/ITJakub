@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ITJakub.DataEntities.Database;
 using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.ITJakubService.Core.Search
 {

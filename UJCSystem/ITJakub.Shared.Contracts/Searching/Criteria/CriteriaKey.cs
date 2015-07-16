@@ -1,0 +1,19 @@
+using System.Runtime.Serialization;
+
+namespace ITJakub.Shared.Contracts.Searching.Criteria
+{
+    [DataContract]
+    public enum CriteriaKey
+    {
+        [EnumMember] Author = 0,
+        [EnumMember] Title = 1,
+        [EnumMember] Editor = 2,
+        [EnumMember] Dating = 3,
+        [EnumMember] Fulltext = 4,
+        [EnumMember] Heading = 5,
+        [EnumMember] Sentence = 6,
+        [EnumMember] Result = 7,
+        [EnumMember] ResultRestriction = 8,
+        [EnumMember] TokenDistance = 9,
+    }
+}
