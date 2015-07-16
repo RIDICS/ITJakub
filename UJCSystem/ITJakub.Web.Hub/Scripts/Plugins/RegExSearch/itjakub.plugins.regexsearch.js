@@ -74,7 +74,11 @@ var Search = (function () {
     };
     Search.prototype.importJsonToAdvancedSearch = function (json) {
     };
-    Search.prototype.processSearch = function (json) {
+    Search.prototype.processSearch = function () {
+        var searchboxTextInput = document.getElementById("searchbox"); //TODO property
+        this.processSearchJson($(searchboxTextInput).val());
+    };
+    Search.prototype.processSearchJson = function (json) {
         $.ajax({
             type: "POST",
             traditional: true,

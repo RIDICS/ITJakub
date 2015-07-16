@@ -82,7 +82,12 @@ class Search {
         
     }
 
-    processSearch(json: string) {
+    processSearch() {
+        var searchboxTextInput = document.getElementById("searchbox"); //TODO property
+        this.processSearchJson($(searchboxTextInput).val());
+    }
+
+    processSearchJson(json: string) {
         $.ajax({
             type: "POST",
             traditional: true,
