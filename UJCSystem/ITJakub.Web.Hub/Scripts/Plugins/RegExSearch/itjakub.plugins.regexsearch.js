@@ -195,6 +195,9 @@ var RegExConditionListItem = (function () {
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
         searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Text", 4 /* Fulltext */.toString()));
+        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", 9 /* TokenDistance */.toString()));
+        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Ve větě", 6 /* Sentence */.toString()));
+        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("V nadpisu", 5 /* Heading */.toString()));
         searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Autor", 0 /* Author */.toString()));
         searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Titul", 1 /* Title */.toString()));
         searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Editor", 2 /* Editor */.toString()));
@@ -219,7 +222,7 @@ var RegExConditionListItem = (function () {
         this.html = conditionsDiv;
     };
     RegExConditionListItem.prototype.changeConditionType = function (newSearchType, oldSearchType) {
-        if (!(this.innerCondition instanceof RegExWordConditionList) && (newSearchType === 0 /* Author */ || newSearchType === 2 /* Editor */ || newSearchType === 4 /* Fulltext */ || newSearchType === 1 /* Title */)) {
+        if (!(this.innerCondition instanceof RegExWordConditionList) && (newSearchType === 0 /* Author */ || newSearchType === 2 /* Editor */ || newSearchType === 4 /* Fulltext */ || newSearchType === 1 /* Title */ || newSearchType === 5 /* Heading */ || newSearchType === 6 /* Sentence */)) {
             $(this.innerConditionContainer).empty();
             this.innerCondition = new RegExWordConditionList(this);
             this.innerCondition.makeRegExCondition(this.innerConditionContainer);
@@ -229,11 +232,11 @@ var RegExConditionListItem = (function () {
             this.innerCondition = new RegExDatingConditionList(this);
             this.innerCondition.makeRegExCondition(this.innerConditionContainer);
         }
-        //else if (!(this.innerCondition instanceof RegExTokenDistanceConditionList) && (newSearchType === SearchTypeEnum.TokenDistance)) { //TODO
-        //    $(this.innerConditionContainer).empty();
-        //    this.innerCondition = new RegExTokenDistanceConditionList(this);
-        //    this.innerCondition.makeRegExCondition(this.innerConditionContainer);
-        //}
+        else if (!(this.innerCondition instanceof RegExTokenDistanceConditionList) && (newSearchType === 9 /* TokenDistance */)) {
+            $(this.innerConditionContainer).empty();
+            this.innerCondition = new RegExTokenDistanceConditionList(this);
+            this.innerCondition.makeRegExCondition(this.innerConditionContainer);
+        }
     };
     RegExConditionListItem.prototype.makeDefaultCondition = function () {
         $(this.innerConditionContainer).empty();
@@ -284,39 +287,39 @@ var RegExWordConditionList = (function () {
         this.wordListContainerDiv = document.createElement("div");
         $(this.wordListContainerDiv).addClass("regexsearch-condition-list-div");
         conditionContainerDiv.appendChild(this.wordListContainerDiv);
-        this.resetWords();
+        this.resetItems();
     };
     RegExWordConditionList.prototype.getConditionValue = function () {
         var criteriaDescriptions = new WordsCriteriaListDescription();
         for (var i = 0; i < this.conditionInputArray.length; i++) {
             var regExWordCondition = this.conditionInputArray[i];
-            criteriaDescriptions.conditions.push(regExWordCondition.getConditionsValue());
+            criteriaDescriptions.conditions.push(regExWordCondition.getConditionItemValue());
         }
         return criteriaDescriptions;
     };
     RegExWordConditionList.prototype.getConditionType = function () {
         return 0 /* WordList */;
     };
-    RegExWordConditionList.prototype.resetWords = function () {
+    RegExWordConditionList.prototype.resetItems = function () {
         $(this.wordListContainerDiv).empty();
         this.conditionInputArray = [];
         var newWordCondition = new RegExWordCondition(this);
-        newWordCondition.makeRegExWordCondition();
+        newWordCondition.makeRegExItemCondition();
         newWordCondition.setClickableDelimeter();
         this.conditionInputArray.push(newWordCondition);
         this.wordListContainerDiv.appendChild(newWordCondition.getHtml());
     };
-    RegExWordConditionList.prototype.addWord = function () {
+    RegExWordConditionList.prototype.addItem = function () {
         this.conditionInputArray[this.conditionInputArray.length - 1].setTextDelimeter();
         var newWordCondition = new RegExWordCondition(this);
-        newWordCondition.makeRegExWordCondition();
+        newWordCondition.makeRegExItemCondition();
         newWordCondition.setClickableDelimeter();
         this.conditionInputArray.push(newWordCondition);
         this.wordListContainerDiv.appendChild(newWordCondition.getHtml());
     };
-    RegExWordConditionList.prototype.removeWord = function (condition) {
+    RegExWordConditionList.prototype.removeItem = function (item) {
         var _this = this;
-        var index = this.conditionInputArray.indexOf(condition, 0);
+        var index = this.conditionInputArray.indexOf(item, 0);
         if (index != undefined) {
             var arrayItem = this.conditionInputArray[index];
             $(arrayItem.getHtml()).fadeToggle("slow", "linear", function () {
@@ -328,7 +331,7 @@ var RegExWordConditionList = (function () {
             this.conditionInputArray[0].setClickableDelimeter();
         }
         if (this.conditionInputArray.length === 0) {
-            this.resetWords();
+            this.resetItems();
         }
     };
     return RegExWordConditionList;
@@ -549,37 +552,37 @@ var RegExDatingConditionList = (function () {
         this.datingListContainerDiv = document.createElement("div");
         $(this.datingListContainerDiv).addClass("regexsearch-condition-list-div");
         conditionContainerDiv.appendChild(this.datingListContainerDiv);
-        this.resetDatingConditions();
+        this.resetItems();
     };
     RegExDatingConditionList.prototype.getConditionValue = function () {
         var criteriaDescriptions = new DatingCriteriaListDescription();
         for (var i = 0; i < this.conditionInputArray.length; i++) {
             var regExDatingCondition = this.conditionInputArray[i];
-            criteriaDescriptions.conditions.push(regExDatingCondition.getConditionValue());
+            criteriaDescriptions.conditions.push(regExDatingCondition.getConditionItemValue());
         }
         return criteriaDescriptions;
     };
     RegExDatingConditionList.prototype.getConditionType = function () {
         return 1 /* DatingList */;
     };
-    RegExDatingConditionList.prototype.resetDatingConditions = function () {
+    RegExDatingConditionList.prototype.resetItems = function () {
         $(this.datingListContainerDiv).empty();
         this.conditionInputArray = [];
         var newDatingCondition = new RegExDatingCondition(this);
-        newDatingCondition.makeRegExCondition();
+        newDatingCondition.makeRegExItemCondition();
         newDatingCondition.setClickableDelimeter();
         this.conditionInputArray.push(newDatingCondition);
         this.datingListContainerDiv.appendChild(newDatingCondition.getHtml());
     };
-    RegExDatingConditionList.prototype.addDatingCondition = function () {
+    RegExDatingConditionList.prototype.addItem = function () {
         this.conditionInputArray[this.conditionInputArray.length - 1].setTextDelimeter();
         var newDatingCondition = new RegExDatingCondition(this);
-        newDatingCondition.makeRegExCondition();
+        newDatingCondition.makeRegExItemCondition();
         newDatingCondition.setClickableDelimeter();
         this.conditionInputArray.push(newDatingCondition);
         this.datingListContainerDiv.appendChild(newDatingCondition.getHtml());
     };
-    RegExDatingConditionList.prototype.removeDatingCondition = function (condition) {
+    RegExDatingConditionList.prototype.removeItem = function (condition) {
         var _this = this;
         var index = this.conditionInputArray.indexOf(condition, 0);
         if (index != undefined) {
@@ -593,7 +596,7 @@ var RegExDatingConditionList = (function () {
             this.conditionInputArray[0].setClickableDelimeter();
         }
         if (this.conditionInputArray.length === 0) {
-            this.resetDatingConditions();
+            this.resetItems();
         }
     };
     return RegExDatingConditionList;
@@ -635,17 +638,17 @@ var RegExDatingCondition = (function () {
         $(addWordSpan).addClass("regex-clickable-text");
         addWordSpan.innerHTML = "+ Nebo";
         $(addWordSpan).click(function () {
-            _this.parent.addDatingCondition();
+            _this.parent.addItem();
         });
         delimeterDiv.appendChild(addWordSpan);
-        $(delimeterDiv).addClass("regexsearch-or-delimiter");
+        //$(delimeterDiv).addClass("regexsearch-or-delimiter");
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
         var removeGlyph = document.createElement("span");
         $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
         trashButton.appendChild(removeGlyph);
         $(trashButton).click(function () {
-            _this.parent.removeDatingCondition(_this);
+            _this.parent.removeItem(_this);
         });
         delimeterDiv.appendChild(trashButton);
         return delimeterDiv;
@@ -661,12 +664,12 @@ var RegExDatingCondition = (function () {
         $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
         trashButton.appendChild(removeGlyph);
         $(trashButton).click(function () {
-            _this.parent.removeDatingCondition(_this);
+            _this.parent.removeItem(_this);
         });
         delimeterDiv.appendChild(trashButton);
         return delimeterDiv;
     };
-    RegExDatingCondition.prototype.makeRegExCondition = function () {
+    RegExDatingCondition.prototype.makeRegExItemCondition = function () {
         var datingConditionDiv = document.createElement('div');
         $(datingConditionDiv).addClass("regex-dating-condition");
         var datingDiv = document.createElement('div');
@@ -753,7 +756,7 @@ var RegExDatingCondition = (function () {
             return new RegExDatingConditionRangeYearView();
         }
     };
-    RegExDatingCondition.prototype.getConditionValue = function () {
+    RegExDatingCondition.prototype.getConditionItemValue = function () {
         var datingValue = new DatingCriteriaDescription();
         switch (this.datingRange) {
             case 1 /* YoungerThen */:
@@ -820,17 +823,17 @@ var RegExWordCondition = (function () {
         $(addWordSpan).addClass("regex-clickable-text");
         addWordSpan.innerHTML = "+ Nebo";
         $(addWordSpan).click(function () {
-            _this.parent.addWord();
+            _this.parent.addItem();
         });
         delimeterDiv.appendChild(addWordSpan);
-        $(delimeterDiv).addClass("regexsearch-or-delimiter");
+        //$(delimeterDiv).addClass("regexsearch-or-delimiter");
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
         var removeGlyph = document.createElement("span");
         $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
         trashButton.appendChild(removeGlyph);
         $(trashButton).click(function () {
-            _this.parent.removeWord(_this);
+            _this.parent.removeItem(_this);
         });
         delimeterDiv.appendChild(trashButton);
         return delimeterDiv;
@@ -846,12 +849,12 @@ var RegExWordCondition = (function () {
         $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
         trashButton.appendChild(removeGlyph);
         $(trashButton).click(function () {
-            _this.parent.removeWord(_this);
+            _this.parent.removeItem(_this);
         });
         delimeterDiv.appendChild(trashButton);
         return delimeterDiv;
     };
-    RegExWordCondition.prototype.makeRegExWordCondition = function () {
+    RegExWordCondition.prototype.makeRegExItemCondition = function () {
         var _this = this;
         var mainDiv = document.createElement("div");
         $(mainDiv).addClass("reg-ex-word-condition");
@@ -906,7 +909,7 @@ var RegExWordCondition = (function () {
             this.resetInputs();
         }
     };
-    RegExWordCondition.prototype.getConditionsValue = function () {
+    RegExWordCondition.prototype.getConditionItemValue = function () {
         var wordCriteriaDescription = new WordCriteriaDescription();
         for (var i = 0; i < this.inputsArray.length; i++) {
             var wordInput = this.inputsArray[i];
@@ -1059,10 +1062,164 @@ var RegExWordInput = (function () {
     };
     return RegExWordInput;
 })();
+var RegExTokenDistanceConditionList = (function () {
+    function RegExTokenDistanceConditionList(parent) {
+        this.parentRegExConditionListItem = parent;
+    }
+    RegExTokenDistanceConditionList.prototype.makeRegExCondition = function (conditionContainerDiv) {
+        this.tokenDistanceListContainerDiv = document.createElement("div");
+        $(this.tokenDistanceListContainerDiv).addClass("regexsearch-condition-list-div");
+        conditionContainerDiv.appendChild(this.tokenDistanceListContainerDiv);
+        this.resetItems();
+    };
+    RegExTokenDistanceConditionList.prototype.getConditionValue = function () {
+        var criteriaDescriptions = new TokenDistanceCriteriaListDescription();
+        for (var i = 0; i < this.conditionInputArray.length; i++) {
+            var regExTokenDistanceCondition = this.conditionInputArray[i];
+            criteriaDescriptions.conditions.push(regExTokenDistanceCondition.getConditionItemValue());
+        }
+        return criteriaDescriptions;
+    };
+    RegExTokenDistanceConditionList.prototype.getConditionType = function () {
+        return 2 /* TokenDistanceList */;
+    };
+    RegExTokenDistanceConditionList.prototype.resetItems = function () {
+        $(this.tokenDistanceListContainerDiv).empty();
+        this.conditionInputArray = [];
+        var newTokenDistanceCondition = new RegExTokenDistanceCondition(this);
+        newTokenDistanceCondition.makeRegExItemCondition();
+        newTokenDistanceCondition.setClickableDelimeter();
+        this.conditionInputArray.push(newTokenDistanceCondition);
+        this.tokenDistanceListContainerDiv.appendChild(newTokenDistanceCondition.getHtml());
+    };
+    RegExTokenDistanceConditionList.prototype.addItem = function () {
+        this.conditionInputArray[this.conditionInputArray.length - 1].setTextDelimeter();
+        var newTokenDistanceCondition = new RegExTokenDistanceCondition(this);
+        newTokenDistanceCondition.makeRegExItemCondition();
+        newTokenDistanceCondition.setClickableDelimeter();
+        this.conditionInputArray.push(newTokenDistanceCondition);
+        this.tokenDistanceListContainerDiv.appendChild(newTokenDistanceCondition.getHtml());
+    };
+    RegExTokenDistanceConditionList.prototype.removeItem = function (condition) {
+        var _this = this;
+        var index = this.conditionInputArray.indexOf(condition, 0);
+        if (index != undefined) {
+            var arrayItem = this.conditionInputArray[index];
+            $(arrayItem.getHtml()).fadeToggle("slow", "linear", function () {
+                _this.tokenDistanceListContainerDiv.removeChild(arrayItem.getHtml());
+            });
+            this.conditionInputArray.splice(index, 1);
+        }
+        if (this.conditionInputArray.length === 1) {
+            this.conditionInputArray[0].setClickableDelimeter();
+        }
+        if (this.conditionInputArray.length === 0) {
+            this.resetItems();
+        }
+    };
+    return RegExTokenDistanceConditionList;
+})();
+var RegExTokenDistanceCondition = (function () {
+    function RegExTokenDistanceCondition(parent) {
+        this.parent = parent;
+    }
+    RegExTokenDistanceCondition.prototype.getHtml = function () {
+        return this.html;
+    };
+    RegExTokenDistanceCondition.prototype.removeDelimeter = function () {
+        $(this.html).find(".regexsearch-or-delimiter").empty();
+    };
+    RegExTokenDistanceCondition.prototype.hasDelimeter = function () {
+        var isEmpty = $(this.html).find(".regexsearch-or-delimiter").is(":empty");
+        return !isEmpty;
+    };
+    RegExTokenDistanceCondition.prototype.setTextDelimeter = function () {
+        var textDelimeter = this.createTextDelimeter();
+        if (this.hasDelimeter()) {
+            this.removeDelimeter();
+        }
+        $(this.html).find(".regexsearch-or-delimiter").append(textDelimeter);
+    };
+    RegExTokenDistanceCondition.prototype.setClickableDelimeter = function () {
+        var clickableDelimeter = this.createClickableDelimeter();
+        if (this.hasDelimeter()) {
+            this.removeDelimeter();
+        }
+        $(this.html).find(".regexsearch-or-delimiter").append(clickableDelimeter);
+    };
+    RegExTokenDistanceCondition.prototype.createClickableDelimeter = function () {
+        var _this = this;
+        var delimeterDiv = document.createElement("div");
+        var addWordSpan = document.createElement("span");
+        $(addWordSpan).addClass("regex-clickable-text");
+        addWordSpan.innerHTML = "+ Nebo";
+        $(addWordSpan).click(function () {
+            _this.parent.addItem();
+        });
+        delimeterDiv.appendChild(addWordSpan);
+        //$(delimeterDiv).addClass("regexsearch-or-delimiter");
+        var trashButton = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(function () {
+            _this.parent.removeItem(_this);
+        });
+        delimeterDiv.appendChild(trashButton);
+        return delimeterDiv;
+    };
+    RegExTokenDistanceCondition.prototype.createTextDelimeter = function () {
+        var _this = this;
+        var delimeterDiv = document.createElement("div");
+        delimeterDiv.innerHTML = "Nebo";
+        $(delimeterDiv).addClass("regexsearch-or-delimiter");
+        var trashButton = document.createElement("button");
+        $(trashButton).addClass("regexsearch-delimiter-remove-button");
+        var removeGlyph = document.createElement("span");
+        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.appendChild(removeGlyph);
+        $(trashButton).click(function () {
+            _this.parent.removeItem(_this);
+        });
+        delimeterDiv.appendChild(trashButton);
+        return delimeterDiv;
+    };
+    RegExTokenDistanceCondition.prototype.makeRegExItemCondition = function () {
+        var mainDiv = document.createElement("div");
+        $(mainDiv).addClass("regexsearch-token-distance-condition");
+        this.firstToken = new RegExWordCondition();
+        this.firstToken.makeRegExItemCondition();
+        this.firstToken.removeDelimeter();
+        this.secondToken = new RegExWordCondition();
+        this.secondToken.makeRegExItemCondition();
+        this.secondToken.removeDelimeter();
+        mainDiv.appendChild(this.firstToken.getHtml());
+        var tokenDistanceInput = document.createElement("input");
+        tokenDistanceInput.type = "text";
+        $(tokenDistanceInput).addClass("form-control");
+        $(tokenDistanceInput).addClass("regexsearch-condition-input");
+        mainDiv.appendChild(tokenDistanceInput);
+        mainDiv.appendChild(this.secondToken.getHtml());
+        mainDiv.appendChild(this.createTextDelimeter());
+        this.html = mainDiv;
+    };
+    RegExTokenDistanceCondition.prototype.getConditionItemValue = function () {
+        var tokenDistanceCriteriaDescription = new TokenDistanceCriteriaDescription();
+        return tokenDistanceCriteriaDescription;
+    };
+    return RegExTokenDistanceCondition;
+})();
+//  Classes for storing data
 var ConditionResult = (function () {
     function ConditionResult() {
     }
     return ConditionResult;
+})();
+var ConditionItemResult = (function () {
+    function ConditionItemResult() {
+    }
+    return ConditionItemResult;
 })();
 var DatingCriteriaListDescription = (function (_super) {
     __extends(DatingCriteriaListDescription, _super);
@@ -1072,11 +1229,13 @@ var DatingCriteriaListDescription = (function (_super) {
     }
     return DatingCriteriaListDescription;
 })(ConditionResult);
-var DatingCriteriaDescription = (function () {
+var DatingCriteriaDescription = (function (_super) {
+    __extends(DatingCriteriaDescription, _super);
     function DatingCriteriaDescription() {
+        _super.apply(this, arguments);
     }
     return DatingCriteriaDescription;
-})();
+})(ConditionItemResult);
 var WordsCriteriaListDescription = (function (_super) {
     __extends(WordsCriteriaListDescription, _super);
     function WordsCriteriaListDescription() {
@@ -1085,12 +1244,14 @@ var WordsCriteriaListDescription = (function (_super) {
     }
     return WordsCriteriaListDescription;
 })(ConditionResult);
-var WordCriteriaDescription = (function () {
+var WordCriteriaDescription = (function (_super) {
+    __extends(WordCriteriaDescription, _super);
     function WordCriteriaDescription() {
+        _super.call(this);
         this.contains = new Array();
     }
     return WordCriteriaDescription;
-})();
+})(ConditionItemResult);
 var TokenDistanceCriteriaListDescription = (function (_super) {
     __extends(TokenDistanceCriteriaListDescription, _super);
     function TokenDistanceCriteriaListDescription() {
@@ -1099,11 +1260,13 @@ var TokenDistanceCriteriaListDescription = (function (_super) {
     }
     return TokenDistanceCriteriaListDescription;
 })(ConditionResult);
-var TokenDistanceCriteriaDescription = (function () {
+var TokenDistanceCriteriaDescription = (function (_super) {
+    __extends(TokenDistanceCriteriaDescription, _super);
     function TokenDistanceCriteriaDescription() {
+        _super.apply(this, arguments);
     }
     return TokenDistanceCriteriaDescription;
-})();
+})(ConditionItemResult);
 var WordInputTypeEnum;
 (function (WordInputTypeEnum) {
     WordInputTypeEnum[WordInputTypeEnum["StartsWith"] = 0] = "StartsWith";
