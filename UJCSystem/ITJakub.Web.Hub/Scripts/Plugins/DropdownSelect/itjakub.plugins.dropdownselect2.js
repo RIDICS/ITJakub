@@ -9,6 +9,8 @@ var DropDownSelect2 = (function (_super) {
     function DropDownSelect2(dropDownSelectContainer, dataUrl, showStar, callbackDelegate) {
         var _this = this;
         _super.call(this, dropDownSelectContainer, dataUrl, showStar, callbackDelegate);
+        this.selectedChangedCallback = callbackDelegate.selectedChangedCallback;
+        callbackDelegate.selectedChangedCallback = null;
         callbackDelegate.getRootCategoryCallback = function (categories) {
             return _this.rootCategory.id;
         };
@@ -142,6 +144,9 @@ var DropDownSelect2 = (function (_super) {
         itemDiv.appendChild(nameSpan);
         container.appendChild(itemDiv);
     };
+    DropDownSelect2.prototype.propagateRootSelectChange = function (item) {
+        this.selectedChangedCallback(this.getState());
+    };
     DropDownSelect2.prototype.propagateLeafSelectChange = function (item, info) {
         var sameBookCheckBoxes = this.books[info.ItemId].checkboxes;
         var checkBoxState = $(item).prop("checked");
@@ -152,6 +157,7 @@ var DropDownSelect2 = (function (_super) {
                 this.propagateSelectChange($(otherCheckBox).parent(".concrete-item")[0]);
             }
         }
+        this.selectedChangedCallback(this.getState());
     };
     DropDownSelect2.prototype.propagateCategorySelectChange = function (item, info) {
         var isChecked = $(item).prop("checked");
@@ -168,6 +174,7 @@ var DropDownSelect2 = (function (_super) {
                 }
             }
         }
+        this.selectedChangedCallback(this.getState());
     };
     DropDownSelect2.prototype.getBookIdsForUpdate = function (category, bookIds) {
         for (var i = 0; i < category.bookIds.length; i++) {
@@ -181,6 +188,48 @@ var DropDownSelect2 = (function (_super) {
             var subcategory = this.categories[subcategoryId];
             this.getBookIdsForUpdate(subcategory, bookIds);
         }
+    };
+    DropDownSelect2.prototype.isChecked = function (category, selectedCategories, selectedBooks) {
+        var isAllChecked = true;
+        for (var i = 0; i < category.subcategoryIds.length; i++) {
+            var subcategory = this.categories[category.subcategoryIds[i]];
+            var books = [];
+            var categories = [];
+            if (!this.isChecked(subcategory, categories, books)) {
+                isAllChecked = false;
+                for (var k = 0; k < categories.length; k++) {
+                    selectedCategories.push(categories[k]);
+                }
+                for (var l = 0; l < books.length; l++) {
+                    selectedBooks.push(books[l]);
+                }
+            }
+            else {
+                selectedCategories.push(subcategory.id);
+            }
+        }
+        for (var j = 0; j < category.bookIds.length; j++) {
+            var book = this.books[category.bookIds[j]];
+            if (!book.checkboxes[0].checked)
+                isAllChecked = false;
+            else
+                selectedBooks.push(book.id);
+        }
+        return isAllChecked;
+    };
+    DropDownSelect2.prototype.getState = function () {
+        var state = new State();
+        var selectedBooks = [];
+        var selectedCategories = [];
+        if (!this.rootCategory || this.isChecked(this.rootCategory, selectedCategories, selectedBooks)) {
+            state.SelectedCategories = [];
+            state.SelectedItems = [];
+        }
+        else {
+            state.SelectedCategories = selectedCategories; // TODO return objects instead of IDs
+            state.SelectedItems = selectedBooks;
+        }
+        return state;
     };
     return DropDownSelect2;
 })(DropDownSelect);

@@ -302,6 +302,10 @@ class DropDownSelect {
                 $(items).prop("checked", false);
                 $(items).trigger("change", [false]);
             }
+
+            if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
+                self.propagateRootSelectChange(this);
+            }
         });
 
         var childCategories = this.getChildCategories(categories, rootCategory);
@@ -321,6 +325,8 @@ class DropDownSelect {
             }
         }
     }
+
+    protected propagateRootSelectChange(item: HTMLInputElement) { }
 
     protected propagateLeafSelectChange(item: HTMLInputElement, info: CallbackInfo) { }
 

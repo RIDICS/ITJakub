@@ -2,9 +2,13 @@
     private books: IDropDownBookDictionary;
     private categories: IDropDownCategoryDictionary;
     private rootCategory: DropDownCategory;
+    private selectedChangedCallback: (state: State) => void;
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         super(dropDownSelectContainer, dataUrl, showStar, callbackDelegate);
+
+        this.selectedChangedCallback = callbackDelegate.selectedChangedCallback;
+        callbackDelegate.selectedChangedCallback = null;
 
         callbackDelegate.getRootCategoryCallback = (categories) => {
             return this.rootCategory.id;
@@ -165,6 +169,10 @@
         container.appendChild(itemDiv);
     }
 
+    protected propagateRootSelectChange(item: HTMLInputElement) {
+        this.selectedChangedCallback(this.getState());
+    }
+
     protected propagateLeafSelectChange(item: HTMLInputElement, info: CallbackInfo) {
         var sameBookCheckBoxes = this.books[info.ItemId].checkboxes;
         var checkBoxState = $(item).prop("checked");
@@ -175,6 +183,8 @@
                 this.propagateSelectChange(<HTMLDivElement>$(otherCheckBox).parent(".concrete-item")[0]);
             }
         }
+
+        this.selectedChangedCallback(this.getState());
     }
 
     protected propagateCategorySelectChange(item: HTMLInputElement, info: CallbackInfo) {
@@ -195,6 +205,8 @@
                 }
             }
         }
+
+        this.selectedChangedCallback(this.getState());
     }
 
     private getBookIdsForUpdate(category: DropDownCategory, bookIds: Array<number>) {
@@ -209,6 +221,54 @@
             var subcategory = this.categories[subcategoryId];
             this.getBookIdsForUpdate(subcategory, bookIds);
         }
+    }
+
+    private isChecked(category: DropDownCategory, selectedCategories: Array<number>, selectedBooks: Array<number>): boolean {
+        var isAllChecked = true;
+        
+        for (var i = 0; i < category.subcategoryIds.length; i++) {
+            var subcategory = this.categories[category.subcategoryIds[i]];
+            var books = [];
+            var categories = [];
+
+            if (!this.isChecked(subcategory, categories, books)) {
+                isAllChecked = false;
+
+                for (var k = 0; k < categories.length; k++) {
+                    selectedCategories.push(categories[k]);
+                }
+                for (var l = 0; l < books.length; l++) {
+                    selectedBooks.push(books[l]);
+                }
+            } else {
+                selectedCategories.push(subcategory.id);
+            }
+        }
+
+        for (var j = 0; j < category.bookIds.length; j++) {
+            var book = this.books[category.bookIds[j]];
+            if (!book.checkboxes[0].checked)
+                isAllChecked = false;
+            else
+                selectedBooks.push(book.id);
+        }
+
+        return isAllChecked;
+    }
+
+    getState(): State {
+        var state = new State();
+        var selectedBooks = [];
+        var selectedCategories = [];
+        if (!this.rootCategory || this.isChecked(this.rootCategory, selectedCategories, selectedBooks)) {
+            state.SelectedCategories = [];
+            state.SelectedItems = [];
+        } else {
+            state.SelectedCategories = selectedCategories; // TODO return objects instead of IDs
+            state.SelectedItems = selectedBooks;
+        }
+
+        return state;
     }
 }
 

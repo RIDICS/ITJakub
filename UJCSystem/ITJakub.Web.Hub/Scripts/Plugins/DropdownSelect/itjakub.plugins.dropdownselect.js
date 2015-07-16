@@ -214,6 +214,9 @@ var DropDownSelect = (function () {
                 $(items).prop("checked", false);
                 $(items).trigger("change", [false]);
             }
+            if (typeof propagate === "undefined" || propagate === null || propagate) {
+                self.propagateRootSelectChange(this);
+            }
         });
         var childCategories = this.getChildCategories(categories, rootCategory);
         var childLeafItems = this.getChildLeafItems(leafItems, rootCategory);
@@ -229,6 +232,8 @@ var DropDownSelect = (function () {
                 this.makeLeafItem(dropDownItemsDiv, childBook);
             }
         }
+    };
+    DropDownSelect.prototype.propagateRootSelectChange = function (item) {
     };
     DropDownSelect.prototype.propagateLeafSelectChange = function (item, info) {
     };
