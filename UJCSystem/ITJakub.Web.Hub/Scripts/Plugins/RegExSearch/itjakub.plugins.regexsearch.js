@@ -99,7 +99,7 @@ var RegExSearch = (function () {
             type: "POST",
             traditional: true,
             data: JSON.stringify({ "json": json }),
-            url: "/Dictionaries/Dictionaries/SearchCriteria",
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (response) {

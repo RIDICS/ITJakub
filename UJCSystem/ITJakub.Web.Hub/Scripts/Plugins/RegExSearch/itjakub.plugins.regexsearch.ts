@@ -111,7 +111,7 @@ class RegExSearch {
             type: "POST",
             traditional: true,
             data: JSON.stringify({ "json": json }),
-            url: "/Dictionaries/Dictionaries/SearchCriteria", //TODO add getBaseUrl
+            url: getBaseUrl()+"Dictionaries/Dictionaries/SearchCriteria",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: (response) => {

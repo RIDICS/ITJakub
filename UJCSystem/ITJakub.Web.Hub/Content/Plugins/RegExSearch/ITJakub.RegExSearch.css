@@ -289,4 +289,7 @@ input.regexsearch-checkbox {
   font-weight: bold;
   font-size: 90%;
 }
+.searchbar-input:disabled {
+  background-color: lightgray!important;
+}
 /*# sourceMappingURL=ITJakub.RegExSearch.css.map */
