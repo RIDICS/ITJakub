@@ -1038,7 +1038,8 @@ body {
   margin-top: 30px;
 }
 .regexsearch-delimiter,
-.regexsearch-or-delimiter {
+.regexsearch-or-delimiter,
+.regexsearch-token-distance-or-delimiter {
   color: white;
   background-color: #9a9a9a;
   padding: 0 10px 0 10px;
@@ -1193,6 +1194,21 @@ input.regexsearch-checkbox {
 }
 .regex-dating-input-span {
   margin-right: 10px;
+}
+.regexsearch-token-distance-condition-input-div {
+  margin-left: 85px;
+}
+.regexsearch-token-distance-condition-input-div .regexsearch-condition-input {
+  width: 80px;
+  margin-right: -40px;
+  padding-right: 0;
+  margin-left: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.regexsearch-token-distance-condition-input-text {
+  font-weight: bold;
+  font-size: 90%;
 }
 .tt-input,
 .tt-hint {

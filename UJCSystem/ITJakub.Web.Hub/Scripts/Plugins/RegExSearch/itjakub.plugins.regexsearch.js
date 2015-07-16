@@ -641,7 +641,7 @@ var RegExDatingCondition = (function () {
             _this.parent.addItem();
         });
         delimeterDiv.appendChild(addWordSpan);
-        //$(delimeterDiv).addClass("regexsearch-or-delimiter");
+        $(delimeterDiv).addClass(this.delimeterClass);
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
         var removeGlyph = document.createElement("span");
@@ -790,16 +790,17 @@ var DatingSliderValue = (function () {
 })();
 var RegExWordCondition = (function () {
     function RegExWordCondition(parent) {
+        this.delimeterClass = "regexsearch-or-delimiter";
         this.parent = parent;
     }
     RegExWordCondition.prototype.getHtml = function () {
         return this.html;
     };
     RegExWordCondition.prototype.removeDelimeter = function () {
-        $(this.html).find(".regexsearch-or-delimiter").empty();
+        $(this.html).find("." + this.delimeterClass).empty();
     };
     RegExWordCondition.prototype.hasDelimeter = function () {
-        var isEmpty = $(this.html).find(".regexsearch-or-delimiter").is(":empty");
+        var isEmpty = $(this.html).find("." + this.delimeterClass).is(":empty");
         return !isEmpty;
     };
     RegExWordCondition.prototype.setTextDelimeter = function () {
@@ -807,14 +808,14 @@ var RegExWordCondition = (function () {
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find(".regexsearch-or-delimiter").append(textDelimeter);
+        $(this.html).find("." + this.delimeterClass).append(textDelimeter);
     };
     RegExWordCondition.prototype.setClickableDelimeter = function () {
         var clickableDelimeter = this.createClickableDelimeter();
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find(".regexsearch-or-delimiter").append(clickableDelimeter);
+        $(this.html).find("." + this.delimeterClass).append(clickableDelimeter);
     };
     RegExWordCondition.prototype.createClickableDelimeter = function () {
         var _this = this;
@@ -826,7 +827,7 @@ var RegExWordCondition = (function () {
             _this.parent.addItem();
         });
         delimeterDiv.appendChild(addWordSpan);
-        //$(delimeterDiv).addClass("regexsearch-or-delimiter");
+        $(delimeterDiv).addClass(this.delimeterClass);
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
         var removeGlyph = document.createElement("span");
@@ -842,7 +843,7 @@ var RegExWordCondition = (function () {
         var _this = this;
         var delimeterDiv = document.createElement("div");
         delimeterDiv.innerHTML = "Nebo";
-        $(delimeterDiv).addClass("regexsearch-or-delimiter");
+        $(delimeterDiv).addClass(this.delimeterClass);
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
         var removeGlyph = document.createElement("span");
@@ -1121,16 +1122,20 @@ var RegExTokenDistanceConditionList = (function () {
 })();
 var RegExTokenDistanceCondition = (function () {
     function RegExTokenDistanceCondition(parent) {
+        this.minTokenDistanceValue = 1;
+        this.maxTokenDistanceValue = 100;
+        this.initTokenDistanceValue = 1;
+        this.delimeterClass = "regexsearch-token-distance-or-delimiter";
         this.parent = parent;
     }
     RegExTokenDistanceCondition.prototype.getHtml = function () {
         return this.html;
     };
     RegExTokenDistanceCondition.prototype.removeDelimeter = function () {
-        $(this.html).find(".regexsearch-or-delimiter").empty();
+        $(this.html).find("." + this.delimeterClass).empty();
     };
     RegExTokenDistanceCondition.prototype.hasDelimeter = function () {
-        var isEmpty = $(this.html).find(".regexsearch-or-delimiter").is(":empty");
+        var isEmpty = $(this.html).find("." + this.delimeterClass).is(":empty");
         return !isEmpty;
     };
     RegExTokenDistanceCondition.prototype.setTextDelimeter = function () {
@@ -1138,14 +1143,14 @@ var RegExTokenDistanceCondition = (function () {
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find(".regexsearch-or-delimiter").append(textDelimeter);
+        $(this.html).find("." + this.delimeterClass).append(textDelimeter);
     };
     RegExTokenDistanceCondition.prototype.setClickableDelimeter = function () {
         var clickableDelimeter = this.createClickableDelimeter();
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find(".regexsearch-or-delimiter").append(clickableDelimeter);
+        $(this.html).find("." + this.delimeterClass).append(clickableDelimeter);
     };
     RegExTokenDistanceCondition.prototype.createClickableDelimeter = function () {
         var _this = this;
@@ -1157,7 +1162,7 @@ var RegExTokenDistanceCondition = (function () {
             _this.parent.addItem();
         });
         delimeterDiv.appendChild(addWordSpan);
-        //$(delimeterDiv).addClass("regexsearch-or-delimiter");
+        $(delimeterDiv).addClass(this.delimeterClass);
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
         var removeGlyph = document.createElement("span");
@@ -1173,7 +1178,7 @@ var RegExTokenDistanceCondition = (function () {
         var _this = this;
         var delimeterDiv = document.createElement("div");
         delimeterDiv.innerHTML = "Nebo";
-        $(delimeterDiv).addClass("regexsearch-or-delimiter");
+        $(delimeterDiv).addClass(this.delimeterClass);
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
         var removeGlyph = document.createElement("span");
@@ -1186,6 +1191,7 @@ var RegExTokenDistanceCondition = (function () {
         return delimeterDiv;
     };
     RegExTokenDistanceCondition.prototype.makeRegExItemCondition = function () {
+        var _this = this;
         var mainDiv = document.createElement("div");
         $(mainDiv).addClass("regexsearch-token-distance-condition");
         this.firstToken = new RegExWordCondition();
@@ -1195,17 +1201,38 @@ var RegExTokenDistanceCondition = (function () {
         this.secondToken.makeRegExItemCondition();
         this.secondToken.removeDelimeter();
         mainDiv.appendChild(this.firstToken.getHtml());
+        var inputTextDiv = document.createElement("div");
+        $(inputTextDiv).addClass("regexsearch-token-distance-condition-input-div");
+        var inputTextSpan = document.createElement("span");
+        $(inputTextSpan).addClass("regexsearch-token-distance-condition-input-text");
+        inputTextSpan.innerHTML = "Vzdálenost: ";
+        inputTextDiv.appendChild(inputTextSpan);
         var tokenDistanceInput = document.createElement("input");
-        tokenDistanceInput.type = "text";
+        tokenDistanceInput.type = "number";
+        tokenDistanceInput.min = this.minTokenDistanceValue.toString();
+        tokenDistanceInput.max = this.maxTokenDistanceValue.toString();
+        tokenDistanceInput.value = this.initTokenDistanceValue.toString();
+        this.actualTokenDistanceValue = this.initTokenDistanceValue;
         $(tokenDistanceInput).addClass("form-control");
         $(tokenDistanceInput).addClass("regexsearch-condition-input");
-        mainDiv.appendChild(tokenDistanceInput);
+        inputTextDiv.appendChild(tokenDistanceInput);
+        $(tokenDistanceInput).keyup(function (e) {
+            var value = $(e.target).val();
+            value.replace(/[^0-9]/g, '');
+            $(e.target).val(value);
+            $(e.target).text(value);
+            _this.actualTokenDistanceValue = parseInt(value);
+        });
+        mainDiv.appendChild(inputTextDiv);
         mainDiv.appendChild(this.secondToken.getHtml());
         mainDiv.appendChild(this.createTextDelimeter());
         this.html = mainDiv;
     };
     RegExTokenDistanceCondition.prototype.getConditionItemValue = function () {
         var tokenDistanceCriteriaDescription = new TokenDistanceCriteriaDescription();
+        tokenDistanceCriteriaDescription.first = this.firstToken.getConditionItemValue();
+        tokenDistanceCriteriaDescription.second = this.secondToken.getConditionItemValue();
+        tokenDistanceCriteriaDescription.distance = this.actualTokenDistanceValue;
         return tokenDistanceCriteriaDescription;
     };
     return RegExTokenDistanceCondition;

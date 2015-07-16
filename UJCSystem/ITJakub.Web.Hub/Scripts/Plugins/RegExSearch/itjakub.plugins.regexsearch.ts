@@ -823,7 +823,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
         });
 
         delimeterDiv.appendChild(addWordSpan);
-        //$(delimeterDiv).addClass("regexsearch-or-delimiter");
+        $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
@@ -1014,6 +1014,8 @@ class RegExWordCondition implements IRegExConditionItemBase{
     private inputsContainerDiv: HTMLDivElement;
     parent: IRegExConditionListBase;
 
+    private delimeterClass: string = "regexsearch-or-delimiter";
+
     constructor(parent?: IRegExConditionListBase) {
         this.parent = parent;
     }
@@ -1023,11 +1025,11 @@ class RegExWordCondition implements IRegExConditionItemBase{
     }
 
     removeDelimeter() {
-        $(this.html).find(".regexsearch-or-delimiter").empty();
+        $(this.html).find("."+this.delimeterClass).empty();
     }
 
     hasDelimeter(): boolean {
-        var isEmpty = $(this.html).find(".regexsearch-or-delimiter").is(":empty");
+        var isEmpty = $(this.html).find("." + this.delimeterClass).is(":empty");
         return !isEmpty;
     }
 
@@ -1036,7 +1038,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find(".regexsearch-or-delimiter").append(textDelimeter);
+        $(this.html).find("." + this.delimeterClass).append(textDelimeter);
     }
 
     setClickableDelimeter() {
@@ -1044,7 +1046,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find(".regexsearch-or-delimiter").append(clickableDelimeter);
+        $(this.html).find("." + this.delimeterClass).append(clickableDelimeter);
     }
 
     private createClickableDelimeter(): HTMLDivElement {
@@ -1057,7 +1059,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
         });
 
         delimeterDiv.appendChild(addWordSpan);
-        //$(delimeterDiv).addClass("regexsearch-or-delimiter");
+        $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
@@ -1076,7 +1078,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
         delimeterDiv.innerHTML = "Nebo";
-        $(delimeterDiv).addClass("regexsearch-or-delimiter");
+        $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
@@ -1425,11 +1427,19 @@ class RegExTokenDistanceConditionList implements IRegExConditionListBase {
 class RegExTokenDistanceCondition implements IRegExConditionItemBase {
     parent: IRegExConditionListBase;
 
+    private minTokenDistanceValue: number = 1;
+    private maxTokenDistanceValue: number = 100;
+    private initTokenDistanceValue: number = 1;
+
+    private actualTokenDistanceValue: number;
+
     private html: HTMLDivElement;
 
     private firstToken: RegExWordCondition;
     private secondToken: RegExWordCondition;
     private tokenDistance: number;
+
+    private delimeterClass: string = "regexsearch-token-distance-or-delimiter";
 
     constructor(parent: RegExTokenDistanceConditionList) {
         this.parent = parent;
@@ -1440,11 +1450,11 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
     }
 
     removeDelimeter() {
-        $(this.html).find(".regexsearch-or-delimiter").empty();
+        $(this.html).find("." + this.delimeterClass).empty();
     }
 
     hasDelimeter(): boolean {
-        var isEmpty = $(this.html).find(".regexsearch-or-delimiter").is(":empty");
+        var isEmpty = $(this.html).find("." + this.delimeterClass).is(":empty");
         return !isEmpty;
     }
 
@@ -1453,7 +1463,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find(".regexsearch-or-delimiter").append(textDelimeter);
+        $(this.html).find("." + this.delimeterClass).append(textDelimeter);
     }
 
     setClickableDelimeter() {
@@ -1461,7 +1471,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find(".regexsearch-or-delimiter").append(clickableDelimeter);
+        $(this.html).find("." + this.delimeterClass).append(clickableDelimeter);
     }
 
     private createClickableDelimeter(): HTMLDivElement {
@@ -1474,7 +1484,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
         });
 
         delimeterDiv.appendChild(addWordSpan);
-        //$(delimeterDiv).addClass("regexsearch-or-delimiter");
+        $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
@@ -1493,7 +1503,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
         delimeterDiv.innerHTML = "Nebo";
-        $(delimeterDiv).addClass("regexsearch-or-delimiter");
+        $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
@@ -1523,11 +1533,34 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
         
         mainDiv.appendChild(this.firstToken.getHtml());
 
+        var inputTextDiv = document.createElement("div");
+        $(inputTextDiv).addClass("regexsearch-token-distance-condition-input-div");
+
+        var inputTextSpan = document.createElement("span");
+        $(inputTextSpan).addClass("regexsearch-token-distance-condition-input-text");
+        inputTextSpan.innerHTML = "Vzdálenost: ";
+        inputTextDiv.appendChild(inputTextSpan);
+
         var tokenDistanceInput = document.createElement("input");
-        tokenDistanceInput.type = "text";
+        tokenDistanceInput.type = "number";
+        tokenDistanceInput.min = this.minTokenDistanceValue.toString();
+        tokenDistanceInput.max = this.maxTokenDistanceValue.toString();
+        tokenDistanceInput.value = this.initTokenDistanceValue.toString();
+        this.actualTokenDistanceValue = this.initTokenDistanceValue;
         $(tokenDistanceInput).addClass("form-control");
         $(tokenDistanceInput).addClass("regexsearch-condition-input");
-        mainDiv.appendChild(tokenDistanceInput);
+        inputTextDiv.appendChild(tokenDistanceInput);
+
+        $(tokenDistanceInput).keyup((e: Event) => {
+            var value = $(e.target).val();
+            value.replace(/[^0-9]/g, '');
+            $(e.target).val(value);
+            $(e.target).text(value);
+
+            this.actualTokenDistanceValue = parseInt(value);
+        });
+
+        mainDiv.appendChild(inputTextDiv);
 
         mainDiv.appendChild(this.secondToken.getHtml());
         mainDiv.appendChild(this.createTextDelimeter());
@@ -1537,6 +1570,9 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
 
     getConditionItemValue(): TokenDistanceCriteriaDescription {
         var tokenDistanceCriteriaDescription = new TokenDistanceCriteriaDescription();
+        tokenDistanceCriteriaDescription.first = this.firstToken.getConditionItemValue();
+        tokenDistanceCriteriaDescription.second = this.secondToken.getConditionItemValue();
+        tokenDistanceCriteriaDescription.distance = this.actualTokenDistanceValue;
         return tokenDistanceCriteriaDescription;
     }
 }
