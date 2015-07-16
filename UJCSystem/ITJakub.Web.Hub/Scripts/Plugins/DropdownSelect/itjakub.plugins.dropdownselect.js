@@ -230,6 +230,10 @@ var DropDownSelect = (function () {
             }
         }
     };
+    DropDownSelect.prototype.propagateLeafSelectChange = function (item, info) {
+    };
+    DropDownSelect.prototype.propagateCategorySelectChange = function (item, info) {
+    };
     DropDownSelect.prototype.propagateSelectChange = function (concreteItemSource) {
         var actualItem = $(concreteItemSource).parent().closest(".concrete-item");
         var actualItemInput;
@@ -330,6 +334,7 @@ var DropDownSelect = (function () {
             }
             if (typeof propagate === "undefined" || propagate === null || propagate) {
                 self.propagateSelectChange($(this).parent(".concrete-item")[0]);
+                self.propagateCategorySelectChange(this, info);
             }
         });
         itemDiv.appendChild(checkbox);
@@ -419,6 +424,7 @@ var DropDownSelect = (function () {
             }
             if (typeof propagate === "undefined" || propagate === null || propagate) {
                 self.propagateSelectChange($(this).parent(".concrete-item")[0]);
+                self.propagateLeafSelectChange(this, info);
             }
         });
         itemDiv.appendChild(checkbox);

@@ -93,7 +93,7 @@
             }
         }
     }
-
+    
     protected makeLeafItem(container: HTMLDivElement, currentLeafItem: any) {
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("concrete-item"); //TODO add data-item-is-favorite
@@ -119,14 +119,7 @@
 
             if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
                 self.propagateSelectChange(<HTMLDivElement>$(this).parent(".concrete-item")[0]);
-            }
-
-            var sameBookCheckBoxes = self.books[info.ItemId].checkboxes;
-            for (var i = 0; i < sameBookCheckBoxes.length; i++) {
-                var otherCheckBox = sameBookCheckBoxes[i];
-                if (otherCheckBox !== this) {
-                    $(otherCheckBox).prop("checked", $(this).prop("checked"));
-                }
+                self.propagateLeafSelectChange(this, info);
             }
         });
 
@@ -170,6 +163,52 @@
         itemDiv.appendChild(nameSpan);
 
         container.appendChild(itemDiv);
+    }
+
+    protected propagateLeafSelectChange(item: HTMLInputElement, info: CallbackInfo) {
+        var sameBookCheckBoxes = this.books[info.ItemId].checkboxes;
+        var checkBoxState = $(item).prop("checked");
+        for (var i = 0; i < sameBookCheckBoxes.length; i++) {
+            var otherCheckBox = sameBookCheckBoxes[i];
+            if ($(otherCheckBox).prop("checked") !== checkBoxState) {
+                $(otherCheckBox).prop("checked", checkBoxState);
+                this.propagateSelectChange(<HTMLDivElement>$(otherCheckBox).parent(".concrete-item")[0]);
+            }
+        }
+    }
+
+    protected propagateCategorySelectChange(item: HTMLInputElement, info: CallbackInfo) {
+        var isChecked = $(item).prop("checked");
+        var category = this.categories[info.ItemId];
+        var bookIds: Array<number> = [];
+
+        this.getBookIdsForUpdate(category, bookIds);
+
+        for (var i = 0; i < bookIds.length; i++) {
+            var book = this.books[bookIds[i]];
+
+            for (var j = 0; j < book.checkboxes.length; j++) {
+                var bookCheckBox = book.checkboxes[j];
+                if ($(bookCheckBox).prop("checked") !== isChecked) {
+                    $(bookCheckBox).prop("checked", isChecked);
+                    this.propagateSelectChange(<HTMLDivElement>$(bookCheckBox).parent(".concrete-item")[0]);
+                }
+            }
+        }
+    }
+
+    private getBookIdsForUpdate(category: DropDownCategory, bookIds: Array<number>) {
+        for (var i = 0; i < category.bookIds.length; i++) {
+            var bookId = category.bookIds[i];
+            if ($.inArray(bookId, bookIds) === -1) {
+                bookIds.push(bookId);
+            }
+        }
+        for (var j = 0; j < category.subcategoryIds.length; j++) {
+            var subcategoryId = category.subcategoryIds[j];
+            var subcategory = this.categories[subcategoryId];
+            this.getBookIdsForUpdate(subcategory, bookIds);
+        }
     }
 }
 

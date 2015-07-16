@@ -108,13 +108,7 @@ var DropDownSelect2 = (function (_super) {
             }
             if (typeof propagate === "undefined" || propagate === null || propagate) {
                 self.propagateSelectChange($(this).parent(".concrete-item")[0]);
-            }
-            var sameBookCheckBoxes = self.books[info.ItemId].checkboxes;
-            for (var i = 0; i < sameBookCheckBoxes.length; i++) {
-                var otherCheckBox = sameBookCheckBoxes[i];
-                if (otherCheckBox !== this) {
-                    $(otherCheckBox).prop("checked", $(this).prop("checked"));
-                }
+                self.propagateLeafSelectChange(this, info);
             }
         });
         itemDiv.appendChild(checkbox);
@@ -147,6 +141,46 @@ var DropDownSelect2 = (function (_super) {
         nameSpan.innerHTML = this.books[currentLeafItem].name;
         itemDiv.appendChild(nameSpan);
         container.appendChild(itemDiv);
+    };
+    DropDownSelect2.prototype.propagateLeafSelectChange = function (item, info) {
+        var sameBookCheckBoxes = this.books[info.ItemId].checkboxes;
+        var checkBoxState = $(item).prop("checked");
+        for (var i = 0; i < sameBookCheckBoxes.length; i++) {
+            var otherCheckBox = sameBookCheckBoxes[i];
+            if ($(otherCheckBox).prop("checked") !== checkBoxState) {
+                $(otherCheckBox).prop("checked", checkBoxState);
+                this.propagateSelectChange($(otherCheckBox).parent(".concrete-item")[0]);
+            }
+        }
+    };
+    DropDownSelect2.prototype.propagateCategorySelectChange = function (item, info) {
+        var isChecked = $(item).prop("checked");
+        var category = this.categories[info.ItemId];
+        var bookIds = [];
+        this.getBookIdsForUpdate(category, bookIds);
+        for (var i = 0; i < bookIds.length; i++) {
+            var book = this.books[bookIds[i]];
+            for (var j = 0; j < book.checkboxes.length; j++) {
+                var bookCheckBox = book.checkboxes[j];
+                if ($(bookCheckBox).prop("checked") !== isChecked) {
+                    $(bookCheckBox).prop("checked", isChecked);
+                    this.propagateSelectChange($(bookCheckBox).parent(".concrete-item")[0]);
+                }
+            }
+        }
+    };
+    DropDownSelect2.prototype.getBookIdsForUpdate = function (category, bookIds) {
+        for (var i = 0; i < category.bookIds.length; i++) {
+            var bookId = category.bookIds[i];
+            if ($.inArray(bookId, bookIds) === -1) {
+                bookIds.push(bookId);
+            }
+        }
+        for (var j = 0; j < category.subcategoryIds.length; j++) {
+            var subcategoryId = category.subcategoryIds[j];
+            var subcategory = this.categories[subcategoryId];
+            this.getBookIdsForUpdate(subcategory, bookIds);
+        }
     };
     return DropDownSelect2;
 })(DropDownSelect);

@@ -322,6 +322,10 @@ class DropDownSelect {
         }
     }
 
+    protected propagateLeafSelectChange(item: HTMLInputElement, info: CallbackInfo) { }
+
+    protected propagateCategorySelectChange(item: HTMLInputElement, info: CallbackInfo) { }
+
     protected propagateSelectChange(concreteItemSource: HTMLDivElement) {
         var actualItem = $(concreteItemSource).parent().closest(".concrete-item");
         var actualItemInput: JQuery;
@@ -428,6 +432,7 @@ class DropDownSelect {
 
             if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
                 self.propagateSelectChange(<HTMLDivElement>$(this).parent(".concrete-item")[0]);
+                self.propagateCategorySelectChange(this, info);
             }
         });
 
@@ -540,6 +545,7 @@ class DropDownSelect {
 
             if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
                 self.propagateSelectChange(<HTMLDivElement>$(this).parent(".concrete-item")[0]);
+                self.propagateLeafSelectChange(this, info);
             }
 
         });
