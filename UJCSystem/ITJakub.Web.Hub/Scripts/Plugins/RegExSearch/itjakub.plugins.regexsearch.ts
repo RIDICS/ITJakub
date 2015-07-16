@@ -20,12 +20,96 @@
     }
 }
 
-class RegExSearch {
+class Search {
+    speedAnimation : number = 200; //200=fast, 600=slow
+
     container: HTMLDivElement;
-    innerContainer: HTMLDivElement;
-    regExConditions: Array<RegExConditionListItem>;
+
+    //constructor(container: HTMLDivElement) {
+    //    this.container = container;
+    //}
+
+    makeSearch() {
+        $("#advancedSearchButton").click(() => {
+            //var glyph = $("#advancedSearchButton .regexsearch-button-glyph");   //TODO create dynamically (getted from dicionariesSearch)
+            $("#advancedSearchButton").css("visibility", "hidden");
+            var regExSearchDiv = document.getElementById("regExSearchDiv");
+            var searchboxTextInput = document.getElementById("searchbox");
+            var searchButton = document.getElementById("searchButton");
+            if (document.getElementById("regExSearchDiv").children.length === 0) {
+                //glyph.removeClass("glyphicon-chevron-down");
+                //glyph.addClass("glyphicon-chevron-up");
+                var regExSearchPlugin = new RegExSearch(<HTMLDivElement>regExSearchDiv, (json:string) => this.closeAdvancedSearchEditor(json));
+                regExSearchPlugin.makeRegExSearch();
+                $(regExSearchDiv).hide();
+                $(regExSearchDiv).slideDown(this.speedAnimation);
+            } else if ($(regExSearchDiv).is(":hidden")) {       //show advanced search
+                $(regExSearchDiv).slideDown(this.speedAnimation);
+                $(searchboxTextInput).prop('disabled', true);
+                $(searchButton).prop('disabled', true);
+                //glyph.removeClass("glyphicon-chevron-down");
+                //glyph.addClass("glyphicon-chevron-up");
+            //} else {
+            //    $(regExSearchDiv).slideUp(this.speedAnimation);      //hide advanced search
+            //    $(searchboxTextInput).prop('disabled', false);
+                //glyph.removeClass("glyphicon-chevron-up");
+                //glyph.addClass("glyphicon-chevron-down");
+            }
+        });
+    }
+
+    closeAdvancedSearchEditor(jsonData: string) {
+        this.importJsonToTextField(jsonData);
+        var regExSearchDiv = document.getElementById("regExSearchDiv"); //TODO property
+        $(regExSearchDiv).slideUp(this.speedAnimation);      //hide advanced search
+        var searchboxTextInput = document.getElementById("searchbox");
+        var searchButton = document.getElementById("searchButton");
+        $(searchboxTextInput).prop('disabled', false);  //TODO property
+        $(searchButton).prop('disabled', false);  //TODO property
+        //var glyph = $("#advancedSearchButton .regexsearch-button-glyph");
+        //glyph.removeClass("glyphicon-chevron-up");
+        //glyph.addClass("glyphicon-chevron-down");
+        $("#advancedSearchButton").css("visibility", "visible");
+    }
+
+    importJsonToTextField(json: string) {
+        var searchboxTextInput = document.getElementById("searchbox"); //TODO property
+        $(searchboxTextInput).text(json);
+        $(searchboxTextInput).val(json);
+    }
+
+    importJsonToAdvancedSearch(json: string) {
         
-    constructor(container: HTMLDivElement) {
+    }
+
+    processSearch(json: string) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ "json": json }),
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: (response) => {
+            },
+            error: (response: JQueryXHR) => {
+                //$(this.container).empty();
+                //$(this.container).append(response.responseText);
+            }
+        });
+
+    }
+
+}
+
+class RegExSearch {
+    private regexDoneCallback: (jsonData: string) => void;
+    private container: HTMLDivElement;
+    private innerContainer: HTMLDivElement;
+    private regExConditions: Array<RegExConditionListItem>;
+
+    constructor(container: HTMLDivElement, regexDoneCallback: (jsonData:string) => void) {
+        this.regexDoneCallback = regexDoneCallback;
         this.container = container;
     }
 
@@ -35,11 +119,12 @@ class RegExSearch {
 
         var commandsDiv = document.createElement("div");
 
-        var sentButton = HtmlItemsFactory.createButton("Vyhledat");
+        var sentButton = HtmlItemsFactory.createButton("Dokončit");
         $(sentButton).addClass("regex-search-button");
         commandsDiv.appendChild(sentButton);
         $(sentButton).click(() => {
-            this.processSearch();
+            var json = this.getConditionsResultJSON();
+            this.regexDoneCallback(json);
         });
 
         this.innerContainer = document.createElement("div");
@@ -102,26 +187,6 @@ class RegExSearch {
     getConditionsResultJSON(): string {
         var jsonString = JSON.stringify(this.getConditionsResultObject());
         return jsonString;
-    }
-
-    processSearch() {
-        var json = this.getConditionsResultJSON();
-
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            data: JSON.stringify({ "json": json }),
-            url: getBaseUrl()+"Dictionaries/Dictionaries/SearchCriteria",
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            success: (response) => {
-            },
-            error: (response : JQueryXHR) => {
-                //$(this.container).empty();
-                //$(this.container).append(response.responseText);
-            }
-        });
-
     }
 }
 

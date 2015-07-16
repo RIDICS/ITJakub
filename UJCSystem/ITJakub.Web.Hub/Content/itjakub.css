@@ -1213,6 +1213,9 @@ input.regexsearch-checkbox {
 .searchbar-input:disabled {
   background-color: lightgray!important;
 }
+.search-area button:disabled {
+  background-color: #84ced7;
+}
 .tt-input,
 .tt-hint {
   outline: none;
