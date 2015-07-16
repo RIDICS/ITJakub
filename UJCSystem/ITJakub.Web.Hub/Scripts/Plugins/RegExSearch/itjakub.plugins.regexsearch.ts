@@ -82,9 +82,24 @@ class Search {
         
     }
 
+    private isValidJson(data: string): boolean {
+        try {
+            JSON.parse(data);
+            return true;
+        } catch (e) {
+            return false;
+        } 
+    }
+
     processSearch() {
         var searchboxTextInput = document.getElementById("searchbox"); //TODO property
-        this.processSearchJson($(searchboxTextInput).val());
+        var searchboxValue = $(searchboxTextInput).val();
+
+        if (this.isValidJson(searchboxValue)) {
+            this.processSearchJson(searchboxValue);
+        } else {
+            this.processSearchText(searchboxValue);
+        }
     }
 
     processSearchJson(json: string) {
@@ -93,6 +108,24 @@ class Search {
             traditional: true,
             data: JSON.stringify({ "json": json }),
             url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: (response) => {
+            },
+            error: (response: JQueryXHR) => {
+                //$(this.container).empty();
+                //$(this.container).append(response.responseText);
+            }
+        });
+
+    }
+
+    processSearchText(text: string) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ "text": text }),
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaText", //TODO add to controller
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: (response) => {

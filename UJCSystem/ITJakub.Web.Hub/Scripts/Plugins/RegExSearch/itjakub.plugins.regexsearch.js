@@ -74,9 +74,24 @@ var Search = (function () {
     };
     Search.prototype.importJsonToAdvancedSearch = function (json) {
     };
+    Search.prototype.isValidJson = function (data) {
+        try {
+            JSON.parse(data);
+            return true;
+        }
+        catch (e) {
+            return false;
+        }
+    };
     Search.prototype.processSearch = function () {
         var searchboxTextInput = document.getElementById("searchbox"); //TODO property
-        this.processSearchJson($(searchboxTextInput).val());
+        var searchboxValue = $(searchboxTextInput).val();
+        if (this.isValidJson(searchboxValue)) {
+            this.processSearchJson(searchboxValue);
+        }
+        else {
+            this.processSearchText(searchboxValue);
+        }
     };
     Search.prototype.processSearchJson = function (json) {
         $.ajax({
@@ -84,6 +99,22 @@ var Search = (function () {
             traditional: true,
             data: JSON.stringify({ "json": json }),
             url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+            },
+            error: function (response) {
+                //$(this.container).empty();
+                //$(this.container).append(response.responseText);
+            }
+        });
+    };
+    Search.prototype.processSearchText = function (text) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ "text": text }),
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaText",
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (response) {
