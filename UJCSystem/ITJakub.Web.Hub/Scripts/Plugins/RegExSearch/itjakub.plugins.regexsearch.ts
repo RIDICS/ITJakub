@@ -74,7 +74,9 @@ class RegExSearch {
         var index = this.regExConditions.indexOf(condition, 0);
         if (index != undefined) {
             var arrayItem = this.regExConditions[index];
-            this.innerContainer.removeChild(arrayItem.getHtml());
+            $(arrayItem.getHtml()).fadeToggle("slow", "linear", () => {
+                this.innerContainer.removeChild(arrayItem.getHtml());    
+            });
             this.regExConditions.splice(index, 1);
         }
 
@@ -396,7 +398,9 @@ class RegExWordConditionList implements IRegExConditionBase {
         var index = this.conditionInputArray.indexOf(condition, 0);
         if (index != undefined) {
             var arrayItem = this.conditionInputArray[index];
-            this.wordListContainerDiv.removeChild(arrayItem.getHtml());
+            $(arrayItem.getHtml()).fadeToggle("slow", "linear", () => {
+                this.wordListContainerDiv.removeChild(arrayItem.getHtml());    
+            });
             this.conditionInputArray.splice(index, 1);
         }
 
@@ -718,7 +722,9 @@ class RegExDatingConditionList implements IRegExConditionBase {
         var index = this.conditionInputArray.indexOf(condition, 0);
         if (index != undefined) {
             var arrayItem = this.conditionInputArray[index];
-            this.datingListContainerDiv.removeChild(arrayItem.getHtml());
+            $(arrayItem.getHtml()).fadeToggle("slow", "linear",() => {
+                this.datingListContainerDiv.removeChild(arrayItem.getHtml());    
+            });
             this.conditionInputArray.splice(index, 1);
         }
 
