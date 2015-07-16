@@ -687,11 +687,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
+        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int end)
         {
             try
             {
-                return Channel.GetHeadwordList(selectedCategoryIds, selectedBookIds, page, pageSize);
+                return Channel.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, end);
             }
             catch (CommunicationException ex)
             {
@@ -714,29 +714,29 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
+        public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             try
             {
-                return Channel.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query, pageSize);
+                return Channel.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetHeadwordPageNumber failed with: {0}", ex);
+                    m_log.ErrorFormat("GetHeadwordRowNumber failed with: {0}", ex);
                 throw;
             }
 
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetHeadwordPageNumber failed with: {0}", ex);
+                    m_log.ErrorFormat("GetHeadwordRowNumber failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetHeadwordPageNumber timeouted with: {0}", ex);
+                    m_log.ErrorFormat("GetHeadwordRowNumber timeouted with: {0}", ex);
                 throw;
             }
         }

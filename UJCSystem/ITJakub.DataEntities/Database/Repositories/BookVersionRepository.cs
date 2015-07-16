@@ -304,7 +304,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<HeadwordSearchResult> GetHeadwordList(int page, int pageSize, IList<long> selectedBookIds = null)
+        public virtual IList<HeadwordSearchResult> GetHeadwordList(int start, int end, IList<long> selectedBookIds = null)
         {
             using (var session = GetSession())
             {
@@ -328,8 +328,8 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))))
                     .OrderBy(x => x.DefaultHeadword).Asc
                     .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
+                    .Skip(start - 1)
+                    .Take(end - start + 1)
                     .List<HeadwordSearchResult>();
 
                 return result;
@@ -337,12 +337,12 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int GetPageNumberForHeadword(IList<long> selectedBookIds, string headwordQuery, int pageSize)
+        public virtual int GetPageNumberForHeadword(IList<long> selectedBookIds, string headwordQuery)
         {
             using (var session = GetSession())
             {
 
-                return 2; //TODO
+                return 100; //TODO
             }
         }
 

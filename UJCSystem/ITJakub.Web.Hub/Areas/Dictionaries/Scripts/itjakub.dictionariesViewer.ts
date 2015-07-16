@@ -102,7 +102,7 @@
                 if (this.isLazyLoad) {
                     this.prepareLazyLoad(mainHeadwordDiv);
                 } else {
-                    this.getAndShowHeadwordDescription(record.Headword, dictionary.BookXmlId, dictionary.XmlEntryId, descriptionDiv);
+                    this.getAndShowHeadwordDescription(record.Headword, dictionary.BookXmlId, dictionary.EntryXmlId, descriptionDiv);
                 }
 
                 var commentsDiv = document.createElement("div");
@@ -211,7 +211,7 @@
 
         $(mainDescriptionDiv).unbind("appearing");
         $(mainDescriptionDiv).removeClass("lazy-loading");
-        this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookXmlId, dictionaryInfo.XmlEntryId, <HTMLDivElement>descriptionContainer);
+        this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookXmlId, dictionaryInfo.EntryXmlId, <HTMLDivElement>descriptionContainer);
     }
 
     private isAllLoaded(): boolean {
@@ -427,7 +427,7 @@ interface IHeadwordBookInfo {
     BookXmlId: string;
     BookAcronym: string;
     BookTitle: string;
-    XmlEntryId: string;
+    EntryXmlId: string;
 }
 
 interface IHeadword {

@@ -77,7 +77,7 @@ var DictionaryViewer = (function () {
                     this.prepareLazyLoad(mainHeadwordDiv);
                 }
                 else {
-                    this.getAndShowHeadwordDescription(record.Headword, dictionary.BookXmlId, dictionary.XmlEntryId, descriptionDiv);
+                    this.getAndShowHeadwordDescription(record.Headword, dictionary.BookXmlId, dictionary.EntryXmlId, descriptionDiv);
                 }
                 var commentsDiv = document.createElement("div");
                 var commentsLink = document.createElement("a");
@@ -173,7 +173,7 @@ var DictionaryViewer = (function () {
         var descriptionContainer = $(".dictionary-entry-description-container", mainDescriptionDiv).get(0);
         $(mainDescriptionDiv).unbind("appearing");
         $(mainDescriptionDiv).removeClass("lazy-loading");
-        this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookXmlId, dictionaryInfo.XmlEntryId, descriptionContainer);
+        this.getAndShowHeadwordDescription(headword, dictionaryInfo.BookXmlId, dictionaryInfo.EntryXmlId, descriptionContainer);
     };
     DictionaryViewer.prototype.isAllLoaded = function () {
         var descriptions = $(this.headwordDescriptionContainer);

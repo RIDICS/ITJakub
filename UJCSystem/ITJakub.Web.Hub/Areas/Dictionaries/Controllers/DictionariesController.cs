@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -109,13 +107,16 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
         {
-            var result = m_mainServiceClient.GetHeadwordList(selectedCategoryIds, selectedBookIds, page, pageSize);
+            var start = (page - 1)*pageSize + 1;
+            var end = page*pageSize;
+            var result = m_mainServiceClient.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, end);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
         {
-            var resultPageNumber = m_mainServiceClient.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query, pageSize);
+            var rowNumber = m_mainServiceClient.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query);
+            var resultPageNumber = (rowNumber - 1)/pageSize + 1;
             return Json(resultPageNumber, JsonRequestBehavior.AllowGet);
         }
 

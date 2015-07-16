@@ -6,7 +6,6 @@ using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
-using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 
@@ -167,14 +166,14 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
         }
 
-        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
+        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int end)
         {
-            return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, page, pageSize);
+            return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, end);
         }
 
-        public int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
+        public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            return m_searchManager.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query, pageSize);
+            return m_searchManager.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query);
         }
 
         public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
