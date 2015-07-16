@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    var speedAnimation = 200; //200=fast, 600=slow
     $("#advancedSearchButton").click(function () {
         var glyph = $("#advancedSearchButton .regexsearch-button-glyph");
         var regExSearchDiv = document.getElementById("regExSearchDiv");
@@ -7,14 +8,16 @@ $(document).ready(function () {
             glyph.addClass("glyphicon-chevron-up");
             var regExSearchPlugin = new RegExSearch(regExSearchDiv);
             regExSearchPlugin.makeRegExSearch();
+            $(regExSearchDiv).hide();
+            $(regExSearchDiv).slideDown(speedAnimation);
         }
-        else if ($(regExSearchDiv).hasClass("hidden")) {
-            $(regExSearchDiv).removeClass("hidden");
+        else if ($(regExSearchDiv).is(":hidden")) {
+            $(regExSearchDiv).slideDown(speedAnimation);
             glyph.removeClass("glyphicon-chevron-down");
             glyph.addClass("glyphicon-chevron-up");
         }
         else {
-            $(regExSearchDiv).addClass("hidden");
+            $(regExSearchDiv).slideUp(speedAnimation);
             glyph.removeClass("glyphicon-chevron-up");
             glyph.addClass("glyphicon-chevron-down");
         }
