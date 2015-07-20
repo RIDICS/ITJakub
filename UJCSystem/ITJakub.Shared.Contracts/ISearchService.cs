@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.Shared.Contracts
@@ -27,6 +26,16 @@ namespace ITJakub.Shared.Contracts
             OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
+        string GetDictionaryEntryFromSearch(List<SearchCriteriaContract> searchCriterias, string bookId, string versionId, string xmlEntryId, string transformationName,
+            OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel);
+
+        [OperationContract]
         void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        string GetResultCountSearchDictionaries(List<SearchCriteriaContract> searchCriterias);
     }
 }

@@ -69,6 +69,12 @@ namespace ITJakub.SearchService.Core.Exist
             return GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId, outputFormat, null);
         }
 
+        public string GetDictionaryEntryFromSearch(string serializedSearchCriteria, string bookId, string versionId, string xmlEntryId,
+            string outputFormat)
+        {
+            return GetDictionaryEntryFromSearch(serializedSearchCriteria, bookId, versionId, xmlEntryId, outputFormat, null);
+        }
+
         public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string outputFormat)
         {
             return GetPageByPositionFromStart(bookId, versionId, pagePosition, outputFormat, null);
@@ -146,7 +152,34 @@ namespace ITJakub.SearchService.Core.Exist
             return entryResult;
         }
 
+        public string GetDictionaryEntryFromSearch(string serializedSearchCriteria, string bookId, string versionId, string xmlEntryId, string outputFormat, string xslPath)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, xmlEntryId, outputFormat, serializedSearchCriteria);
+            var entryResult = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return entryResult;
+        }
+
         public string ListSearchEditionsResults(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return result;
+        }
+
+        public string ListSearchDictionariesResults(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return result;
+        }
+
+        public string GetResultCountSearchDictionaries(string serializedSearchCriteria)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);

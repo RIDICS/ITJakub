@@ -63,6 +63,7 @@
     <Compile Include="Exist\AttributeResolver\ExistResourceResolver.cs" />
     <Compile Include="Exist\AttributeResolver\IExistAttributeResolver.cs" />
     <Compile Include="Exist\IExistDao.cs" />
+    <Compile Include="Search\DataContract\ResultConjunctionsCriteriaContract.cs" />
     <Compile Include="Search\RegexCriteriaBuilder.cs" />
     <Compile Include="Search\DataContract\ResultSearchCriteriaContract.cs" />
     <Compile Include="Exist\UriCache.cs" />

@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
 
@@ -45,9 +44,25 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId, transformationName, outputFormat, transformationLevel);
         }
 
+        public string GetDictionaryEntryFromSearch(List<SearchCriteriaContract> searchCriterias, string bookId, string versionId, string xmlEntryId,
+            string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        {
+            return m_searchServiceManager.GetDictionaryEntryFromSearch(searchCriterias, bookId, versionId, xmlEntryId, transformationName, outputFormat, transformationLevel);
+        }
+
         public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
             m_searchServiceManager.ListSearchEditionsResults(searchCriterias);
+        }
+
+        public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchServiceManager.ListSearchDictionariesResults(searchCriterias);
+        }
+
+        public string GetResultCountSearchDictionaries(List<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchServiceManager.GetResultCountSearchDictionaries(searchCriterias);
         }
 
         public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName,

@@ -4,7 +4,6 @@ using System.IO;
 using ITJakub.SearchService.Core.Search;
 using ITJakub.SearchService.Core.Search.DataContract;
 using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -85,6 +84,35 @@ namespace ITJakub.SearchService.Core.Exist
                 Enum.GetName(typeof(OutputFormatEnumContract), outputFormat), xslPath);
         }
 
+        public string GetDictionaryEntryFromSearch(List<SearchCriteriaContract> searchCriterias, string bookId, string versionId, string xmlEntryId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        {
+            var resultSearchConjunctions = new ResultConjunctionsCriteriaContract
+            {
+                ConjunctionSearchCriterias = ConvertToRegexCriterias(searchCriterias)
+            };
+            
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
+               transformationLevel, bookId, versionId);
+            
+            return m_client.GetDictionaryEntryFromSearch(resultSearchConjunctions.ToXml(), bookId, versionId, xmlEntryId,
+                Enum.GetName(typeof(OutputFormatEnumContract), outputFormat), xslPath);
+        }
+
+        private IList<SearchCriteriaContract> ConvertToRegexCriterias(IList<SearchCriteriaContract> searchCriterias)
+        {
+            RegexCriteriaBuilder.ConvertWildcardToRegex(searchCriterias);
+            var filteredCriterias = new List<SearchCriteriaContract>();
+            foreach (var searchCriteriaContract in searchCriterias)
+            {
+                if (m_searchCriteriaDirector.IsCriteriaSupported(searchCriteriaContract))
+                {
+                    filteredCriterias.Add(RegexCriteriaBuilder.ConvertToRegexCriteria(searchCriteriaContract));
+                }
+            }
+
+            return filteredCriterias;
+        }
+
         public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
             ResultRestrictionCriteriaContract resultRestrictionCriteriaContract = null;
@@ -112,6 +140,28 @@ namespace ITJakub.SearchService.Core.Exist
             };
 
             var stringResult = m_client.ListSearchEditionsResults(searchCriteria.ToXml());
+        }
+        
+        public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
+        {
+            var regexCriterias = ConvertToRegexCriterias(searchCriterias);
+            var searchCriteria = new ResultConjunctionsCriteriaContract
+            {
+                ConjunctionSearchCriterias = regexCriterias
+            };
+            var stringResult = m_client.ListSearchDictionariesResults(searchCriteria.ToXml());
+            return stringResult;
+        }
+
+        public string GetResultCountSearchDictionaries(List<SearchCriteriaContract> searchCriterias)
+        {
+            var regexCriterias = ConvertToRegexCriterias(searchCriterias);
+            var searchCriteria = new ResultConjunctionsCriteriaContract
+            {
+                ConjunctionSearchCriterias = regexCriterias
+            };
+            var stringResult = m_client.GetResultCountSearchDictionaries(searchCriteria.ToXml());
+            return stringResult;
         }
     }
 }

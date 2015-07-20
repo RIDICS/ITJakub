@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ITJakub.SearchService.Core.Exist;
 using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.SearchService
@@ -68,9 +66,28 @@ namespace ITJakub.SearchService
                 transformationLevel);
         }
 
+        public string GetDictionaryEntryFromSearch(List<SearchCriteriaContract> searchCriterias, string bookId,
+            string versionId, string xmlEntryId, string transformationName, OutputFormatEnumContract outputFormat,
+            ResourceLevelEnumContract transformationLevel)
+        {
+            return m_existManager.GetDictionaryEntryFromSearch(searchCriterias, bookId, versionId, xmlEntryId,
+                transformationName, outputFormat,
+                transformationLevel);
+        }
+        
         public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
             m_existManager.ListSearchEditionsResults(searchCriterias);
+        }
+
+        public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
+        {
+            return m_existManager.ListSearchDictionariesResults(searchCriterias);
+        }
+
+        public string GetResultCountSearchDictionaries(List<SearchCriteriaContract> searchCriterias)
+        {
+            return m_existManager.GetResultCountSearchDictionaries(searchCriterias);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Serialization;
 
 namespace ITJakub.ITJakubService.DataContracts
@@ -37,5 +38,28 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [DataMember]
         public string BookAcronym { get; set; }
+    }
+
+    [DataContract]
+    public class HeadwordListContract
+    {
+        [DataMember]
+        public IList<HeadwordContract> HeadwordList { get; set; }
+
+        public virtual string ToXml()
+        {
+            using (Stream stream = new MemoryStream())
+            {
+                //Serialize the Record object to a memory stream using DataContractSerializer. 
+                DataContractSerializer serializer = new DataContractSerializer(GetType());
+                serializer.WriteObject(stream, this);
+
+
+                stream.Position = 0;
+                string result = new StreamReader(stream).ReadToEnd();
+
+                return result;
+            }
+        }
     }
 }

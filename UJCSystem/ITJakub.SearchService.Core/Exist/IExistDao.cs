@@ -41,7 +41,20 @@ namespace ITJakub.SearchService.Core.Exist
         string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string outputFormat);
 
         [OperationContract]
+        [ExistQuery(XqueryName = "get-entry-from-search.xquery")]
+        string GetDictionaryEntryFromSearch(string serializedSearchCriteria, string bookId, string versionId,
+            string xmlEntryId, string outputFormat);
+
+        [OperationContract]
         [ExistQuery(XqueryName = "list-search-editions.xquery")]
         string ListSearchEditionsResults(string serializedSearchCriteria);
+
+        [OperationContract]
+        [ExistQuery(XqueryName = "list-search-dictionaries.xquery")]
+        string ListSearchDictionariesResults(string serializedSearchCriteria);
+
+        [OperationContract]
+        [ExistQuery(XqueryName = "list-search-dictionaries-count.xquery")]
+        string GetResultCountSearchDictionaries(string serializedSearchCriteria);
     }
 }
