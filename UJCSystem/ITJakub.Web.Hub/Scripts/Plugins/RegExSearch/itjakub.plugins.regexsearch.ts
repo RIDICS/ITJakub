@@ -21,9 +21,10 @@
 }
 
 class Search {
-    speedAnimation : number = 200; //200=fast, 600=slow
+    private speedAnimation: number = 200; //200=fast, 600=slow
+    private advancedRegexEditor: RegExAdvancedSearchEditor;
 
-    container: HTMLDivElement;
+    private container: HTMLDivElement;
 
     //constructor(container: HTMLDivElement) {
     //    this.container = container;
@@ -39,11 +40,15 @@ class Search {
             if (document.getElementById("regExSearchDiv").children.length === 0) {
                 //glyph.removeClass("glyphicon-chevron-down");
                 //glyph.addClass("glyphicon-chevron-up");
-                var regExSearchPlugin = new RegExSearch(<HTMLDivElement>regExSearchDiv, (json:string) => this.closeAdvancedSearchEditor(json));
-                regExSearchPlugin.makeRegExSearch();
+                this.advancedRegexEditor = new RegExAdvancedSearchEditor(<HTMLDivElement>regExSearchDiv, (json:string) => this.closeAdvancedSearchEditor(json));
+                this.advancedRegexEditor.makeRegExSearch();
                 $(regExSearchDiv).hide();
                 $(regExSearchDiv).slideDown(this.speedAnimation);
             } else if ($(regExSearchDiv).is(":hidden")) {       //show advanced search
+                var textboxValue = $(searchboxTextInput).val();
+                if(this.isValidJson(textboxValue)){
+                    this.advancedRegexEditor.importJson(textboxValue);
+                }
                 $(regExSearchDiv).slideDown(this.speedAnimation);
                 $(searchboxTextInput).prop('disabled', true);
                 $(searchButton).prop('disabled', true);
@@ -140,7 +145,7 @@ class Search {
 
 }
 
-class RegExSearch {
+class RegExAdvancedSearchEditor {
     private regexDoneCallback: (jsonData: string) => void;
     private container: HTMLDivElement;
     private innerContainer: HTMLDivElement;
@@ -169,6 +174,19 @@ class RegExSearch {
         this.addNewCondition(true);
         $(this.container).append(this.innerContainer);
         $(this.container).append(commandsDiv);
+    }
+
+    importJson(json: string) {
+        var jsonDataArray = JSON.parse(json);
+        $(this.innerContainer).empty();
+        this.regExConditions = new Array<RegExConditionListItem>();
+
+        for (var i = 0; i < jsonDataArray.length; i++) {
+            var conditionData = jsonDataArray[i];
+            this.addNewCondition();
+            var regexCondition = this.regExConditions[this.regExConditions.length - 1];
+            regexCondition.importData(conditionData);
+        }
     }
 
     addNewCondition(useDelimiter: boolean = true) {
@@ -230,13 +248,24 @@ class RegExSearch {
 
 class RegExConditionListItem {
     private html: HTMLDivElement;
-    private parent: RegExSearch;
+    private parent: RegExAdvancedSearchEditor;
     private selectedSearchType: number;
     private innerConditionContainer: HTMLDivElement;
     private innerCondition: IRegExConditionListBase;
 
-    constructor(parent: RegExSearch) {
+    constructor(parent: RegExAdvancedSearchEditor) {
         this.parent = parent;
+    }
+
+    importData(conditionData: Object) {
+        var oldSelectedSearchType = this.selectedSearchType;
+        this.selectedSearchType = conditionData["searchType"];
+
+        if (this.selectedSearchType !== oldSelectedSearchType) {
+            this.changeConditionType(this.selectedSearchType, oldSelectedSearchType);
+        }
+
+        this.innerCondition.importData(conditionData["conditions"]);
     }
 
     getHtml(): HTMLDivElement {
@@ -416,6 +445,10 @@ interface IRegExConditionListBase {
     addItem();
 
     removeItem(item: IRegExConditionItemBase);
+
+    importData(conditionData: Object);
+    
+    getLastItem(): IRegExConditionItemBase;
 }
 
 interface IRegExConditionItemBase {
@@ -434,6 +467,8 @@ interface IRegExConditionItemBase {
     setClickableDelimeter();
 
     getConditionItemValue(): ConditionItemResult;
+
+    importData(conditionData: Object);
 }
 
 class RegExWordConditionList implements IRegExConditionListBase {
@@ -445,6 +480,21 @@ class RegExWordConditionList implements IRegExConditionListBase {
 
     constructor(parent: RegExConditionListItem) {
         this.parentRegExConditionListItem = parent;
+    }
+
+    importData(conditionsArray: Array<Object>) {
+        this.resetItems();
+        if (conditionsArray.length === 0) return;
+        this.getLastItem().importData(conditionsArray[0]);
+        for (var i = 1; i < conditionsArray.length; i++) {
+            this.addItem();
+            this.getLastItem().importData(conditionsArray[0]);
+        }
+    }
+
+    getLastItem(): IRegExConditionItemBase {
+        if (this.conditionInputArray.length === 0) return null;
+        return this.conditionInputArray[this.conditionInputArray.length - 1];
     }
 
     getWordFormType(): string {
@@ -807,6 +857,21 @@ class RegExDatingConditionList implements IRegExConditionListBase {
         this.parentRegExConditionListItem = parent;
     }
 
+    importData(conditionsArray: Array<Object>) {
+        this.resetItems();
+        if (conditionsArray.length === 0) return;
+        this.getLastItem().importData(conditionsArray[0]);
+        for (var i = 1; i < conditionsArray.length; i++) {
+            this.addItem();
+            this.getLastItem().importData(conditionsArray[0]);
+        }
+    }
+
+    getLastItem(): IRegExConditionItemBase {
+        if (this.conditionInputArray.length === 0) return null;
+        return this.conditionInputArray[this.conditionInputArray.length - 1];
+    }
+
     makeRegExCondition(conditionContainerDiv: HTMLDivElement) {
         this.datingListContainerDiv = document.createElement("div");
         $(this.datingListContainerDiv).addClass("regexsearch-condition-list-div");
@@ -885,6 +950,12 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
     constructor(parent: RegExDatingConditionList) {
         this.parent = parent;
+    }
+
+    importData(conditionData: DatingCriteriaDescription) {
+        //TODO implement
+
+        //this.firstDateView.getLowerValue() = conditionData.notAfter;
     }
 
     getHtml(): HTMLDivElement {
@@ -1123,6 +1194,31 @@ class RegExWordCondition implements IRegExConditionItemBase{
         this.parent = parent;
     }
 
+    importData(conditionData: WordCriteriaDescription) {
+        this.resetInputs();
+        if (typeof conditionData.startsWith !== "undefined" && conditionData.startsWith !== "") {
+            this.getLastInput().importData(conditionData.startsWith, WordInputTypeEnum.StartsWith);
+            this.addInput();
+        }
+        if (typeof conditionData.contains !== "undefined" && conditionData.contains.length > 0) {
+            for (var i = 0; i < conditionData.contains.length; i++) {
+                this.getLastInput().importData(conditionData.contains[i], WordInputTypeEnum.Contains);
+                this.addInput();
+            }
+        }
+        if (typeof conditionData.endsWith !== "undefined" && conditionData.endsWith !== "") {
+            this.getLastInput().importData(conditionData.endsWith, WordInputTypeEnum.EndsWith);
+            this.addInput();
+        }
+
+        this.removeInput(this.getLastInput());
+    }
+
+    private getLastInput(): RegExWordInput {
+        if (this.inputsArray.length === 0) return null;
+        return this.inputsArray[this.inputsArray.length - 1];
+    }
+
     getHtml(): HTMLDivElement {
         return this.html;
     }
@@ -1329,6 +1425,15 @@ class RegExWordInput {
         this.parentRegExWordCondition = parent;
     }
 
+    public importData(data: string, wordInputType: WordInputTypeEnum) {
+        $(this.conditionSelectbox).val(wordInputType.toString());
+        $(this.conditionSelectbox).change();
+
+        $(this.conditionInput).val(data);
+        $(this.conditionInput).text(data);
+        $(this.conditionInput).change();
+    }
+
     getHtml(): HTMLDivElement {
         return this.html;
     }
@@ -1465,6 +1570,21 @@ class RegExTokenDistanceConditionList implements IRegExConditionListBase {
     constructor(parent: RegExConditionListItem) {
         this.parentRegExConditionListItem = parent;
     }
+    
+    importData(conditionsArray: Array<Object>) {
+        this.resetItems();
+        if (conditionsArray.length === 0) return;
+        this.getLastItem().importData(conditionsArray[0]);
+        for (var i = 1; i < conditionsArray.length; i++) {
+            this.addItem();
+            this.getLastItem().importData(conditionsArray[0]);
+        }
+    }
+
+    getLastItem(): IRegExConditionItemBase {
+        if (this.conditionInputArray.length === 0) return null;
+        return this.conditionInputArray[this.conditionInputArray.length - 1];
+    }
 
     public makeRegExCondition(conditionContainerDiv: HTMLDivElement) {
         this.tokenDistanceListContainerDiv = document.createElement("div");
@@ -1537,6 +1657,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
     private actualTokenDistanceValue: number;
 
     private html: HTMLDivElement;
+    private tokenDistanceInput: HTMLInputElement;
 
     private firstToken: RegExWordCondition;
     private secondToken: RegExWordCondition;
@@ -1546,6 +1667,14 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
 
     constructor(parent: RegExTokenDistanceConditionList) {
         this.parent = parent;
+    }
+
+    importData(conditionData: TokenDistanceCriteriaDescription) {
+        this.firstToken.importData(conditionData.first);
+        this.secondToken.importData(conditionData.second);
+        $(this.tokenDistanceInput).val(conditionData.distance.toString());
+        $(this.tokenDistanceInput).text(conditionData.distance.toString());
+        this.tokenDistance = conditionData.distance;
     }
 
     getHtml(): HTMLDivElement {
@@ -1662,6 +1791,8 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
 
             this.actualTokenDistanceValue = parseInt(value);
         });
+
+        this.tokenDistanceInput = tokenDistanceInput;
 
         mainDiv.appendChild(inputTextDiv);
 

@@ -42,12 +42,16 @@ var Search = (function () {
             if (document.getElementById("regExSearchDiv").children.length === 0) {
                 //glyph.removeClass("glyphicon-chevron-down");
                 //glyph.addClass("glyphicon-chevron-up");
-                var regExSearchPlugin = new RegExSearch(regExSearchDiv, function (json) { return _this.closeAdvancedSearchEditor(json); });
-                regExSearchPlugin.makeRegExSearch();
+                _this.advancedRegexEditor = new RegExAdvancedSearchEditor(regExSearchDiv, function (json) { return _this.closeAdvancedSearchEditor(json); });
+                _this.advancedRegexEditor.makeRegExSearch();
                 $(regExSearchDiv).hide();
                 $(regExSearchDiv).slideDown(_this.speedAnimation);
             }
             else if ($(regExSearchDiv).is(":hidden")) {
+                var textboxValue = $(searchboxTextInput).val();
+                if (_this.isValidJson(textboxValue)) {
+                    _this.advancedRegexEditor.importJson(textboxValue);
+                }
                 $(regExSearchDiv).slideDown(_this.speedAnimation);
                 $(searchboxTextInput).prop('disabled', true);
                 $(searchButton).prop('disabled', true);
@@ -127,12 +131,12 @@ var Search = (function () {
     };
     return Search;
 })();
-var RegExSearch = (function () {
-    function RegExSearch(container, regexDoneCallback) {
+var RegExAdvancedSearchEditor = (function () {
+    function RegExAdvancedSearchEditor(container, regexDoneCallback) {
         this.regexDoneCallback = regexDoneCallback;
         this.container = container;
     }
-    RegExSearch.prototype.makeRegExSearch = function () {
+    RegExAdvancedSearchEditor.prototype.makeRegExSearch = function () {
         var _this = this;
         $(this.container).empty();
         this.regExConditions = [];
@@ -149,7 +153,18 @@ var RegExSearch = (function () {
         $(this.container).append(this.innerContainer);
         $(this.container).append(commandsDiv);
     };
-    RegExSearch.prototype.addNewCondition = function (useDelimiter) {
+    RegExAdvancedSearchEditor.prototype.importJson = function (json) {
+        var jsonDataArray = JSON.parse(json);
+        $(this.innerContainer).empty();
+        this.regExConditions = new Array();
+        for (var i = 0; i < jsonDataArray.length; i++) {
+            var conditionData = jsonDataArray[i];
+            this.addNewCondition();
+            var regexCondition = this.regExConditions[this.regExConditions.length - 1];
+            regexCondition.importData(conditionData);
+        }
+    };
+    RegExAdvancedSearchEditor.prototype.addNewCondition = function (useDelimiter) {
         if (useDelimiter === void 0) { useDelimiter = true; }
         if (this.regExConditions.length > 0) {
             this.regExConditions[this.regExConditions.length - 1].setTextDelimeter();
@@ -163,13 +178,13 @@ var RegExSearch = (function () {
         this.regExConditions.push(newRegExConditions);
         $(this.innerContainer).append(newRegExConditions.getHtml());
     };
-    RegExSearch.prototype.removeLastCondition = function () {
+    RegExAdvancedSearchEditor.prototype.removeLastCondition = function () {
         if (this.regExConditions.length <= 1)
             return;
         var arrayItem = this.regExConditions.pop();
         this.innerContainer.removeChild(arrayItem.getHtml());
     };
-    RegExSearch.prototype.removeCondition = function (condition) {
+    RegExAdvancedSearchEditor.prototype.removeCondition = function (condition) {
         var _this = this;
         var index = this.regExConditions.indexOf(condition, 0);
         if (index != undefined) {
@@ -186,7 +201,7 @@ var RegExSearch = (function () {
             this.regExConditions[this.regExConditions.length - 1].setClickableDelimeter();
         }
     };
-    RegExSearch.prototype.getConditionsResultObject = function () {
+    RegExAdvancedSearchEditor.prototype.getConditionsResultObject = function () {
         var resultArray = new Array();
         for (var i = 0; i < this.regExConditions.length; i++) {
             var regExCondition = this.regExConditions[i];
@@ -194,16 +209,24 @@ var RegExSearch = (function () {
         }
         return resultArray;
     };
-    RegExSearch.prototype.getConditionsResultJSON = function () {
+    RegExAdvancedSearchEditor.prototype.getConditionsResultJSON = function () {
         var jsonString = JSON.stringify(this.getConditionsResultObject());
         return jsonString;
     };
-    return RegExSearch;
+    return RegExAdvancedSearchEditor;
 })();
 var RegExConditionListItem = (function () {
     function RegExConditionListItem(parent) {
         this.parent = parent;
     }
+    RegExConditionListItem.prototype.importData = function (conditionData) {
+        var oldSelectedSearchType = this.selectedSearchType;
+        this.selectedSearchType = conditionData["searchType"];
+        if (this.selectedSearchType !== oldSelectedSearchType) {
+            this.changeConditionType(this.selectedSearchType, oldSelectedSearchType);
+        }
+        this.innerCondition.importData(conditionData["conditions"]);
+    };
     RegExConditionListItem.prototype.getHtml = function () {
         return this.html;
     };
@@ -349,6 +372,21 @@ var RegExWordConditionList = (function () {
         };
         this.parentRegExConditionListItem = parent;
     }
+    RegExWordConditionList.prototype.importData = function (conditionsArray) {
+        this.resetItems();
+        if (conditionsArray.length === 0)
+            return;
+        this.getLastItem().importData(conditionsArray[0]);
+        for (var i = 1; i < conditionsArray.length; i++) {
+            this.addItem();
+            this.getLastItem().importData(conditionsArray[0]);
+        }
+    };
+    RegExWordConditionList.prototype.getLastItem = function () {
+        if (this.conditionInputArray.length === 0)
+            return null;
+        return this.conditionInputArray[this.conditionInputArray.length - 1];
+    };
     RegExWordConditionList.prototype.getWordFormType = function () {
         return this.selectedWordFormType;
     };
@@ -636,6 +674,21 @@ var RegExDatingConditionList = (function () {
     function RegExDatingConditionList(parent) {
         this.parentRegExConditionListItem = parent;
     }
+    RegExDatingConditionList.prototype.importData = function (conditionsArray) {
+        this.resetItems();
+        if (conditionsArray.length === 0)
+            return;
+        this.getLastItem().importData(conditionsArray[0]);
+        for (var i = 1; i < conditionsArray.length; i++) {
+            this.addItem();
+            this.getLastItem().importData(conditionsArray[0]);
+        }
+    };
+    RegExDatingConditionList.prototype.getLastItem = function () {
+        if (this.conditionInputArray.length === 0)
+            return null;
+        return this.conditionInputArray[this.conditionInputArray.length - 1];
+    };
     RegExDatingConditionList.prototype.makeRegExCondition = function (conditionContainerDiv) {
         this.datingListContainerDiv = document.createElement("div");
         $(this.datingListContainerDiv).addClass("regexsearch-condition-list-div");
@@ -695,6 +748,10 @@ var RegExDatingCondition = (function () {
         this.delimeterClass = "regexsearch-dating-or-delimiter";
         this.parent = parent;
     }
+    RegExDatingCondition.prototype.importData = function (conditionData) {
+        //TODO implement
+        //this.firstDateView.getLowerValue() = conditionData.notAfter;
+    };
     RegExDatingCondition.prototype.getHtml = function () {
         return this.html;
     };
@@ -881,6 +938,29 @@ var RegExWordCondition = (function () {
         this.delimeterClass = "regexsearch-or-delimiter";
         this.parent = parent;
     }
+    RegExWordCondition.prototype.importData = function (conditionData) {
+        this.resetInputs();
+        if (typeof conditionData.startsWith !== "undefined" && conditionData.startsWith !== "") {
+            this.getLastInput().importData(conditionData.startsWith, 0 /* StartsWith */);
+            this.addInput();
+        }
+        if (typeof conditionData.contains !== "undefined" && conditionData.contains.length > 0) {
+            for (var i = 0; i < conditionData.contains.length; i++) {
+                this.getLastInput().importData(conditionData.contains[i], 1 /* Contains */);
+                this.addInput();
+            }
+        }
+        if (typeof conditionData.endsWith !== "undefined" && conditionData.endsWith !== "") {
+            this.getLastInput().importData(conditionData.endsWith, 2 /* EndsWith */);
+            this.addInput();
+        }
+        this.removeInput(this.getLastInput());
+    };
+    RegExWordCondition.prototype.getLastInput = function () {
+        if (this.inputsArray.length === 0)
+            return null;
+        return this.inputsArray[this.inputsArray.length - 1];
+    };
     RegExWordCondition.prototype.getHtml = function () {
         return this.html;
     };
@@ -1050,6 +1130,13 @@ var RegExWordInput = (function () {
     function RegExWordInput(parent) {
         this.parentRegExWordCondition = parent;
     }
+    RegExWordInput.prototype.importData = function (data, wordInputType) {
+        $(this.conditionSelectbox).val(wordInputType.toString());
+        $(this.conditionSelectbox).change();
+        $(this.conditionInput).val(data);
+        $(this.conditionInput).text(data);
+        $(this.conditionInput).change();
+    };
     RegExWordInput.prototype.getHtml = function () {
         return this.html;
     };
@@ -1155,6 +1242,21 @@ var RegExTokenDistanceConditionList = (function () {
     function RegExTokenDistanceConditionList(parent) {
         this.parentRegExConditionListItem = parent;
     }
+    RegExTokenDistanceConditionList.prototype.importData = function (conditionsArray) {
+        this.resetItems();
+        if (conditionsArray.length === 0)
+            return;
+        this.getLastItem().importData(conditionsArray[0]);
+        for (var i = 1; i < conditionsArray.length; i++) {
+            this.addItem();
+            this.getLastItem().importData(conditionsArray[0]);
+        }
+    };
+    RegExTokenDistanceConditionList.prototype.getLastItem = function () {
+        if (this.conditionInputArray.length === 0)
+            return null;
+        return this.conditionInputArray[this.conditionInputArray.length - 1];
+    };
     RegExTokenDistanceConditionList.prototype.makeRegExCondition = function (conditionContainerDiv) {
         this.tokenDistanceListContainerDiv = document.createElement("div");
         $(this.tokenDistanceListContainerDiv).addClass("regexsearch-condition-list-div");
@@ -1216,6 +1318,13 @@ var RegExTokenDistanceCondition = (function () {
         this.delimeterClass = "regexsearch-token-distance-or-delimiter";
         this.parent = parent;
     }
+    RegExTokenDistanceCondition.prototype.importData = function (conditionData) {
+        this.firstToken.importData(conditionData.first);
+        this.secondToken.importData(conditionData.second);
+        $(this.tokenDistanceInput).val(conditionData.distance.toString());
+        $(this.tokenDistanceInput).text(conditionData.distance.toString());
+        this.tokenDistance = conditionData.distance;
+    };
     RegExTokenDistanceCondition.prototype.getHtml = function () {
         return this.html;
     };
@@ -1311,6 +1420,7 @@ var RegExTokenDistanceCondition = (function () {
             $(e.target).text(value);
             _this.actualTokenDistanceValue = parseInt(value);
         });
+        this.tokenDistanceInput = tokenDistanceInput;
         mainDiv.appendChild(inputTextDiv);
         mainDiv.appendChild(this.secondToken.getHtml());
         mainDiv.appendChild(this.createTextDelimeter());
