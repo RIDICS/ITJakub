@@ -1493,9 +1493,9 @@ class RegExWordInput {
         $(regExButton).addClass("regexsearch-condition-input-button");
         $(regExButton).click(() => {
             if ($(this.regexButtonsDiv).is(":hidden")) {
-                $(this.regexButtonsDiv).show();
+                $(this.regexButtonsDiv).slideDown("fast");
             } else {
-                $(this.regexButtonsDiv).hide();
+                $(this.regexButtonsDiv).slideUp("fast");
             }
         });
         lineDiv.appendChild(regExButton);

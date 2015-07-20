@@ -1183,10 +1183,10 @@ var RegExWordInput = (function () {
         $(regExButton).addClass("regexsearch-condition-input-button");
         $(regExButton).click(function () {
             if ($(_this.regexButtonsDiv).is(":hidden")) {
-                $(_this.regexButtonsDiv).show();
+                $(_this.regexButtonsDiv).slideDown("fast");
             }
             else {
-                $(_this.regexButtonsDiv).hide();
+                $(_this.regexButtonsDiv).slideUp("fast");
             }
         });
         lineDiv.appendChild(regExButton);
