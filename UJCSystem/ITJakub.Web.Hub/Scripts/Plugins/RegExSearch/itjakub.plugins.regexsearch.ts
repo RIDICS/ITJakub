@@ -252,20 +252,16 @@ class RegExConditionListItem {
     private selectedSearchType: number;
     private innerConditionContainer: HTMLDivElement;
     private innerCondition: IRegExConditionListBase;
+    private searchDestinationSelect: HTMLSelectElement;
 
     constructor(parent: RegExAdvancedSearchEditor) {
         this.parent = parent;
     }
 
-    importData(conditionData: Object) {
-        var oldSelectedSearchType = this.selectedSearchType;
-        this.selectedSearchType = conditionData["searchType"];
-
-        if (this.selectedSearchType !== oldSelectedSearchType) {
-            this.changeConditionType(this.selectedSearchType, oldSelectedSearchType);
-        }
-
-        this.innerCondition.importData(conditionData["conditions"]);
+    importData(conditionData: ConditionResult) {
+        $(this.searchDestinationSelect).val(conditionData.searchType.toString());
+        $(this.searchDestinationSelect).change();
+        this.innerCondition.importData(conditionData);
     }
 
     getHtml(): HTMLDivElement {
@@ -384,6 +380,8 @@ class RegExConditionListItem {
             }
         });
 
+        this.searchDestinationSelect = searchDestinationSelect;
+
         $(conditionsDiv).append(mainSearchDiv);
 
         this.innerConditionContainer = document.createElement("div");
@@ -446,7 +444,7 @@ interface IRegExConditionListBase {
 
     removeItem(item: IRegExConditionItemBase);
 
-    importData(conditionData: Object);
+    importData(conditionData: ConditionResult);
     
     getLastItem(): IRegExConditionItemBase;
 }
@@ -461,14 +459,14 @@ interface IRegExConditionItemBase {
     removeDelimeter();
 
     hasDelimeter();
-
+    
     setTextDelimeter();
 
     setClickableDelimeter();
 
     getConditionItemValue(): ConditionItemResult;
 
-    importData(conditionData: Object);
+    importData(conditionData: ConditionItemResult);
 }
 
 class RegExWordConditionList implements IRegExConditionListBase {
@@ -482,13 +480,13 @@ class RegExWordConditionList implements IRegExConditionListBase {
         this.parentRegExConditionListItem = parent;
     }
 
-    importData(conditionsArray: Array<Object>) {
+    importData(conditionsArray: WordsCriteriaListDescription) {
         this.resetItems();
-        if (conditionsArray.length === 0) return;
-        this.getLastItem().importData(conditionsArray[0]);
-        for (var i = 1; i < conditionsArray.length; i++) {
+        if (conditionsArray.conditions.length === 0) return;
+        this.getLastItem().importData(conditionsArray.conditions[0]);
+        for (var i = 1; i < conditionsArray.conditions.length; i++) {
             this.addItem();
-            this.getLastItem().importData(conditionsArray[0]);
+            this.getLastItem().importData(conditionsArray.conditions[i]);
         }
     }
 
@@ -857,13 +855,13 @@ class RegExDatingConditionList implements IRegExConditionListBase {
         this.parentRegExConditionListItem = parent;
     }
 
-    importData(conditionsArray: Array<Object>) {
+    importData(conditionsArray: DatingCriteriaListDescription) {
         this.resetItems();
-        if (conditionsArray.length === 0) return;
-        this.getLastItem().importData(conditionsArray[0]);
-        for (var i = 1; i < conditionsArray.length; i++) {
+        if (conditionsArray.conditions.length === 0) return;
+        this.getLastItem().importData(conditionsArray.conditions[0]);
+        for (var i = 1; i < conditionsArray.conditions.length; i++) {
             this.addItem();
-            this.getLastItem().importData(conditionsArray[0]);
+            this.getLastItem().importData(conditionsArray.conditions[i]);
         }
     }
 
@@ -1571,13 +1569,13 @@ class RegExTokenDistanceConditionList implements IRegExConditionListBase {
         this.parentRegExConditionListItem = parent;
     }
     
-    importData(conditionsArray: Array<Object>) {
+    importData(conditionsArray: TokenDistanceCriteriaListDescription) {
         this.resetItems();
-        if (conditionsArray.length === 0) return;
-        this.getLastItem().importData(conditionsArray[0]);
-        for (var i = 1; i < conditionsArray.length; i++) {
+        if (conditionsArray.conditions.length === 0) return;
+        this.getLastItem().importData(conditionsArray.conditions[0]);
+        for (var i = 1; i < conditionsArray.conditions.length; i++) {
             this.addItem();
-            this.getLastItem().importData(conditionsArray[0]);
+            this.getLastItem().importData(conditionsArray.conditions[i]);
         }
     }
 
@@ -1673,8 +1671,8 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
         this.firstToken.importData(conditionData.first);
         this.secondToken.importData(conditionData.second);
         $(this.tokenDistanceInput).val(conditionData.distance.toString());
-        $(this.tokenDistanceInput).text(conditionData.distance.toString());
-        this.tokenDistance = conditionData.distance;
+        $(this.tokenDistanceInput).keyup();
+        $(this.tokenDistanceInput).change();
     }
 
     getHtml(): HTMLDivElement {
@@ -1789,6 +1787,11 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
             $(e.target).val(value);
             $(e.target).text(value);
 
+            this.actualTokenDistanceValue = parseInt(value);
+        });
+
+        $(tokenDistanceInput).change((e: Event) => {
+            var value = $(e.target).val();
             this.actualTokenDistanceValue = parseInt(value);
         });
 

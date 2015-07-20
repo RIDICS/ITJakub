@@ -220,12 +220,9 @@ var RegExConditionListItem = (function () {
         this.parent = parent;
     }
     RegExConditionListItem.prototype.importData = function (conditionData) {
-        var oldSelectedSearchType = this.selectedSearchType;
-        this.selectedSearchType = conditionData["searchType"];
-        if (this.selectedSearchType !== oldSelectedSearchType) {
-            this.changeConditionType(this.selectedSearchType, oldSelectedSearchType);
-        }
-        this.innerCondition.importData(conditionData["conditions"]);
+        $(this.searchDestinationSelect).val(conditionData.searchType.toString());
+        $(this.searchDestinationSelect).change();
+        this.innerCondition.importData(conditionData);
     };
     RegExConditionListItem.prototype.getHtml = function () {
         return this.html;
@@ -321,6 +318,7 @@ var RegExConditionListItem = (function () {
                 _this.changeConditionType(_this.selectedSearchType, oldSelectedSearchType);
             }
         });
+        this.searchDestinationSelect = searchDestinationSelect;
         $(conditionsDiv).append(mainSearchDiv);
         this.innerConditionContainer = document.createElement("div");
         $(this.innerConditionContainer).addClass("regex-inner-conditon-container");
@@ -374,12 +372,12 @@ var RegExWordConditionList = (function () {
     }
     RegExWordConditionList.prototype.importData = function (conditionsArray) {
         this.resetItems();
-        if (conditionsArray.length === 0)
+        if (conditionsArray.conditions.length === 0)
             return;
-        this.getLastItem().importData(conditionsArray[0]);
-        for (var i = 1; i < conditionsArray.length; i++) {
+        this.getLastItem().importData(conditionsArray.conditions[0]);
+        for (var i = 1; i < conditionsArray.conditions.length; i++) {
             this.addItem();
-            this.getLastItem().importData(conditionsArray[0]);
+            this.getLastItem().importData(conditionsArray.conditions[i]);
         }
     };
     RegExWordConditionList.prototype.getLastItem = function () {
@@ -676,12 +674,12 @@ var RegExDatingConditionList = (function () {
     }
     RegExDatingConditionList.prototype.importData = function (conditionsArray) {
         this.resetItems();
-        if (conditionsArray.length === 0)
+        if (conditionsArray.conditions.length === 0)
             return;
-        this.getLastItem().importData(conditionsArray[0]);
-        for (var i = 1; i < conditionsArray.length; i++) {
+        this.getLastItem().importData(conditionsArray.conditions[0]);
+        for (var i = 1; i < conditionsArray.conditions.length; i++) {
             this.addItem();
-            this.getLastItem().importData(conditionsArray[0]);
+            this.getLastItem().importData(conditionsArray.conditions[i]);
         }
     };
     RegExDatingConditionList.prototype.getLastItem = function () {
@@ -1244,12 +1242,12 @@ var RegExTokenDistanceConditionList = (function () {
     }
     RegExTokenDistanceConditionList.prototype.importData = function (conditionsArray) {
         this.resetItems();
-        if (conditionsArray.length === 0)
+        if (conditionsArray.conditions.length === 0)
             return;
-        this.getLastItem().importData(conditionsArray[0]);
-        for (var i = 1; i < conditionsArray.length; i++) {
+        this.getLastItem().importData(conditionsArray.conditions[0]);
+        for (var i = 1; i < conditionsArray.conditions.length; i++) {
             this.addItem();
-            this.getLastItem().importData(conditionsArray[0]);
+            this.getLastItem().importData(conditionsArray.conditions[i]);
         }
     };
     RegExTokenDistanceConditionList.prototype.getLastItem = function () {
@@ -1322,8 +1320,8 @@ var RegExTokenDistanceCondition = (function () {
         this.firstToken.importData(conditionData.first);
         this.secondToken.importData(conditionData.second);
         $(this.tokenDistanceInput).val(conditionData.distance.toString());
-        $(this.tokenDistanceInput).text(conditionData.distance.toString());
-        this.tokenDistance = conditionData.distance;
+        $(this.tokenDistanceInput).keyup();
+        $(this.tokenDistanceInput).change();
     };
     RegExTokenDistanceCondition.prototype.getHtml = function () {
         return this.html;
@@ -1418,6 +1416,10 @@ var RegExTokenDistanceCondition = (function () {
             value.replace(/[^0-9]/g, '');
             $(e.target).val(value);
             $(e.target).text(value);
+            _this.actualTokenDistanceValue = parseInt(value);
+        });
+        $(tokenDistanceInput).change(function (e) {
+            var value = $(e.target).val();
             _this.actualTokenDistanceValue = parseInt(value);
         });
         this.tokenDistanceInput = tokenDistanceInput;
