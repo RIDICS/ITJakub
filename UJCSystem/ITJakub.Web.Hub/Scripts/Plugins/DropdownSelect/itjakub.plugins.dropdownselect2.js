@@ -218,21 +218,41 @@ var DropDownSelect2 = (function (_super) {
         return isAllChecked;
     };
     DropDownSelect2.prototype.getState = function () {
+        var selectedIds = this.getSelectedIds();
         var state = new State();
+        state.SelectedCategories = [];
+        state.SelectedItems = [];
+        for (var i = 0; i < selectedIds.selectedCategoryIds.length; i++) {
+            var id = selectedIds.selectedCategoryIds[i];
+            state.SelectedCategories.push(new Category(String(id), this.categories[id].name));
+        }
+        for (var i = 0; i < selectedIds.selectedBookIds.length; i++) {
+            var id = selectedIds.selectedBookIds[i];
+            state.SelectedItems.push(new Item(String(id), this.books[id].name));
+        }
+        return state;
+    };
+    DropDownSelect2.prototype.getSelectedIds = function () {
+        var state = new DropDownSelected();
         var selectedBooks = [];
         var selectedCategories = [];
         if (!this.rootCategory || this.isChecked(this.rootCategory, selectedCategories, selectedBooks)) {
-            state.SelectedCategories = [];
-            state.SelectedItems = [];
+            state.selectedBookIds = [];
+            state.selectedCategoryIds = [];
         }
         else {
-            state.SelectedCategories = selectedCategories; // TODO return objects instead of IDs
-            state.SelectedItems = selectedBooks;
+            state.selectedBookIds = selectedBooks;
+            state.selectedCategoryIds = selectedCategories;
         }
         return state;
     };
     return DropDownSelect2;
 })(DropDownSelect);
+var DropDownSelected = (function () {
+    function DropDownSelected() {
+    }
+    return DropDownSelected;
+})();
 var DropDownBook = (function () {
     function DropDownBook() {
     }

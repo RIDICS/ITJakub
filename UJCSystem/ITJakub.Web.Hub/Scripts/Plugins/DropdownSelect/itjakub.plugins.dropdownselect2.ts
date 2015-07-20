@@ -257,19 +257,42 @@
     }
 
     getState(): State {
+        var selectedIds = this.getSelectedIds();
         var state = new State();
-        var selectedBooks = [];
-        var selectedCategories = [];
-        if (!this.rootCategory || this.isChecked(this.rootCategory, selectedCategories, selectedBooks)) {
-            state.SelectedCategories = [];
-            state.SelectedItems = [];
-        } else {
-            state.SelectedCategories = selectedCategories; // TODO return objects instead of IDs
-            state.SelectedItems = selectedBooks;
+        state.SelectedCategories = [];
+        state.SelectedItems = [];
+
+        for (var i = 0; i < selectedIds.selectedCategoryIds.length; i++) {
+            var id = selectedIds.selectedCategoryIds[i];
+            state.SelectedCategories.push(new Category(String(id), this.categories[id].name));
+        }
+        for (var i = 0; i < selectedIds.selectedBookIds.length; i++) {
+            var id = selectedIds.selectedBookIds[i];
+            state.SelectedItems.push(new Item(String(id), this.books[id].name));
         }
 
         return state;
     }
+
+    getSelectedIds(): DropDownSelected {
+        var state = new DropDownSelected();
+        var selectedBooks = [];
+        var selectedCategories = [];
+        if (!this.rootCategory || this.isChecked(this.rootCategory, selectedCategories, selectedBooks)) {
+            state.selectedBookIds = [];
+            state.selectedCategoryIds = [];
+        } else {
+            state.selectedBookIds = selectedBooks;
+            state.selectedCategoryIds = selectedCategories;
+        }
+
+        return state;
+    }
+}
+
+class DropDownSelected {
+    selectedBookIds: Array<number>;
+    selectedCategoryIds: Array<number>;
 }
 
 class DropDownBook {

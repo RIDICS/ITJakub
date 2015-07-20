@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using Castle.Facilities.NHibernateIntegration;
@@ -288,18 +289,25 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             Book bookAlias = null;
             BookHeadword bookHeadwordAlias = null;
+            HeadwordCountResult headwordCountAlias = null;
 
             using (var session = GetSession())
             {
                 var query = session.QueryOver(() => bookAlias)
                     .JoinQueryOver(x => x.LastVersion)
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
-                    .Select(Projections.CountDistinct(() => bookHeadwordAlias.XmlEntryId));
+                    .Select(Projections.ProjectionList()
+                        .Add(Projections.CountDistinct(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => headwordCountAlias.Count))
+                        .Add(Projections.Group(() => bookAlias.Id).WithAlias(() => headwordCountAlias.BookId))
+                    );
 
                 if (selectedBookIds != null)
                     query.WhereRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds);
 
-                return query.SingleOrDefault<int>();
+                var resultList = query.TransformUsing(Transformers.AliasToBean<HeadwordCountResult>())
+                    .List<HeadwordCountResult>();
+
+                return resultList.Sum(x => x.Count);
             }
         }
 
