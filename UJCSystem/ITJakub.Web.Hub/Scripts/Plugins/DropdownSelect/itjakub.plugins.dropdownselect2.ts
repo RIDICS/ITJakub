@@ -288,6 +288,26 @@
 
         return state;
     }
+
+    static getUrlStringFromState(state: State): string {
+        var selectedBooks = state.SelectedItems;
+        var selectedCategories = state.SelectedCategories;
+        var resultString = "";
+
+        for (var i = 0; i < selectedBooks.length; i++) {
+            if (resultString.length > 0)
+                resultString += "&";
+            resultString += "selectedBookIds=" + selectedBooks[i].Id;
+        }
+
+        for (var i = 0; i < selectedCategories.length; i++) {
+            if (resultString.length > 0)
+                resultString += "&";
+            resultString += "selectedCategoryIds=" + selectedCategories[i].Id;
+        }
+
+        return resultString;
+    }
 }
 
 class DropDownSelected {

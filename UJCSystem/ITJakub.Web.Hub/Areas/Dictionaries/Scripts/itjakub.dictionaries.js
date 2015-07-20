@@ -13,9 +13,9 @@ $(document).ready(function () {
     //        showStateInAlertBox(state);
     //    }
     //});
-    var searchBox = new SearchBox("#searchbox", "Dictionaries/Dictionaries");
-    searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
-    searchBox.create();
+    //var searchBox = new SearchBox("#searchbox", "Dictionaries/Dictionaries");
+    //searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+    //searchBox.create();
 });
 function showStateInAlertBox(state) {
     var itemIds = "";

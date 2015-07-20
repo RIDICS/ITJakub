@@ -30,7 +30,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadDictionaryHeadword(string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(query);
+            var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(null, null, query);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

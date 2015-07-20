@@ -3,6 +3,7 @@ var SearchBox = (function () {
         this.inputField = inputFieldElement;
         this.urlWithController = getBaseUrl() + controllerPath;
         this.datasets = [];
+        this.bloodhounds = [];
         this.options = {
             hint: true,
             highlight: true,
@@ -15,9 +16,25 @@ var SearchBox = (function () {
     SearchBox.prototype.destroy = function () {
         $(this.inputField).typeahead("destroy");
     };
-    SearchBox.prototype.addDataSet = function (name, groupHeader) {
+    SearchBox.prototype.clearAndDestroy = function () {
+        for (var i = 0; i < this.bloodhounds.length; i++) {
+            var bloodhound = this.bloodhounds[i];
+            bloodhound.clear();
+            bloodhound.clearPrefetchCache();
+            bloodhound.clearRemoteCache();
+        }
+        this.datasets = [];
+        this.bloodhounds = [];
+        this.destroy();
+    };
+    SearchBox.prototype.addDataSet = function (name, groupHeader, parameterUrlString) {
+        if (parameterUrlString === void 0) { parameterUrlString = null; }
         var prefetchUrl = this.urlWithController + "/GetTypeahead" + name;
         var remoteUrl = this.urlWithController + "/GetTypeahead" + name + "?query=%QUERY";
+        if (parameterUrlString != null) {
+            prefetchUrl += "?" + parameterUrlString;
+            remoteUrl += "&" + parameterUrlString;
+        }
         var remoteOptions = {
             url: remoteUrl,
             wildcard: "%QUERY"
@@ -36,6 +53,7 @@ var SearchBox = (function () {
                 header: "<div class=\"tt-suggestions-header\">" + groupHeader + "</div>"
             }
         };
+        this.bloodhounds.push(bloodhound);
         this.datasets.push(dataset);
     };
     return SearchBox;

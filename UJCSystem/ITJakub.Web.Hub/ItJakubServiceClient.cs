@@ -579,11 +579,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
+        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             try
             {
-                return Channel.GetTypeaheadDictionaryHeadwords(query);
+                return Channel.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query);
             }
             catch (CommunicationException ex)
             {

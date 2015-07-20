@@ -395,37 +395,49 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<string> GetLastTypeaheadHeadwords(int recordCount)
+        public virtual IList<string> GetLastTypeaheadHeadwords(int recordCount, IList<long> selectedBookIds = null)
         {
             using (var session = GetSession())
             {
+                Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
                 BookHeadword bookHeadwordAlias = null;
 
-                return session.QueryOver<Book>()
+                var dbQuery = session.QueryOver(() => bookAlias)
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
                     .Select(Projections.Distinct(Projections.Property(() => bookHeadwordAlias.Headword)))
-                    .Where(x => x.Visibility == VisibilityEnum.Public)
+                    .Where(x => x.Visibility == VisibilityEnum.Public);
+
+                if (selectedBookIds != null)
+                    dbQuery.AndRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds);
+
+                return dbQuery
                     .Take(recordCount)
                     .List<string>();
             }
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<string> GetTypeaheadHeadwords(string query, int recordCount)
+        public virtual IList<string> GetTypeaheadHeadwords(string query, int recordCount, IList<long> selectedBookIds = null)
         {
             using (var session = GetSession())
             {
+                Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
                 BookHeadword bookHeadwordAlias = null;
-
-                return session.QueryOver<Book>()
+                
+                var dbQuery = session.QueryOver(() => bookAlias)
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
                     .Select(Projections.Distinct(Projections.Property(() => bookHeadwordAlias.Headword)))
                     .Where(x => x.Visibility == VisibilityEnum.Public)
-                    .AndRestrictionOn(x => x.Headword).IsInsensitiveLike(query)
+                    .AndRestrictionOn(x => x.Headword).IsInsensitiveLike(query);
+
+                if (selectedBookIds != null)
+                    dbQuery.AndRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds);
+
+                return dbQuery
                     .Take(recordCount)
                     .List<string>();
             }

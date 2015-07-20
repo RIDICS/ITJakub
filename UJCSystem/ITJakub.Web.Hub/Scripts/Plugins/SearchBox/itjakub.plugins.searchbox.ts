@@ -3,11 +3,13 @@
      private urlWithController: string;
      private options: Twitter.Typeahead.Options;
      private datasets: Array<Twitter.Typeahead.Dataset>;
+     private bloodhounds: Array<Bloodhound<string>>;
 
      constructor(inputFieldElement: string, controllerPath: string) {
          this.inputField = inputFieldElement;
          this.urlWithController = getBaseUrl() + controllerPath;
          this.datasets = [];
+         this.bloodhounds = [];
 
          this.options = {
              hint: true,
@@ -24,9 +26,26 @@
          $(this.inputField).typeahead("destroy");
      }
 
-     addDataSet(name: string, groupHeader: string): void {
+     clearAndDestroy(): void {
+         for (var i = 0; i < this.bloodhounds.length; i++) {
+             var bloodhound = this.bloodhounds[i];
+             bloodhound.clear();
+             bloodhound.clearPrefetchCache();
+             bloodhound.clearRemoteCache();
+         }
+         this.datasets = [];
+         this.bloodhounds = [];
+         this.destroy();
+     }
+
+     addDataSet(name: string, groupHeader: string, parameterUrlString: string = null): void {
          var prefetchUrl: string = this.urlWithController + "/GetTypeahead" + name;
          var remoteUrl: string = this.urlWithController + "/GetTypeahead" + name + "?query=%QUERY";
+
+         if (parameterUrlString != null) {
+             prefetchUrl += "?" + parameterUrlString;
+             remoteUrl += "&" + parameterUrlString;
+         }
 
          var remoteOptions: Bloodhound.RemoteOptions<string> = {
              url: remoteUrl,
@@ -49,6 +68,7 @@
              }
          };
 
+         this.bloodhounds.push(bloodhound);
          this.datasets.push(dataset);
      }
  }

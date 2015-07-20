@@ -173,14 +173,18 @@ namespace ITJakub.ITJakubService.Core
             query = PrepareQuery(query);
             return m_bookRepository.GetTypeaheadTitlesByBookType(query, bookType, PrefetchRecordCount);
         }
-        
-        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
+
+        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
+            var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+            if (bookIds.Count == 0)
+                bookIds = null;
+
             if (string.IsNullOrWhiteSpace(query))
-                return m_bookRepository.GetLastTypeaheadHeadwords(PrefetchRecordCount);
+                return m_bookRepository.GetLastTypeaheadHeadwords(PrefetchRecordCount, bookIds);
 
             query = string.Format("{0}%", query);
-            return m_bookRepository.GetTypeaheadHeadwords(query, PrefetchRecordCount);
+            return m_bookRepository.GetTypeaheadHeadwords(query, PrefetchRecordCount, bookIds);
         }
 
         private IList<HeadwordContract> ConvertHeadwordSearchToContract(IList<HeadwordSearchResult> databaseResult)

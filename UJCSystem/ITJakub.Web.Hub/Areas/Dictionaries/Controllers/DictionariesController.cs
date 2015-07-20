@@ -134,9 +134,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetTypeaheadDictionaryHeadword(string query)
+        public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(query);
+            var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

@@ -147,9 +147,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetTypeaheadTitles(query);
         }
 
-        public IList<string> GetTypeaheadDictionaryHeadwords(string query)
+        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            return m_searchManager.GetTypeaheadDictionaryHeadwords(query);
+            return m_searchManager.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query);
         }
 
         public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType)

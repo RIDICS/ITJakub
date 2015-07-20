@@ -2,6 +2,9 @@ $(document).ready(function () {
     var pageSize = 50;
     var headwordsListUrl = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordList";
     var dictionariesViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription", true);
+    var searchBox = new SearchBox("#searchbox", "Dictionaries/Dictionaries");
+    searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+    searchBox.create();
     var loadHeadwordsFunction = function (state) {
         $.ajax({
             type: "GET",
@@ -19,9 +22,16 @@ $(document).ready(function () {
             }
         });
     };
+    var updateSearchBox = function (state) {
+        var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
+        searchBox.clearAndDestroy();
+        searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla", parametersUrl);
+        searchBox.create();
+    };
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
         loadHeadwordsFunction(state);
+        updateSearchBox(state);
     };
     var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeDropdown();
