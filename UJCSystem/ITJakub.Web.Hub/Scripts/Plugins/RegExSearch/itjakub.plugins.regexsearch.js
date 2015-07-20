@@ -956,15 +956,23 @@ var RegExDatingCondition = (function () {
         return datingFormDiv;
     };
     RegExDatingCondition.prototype.changeViews = function () {
+        var oldFirstDataView = this.firstDateView;
         $(this.precisionInputDiv).empty();
         this.firstDateView = this.createInputRangeView();
         this.firstDateView.makeRangeView(this.precisionInputDiv);
+        if (typeof oldFirstDataView !== 'undefined' && oldFirstDataView !== null) {
+            this.firstDateView.setValues(oldFirstDataView.getLowerValue(), oldFirstDataView.getHigherValue());
+        }
         if (this.datingRange === 2 /* Between */) {
             var delimeter = document.createElement("div");
             delimeter.innerHTML = "až";
             this.precisionInputDiv.appendChild(delimeter);
+            var oldSecondView = this.secondDateView;
             this.secondDateView = this.createInputRangeView();
             this.secondDateView.makeRangeView(this.precisionInputDiv);
+            if (typeof oldSecondView !== 'undefined' && oldSecondView !== null) {
+                this.secondDateView.setValues(oldSecondView.getLowerValue(), oldSecondView.getHigherValue());
+            }
         }
         else {
             this.secondDateView = null;
