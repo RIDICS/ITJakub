@@ -596,6 +596,9 @@ interface IRegExDatingConditionView {
 
     getLowerValue(): number;
     getHigherValue(): number;
+
+    setValues(lower?: number, higher?: number);
+
 }
 
 class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
@@ -609,6 +612,11 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
     private selectedDecadeLowerValue: number;
     private selectedDecadeHigherValue: number;
 
+
+    private centurySliderValues: Array<DatingSliderValue>;
+    private periodSliderValues: Array<DatingSliderValue>;
+    private decadeSliderValues: Array<DatingSliderValue>;
+
     private lowerValue: number;
     private higherValue: number;
 
@@ -616,6 +624,10 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
     private decadeEnabled: boolean;
 
     private dateDisplayDiv: HTMLDivElement;
+
+    private centurySlider: HTMLDivElement;
+    private periodSlider: HTMLDivElement;
+    private decadesSlider: HTMLDivElement;
 
     public makeRangeView(container : HTMLDivElement) {
         var precisionInpuDiv = container;
@@ -636,9 +648,13 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
             centuryArray.push(new DatingSliderValue(century.toString(), century * 100 - 100, century * 100 - 1)); //calculate century low and high values (i.e 18. century is 1700 - 1799)
         }
 
+        this.centurySliderValues = centuryArray;
+
         var sliderCentury = this.makeSlider(centuryArray, ". století",(selectedValue: DatingSliderValue) => { this.centuryChanged(selectedValue) });
         $(sliderCentury).change();
         centurySliderDiv.appendChild(sliderCentury);
+
+        this.centurySlider = sliderCentury;
 
         var periodSliderDiv: HTMLDivElement = window.document.createElement("div");
         $(periodSliderDiv).addClass("regex-dating-period-div regex-slider-div");
@@ -671,11 +687,15 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         periodSliderDiv.appendChild(periodCheckboxDiv);
         precisionInpuDiv.appendChild(periodSliderDiv);
 
-        var sliderPeriod = this.makeSlider(new Array<DatingSliderValue>(new DatingSliderValue("začátek", 0, -85), new DatingSliderValue("čtvrtina", 0, -75), new DatingSliderValue("třetina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0)), "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
+        this.periodSliderValues = new Array<DatingSliderValue>(new DatingSliderValue("začátek", 0, -85), new DatingSliderValue("čtvrtina", 0, -75), new DatingSliderValue("třetina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0));
+
+        var sliderPeriod = this.makeSlider(this.periodSliderValues, "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
         $(sliderPeriod).slider("option", "disabled", true);
         $(sliderPeriod).parent().siblings(".slider").find(".slider-tip").hide();
         $(sliderPeriod).change();
         periodSliderDiv.appendChild(sliderPeriod);
+
+        this.periodSlider = sliderPeriod;
 
         var decadesSliderDiv: HTMLDivElement = window.document.createElement("div");
         $(decadesSliderDiv).addClass("regex-dating-decades-div regex-slider-div");
@@ -713,11 +733,16 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         for (var decades = 0; decades <= 90; decades += 10) {
             decadesArray.push(new DatingSliderValue(decades.toString(), decades, -(100 - (decades + 10)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
         }
+
+        this.decadeSliderValues = decadesArray;
+
         var sliderDecades = this.makeSlider(decadesArray, ". léta",(selectedValue: DatingSliderValue) => { this.decadeChanged(selectedValue) });
         $(sliderDecades).slider("option", "disabled", true);
         $(sliderDecades).parent().siblings(".slider").find(".slider-tip").hide();
         $(sliderDecades).change();
         decadesSliderDiv.appendChild(sliderDecades);
+
+        this.decadesSlider = sliderDecades;
 
         var datingDisplayedValueDiv = document.createElement('div');
         $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");
@@ -778,6 +803,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
             },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
                 callbackFunction(valuesArray[ui.value]);
+                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html(valuesArray[ui.value].name + nameEnding);
             }
         });
 
@@ -803,6 +829,41 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
     getLowerValue(): number { return this.lowerValue; }
 
     getHigherValue(): number { return this.higherValue; }
+
+    setValues(lower?: number, higher?: number) {
+        var century: number = lower !== null ? Math.floor(lower/100) : Math.floor(higher/100);
+        var centuryIndex: number = 0;
+        for (var i = 0; i < this.centurySliderValues.length; i++) {
+            var centurySliderValue = this.centurySliderValues[i];
+            if (Math.floor(centurySliderValue.lowNumberValue/100) === century) {
+                $(this.centurySlider).slider("value", i);
+                centuryIndex = i;
+                break;
+            }
+        }
+
+        var importedCentury = this.centurySliderValues[centuryIndex];
+
+        var periodIndex = -1;
+        for (var i = 0; i < this.periodSliderValues.length; i++) {
+            var periodSliderValue = this.periodSliderValues[i];
+            if ((lower === null || (periodSliderValue.lowNumberValue + importedCentury.lowNumberValue) === lower) && (higher === null || (periodSliderValue.highNumberValue + importedCentury.highNumberValue) === higher)) {
+                $(this.periodSlider).slider("value", i);
+                periodIndex = i;
+                break;
+            }
+        }
+
+        if (periodIndex < 0) {
+            for (var i = 0; i < this.decadeSliderValues.length; i++) {
+                var decadeSliderValue = this.decadeSliderValues[i];
+                if ((lower === null || (decadeSliderValue.lowNumberValue + importedCentury.lowNumberValue) === lower) && (higher === null || (decadeSliderValue.highNumberValue + importedCentury.highNumberValue) === higher)) {
+                    $(this.decadesSlider).slider("value", i);
+                    break;
+                }
+            }
+        }
+    }
 }
 
 class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
@@ -811,6 +872,8 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
     private initValue: number = 800;
 
     private actualValue: number;
+
+    private valueInput: HTMLInputElement;
 
     makeRangeView(container: HTMLDivElement) {
         var precisionInpuDiv = container;
@@ -831,6 +894,13 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
             this.actualValue = parseInt(value);
         });
 
+        $(textInput).change((e: Event) => {
+            var value = $(e.target).val();
+            this.actualValue = parseInt(value);
+        });
+
+        this.valueInput = textInput;
+
         var spanInput: HTMLSpanElement = document.createElement("span");
         $(spanInput).addClass("regex-dating-input-span");
         spanInput.innerHTML = "Rok:";
@@ -843,6 +913,21 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
     getLowerValue(): number { return this.actualValue; }
 
     getHigherValue(): number { return this.actualValue; }
+
+    private setValue(value: number) {
+        $(this.valueInput).val(value.toString());
+        $(this.valueInput).text(value.toString());
+        $(this.valueInput).change();
+    }
+
+    setValues(lower?: number, higher?: number) {
+        if (lower !== null) {
+            this.setValue(lower);
+        }
+        else {
+            this.setValue(higher);
+        }
+    }
 }
 
 class RegExDatingConditionList implements IRegExConditionListBase {
@@ -936,7 +1021,10 @@ class RegExDatingCondition implements IRegExConditionItemBase{
     private datingPrecision: DatingPrecisionEnum;
     private datingRange: DatingRangeEnum;
 
-    private precisionInpuDiv: HTMLDivElement;
+    private precisionInputDiv: HTMLDivElement;
+
+    private datingRangeSelect: HTMLSelectElement;
+    private datingPrecisionSelect: HTMLSelectElement;
 
     private firstDateView: IRegExDatingConditionView;
     private secondDateView: IRegExDatingConditionView;
@@ -951,9 +1039,32 @@ class RegExDatingCondition implements IRegExConditionItemBase{
     }
 
     importData(conditionData: DatingCriteriaDescription) {
-        //TODO implement
+        $(this.datingRangeSelect).val(conditionData.datingRangeEnum.toString());
+        $(this.datingRangeSelect).change();
+        $(this.datingPrecisionSelect).val(conditionData.datingPrecision.toString());
+        $(this.datingPrecisionSelect).change();
+        
 
-        //this.firstDateView.getLowerValue() = conditionData.notAfter;
+        switch (conditionData.datingRangeEnum) {
+            case DatingRangeEnum.YoungerThen:
+                this.firstDateView.setValues(conditionData.notAfter, null);
+                break;
+            case DatingRangeEnum.OlderThen:
+                this.firstDateView.setValues(null, conditionData.notBefore);
+                break;
+            case DatingRangeEnum.Around:
+                var lower = conditionData.notBefore + this.DATING_AROUND;
+                var higher = conditionData.notAfter - this.DATING_AROUND;
+                this.firstDateView.setValues(lower,higher);
+                break;
+            case DatingRangeEnum.Between:
+                this.firstDateView.setValues(conditionData.notBefore, null);
+                this.secondDateView.setValues(null, conditionData.notAfter);
+                break;
+
+            default:
+                break;
+        }
     }
 
     getHtml(): HTMLDivElement {
@@ -1041,7 +1152,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
         var precisionInpuDiv: HTMLDivElement = window.document.createElement("div");
         $(precisionInpuDiv).addClass("regex-dating-precision-div");
-        this.precisionInpuDiv = precisionInpuDiv;
+        this.precisionInputDiv = precisionInpuDiv;
         datingDiv.appendChild(precisionInpuDiv);
 
         this.changeViews();
@@ -1082,6 +1193,8 @@ class RegExDatingCondition implements IRegExConditionItemBase{
             }
         });
 
+        this.datingRangeSelect = datingFormSelect;
+
         var precisionSelectDiv = document.createElement("div");
         $(precisionSelectDiv).addClass("regex-dating-condition-select");
 
@@ -1107,6 +1220,9 @@ class RegExDatingCondition implements IRegExConditionItemBase{
                 this.changeViews();
             }
         });
+
+        this.datingPrecisionSelect = precisionFormSelect;
+
         precisionSelectDiv.appendChild(precisionFormSelect);
 
         datingFormDiv.appendChild(datingSelectDiv);
@@ -1116,18 +1232,18 @@ class RegExDatingCondition implements IRegExConditionItemBase{
     }
 
     private changeViews() {
-        $(this.precisionInpuDiv).empty();
+        $(this.precisionInputDiv).empty();
 
         this.firstDateView = this.createInputRangeView();
 
-        this.firstDateView.makeRangeView(this.precisionInpuDiv);
+        this.firstDateView.makeRangeView(this.precisionInputDiv);
 
         if (this.datingRange === DatingRangeEnum.Between) {
             var delimeter = document.createElement("div");
             delimeter.innerHTML = "až";
-            this.precisionInpuDiv.appendChild(delimeter);
+            this.precisionInputDiv.appendChild(delimeter);
             this.secondDateView = this.createInputRangeView();
-            this.secondDateView.makeRangeView(this.precisionInpuDiv);
+            this.secondDateView.makeRangeView(this.precisionInputDiv);
         } else {
             this.secondDateView = null;
         }
@@ -1143,6 +1259,8 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
     getConditionItemValue(): DatingCriteriaDescription {
         var datingValue = new DatingCriteriaDescription();
+        datingValue.datingRangeEnum = this.datingRange;
+        datingValue.datingPrecision = this.datingPrecision;
 
         switch (this.datingRange) {
             case DatingRangeEnum.YoungerThen:
@@ -1838,6 +1956,8 @@ class DatingCriteriaListDescription extends ConditionResult {
 class DatingCriteriaDescription extends ConditionItemResult{
     notBefore: number;
     notAfter: number;
+    datingPrecision: DatingPrecisionEnum;
+    datingRangeEnum: DatingRangeEnum;
 }
 
 class WordsCriteriaListDescription extends ConditionResult {
