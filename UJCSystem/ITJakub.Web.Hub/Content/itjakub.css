@@ -508,6 +508,9 @@ ul.bib-listing li.list-item .label {
   outline: none!important;
   box-shadow: none !important;
 }
+.bib-listing-pagination-div {
+  text-align: center;
+}
 html,
 body {
   height: 100%;

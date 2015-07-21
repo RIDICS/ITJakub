@@ -5,21 +5,21 @@ var Pagination = (function () {
         this.maxPageElements = maxVisiblePageElements;
         this.paginationContainer = paginationContainer;
     }
-    Pagination.prototype.createPagination = function (pageCount, pageClickCallback) {
-        this.pageCount = pageCount;
+    Pagination.prototype.createPagination = function (itemsCount, itemsOnPage, pageClickCallback) {
+        this.pageCount = Math.ceil(itemsCount / itemsOnPage);
         this.pageClickCallback = pageClickCallback;
         $(this.paginationContainer).empty();
         var paginationUl = document.createElement("ul");
         $(paginationUl).addClass("pagination").addClass("pagination-sm");
         var previousPageLi = this.createPageElement("&laquo;", "previous");
         paginationUl.appendChild(previousPageLi);
-        for (var i = 1; i <= pageCount; i++) {
+        for (var i = 1; i <= this.pageCount; i++) {
             var pageLi = this.createPageElement(String(i), i);
             paginationUl.appendChild(pageLi);
         }
         var nextPageLi = this.createPageElement("&raquo;", "next");
         paginationUl.appendChild(nextPageLi);
-        this.usePaginationDots = pageCount > this.maxPageElements;
+        this.usePaginationDots = this.pageCount > this.maxPageElements;
         if (this.usePaginationDots) {
             $(paginationUl.children[1]).after(this.createThreeDots());
             $(paginationUl.children[this.pageCount]).after(this.createThreeDots());

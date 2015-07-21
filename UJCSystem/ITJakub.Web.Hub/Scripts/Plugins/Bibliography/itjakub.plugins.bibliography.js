@@ -1,9 +1,16 @@
 /// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
+/// <reference path="../itjakub.plugins.pagination.ts" />
 var BibliographyModule = (function () {
-    function BibliographyModule(booksContainer, sortBarContainer, forcedBookType) {
-        this.booksContainer = booksContainer;
+    function BibliographyModule(resultsContainer, sortBarContainer, forcedBookType) {
+        this.resultsContainer = $(resultsContainer);
+        this.booksContainer = document.createElement("div");
+        $(this.booksContainer).addClass("bib-listing-books-div");
+        this.paginatorContainer = document.createElement("div");
+        $(this.paginatorContainer).addClass("bib-listing-pagination-div");
+        $(this.resultsContainer).append(this.booksContainer);
+        $(this.resultsContainer).append(this.paginatorContainer);
         this.sortBarContainer = sortBarContainer;
         this.forcedBookType = forcedBookType;
         //Download configuration
@@ -82,6 +89,17 @@ var BibliographyModule = (function () {
             hiddenContent.appendChild(panel);
         $(liElement).append(hiddenContent);
         return liElement;
+    };
+    BibliographyModule.prototype.showPage = function (pageNumber) {
+        this.paginator.goToPage(pageNumber);
+    };
+    BibliographyModule.prototype.createPagination = function (booksOnPage, pageClickCallback, booksCount) {
+        this.paginator = new Pagination(this.paginatorContainer, booksOnPage);
+        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
+    };
+    BibliographyModule.prototype.destroyPagination = function () {
+        $(this.paginatorContainer).empty();
+        this.paginator = null;
     };
     return BibliographyModule;
 })();

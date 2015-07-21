@@ -24,8 +24,7 @@ var DictionaryViewer = (function () {
         this.recordCount = recordCount;
         this.searchUrl = searchUrl;
         this.pageSize = pageSize;
-        var pageCount = Math.ceil(this.recordCount / this.pageSize);
-        this.pagination.createPagination(pageCount, this.searchAndDisplay.bind(this));
+        this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
     };
     DictionaryViewer.prototype.goToPage = function (pageNumber) {
         this.pagination.goToPage(pageNumber);

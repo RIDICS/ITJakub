@@ -11,8 +11,8 @@ class Pagination {
         this.paginationContainer = paginationContainer;
     }
 
-    public createPagination(pageCount: number, pageClickCallback: (pageNumber: number) => void) {
-        this.pageCount = pageCount;
+    public createPagination(itemsCount: number,itemsOnPage: number, pageClickCallback: (pageNumber: number) => void) {
+        this.pageCount = Math.ceil(itemsCount / itemsOnPage);
         this.pageClickCallback = pageClickCallback;
         
         $(this.paginationContainer).empty();
@@ -24,7 +24,7 @@ class Pagination {
         var previousPageLi = this.createPageElement("&laquo;", "previous");
         paginationUl.appendChild(previousPageLi);
 
-        for (var i = 1; i <= pageCount; i++) {
+        for (var i = 1; i <= this.pageCount; i++) {
             var pageLi = this.createPageElement(String(i), i);
             paginationUl.appendChild(pageLi);
         }
@@ -32,7 +32,7 @@ class Pagination {
         var nextPageLi = this.createPageElement("&raquo;", "next");
         paginationUl.appendChild(nextPageLi);
 
-        this.usePaginationDots = pageCount > this.maxPageElements;
+        this.usePaginationDots = this.pageCount > this.maxPageElements;
         if (this.usePaginationDots) {
             $(paginationUl.children[1]).after(this.createThreeDots());
             $(paginationUl.children[this.pageCount]).after(this.createThreeDots());

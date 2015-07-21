@@ -38,8 +38,7 @@ class DictionaryViewer {
         this.searchUrl = searchUrl;
         this.pageSize = pageSize;
 
-        var pageCount = Math.ceil(this.recordCount / this.pageSize);
-        this.pagination.createPagination(pageCount, this.searchAndDisplay.bind(this));
+        this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
     }
 
     public goToPage(pageNumber: number) {
