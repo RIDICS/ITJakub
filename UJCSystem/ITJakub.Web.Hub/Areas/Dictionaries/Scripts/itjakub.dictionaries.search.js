@@ -3,8 +3,8 @@ $(document).ready(function () {
     var jsonSearchUrl = getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria";
     var search = new Search($("#dictionarySearchDiv"), jsonSearchUrl, textSearchUrl, processSearchResults);
     var disabledOptions = new Array();
-    disabledOptions.push(2 /* Editor */);
-    disabledOptions.push(0 /* Author */);
+    disabledOptions.push(10 /* Headwords */);
+    disabledOptions.push(11 /* TokenDistanceHeadwords */);
     search.makeSearch(disabledOptions);
 });
 function processSearchResults(result) {

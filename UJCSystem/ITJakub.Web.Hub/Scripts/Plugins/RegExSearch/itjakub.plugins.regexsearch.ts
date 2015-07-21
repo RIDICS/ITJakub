@@ -8,6 +8,12 @@
         return conditionOption;
     }
 
+    public static createOptionGroup(label: string): HTMLOptionElement {
+        var conditionOption: HTMLOptGroupElement = document.createElement("optgroup");
+        conditionOption.label = label;
+        return conditionOption;
+    }
+
     public static createButton(label: string): HTMLButtonElement {
         var button = document.createElement("button");
         button.type = "button";
@@ -410,8 +416,15 @@ class RegExConditionListItem {
         if (typeof this.searchDestinationSelect !== "undefined" || this.searchDestinationSelect !== null) {
             for (var i = 0; i < disabledOptions.length; i++) {
                 var disabled = disabledOptions[i];
-                $(this.searchDestinationSelect).find("option[value = " + disabled.toString() + "]").hide();
-            }    
+                $(this.searchDestinationSelect).find("option[value = " + disabled.toString() + "]").remove();
+            }
+
+            var optGroups = $(this.searchDestinationSelect).find("optgroup");
+            for (var j = 0; j < optGroups.length; j++) {
+                var optGroup = optGroups[j];
+                var visibleChilds = $(optGroup).children();
+                if (visibleChilds.length === 0) $(optGroup).remove();
+            }
         }
 
         this.disabledOptions = disabledOptions;
@@ -437,14 +450,27 @@ class RegExConditionListItem {
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
 
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Text", SearchTypeEnum.Fulltext.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.TokenDistance.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Ve větě", SearchTypeEnum.Sentence.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("V nadpisu", SearchTypeEnum.Heading.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Autor", SearchTypeEnum.Author.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Titul", SearchTypeEnum.Title.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Editor", SearchTypeEnum.Editor.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Období vzniku", SearchTypeEnum.Dating.toString()));
+        var metadataOptGroup = HtmlItemsFactory.createOptionGroup("Metadata");
+        searchDestinationSelect.appendChild(metadataOptGroup);
+
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Autor", SearchTypeEnum.Author.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Titul", SearchTypeEnum.Title.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Editor", SearchTypeEnum.Editor.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Období vzniku", SearchTypeEnum.Dating.toString()));
+
+        var textOptGroup = HtmlItemsFactory.createOptionGroup("Text");
+        searchDestinationSelect.appendChild(textOptGroup);
+
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("Fulltext", SearchTypeEnum.Fulltext.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.TokenDistance.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("Ve větě", SearchTypeEnum.Sentence.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("V nadpisu", SearchTypeEnum.Heading.toString()));
+
+        var headwordsOptGroup = HtmlItemsFactory.createOptionGroup("Hesla");
+        searchDestinationSelect.appendChild(headwordsOptGroup);
+
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.TokenDistanceHeadwords.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", SearchTypeEnum.Headwords.toString()));
 
         this.selectedSearchType = SearchTypeEnum.Fulltext;
 
@@ -2113,6 +2139,8 @@ enum SearchTypeEnum {
     Result = 7,
     ResultRestriction = 8,
     TokenDistance = 9,
+    Headwords = 10,     //TODO Not yet on server side
+    TokenDistanceHeadwords = 11 //TODO Not yet on server side
 }
 
 /*

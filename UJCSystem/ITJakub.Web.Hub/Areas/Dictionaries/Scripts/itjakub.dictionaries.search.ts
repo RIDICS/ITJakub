@@ -3,8 +3,8 @@
     var jsonSearchUrl = getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria";
     var search = new Search($("#dictionarySearchDiv"), jsonSearchUrl, textSearchUrl, processSearchResults);
     var disabledOptions = new Array<SearchTypeEnum>();
-    disabledOptions.push(SearchTypeEnum.Editor);
-    disabledOptions.push(SearchTypeEnum.Author);
+    disabledOptions.push(SearchTypeEnum.Headwords);
+    disabledOptions.push(SearchTypeEnum.TokenDistanceHeadwords);
     search.makeSearch(disabledOptions);
 });
 
