@@ -15,5 +15,9 @@ namespace ITJakub.Shared.Contracts.Searching.Criteria
         [EnumMember] Result = 7,
         [EnumMember] ResultRestriction = 8,
         [EnumMember] TokenDistance = 9,
+        [EnumMember] Headword = 10,
+        [EnumMember] HeadwordDescription = 11,
+        [EnumMember] HeadwordDescriptionTokenDistance = 12,
+        [EnumMember] SelectedCategory = 13,
     }
 }

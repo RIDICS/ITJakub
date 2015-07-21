@@ -378,8 +378,9 @@ var RegExConditionListItem = (function () {
         textOptGroup.appendChild(HtmlItemsFactory.createOption("V nadpisu", 5 /* Heading */.toString()));
         var headwordsOptGroup = HtmlItemsFactory.createOptionGroup("Hesla");
         searchDestinationSelect.appendChild(headwordsOptGroup);
-        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", 11 /* TokenDistanceHeadwords */.toString()));
-        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", 10 /* Headwords */.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", 12 /* HeadwordDescriptionTokenDistance */.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", 10 /* Headword */.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Heslová stať", 11 /* HeadwordDescription */.toString()));
         this.selectedSearchType = 4 /* Fulltext */;
         $(searchDestinationSelect).change(function (eventData) {
             var oldSelectedSearchType = _this.selectedSearchType;
@@ -1686,8 +1687,10 @@ var SearchTypeEnum;
     SearchTypeEnum[SearchTypeEnum["Result"] = 7] = "Result";
     SearchTypeEnum[SearchTypeEnum["ResultRestriction"] = 8] = "ResultRestriction";
     SearchTypeEnum[SearchTypeEnum["TokenDistance"] = 9] = "TokenDistance";
-    SearchTypeEnum[SearchTypeEnum["Headwords"] = 10] = "Headwords";
-    SearchTypeEnum[SearchTypeEnum["TokenDistanceHeadwords"] = 11] = "TokenDistanceHeadwords"; //TODO Not yet on server side
+    SearchTypeEnum[SearchTypeEnum["Headword"] = 10] = "Headword";
+    SearchTypeEnum[SearchTypeEnum["HeadwordDescription"] = 11] = "HeadwordDescription";
+    SearchTypeEnum[SearchTypeEnum["HeadwordDescriptionTokenDistance"] = 12] = "HeadwordDescriptionTokenDistance";
+    SearchTypeEnum[SearchTypeEnum["SelectedCategory"] = 13] = "SelectedCategory";
 })(SearchTypeEnum || (SearchTypeEnum = {}));
 /*
  * ConditionTypeEnum must match with ConditionTypeEnum number values in C#

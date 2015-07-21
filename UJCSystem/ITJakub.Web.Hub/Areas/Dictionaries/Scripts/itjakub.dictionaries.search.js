@@ -3,8 +3,10 @@ $(document).ready(function () {
     var jsonSearchUrl = getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria";
     var search = new Search($("#dictionarySearchDiv"), jsonSearchUrl, textSearchUrl, processSearchResults);
     var disabledOptions = new Array();
-    disabledOptions.push(10 /* Headwords */);
-    disabledOptions.push(11 /* TokenDistanceHeadwords */);
+    disabledOptions.push(0 /* Author */);
+    disabledOptions.push(1 /* Title */);
+    disabledOptions.push(2 /* Editor */);
+    disabledOptions.push(3 /* Dating */);
     search.makeSearch(disabledOptions);
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
@@ -13,6 +15,6 @@ $(document).ready(function () {
     dictionarySelector.makeDropdown();
 });
 function processSearchResults(result) {
-    //alert("processed: " + result);
+    alert("processed: " + result);
 }
 //# sourceMappingURL=itjakub.dictionaries.search.js.map

@@ -469,8 +469,9 @@ class RegExConditionListItem {
         var headwordsOptGroup = HtmlItemsFactory.createOptionGroup("Hesla");
         searchDestinationSelect.appendChild(headwordsOptGroup);
 
-        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.TokenDistanceHeadwords.toString()));
-        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", SearchTypeEnum.Headwords.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.HeadwordDescriptionTokenDistance.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", SearchTypeEnum.Headword.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Heslová stať", SearchTypeEnum.HeadwordDescription.toString()));
 
         this.selectedSearchType = SearchTypeEnum.Fulltext;
 
@@ -2139,8 +2140,10 @@ enum SearchTypeEnum {
     Result = 7,
     ResultRestriction = 8,
     TokenDistance = 9,
-    Headwords = 10,     //TODO Not yet on server side
-    TokenDistanceHeadwords = 11 //TODO Not yet on server side
+    Headword = 10,
+    HeadwordDescription = 11,
+    HeadwordDescriptionTokenDistance = 12,
+    SelectedCategory = 13,
 }
 
 /*

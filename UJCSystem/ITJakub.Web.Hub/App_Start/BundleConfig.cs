@@ -46,6 +46,7 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js",
                 "~/Scripts/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js",
                 "~/Scripts/Plugins/RegExSearch/itjakub.plugins.regexsearch.js",
+                "~/Scripts/Plugins/itjakub.plugins.pagination.js",
                 "~/Scripts/Plugins/SearchBox/itjakub.plugins.searchbox.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/home/javascript").Include(

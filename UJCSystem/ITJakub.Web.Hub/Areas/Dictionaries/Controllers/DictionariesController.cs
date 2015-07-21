@@ -85,13 +85,48 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         }
 
         [HttpPost]
+        public ActionResult SearchCriteriaText(string text)
+        {
+            var headwordContract = new WordListCriteriaContract
+            {
+                Key = CriteriaKey.Headword,
+                Disjunctions = new List<WordCriteriaContract>
+                {
+                    new WordCriteriaContract
+                    {
+                        Contains = new List<string>{text}
+                    }
+                }
+            };
+            var headwordDescriptionContract = new WordListCriteriaContract
+            {
+                Key = CriteriaKey.HeadwordDescription,
+                Disjunctions = new List<WordCriteriaContract>
+                {
+                    new WordCriteriaContract
+                    {
+                        Contains = new List<string>{text}
+                    }
+                }
+            };
+
+            var searchContract = new List<SearchCriteriaContract>
+            {
+                headwordContract,
+                headwordDescriptionContract
+            };
+
+            m_mainServiceClient.SearchByCriteria(searchContract);
+            return Json(new {a = "aasdfd"});
+        }
+
+        [HttpPost]
         public ActionResult SearchCriteria(string json)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
             m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
             return Json(new { });
-
         }
 
         public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)

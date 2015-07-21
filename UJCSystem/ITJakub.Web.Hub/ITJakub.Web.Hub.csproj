@@ -687,6 +687,7 @@
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.search.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesViewer.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\itjakub.plugins.pagination.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.search.ts" />
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.ts" />
