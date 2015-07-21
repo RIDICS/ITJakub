@@ -30,12 +30,11 @@ var HtmlItemsFactory = (function () {
     return HtmlItemsFactory;
 })();
 var Search = (function () {
-    function Search(container, jsonSearchUrl, textSearchUrl, processSearchResultCallback) {
+    function Search(container, processSearchJsonCallback, processSearchTextCallback) {
         this.speedAnimation = 200; //200=fast, 600=slow
         this.container = container;
-        this.jsonSearchUrl = jsonSearchUrl;
-        this.textSearchUrl = textSearchUrl;
-        this.searchResultCallback = processSearchResultCallback;
+        this.processSearchJsonCallback = processSearchJsonCallback;
+        this.processSearchTextCallback = processSearchTextCallback;
     }
     Search.prototype.makeSearch = function (disabledOptions) {
         var _this = this;
@@ -128,43 +127,11 @@ var Search = (function () {
     Search.prototype.processSearch = function () {
         var searchboxValue = $(this.searchInputTextbox).val();
         if (this.isValidJson(searchboxValue)) {
-            this.processSearchJson(searchboxValue);
+            this.processSearchJsonCallback(searchboxValue);
         }
         else {
-            this.processSearchText(searchboxValue);
+            this.processSearchTextCallback(searchboxValue);
         }
-    };
-    Search.prototype.processSearchJson = function (json) {
-        var _this = this;
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            data: JSON.stringify({ "json": json }),
-            url: this.jsonSearchUrl,
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            success: function (response) {
-                _this.searchResultCallback(response);
-            },
-            error: function (response) {
-            }
-        });
-    };
-    Search.prototype.processSearchText = function (text) {
-        var _this = this;
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            data: JSON.stringify({ "text": text }),
-            url: this.textSearchUrl,
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            success: function (response) {
-                _this.searchResultCallback(response);
-            },
-            error: function (response) {
-            }
-        });
     };
     return Search;
 })();
