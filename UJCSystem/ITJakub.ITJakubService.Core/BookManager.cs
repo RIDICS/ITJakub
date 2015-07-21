@@ -119,7 +119,7 @@ namespace ITJakub.ITJakubService.Core
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
             {
                 throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
-    }
+            }
 
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter

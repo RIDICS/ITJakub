@@ -155,7 +155,7 @@ namespace ITJakub.SearchService.Core.Exist
         public string GetDictionaryEntryFromSearch(string serializedSearchCriteria, string bookId, string versionId, string xmlEntryId, string outputFormat, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, xmlEntryId, outputFormat, serializedSearchCriteria);
+            var completeUri = GetCompleteUri(commInfo, xslPath, serializedSearchCriteria, bookId, versionId, xmlEntryId, outputFormat);
             var entryResult = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
 
             return entryResult;

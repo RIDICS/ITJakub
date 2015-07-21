@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using ITJakub.Core.SearchService;
@@ -55,7 +56,7 @@ namespace ITJakub.ITJakubService.Core
             };
         }
 
-        public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        private FilteredCriterias FilterSearchCriterias(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             var nonMetadataCriterias = new List<SearchCriteriaContract>();
             var conjunction = new List<SearchCriteriaQuery>();
@@ -71,8 +72,20 @@ namespace ITJakub.ITJakubService.Core
                     nonMetadataCriterias.Add(searchCriteriaContract);
                 }
             }
+
+            return new FilteredCriterias
+            {
+                NonMetadataCriterias = nonMetadataCriterias,
+                ConjunctionQuery = conjunction
+            };
+        }
+
+        public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
             
-            IList<BookVersionPairContract> databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(conjunction);
+            IList<BookVersionPairContract> databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(filteredCriterias.ConjunctionQuery);
             if (databaseSearchResult.Count == 0)
                 return new List<SearchResultContract>();
 
@@ -254,21 +267,65 @@ namespace ITJakub.ITJakubService.Core
             return m_bookVersionRepository.GetPageNumberForHeadword(bookIds, query);
         }
 
-        public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
-        {
-            query = string.Format("%{0}%", query);
-            var databaseResult = m_bookVersionRepository.GetCountOfSearchHeadword(query, new [] {"{08BE3E56-77D0-46C1-80BB-C1346B757BE5}"});
+        //public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
+        //{
+        //    query = string.Format("%{0}%", query);
+        //    var databaseResult = m_bookVersionRepository.GetCountOfSearchHeadword(query, new [] {"{08BE3E56-77D0-46C1-80BB-C1346B757BE5}"});
 
+        //    return null; //TODO
+        //}
+
+        //public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
+        //{
+        //    query = string.Format("%{0}%", query);
+        //    var databaseResult = m_bookVersionRepository.SearchHeadword(query, dictionaryGuidList, page, pageSize);
+        //    var resultList = ConvertHeadwordSearchToContract(databaseResult);
+
+        //    return resultList;
+        //}
+        
+        public HeadwordSearchResultContract GetHeadwordSearchResultCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            // TODO search in SQL
+
+            var fileteredCriterias = FilterSearchCriterias(searchCriterias);
+
+            var serializedResult = m_searchServiceClient.GetResultCountSearchDictionaries(fileteredCriterias.NonMetadataCriterias);
             return null; //TODO
         }
 
-        public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
+        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            query = string.Format("%{0}%", query);
-            var databaseResult = m_bookVersionRepository.SearchHeadword(query, dictionaryGuidList, page, pageSize);
-            var resultList = ConvertHeadwordSearchToContract(databaseResult);
+            // TODO search in SQL
 
-            return resultList;
+            var fileteredCriterias = FilterSearchCriterias(searchCriterias);
+
+            var serializedResult = m_searchServiceClient.ListSearchDictionariesResults(fileteredCriterias.NonMetadataCriterias);
+            return null; //TODO
+        }
+        
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+        {
+            var searchServiceClient = new SearchServiceClient();
+            OutputFormat outputFormat;
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
+
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
+            var transformationName = transformation.Name;
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+            var dictionaryEntryText = searchServiceClient.GetDictionaryEntryFromSearch(searchCriterias.ToList(), bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
+
+            return dictionaryEntryText;
+        }
+
+        private class FilteredCriterias
+        {
+            public List<SearchCriteriaQuery> ConjunctionQuery { get; set; }
+            public List<SearchCriteriaContract> NonMetadataCriterias { get; set; }
         }
     }
 }

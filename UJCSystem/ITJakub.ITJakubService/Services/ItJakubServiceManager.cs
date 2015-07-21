@@ -176,19 +176,25 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query);
         }
 
-        public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
+        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            return m_searchManager.GetHeadwordSearchResultCount(query);
+            return m_searchManager.SearchHeadwordByCriteria(searchCriterias);
         }
 
-        public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
+        public HeadwordSearchResultContract GetHeadwordSearchResultCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            return m_searchManager.SearchHeadword(query, dictionaryGuidList, page, pageSize);
+            return m_searchManager.GetHeadwordSearchResultCount(searchCriterias);
         }
 
         public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
         {
             return m_bookManager.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat);
+        }
+
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
+            OutputFormatEnumContract resultFormat)
+        {
+            return m_searchManager.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat);
         }
     }
 }

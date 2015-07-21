@@ -53,7 +53,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
-
+        
         #region CardFile methods
 
         [OperationContract]
@@ -108,12 +108,15 @@ namespace ITJakub.ITJakubService.DataContracts
         int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);
 
         [OperationContract]
-        HeadwordSearchResultContract GetHeadwordSearchResultCount(string query);
-
+        IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
+        
         [OperationContract]
-        IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize);
+        HeadwordSearchResultContract GetHeadwordSearchResultCount(IEnumerable<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
         string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
+        
+        [OperationContract]
+        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
     }
 }

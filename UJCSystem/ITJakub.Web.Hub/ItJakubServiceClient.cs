@@ -741,11 +741,38 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
+        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             try
             {
-                return Channel.GetHeadwordSearchResultCount(query);
+                return Channel.SearchHeadwordByCriteria(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchHeadwordByCriteria failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchHeadwordByCriteria failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("SearchHeadwordByCriteria timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public HeadwordSearchResultContract GetHeadwordSearchResultCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetHeadwordSearchResultCount(searchCriterias);
             }
             catch (CommunicationException ex)
             {
@@ -764,32 +791,6 @@ namespace ITJakub.Web.Hub
             {
                 if (m_log.IsErrorEnabled)
                     m_log.ErrorFormat("GetHeadwordSearchResultCount timeouted with: {0}", ex);
-                throw;
-            }
-        }
-        public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
-        {
-            try
-            {
-                return Channel.SearchHeadword(query, dictionaryGuidList, page, pageSize);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SearchHeadword failed with: {0}", ex);
-                throw;
-            }
-
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SearchHeadword failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SearchHeadword timeouted with: {0}", ex);
                 throw;
             }
         }
@@ -816,6 +817,33 @@ namespace ITJakub.Web.Hub
             {
                 if (m_log.IsErrorEnabled)
                     m_log.ErrorFormat("GetDictionaryEntryByXmlId timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
+            OutputFormatEnumContract resultFormat)
+        {
+            try
+            {
+                return Channel.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetDictionaryEntryFromSearch failed with: {0}", ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetDictionaryEntryFromSearch failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetDictionaryEntryFromSearch timeouted with: {0}", ex);
                 throw;
             }
         }

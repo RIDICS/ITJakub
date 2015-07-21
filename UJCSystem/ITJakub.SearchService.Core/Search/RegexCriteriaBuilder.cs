@@ -21,7 +21,9 @@ namespace ITJakub.SearchService.Core.Search
         {
             wordCriteria.StartsWith = ConvertWildcardToRegex(wordCriteria.StartsWith);
             wordCriteria.EndsWith = ConvertWildcardToRegex(wordCriteria.EndsWith);
-            wordCriteria.Contains = wordCriteria.Contains.Select(ConvertWildcardToRegex).ToList();
+
+            if (wordCriteria.Contains != null)
+                wordCriteria.Contains = wordCriteria.Contains.Select(ConvertWildcardToRegex).ToList();
         }
 
         public static void ConvertWildcardToRegex(IList<SearchCriteriaContract> searchCriterias)
