@@ -60,10 +60,21 @@
     margin-top: 30px;
 }
 
-.regexsearch-delimiter, .regexsearch-or-delimiter{
+.regexsearch-delimiter, .regexsearch-or-delimiter, .regexsearch-token-distance-or-delimiter{
     color: white;
     background-color: @regexsearch-gray-color;
     padding: 0 10px 0 10px;
+    margin-bottom: 5px;
+}
+
+.regexsearch-dating-or-delimiter{
+    color: white;
+    background-color: @regexsearch-gray-color;
+    padding: 0 10px 0 10px;
+    margin-bottom: 70px;
+}
+
+.regexsearch-condition-list-div .regex-dating-condition:last-child .regexsearch-dating-or-delimiter {
     margin-bottom: 5px;
 }
 
@@ -160,7 +171,7 @@ input.regexsearch-checkbox {
   margin-left: 308px;
 }
 
-.regex-dating-condition {
+.regex-dating-condition-value-select{
     margin: 20px;
     padding: 10px 5px 10px 5px;
     background-color: white;
@@ -241,4 +252,36 @@ input.regexsearch-checkbox {
 
 .regex-dating-input-span{
     margin-right: 10px;
+}
+
+.regexsearch-token-distance-condition-input-div{
+    margin-left: 85px;
+}
+
+.regexsearch-token-distance-condition-input-div .regexsearch-condition-input{
+    width: 80px;
+    margin-right: -40px;
+    padding-right: 0;         
+    margin-left: 20px; 
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.regexsearch-token-distance-condition-input-text {
+  font-weight: bold;
+  font-size: 90%;
+}
+
+.searchbar-input:disabled {
+    background-color: lightgray!important;
+}
+
+.search-area button:disabled {
+    background-color: @item-background-color;
+}
+
+.regex-searchbar-inputs {
+    display: block;
+    margin-right: 172px;
+    padding-right: 10px;
 }

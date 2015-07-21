@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ITJakub.Web.Hub.Models.Plugins.RegExSearch
+namespace ITJakub.Web.Hub.Converters
 {
     public class ConditionCriteriaDescriptionConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            var canConvert = (objectType == typeof(ConditionCriteriaDescription));
+            var canConvert = (objectType == typeof(ConditionCriteriaDescriptionBase));
             return canConvert;
         }
 
@@ -18,7 +19,7 @@ namespace ITJakub.Web.Hub.Models.Plugins.RegExSearch
             JObject jObject = JObject.Load(reader);
             var type = (string)jObject["conditionType"];
             ConditionTypeEnum conditionTypeEnum;
-            ConditionCriteriaDescription result = null;
+            ConditionCriteriaDescriptionBase result = null;
 
             if (Enum.TryParse(type, out conditionTypeEnum))
             {
@@ -29,14 +30,20 @@ namespace ITJakub.Web.Hub.Models.Plugins.RegExSearch
                     case ConditionTypeEnum.DatingList:
                         var datingList = new DatingListCriteriaDescription();
                         var list = conditions.ToObject<IList<DatingCriteriaDescription>>(serializer);
-                        datingList.DatingCriteriaDescription = list;
+                        datingList.Disjunctions = list;
                         result = datingList;
                         break;
                     case ConditionTypeEnum.WordList:
                         var wordList = new WordListCriteriaDescription();
                         var wordDescriptions = conditions.ToObject<IList<WordCriteriaDescription>>(serializer);
-                        wordList.WordCriteriaDescription = wordDescriptions;
+                        wordList.Disjunctions = wordDescriptions;
                         result = wordList;
+                        break;
+                    case ConditionTypeEnum.TokenDistanceList:
+                        var tokenDistanceList = new TokenDistanceListCriteriaDescription();
+                        var tokenDescriptions = conditions.ToObject<IList<TokenDistanceCriteriaDescription>>(serializer);
+                        tokenDistanceList.Disjunctions = tokenDescriptions;
+                        result = tokenDistanceList;
                         break;
                 }
 

@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using ITJakub.ITJakubService.DataContracts;
-using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 
@@ -10,9 +8,10 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<ConditionCriteriaDescription, SearchCriteriaContract>()
+            CreateMap<ConditionCriteriaDescriptionBase, SearchCriteriaContract>()
                 .Include<DatingListCriteriaDescription, DatingListCriteriaContract>()
-                .Include<WordListCriteriaDescription, WordListCriteriaContract>();
+                .Include<WordListCriteriaDescription, WordListCriteriaContract>()
+                .Include<TokenDistanceListCriteriaDescription, TokenDistanceListCriteriaContract>();
         }
     }
 }

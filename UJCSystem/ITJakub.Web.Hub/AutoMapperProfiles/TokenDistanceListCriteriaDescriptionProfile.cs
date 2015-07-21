@@ -5,12 +5,12 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 
 namespace ITJakub.Web.Hub.AutoMapperProfiles
 {
-    public class WordListCriteriaDescriptionProfile : Profile
+    public class TokenDistanceListCriteriaDescriptionProfile : Profile
     {
         protected override void Configure()
         {
-            CreateMap<WordListCriteriaDescription, WordListCriteriaContract>()
-                .ForMember(dest => dest.Disjunctions, opt => opt.MapFrom(src => Mapper.Map<IList<WordCriteriaContract>>(src.Disjunctions)))
+            CreateMap<TokenDistanceListCriteriaDescription, TokenDistanceListCriteriaContract>()
+                .ForMember(dest => dest.Disjunctions, opt => opt.MapFrom(src => Mapper.Map<IList<TokenDistanceCriteriaContract>>(src.Disjunctions)))
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => (CriteriaKey) src.SearchType))
                 .ForAllMembers(opt => opt.Condition(src => !src.IsSourceValueNull));
         }
