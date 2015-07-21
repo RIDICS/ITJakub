@@ -84,18 +84,21 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
+        private IList<SearchCriteriaContract> DeserializeJsonSearchCriteria(string json)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            return Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+        }
+
         [HttpPost]
-        public ActionResult SearchCriteriaText(string text)
+        public ActionResult SearchCriteriaText(string text, int start, int count)
         {
             var headwordContract = new WordListCriteriaContract
             {
                 Key = CriteriaKey.Headword,
                 Disjunctions = new List<WordCriteriaContract>
                 {
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string>{text}
-                    }
+                    new WordCriteriaContract {Contains = new List<string> {text}}
                 }
             };
             var headwordDescriptionContract = new WordListCriteriaContract
@@ -103,30 +106,61 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 Key = CriteriaKey.HeadwordDescription,
                 Disjunctions = new List<WordCriteriaContract>
                 {
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string>{text}
-                    }
+                    new WordCriteriaContract {Contains = new List<string> {text}}
                 }
+            };
+            var resultCriteria = new ResultCriteriaContract
+            {
+                Start = start,
+                Count = count
             };
 
             var searchContract = new List<SearchCriteriaContract>
             {
                 headwordContract,
-                headwordDescriptionContract
+                headwordDescriptionContract,
+                resultCriteria
             };
 
-            m_mainServiceClient.SearchByCriteria(searchContract);
+            // TODO add search
             return Json(new {a = "aasdfd"});
         }
 
         [HttpPost]
-        public ActionResult SearchCriteria(string json)
+        public ActionResult SearchCriteriaResultsCount(string json)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-            m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { });
+            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
+
+            var resultCount = m_mainServiceClient.SearchHeadwordByCriteria(listSearchCriteriaContracts);
+            return Json(resultCount);
+        }
+
+        [HttpPost]
+        public ActionResult SearchCriteria(string json, int start, int count)
+        {
+            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            {
+                Start = start,
+                Count = count
+            });
+            
+            var result = m_mainServiceClient.SearchHeadwordByCriteria(listSearchCriteriaContracts); // TODO criteria filter
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult SearchCriteriaFulltext(string json, int start, int count)
+        {
+            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            {
+                Start = start,
+                Count = count
+            });
+
+            var result = m_mainServiceClient.SearchHeadwordByCriteria(listSearchCriteriaContracts); //TODO fulltext parameter
+            return Json(result);
         }
 
         public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)
@@ -209,22 +243,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 title1,
                 fulltext1
             };
-        }
-
-        public ActionResult GetSearchCriteriaResultCountMocked()
-        {
-            var searchCriteriaContracts = GetMockedCriteria();
-
-            var result = m_mainServiceClient.GetHeadwordSearchResultCount(searchCriteriaContracts);
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult SearchCriteriaMocked()
-        {
-            var searchCriteriaContracts = GetMockedCriteria();
-
-            var result = m_mainServiceClient.SearchHeadwordByCriteria(searchCriteriaContracts);
-            return Json(new { }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -65,6 +65,7 @@
     <Compile Include="Searching\Criteria\CriteriaKey.cs" />
     <Compile Include="Searching\Criteria\DatingCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\DatingListCriteriaContract.cs" />
+    <Compile Include="Searching\Criteria\DictionarySearchTarget.cs" />
     <Compile Include="Searching\Criteria\HitSettingsContract.cs" />
     <Compile Include="Searching\Criteria\RegexSearchCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\RegexTokenDistanceCriteriaContract.cs" />

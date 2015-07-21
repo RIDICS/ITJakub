@@ -290,8 +290,13 @@ namespace ITJakub.ITJakubService.Core
 
             var fileteredCriterias = FilterSearchCriterias(searchCriterias);
 
-            var serializedResult = m_searchServiceClient.GetResultCountSearchDictionaries(fileteredCriterias.NonMetadataCriterias);
-            return null; //TODO
+            //var serializedResult = m_searchServiceClient.GetResultCountSearchDictionaries(fileteredCriterias.NonMetadataCriterias);
+
+            return new HeadwordSearchResultContract
+            {
+                FulltextCount = 123,
+                HeadwordCount = 25
+            }; //TODO
         }
 
         public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
@@ -301,12 +306,31 @@ namespace ITJakub.ITJakubService.Core
             var fileteredCriterias = FilterSearchCriterias(searchCriterias);
 
             var serializedResult = m_searchServiceClient.ListSearchDictionariesResults(fileteredCriterias.NonMetadataCriterias);
-            return null; //TODO
+
+            return new List<HeadwordContract>  //TODO
+            {
+                new HeadwordContract
+                {
+                    Headword = "Abc",
+                    Dictionaries = new List<HeadwordBookInfoContract>{new HeadwordBookInfoContract
+                    {
+                        BookAcronym = "ES", BookTitle = "Elektronický slovník"
+                    }}
+                },
+                new HeadwordContract
+                {
+                    Headword = "Defg",
+                    Dictionaries = new List<HeadwordBookInfoContract>{new HeadwordBookInfoContract
+                    {
+                        BookAcronym = "ES", BookTitle = "Elektronický slovník"
+                    }}
+                },
+            };
         }
         
         public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
         {
-            var searchServiceClient = new SearchServiceClient();
+            return "<div class='entryFree'><span class='bo'>Heslo</span></div>";
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
             {
@@ -317,7 +341,7 @@ namespace ITJakub.ITJakubService.Core
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            var dictionaryEntryText = searchServiceClient.GetDictionaryEntryFromSearch(searchCriterias.ToList(), bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
+            var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryFromSearch(searchCriterias.ToList(), bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
 
             return dictionaryEntryText;
         }

@@ -34,26 +34,27 @@ namespace ITJakub.ITJakubService.Core
         public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
             if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("Start MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId, bookGuid);
+                m_log.DebugFormat("Start MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId,
+                    bookGuid);
 
-            var searchServiceClient = new SearchServiceClient();
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
             {
                 throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
             }
 
-	        BookTypeEnum bookType;
-					if (!Enum.TryParse(bookTypeContract.ToString(), true, out bookType))
-					{
-						throw new ArgumentException(string.Format("Book type : '{0}' unknown", bookTypeContract));
-					}
+            BookTypeEnum bookType;
+            if (!Enum.TryParse(bookTypeContract.ToString(), true, out bookType))
+            {
+                throw new ArgumentException(string.Format("Book type : '{0}' unknown", bookTypeContract));
+            }
 
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookType);
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract) transformation.ResourceLevel;
-						var pageText = searchServiceClient.GetBookPageByXmlId(bookGuid, bookVersion.VersionId, pageXmlId, transformationName, resultFormat, transformationLevel);
+            var pageText = m_searchServiceClient.GetBookPageByXmlId(bookGuid, bookVersion.VersionId, pageXmlId,
+                transformationName, resultFormat, transformationLevel);
 
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("End MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId, bookGuid);
@@ -114,7 +115,6 @@ namespace ITJakub.ITJakubService.Core
 
         public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
         {
-            var searchServiceClient = new SearchServiceClient();
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
             {
@@ -125,7 +125,7 @@ namespace ITJakub.ITJakubService.Core
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            var dictionaryEntryText = searchServiceClient.GetDictionaryEntryByXmlId(bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
+            var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryByXmlId(bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
 
             return dictionaryEntryText;
         }

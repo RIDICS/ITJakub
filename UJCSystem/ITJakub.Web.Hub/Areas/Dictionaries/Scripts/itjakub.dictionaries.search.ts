@@ -15,16 +15,20 @@
     var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeDropdown();
 });
+
 function processSearchResults(result: any) {
     alert("processed: " + result);
 }
-
 
 function processSearchJson(json: string) {
     $.ajax({
         type: "POST",
         traditional: true,
-        data: JSON.stringify({ "json": json }),
+        data: JSON.stringify({
+            "json": json,
+            "start": 0,
+            "count": 50
+        }),
         url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
         dataType: "text",
         contentType: "application/json; charset=utf-8",
@@ -39,9 +43,13 @@ function processSearchJson(json: string) {
 
 function processSearchText(text: string) {
     $.ajax({
-        type: "POST",
+        type: "GET",
         traditional: true,
-        data: JSON.stringify({ "text": text }),
+        data: JSON.stringify({
+            "text": text,
+            "start": 0,
+            "count": 50
+        }),
         url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaText",
         dataType: "text",
         contentType: "application/json; charset=utf-8",
