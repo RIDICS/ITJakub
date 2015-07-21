@@ -37,16 +37,13 @@ class Search {
 
     private container: HTMLDivElement;
 
-    private jsonSearchUrl: string;
-    private textSearchUrl: string;
+    private processSearchTextCallback: (text: string) => void;
+    private processSearchJsonCallback: (json: string) => void;
 
-    private searchResultCallback: (result: any) => void;
-
-    constructor(container, jsonSearchUrl, textSearchUrl, processSearchResultCallback: (result:any) => void) {
+    constructor(container, processSearchJsonCallback: (jsonData: string) => void, processSearchTextCallback: (text: string) => void) {
         this.container = container;
-        this.jsonSearchUrl = jsonSearchUrl;
-        this.textSearchUrl = textSearchUrl;
-        this.searchResultCallback = processSearchResultCallback;
+        this.processSearchJsonCallback = processSearchJsonCallback;
+        this.processSearchTextCallback = processSearchTextCallback;
     }
 
     makeSearch(disabledOptions?: Array<SearchTypeEnum>) {
@@ -161,45 +158,13 @@ class Search {
         var searchboxValue = $(this.searchInputTextbox).val();
 
         if (this.isValidJson(searchboxValue)) {
-            this.processSearchJson(searchboxValue);
+            this.processSearchJsonCallback(searchboxValue);
         } else {
-            this.processSearchText(searchboxValue);
+            this.processSearchTextCallback(searchboxValue);
         }
     }
 
-    processSearchJson(json: string) {
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            data: JSON.stringify({ "json": json }),
-            url: this.jsonSearchUrl,
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            success: (response) => {
-                this.searchResultCallback(response);
-            },
-            error: (response: JQueryXHR) => {
-            }
-        });
 
-    }
-
-    processSearchText(text: string) {
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            data: JSON.stringify({ "text": text }),
-            url: this.textSearchUrl,
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            success: (response) => {
-                this.searchResultCallback(response);
-            },
-            error: (response: JQueryXHR) => {
-            }
-        });
-
-    }
 
 }
 
