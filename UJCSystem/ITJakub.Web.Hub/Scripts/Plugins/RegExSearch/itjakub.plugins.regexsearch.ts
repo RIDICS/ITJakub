@@ -35,7 +35,7 @@ class Search {
         this.container = container;
     }
 
-    makeSearch() {
+    makeSearch(disabledOptions?: Array<SearchTypeEnum>) {
         var searchAreaDiv = document.createElement("div");
         $(searchAreaDiv).addClass("regex-search-div");
 
@@ -100,7 +100,8 @@ class Search {
         $(this.advancedButton).click(() => {
             $(this.advancedButton).css("visibility", "hidden");
             if (this.searchbarAdvancedEditorContainer.children.length === 0) {
-                this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer, (json:string) => this.closeAdvancedSearchEditor(json));
+                this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer,(json: string) => this.closeAdvancedSearchEditor(json));
+                this.advancedRegexEditor.setDisabledOptions(disabledOptions);
                 this.advancedRegexEditor.makeRegExSearch();
                 $(this.searchbarAdvancedEditorContainer).hide();
                 $(this.searchbarAdvancedEditorContainer).slideDown(this.speedAnimation);
@@ -191,10 +192,15 @@ class RegExAdvancedSearchEditor {
     private container: HTMLDivElement;
     private innerContainer: HTMLDivElement;
     private regExConditions: Array<RegExConditionListItem>;
+    private disabledOptionsArray: Array<SearchTypeEnum>;
 
-    constructor(container: HTMLDivElement, regexDoneCallback: (jsonData:string) => void) {
+    constructor(container: HTMLDivElement, regexDoneCallback: (jsonData:string) => void){
         this.regexDoneCallback = regexDoneCallback;
         this.container = container;
+    }
+
+    setDisabledOptions(disabledOptions: Array<SearchTypeEnum>) {
+        this.disabledOptionsArray = disabledOptions;
     }
 
     makeRegExSearch() {
@@ -225,16 +231,16 @@ class RegExAdvancedSearchEditor {
         for (var i = 0; i < jsonDataArray.length; i++) {
             var conditionData = jsonDataArray[i];
             this.addNewCondition();
-            var regexCondition = this.regExConditions[this.regExConditions.length - 1];
-            regexCondition.importData(conditionData);
+            this.getLastCondition().importData(conditionData);
         }
     }
 
     addNewCondition(useDelimiter: boolean = true) {
         if (this.regExConditions.length > 0) {
-            this.regExConditions[this.regExConditions.length - 1].setTextDelimeter();
+            this.getLastCondition().setTextDelimeter();
         }
         var newRegExConditions = new RegExConditionListItem(this);
+        newRegExConditions.disbaleOptions(this.disabledOptionsArray);
         newRegExConditions.makeRegExCondition();
         newRegExConditions.setClickableDelimeter();
         if (!useDelimiter) {
@@ -265,7 +271,7 @@ class RegExAdvancedSearchEditor {
         if (this.regExConditions.length === 0) {
             this.addNewCondition(true);
         } else {
-            this.regExConditions[this.regExConditions.length - 1].setClickableDelimeter();
+            this.getLastCondition().setClickableDelimeter();
         }
     }
 
@@ -285,6 +291,11 @@ class RegExAdvancedSearchEditor {
         var jsonString = JSON.stringify(this.getConditionsResultObject());
         return jsonString;
     }
+
+    private getLastCondition(): RegExConditionListItem {
+        if (this.regExConditions === null || this.regExConditions.length === 0) return null;
+        return this.regExConditions[this.regExConditions.length - 1];
+    }
 }
 
 class RegExConditionListItem {
@@ -295,6 +306,8 @@ class RegExConditionListItem {
     private innerCondition: IRegExConditionListBase;
     private searchDestinationSelect: HTMLSelectElement;
 
+    private disabledOptions: Array<SearchTypeEnum>;
+
     constructor(parent: RegExAdvancedSearchEditor) {
         this.parent = parent;
     }
@@ -303,6 +316,8 @@ class RegExConditionListItem {
         $(this.searchDestinationSelect).val(conditionData.searchType.toString());
         $(this.searchDestinationSelect).change();
         this.innerCondition.importData(conditionData);
+
+        //TODO implement disabled options
     }
 
     getHtml(): HTMLDivElement {
@@ -381,6 +396,17 @@ class RegExConditionListItem {
         return this.selectedSearchType;
     }
 
+    disbaleOptions(disabledOptions: Array<SearchTypeEnum>) {
+        if (typeof this.searchDestinationSelect !== "undefined" || this.searchDestinationSelect !== null) {
+            for (var i = 0; i < disabledOptions.length; i++) {
+                var disabled = disabledOptions[i];
+                $(this.searchDestinationSelect).find("option[value = " + disabled.toString() + "]").hide();
+            }    
+        }
+
+        this.disabledOptions = disabledOptions;
+    }
+
     makeRegExCondition() {
 
         var conditionsDiv = document.createElement("div");
@@ -422,6 +448,8 @@ class RegExConditionListItem {
         });
 
         this.searchDestinationSelect = searchDestinationSelect;
+
+        this.disbaleOptions(this.disabledOptions);
 
         $(conditionsDiv).append(mainSearchDiv);
 

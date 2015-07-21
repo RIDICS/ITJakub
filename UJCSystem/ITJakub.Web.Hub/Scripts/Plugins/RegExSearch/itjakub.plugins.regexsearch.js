@@ -29,7 +29,7 @@ var Search = (function () {
         this.speedAnimation = 200; //200=fast, 600=slow
         this.container = container;
     }
-    Search.prototype.makeSearch = function () {
+    Search.prototype.makeSearch = function (disabledOptions) {
         var _this = this;
         var searchAreaDiv = document.createElement("div");
         $(searchAreaDiv).addClass("regex-search-div");
@@ -79,6 +79,7 @@ var Search = (function () {
             $(_this.advancedButton).css("visibility", "hidden");
             if (_this.searchbarAdvancedEditorContainer.children.length === 0) {
                 _this.advancedRegexEditor = new RegExAdvancedSearchEditor(_this.searchbarAdvancedEditorContainer, function (json) { return _this.closeAdvancedSearchEditor(json); });
+                _this.advancedRegexEditor.setDisabledOptions(disabledOptions);
                 _this.advancedRegexEditor.makeRegExSearch();
                 $(_this.searchbarAdvancedEditorContainer).hide();
                 $(_this.searchbarAdvancedEditorContainer).slideDown(_this.speedAnimation);
@@ -160,6 +161,9 @@ var RegExAdvancedSearchEditor = (function () {
         this.regexDoneCallback = regexDoneCallback;
         this.container = container;
     }
+    RegExAdvancedSearchEditor.prototype.setDisabledOptions = function (disabledOptions) {
+        this.disabledOptionsArray = disabledOptions;
+    };
     RegExAdvancedSearchEditor.prototype.makeRegExSearch = function () {
         var _this = this;
         $(this.container).empty();
@@ -184,16 +188,16 @@ var RegExAdvancedSearchEditor = (function () {
         for (var i = 0; i < jsonDataArray.length; i++) {
             var conditionData = jsonDataArray[i];
             this.addNewCondition();
-            var regexCondition = this.regExConditions[this.regExConditions.length - 1];
-            regexCondition.importData(conditionData);
+            this.getLastCondition().importData(conditionData);
         }
     };
     RegExAdvancedSearchEditor.prototype.addNewCondition = function (useDelimiter) {
         if (useDelimiter === void 0) { useDelimiter = true; }
         if (this.regExConditions.length > 0) {
-            this.regExConditions[this.regExConditions.length - 1].setTextDelimeter();
+            this.getLastCondition().setTextDelimeter();
         }
         var newRegExConditions = new RegExConditionListItem(this);
+        newRegExConditions.disbaleOptions(this.disabledOptionsArray);
         newRegExConditions.makeRegExCondition();
         newRegExConditions.setClickableDelimeter();
         if (!useDelimiter) {
@@ -222,7 +226,7 @@ var RegExAdvancedSearchEditor = (function () {
             this.addNewCondition(true);
         }
         else {
-            this.regExConditions[this.regExConditions.length - 1].setClickableDelimeter();
+            this.getLastCondition().setClickableDelimeter();
         }
     };
     RegExAdvancedSearchEditor.prototype.getConditionsResultObject = function () {
@@ -237,6 +241,11 @@ var RegExAdvancedSearchEditor = (function () {
         var jsonString = JSON.stringify(this.getConditionsResultObject());
         return jsonString;
     };
+    RegExAdvancedSearchEditor.prototype.getLastCondition = function () {
+        if (this.regExConditions === null || this.regExConditions.length === 0)
+            return null;
+        return this.regExConditions[this.regExConditions.length - 1];
+    };
     return RegExAdvancedSearchEditor;
 })();
 var RegExConditionListItem = (function () {
@@ -247,6 +256,7 @@ var RegExConditionListItem = (function () {
         $(this.searchDestinationSelect).val(conditionData.searchType.toString());
         $(this.searchDestinationSelect).change();
         this.innerCondition.importData(conditionData);
+        //TODO implement disabled options
     };
     RegExConditionListItem.prototype.getHtml = function () {
         return this.html;
@@ -311,6 +321,15 @@ var RegExConditionListItem = (function () {
     RegExConditionListItem.prototype.getSearchType = function () {
         return this.selectedSearchType;
     };
+    RegExConditionListItem.prototype.disbaleOptions = function (disabledOptions) {
+        if (typeof this.searchDestinationSelect !== "undefined" || this.searchDestinationSelect !== null) {
+            for (var i = 0; i < disabledOptions.length; i++) {
+                var disabled = disabledOptions[i];
+                $(this.searchDestinationSelect).find("option[value = " + disabled.toString() + "]").hide();
+            }
+        }
+        this.disabledOptions = disabledOptions;
+    };
     RegExConditionListItem.prototype.makeRegExCondition = function () {
         var _this = this;
         var conditionsDiv = document.createElement("div");
@@ -343,6 +362,7 @@ var RegExConditionListItem = (function () {
             }
         });
         this.searchDestinationSelect = searchDestinationSelect;
+        this.disbaleOptions(this.disabledOptions);
         $(conditionsDiv).append(mainSearchDiv);
         this.innerConditionContainer = document.createElement("div");
         $(this.innerConditionContainer).addClass("regex-inner-conditon-container");
