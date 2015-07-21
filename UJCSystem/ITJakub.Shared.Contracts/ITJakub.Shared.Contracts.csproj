@@ -71,6 +71,7 @@
     <Compile Include="Searching\Criteria\RegexTokenListCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\ResultCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\ResultRestrictionCriteriaContract.cs" />
+    <Compile Include="Searching\Criteria\SelectedCategoryCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\SortEnum.cs" />
     <Compile Include="Searching\Criteria\TokenDistanceCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\TokenDistanceListCriteriaContract.cs" />
