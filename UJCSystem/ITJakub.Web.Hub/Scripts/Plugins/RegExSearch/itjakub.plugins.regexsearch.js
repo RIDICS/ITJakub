@@ -25,9 +25,12 @@ var HtmlItemsFactory = (function () {
     return HtmlItemsFactory;
 })();
 var Search = (function () {
-    function Search(container) {
+    function Search(container, jsonSearchUrl, textSearchUrl, processSearchResultCallback) {
         this.speedAnimation = 200; //200=fast, 600=slow
         this.container = container;
+        this.jsonSearchUrl = jsonSearchUrl;
+        this.textSearchUrl = textSearchUrl;
+        this.searchResultCallback = processSearchResultCallback;
     }
     Search.prototype.makeSearch = function (disabledOptions) {
         var _this = this;
@@ -127,28 +130,32 @@ var Search = (function () {
         }
     };
     Search.prototype.processSearchJson = function (json) {
+        var _this = this;
         $.ajax({
             type: "POST",
             traditional: true,
             data: JSON.stringify({ "json": json }),
-            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
+            url: this.jsonSearchUrl,
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (response) {
+                _this.searchResultCallback(response);
             },
             error: function (response) {
             }
         });
     };
     Search.prototype.processSearchText = function (text) {
+        var _this = this;
         $.ajax({
             type: "POST",
             traditional: true,
             data: JSON.stringify({ "text": text }),
-            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaText",
+            url: this.textSearchUrl,
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (response) {
+                _this.searchResultCallback(response);
             },
             error: function (response) {
             }

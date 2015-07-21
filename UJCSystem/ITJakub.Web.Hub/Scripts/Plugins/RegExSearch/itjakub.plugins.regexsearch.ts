@@ -31,8 +31,16 @@ class Search {
 
     private container: HTMLDivElement;
 
-    constructor(container) {
+    private jsonSearchUrl: string;
+    private textSearchUrl: string;
+
+    private searchResultCallback: (result: any) => void;
+
+    constructor(container, jsonSearchUrl, textSearchUrl, processSearchResultCallback: (result:any) => void) {
         this.container = container;
+        this.jsonSearchUrl = jsonSearchUrl;
+        this.textSearchUrl = textSearchUrl;
+        this.searchResultCallback = processSearchResultCallback;
     }
 
     makeSearch(disabledOptions?: Array<SearchTypeEnum>) {
@@ -158,10 +166,11 @@ class Search {
             type: "POST",
             traditional: true,
             data: JSON.stringify({ "json": json }),
-            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
+            url: this.jsonSearchUrl,
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: (response) => {
+                this.searchResultCallback(response);
             },
             error: (response: JQueryXHR) => {
             }
@@ -174,10 +183,11 @@ class Search {
             type: "POST",
             traditional: true,
             data: JSON.stringify({ "text": text }),
-            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaText", //TODO add to controller
+            url: this.textSearchUrl,
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: (response) => {
+                this.searchResultCallback(response);
             },
             error: (response: JQueryXHR) => {
             }
