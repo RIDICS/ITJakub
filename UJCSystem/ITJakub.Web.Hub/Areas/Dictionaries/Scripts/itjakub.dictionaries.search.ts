@@ -1,8 +1,10 @@
 ﻿$(document).ready(() => {
-    var search = new Search($("#dictionarySearchDiv"));
+    var textSearchUrl = getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaText";
+    var jsonSearchUrl = getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria";
+    var search = new Search($("#dictionarySearchDiv"), jsonSearchUrl, textSearchUrl, processSearchResults);
     var disabledOptions = new Array<SearchTypeEnum>();
-    disabledOptions.push(SearchTypeEnum.Editor);
-    disabledOptions.push(SearchTypeEnum.Author);
+    disabledOptions.push(SearchTypeEnum.Headwords);
+    disabledOptions.push(SearchTypeEnum.TokenDistanceHeadwords);
     search.makeSearch(disabledOptions);
 
     var callbackDelegate = new DropDownSelectCallbackDelegate();
@@ -13,3 +15,6 @@
     var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeDropdown();
 });
+function processSearchResults(result: any) {
+    //alert("processed: " + result);
+}

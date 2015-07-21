@@ -13,6 +13,11 @@ var HtmlItemsFactory = (function () {
         conditionOption.value = value;
         return conditionOption;
     };
+    HtmlItemsFactory.createOptionGroup = function (label) {
+        var conditionOption = document.createElement("optgroup");
+        conditionOption.label = label;
+        return conditionOption;
+    };
     HtmlItemsFactory.createButton = function (label) {
         var button = document.createElement("button");
         button.type = "button";
@@ -25,9 +30,12 @@ var HtmlItemsFactory = (function () {
     return HtmlItemsFactory;
 })();
 var Search = (function () {
-    function Search(container) {
+    function Search(container, jsonSearchUrl, textSearchUrl, processSearchResultCallback) {
         this.speedAnimation = 200; //200=fast, 600=slow
         this.container = container;
+        this.jsonSearchUrl = jsonSearchUrl;
+        this.textSearchUrl = textSearchUrl;
+        this.searchResultCallback = processSearchResultCallback;
     }
     Search.prototype.makeSearch = function (disabledOptions) {
         var _this = this;
@@ -127,28 +135,32 @@ var Search = (function () {
         }
     };
     Search.prototype.processSearchJson = function (json) {
+        var _this = this;
         $.ajax({
             type: "POST",
             traditional: true,
             data: JSON.stringify({ "json": json }),
-            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
+            url: this.jsonSearchUrl,
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (response) {
+                _this.searchResultCallback(response);
             },
             error: function (response) {
             }
         });
     };
     Search.prototype.processSearchText = function (text) {
+        var _this = this;
         $.ajax({
             type: "POST",
             traditional: true,
             data: JSON.stringify({ "text": text }),
-            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaText",
+            url: this.textSearchUrl,
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (response) {
+                _this.searchResultCallback(response);
             },
             error: function (response) {
             }
@@ -325,7 +337,14 @@ var RegExConditionListItem = (function () {
         if (typeof this.searchDestinationSelect !== "undefined" || this.searchDestinationSelect !== null) {
             for (var i = 0; i < disabledOptions.length; i++) {
                 var disabled = disabledOptions[i];
-                $(this.searchDestinationSelect).find("option[value = " + disabled.toString() + "]").hide();
+                $(this.searchDestinationSelect).find("option[value = " + disabled.toString() + "]").remove();
+            }
+            var optGroups = $(this.searchDestinationSelect).find("optgroup");
+            for (var j = 0; j < optGroups.length; j++) {
+                var optGroup = optGroups[j];
+                var visibleChilds = $(optGroup).children();
+                if (visibleChilds.length === 0)
+                    $(optGroup).remove();
             }
         }
         this.disabledOptions = disabledOptions;
@@ -345,14 +364,22 @@ var RegExConditionListItem = (function () {
         var searchDestinationSelect = document.createElement("select");
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Text", 4 /* Fulltext */.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", 9 /* TokenDistance */.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Ve větě", 6 /* Sentence */.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("V nadpisu", 5 /* Heading */.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Autor", 0 /* Author */.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Titul", 1 /* Title */.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Editor", 2 /* Editor */.toString()));
-        searchDestinationSelect.appendChild(HtmlItemsFactory.createOption("Období vzniku", 3 /* Dating */.toString()));
+        var metadataOptGroup = HtmlItemsFactory.createOptionGroup("Metadata");
+        searchDestinationSelect.appendChild(metadataOptGroup);
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Autor", 0 /* Author */.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Titul", 1 /* Title */.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Editor", 2 /* Editor */.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Období vzniku", 3 /* Dating */.toString()));
+        var textOptGroup = HtmlItemsFactory.createOptionGroup("Text");
+        searchDestinationSelect.appendChild(textOptGroup);
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("Fulltext", 4 /* Fulltext */.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", 9 /* TokenDistance */.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("Ve větě", 6 /* Sentence */.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("V nadpisu", 5 /* Heading */.toString()));
+        var headwordsOptGroup = HtmlItemsFactory.createOptionGroup("Hesla");
+        searchDestinationSelect.appendChild(headwordsOptGroup);
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", 11 /* TokenDistanceHeadwords */.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", 10 /* Headwords */.toString()));
         this.selectedSearchType = 4 /* Fulltext */;
         $(searchDestinationSelect).change(function (eventData) {
             var oldSelectedSearchType = _this.selectedSearchType;
@@ -1659,6 +1686,8 @@ var SearchTypeEnum;
     SearchTypeEnum[SearchTypeEnum["Result"] = 7] = "Result";
     SearchTypeEnum[SearchTypeEnum["ResultRestriction"] = 8] = "ResultRestriction";
     SearchTypeEnum[SearchTypeEnum["TokenDistance"] = 9] = "TokenDistance";
+    SearchTypeEnum[SearchTypeEnum["Headwords"] = 10] = "Headwords";
+    SearchTypeEnum[SearchTypeEnum["TokenDistanceHeadwords"] = 11] = "TokenDistanceHeadwords"; //TODO Not yet on server side
 })(SearchTypeEnum || (SearchTypeEnum = {}));
 /*
  * ConditionTypeEnum must match with ConditionTypeEnum number values in C#
