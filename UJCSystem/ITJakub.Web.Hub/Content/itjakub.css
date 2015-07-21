@@ -1216,6 +1216,11 @@ input.regexsearch-checkbox {
 .search-area button:disabled {
   background-color: #84ced7;
 }
+.regex-searchbar-inputs {
+  display: block;
+  margin-right: 172px;
+  padding-right: 10px;
+}
 .tt-input,
 .tt-hint {
   outline: none;

@@ -1,8 +1,5 @@
 $(document).ready(function () {
-    var search = new Search();
+    var search = new Search($("#dictionarySearchDiv"));
     search.makeSearch();
-    $("#searchButton").click(function (event) {
-        search.processSearch();
-    });
 });
 //# sourceMappingURL=itjakub.dictionaries.search.js.map

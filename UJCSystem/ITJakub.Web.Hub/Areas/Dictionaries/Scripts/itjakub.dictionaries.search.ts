@@ -1,8 +1,4 @@
 ﻿$(document).ready(() => {
-    var search = new Search();
+    var search = new Search($("#dictionarySearchDiv"));
     search.makeSearch();
-
-    $("#searchButton").click((event: Event) => {
-        search.processSearch();
-    });
 });

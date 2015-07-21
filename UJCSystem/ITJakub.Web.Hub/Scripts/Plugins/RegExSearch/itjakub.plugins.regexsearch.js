@@ -25,56 +25,85 @@ var HtmlItemsFactory = (function () {
     return HtmlItemsFactory;
 })();
 var Search = (function () {
-    function Search() {
+    function Search(container) {
         this.speedAnimation = 200; //200=fast, 600=slow
+        this.container = container;
     }
-    //constructor(container: HTMLDivElement) {
-    //    this.container = container;
-    //}
     Search.prototype.makeSearch = function () {
         var _this = this;
-        $("#advancedSearchButton").click(function () {
-            //var glyph = $("#advancedSearchButton .regexsearch-button-glyph");   //TODO create dynamically (getted from dicionariesSearch)
-            $("#advancedSearchButton").css("visibility", "hidden");
-            var regExSearchDiv = document.getElementById("regExSearchDiv");
-            var searchboxTextInput = document.getElementById("searchbox");
-            var searchButton = document.getElementById("searchButton");
-            if (document.getElementById("regExSearchDiv").children.length === 0) {
-                //glyph.removeClass("glyphicon-chevron-down");
-                //glyph.addClass("glyphicon-chevron-up");
-                _this.advancedRegexEditor = new RegExAdvancedSearchEditor(regExSearchDiv, function (json) { return _this.closeAdvancedSearchEditor(json); });
+        var searchAreaDiv = document.createElement("div");
+        $(searchAreaDiv).addClass("regex-search-div");
+        var form = document.createElement("form");
+        $(form).attr("role", "form");
+        $(form).addClass("form-horizontal");
+        $(searchAreaDiv).append(form);
+        var formGroupDiv = document.createElement("div");
+        $(formGroupDiv).addClass("form-group searchbar");
+        $(form).append(formGroupDiv);
+        var searchbarButtonsDiv = document.createElement("div");
+        $(searchbarButtonsDiv).addClass("searchbar-buttons");
+        $(formGroupDiv).append(searchbarButtonsDiv);
+        var searchButton = document.createElement("button");
+        searchButton.type = "button";
+        searchButton.innerHTML = "Vyhledat";
+        $(searchButton).addClass("btn btn-default searchbar-button");
+        $(searchbarButtonsDiv).append(searchButton);
+        this.searchButton = searchButton;
+        var advancedButton = document.createElement("button");
+        advancedButton.type = "button";
+        advancedButton.innerHTML = "Pokročilé";
+        $(advancedButton).addClass("btn btn-default searchbar-button");
+        $(searchbarButtonsDiv).append(advancedButton);
+        this.advancedButton = advancedButton;
+        var advancedButtonSpanCarrot = document.createElement("span");
+        $(advancedButtonSpanCarrot).addClass("glyphicon glyphicon-chevron-down regexsearch-button-glyph");
+        $(advancedButton).append(advancedButtonSpanCarrot);
+        var searchbarInputDiv = document.createElement("div");
+        $(searchbarInputDiv).addClass("regex-searchbar-inputs");
+        $(formGroupDiv).append(searchbarInputDiv);
+        var searchbarInput = document.createElement("input");
+        searchbarInput.type = "text";
+        searchbarInput.placeholder = "Hledat...";
+        $(searchbarInput).addClass("form-control searchbar-input");
+        $(searchbarInputDiv).append(searchbarInput);
+        this.searchInputTextbox = searchbarInput;
+        var searchbarAdvancedEditor = document.createElement("div");
+        $(searchbarInputDiv).addClass("regex-searchbar-advanced-editor");
+        $(searchAreaDiv).append(searchbarAdvancedEditor);
+        this.searchbarAdvancedEditorContainer = searchbarAdvancedEditor;
+        $(this.container).append(searchAreaDiv);
+        $(this.searchButton).click(function (event) {
+            _this.processSearch();
+        });
+        $(this.advancedButton).click(function () {
+            $(_this.advancedButton).css("visibility", "hidden");
+            if (_this.searchbarAdvancedEditorContainer.children.length === 0) {
+                _this.advancedRegexEditor = new RegExAdvancedSearchEditor(_this.searchbarAdvancedEditorContainer, function (json) { return _this.closeAdvancedSearchEditor(json); });
                 _this.advancedRegexEditor.makeRegExSearch();
-                $(regExSearchDiv).hide();
-                $(regExSearchDiv).slideDown(_this.speedAnimation);
+                $(_this.searchbarAdvancedEditorContainer).hide();
+                $(_this.searchbarAdvancedEditorContainer).slideDown(_this.speedAnimation);
             }
-            else if ($(regExSearchDiv).is(":hidden")) {
-                var textboxValue = $(searchboxTextInput).val();
+            else if ($(_this.searchbarAdvancedEditorContainer).is(":hidden")) {
+                var textboxValue = $(_this.searchInputTextbox).val();
                 if (_this.isValidJson(textboxValue)) {
                     _this.advancedRegexEditor.importJson(textboxValue);
                 }
-                $(regExSearchDiv).slideDown(_this.speedAnimation);
-                $(searchboxTextInput).prop('disabled', true);
-                $(searchButton).prop('disabled', true);
+                $(_this.searchbarAdvancedEditorContainer).slideDown(_this.speedAnimation);
+                $(_this.searchInputTextbox).prop('disabled', true);
+                $(_this.searchButton).prop('disabled', true);
             }
         });
     };
     Search.prototype.closeAdvancedSearchEditor = function (jsonData) {
         this.importJsonToTextField(jsonData);
-        var regExSearchDiv = document.getElementById("regExSearchDiv"); //TODO property
-        $(regExSearchDiv).slideUp(this.speedAnimation); //hide advanced search
-        var searchboxTextInput = document.getElementById("searchbox");
-        var searchButton = document.getElementById("searchButton");
-        $(searchboxTextInput).prop('disabled', false); //TODO property
-        $(searchButton).prop('disabled', false); //TODO property
-        //var glyph = $("#advancedSearchButton .regexsearch-button-glyph");
-        //glyph.removeClass("glyphicon-chevron-up");
-        //glyph.addClass("glyphicon-chevron-down");
-        $("#advancedSearchButton").css("visibility", "visible");
+        $(this.searchbarAdvancedEditorContainer).slideUp(this.speedAnimation); //hide advanced search
+        $(this.searchInputTextbox).prop('disabled', false);
+        $(this.searchButton).prop('disabled', false);
+        $(this.advancedButton).css("visibility", "visible");
     };
     Search.prototype.importJsonToTextField = function (json) {
-        var searchboxTextInput = document.getElementById("searchbox"); //TODO property
-        $(searchboxTextInput).text(json);
-        $(searchboxTextInput).val(json);
+        $(this.searchInputTextbox).text(json);
+        $(this.searchInputTextbox).val(json);
     };
     Search.prototype.importJsonToAdvancedSearch = function (json) {
     };
@@ -88,8 +117,7 @@ var Search = (function () {
         }
     };
     Search.prototype.processSearch = function () {
-        var searchboxTextInput = document.getElementById("searchbox"); //TODO property
-        var searchboxValue = $(searchboxTextInput).val();
+        var searchboxValue = $(this.searchInputTextbox).val();
         if (this.isValidJson(searchboxValue)) {
             this.processSearchJson(searchboxValue);
         }
@@ -108,8 +136,6 @@ var Search = (function () {
             success: function (response) {
             },
             error: function (response) {
-                //$(this.container).empty();
-                //$(this.container).append(response.responseText);
             }
         });
     };
@@ -124,8 +150,6 @@ var Search = (function () {
             success: function (response) {
             },
             error: function (response) {
-                //$(this.container).empty();
-                //$(this.container).append(response.responseText);
             }
         });
     };

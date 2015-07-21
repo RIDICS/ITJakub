@@ -295,4 +295,9 @@ input.regexsearch-checkbox {
 .search-area button:disabled {
   background-color: #84ced7;
 }
+.regex-searchbar-inputs {
+  display: block;
+  margin-right: 172px;
+  padding-right: 10px;
+}
 /*# sourceMappingURL=ITJakub.RegExSearch.css.map */

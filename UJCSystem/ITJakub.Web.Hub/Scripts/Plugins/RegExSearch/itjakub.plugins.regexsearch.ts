@@ -24,63 +24,109 @@ class Search {
     private speedAnimation: number = 200; //200=fast, 600=slow
     private advancedRegexEditor: RegExAdvancedSearchEditor;
 
+    private searchButton: HTMLButtonElement;
+    private advancedButton: HTMLButtonElement;
+    private searchInputTextbox: HTMLInputElement;
+    private searchbarAdvancedEditorContainer: HTMLDivElement;
+
     private container: HTMLDivElement;
 
-    //constructor(container: HTMLDivElement) {
-    //    this.container = container;
-    //}
+    constructor(container) {
+        this.container = container;
+    }
 
     makeSearch() {
-        $("#advancedSearchButton").click(() => {
-            //var glyph = $("#advancedSearchButton .regexsearch-button-glyph");   //TODO create dynamically (getted from dicionariesSearch)
-            $("#advancedSearchButton").css("visibility", "hidden");
-            var regExSearchDiv = document.getElementById("regExSearchDiv");
-            var searchboxTextInput = document.getElementById("searchbox");
-            var searchButton = document.getElementById("searchButton");
-            if (document.getElementById("regExSearchDiv").children.length === 0) {
-                //glyph.removeClass("glyphicon-chevron-down");
-                //glyph.addClass("glyphicon-chevron-up");
-                this.advancedRegexEditor = new RegExAdvancedSearchEditor(<HTMLDivElement>regExSearchDiv, (json:string) => this.closeAdvancedSearchEditor(json));
+        var searchAreaDiv = document.createElement("div");
+        $(searchAreaDiv).addClass("regex-search-div");
+
+        var form: HTMLFormElement = document.createElement("form");
+        $(form).attr("role", "form");
+        $(form).addClass("form-horizontal");
+        $(searchAreaDiv).append(form);
+
+        var formGroupDiv = document.createElement("div");
+        $(formGroupDiv).addClass("form-group searchbar");
+        $(form).append(formGroupDiv);
+
+        var searchbarButtonsDiv = document.createElement("div");
+        $(searchbarButtonsDiv).addClass("searchbar-buttons");
+        $(formGroupDiv).append(searchbarButtonsDiv);
+
+        var searchButton = document.createElement("button");
+        searchButton.type = "button";
+        searchButton.innerHTML = "Vyhledat";
+        $(searchButton).addClass("btn btn-default searchbar-button");
+        $(searchbarButtonsDiv).append(searchButton);
+
+        this.searchButton = searchButton;
+
+        var advancedButton = document.createElement("button");
+        advancedButton.type = "button";
+        advancedButton.innerHTML = "Pokročilé";
+        $(advancedButton).addClass("btn btn-default searchbar-button");
+        $(searchbarButtonsDiv).append(advancedButton);
+
+        this.advancedButton = advancedButton;
+
+        var advancedButtonSpanCarrot = document.createElement("span");
+        $(advancedButtonSpanCarrot).addClass("glyphicon glyphicon-chevron-down regexsearch-button-glyph");
+        $(advancedButton).append(advancedButtonSpanCarrot);
+
+        var searchbarInputDiv = document.createElement("div");
+        $(searchbarInputDiv).addClass("regex-searchbar-inputs");
+        $(formGroupDiv).append(searchbarInputDiv);
+
+        var searchbarInput: HTMLInputElement = document.createElement("input");
+        searchbarInput.type = "text";
+        searchbarInput.placeholder = "Hledat...";
+        $(searchbarInput).addClass("form-control searchbar-input");
+        $(searchbarInputDiv).append(searchbarInput);
+
+        this.searchInputTextbox = searchbarInput;
+
+        var searchbarAdvancedEditor = document.createElement("div");
+        $(searchbarInputDiv).addClass("regex-searchbar-advanced-editor");
+        $(searchAreaDiv).append(searchbarAdvancedEditor);
+
+        this.searchbarAdvancedEditorContainer = searchbarAdvancedEditor;
+        
+        $(this.container).append(searchAreaDiv);
+
+
+        $(this.searchButton).click((event: Event) => {
+            this.processSearch();
+        });
+
+        $(this.advancedButton).click(() => {
+            $(this.advancedButton).css("visibility", "hidden");
+            if (this.searchbarAdvancedEditorContainer.children.length === 0) {
+                this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer, (json:string) => this.closeAdvancedSearchEditor(json));
                 this.advancedRegexEditor.makeRegExSearch();
-                $(regExSearchDiv).hide();
-                $(regExSearchDiv).slideDown(this.speedAnimation);
-            } else if ($(regExSearchDiv).is(":hidden")) {       //show advanced search
-                var textboxValue = $(searchboxTextInput).val();
+                $(this.searchbarAdvancedEditorContainer).hide();
+                $(this.searchbarAdvancedEditorContainer).slideDown(this.speedAnimation);
+            } else if ($(this.searchbarAdvancedEditorContainer).is(":hidden")) {       //show advanced search
+                var textboxValue = $(this.searchInputTextbox).val();
                 if(this.isValidJson(textboxValue)){
                     this.advancedRegexEditor.importJson(textboxValue);
                 }
-                $(regExSearchDiv).slideDown(this.speedAnimation);
-                $(searchboxTextInput).prop('disabled', true);
-                $(searchButton).prop('disabled', true);
-                //glyph.removeClass("glyphicon-chevron-down");
-                //glyph.addClass("glyphicon-chevron-up");
-            //} else {
-            //    $(regExSearchDiv).slideUp(this.speedAnimation);      //hide advanced search
-            //    $(searchboxTextInput).prop('disabled', false);
-                //glyph.removeClass("glyphicon-chevron-up");
-                //glyph.addClass("glyphicon-chevron-down");
+                $(this.searchbarAdvancedEditorContainer).slideDown(this.speedAnimation);
+                $(this.searchInputTextbox).prop('disabled', true);
+                $(this.searchButton).prop('disabled', true);
             }
         });
     }
 
     closeAdvancedSearchEditor(jsonData: string) {
         this.importJsonToTextField(jsonData);
-        var regExSearchDiv = document.getElementById("regExSearchDiv"); //TODO property
-        $(regExSearchDiv).slideUp(this.speedAnimation);      //hide advanced search
-        var searchboxTextInput = document.getElementById("searchbox");
-        var searchButton = document.getElementById("searchButton");
-        $(searchboxTextInput).prop('disabled', false);  //TODO property
-        $(searchButton).prop('disabled', false);  //TODO property
-        //var glyph = $("#advancedSearchButton .regexsearch-button-glyph");
-        //glyph.removeClass("glyphicon-chevron-up");
-        //glyph.addClass("glyphicon-chevron-down");
-        $("#advancedSearchButton").css("visibility", "visible");
+        $(this.searchbarAdvancedEditorContainer).slideUp(this.speedAnimation);      //hide advanced search
+        $(this.searchInputTextbox).prop('disabled', false);
+        $(this.searchButton).prop('disabled', false);
+        $(this.advancedButton).css("visibility", "visible");
     }
 
     importJsonToTextField(json: string) {
-        var searchboxTextInput = document.getElementById("searchbox"); //TODO property
-        $(searchboxTextInput).text(json);
-        $(searchboxTextInput).val(json);
+        $(this.searchInputTextbox).text(json);
+        $(this.searchInputTextbox).val(json);
     }
 
     importJsonToAdvancedSearch(json: string) {
@@ -97,8 +143,7 @@ class Search {
     }
 
     processSearch() {
-        var searchboxTextInput = document.getElementById("searchbox"); //TODO property
-        var searchboxValue = $(searchboxTextInput).val();
+        var searchboxValue = $(this.searchInputTextbox).val();
 
         if (this.isValidJson(searchboxValue)) {
             this.processSearchJson(searchboxValue);
@@ -118,8 +163,6 @@ class Search {
             success: (response) => {
             },
             error: (response: JQueryXHR) => {
-                //$(this.container).empty();
-                //$(this.container).append(response.responseText);
             }
         });
 
@@ -136,8 +179,6 @@ class Search {
             success: (response) => {
             },
             error: (response: JQueryXHR) => {
-                //$(this.container).empty();
-                //$(this.container).append(response.responseText);
             }
         });
 
