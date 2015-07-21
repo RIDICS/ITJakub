@@ -51,26 +51,33 @@
     <div class="dictionary-result-area transparent-content-container">
         <div class="dictionary-result-word-search-list">
             <div class="dictionary-header">
-                <span class="words-result">Hesla (<span class="words-result-numbers">0</span>x)</span>
-                <span class="fulltext-result">Fulltext (<span class="fulltext-result-numbers">0</span>x)</span>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#headwords">Hesla</a></li>
+                    <li><a href="#fulltext">Fulltext</a></li>
+                </ul>
             </div>
             <div class="dictionary-header dictionary-subheader">
                 <span>Vše ()</span>
                 <span>Zapojené ()</span>
                 <span>Nezapojené ()</span>
             </div>
-            <div class="dictionary-result-word-search-list-body" id="headwordList">
-                <ul>
-                    <li>pes</li>
-                </ul>
-            </div>
-            <div class="dictionary-result-pagination" id="pagination">
-                <ul class="pagination pagination-sm">
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">...</a></li>
-                </ul>
+            <div class="tab-content">
+                <div id="headwords">
+                    <div class="dictionary-result-word-search-list-body" id="headwordList">
+                        <ul>
+                            <li>pes</li>
+                        </ul>
+                    </div>
+                    <div class="dictionary-result-pagination" id="pagination">
+                        <ul class="pagination pagination-sm">
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">...</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="fulltext"></div>
             </div>
         </div>
         <div class="dictionary-result-word-search-description">
