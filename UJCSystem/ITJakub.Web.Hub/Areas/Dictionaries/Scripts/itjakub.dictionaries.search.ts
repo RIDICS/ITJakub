@@ -32,7 +32,69 @@
     var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeDropdown();
 
+    var tabs = new DictionarySearchTabs();
 });
+
+class DictionarySearchTabs {
+    private searchTabs: Array<SearchTab>;
+
+    constructor() {
+        this.searchTabs = [
+            new SearchTab("#tab-headwords", "#headwords", "#description-headwords"),
+            new SearchTab("#tab-fulltext", "#fulltext", "#description-fulltext"),
+            new SearchTab("#tab-advanced", "#advanced", "#description-advanced")
+        ];
+        
+        $("#search-tabs a").click(e => {
+            e.preventDefault();
+            $(e.target).tab("show");
+            this.show(e.target.getAttribute("href"));
+        });
+    }
+
+    show(id: string) {
+        var index = 0;
+        switch (id) {
+            case "#headwords":
+                index = 0;
+                break;
+            case "#fulltext":
+                index = 1;
+                break;
+            case "#advanced":
+                index = 2;
+                break;
+        }
+
+        var searchTab = this.searchTabs[index];
+        $("#headword-description div").removeClass("active");
+        $(searchTab.descriptionDiv).addClass("active");
+    }
+
+    showAdvanced() {
+        var searchTab = this.searchTabs[2];
+        $("#search-tabs li").addClass("hidden");
+        $(searchTab.tabLi).removeClass("hidden");
+    }
+
+    showBasic() {
+        var searchTab = this.searchTabs[2];
+        $("#search-tabs li").removeClass("hidden");
+        $(searchTab.tabLi).addClass("hidden");
+    }
+}
+
+class SearchTab {
+    listDiv: string;
+    descriptionDiv: string;
+    tabLi: string;
+
+    constructor(tabLi: string, listDiv: string, descriptionDiv: string) {
+        this.descriptionDiv = descriptionDiv;
+        this.listDiv = listDiv;
+        this.tabLi = tabLi;
+    }
+}
 
 class DictionaryViewerJsonWrapper {
     private pageSize: number;

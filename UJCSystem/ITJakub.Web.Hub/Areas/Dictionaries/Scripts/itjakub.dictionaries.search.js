@@ -15,17 +15,69 @@ $(document).ready(function () {
     };
     var search = new Search($("#dictionarySearchDiv"), processSearchJson, processSearchText);
     var disabledOptions = new Array();
-    disabledOptions.push(4 /* Fulltext */);
-    disabledOptions.push(9 /* TokenDistance */);
-    disabledOptions.push(6 /* Sentence */);
-    disabledOptions.push(5 /* Heading */);
+    disabledOptions.push(SearchTypeEnum.Fulltext);
+    disabledOptions.push(SearchTypeEnum.TokenDistance);
+    disabledOptions.push(SearchTypeEnum.Sentence);
+    disabledOptions.push(SearchTypeEnum.Heading);
     search.makeSearch(disabledOptions);
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
     };
     var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeDropdown();
+    var tabs = new DictionarySearchTabs();
 });
+var DictionarySearchTabs = (function () {
+    function DictionarySearchTabs() {
+        var _this = this;
+        this.searchTabs = [
+            new SearchTab("#tab-headwords", "#headwords", "#description-headwords"),
+            new SearchTab("#tab-fulltext", "#fulltext", "#description-fulltext"),
+            new SearchTab("#tab-advanced", "#advanced", "#description-advanced")
+        ];
+        $("#search-tabs a").click(function (e) {
+            e.preventDefault();
+            $(e.target).tab("show");
+            _this.show(e.target.getAttribute("href"));
+        });
+    }
+    DictionarySearchTabs.prototype.show = function (id) {
+        var index = 0;
+        switch (id) {
+            case "#headwords":
+                index = 0;
+                break;
+            case "#fulltext":
+                index = 1;
+                break;
+            case "#advanced":
+                index = 2;
+                break;
+        }
+        var searchTab = this.searchTabs[index];
+        $("#headword-description div").removeClass("active");
+        $(searchTab.descriptionDiv).addClass("active");
+    };
+    DictionarySearchTabs.prototype.showAdvanced = function () {
+        var searchTab = this.searchTabs[2];
+        $("#search-tabs li").addClass("hidden");
+        $(searchTab.tabLi).removeClass("hidden");
+    };
+    DictionarySearchTabs.prototype.showBasic = function () {
+        var searchTab = this.searchTabs[2];
+        $("#search-tabs li").removeClass("hidden");
+        $(searchTab.tabLi).addClass("hidden");
+    };
+    return DictionarySearchTabs;
+})();
+var SearchTab = (function () {
+    function SearchTab(tabLi, listDiv, descriptionDiv) {
+        this.descriptionDiv = descriptionDiv;
+        this.listDiv = listDiv;
+        this.tabLi = tabLi;
+    }
+    return SearchTab;
+})();
 var DictionaryViewerJsonWrapper = (function () {
     function DictionaryViewerJsonWrapper(dictionaryViewer, pageSize) {
         this.pageSize = pageSize;
