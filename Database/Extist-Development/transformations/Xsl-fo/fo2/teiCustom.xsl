@@ -1,10 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/XSL/Format" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:fotex="http://www.tug.org/fotex" version="1.0">
     <xsl:import href="tei.xsl"/>
-    
-    
-    
     <xsl:param name="tableAlign">left</xsl:param>
-    
     <xsl:template match="tei:table">
         <xsl:choose>
             <xsl:when test="@rend='eqnarray' and $foEngine='passivetex'">
@@ -21,10 +17,6 @@
                 <xsl:if test="tei:head">
                     <block>
                         <xsl:call-template name="tableCaptionstyle"/>
-                        
-                        
-                        
-                        
                         <xsl:if test="$makeTableCaption='true'">
                             <xsl:call-template name="i18n">
                                 <xsl:with-param name="word">tableWord</xsl:with-param>

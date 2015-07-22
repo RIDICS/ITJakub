@@ -1,63 +1,82 @@
 xquery version "3.0";
-(:module namespace vw = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/collection";:)
-import module namespace vwpaging = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/paging" at "../modules/paging.xqm";
-import module namespace vwcoll = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/collection" at "../modules/collection.xqm";
-import module namespace vwtrans = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/transformation" at "../modules/transformation.xqm";
-import module namespace s = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/searching" at "../modules/searching.xqm";
+import module namespace search = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/search" at "../modules/searching.xqm";
 
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
+declare namespace itj = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/exist";
+declare namespace exist = "http://exist.sourceforge.net/NS/exist"; 
 
 declare namespace a="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching";
 declare namespace r="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract";
 declare namespace i="http://www.w3.org/2001/XMLSchema-instance";
+declare namespace b="http://schemas.microsoft.com/2003/10/Serialization/Arrays";
 
-let $query-criteria-param := request:get-parameter("serializedSearchCriteria", "")
-let $query-criteria := parse-xml($query-criteria-param)
 
+declare option exist:serialize "highlight-matches=elements";
+
+(:let $query-criteria-param := if (system:function-available(request:get-parameter, 2)) then
+	request:get-parameter("serializedSearchCriteria", "")
+	else
+	local:get-query-criteria-param()
+:)	
+
+let $defaultSearchCriteria := '<ResultSearchCriteriaContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract"></ResultSearchCriteriaContract>'
+
+let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $defaultSearchCriteria)
+let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzích parse-xml :)
+
+let $queries := search:get-queries-from-search-criteria($query-criteria(://a:SearchCriteriaContract[a:Key = 'Fulltext']:))
+
+(:~ od jakého záznamu se vracejí výsledky, tj. knihy :)
+let $result-start := 1
+(:~ kolik záznamů má být ve vraceném výsledku; 0 znamená všechny; pokud je číslo větší než celkový počet záznamů, vrátí se všechny :)
+let $result-count := 0
+
+(:~ od jakého záznamu se vracejí doklady s výskytem hledaného výrazu :)
+let $kwic-start := 1
+(:~ kolik záznamů s doklady s výskytem hledaného výrazu se vrací; pokud je číslo větší než celkový počet dokladů, vrátí se všechny :)
+let $kwic-count := 3
+(:~ počet znaků zleva a zprava pro zobrazení dokladů :)
+let $kwic-context-length := 50
+
+(:~ kriterium použité pro seřazení výsledků :)
+let $sort-criterion := "datace"
+(:~ kriterium použité pro seřazení výsledků :)
+let $sort-direction := "Ascending" (: Descending :)
+
+
+(:~ pomocná proměnná; vrací všechny požadované knihy z dotazu :)
 let $books := $query-criteria/r:ResultSearchCriteriaContract/r:ResultBooks/a:BookVersionPairContract
+(:~ sekvence všech identifikátorů zdrojů, které se mají prohledat :)
+let $book-ids := $books/a:Guid/text()
+(:~ sekvence všech verzí zdrojů, které se mají prohledat; upraveno tak, aby se dalo odkazovat na hodnotu @change :)
+let $book-version-ids := $books/a:VersionId/concat('#', text())
 
-let $results-count := 3
-let $results := <Results>
-			<PageResultContext>
-				<ContextStructure>
-					<After>, ktery nemel rad kocky...</After>
-					<Before>...zacalo to pred malym </Before>
-					<Match>psem</Match>
-				</ContextStructure>
-				<PageName>2r</PageName>
-				<PageXmlId>div1.pb2</PageXmlId>
-			</PageResultContext>
-			<PageResultContext>
-				<ContextStructure>
-					<After>, ktery nikdy nebyl venku...</After>
-					<Before>...zacalo to po malem </Before>
-					<Match>psu</Match>
-				</ContextStructure>
-				<PageName>145r</PageName>
-				<PageXmlId>div145.pb55</PageXmlId>
-			</PageResultContext>
-			<PageResultContext>
-				<ContextStructure>
-					<After>, ktery byl stasten...</After>
-					<Before>...skoncilo to </Before>
-					<Match>psem</Match>
-				</ContextStructure>
-				<PageName>210v</PageName>
-				<PageXmlId>div5.pb45</PageXmlId>
-			</PageResultContext>
-		</Results>
+(:~ relativní cesta k prohledávané kolekci :)
+let $collection-path := "/apps/jacob/data/"
+(:~ výchozí kolekce prohledávaných dokumentů :)
+let $collection := collection($collection-path)
 
-let $result := <ArrayOfSearchResultContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+
+(:~ dokumenty, které obsahují hledaný výraz :)
+(:~ TODO: dodat řazení, více proledávaných elementů :)
+let $documents := search:get-query-documents-matches($collection, $queries)
+let $documents := for $document in $documents 
+	order by $document/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:history/tei:origin/tei:origDate[@notBefore]
+	return $document
+	
+let $result-documents := if($result-count = 0) then
+		subsequence($documents, $result-start)
+	else
+		subsequence($documents, $result-start, $result-count)
+
+return <ArrayOfSearchResultContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
 	{
-		for $book in $books
-			return
-				<SearchResultContract>
-					<BookXmlId>{$book/a:Guid/text()}</BookXmlId>
-					{$results}
-					<TotalHitCount>{$results-count}</TotalHitCount>
-					<VersionXmlId>{$book/a:VersionId/text()}</VersionXmlId>
+for $document in $result-documents
+	let $hits := search:get-document-search-hits($document, $queries, $kwic-start, $kwic-count, $kwic-context-length)
+	return <SearchResultContract>
+					<BookXmlId>{string($document/@n)}</BookXmlId>
+					{$hits}
+					<VersionXmlId>{$document/substring-after(@change, '#')}</VersionXmlId>
 				</SearchResultContract>
-	} </ArrayOfSearchResultContract>
-(:let $result := $query-criteria:)
-return $result
+} </ArrayOfSearchResultContract>
