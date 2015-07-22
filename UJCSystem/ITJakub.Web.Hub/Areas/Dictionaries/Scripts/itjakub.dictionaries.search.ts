@@ -1,5 +1,5 @@
 ﻿$(document).ready(() => {
-    var search = new Search($("#dictionarySearchDiv"), processSearchJson, processSearchText );
+    var search = new Search(<any>$("#dictionarySearchDiv")[0], processSearchJson, processSearchText );
     var disabledOptions = new Array<SearchTypeEnum>();
     disabledOptions.push(SearchTypeEnum.Author);
     disabledOptions.push(SearchTypeEnum.Title);

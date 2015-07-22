@@ -40,7 +40,10 @@ class Search {
     private processSearchTextCallback: (text: string) => void;
     private processSearchJsonCallback: (json: string) => void;
 
-    constructor(container, processSearchJsonCallback: (jsonData: string) => void, processSearchTextCallback: (text: string) => void) {
+    private lastQuery: string;
+    private lastQueryWasJson: boolean;
+
+    constructor(container: HTMLDivElement, processSearchJsonCallback: (jsonData: string) => void, processSearchTextCallback: (text: string) => void) {
         this.container = container;
         this.processSearchJsonCallback = processSearchJsonCallback;
         this.processSearchTextCallback = processSearchTextCallback;
@@ -156,12 +159,26 @@ class Search {
 
     processSearch() {
         var searchboxValue = $(this.searchInputTextbox).val();
-
+        this.lastQuery = searchboxValue;
         if (this.isValidJson(searchboxValue)) {
+            this.lastQueryWasJson = true;
             this.processSearchJsonCallback(searchboxValue);
         } else {
+            this.lastQueryWasJson = false;
             this.processSearchTextCallback(searchboxValue);
         }
+    }
+
+    getLastQuery(): string {
+        return this.lastQuery;
+    }
+
+    isLastQueryJson(): boolean {
+        return this.lastQueryWasJson;
+    }
+
+    isLastQueryText(): boolean {
+        return !this.lastQueryWasJson;
     }
 
 
@@ -378,6 +395,9 @@ class RegExConditionListItem {
     }
 
     disbaleOptions(disabledOptions: Array<SearchTypeEnum>) {
+
+        if (typeof disabledOptions === "undefined" || disabledOptions === null) return;
+        
         if (typeof this.searchDestinationSelect !== "undefined" || this.searchDestinationSelect !== null) {
             for (var i = 0; i < disabledOptions.length; i++) {
                 var disabled = disabledOptions[i];

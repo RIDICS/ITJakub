@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var search = new Search($("#dictionarySearchDiv"), processSearchJson, processSearchText);
+    var search = new Search($("#dictionarySearchDiv")[0], processSearchJson, processSearchText);
     var disabledOptions = new Array();
     disabledOptions.push(0 /* Author */);
     disabledOptions.push(1 /* Title */);

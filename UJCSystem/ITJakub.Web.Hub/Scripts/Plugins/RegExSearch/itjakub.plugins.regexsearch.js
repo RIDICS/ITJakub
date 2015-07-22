@@ -126,12 +126,24 @@ var Search = (function () {
     };
     Search.prototype.processSearch = function () {
         var searchboxValue = $(this.searchInputTextbox).val();
+        this.lastQuery = searchboxValue;
         if (this.isValidJson(searchboxValue)) {
+            this.lastQueryWasJson = true;
             this.processSearchJsonCallback(searchboxValue);
         }
         else {
+            this.lastQueryWasJson = false;
             this.processSearchTextCallback(searchboxValue);
         }
+    };
+    Search.prototype.getLastQuery = function () {
+        return this.lastQuery;
+    };
+    Search.prototype.isLastQueryJson = function () {
+        return this.lastQueryWasJson;
+    };
+    Search.prototype.isLastQueryText = function () {
+        return !this.lastQueryWasJson;
     };
     return Search;
 })();
@@ -301,6 +313,8 @@ var RegExConditionListItem = (function () {
         return this.selectedSearchType;
     };
     RegExConditionListItem.prototype.disbaleOptions = function (disabledOptions) {
+        if (typeof disabledOptions === "undefined" || disabledOptions === null)
+            return;
         if (typeof this.searchDestinationSelect !== "undefined" || this.searchDestinationSelect !== null) {
             for (var i = 0; i < disabledOptions.length; i++) {
                 var disabled = disabledOptions[i];

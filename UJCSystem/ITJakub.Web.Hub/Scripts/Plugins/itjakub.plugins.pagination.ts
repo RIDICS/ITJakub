@@ -155,4 +155,12 @@ class Pagination {
             this.updateCurrentPage(pageNumber);
         }
     }
+
+    public getPageCount(): number {
+        return this.pageCount;
+    }
+
+    public getCurrentPage(): number {
+        return this.currentPage;
+    }
 }

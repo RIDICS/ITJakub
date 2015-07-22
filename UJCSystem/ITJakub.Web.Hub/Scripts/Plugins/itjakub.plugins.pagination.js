@@ -122,6 +122,12 @@ var Pagination = (function () {
             this.updateCurrentPage(pageNumber);
         }
     };
+    Pagination.prototype.getPageCount = function () {
+        return this.pageCount;
+    };
+    Pagination.prototype.getCurrentPage = function () {
+        return this.currentPage;
+    };
     return Pagination;
 })();
 //# sourceMappingURL=itjakub.plugins.pagination.js.map

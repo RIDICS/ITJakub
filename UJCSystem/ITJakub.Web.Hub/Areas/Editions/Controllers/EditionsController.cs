@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Web.Mvc;
+using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Areas.Editions.Models;
+using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 {
@@ -99,6 +104,31 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Edition);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AdvancedSearch(string json, int? start, int? count)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            if (start.HasValue)
+            {
+                listSearchCriteriaContracts.Add(new ResultCriteriaContract
+                {
+                    Start = start.Value,
+                    Count = count,
+                    Direction = ListSortDirection.Ascending,
+                });
+            }
+
+            var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { results = results});
+        }
+        
+        public ActionResult TextSearch(string text, int? pageNumber)
+        {
+            //m_serviceClient.SearchByCriteria(listSearchCriteriaContracts); //TODO implement
+            return Json(new { results = "TODO" });
         }
 
         public ActionResult SearchCriteriaMocked()

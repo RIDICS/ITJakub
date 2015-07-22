@@ -14,6 +14,8 @@ class BibliographyModule {
 
     private paginator: Pagination;
     private paginatorContainer: HTMLDivElement;
+    private booksCount : number;
+    private booksOnPage : number;
 
     constructor(resultsContainer: string, sortBarContainer: string, forcedBookType?: BookTypeEnum) {
         this.resultsContainer = $(resultsContainer);
@@ -122,6 +124,20 @@ class BibliographyModule {
     public createPagination(booksOnPage: number, pageClickCallback: (pageNumber: number) => void, booksCount : number) {
         this.paginator = new Pagination(<any>this.paginatorContainer, booksOnPage);
         this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
+        this.booksCount = booksCount;
+        this.booksOnPage = booksOnPage;
+    }
+
+    public getPagesCount(): number {
+        return this.paginator.getPageCount();
+    }
+
+    public getBooksCount(): number {
+        return this.booksCount;
+    }
+
+    public getBooksCountOnPage(): number {
+        return this.booksOnPage;
     }
 
     public destroyPagination() {

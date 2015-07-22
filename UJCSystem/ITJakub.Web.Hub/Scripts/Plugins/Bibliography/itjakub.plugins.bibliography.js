@@ -96,6 +96,17 @@ var BibliographyModule = (function () {
     BibliographyModule.prototype.createPagination = function (booksOnPage, pageClickCallback, booksCount) {
         this.paginator = new Pagination(this.paginatorContainer, booksOnPage);
         this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
+        this.booksCount = booksCount;
+        this.booksOnPage = booksOnPage;
+    };
+    BibliographyModule.prototype.getPagesCount = function () {
+        return this.paginator.getPageCount();
+    };
+    BibliographyModule.prototype.getBooksCount = function () {
+        return this.booksCount;
+    };
+    BibliographyModule.prototype.getBooksCountOnPage = function () {
+        return this.booksOnPage;
     };
     BibliographyModule.prototype.destroyPagination = function () {
         $(this.paginatorContainer).empty();
