@@ -1,0 +1,24 @@
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:tei="http://www.tei-c.org/ns/1.0">
+        <fulltext default="none" attributes="no"/>
+		
+        <lucene>
+            <analyzer class="org.apache.lucene.analysis.StandardAnalyzer">
+                <param name="stopwords" type="java.io.File"/>
+            </analyzer>
+            <text qname="tei:titlePart">
+                <ignore qname="tei:note"/>
+            </text>
+            <text qname="tei:head">
+                <ignore qname="tei:note"/>
+            </text>
+            <text qname="tei:p">
+                <ignore qname="tei:note"/>
+            </text>
+            <text qname="tei:l">
+                <ignore qname="tei:note"/>
+            </text>
+            <text qname="tei:note"/>
+        </lucene>
+    </index>
+</collection>

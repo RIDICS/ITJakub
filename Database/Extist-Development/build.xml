@@ -26,7 +26,7 @@
 		<echo message="Saving ${uri}/transformations to ${save-path}\transformations"/>
 		<xdb:extract xmlns:xdb="http://exist-db.org/ant"
 			uri="${uri}/transformations" destdir
-			="${save-path}/transformations" subcollections="true" createdirectories="true"/>
+			="${save-path}\transformations" subcollections="true" createdirectories="true"/>
 		<echo message="Saving ${uri}/queries to ${save-path}\queries"/>
 		<xdb:extract xmlns:xdb="http://exist-db.org/ant"
 			uri="${uri}/queries" destdir="${save-path}/queries"
@@ -34,7 +34,18 @@
 		<echo message="Saving ${uri}/modules to ${save-path}\modules"/>
 		<xdb:extract xmlns:xdb="http://exist-db.org/ant"
 			uri="${uri}/modules" destdir
-			="${save-path}/modules" subcollections="true" createdirectories="true"/>
+			="${save-path}\modules" subcollections="true" createdirectories="true"/>
+		
+		<echo message="Saving ${configuri} to ${save-path}\config"/>
+		<xdb:extract xmlns:xdb="http://exist-db.org/ant"
+			uri="${configuri}" destdir
+			="${save-path}\config" subcollections="true" createdirectories="true"/>
+		
+		<echo message="Removing temporary files" />
+		<delete>
+			<fileset dir="${save-path}\queries\" includes="fulltext*.xquery" />
+			<fileset dir="${save-path}\modules\" includes="*-testing.xqm" />
+		</delete>
 	</target>
 	
 	<target name="load-resources-from-disk">

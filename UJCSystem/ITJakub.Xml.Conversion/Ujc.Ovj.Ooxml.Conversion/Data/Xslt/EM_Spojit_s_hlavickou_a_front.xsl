@@ -19,7 +19,7 @@
 	
 	<xsl:template match="/">
 		<xsl:comment> EM_Spojit_s_hlavickou_a_front </xsl:comment>
-		<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cs">
+		<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cs" n="{document($hlavicka)/teiHeader/fileDesc/@n}">
 			<xsl:apply-templates select="document($hlavicka)/*" mode="jmennyProstor" />
 			<text>
 				<xsl:apply-templates select="document($zacatek)/*" mode="jmennyProstor" />

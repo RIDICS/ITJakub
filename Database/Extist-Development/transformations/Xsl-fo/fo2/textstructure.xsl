@@ -68,7 +68,6 @@
                             <xsl:value-of select="$backMulticolumns"/>
                         </xsl:with-param>
                     </xsl:call-template>
-
                     <xsl:choose>
                         <xsl:when test="$twoSided='true'">
                             <xsl:call-template name="headers-footers-twoside-back"/>
@@ -77,7 +76,6 @@
                             <xsl:call-template name="headers-footers-oneside-back"/>
                         </xsl:otherwise>
                     </xsl:choose>
-
                     <flow flow-name="xsl-region-body" font-family="{$bodyFont}" font-size="{$bodySize}">
                         <xsl:apply-templates/>
                         <xsl:call-template name="afterBodyHook"/>
@@ -102,14 +100,12 @@
                 <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
-
                 <page-sequence format="{$formatBodypage}" text-align="{$alignment}" hyphenate="{$hyphenate}" language="{$language}" initial-page-number="1">
                     <xsl:call-template name="choosePageMaster">
                         <xsl:with-param name="where">
                             <xsl:value-of select="$bodyMulticolumns"/>
                         </xsl:with-param>
                     </xsl:call-template>
-
                     <xsl:choose>
                         <xsl:when test="$twoSided='true'">
                             <xsl:call-template name="headers-footers-twoside"/>
@@ -118,14 +114,12 @@
                             <xsl:call-template name="headers-footers-oneside"/>
                         </xsl:otherwise>
                     </xsl:choose>
-
                     <flow flow-name="xsl-region-body" font-family="{$bodyFont}" font-size="{$bodySize}">
                         <xsl:if test="not($flowMarginLeft='')">
                             <xsl:attribute name="margin-left">
                                 <xsl:value-of select="$flowMarginLeft"/>
                             </xsl:attribute>
                         </xsl:if>
-
                         <xsl:if test="not($titlePage='true') and not(preceding-sibling::tei:front)">
                             <xsl:call-template name="Header"/>
                         </xsl:if>
@@ -190,7 +184,6 @@
                 <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
-
                 <xsl:variable name="divlevel" select="count(ancestor::tei:div)"/>
                 <xsl:call-template name="NumberedHeading">
                     <xsl:with-param name="level">
@@ -362,7 +355,6 @@
                             <xsl:value-of select="$frontMulticolumns"/>
                         </xsl:with-param>
                     </xsl:call-template>
-
                     <xsl:choose>
                         <xsl:when test="$twoSided='true'">
                             <xsl:call-template name="headers-footers-twoside"/>
@@ -371,7 +363,6 @@
                             <xsl:call-template name="headers-footers-oneside"/>
                         </xsl:otherwise>
                     </xsl:choose>
-
                     <flow flow-name="xsl-region-body" font-family="{$bodyFont}" font-size="{$bodySize}">
                         <xsl:for-each select="tei:*">
                             <xsl:comment>Start <xsl:value-of select="name(.)"/>
@@ -431,8 +422,6 @@
         </xd:detail>
     </xd:doc>
     <xsl:template match="tei:head" mode="section">
-
-
         <xsl:apply-templates/>
     </xsl:template>
     <xd:doc>
@@ -666,11 +655,9 @@
                     </xsl:call-template>
                 </xsl:if>
             </xsl:variable>
-
             <xsl:value-of select="$Number"/>
             <xsl:apply-templates mode="section" select="tei:head"/>
             <xsl:if test="$divRunningheads='true'">
-
                 <xsl:choose>
                     <xsl:when test="$level=0">
                         <marker marker-class-name="section1"/>
@@ -709,7 +696,6 @@
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="$foEngine='passivetex'">
-
                     <fotex:bookmark fotex-bookmark-level="{$level}" fotex-bookmark-label="{$divid}">
                         <xsl:if test="$numberHeadings='true'">
                             <xsl:value-of select="$Number"/>
@@ -1049,62 +1035,52 @@
     </xd:doc>
     <xsl:template name="setupPagemasters">
         <layout-master-set>
-
             <simple-page-master master-name="simple1" page-width="{$pageWidth}" page-height="{$pageHeight}" margin-top="{$pageMarginTop}" margin-bottom="{$pageMarginBottom}" margin-left="{$pageMarginLeft}" margin-right="{$pageMarginRight}">
                 <region-body margin-bottom="{$bodyMarginBottom}" margin-top="{$bodyMarginTop}"/>
                 <region-before extent="{$regionBeforeExtent}"/>
                 <region-after extent="{$regionAfterExtent}"/>
             </simple-page-master>
-
             <simple-page-master master-name="left1" page-width="{$pageWidth}" page-height="{$pageHeight}" margin-top="{$pageMarginTop}" margin-bottom="{$pageMarginBottom}" margin-left="{$pageMarginLeft}" margin-right="{$pageMarginRight}">
                 <region-body margin-bottom="{$bodyMarginBottom}" margin-top="{$bodyMarginTop}"/>
                 <region-before region-name="xsl-region-before-left" extent="{$regionBeforeExtent}"/>
                 <region-after region-name="xsl-region-after-left" extent="{$regionAfterExtent}"/>
             </simple-page-master>
-
             <simple-page-master master-name="right1" page-width="{$pageWidth}" page-height="{$pageHeight}" margin-top="{$pageMarginTop}" margin-bottom="{$pageMarginBottom}" margin-left="{$pageMarginLeft}" margin-right="{$pageMarginRight}">
                 <region-body margin-bottom="{$bodyMarginBottom}" margin-top="{$bodyMarginTop}"/>
                 <region-before region-name="xsl-region-before-right" extent="{$regionBeforeExtent}"/>
                 <region-after region-name="xsl-region-after-right" extent="{$regionAfterExtent}"/>
             </simple-page-master>
-
             <simple-page-master master-name="first1" page-width="{$pageWidth}" page-height="{$pageHeight}" margin-top="{$pageMarginTop}" margin-bottom="{$pageMarginBottom}" margin-left="{$pageMarginLeft}" margin-right="{$pageMarginRight}">
                 <region-body margin-bottom="{$bodyMarginBottom}" margin-top="{$bodyMarginTop}"/>
                 <region-before region-name="xsl-region-before-first" extent="{$regionBeforeExtent}"/>
                 <region-after region-name="xsl-region-after-first" extent="{$regionAfterExtent}"/>
             </simple-page-master>
-
             <simple-page-master master-name="simple2" page-width="{$pageWidth}" page-height="{$pageHeight}" margin-top="{$pageMarginTop}" margin-bottom="{$pageMarginBottom}" margin-left="{$pageMarginLeft}" margin-right="{$pageMarginRight}">
                 <region-body column-count="{$columnCount}" margin-bottom="{$bodyMarginBottom}" margin-top="{$bodyMarginTop}"/>
                 <region-before extent="{$regionBeforeExtent}"/>
                 <region-after extent="{$regionAfterExtent}"/>
             </simple-page-master>
-
             <simple-page-master master-name="left2" page-width="{$pageWidth}" page-height="{$pageHeight}" margin-top="{$pageMarginTop}" margin-bottom="{$pageMarginBottom}" margin-left="{$pageMarginLeft}" margin-right="{$pageMarginRight}">
                 <region-body column-count="{$columnCount}" margin-bottom="{$bodyMarginBottom}" margin-top="{$bodyMarginTop}"/>
                 <region-before region-name="xsl-region-before-left" extent="{$regionBeforeExtent}"/>
                 <region-after region-name="xsl-region-after-left" extent="{$regionAfterExtent}"/>
             </simple-page-master>
-
             <simple-page-master master-name="right2" page-width="{$pageWidth}" page-height="{$pageHeight}" margin-top="{$pageMarginTop}" margin-bottom="{$pageMarginBottom}" margin-left="{$pageMarginLeft}" margin-right="{$pageMarginRight}">
                 <region-body column-count="{$columnCount}" margin-bottom="{$bodyMarginBottom}" margin-top="{$bodyMarginTop}"/>
                 <region-before region-name="xsl-region-before-right" extent="{$regionBeforeExtent}"/>
                 <region-after region-name="xsl-region-after-right" extent="{$regionAfterExtent}"/>
             </simple-page-master>
-
             <simple-page-master master-name="first2" page-width="{$pageWidth}" page-height="{$pageHeight}" margin-top="{$pageMarginTop}" margin-bottom="{$pageMarginBottom}" margin-left="{$pageMarginLeft}" margin-right="{$pageMarginRight}">
                 <region-body column-count="{$columnCount}" margin-bottom="{$bodyMarginBottom}" margin-top="{$bodyMarginTop}"/>
                 <region-before region-name="xsl-region-before-first" extent="{$regionBeforeExtent}"/>
                 <region-after region-name="xsl-region-after-first" extent="{$regionAfterExtent}"/>
             </simple-page-master>
-
             <page-sequence-master master-name="twoside1nofirst">
                 <repeatable-page-master-alternatives>
                     <conditional-page-master-reference master-reference="right1" odd-or-even="odd"/>
                     <conditional-page-master-reference master-reference="left1" odd-or-even="even"/>
                 </repeatable-page-master-alternatives>
             </page-sequence-master>
-
             <page-sequence-master master-name="twoside1">
                 <repeatable-page-master-alternatives>
                     <conditional-page-master-reference master-reference="first1" page-position="first"/>
@@ -1112,14 +1088,12 @@
                     <conditional-page-master-reference master-reference="left1" odd-or-even="even"/>
                 </repeatable-page-master-alternatives>
             </page-sequence-master>
-
             <page-sequence-master master-name="oneside1">
                 <repeatable-page-master-alternatives>
                     <conditional-page-master-reference master-reference="first1" page-position="first"/>
                     <conditional-page-master-reference master-reference="simple1"/>
                 </repeatable-page-master-alternatives>
             </page-sequence-master>
-
             <page-sequence-master master-name="twoside2">
                 <repeatable-page-master-alternatives>
                     <conditional-page-master-reference master-reference="first2" page-position="first"/>
@@ -1127,7 +1101,6 @@
                     <conditional-page-master-reference master-reference="left2" odd-or-even="even"/>
                 </repeatable-page-master-alternatives>
             </page-sequence-master>
-
             <page-sequence-master master-name="oneside2">
                 <repeatable-page-master-alternatives>
                     <conditional-page-master-reference master-reference="first2" page-position="first"/>
@@ -1137,7 +1110,6 @@
             <xsl:call-template name="pageMasterHook"/>
         </layout-master-set>
         <xsl:if test="$foEngine='xep'">
-
             <outline xmlns="http://www.renderx.com/XSL/Extensions">
                 <xsl:for-each select="/tei:TEI/tei:text/tei:front/tei:div">
                     <xsl:call-template name="makeBookMark"/>
@@ -1148,7 +1120,6 @@
                 <xsl:for-each select="/tei:TEI/tei:text/tei:back/tei:div">
                     <xsl:call-template name="makeBookMark"/>
                 </xsl:for-each>
-
                 <xsl:for-each select="/tei:TEI/tei:text/tei:front/tei:div0">
                     <xsl:call-template name="makeBookMarkN"/>
                 </xsl:for-each>
@@ -1158,7 +1129,6 @@
                 <xsl:for-each select="/tei:TEI/tei:text/tei:back/tei:div0">
                     <xsl:call-template name="makeBookMarkN"/>
                 </xsl:for-each>
-
                 <xsl:for-each select="/tei:TEI/tei:text/tei:front/tei:div1">
                     <xsl:call-template name="makeBookMarkN"/>
                 </xsl:for-each>

@@ -60,9 +60,9 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.ListSearchDictionariesResults(searchCriterias);
         }
 
-        public string GetResultCountSearchDictionaries(List<SearchCriteriaContract> searchCriterias)
+        public string ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
-            return m_searchServiceManager.GetResultCountSearchDictionaries(searchCriterias);
+            return m_searchServiceManager.ListSearchDictionariesResultsCount(searchCriterias);
         }
 
         public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName,

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.SearchService.Core.Search
@@ -15,7 +14,10 @@ namespace ITJakub.SearchService.Core.Search
                 CriteriaKey.Fulltext,
                 CriteriaKey.Heading,
                 CriteriaKey.Sentence,
-                CriteriaKey.TokenDistance
+                CriteriaKey.TokenDistance,
+                CriteriaKey.Headword,
+                CriteriaKey.HeadwordDescription,
+                CriteriaKey.HeadwordDescriptionTokenDistance
             };
         }
 

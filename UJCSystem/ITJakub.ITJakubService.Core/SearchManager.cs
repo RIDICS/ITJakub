@@ -260,53 +260,73 @@ namespace ITJakub.ITJakubService.Core
             return result;
         }
         
-        public int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
-            return m_bookVersionRepository.GetPageNumberForHeadword(bookIds, query);
+            return m_bookVersionRepository.GetHeadwordRowNumber(bookIds, query);
         }
-
-        //public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
-        //{
-        //    query = string.Format("%{0}%", query);
-        //    var databaseResult = m_bookVersionRepository.GetCountOfSearchHeadword(query, new [] {"{08BE3E56-77D0-46C1-80BB-C1346B757BE5}"});
-
-        //    return null; //TODO
-        //}
-
-        //public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
-        //{
-        //    query = string.Format("%{0}%", query);
-        //    var databaseResult = m_bookVersionRepository.SearchHeadword(query, dictionaryGuidList, page, pageSize);
-        //    var resultList = ConvertHeadwordSearchToContract(databaseResult);
-
-        //    return resultList;
-        //}
         
-        public HeadwordSearchResultContract GetHeadwordSearchResultCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
-            // TODO search in SQL
+            // TODO search in SQL and get bookVersionPair
 
             var fileteredCriterias = FilterSearchCriterias(searchCriterias);
 
-            var serializedResult = m_searchServiceClient.GetResultCountSearchDictionaries(fileteredCriterias.NonMetadataCriterias);
-            return null; //TODO
+            //var serializedResult = m_searchServiceClient.ListSearchDictionariesResultsCount(fileteredCriterias.NonMetadataCriterias);
+
+            return 25; //TODO
         }
 
-        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
-            // TODO search in SQL
+            // TODO search in SQL and get bookVersionPair
+            var databaseSearchResult =
+                m_bookVersionRepository.GetBookVersionsByGuid(new List<string>
+                {
+                    "{08BE3E56-77D0-46C1-80BB-C1346B757BE5}",
+                    "{1ADA5193-4375-4269-8222-D8BE81D597DB}"
+                }).Select(x => new BookVersionPairContract
+                {
+                    Guid = x.Book.Guid,
+                    VersionId = x.VersionId
+                }).ToList();
+
+            var resultRestrictionContract = new ResultRestrictionCriteriaContract
+            {
+                ResultBooks = databaseSearchResult
+            };
 
             var fileteredCriterias = FilterSearchCriterias(searchCriterias);
+            fileteredCriterias.NonMetadataCriterias.Add(resultRestrictionContract);
 
             var serializedResult = m_searchServiceClient.ListSearchDictionariesResults(fileteredCriterias.NonMetadataCriterias);
-            return null; //TODO
+
+
+            return new List<HeadwordContract>  //TODO
+            {
+                new HeadwordContract
+                {
+                    Headword = "Abc",
+                    Dictionaries = new List<HeadwordBookInfoContract>{new HeadwordBookInfoContract
+                    {
+                        BookAcronym = "ES", BookTitle = "Elektronický slovník"
+                    }}
+                },
+                new HeadwordContract
+                {
+                    Headword = "Defg",
+                    Dictionaries = new List<HeadwordBookInfoContract>{new HeadwordBookInfoContract
+                    {
+                        BookAcronym = "ES", BookTitle = "Elektronický slovník"
+                    }}
+                },
+            };
         }
         
         public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
         {
-            var searchServiceClient = new SearchServiceClient();
+            return "<div class='entryFree'><span class='bo'>Heslo</span></div>";
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
             {
@@ -317,7 +337,7 @@ namespace ITJakub.ITJakubService.Core
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            var dictionaryEntryText = searchServiceClient.GetDictionaryEntryFromSearch(searchCriterias.ToList(), bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
+            var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryFromSearch(searchCriterias.ToList(), bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
 
             return dictionaryEntryText;
         }

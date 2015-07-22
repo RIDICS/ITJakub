@@ -46,7 +46,6 @@
                             <xsl:value-of select="key('KEYS',$Word)/text[@xml:lang=$documentationLanguage]"/>
                         </xsl:when>
                         <xsl:otherwise>
-
                             <xsl:value-of select="key('KEYS',$Word)/text[@xml:lang='en']"/>
                         </xsl:otherwise>
                     </xsl:choose>

@@ -1,10 +1,10 @@
 $(document).ready(function () {
     var search = new Search($("#dictionarySearchDiv")[0], processSearchJson, processSearchText);
     var disabledOptions = new Array();
-    disabledOptions.push(0 /* Author */);
-    disabledOptions.push(1 /* Title */);
-    disabledOptions.push(2 /* Editor */);
-    disabledOptions.push(3 /* Dating */);
+    disabledOptions.push(4 /* Fulltext */);
+    disabledOptions.push(9 /* TokenDistance */);
+    disabledOptions.push(6 /* Sentence */);
+    disabledOptions.push(5 /* Heading */);
     search.makeSearch(disabledOptions);
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
@@ -19,8 +19,10 @@ function processSearchJson(json) {
     $.ajax({
         type: "POST",
         traditional: true,
-        data: JSON.stringify({ "json": json }),
-        url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
+        data: JSON.stringify({
+            "json": json
+        }),
+        url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaResultsCount",
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function (response) {
@@ -32,10 +34,12 @@ function processSearchJson(json) {
 }
 function processSearchText(text) {
     $.ajax({
-        type: "POST",
+        type: "GET",
         traditional: true,
-        data: JSON.stringify({ "text": text }),
-        url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaText",
+        data: {
+            text: text
+        },
+        url: getBaseUrl() + "Dictionaries/Dictionaries/SearchBasicResultsCount",
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: function (response) {

@@ -29,7 +29,6 @@ let $entryFragment := $document/id($entryXmlId)
 
 (:let $xslPath := "/db/apps/jacob/transformations/pageToHtml.xsl":)
 let $template := doc(escape-html-uri($xslPath)) 
-
 let $transformation := 
 	if($outputFormat = "Html") 
 	then transform:stream-transform($entryFragment, $template, ())

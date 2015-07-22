@@ -56,11 +56,9 @@
         <xsl:choose>
             <xsl:when test="normalize-space($who)=concat('$Author', '$')"/>
             <xsl:when test="starts-with($who,'$Author')">
-        
                 <xsl:value-of select="normalize-space(substring-before(substring-after($who,'Author'),'$'))"/>
             </xsl:when>
             <xsl:when test="starts-with($who,'$LastChangedBy')">
-        
                 <xsl:value-of select="normalize-space(substring-before(substring-after($who,'LastChangedBy:'),'$'))"/>
             </xsl:when>
             <xsl:otherwise>
@@ -114,7 +112,6 @@
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="starts-with($when,'$Date')">
-        
                 <xsl:value-of select="substring($when,16,2)"/>
                 <xsl:text>/</xsl:text>
                 <xsl:value-of select="substring($when,13,2)"/>
@@ -122,7 +119,6 @@
                 <xsl:value-of select="substring($when,8,4)"/>
             </xsl:when>
             <xsl:when test="starts-with($when,'$LastChangedDate')">
-        
                 <xsl:value-of select="substring-before(substring-after($when,'('),')')"/>
             </xsl:when>
             <xsl:otherwise>

@@ -179,7 +179,7 @@ namespace ITJakub.SearchService.Core.Exist
             return result;
         }
 
-        public string GetResultCountSearchDictionaries(string serializedSearchCriteria)
+        public string ListSearchDictionariesResultsCount(string serializedSearchCriteria)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);

@@ -29,7 +29,6 @@ let $documentFragment := vwpaging:get-document-fragment($document, $start, $end,
 
 (:let $xslPath := "/db/apps/jacob/transformations/pageToHtml.xsl":)
 let $template := doc(escape-html-uri($xslPath)) 
-
 let $transformation := 
 	if($outputFormat = "Html") 
 	then transform:stream-transform($documentFragment, $template, ())

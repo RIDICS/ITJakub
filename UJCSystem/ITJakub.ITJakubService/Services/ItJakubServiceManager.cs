@@ -173,17 +173,17 @@ namespace ITJakub.ITJakubService.Services
 
         public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            return m_searchManager.GetHeadwordPageNumber(selectedCategoryIds, selectedBookIds, query);
+            return m_searchManager.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query);
         }
 
-        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
-            return m_searchManager.SearchHeadwordByCriteria(searchCriterias);
+            return m_searchManager.SearchHeadwordByCriteria(searchCriterias, searchTarget);
         }
 
-        public HeadwordSearchResultContract GetHeadwordSearchResultCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
-            return m_searchManager.GetHeadwordSearchResultCount(searchCriterias);
+            return m_searchManager.SearchHeadwordByCriteriaResultsCount(searchCriterias, searchTarget);
         }
 
         public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)

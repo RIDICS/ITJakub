@@ -616,7 +616,6 @@
                                     </xsl:for-each>
                                 </xsl:otherwise>
                             </xsl:choose>
-
                         </xsl:element>
                     </xsl:element>
                 </xsl:if>
@@ -976,7 +975,6 @@
                 <xsl:call-template name="showExample"/>
             </xsl:when>
             <xsl:when test="@xml:lang='mul' and not($documentationLanguage='zh-tw')">
-	
                 <xsl:call-template name="showExample"/>
             </xsl:when>
             <xsl:when test="@xml:lang=$documentationLanguage">
@@ -1868,7 +1866,6 @@
                 </Item>
             </xsl:for-each>
         </xsl:if>
-    
     </xsl:template>
     <xsl:template name="generateParentsByClass">
         <xsl:variable name="this" select="@ident"/>
@@ -1882,7 +1879,6 @@
                             <xsl:with-param name="class">link_odd_class</xsl:with-param>
                         </xsl:call-template>
                     </xsl:if>
-	  
                 </Item>
             </xsl:for-each>
         </xsl:for-each>
@@ -2033,8 +2029,6 @@
     <xsl:template match="tei:desc">
         <xsl:apply-templates/>
     </xsl:template>
-
-  
     <xsl:template match="nc" mode="keep">
         <xsl:call-template name="showRNC">
             <xsl:with-param name="style">

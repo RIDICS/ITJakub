@@ -436,7 +436,6 @@
         <xsl:choose>
             <xsl:when test="$activeLinebreaks='true'">
                 <xsl:choose>
-
                     <xsl:when test="$foEngine='passivetex'"> </xsl:when>
                     <xsl:when test="parent::tei:list">
                         <list-item>
@@ -450,7 +449,6 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <block/>
-	    
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
@@ -460,7 +458,6 @@
                 </inline>
             </xsl:otherwise>
         </xsl:choose>
-
     </xsl:template>
     <xd:doc>
         <xd:short>Process elements  tei:list</xd:short>
@@ -1031,7 +1028,6 @@
         <xd:detail>&#160;</xd:detail>
     </xd:doc>
     <xsl:template name="makeItem">
-
         <xsl:variable name="listdepth" select="count(ancestor::tei:list)"/>
         <list-item>
             <xsl:if test="not(parent::tei:note[@place='foot' or @place='bottom' ])">
@@ -1078,13 +1074,11 @@
                             </xsl:choose>
                         </xsl:when>
                         <xsl:when test="../@type='numbered'">
-
                             <xsl:attribute name="text-align">end</xsl:attribute>
                             <xsl:number/>
                             <xsl:text>.</xsl:text>
                         </xsl:when>
                         <xsl:when test="../@type='ordered'">
-
                             <xsl:attribute name="text-align">end</xsl:attribute>
                             <xsl:number/>
                             <xsl:text>.</xsl:text>

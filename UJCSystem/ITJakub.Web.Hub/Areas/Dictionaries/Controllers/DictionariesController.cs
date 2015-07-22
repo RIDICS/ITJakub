@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Converters;
@@ -84,63 +85,108 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult SearchCriteriaText(string text)
-        {
-            var headwordContract = new WordListCriteriaContract
-            {
-                Key = CriteriaKey.Headword,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string>{text}
-                    }
-                }
-            };
-            var headwordDescriptionContract = new WordListCriteriaContract
-            {
-                Key = CriteriaKey.HeadwordDescription,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string>{text}
-                    }
-                }
-            };
-
-            var searchContract = new List<SearchCriteriaContract>
-            {
-                headwordContract,
-                headwordDescriptionContract
-            };
-
-            m_mainServiceClient.SearchByCriteria(searchContract);
-            return Json(new {a = "aasdfd"});
-        }
-
-        [HttpPost]
-        public ActionResult SearchCriteria(string json)
+        private IList<SearchCriteriaContract> DeserializeJsonSearchCriteria(string json)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-            m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { });
+            return Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
         }
 
+        private WordListCriteriaContract CreateWordListContract(CriteriaKey criteriaKey, string text)
+        {
+            return new WordListCriteriaContract
+            {
+                Key = criteriaKey,
+                Disjunctions = new List<WordCriteriaContract>
+                {
+                    new WordCriteriaContract {Contains = new List<string> {text}}
+                }
+            };
+        }
+
+        private ResultCriteriaContract CreateResultCriteriaContract(int start, int count)
+        {
+            return new ResultCriteriaContract
+            {
+                Start = start,
+                Count = count
+            };
+        }
+
+        public ActionResult SearchBasicResultsCount(string text)
+        {
+            var searchContract = new List<SearchCriteriaContract>
+            {
+                CreateWordListContract(CriteriaKey.Headword, text),
+                CreateWordListContract(CriteriaKey.HeadwordDescription, text)
+            };
+
+            var headwordCount = m_mainServiceClient.SearchHeadwordByCriteriaResultsCount(searchContract, DictionarySearchTarget.Headword);
+            var fulltextCount = m_mainServiceClient.SearchHeadwordByCriteriaResultsCount(searchContract, DictionarySearchTarget.Fulltext);
+            
+            var result = new HeadwordSearchResultContract
+            {
+                HeadwordCount = headwordCount,
+                FulltextCount = fulltextCount
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SearchBasicHeadword(string text, int start, int count)
+        {
+            var searchContract = new List<SearchCriteriaContract>
+            {
+                CreateWordListContract(CriteriaKey.Headword, text),
+                CreateResultCriteriaContract(start, count)
+            };
+
+            var result = m_mainServiceClient.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Headword);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SearchBasicFulltext(string text, int start, int count)
+        {
+            var searchContract = new List<SearchCriteriaContract>
+            {
+                CreateWordListContract(CriteriaKey.Headword, text),
+                CreateWordListContract(CriteriaKey.HeadwordDescription, text),
+                CreateResultCriteriaContract(start, count)
+            };
+
+            var result = m_mainServiceClient.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Fulltext);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult SearchCriteriaResultsCount(string json)
+        {
+            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
+
+            var resultCount = m_mainServiceClient.SearchHeadwordByCriteriaResultsCount(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
+            return Json(resultCount);
+        }
+
+        [HttpPost]
+        public ActionResult SearchCriteria(string json, int start, int count)
+        {
+            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
+            listSearchCriteriaContracts.Add(CreateResultCriteriaContract(start, count));
+            
+            var result = m_mainServiceClient.SearchHeadwordByCriteria(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
+            return Json(result);
+        }
+        
         public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)
         {
             var result = m_mainServiceClient.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetHeadwordDescriptionFromSearch()
+        public ActionResult GetHeadwordDescriptionFromSearch(string json, string bookGuid, string xmlEntryId)
         {
-            //TODO only mocked now
-            var searchCriteriaContracts = GetMockedCriteria();
+            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
 
-            var result = m_mainServiceClient.GetDictionaryEntryFromSearch(searchCriteriaContracts, "{08BE3E56-77D0-46C1-80BB-C1346B757BE5}", "en000001", OutputFormatEnumContract.Html);
+            var result = m_mainServiceClient.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -169,62 +215,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query);
             return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        private List<SearchCriteriaContract> GetMockedCriteria()
-        {
-            var title1 = new WordListCriteriaContract
-            {
-                Key = CriteriaKey.Title,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    new WordCriteriaContract
-                    {
-                        EndsWith = "n_k",
-                        StartsWith = "Star"
-                    },
-                    new WordCriteriaContract
-                    {
-                        StartsWith = "Ele",
-                        Contains = new List<string> {"slov", "st"},
-                        EndsWith = "iny"
-                    }
-                }
-            };
-
-            var fulltext1 = new WordListCriteriaContract
-            {
-                Key = CriteriaKey.Fulltext,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string> {"alab"}
-                    }
-                }
-            };
-
-            return new List<SearchCriteriaContract>
-            {
-                title1,
-                fulltext1
-            };
-        }
-
-        public ActionResult GetSearchCriteriaResultCountMocked()
-        {
-            var searchCriteriaContracts = GetMockedCriteria();
-
-            var result = m_mainServiceClient.GetHeadwordSearchResultCount(searchCriteriaContracts);
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult SearchCriteriaMocked()
-        {
-            var searchCriteriaContracts = GetMockedCriteria();
-
-            var result = m_mainServiceClient.SearchHeadwordByCriteria(searchCriteriaContracts);
-            return Json(new { }, JsonRequestBehavior.AllowGet);
         }
     }
 }
