@@ -56,11 +56,12 @@ var DictionaryViewer = (function () {
         this.headwordDescriptionDivs = [];
         this.dictionariesInfo = [];
         this.headwordList = [];
+        this.dictionariesMetadataList = headwords.BookList;
         var listUl = document.createElement("ul");
         var descriptionsDiv = document.createElement("div");
-        for (var i = 0; i < headwords.length; i++) {
+        for (var i = 0; i < headwords.HeadwordList.length; i++) {
             var headwordLi = document.createElement("li");
-            var record = headwords[i];
+            var record = headwords.HeadwordList[i];
             var headwordSpan = document.createElement("span");
             $(headwordSpan).text(record.Headword);
             $(headwordSpan).addClass("dictionary-result-headword");
@@ -70,6 +71,7 @@ var DictionaryViewer = (function () {
             headwordLi.appendChild(favoriteGlyphSpan);
             for (var j = 0; j < record.Dictionaries.length; j++) {
                 var dictionary = record.Dictionaries[j];
+                var dictionaryMetadata = this.dictionariesMetadataList[dictionary.BookXmlId];
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
                 var descriptionDiv = document.createElement("div");
@@ -88,7 +90,7 @@ var DictionaryViewer = (function () {
                 commentsDiv.appendChild(commentsLink);
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
-                $(dictionaryLink).text(dictionary.BookTitle);
+                $(dictionaryLink).text(dictionaryMetadata.BookTitle);
                 dictionaryLink.href = "?guid=" + dictionary.BookXmlId;
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
@@ -104,7 +106,7 @@ var DictionaryViewer = (function () {
                 // create link
                 var aLink = document.createElement("a");
                 aLink.href = "#";
-                aLink.innerHTML = dictionary.BookAcronym;
+                aLink.innerHTML = dictionaryMetadata.BookAcronym;
                 aLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length - 1));
                 $(aLink).addClass("dictionary-result-headword-book");
                 this.createLinkListener(aLink, record.Headword, dictionary, descriptionDiv);

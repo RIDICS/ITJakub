@@ -32,17 +32,14 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [DataMember]
         public string BookXmlId { get; set; }
-
-        [DataMember]
-        public string BookTitle { get; set; }
-
-        [DataMember]
-        public string BookAcronym { get; set; }
     }
 
     [DataContract]
     public class HeadwordListContract
     {
+        [DataMember]
+        public IDictionary<string, DictionaryContract> BookList { get; set; }
+
         [DataMember]
         public IList<HeadwordContract> HeadwordList { get; set; }
 
@@ -61,5 +58,43 @@ namespace ITJakub.ITJakubService.DataContracts
                 return result;
             }
         }
+
+        public static HeadwordListContract FromXml(string xml)
+        {
+            using (Stream stream = new MemoryStream())
+            {
+                var writer = new StreamWriter(stream);
+                writer.Write(xml);
+                writer.Flush();
+
+                stream.Position = 0;
+                //object result = new XmlSerializer(typeof (Server)).Deserialize(stream); 
+
+                object result = new DataContractSerializer(typeof(HeadwordListContract)).ReadObject(stream);
+                return (HeadwordListContract)result;
+            }
+        }
+    }
+
+    [DataContract]
+    public class DictionaryContract
+    {
+        [DataMember]
+        public string BookXmlId { get; set; }
+
+        [DataMember]
+        public long BookId { get; set; }
+
+        [DataMember]
+        public string BookTitle { get; set; }
+
+        [DataMember]
+        public long BookVersionId { get; set; }
+
+        [DataMember]
+        public string BookVersionXmlId { get; set; }
+
+        [DataMember]
+        public string BookAcronym { get; set; }
     }
 }
