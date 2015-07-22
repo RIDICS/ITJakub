@@ -169,7 +169,6 @@
                         </xsl:choose>
                     </xsl:with-param>
                 </xsl:call-template>
-        
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -242,7 +241,6 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-    
         <xsl:choose>
             <xsl:when test="normalize-space($text)=''"/>
             <xsl:when test="contains($text,'⌤')">
@@ -258,7 +256,6 @@
                         <xsl:value-of select="normalize-space(substring-before($text,'⌤'))"/>
                     </xsl:with-param>
                 </xsl:call-template>
-        
                 <xsl:call-template name="verbatim-lineBreak">
                     <xsl:with-param name="id">6</xsl:with-param>
                 </xsl:call-template>
@@ -322,7 +319,6 @@
         <xsl:param name="highlight"/>
         <xsl:choose>
             <xsl:when test="parent::xhtml:Wrapper"/>
-      
             <xsl:when test="not(parent::*)  or parent::teix:egXML">
                 <xsl:choose>
                     <xsl:when test="preceding-sibling::node()[1][self::text()]      and following-sibling::node()[1][self::text()]"/>
@@ -333,7 +329,6 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:call-template name="verbatim-newLine"/>
-            
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
@@ -449,7 +444,6 @@
     <xsl:template name="verbatim-makeElementName">
         <xsl:param name="start"/>
         <xsl:param name="highlight"/>
-    
         <xsl:variable name="ns-prefix">
             <xsl:call-template name="verbatim-getNamespacePrefix"/>
         </xsl:variable>

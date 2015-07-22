@@ -24,14 +24,9 @@
             </ul>
         </xd:detail>
     </xd:doc>
-	
     <xsl:param name="foEngine">fop</xsl:param>
     <xd:doc class="layout" type="string"> Which named page master name to use </xd:doc>
     <xsl:param name="forcePageMaster">simple1</xsl:param>
-
-
-	
-	
     <xsl:variable name="vychoziPismo">FreeSerif</xsl:variable>
     <xd:doc class="style" type="string"> Sans-serif font </xd:doc>
     <xsl:param name="sansFont">FreeSans</xsl:param>
@@ -44,18 +39,14 @@
         <xsl:value-of select="$vychoziPismo"/>
     </xsl:param>
     <xd:doc class="style" type="string"> Font family for running header and footer </xd:doc>
-	
     <xsl:param name="runFont">
         <xsl:value-of select="$sansFont"/>
     </xsl:param>
     <xd:doc class="style" type="string"> Font size for running header and footer </xd:doc>
     <xsl:param name="runSize">9pt</xsl:param>
     <xd:doc class="layout" type="boolean">Display section headings in running heads</xd:doc>
-	
-	
     <xsl:param name="divRunningheads">true</xsl:param>
     <xd:doc class="style" type="string"> Default font size for body (without dimension) </xd:doc>
-	
     <xsl:param name="bodyMaster">12</xsl:param>
     <xd:doc>Velikost kramle u emendačních poznámek</xd:doc>
     <xsl:param name="kramleSize">9pt</xsl:param>
@@ -72,7 +63,6 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="round($bodyMaster * 0.6)"/>
-				
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>pt</xsl:text>
@@ -84,44 +74,32 @@
     <xd:doc class="style" type="string"> Font size for footnotes </xd:doc>
     <xsl:param name="footnoteSize">8pt</xsl:param>
     <xd:doc class="layout" type="boolean"> Make title page </xd:doc>
-	
     <xsl:param name="titlePage">false</xsl:param>
     <xd:doc class="layout" type="string"> How to format page numbers in back matter (use XSLT number format) </xd:doc>
     <xsl:param name="formatBackpage">1</xsl:param>
     <xd:doc class="layout" type="string"> How to format page numbers in main matter (use XSLT number format) </xd:doc>
     <xsl:param name="formatBodypage">1</xsl:param>
     <xd:doc class="layout" type="string"> How to format page numbers in front matter (use XSLT number format) </xd:doc>
-	
-	
     <xsl:param name="formatFrontpage">I</xsl:param>
     <xd:doc class="style" type="boolean"> Hyphenate text </xd:doc>
-	
     <xsl:param name="hyphenate">false</xsl:param>
     <xd:doc class="output" type="string"> Language (for hyphenation) </xd:doc>
     <xsl:param name="language">cs</xsl:param>
     <xd:doc class="layout" type="boolean"> Make 2-page spreads </xd:doc>
-	
     <xsl:param name="twoSided">false</xsl:param>
     <xd:doc class="layout" type="string"> Paragraph indentation. Odsazení odstavce a poznámky pod
 		čarou.</xd:doc>
     <xsl:param name="parIndent">1em</xsl:param>
     <xd:doc class="layout" type="string"> Default spacing between paragraphs </xd:doc>
-	
-	
     <xsl:param name="parSkip">3pt</xsl:param>
     <xd:doc class="layout" type="string"> Maximum space allowed between paragraphs </xd:doc>
-	
     <xsl:param name="parSkipmax">6pt</xsl:param>
-	
     <xd:doc class="style" type="number">Výška řádku odstavce</xd:doc>
-	
     <xsl:param name="lineHeight">1.2</xsl:param>
     <xd:doc class="toc" type="boolean"> Make TOC for sections in &lt;back&gt; </xd:doc>
     <xsl:param name="tocBack">true</xsl:param>
     <xd:doc class="toc" type="boolean"> Make TOC for sections in &lt;front&gt; </xd:doc>
     <xsl:param name="tocFront">false</xsl:param>
-
-	
     <xd:doc class="style">
         <xd:short>[fo] Set attributes for display of links</xd:short>
         <xd:detail>&#160;</xd:detail>
@@ -165,7 +143,6 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:if test="$titlePage='true'">
-					
                     <page-sequence format="{$formatFrontpage}" force-page-count="no-force" hyphenate="{$hyphenate}" language="{$language}">
                         <xsl:call-template name="choosePageMaster">
                             <xsl:with-param name="where">
@@ -186,7 +163,6 @@
                         </flow>
                     </page-sequence>
                 </xsl:if>
-				
                 <page-sequence format="{$formatFrontpage}" force-page-count="no-force" text-align="{$alignment}" hyphenate="{$hyphenate}" language="{$language}" initial-page-number="1">
                     <xsl:call-template name="choosePageMaster">
                         <xsl:with-param name="where">
@@ -196,10 +172,6 @@
                             <xsl:text>zacatek1</xsl:text>
                         </xsl:with-param>
                     </xsl:call-template>
-					
-					
-					
-					
                     <flow flow-name="xsl-region-body" font-family="{$bodyFont}" font-size="{$bodySize}">
                         <xsl:for-each select="tei:*">
                             <xsl:comment>Start <xsl:value-of select="name(.)"/>
@@ -252,9 +224,7 @@
         <xd:short>[fo] Set attributes for display of heading for chapters (level 0)</xd:short>
         <xd:detail>&#160;</xd:detail>
     </xd:doc>
-	
     <xsl:template name="setupDiv0">
-		
         <xsl:attribute name="hyphenate">
             <xsl:text>false</xsl:text>
         </xsl:attribute>
@@ -264,15 +234,12 @@
         <xsl:attribute name="font-size">16pt</xsl:attribute>
         <xsl:attribute name="text-align">left</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-		
         <xsl:attribute name="space-after.optimum">3pt</xsl:attribute>
         <xsl:attribute name="space-after.maximum">6pt</xsl:attribute>
-		
         <xsl:attribute name="space-before.optimum">9pt</xsl:attribute>
         <xsl:attribute name="space-before.maximum">12pt</xsl:attribute>
         <xsl:attribute name="text-indent">
             <xsl:value-of select="$headingOutdent"/>
-			
         </xsl:attribute>
         <xsl:attribute name="keep-with-next.within-page">always</xsl:attribute>
         <xsl:attribute name="page-break-before">always</xsl:attribute>
@@ -287,18 +254,13 @@
         <xd:detail>&#160;</xd:detail>
     </xd:doc>
     <xsl:template name="setupDiv1">
-		
         <xsl:attribute name="color">
             <xsl:value-of select="$barvaLoga"/>
         </xsl:attribute>
         <xsl:attribute name="font-size">14pt</xsl:attribute>
         <xsl:attribute name="text-align">left</xsl:attribute>
-		
-		
-		
         <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>
         <xsl:attribute name="space-after.maximum">7pt</xsl:attribute>
-		
         <xsl:attribute name="space-before.optimum">9pt</xsl:attribute>
         <xsl:attribute name="space-before.maximum">12pt</xsl:attribute>
         <xsl:attribute name="text-indent">
@@ -310,7 +272,6 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:attribute name="keep-with-next.within-page">auto</xsl:attribute>
-				
             </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="@xml:id">
@@ -330,8 +291,6 @@
         <xsl:attribute name="font-size">12pt</xsl:attribute>
         <xsl:attribute name="text-align">left</xsl:attribute>
         <xsl:attribute name="font-weight">normal</xsl:attribute>
-		
-		
         <xsl:attribute name="space-after.maximum">4pt</xsl:attribute>
         <xsl:attribute name="space-after.optimum">2pt</xsl:attribute>
         <xsl:attribute name="space-before.maximum">8pt</xsl:attribute>
@@ -345,7 +304,6 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:attribute name="keep-with-next.within-page">auto</xsl:attribute>
-				
             </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="@xml:id">
@@ -359,9 +317,6 @@
         <xd:detail>&#160;</xd:detail>
     </xd:doc>
     <xsl:template match="tei:note">
-		
-
-		
         <xsl:if test="preceding-sibling::node()[1][self::add] and string-length(preceding-sibling::node()[1][self::text()]) = 0">
             <inline>
                 <xsl:if test="not(@target)">
@@ -369,7 +324,6 @@
                         <xsl:value-of select="$footnotenumSize"/>
                     </xsl:attribute>
                     <xsl:attribute name="vertical-align">super</xsl:attribute>
-					
                     <xsl:attribute name="font-style">normal</xsl:attribute>
                     <xsl:attribute name="font-weight">normal</xsl:attribute>
                     <xsl:text>,</xsl:text>
@@ -377,9 +331,6 @@
             </inline>
         </xsl:if>
         <xsl:apply-templates mode="real" select="."/>
-
-		
-		
         <xsl:call-template name="InsertCommaBeforeFollowingtNote"/>
     </xsl:template>
     <xsl:template name="InsertCommaBeforeFollowingtNote">
@@ -390,7 +341,6 @@
                         <xsl:value-of select="$footnotenumSize"/>
                     </xsl:attribute>
                     <xsl:attribute name="vertical-align">super</xsl:attribute>
-					
                     <xsl:attribute name="font-style">normal</xsl:attribute>
                     <xsl:attribute name="font-weight">normal</xsl:attribute>
                     <xsl:text>,</xsl:text>
@@ -440,8 +390,6 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="makeFootnote"/>
-				
-
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -449,7 +397,6 @@
         <xd:short>Create a footnote</xd:short>
         <xd:detail>&#160;</xd:detail>
     </xd:doc>
-	
     <xsl:template name="makeFootnote">
         <xsl:param name="text"/>
         <xsl:variable name="FootID">
@@ -469,7 +416,6 @@
                         <xsl:value-of select="$footnotenumSize"/>
                     </xsl:attribute>
                     <xsl:attribute name="vertical-align">super</xsl:attribute>
-					
                     <xsl:attribute name="font-style">normal</xsl:attribute>
                     <xsl:attribute name="font-weight">normal</xsl:attribute>
                     <xsl:value-of select="$FootID"/>
@@ -488,7 +434,6 @@
                         </inline>
                         <xsl:text> </xsl:text>
                     </xsl:if>
-					
                     <xsl:choose>
                         <xsl:when test="$text">
                             <xsl:value-of select="$text"/>
@@ -565,7 +510,6 @@
                     <xsl:value-of select="$footnotenumSize"/>
                 </xsl:attribute>
             </xsl:when>
-			
             <xsl:when test="$value='superscript'">
                 <xsl:attribute name="vertical-align">super</xsl:attribute>
                 <xsl:attribute name="font-style">normal</xsl:attribute>
@@ -622,7 +566,6 @@
         </xsl:choose>
     </xsl:template>
     <xsl:template name="makeItem">
-		
         <xsl:choose>
             <xsl:when test="../@type='index' and name(../..) = 'cell'">
                 <xsl:apply-templates/>
@@ -674,13 +617,11 @@
                                     </xsl:choose>
                                 </xsl:when>
                                 <xsl:when test="../@type='numbered'">
-									
                                     <xsl:attribute name="text-align">end</xsl:attribute>
                                     <xsl:number/>
                                     <xsl:text>.</xsl:text>
                                 </xsl:when>
                                 <xsl:when test="../@type='ordered'">
-									
                                     <xsl:attribute name="text-align">end</xsl:attribute>
                                     <xsl:number/>
                                     <xsl:text>.</xsl:text>
@@ -714,8 +655,6 @@
                                 <block font-weight="normal">
                                     <xsl:apply-templates/>
                                 </block>
-								
-								
                             </xsl:when>
                             <xsl:otherwise>
                                 <block font-weight="normal">
@@ -737,7 +676,6 @@
             <xsl:when test="tei:choice">
                 <xsl:number count="tei:note[tei:choice]" format="a" from="tei:text" level="any"/>
             </xsl:when>
-			
             <xsl:otherwise>
                 <xsl:number count="tei:note[not(tei:choice)] | tei:add" format="1" from="tei:text" level="any"/>
             </xsl:otherwise>
@@ -747,9 +685,6 @@
         <block-container height="100%" display-align="center">
             <block space-after="0pt" space-before="0pt" text-align="center">
                 <external-graphic>
-					
-					
-					
                     <xsl:attribute name="src">
                         <xsl:text>url('</xsl:text>
                         <xsl:value-of select="tei:graphic/@url"/>
@@ -815,15 +750,11 @@
             <xsl:apply-templates/>
         </block>
     </xsl:template>
-
-	
     <xsl:template match="tei:div[@type='editorial' and @sbtype='imprint']">
         <block font-family="{$vychoziPismo}" font-size="$bodySize" keep-with-next.within-page="always" space-after="12pt" space-before="9pt" text-align="left" text-indent="0em">
             <xsl:apply-templates/>
         </block>
     </xsl:template>
-
-	
     <xsl:template match="tei:figure" mode="loga">
         <external-graphic margin-left="5px">
             <xsl:attribute name="src">
@@ -857,7 +788,6 @@
                 <table-body text-indent="0pt" table-layout="fixed">
                     <table-row>
                         <table-cell padding="2pt" text-align="center" vertical-align="top">
-							
                             <block>
                                 <xsl:value-of select="tei:row[1]/tei:cell[1]/tei:seg[2]"/>
                             </block>
@@ -884,8 +814,6 @@
             </table>
         </block>
     </xsl:template>
-
-	
     <xsl:template match="tei:cell/tei:seg">
         <xsl:apply-templates/>
     </xsl:template>
@@ -896,8 +824,6 @@
     <xsl:template match="tei:p">
         <block line-height="{$lineHeight}">
             <xsl:if test="preceding-sibling::tei:p">
-				
-				
                 <xsl:if test="not(ancestor::tei:div[@type='editorial'])">
                     <xsl:attribute name="text-indent">
                         <xsl:value-of select="$parIndent"/>
@@ -923,7 +849,6 @@
                     <xsl:value-of select="substring-after(@xml:lang,'-')"/>
                 </xsl:attribute>
             </xsl:if>
-			
             <block>
                 <xsl:if test="@rend">
                     <xsl:call-template name="applyRend">
@@ -999,18 +924,11 @@
                             <xsl:value-of select="@xml:id"/>
                         </xsl:attribute>
                     </xsl:if>
-					
                     <xsl:attribute name="font-weight">bold</xsl:attribute>
                     <xsl:attribute name="font-size">
                         <xsl:value-of select="$bodySize"/>
                     </xsl:attribute>
                     <xsl:attribute name="color">#000000</xsl:attribute>
-					
-					
-					
-					
-					
-					
                     <xsl:attribute name="keep-together.within-line">
                         <xsl:value-of select="'always'"/>
                     </xsl:attribute>
@@ -1020,8 +938,6 @@
                     <xsl:if test="@rend = 'space'">
                         <xsl:text> </xsl:text>
                     </xsl:if>
-
-					
                 </xsl:element>
             </xsl:when>
         </xsl:choose>
@@ -1034,7 +950,6 @@
         <inline font-style="italic">
             <xsl:apply-templates/>
         </inline>
-		
         <inline font-size="{$kramleSize}">
             <xsl:text>] </xsl:text>
         </inline>
@@ -1078,7 +993,6 @@
     </xd:doc>
     <xsl:template match="tei:sic">
         <xsl:apply-templates/>
-		
     </xsl:template>
     <xd:doc>
         <xd:short>Process elements tei:seg</xd:short>
@@ -1091,7 +1005,6 @@
                 <xsl:value-of select="$footnotenumSize"/>
             </xsl:attribute>
             <xsl:attribute name="vertical-align">super</xsl:attribute>
-			
             <xsl:attribute name="font-style">normal</xsl:attribute>
             <xsl:attribute name="font-weight">normal</xsl:attribute>
             <xsl:value-of select="translate(substring-after(@xml:id, '.'), '.', ',')"/>
@@ -1126,12 +1039,7 @@
                         <xsl:value-of select="$runhead"/>
                     </xsl:when>
                     <xsl:otherwise>
-						
-						
-						
                         <inline>
-
-							
                             <xsl:text>– </xsl:text>
                             <page-number/>
                             <xsl:text> –</xsl:text>
@@ -1145,14 +1053,10 @@
             </block>
         </static-content>
         <static-content flow-name="xsl-region-before-first">
-			
             <block/>
         </static-content>
         <static-content flow-name="xsl-region-after-first">
-            <block color="gray" font-family="{$runFont}" font-size="{$headerSize}" text-align="center">
-				
-				
-            </block>
+            <block color="gray" font-family="{$runFont}" font-size="{$headerSize}" text-align="center"/>
         </static-content>
         <static-content flow-name="xsl-footnote-separator">
             <block>
@@ -1165,7 +1069,6 @@
         <xd:detail>&#160;</xd:detail>
     </xd:doc>
     <xsl:template match="tei:gap">
-		
         <xsl:text>…</xsl:text>
     </xsl:template>
     <xsl:template match="tei:add">
@@ -1175,7 +1078,6 @@
         <xsl:call-template name="makeFootnote">
             <xsl:with-param name="text">
                 <xsl:call-template name="pripisek"/>
-				
             </xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="InsertCommaBeforeFollowingtNote"/>
@@ -1202,7 +1104,6 @@
         </inline>
     </xsl:template>
     <xsl:template match="tei:titlePage">
-		
         <xsl:apply-templates select="tei:figure[@type='cover']"/>
         <block color="{$barvaLoga}" hyphenate="false" font-size=" { $venovaniSize }">
             <xsl:apply-templates select="tei:docTitle"/>
@@ -1222,13 +1123,8 @@
                         <xsl:value-of select="concat(substring-before(substring-after(@rend,'('),')'),'em')"/>
                     </xsl:attribute>
                 </xsl:when>
-                <xsl:when test="starts-with(@rend,'indent')">
-					
-                </xsl:when>
+                <xsl:when test="starts-with(@rend,'indent')"/>
             </xsl:choose>
-
-			
-			
             <xsl:apply-templates select="@n"/>
             <xsl:apply-templates/>
         </block>
@@ -1239,9 +1135,7 @@
                 <xsl:value-of select="$footnotenumSize"/>
             </xsl:attribute>
             <xsl:attribute name="vertical-align">middle</xsl:attribute>
-			
             <xsl:attribute name="position">relative</xsl:attribute>
-			
             <xsl:attribute name="font-style">normal</xsl:attribute>
             <xsl:attribute name="font-weight">normal</xsl:attribute>
             <xsl:choose>
@@ -1298,17 +1192,11 @@
         </xsl:choose>
     </xsl:template>
     <xsl:template match="tei:body/tei:div//tei:div |  tei:back/tei:div//tei:div" mode="toc"/>
-
-	
     <xsl:template match="tei:body/tei:div | tei:back/tei:div " mode="toc">
-		
-		
         <xsl:if test="tei:head">
             <block text-align="left" text-align-last="justify" hyphenate="false" line-height="1.5em" start-indent="2em" end-indent="1em" text-indent="-1em">
                 <inline>
                     <basic-link internal-destination="{@xml:id}">
-						
-
                         <xsl:apply-templates select="tei:head" mode="toc"/>
                     </basic-link>
                     <leader leader-pattern="dots"/>
@@ -1317,7 +1205,6 @@
                     </basic-link>
                 </inline>
             </block>
-			
         </xsl:if>
     </xsl:template>
     <xsl:template match="tei:head" mode="toc">
@@ -1346,13 +1233,11 @@
                 <xsl:apply-templates mode="toc" select="(.)"/>
             </xsl:for-each>
         </xsl:if>
-		
         <xsl:for-each select="ancestor::tei:text/tei:body/tei:div|ancestor::tei:text/tei:body/tei:div/tei:div">
             <xsl:apply-templates mode="toc" select="(.)"/>
         </xsl:for-each>
         <xsl:if test="$tocBack='true'">
             <xsl:for-each select="ancestor::tei:text/tei:back//tei:div">
-			
                 <xsl:apply-templates mode="toc" select="(.)"/>
             </xsl:for-each>
         </xsl:if>
@@ -1363,15 +1248,11 @@
             <p> headings in TOC </p>
         </xd:detail>
     </xd:doc>
-	
     <xsl:template match="tei:div[tei:p[1][not (node())]]">
         <xsl:text>
 </xsl:text>
-		
     </xsl:template>
     <xsl:template match="tei:head" mode="section">
-		
-		
         <block keep-with-next="always">
             <xsl:apply-templates/>
         </block>
@@ -1405,12 +1286,10 @@
                 </block>
                 <xsl:apply-templates/>
             </xsl:when>
-			
             <xsl:when test="@type='editorial' and @subtype='annotation'">
                 <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
-				
                 <xsl:variable name="divlevel" select="count(ancestor::tei:div)"/>
                 <xsl:call-template name="NumberedHeading">
                     <xsl:with-param name="level">
@@ -1435,11 +1314,8 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:attribute name="keep-with-next.within-page">auto</xsl:attribute>
-					
                 </xsl:otherwise>
             </xsl:choose>
-			
-			
             <xsl:variable name="divid">
                 <xsl:choose>
                     <xsl:when test="@xml:id">
@@ -1487,10 +1363,8 @@
                     </xsl:call-template>
                 </xsl:if>
             </xsl:variable>
-			
             <xsl:value-of select="$Number"/>
             <xsl:if test="$divRunningheads='true'">
-				
                 <xsl:choose>
                     <xsl:when test="$level=0">
                         <marker marker-class-name="section1"/>
@@ -1524,14 +1398,12 @@
                         <xsl:value-of select="$Number"/>
                         <xsl:call-template name="headingNumberSuffix"/>
                     </xsl:if>
-					
                     <xsl:call-template name="makeRunningHeadText"/>
                 </marker>
             </xsl:if>
             <xsl:apply-templates mode="section" select="tei:head"/>
             <xsl:choose>
                 <xsl:when test="$foEngine='passivetex'">
-					
                     <fotex:bookmark fotex-bookmark-level="{$level}" fotex-bookmark-label="{$divid}">
                         <xsl:if test="$numberHeadings='true'">
                             <xsl:value-of select="$Number"/>
@@ -1546,7 +1418,6 @@
         <xsl:variable name="textNadpisu">
             <xsl:apply-templates select="tei:head" mode="runningHead"/>
         </xsl:variable>
-		
         <xsl:choose>
             <xsl:when test="string-length(normalize-space($textNadpisu)) &gt; 150">
                 <xsl:choose>
