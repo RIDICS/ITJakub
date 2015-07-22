@@ -229,11 +229,11 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public string GetResultCountSearchDictionaries(List<SearchCriteriaContract> searchCriterias)
+        public string ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
             try
             {
-                return Channel.GetResultCountSearchDictionaries(searchCriterias);
+                return Channel.ListSearchDictionariesResultsCount(searchCriterias);
             }
             catch (CommunicationException ex)
             {

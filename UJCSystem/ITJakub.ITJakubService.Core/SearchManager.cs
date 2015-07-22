@@ -286,11 +286,11 @@ namespace ITJakub.ITJakubService.Core
         
         public HeadwordSearchResultContract GetHeadwordSearchResultCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            // TODO search in SQL
+            // TODO search in SQL and get bookVersionPair
 
             var fileteredCriterias = FilterSearchCriterias(searchCriterias);
 
-            //var serializedResult = m_searchServiceClient.GetResultCountSearchDictionaries(fileteredCriterias.NonMetadataCriterias);
+            //var serializedResult = m_searchServiceClient.ListSearchDictionariesResultsCount(fileteredCriterias.NonMetadataCriterias);
 
             return new HeadwordSearchResultContract
             {
@@ -301,11 +301,28 @@ namespace ITJakub.ITJakubService.Core
 
         public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            // TODO search in SQL
+            // TODO search in SQL and get bookVersionPair
+            var databaseSearchResult =
+                m_bookVersionRepository.GetBookVersionsByGuid(new List<string>
+                {
+                    "{08BE3E56-77D0-46C1-80BB-C1346B757BE5}",
+                    "{1ADA5193-4375-4269-8222-D8BE81D597DB}"
+                }).Select(x => new BookVersionPairContract
+                {
+                    Guid = x.Book.Guid,
+                    VersionId = x.VersionId
+                }).ToList();
+
+            var resultRestrictionContract = new ResultRestrictionCriteriaContract
+            {
+                ResultBooks = databaseSearchResult
+            };
 
             var fileteredCriterias = FilterSearchCriterias(searchCriterias);
+            fileteredCriterias.NonMetadataCriterias.Add(resultRestrictionContract);
 
             var serializedResult = m_searchServiceClient.ListSearchDictionariesResults(fileteredCriterias.NonMetadataCriterias);
+
 
             return new List<HeadwordContract>  //TODO
             {

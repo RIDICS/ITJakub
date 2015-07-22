@@ -1,10 +1,10 @@
 $(document).ready(function () {
     var search = new Search($("#dictionarySearchDiv"), processSearchJson, processSearchText);
     var disabledOptions = new Array();
-    disabledOptions.push(SearchTypeEnum.Author);
-    disabledOptions.push(SearchTypeEnum.Title);
-    disabledOptions.push(SearchTypeEnum.Editor);
-    disabledOptions.push(SearchTypeEnum.Dating);
+    disabledOptions.push(4 /* Fulltext */);
+    disabledOptions.push(9 /* TokenDistance */);
+    disabledOptions.push(6 /* Sentence */);
+    disabledOptions.push(5 /* Heading */);
     search.makeSearch(disabledOptions);
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
