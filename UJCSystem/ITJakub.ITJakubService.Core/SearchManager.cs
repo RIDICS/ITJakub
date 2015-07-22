@@ -63,11 +63,12 @@ namespace ITJakub.ITJakubService.Core
         {
             var nonMetadataCriterias = new List<SearchCriteriaContract>();
             var conjunction = new List<SearchCriteriaQuery>();
+            var metadataParameters = new Dictionary<string,object>();
             foreach (var searchCriteriaContract in searchCriterias)
             {
                 if (m_searchCriteriaDirector.IsCriteriaSupported(searchCriteriaContract))
                 {
-                    var criteriaQuery = m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract);
+                    var criteriaQuery = m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract, metadataParameters);
                     conjunction.Add(criteriaQuery);
                 }
                 else
@@ -78,6 +79,7 @@ namespace ITJakub.ITJakubService.Core
 
             return new FilteredCriterias
             {
+                MetadataParameters = metadataParameters,
                 NonMetadataCriterias = nonMetadataCriterias,
                 ConjunctionQuery = conjunction
             };
@@ -88,7 +90,7 @@ namespace ITJakub.ITJakubService.Core
             var filteredCriterias = FilterSearchCriterias(searchCriterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
 
-            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(filteredCriterias.ConjunctionQuery);
+            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters));
             if (databaseSearchResult.Count == 0)
                 return new List<SearchResultContract>();
 
@@ -305,10 +307,10 @@ namespace ITJakub.ITJakubService.Core
         
         public int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            FilteredCriterias  filteredCriterias = FilterSearchCriterias(searchCriterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
-
-            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(filteredCriterias.ConjunctionQuery);
+            SearchCriteriaQueryCreator creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
+            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(creator);
             if (databaseSearchResult.Count == 0)
                 return 0;
 
@@ -409,6 +411,8 @@ namespace ITJakub.ITJakubService.Core
         {
             public List<SearchCriteriaQuery> ConjunctionQuery { get; set; }
             public List<SearchCriteriaContract> NonMetadataCriterias { get; set; }
+
+            public Dictionary<string, object> MetadataParameters { get; set; } 
         }
     }
 }
