@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
-using System.Runtime.Serialization;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
@@ -106,29 +104,76 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AdvancedSearch(string json, int? start, int? count)
+        public ActionResult GetEditionsWithCategories()
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var editionsWithCategories = m_serviceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
+            return Json(editionsWithCategories, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AdvancedSearch(string json, short? sortingEnum, bool? sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json,
+                new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
 
-            if (start.HasValue)
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
             {
-                listSearchCriteriaContracts.Add(new ResultCriteriaContract
+                Sorting = (SortEnum) sortingEnum,
+                Direction = ListSortDirection.Ascending,
+                HitSettingsContract = new HitSettingsContract
                 {
-                    Start = start.Value,
-                    Count = count,
-                    Direction = ListSortDirection.Ascending,
-                });
-            }
+                    ContextLength = 70,
+                    Count = 3,
+                    Start = 1
+                }
+            });
+
+            listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+            {
+                SelectedBookIds = new List<long> {1, 2},
+                SelectedCategoryIds = new List<int> {1, 2} //TODO
+            });
+
 
             var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { results = results});
+            return Json(new {results});
         }
-        
+
+        public ActionResult AdvancedSearchPaged(string json, int start, int count, short? sortingEnum, bool? sortAsc)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json,
+                new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            {
+                Start = start,
+                Count = count,
+                Sorting = (SortEnum) sortingEnum,
+                Direction = ListSortDirection.Ascending,
+                HitSettingsContract = new HitSettingsContract
+                {
+                    ContextLength = 70,
+                    Count = 3,
+                    Start = 1
+                }
+            });
+
+            listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+            {
+                SelectedBookIds = new List<long> {1, 2},
+                SelectedCategoryIds = new List<int> {1, 2} //TODO
+            });
+
+
+            var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new {results});
+        }
+
         public ActionResult TextSearch(string text, int? pageNumber)
         {
             //m_serviceClient.SearchByCriteria(listSearchCriteriaContracts); //TODO implement
-            return Json(new { results = "TODO" });
+            return Json(new {results = "TODO"});
         }
 
         public ActionResult SearchCriteriaMocked()
@@ -402,7 +447,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     }
                 }
             };
-            
+
             var resultSearchCrit2 = new SearchResultContract
             {
                 Authors =

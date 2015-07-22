@@ -89,9 +89,8 @@ var Search = (function () {
                 _this.advancedRegexEditor.setDisabledOptions(disabledOptions);
                 _this.advancedRegexEditor.makeRegExSearch();
                 $(_this.searchbarAdvancedEditorContainer).hide();
-                $(_this.searchbarAdvancedEditorContainer).slideDown(_this.speedAnimation);
             }
-            else if ($(_this.searchbarAdvancedEditorContainer).is(":hidden")) {
+            if ($(_this.searchbarAdvancedEditorContainer).is(":hidden")) {
                 var textboxValue = $(_this.searchInputTextbox).val();
                 if (_this.isValidJson(textboxValue)) {
                     _this.advancedRegexEditor.importJson(textboxValue);

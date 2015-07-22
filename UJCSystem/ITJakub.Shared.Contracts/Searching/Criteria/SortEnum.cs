@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 namespace ITJakub.Shared.Contracts.Searching.Criteria
 {
     [DataContract]
-    public enum SortEnum
+    public enum SortEnum : short
     {
         [EnumMember]
         Author = 0,

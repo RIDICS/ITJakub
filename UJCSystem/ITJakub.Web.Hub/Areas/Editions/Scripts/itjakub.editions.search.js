@@ -44,9 +44,11 @@ $(document).ready(function () {
         }
     }
     bibliographyModule.createPagination(10, pageClickCallbackForBiblModule, 500); //enable pagination
-    //var searchBox = new SearchBox("#searchbox", "Editions/Editions");
-    //searchBox.addDataSet("Title", "Názvy");
-    //searchBox.addDataSet("Author", "Autoři");
-    //searchBox.create();
+    var callbackDelegate = new DropDownSelectCallbackDelegate();
+    callbackDelegate.selectedChangedCallback = function (state) {
+        //TODO add cataegory ids and book ids to request
+    };
+    var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
+    editionsSelector.makeDropdown();
 });
 //# sourceMappingURL=itjakub.editions.search.js.map

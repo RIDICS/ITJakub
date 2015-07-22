@@ -113,13 +113,15 @@ class Search {
 
         $(this.advancedButton).click(() => {
             $(this.advancedButton).css("visibility", "hidden");
+
             if (this.searchbarAdvancedEditorContainer.children.length === 0) {
                 this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer,(json: string) => this.closeAdvancedSearchEditor(json));
                 this.advancedRegexEditor.setDisabledOptions(disabledOptions);
                 this.advancedRegexEditor.makeRegExSearch();
                 $(this.searchbarAdvancedEditorContainer).hide();
-                $(this.searchbarAdvancedEditorContainer).slideDown(this.speedAnimation);
-            } else if ($(this.searchbarAdvancedEditorContainer).is(":hidden")) {       //show advanced search
+            }
+
+            if ($(this.searchbarAdvancedEditorContainer).is(":hidden")) {       //show advanced search
                 var textboxValue = $(this.searchInputTextbox).val();
                 if(this.isValidJson(textboxValue)){
                     this.advancedRegexEditor.importJson(textboxValue);
