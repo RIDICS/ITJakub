@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -38,7 +36,7 @@ namespace ITJakub.SearchService.Core.Exist
             Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
-            }));
+            })).Wait();
 
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("End upload file '{0}' of book '{1}' and version '{2}'", fileName, bookId,
@@ -53,7 +51,7 @@ namespace ITJakub.SearchService.Core.Exist
             Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
-            }));
+            })).Wait();
         }
 
         public void UploadSharedFile(string fileName, Stream dataStream)
@@ -63,7 +61,7 @@ namespace ITJakub.SearchService.Core.Exist
             Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
-            }));
+            })).Wait();
         }
 
         public string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string outputFormat)

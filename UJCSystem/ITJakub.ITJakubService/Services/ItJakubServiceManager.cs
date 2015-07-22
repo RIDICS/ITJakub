@@ -100,6 +100,7 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.SearchByCriteria(searchCriterias);
         }
+
         #region CardFile methods
         public IEnumerable<CardFileContract> GetCardFiles()
         {
