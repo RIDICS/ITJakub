@@ -29,7 +29,8 @@ var BibliographyModule = (function () {
         this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
         $(this.sortBarContainer).empty();
-        var sortBarHtml = new SortBar().makeSortBar(this.booksContainer, this.sortBarContainer);
+        this.sortBar = new SortBar();
+        var sortBarHtml = this.sortBar.makeSortBar(this.booksContainer, this.sortBarContainer);
         $(this.sortBarContainer).append(sortBarHtml);
     }
     BibliographyModule.prototype.showBooks = function (books) {
@@ -94,10 +95,10 @@ var BibliographyModule = (function () {
         this.paginator.goToPage(pageNumber);
     };
     BibliographyModule.prototype.createPagination = function (booksOnPage, pageClickCallback, booksCount) {
-        this.paginator = new Pagination(this.paginatorContainer, booksOnPage);
-        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
         this.booksCount = booksCount;
         this.booksOnPage = booksOnPage;
+        this.paginator = new Pagination(this.paginatorContainer, booksOnPage);
+        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
     };
     BibliographyModule.prototype.getPagesCount = function () {
         return this.paginator.getPageCount();
@@ -111,6 +112,12 @@ var BibliographyModule = (function () {
     BibliographyModule.prototype.destroyPagination = function () {
         $(this.paginatorContainer).empty();
         this.paginator = null;
+    };
+    BibliographyModule.prototype.isSortedAsc = function () {
+        return this.sortBar.isSortedAsc();
+    };
+    BibliographyModule.prototype.getSortCriteria = function () {
+        return this.sortBar.getSortCriteria();
     };
     return BibliographyModule;
 })();

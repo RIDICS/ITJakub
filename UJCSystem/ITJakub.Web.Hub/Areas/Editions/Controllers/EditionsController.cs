@@ -125,7 +125,6 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             }
 
             var count = m_serviceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-
             return Json(new {count}, JsonRequestBehavior.AllowGet);
         }
 

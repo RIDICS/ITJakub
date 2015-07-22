@@ -2,7 +2,7 @@ var SortBar = (function () {
     function SortBar() {
         this.comparatorResolver = new ComparatorResolver();
         this.actualSortOrder = 1;
-        this.actualSortOptionValue = "bookid"; //TODO get default sort option from config
+        this.actualSortOptionValue = 1 /* Title */;
     }
     SortBar.prototype.makeSortBar = function (booksContainer, sortBarContainer) {
         var _this = this;
@@ -11,14 +11,14 @@ var SortBar = (function () {
         var select = document.createElement('select');
         $(select).change(function () {
             var selectedOptionValue = $(sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected").val();
-            _this.actualSortOptionValue = selectedOptionValue;
+            _this.actualSortOptionValue = parseInt(selectedOptionValue);
             var comparator = _this.comparatorResolver.getComparatorForOptionValue(selectedOptionValue);
             _this.sort(comparator, _this.actualSortOrder, booksContainer);
         });
-        this.addOption(select, "Název", "name");
-        this.addOption(select, "Id", "bookid");
-        this.addOption(select, "Datace", "century"); //TODO add options to json config
-        this.addOption(select, "Typ", "booktype");
+        this.addOption(select, "Název", 1 /* Title */.toString());
+        this.addOption(select, "Datace", 3 /* Dating */.toString()); //TODO add options to json config
+        this.addOption(select, "Autor", 0 /* Author */.toString());
+        this.addOption(select, "Editor", 2 /* Editor */.toString());
         sortBarDiv.appendChild(select);
         var sortOrderButton = document.createElement('button');
         sortOrderButton.type = 'button';
@@ -28,7 +28,7 @@ var SortBar = (function () {
         sortOrderButton.appendChild(spanSortAsc);
         $(sortOrderButton).click(function (event) {
             _this.changeSortOrder();
-            var comparator = _this.comparatorResolver.getComparatorForOptionValue(_this.actualSortOptionValue);
+            var comparator = _this.comparatorResolver.getComparatorForOptionValue(_this.actualSortOptionValue.toString());
             _this.sort(comparator, _this.actualSortOrder, booksContainer);
             $(event.currentTarget).children('span').toggleClass('glyphicon-arrow-up glyphicon-arrow-down');
         });
@@ -51,6 +51,12 @@ var SortBar = (function () {
         option.text = text;
         option.value = value;
         selectbox.appendChild(option);
+    };
+    SortBar.prototype.isSortedAsc = function () {
+        return this.actualSortOrder > 0;
+    };
+    SortBar.prototype.getSortCriteria = function () {
+        return this.actualSortOptionValue; //TODO make enum
     };
     return SortBar;
 })();
@@ -77,4 +83,33 @@ var ComparatorResolver = (function () {
     };
     return ComparatorResolver;
 })();
+/*
+ *
+ *
+ * Mirroring of C# datacontract in namespace ITJakub.Shared.Contracts.Searching.Criteria
+ *
+ *
+ * [DataContract]
+    public enum SortEnum : short
+    {
+        [EnumMember]
+        Author = 0,
+        [EnumMember]
+        Title = 1,
+        [EnumMember]
+        Editor = 2,
+        [EnumMember]
+        Dating = 3,
+    }
+ 
+ *
+ *
+ */
+var SortEnum;
+(function (SortEnum) {
+    SortEnum[SortEnum["Author"] = 0] = "Author";
+    SortEnum[SortEnum["Title"] = 1] = "Title";
+    SortEnum[SortEnum["Editor"] = 2] = "Editor";
+    SortEnum[SortEnum["Dating"] = 3] = "Dating";
+})(SortEnum || (SortEnum = {}));
 //# sourceMappingURL=itjakub.plugins.bibliography.sorting.js.map

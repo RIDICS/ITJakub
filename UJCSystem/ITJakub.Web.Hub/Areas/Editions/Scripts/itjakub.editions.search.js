@@ -1,52 +1,98 @@
 $(document).ready(function () {
+    var booksCountOnPage = 10;
+    var bookIds = new Array();
+    var categoryIds = new Array();
     var bookType = $("#listResults").data("book-type");
     var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", bookType);
-    function editionBasicSearch(text, pageNumber) {
+    function editionAdvancedSearchPaged(json, pageNumber) {
+        if (typeof json === "undefined" || json === null || json === "")
+            return;
+        var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
+        var count = bibliographyModule.getBooksCountOnPage();
+        var sortAsc = bibliographyModule.isSortedAsc();
+        var sortingEnum = bibliographyModule.getSortCriteria();
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchPaged",
+            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                bibliographyModule.showBooks(response.books);
+            }
+        });
+    }
+    function editionBasicSearchPaged(text, pageNumber) {
+        if (typeof text === "undefined" || text === null || text === "")
+            return;
+        var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
+        var count = bibliographyModule.getBooksCountOnPage();
+        var sortAsc = bibliographyModule.isSortedAsc();
+        var sortingEnum = bibliographyModule.getSortCriteria();
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/TextSearchCount",
+            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                bibliographyModule.showBooks(response.books);
+            }
+        });
+    }
+    var search;
+    function pageClickCallbackForBiblModule(pageNumber) {
+        if (search.isLastQueryJson()) {
+            editionAdvancedSearchPaged(search.getLastQuery(), pageNumber);
+        }
+        else {
+            editionBasicSearchPaged(search.getLastQuery(), pageNumber);
+        }
+    }
+    function editionBasicSearch(text) {
         if (typeof text === "undefined" || text === null || text === "")
             return;
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearch",
-            data: { text: text, pageNumber: pageNumber },
+            url: getBaseUrl() + "Editions/Editions/TextSearchCount",
+            data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                bibliographyModule.showBooks(response.books);
-                alert("done text");
+                bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, response["count"]); //enable pagination
             }
         });
     }
-    function editionAdvancedSearch(json, pageNumber) {
+    function editionAdvancedSearch(json) {
         if (typeof json === "undefined" || json === null || json === "")
             return;
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/AdvancedSearch",
-            data: { json: json, pageNumber: pageNumber },
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchResultsCount",
+            data: { json: json, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                bibliographyModule.showBooks(response.books);
-                alert("done json");
+                bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, response["count"]); //enable pagination
             }
         });
     }
-    var search = new Search($("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
+    search = new Search($("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
     search.makeSearch();
-    function pageClickCallbackForBiblModule(pageNumber) {
-        if (search.isLastQueryJson()) {
-            editionAdvancedSearch(search.getLastQuery(), pageNumber);
-        }
-        else {
-            editionBasicSearch(search.getLastQuery(), pageNumber);
-        }
-    }
-    bibliographyModule.createPagination(10, pageClickCallbackForBiblModule, 500); //enable pagination
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
-        //TODO add cataegory ids and book ids to request
+        bookIds = new Array();
+        for (var i = 0; i < state.SelectedItems.length; i++) {
+            bookIds.push(state.SelectedItems[i].Id);
+        }
+        categoryIds = new Array();
+        for (var i = 0; i < state.SelectedCategories.length; i++) {
+            categoryIds.push(state.SelectedCategories[i].Id);
+        }
     };
     var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();

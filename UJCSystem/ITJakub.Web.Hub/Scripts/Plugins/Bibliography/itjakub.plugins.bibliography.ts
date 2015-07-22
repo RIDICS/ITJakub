@@ -15,7 +15,9 @@ class BibliographyModule {
     private paginator: Pagination;
     private paginatorContainer: HTMLDivElement;
     private booksCount : number;
-    private booksOnPage : number;
+    private booksOnPage: number;
+
+    private sortBar: SortBar;
 
     constructor(resultsContainer: string, sortBarContainer: string, forcedBookType?: BookTypeEnum) {
         this.resultsContainer = $(resultsContainer);
@@ -47,7 +49,8 @@ class BibliographyModule {
         this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
         $(this.sortBarContainer).empty();
-        var sortBarHtml = new SortBar().makeSortBar(<any>this.booksContainer, this.sortBarContainer);
+        this.sortBar = new SortBar();
+        var sortBarHtml = this.sortBar.makeSortBar(<any>this.booksContainer, this.sortBarContainer);
         $(this.sortBarContainer).append(sortBarHtml);
     }
 
@@ -121,11 +124,12 @@ class BibliographyModule {
         this.paginator.goToPage(pageNumber);
     }
 
-    public createPagination(booksOnPage: number, pageClickCallback: (pageNumber: number) => void, booksCount : number) {
-        this.paginator = new Pagination(<any>this.paginatorContainer, booksOnPage);
-        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
+    public createPagination(booksOnPage: number, pageClickCallback: (pageNumber: number) => void, booksCount: number) {
         this.booksCount = booksCount;
         this.booksOnPage = booksOnPage;
+        this.paginator = new Pagination(<any>this.paginatorContainer, booksOnPage);
+        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
+
     }
 
     public getPagesCount(): number {
@@ -143,6 +147,14 @@ class BibliographyModule {
     public destroyPagination() {
         $(this.paginatorContainer).empty();
         this.paginator = null;
+    }
+
+    public isSortedAsc(): boolean {
+        return this.sortBar.isSortedAsc();
+    }
+
+    public getSortCriteria(): SortEnum {
+        return this.sortBar.getSortCriteria();
     }
 }
 
