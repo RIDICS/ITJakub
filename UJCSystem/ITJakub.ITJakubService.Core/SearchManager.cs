@@ -260,31 +260,14 @@ namespace ITJakub.ITJakubService.Core
             return result;
         }
         
-        public int GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
-            return m_bookVersionRepository.GetPageNumberForHeadword(bookIds, query);
+            return m_bookVersionRepository.GetHeadwordRowNumber(bookIds, query);
         }
-
-        //public HeadwordSearchResultContract GetHeadwordSearchResultCount(string query)
-        //{
-        //    query = string.Format("%{0}%", query);
-        //    var databaseResult = m_bookVersionRepository.GetCountOfSearchHeadword(query, new [] {"{08BE3E56-77D0-46C1-80BB-C1346B757BE5}"});
-
-        //    return null; //TODO
-        //}
-
-        //public IList<HeadwordContract> SearchHeadword(string query, IList<string> dictionaryGuidList, int page, int pageSize)
-        //{
-        //    query = string.Format("%{0}%", query);
-        //    var databaseResult = m_bookVersionRepository.SearchHeadword(query, dictionaryGuidList, page, pageSize);
-        //    var resultList = ConvertHeadwordSearchToContract(databaseResult);
-
-        //    return resultList;
-        //}
         
-        public HeadwordSearchResultContract GetHeadwordSearchResultCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
             // TODO search in SQL and get bookVersionPair
 
@@ -292,14 +275,10 @@ namespace ITJakub.ITJakubService.Core
 
             //var serializedResult = m_searchServiceClient.ListSearchDictionariesResultsCount(fileteredCriterias.NonMetadataCriterias);
 
-            return new HeadwordSearchResultContract
-            {
-                FulltextCount = 123,
-                HeadwordCount = 25
-            }; //TODO
+            return 25; //TODO
         }
 
-        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
             // TODO search in SQL and get bookVersionPair
             var databaseSearchResult =

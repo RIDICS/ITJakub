@@ -345,7 +345,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int GetPageNumberForHeadword(IList<long> selectedBookIds, string headwordQuery)
+        public virtual int GetHeadwordRowNumber(IList<long> selectedBookIds, string headwordQuery)
         {
             using (var session = GetSession())
             {

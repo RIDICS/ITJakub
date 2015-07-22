@@ -741,11 +741,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
             try
             {
-                return Channel.SearchHeadwordByCriteria(searchCriterias);
+                return Channel.SearchHeadwordByCriteria(searchCriterias, searchTarget);
             }
             catch (CommunicationException ex)
             {
@@ -768,29 +768,29 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public HeadwordSearchResultContract GetHeadwordSearchResultCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
             try
             {
-                return Channel.GetHeadwordSearchResultCount(searchCriterias);
+                return Channel.SearchHeadwordByCriteriaResultsCount(searchCriterias, searchTarget);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetHeadwordSearchResultCount failed with: {0}", ex);
+                    m_log.ErrorFormat("SearchHeadwordByCriteriaResultsCount failed with: {0}", ex);
                 throw;
             }
 
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetHeadwordSearchResultCount failed with: {0}", ex);
+                    m_log.ErrorFormat("SearchHeadwordByCriteriaResultsCount failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetHeadwordSearchResultCount timeouted with: {0}", ex);
+                    m_log.ErrorFormat("SearchHeadwordByCriteriaResultsCount timeouted with: {0}", ex);
                 throw;
             }
         }

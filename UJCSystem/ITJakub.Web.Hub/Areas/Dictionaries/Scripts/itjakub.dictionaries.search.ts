@@ -25,11 +25,9 @@ function processSearchJson(json: string) {
         type: "POST",
         traditional: true,
         data: JSON.stringify({
-            "json": json,
-            "start": 0,
-            "count": 50
+            "json": json
         }),
-        url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
+        url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaResultsCount",
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: (response) => {
@@ -45,12 +43,10 @@ function processSearchText(text: string) {
     $.ajax({
         type: "GET",
         traditional: true,
-        data: JSON.stringify({
-            "text": text,
-            "start": 0,
-            "count": 50
-        }),
-        url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaText",
+        data: {
+            text: text
+        },
+        url: getBaseUrl() + "Dictionaries/Dictionaries/SearchBasicResultsCount",
         dataType: "text",
         contentType: "application/json; charset=utf-8",
         success: (response) => {
@@ -60,4 +56,9 @@ function processSearchText(text: string) {
         }
     });
 
+}
+
+interface IHeadwordSearchResultContract {
+    HeadwordCount: number;
+    FulltextCount: number;
 }
