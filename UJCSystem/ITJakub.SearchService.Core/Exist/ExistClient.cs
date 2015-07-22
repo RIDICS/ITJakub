@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -187,6 +189,14 @@ namespace ITJakub.SearchService.Core.Exist
 
             return result;
         }
+        public int GetSearchCriteriaResultsCount(string serializedSearchCriterias)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriterias);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return int.Parse(result);
+        }
 
         #region Helpers
 
@@ -212,5 +222,7 @@ namespace ITJakub.SearchService.Core.Exist
         }
 
         #endregion
+
+        
     }
 }

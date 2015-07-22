@@ -65,6 +65,11 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.ListSearchDictionariesResultsCount(searchCriterias);
         }
 
+        public int GetSearchCriteriaResultsCount(List<SearchCriteriaContract> nonMetadataCriterias)
+        {
+            return m_searchServiceManager.GetSearchCriteriaResultsCount(nonMetadataCriterias);
+        }
+
         public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName,
             OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {

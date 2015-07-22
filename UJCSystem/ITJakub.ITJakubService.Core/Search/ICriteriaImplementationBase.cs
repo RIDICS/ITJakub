@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ITJakub.DataEntities.Database;
+using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.ITJakubService.Core.Search
@@ -38,6 +39,43 @@ namespace ITJakub.ITJakubService.Core.Search
             return new SearchCriteriaQuery
             {
                 Join = string.Format("inner join bv.Authors {0}", authorAlias),
+                Where = whereBuilder.ToString(),
+                Parameters = parameters
+            };
+        }
+    }
+
+    public class CategoryCriteriaImplementation : ICriteriaImplementationBase
+    {
+        private readonly CategoryRepository m_categoryRepository;
+
+        public CategoryCriteriaImplementation(CategoryRepository categoryRepository)
+        {
+            m_categoryRepository = categoryRepository;
+        }
+
+        public CriteriaKey CriteriaKey
+        {
+            get { return CriteriaKey.SelectedCategory; }
+        }
+
+        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
+        {
+            var selectedCategoryContract = (SelectedCategoryCriteriaContract) searchCriteriaContract;
+            var subcategoryIds = m_categoryRepository.GetAllSubcategoryIds(selectedCategoryContract.SelectedCategoryIds);
+            
+            var categoryAlias = string.Format("c{0}", Guid.NewGuid().ToString("N"));
+            var bookAlias = string.Format("b{0}", Guid.NewGuid().ToString("N"));
+            var whereBuilder = new StringBuilder();
+            var parameters = new List<object>();
+
+            whereBuilder.AppendLine(string.Format("{0}.Id in ? or {1}.Id in ?", bookAlias, categoryAlias));
+            parameters.Add(selectedCategoryContract.SelectedBookIds);
+            parameters.Add(subcategoryIds);
+
+            return new SearchCriteriaQuery
+            {
+                Join = string.Format("inner join bv.Categories {0} inner join bv.Book {1}", categoryAlias, bookAlias),
                 Where = whereBuilder.ToString(),
                 Parameters = parameters
             };

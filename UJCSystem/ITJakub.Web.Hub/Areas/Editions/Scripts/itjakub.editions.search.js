@@ -86,6 +86,7 @@ $(document).ready(function () {
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
         bookIds = new Array();
+        bookIds.push(1); //TODO remove
         for (var i = 0; i < state.SelectedItems.length; i++) {
             bookIds.push(state.SelectedItems[i].Id);
         }

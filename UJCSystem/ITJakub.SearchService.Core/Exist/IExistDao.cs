@@ -56,5 +56,9 @@ namespace ITJakub.SearchService.Core.Exist
         [OperationContract]
         [ExistQuery(XqueryName = "list-search-dictionaries-count.xquery")]
         string ListSearchDictionariesResultsCount(string serializedSearchCriteria);
+
+        [OperationContract]
+        [ExistQuery(XqueryName = "list-search-editions-count.xquery")]
+        int GetSearchCriteriaResultsCount(string serializedSearchCriterias);
     }
 }
