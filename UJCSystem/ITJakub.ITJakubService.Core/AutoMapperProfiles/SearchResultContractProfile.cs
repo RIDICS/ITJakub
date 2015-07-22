@@ -12,6 +12,8 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<BookVersion, SearchResultContract>()
+                .ForMember(dest => dest.BookXmlId, opts => opts.MapFrom(src => src.Book.Guid))
+                .ForMember(dest => dest.VersionXmlId, opts => opts.MapFrom(src => src.VersionId)); //TODO forMember for other members
                 .ForMember(dest => dest.BookType, opts => opts.MapFrom(src => src.Book.LastVersion.DefaultBookType.Type)) //TODO change to booktype list (from categories)
                 .ForMember(dest => dest.PageCount, opts => opts.MapFrom(src => src.BookPages.Count))
                 .ForMember(dest => dest.Keywords, opts => opts.MapFrom(src => src.Keywords.Select(x => x.Text).ToList()))
