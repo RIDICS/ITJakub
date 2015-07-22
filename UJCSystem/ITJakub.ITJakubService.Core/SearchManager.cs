@@ -10,24 +10,27 @@ using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.Core.Search;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.MobileApps.MobileContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
-using MobileContracts = ITJakub.MobileApps.MobileContracts;
+using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 
 namespace ITJakub.ITJakubService.Core
 {
     public class SearchManager
     {
+        private const int PrefetchRecordCount = 5;
         private readonly BookRepository m_bookRepository;
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly MetadataSearchCriteriaDirector m_searchCriteriaDirector;
         private readonly SearchServiceClient m_searchServiceClient;
-        private const int PrefetchRecordCount = 5;
 
-        public SearchManager(BookRepository bookRepository, BookVersionRepository bookVersionRepository, CategoryRepository categoryRepository, MetadataSearchCriteriaDirector searchCriteriaDirector, SearchServiceClient searchServiceClient)
+        public SearchManager(BookRepository bookRepository, BookVersionRepository bookVersionRepository,
+            CategoryRepository categoryRepository, MetadataSearchCriteriaDirector searchCriteriaDirector,
+            SearchServiceClient searchServiceClient)
         {
             m_bookRepository = bookRepository;
             m_bookVersionRepository = bookVersionRepository;
@@ -41,7 +44,7 @@ namespace ITJakub.ITJakubService.Core
             var bookVersionResults = m_bookRepository.SearchByTitle(term);
             return Mapper.Map<List<SearchResultContract>>(bookVersionResults);
         }
-        
+
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
         {
             var type = Mapper.Map<BookTypeEnum>(bookType);
@@ -51,7 +54,7 @@ namespace ITJakub.ITJakubService.Core
             return new BookTypeSearchResultContract
             {
                 BookType = bookType,
-                Books = Mapper.Map<IList<BookContract>>(books),
+                Books = Mapper.Map<IList<Shared.Contracts.BookContract>>(books),
                 Categories = Mapper.Map<IList<CategoryContract>>(categories)
             };
         }
@@ -84,8 +87,8 @@ namespace ITJakub.ITJakubService.Core
         {
             var filteredCriterias = FilterSearchCriterias(searchCriterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
-            
-            IList<BookVersionPairContract> databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(filteredCriterias.ConjunctionQuery);
+
+            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(filteredCriterias.ConjunctionQuery);
             if (databaseSearchResult.Count == 0)
                 return new List<SearchResultContract>();
 
@@ -112,11 +115,11 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<List<SearchResultContract>>(bookVersions);
         }
 
-        public List<MobileContracts.BookContract> GetBooksByBookType(MobileContracts.BookTypeContract bookType)
+        public List<BookContract> GetBooksByBookType(BookTypeContract bookType)
         {
             var type = Mapper.Map<BookTypeEnum>(bookType);
             var bookVersions = m_bookRepository.FindBooksLastVersionsByBookType(type);
-            return Mapper.Map<List<MobileContracts.BookContract>>(bookVersions);
+            return Mapper.Map<List<BookContract>>(bookVersions);
         }
 
         public List<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
@@ -126,21 +129,21 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<List<SearchResultContract>>(bookVersions);
         }
 
-        public IList<MobileContracts.BookContract> Search(MobileContracts.BookTypeContract category, MobileContracts.SearchDestinationContract searchBy, string query)
+        public IList<BookContract> Search(BookTypeContract category, SearchDestinationContract searchBy, string query)
         {
             var type = Mapper.Map<BookTypeEnum>(category);
             IList<BookVersion> bookList = null;
 
             switch (searchBy)
             {
-                case MobileContracts.SearchDestinationContract.Author:
+                case SearchDestinationContract.Author:
                     //TODO search by author
                     break;
                 default:
                     bookList = m_bookRepository.SearchByTitleAndBookType(query, type);
                     break;
             }
-            return Mapper.Map<IList<MobileContracts.BookContract>>(bookList);
+            return Mapper.Map<IList<BookContract>>(bookList);
         }
 
         private string PrepareQuery(string query)
@@ -187,7 +190,8 @@ namespace ITJakub.ITJakubService.Core
             return m_bookRepository.GetTypeaheadTitlesByBookType(query, bookType, PrefetchRecordCount);
         }
 
-        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
+            string query)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
             if (bookIds.Count == 0)
@@ -200,20 +204,34 @@ namespace ITJakub.ITJakubService.Core
             return m_bookRepository.GetTypeaheadHeadwords(query, PrefetchRecordCount, bookIds);
         }
 
-        private IList<HeadwordContract> ConvertHeadwordSearchToContract(IList<HeadwordSearchResult> databaseResult)
+        private HeadwordListContract ConvertHeadwordSearchToContract(IList<HeadwordSearchResult> databaseResult)
         {
-            var resultList = new List<HeadwordContract>();
+            var dictionaryList = new Dictionary<string, DictionaryContract>();
+            var headwordList = new List<HeadwordContract>();
             var headwordContract = new HeadwordContract();
             foreach (var headword in databaseResult)
             {
+                DictionaryContract dictionaryContract;
+                if (!dictionaryList.TryGetValue(headword.BookGuid, out dictionaryContract))
+                {
+                    dictionaryContract = new DictionaryContract
+                    {
+                    BookAcronym = headword.BookAcronym,
+                        BookId = 0, // TODO
+                    BookTitle = headword.BookTitle,
+                    BookXmlId = headword.BookGuid,
+                        BookVersionXmlId = null, //TODO
+                        BookVersionId = 0 // TODO
+                    };
+                    dictionaryList.Add(dictionaryContract.BookXmlId, dictionaryContract);
+                }
+
                 var bookInfoContract = new HeadwordBookInfoContract
                 {
-                    BookAcronym = headword.BookAcronym,
-                    BookTitle = headword.BookTitle,
                     BookXmlId = headword.BookGuid,
                     EntryXmlId = headword.XmlEntryId
                 };
-
+                
                 if (headword.Headword == headwordContract.Headword)
                 {
                     headwordContract.Dictionaries.Add(bookInfoContract);
@@ -222,13 +240,18 @@ namespace ITJakub.ITJakubService.Core
                 {
                     headwordContract = new HeadwordContract
                     {
-                        Dictionaries = new List<HeadwordBookInfoContract> { bookInfoContract },
+                        Dictionaries = new List<HeadwordBookInfoContract> {bookInfoContract},
                         Headword = headword.Headword
                     };
-                    resultList.Add(headwordContract);
+                    headwordList.Add(headwordContract);
                 }
             }
-            return resultList;
+
+            return new HeadwordListContract
+            {
+                BookList = dictionaryList,
+                HeadwordList = headwordList
+            };
         }
 
         private IList<long> GetCompleteBookIdList(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
@@ -248,7 +271,8 @@ namespace ITJakub.ITJakubService.Core
                 : m_bookVersionRepository.GetHeadwordCount(bookIds);
         }
 
-        public IList<HeadwordContract> GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int end)
+        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
+            int start, int end)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
@@ -259,15 +283,16 @@ namespace ITJakub.ITJakubService.Core
 
             return result;
         }
-        
+
         public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
             return m_bookVersionRepository.GetHeadwordRowNumber(bookIds, query);
         }
-        
-        public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
+
+        public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias,
+            DictionarySearchTarget searchTarget)
         {
             // TODO search in SQL and get bookVersionPair
 
@@ -277,7 +302,7 @@ namespace ITJakub.ITJakubService.Core
 
             return 25; //TODO
         }
-
+        
         public int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             // TODO search in SQL and get bookVersionPair
@@ -311,31 +336,49 @@ namespace ITJakub.ITJakubService.Core
             var fileteredCriterias = FilterSearchCriterias(searchCriterias);
             fileteredCriterias.NonMetadataCriterias.Add(resultRestrictionContract);
 
-            var serializedResult = m_searchServiceClient.ListSearchDictionariesResults(fileteredCriterias.NonMetadataCriterias);
-
-
-            return new List<HeadwordContract>  //TODO
+            var serializedResult =
+                m_searchServiceClient.ListSearchDictionariesResults(fileteredCriterias.NonMetadataCriterias);
+            var contract = new HeadwordListContract
             {
+                HeadwordList = new List<HeadwordContract> //TODO
+                {
                 new HeadwordContract
                 {
                     Headword = "Abc",
-                    Dictionaries = new List<HeadwordBookInfoContract>{new HeadwordBookInfoContract
+                        Dictionaries = new List<HeadwordBookInfoContract>
                     {
-                        BookAcronym = "ES", BookTitle = "Elektronický slovník"
-                    }}
+                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy1", EntryXmlId = "EntryId1"},
+                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy2", EntryXmlId = "EntryId1"}
+                        }
                 },
                 new HeadwordContract
                 {
                     Headword = "Defg",
-                    Dictionaries = new List<HeadwordBookInfoContract>{new HeadwordBookInfoContract
+                        Dictionaries = new List<HeadwordBookInfoContract>
                     {
-                        BookAcronym = "ES", BookTitle = "Elektronický slovník"
-                    }}
+                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy1", EntryXmlId = "EntryId1"},
+                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy2", EntryXmlId = "EntryId1"},
+                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy3", EntryXmlId = "EntryId3"}
+                        }
+                    }
                 },
+                BookList = new Dictionary<string, DictionaryContract>()                                
             };
+
+            contract.BookList.Add("XmlIdKnihy1", new DictionaryContract {BookXmlId = "XmlIdKnihy1", BookVersionXmlId = "XmlIdVerze"});
+            contract.BookList.Add("XmlIdKnihy2", new DictionaryContract {BookXmlId = "XmlIdKnihy2", BookVersionXmlId = "XmlIdVerze"});
+            contract.BookList.Add("XmlIdKnihy3", null);
+            contract.BookList.Add("XmlIdKnihy4", null);
+
+            var result = contract.ToXml();
+
+            var obj = HeadwordListContract.FromXml(result);
+
+            return null;
         }
-        
-        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid,
+            string xmlEntryId, OutputFormatEnumContract resultFormat)
         {
             return "<div class='entryFree'><span class='bo'>Heslo</span></div>";
             OutputFormat outputFormat;
@@ -345,10 +388,12 @@ namespace ITJakub.ITJakubService.Core
             }
 
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat,
+                bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
-            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryFromSearch(searchCriterias.ToList(), bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
+            var transformationLevel = (ResourceLevelEnumContract) transformation.ResourceLevel;
+            var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryFromSearch(searchCriterias.ToList(),
+                bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
 
             return dictionaryEntryText;
         }

@@ -15,6 +15,7 @@ class DictionaryViewer {
     private headwordDescriptionDivs: HTMLDivElement[];
     private dictionariesInfo: IHeadwordBookInfo[];
     private headwordList: string[];
+    private dictionariesMetadataList: IBookListDictionary;
 
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean = false) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
@@ -65,18 +66,19 @@ class DictionaryViewer {
         });
     }
 
-    private showHeadwords(headwords: IHeadword[]) {
+    private showHeadwords(headwords: IHeadwordList) {
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
         this.headwordDescriptionDivs = [];
         this.dictionariesInfo = [];
         this.headwordList = [];
+        this.dictionariesMetadataList = headwords.BookList;
 
         var listUl = document.createElement("ul");
         var descriptionsDiv = document.createElement("div");
-        for (var i = 0; i < headwords.length; i++) {
+        for (var i = 0; i < headwords.HeadwordList.length; i++) {
             var headwordLi = document.createElement("li");
-            var record = headwords[i];
+            var record = headwords.HeadwordList[i];
 
             var headwordSpan = document.createElement("span");
             $(headwordSpan).text(record.Headword);
@@ -92,6 +94,7 @@ class DictionaryViewer {
 
             for (var j = 0; j < record.Dictionaries.length; j++) {
                 var dictionary = record.Dictionaries[j];
+                var dictionaryMetadata = this.dictionariesMetadataList[dictionary.BookXmlId];
 
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
@@ -114,7 +117,7 @@ class DictionaryViewer {
 
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
-                $(dictionaryLink).text(dictionary.BookTitle);
+                $(dictionaryLink).text(dictionaryMetadata.BookTitle);
                 dictionaryLink.href = "?guid=" + dictionary.BookXmlId;
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
@@ -134,7 +137,7 @@ class DictionaryViewer {
                 // create link
                 var aLink = document.createElement("a");
                 aLink.href = "#";
-                aLink.innerHTML = dictionary.BookAcronym;
+                aLink.innerHTML = dictionaryMetadata.BookAcronym;
                 aLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length-1));
                 $(aLink).addClass("dictionary-result-headword-book");
                 this.createLinkListener(aLink, record.Headword, dictionary, descriptionDiv);
@@ -266,12 +269,24 @@ class DictionaryViewer {
 
 interface IHeadwordBookInfo {
     BookXmlId: string;
-    BookAcronym: string;
-    BookTitle: string;
     EntryXmlId: string;
 }
 
 interface IHeadword {
     Headword: string;
     Dictionaries: Array<IHeadwordBookInfo>;
+}
+
+interface IHeadwordList {
+    BookList: IBookListDictionary;
+    HeadwordList: Array<IHeadword>;
+}
+
+interface IDictionaryContract {
+    BookAcronym: string;
+    BookTitle: string;
+}
+
+interface IBookListDictionary {
+    [bookXmlId: string]: IDictionaryContract;
 }
