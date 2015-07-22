@@ -13,7 +13,8 @@ class DictionaryViewer {
     private headwordList: string[];
     private dictionariesMetadataList: IBookListDictionary;
     private showPageCallback: (pageNumber: number) => void;
-    private advancedSearchJson: string;
+    private searchCriteria: string;
+    private isCriteriaJson: boolean;
 
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
@@ -29,11 +30,12 @@ class DictionaryViewer {
         });
     }
 
-    public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, advancedSearchJson: string = null) {
+    public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, searchCriteria: string = null, isCriteriaJson: boolean = false) {
         this.recordCount = recordCount;
         this.showPageCallback = showPageCallback;
         this.pageSize = pageSize;
-        this.advancedSearchJson = advancedSearchJson;
+        this.searchCriteria = searchCriteria;
+        this.isCriteriaJson = isCriteriaJson;
 
         var pageCount = Math.ceil(this.recordCount / this.pageSize);
         this.pagination.createPagination(pageCount, this.searchAndDisplay.bind(this));
@@ -177,7 +179,7 @@ class DictionaryViewer {
     }
 
     private getAndShowHeadwordDescription(headword: string, bookGuid: string, xmlEntryId: string, container: HTMLDivElement) {
-        if (this.advancedSearchJson == null)
+        if (this.searchCriteria == null)
             this.getAndShowHeadwordDescriptionBasic(headword, bookGuid, xmlEntryId, container);
         else
             this.getAndShowHeadwordDescriptionFromSearch(headword, bookGuid, xmlEntryId, container);
@@ -209,7 +211,8 @@ class DictionaryViewer {
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordDescriptionFromSearch",
             data: {
-                json: this.advancedSearchJson,
+                criteria: this.searchCriteria,
+                isCriteriaJson: this.isCriteriaJson,
                 bookGuid: bookGuid,
                 xmlEntryId: xmlEntryId
             },

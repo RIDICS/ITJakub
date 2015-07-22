@@ -182,9 +182,21 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetHeadwordDescriptionFromSearch(string json, string bookGuid, string xmlEntryId)
+        public ActionResult GetHeadwordDescriptionFromSearch(string criteria, string bookGuid, string xmlEntryId, bool isCriteriaJson)
         {
-            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
+            IList<SearchCriteriaContract> listSearchCriteriaContracts;
+            if (isCriteriaJson)
+            {
+                listSearchCriteriaContracts = DeserializeJsonSearchCriteria(criteria);
+            }
+            else
+            {
+                listSearchCriteriaContracts = new List<SearchCriteriaContract>
+                {
+                    CreateWordListContract(CriteriaKey.Headword, criteria),
+                    CreateWordListContract(CriteriaKey.HeadwordDescription, criteria)
+                };
+            }
 
             var result = m_mainServiceClient.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html);
             return Json(result, JsonRequestBehavior.AllowGet);

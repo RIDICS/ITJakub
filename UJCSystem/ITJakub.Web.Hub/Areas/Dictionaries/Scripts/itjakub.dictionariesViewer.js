@@ -14,12 +14,14 @@ var DictionaryViewer = (function () {
             }
         });
     }
-    DictionaryViewer.prototype.createViewer = function (recordCount, showPageCallback, pageSize, advancedSearchJson) {
-        if (advancedSearchJson === void 0) { advancedSearchJson = null; }
+    DictionaryViewer.prototype.createViewer = function (recordCount, showPageCallback, pageSize, searchCriteria, isCriteriaJson) {
+        if (searchCriteria === void 0) { searchCriteria = null; }
+        if (isCriteriaJson === void 0) { isCriteriaJson = false; }
         this.recordCount = recordCount;
         this.showPageCallback = showPageCallback;
         this.pageSize = pageSize;
-        this.advancedSearchJson = advancedSearchJson;
+        this.searchCriteria = searchCriteria;
+        this.isCriteriaJson = isCriteriaJson;
         var pageCount = Math.ceil(this.recordCount / this.pageSize);
         this.pagination.createPagination(pageCount, this.searchAndDisplay.bind(this));
     };
@@ -136,7 +138,7 @@ var DictionaryViewer = (function () {
             this.print();
     };
     DictionaryViewer.prototype.getAndShowHeadwordDescription = function (headword, bookGuid, xmlEntryId, container) {
-        if (this.advancedSearchJson == null)
+        if (this.searchCriteria == null)
             this.getAndShowHeadwordDescriptionBasic(headword, bookGuid, xmlEntryId, container);
         else
             this.getAndShowHeadwordDescriptionFromSearch(headword, bookGuid, xmlEntryId, container);
@@ -168,7 +170,8 @@ var DictionaryViewer = (function () {
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordDescriptionFromSearch",
             data: {
-                json: this.advancedSearchJson,
+                criteria: this.searchCriteria,
+                isCriteriaJson: this.isCriteriaJson,
                 bookGuid: bookGuid,
                 xmlEntryId: xmlEntryId
             },

@@ -1,6 +1,9 @@
 ﻿$(document).ready(() => {
     var pageSize = 25;
-    var dictionaryViewerAdvanced = new DictionaryViewer("#advanced", "#pagination-advanced", "#headword-description", true);
+    var dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#headword-description", true);
+    var dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#headword-description", true);
+    var dictionaryViewerAdvanced = new DictionaryViewer("#headwords-list-advanced", "#headwords-pagination-advanced", "#headword-description", true);
+    var dictionaryWrapperBasic = new DictionaryViewerTextWrapper(dictionaryViewerHeadword, dictionaryViewerFulltext, pageSize);
     var dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize);
 
     var processSearchJson = (json: string) => {
@@ -10,7 +13,7 @@
 
     var processSearchText = (text: string) => {
         $("#headword-description").empty();
-        //TODO
+        dictionaryWrapperBasic.loadCount(text);
     };
 
     var search = new Search($("#dictionarySearchDiv"), processSearchJson, processSearchText);
@@ -30,30 +33,6 @@
     dictionarySelector.makeDropdown();
 
 });
-
-function processSearchResults(result: any) {
-    alert("processed: " + result);
-}
-
-
-function processSearchText(text: string) {
-    $.ajax({
-        type: "GET",
-        traditional: true,
-        data: {
-            text: text
-        },
-        url: getBaseUrl() + "Dictionaries/Dictionaries/SearchBasicResultsCount",
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: (response) => {
-            processSearchResults(response);
-        },
-        error: (response: JQueryXHR) => {
-        }
-    });
-
-}
 
 class DictionaryViewerJsonWrapper {
     private pageSize: number;
@@ -103,10 +82,73 @@ class DictionaryViewerJsonWrapper {
 }
 
 class DictionaryViewerTextWrapper {
-    
+    private pageSize: number;
+    private headwordViewer: DictionaryViewer;
+    private fulltextViewer: DictionaryViewer;
+    private text: string;
+
+    constructor(headwordViewer: DictionaryViewer, fulltextViewer: DictionaryViewer, pageSize: number) {
+        this.pageSize = pageSize;
+        this.headwordViewer = headwordViewer;
+        this.fulltextViewer = fulltextViewer;
+    }
+
+    loadCount(text: string) {
+        this.text = text;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchBasicResultsCount",
+            data: {
+                text: text
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response: IHeadwordSearchResult) => {
+                this.headwordViewer.createViewer(response.HeadwordCount, this.loadHeadwords.bind(this), this.pageSize, text);
+                this.fulltextViewer.createViewer(response.FulltextCount, this.loadFulltextHeadwords.bind(this), this.pageSize, text);
+            }
+        });
+    }
+
+    loadHeadwords(pageNumber: number) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchBasicHeadword",
+            data: {
+                text: this.text,
+                start: this.pageSize * (pageNumber - 1),
+                count: this.pageSize
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                this.headwordViewer.showHeadwords(response);
+            }
+        });
+    }
+
+    loadFulltextHeadwords(pageNumber: number) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchBasicFulltext",
+            data: {
+                text: this.text,
+                start: this.pageSize * (pageNumber - 1),
+                count: this.pageSize
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                this.fulltextViewer.showHeadwords(response);
+            }
+        });
+    }
 }
 
-interface IHeadwordSearchResultContract {
+interface IHeadwordSearchResult {
     HeadwordCount: number;
     FulltextCount: number;
 }
