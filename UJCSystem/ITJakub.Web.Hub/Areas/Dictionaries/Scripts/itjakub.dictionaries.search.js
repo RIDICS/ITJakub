@@ -1,10 +1,21 @@
 $(document).ready(function () {
+    var pageSize = 25;
+    var dictionaryViewerAdvanced = new DictionaryViewer("#advanced", "#pagination-advanced", "#headword-description", true);
+    var dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize);
+    var processSearchJson = function (json) {
+        $("#headword-description").empty();
+        dictionaryWrapperAdvanced.loadCount(json);
+    };
+    var processSearchText = function (text) {
+        $("#headword-description").empty();
+        //TODO
+    };
     var search = new Search($("#dictionarySearchDiv"), processSearchJson, processSearchText);
     var disabledOptions = new Array();
-    disabledOptions.push(4 /* Fulltext */);
-    disabledOptions.push(9 /* TokenDistance */);
-    disabledOptions.push(6 /* Sentence */);
-    disabledOptions.push(5 /* Heading */);
+    disabledOptions.push(SearchTypeEnum.Fulltext);
+    disabledOptions.push(SearchTypeEnum.TokenDistance);
+    disabledOptions.push(SearchTypeEnum.Sentence);
+    disabledOptions.push(SearchTypeEnum.Heading);
     search.makeSearch(disabledOptions);
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
@@ -14,23 +25,6 @@ $(document).ready(function () {
 });
 function processSearchResults(result) {
     alert("processed: " + result);
-}
-function processSearchJson(json) {
-    $.ajax({
-        type: "POST",
-        traditional: true,
-        data: JSON.stringify({
-            "json": json
-        }),
-        url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaResultsCount",
-        dataType: "text",
-        contentType: "application/json; charset=utf-8",
-        success: function (response) {
-            processSearchResults(response);
-        },
-        error: function (response) {
-        }
-    });
 }
 function processSearchText(text) {
     $.ajax({
@@ -49,4 +43,52 @@ function processSearchText(text) {
         }
     });
 }
+var DictionaryViewerJsonWrapper = (function () {
+    function DictionaryViewerJsonWrapper(dictionaryViewer, pageSize) {
+        this.pageSize = pageSize;
+        this.dictionaryViewer = dictionaryViewer;
+    }
+    DictionaryViewerJsonWrapper.prototype.loadCount = function (json) {
+        var _this = this;
+        this.json = json;
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaResultsCount",
+            data: JSON.stringify({
+                "json": json
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                var resultCount = response;
+                _this.dictionaryViewer.createViewer(resultCount, _this.loadHeadwords.bind(_this), _this.pageSize, json);
+            }
+        });
+    };
+    DictionaryViewerJsonWrapper.prototype.loadHeadwords = function (pageNumber) {
+        var _this = this;
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteria",
+            data: JSON.stringify({
+                "json": this.json,
+                "start": this.pageSize * (pageNumber - 1),
+                "count": this.pageSize
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                _this.dictionaryViewer.showHeadwords(response);
+            }
+        });
+    };
+    return DictionaryViewerJsonWrapper;
+})();
+var DictionaryViewerTextWrapper = (function () {
+    function DictionaryViewerTextWrapper() {
+    }
+    return DictionaryViewerTextWrapper;
+})();
 //# sourceMappingURL=itjakub.dictionaries.search.js.map

@@ -176,7 +176,7 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query);
         }
 
-        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
+        public HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
             return m_searchManager.SearchHeadwordByCriteria(searchCriterias, searchTarget);
         }

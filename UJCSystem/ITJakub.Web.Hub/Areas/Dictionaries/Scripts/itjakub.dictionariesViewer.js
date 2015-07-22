@@ -2,7 +2,6 @@
 var DictionaryViewer = (function () {
     function DictionaryViewer(headwordListContainer, paginationContainer, headwordDescriptionContainer, lazyLoad) {
         var _this = this;
-        if (lazyLoad === void 0) { lazyLoad = false; }
         this.isRequestToPrint = false;
         this.headwordDescriptionContainer = headwordDescriptionContainer;
         this.paginationContainer = paginationContainer;
@@ -15,15 +14,12 @@ var DictionaryViewer = (function () {
             }
         });
     }
-    DictionaryViewer.prototype.createViewer = function (recordCount, searchUrl, state, query, pageSize) {
-        if (query === void 0) { query = null; }
-        if (pageSize === void 0) { pageSize = 50; }
-        this.selectedBookIds = DropDownSelect.getBookIdsFromState(state);
-        this.selectedCategoryIds = DropDownSelect.getCategoryIdsFromState(state);
-        this.currentQuery = query;
+    DictionaryViewer.prototype.createViewer = function (recordCount, showPageCallback, pageSize, advancedSearchJson) {
+        if (advancedSearchJson === void 0) { advancedSearchJson = null; }
         this.recordCount = recordCount;
-        this.searchUrl = searchUrl;
+        this.showPageCallback = showPageCallback;
         this.pageSize = pageSize;
+        this.advancedSearchJson = advancedSearchJson;
         var pageCount = Math.ceil(this.recordCount / this.pageSize);
         this.pagination.createPagination(pageCount, this.searchAndDisplay.bind(this));
     };
@@ -31,24 +27,8 @@ var DictionaryViewer = (function () {
         this.pagination.goToPage(pageNumber);
     };
     DictionaryViewer.prototype.searchAndDisplay = function (pageNumber) {
-        var _this = this;
         this.isRequestToPrint = false;
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: this.searchUrl,
-            data: {
-                selectedBookIds: this.selectedBookIds,
-                query: this.currentQuery,
-                page: pageNumber,
-                pageSize: this.pageSize
-            },
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                _this.showHeadwords(response);
-            }
-        });
+        this.showPageCallback(pageNumber);
     };
     DictionaryViewer.prototype.showHeadwords = function (headwords) {
         $(this.headwordListContainer).empty();
@@ -141,7 +121,27 @@ var DictionaryViewer = (function () {
             _this.loadHeadwordDescription(index);
         });
     };
+    DictionaryViewer.prototype.showLoadHeadword = function (response, container) {
+        $(container).empty();
+        $(container).removeClass("loading");
+        container.innerHTML = response;
+        if (this.isRequestToPrint)
+            this.print();
+    };
+    DictionaryViewer.prototype.showLoadError = function (headword, container) {
+        $(container).empty();
+        $(container).removeClass("loading");
+        $(container).text("Chyba při náčítání hesla '" + headword + "'.");
+        if (this.isRequestToPrint)
+            this.print();
+    };
     DictionaryViewer.prototype.getAndShowHeadwordDescription = function (headword, bookGuid, xmlEntryId, container) {
+        if (this.advancedSearchJson == null)
+            this.getAndShowHeadwordDescriptionBasic(headword, bookGuid, xmlEntryId, container);
+        else
+            this.getAndShowHeadwordDescriptionFromSearch(headword, bookGuid, xmlEntryId, container);
+    };
+    DictionaryViewer.prototype.getAndShowHeadwordDescriptionBasic = function (headword, bookGuid, xmlEntryId, container) {
         var _this = this;
         $.ajax({
             type: "GET",
@@ -154,18 +154,31 @@ var DictionaryViewer = (function () {
             dataType: "json",
             contentType: "application/json",
             success: function (response) {
-                $(container).empty();
-                $(container).removeClass("loading");
-                container.innerHTML = response;
-                if (_this.isRequestToPrint)
-                    _this.print();
+                _this.showLoadHeadword(response, container);
             },
             error: function () {
-                $(container).empty();
-                $(container).removeClass("loading");
-                $(container).text("Chyba při náčítání hesla '" + headword + "'.");
-                if (_this.isRequestToPrint)
-                    _this.print();
+                _this.showLoadError(headword, container);
+            }
+        });
+    };
+    DictionaryViewer.prototype.getAndShowHeadwordDescriptionFromSearch = function (headword, bookGuid, xmlEntryId, container) {
+        var _this = this;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordDescriptionFromSearch",
+            data: {
+                json: this.advancedSearchJson,
+                bookGuid: bookGuid,
+                xmlEntryId: xmlEntryId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                _this.showLoadHeadword(response, container);
+            },
+            error: function () {
+                _this.showLoadError(headword, container);
             }
         });
     };

@@ -303,7 +303,7 @@ namespace ITJakub.ITJakubService.Core
             return 25; //TODO
         }
 
-        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(
+        public HeadwordListContract SearchHeadwordByCriteria(
             IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
             // TODO search in SQL and get bookVersionPair
@@ -337,8 +337,8 @@ namespace ITJakub.ITJakubService.Core
                         Headword = "Abc",
                         Dictionaries = new List<HeadwordBookInfoContract>
                         {
-                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy1", EntryXmlId = "EntryId1"},
-                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy2", EntryXmlId = "EntryId1"}
+                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy1", EntryXmlId = "EntryId1"},
+                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy2", EntryXmlId = "EntryId1"}
                         }
                     },
                     new HeadwordContract
@@ -346,25 +346,21 @@ namespace ITJakub.ITJakubService.Core
                         Headword = "Defg",
                         Dictionaries = new List<HeadwordBookInfoContract>
                         {
-                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy1", EntryXmlId = "EntryId1"},
-                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy2", EntryXmlId = "EntryId1"},
-                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy3", EntryXmlId = "EntryId3"}
+                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy1", EntryXmlId = "EntryId1"},
+                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy2", EntryXmlId = "EntryId1"},
+                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy3", EntryXmlId = "EntryId3"}
                         }
                     }
                 },
                 BookList = new Dictionary<string, DictionaryContract>()                                
             };
 
-            contract.BookList.Add("XmlIdKnihy1", new DictionaryContract {BookXmlId = "XmlIdKnihy1", BookVersionXmlId = "XmlIdVerze"});
-            contract.BookList.Add("XmlIdKnihy2", new DictionaryContract {BookXmlId = "XmlIdKnihy2", BookVersionXmlId = "XmlIdVerze"});
-            contract.BookList.Add("XmlIdKnihy3", null);
+            contract.BookList.Add("XmlIdKnihy1", new DictionaryContract {BookXmlId = "XmlIdKnihy1", BookVersionXmlId = "XmlIdVerze", BookAcronym = "ES"});
+            contract.BookList.Add("XmlIdKnihy2", new DictionaryContract {BookXmlId = "XmlIdKnihy2", BookVersionXmlId = "XmlIdVerze", BookAcronym = "StCS"});
+            contract.BookList.Add("XmlIdKnihy3", new DictionaryContract {BookXmlId = "XmlIdKnihy3", BookVersionXmlId = "XmlIdVerze", BookAcronym = "ESSC"});
             contract.BookList.Add("XmlIdKnihy4", null);
 
-            var result = contract.ToXml();
-
-            var obj = HeadwordListContract.FromXml(result);
-
-            return null;
+            return contract;
         }
 
         public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid,

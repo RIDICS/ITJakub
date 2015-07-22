@@ -58,37 +58,36 @@
                     <li>
                         <a href="#fulltext">Fulltext <span class="badge" id="search-fulltext-count">125</span></a>
                     </li>
+                    <li>
+                        <a href="#fulltext">Pokročilé vyhledávání <span class="badge" id="search-advanced-count">125</span></a>
+                    </li>
                 </ul>
             </div>
-            <div class="dictionary-header dictionary-subheader">
+            @*<div class="dictionary-header dictionary-subheader">
                 <span>Vše ()</span>
                 <span>Zapojené ()</span>
                 <span>Nezapojené ()</span>
-            </div>
+            </div>*@
             <div class="tab-content">
                 <div id="headwords">
-                    <div class="dictionary-result-word-search-list-body" id="headwordList">
-                        <ul>
-                            <li>pes</li>
-                        </ul>
-                    </div>
-                    <div class="dictionary-result-pagination" id="pagination">
-                        <ul class="pagination pagination-sm">
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">...</a></li>
-                        </ul>
-                    </div>
+                    <div class="dictionary-result-word-search-list-body" id="headwords-list"></div>
+                    <div class="dictionary-result-pagination" id="headwords-pagination"></div>
                 </div>
-                <div id="fulltext"></div>
+                <div id="fulltext">
+                    <div class="dictionary-result-word-search-list-body" id="headwords-list-fulltext"></div>
+                    <div class="dictionary-result-pagination" id="headwords-pagination-fulltext"></div>
+                </div>
+                <div id="advanced">
+                    <div class="dictionary-result-word-search-list-body" id="headwords-list-advanced"></div>
+                    <div class="dictionary-result-pagination" id="headwords-pagination-advanced"></div>
+                </div>
             </div>
         </div>
         <div class="dictionary-result-word-search-description">
             <div class="dictionary-header">
                 Heslové stati
             </div>
-            <div class="dictionary-result-word-search-description-body" id="headwordDescription">
+            <div class="dictionary-result-word-search-description-body" id="headword-description">
             </div>
         </div>
     </div>

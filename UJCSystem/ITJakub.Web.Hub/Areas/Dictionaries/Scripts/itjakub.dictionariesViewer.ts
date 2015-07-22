@@ -4,11 +4,7 @@ class DictionaryViewer {
     private paginationContainer: string;
     private headwordListContainer: string;
     private pagination: Pagination;
-    private selectedBookIds: number[];
-    private selectedCategoryIds: number[];
-    private currentQuery: string;
     private recordCount: number;
-    private searchUrl: string;
     private pageSize: number;
     private isLazyLoad: boolean;
     private isRequestToPrint = false;
@@ -16,8 +12,10 @@ class DictionaryViewer {
     private dictionariesInfo: IHeadwordBookInfo[];
     private headwordList: string[];
     private dictionariesMetadataList: IBookListDictionary;
+    private showPageCallback: (pageNumber: number) => void;
+    private advancedSearchJson: string;
 
-    constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean = false) {
+    constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
         this.paginationContainer = paginationContainer;
         this.headwordListContainer = headwordListContainer;
@@ -31,13 +29,11 @@ class DictionaryViewer {
         });
     }
 
-    public createViewer(recordCount: number, searchUrl: string, state: State, query: string = null, pageSize: number = 50) {
-        this.selectedBookIds = DropDownSelect.getBookIdsFromState(state);
-        this.selectedCategoryIds = DropDownSelect.getCategoryIdsFromState(state);
-        this.currentQuery = query;
+    public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, advancedSearchJson: string = null) {
         this.recordCount = recordCount;
-        this.searchUrl = searchUrl;
+        this.showPageCallback = showPageCallback;
         this.pageSize = pageSize;
+        this.advancedSearchJson = advancedSearchJson;
 
         var pageCount = Math.ceil(this.recordCount / this.pageSize);
         this.pagination.createPagination(pageCount, this.searchAndDisplay.bind(this));
@@ -49,25 +45,10 @@ class DictionaryViewer {
 
     private searchAndDisplay(pageNumber: number) {
         this.isRequestToPrint = false;
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: this.searchUrl,
-            data: {
-                selectedBookIds: this.selectedBookIds,
-                query: this.currentQuery,
-                page: pageNumber,
-                pageSize: this.pageSize
-            },
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                this.showHeadwords(response);
-            }
-        });
+        this.showPageCallback(pageNumber);
     }
 
-    private showHeadwords(headwords: IHeadwordList) {
+    public showHeadwords(headwords: IHeadwordList) {
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
         this.headwordDescriptionDivs = [];
@@ -179,7 +160,30 @@ class DictionaryViewer {
         });
     }
 
+    private showLoadHeadword(response: string, container: HTMLDivElement) {
+        $(container).empty();
+        $(container).removeClass("loading");
+        container.innerHTML = response;
+        if (this.isRequestToPrint)
+            this.print();
+    }
+
+    private showLoadError(headword: string, container: HTMLDivElement) {
+        $(container).empty();
+        $(container).removeClass("loading");
+        $(container).text("Chyba při náčítání hesla '" + headword + "'.");
+        if (this.isRequestToPrint)
+            this.print();
+    }
+
     private getAndShowHeadwordDescription(headword: string, bookGuid: string, xmlEntryId: string, container: HTMLDivElement) {
+        if (this.advancedSearchJson == null)
+            this.getAndShowHeadwordDescriptionBasic(headword, bookGuid, xmlEntryId, container);
+        else
+            this.getAndShowHeadwordDescriptionFromSearch(headword, bookGuid, xmlEntryId, container);
+    }
+
+    private getAndShowHeadwordDescriptionBasic(headword: string, bookGuid: string, xmlEntryId: string, container: HTMLDivElement) {
         $.ajax({
             type: "GET",
             traditional: true,
@@ -191,18 +195,31 @@ class DictionaryViewer {
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
-                $(container).empty();
-                $(container).removeClass("loading");
-                container.innerHTML = response;
-                if (this.isRequestToPrint)
-                    this.print();
+                this.showLoadHeadword(response, container);
             },
             error: () => {
-                $(container).empty();
-                $(container).removeClass("loading");
-                $(container).text("Chyba při náčítání hesla '" + headword + "'.");
-                if (this.isRequestToPrint)
-                    this.print();
+                this.showLoadError(headword, container);
+            }
+        });
+    }
+
+    private getAndShowHeadwordDescriptionFromSearch(headword: string, bookGuid: string, xmlEntryId: string, container: HTMLDivElement) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordDescriptionFromSearch",
+            data: {
+                json: this.advancedSearchJson,
+                bookGuid: bookGuid,
+                xmlEntryId: xmlEntryId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                this.showLoadHeadword(response, container);
+            },
+            error: () => {
+                this.showLoadError(headword, container);
             }
         });
     }
