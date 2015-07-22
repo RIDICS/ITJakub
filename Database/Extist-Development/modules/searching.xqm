@@ -92,12 +92,75 @@ declare function search:match-hits-by-fulltext-elements($root as node()*, $query
 	else
 		()
 } ;
+
+declare function search:get-query-documents-matches-headwords($root as node()*, $queries as element()) as item()* {
+	let $query := $queries//query[@type='Headword']
+	return search:match-documents-by-headword-elements($root, $query)
+} ;
+
+declare function search:match-hits-by-headwords($root as node()*, $queries as element()) as item()* {
+	let $query := $queries//query[@type='Headword']
+	return search:match-hits-by-headword-elements($root, $query)
+} ;
+
+declare function search:get-query-documents-matches-entry($root as node()*, $queries as element()) as item()* {
+	let $query := $queries//query[@type='HeadwordDescription']
+	return search:match-documents-by-entry-elements($root, $query)
+} ;
+
+
+declare function search:match-hits-by-entry($root as node()*, $queries as element()) as item()* {
+	let $query := $queries//query[@type='HeadwordDescription']
+	return search:match-hits-by-entry-elements($root, $query)
+} ;
+
+declare function search:match-hits-by-entry-elements($root as node()*, $query as element()) as item()* {
+	if ($root and $query) then
+		$root//tei:entryFree[ft:query(., $query, $search:query-options)]
+	else
+		()
+	
+};
+
+declare function search:match-hits-by-headword-elements($root as node()*, $query as element()) as item()* {
+	if ($root and $query) then
+		$root//tei:entryFree[ft:query(.//tei:form, $query, $search:query-options)]
+	else
+		()
+};
+
 declare function search:get-query-documents-matches($root as node()*, $queries as element()) as node()* {
 	let $fulltext := search:get-query-documents-matches-fulltext($root, $queries)
 	let $heading := search:get-query-documents-matches-heading($root, $queries)
 	let $sentence := search:get-query-documents-matches-sentence($root, $queries)
 	let $token-distance := search:get-query-documents-matches-token-distance($root, $queries)
-	return ($fulltext, $heading, $sentence, $token-distance)
+	let $headwords := search:get-query-documents-matches-headwords($root, $queries)
+	let $entry := search:get-query-documents-matches-entry($root, $queries)
+	return if($headwords or $entry) then
+		search:intersect-sequences($headwords, $entry)
+		else
+		($fulltext, $heading, $sentence, $token-distance, $headwords, $entry)
+} ;
+
+declare function search:intersect-sequences($item1 as item()*, $item2 as item()*) as item()* {
+	let $union := $item1 | $item2
+	let $results := (if ($item1) then $item1 else $union)  intersect
+    (if ($item2) then $item2 else $union)
+	return $results
+} ;
+
+declare function search:match-documents-by-headword-elements($root as node()*, $query as element()?) as node()* {
+	if ($root and $query) then
+		$root//tei:TEI[.//tei:entryFree//tei:form[ft:query(., $query, $search:query-options)]]
+	else
+		()
+} ;
+
+declare function search:match-documents-by-entry-elements($root as node()*, $query as element()?) as node()* {
+	if ($root and $query) then
+		$root//tei:TEI[.//tei:entryFree[ft:query(., $query, $search:query-options)]]
+	else
+		()
 } ;
 
 
@@ -208,6 +271,31 @@ declare function search:get-search-hits($document as node()?,
 		<TotalHitCount xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">{$hits-count}</TotalHitCount>)
 } ;
 
+declare function search:get-dictionaries-search-hits($dictionaries as node()*, 
+$queries as element()?, 
+$result-start as xs:double, $result-count as xs:double) as item()* {
+	let $headwords := search:match-hits-by-entry($dictionaries, $queries)
+	let $entries := search:match-hits-by-headwords($dictionaries, $queries)
+	let $query := <query><term>aby</term></query>
+	(:let $temp := $dictionaries//tei:entryFree[ft:query(., $query, $search:query-options)]:)
+	let $temp := $dictionaries//tei:form[ft:query(., 'na')]
+	(:let $temp := $dictionaries//tei:entryFree[contains(., 'aby')]:)
+	return ($entries, $headwords, $temp)
+	
+	(:let $entries := search:intersect-sequences($headwords, $entries)
+	
+	let $entries := for $entry in $entries
+		order by $entry//tei:orth[1] return $entry
+		
+		let $entries := if($result-count < 1) then 
+				subsequence($entries, $result-start)
+			else
+				subsequence($entries, $result-start, $result-count)
+		
+		return $entries:)
+
+} ;
+
 (:~ převede vyhledávací kritéria na seznam dotazů query pro fulltextové vyhledávání :)
 declare function search:get-queries-from-search-criteria($search-criteria  as node()*) as element() {
 	let $xslt :=
@@ -215,7 +303,7 @@ declare function search:get-queries-from-search-criteria($search-criteria  as no
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
 	xmlns:dc="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract"
-	xmlns:a="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching"
+	xmlns:a="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Criteria"
 	xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
 	xmlns:i="http://www.w3.org/2001/XMLSchema-instance" exclude-result-prefixes="xs xd dc a b i" version="2.0">
 	<xd:doc scope="stylesheet">

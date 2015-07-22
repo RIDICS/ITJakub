@@ -236,9 +236,7 @@
     </xd:doc>
     <xsl:template name="makeTEILink">
         <xsl:param name="ptr"/>
-    
         <xsl:choose>
-      
             <xsl:when test="@target and starts-with(@target,'#')">
                 <xsl:call-template name="makeInternalLink">
                     <xsl:with-param name="target" select="substring-after(@target,'#')"/>
@@ -252,7 +250,6 @@
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-      
             <xsl:when test="@target and $teiP4Compat='true'">
                 <xsl:call-template name="makeInternalLink">
                     <xsl:with-param name="target" select="@target"/>
@@ -266,7 +263,6 @@
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-      
             <xsl:when test="@target">
                 <xsl:call-template name="makeExternalLink">
                     <xsl:with-param name="ptr" select="$ptr"/>
@@ -275,7 +271,6 @@
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-      
             <xsl:when test="@url and starts-with(@url,'#')">
                 <xsl:call-template name="makeInternalLink">
                     <xsl:with-param name="target" select="substring-after(@url,'#')"/>
@@ -289,7 +284,6 @@
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-      
             <xsl:when test="@url">
                 <xsl:call-template name="makeExternalLink">
                     <xsl:with-param name="ptr" select="$ptr"/>
@@ -298,7 +292,6 @@
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-      
             <xsl:when test="@doc">
                 <xsl:call-template name="makeExternalLink">
                     <xsl:with-param name="ptr" select="$ptr"/>
@@ -308,7 +301,6 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-        
                 <xsl:apply-templates/>
             </xsl:otherwise>
         </xsl:choose>

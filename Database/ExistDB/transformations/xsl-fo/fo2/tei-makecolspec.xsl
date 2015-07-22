@@ -85,13 +85,11 @@
                         </xsl:for-each>
                     </xsl:when>
                     <xsl:otherwise>
-
                         <xsl:call-template name="calculateTableSpecs"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
-
                 <xsl:call-template name="calculateTableSpecs"/>
             </xsl:otherwise>
         </xsl:choose>
