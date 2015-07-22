@@ -185,6 +185,10 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.SearchHeadwordByCriteriaResultsCount(searchCriterias, searchTarget);
         }
+        public int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.SearchCriteriaResultsCount(searchCriterias);
+        }
 
         public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
         {

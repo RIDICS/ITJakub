@@ -278,6 +278,17 @@ namespace ITJakub.ITJakubService.Core
             return 25; //TODO
         }
 
+        public int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            // TODO search in SQL and get bookVersionPair
+
+            var fileteredCriterias = FilterSearchCriterias(searchCriterias);
+
+            //var serializedResult = m_searchServiceClient.ListSearchDictionariesResultsCount(fileteredCriterias.NonMetadataCriterias);
+
+            return 25; //TODO
+        }
+
         public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
             // TODO search in SQL and get bookVersionPair

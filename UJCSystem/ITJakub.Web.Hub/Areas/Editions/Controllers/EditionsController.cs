@@ -110,39 +110,28 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return Json(editionsWithCategories, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AdvancedSearch(string json, short? sortingEnum, bool? sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json,
-                new ConditionCriteriaDescriptionConverter());
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            
+            if (selectedBookIds != null || selectedCategoryIds != null)
             {
-                Sorting = (SortEnum) sortingEnum,
-                Direction = ListSortDirection.Ascending,
-                HitSettingsContract = new HitSettingsContract
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
                 {
-                    ContextLength = 70,
-                    Count = 3,
-                    Start = 1
-                }
-            });
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
 
-            listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-            {
-                SelectedBookIds = new List<long> {1, 2},
-                SelectedCategoryIds = new List<int> {1, 2} //TODO
-            });
+            var count = m_serviceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
-
-            var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new {results});
+            return Json(new {count}, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AdvancedSearchPaged(string json, int start, int count, short? sortingEnum, bool? sortAsc)
+        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json,
-                new ConditionCriteriaDescriptionConverter());
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
 
             listSearchCriteriaContracts.Add(new ResultCriteriaContract
@@ -150,30 +139,100 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 Start = start,
                 Count = count,
                 Sorting = (SortEnum) sortingEnum,
-                Direction = ListSortDirection.Ascending,
+                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
                 HitSettingsContract = new HitSettingsContract
                 {
-                    ContextLength = 70,
+                    ContextLength = 50,
                     Count = 3,
                     Start = 1
                 }
             });
 
-            listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+            if (selectedBookIds != null || selectedCategoryIds != null)
             {
-                SelectedBookIds = new List<long> {1, 2},
-                SelectedCategoryIds = new List<int> {1, 2} //TODO
-            });
-
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
 
             var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new {results});
+            return Json(new { results }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult TextSearch(string text, int? pageNumber)
+        public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            //m_serviceClient.SearchByCriteria(listSearchCriteriaContracts); //TODO implement
-            return Json(new {results = "TODO"});
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                  Key = CriteriaKey.Title,
+                  Disjunctions = new List<WordCriteriaContract>
+                  {
+                      new WordCriteriaContract
+                      {
+                          Contains = new List<string>{ text }
+                      }
+                  }
+                }
+            };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            var count = m_serviceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+
+            return Json(new { count }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                  Key = CriteriaKey.Title,
+                  Disjunctions = new List<WordCriteriaContract>
+                  {
+                      new WordCriteriaContract
+                      {
+                          Contains = new List<string>{ text }
+                      }
+                  }
+                },
+                new ResultCriteriaContract
+                {
+                    Start = start,
+                    Count = count,
+                    Sorting = (SortEnum) sortingEnum,
+                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
+                    HitSettingsContract = new HitSettingsContract
+                    {
+                        ContextLength = 50,
+                        Count = 3,
+                        Start = 1
+                    }
+                }
+            };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { results }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SearchCriteriaMocked()
