@@ -28,10 +28,10 @@
             <text qname="tei:oVar"/> 
             <text qname="tei:num"/> 
             <text qname="tei:entryFree"/> 
-        	
-        	 &lt;xr type="bible" norm="Jdc 11,40"&gt;&lt;ref&gt;Jdc 11,40 &lt;/ref&gt;&lt;/xr&gt; 
-        	
-        	 &lt;xr type="pram" norm="~Lit"&gt;&lt;ref&gt;~Lit&lt;/ref&gt;&lt;/xr&gt; <inline qname="hi"/>
+			
+			 &lt;xr type="bible" norm="Jdc 11,40"&gt;&lt;ref&gt;Jdc 11,40 &lt;/ref&gt;&lt;/xr&gt; 
+			
+			 &lt;xr type="pram" norm="~Lit"&gt;&lt;ref&gt;~Lit&lt;/ref&gt;&lt;/xr&gt; <inline qname="hi"/>
         </lucene>
     </index>
 </collection>

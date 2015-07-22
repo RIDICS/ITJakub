@@ -122,8 +122,6 @@
         <xsl:apply-templates/>
         <xsl:value-of select="$post"/>
     </xsl:template>
-
-
     <xsl:template match="tei:biblStruct" mode="xref">
         <xsl:choose>
             <xsl:when test="count(key('ANAMES',@xml:id))=1">
@@ -190,11 +188,8 @@
             </xsl:when>
         </xsl:choose>
     </xsl:template>
-
-
     <xsl:template match="tei:author|tei:editor">
         <xsl:choose>
-    
             <xsl:when test="ancestor::tei:bibl">
                 <xsl:apply-templates/>
             </xsl:when>
@@ -211,7 +206,6 @@
                 <xsl:text>) </xsl:text>
             </xsl:when>
             <xsl:otherwise>
-      
                 <xsl:apply-templates/>
                 <xsl:text>, </xsl:text>
             </xsl:otherwise>
@@ -239,8 +233,6 @@
     <xsl:template match="tei:nameLink" mode="use">
         <xsl:apply-templates/>
     </xsl:template>
-
-
     <xsl:template match="tei:titlePart" mode="simple">
         <xsl:if test="preceding-sibling::tei:titlePart">
             <xsl:text> — </xsl:text>
@@ -413,8 +405,6 @@
             <xsl:text>. </xsl:text>
         </xsl:if>
     </xsl:template>
-
-
     <xsl:template match="tei:biblScope">
         <xsl:choose>
             <xsl:when test="ancestor::tei:bibl">

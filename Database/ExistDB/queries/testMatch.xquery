@@ -12,6 +12,6 @@ import module namespace vwcollection = "http://vokabular.ujc.cas.cz/ns/it-jakub/
 let $documentId := request:get-parameter("bookId", "")
 let $versionId := request:get-parameter("versionId", "")
 let $term := request:get-parameter("term", "")
-let $document := vwcollection:getDocument($documentId)
+let $document := vwcollection:getDocument($documentId, $versionId)
 let $hits := vwsearch:SearchQuery($document, $term)
 return <result>{$hits}</result>
