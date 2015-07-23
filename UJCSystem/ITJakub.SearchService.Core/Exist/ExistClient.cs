@@ -179,13 +179,13 @@ namespace ITJakub.SearchService.Core.Exist
             return result;
         }
 
-        public string ListSearchDictionariesResultsCount(string serializedSearchCriteria)
+        public int ListSearchDictionariesResultsCount(string serializedSearchCriteria)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
             var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
 
-            return result;
+            return int.Parse(result);
         }
 
         #region Helpers

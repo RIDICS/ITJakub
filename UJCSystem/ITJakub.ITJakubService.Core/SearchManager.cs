@@ -294,13 +294,29 @@ namespace ITJakub.ITJakubService.Core
         public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias,
             DictionarySearchTarget searchTarget)
         {
-            // TODO search in SQL and get bookVersionPair
+            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
 
-            var fileteredCriterias = FilterSearchCriterias(searchCriterias);
+            if (searchTarget == DictionarySearchTarget.Fulltext)
+            {
+                // TODO search in SearchService, from SQL get bookVersionPair
+            }
+            else
+            {
+                // TODO search in SQL, get count
+            }
 
-            //var serializedResult = m_searchServiceClient.ListSearchDictionariesResultsCount(fileteredCriterias.NonMetadataCriterias);
+            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(filteredCriterias.ConjunctionQuery);
+            if (databaseSearchResult.Count == 0)
+                return 0;
 
-            return 25; //TODO
+            var resultContract = new ResultRestrictionCriteriaContract
+            {
+                ResultBooks = databaseSearchResult
+            };
+            nonMetadataCriterias.Add(resultContract);
+
+            return m_searchServiceClient.ListSearchDictionariesResultsCount(nonMetadataCriterias);
         }
 
         public HeadwordListContract SearchHeadwordByCriteria(

@@ -162,12 +162,12 @@ namespace ITJakub.SearchService.Core.Exist
             return stringResult;
         }
 
-        public string ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
+        public int ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
 
-            var stringResult = m_client.ListSearchDictionariesResultsCount(resultSearchCriteria.ToXml());
-            return stringResult;
+            var result = m_client.ListSearchDictionariesResultsCount(resultSearchCriteria.ToXml());
+            return result;
         }
     }
 }
