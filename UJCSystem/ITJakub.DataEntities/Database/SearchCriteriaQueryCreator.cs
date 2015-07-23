@@ -71,6 +71,17 @@ namespace ITJakub.DataEntities.Database
             return selectQueryString;
         }
 
+        public string GetQueryStringForHeadwordList(string headwordQuery)
+        {
+            m_metadataParameters["headwordQuery"] = string.Format("%{0}%", headwordQuery);
+
+            var selectQueryString =
+                "select distinct b1.Guid as BookGuid, bv1.Title as BookTitle, bv1.Acronym as BookAcronym, bh1.DefaultHeadword as Headword, bh1.XmlEntryId as XmlEntryId from Book b1 inner join b1.LastVersion bv1 inner join bv1.BookHeadwords bh1";
+
+            selectQueryString = string.Format("{0} where b1.Id in ({1}) and bh1.Headword like :headwordQuery order by bh1.DefaultHeadword", selectQueryString, GetQueryStringForIdList());
+            return selectQueryString;
+        }
+
         public void SetParameters(IQuery query)
         {
             foreach (var parameterKeyValue in m_metadataParameters)

@@ -295,5 +295,23 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return (int) result.Sum(x => x.HeadwordCount);
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<HeadwordSearchResult> SearchHeadwordByCriteria(SearchCriteriaQueryCreator creator, string headwordQuery, int start, int count)
+        {
+            using (var session = GetSession())
+            {
+                var query = session.CreateQuery(creator.GetQueryStringForHeadwordList(headwordQuery));
+                creator.SetParameters(query);
+                
+                var result = query
+                    .SetFirstResult(start)
+                    .SetMaxResults(count)
+                    .SetResultTransformer(Transformers.AliasToBean<HeadwordSearchResult>())
+                    .List<HeadwordSearchResult>();
+
+                return result;
+            }
+        }
     }
 }
