@@ -304,15 +304,18 @@ namespace ITJakub.ITJakubService.Core
         {
             var filteredCriterias = FilterSearchCriterias(searchCriterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
-
+            var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
+            
+            // Only SQL search
             if (searchTarget == DictionarySearchTarget.Headword)
             {
-
-                return 24; //todo return from SQL
+                var query = ((WordListCriteriaContract) filteredCriterias.MetadataCriterias[0]).Disjunctions[0].Contains[0]; // TODO better way
+                var resultCount = m_bookVersionRepository.GetSearchHeadwordCount(creator, query);
+                return resultCount;
             }
+            else return 0; //TODO only debug
 
             // Fulltext search
-            var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
             var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(creator);
             if (databaseSearchResult.Count == 0)
                 return 0;

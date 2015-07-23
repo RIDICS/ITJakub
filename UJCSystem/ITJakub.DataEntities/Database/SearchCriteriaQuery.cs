@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ITJakub.DataEntities.Database
 {
     public class SearchCriteriaQuery
