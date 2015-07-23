@@ -20,11 +20,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        var readerPlugin = new ReaderModule('#ReaderDiv');
-        readerPlugin.makeReader("@Model.BookXmlId", "@Model.BookTitle",@Html.Raw(Json.Encode(@Model.BookPages)));
-
-        var search = new Search($("#SearchDiv")[0], searchCallback, searchCallback);
-        search.makeSearch();
-
+        initReader("@Model.BookXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)));
     });
 </script>

@@ -2,7 +2,7 @@
 
 class ReaderModule {
 
-    readerContainer: string;
+    readerContainer: HTMLDivElement;
     sliderOnPage: number;
     actualPageIndex: number;
     pages: Array<BookPage>;
@@ -19,7 +19,7 @@ class ReaderModule {
     imagePanelIdentificator: string = "ImagePanel";
     textPanelIdentificator: string = "TextPanel";
 
-    constructor(readerContainer: string) {
+    constructor(readerContainer: HTMLDivElement) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
     }
