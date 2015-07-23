@@ -124,7 +124,8 @@ declare function search:match-hits-by-entry-elements($root as node()*, $query as
 			let $rid := $r/tei:TEI/@n/text()
 			let $vid := $r/tei:TEI/substring-after(@change, '#')
 			let $hits := $r/tei:TEI//tei:entryFree[ft:query(., $query, $search:query-options)]
-			for $hit in $hits
+			return $rid
+			(:for $hit in $hits
 			let $hitid := $hit/@xml:id
 			let $hw := subsequence($hit//tei:orth, 1, 1)/text()
 			return <HeadwordContract><Dictionaries><HeadwordBookInfoContract>
@@ -133,7 +134,7 @@ declare function search:match-hits-by-entry-elements($root as node()*, $query as
 				</HeadwordBookInfoContract>
 			</Dictionaries>
 			<Headword>{$hw}</Headword>
-		</HeadwordContract>
+		</HeadwordContract>:)
 	else
 		()
 	
@@ -244,9 +245,9 @@ declare function search:get-document-search-hits($document as node()?,
 			return 
 			<PageResultContext>
 				<ContextStructure>
+					<After>{search:get-kwic-summary-content($summary, 'following')}</After>
 					<Before>{search:get-kwic-summary-content($summary, 'previous')}</Before>
 					<Match>{search:get-kwic-summary-content($summary, 'hi')}</Match>
-					<After>{search:get-kwic-summary-content($summary, 'following')}</After>
 				</ContextStructure>
 				<PageName>{string($pb/@n)}</PageName>
 				<PageXmlId>{string($pb/@xml:id)}</PageXmlId>
@@ -307,8 +308,8 @@ declare function search:get-search-hits($document as node()?,
 declare function search:get-dictionaries-search-hits($dictionaries as node()*, 
 $queries as element()?, 
 $result-start as xs:double, $result-count as xs:double) as item()* {
-	let $headwords := search:match-hits-by-entry($dictionaries, $queries)
-	let $entries := search:match-hits-by-headwords($dictionaries, $queries)
+	let $entries := search:match-hits-by-entry($dictionaries, $queries)
+	let $headwords := search:match-hits-by-headwords($dictionaries, $queries)
 (:	let $query := <query><term>našiti</term></query>:)
 	(:let $temp := $dictionaries//tei:entryFree[ft:query(., $query, $search:query-options)]:)
 	(:let $temp := $dictionaries/tei:TEI//tei:form[ft:query(., 'našiti')]
