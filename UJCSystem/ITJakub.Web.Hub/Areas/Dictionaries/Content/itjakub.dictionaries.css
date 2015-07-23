@@ -247,7 +247,7 @@ ul.pagination-sm {
   display: inline-block;
   margin-top: 0;
 }
-.tab-content div {
+.tab-content > div {
   display: none;
 }
 /*# sourceMappingURL=itjakub.dictionaries.css.map */

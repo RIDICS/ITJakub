@@ -1,18 +1,18 @@
 ﻿$(document).ready(() => {
     var pageSize = 25;
-    var dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#headword-description", true);
-    var dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#headword-description", true);
-    var dictionaryViewerAdvanced = new DictionaryViewer("#headwords-list-advanced", "#headwords-pagination-advanced", "#headword-description", true);
-    var dictionaryWrapperBasic = new DictionaryViewerTextWrapper(dictionaryViewerHeadword, dictionaryViewerFulltext, pageSize);
-    var dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize);
+    var tabs = new DictionarySearchTabs();
 
+    var dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
+    var dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#description-fulltext", true);
+    var dictionaryViewerAdvanced = new DictionaryViewer("#headwords-list-advanced", "#headwords-pagination-advanced", "#description-advanced", true);
+    var dictionaryWrapperBasic = new DictionaryViewerTextWrapper(dictionaryViewerHeadword, dictionaryViewerFulltext, pageSize, tabs);
+    var dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize, tabs);
+    
     var processSearchJson = (json: string) => {
-        $("#headword-description").empty();
         dictionaryWrapperAdvanced.loadCount(json);
     };
 
     var processSearchText = (text: string) => {
-        $("#headword-description").empty();
         dictionaryWrapperBasic.loadCount(text);
     };
 
@@ -32,7 +32,7 @@
     var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeDropdown();
 
-    var tabs = new DictionarySearchTabs();
+    
 });
 
 class DictionarySearchTabs {
@@ -45,6 +45,7 @@ class DictionarySearchTabs {
             new SearchTab("#tab-advanced", "#advanced", "#description-advanced")
         ];
         
+        $("#search-tabs li").addClass("hidden");
         $("#search-tabs a").click(e => {
             e.preventDefault();
             $(e.target).tab("show");
@@ -53,16 +54,16 @@ class DictionarySearchTabs {
     }
 
     show(id: string) {
-        var index = 0;
+        var index = DictionaryTabsEnum.Headwords;
         switch (id) {
             case "#headwords":
-                index = 0;
+                index = DictionaryTabsEnum.Headwords;
                 break;
             case "#fulltext":
-                index = 1;
+                index = DictionaryTabsEnum.Fulltext;
                 break;
             case "#advanced":
-                index = 2;
+                index = DictionaryTabsEnum.Advanced;
                 break;
         }
 
@@ -72,16 +73,25 @@ class DictionarySearchTabs {
     }
 
     showAdvanced() {
-        var searchTab = this.searchTabs[2];
+        var advancedSearchTab = this.searchTabs[DictionaryTabsEnum.Advanced];
         $("#search-tabs li").addClass("hidden");
-        $(searchTab.tabLi).removeClass("hidden");
+        $(advancedSearchTab.tabLi).removeClass("hidden");
+        $(advancedSearchTab.tabLi).children().trigger("click");
     }
 
     showBasic() {
-        var searchTab = this.searchTabs[2];
+        var advancedSearchTab = this.searchTabs[DictionaryTabsEnum.Advanced];
+        var headwordSearchTab = this.searchTabs[DictionaryTabsEnum.Headwords];
         $("#search-tabs li").removeClass("hidden");
-        $(searchTab.tabLi).addClass("hidden");
+        $(advancedSearchTab.tabLi).addClass("hidden");
+        $(headwordSearchTab.tabLi).children().trigger("click");
     }
+}
+
+enum DictionaryTabsEnum {
+    Headwords = 0,
+    Fulltext = 1,
+    Advanced = 2
 }
 
 class SearchTab {
@@ -97,11 +107,13 @@ class SearchTab {
 }
 
 class DictionaryViewerJsonWrapper {
+    private tabs: DictionarySearchTabs;
     private pageSize: number;
     private dictionaryViewer: DictionaryViewer;
     private json: string;
 
-    constructor(dictionaryViewer: DictionaryViewer, pageSize: number) {
+    constructor(dictionaryViewer: DictionaryViewer, pageSize: number, tabs: DictionarySearchTabs) {
+        this.tabs = tabs;
         this.pageSize = pageSize;
         this.dictionaryViewer = dictionaryViewer;
     }
@@ -117,8 +129,9 @@ class DictionaryViewerJsonWrapper {
             }),
             dataType: "json",
             contentType: "application/json",
-            success: (response) => {
-                var resultCount = response;
+            success: (resultCount: number) => {
+                $("#search-advanced-count").text(resultCount);
+                this.tabs.showAdvanced();
                 this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, json);
             }
         });
@@ -144,12 +157,14 @@ class DictionaryViewerJsonWrapper {
 }
 
 class DictionaryViewerTextWrapper {
+    private tabs: DictionarySearchTabs;
     private pageSize: number;
     private headwordViewer: DictionaryViewer;
     private fulltextViewer: DictionaryViewer;
     private text: string;
 
-    constructor(headwordViewer: DictionaryViewer, fulltextViewer: DictionaryViewer, pageSize: number) {
+    constructor(headwordViewer: DictionaryViewer, fulltextViewer: DictionaryViewer, pageSize: number, tabs: DictionarySearchTabs) {
+        this.tabs = tabs;
         this.pageSize = pageSize;
         this.headwordViewer = headwordViewer;
         this.fulltextViewer = fulltextViewer;
@@ -167,6 +182,9 @@ class DictionaryViewerTextWrapper {
             dataType: "json",
             contentType: "application/json",
             success: (response: IHeadwordSearchResult) => {
+                $("#search-headword-count").text(response.HeadwordCount);
+                $("#search-fulltext-count").text(response.FulltextCount);
+                this.tabs.showBasic();
                 this.headwordViewer.createViewer(response.HeadwordCount, this.loadHeadwords.bind(this), this.pageSize, text);
                 this.fulltextViewer.createViewer(response.FulltextCount, this.loadFulltextHeadwords.bind(this), this.pageSize, text);
             }

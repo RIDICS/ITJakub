@@ -1,16 +1,15 @@
 $(document).ready(function () {
     var pageSize = 25;
-    var dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#headword-description", true);
-    var dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#headword-description", true);
-    var dictionaryViewerAdvanced = new DictionaryViewer("#headwords-list-advanced", "#headwords-pagination-advanced", "#headword-description", true);
-    var dictionaryWrapperBasic = new DictionaryViewerTextWrapper(dictionaryViewerHeadword, dictionaryViewerFulltext, pageSize);
-    var dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize);
+    var tabs = new DictionarySearchTabs();
+    var dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
+    var dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#description-fulltext", true);
+    var dictionaryViewerAdvanced = new DictionaryViewer("#headwords-list-advanced", "#headwords-pagination-advanced", "#description-advanced", true);
+    var dictionaryWrapperBasic = new DictionaryViewerTextWrapper(dictionaryViewerHeadword, dictionaryViewerFulltext, pageSize, tabs);
+    var dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize, tabs);
     var processSearchJson = function (json) {
-        $("#headword-description").empty();
         dictionaryWrapperAdvanced.loadCount(json);
     };
     var processSearchText = function (text) {
-        $("#headword-description").empty();
         dictionaryWrapperBasic.loadCount(text);
     };
     var search = new Search($("#dictionarySearchDiv"), processSearchJson, processSearchText);
@@ -25,7 +24,6 @@ $(document).ready(function () {
     };
     var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeDropdown();
-    var tabs = new DictionarySearchTabs();
 });
 var DictionarySearchTabs = (function () {
     function DictionarySearchTabs() {
@@ -35,6 +33,7 @@ var DictionarySearchTabs = (function () {
             new SearchTab("#tab-fulltext", "#fulltext", "#description-fulltext"),
             new SearchTab("#tab-advanced", "#advanced", "#description-advanced")
         ];
+        $("#search-tabs li").addClass("hidden");
         $("#search-tabs a").click(function (e) {
             e.preventDefault();
             $(e.target).tab("show");
@@ -42,16 +41,16 @@ var DictionarySearchTabs = (function () {
         });
     }
     DictionarySearchTabs.prototype.show = function (id) {
-        var index = 0;
+        var index = 0 /* Headwords */;
         switch (id) {
             case "#headwords":
-                index = 0;
+                index = 0 /* Headwords */;
                 break;
             case "#fulltext":
-                index = 1;
+                index = 1 /* Fulltext */;
                 break;
             case "#advanced":
-                index = 2;
+                index = 2 /* Advanced */;
                 break;
         }
         var searchTab = this.searchTabs[index];
@@ -59,17 +58,26 @@ var DictionarySearchTabs = (function () {
         $(searchTab.descriptionDiv).addClass("active");
     };
     DictionarySearchTabs.prototype.showAdvanced = function () {
-        var searchTab = this.searchTabs[2];
+        var advancedSearchTab = this.searchTabs[2 /* Advanced */];
         $("#search-tabs li").addClass("hidden");
-        $(searchTab.tabLi).removeClass("hidden");
+        $(advancedSearchTab.tabLi).removeClass("hidden");
+        $(advancedSearchTab.tabLi).children().trigger("click");
     };
     DictionarySearchTabs.prototype.showBasic = function () {
-        var searchTab = this.searchTabs[2];
+        var advancedSearchTab = this.searchTabs[2 /* Advanced */];
+        var headwordSearchTab = this.searchTabs[0 /* Headwords */];
         $("#search-tabs li").removeClass("hidden");
-        $(searchTab.tabLi).addClass("hidden");
+        $(advancedSearchTab.tabLi).addClass("hidden");
+        $(headwordSearchTab.tabLi).children().trigger("click");
     };
     return DictionarySearchTabs;
 })();
+var DictionaryTabsEnum;
+(function (DictionaryTabsEnum) {
+    DictionaryTabsEnum[DictionaryTabsEnum["Headwords"] = 0] = "Headwords";
+    DictionaryTabsEnum[DictionaryTabsEnum["Fulltext"] = 1] = "Fulltext";
+    DictionaryTabsEnum[DictionaryTabsEnum["Advanced"] = 2] = "Advanced";
+})(DictionaryTabsEnum || (DictionaryTabsEnum = {}));
 var SearchTab = (function () {
     function SearchTab(tabLi, listDiv, descriptionDiv) {
         this.descriptionDiv = descriptionDiv;
@@ -79,7 +87,8 @@ var SearchTab = (function () {
     return SearchTab;
 })();
 var DictionaryViewerJsonWrapper = (function () {
-    function DictionaryViewerJsonWrapper(dictionaryViewer, pageSize) {
+    function DictionaryViewerJsonWrapper(dictionaryViewer, pageSize, tabs) {
+        this.tabs = tabs;
         this.pageSize = pageSize;
         this.dictionaryViewer = dictionaryViewer;
     }
@@ -95,8 +104,9 @@ var DictionaryViewerJsonWrapper = (function () {
             }),
             dataType: "json",
             contentType: "application/json",
-            success: function (response) {
-                var resultCount = response;
+            success: function (resultCount) {
+                $("#search-advanced-count").text(resultCount);
+                _this.tabs.showAdvanced();
                 _this.dictionaryViewer.createViewer(resultCount, _this.loadHeadwords.bind(_this), _this.pageSize, json);
             }
         });
@@ -122,7 +132,8 @@ var DictionaryViewerJsonWrapper = (function () {
     return DictionaryViewerJsonWrapper;
 })();
 var DictionaryViewerTextWrapper = (function () {
-    function DictionaryViewerTextWrapper(headwordViewer, fulltextViewer, pageSize) {
+    function DictionaryViewerTextWrapper(headwordViewer, fulltextViewer, pageSize, tabs) {
+        this.tabs = tabs;
         this.pageSize = pageSize;
         this.headwordViewer = headwordViewer;
         this.fulltextViewer = fulltextViewer;
@@ -140,6 +151,9 @@ var DictionaryViewerTextWrapper = (function () {
             dataType: "json",
             contentType: "application/json",
             success: function (response) {
+                $("#search-headword-count").text(response.HeadwordCount);
+                $("#search-fulltext-count").text(response.FulltextCount);
+                _this.tabs.showBasic();
                 _this.headwordViewer.createViewer(response.HeadwordCount, _this.loadHeadwords.bind(_this), _this.pageSize, text);
                 _this.fulltextViewer.createViewer(response.FulltextCount, _this.loadFulltextHeadwords.bind(_this), _this.pageSize, text);
             }
