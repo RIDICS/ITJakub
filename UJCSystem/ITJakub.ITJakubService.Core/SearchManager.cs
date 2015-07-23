@@ -106,14 +106,24 @@ namespace ITJakub.ITJakubService.Core
             };
             nonMetadataCriterias.Add(resultContract);
 
-            m_searchServiceClient.ListSearchEditionsResults(nonMetadataCriterias);
+            var searchResults = m_searchServiceClient.ListSearchEditionsResults(nonMetadataCriterias);
 
-            //TODO return correct results
-
-            var guidList = databaseSearchResult.Select(x => x.Guid);
+            var guidList = searchResults.SearchResults.Select(x => x.BookXmlId);
             var result = m_bookVersionRepository.GetBookVersionsByGuid(guidList);
 
-            return Mapper.Map<List<SearchResultContract>>(result);
+            var resultDictionary = result.ToDictionary(x => x.Book.Guid);
+
+            var searchResultFullContext = new List<SearchResultContract>();
+
+            foreach (var searchResult in searchResults.SearchResults)
+            {
+                var localResult = Mapper.Map<SearchResultContract>(resultDictionary[searchResult.BookXmlId]);
+                localResult.TotalHitCount = searchResult.TotalHitCount;
+                localResult.Results = searchResult.Results;
+                searchResultFullContext.Add(localResult);
+            }
+
+            return searchResultFullContext;
         }
 
         public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)

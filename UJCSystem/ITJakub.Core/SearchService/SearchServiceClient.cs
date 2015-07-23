@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
 
 namespace ITJakub.Core.SearchService
@@ -177,11 +178,11 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
+        public SearchResultContractList ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
             try
             {
-                Channel.ListSearchEditionsResults(searchCriterias);
+                return Channel.ListSearchEditionsResults(searchCriterias);
             }
             catch (CommunicationException ex)
             {
