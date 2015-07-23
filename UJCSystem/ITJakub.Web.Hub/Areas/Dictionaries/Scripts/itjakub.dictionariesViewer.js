@@ -2,7 +2,6 @@
 var DictionaryViewer = (function () {
     function DictionaryViewer(headwordListContainer, paginationContainer, headwordDescriptionContainer, lazyLoad) {
         var _this = this;
-        if (lazyLoad === void 0) { lazyLoad = false; }
         this.isRequestToPrint = false;
         this.headwordDescriptionContainer = headwordDescriptionContainer;
         this.paginationContainer = paginationContainer;
@@ -15,39 +14,22 @@ var DictionaryViewer = (function () {
             }
         });
     }
-    DictionaryViewer.prototype.createViewer = function (recordCount, searchUrl, state, query, pageSize) {
-        if (query === void 0) { query = null; }
-        if (pageSize === void 0) { pageSize = 50; }
-        this.selectedBookIds = DropDownSelect.getBookIdsFromState(state);
-        this.selectedCategoryIds = DropDownSelect.getCategoryIdsFromState(state);
-        this.currentQuery = query;
+    DictionaryViewer.prototype.createViewer = function (recordCount, showPageCallback, pageSize, searchCriteria, isCriteriaJson) {
+        if (searchCriteria === void 0) { searchCriteria = null; }
+        if (isCriteriaJson === void 0) { isCriteriaJson = false; }
         this.recordCount = recordCount;
-        this.searchUrl = searchUrl;
+        this.showPageCallback = showPageCallback;
         this.pageSize = pageSize;
+        this.searchCriteria = searchCriteria;
+        this.isCriteriaJson = isCriteriaJson;
         this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
     };
     DictionaryViewer.prototype.goToPage = function (pageNumber) {
         this.pagination.goToPage(pageNumber);
     };
     DictionaryViewer.prototype.searchAndDisplay = function (pageNumber) {
-        var _this = this;
         this.isRequestToPrint = false;
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: this.searchUrl,
-            data: {
-                selectedBookIds: this.selectedBookIds,
-                query: this.currentQuery,
-                page: pageNumber,
-                pageSize: this.pageSize
-            },
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                _this.showHeadwords(response);
-            }
-        });
+        this.showPageCallback(pageNumber);
     };
     DictionaryViewer.prototype.showHeadwords = function (headwords) {
         $(this.headwordListContainer).empty();
@@ -68,13 +50,16 @@ var DictionaryViewer = (function () {
             $(favoriteGlyphSpan).addClass("glyphicon").addClass("glyphicon-star-empty").addClass("dictionary-result-headword-favorite");
             headwordLi.appendChild(headwordSpan);
             headwordLi.appendChild(favoriteGlyphSpan);
+            var dictionaryListDiv = document.createElement("div");
+            $(dictionaryListDiv).addClass("dictionary-result-book-list");
             for (var j = 0; j < record.Dictionaries.length; j++) {
                 var dictionary = record.Dictionaries[j];
                 var dictionaryMetadata = this.dictionariesMetadataList[dictionary.BookXmlId];
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
                 var descriptionDiv = document.createElement("div");
-                $(descriptionDiv).addClass("loading").addClass("dictionary-entry-description-container");
+                $(mainHeadwordDiv).addClass("loading-background");
+                $(descriptionDiv).addClass("dictionary-entry-description-container");
                 if (this.isLazyLoad) {
                     this.prepareLazyLoad(mainHeadwordDiv);
                 }
@@ -103,14 +88,20 @@ var DictionaryViewer = (function () {
                 this.headwordList.push(record.Headword);
                 descriptionsDiv.appendChild(mainHeadwordDiv);
                 // create link
+                if (j > 0) {
+                    var delimiterSpan = document.createElement("span");
+                    $(delimiterSpan).text(" | ");
+                    dictionaryListDiv.appendChild(delimiterSpan);
+                }
                 var aLink = document.createElement("a");
                 aLink.href = "#";
                 aLink.innerHTML = dictionaryMetadata.BookAcronym;
                 aLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length - 1));
                 $(aLink).addClass("dictionary-result-headword-book");
                 this.createLinkListener(aLink, record.Headword, dictionary, descriptionDiv);
-                headwordLi.appendChild(aLink);
+                dictionaryListDiv.appendChild(aLink);
             }
+            headwordLi.appendChild(dictionaryListDiv);
             listUl.appendChild(headwordLi);
         }
         $(this.headwordListContainer).append(listUl);
@@ -140,7 +131,27 @@ var DictionaryViewer = (function () {
             _this.loadHeadwordDescription(index);
         });
     };
+    DictionaryViewer.prototype.showLoadHeadword = function (response, container) {
+        $(container).empty();
+        $(container).parent().removeClass("loading-background");
+        container.innerHTML = response;
+        if (this.isRequestToPrint)
+            this.print();
+    };
+    DictionaryViewer.prototype.showLoadError = function (headword, container) {
+        $(container).empty();
+        $(container).parent().removeClass("loading-background");
+        $(container).text("Chyba při náčítání hesla '" + headword + "'.");
+        if (this.isRequestToPrint)
+            this.print();
+    };
     DictionaryViewer.prototype.getAndShowHeadwordDescription = function (headword, bookGuid, xmlEntryId, container) {
+        if (this.searchCriteria == null)
+            this.getAndShowHeadwordDescriptionBasic(headword, bookGuid, xmlEntryId, container);
+        else
+            this.getAndShowHeadwordDescriptionFromSearch(headword, bookGuid, xmlEntryId, container);
+    };
+    DictionaryViewer.prototype.getAndShowHeadwordDescriptionBasic = function (headword, bookGuid, xmlEntryId, container) {
         var _this = this;
         $.ajax({
             type: "GET",
@@ -153,18 +164,32 @@ var DictionaryViewer = (function () {
             dataType: "json",
             contentType: "application/json",
             success: function (response) {
-                $(container).empty();
-                $(container).removeClass("loading");
-                container.innerHTML = response;
-                if (_this.isRequestToPrint)
-                    _this.print();
+                _this.showLoadHeadword(response, container);
             },
             error: function () {
-                $(container).empty();
-                $(container).removeClass("loading");
-                $(container).text("Chyba při náčítání hesla '" + headword + "'.");
-                if (_this.isRequestToPrint)
-                    _this.print();
+                _this.showLoadError(headword, container);
+            }
+        });
+    };
+    DictionaryViewer.prototype.getAndShowHeadwordDescriptionFromSearch = function (headword, bookGuid, xmlEntryId, container) {
+        var _this = this;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordDescriptionFromSearch",
+            data: {
+                criteria: this.searchCriteria,
+                isCriteriaJson: this.isCriteriaJson,
+                bookGuid: bookGuid,
+                xmlEntryId: xmlEntryId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                _this.showLoadHeadword(response, container);
+            },
+            error: function () {
+                _this.showLoadError(headword, container);
             }
         });
     };
@@ -179,7 +204,7 @@ var DictionaryViewer = (function () {
     };
     DictionaryViewer.prototype.isAllLoaded = function () {
         var descriptions = $(this.headwordDescriptionContainer);
-        var notLoaded = $(".loading", descriptions);
+        var notLoaded = $(".loading-background", descriptions);
         var notLoadedVisible = notLoaded.parent(":not(.hidden)");
         return notLoadedVisible.length === 0;
     };

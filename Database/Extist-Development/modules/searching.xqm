@@ -1,6 +1,10 @@
 xquery version "3.0";
-
 module namespace search="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/search";
+declare default collation "?lang=cs-CZ";
+
+import module namespace functx = "http://www.functx.com" at "functx.xqm";
+
+
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
 
@@ -45,14 +49,14 @@ declare function search:get-query-documents-matches-token-distance($root as node
 
 declare function search:match-documents-by-heading-elements($root as node()*, $query as element()?) as node()* {
 	if ($root and $query) then
-		$root//tei:TEI[.//(tei:titlePart | tei:head) [ft:query(., $query, $search:query-options)]]
+		$root[.//tei:TEI[.//(tei:titlePart | tei:head) [ft:query(., $query, $search:query-options)]]]
 	else
 		()
 } ;
 
 declare function search:match-documents-by-fulltext-elements($root as node()*, $query as element()?) as node()* {
 	if ($root and $query) then
-		$root//tei:TEI[.//(tei:l | tei:p) [ft:query(., $query, $search:query-options)]]
+		$root[.//tei:TEI[.//(tei:l | tei:p) [ft:query(., $query, $search:query-options)]]]
 	else
 		()
 } ;
@@ -81,14 +85,14 @@ declare function search:get-query-document-hits-token-distance($root as node()*,
 
 declare function search:match-hits-by-heading-elements($root as node()*, $query as element()?) as item()* {
 	if ($root and $query) then
-		$root//(tei:titlePart | tei:head) [ft:query(., $query, $search:query-options)]
+		$root/tei:TEI//(tei:titlePart | tei:head) [ft:query(., $query, $search:query-options)]
 	else
 		()
 } ;
 
 declare function search:match-hits-by-fulltext-elements($root as node()*, $query as element()?) as item()* {
 	if ($root and $query) then
-		$root//(tei:l | tei:p) [ft:query(., $query, $search:query-options)]
+		$root/tei:TEI//(tei:l | tei:p) [ft:query(., $query, $search:query-options)]
 	else
 		()
 } ;
@@ -116,7 +120,12 @@ declare function search:match-hits-by-entry($root as node()*, $queries as elemen
 
 declare function search:match-hits-by-entry-elements($root as node()*, $query as element()) as item()* {
 	if ($root and $query) then
-		$root//tei:entryFree[ft:query(., $query, $search:query-options)]
+(:		for $root1 in $root
+			for $entry in $root1/tei:TEI//tei:entryFree[ft:query(., $query, $search:query-options)]
+			return <hit book-xml-id="{string($root1/tei:TEI/@xml:id)}" entry-id="{$entry/@xml:id}" hw="{subsequence($entry//tei:orth, 1, 1)}"  />
+:)
+			(:$root/tei:TEI//tei:entryFree[ft:query(., $query, $search:query-options)]:)
+			$root/tei:TEI//tei:entryFree[contains(., 'aldran')]
 	else
 		()
 	
@@ -124,7 +133,11 @@ declare function search:match-hits-by-entry-elements($root as node()*, $query as
 
 declare function search:match-hits-by-headword-elements($root as node()*, $query as element()) as item()* {
 	if ($root and $query) then
-		$root//tei:entryFree[ft:query(.//tei:form, $query, $search:query-options)]
+(:		for $root1 in $root
+			for $entry in $root1/tei:TEI//tei:entryFree[ft:query(.//tei:form, $query, $search:query-options)]
+			return <hit book-xml-id="{string($root1/tei:TEI/@xml:id)}" entry-id="{$entry/@xml:id}" hw="{subsequence($entry//tei:orth, 1, 1)}"  />
+:)	
+		$root/tei:TEI//tei:entryFree[ft:query(.//tei:form, $query, $search:query-options)]
 	else
 		()
 };
@@ -136,10 +149,18 @@ declare function search:get-query-documents-matches($root as node()*, $queries a
 	let $token-distance := search:get-query-documents-matches-token-distance($root, $queries)
 	let $headwords := search:get-query-documents-matches-headwords($root, $queries)
 	let $entry := search:get-query-documents-matches-entry($root, $queries)
-	return if($headwords or $entry) then
-		search:intersect-sequences($headwords, $entry)
-		else
-		($fulltext, $heading, $sentence, $token-distance, $headwords, $entry)
+	
+	let $union := $fulltext | $heading | $sentence | $token-distance |  $headwords | $entry
+	let $results :=
+    (if ($fulltext) then $fulltext else $union)  intersect
+    (if ($heading) then $heading else $union)  intersect
+    (if ($sentence) then $sentence else $union)  intersect
+    (if ($token-distance) then $token-distance else $union)  intersect
+    (if ($headwords) then $headwords else $union)  intersect
+    (if ($entry) then $entry else $union)
+	
+	return $results
+		
 } ;
 
 declare function search:intersect-sequences($item1 as item()*, $item2 as item()*) as item()* {
@@ -151,14 +172,14 @@ declare function search:intersect-sequences($item1 as item()*, $item2 as item()*
 
 declare function search:match-documents-by-headword-elements($root as node()*, $query as element()?) as node()* {
 	if ($root and $query) then
-		$root//tei:TEI[.//tei:entryFree//tei:form[ft:query(., $query, $search:query-options)]]
+		$root[.//tei:TEI[.//tei:entryFree//tei:form[ft:query(., $query, $search:query-options)]]]
 	else
 		()
 } ;
 
 declare function search:match-documents-by-entry-elements($root as node()*, $query as element()?) as node()* {
 	if ($root and $query) then
-		$root//tei:TEI[.//tei:entryFree[ft:query(., $query, $search:query-options)]]
+		$root[.//tei:TEI[.//tei:entryFree[ft:query(., $query, $search:query-options)]]]
 	else
 		()
 } ;
@@ -215,9 +236,9 @@ declare function search:get-document-search-hits($document as node()?,
 			return 
 			<PageResultContext>
 				<ContextStructure>
-					<Before>{string($summary//*[@class='previous'][1])}</Before>
-					<Match>{string($summary//*[@class='hi'][1])}</Match>
-					<After>{string($summary//*[@class='following'][1])}</After>
+					<Before>{search:get-kwic-summary-content($summary, 'previous')}</Before>
+					<Match>{search:get-kwic-summary-content($summary, 'hi')}</Match>
+					<After>{search:get-kwic-summary-content($summary, 'following')}</After>
 				</ContextStructure>
 				<PageName>{string($pb/@n)}</PageName>
 				<PageXmlId>{string($pb/@xml:id)}</PageXmlId>
@@ -225,6 +246,10 @@ declare function search:get-document-search-hits($document as node()?,
 		}
 		</Results>,
 		<TotalHitCount xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">{$hits-count}</TotalHitCount>)	
+} ;
+
+declare function search:get-kwic-summary-content($summary as node()*, $class as xs:string) as xs:string {
+	subsequence($summary, 1, 1)//*[@class=$class]
 } ;
 
 (:~ vrací seznam nalezených výskytů včetně příslušného okolí, identifikátoru a čísla strany, kde se doklad nachází :)
@@ -276,16 +301,24 @@ $queries as element()?,
 $result-start as xs:double, $result-count as xs:double) as item()* {
 	let $headwords := search:match-hits-by-entry($dictionaries, $queries)
 	let $entries := search:match-hits-by-headwords($dictionaries, $queries)
-	let $query := <query><term>aby</term></query>
+(:	let $query := <query><term>našiti</term></query>:)
 	(:let $temp := $dictionaries//tei:entryFree[ft:query(., $query, $search:query-options)]:)
-	let $temp := $dictionaries//tei:form[ft:query(., 'na')]
-	(:let $temp := $dictionaries//tei:entryFree[contains(., 'aby')]:)
-	return ($entries, $headwords, $temp)
+	(:let $temp := $dictionaries/tei:TEI//tei:form[ft:query(., 'našiti')]
+	let $temp2 := $dictionaries/tei:TEI//tei:entryFree[ft:query(., $query)]
+	(\:let $temp := $dictionaries//tei:entryFree[contains(., 'aby')]:\)
+	return ($temp, $temp2, $entries):)
 	
-	(:let $entries := search:intersect-sequences($headwords, $entries)
+	let $documents := search:intersect-sequences($headwords, $entries)
 	
-	let $entries := for $entry in $entries
-		order by $entry//tei:orth[1] return $entry
+(:	return ($documents, functx:node-kind($documents)):)
+	
+		for $document at $position in $documents
+			return $document
+(:			return <result n="{$position}" bookXmlId="{string($document/ancestor::tei:TEI/@xml:id)}" entry-id="{$document/@xml:id}" hw="{subsequence($document//tei:orth, 1, 1)}" />:)
+	(:let $entries := for $document in $documents
+			return <result bookXmlId="{string($document/preceding::tei:TEI/@xml:id)}" entry-id="{$document/@xml:id}" hw="{subsequence($document//tei:orth, 1, 1)}" />
+	let $entries := for $result in $entries
+		order by $result/@hw return $result
 		
 		let $entries := if($result-count < 1) then 
 				subsequence($entries, $result-start)

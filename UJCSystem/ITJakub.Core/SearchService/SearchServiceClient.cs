@@ -229,7 +229,7 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public string ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
+        public int ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
             try
             {

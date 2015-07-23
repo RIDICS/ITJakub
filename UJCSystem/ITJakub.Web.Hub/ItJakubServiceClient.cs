@@ -741,7 +741,7 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
+        public HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
             try
             {

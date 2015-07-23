@@ -93,10 +93,8 @@
 
             for (var k = 0; k < book.categoryIds.length; k++) {
                 var categoryId = book.categoryIds[k];
-                var actualCategory = this.categories[categoryId];
-                if (typeof actualCategory !== "undefined" && actualCategory != null) {
-                    actualCategory.bookIds.push(book.id);   
-                }
+                if (this.categories[categoryId])
+                    this.categories[categoryId].bookIds.push(book.id);
             }
         }
     }

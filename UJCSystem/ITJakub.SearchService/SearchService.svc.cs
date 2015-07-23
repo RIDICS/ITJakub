@@ -60,7 +60,7 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.ListSearchDictionariesResults(searchCriterias);
         }
 
-        public string ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
+        public int ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
             return m_searchServiceManager.ListSearchDictionariesResultsCount(searchCriterias);
         }

@@ -36,7 +36,7 @@ namespace ITJakub.Shared.Contracts
         string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
-        string ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias);
+        int ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
         int GetSearchCriteriaResultsCount(List<SearchCriteriaContract> nonMetadataCriterias);

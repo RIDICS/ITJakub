@@ -1,28 +1,14 @@
 ﻿$(document).ready(() => {
     var pageSize = 50;
-    var headwordsListUrl = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordList";
-    var dictionariesViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription", true);
+    var dictionaryViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription", true);
+    var dictionaryViewerWrapper = new DictionaryViewerListWrapper(dictionaryViewer, pageSize);
 
     var searchBox = new SearchBox("#searchbox", "Dictionaries/Dictionaries");
     searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
     searchBox.create();
 
     var loadHeadwordsFunction = (state: State) => {
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordCount",
-            data: {
-                selectedBookIds: DropDownSelect.getBookIdsFromState(state),
-                selectedCategoryIds: DropDownSelect.getCategoryIdsFromState(state)
-            },
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                var resultCount = response;
-                dictionariesViewer.createViewer(resultCount, headwordsListUrl, state, null, pageSize);
-            }
-        });
+        dictionaryViewerWrapper.loadCount(state);
     };
 
     var updateSearchBox = (state: State) => {
@@ -44,7 +30,7 @@
     
     
     $("#printDescription").click(() => {
-        dictionariesViewer.print();
+        dictionaryViewer.print();
     });
 
     $("#searchButton").click(() => {
@@ -63,10 +49,61 @@
             contentType: "application/json",
             success: (response) => {
                 var resultPageNumber = response;
-                dictionariesViewer.goToPage(resultPageNumber);
+                dictionaryViewer.goToPage(resultPageNumber);
             }
         });
     });
 
     loadHeadwordsFunction(dictionarySelector.getState());
-}); 
+});
+
+class DictionaryViewerListWrapper {
+    private pageSize: number;
+    private dictionaryViewer: DictionaryViewer;
+    private selectedBookIds: Array<number>;
+    private selectedCategoryIds: Array<number>;
+
+    constructor(dictionaryViewer: DictionaryViewer, pageSize: number) {
+        this.pageSize = pageSize;
+        this.dictionaryViewer = dictionaryViewer;
+    }
+
+    loadCount(state: State) {
+        this.selectedBookIds = DropDownSelect.getBookIdsFromState(state);
+        this.selectedCategoryIds = DropDownSelect.getCategoryIdsFromState(state);
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordCount",
+            data: {
+                selectedBookIds: this.selectedBookIds,
+                selectedCategoryIds: this.selectedCategoryIds
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                var resultCount = response;
+                this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize);
+            }
+        });
+    }
+
+    loadHeadwords(pageNumber: number) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordList",
+            data: {
+                selectedBookIds: this.selectedBookIds,
+                selectedCategoryIds: this.selectedCategoryIds,
+                page: pageNumber,
+                pageSize: this.pageSize
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                this.dictionaryViewer.showHeadwords(response);
+            }
+        });
+    }
+}

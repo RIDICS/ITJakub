@@ -5,6 +5,7 @@
     background-color: @item-background-color;
     color: white;
     padding: 5px;
+    min-height: 30px;
 }
 
 .dictionary-subheader {
@@ -79,8 +80,12 @@
 
 }
 
+.dictionary-result-book-list {
+    display: inline;
+    margin-left: 8px;
+}
+
 a.dictionary-result-headword-book {
-    margin-left: 5px;
     color: @item-background-color;
 }
 
@@ -170,9 +175,8 @@ ul.pagination-sm {
     margin-right: 0 !important;
 }
 
-.loading {
-    background: url(../../../Content/Images/loading.gif) no-repeat center;
-    margin: 0 auto;
+.loading-background {
+    background: url(../../../Content/Images/loading.gif) no-repeat top;
 }
 
 .loading-modal {
@@ -209,4 +213,34 @@ ul.pagination-sm {
     a:link:after, a:visited:after {  
         content: normal;  
     }
+}
+
+#search-tabs {
+    display: block;
+    margin: 0;
+}
+
+#search-tabs a {
+    padding: 2px 10px 4px 10px;
+}
+
+.tab-content > div {
+    display: none;
+}
+
+.dictionary-result-word-search-list .dictionary-header-tabs {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.dictionary-header a {
+    color: white;
+}
+
+.dictionary-header a:hover {
+    color: black;
+}
+
+.dictionary-entry-description-container {
+    min-height: 24px;
 }

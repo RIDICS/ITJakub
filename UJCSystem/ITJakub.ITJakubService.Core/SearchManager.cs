@@ -63,12 +63,13 @@ namespace ITJakub.ITJakubService.Core
         {
             var nonMetadataCriterias = new List<SearchCriteriaContract>();
             var conjunction = new List<SearchCriteriaQuery>();
-            var metadataParameters = new Dictionary<string,object>();
+            var metadataParameters = new Dictionary<string, object>();
             foreach (var searchCriteriaContract in searchCriterias)
             {
                 if (m_searchCriteriaDirector.IsCriteriaSupported(searchCriteriaContract))
                 {
-                    var criteriaQuery = m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract, metadataParameters);
+                    var criteriaQuery = m_searchCriteriaDirector.ProcessCriteria(searchCriteriaContract,
+                        metadataParameters);
                     conjunction.Add(criteriaQuery);
                 }
                 else
@@ -90,7 +91,10 @@ namespace ITJakub.ITJakubService.Core
             var filteredCriterias = FilterSearchCriterias(searchCriterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
 
-            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters));
+            var databaseSearchResult =
+                m_bookVersionRepository.SearchByCriteriaQuery(
+                    new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery,
+                        filteredCriterias.MetadataParameters));
             if (databaseSearchResult.Count == 0)
                 return new List<SearchResultContract>();
 
@@ -218,10 +222,10 @@ namespace ITJakub.ITJakubService.Core
                 {
                     dictionaryContract = new DictionaryContract
                     {
-                    BookAcronym = headword.BookAcronym,
+                        BookAcronym = headword.BookAcronym,
                         BookId = 0, // TODO
-                    BookTitle = headword.BookTitle,
-                    BookXmlId = headword.BookGuid,
+                        BookTitle = headword.BookTitle,
+                        BookXmlId = headword.BookGuid,
                         BookVersionXmlId = null, //TODO
                         BookVersionId = 0 // TODO
                     };
@@ -233,7 +237,7 @@ namespace ITJakub.ITJakubService.Core
                     BookXmlId = headword.BookGuid,
                     EntryXmlId = headword.XmlEntryId
                 };
-                
+
                 if (headword.Headword == headwordContract.Headword)
                 {
                     headwordContract.Dictionaries.Add(bookInfoContract);
@@ -296,20 +300,24 @@ namespace ITJakub.ITJakubService.Core
         public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias,
             DictionarySearchTarget searchTarget)
         {
-            // TODO search in SQL and get bookVersionPair
+            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
 
-            var fileteredCriterias = FilterSearchCriterias(searchCriterias);
+            if (searchTarget == DictionarySearchTarget.Fulltext)
+            {
+                // TODO search in SearchService, from SQL get bookVersionPair
+            }
 
-            //var serializedResult = m_searchServiceClient.ListSearchDictionariesResultsCount(fileteredCriterias.NonMetadataCriterias);
-
-            return 25; //TODO
+            //TODO
+            return m_searchServiceClient.ListSearchDictionariesResultsCount(nonMetadataCriterias);
         }
-        
+
         public int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            FilteredCriterias  filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var filteredCriterias = FilterSearchCriterias(searchCriterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
-            SearchCriteriaQueryCreator creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
+            var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery,
+                filteredCriterias.MetadataParameters);
             var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(creator);
             if (databaseSearchResult.Count == 0)
                 return 0;
@@ -323,7 +331,8 @@ namespace ITJakub.ITJakubService.Core
             return m_searchServiceClient.GetSearchCriteriaResultsCount(nonMetadataCriterias);
         }
 
-        public IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
+        public HeadwordListContract SearchHeadwordByCriteria(
+            IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
             // TODO search in SQL and get bookVersionPair
             var databaseSearchResult =
@@ -351,39 +360,56 @@ namespace ITJakub.ITJakubService.Core
             {
                 HeadwordList = new List<HeadwordContract> //TODO
                 {
-                new HeadwordContract
-                {
-                    Headword = "Abc",
-                        Dictionaries = new List<HeadwordBookInfoContract>
+                    new HeadwordContract
                     {
-                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy1", EntryXmlId = "EntryId1"},
-                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy2", EntryXmlId = "EntryId1"}
+                        Headword = "Abc",
+                        Dictionaries = new List<HeadwordBookInfoContract>
+                        {
+                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy1", EntryXmlId = "EntryId1"},
+                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy2", EntryXmlId = "EntryId1"}
                         }
-                },
-                new HeadwordContract
-                {
-                    Headword = "Defg",
-                        Dictionaries = new List<HeadwordBookInfoContract>
+                    },
+                    new HeadwordContract
                     {
-                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy1", EntryXmlId = "EntryId1"},
-                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy2", EntryXmlId = "EntryId1"},
-                            new HeadwordBookInfoContract {BookXmlId = "XMLIDKnihy3", EntryXmlId = "EntryId3"}
+                        Headword = "Defg",
+                        Dictionaries = new List<HeadwordBookInfoContract>
+                        {
+                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy1", EntryXmlId = "EntryId1"},
+                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy2", EntryXmlId = "EntryId1"},
+                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy3", EntryXmlId = "EntryId3"}
                         }
                     }
                 },
-                BookList = new Dictionary<string, DictionaryContract>()                                
+                BookList = new Dictionary<string, DictionaryContract>()
             };
 
-            contract.BookList.Add("XmlIdKnihy1", new DictionaryContract {BookXmlId = "XmlIdKnihy1", BookVersionXmlId = "XmlIdVerze"});
-            contract.BookList.Add("XmlIdKnihy2", new DictionaryContract {BookXmlId = "XmlIdKnihy2", BookVersionXmlId = "XmlIdVerze"});
-            contract.BookList.Add("XmlIdKnihy3", null);
+            contract.BookList.Add("XmlIdKnihy1",
+                new DictionaryContract
+                {
+                    BookXmlId = "XmlIdKnihy1",
+                    BookVersionXmlId = "XmlIdVerze",
+                    BookAcronym = "ES",
+                    BookTitle = "Elektronický slovník"
+                });
+            contract.BookList.Add("XmlIdKnihy2",
+                new DictionaryContract
+                {
+                    BookXmlId = "XmlIdKnihy2",
+                    BookVersionXmlId = "XmlIdVerze",
+                    BookAcronym = "StCS",
+                    BookTitle = "Staročeský slovník"
+                });
+            contract.BookList.Add("XmlIdKnihy3",
+                new DictionaryContract
+                {
+                    BookXmlId = "XmlIdKnihy3",
+                    BookVersionXmlId = "XmlIdVerze",
+                    BookAcronym = "ESSC",
+                    BookTitle = "Slovník"
+                });
             contract.BookList.Add("XmlIdKnihy4", null);
 
-            var result = contract.ToXml();
-
-            var obj = HeadwordListContract.FromXml(result);
-
-            return null;
+            return contract;
         }
 
         public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid,
@@ -411,8 +437,7 @@ namespace ITJakub.ITJakubService.Core
         {
             public List<SearchCriteriaQuery> ConjunctionQuery { get; set; }
             public List<SearchCriteriaContract> NonMetadataCriterias { get; set; }
-
-            public Dictionary<string, object> MetadataParameters { get; set; } 
+            public Dictionary<string, object> MetadataParameters { get; set; }
         }
     }
 }

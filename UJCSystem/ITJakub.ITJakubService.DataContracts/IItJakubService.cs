@@ -108,7 +108,7 @@ namespace ITJakub.ITJakubService.DataContracts
         int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);
 
         [OperationContract]
-        IEnumerable<HeadwordContract> SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
+        HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
         
         [OperationContract]
         int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
