@@ -75,6 +75,8 @@ class DictionaryViewer {
 
             headwordLi.appendChild(headwordSpan);
             headwordLi.appendChild(favoriteGlyphSpan);
+            var dictionaryListDiv = document.createElement("div");
+            $(dictionaryListDiv).addClass("dictionary-result-book-list");
 
             for (var j = 0; j < record.Dictionaries.length; j++) {
                 var dictionary = record.Dictionaries[j];
@@ -83,9 +85,9 @@ class DictionaryViewer {
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
                 var descriptionDiv = document.createElement("div");
-                $(descriptionDiv).addClass("loading")
-                    .addClass("dictionary-entry-description-container");
-
+                $(mainHeadwordDiv).addClass("loading-background");
+                $(descriptionDiv).addClass("dictionary-entry-description-container");
+                
                 if (this.isLazyLoad) {
                     this.prepareLazyLoad(mainHeadwordDiv);
                 } else {
@@ -119,6 +121,12 @@ class DictionaryViewer {
                 descriptionsDiv.appendChild(mainHeadwordDiv);
 
                 // create link
+                if (j > 0) {
+                    var delimiterSpan = document.createElement("span");
+                    $(delimiterSpan).text(" | ");
+                    dictionaryListDiv.appendChild(delimiterSpan);
+                }
+
                 var aLink = document.createElement("a");
                 aLink.href = "#";
                 aLink.innerHTML = dictionaryMetadata.BookAcronym;
@@ -126,9 +134,10 @@ class DictionaryViewer {
                 $(aLink).addClass("dictionary-result-headword-book");
                 this.createLinkListener(aLink, record.Headword, dictionary, descriptionDiv);
 
-                headwordLi.appendChild(aLink);
+                dictionaryListDiv.appendChild(aLink);
             }
-            
+
+            headwordLi.appendChild(dictionaryListDiv);
             listUl.appendChild(headwordLi);
         }
 
@@ -164,7 +173,7 @@ class DictionaryViewer {
 
     private showLoadHeadword(response: string, container: HTMLDivElement) {
         $(container).empty();
-        $(container).removeClass("loading");
+        $(container).parent().removeClass("loading-background");
         container.innerHTML = response;
         if (this.isRequestToPrint)
             this.print();
@@ -172,7 +181,7 @@ class DictionaryViewer {
 
     private showLoadError(headword: string, container: HTMLDivElement) {
         $(container).empty();
-        $(container).removeClass("loading");
+        $(container).parent().removeClass("loading-background");
         $(container).text("Chyba při náčítání hesla '" + headword + "'.");
         if (this.isRequestToPrint)
             this.print();
@@ -240,7 +249,7 @@ class DictionaryViewer {
 
     private isAllLoaded(): boolean {
         var descriptions = $(this.headwordDescriptionContainer);
-        var notLoaded = $(".loading", descriptions);
+        var notLoaded = $(".loading-background", descriptions);
         var notLoadedVisible = notLoaded.parent(":not(.hidden)");
         return notLoadedVisible.length === 0;
     }

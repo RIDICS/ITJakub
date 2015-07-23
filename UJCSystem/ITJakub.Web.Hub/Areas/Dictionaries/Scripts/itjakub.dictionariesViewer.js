@@ -51,13 +51,16 @@ var DictionaryViewer = (function () {
             $(favoriteGlyphSpan).addClass("glyphicon").addClass("glyphicon-star-empty").addClass("dictionary-result-headword-favorite");
             headwordLi.appendChild(headwordSpan);
             headwordLi.appendChild(favoriteGlyphSpan);
+            var dictionaryListDiv = document.createElement("div");
+            $(dictionaryListDiv).addClass("dictionary-result-book-list");
             for (var j = 0; j < record.Dictionaries.length; j++) {
                 var dictionary = record.Dictionaries[j];
                 var dictionaryMetadata = this.dictionariesMetadataList[dictionary.BookXmlId];
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
                 var descriptionDiv = document.createElement("div");
-                $(descriptionDiv).addClass("loading").addClass("dictionary-entry-description-container");
+                $(mainHeadwordDiv).addClass("loading-background");
+                $(descriptionDiv).addClass("dictionary-entry-description-container");
                 if (this.isLazyLoad) {
                     this.prepareLazyLoad(mainHeadwordDiv);
                 }
@@ -86,14 +89,20 @@ var DictionaryViewer = (function () {
                 this.headwordList.push(record.Headword);
                 descriptionsDiv.appendChild(mainHeadwordDiv);
                 // create link
+                if (j > 0) {
+                    var delimiterSpan = document.createElement("span");
+                    $(delimiterSpan).text(" | ");
+                    dictionaryListDiv.appendChild(delimiterSpan);
+                }
                 var aLink = document.createElement("a");
                 aLink.href = "#";
                 aLink.innerHTML = dictionaryMetadata.BookAcronym;
                 aLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length - 1));
                 $(aLink).addClass("dictionary-result-headword-book");
                 this.createLinkListener(aLink, record.Headword, dictionary, descriptionDiv);
-                headwordLi.appendChild(aLink);
+                dictionaryListDiv.appendChild(aLink);
             }
+            headwordLi.appendChild(dictionaryListDiv);
             listUl.appendChild(headwordLi);
         }
         $(this.headwordListContainer).append(listUl);
@@ -125,14 +134,14 @@ var DictionaryViewer = (function () {
     };
     DictionaryViewer.prototype.showLoadHeadword = function (response, container) {
         $(container).empty();
-        $(container).removeClass("loading");
+        $(container).parent().removeClass("loading-background");
         container.innerHTML = response;
         if (this.isRequestToPrint)
             this.print();
     };
     DictionaryViewer.prototype.showLoadError = function (headword, container) {
         $(container).empty();
-        $(container).removeClass("loading");
+        $(container).parent().removeClass("loading-background");
         $(container).text("Chyba při náčítání hesla '" + headword + "'.");
         if (this.isRequestToPrint)
             this.print();
@@ -196,7 +205,7 @@ var DictionaryViewer = (function () {
     };
     DictionaryViewer.prototype.isAllLoaded = function () {
         var descriptions = $(this.headwordDescriptionContainer);
-        var notLoaded = $(".loading", descriptions);
+        var notLoaded = $(".loading-background", descriptions);
         var notLoadedVisible = notLoaded.parent(":not(.hidden)");
         return notLoadedVisible.length === 0;
     };

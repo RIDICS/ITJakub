@@ -355,9 +355,9 @@ namespace ITJakub.ITJakubService.Core
                 BookList = new Dictionary<string, DictionaryContract>()                                
             };
 
-            contract.BookList.Add("XmlIdKnihy1", new DictionaryContract {BookXmlId = "XmlIdKnihy1", BookVersionXmlId = "XmlIdVerze", BookAcronym = "ES"});
-            contract.BookList.Add("XmlIdKnihy2", new DictionaryContract {BookXmlId = "XmlIdKnihy2", BookVersionXmlId = "XmlIdVerze", BookAcronym = "StCS"});
-            contract.BookList.Add("XmlIdKnihy3", new DictionaryContract {BookXmlId = "XmlIdKnihy3", BookVersionXmlId = "XmlIdVerze", BookAcronym = "ESSC"});
+            contract.BookList.Add("XmlIdKnihy1", new DictionaryContract {BookXmlId = "XmlIdKnihy1", BookVersionXmlId = "XmlIdVerze", BookAcronym = "ES", BookTitle = "Elektronický slovník"});
+            contract.BookList.Add("XmlIdKnihy2", new DictionaryContract {BookXmlId = "XmlIdKnihy2", BookVersionXmlId = "XmlIdVerze", BookAcronym = "StCS", BookTitle = "Staročeský slovník"});
+            contract.BookList.Add("XmlIdKnihy3", new DictionaryContract {BookXmlId = "XmlIdKnihy3", BookVersionXmlId = "XmlIdVerze", BookAcronym = "ESSC", BookTitle = "Slovník"});
             contract.BookList.Add("XmlIdKnihy4", null);
 
             return contract;
