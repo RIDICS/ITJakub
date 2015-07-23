@@ -115,7 +115,7 @@ class Search {
             $(this.advancedButton).css("visibility", "hidden");
 
             if (this.searchbarAdvancedEditorContainer.children.length === 0) {
-                this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer,(json: string) => this.closeAdvancedSearchEditor(json));
+                this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer,(json: string) => this.closeAdvancedSearchEditorWithImport(json),(json: string) => this.closeAdvancedSearchEditor());
                 this.advancedRegexEditor.setDisabledOptions(disabledOptions);
                 this.advancedRegexEditor.makeRegExSearch();
                 $(this.searchbarAdvancedEditorContainer).hide();
@@ -133,8 +133,12 @@ class Search {
         });
     }
 
-    closeAdvancedSearchEditor(jsonData: string) {
+    closeAdvancedSearchEditorWithImport(jsonData: string) {
         this.importJsonToTextField(jsonData);
+        this.closeAdvancedSearchEditor();
+    }
+
+    closeAdvancedSearchEditor() {
         $(this.searchbarAdvancedEditorContainer).slideUp(this.speedAnimation);      //hide advanced search
         $(this.searchInputTextbox).prop('disabled', false);
         $(this.searchButton).prop('disabled', false);
@@ -144,10 +148,12 @@ class Search {
     importJsonToTextField(json: string) {
         $(this.searchInputTextbox).text(json);
         $(this.searchInputTextbox).val(json);
+        $(this.searchInputTextbox).change();
     }
 
-    importJsonToAdvancedSearch(json: string) {
-        
+    public processSearchQuery(query: string) {
+        this.importJsonToTextField(query);
+        this.processSearch();
     }
 
     private isValidJson(data: string): boolean {
@@ -189,13 +195,15 @@ class Search {
 
 class RegExAdvancedSearchEditor {
     private regexDoneCallback: (jsonData: string) => void;
+    private regexCancelledCallback: (jsonData: string) => void;
     private container: HTMLDivElement;
     private innerContainer: HTMLDivElement;
     private regExConditions: Array<RegExConditionListItem>;
     private disabledOptionsArray: Array<SearchTypeEnum>;
 
-    constructor(container: HTMLDivElement, regexDoneCallback: (jsonData:string) => void){
+    constructor(container: HTMLDivElement, regexDoneCallback: (jsonData: string) => void, regexCancelledCallback: (jsonData: string) => void){
         this.regexDoneCallback = regexDoneCallback;
+        this.regexCancelledCallback = regexCancelledCallback;
         this.container = container;
     }
 
@@ -208,6 +216,7 @@ class RegExAdvancedSearchEditor {
         this.regExConditions = [];
 
         var commandsDiv = document.createElement("div");
+        $(commandsDiv).addClass("regex-search-buttons-bottom-area");
 
         var sentButton = HtmlItemsFactory.createButton("Dokončit");
         $(sentButton).addClass("regex-search-button");
@@ -215,6 +224,14 @@ class RegExAdvancedSearchEditor {
         $(sentButton).click(() => {
             var json = this.getConditionsResultJSON();
             this.regexDoneCallback(json);
+        });
+
+        var cancelButton = HtmlItemsFactory.createButton("Zrušit");
+        $(cancelButton).addClass("regex-search-button");
+        commandsDiv.appendChild(cancelButton);
+        $(cancelButton).click(() => {
+            var json = this.getConditionsResultJSON();
+            this.regexCancelledCallback(json);
         });
 
         this.innerContainer = document.createElement("div");

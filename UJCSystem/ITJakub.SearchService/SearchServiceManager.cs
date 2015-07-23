@@ -2,6 +2,7 @@
 using ITJakub.SearchService.Core.Exist;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 
 namespace ITJakub.SearchService
 {
@@ -74,10 +75,10 @@ namespace ITJakub.SearchService
                 transformationName, outputFormat,
                 transformationLevel);
         }
-        
-        public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
+
+        public SearchResultContractList ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
-            m_existManager.ListSearchEditionsResults(searchCriterias);
+            return m_existManager.ListSearchEditionsResults(searchCriterias);
         }
 
         public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
