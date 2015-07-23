@@ -40,9 +40,9 @@ class DictionarySearchTabs {
 
     constructor() {
         this.searchTabs = [
-            new SearchTab("#tab-headwords", "#headwords", "#description-headwords"),
-            new SearchTab("#tab-fulltext", "#fulltext", "#description-fulltext"),
-            new SearchTab("#tab-advanced", "#advanced", "#description-advanced")
+            new SearchTab("#tab-headwords", "#list-headwords", "#description-headwords"),
+            new SearchTab("#tab-fulltext", "#list-fulltext", "#description-fulltext"),
+            new SearchTab("#tab-advanced", "#list-advanced", "#description-advanced")
         ];
         
         $("#search-tabs li").addClass("hidden");
@@ -68,8 +68,10 @@ class DictionarySearchTabs {
         }
 
         var searchTab = this.searchTabs[index];
-        $("#headword-description div").removeClass("active");
+        $("#headword-description > div").removeClass("active");
+        $(".tab-content > div").removeClass("active");
         $(searchTab.descriptionDiv).addClass("active");
+        $(searchTab.listDiv).addClass("active");
     }
 
     showAdvanced() {
