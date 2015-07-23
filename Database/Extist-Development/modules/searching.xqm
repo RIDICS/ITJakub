@@ -120,12 +120,20 @@ declare function search:match-hits-by-entry($root as node()*, $queries as elemen
 
 declare function search:match-hits-by-entry-elements($root as node()*, $query as element()) as item()* {
 	if ($root and $query) then
-(:		for $root1 in $root
-			for $entry in $root1/tei:TEI//tei:entryFree[ft:query(., $query, $search:query-options)]
-			return <hit book-xml-id="{string($root1/tei:TEI/@xml:id)}" entry-id="{$entry/@xml:id}" hw="{subsequence($entry//tei:orth, 1, 1)}"  />
-:)
-			(:$root/tei:TEI//tei:entryFree[ft:query(., $query, $search:query-options)]:)
-			$root/tei:TEI//tei:entryFree[contains(., 'aldran')]
+		for $r in $root
+			let $rid := $r/tei:TEI/@n/text()
+			let $vid := $r/tei:TEI/substring-after(@change, '#')
+			let $hits := $r/tei:TEI//tei:entryFree[ft:query(., $query, $search:query-options)]
+			for $hit in $hits
+			let $hitid := $hit/@xml:id
+			let $hw := subsequence($hit//tei:orth, 1, 1)/text()
+			return <HeadwordContract><Dictionaries><HeadwordBookInfoContract>
+				<BookXmlId>{$rid}</BookXmlId>
+				<EntryXmlId>{$hitid}</EntryXmlId>
+				</HeadwordBookInfoContract>
+			</Dictionaries>
+			<Headword>{$hw}</Headword>
+		</HeadwordContract>
 	else
 		()
 	
