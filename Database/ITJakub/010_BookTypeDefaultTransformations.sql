@@ -69,7 +69,7 @@ BEGIN TRAN
 	      [Description], -- Description - varchar
 	      [ParentCategory],  -- ParentCategory - FK int
 	      [BookType],  -- BookType - FK int
-	      [Path]
+		  [Path]
 	  )
 	  VALUES
 	  ('output-editions','Edice',NULL,@EditionTypeId,'/output-editions/'),

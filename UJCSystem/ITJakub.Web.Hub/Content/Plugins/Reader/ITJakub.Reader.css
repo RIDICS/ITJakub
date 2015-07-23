@@ -456,4 +456,27 @@ body {
 .page-wrapper {
   margin-bottom: 5px;
 }
+/* CSS block for hide/show notes in text */
+.reader-text .itj-page-notes .itj-page-note {
+  display: none;
+}
+.reader-text.show-notes .itj-page {
+  display: flex;
+}
+.reader-text.show-notes .itj-page-text {
+  width: 75%;
+}
+.reader-text.show-notes .itj-page-notes {
+  width: 25%;
+}
+.reader-text.show-notes .itj-page-notes .itj-page-note {
+  display: inherit;
+}
+.reader-text div.itj-page-note {
+  display: inherit;
+  border-radius: 10px;
+  background-color: gold;
+  margin: 2px;
+  padding: 5px;
+}
 /*# sourceMappingURL=ITJakub.Reader.css.map */
