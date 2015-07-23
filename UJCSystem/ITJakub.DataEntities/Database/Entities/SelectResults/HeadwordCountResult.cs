@@ -4,6 +4,6 @@
     {
         public long BookId { get; set; }
 
-        public int Count { get; set; }
+        public long HeadwordCount { get; set; }
     }
 }

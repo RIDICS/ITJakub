@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    var search = new Search($("#dictionarySearchDiv")[0], processSearchJson, processSearchText);
     var pageSize = 25;
     var tabs = new DictionarySearchTabs();
     var dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
@@ -13,6 +12,7 @@ $(document).ready(function () {
     var processSearchText = function (text) {
         dictionaryWrapperBasic.loadCount(text);
     };
+    var search = new Search($("#dictionarySearchDiv")[0], processSearchJson, processSearchText);
     var disabledOptions = new Array();
     disabledOptions.push(4 /* Fulltext */);
     disabledOptions.push(9 /* TokenDistance */);
@@ -29,9 +29,9 @@ var DictionarySearchTabs = (function () {
     function DictionarySearchTabs() {
         var _this = this;
         this.searchTabs = [
-            new SearchTab("#tab-headwords", "#headwords", "#description-headwords"),
-            new SearchTab("#tab-fulltext", "#fulltext", "#description-fulltext"),
-            new SearchTab("#tab-advanced", "#advanced", "#description-advanced")
+            new SearchTab("#tab-headwords", "#list-headwords", "#description-headwords"),
+            new SearchTab("#tab-fulltext", "#list-fulltext", "#description-fulltext"),
+            new SearchTab("#tab-advanced", "#list-advanced", "#description-advanced")
         ];
         $("#search-tabs li").addClass("hidden");
         $("#search-tabs a").click(function (e) {
@@ -54,8 +54,10 @@ var DictionarySearchTabs = (function () {
                 break;
         }
         var searchTab = this.searchTabs[index];
-        $("#headword-description div").removeClass("active");
+        $("#headword-description > div").removeClass("active");
+        $(".tab-content > div").removeClass("active");
         $(searchTab.descriptionDiv).addClass("active");
+        $(searchTab.listDiv).addClass("active");
     };
     DictionarySearchTabs.prototype.showAdvanced = function () {
         var advancedSearchTab = this.searchTabs[2 /* Advanced */];

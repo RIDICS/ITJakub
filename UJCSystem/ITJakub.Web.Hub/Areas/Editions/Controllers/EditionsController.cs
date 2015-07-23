@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
@@ -50,7 +51,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Listing(string bookId)
+        public ActionResult Listing(string bookId, string searchText)
         {
             var book = m_serviceClient.GetBookInfo(bookId);
             return
@@ -58,7 +59,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 {
                     BookXmlId = book.BookXmlId,
                     BookTitle = book.Title,
-                    BookPages = book.BookPages
+                    BookPages = book.BookPages,
+                    SearchText = HttpUtility.UrlDecode(searchText)
                 });
         }
 
@@ -157,7 +159,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             }
 
             var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { results }, JsonRequestBehavior.AllowGet);
+            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -231,7 +233,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             }
 
             var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { results }, JsonRequestBehavior.AllowGet);
+            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SearchCriteriaMocked()
@@ -425,6 +427,20 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 }
             };
 
+            var resultCriteria = new ResultCriteriaContract
+            {
+                Count = 25,
+                Direction = ListSortDirection.Ascending,
+                Sorting = SortEnum.Title,
+                Start = 26,
+                HitSettingsContract = new HitSettingsContract
+                {
+                    ContextLength = 70,
+                    Count = 3,
+                    Start = 1
+                }
+            };
+
             //Mockup of search result 
             var createTime = DateTime.Today;
             var resultSearchCrit = new SearchResultContract
@@ -609,7 +625,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 sentence2,
                 heading1,
                 heading2,
-                tokens
+                tokens,
+                resultCriteria
             };
             m_serviceClient.SearchByCriteria(wordListCriteriaContracts);
             return Json(new {}, JsonRequestBehavior.AllowGet);
