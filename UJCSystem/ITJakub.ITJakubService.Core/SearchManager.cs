@@ -318,7 +318,6 @@ namespace ITJakub.ITJakubService.Core
                 var resultCount = m_bookVersionRepository.GetSearchHeadwordCount(creator, query);
                 return resultCount;
             }
-            else return 0; //TODO only debug
 
             // Fulltext search
             var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(creator);
@@ -396,67 +395,11 @@ namespace ITJakub.ITJakubService.Core
             var resultContract = HeadwordListContract.FromXml(resultString);
 
             return resultContract;
-
-            var contract = new HeadwordListContract
-            {
-                HeadwordList = new List<HeadwordContract> //TODO
-                {
-                    new HeadwordContract
-                    {
-                        Headword = "Abc",
-                        Dictionaries = new List<HeadwordBookInfoContract>
-                        {
-                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy1", EntryXmlId = "EntryId1"},
-                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy2", EntryXmlId = "EntryId1"}
-                        }
-                    },
-                    new HeadwordContract
-                    {
-                        Headword = "Defg",
-                        Dictionaries = new List<HeadwordBookInfoContract>
-                        {
-                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy1", EntryXmlId = "EntryId1"},
-                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy2", EntryXmlId = "EntryId1"},
-                            new HeadwordBookInfoContract {BookXmlId = "XmlIdKnihy3", EntryXmlId = "EntryId3"}
-                        }
-                    }
-                },
-                BookList = new Dictionary<string, DictionaryContract>()
-            };
-
-            contract.BookList.Add("XmlIdKnihy1",
-                new DictionaryContract
-                {
-                    BookXmlId = "XmlIdKnihy1",
-                    BookVersionXmlId = "XmlIdVerze",
-                    BookAcronym = "ES",
-                    BookTitle = "Elektronický slovník"
-                });
-            contract.BookList.Add("XmlIdKnihy2",
-                new DictionaryContract
-                {
-                    BookXmlId = "XmlIdKnihy2",
-                    BookVersionXmlId = "XmlIdVerze",
-                    BookAcronym = "StCS",
-                    BookTitle = "Staročeský slovník"
-                });
-            contract.BookList.Add("XmlIdKnihy3",
-                new DictionaryContract
-                {
-                    BookXmlId = "XmlIdKnihy3",
-                    BookVersionXmlId = "XmlIdVerze",
-                    BookAcronym = "ESSC",
-                    BookTitle = "Slovník"
-                });
-            contract.BookList.Add("XmlIdKnihy4", null);
-
-            return contract;
         }
 
         public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid,
             string xmlEntryId, OutputFormatEnumContract resultFormat)
         {
-            return "<div class='entryFree'><span class='bo'>Heslo</span></div>";
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
             {
