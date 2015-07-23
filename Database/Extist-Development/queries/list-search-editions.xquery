@@ -57,6 +57,8 @@ let $collection-path := "/apps/jacob/data/"
 (:~ výchozí kolekce prohledávaných dokumentů :)
 let $collection := collection($collection-path)
 
+let $collection := $collection[./tei:TEI[@n = $book-ids][@change = $book-version-ids]] 
+
 
 (:~ dokumenty, které obsahují hledaný výraz :)
 (:~ TODO: dodat řazení, více proledávaných elementů :)
