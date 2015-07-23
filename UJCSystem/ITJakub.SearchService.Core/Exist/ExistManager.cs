@@ -128,6 +128,7 @@ namespace ITJakub.SearchService.Core.Exist
         public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
             ResultRestrictionCriteriaContract resultRestrictionCriteriaContract = null;
+            ResultCriteriaContract resultCriteriaContract = null;
             RegexCriteriaBuilder.ConvertWildcardToRegex(searchCriterias);
             var filteredCriterias = new List<SearchCriteriaContract>();
             foreach (var searchCriteriaContract in searchCriterias)
@@ -140,6 +141,10 @@ namespace ITJakub.SearchService.Core.Exist
                 {
                     resultRestrictionCriteriaContract = (ResultRestrictionCriteriaContract) searchCriteriaContract;
                 }
+                else if (searchCriteriaContract.Key == CriteriaKey.Result)
+                {
+                    resultCriteriaContract = (ResultCriteriaContract) searchCriteriaContract;
+                }
             }
 
             if (resultRestrictionCriteriaContract == null)
@@ -148,6 +153,7 @@ namespace ITJakub.SearchService.Core.Exist
             var searchCriteria = new ResultSearchCriteriaContract
             {
                 ResultBooks = resultRestrictionCriteriaContract.ResultBooks,
+                ResultSpecifications = resultCriteriaContract,
                 ConjunctionSearchCriterias = filteredCriterias
             };
 

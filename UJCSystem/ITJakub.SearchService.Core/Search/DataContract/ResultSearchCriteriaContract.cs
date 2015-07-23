@@ -15,6 +15,9 @@ namespace ITJakub.SearchService.Core.Search.DataContract
         [DataMember]
         public IList<SearchCriteriaContract> ConjunctionSearchCriterias { get; set; }
 
+        [DataMember]
+        public ResultCriteriaContract ResultSpecifications { get; set; }
+
 
         public virtual string ToXml()
         {

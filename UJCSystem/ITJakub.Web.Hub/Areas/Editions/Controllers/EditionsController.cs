@@ -425,6 +425,20 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 }
             };
 
+            var resultCriteria = new ResultCriteriaContract
+            {
+                Count = 25,
+                Direction = ListSortDirection.Ascending,
+                Sorting = SortEnum.Title,
+                Start = 26,
+                HitSettingsContract = new HitSettingsContract
+                {
+                    ContextLength = 70,
+                    Count = 3,
+                    Start = 1
+                }
+            };
+
             //Mockup of search result 
             var createTime = DateTime.Today;
             var resultSearchCrit = new SearchResultContract
@@ -609,7 +623,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 sentence2,
                 heading1,
                 heading2,
-                tokens
+                tokens,
+                resultCriteria
             };
             m_serviceClient.SearchByCriteria(wordListCriteriaContracts);
             return Json(new {}, JsonRequestBehavior.AllowGet);
