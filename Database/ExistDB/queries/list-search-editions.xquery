@@ -79,13 +79,16 @@ let $result-documents := if($result-count = 0) then
 	else
 		subsequence($documents, $result-start, $result-count)
 
-return <ArrayOfSearchResultContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+return
+<SearchResultContractList xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+<SearchResults>
 	{
 for $document in $result-documents
 	let $hits := search:get-document-search-hits($document, $queries, $kwic-start, $kwic-count, $kwic-context-length)
 	return <SearchResultContract>
-					<BookXmlId>{string($document/@n)}</BookXmlId>
+					<BookXmlId>{string($document/tei:TEI/@n)}</BookXmlId>
 					{$hits}
-					<VersionXmlId>{$document/substring-after(@change, '#')}</VersionXmlId>
+					<VersionXmlId>{$document/tei:TEI/substring-after(@change, '#')}</VersionXmlId>
 				</SearchResultContract>
-} </ArrayOfSearchResultContract>
+} </SearchResults>
+</SearchResultContractList>
