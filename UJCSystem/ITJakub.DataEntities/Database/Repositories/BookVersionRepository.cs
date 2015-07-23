@@ -268,7 +268,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.LastVersion)
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
                     .Select(Projections.ProjectionList()
-                        .Add(Projections.CountDistinct(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => headwordCountAlias.Count))
+                        .Add(Projections.CountDistinct(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => headwordCountAlias.HeadwordCount))
                         .Add(Projections.Group(() => bookAlias.Id).WithAlias(() => headwordCountAlias.BookId))
                     );
 
@@ -278,7 +278,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var resultList = query.TransformUsing(Transformers.AliasToBean<HeadwordCountResult>())
                     .List<HeadwordCountResult>();
 
-                return resultList.Sum(x => x.Count);
+                return resultList.Sum(x => x.HeadwordCount);
             }
         }
 
