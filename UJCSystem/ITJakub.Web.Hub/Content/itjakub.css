@@ -934,6 +934,9 @@ body {
   margin: 2px;
   padding: 5px;
 }
+div.dummy-page {
+  display: inherit!important;
+}
 .dropdown-select {
   margin-right: 5px;
   float: left;

@@ -492,4 +492,7 @@ body {
   margin: 2px;
   padding: 5px;
 }
+div.dummy-page {
+  display: inherit!important;
+}
 /*# sourceMappingURL=ITJakub.Reader.css.map */

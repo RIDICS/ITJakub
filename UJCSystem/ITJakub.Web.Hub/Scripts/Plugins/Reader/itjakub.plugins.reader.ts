@@ -1035,7 +1035,7 @@ class SettingsPanel extends LeftSidePanel {
 class SearchResultPanel extends LeftSidePanel {
 
     constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Výsledky vyhledávání", readerModule);
+        super(identificator, "Vyhledávání", readerModule);
     }
     
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {

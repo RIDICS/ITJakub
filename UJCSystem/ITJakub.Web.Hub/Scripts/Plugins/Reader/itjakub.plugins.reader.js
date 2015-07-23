@@ -871,7 +871,7 @@ var SettingsPanel = (function (_super) {
 var SearchResultPanel = (function (_super) {
     __extends(SearchResultPanel, _super);
     function SearchResultPanel(identificator, readerModule) {
-        _super.call(this, identificator, "Výsledky vyhledávání", readerModule);
+        _super.call(this, identificator, "Vyhledávání", readerModule);
     }
     SearchResultPanel.prototype.makeBody = function (rootReference, window) {
         var innerContent = window.document.createElement("div");
