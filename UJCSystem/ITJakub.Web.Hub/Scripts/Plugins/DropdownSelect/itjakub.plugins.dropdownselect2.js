@@ -85,8 +85,10 @@ var DropDownSelect2 = (function (_super) {
             this.books[book.id] = book;
             for (var k = 0; k < book.categoryIds.length; k++) {
                 var categoryId = book.categoryIds[k];
-                if (this.categories[categoryId])
-                    this.categories[categoryId].bookIds.push(book.id);
+                var actualCategory = this.categories[categoryId];
+                if (typeof actualCategory !== "undefined" && actualCategory != null) {
+                    actualCategory.bookIds.push(book.id);
+                }
             }
         }
     };

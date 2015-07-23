@@ -13,7 +13,6 @@
     </xd:doc>
     <xd:doc class="style" type="string">Font size for footnote numbers</xd:doc>
     <xsl:param name="footnotenumSize">9pt</xsl:param>
-	
     <xsl:param name="titlePage">true</xsl:param>
     <xsl:param name="divRunningheads">false</xsl:param>
     <xsl:template match="tei:pb"/>

@@ -100,6 +100,7 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.SearchByCriteria(searchCriterias);
         }
+
         #region CardFile methods
         public IEnumerable<CardFileContract> GetCardFiles()
         {
@@ -184,6 +185,10 @@ namespace ITJakub.ITJakubService.Services
         public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
             return m_searchManager.SearchHeadwordByCriteriaResultsCount(searchCriterias, searchTarget);
+        }
+        public int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.SearchCriteriaResultsCount(searchCriterias);
         }
 
         public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)

@@ -36,7 +36,7 @@ namespace ITJakub.SearchService.Core.Exist
             Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
-            }));
+            })).Wait();
 
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("End upload file '{0}' of book '{1}' and version '{2}'", fileName, bookId,
@@ -51,7 +51,7 @@ namespace ITJakub.SearchService.Core.Exist
             Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
-            }));
+            })).Wait();
         }
 
         public void UploadSharedFile(string fileName, Stream dataStream)
@@ -61,7 +61,7 @@ namespace ITJakub.SearchService.Core.Exist
             Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
-            }));
+            })).Wait();
         }
 
         public string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string outputFormat)
@@ -187,6 +187,14 @@ namespace ITJakub.SearchService.Core.Exist
 
             return int.Parse(result);
         }
+        public int GetSearchCriteriaResultsCount(string serializedSearchCriterias)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriterias);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return int.Parse(result);
+        }
 
         #region Helpers
 
@@ -212,5 +220,7 @@ namespace ITJakub.SearchService.Core.Exist
         }
 
         #endregion
+
+        
     }
 }

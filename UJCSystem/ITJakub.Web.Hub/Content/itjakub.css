@@ -508,6 +508,9 @@ ul.bib-listing li.list-item .label {
   outline: none!important;
   box-shadow: none !important;
 }
+.bib-listing-pagination-div {
+  text-align: center;
+}
 html,
 body {
   height: 100%;
@@ -1213,7 +1216,7 @@ input.regexsearch-checkbox {
 .searchbar-input:disabled {
   background-color: lightgray!important;
 }
-.search-area button:disabled {
+.searchbar-buttons button:disabled {
   background-color: #84ced7;
 }
 .regex-searchbar-inputs {

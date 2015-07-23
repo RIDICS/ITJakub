@@ -1,9 +1,16 @@
 /// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
+/// <reference path="../itjakub.plugins.pagination.ts" />
 var BibliographyModule = (function () {
-    function BibliographyModule(booksContainer, sortBarContainer, forcedBookType) {
-        this.booksContainer = booksContainer;
+    function BibliographyModule(resultsContainer, sortBarContainer, forcedBookType) {
+        this.resultsContainer = $(resultsContainer);
+        this.booksContainer = document.createElement("div");
+        $(this.booksContainer).addClass("bib-listing-books-div");
+        this.paginatorContainer = document.createElement("div");
+        $(this.paginatorContainer).addClass("bib-listing-pagination-div");
+        $(this.resultsContainer).append(this.booksContainer);
+        $(this.resultsContainer).append(this.paginatorContainer);
         this.sortBarContainer = sortBarContainer;
         this.forcedBookType = forcedBookType;
         //Download configuration
@@ -22,7 +29,8 @@ var BibliographyModule = (function () {
         this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
         $(this.sortBarContainer).empty();
-        var sortBarHtml = new SortBar().makeSortBar(this.booksContainer, this.sortBarContainer);
+        this.sortBar = new SortBar();
+        var sortBarHtml = this.sortBar.makeSortBar(this.booksContainer, this.sortBarContainer);
         $(this.sortBarContainer).append(sortBarHtml);
     }
     BibliographyModule.prototype.showBooks = function (books) {
@@ -82,6 +90,34 @@ var BibliographyModule = (function () {
             hiddenContent.appendChild(panel);
         $(liElement).append(hiddenContent);
         return liElement;
+    };
+    BibliographyModule.prototype.showPage = function (pageNumber) {
+        this.paginator.goToPage(pageNumber);
+    };
+    BibliographyModule.prototype.createPagination = function (booksOnPage, pageClickCallback, booksCount) {
+        this.booksCount = booksCount;
+        this.booksOnPage = booksOnPage;
+        this.paginator = new Pagination(this.paginatorContainer, booksOnPage);
+        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
+    };
+    BibliographyModule.prototype.getPagesCount = function () {
+        return this.paginator.getPageCount();
+    };
+    BibliographyModule.prototype.getBooksCount = function () {
+        return this.booksCount;
+    };
+    BibliographyModule.prototype.getBooksCountOnPage = function () {
+        return this.booksOnPage;
+    };
+    BibliographyModule.prototype.destroyPagination = function () {
+        $(this.paginatorContainer).empty();
+        this.paginator = null;
+    };
+    BibliographyModule.prototype.isSortedAsc = function () {
+        return this.sortBar.isSortedAsc();
+    };
+    BibliographyModule.prototype.getSortCriteria = function () {
+        return this.sortBar.getSortCriteria();
     };
     return BibliographyModule;
 })();

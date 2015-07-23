@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Results;
 using ResponsibleType = ITJakub.DataEntities.Database.Entities.Enums.ResponsibleType;
 
@@ -12,7 +12,18 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<BookVersion, SearchResultContract>()
-                .ForMember(dest => dest.BookType, opts => opts.MapFrom(src => src.Book.LastVersion.DefaultBookType.Type)) //TODO change to booktype list (from categories)
+                .ForMember(dest => dest.BookXmlId, opts => opts.MapFrom(src => src.Book.Guid))
+                .ForMember(dest => dest.VersionXmlId, opts => opts.MapFrom(src => src.VersionId)) 
+                .ForMember(dest => dest.CreateTime, opts => opts.MapFrom(src => src.CreateTime)) 
+                .ForMember(dest => dest.CreateTimeString, opts => opts.MapFrom(src => src.CreateTime.ToString(CultureInfo.InvariantCulture))) 
+                .ForMember(dest => dest.Copyright, opts => opts.MapFrom(src => src.Copyright))
+                .ForMember(dest => dest.PublishDate, opts => opts.MapFrom(src => src.PublishDate))
+                .ForMember(dest => dest.PublishPlace, opts => opts.MapFrom(src => src.PublishPlace))
+                .ForMember(dest => dest.Publisher, opts => opts.MapFrom(src => src.Publisher))
+                .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Title))
+                .ForMember(dest => dest.SubTitle, opts => opts.MapFrom(src => src.SubTitle))
+                .ForMember(dest => dest.Copyright, opts => opts.MapFrom(src => src.Copyright))
+                .ForMember(dest => dest.BookType, opts => opts.MapFrom(src => src.Book.LastVersion.DefaultBookType.Type))
                 .ForMember(dest => dest.PageCount, opts => opts.MapFrom(src => src.BookPages.Count))
                 .ForMember(dest => dest.Keywords, opts => opts.MapFrom(src => src.Keywords.Select(x => x.Text).ToList()))
                 .ForMember(dest => dest.Manuscripts, opts => opts.MapFrom(src => src.ManuscriptDescriptions))

@@ -181,4 +181,7 @@ ul.bib-listing li.list-item .label {
   outline: none!important;
   box-shadow: none !important;
 }
+.bib-listing-pagination-div {
+  text-align: center;
+}
 /*# sourceMappingURL=ITJakub.Bibliography.css.map */

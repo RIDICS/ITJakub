@@ -1,4 +1,6 @@
 ﻿$(document).ready(() => {
+    var search = new Search(<any>$("#dictionarySearchDiv")[0], processSearchJson, processSearchText );
+
     var pageSize = 25;
     var tabs = new DictionarySearchTabs();
 
@@ -16,7 +18,6 @@
         dictionaryWrapperBasic.loadCount(text);
     };
 
-    var search = new Search($("#dictionarySearchDiv"), processSearchJson, processSearchText);
     var disabledOptions = new Array<SearchTypeEnum>();
     disabledOptions.push(SearchTypeEnum.Fulltext);
     disabledOptions.push(SearchTypeEnum.TokenDistance);

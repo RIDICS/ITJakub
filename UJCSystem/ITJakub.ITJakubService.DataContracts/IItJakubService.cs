@@ -114,6 +114,9 @@ namespace ITJakub.ITJakubService.DataContracts
         int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
 
         [OperationContract]
+        int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
         string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
         
         [OperationContract]

@@ -1,13 +1,13 @@
 ﻿class SortBar {
     comparatorResolver: ComparatorResolver;
     actualSortOrder: number;
-    actualSortOptionValue: string;
+    actualSortOptionValue: SortEnum;
 
 
     constructor() {
         this.comparatorResolver = new ComparatorResolver();
         this.actualSortOrder = 1;
-        this.actualSortOptionValue = "bookid"; //TODO get default sort option from config
+        this.actualSortOptionValue = SortEnum.Title;
     }
 
     public makeSortBar(booksContainer: string, sortBarContainer: string): HTMLDivElement {
@@ -15,15 +15,15 @@
         $(sortBarDiv).addClass('bib-sortbar');
         var select: HTMLSelectElement = document.createElement('select');
         $(select).change(() => {
-            var selectedOptionValue = $(sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected").val();
-            this.actualSortOptionValue = selectedOptionValue;
+            var selectedOptionValue:string = $(sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected").val();
+            this.actualSortOptionValue = parseInt(selectedOptionValue);
             var comparator = this.comparatorResolver.getComparatorForOptionValue(selectedOptionValue);
             this.sort(comparator, this.actualSortOrder, booksContainer);
         });
-        this.addOption(select, "Název", "name");
-        this.addOption(select, "Id", "bookid");
-        this.addOption(select, "Datace", "century"); //TODO add options to json config
-        this.addOption(select, "Typ", "booktype");
+        this.addOption(select, "Název", SortEnum.Title.toString());
+        this.addOption(select, "Datace", SortEnum.Dating.toString()); //TODO add options to json config
+        this.addOption(select, "Autor", SortEnum.Author.toString());
+        this.addOption(select, "Editor", SortEnum.Editor.toString());
         sortBarDiv.appendChild(select);
 
         var sortOrderButton: HTMLButtonElement = document.createElement('button');
@@ -34,7 +34,7 @@
         sortOrderButton.appendChild(spanSortAsc);
         $(sortOrderButton).click((event) => {
             this.changeSortOrder();
-            var comparator = this.comparatorResolver.getComparatorForOptionValue(this.actualSortOptionValue);
+            var comparator = this.comparatorResolver.getComparatorForOptionValue(this.actualSortOptionValue.toString());
             this.sort(comparator, this.actualSortOrder, booksContainer);
             $(event.currentTarget).children('span').toggleClass('glyphicon-arrow-up glyphicon-arrow-down');
         });
@@ -59,6 +59,14 @@
         option.text = text;
         option.value = value;
         selectbox.appendChild(option);
+    }
+
+    public isSortedAsc(): boolean {
+        return this.actualSortOrder > 0;
+    }
+
+    public getSortCriteria(): SortEnum {
+        return this.actualSortOptionValue; //TODO make enum
     }
 }
 
@@ -87,4 +95,35 @@ class ComparatorResolver {
         }
         return this.comparators['Default'](optionValue);
     }
+}
+
+/*
+ * 
+ * 
+ * Mirroring of C# datacontract in namespace ITJakub.Shared.Contracts.Searching.Criteria
+ * 
+ *  
+ * [DataContract]
+    public enum SortEnum : short
+    {
+        [EnumMember]
+        Author = 0,
+        [EnumMember]
+        Title = 1,
+        [EnumMember]
+        Editor = 2,
+        [EnumMember]
+        Dating = 3,
+    }
+ 
+ *
+ * 
+ */
+
+enum SortEnum 
+{
+    Author = 0,
+    Title = 1,
+    Editor = 2,
+    Dating = 3,
 }

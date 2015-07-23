@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ITJakub.DataEntities.Database;
+using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.ITJakubService.Core.Search
@@ -9,7 +10,7 @@ namespace ITJakub.ITJakubService.Core.Search
     public interface ICriteriaImplementationBase
     {
         CriteriaKey CriteriaKey { get; }
-        SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract);
+        SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters);
     }
 
     public class AuthorCriteriaImplementation : ICriteriaImplementationBase
@@ -19,27 +20,83 @@ namespace ITJakub.ITJakubService.Core.Search
             get { return CriteriaKey.Author; }
         }
 
-        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
+        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
         {
             var wordListCriteria = (WordListCriteriaContract) searchCriteriaContract;
             var authorAlias = string.Format("a{0}", Guid.NewGuid().ToString("N"));
             var whereBuilder = new StringBuilder();
-            var parameters = new List<object>();
+            
 
             foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
 
-                whereBuilder.AppendFormat(" {0}.Name like ?", authorAlias);
-                parameters.Add(CriteriaConditionBuilder.Create(wordCriteria));
+                var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
+                whereBuilder.AppendFormat(" {0}.Name like (:{1})", authorAlias, uniqueParameterName);
+                metadataParameters.Add(uniqueParameterName, CriteriaConditionBuilder.Create(wordCriteria));
             }
 
             return new SearchCriteriaQuery
             {
                 Join = string.Format("inner join bv.Authors {0}", authorAlias),
-                Where = whereBuilder.ToString(),
-                Parameters = parameters
+                Where = whereBuilder.ToString()
+            };
+        }
+    }
+
+    public class CategoryCriteriaImplementation : ICriteriaImplementationBase
+    {
+        private readonly CategoryRepository m_categoryRepository;
+
+        public CategoryCriteriaImplementation(CategoryRepository categoryRepository)
+        {
+            m_categoryRepository = categoryRepository;
+        }
+
+        public CriteriaKey CriteriaKey
+        {
+            get { return CriteriaKey.SelectedCategory; }
+        }
+
+        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
+        {
+            var selectedCategoryContract = (SelectedCategoryCriteriaContract) searchCriteriaContract;
+            var subcategoryIds = m_categoryRepository.GetAllSubcategoryIds(selectedCategoryContract.SelectedCategoryIds);
+            
+            var categoryAlias = string.Format("c{0}", Guid.NewGuid().ToString("N"));
+            var bookAlias = string.Format("b{0}", Guid.NewGuid().ToString("N"));
+            var whereBuilder = new StringBuilder();
+
+            var bookUniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
+            var categoryUniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
+
+            whereBuilder.Append(" (");
+
+            if (selectedCategoryContract.SelectedBookIds != null && selectedCategoryContract.SelectedBookIds.Count > 0)
+            {
+                whereBuilder.Append(string.Format("{0}.Id in (:{1})", bookAlias, bookUniqueParameterName));
+                metadataParameters.Add(bookUniqueParameterName, selectedCategoryContract.SelectedBookIds);
+            }
+
+            if ((selectedCategoryContract.SelectedBookIds != null && selectedCategoryContract.SelectedBookIds.Count > 0) &&
+                (subcategoryIds != null && subcategoryIds.Count > 0))
+            {
+                whereBuilder.Append(" or ");
+            }
+
+            if (subcategoryIds != null && subcategoryIds.Count > 0)
+            {
+                whereBuilder.Append(string.Format("{0}.Id in (:{1})", categoryAlias, categoryUniqueParameterName));
+                metadataParameters.Add(categoryUniqueParameterName, subcategoryIds);
+            }
+
+            whereBuilder.Append(" )");
+            
+            return new SearchCriteriaQuery
+            {
+                Join = string.Format("inner join bv.Categories {0} inner join bv.Book {1}", categoryAlias, bookAlias),
+                Where = whereBuilder.ToString()
             };
         }
     }
@@ -51,26 +108,25 @@ namespace ITJakub.ITJakubService.Core.Search
             get { return CriteriaKey.Title; }
         }
 
-        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
+        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
         {
             var wordListCriteria = (WordListCriteriaContract) searchCriteriaContract;
             var whereBuilder = new StringBuilder();
-            var parameters = new List<object>();
 
             foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
 
-                whereBuilder.Append(" bv.Title like ?");
-                parameters.Add(CriteriaConditionBuilder.Create(wordCriteria));
+                var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
+                whereBuilder.AppendFormat(" bv.Title like (:{0})", uniqueParameterName);
+                metadataParameters.Add(uniqueParameterName, CriteriaConditionBuilder.Create(wordCriteria));
             }
 
             return new SearchCriteriaQuery
             {
                 Join = string.Empty,
                 Where = whereBuilder.ToString(),
-                Parameters = parameters
             };
         }
     }
@@ -82,28 +138,27 @@ namespace ITJakub.ITJakubService.Core.Search
             get { return CriteriaKey.Editor; }
         }
 
-        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
+        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
         {
             var wordListCriteria = (WordListCriteriaContract) searchCriteriaContract;
             var responsiblesAlias = string.Format("r{0}", Guid.NewGuid().ToString("N"));
             var responsibleTypeAlias = string.Format("t{0}", Guid.NewGuid().ToString("N"));
             var whereBuilder = new StringBuilder();
-            var parameters = new List<object>();
 
             foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
-
-                whereBuilder.AppendFormat(" {0}.Text like ?", responsiblesAlias);
-                parameters.Add(CriteriaConditionBuilder.Create(wordCriteria));
+                
+                var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
+                whereBuilder.AppendFormat(" {0}.Text like (:{1})", responsiblesAlias, uniqueParameterName);
+                metadataParameters.Add(uniqueParameterName, CriteriaConditionBuilder.Create(wordCriteria));
             }
 
             return new SearchCriteriaQuery
             {
                 Join = string.Format("inner join bv.Responsibles {0} inner join {0}.ResponsibleType {1}", responsiblesAlias, responsibleTypeAlias),
                 Where = string.Format("{0}.Text like 'Editor' and ({1})", responsibleTypeAlias, whereBuilder),
-                Parameters = parameters
             };
         }
     }
@@ -115,12 +170,11 @@ namespace ITJakub.ITJakubService.Core.Search
             get { return CriteriaKey.Dating; }
         }
 
-        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract)
+        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
         {
             var datingListCriteriaContract = (DatingListCriteriaContract) searchCriteriaContract;
             var manuscriptAlias = string.Format("m{0}", Guid.NewGuid().ToString("N"));
             var whereBuilder = new StringBuilder();
-            var datingParameters = new List<object>();
 
             foreach (DatingCriteriaContract datingCriteriaContract in datingListCriteriaContract.Disjunctions)
             {
@@ -133,16 +187,22 @@ namespace ITJakub.ITJakubService.Core.Search
                 if (datingCriteriaContract.NotBefore != null)
                 {
                     notBeforeUsed = true;
-                    whereBuilder.AppendFormat("{0}.NotAfter >= ?", manuscriptAlias);
-                    datingParameters.Add(datingCriteriaContract.NotBefore.Value);
+
+                    var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
+                    whereBuilder.AppendFormat("{0}.NotAfter >= (:{1})", manuscriptAlias, uniqueParameterName);
+                    metadataParameters.Add(uniqueParameterName, datingCriteriaContract.NotBefore.Value);
                 }
 
                 if (datingCriteriaContract.NotAfter != null)
                 {
                     if (notBeforeUsed)
+                    {
                         whereBuilder.Append(" and ");
-                    whereBuilder.AppendFormat("{0}.NotBefore <= ?", manuscriptAlias);
-                    datingParameters.Add(datingCriteriaContract.NotAfter.Value);
+                    }
+
+                    var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
+                    whereBuilder.AppendFormat("{0}.NotBefore <= (:{1})", manuscriptAlias,uniqueParameterName);
+                    metadataParameters.Add(uniqueParameterName, datingCriteriaContract.NotAfter.Value);
                 }
                 whereBuilder.Append(")");
             }
@@ -151,7 +211,6 @@ namespace ITJakub.ITJakubService.Core.Search
             {
                 Join = string.Format("inner join bv.ManuscriptDescriptions {0}", manuscriptAlias),
                 Where = whereBuilder.ToString(),
-                Parameters = datingParameters
             };
         }
     }

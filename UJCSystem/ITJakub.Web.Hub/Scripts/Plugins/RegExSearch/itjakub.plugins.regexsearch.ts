@@ -40,7 +40,10 @@ class Search {
     private processSearchTextCallback: (text: string) => void;
     private processSearchJsonCallback: (json: string) => void;
 
-    constructor(container, processSearchJsonCallback: (jsonData: string) => void, processSearchTextCallback: (text: string) => void) {
+    private lastQuery: string;
+    private lastQueryWasJson: boolean;
+
+    constructor(container: HTMLDivElement, processSearchJsonCallback: (jsonData: string) => void, processSearchTextCallback: (text: string) => void) {
         this.container = container;
         this.processSearchJsonCallback = processSearchJsonCallback;
         this.processSearchTextCallback = processSearchTextCallback;
@@ -110,13 +113,15 @@ class Search {
 
         $(this.advancedButton).click(() => {
             $(this.advancedButton).css("visibility", "hidden");
+
             if (this.searchbarAdvancedEditorContainer.children.length === 0) {
                 this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer,(json: string) => this.closeAdvancedSearchEditor(json));
                 this.advancedRegexEditor.setDisabledOptions(disabledOptions);
                 this.advancedRegexEditor.makeRegExSearch();
                 $(this.searchbarAdvancedEditorContainer).hide();
-                $(this.searchbarAdvancedEditorContainer).slideDown(this.speedAnimation);
-            } else if ($(this.searchbarAdvancedEditorContainer).is(":hidden")) {       //show advanced search
+            }
+
+            if ($(this.searchbarAdvancedEditorContainer).is(":hidden")) {       //show advanced search
                 var textboxValue = $(this.searchInputTextbox).val();
                 if(this.isValidJson(textboxValue)){
                     this.advancedRegexEditor.importJson(textboxValue);
@@ -156,12 +161,26 @@ class Search {
 
     processSearch() {
         var searchboxValue = $(this.searchInputTextbox).val();
-
+        this.lastQuery = searchboxValue;
         if (this.isValidJson(searchboxValue)) {
+            this.lastQueryWasJson = true;
             this.processSearchJsonCallback(searchboxValue);
         } else {
+            this.lastQueryWasJson = false;
             this.processSearchTextCallback(searchboxValue);
         }
+    }
+
+    getLastQuery(): string {
+        return this.lastQuery;
+    }
+
+    isLastQueryJson(): boolean {
+        return this.lastQueryWasJson;
+    }
+
+    isLastQueryText(): boolean {
+        return !this.lastQueryWasJson;
     }
 
 
@@ -378,6 +397,9 @@ class RegExConditionListItem {
     }
 
     disbaleOptions(disabledOptions: Array<SearchTypeEnum>) {
+
+        if (typeof disabledOptions === "undefined" || disabledOptions === null) return;
+        
         if (typeof this.searchDestinationSelect !== "undefined" || this.searchDestinationSelect !== null) {
             for (var i = 0; i < disabledOptions.length; i++) {
                 var disabled = disabledOptions[i];

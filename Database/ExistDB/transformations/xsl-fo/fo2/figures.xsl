@@ -297,7 +297,6 @@
                     <xsl:for-each select="tei:row">
                         <xsl:apply-templates select=".//tei:formula"/>
                         <xsl:if test="following-sibling::tei:row">
-
                             <xsl:processing-instruction name="xmltex">\\</xsl:processing-instruction>
                         </xsl:if>
                     </xsl:for-each>
@@ -387,7 +386,6 @@
                 <xsl:variable name="align">
                     <xsl:value-of select="$tableSpecs/Info/TableSpec[@xml:id=$tid]/table-column[@column-number=$thiscol]/@fotex:column-align"/>
                 </xsl:variable>
-
                 <xsl:choose>
                     <xsl:when test="$align='R'">
                         <xsl:attribute name="text-align">right</xsl:attribute>

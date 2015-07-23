@@ -1,16 +1,35 @@
 ﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
+/// <reference path="../itjakub.plugins.pagination.ts" />
+
 class BibliographyModule {
 
-    booksContainer: string;
-    sortBarContainer: string;
-    forcedBookType: BookTypeEnum;
-    bibliographyFactoryResolver: BibliographyFactoryResolver;
-    configurationManager: ConfigurationManager;
+    private resultsContainer;
+    private booksContainer: HTMLDivElement;
+    private sortBarContainer: string;
+    private forcedBookType: BookTypeEnum;
+    private bibliographyFactoryResolver: BibliographyFactoryResolver;
+    private configurationManager: ConfigurationManager;
 
-    constructor(booksContainer: string, sortBarContainer: string, forcedBookType?: BookTypeEnum) {
-        this.booksContainer = booksContainer;
+    private paginator: Pagination;
+    private paginatorContainer: HTMLDivElement;
+    private booksCount : number;
+    private booksOnPage: number;
+
+    private sortBar: SortBar;
+
+    constructor(resultsContainer: string, sortBarContainer: string, forcedBookType?: BookTypeEnum) {
+        this.resultsContainer = $(resultsContainer);
+
+        this.booksContainer = document.createElement("div");
+        $(this.booksContainer).addClass("bib-listing-books-div");
+        this.paginatorContainer = document.createElement("div");
+        $(this.paginatorContainer).addClass("bib-listing-pagination-div");
+
+        $(this.resultsContainer).append(this.booksContainer);
+        $(this.resultsContainer).append(this.paginatorContainer);
+
         this.sortBarContainer = sortBarContainer;
         this.forcedBookType = forcedBookType;
 
@@ -30,7 +49,8 @@ class BibliographyModule {
         this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
         $(this.sortBarContainer).empty();
-        var sortBarHtml = new SortBar().makeSortBar(this.booksContainer, this.sortBarContainer);
+        this.sortBar = new SortBar();
+        var sortBarHtml = this.sortBar.makeSortBar(<any>this.booksContainer, this.sortBarContainer);
         $(this.sortBarContainer).append(sortBarHtml);
     }
 
@@ -100,6 +120,42 @@ class BibliographyModule {
 
     }
 
+    public showPage(pageNumber: number) {
+        this.paginator.goToPage(pageNumber);
+    }
+
+    public createPagination(booksOnPage: number, pageClickCallback: (pageNumber: number) => void, booksCount: number) {
+        this.booksCount = booksCount;
+        this.booksOnPage = booksOnPage;
+        this.paginator = new Pagination(<any>this.paginatorContainer, booksOnPage);
+        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
+
+    }
+
+    public getPagesCount(): number {
+        return this.paginator.getPageCount();
+    }
+
+    public getBooksCount(): number {
+        return this.booksCount;
+    }
+
+    public getBooksCountOnPage(): number {
+        return this.booksOnPage;
+    }
+
+    public destroyPagination() {
+        $(this.paginatorContainer).empty();
+        this.paginator = null;
+    }
+
+    public isSortedAsc(): boolean {
+        return this.sortBar.isSortedAsc();
+    }
+
+    public getSortCriteria(): SortEnum {
+        return this.sortBar.getSortCriteria();
+    }
 }
 
 interface IBookInfo {

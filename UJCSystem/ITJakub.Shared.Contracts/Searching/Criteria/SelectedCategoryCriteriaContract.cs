@@ -6,6 +6,11 @@ namespace ITJakub.Shared.Contracts.Searching.Criteria
     [DataContract]
     public class SelectedCategoryCriteriaContract : SearchCriteriaContract
     {
+        public override CriteriaKey Key
+        {
+            get { return CriteriaKey.SelectedCategory; }
+        }
+
         [DataMember]
         public IList<int> SelectedCategoryIds { get; set; }
 

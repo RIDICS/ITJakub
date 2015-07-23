@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +11,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.Shared.Contracts.Searching;
 using log4net;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using ResponsibleType = ITJakub.DataEntities.Database.Entities.ResponsibleType;
@@ -187,44 +189,13 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookVersionPairContract> SearchByCriteriaQuery(List<SearchCriteriaQuery> criteriaQueries)
+        public virtual IList<BookVersionPairContract> SearchByCriteriaQuery(SearchCriteriaQueryCreator creator)
         {
-            var queryString = "select b.Guid as Guid, min(bv.VersionId) as VersionId from Book b inner join b.LastVersion bv";
-            var joinBuilder = new StringBuilder();
-            var whereBuilder = new StringBuilder();
-            foreach (var criteriaQuery in criteriaQueries)
-            {
-                if (!string.IsNullOrEmpty(criteriaQuery.Join))
-                    joinBuilder.Append(' ').Append(criteriaQuery.Join);
-
-                whereBuilder.Append(whereBuilder.Length > 0 ? " and" : " where");
-
-                whereBuilder.Append(" (").Append(criteriaQuery.Where).Append(')');
-            }
-
-            queryString = string.Format("{0}{1}{2} group by b.Guid", queryString, joinBuilder, whereBuilder);
-
             using (var session = GetSession())
             {
-                var paramIndex = 0;
-                var query = session.CreateQuery(queryString);
-                foreach (var criteriaQuery in criteriaQueries)
-                {
-                    foreach (var parameterValue in criteriaQuery.Parameters)
-                    {
-                        if (parameterValue is DateTime)
-                            //set parameter as DateTime2 otherwise comparison years before 1753 doesn't work
-                            query.SetDateTime2(paramIndex, (DateTime)parameterValue);
-                        else
-                            query.SetParameter(paramIndex, parameterValue);
-
-                        paramIndex++;
-                    }
-                }
-                
-                var result = query.SetResultTransformer(Transformers.AliasToBean<BookVersionPairContract>())
-                    .List<BookVersionPairContract>();
-
+                var query = session.CreateQuery(creator.GetQueryString());
+                creator.SetParameters(query);
+                var result = query.SetResultTransformer(Transformers.AliasToBean<BookVersionPairContract>()).List<BookVersionPairContract>();
                 return result;
             }
         }

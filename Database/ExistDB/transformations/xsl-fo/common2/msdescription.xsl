@@ -41,8 +41,6 @@
         <xsl:param name="text"/>
         <xsl:value-of select="$text"/>
     </xsl:template>
-
-
     <xsl:template match="tei:accMat">
         <xsl:call-template name="msSection">
             <xsl:with-param name="level">2</xsl:with-param>
@@ -241,9 +239,6 @@
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
-
-
-
     <xsl:template match="tei:abbr">
         <xsl:choose>
             <xsl:when test="parent::tei:choice"/>
@@ -410,8 +405,6 @@
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
-    
-
     <xsl:template match="tei:handNote">
         <xsl:if test="not(preceding-sibling::tei:handNote)">
             <xsl:variable name="Notes">

@@ -37,8 +37,7 @@ class DictionaryViewer {
         this.searchCriteria = searchCriteria;
         this.isCriteriaJson = isCriteriaJson;
 
-        var pageCount = Math.ceil(this.recordCount / this.pageSize);
-        this.pagination.createPagination(pageCount, this.searchAndDisplay.bind(this));
+        this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
     }
 
     public goToPage(pageNumber: number) {

@@ -20,7 +20,7 @@
 
 
     var callbackDelegate = new DropDownSelectCallbackDelegate();
-    callbackDelegate.selectedChangedCallback = (state) => {
+    callbackDelegate.selectedChangedCallback = (state: State) => {
         loadHeadwordsFunction(state);
         updateSearchBox(state);
     };
