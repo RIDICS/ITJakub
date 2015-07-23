@@ -313,7 +313,7 @@ $result-start as xs:double, $result-count as xs:double) as item()* {
 (:	return ($documents, functx:node-kind($documents)):)
 	
 		for $document at $position in $documents
-			return $document/parent::*
+			return $document
 (:			return <result n="{$position}" bookXmlId="{string($document/ancestor::tei:TEI/@xml:id)}" entry-id="{$document/@xml:id}" hw="{subsequence($document//tei:orth, 1, 1)}" />:)
 	(:let $entries := for $document in $documents
 			return <result bookXmlId="{string($document/preceding::tei:TEI/@xml:id)}" entry-id="{$document/@xml:id}" hw="{subsequence($document//tei:orth, 1, 1)}" />
