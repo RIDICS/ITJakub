@@ -460,22 +460,35 @@ body {
 .reader-text .itj-notes .itj-note {
   display: none;
 }
-.reader-text.show-notes .page {
-  display: flex;
+.reader-text span.note-ref {
+  font-weight: bold;
+  display: none;
 }
-.reader-text.show-notes .itj-page {
+.reader-text.show-notes .page {
+  display: inherit;
+}
+/*.reader-text.show-notes .itj-page {
   width: 75%;
 }
+
 .reader-text.show-notes .itj-notes {
   width: 25%;
-}
+}*/
 .reader-text.show-notes .itj-notes .itj-note {
   display: inherit;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+.reader-text.show-notes span.note-ref {
+  display: inline;
+  background-color: #FFF380;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 .reader-text div.itj-note {
   display: inherit;
   border-radius: 10px;
-  background-color: gold;
+  background-color: #FFF380;
   margin: 2px;
   padding: 5px;
 }
