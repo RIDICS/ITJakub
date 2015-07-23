@@ -1,5 +1,5 @@
 //window.onload = () => { alert("hello from editions!"); }
-function initReader(bookXmlId, bookTitle, pageList) {
+function initReader(bookXmlId, bookTitle, pageList, searchedText) {
     var readerPlugin = new ReaderModule($("#ReaderDiv")[0]);
     readerPlugin.makeReader(bookXmlId, bookTitle, pageList);
     function basicSearch(text) {
@@ -15,6 +15,7 @@ function initReader(bookXmlId, bookTitle, pageList) {
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
+                updateQueryStringParameter("searchText", text);
             }
         });
     }
@@ -31,6 +32,7 @@ function initReader(bookXmlId, bookTitle, pageList) {
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
+                updateQueryStringParameter("searchText", json);
             }
         });
     }
@@ -44,5 +46,10 @@ function initReader(bookXmlId, bookTitle, pageList) {
     disabledOptions.push(12 /* HeadwordDescriptionTokenDistance */);
     disabledOptions.push(1 /* Title */);
     search.makeSearch(disabledOptions);
+    if (typeof searchedText !== "undefined" && searchedText !== null) {
+        var decodedText = decodeURIComponent(searchedText);
+        decodedText = replaceSpecialChars(decodedText);
+        search.processSearchQuery(decodedText);
+    }
 }
 //# sourceMappingURL=itjakub.editions.js.map

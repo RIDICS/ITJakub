@@ -20,6 +20,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        initReader("@Model.BookXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)));
+        initReader("@Model.BookXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)),"@Model.SearchText");
     });
 </script>

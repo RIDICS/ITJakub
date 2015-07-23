@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
@@ -50,7 +51,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Listing(string bookId)
+        public ActionResult Listing(string bookId, string searchText)
         {
             var book = m_serviceClient.GetBookInfo(bookId);
             return
@@ -58,7 +59,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 {
                     BookXmlId = book.BookXmlId,
                     BookTitle = book.Title,
-                    BookPages = book.BookPages
+                    BookPages = book.BookPages,
+                    SearchText = HttpUtility.UrlDecode(searchText)
                 });
         }
 

@@ -85,7 +85,7 @@ var Search = (function () {
         $(this.advancedButton).click(function () {
             $(_this.advancedButton).css("visibility", "hidden");
             if (_this.searchbarAdvancedEditorContainer.children.length === 0) {
-                _this.advancedRegexEditor = new RegExAdvancedSearchEditor(_this.searchbarAdvancedEditorContainer, function (json) { return _this.closeAdvancedSearchEditor(json); });
+                _this.advancedRegexEditor = new RegExAdvancedSearchEditor(_this.searchbarAdvancedEditorContainer, function (json) { return _this.closeAdvancedSearchEditorWithImport(json); }, function (json) { return _this.closeAdvancedSearchEditor(); });
                 _this.advancedRegexEditor.setDisabledOptions(disabledOptions);
                 _this.advancedRegexEditor.makeRegExSearch();
                 $(_this.searchbarAdvancedEditorContainer).hide();
@@ -101,8 +101,11 @@ var Search = (function () {
             }
         });
     };
-    Search.prototype.closeAdvancedSearchEditor = function (jsonData) {
+    Search.prototype.closeAdvancedSearchEditorWithImport = function (jsonData) {
         this.importJsonToTextField(jsonData);
+        this.closeAdvancedSearchEditor();
+    };
+    Search.prototype.closeAdvancedSearchEditor = function () {
         $(this.searchbarAdvancedEditorContainer).slideUp(this.speedAnimation); //hide advanced search
         $(this.searchInputTextbox).prop('disabled', false);
         $(this.searchButton).prop('disabled', false);
@@ -111,8 +114,11 @@ var Search = (function () {
     Search.prototype.importJsonToTextField = function (json) {
         $(this.searchInputTextbox).text(json);
         $(this.searchInputTextbox).val(json);
+        $(this.searchInputTextbox).change();
     };
-    Search.prototype.importJsonToAdvancedSearch = function (json) {
+    Search.prototype.processSearchQuery = function (query) {
+        this.importJsonToTextField(query);
+        this.processSearch();
     };
     Search.prototype.isValidJson = function (data) {
         try {
@@ -147,8 +153,9 @@ var Search = (function () {
     return Search;
 })();
 var RegExAdvancedSearchEditor = (function () {
-    function RegExAdvancedSearchEditor(container, regexDoneCallback) {
+    function RegExAdvancedSearchEditor(container, regexDoneCallback, regexCancelledCallback) {
         this.regexDoneCallback = regexDoneCallback;
+        this.regexCancelledCallback = regexCancelledCallback;
         this.container = container;
     }
     RegExAdvancedSearchEditor.prototype.setDisabledOptions = function (disabledOptions) {
@@ -166,6 +173,13 @@ var RegExAdvancedSearchEditor = (function () {
         $(sentButton).click(function () {
             var json = _this.getConditionsResultJSON();
             _this.regexDoneCallback(json);
+        });
+        var cancelButton = HtmlItemsFactory.createButton("Zrušit");
+        $(cancelButton).addClass("regex-search-button");
+        commandsDiv.appendChild(cancelButton);
+        $(cancelButton).click(function () {
+            var json = _this.getConditionsResultJSON();
+            _this.regexCancelledCallback(json);
         });
         this.innerContainer = document.createElement("div");
         this.addNewCondition(true);

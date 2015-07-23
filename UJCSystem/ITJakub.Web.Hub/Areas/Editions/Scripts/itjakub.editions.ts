@@ -1,6 +1,6 @@
 ﻿//window.onload = () => { alert("hello from editions!"); }
 
-function initReader(bookXmlId: string, bookTitle: string, pageList: any) {
+function initReader(bookXmlId: string, bookTitle: string, pageList: any, searchedText?: string) {
     var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0]);
     readerPlugin.makeReader(bookXmlId, bookTitle, pageList);
 
@@ -19,6 +19,7 @@ function initReader(bookXmlId: string, bookTitle: string, pageList: any) {
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
+                updateQueryStringParameter("searchText", text);
             }
         });
     }
@@ -37,6 +38,7 @@ function initReader(bookXmlId: string, bookTitle: string, pageList: any) {
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
+                updateQueryStringParameter("searchText", json);
             }
         });
     }
@@ -52,5 +54,9 @@ function initReader(bookXmlId: string, bookTitle: string, pageList: any) {
     disabledOptions.push(SearchTypeEnum.Title);
     search.makeSearch(disabledOptions);
 
-
+    if (typeof searchedText !== "undefined" && searchedText !== null) {
+        var decodedText = decodeURIComponent(searchedText);
+        decodedText = replaceSpecialChars(decodedText);
+        search.processSearchQuery(decodedText);    
+    }
 }
