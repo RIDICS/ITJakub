@@ -899,22 +899,22 @@ body {
   margin-bottom: 5px;
 }
 /* CSS block for hide/show notes in text */
-.reader-text .itj-page-notes .itj-page-note {
+.reader-text .itj-notes .itj-note {
   display: none;
 }
-.reader-text.show-notes .itj-page {
+.reader-text.show-notes .page {
   display: flex;
 }
-.reader-text.show-notes .itj-page-text {
+.reader-text.show-notes .itj-page {
   width: 75%;
 }
-.reader-text.show-notes .itj-page-notes {
+.reader-text.show-notes .itj-notes {
   width: 25%;
 }
-.reader-text.show-notes .itj-page-notes .itj-page-note {
+.reader-text.show-notes .itj-notes .itj-note {
   display: inherit;
 }
-.reader-text div.itj-page-note {
+.reader-text div.itj-note {
   display: inherit;
   border-radius: 10px;
   background-color: gold;
