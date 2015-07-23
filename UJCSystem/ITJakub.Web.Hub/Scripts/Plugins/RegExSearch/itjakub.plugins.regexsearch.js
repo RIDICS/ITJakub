@@ -159,6 +159,7 @@ var RegExAdvancedSearchEditor = (function () {
         $(this.container).empty();
         this.regExConditions = [];
         var commandsDiv = document.createElement("div");
+        $(commandsDiv).addClass("regex-search-buttons-bottom-area");
         var sentButton = HtmlItemsFactory.createButton("Dokončit");
         $(sentButton).addClass("regex-search-button");
         commandsDiv.appendChild(sentButton);

@@ -358,7 +358,7 @@ class ReaderModule {
         $(searchResultButton).click((event: Event) => {
             var panelId = "SearchPanel";
             if (!this.existSidePanel(panelId)) {
-                var searchPanel = new LeftSidePanel(panelId,"Vyhlédávání", this);
+                var searchPanel = new SearchResultPanel(panelId, this);
                 this.loadSidePanel(searchPanel.panelHtml);
                 this.leftSidePanels.push(searchPanel);
             }
@@ -1014,6 +1014,18 @@ class SettingsPanel extends LeftSidePanel {
         var innerContent: HTMLDivElement = window.document.createElement("div");
         innerContent.appendChild(buttonsDiv);
         innerContent.appendChild(checkboxesDiv);
+        return innerContent;
+    }
+}
+
+class SearchResultPanel extends LeftSidePanel {
+
+    constructor(identificator: string, readerModule: ReaderModule) {
+        super(identificator, "Výsledky vyhledávání", readerModule);
+    }
+    
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var innerContent: HTMLDivElement = window.document.createElement("div");
         return innerContent;
     }
 }

@@ -292,7 +292,7 @@ var ReaderModule = (function () {
         $(searchResultButton).click(function (event) {
             var panelId = "SearchPanel";
             if (!_this.existSidePanel(panelId)) {
-                var searchPanel = new LeftSidePanel(panelId, "Vyhlédávání", _this);
+                var searchPanel = new SearchResultPanel(panelId, _this);
                 _this.loadSidePanel(searchPanel.panelHtml);
                 _this.leftSidePanels.push(searchPanel);
             }
@@ -857,6 +857,17 @@ var SettingsPanel = (function (_super) {
         return innerContent;
     };
     return SettingsPanel;
+})(LeftSidePanel);
+var SearchResultPanel = (function (_super) {
+    __extends(SearchResultPanel, _super);
+    function SearchResultPanel(identificator, readerModule) {
+        _super.call(this, identificator, "Výsledky vyhledávání", readerModule);
+    }
+    SearchResultPanel.prototype.makeBody = function (rootReference, window) {
+        var innerContent = window.document.createElement("div");
+        return innerContent;
+    };
+    return SearchResultPanel;
 })(LeftSidePanel);
 var ContentPanel = (function (_super) {
     __extends(ContentPanel, _super);

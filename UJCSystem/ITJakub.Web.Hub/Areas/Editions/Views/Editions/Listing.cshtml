@@ -10,13 +10,21 @@
 }
 @model ITJakub.Web.Hub.Areas.Editions.Models.BookListingModel
 
-<div id="Reader" data-bookid="@Model.BookXmlId" class="top-offset-without-submenu">
+<div id="SearchDiv" class="top-offset-without-submenu">
+
+</div>
+
+<div id="ReaderDiv" data-bookid="@Model.BookXmlId">
 
 </div>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        var readerPlugin = new ReaderModule('#Reader');
+        var readerPlugin = new ReaderModule('#ReaderDiv');
         readerPlugin.makeReader("@Model.BookXmlId", "@Model.BookTitle",@Html.Raw(Json.Encode(@Model.BookPages)));
+
+        var search = new Search($("#SearchDiv")[0], searchCallback, searchCallback);
+        search.makeSearch();
+
     });
 </script>
