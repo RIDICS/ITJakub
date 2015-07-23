@@ -159,7 +159,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             }
 
             var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { results }, JsonRequestBehavior.AllowGet);
+            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -233,7 +233,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             }
 
             var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { results }, JsonRequestBehavior.AllowGet);
+            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SearchCriteriaMocked()
