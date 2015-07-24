@@ -176,7 +176,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 Count = 1,
                 HitSettingsContract = new HitSettingsContract
                 {
-                    ContextLength = 50,
+                    ContextLength = 45,
                     Count = count,
                     Start = start
                 }
@@ -243,7 +243,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     Count = 1,
                     HitSettingsContract = new HitSettingsContract
                     {
-                        ContextLength = 50,
+                        ContextLength = 45,
                         Count = count,
                         Start = start
                     }

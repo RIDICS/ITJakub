@@ -1090,8 +1090,8 @@ class SearchResultPanel extends LeftSidePanel {
     private searchPagingDiv: HTMLDivElement;
 
     private paginator: Pagination;
-    private resultsOnPage = 25;
-    private maxPaginatorVisibleElements = 5;
+    private resultsOnPage;
+    private maxPaginatorVisibleElements;
 
     constructor(identificator: string, readerModule: ReaderModule) {
         super(identificator, "Vyhledávání", readerModule);
@@ -1103,14 +1103,17 @@ class SearchResultPanel extends LeftSidePanel {
         var searchResultItemsDiv = window.document.createElement("div");
         $(searchResultItemsDiv).addClass("reader-search-result-items-div");
         this.searchResultItemsDiv = searchResultItemsDiv;
-        innerContent.appendChild(searchResultItemsDiv);
 
         var pagingDiv = window.document.createElement("div");
         $(pagingDiv).addClass("reader-search-result-paging");
         this.searchPagingDiv = pagingDiv;
-        innerContent.appendChild(this.searchPagingDiv);
 
+        this.resultsOnPage = 8;
+        this.maxPaginatorVisibleElements = 5;
         this.paginator = new Pagination(<any>this.searchPagingDiv, this.maxPaginatorVisibleElements);
+
+        innerContent.appendChild(this.searchPagingDiv);
+        innerContent.appendChild(searchResultItemsDiv);
 
         return innerContent;
     }
@@ -1139,6 +1142,10 @@ class SearchResultPanel extends LeftSidePanel {
             this.parentReader.moveToPage(result.pageXmlId, true);
         });
 
+        var pageNameSpan = document.createElement("span");
+        $(pageNameSpan).addClass("reader-search-result-name");
+        pageNameSpan.innerHTML = result.pageName;
+
         var resultBeforeSpan = document.createElement("span");
         $(resultBeforeSpan).addClass("reader-search-result-before");
         resultBeforeSpan.innerHTML = result.before;
@@ -1151,6 +1158,7 @@ class SearchResultPanel extends LeftSidePanel {
         $(resultAfterSpan).addClass("reader-search-result-after");
         resultAfterSpan.innerHTML = result.after;
 
+        resultItemDiv.appendChild(pageNameSpan);
         resultItemDiv.appendChild(resultBeforeSpan);
         resultItemDiv.appendChild(resultMatchSpan);
         resultItemDiv.appendChild(resultAfterSpan);
