@@ -242,6 +242,7 @@ namespace ITJakub.ITJakubService.Core.Search
             {
                 Join = string.Format("inner join bv.BookHeadwords {0}", bookHeadwordAlias),
                 Where = whereBuilder.ToString(),
+                // TODO add new where for getting result headwords (not bookGuids)
             };
         }
     }

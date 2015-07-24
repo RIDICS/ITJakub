@@ -363,7 +363,7 @@ namespace ITJakub.ITJakubService.Core
             var headwordContracts = filteredCriterias.MetadataCriterias.Where(x => x.Key == CriteriaKey.Headword);
             nonMetadataCriterias.Add(resultContract);
             nonMetadataCriterias.AddRange(headwordContracts);
-
+            
             return m_searchServiceClient.ListSearchDictionariesResultsCount(nonMetadataCriterias);
         }
 

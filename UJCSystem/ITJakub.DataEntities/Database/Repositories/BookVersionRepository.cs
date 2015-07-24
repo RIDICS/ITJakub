@@ -7,7 +7,9 @@ using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 
@@ -254,6 +256,84 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 if (selectedBookIds != null)
                     query.WhereRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds);
+
+                var result = query.Select(Projections.Distinct(Projections.ProjectionList()
+                        .Add(Projections.Property(() => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid))
+                        .Add(Projections.Property(() => bookVersionAlias.Title).WithAlias(() => resultAlias.BookTitle))
+                        .Add(Projections.Property(() => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym))
+                        .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
+                        .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))))
+                    .OrderBy(x => x.DefaultHeadword).Asc
+                    .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
+                    .Skip(start - 1)
+                    .Take(end - start + 1)
+                    .List<HeadwordSearchResult>();
+
+                return result;
+            }
+        }
+
+        private void SetConditions(IQueryOver query, BookHeadword bookHeadwordAlias, IEnumerable<WordListCriteriaContract> headwordsCriteria)
+        {
+            foreach (var wordListCriteriaContract in headwordsCriteria)
+            {
+                
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual int GetHeadwordCountBySearchCriteria(IEnumerable<string> selectedGuidList)
+        {
+            Book bookAlias = null;
+            BookHeadword bookHeadwordAlias = null;
+            HeadwordCountResult headwordCountAlias = null;
+
+            using (var session = GetSession())
+            {
+                var query = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion)
+                    .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
+                    .Select(Projections.ProjectionList()
+                        .Add(Projections.CountDistinct(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => headwordCountAlias.HeadwordCount))
+                        .Add(Projections.Group(() => bookAlias.Id).WithAlias(() => headwordCountAlias.BookId))
+                    )
+                    .WhereRestrictionOn(() => bookAlias.Guid).IsInG(selectedGuidList);
+
+                //TODO
+                var conjunction = new Conjunction();
+                var disj = new Disjunction();
+                disj.Add(new LikeExpression(Projections.Property(() => bookHeadwordAlias.DefaultHeadword), "%al%", MatchMode.Exact));
+                disj.Add(new LikeExpression(Projections.Property(() => bookHeadwordAlias.DefaultHeadword), "%ab%", MatchMode.Exact));
+                conjunction.Add(disj);
+
+                query.And(conjunction);
+
+
+
+                var resultList = query.TransformUsing(Transformers.AliasToBean<HeadwordCountResult>())
+                    .List<HeadwordCountResult>();
+
+                return (int)resultList.Sum(x => x.HeadwordCount);
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<HeadwordSearchResult> GetHeadwordListBySearchCriteria(int start, int end, IEnumerable<string> selectedGuidList)
+        {
+            //TODO
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                BookHeadword bookHeadwordAlias = null;
+                HeadwordSearchResult resultAlias = null;
+
+                var query = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias);
+
+                //if (selectedBookIds != null)
+                //    query.WhereRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds);
 
                 var result = query.Select(Projections.Distinct(Projections.ProjectionList()
                         .Add(Projections.Property(() => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid))

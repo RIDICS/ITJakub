@@ -74,7 +74,6 @@
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="CardFileManager.cs" />
     <Compile Include="SearchManager.cs" />
-    <Compile Include="Search\CriteriaConditionBuilder.cs" />
     <Compile Include="Search\ICriteriaImplementationBase.cs" />
     <Compile Include="Search\MetadataSearchCriteriaDirector.cs" />
     <Compile Include="UserManager.cs" />
