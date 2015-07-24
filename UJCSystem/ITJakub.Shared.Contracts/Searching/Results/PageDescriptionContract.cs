@@ -3,15 +3,12 @@
 namespace ITJakub.Shared.Contracts.Searching.Results
 {
     [DataContract]
-    public class PageResultContext
+    public class PageDescriptionContract
     {
         [DataMember]
-        public string PageXmlId { get; set; }   //TODO use PageDescriptionContract
+        public string PageXmlId { get; set; }
 
         [DataMember]
         public string PageName { get; set; }
-
-        [DataMember]
-        public KwicStructure ContextStructure { get; set; }
     }
 }

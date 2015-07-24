@@ -41,5 +41,8 @@ namespace ITJakub.Shared.Contracts
 
         [OperationContract]
         int GetSearchCriteriaResultsCount(List<SearchCriteriaContract> nonMetadataCriterias);
+
+        [OperationContract]
+        PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias);
     }
 }

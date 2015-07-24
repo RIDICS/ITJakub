@@ -81,6 +81,8 @@
     <Compile Include="Searching\Results\KwicStructure.cs" />
     <Compile Include="Searching\Criteria\SearchCriteriaContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Searching\Results\PageDescriptionContract.cs" />
+    <Compile Include="Searching\Results\PageListContract.cs" />
     <Compile Include="Searching\Results\PageResultContext.cs" />
     <Compile Include="Searching\Results\SearchResultContract.cs" />
     <Compile Include="Searching\Results\SearchResultContractList.cs" />
