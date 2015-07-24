@@ -45,6 +45,7 @@
 		<delete>
 			<fileset dir="${save-path}\queries\" includes="fulltext*.xquery" />
 			<fileset dir="${save-path}\modules\" includes="*-testing.xqm" />
+			<fileset dir="${save-path}\queries\" includes="tests-*.xquery" />
 		</delete>
 	</target>
 	

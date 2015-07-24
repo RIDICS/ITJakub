@@ -27,6 +27,8 @@ declare variable $search:query-options := <query-options>
      <filter-rewrite>yes</filter-rewrite>
   </query-options>;
 
+declare variable $search:default-search-criteria :=
+	'<ResultSearchCriteriaContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract" />';
 
 declare function search:get-query-documents-matches-fulltext($root as node()*, $queries as element()) as node()* { 
 	let $query := $queries//query[@type='Fulltext']
@@ -366,6 +368,17 @@ $result-start as xs:double, $result-count as xs:double) as item()* {
 		
 		return $entries:)
 
+} ;
+
+
+declare function search:get-document-fragment-with-matches($fragment as node()*, $queries as element()?) {
+	let $fulltext-query := $queries/query[@type='Fulltext']
+	let $matches := $fragment/tei:TEI//(tei:l | tei:p) [ft:query(., $fulltext-query, $search:query-options)]
+	return if ($matches) then $matches else $fragment
+} ;
+
+declare function search:get-entry-with-matches($entry as node()*, $queries as element()?) {
+	$fragment
 } ;
 
 (:~ převede vyhledávací kritéria na seznam dotazů query pro fulltextové vyhledávání :)
