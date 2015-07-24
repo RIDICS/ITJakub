@@ -431,6 +431,12 @@ namespace ITJakub.ITJakubService.Core
 
             var resultString = m_searchServiceClient.ListSearchDictionariesResults(nonMetadataCriterias);
             var resultContract = HeadwordListContract.FromXml(resultString);
+            
+            // fill book info
+            var bookInfoList = m_bookVersionRepository.GetBookVersionsByGuid(resultContract.BookList.Keys);
+            var bookInfoContracts = Mapper.Map<IList<DictionaryContract>>(bookInfoList);
+            var bookDictionary = bookInfoContracts.ToDictionary(x => x.BookXmlId, x => x);
+            resultContract.BookList = bookDictionary;
 
             return resultContract;
         }

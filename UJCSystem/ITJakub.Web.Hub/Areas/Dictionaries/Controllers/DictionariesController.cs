@@ -124,15 +124,23 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult SearchBasicResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var searchContract = new List<SearchCriteriaContract>
+            var searchContractBasic = new List<SearchCriteriaContract>
             {
                 CreateWordListContract(CriteriaKey.Headword, text),
+            };
+            var searchContractFulltext = new List<SearchCriteriaContract>
+            {
                 CreateWordListContract(CriteriaKey.HeadwordDescription, text),
-                CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds)
             };
 
-            var headwordCount = m_mainServiceClient.SearchHeadwordByCriteriaResultsCount(searchContract, DictionarySearchTarget.Headword);
-            var fulltextCount = m_mainServiceClient.SearchHeadwordByCriteriaResultsCount(searchContract, DictionarySearchTarget.Fulltext);
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                searchContractBasic.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
+                searchContractFulltext.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
+            }
+            
+            var headwordCount = m_mainServiceClient.SearchHeadwordByCriteriaResultsCount(searchContractBasic, DictionarySearchTarget.Headword);
+            var fulltextCount = m_mainServiceClient.SearchHeadwordByCriteriaResultsCount(searchContractFulltext, DictionarySearchTarget.Fulltext);
             
             var result = new HeadwordSearchResultContract
             {
@@ -149,8 +157,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 CreateWordListContract(CriteriaKey.Headword, text),
                 CreateResultCriteriaContract(start, count),
-                CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds)
             };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+                searchContract.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
 
             var result = m_mainServiceClient.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Headword);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -160,11 +170,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var searchContract = new List<SearchCriteriaContract>
             {
-                CreateWordListContract(CriteriaKey.Headword, text),
                 CreateWordListContract(CriteriaKey.HeadwordDescription, text),
                 CreateResultCriteriaContract(start, count),
-                CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds)
             };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+                searchContract.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
 
             var result = m_mainServiceClient.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Fulltext);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -174,7 +185,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult SearchCriteriaResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
-            listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
 
             var resultCount = m_mainServiceClient.SearchHeadwordByCriteriaResultsCount(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
             return Json(resultCount);
@@ -185,7 +198,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
             listSearchCriteriaContracts.Add(CreateResultCriteriaContract(start, count));
-            listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             
             var result = m_mainServiceClient.SearchHeadwordByCriteria(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
             return Json(result);
