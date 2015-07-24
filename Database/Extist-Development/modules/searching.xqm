@@ -14,6 +14,7 @@ declare namespace a="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Cont
 declare namespace r="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract";
 declare namespace i="http://www.w3.org/2001/XMLSchema-instance";
 declare namespace b="http://schemas.microsoft.com/2003/10/Serialization/Arrays";
+declare namespace dcs="http://schemas.datacontract.org/2004/07/ITJakub.ITJakubService.DataContracts";
 
 declare namespace exist = "http://exist.sourceforge.net/NS/exist"; 
 declare option exist:serialize "highlight-matches=elements";
@@ -26,6 +27,8 @@ declare variable $search:query-options := <query-options>
      <filter-rewrite>yes</filter-rewrite>
   </query-options>;
 
+declare variable $search:default-search-criteria :=
+	'<ResultSearchCriteriaContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract" />';
 
 declare function search:get-query-documents-matches-fulltext($root as node()*, $queries as element()) as node()* { 
 	let $query := $queries//query[@type='Fulltext']
@@ -121,23 +124,16 @@ declare function search:match-hits-by-entry($root as node()*, $queries as elemen
 declare function search:match-hits-by-entry-elements($root as node()*, $query as element()) as item()* {
 	if ($root and $query) then
 		for $r in $root
-			let $rid := $r/tei:TEI/@n/text()
-			let $vid := $r/tei:TEI/substring-after(@change, '#')
-			let $hits := $r/tei:TEI//tei:entryFree[ft:query(., $query, $search:query-options)]
-			for $hit in $hits
-			let $hitid := $hit/@xml:id
-			let $hw := subsequence($hit//tei:orth, 1, 1)/text()
-			return <HeadwordContract><Dictionaries><HeadwordBookInfoContract>
-				<BookXmlId>{$rid}</BookXmlId>
-				<EntryXmlId>{$hitid}</EntryXmlId>
-				</HeadwordBookInfoContract>
-			</Dictionaries>
-			<Headword>{$hw}</Headword>
-		</HeadwordContract>
+			let $hits := root($r)/tei:TEI//tei:entryFree[ft:query(., $query, $search:query-options)]
+			let $rid := root($r)/tei:TEI/string(@n)
+			let $vid := root($r)/tei:TEI/substring-after(@change, '#')
+			return search:get-xml-hits-for-dictionaries($hits, $rid, $vid)
+(:			return root($r):)
 	else
 		()
 	
 };
+
 
 declare function search:match-hits-by-headword-elements($root as node()*, $query as element()) as item()* {
 	if ($root and $query) then
@@ -145,10 +141,31 @@ declare function search:match-hits-by-headword-elements($root as node()*, $query
 			for $entry in $root1/tei:TEI//tei:entryFree[ft:query(.//tei:form, $query, $search:query-options)]
 			return <hit book-xml-id="{string($root1/tei:TEI/@xml:id)}" entry-id="{$entry/@xml:id}" hw="{subsequence($entry//tei:orth, 1, 1)}"  />
 :)	
-		$root/tei:TEI//tei:entryFree[ft:query(.//tei:form, $query, $search:query-options)]
+		for $r in $root
+			let $hits := root($r)/tei:TEI//tei:entryFree[ft:query(.//tei:form, $query, $search:query-options)]
+			let $rid := root($r)/tei:TEI/string(@n)
+			let $vid := root($r)/tei:TEI/substring-after(@change, '#')
+			return search:get-xml-hits-for-dictionaries($hits, $rid, $vid)
+(:			return root($r):)
+		
 	else
 		()
 };
+
+declare function search:get-xml-hits-for-dictionaries($hits as element()*, $rid as xs:string, $vid as xs:string) as element()* {
+	for $hit in $hits
+			let $hitid := string($hit/@xml:id)
+			let $hw := subsequence($hit//tei:orth, 1, 1)/text()
+			return <HeadwordContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.ITJakubService.DataContracts">
+			<Dictionaries>
+			<HeadwordBookInfoContract>
+				<BookXmlId>{$rid}</BookXmlId>
+				<EntryXmlId>{$hitid}</EntryXmlId>
+				</HeadwordBookInfoContract>
+			</Dictionaries>
+			<Headword>{$hw}</Headword>
+		</HeadwordContract>
+} ;
 
 declare function search:get-query-documents-matches($root as node()*, $queries as element()) as node()* {
 	let $fulltext := search:get-query-documents-matches-fulltext($root, $queries)
@@ -244,9 +261,9 @@ declare function search:get-document-search-hits($document as node()?,
 			return 
 			<PageResultContext>
 				<ContextStructure>
+					<After>{search:get-kwic-summary-content($summary, 'following')}</After>
 					<Before>{search:get-kwic-summary-content($summary, 'previous')}</Before>
 					<Match>{search:get-kwic-summary-content($summary, 'hi')}</Match>
-					<After>{search:get-kwic-summary-content($summary, 'following')}</After>
 				</ContextStructure>
 				<PageName>{string($pb/@n)}</PageName>
 				<PageXmlId>{string($pb/@xml:id)}</PageXmlId>
@@ -304,25 +321,41 @@ declare function search:get-search-hits($document as node()?,
 		<TotalHitCount xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">{$hits-count}</TotalHitCount>)
 } ;
 
+declare function search:get-hits-by-entry-and-headwords($root as node()*, 
+$queries as element()?) as element()* {
+
+	let $headword-query := $queries//query[@type='Headword']
+	let $entry-query := $queries//query[@type='HeadwordDescription']
+
+	for $r in $root
+		let $rid := root($r)/tei:TEI/string(@n)
+		let $vid := root($r)/tei:TEI/substring-after(@change, '#')
+		let $hits :=
+			if($headword-query and $entry-query) then
+				$r/tei:TEI//tei:entryFree[ft:query(.//tei:form, $headword-query, $search:query-options)]
+						[ft:query(., $entry-query, $search:query-options)]
+				else if($entry-query) then
+						$r/tei:TEI//tei:entryFree[ft:query(., $entry-query, $search:query-options)]
+				else if($headword-query) then
+					$r/tei:TEI//tei:entryFree[ft:query(.//tei:form, $headword-query, $search:query-options)]
+				else
+				()
+	return search:get-xml-hits-for-dictionaries($hits, $rid, $vid)
+} ;
+
 declare function search:get-dictionaries-search-hits($dictionaries as node()*, 
 $queries as element()?, 
 $result-start as xs:double, $result-count as xs:double) as item()* {
-	let $headwords := search:match-hits-by-entry($dictionaries, $queries)
-	let $entries := search:match-hits-by-headwords($dictionaries, $queries)
-(:	let $query := <query><term>našiti</term></query>:)
-	(:let $temp := $dictionaries//tei:entryFree[ft:query(., $query, $search:query-options)]:)
-	(:let $temp := $dictionaries/tei:TEI//tei:form[ft:query(., 'našiti')]
-	let $temp2 := $dictionaries/tei:TEI//tei:entryFree[ft:query(., $query)]
-	(\:let $temp := $dictionaries//tei:entryFree[contains(., 'aby')]:\)
-	return ($temp, $temp2, $entries):)
-	
-	let $documents := search:intersect-sequences($headwords, $entries)
+	let $hits := search:get-hits-by-entry-and-headwords($dictionaries, $queries)
+	return $hits
+
+(:	let $documents := search:intersect-sequences($headwords, $entries):)
 	
 (:	return ($documents, functx:node-kind($documents)):)
 	
-		for $document at $position in $documents
+(:		for $document at $position in $documents
 			return $document
-(:			return <result n="{$position}" bookXmlId="{string($document/ancestor::tei:TEI/@xml:id)}" entry-id="{$document/@xml:id}" hw="{subsequence($document//tei:orth, 1, 1)}" />:)
+:)(:			return <result n="{$position}" bookXmlId="{string($document/ancestor::tei:TEI/@xml:id)}" entry-id="{$document/@xml:id}" hw="{subsequence($document//tei:orth, 1, 1)}" />:)
 	(:let $entries := for $document in $documents
 			return <result bookXmlId="{string($document/preceding::tei:TEI/@xml:id)}" entry-id="{$document/@xml:id}" hw="{subsequence($document//tei:orth, 1, 1)}" />
 	let $entries := for $result in $entries
@@ -335,6 +368,17 @@ $result-start as xs:double, $result-count as xs:double) as item()* {
 		
 		return $entries:)
 
+} ;
+
+
+declare function search:get-document-fragment-with-matches($fragment as node()*, $queries as element()?) {
+	let $fulltext-query := $queries/query[@type='Fulltext']
+	let $matches := $fragment/tei:TEI//(tei:l | tei:p) [ft:query(., $fulltext-query, $search:query-options)]
+	return if ($matches) then $matches else $fragment
+} ;
+
+declare function search:get-entry-with-matches($entry as node()*, $queries as element()?) {
+	$fragment
 } ;
 
 (:~ převede vyhledávací kritéria na seznam dotazů query pro fulltextové vyhledávání :)

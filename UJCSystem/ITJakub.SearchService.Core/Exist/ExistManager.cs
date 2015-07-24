@@ -116,13 +116,12 @@ namespace ITJakub.SearchService.Core.Exist
                 }
             }
 
-            if (resultRestrictionCriteriaContract == null)
-                return null;
-
             return new ResultSearchCriteriaContract
             {
                 ConjunctionSearchCriterias = filteredCriterias,
-                ResultBooks = resultRestrictionCriteriaContract.ResultBooks
+                ResultBooks = resultRestrictionCriteriaContract != null
+                    ? resultRestrictionCriteriaContract.ResultBooks
+                    : null,
             };
         }
 
@@ -182,6 +181,8 @@ namespace ITJakub.SearchService.Core.Exist
         public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
         {
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
+            if (resultSearchCriteria.ResultBooks == null)
+                return null;
             
             var stringResult = m_client.ListSearchDictionariesResults(resultSearchCriteria.ToXml());
             return stringResult;
@@ -190,6 +191,8 @@ namespace ITJakub.SearchService.Core.Exist
         public int ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
+            if (resultSearchCriteria.ResultBooks == null)
+                return 0;
 
             var result = m_client.ListSearchDictionariesResultsCount(resultSearchCriteria.ToXml());
             return result;
@@ -198,6 +201,9 @@ namespace ITJakub.SearchService.Core.Exist
         public int GetSearchCriteriaResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
+            if (resultSearchCriteria.ResultBooks == null)
+                return 0;
+
             return m_client.GetSearchCriteriaResultsCount(resultSearchCriteria.ToXml());
         }
     }

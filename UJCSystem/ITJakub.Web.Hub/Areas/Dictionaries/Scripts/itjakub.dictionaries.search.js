@@ -1,11 +1,17 @@
 $(document).ready(function () {
     var pageSize = 25;
     var tabs = new DictionarySearchTabs();
+    var callbackDelegate = new DropDownSelectCallbackDelegate();
+    callbackDelegate.selectedChangedCallback = function (state) {
+        //TODO notify typeahead
+    };
+    var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
+    dictionarySelector.makeDropdown();
     var dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
     var dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#description-fulltext", true);
     var dictionaryViewerAdvanced = new DictionaryViewer("#headwords-list-advanced", "#headwords-pagination-advanced", "#description-advanced", true);
-    var dictionaryWrapperBasic = new DictionaryViewerTextWrapper(dictionaryViewerHeadword, dictionaryViewerFulltext, pageSize, tabs);
-    var dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize, tabs);
+    var dictionaryWrapperBasic = new DictionaryViewerTextWrapper(dictionaryViewerHeadword, dictionaryViewerFulltext, pageSize, tabs, dictionarySelector);
+    var dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize, tabs, dictionarySelector);
     var processSearchJson = function (json) {
         dictionaryWrapperAdvanced.loadCount(json);
     };
@@ -19,19 +25,14 @@ $(document).ready(function () {
     disabledOptions.push(6 /* Sentence */);
     disabledOptions.push(5 /* Heading */);
     search.makeSearch(disabledOptions);
-    var callbackDelegate = new DropDownSelectCallbackDelegate();
-    callbackDelegate.selectedChangedCallback = function (state) {
-    };
-    var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
-    dictionarySelector.makeDropdown();
 });
 var DictionarySearchTabs = (function () {
     function DictionarySearchTabs() {
         var _this = this;
         this.searchTabs = [
-            new SearchTab("#tab-headwords", "#headwords", "#description-headwords"),
-            new SearchTab("#tab-fulltext", "#fulltext", "#description-fulltext"),
-            new SearchTab("#tab-advanced", "#advanced", "#description-advanced")
+            new SearchTab("#tab-headwords", "#list-headwords", "#description-headwords"),
+            new SearchTab("#tab-fulltext", "#list-fulltext", "#description-fulltext"),
+            new SearchTab("#tab-advanced", "#list-advanced", "#description-advanced")
         ];
         $("#search-tabs li").addClass("hidden");
         $("#search-tabs a").click(function (e) {
@@ -54,8 +55,10 @@ var DictionarySearchTabs = (function () {
                 break;
         }
         var searchTab = this.searchTabs[index];
-        $("#headword-description div").removeClass("active");
+        $("#headword-description > div").removeClass("active");
+        $(".tab-content > div").removeClass("active");
         $(searchTab.descriptionDiv).addClass("active");
+        $(searchTab.listDiv).addClass("active");
     };
     DictionarySearchTabs.prototype.showAdvanced = function () {
         var advancedSearchTab = this.searchTabs[2 /* Advanced */];
@@ -87,7 +90,8 @@ var SearchTab = (function () {
     return SearchTab;
 })();
 var DictionaryViewerJsonWrapper = (function () {
-    function DictionaryViewerJsonWrapper(dictionaryViewer, pageSize, tabs) {
+    function DictionaryViewerJsonWrapper(dictionaryViewer, pageSize, tabs, categoryDropDown) {
+        this.categoryDropDown = categoryDropDown;
         this.tabs = tabs;
         this.pageSize = pageSize;
         this.dictionaryViewer = dictionaryViewer;
@@ -95,12 +99,15 @@ var DictionaryViewerJsonWrapper = (function () {
     DictionaryViewerJsonWrapper.prototype.loadCount = function (json) {
         var _this = this;
         this.json = json;
+        this.selectedIds = this.categoryDropDown.getSelectedIds();
         $.ajax({
             type: "POST",
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/SearchCriteriaResultsCount",
             data: JSON.stringify({
-                "json": json
+                "json": json,
+                "selectedBookIds": this.selectedIds.selectedBookIds,
+                "selectedCategoryIds": this.selectedIds.selectedCategoryIds
             }),
             dataType: "json",
             contentType: "application/json",
@@ -120,7 +127,9 @@ var DictionaryViewerJsonWrapper = (function () {
             data: JSON.stringify({
                 "json": this.json,
                 "start": this.pageSize * (pageNumber - 1),
-                "count": this.pageSize
+                "count": this.pageSize,
+                "selectedBookIds": this.selectedIds.selectedBookIds,
+                "selectedCategoryIds": this.selectedIds.selectedCategoryIds
             }),
             dataType: "json",
             contentType: "application/json",
@@ -132,7 +141,8 @@ var DictionaryViewerJsonWrapper = (function () {
     return DictionaryViewerJsonWrapper;
 })();
 var DictionaryViewerTextWrapper = (function () {
-    function DictionaryViewerTextWrapper(headwordViewer, fulltextViewer, pageSize, tabs) {
+    function DictionaryViewerTextWrapper(headwordViewer, fulltextViewer, pageSize, tabs, categoryDropDown) {
+        this.categoryDropDown = categoryDropDown;
         this.tabs = tabs;
         this.pageSize = pageSize;
         this.headwordViewer = headwordViewer;
@@ -141,12 +151,15 @@ var DictionaryViewerTextWrapper = (function () {
     DictionaryViewerTextWrapper.prototype.loadCount = function (text) {
         var _this = this;
         this.text = text;
+        this.selectedIds = this.categoryDropDown.getSelectedIds();
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/SearchBasicResultsCount",
             data: {
-                text: text
+                text: text,
+                selectedBookIds: this.selectedIds.selectedBookIds,
+                selectedCategoryIds: this.selectedIds.selectedCategoryIds
             },
             dataType: "json",
             contentType: "application/json",
@@ -168,7 +181,9 @@ var DictionaryViewerTextWrapper = (function () {
             data: {
                 text: this.text,
                 start: this.pageSize * (pageNumber - 1),
-                count: this.pageSize
+                count: this.pageSize,
+                selectedBookIds: this.selectedIds.selectedBookIds,
+                selectedCategoryIds: this.selectedIds.selectedCategoryIds
             },
             dataType: "json",
             contentType: "application/json",
@@ -186,7 +201,9 @@ var DictionaryViewerTextWrapper = (function () {
             data: {
                 text: this.text,
                 start: this.pageSize * (pageNumber - 1),
-                count: this.pageSize
+                count: this.pageSize,
+                selectedBookIds: this.selectedIds.selectedBookIds,
+                selectedCategoryIds: this.selectedIds.selectedCategoryIds
             },
             dataType: "json",
             contentType: "application/json",
