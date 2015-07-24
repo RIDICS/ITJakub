@@ -10,6 +10,7 @@ class ReaderModule {
     preloadPagesBefore: number;
     preloadPagesAfter: number;
     bookId: string;
+    versionId: string;
     loadedBookContent: boolean;
 
     leftSidePanels: Array<SidePanel>;
@@ -35,8 +36,9 @@ class ReaderModule {
         this.pagerDisplayPages = 5;
     }
 
-    public makeReader(bookId : string, bookTitle : string, pageList) {
-        this.bookId = bookId;
+    public makeReader(bookXmlId : string, versionXmlId: string, bookTitle : string, pageList) {
+        this.bookId = bookXmlId;
+        this.versionId = versionXmlId;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array<BookPage>();
@@ -104,6 +106,14 @@ class ReaderModule {
         this.loadBookmarks();
 
         this.moveToPageNumber(0, false); //load first page
+    }
+
+    getBookXmlId(): string {
+        return this.bookId;
+    }
+
+    getVersionXmlId(): string {
+        return this.versionId;
     }
 
     private makeTitle(bookTitle : string): HTMLDivElement {
@@ -742,7 +752,18 @@ class ReaderModule {
     }
 
     showSearch(searchResults: Array<SearchResult>) {
+        for (var i = 0; i < searchResults.length; i++) {
+            //this.invalidatePage(searchResults[i].pageXmlId); //TODO make invalidating page and loading
+        }
         this.searchPanel.showResults(searchResults);
+    }
+
+    setResultsPaging(itemsCount: number, pageChangedCallback: (pageNumner: number) => void) {
+        this.searchPanel.createPagination(pageChangedCallback, itemsCount);
+    }
+
+    getSearchResultsCountOnPage(): number {
+        return this.searchPanel.getResultsCountOnPage();
     }
 }
 
@@ -1053,6 +1074,11 @@ class SettingsPanel extends LeftSidePanel {
 }
 
 class SearchResultPanel extends LeftSidePanel {
+    private searchResultItemsDiv : HTMLDivElement;
+    private searchPagingDiv: HTMLDivElement;
+
+    private paginator: Pagination;
+    private resultsOnPage = 50;
 
     constructor(identificator: string, readerModule: ReaderModule) {
         super(identificator, "Vyhledávání", readerModule);
@@ -1060,11 +1086,30 @@ class SearchResultPanel extends LeftSidePanel {
     
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
+
+        var searchResultItemsDiv = window.document.createElement("div");
+        $(searchResultItemsDiv).addClass("reader-search-result-items-div");
+        this.searchResultItemsDiv = searchResultItemsDiv;
+
+        var pagingDiv = window.document.createElement("div");
+        $(pagingDiv).addClass("reader-search-result-paging");
+        this.searchPagingDiv = pagingDiv;
+
+        this.paginator = new Pagination(<any>this.searchPagingDiv, this.resultsOnPage);
+
         return innerContent;
     }
 
+    createPagination(pageChangedCallback: (pageNumber: number) => void, itemsCount: number) {
+        this.paginator.createPagination(itemsCount, this.resultsOnPage, pageChangedCallback);
+    }
+
+    getResultsCountOnPage(): number {
+        return this.resultsOnPage;
+    }
+
     showResults(searchResults: SearchResult[]) {
-        $(this.innerContent).empty();
+        $(this.searchResultItemsDiv).empty();
         for (var i = 0; i < searchResults.length; i++) {
             var result = searchResults[i];
             var resultItem = this.createResultItem(result);

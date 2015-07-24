@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Areas.Editions.Models;
@@ -58,6 +59,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 View(new BookListingModel
                 {
                     BookXmlId = book.BookXmlId,
+                    VersionXmlId = book.LastVersionXmlId,
                     BookTitle = book.Title,
                     BookPages = book.BookPages,
                     SearchText = HttpUtility.UrlDecode(searchText)
@@ -160,6 +162,68 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
             var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
             return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AdvancedSearchInBookPaged(string json, int start, int count, string bookXmlId, string versionXmlId)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            {
+                HitSettingsContract = new HitSettingsContract
+                {
+                    ContextLength = 50,
+                    Count = count,
+                    Start = start
+                }
+            });
+
+            listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
+            {
+                ResultBooks = new List<BookVersionPairContract> { new BookVersionPairContract { Guid = bookXmlId, VersionId = versionXmlId} }
+            });
+
+            var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { results }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult TextSearchInBookPaged(string text, int start, int count, string bookXmlId, string versionXmlId)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                    Key = CriteriaKey.Fulltext,
+                    Disjunctions = new List<WordCriteriaContract>
+                    {
+                        new WordCriteriaContract
+                        {
+                            Contains = new List<string> {text}
+                        }
+                    }
+                },
+                new ResultCriteriaContract
+                {
+                    HitSettingsContract = new HitSettingsContract
+                    {
+                        ContextLength = 50,
+                        Count = count,
+                        Start = start
+                    }
+                },
+                new ResultRestrictionCriteriaContract
+                {
+                    ResultBooks =
+                        new List<BookVersionPairContract>
+                        {
+                            new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}
+                        }
+                }
+            };
+
+            var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { results }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)

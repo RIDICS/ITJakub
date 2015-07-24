@@ -14,12 +14,12 @@
 
 </div>
 
-<div id="ReaderDiv" data-bookid="@Model.BookXmlId">
+<div id="ReaderDiv" data-bookid="@Model.BookXmlId" data-versionid="@Model.VersionXmlId">
 
 </div>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        initReader("@Model.BookXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)),"@Model.SearchText");
+        initReader("@Model.BookXmlId", "@Model.VersionXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)),"@Model.SearchText");
     });
 </script>

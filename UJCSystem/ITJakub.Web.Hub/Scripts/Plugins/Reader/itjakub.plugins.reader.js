@@ -15,9 +15,10 @@ var ReaderModule = (function () {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
     }
-    ReaderModule.prototype.makeReader = function (bookId, bookTitle, pageList) {
+    ReaderModule.prototype.makeReader = function (bookXmlId, versionXmlId, bookTitle, pageList) {
         var _this = this;
-        this.bookId = bookId;
+        this.bookId = bookXmlId;
+        this.versionId = versionXmlId;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array();
@@ -68,6 +69,12 @@ var ReaderModule = (function () {
         $(this.readerContainer).append(readerDiv);
         this.loadBookmarks();
         this.moveToPageNumber(0, false); //load first page
+    };
+    ReaderModule.prototype.getBookXmlId = function () {
+        return this.bookId;
+    };
+    ReaderModule.prototype.getVersionXmlId = function () {
+        return this.versionId;
     };
     ReaderModule.prototype.makeTitle = function (bookTitle) {
         var titleDiv = document.createElement('div');
@@ -624,7 +631,15 @@ var ReaderModule = (function () {
         $(panel.panelHtml).css('z-index', max + 1);
     };
     ReaderModule.prototype.showSearch = function (searchResults) {
+        for (var i = 0; i < searchResults.length; i++) {
+        }
         this.searchPanel.showResults(searchResults);
+    };
+    ReaderModule.prototype.setResultsPaging = function (itemsCount, pageChangedCallback) {
+        this.searchPanel.createPagination(pageChangedCallback, itemsCount);
+    };
+    ReaderModule.prototype.getSearchResultsCountOnPage = function () {
+        return this.searchPanel.getResultsCountOnPage();
     };
     return ReaderModule;
 })();
@@ -883,13 +898,27 @@ var SearchResultPanel = (function (_super) {
     __extends(SearchResultPanel, _super);
     function SearchResultPanel(identificator, readerModule) {
         _super.call(this, identificator, "Vyhledávání", readerModule);
+        this.resultsOnPage = 50;
     }
     SearchResultPanel.prototype.makeBody = function (rootReference, window) {
         var innerContent = window.document.createElement("div");
+        var searchResultItemsDiv = window.document.createElement("div");
+        $(searchResultItemsDiv).addClass("reader-search-result-items-div");
+        this.searchResultItemsDiv = searchResultItemsDiv;
+        var pagingDiv = window.document.createElement("div");
+        $(pagingDiv).addClass("reader-search-result-paging");
+        this.searchPagingDiv = pagingDiv;
+        this.paginator = new Pagination(this.searchPagingDiv, this.resultsOnPage);
         return innerContent;
     };
+    SearchResultPanel.prototype.createPagination = function (pageChangedCallback, itemsCount) {
+        this.paginator.createPagination(itemsCount, this.resultsOnPage, pageChangedCallback);
+    };
+    SearchResultPanel.prototype.getResultsCountOnPage = function () {
+        return this.resultsOnPage;
+    };
     SearchResultPanel.prototype.showResults = function (searchResults) {
-        $(this.innerContent).empty();
+        $(this.searchResultItemsDiv).empty();
         for (var i = 0; i < searchResults.length; i++) {
             var result = searchResults[i];
             var resultItem = this.createResultItem(result);

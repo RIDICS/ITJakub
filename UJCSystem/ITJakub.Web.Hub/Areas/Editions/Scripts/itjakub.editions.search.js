@@ -2,7 +2,7 @@ $(document).ready(function () {
     var booksCountOnPage = 3;
     var bookIds = new Array();
     var categoryIds = new Array();
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", 0 /* Edition */);
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", BookTypeEnum.Edition);
     function editionAdvancedSearchPaged(json, pageNumber) {
         if (typeof json === "undefined" || json === null || json === "")
             return;
@@ -85,7 +85,6 @@ $(document).ready(function () {
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
         bookIds = new Array();
-        bookIds.push(1); //TODO remove
         for (var i = 0; i < state.SelectedItems.length; i++) {
             bookIds.push(state.SelectedItems[i].Id);
         }
