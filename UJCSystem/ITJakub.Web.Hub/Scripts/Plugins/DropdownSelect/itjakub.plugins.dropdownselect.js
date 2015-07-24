@@ -233,6 +233,8 @@ var DropDownSelect = (function () {
             }
         }
     };
+    DropDownSelect.prototype.onCreateCategoryCheckBox = function (categoryId, checkBox) {
+    };
     DropDownSelect.prototype.propagateRootSelectChange = function (item) {
     };
     DropDownSelect.prototype.propagateLeafSelectChange = function (item, info) {
@@ -311,6 +313,7 @@ var DropDownSelect = (function () {
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
+        this.onCreateCategoryCheckBox(this.getCategoryId(currentCategory), checkbox);
         var info = this.createCallbackInfo(this.getCategoryId(currentCategory), this.getCategoryName(currentCategory), itemDiv);
         var self = this;
         $(checkbox).change(function (event, propagate) {

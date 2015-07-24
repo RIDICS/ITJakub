@@ -20,10 +20,10 @@ $(document).ready(function () {
     };
     var search = new Search($("#dictionarySearchDiv")[0], processSearchJson, processSearchText);
     var disabledOptions = new Array();
-    disabledOptions.push(SearchTypeEnum.Fulltext);
-    disabledOptions.push(SearchTypeEnum.TokenDistance);
-    disabledOptions.push(SearchTypeEnum.Sentence);
-    disabledOptions.push(SearchTypeEnum.Heading);
+    disabledOptions.push(4 /* Fulltext */);
+    disabledOptions.push(9 /* TokenDistance */);
+    disabledOptions.push(6 /* Sentence */);
+    disabledOptions.push(5 /* Heading */);
     search.makeSearch(disabledOptions);
 });
 var DictionarySearchTabs = (function () {

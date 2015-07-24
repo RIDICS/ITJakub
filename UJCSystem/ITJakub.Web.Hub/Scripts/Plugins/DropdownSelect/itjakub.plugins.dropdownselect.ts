@@ -326,6 +326,8 @@ class DropDownSelect {
         }
     }
 
+    protected onCreateCategoryCheckBox(categoryId: any, checkBox: HTMLInputElement) { }
+
     protected propagateRootSelectChange(item: HTMLInputElement) { }
 
     protected propagateLeafSelectChange(item: HTMLInputElement, info: CallbackInfo) { }
@@ -408,6 +410,7 @@ class DropDownSelect {
         var checkbox = document.createElement("input");
         $(checkbox).addClass("concrete-item-checkbox checkbox");
         checkbox.type = "checkbox";
+        this.onCreateCategoryCheckBox(this.getCategoryId(currentCategory), checkbox);
 
         var info = this.createCallbackInfo(this.getCategoryId(currentCategory), this.getCategoryName(currentCategory), itemDiv);
         var self = this;

@@ -51,6 +51,7 @@
                 $(dropDownItemsDiv).children("div.loading").remove();
                 this.processDownloadedData(response);
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
+                this.rootCategory.checkBox = <HTMLInputElement>($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0));
             }
         });
     }
@@ -170,6 +171,10 @@
         container.appendChild(itemDiv);
     }
 
+    protected onCreateCategoryCheckBox(categoryId, checkBox: HTMLInputElement) {
+        this.categories[categoryId].checkBox = checkBox;
+    }
+
     protected propagateRootSelectChange(item: HTMLInputElement) {
         this.selectedChangedCallback(this.getState());
     }
@@ -224,37 +229,24 @@
         }
     }
 
-    private isChecked(category: DropDownCategory, selectedCategories: Array<number>, selectedBooks: Array<number>): boolean {
-        var isAllChecked = true;
-        
+    private getSelected(category: DropDownCategory, selectedCategories: Array<number>, selectedBooks: Array<number>) {
+        if (!category.checkBox.indeterminate) {
+            if (category.checkBox.checked) {
+                selectedCategories.push(category.id);
+            }
+            return;
+        }
+
         for (var i = 0; i < category.subcategoryIds.length; i++) {
             var subcategory = this.categories[category.subcategoryIds[i]];
-            var books = [];
-            var categories = [];
-
-            if (!this.isChecked(subcategory, categories, books)) {
-                isAllChecked = false;
-
-                for (var k = 0; k < categories.length; k++) {
-                    selectedCategories.push(categories[k]);
-                }
-                for (var l = 0; l < books.length; l++) {
-                    selectedBooks.push(books[l]);
-                }
-            } else {
-                selectedCategories.push(subcategory.id);
-            }
+            this.getSelected(subcategory, selectedCategories, selectedBooks);
         }
 
         for (var j = 0; j < category.bookIds.length; j++) {
             var book = this.books[category.bookIds[j]];
-            if (!book.checkboxes[0].checked)
-                isAllChecked = false;
-            else
+            if (book.checkboxes[0].checked)
                 selectedBooks.push(book.id);
         }
-
-        return isAllChecked;
     }
 
     getState(): State {
@@ -279,10 +271,11 @@
         var state = new DropDownSelected();
         var selectedBooks = [];
         var selectedCategories = [];
-        if (!this.rootCategory || this.isChecked(this.rootCategory, selectedCategories, selectedBooks)) {
+        if (!this.rootCategory || !this.rootCategory.checkBox.indeterminate) {
             state.selectedBookIds = [];
             state.selectedCategoryIds = [];
         } else {
+            this.getSelected(this.rootCategory, selectedCategories, selectedBooks);
             state.selectedBookIds = selectedBooks;
             state.selectedCategoryIds = selectedCategories;
         }
@@ -329,6 +322,7 @@ class DropDownCategory {
     parentCategoryId: number;
     subcategoryIds: Array<number>;
     bookIds: Array<number>;
+    checkBox: HTMLInputElement;
 }
 
 interface IDropDownBookDictionary {
