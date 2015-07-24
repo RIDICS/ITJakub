@@ -282,11 +282,11 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int GetSearchHeadwordCount(SearchCriteriaQueryCreator creator, string headwordQuery)
+        public virtual int GetSearchHeadwordCount(SearchCriteriaQueryCreator creator)
         {
             using (var session = GetSession())
             {
-                var query = session.CreateQuery(creator.GetQueryStringForHeadwordCount(headwordQuery));
+                var query = session.CreateQuery(creator.GetQueryStringForHeadwordCount());
                 creator.SetParameters(query);
                 var result = query
                     .SetResultTransformer(Transformers.AliasToBean<HeadwordCountResult>())
@@ -297,11 +297,11 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<HeadwordSearchResult> SearchHeadwordByCriteria(SearchCriteriaQueryCreator creator, string headwordQuery, int start, int count)
+        public virtual IList<HeadwordSearchResult> SearchHeadwordByCriteria(SearchCriteriaQueryCreator creator, int start, int count)
         {
             using (var session = GetSession())
             {
-                var query = session.CreateQuery(creator.GetQueryStringForHeadwordList(headwordQuery));
+                var query = session.CreateQuery(creator.GetQueryStringForHeadwordList());
                 creator.SetParameters(query);
                 
                 var result = query

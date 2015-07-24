@@ -285,6 +285,23 @@ namespace ITJakub.ITJakubService.Core
                 : bookIdsFromCategory;
         }
 
+        private string GetSingleHeadwordQuery(IList<SearchCriteriaContract> searchCriteria)
+        {
+            var headwordCriteria =
+                searchCriteria.Where(x => x.Key == CriteriaKey.Headword)
+                    .OfType<WordListCriteriaContract>()
+                    .SingleOrDefault();
+
+            if (headwordCriteria == null)
+                return null;
+
+            var wordCriteria = headwordCriteria.Disjunctions.SingleOrDefault();
+            if (wordCriteria == null)
+                return null;
+
+            return CriteriaConditionBuilder.Create(wordCriteria);
+        }
+
         public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
@@ -324,8 +341,13 @@ namespace ITJakub.ITJakubService.Core
             // Only SQL search
             if (searchTarget == DictionarySearchTarget.Headword)
             {
-                var query = ((WordListCriteriaContract) filteredCriterias.MetadataCriterias[0]).Disjunctions[0].Contains[0]; // TODO better way
-                var resultCount = m_bookVersionRepository.GetSearchHeadwordCount(creator, query);
+                var query = GetSingleHeadwordQuery(filteredCriterias.MetadataCriterias);
+                if (query == null)
+                    return 0;
+
+                creator.SetHeadwordQueryParameter(query);
+
+                var resultCount = m_bookVersionRepository.GetSearchHeadwordCount(creator);
                 return resultCount;
             }
 
@@ -371,13 +393,19 @@ namespace ITJakub.ITJakubService.Core
             var resultCriteria = filteredCriterias.ResultCriteria;
             var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
 
+            // Only SQL search
             if (searchTarget == DictionarySearchTarget.Headword)
             {
                 if (resultCriteria.Start == null || resultCriteria.Count == null)
                     return null;
 
-                var query = ((WordListCriteriaContract)filteredCriterias.MetadataCriterias[0]).Disjunctions[0].Contains[0]; // TODO better way
-                var databaseHeadwords = m_bookVersionRepository.SearchHeadwordByCriteria(creator, query, resultCriteria.Start.Value, resultCriteria.Count.Value);
+                var query = GetSingleHeadwordQuery(filteredCriterias.MetadataCriterias);
+                if (query == null)
+                    return new HeadwordListContract();
+
+                creator.SetHeadwordQueryParameter(query);
+                
+                var databaseHeadwords = m_bookVersionRepository.SearchHeadwordByCriteria(creator, resultCriteria.Start.Value, resultCriteria.Count.Value);
 
                 return ConvertHeadwordSearchToContract(databaseHeadwords);
             }
