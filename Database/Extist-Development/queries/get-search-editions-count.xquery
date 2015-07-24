@@ -10,6 +10,7 @@ declare namespace a="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Cont
 declare namespace r="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract";
 declare namespace i="http://www.w3.org/2001/XMLSchema-instance";
 declare namespace b="http://schemas.microsoft.com/2003/10/Serialization/Arrays";
+declare namespace sc="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Criteria";
 
 
 declare option exist:serialize "highlight-matches=elements";
@@ -56,7 +57,7 @@ let $book-version-ids := $books/a:VersionId/concat('#', text())
 let $collection-path := "/apps/jacob/data/"
 (:~ výchozí kolekce prohledávaných dokumentů :)
 let $collection := collection($collection-path)
-
+let $collection := $collection[./tei:TEI[@n = $book-ids][@change = $book-version-ids]] 
 
 (:~ dokumenty, které obsahují hledaný výraz :)
 (:~ TODO: dodat řazení, více proledávaných elementů :)

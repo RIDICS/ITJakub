@@ -29,6 +29,11 @@ var DictionaryViewer = (function () {
     };
     DictionaryViewer.prototype.searchAndDisplay = function (pageNumber) {
         this.isRequestToPrint = false;
+        if (this.recordCount === 0) {
+            $(this.headwordListContainer).empty();
+            $(this.headwordDescriptionContainer).empty();
+            return;
+        }
         this.showPageCallback(pageNumber);
     };
     DictionaryViewer.prototype.showHeadwords = function (headwords) {

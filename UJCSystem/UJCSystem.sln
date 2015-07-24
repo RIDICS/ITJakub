@@ -218,6 +218,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Lemmatization.Core"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Storage.FileSystem", "ITJakub.Storage.FileSystem\ITJakub.Storage.FileSystem.csproj", "{4D73837E-B90C-45E0-862F-C512A7E4F64D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Shared.Contracts.Test", "ITJakub.Shared.Contracts.Test\ITJakub.Shared.Contracts.Test.csproj", "{EFF05D42-A0F9-49EC-B581-1D6F750A3419}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2581,6 +2583,34 @@ Global
 		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|x64.Build.0 = Release|Any CPU
 		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|x86.ActiveCfg = Release|Any CPU
 		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|x86.Build.0 = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.JenTest|Any CPU.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.JenTest|Any CPU.Build.0 = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.JenTest|ARM.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.JenTest|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.JenTest|Mixed Platforms.Build.0 = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.JenTest|x64.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.JenTest|x86.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Release|ARM.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Release|x64.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Release|x86.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.TranskriptorVBA|Any CPU.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.TranskriptorVBA|Any CPU.Build.0 = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.TranskriptorVBA|ARM.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.TranskriptorVBA|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.TranskriptorVBA|Mixed Platforms.Build.0 = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.TranskriptorVBA|x64.ActiveCfg = Release|Any CPU
+		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.TranskriptorVBA|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,6 +5,7 @@ using ITJakub.SearchService.Core.Search;
 using ITJakub.SearchService.Core.Search.DataContract;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 
 namespace ITJakub.SearchService.Core.Exist
 {
@@ -115,17 +116,16 @@ namespace ITJakub.SearchService.Core.Exist
                 }
             }
 
-            if (resultRestrictionCriteriaContract == null)
-                return null;
-
             return new ResultSearchCriteriaContract
             {
                 ConjunctionSearchCriterias = filteredCriterias,
-                ResultBooks = resultRestrictionCriteriaContract.ResultBooks
+                ResultBooks = resultRestrictionCriteriaContract != null
+                    ? resultRestrictionCriteriaContract.ResultBooks
+                    : null,
             };
         }
 
-        public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
+        public SearchResultContractList ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
             ResultRestrictionCriteriaContract resultRestrictionCriteriaContract = null;
             ResultCriteriaContract resultCriteriaContract = null;
@@ -148,7 +148,7 @@ namespace ITJakub.SearchService.Core.Exist
             }
 
             if (resultRestrictionCriteriaContract == null)
-                return;
+                return null;
 
             var searchCriteria = new ResultSearchCriteriaContract
             {
@@ -157,12 +157,14 @@ namespace ITJakub.SearchService.Core.Exist
                 ConjunctionSearchCriterias = filteredCriterias
             };
 
-            var stringResult = m_client.ListSearchEditionsResults(searchCriteria.ToXml());
+            return SearchResultContractList.FromXml(m_client.ListSearchEditionsResults(searchCriteria.ToXml()));
         }
         
         public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
         {
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
+            if (resultSearchCriteria.ResultBooks == null)
+                return null;
             
             var stringResult = m_client.ListSearchDictionariesResults(resultSearchCriteria.ToXml());
             return stringResult;
@@ -171,6 +173,8 @@ namespace ITJakub.SearchService.Core.Exist
         public int ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
+            if (resultSearchCriteria.ResultBooks == null)
+                return 0;
 
             var result = m_client.ListSearchDictionariesResultsCount(resultSearchCriteria.ToXml());
             return result;
@@ -179,6 +183,9 @@ namespace ITJakub.SearchService.Core.Exist
         public int GetSearchCriteriaResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
+            if (resultSearchCriteria.ResultBooks == null)
+                return 0;
+
             return m_client.GetSearchCriteriaResultsCount(resultSearchCriteria.ToXml());
         }
     }
