@@ -1090,7 +1090,8 @@ class SearchResultPanel extends LeftSidePanel {
     private searchPagingDiv: HTMLDivElement;
 
     private paginator: Pagination;
-    private resultsOnPage = 50;
+    private resultsOnPage = 25;
+    private maxPaginatorVisibleElements = 5;
 
     constructor(identificator: string, readerModule: ReaderModule) {
         super(identificator, "Vyhledávání", readerModule);
@@ -1102,12 +1103,14 @@ class SearchResultPanel extends LeftSidePanel {
         var searchResultItemsDiv = window.document.createElement("div");
         $(searchResultItemsDiv).addClass("reader-search-result-items-div");
         this.searchResultItemsDiv = searchResultItemsDiv;
+        innerContent.appendChild(searchResultItemsDiv);
 
         var pagingDiv = window.document.createElement("div");
         $(pagingDiv).addClass("reader-search-result-paging");
         this.searchPagingDiv = pagingDiv;
+        innerContent.appendChild(this.searchPagingDiv);
 
-        this.paginator = new Pagination(<any>this.searchPagingDiv, this.resultsOnPage);
+        this.paginator = new Pagination(<any>this.searchPagingDiv, this.maxPaginatorVisibleElements);
 
         return innerContent;
     }
@@ -1125,7 +1128,7 @@ class SearchResultPanel extends LeftSidePanel {
         for (var i = 0; i < searchResults.length; i++) {
             var result = searchResults[i];
             var resultItem = this.createResultItem(result);
-            this.innerContent.appendChild(resultItem);
+            this.searchResultItemsDiv.appendChild(resultItem);
         }
     }
 

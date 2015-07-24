@@ -908,17 +908,20 @@ var SearchResultPanel = (function (_super) {
     __extends(SearchResultPanel, _super);
     function SearchResultPanel(identificator, readerModule) {
         _super.call(this, identificator, "Vyhledávání", readerModule);
-        this.resultsOnPage = 50;
+        this.resultsOnPage = 25;
+        this.maxPaginatorVisibleElements = 5;
     }
     SearchResultPanel.prototype.makeBody = function (rootReference, window) {
         var innerContent = window.document.createElement("div");
         var searchResultItemsDiv = window.document.createElement("div");
         $(searchResultItemsDiv).addClass("reader-search-result-items-div");
         this.searchResultItemsDiv = searchResultItemsDiv;
+        innerContent.appendChild(searchResultItemsDiv);
         var pagingDiv = window.document.createElement("div");
         $(pagingDiv).addClass("reader-search-result-paging");
         this.searchPagingDiv = pagingDiv;
-        this.paginator = new Pagination(this.searchPagingDiv, this.resultsOnPage);
+        innerContent.appendChild(this.searchPagingDiv);
+        this.paginator = new Pagination(this.searchPagingDiv, this.maxPaginatorVisibleElements);
         return innerContent;
     };
     SearchResultPanel.prototype.createPagination = function (pageChangedCallback, itemsCount) {
@@ -932,7 +935,7 @@ var SearchResultPanel = (function (_super) {
         for (var i = 0; i < searchResults.length; i++) {
             var result = searchResults[i];
             var resultItem = this.createResultItem(result);
-            this.innerContent.appendChild(resultItem);
+            this.searchResultItemsDiv.appendChild(resultItem);
         }
     };
     SearchResultPanel.prototype.createResultItem = function (result) {

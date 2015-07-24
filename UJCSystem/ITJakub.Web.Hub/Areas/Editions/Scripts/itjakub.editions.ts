@@ -77,19 +77,16 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
 
         if (typeof text === "undefined" || text === null || text === "") return;
 
-        var bookIds = new Array(); //TODO
-        var categoryIds = new Array();
-
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearchCount",
-            data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            url: getBaseUrl() + "Editions/Editions/TextSearchInBookCount",
+            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId()  },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
                 updateQueryStringParameter("searchText", text);
-                readerPlugin.setResultsPaging(response, pageClickCallback);
+                readerPlugin.setResultsPaging(response["count"], pageClickCallback);
             }
         });
     }
@@ -97,19 +94,16 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
     function advancedSearch(json: string) {
         if (typeof json === "undefined" || json === null || json === "") return;
 
-        var bookIds = new Array();  //TODO
-        var categoryIds = new Array();
-
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/AdvancedSearchResultsCount",
-            data: { json: json, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookCount",
+            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId()  },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
                 updateQueryStringParameter("searchText", json);
-                readerPlugin.setResultsPaging(response, pageClickCallback);
+                readerPlugin.setResultsPaging(response["count"], pageClickCallback);
             }
         });
     }

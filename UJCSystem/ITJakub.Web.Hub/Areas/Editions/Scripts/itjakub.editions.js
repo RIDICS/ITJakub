@@ -65,48 +65,44 @@ function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) 
     function basicSearch(text) {
         if (typeof text === "undefined" || text === null || text === "")
             return;
-        var bookIds = new Array(); //TODO
-        var categoryIds = new Array();
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearchCount",
-            data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            url: getBaseUrl() + "Editions/Editions/TextSearchInBookCount",
+            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
                 updateQueryStringParameter("searchText", text);
-                readerPlugin.setResultsPaging(response, pageClickCallback);
+                readerPlugin.setResultsPaging(response["count"], pageClickCallback);
             }
         });
     }
     function advancedSearch(json) {
         if (typeof json === "undefined" || json === null || json === "")
             return;
-        var bookIds = new Array(); //TODO
-        var categoryIds = new Array();
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/AdvancedSearchResultsCount",
-            data: { json: json, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookCount",
+            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
                 updateQueryStringParameter("searchText", json);
-                readerPlugin.setResultsPaging(response, pageClickCallback);
+                readerPlugin.setResultsPaging(response["count"], pageClickCallback);
             }
         });
     }
     search = new Search($("#SearchDiv")[0], advancedSearch, basicSearch);
     var disabledOptions = new Array();
-    disabledOptions.push(SearchTypeEnum.Author);
-    disabledOptions.push(SearchTypeEnum.Dating);
-    disabledOptions.push(SearchTypeEnum.Editor);
-    disabledOptions.push(SearchTypeEnum.Headword);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
-    disabledOptions.push(SearchTypeEnum.Title);
+    disabledOptions.push(0 /* Author */);
+    disabledOptions.push(3 /* Dating */);
+    disabledOptions.push(2 /* Editor */);
+    disabledOptions.push(10 /* Headword */);
+    disabledOptions.push(11 /* HeadwordDescription */);
+    disabledOptions.push(12 /* HeadwordDescriptionTokenDistance */);
+    disabledOptions.push(1 /* Title */);
     search.makeSearch(disabledOptions);
     if (typeof searchedText !== "undefined" && searchedText !== null) {
         var decodedText = decodeURIComponent(searchedText);

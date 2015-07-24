@@ -195,6 +195,32 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
+        
+        public ActionResult AdvancedSearchInBookCount(string json, string bookXmlId, string versionXmlId)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            {
+                Start = 0,
+                Count = 1,
+            });
+
+            listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
+            {
+                ResultBooks = new List<BookVersionPairContract> { new BookVersionPairContract { Guid = bookXmlId, VersionId = versionXmlId } }
+            });
+
+            var result = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
+            if (result != null)
+            {
+                var count = result.TotalHitCount;
+                return Json(new { count }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult TextSearchInBookPaged(string text, int start, int count, string bookXmlId, string versionXmlId)
         {
@@ -236,6 +262,46 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             if (result != null)
             {
                 return Json(new { results = result.Results}, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult TextSearchInBookCount(string text, string bookXmlId, string versionXmlId)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                    Key = CriteriaKey.Fulltext,
+                    Disjunctions = new List<WordCriteriaContract>
+                    {
+                        new WordCriteriaContract
+                        {
+                            Contains = new List<string> {text}
+                        }
+                    }
+                },
+                new ResultCriteriaContract
+                {
+                    Start = 0,
+                    Count = 1
+                },
+                new ResultRestrictionCriteriaContract
+                {
+                    ResultBooks =
+                        new List<BookVersionPairContract>
+                        {
+                            new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}
+                        }
+                }
+            };
+
+            var result = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
+            if (result != null)
+            {
+                var count = result.TotalHitCount;
+                return Json(new { count }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new {}, JsonRequestBehavior.AllowGet);

@@ -172,7 +172,7 @@ namespace ITJakub.SearchService.Core.Exist
                     resultCriteriaContract.Start++;
                 }
 
-                if (resultCriteriaContract.HitSettingsContract.Start.HasValue)
+                if (resultCriteriaContract.HitSettingsContract != null && resultCriteriaContract.HitSettingsContract.Start.HasValue)
                 {
                     resultCriteriaContract.HitSettingsContract.Start++;
                 }
