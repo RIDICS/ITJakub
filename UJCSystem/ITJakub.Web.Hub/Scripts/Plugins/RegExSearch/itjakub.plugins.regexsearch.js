@@ -392,7 +392,6 @@ var RegExConditionListItem = (function () {
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", 12 /* HeadwordDescriptionTokenDistance */.toString()));
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", 10 /* Headword */.toString()));
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Heslová stať", 11 /* HeadwordDescription */.toString()));
-        this.selectedSearchType = 4 /* Fulltext */;
         $(searchDestinationSelect).change(function (eventData) {
             var oldSelectedSearchType = _this.selectedSearchType;
             _this.selectedSearchType = parseInt($(eventData.target).val());
@@ -412,6 +411,8 @@ var RegExConditionListItem = (function () {
         $(conditionsDiv).append(delimeterDiv);
         this.setClickableDelimeter();
         this.html = conditionsDiv;
+        $(searchDestinationSelect).val(4 /* Fulltext */.toString());
+        $(searchDestinationSelect).change();
     };
     RegExConditionListItem.prototype.changeConditionType = function (newSearchType, oldSearchType) {
         if (!(this.innerCondition instanceof RegExWordConditionList) && (newSearchType === 0 /* Author */ || newSearchType === 2 /* Editor */ || newSearchType === 4 /* Fulltext */ || newSearchType === 1 /* Title */ || newSearchType === 5 /* Heading */ || newSearchType === 6 /* Sentence */)) {

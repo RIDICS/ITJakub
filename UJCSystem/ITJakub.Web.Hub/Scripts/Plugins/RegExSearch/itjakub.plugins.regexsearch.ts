@@ -489,8 +489,6 @@ class RegExConditionListItem {
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", SearchTypeEnum.Headword.toString()));
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Heslová stať", SearchTypeEnum.HeadwordDescription.toString()));
 
-        this.selectedSearchType = SearchTypeEnum.Fulltext;
-
         $(searchDestinationSelect).change((eventData: Event) => {
             var oldSelectedSearchType = this.selectedSearchType;
             this.selectedSearchType = parseInt($(eventData.target).val());
@@ -501,6 +499,7 @@ class RegExConditionListItem {
         });
 
         this.searchDestinationSelect = searchDestinationSelect;
+        
 
         this.disbaleOptions(disabledOptions);
 
@@ -517,6 +516,9 @@ class RegExConditionListItem {
         $(conditionsDiv).append(delimeterDiv);
         this.setClickableDelimeter();
         this.html = conditionsDiv;
+
+        $(searchDestinationSelect).val(SearchTypeEnum.Fulltext.toString());
+        $(searchDestinationSelect).change();
     }
 
     private changeConditionType(newSearchType : SearchTypeEnum, oldSearchType: SearchTypeEnum) {
