@@ -18,6 +18,17 @@ class ReaderModule {
 
     imagePanelIdentificator: string = "ImagePanel";
     textPanelIdentificator: string = "TextPanel";
+    searchPanelIdentificator: string = "SearchPanel";
+    settingsPanelIdentificator: string = "SettingsPanel";
+    contentPanelIdentificator: string = "ContentPanel";
+
+
+    imagePanel: ImagePanel;
+    textPanel: TextPanel;
+    searchPanel: SearchResultPanel;
+    settingsPanel: SettingsPanel;
+    contentPanel: ContentPanel;
+
 
     constructor(readerContainer: HTMLDivElement) {
         this.readerContainer = readerContainer;
@@ -332,13 +343,14 @@ class ReaderModule {
         $(commentButton).append(commentSpanText);
 
         $(commentButton).click((event: Event) => {
-            var panelId = "EditacniPanel";
+            var panelId = this.settingsPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
-                var editPanel: SettingsPanel = new SettingsPanel(panelId , this);
-                this.loadSidePanel(editPanel.panelHtml);
-                this.leftSidePanels.push(editPanel);
+                var settingsPanel: SettingsPanel = new SettingsPanel(panelId , this);
+                this.loadSidePanel(settingsPanel.panelHtml);
+                this.leftSidePanels.push(settingsPanel);
+                this.settingsPanel = settingsPanel;
             }
-            this.changeSidePanelVisibility("EditacniPanel", 'left');
+            this.changeSidePanelVisibility(this.settingsPanelIdentificator, 'left');
         });
 
         buttonsDiv.appendChild(commentButton);
@@ -356,13 +368,14 @@ class ReaderModule {
         $(searchResultButton).append(searchSpanText);
 
         $(searchResultButton).click((event: Event) => {
-            var panelId = "SearchPanel";
+            var panelId = this.searchPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
                 var searchPanel = new SearchResultPanel(panelId, this);
                 this.loadSidePanel(searchPanel.panelHtml);
                 this.leftSidePanels.push(searchPanel);
+                this.searchPanel = searchPanel;
             }
-            this.changeSidePanelVisibility("SearchPanel", 'left');
+            this.changeSidePanelVisibility(this.searchPanelIdentificator, 'left');
         });
 
         buttonsDiv.appendChild(searchResultButton);
@@ -380,13 +393,14 @@ class ReaderModule {
         $(contentButton).append(contentSpanText);
 
         $(contentButton).click((event: Event) => {
-            var panelId = "ObsahPanel";
+            var panelId = this.contentPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
                 var contentPanel: ContentPanel = new ContentPanel(panelId, this);
                 this.loadSidePanel(contentPanel.panelHtml);
                 this.leftSidePanels.push(contentPanel);
+                this.contentPanel = contentPanel;
             }
-            this.changeSidePanelVisibility("ObsahPanel",'left');
+            this.changeSidePanelVisibility(this.contentPanelIdentificator,'left');
         });
 
         buttonsDiv.appendChild(contentButton);
@@ -487,11 +501,13 @@ class ReaderModule {
 
         var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this);
         this.rightSidePanels.push(textPanel);
+        this.textPanel = textPanel;
 
         bodyContainerDiv.appendChild(textPanel.panelHtml);
 
         var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
+        this.imagePanel = imagePanel;
 
         $(imagePanel.panelHtml).hide();
         bodyContainerDiv.appendChild(imagePanel.panelHtml);
@@ -723,6 +739,10 @@ class ReaderModule {
         }
 
         $(panel.panelHtml).css('z-index', max + 1);
+    }
+
+    showSearch(searchResults: Array<SearchResult>) {
+        this.searchPanel.showResults(searchResults);
     }
 }
 
@@ -1041,6 +1061,41 @@ class SearchResultPanel extends LeftSidePanel {
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
         return innerContent;
+    }
+
+    showResults(searchResults: SearchResult[]) {
+        $(this.innerContent).empty();
+        for (var i = 0; i < searchResults.length; i++) {
+            var result = searchResults[i];
+            var resultItem = this.createResultItem(result);
+            this.innerContent.appendChild(resultItem);
+        }
+    }
+
+    private createResultItem(result: SearchResult): HTMLDivElement {
+        var resultItemDiv = document.createElement("div");
+        $(resultItemDiv).addClass("reader-search-result-item");
+        $(resultItemDiv).click(() => {
+            this.parentReader.moveToPage(result.pageXmlId, true);
+        });
+
+        var resultBeforeSpan = document.createElement("span");
+        $(resultBeforeSpan).addClass("reader-search-result-before");
+        resultBeforeSpan.innerHTML = result.before;
+        
+        var resultMatchSpan = document.createElement("span");
+        $(resultMatchSpan).addClass("reader-search-result-match");
+        resultMatchSpan.innerHTML = result.match;
+
+        var resultAfterSpan = document.createElement("span");
+        $(resultAfterSpan).addClass("reader-search-result-after");
+        resultAfterSpan.innerHTML = result.after;
+
+        resultItemDiv.appendChild(resultBeforeSpan);
+        resultItemDiv.appendChild(resultMatchSpan);
+        resultItemDiv.appendChild(resultAfterSpan);
+
+        return resultItemDiv;
     }
 }
 
@@ -1432,4 +1487,12 @@ class ContentItem {
     get childBookContentItems(): JSON[] {
         return this._childBookContentItems;
     }
+}
+
+
+class SearchResult {
+    pageXmlId: string;
+    before: string;
+    after: string;
+    match; string;
 }

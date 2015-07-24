@@ -9,6 +9,9 @@ var ReaderModule = (function () {
     function ReaderModule(readerContainer) {
         this.imagePanelIdentificator = "ImagePanel";
         this.textPanelIdentificator = "TextPanel";
+        this.searchPanelIdentificator = "SearchPanel";
+        this.settingsPanelIdentificator = "SettingsPanel";
+        this.contentPanelIdentificator = "ContentPanel";
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
     }
@@ -271,13 +274,14 @@ var ReaderModule = (function () {
         $(commentSpanText).append("Možnosti zobrazeni");
         $(commentButton).append(commentSpanText);
         $(commentButton).click(function (event) {
-            var panelId = "EditacniPanel";
+            var panelId = _this.settingsPanelIdentificator;
             if (!_this.existSidePanel(panelId)) {
-                var editPanel = new SettingsPanel(panelId, _this);
-                _this.loadSidePanel(editPanel.panelHtml);
-                _this.leftSidePanels.push(editPanel);
+                var settingsPanel = new SettingsPanel(panelId, _this);
+                _this.loadSidePanel(settingsPanel.panelHtml);
+                _this.leftSidePanels.push(settingsPanel);
+                _this.settingsPanel = settingsPanel;
             }
-            _this.changeSidePanelVisibility("EditacniPanel", 'left');
+            _this.changeSidePanelVisibility(_this.settingsPanelIdentificator, 'left');
         });
         buttonsDiv.appendChild(commentButton);
         var searchResultButton = document.createElement("button");
@@ -290,13 +294,14 @@ var ReaderModule = (function () {
         $(searchSpanText).append("Výsledky vyhledávání");
         $(searchResultButton).append(searchSpanText);
         $(searchResultButton).click(function (event) {
-            var panelId = "SearchPanel";
+            var panelId = _this.searchPanelIdentificator;
             if (!_this.existSidePanel(panelId)) {
                 var searchPanel = new SearchResultPanel(panelId, _this);
                 _this.loadSidePanel(searchPanel.panelHtml);
                 _this.leftSidePanels.push(searchPanel);
+                _this.searchPanel = searchPanel;
             }
-            _this.changeSidePanelVisibility("SearchPanel", 'left');
+            _this.changeSidePanelVisibility(_this.searchPanelIdentificator, 'left');
         });
         buttonsDiv.appendChild(searchResultButton);
         var contentButton = document.createElement("button");
@@ -309,13 +314,14 @@ var ReaderModule = (function () {
         $(contentSpanText).append("Obsah");
         $(contentButton).append(contentSpanText);
         $(contentButton).click(function (event) {
-            var panelId = "ObsahPanel";
+            var panelId = _this.contentPanelIdentificator;
             if (!_this.existSidePanel(panelId)) {
                 var contentPanel = new ContentPanel(panelId, _this);
                 _this.loadSidePanel(contentPanel.panelHtml);
                 _this.leftSidePanels.push(contentPanel);
+                _this.contentPanel = contentPanel;
             }
-            _this.changeSidePanelVisibility("ObsahPanel", 'left');
+            _this.changeSidePanelVisibility(_this.contentPanelIdentificator, 'left');
         });
         buttonsDiv.appendChild(contentButton);
         pagingDiv.appendChild(buttonsDiv);
@@ -409,9 +415,11 @@ var ReaderModule = (function () {
         $(bodyContainerDiv).addClass('reader-body-container content-container');
         var textPanel = new TextPanel(this.textPanelIdentificator, this);
         this.rightSidePanels.push(textPanel);
+        this.textPanel = textPanel;
         bodyContainerDiv.appendChild(textPanel.panelHtml);
         var imagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
+        this.imagePanel = imagePanel;
         $(imagePanel.panelHtml).hide();
         bodyContainerDiv.appendChild(imagePanel.panelHtml);
         return bodyContainerDiv;
@@ -614,6 +622,9 @@ var ReaderModule = (function () {
             }
         }
         $(panel.panelHtml).css('z-index', max + 1);
+    };
+    ReaderModule.prototype.showSearch = function (searchResults) {
+        this.searchPanel.showResults(searchResults);
     };
     return ReaderModule;
 })();
@@ -876,6 +887,35 @@ var SearchResultPanel = (function (_super) {
     SearchResultPanel.prototype.makeBody = function (rootReference, window) {
         var innerContent = window.document.createElement("div");
         return innerContent;
+    };
+    SearchResultPanel.prototype.showResults = function (searchResults) {
+        $(this.innerContent).empty();
+        for (var i = 0; i < searchResults.length; i++) {
+            var result = searchResults[i];
+            var resultItem = this.createResultItem(result);
+            this.innerContent.appendChild(resultItem);
+        }
+    };
+    SearchResultPanel.prototype.createResultItem = function (result) {
+        var _this = this;
+        var resultItemDiv = document.createElement("div");
+        $(resultItemDiv).addClass("reader-search-result-item");
+        $(resultItemDiv).click(function () {
+            _this.parentReader.moveToPage(result.pageXmlId, true);
+        });
+        var resultBeforeSpan = document.createElement("span");
+        $(resultBeforeSpan).addClass("reader-search-result-before");
+        resultBeforeSpan.innerHTML = result.before;
+        var resultMatchSpan = document.createElement("span");
+        $(resultMatchSpan).addClass("reader-search-result-match");
+        resultMatchSpan.innerHTML = result.match;
+        var resultAfterSpan = document.createElement("span");
+        $(resultAfterSpan).addClass("reader-search-result-after");
+        resultAfterSpan.innerHTML = result.after;
+        resultItemDiv.appendChild(resultBeforeSpan);
+        resultItemDiv.appendChild(resultMatchSpan);
+        resultItemDiv.appendChild(resultAfterSpan);
+        return resultItemDiv;
     };
     return SearchResultPanel;
 })(LeftSidePanel);
@@ -1244,5 +1284,10 @@ var ContentItem = (function () {
         configurable: true
     });
     return ContentItem;
+})();
+var SearchResult = (function () {
+    function SearchResult() {
+    }
+    return SearchResult;
 })();
 //# sourceMappingURL=itjakub.plugins.reader.js.map
