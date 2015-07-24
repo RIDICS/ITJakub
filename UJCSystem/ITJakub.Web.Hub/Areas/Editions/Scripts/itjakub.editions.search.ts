@@ -1,6 +1,6 @@
 ﻿
 $(document).ready(() => {
-    var booksCountOnPage = 10;
+    var booksCountOnPage = 3;
 
     var bookIds = new Array();
     var categoryIds = new Array();

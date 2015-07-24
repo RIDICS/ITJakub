@@ -151,6 +151,8 @@ namespace ITJakub.SearchService.Core.Exist
             if (resultRestrictionCriteriaContract == null)
                 return null;
 
+            AdjustStartIndexes(resultCriteriaContract);
+
             var searchCriteria = new ResultSearchCriteriaContract
             {
                 ResultBooks = resultRestrictionCriteriaContract.ResultBooks,
@@ -160,7 +162,23 @@ namespace ITJakub.SearchService.Core.Exist
 
             return SearchResultContractList.FromXml(m_client.ListSearchEditionsResults(searchCriteria.ToXml()));
         }
-        
+
+        private void AdjustStartIndexes(ResultCriteriaContract resultCriteriaContract)
+        {
+            if (resultCriteriaContract != null)
+            {
+                if (resultCriteriaContract.Start.HasValue)
+                {
+                    resultCriteriaContract.Start++;
+                }
+
+                if (resultCriteriaContract.HitSettingsContract.Start.HasValue)
+                {
+                    resultCriteriaContract.HitSettingsContract.Start++;
+                }
+            }
+        }
+
         public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
         {
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);

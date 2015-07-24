@@ -200,6 +200,8 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
+
+        //TODO inspect performance (fix lazy=false)
         [Transaction(TransactionMode.Requires)]
         public virtual IList<BookVersion> GetBookVersionsByGuid(IEnumerable<string> bookGuidList)
         {
