@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
@@ -171,6 +172,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
             listSearchCriteriaContracts.Add(new ResultCriteriaContract
             {
+                Start = 0,
+                Count = 1,
                 HitSettingsContract = new HitSettingsContract
                 {
                     ContextLength = 50,
@@ -184,8 +187,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 ResultBooks = new List<BookVersionPairContract> { new BookVersionPairContract { Guid = bookXmlId, VersionId = versionXmlId} }
             });
 
-            var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { results }, JsonRequestBehavior.AllowGet);
+            var result = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
+            if (result != null)
+            {
+                return Json(new { results = result.Results }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TextSearchInBookPaged(string text, int start, int count, string bookXmlId, string versionXmlId)
@@ -205,6 +213,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 },
                 new ResultCriteriaContract
                 {
+                    Start = 0,
+                    Count = 1,
                     HitSettingsContract = new HitSettingsContract
                     {
                         ContextLength = 50,
@@ -222,8 +232,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 }
             };
 
-            var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { results }, JsonRequestBehavior.AllowGet);
+            var result = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
+            if (result != null)
+            {
+                return Json(new { results = result.Results}, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)

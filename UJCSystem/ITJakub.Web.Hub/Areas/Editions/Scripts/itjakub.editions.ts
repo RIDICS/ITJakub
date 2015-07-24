@@ -8,9 +8,14 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
     function convertSearchResults(responseResults: Array<Object>): SearchResult[] {
         var searchResults = new Array<SearchResult>();
         for (var i = 0; i < responseResults.length; i++) {
-            var book = responseResults[i];
+            var result = responseResults[i];
+            var resultContextStructure = result["ContextStructure"];
             var searchResult = new SearchResult();
-            //searchResult.after = book.    //TODO
+            searchResult.pageXmlId = result["PageXmlId"];
+            searchResult.pageName = result["PageName"];
+            searchResult.before = resultContextStructure["Before"];
+            searchResult.match = resultContextStructure["Match"];
+            searchResult.after = resultContextStructure["After"];
             searchResults.push(searchResult);
         }
 
@@ -32,7 +37,7 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
-                var convertedResults = convertSearchResults(response);
+                var convertedResults = convertSearchResults(response["results"]);
                 readerPlugin.showSearch(convertedResults);
             }
         });
@@ -53,7 +58,7 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
-                var convertedResults = convertSearchResults(response);
+                var convertedResults = convertSearchResults(response["results"]);
                 readerPlugin.showSearch(convertedResults);
             }
         });

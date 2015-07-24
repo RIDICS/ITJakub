@@ -495,7 +495,11 @@ body {
 div.dummy-page {
   display: inherit!important;
 }
-reader-search-result-match {
+.reader-search-result-match {
   background-color: yellow;
+}
+.reader-search-result-item:hover {
+  cursor: pointer;
+  background-color: lightgray;
 }
 /*# sourceMappingURL=ITJakub.Reader.css.map */

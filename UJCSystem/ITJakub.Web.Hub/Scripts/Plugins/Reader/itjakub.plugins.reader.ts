@@ -1549,6 +1549,7 @@ class ContentItem {
 
 class SearchResult {
     pageXmlId: string;
+    pageName: string;
     before: string;
     after: string;
     match; string;
