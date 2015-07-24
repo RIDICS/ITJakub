@@ -633,13 +633,23 @@ var ReaderModule = (function () {
     ReaderModule.prototype.showSearch = function (searchResults) {
         for (var i = 0; i < searchResults.length; i++) {
         }
-        this.searchPanel.showResults(searchResults);
+        this.getSearchPanel().showResults(searchResults);
     };
     ReaderModule.prototype.setResultsPaging = function (itemsCount, pageChangedCallback) {
-        this.searchPanel.createPagination(pageChangedCallback, itemsCount);
+        this.getSearchPanel().createPagination(pageChangedCallback, itemsCount);
     };
     ReaderModule.prototype.getSearchResultsCountOnPage = function () {
-        return this.searchPanel.getResultsCountOnPage();
+        return this.getSearchPanel().getResultsCountOnPage();
+    };
+    ReaderModule.prototype.getSearchPanel = function () {
+        var panelId = this.searchPanelIdentificator;
+        if (!this.existSidePanel(panelId)) {
+            var searchPanel = new SearchResultPanel(panelId, this);
+            this.loadSidePanel(searchPanel.panelHtml);
+            this.leftSidePanels.push(searchPanel);
+            this.searchPanel = searchPanel;
+        }
+        return this.searchPanel;
     };
     return ReaderModule;
 })();

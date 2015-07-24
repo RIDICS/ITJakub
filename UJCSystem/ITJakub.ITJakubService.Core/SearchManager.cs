@@ -93,18 +93,21 @@ namespace ITJakub.ITJakubService.Core
             var filteredCriterias = FilterSearchCriterias(searchCriterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
 
-            var databaseSearchResult =
-                m_bookVersionRepository.SearchByCriteriaQuery(
-                    new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery,
-                        filteredCriterias.MetadataParameters));
-            if (databaseSearchResult.Count == 0)
-                return new List<SearchResultContract>();
-
-            var resultContract = new ResultRestrictionCriteriaContract
+            if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
             {
-                ResultBooks = databaseSearchResult
-            };
-            nonMetadataCriterias.Add(resultContract);
+                var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters));
+                
+                if (databaseSearchResult.Count == 0)
+                {
+                    return new List<SearchResultContract>();
+                }
+
+                var resultContract = new ResultRestrictionCriteriaContract
+                {
+                    ResultBooks = databaseSearchResult
+                };
+                nonMetadataCriterias.Add(resultContract);   
+            }
 
             var searchResults = m_searchServiceClient.ListSearchEditionsResults(nonMetadataCriterias);
 

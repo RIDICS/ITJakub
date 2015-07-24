@@ -755,15 +755,27 @@ class ReaderModule {
         for (var i = 0; i < searchResults.length; i++) {
             //this.invalidatePage(searchResults[i].pageXmlId); //TODO make invalidating page and loading
         }
-        this.searchPanel.showResults(searchResults);
+        this.getSearchPanel().showResults(searchResults);
     }
 
     setResultsPaging(itemsCount: number, pageChangedCallback: (pageNumner: number) => void) {
-        this.searchPanel.createPagination(pageChangedCallback, itemsCount);
+        this.getSearchPanel().createPagination(pageChangedCallback, itemsCount);
     }
 
     getSearchResultsCountOnPage(): number {
-        return this.searchPanel.getResultsCountOnPage();
+        return this.getSearchPanel().getResultsCountOnPage();
+    }
+
+    private getSearchPanel(): SearchResultPanel {
+        var panelId = this.searchPanelIdentificator;
+        if (!this.existSidePanel(panelId)){
+            var searchPanel = new SearchResultPanel(panelId, this);
+            this.loadSidePanel(searchPanel.panelHtml);
+            this.leftSidePanels.push(searchPanel);
+            this.searchPanel = searchPanel;
+        }
+
+        return this.searchPanel;
     }
 }
 
