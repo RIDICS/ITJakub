@@ -1,7 +1,5 @@
 xquery version "3.0";
 import module namespace search = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/search" at "../modules/searching.xqm";
-import module namespace search-test = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/search-test" at "../modules/searching-testing.xqm";
-import module namespace functx = "http://www.functx.com" at "../modules/functx.xqm";
 
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
@@ -47,7 +45,9 @@ declare function local:get-headword-contract-from-entry($entry as element()) {
 	else
 	local:get-query-criteria-param()
 :)	
-let $query-criteria-param := search-test:get-query-criteria-param-for-dictionaries()
+let $defaultSearchCriteria := '<ResultSearchCriteriaContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract"></ResultSearchCriteriaContract>'
+
+let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $defaultSearchCriteria)
 let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzích parse-xml :)
 
 let $queries := search:get-queries-from-search-criteria($query-criteria(://a:SearchCriteriaContract[a:Key = 'Fulltext']:))
@@ -92,8 +92,8 @@ let $collection := $collection[./tei:TEI[@n = $book-ids][@change = $book-version
 (:~ dokumenty, které obsahují hledaný výraz :)
 (:~ TODO: dodat řazení, více proledávaných elementů :)
 let $documents := search:get-query-documents-matches($collection, $queries)
-let $documents := for $document in $documents 
-	(:order by $document/tei:TEI/tei:teiHeader//tei:origDate[@notBefore]:)
+(:let $documents := for $document in $documents 
+	(\:order by $document/tei:TEI/tei:teiHeader//tei:origDate[@notBefore]:\)
 		order by $document/tei:TEI/tei:teiHeader//tei:titleStmt/tei:title
 		return $document
 
@@ -103,8 +103,9 @@ let $dictionaries-list-element := local:get-dictionaries-list-element($documents
 let $result-documents := if($result-count = 0) then
 		subsequence($documents, $result-start)
 	else
-		subsequence($documents, $result-start, $result-count)
-
+		subsequence($documents, $result-start, $result-count):)
+		
+let $result-documents := $documents
 let $hits := search:get-dictionaries-search-hits($result-documents, $queries, $result-start, $result-count)
 
 return count($hits)
