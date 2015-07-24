@@ -7,17 +7,18 @@ var __extends = this.__extends || function (d, b) {
 var BibliographyFactoryResolver = (function () {
     function BibliographyFactoryResolver(booksConfigurations) {
         this.factories = new Array();
-        this.factories[0 /* Edition */] = new EditionFactory(new BookTypeConfiguration("Edition", booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
-        this.factories[1 /* Dictionary */] = new DictionaryFactory(new BookTypeConfiguration("Dictionary", booksConfigurations["Dictionary"]));
-        this.factories[4 /* TextBank */] = new TextBankFactory(new BookTypeConfiguration("TextBank", booksConfigurations["TextBank"]));
-        this.factories[6 /* CardFile */] = new CardFileFactory(new BookTypeConfiguration("CardFile", booksConfigurations["CardFile"]));
-        this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
+        this.factories[0 /* Edition */] = new EditionFactory(new BookTypeConfiguration(0 /* Edition */, booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
+        this.factories[1 /* Dictionary */] = new DictionaryFactory(new BookTypeConfiguration(1 /* Dictionary */, booksConfigurations["Dictionary"]));
+        this.factories[4 /* TextBank */] = new TextBankFactory(new BookTypeConfiguration(4 /* TextBank */, booksConfigurations["TextBank"]));
+        this.factories[6 /* CardFile */] = new CardFileFactory(new BookTypeConfiguration(6 /* CardFile */, booksConfigurations["CardFile"]));
+        //this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
     }
     BibliographyFactoryResolver.prototype.getFactoryForType = function (bookType) {
         if (typeof this.factories[bookType] !== 'undefined') {
             return this.factories[bookType];
         }
-        return this.factories['Default'];
+        //return this.factories['Default'];
+        return null;
     };
     return BibliographyFactoryResolver;
 })();

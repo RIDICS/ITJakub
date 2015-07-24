@@ -11,12 +11,12 @@
 }
 
 class BookTypeConfiguration {
-    bookType : string;
+    bookType: BookTypeEnum;
     rightPanelConfig: RightPanelConfiguration;
     middlePanelConfig: MiddlePanelConfiguration;
     bottomPanelConfig: BottomPanelConfiguration;
 
-    constructor(bookType: string, bookTypeConfig: Object) {
+    constructor(bookType: BookTypeEnum, bookTypeConfig: Object) {
         this.bookType = bookType;
         this.rightPanelConfig = new RightPanelConfiguration(bookTypeConfig['right-panel']);
         this.middlePanelConfig = new MiddlePanelConfiguration(bookTypeConfig['middle-panel']);
@@ -102,3 +102,4 @@ class BottomPanelConfiguration extends Configuration {
     getBody(bibItem: IBookInfo): string { return this.interpret(this.configObject['body'], bibItem); }
 
 }
+

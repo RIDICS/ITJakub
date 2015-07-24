@@ -2,8 +2,7 @@ $(document).ready(function () {
     var booksCountOnPage = 10;
     var bookIds = new Array();
     var categoryIds = new Array();
-    var bookType = $("#listResults").data("book-type");
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", bookType);
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", 0 /* Edition */);
     function editionAdvancedSearchPaged(json, pageNumber) {
         if (typeof json === "undefined" || json === null || json === "")
             return;
