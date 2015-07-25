@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.SearchService.Core.Search;
 using ITJakub.SearchService.Core.Search.DataContract;
 using ITJakub.Shared.Contracts;
@@ -133,39 +134,13 @@ namespace ITJakub.SearchService.Core.Exist
 
         public SearchResultContractList ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
-            ResultRestrictionCriteriaContract resultRestrictionCriteriaContract = null;
-            ResultCriteriaContract resultCriteriaContract = null;
-            RegexCriteriaBuilder.ConvertWildcardToRegex(searchCriterias);
-            var filteredCriterias = new List<SearchCriteriaContract>();
-            foreach (var searchCriteriaContract in searchCriterias)
-            {
-                if (m_searchCriteriaDirector.IsCriteriaSupported(searchCriteriaContract))
-                {
-                    filteredCriterias.Add(RegexCriteriaBuilder.ConvertToRegexCriteria(searchCriteriaContract));
-                }
-                else if (searchCriteriaContract.Key == CriteriaKey.ResultRestriction)
-                {
-                    resultRestrictionCriteriaContract = (ResultRestrictionCriteriaContract) searchCriteriaContract;
-                }
-                else if (searchCriteriaContract.Key == CriteriaKey.Result)
-                {
-                    resultCriteriaContract = (ResultCriteriaContract) searchCriteriaContract;
-                }
-            }
-
-            if (resultRestrictionCriteriaContract == null)
+            var filteredCriterias = GetFilteredResultSearchCriterias(searchCriterias);
+            if (filteredCriterias.ResultBooks == null)
                 return null;
 
-            AdjustStartIndexes(resultCriteriaContract);
+            AdjustStartIndexes(filteredCriterias.ResultSpecifications);
 
-            var searchCriteria = new ResultSearchCriteriaContract
-            {
-                ResultBooks = resultRestrictionCriteriaContract.ResultBooks,
-                ResultSpecifications = resultCriteriaContract,
-                ConjunctionSearchCriterias = filteredCriterias
-            };
-
-            return SearchResultContractList.FromXml(m_client.ListSearchEditionsResults(searchCriteria.ToXml()));
+            return SearchResultContractList.FromXml(m_client.ListSearchEditionsResults(filteredCriterias.ToXml()));
         }
 
         private void AdjustStartIndexes(ResultCriteriaContract resultCriteriaContract)
@@ -184,7 +159,7 @@ namespace ITJakub.SearchService.Core.Exist
             }
         }
 
-        public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
+        public HeadwordListContract ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
         {
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
             if (resultSearchCriteria.ResultBooks == null)
@@ -193,7 +168,7 @@ namespace ITJakub.SearchService.Core.Exist
             AdjustStartIndexes(resultSearchCriteria.ResultSpecifications);
 
             var stringResult = m_client.ListSearchDictionariesResults(resultSearchCriteria.ToXml());
-            return stringResult;
+            return HeadwordListContract.FromXml(stringResult);
         }
 
         public int ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias)
@@ -217,37 +192,11 @@ namespace ITJakub.SearchService.Core.Exist
 
         public PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias)
         {
-            ResultRestrictionCriteriaContract resultRestrictionCriteriaContract = null;
-            ResultCriteriaContract resultCriteriaContract = null;
-            RegexCriteriaBuilder.ConvertWildcardToRegex(searchCriterias);
-            var filteredCriterias = new List<SearchCriteriaContract>();
-            foreach (var searchCriteriaContract in searchCriterias)
-            {
-                if (m_searchCriteriaDirector.IsCriteriaSupported(searchCriteriaContract))
-                {
-                    filteredCriterias.Add(RegexCriteriaBuilder.ConvertToRegexCriteria(searchCriteriaContract));
-                }
-                else if (searchCriteriaContract.Key == CriteriaKey.ResultRestriction)
-                {
-                    resultRestrictionCriteriaContract = (ResultRestrictionCriteriaContract)searchCriteriaContract;
-                }
-                else if (searchCriteriaContract.Key == CriteriaKey.Result)
-                {
-                    resultCriteriaContract = (ResultCriteriaContract)searchCriteriaContract;
-                }
-            }
-
-            if (resultRestrictionCriteriaContract == null)
+            var filteredCriterias = GetFilteredResultSearchCriterias(searchCriterias);
+            if (filteredCriterias.ResultBooks == null)
                 return null;
-            
-            var searchCriteria = new ResultSearchCriteriaContract
-            {
-                ResultBooks = resultRestrictionCriteriaContract.ResultBooks,
-                ResultSpecifications = resultCriteriaContract,
-                ConjunctionSearchCriterias = filteredCriterias
-            };
 
-            return PageListContract.FromXml(m_client.GetSearchEditionsPageList(searchCriteria.ToXml()));
+            return PageListContract.FromXml(m_client.GetSearchEditionsPageList(filteredCriterias.ToXml()));
         }
     }
 }

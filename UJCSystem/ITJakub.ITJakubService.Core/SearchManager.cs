@@ -474,8 +474,7 @@ namespace ITJakub.ITJakubService.Core
             nonMetadataCriterias.Add(resultRestrictionContract);
             nonMetadataCriterias.AddRange(headwordContracts);
 
-            var resultString = m_searchServiceClient.ListSearchDictionariesResults(nonMetadataCriterias);
-            var resultContract = HeadwordListContract.FromXml(resultString);
+            var resultContract = m_searchServiceClient.ListSearchDictionariesResults(nonMetadataCriterias);
             
             // fill book info
             var bookInfoList = m_bookVersionRepository.GetBookVersionsByGuid(resultContract.BookList.Keys);
