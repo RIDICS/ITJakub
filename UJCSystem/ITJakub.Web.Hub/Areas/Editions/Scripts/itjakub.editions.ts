@@ -89,6 +89,18 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
                 readerPlugin.setResultsPaging(response["count"], pageClickCallback);
             }
         });
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/TextSearchInBookPagesWithMatchHit",
+            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: response => {
+                //readerPlugin.showSearchResultInPages(response["pages"]); //TODO implement in reader plugin
+            }
+        });
     }
 
     function advancedSearch(json: string) {
@@ -104,6 +116,19 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             success: response => {
                 updateQueryStringParameter("searchText", json);
                 readerPlugin.setResultsPaging(response["count"], pageClickCallback);
+            }
+        });
+
+        
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPagesWithMatchHit",
+            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: response => {
+                //readerPlugin.showSearchResultInPages(response["pages"]); //TODO implement in reader plugin
             }
         });
     }
