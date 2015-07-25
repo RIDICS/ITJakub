@@ -114,6 +114,17 @@ namespace ITJakub.ITJakubService.Core
                 nonMetadataCriterias.Add(resultContract);   
             }
 
+            if (filteredCriterias.NonMetadataCriterias.All(
+                    x => x.Key == CriteriaKey.ResultRestriction || x.Key == CriteriaKey.Result))
+            {
+                // Search only in SQL
+                var resultRestriction = nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().First();
+                var guidListRestriction = resultRestriction.ResultBooks.Select(x => x.Guid);
+                var resultBookVersions = m_bookVersionRepository.GetBookVersionsByGuid(guidListRestriction);
+                return Mapper.Map<IList<SearchResultContract>>(resultBookVersions);
+            }
+
+            // Fulltext search
             var searchResults = m_searchServiceClient.ListSearchEditionsResults(nonMetadataCriterias);
 
             var guidList = searchResults.SearchResults.Select(x => x.BookXmlId);
@@ -391,6 +402,13 @@ namespace ITJakub.ITJakubService.Core
             if (databaseSearchResult.Count == 0)
                 return 0;
 
+            if (nonMetadataCriterias.All(x => x.Key == CriteriaKey.Result))
+            {
+                // Search only in SQL
+                return databaseSearchResult.Count;
+            }
+
+            // Fulltext search
             var resultContract = new ResultRestrictionCriteriaContract
             {
                 ResultBooks = databaseSearchResult
