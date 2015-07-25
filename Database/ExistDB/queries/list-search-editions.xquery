@@ -32,9 +32,17 @@ let $queries := search:get-queries-from-search-criteria($query-criteria(://a:Sea
 let $result-params := $query-criteria/r:ResultSearchCriteriaContract/r:ResultSpecifications
 
 (:~ od jakého záznamu se vracejí výsledky, tj. knihy :)
-let $result-start := if($result-params/sc:Start) then xs:int($result-params/sc:Start) else 1
+let $result-start := if($result-params/sc:Start) then
+		if($result-params/sc:Start[@i:nil='true']) then
+			1 
+		else xs:int($result-params/sc:Start) else 
+			1
 (:~ kolik záznamů má být ve vraceném výsledku; 0 znamená všechny; pokud je číslo větší než celkový počet záznamů, vrátí se všechny :)
-let $result-count := if($result-params/sc:Count) then xs:int($result-params/sc:Count) else 20
+let $result-count := if($result-params/sc:Count) then
+	if($result-params/sc:Count[@i:nil='true']) then
+			1
+	else xs:int($result-params/sc:Count) else 
+			20
 
 (:~ od jakého záznamu se vracejí doklady s výskytem hledaného výrazu :)
 let $kwic-start := if($result-params/sc:HitSettingsContract/sc:Start) then xs:int($result-params/sc:HitSettingsContract/sc:Start) else 1
@@ -44,7 +52,12 @@ let $kwic-count := if($result-params/sc:HitSettingsContract/sc:Count) then xs:in
 let $kwic-context-length := if($result-params/sc:HitSettingsContract/sc:ContextLength) then xs:int($result-params/sc:HitSettingsContract/sc:ContextLength) else 50
 
 (:~ kriterium použité pro seřazení výsledků :)
-let $sort-criterion := if($result-params/sc:Sorting) then $result-params/sc:Sorting/text() else "Title"
+let $sort-criterion := if($result-params/sc:Sorting) then
+	if($result-params/sc:Sorting[@i:nil='true']) then
+		"Title"
+	else $result-params/sc:Sorting/text() 
+	else "Title"
+	
 (:~ kriterium použité pro seřazení výsledků :)
 let $sort-direction := if($result-params/sc:Direction) then $result-params/sc:Direction/text() else "Ascending" (: Descending :)
 

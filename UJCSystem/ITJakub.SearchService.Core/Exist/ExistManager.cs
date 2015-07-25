@@ -150,6 +150,8 @@ namespace ITJakub.SearchService.Core.Exist
             if (resultRestrictionCriteriaContract == null)
                 return null;
 
+            AdjustStartIndexes(resultCriteriaContract);
+
             var searchCriteria = new ResultSearchCriteriaContract
             {
                 ResultBooks = resultRestrictionCriteriaContract.ResultBooks,
@@ -159,7 +161,23 @@ namespace ITJakub.SearchService.Core.Exist
 
             return SearchResultContractList.FromXml(m_client.ListSearchEditionsResults(searchCriteria.ToXml()));
         }
-        
+
+        private void AdjustStartIndexes(ResultCriteriaContract resultCriteriaContract)
+        {
+            if (resultCriteriaContract != null)
+            {
+                if (resultCriteriaContract.Start.HasValue)
+                {
+                    resultCriteriaContract.Start++;
+                }
+
+                if (resultCriteriaContract.HitSettingsContract != null && resultCriteriaContract.HitSettingsContract.Start.HasValue)
+                {
+                    resultCriteriaContract.HitSettingsContract.Start++;
+                }
+            }
+        }
+
         public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
         {
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
@@ -187,6 +205,41 @@ namespace ITJakub.SearchService.Core.Exist
                 return 0;
 
             return m_client.GetSearchCriteriaResultsCount(resultSearchCriteria.ToXml());
+        }
+
+        public PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias)
+        {
+            ResultRestrictionCriteriaContract resultRestrictionCriteriaContract = null;
+            ResultCriteriaContract resultCriteriaContract = null;
+            RegexCriteriaBuilder.ConvertWildcardToRegex(searchCriterias);
+            var filteredCriterias = new List<SearchCriteriaContract>();
+            foreach (var searchCriteriaContract in searchCriterias)
+            {
+                if (m_searchCriteriaDirector.IsCriteriaSupported(searchCriteriaContract))
+                {
+                    filteredCriterias.Add(RegexCriteriaBuilder.ConvertToRegexCriteria(searchCriteriaContract));
+                }
+                else if (searchCriteriaContract.Key == CriteriaKey.ResultRestriction)
+                {
+                    resultRestrictionCriteriaContract = (ResultRestrictionCriteriaContract)searchCriteriaContract;
+                }
+                else if (searchCriteriaContract.Key == CriteriaKey.Result)
+                {
+                    resultCriteriaContract = (ResultCriteriaContract)searchCriteriaContract;
+                }
+            }
+
+            if (resultRestrictionCriteriaContract == null)
+                return null;
+            
+            var searchCriteria = new ResultSearchCriteriaContract
+            {
+                ResultBooks = resultRestrictionCriteriaContract.ResultBooks,
+                ResultSpecifications = resultCriteriaContract,
+                ConjunctionSearchCriterias = filteredCriterias
+            };
+
+            return PageListContract.FromXml(m_client.GetSearchEditionsPageList(searchCriteria.ToXml()));
         }
     }
 }

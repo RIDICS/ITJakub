@@ -50,7 +50,7 @@ let $defaultSearchCriteria := '<ResultSearchCriteriaContract xmlns="http://schem
 let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $defaultSearchCriteria)
 let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzích parse-xml :)
 
-let $queries := search:get-queries-from-search-criteria($query-criteria(://a:SearchCriteriaContract[a:Key = 'Fulltext']:))
+let $queries := search:get-queries-from-search-criteria($query-criteria)
 
 
 let $result-params := $query-criteria/r:ResultSearchCriteriaContract/r:ResultSpecifications

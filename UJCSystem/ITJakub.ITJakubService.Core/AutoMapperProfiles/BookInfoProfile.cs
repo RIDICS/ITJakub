@@ -12,6 +12,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         {
             CreateMap<BookVersion, BookInfoContract>()
                 .ForMember(dest => dest.BookXmlId, opts => opts.MapFrom(src => src.Book.Guid))
+                .ForMember(dest => dest.LastVersionXmlId, opts => opts.MapFrom(src => src.VersionId))
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Title))
                 .ForMember(dest => dest.SubTitle, opts => opts.MapFrom(src => src.SubTitle))
                 .ForMember(dest => dest.Description, opts => opts.MapFrom(src => src.Description))

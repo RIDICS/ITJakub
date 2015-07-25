@@ -196,6 +196,16 @@ namespace ITJakub.SearchService.Core.Exist
             return int.Parse(result);
         }
 
+
+        public string GetSearchEditionsPageList(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return result;
+        }
+
         #region Helpers
 
         private static Uri SetParamsToUri(string uriTemplate, params object[] args)

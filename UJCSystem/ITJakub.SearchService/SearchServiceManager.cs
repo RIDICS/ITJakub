@@ -95,5 +95,10 @@ namespace ITJakub.SearchService
         {
             return m_existManager.GetSearchCriteriaResultsCount(searchCriterias);
         }
+
+        public PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias)
+        {
+            return m_existManager.GetSearchEditionsPageList(searchCriterias);
+        }
     }
 }

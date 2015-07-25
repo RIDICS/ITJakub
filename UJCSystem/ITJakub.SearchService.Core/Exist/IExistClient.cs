@@ -60,5 +60,11 @@ namespace ITJakub.SearchService.Core.Exist
         [OperationContract]
         [ExistQuery(XqueryName = "get-search-editions-count.xquery")]
         int GetSearchCriteriaResultsCount(string serializedSearchCriteria);
+
+
+        [OperationContract]
+        [ExistQuery(XqueryName = "get-search-editions-page-list.xquery")]
+        string GetSearchEditionsPageList(string serializedSearchCriteria);
+
     }
 }

@@ -129,16 +129,18 @@ var BookInfo = (function () {
     }
     return BookInfo;
 })();
-/*
- *      [EnumMember] Edition = 0, //Edice
-        [EnumMember] Dictionary = 1, //Slovnik
-        [EnumMember] Grammar = 2, //Mluvnice
-        [EnumMember] ProfessionalLiterature = 3, //Odborna literatura
-        [EnumMember] TextBank = 4, //Textova banka
-        [EnumMember] BibliographicalItem = 5,
-        [EnumMember] CardFile = 6,
- *
- */
+//
+//  [DataContract]
+//  public enum BookTypeEnumContract : byte
+//  {
+//    [EnumMember] Edition = 0, //Edice
+//    [EnumMember] Dictionary = 1, //Slovnik
+//    [EnumMember] Grammar = 2, //Mluvnice
+//    [EnumMember] ProfessionalLiterature = 3, //Odborna literatura
+//    [EnumMember] TextBank = 4, //Textova banka
+//    [EnumMember] BibliographicalItem = 5,
+//    [EnumMember] CardFile = 6,
+//    }
 var BookTypeEnum;
 (function (BookTypeEnum) {
     BookTypeEnum[BookTypeEnum["Edition"] = 0] = "Edition";

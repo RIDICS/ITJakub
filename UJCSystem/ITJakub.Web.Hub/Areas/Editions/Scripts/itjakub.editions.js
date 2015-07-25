@@ -1,42 +1,100 @@
 //window.onload = () => { alert("hello from editions!"); }
-function initReader(bookXmlId, bookTitle, pageList, searchedText) {
+function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) {
     var readerPlugin = new ReaderModule($("#ReaderDiv")[0]);
-    readerPlugin.makeReader(bookXmlId, bookTitle, pageList);
-    function basicSearch(text) {
-        if (typeof text === "undefined" || text === null || text === "")
+    readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
+    var search;
+    function convertSearchResults(responseResults) {
+        var searchResults = new Array();
+        for (var i = 0; i < responseResults.length; i++) {
+            var result = responseResults[i];
+            var resultContextStructure = result["ContextStructure"];
+            var searchResult = new SearchResult();
+            searchResult.pageXmlId = result["PageXmlId"];
+            searchResult.pageName = result["PageName"];
+            searchResult.before = resultContextStructure["Before"];
+            searchResult.match = resultContextStructure["Match"];
+            searchResult.after = resultContextStructure["After"];
+            searchResults.push(searchResult);
+        }
+        return searchResults;
+    }
+    function editionAdvancedSearchPaged(json, pageNumber) {
+        if (typeof json === "undefined" || json === null || json === "")
             return;
-        var bookIds = new Array(); //TODO
-        var categoryIds = new Array();
+        var start = (pageNumber - 1) * readerPlugin.getSearchResultsCountOnPage();
+        var count = readerPlugin.getSearchResultsCountOnPage();
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearchCount",
-            data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPaged",
+            data: { json: json, start: start, count: count, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                var convertedResults = convertSearchResults(response["results"]);
+                readerPlugin.showSearch(convertedResults);
+            }
+        });
+    }
+    function editionBasicSearchPaged(text, pageNumber) {
+        if (typeof text === "undefined" || text === null || text === "")
+            return;
+        var start = (pageNumber - 1) * readerPlugin.getSearchResultsCountOnPage();
+        var count = readerPlugin.getSearchResultsCountOnPage();
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/TextSearchInBookPaged",
+            data: { text: text, start: start, count: count, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                var convertedResults = convertSearchResults(response["results"]);
+                readerPlugin.showSearch(convertedResults);
+            }
+        });
+    }
+    function pageClickCallback(pageNumber) {
+        if (search.isLastQueryJson()) {
+            editionAdvancedSearchPaged(search.getLastQuery(), pageNumber);
+        }
+        else {
+            editionBasicSearchPaged(search.getLastQuery(), pageNumber);
+        }
+    }
+    function basicSearch(text) {
+        if (typeof text === "undefined" || text === null || text === "")
+            return;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/TextSearchInBookCount",
+            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
                 updateQueryStringParameter("searchText", text);
+                readerPlugin.setResultsPaging(response["count"], pageClickCallback);
             }
         });
     }
     function advancedSearch(json) {
         if (typeof json === "undefined" || json === null || json === "")
             return;
-        var bookIds = new Array(); //TODO
-        var categoryIds = new Array();
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/AdvancedSearchResultsCount",
-            data: { json: json, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookCount",
+            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
                 updateQueryStringParameter("searchText", json);
+                readerPlugin.setResultsPaging(response["count"], pageClickCallback);
             }
         });
     }
-    var search = new Search($("#SearchDiv")[0], advancedSearch, basicSearch);
+    search = new Search($("#SearchDiv")[0], advancedSearch, basicSearch);
     var disabledOptions = new Array();
     disabledOptions.push(0 /* Author */);
     disabledOptions.push(3 /* Dating */);
