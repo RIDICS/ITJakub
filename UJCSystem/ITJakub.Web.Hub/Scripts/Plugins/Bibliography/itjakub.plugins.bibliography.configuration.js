@@ -66,11 +66,17 @@ var RightPanelConfiguration = (function (_super) {
     RightPanelConfiguration.prototype.containsReadButton = function () {
         return typeof this.configObject['read-button'] !== 'undefined';
     };
-    RightPanelConfiguration.prototype.getInfoButton = function (bibItem) {
+    RightPanelConfiguration.prototype.getInfoButtonUrl = function (bibItem) {
         return this.interpret(getBaseUrl() + this.configObject['info-button']['url'], bibItem);
     };
-    RightPanelConfiguration.prototype.getReadButton = function (bibItem) {
+    RightPanelConfiguration.prototype.getInfoButtonOnClick = function (bibItem) {
+        return this.interpret(this.configObject['info-button']['onclick'], bibItem);
+    };
+    RightPanelConfiguration.prototype.getReadButtonUrl = function (bibItem) {
         return this.interpret(getBaseUrl() + this.configObject["read-button"]["url"], bibItem);
+    };
+    RightPanelConfiguration.prototype.getReadButtonOnClick = function (bibItem) {
+        return this.interpret(this.configObject["read-button"]["onclick"], bibItem);
     };
     return RightPanelConfiguration;
 })(Configuration);

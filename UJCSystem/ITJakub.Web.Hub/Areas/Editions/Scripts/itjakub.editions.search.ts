@@ -1,12 +1,11 @@
 ﻿
 $(document).ready(() => {
-    var booksCountOnPage = 10;
+    var booksCountOnPage = 3;
 
     var bookIds = new Array();
     var categoryIds = new Array();
 
-    var bookType = $("#listResults").data("book-type");
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", bookType);
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", BookTypeEnum.Edition);
 
     function editionAdvancedSearchPaged(json: string, pageNumber: number) {
 
@@ -104,8 +103,7 @@ $(document).ready(() => {
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
         bookIds = new Array();
-        bookIds.push(1); //TODO remove
-
+        
         for (var i = 0; i < state.SelectedItems.length; i++) {
             bookIds.push(state.SelectedItems[i].Id);
         }

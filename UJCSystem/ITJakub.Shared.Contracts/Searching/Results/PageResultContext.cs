@@ -6,7 +6,7 @@ namespace ITJakub.Shared.Contracts.Searching.Results
     public class PageResultContext
     {
         [DataMember]
-        public string PageXmlId { get; set; }
+        public string PageXmlId { get; set; }   //TODO use PageDescriptionContract
 
         [DataMember]
         public string PageName { get; set; }

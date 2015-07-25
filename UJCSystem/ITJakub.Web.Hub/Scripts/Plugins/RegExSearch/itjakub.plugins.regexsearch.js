@@ -38,6 +38,7 @@ var Search = (function () {
     }
     Search.prototype.makeSearch = function (disabledOptions) {
         var _this = this;
+        this.disabledOptions = disabledOptions;
         var searchAreaDiv = document.createElement("div");
         $(searchAreaDiv).addClass("regex-search-div");
         var form = document.createElement("form");
@@ -85,7 +86,7 @@ var Search = (function () {
         $(this.advancedButton).click(function () {
             $(_this.advancedButton).css("visibility", "hidden");
             if (_this.searchbarAdvancedEditorContainer.children.length === 0) {
-                _this.advancedRegexEditor = new RegExAdvancedSearchEditor(_this.searchbarAdvancedEditorContainer, function (json) { return _this.closeAdvancedSearchEditor(json); });
+                _this.advancedRegexEditor = new RegExAdvancedSearchEditor(_this.searchbarAdvancedEditorContainer, function (json) { return _this.closeAdvancedSearchEditorWithImport(json); }, function (json) { return _this.closeAdvancedSearchEditor(); });
                 _this.advancedRegexEditor.setDisabledOptions(disabledOptions);
                 _this.advancedRegexEditor.makeRegExSearch();
                 $(_this.searchbarAdvancedEditorContainer).hide();
@@ -101,8 +102,11 @@ var Search = (function () {
             }
         });
     };
-    Search.prototype.closeAdvancedSearchEditor = function (jsonData) {
+    Search.prototype.closeAdvancedSearchEditorWithImport = function (jsonData) {
         this.importJsonToTextField(jsonData);
+        this.closeAdvancedSearchEditor();
+    };
+    Search.prototype.closeAdvancedSearchEditor = function () {
         $(this.searchbarAdvancedEditorContainer).slideUp(this.speedAnimation); //hide advanced search
         $(this.searchInputTextbox).prop('disabled', false);
         $(this.searchButton).prop('disabled', false);
@@ -111,8 +115,11 @@ var Search = (function () {
     Search.prototype.importJsonToTextField = function (json) {
         $(this.searchInputTextbox).text(json);
         $(this.searchInputTextbox).val(json);
+        $(this.searchInputTextbox).change();
     };
-    Search.prototype.importJsonToAdvancedSearch = function (json) {
+    Search.prototype.processSearchQuery = function (query) {
+        this.importJsonToTextField(query);
+        this.processSearch();
     };
     Search.prototype.isValidJson = function (data) {
         try {
@@ -128,7 +135,8 @@ var Search = (function () {
         this.lastQuery = searchboxValue;
         if (this.isValidJson(searchboxValue)) {
             this.lastQueryWasJson = true;
-            this.processSearchJsonCallback(searchboxValue);
+            var query = this.getFilteredQuery(searchboxValue, this.disabledOptions); //filter disabled options
+            this.processSearchJsonCallback(query);
         }
         else {
             this.lastQueryWasJson = false;
@@ -137,6 +145,18 @@ var Search = (function () {
     };
     Search.prototype.getLastQuery = function () {
         return this.lastQuery;
+    };
+    Search.prototype.getLastQueryFiltered = function (disabledOptions) {
+        return this.getFilteredQuery(this.getLastQuery(), disabledOptions);
+    };
+    Search.prototype.getFilteredQuery = function (query, disabledOptions) {
+        if (!this.isValidJson(query))
+            return query;
+        var actualState = this.advancedRegexEditor.getConditionsResultJSON();
+        this.advancedRegexEditor.importJson(query);
+        var filteredQuery = this.advancedRegexEditor.getConditionsResultJSON(disabledOptions);
+        this.advancedRegexEditor.importJson(actualState);
+        return filteredQuery;
     };
     Search.prototype.isLastQueryJson = function () {
         return this.lastQueryWasJson;
@@ -147,8 +167,9 @@ var Search = (function () {
     return Search;
 })();
 var RegExAdvancedSearchEditor = (function () {
-    function RegExAdvancedSearchEditor(container, regexDoneCallback) {
+    function RegExAdvancedSearchEditor(container, regexDoneCallback, regexCancelledCallback) {
         this.regexDoneCallback = regexDoneCallback;
+        this.regexCancelledCallback = regexCancelledCallback;
         this.container = container;
     }
     RegExAdvancedSearchEditor.prototype.setDisabledOptions = function (disabledOptions) {
@@ -159,12 +180,20 @@ var RegExAdvancedSearchEditor = (function () {
         $(this.container).empty();
         this.regExConditions = [];
         var commandsDiv = document.createElement("div");
+        $(commandsDiv).addClass("regex-search-buttons-bottom-area");
         var sentButton = HtmlItemsFactory.createButton("Dokončit");
         $(sentButton).addClass("regex-search-button");
         commandsDiv.appendChild(sentButton);
         $(sentButton).click(function () {
             var json = _this.getConditionsResultJSON();
             _this.regexDoneCallback(json);
+        });
+        var cancelButton = HtmlItemsFactory.createButton("Zrušit");
+        $(cancelButton).addClass("regex-search-button");
+        commandsDiv.appendChild(cancelButton);
+        $(cancelButton).click(function () {
+            var json = _this.getConditionsResultJSON();
+            _this.regexCancelledCallback(json);
         });
         this.innerContainer = document.createElement("div");
         this.addNewCondition(true);
@@ -177,8 +206,10 @@ var RegExAdvancedSearchEditor = (function () {
         this.regExConditions = new Array();
         for (var i = 0; i < jsonDataArray.length; i++) {
             var conditionData = jsonDataArray[i];
-            this.addNewCondition();
-            this.getLastCondition().importData(conditionData);
+            if (typeof this.disabledOptionsArray === "undefined" || this.disabledOptionsArray === null || $.inArray(conditionData.searchType, this.disabledOptionsArray) < 0) {
+                this.addNewCondition();
+                this.getLastCondition().importData(conditionData);
+            }
         }
     };
     RegExAdvancedSearchEditor.prototype.addNewCondition = function (useDelimiter) {
@@ -187,8 +218,7 @@ var RegExAdvancedSearchEditor = (function () {
             this.getLastCondition().setTextDelimeter();
         }
         var newRegExConditions = new RegExConditionListItem(this);
-        newRegExConditions.disbaleOptions(this.disabledOptionsArray);
-        newRegExConditions.makeRegExCondition();
+        newRegExConditions.makeRegExCondition(this.disabledOptionsArray);
         newRegExConditions.setClickableDelimeter();
         if (!useDelimiter) {
             newRegExConditions.removeDelimeter();
@@ -219,16 +249,19 @@ var RegExAdvancedSearchEditor = (function () {
             this.getLastCondition().setClickableDelimeter();
         }
     };
-    RegExAdvancedSearchEditor.prototype.getConditionsResultObject = function () {
+    RegExAdvancedSearchEditor.prototype.getConditionsResultObject = function (disabledOptions) {
         var resultArray = new Array();
         for (var i = 0; i < this.regExConditions.length; i++) {
             var regExCondition = this.regExConditions[i];
-            resultArray.push(regExCondition.getConditionValue());
+            var regExConditionValue = regExCondition.getConditionValue();
+            if (typeof disabledOptions === "undefined" || disabledOptions === null || $.inArray(regExConditionValue.searchType, disabledOptions) < 0) {
+                resultArray.push(regExConditionValue);
+            }
         }
         return resultArray;
     };
-    RegExAdvancedSearchEditor.prototype.getConditionsResultJSON = function () {
-        var jsonString = JSON.stringify(this.getConditionsResultObject());
+    RegExAdvancedSearchEditor.prototype.getConditionsResultJSON = function (disabledOptions) {
+        var jsonString = JSON.stringify(this.getConditionsResultObject(disabledOptions));
         return jsonString;
     };
     RegExAdvancedSearchEditor.prototype.getLastCondition = function () {
@@ -246,7 +279,6 @@ var RegExConditionListItem = (function () {
         $(this.searchDestinationSelect).val(conditionData.searchType.toString());
         $(this.searchDestinationSelect).change();
         this.innerCondition.importData(conditionData);
-        //TODO implement disabled options
     };
     RegExConditionListItem.prototype.getHtml = function () {
         return this.html;
@@ -327,9 +359,8 @@ var RegExConditionListItem = (function () {
                     $(optGroup).remove();
             }
         }
-        this.disabledOptions = disabledOptions;
     };
-    RegExConditionListItem.prototype.makeRegExCondition = function () {
+    RegExConditionListItem.prototype.makeRegExCondition = function (disabledOptions) {
         var _this = this;
         var conditionsDiv = document.createElement("div");
         $(conditionsDiv).addClass("regexsearch-condition-main-div");
@@ -361,7 +392,6 @@ var RegExConditionListItem = (function () {
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", 12 /* HeadwordDescriptionTokenDistance */.toString()));
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", 10 /* Headword */.toString()));
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Heslová stať", 11 /* HeadwordDescription */.toString()));
-        this.selectedSearchType = 4 /* Fulltext */;
         $(searchDestinationSelect).change(function (eventData) {
             var oldSelectedSearchType = _this.selectedSearchType;
             _this.selectedSearchType = parseInt($(eventData.target).val());
@@ -370,7 +400,7 @@ var RegExConditionListItem = (function () {
             }
         });
         this.searchDestinationSelect = searchDestinationSelect;
-        this.disbaleOptions(this.disabledOptions);
+        this.disbaleOptions(disabledOptions);
         $(conditionsDiv).append(mainSearchDiv);
         this.innerConditionContainer = document.createElement("div");
         $(this.innerConditionContainer).addClass("regex-inner-conditon-container");
@@ -381,6 +411,8 @@ var RegExConditionListItem = (function () {
         $(conditionsDiv).append(delimeterDiv);
         this.setClickableDelimeter();
         this.html = conditionsDiv;
+        $(searchDestinationSelect).val(4 /* Fulltext */.toString());
+        $(searchDestinationSelect).change();
     };
     RegExConditionListItem.prototype.changeConditionType = function (newSearchType, oldSearchType) {
         if (!(this.innerCondition instanceof RegExWordConditionList) && (newSearchType === 0 /* Author */ || newSearchType === 2 /* Editor */ || newSearchType === 4 /* Fulltext */ || newSearchType === 1 /* Title */ || newSearchType === 5 /* Heading */ || newSearchType === 6 /* Sentence */)) {

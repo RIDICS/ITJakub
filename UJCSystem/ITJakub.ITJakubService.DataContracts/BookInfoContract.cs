@@ -9,6 +9,9 @@ namespace ITJakub.ITJakubService.DataContracts
     {
         [DataMember]
         public string BookXmlId { get; set; }
+        
+        [DataMember]
+        public string LastVersionXmlId { get; set; }
 
         [DataMember]
         public string Title { get; set; }

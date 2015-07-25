@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ITJakub.DataEntities.Database
 {
     public class SearchCriteriaQuery
@@ -7,6 +5,5 @@ namespace ITJakub.DataEntities.Database
         public string Join { get; set; }
         
         public string Where { get; set; }
-
     }
 }

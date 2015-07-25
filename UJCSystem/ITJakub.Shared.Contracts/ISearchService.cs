@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 
 namespace ITJakub.Shared.Contracts
 {
@@ -30,15 +32,18 @@ namespace ITJakub.Shared.Contracts
             OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
-        void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias);
+        SearchResultContractList ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
-        string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias);
+        HeadwordListContract ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
         int ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
         int GetSearchCriteriaResultsCount(List<SearchCriteriaContract> nonMetadataCriterias);
+
+        [OperationContract]
+        PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias);
     }
 }

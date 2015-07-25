@@ -455,3 +455,86 @@ html,body {
 .page-wrapper {
     margin-bottom: 5px;
 }
+
+
+/* CSS block for hide/show notes in text */
+
+.reader-text .itj-notes .itj-note { //Hide all notes by default
+  display: none;
+}
+
+
+.reader-text span.note-ref {
+  font-weight: bold;
+  display: none;
+}
+
+.reader-text.show-notes .page {
+  display: inherit;
+}
+
+/*.reader-text.show-notes .itj-page {
+  width: 75%;
+}
+
+.reader-text.show-notes .itj-notes {
+  width: 25%;
+}*/
+
+.reader-text.show-notes .itj-notes .itj-note {
+  display: inherit;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+
+.reader-text.show-notes  span.note-ref {
+    display: inline;
+    background-color: #FFF380;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.reader-text div.itj-note {     //note style
+  display: inherit;
+  border-radius: 10px;
+  background-color: #FFF380;
+  margin: 2px;
+  padding: 5px;
+}
+
+div.dummy-page {
+    display: inherit!important;
+}
+
+.reader-search-result-match{
+    background-color: yellow;
+}
+
+.reader-search-result-item:hover {
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.reader-search-result-item {
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
+
+.reader-search-result-name{
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.reader-search-result-name::before{
+    content: "["
+}
+
+.reader-search-result-name::after{
+    content: "]"
+}
+
+.reader-search-result-paging{
+    text-align: center;
+}
+
+

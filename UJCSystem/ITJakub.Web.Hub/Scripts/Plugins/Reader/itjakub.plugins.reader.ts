@@ -2,7 +2,7 @@
 
 class ReaderModule {
 
-    readerContainer: string;
+    readerContainer: HTMLDivElement;
     sliderOnPage: number;
     actualPageIndex: number;
     pages: Array<BookPage>;
@@ -10,6 +10,7 @@ class ReaderModule {
     preloadPagesBefore: number;
     preloadPagesAfter: number;
     bookId: string;
+    versionId: string;
     loadedBookContent: boolean;
 
     leftSidePanels: Array<SidePanel>;
@@ -18,14 +19,26 @@ class ReaderModule {
 
     imagePanelIdentificator: string = "ImagePanel";
     textPanelIdentificator: string = "TextPanel";
+    searchPanelIdentificator: string = "SearchPanel";
+    settingsPanelIdentificator: string = "SettingsPanel";
+    contentPanelIdentificator: string = "ContentPanel";
 
-    constructor(readerContainer: string) {
+
+    imagePanel: ImagePanel;
+    textPanel: TextPanel;
+    searchPanel: SearchResultPanel;
+    settingsPanel: SettingsPanel;
+    contentPanel: ContentPanel;
+
+
+    constructor(readerContainer: HTMLDivElement) {
         this.readerContainer = readerContainer;
         this.pagerDisplayPages = 5;
     }
 
-    public makeReader(bookId : string, bookTitle : string, pageList) {
-        this.bookId = bookId;
+    public makeReader(bookXmlId : string, versionXmlId: string, bookTitle : string, pageList) {
+        this.bookId = bookXmlId;
+        this.versionId = versionXmlId;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array<BookPage>();
@@ -93,6 +106,14 @@ class ReaderModule {
         this.loadBookmarks();
 
         this.moveToPageNumber(0, false); //load first page
+    }
+
+    getBookXmlId(): string {
+        return this.bookId;
+    }
+
+    getVersionXmlId(): string {
+        return this.versionId;
     }
 
     private makeTitle(bookTitle : string): HTMLDivElement {
@@ -332,13 +353,14 @@ class ReaderModule {
         $(commentButton).append(commentSpanText);
 
         $(commentButton).click((event: Event) => {
-            var panelId = "EditacniPanel";
+            var panelId = this.settingsPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
-                var editPanel: SettingsPanel = new SettingsPanel(panelId , this);
-                this.loadSidePanel(editPanel.panelHtml);
-                this.leftSidePanels.push(editPanel);
+                var settingsPanel: SettingsPanel = new SettingsPanel(panelId , this);
+                this.loadSidePanel(settingsPanel.panelHtml);
+                this.leftSidePanels.push(settingsPanel);
+                this.settingsPanel = settingsPanel;
             }
-            this.changeSidePanelVisibility("EditacniPanel", 'left');
+            this.changeSidePanelVisibility(this.settingsPanelIdentificator, 'left');
         });
 
         buttonsDiv.appendChild(commentButton);
@@ -356,13 +378,14 @@ class ReaderModule {
         $(searchResultButton).append(searchSpanText);
 
         $(searchResultButton).click((event: Event) => {
-            var panelId = "SearchPanel";
+            var panelId = this.searchPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
-                var searchPanel = new LeftSidePanel(panelId,"Vyhlédávání", this);
+                var searchPanel = new SearchResultPanel(panelId, this);
                 this.loadSidePanel(searchPanel.panelHtml);
                 this.leftSidePanels.push(searchPanel);
+                this.searchPanel = searchPanel;
             }
-            this.changeSidePanelVisibility("SearchPanel", 'left');
+            this.changeSidePanelVisibility(this.searchPanelIdentificator, 'left');
         });
 
         buttonsDiv.appendChild(searchResultButton);
@@ -380,13 +403,14 @@ class ReaderModule {
         $(contentButton).append(contentSpanText);
 
         $(contentButton).click((event: Event) => {
-            var panelId = "ObsahPanel";
+            var panelId = this.contentPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
                 var contentPanel: ContentPanel = new ContentPanel(panelId, this);
                 this.loadSidePanel(contentPanel.panelHtml);
                 this.leftSidePanels.push(contentPanel);
+                this.contentPanel = contentPanel;
             }
-            this.changeSidePanelVisibility("ObsahPanel",'left');
+            this.changeSidePanelVisibility(this.contentPanelIdentificator,'left');
         });
 
         buttonsDiv.appendChild(contentButton);
@@ -487,11 +511,13 @@ class ReaderModule {
 
         var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this);
         this.rightSidePanels.push(textPanel);
+        this.textPanel = textPanel;
 
         bodyContainerDiv.appendChild(textPanel.panelHtml);
 
         var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this);
         this.rightSidePanels.push(imagePanel);
+        this.imagePanel = imagePanel;
 
         $(imagePanel.panelHtml).hide();
         bodyContainerDiv.appendChild(imagePanel.panelHtml);
@@ -723,6 +749,33 @@ class ReaderModule {
         }
 
         $(panel.panelHtml).css('z-index', max + 1);
+    }
+
+    showSearch(searchResults: Array<SearchResult>) {
+        for (var i = 0; i < searchResults.length; i++) {
+            //this.invalidatePage(searchResults[i].pageXmlId); //TODO make invalidating page and loading
+        }
+        this.getSearchPanel().showResults(searchResults);
+    }
+
+    setResultsPaging(itemsCount: number, pageChangedCallback: (pageNumner: number) => void) {
+        this.getSearchPanel().createPagination(pageChangedCallback, itemsCount);
+    }
+
+    getSearchResultsCountOnPage(): number {
+        return this.getSearchPanel().getResultsCountOnPage();
+    }
+
+    private getSearchPanel(): SearchResultPanel {
+        var panelId = this.searchPanelIdentificator;
+        if (!this.existSidePanel(panelId)){
+            var searchPanel = new SearchResultPanel(panelId, this);
+            this.loadSidePanel(searchPanel.panelHtml);
+            this.leftSidePanels.push(searchPanel);
+            this.searchPanel = searchPanel;
+        }
+
+        return this.searchPanel;
     }
 }
 
@@ -967,6 +1020,7 @@ class SettingsPanel extends LeftSidePanel {
         var showPageCheckboxDiv: HTMLDivElement = window.document.createElement("div");
         var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
+
         $(showPageNameCheckbox).change((eventData: Event) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
@@ -977,6 +1031,7 @@ class SettingsPanel extends LeftSidePanel {
             }
             
         });
+
         var showPageNameSpan: HTMLSpanElement = window.document.createElement("span");
         showPageNameSpan.innerHTML = "Zobrazit číslování stránek";
         showPageCheckboxDiv.appendChild(showPageNameCheckbox);
@@ -985,6 +1040,7 @@ class SettingsPanel extends LeftSidePanel {
         var showPageOnNewLineDiv: HTMLDivElement = window.document.createElement("div");
         var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageOnNewLineCheckbox.type = "checkbox";
+
         $(showPageOnNewLineCheckbox).change((eventData: Event) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
@@ -993,8 +1049,8 @@ class SettingsPanel extends LeftSidePanel {
             } else {
                 $(readerText).removeClass("reader-text-page-new-line");
             }
-
         });
+
         var showPageOnNewLineSpan: HTMLSpanElement = window.document.createElement("span");
         showPageOnNewLineSpan.innerHTML = "Zalamovat stránky";
         showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
@@ -1003,6 +1059,17 @@ class SettingsPanel extends LeftSidePanel {
         var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
         var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
         showCommentCheckbox.type = "checkbox";
+
+        $(showCommentCheckbox).change((eventData: Event) => {
+            var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("show-notes");
+            } else {
+                $(readerText).removeClass("show-notes");
+            }
+        });
+
         var showCommentSpan: HTMLSpanElement = window.document.createElement("span");
         showCommentSpan.innerHTML = "Zobrazit komentáře";
         showCommentCheckboxDiv.appendChild(showCommentCheckbox);
@@ -1015,6 +1082,88 @@ class SettingsPanel extends LeftSidePanel {
         innerContent.appendChild(buttonsDiv);
         innerContent.appendChild(checkboxesDiv);
         return innerContent;
+    }
+}
+
+class SearchResultPanel extends LeftSidePanel {
+    private searchResultItemsDiv : HTMLDivElement;
+    private searchPagingDiv: HTMLDivElement;
+
+    private paginator: Pagination;
+    private resultsOnPage;
+    private maxPaginatorVisibleElements;
+
+    constructor(identificator: string, readerModule: ReaderModule) {
+        super(identificator, "Vyhledávání", readerModule);
+    }
+    
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var innerContent: HTMLDivElement = window.document.createElement("div");
+
+        var searchResultItemsDiv = window.document.createElement("div");
+        $(searchResultItemsDiv).addClass("reader-search-result-items-div");
+        this.searchResultItemsDiv = searchResultItemsDiv;
+
+        var pagingDiv = window.document.createElement("div");
+        $(pagingDiv).addClass("reader-search-result-paging");
+        this.searchPagingDiv = pagingDiv;
+
+        this.resultsOnPage = 8;
+        this.maxPaginatorVisibleElements = 5;
+        this.paginator = new Pagination(<any>this.searchPagingDiv, this.maxPaginatorVisibleElements);
+
+        innerContent.appendChild(this.searchPagingDiv);
+        innerContent.appendChild(searchResultItemsDiv);
+
+        return innerContent;
+    }
+
+    createPagination(pageChangedCallback: (pageNumber: number) => void, itemsCount: number) {
+        this.paginator.createPagination(itemsCount, this.resultsOnPage, pageChangedCallback);
+    }
+
+    getResultsCountOnPage(): number {
+        return this.resultsOnPage;
+    }
+
+    showResults(searchResults: SearchResult[]) {
+        $(this.searchResultItemsDiv).empty();
+        for (var i = 0; i < searchResults.length; i++) {
+            var result = searchResults[i];
+            var resultItem = this.createResultItem(result);
+            this.searchResultItemsDiv.appendChild(resultItem);
+        }
+    }
+
+    private createResultItem(result: SearchResult): HTMLDivElement {
+        var resultItemDiv = document.createElement("div");
+        $(resultItemDiv).addClass("reader-search-result-item");
+        $(resultItemDiv).click(() => {
+            this.parentReader.moveToPage(result.pageXmlId, true);
+        });
+
+        var pageNameSpan = document.createElement("span");
+        $(pageNameSpan).addClass("reader-search-result-name");
+        pageNameSpan.innerHTML = result.pageName;
+
+        var resultBeforeSpan = document.createElement("span");
+        $(resultBeforeSpan).addClass("reader-search-result-before");
+        resultBeforeSpan.innerHTML = result.before;
+        
+        var resultMatchSpan = document.createElement("span");
+        $(resultMatchSpan).addClass("reader-search-result-match");
+        resultMatchSpan.innerHTML = result.match;
+
+        var resultAfterSpan = document.createElement("span");
+        $(resultAfterSpan).addClass("reader-search-result-after");
+        resultAfterSpan.innerHTML = result.after;
+
+        resultItemDiv.appendChild(pageNameSpan);
+        resultItemDiv.appendChild(resultBeforeSpan);
+        resultItemDiv.appendChild(resultMatchSpan);
+        resultItemDiv.appendChild(resultAfterSpan);
+
+        return resultItemDiv;
     }
 }
 
@@ -1320,6 +1469,29 @@ class TextPanel extends RightSidePanel {
                     $(this.windowBody).find('#' + page.xmlId).removeClass("loading");
                     $(this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
                 }
+
+                //TODO in text will be comments and notes too. Styles for css classes are in reader less files already. Structure will be as follows:
+                /*  divs with class 'itj-.*' WILL BE FROM EXIST HTML XSLT
+                  <div class="page-wrapper">
+                     <div class="page" id="t-1.body-1.div-2.div-1.div-1.p-1.pb-1">
+                        <div class="itj-page"> 
+                           <div class="itj-page-text">
+                                <span class="info pb space" data-title="číslo strany rukopisu" data-page-name="2v"></span>ten nebude dokonalý lékař, aniž muož býti. Ale máť býti nazván nedouk, a to proto, že se jest tomu nenaučil, neboť mnozí hojie, a nevědie, co hojie. A to proto, že sú se tomu neučili, i protož tomu právě vyrozuměti nemohú, nebo v tom obyčeje nemají. I protož mistr Anton praví a přikazuje a řka: „Radím každému lékaři takovému, a zvláště neumělému, aby se v takové věci neznámé všetečně neuvazoval a nepletl se v to, což provésti neumie, aby svým neuměním člověka nezavedl a nebo jeho 
+                            </div>
+                            <div class="itj-page-notes">
+                                <div class="itj-page-note">Moje malinkata poznamka o zrozeni divu</div>
+                                <div class="itj-page-note">Moje malinkata poznamka o zrozeni divu 2</div>
+                                <div class="itj-page-note">Moje malinkata poznamka o zrozeni divu 2</div>
+                                <div class="itj-page-note">Moje malinkata dosnvfoirhogidhfbibhuidrfsbhidhbfgibhnighd9fsg poznamka o zrozeni divu 2</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-name">[2v]</div>
+                  </div>
+                  
+                 */
+
+                //TODO if we add class "show-notes" to div with class "reader-text" notes will be showed.If class "show-notes" is removed then notes are hidden;
             },
             error: (response) => {
                 $(pageContainer).empty();
@@ -1383,4 +1555,13 @@ class ContentItem {
     get childBookContentItems(): JSON[] {
         return this._childBookContentItems;
     }
+}
+
+
+class SearchResult {
+    pageXmlId: string;
+    pageName: string;
+    before: string;
+    after: string;
+    match; string;
 }

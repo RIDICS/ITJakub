@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using System.ServiceModel;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
 
 namespace ITJakub.SearchService
@@ -50,12 +52,12 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetDictionaryEntryFromSearch(searchCriterias, bookId, versionId, xmlEntryId, transformationName, outputFormat, transformationLevel);
         }
 
-        public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
+        public SearchResultContractList ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
-            m_searchServiceManager.ListSearchEditionsResults(searchCriterias);
+            return m_searchServiceManager.ListSearchEditionsResults(searchCriterias);
         }
 
-        public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
+        public HeadwordListContract ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
         {
             return m_searchServiceManager.ListSearchDictionariesResults(searchCriterias);
         }
@@ -68,6 +70,11 @@ namespace ITJakub.SearchService
         public int GetSearchCriteriaResultsCount(List<SearchCriteriaContract> nonMetadataCriterias)
         {
             return m_searchServiceManager.GetSearchCriteriaResultsCount(nonMetadataCriterias);
+        }
+
+        public PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchServiceManager.GetSearchEditionsPageList(searchCriterias);
         }
 
         public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName,

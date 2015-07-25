@@ -206,16 +206,21 @@ class BookInfo implements IBookInfo {
 
 }
 
-/*
- *      [EnumMember] Edition = 0, //Edice
-        [EnumMember] Dictionary = 1, //Slovnik
-        [EnumMember] Grammar = 2, //Mluvnice
-        [EnumMember] ProfessionalLiterature = 3, //Odborna literatura
-        [EnumMember] TextBank = 4, //Textova banka
-        [EnumMember] BibliographicalItem = 5,
-        [EnumMember] CardFile = 6,
- * 
- */
+
+//
+//  [DataContract]
+//  public enum BookTypeEnumContract : byte
+//  {
+//    [EnumMember] Edition = 0, //Edice
+//    [EnumMember] Dictionary = 1, //Slovnik
+//    [EnumMember] Grammar = 2, //Mluvnice
+//    [EnumMember] ProfessionalLiterature = 3, //Odborna literatura
+//    [EnumMember] TextBank = 4, //Textova banka
+//    [EnumMember] BibliographicalItem = 5,
+//    [EnumMember] CardFile = 6,
+        
+//    }
+
 enum BookTypeEnum {
     Edition = 0, //Edice
     Dictionary = 1, //Slovnik
@@ -223,7 +228,7 @@ enum BookTypeEnum {
     ProfessionalLiterature = 3, //Odborna literatura
     TextBank = 4, //Textova banka
     BibliographicalItem = 5,
-    CardFile = 6, 
+    CardFile = 6,
 }
 
 interface IPage {

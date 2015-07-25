@@ -43,6 +43,8 @@ class Search {
     private lastQuery: string;
     private lastQueryWasJson: boolean;
 
+    private disabledOptions: Array<SearchTypeEnum>;
+
     constructor(container: HTMLDivElement, processSearchJsonCallback: (jsonData: string) => void, processSearchTextCallback: (text: string) => void) {
         this.container = container;
         this.processSearchJsonCallback = processSearchJsonCallback;
@@ -50,6 +52,8 @@ class Search {
     }
 
     makeSearch(disabledOptions?: Array<SearchTypeEnum>) {
+        this.disabledOptions = disabledOptions;
+
         var searchAreaDiv = document.createElement("div");
         $(searchAreaDiv).addClass("regex-search-div");
 
@@ -115,7 +119,7 @@ class Search {
             $(this.advancedButton).css("visibility", "hidden");
 
             if (this.searchbarAdvancedEditorContainer.children.length === 0) {
-                this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer,(json: string) => this.closeAdvancedSearchEditor(json));
+                this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer,(json: string) => this.closeAdvancedSearchEditorWithImport(json),(json: string) => this.closeAdvancedSearchEditor());
                 this.advancedRegexEditor.setDisabledOptions(disabledOptions);
                 this.advancedRegexEditor.makeRegExSearch();
                 $(this.searchbarAdvancedEditorContainer).hide();
@@ -133,8 +137,12 @@ class Search {
         });
     }
 
-    closeAdvancedSearchEditor(jsonData: string) {
+    closeAdvancedSearchEditorWithImport(jsonData: string) {
         this.importJsonToTextField(jsonData);
+        this.closeAdvancedSearchEditor();
+    }
+
+    closeAdvancedSearchEditor() {
         $(this.searchbarAdvancedEditorContainer).slideUp(this.speedAnimation);      //hide advanced search
         $(this.searchInputTextbox).prop('disabled', false);
         $(this.searchButton).prop('disabled', false);
@@ -144,10 +152,12 @@ class Search {
     importJsonToTextField(json: string) {
         $(this.searchInputTextbox).text(json);
         $(this.searchInputTextbox).val(json);
+        $(this.searchInputTextbox).change();
     }
 
-    importJsonToAdvancedSearch(json: string) {
-        
+    public processSearchQuery(query: string) {
+        this.importJsonToTextField(query);
+        this.processSearch();
     }
 
     private isValidJson(data: string): boolean {
@@ -164,7 +174,8 @@ class Search {
         this.lastQuery = searchboxValue;
         if (this.isValidJson(searchboxValue)) {
             this.lastQueryWasJson = true;
-            this.processSearchJsonCallback(searchboxValue);
+            var query = this.getFilteredQuery(searchboxValue, this.disabledOptions); //filter disabled options
+            this.processSearchJsonCallback(query);
         } else {
             this.lastQueryWasJson = false;
             this.processSearchTextCallback(searchboxValue);
@@ -175,6 +186,19 @@ class Search {
         return this.lastQuery;
     }
 
+    getLastQueryFiltered(disabledOptions: Array<SearchTypeEnum>): string {
+        return this.getFilteredQuery(this.getLastQuery(), disabledOptions);
+    }
+
+    getFilteredQuery(query: string, disabledOptions: Array<SearchTypeEnum>):string {
+        if (!this.isValidJson(query)) return query;
+        var actualState = this.advancedRegexEditor.getConditionsResultJSON();
+        this.advancedRegexEditor.importJson(query);
+        var filteredQuery = this.advancedRegexEditor.getConditionsResultJSON(disabledOptions);
+        this.advancedRegexEditor.importJson(actualState);
+        return filteredQuery;
+    }
+
     isLastQueryJson(): boolean {
         return this.lastQueryWasJson;
     }
@@ -182,20 +206,19 @@ class Search {
     isLastQueryText(): boolean {
         return !this.lastQueryWasJson;
     }
-
-
-
 }
 
 class RegExAdvancedSearchEditor {
     private regexDoneCallback: (jsonData: string) => void;
+    private regexCancelledCallback: (jsonData: string) => void;
     private container: HTMLDivElement;
     private innerContainer: HTMLDivElement;
     private regExConditions: Array<RegExConditionListItem>;
     private disabledOptionsArray: Array<SearchTypeEnum>;
 
-    constructor(container: HTMLDivElement, regexDoneCallback: (jsonData:string) => void){
+    constructor(container: HTMLDivElement, regexDoneCallback: (jsonData: string) => void, regexCancelledCallback: (jsonData: string) => void){
         this.regexDoneCallback = regexDoneCallback;
+        this.regexCancelledCallback = regexCancelledCallback;
         this.container = container;
     }
 
@@ -208,6 +231,7 @@ class RegExAdvancedSearchEditor {
         this.regExConditions = [];
 
         var commandsDiv = document.createElement("div");
+        $(commandsDiv).addClass("regex-search-buttons-bottom-area");
 
         var sentButton = HtmlItemsFactory.createButton("Dokončit");
         $(sentButton).addClass("regex-search-button");
@@ -215,6 +239,14 @@ class RegExAdvancedSearchEditor {
         $(sentButton).click(() => {
             var json = this.getConditionsResultJSON();
             this.regexDoneCallback(json);
+        });
+
+        var cancelButton = HtmlItemsFactory.createButton("Zrušit");
+        $(cancelButton).addClass("regex-search-button");
+        commandsDiv.appendChild(cancelButton);
+        $(cancelButton).click(() => {
+            var json = this.getConditionsResultJSON();
+            this.regexCancelledCallback(json);
         });
 
         this.innerContainer = document.createElement("div");
@@ -230,8 +262,10 @@ class RegExAdvancedSearchEditor {
 
         for (var i = 0; i < jsonDataArray.length; i++) {
             var conditionData = jsonDataArray[i];
-            this.addNewCondition();
-            this.getLastCondition().importData(conditionData);
+            if (typeof this.disabledOptionsArray === "undefined" || this.disabledOptionsArray === null || $.inArray(conditionData.searchType, this.disabledOptionsArray) < 0) {
+                this.addNewCondition();
+                this.getLastCondition().importData(conditionData);
+            }
         }
     }
 
@@ -240,8 +274,7 @@ class RegExAdvancedSearchEditor {
             this.getLastCondition().setTextDelimeter();
         }
         var newRegExConditions = new RegExConditionListItem(this);
-        newRegExConditions.disbaleOptions(this.disabledOptionsArray);
-        newRegExConditions.makeRegExCondition();
+        newRegExConditions.makeRegExCondition(this.disabledOptionsArray);
         newRegExConditions.setClickableDelimeter();
         if (!useDelimiter) {
             newRegExConditions.removeDelimeter();
@@ -275,20 +308,22 @@ class RegExAdvancedSearchEditor {
         }
     }
 
-    getConditionsResultObject(): Object {
+    getConditionsResultObject(disabledOptions?: Array<SearchTypeEnum>): Object {
         var resultArray = new Array();
 
         for (var i = 0; i < this.regExConditions.length; i++) {
             var regExCondition = this.regExConditions[i];
-            resultArray.push(regExCondition.getConditionValue());
-
+            var regExConditionValue = regExCondition.getConditionValue();
+            if (typeof disabledOptions === "undefined" || disabledOptions === null || $.inArray(regExConditionValue.searchType, disabledOptions) < 0) {
+                resultArray.push(regExConditionValue); 
+            }
         }
 
         return resultArray;
     }
 
-    getConditionsResultJSON(): string {
-        var jsonString = JSON.stringify(this.getConditionsResultObject());
+    getConditionsResultJSON(disabledOptions?: Array<SearchTypeEnum>): string {
+        var jsonString = JSON.stringify(this.getConditionsResultObject(disabledOptions));
         return jsonString;
     }
 
@@ -306,8 +341,6 @@ class RegExConditionListItem {
     private innerCondition: IRegExConditionListBase;
     private searchDestinationSelect: HTMLSelectElement;
 
-    private disabledOptions: Array<SearchTypeEnum>;
-
     constructor(parent: RegExAdvancedSearchEditor) {
         this.parent = parent;
     }
@@ -316,8 +349,6 @@ class RegExConditionListItem {
         $(this.searchDestinationSelect).val(conditionData.searchType.toString());
         $(this.searchDestinationSelect).change();
         this.innerCondition.importData(conditionData);
-
-        //TODO implement disabled options
     }
 
     getHtml(): HTMLDivElement {
@@ -396,7 +427,7 @@ class RegExConditionListItem {
         return this.selectedSearchType;
     }
 
-    disbaleOptions(disabledOptions: Array<SearchTypeEnum>) {
+    private disbaleOptions(disabledOptions: Array<SearchTypeEnum>) {
 
         if (typeof disabledOptions === "undefined" || disabledOptions === null) return;
         
@@ -413,11 +444,9 @@ class RegExConditionListItem {
                 if (visibleChilds.length === 0) $(optGroup).remove();
             }
         }
-
-        this.disabledOptions = disabledOptions;
     }
 
-    makeRegExCondition() {
+    makeRegExCondition(disabledOptions?: Array<SearchTypeEnum>) {
 
         var conditionsDiv = document.createElement("div");
         $(conditionsDiv).addClass("regexsearch-condition-main-div");
@@ -460,8 +489,6 @@ class RegExConditionListItem {
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", SearchTypeEnum.Headword.toString()));
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Heslová stať", SearchTypeEnum.HeadwordDescription.toString()));
 
-        this.selectedSearchType = SearchTypeEnum.Fulltext;
-
         $(searchDestinationSelect).change((eventData: Event) => {
             var oldSelectedSearchType = this.selectedSearchType;
             this.selectedSearchType = parseInt($(eventData.target).val());
@@ -472,8 +499,9 @@ class RegExConditionListItem {
         });
 
         this.searchDestinationSelect = searchDestinationSelect;
+        
 
-        this.disbaleOptions(this.disabledOptions);
+        this.disbaleOptions(disabledOptions);
 
         $(conditionsDiv).append(mainSearchDiv);
 
@@ -488,6 +516,9 @@ class RegExConditionListItem {
         $(conditionsDiv).append(delimeterDiv);
         this.setClickableDelimeter();
         this.html = conditionsDiv;
+
+        $(searchDestinationSelect).val(SearchTypeEnum.Fulltext.toString());
+        $(searchDestinationSelect).change();
     }
 
     private changeConditionType(newSearchType : SearchTypeEnum, oldSearchType: SearchTypeEnum) {

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.SearchService.Core.Exist;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 
 namespace ITJakub.SearchService
 {
@@ -74,13 +76,13 @@ namespace ITJakub.SearchService
                 transformationName, outputFormat,
                 transformationLevel);
         }
-        
-        public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
+
+        public SearchResultContractList ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
-            m_existManager.ListSearchEditionsResults(searchCriterias);
+            return m_existManager.ListSearchEditionsResults(searchCriterias);
         }
 
-        public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
+        public HeadwordListContract ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
         {
             return m_existManager.ListSearchDictionariesResults(searchCriterias);
         }
@@ -93,6 +95,11 @@ namespace ITJakub.SearchService
         public int GetSearchCriteriaResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
             return m_existManager.GetSearchCriteriaResultsCount(searchCriterias);
+        }
+
+        public PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias)
+        {
+            return m_existManager.GetSearchEditionsPageList(searchCriterias);
         }
     }
 }

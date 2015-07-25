@@ -46,6 +46,12 @@ class DictionaryViewer {
 
     private searchAndDisplay(pageNumber: number) {
         this.isRequestToPrint = false;
+        if (this.recordCount === 0) {
+            $(this.headwordListContainer).empty();
+            $(this.headwordDescriptionContainer).empty();
+            return;
+        }
+        
         this.showPageCallback(pageNumber);
     }
 

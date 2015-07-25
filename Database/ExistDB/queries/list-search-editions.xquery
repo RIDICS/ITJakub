@@ -10,6 +10,7 @@ declare namespace a="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Cont
 declare namespace r="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract";
 declare namespace i="http://www.w3.org/2001/XMLSchema-instance";
 declare namespace b="http://schemas.microsoft.com/2003/10/Serialization/Arrays";
+declare namespace sc="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Criteria";
 
 
 declare option exist:serialize "highlight-matches=elements";
@@ -27,22 +28,40 @@ let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzí
 
 let $queries := search:get-queries-from-search-criteria($query-criteria(://a:SearchCriteriaContract[a:Key = 'Fulltext']:))
 
+
+let $result-params := $query-criteria/r:ResultSearchCriteriaContract/r:ResultSpecifications
+
 (:~ od jakého záznamu se vracejí výsledky, tj. knihy :)
-let $result-start := 1
+let $result-start := if($result-params/sc:Start) then
+		if($result-params/sc:Start[@i:nil='true']) then
+			1 
+		else xs:int($result-params/sc:Start) else 
+			1
 (:~ kolik záznamů má být ve vraceném výsledku; 0 znamená všechny; pokud je číslo větší než celkový počet záznamů, vrátí se všechny :)
-let $result-count := 0
+let $result-count := if($result-params/sc:Count) then
+	if($result-params/sc:Count[@i:nil='true']) then
+			1
+	else xs:int($result-params/sc:Count) else 
+			20
 
 (:~ od jakého záznamu se vracejí doklady s výskytem hledaného výrazu :)
-let $kwic-start := 1
+let $kwic-start := if($result-params/sc:HitSettingsContract/sc:Start) then xs:int($result-params/sc:HitSettingsContract/sc:Start) else 1
 (:~ kolik záznamů s doklady s výskytem hledaného výrazu se vrací; pokud je číslo větší než celkový počet dokladů, vrátí se všechny :)
-let $kwic-count := 3
+let $kwic-count := if($result-params/sc:HitSettingsContract/sc:Count) then xs:int($result-params/sc:HitSettingsContract/sc:Count) else 3
 (:~ počet znaků zleva a zprava pro zobrazení dokladů :)
-let $kwic-context-length := 50
+let $kwic-context-length := if($result-params/sc:HitSettingsContract/sc:ContextLength) then xs:int($result-params/sc:HitSettingsContract/sc:ContextLength) else 50
 
 (:~ kriterium použité pro seřazení výsledků :)
-let $sort-criterion := "datace"
+let $sort-criterion := if($result-params/sc:Sorting) then
+	if($result-params/sc:Sorting[@i:nil='true']) then
+		"Title"
+	else $result-params/sc:Sorting/text() 
+	else "Title"
+	
 (:~ kriterium použité pro seřazení výsledků :)
-let $sort-direction := "Ascending" (: Descending :)
+let $sort-direction := if($result-params/sc:Direction) then $result-params/sc:Direction/text() else "Ascending" (: Descending :)
+
+
 
 
 (:~ pomocná proměnná; vrací všechny požadované knihy z dotazu :)
@@ -57,12 +76,15 @@ let $collection-path := "/apps/jacob/data/"
 (:~ výchozí kolekce prohledávaných dokumentů :)
 let $collection := collection($collection-path)
 
+let $collection := $collection[./tei:TEI[@n = $book-ids][@change = $book-version-ids]] 
+
 
 (:~ dokumenty, které obsahují hledaný výraz :)
 (:~ TODO: dodat řazení, více proledávaných elementů :)
 let $documents := search:get-query-documents-matches($collection, $queries)
 let $documents := for $document in $documents 
-	order by $document/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:history/tei:origin/tei:origDate[@notBefore]
+	(:order by $document/tei:TEI/tei:teiHeader//tei:origDate[@notBefore]:)
+		order by $document/tei:TEI/tei:teiHeader//tei:titleStmt/tei:title
 	return $document
 	
 let $result-documents := if($result-count = 0) then
@@ -70,13 +92,16 @@ let $result-documents := if($result-count = 0) then
 	else
 		subsequence($documents, $result-start, $result-count)
 
-return <ArrayOfSearchResultContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+return
+<SearchResultContractList xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+<SearchResults>
 	{
 for $document in $result-documents
 	let $hits := search:get-document-search-hits($document, $queries, $kwic-start, $kwic-count, $kwic-context-length)
 	return <SearchResultContract>
-					<BookXmlId>{string($document/@n)}</BookXmlId>
+					<BookXmlId>{string($document/tei:TEI/@n)}</BookXmlId>
 					{$hits}
-					<VersionXmlId>{$document/substring-after(@change, '#')}</VersionXmlId>
+					<VersionXmlId>{$document/tei:TEI/substring-after(@change, '#')}</VersionXmlId>
 				</SearchResultContract>
-} </ArrayOfSearchResultContract>
+} </SearchResults>
+</SearchResultContractList>

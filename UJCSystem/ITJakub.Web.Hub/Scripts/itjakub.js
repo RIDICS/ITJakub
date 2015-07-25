@@ -11,7 +11,30 @@ $(document).ready(function () {
 function getQueryStringParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    if (results === null)
+        return "";
+    var decoded = decodeURIComponent(results[1].replace(/\+/g, " "));
+    decoded = replaceSpecialChars(decoded);
+    return decoded;
+}
+function replaceSpecialChars(text) {
+    var decoded = text.replace(/&amp;/g, '&'); //TODO make better replace
+    decoded = decoded.replace(/&gt;/g, '>');
+    decoded = decoded.replace(/&lt;/g, '<');
+    decoded = decoded.replace(/&quot;/g, '"');
+    decoded = decoded.replace(/&#39;/g, "'");
+    return decoded;
+}
+function updateQueryStringParameter(key, value) {
+    var uri = window.location.href;
+    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+    if (uri.match(re)) {
+        history.pushState(null, null, uri.replace(re, '$1' + key + "=" + encodeURIComponent(value) + '$2'));
+    }
+    else {
+        history.pushState(null, null, uri + separator + key + "=" + encodeURIComponent(value));
+    }
 }
 function getBaseUrl() {
     var baseUrl = $("#baseUrl").data("path");

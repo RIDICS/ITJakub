@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
 
 namespace ITJakub.Core.SearchService
@@ -177,11 +179,11 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public void ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
+        public SearchResultContractList ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias)
         {
             try
             {
-                Channel.ListSearchEditionsResults(searchCriterias);
+                return Channel.ListSearchEditionsResults(searchCriterias);
             }
             catch (CommunicationException ex)
             {
@@ -203,7 +205,7 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
+        public HeadwordListContract ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
         {
             try
             {
@@ -260,6 +262,32 @@ namespace ITJakub.Core.SearchService
             try
             {
                 return Channel.GetSearchCriteriaResultsCount(nonMetadataCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetSearchEditionsPageList(searchCriterias);
             }
             catch (CommunicationException ex)
             {
