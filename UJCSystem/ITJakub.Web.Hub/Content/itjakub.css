@@ -961,6 +961,10 @@ div.dummy-page {
 .reader-search-result-paging {
   text-align: center;
 }
+/*testing class for displaying correct pages that contains search match */
+.search-unloaded {
+  background-color: palegoldenrod;
+}
 .dropdown-select {
   margin-right: 5px;
   float: left;

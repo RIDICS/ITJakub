@@ -1,4 +1,5 @@
-﻿using System.Web.Helpers;
+﻿using System;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using ITJakub.Shared.Contracts;
 
@@ -20,6 +21,15 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             var mainServiceClient = new ItJakubServiceClient();
             var text = mainServiceClient.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html, BookTypeEnumContract.Edition);
             return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
+        }
+
+        //TODO add json or text parameter (2 methods) and move it to right controller by module
+        public ActionResult GetBookSearchPageByXmlId(string bookId, string pageXmlId)
+        {
+            var mainServiceClient = new ItJakubServiceClient();
+            throw new NotImplementedException();
+            var text = mainServiceClient.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html, BookTypeEnumContract.Edition); //TODO change on method for retrieve page with search result
+            return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetBookPageList(string bookId)

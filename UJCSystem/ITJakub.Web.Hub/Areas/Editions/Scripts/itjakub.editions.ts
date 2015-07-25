@@ -38,7 +38,7 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             contentType: 'application/json',
             success: response => {
                 var convertedResults = convertSearchResults(response["results"]);
-                readerPlugin.showSearch(convertedResults);
+                readerPlugin.showSearchInPanel(convertedResults);
             }
         });
     }
@@ -59,7 +59,7 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             contentType: 'application/json',
             success: response => {
                 var convertedResults = convertSearchResults(response["results"]);
-                readerPlugin.showSearch(convertedResults);
+                readerPlugin.showSearchInPanel(convertedResults);
             }
         });
     }
@@ -98,7 +98,7 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
-                //readerPlugin.showSearchResultInPages(response["pages"]); //TODO implement in reader plugin
+                readerPlugin.showSearchResultInPages(response["pages"]);
             }
         });
     }
@@ -128,7 +128,7 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
-                //readerPlugin.showSearchResultInPages(response["pages"]); //TODO implement in reader plugin
+                readerPlugin.showSearchResultInPages(response["pages"]);
             }
         });
     }
