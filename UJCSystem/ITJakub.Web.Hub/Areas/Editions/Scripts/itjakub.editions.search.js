@@ -1,3 +1,4 @@
+var search;
 $(document).ready(function () {
     var booksCountOnPage = 3;
     var bookIds = new Array();
@@ -41,7 +42,6 @@ $(document).ready(function () {
             }
         });
     }
-    var search;
     function pageClickCallbackForBiblModule(pageNumber) {
         if (search.isLastQueryJson()) {
             editionAdvancedSearchPaged(search.getLastQuery(), pageNumber);
@@ -96,4 +96,8 @@ $(document).ready(function () {
     var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
 });
+function listBook(target) {
+    var bookId = $(target).parents("li.list-item").attr("data-bookid");
+    window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
+}
 //# sourceMappingURL=itjakub.editions.search.js.map

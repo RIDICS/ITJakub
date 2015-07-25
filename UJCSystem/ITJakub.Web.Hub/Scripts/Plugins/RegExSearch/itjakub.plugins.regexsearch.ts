@@ -138,7 +138,7 @@ class Search {
     }
 
     closeAdvancedSearchEditorWithImport(jsonData: string) {
-        this.importJsonToTextField(jsonData);
+        this.writeJsonToTextField(jsonData);
         this.closeAdvancedSearchEditor();
     }
 
@@ -149,14 +149,14 @@ class Search {
         $(this.advancedButton).css("visibility", "visible");
     }
 
-    importJsonToTextField(json: string) {
+    writeJsonToTextField(json: string) {
         $(this.searchInputTextbox).text(json);
         $(this.searchInputTextbox).val(json);
         $(this.searchInputTextbox).change();
     }
 
     public processSearchQuery(query: string) {
-        this.importJsonToTextField(query);
+        this.writeJsonToTextField(query);
         this.processSearch();
     }
 
@@ -175,6 +175,7 @@ class Search {
         if (this.isValidJson(searchboxValue)) {
             this.lastQueryWasJson = true;
             var query = this.getFilteredQuery(searchboxValue, this.disabledOptions); //filter disabled options
+            this.writeJsonToTextField(query);
             this.processSearchJsonCallback(query);
         } else {
             this.lastQueryWasJson = false;

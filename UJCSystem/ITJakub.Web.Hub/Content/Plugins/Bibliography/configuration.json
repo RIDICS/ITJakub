@@ -103,10 +103,10 @@
         },
         "right-panel": {
             "info-button": {
-                "onclick": "alert('Test')"
+                "onclick": "listBook(this)"
             },
             "read-button": {
-                "url": "Editions/Editions/Listing?bookId={BookXmlId}"
+                "onclick": "listBook(this)"
             },
             "variables": {
                 "$test": {
@@ -265,10 +265,10 @@
         },
         "right-panel": {
             "info-button": {
-                "onclick": "alert('Test')"
+                "onclick": "listBook(this)"
             },
             "read-button": {
-                "url": "Editions/Editions/Listing?bookId={BookXmlId}"
+                "onclick": "listBook(this)"
             }
 
         }

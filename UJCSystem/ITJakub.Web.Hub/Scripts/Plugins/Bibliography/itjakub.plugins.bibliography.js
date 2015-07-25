@@ -55,15 +55,10 @@ var BibliographyModule = (function () {
     BibliographyModule.prototype.makeBibliography = function (bibItem) {
         var liElement = document.createElement('li');
         $(liElement).addClass('list-item');
-        $(liElement).attr("data-bookid", bibItem.BookId);
+        $(liElement).attr("data-bookid", bibItem.BookXmlId);
         $(liElement).attr("data-booktype", bibItem.BookType);
         $(liElement).attr("data-name", bibItem.Title);
         $(liElement).attr("data-century", bibItem.Century);
-        //TODO toggle uncommented with commented code after testing
-        //$(liElement).data('bookid', bibItem.BookXmlId);
-        //$(liElement).data('booktype', bibItem.BookType);
-        //$(liElement).data('name', bibItem.Title);
-        //$(liElement).data('century', bibItem.Century); //TODO add values for sorting
         var visibleContent = document.createElement('div');
         $(visibleContent).addClass('visible-content');
         var bibFactory;
@@ -121,14 +116,29 @@ var BibliographyModule = (function () {
     };
     return BibliographyModule;
 })();
-//TODO remove or move to separated file
-var BookInfo = (function () {
-    function BookInfo() {
-        this.BookId = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
-        this.Title = "PasKal";
-    }
-    return BookInfo;
-})();
+////TODO remove or move to separated file
+//class BookInfo implements IBookInfo {
+//    BookXmlId = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
+//    //BookXmlId = "%7BFA10177B-25E6-4BB6-B061-0DB988AD3840%7D";
+//    BookType: BookTypeEnum;
+//    Title = "PasKal";
+//    Editor: string;
+//    Pattern: string;
+//    SourceAbbreviation: string;
+//    RelicAbbreviation: string;
+//    LiteraryType: string;
+//    LiteraryGenre: string;
+//    LastEditation: string;
+//    EditationNote: string; //anchor href?
+//    Copyright: string;
+//    Pages: IPage[];
+//    Archive: IArchive;
+//    Century: number;
+//    Sign: string;
+//    Authors: IAuthor[];
+//    Description: string;
+//    Year: number;
+//}
 //
 //  [DataContract]
 //  public enum BookTypeEnumContract : byte
