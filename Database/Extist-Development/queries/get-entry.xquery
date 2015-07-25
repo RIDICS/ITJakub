@@ -26,15 +26,14 @@ let $outputFormat := request:get-parameter("outputFormat", "")
 let $xslPath := request:get-parameter("_xsl", "")
 
 let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $search:default-search-criteria)
-let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzích parse-xml :)
-
-let $queries := search:get-queries-from-search-criteria($query-criteria)
+let $queries := search:get-queries-from-search-criteria-string($query-criteria-param)
 
 
 let $document := vwcoll:getDocument($documentId, $versionId)
 
 let $entryFragment := $document/id($entryXmlId)
 
+let $entryFragment := search:match-hits-for-entry-element($entryFragment, $queries)
 
 (:let $xslPath := "/db/apps/jacob/transformations/pageToHtml.xsl":)
 let $template := doc(escape-html-uri($xslPath)) 

@@ -21,9 +21,7 @@ declare option exist:serialize "highlight-matches=elements";
 	local:get-query-criteria-param()
 :)	
 
-let $defaultSearchCriteria := '<ResultSearchCriteriaContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract"></ResultSearchCriteriaContract>'
-
-let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $defaultSearchCriteria)
+let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $search:default-search-criteria)
 let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzích parse-xml :)
 
 let $queries := search:get-queries-from-search-criteria($query-criteria(://a:SearchCriteriaContract[a:Key = 'Fulltext']:))
