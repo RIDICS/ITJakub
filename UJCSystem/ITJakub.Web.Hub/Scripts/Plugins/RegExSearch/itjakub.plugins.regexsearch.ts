@@ -107,6 +107,11 @@ class Search {
         $(searchAreaDiv).append(searchbarAdvancedEditor);
 
         this.searchbarAdvancedEditorContainer = searchbarAdvancedEditor;
+
+        this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer,(json: string) => this.closeAdvancedSearchEditorWithImport(json),(json: string) => this.closeAdvancedSearchEditor());
+        this.advancedRegexEditor.setDisabledOptions(disabledOptions);
+        this.advancedRegexEditor.makeRegExSearch();
+        $(this.searchbarAdvancedEditorContainer).hide();
         
         $(this.container).append(searchAreaDiv);
 
@@ -117,13 +122,6 @@ class Search {
 
         $(this.advancedButton).click(() => {
             $(this.advancedButton).css("visibility", "hidden");
-
-            if (this.searchbarAdvancedEditorContainer.children.length === 0) {
-                this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer,(json: string) => this.closeAdvancedSearchEditorWithImport(json),(json: string) => this.closeAdvancedSearchEditor());
-                this.advancedRegexEditor.setDisabledOptions(disabledOptions);
-                this.advancedRegexEditor.makeRegExSearch();
-                $(this.searchbarAdvancedEditorContainer).hide();
-            }
 
             if ($(this.searchbarAdvancedEditorContainer).is(":hidden")) {       //show advanced search
                 var textboxValue = $(this.searchInputTextbox).val();

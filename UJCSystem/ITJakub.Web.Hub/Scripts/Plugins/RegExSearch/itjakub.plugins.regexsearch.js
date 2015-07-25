@@ -79,18 +79,16 @@ var Search = (function () {
         $(searchbarInputDiv).addClass("regex-searchbar-advanced-editor");
         $(searchAreaDiv).append(searchbarAdvancedEditor);
         this.searchbarAdvancedEditorContainer = searchbarAdvancedEditor;
+        this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer, function (json) { return _this.closeAdvancedSearchEditorWithImport(json); }, function (json) { return _this.closeAdvancedSearchEditor(); });
+        this.advancedRegexEditor.setDisabledOptions(disabledOptions);
+        this.advancedRegexEditor.makeRegExSearch();
+        $(this.searchbarAdvancedEditorContainer).hide();
         $(this.container).append(searchAreaDiv);
         $(this.searchButton).click(function (event) {
             _this.processSearch();
         });
         $(this.advancedButton).click(function () {
             $(_this.advancedButton).css("visibility", "hidden");
-            if (_this.searchbarAdvancedEditorContainer.children.length === 0) {
-                _this.advancedRegexEditor = new RegExAdvancedSearchEditor(_this.searchbarAdvancedEditorContainer, function (json) { return _this.closeAdvancedSearchEditorWithImport(json); }, function (json) { return _this.closeAdvancedSearchEditor(); });
-                _this.advancedRegexEditor.setDisabledOptions(disabledOptions);
-                _this.advancedRegexEditor.makeRegExSearch();
-                $(_this.searchbarAdvancedEditorContainer).hide();
-            }
             if ($(_this.searchbarAdvancedEditorContainer).is(":hidden")) {
                 var textboxValue = $(_this.searchInputTextbox).val();
                 if (_this.isValidJson(textboxValue)) {
