@@ -7,8 +7,6 @@ import module namespace search = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/se
 
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
-
-declare namespace itj = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/exist";
 declare namespace exist = "http://exist.sourceforge.net/NS/exist"; 
 
 declare option exist:serialize "highlight-matches=elements";
@@ -21,38 +19,34 @@ declare option exist:serialize "highlight-matches=elements";
 
 
 
-let $start := request:get-parameter("start", "")
-let $end := request:get-parameter("end", "")
 let $documentId := request:get-parameter("bookId", "")
 let $versionId := request:get-parameter("versionId", "")
-let $pagePosition := request:get-parameter("page", 1)
-let $pageXmlId := request:get-parameter("pageXmlId", "")
+let $entryXmlId := request:get-parameter("xmlEntryId", "")
 let $outputFormat := request:get-parameter("outputFormat", "")
 let $xslPath := request:get-parameter("_xsl", "")
+
+let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $search:default-search-criteria)
+let $queries := search:get-queries-from-search-criteria-string($query-criteria-param)
+
+
 let $document := vwcoll:getDocument($documentId, $versionId)
 
-let $defaultSearchCriteria := '<ResultSearchCriteriaContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract"></ResultSearchCriteriaContract>'
+let $entryFragment := $document/id($entryXmlId)
 
-let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $defaultSearchCriteria)
-let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzích parse-xml :)
-
-let $queries := search:get-queries-from-search-criteria($query-criteria)
-
-
-let $documentFragment := vwpaging:get-document-fragment($document, $start, $end, $pageXmlId, $pagePosition)
-
-
-
+let $entryFragment := search:match-hits-for-entry-element($entryFragment, $queries)
 
 (:let $xslPath := "/db/apps/jacob/transformations/pageToHtml.xsl":)
 let $template := doc(escape-html-uri($xslPath)) 
 let $transformation := 
+	if($outputFormat = "Xml") then
+			$entryFragment
+	else 
 	if($outputFormat = "Html") 
-	then transform:stream-transform($documentFragment, $template, ())
+	then transform:stream-transform($entryFragment, $template, ())
 	else if($outputFormat = "Rtf") 
-		then vwtrans:transform-document-to-rtf($documentFragment, $template)
+		then vwtrans:transform-document-to-rtf($entryFragment, $template)
 		else if($outputFormat = "Pdf") 
-		then vwtrans:transform-document-to-pdf($documentFragment, $template)
+		then vwtrans:transform-document-to-pdf($entryFragment, $template)
 		else()
 
 return $transformation

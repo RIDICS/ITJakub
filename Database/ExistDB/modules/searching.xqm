@@ -7,6 +7,8 @@ import module namespace functx = "http://www.functx.com" at "functx.xqm";
 
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
+declare namespace itj = "http://vokabular.ujc.cas.cz/ns/it-jakub/tei/1.0";
+
 
 import module namespace kwic="http://exist-db.org/xquery/kwic";
 
@@ -27,6 +29,8 @@ declare variable $search:query-options := <query-options>
      <filter-rewrite>yes</filter-rewrite>
   </query-options>;
 
+declare variable $search:default-search-criteria :=
+	'<ResultSearchCriteriaContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract" />';
 
 declare function search:get-query-documents-matches-fulltext($root as node()*, $queries as element()) as node()* { 
 	let $query := $queries//query[@type='Fulltext']
@@ -132,6 +136,25 @@ declare function search:match-hits-by-entry-elements($root as node()*, $query as
 	
 };
 
+declare function search:match-hits-for-entry-element($root as node()*, 
+	$queries as element()?) as node()? {
+
+	let $headword-query := $queries//query[@type='Headword']
+	let $entry-query := $queries//query[@type='HeadwordDescription']
+
+	let $hits :=
+			if($headword-query and $entry-query) then
+				$root[ft:query(.//tei:form, $headword-query, $search:query-options)]
+						[ft:query(., $entry-query, $search:query-options)]
+				else if($entry-query) then
+						$root[ft:query(., $entry-query, $search:query-options)]
+				else if($headword-query) then
+					$root[ft:query(.//tei:form, $headword-query, $search:query-options)]
+				else
+				()
+	return if ($hits) then $hits else $root
+};
+
 
 declare function search:match-hits-by-headword-elements($root as node()*, $query as element()) as item()* {
 	if ($root and $query) then
@@ -165,6 +188,130 @@ declare function search:get-xml-hits-for-dictionaries($hits as element()*, $rid 
 		</HeadwordContract>
 } ;
 
+declare function search:get-document-hits-pages-using-fragments($collection as node()*,
+	$queries as element()) 
+	as node()* {
+		let $fragments := search:get-document-hits-fragments($collection, $queries)
+		return $fragments//tei:pb
+	};
+
+declare function search:get-document-hits-fragments($collection as node()*,
+	$queries as element()) 
+	as node()* {
+	
+		let $fragments := search:get-document-fragments-with-hits($collection, $queries)
+		return $fragments
+} ;
+
+declare function search:get-document-fragments-with-hits($collection as node()*,
+	$queries as element()) as node()* {
+		
+	let $fulltext := search:get-document-fragments-with-hits-fulltext($collection, $queries)
+	let $heading := search:get-document-fragments-with-hits-heading($collection, $queries)
+	let $sentence := search:get-document-fragments-with-hits-sentence($collection, $queries)
+	let $token-distance := search:get-document-fragments-with-hits-token-distance($collection, $queries)
+	let $headwords := search:get-document-fragments-with-hits-entry-and-headwords($collection, $queries)
+	let $entry := ()
+
+	let $hits := search:union-results($fulltext, $heading, $sentence,
+		$token-distance,  $headwords, $entry)
+		
+		return $hits
+
+};
+
+declare function search:get-document-fragments-with-hits-fulltext($collection as node()*,
+	$queries as element()) {
+		let $query := $queries/query[@type = 'Fulltext']
+		let $fragments := 
+		if ($query) then
+		$collection/itj:fragment[.//(tei:p | tei:l)[ft:query(., $query, $search:query-options)]]
+		else ()
+		return $fragments
+	};
+
+declare function search:get-document-fragments-with-hits-heading($collection as node()*,
+	$queries as element()) {
+		let $query := $queries/query[@type = 'Heading']
+		let $fragments :=
+			if ($query) then
+			$collection/itj:fragment[.//(tei:titlePart | tei:head)[ft:query(., $query, $search:query-options)]]
+			else ()
+		return $fragments
+	};
+	
+declare function search:get-document-fragments-with-hits-sentence($collection as node()*,
+	$queries as element()) {
+			let $query := $queries/query[@type = 'Sentence']
+		let $fragments :=
+		if ($query) then
+			$collection/itj:fragment[.//(tei:p | tei:l) [ft:query(., $query, $search:query-options)]]
+			else ()
+		return $fragments
+} ;
+
+declare function search:get-document-fragments-with-hits-token-distance($collection as node()*,
+	$queries as element()) {
+			let $query := $queries/query[@type = 'TokenDistance']
+		let $fragments :=
+			if ($query) then
+			$collection/itj:fragment[.//(tei:p | tei:l)[ft:query(., $query, $search:query-options)]]
+			else ()
+		return $fragments
+} ;
+
+declare function search:get-document-fragments-with-hits-entry-and-headwords($collection as node()*,
+	$queries as element()) {
+	let $headword-query := $queries//query[@type='Headword']
+	let $entry-query := $queries//query[@type='HeadwordDescription']
+
+	let $fragments :=
+			if($headword-query and $entry-query) then
+				$collection/itj:fragment[ft:query(.//tei:form, $headword-query, $search:query-options)]
+						[ft:query(.//tei:entryFree, $entry-query, $search:query-options)]
+				else if($entry-query) then
+						$collection/itj:fragment//tei:entryFree[ft:query(., $entry-query, $search:query-options)]
+				else if($headword-query) then
+					$collection/itj:fragment[ft:query(.//tei:form, $headword-query, $search:query-options)]
+				else
+				()
+	return $fragments
+} ;
+
+
+declare function search:get-document-search-hits-pages($root as node()*,
+	$queries as element()) 
+	as node()* {
+	
+		let $hits := search:get-query-document-hits($root, $queries)
+		let $pages := for $hit in $hits
+			let $expanded-hit := kwic:expand($hit)
+			return search:get-pb-for-hit($root, $expanded-hit)
+		let $pages := for $page in $pages
+			group by $page := $page
+			return $page 
+			
+		return $pages
+	} ;
+	
+	declare function search:get-query-document-hits($root as node()*,
+		$queries as element()) as node()* {
+		
+	let $fulltext := search:get-query-document-hits-fulltext($root, $queries)
+	let $heading := search:get-query-document-hits-heading($root, $queries)
+	let $sentence := search:get-query-document-hits-sentence($root, $queries)
+	let $token-distance := search:get-query-document-hits-token-distance($root, $queries)
+	let $headwords := search:get-hits-by-entry-and-headwords($root, $queries)
+	let $entry := ()
+
+	let $hits := search:union-results($fulltext, $heading, $sentence,
+		$token-distance,  $headwords, $entry)
+		
+		return $hits
+	
+	} ;
+	
+
 declare function search:get-query-documents-matches($root as node()*, $queries as element()) as node()* {
 	let $fulltext := search:get-query-documents-matches-fulltext($root, $queries)
 	let $heading := search:get-query-documents-matches-heading($root, $queries)
@@ -173,7 +320,17 @@ declare function search:get-query-documents-matches($root as node()*, $queries a
 	let $headwords := search:get-query-documents-matches-headwords($root, $queries)
 	let $entry := search:get-query-documents-matches-entry($root, $queries)
 	
-	let $union := $fulltext | $heading | $sentence | $token-distance |  $headwords | $entry
+	let $results := search:union-results($fulltext, $heading, $sentence,
+		$token-distance,  $headwords, $entry)
+	
+	return $results
+		
+} ;
+
+declare function search:union-results($fulltext, $heading, $sentence,
+	$token-distance,  $headwords, $entry) {
+		
+		let $union := $fulltext | $heading | $sentence | $token-distance |  $headwords | $entry
 	let $results :=
     (if ($fulltext) then $fulltext else $union)  intersect
     (if ($heading) then $heading else $union)  intersect
@@ -183,8 +340,7 @@ declare function search:get-query-documents-matches($root as node()*, $queries a
     (if ($entry) then $entry else $union)
 	
 	return $results
-		
-} ;
+};
 
 declare function search:intersect-sequences($item1 as item()*, $item2 as item()*) as item()* {
 	let $union := $item1 | $item2
@@ -368,6 +524,21 @@ $result-start as xs:double, $result-count as xs:double) as item()* {
 
 } ;
 
+
+declare function search:get-document-fragment-with-matches($fragment as node()*, $queries as element()?) {
+	let $fulltext-query := $queries/query[@type='Fulltext']
+	let $matches := $fragment/tei:TEI//(tei:l | tei:p) [ft:query(., $fulltext-query, $search:query-options)]
+	return if ($matches) then $matches else $fragment
+} ;
+
+declare function search:get-entry-with-matches($entry as node()*, $queries as element()?) {
+	$fragment
+} ;
+
+declare function search:get-queries-from-search-criteria-string($search-criteria  as xs:string) as element() {
+	let $query-criteria := util:parse($search-criteria) (: ve vyšších verzích parse-xml :)
+	return search:get-queries-from-search-criteria($query-criteria)
+} ;
 (:~ převede vyhledávací kritéria na seznam dotazů query pro fulltextové vyhledávání :)
 declare function search:get-queries-from-search-criteria($search-criteria  as node()*) as element() {
 	let $xslt :=

@@ -1,5 +1,6 @@
 xquery version "3.0";
 import module namespace search = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/search" at "../modules/searching.xqm";
+import module namespace coll = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/collection" at "../modules/collection.xqm";
 
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
@@ -15,16 +16,11 @@ declare namespace sc="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Con
 
 declare option exist:serialize "highlight-matches=elements";
 
-(:let $query-criteria-param := if (system:function-available(request:get-parameter, 2)) then
-	request:get-parameter("serializedSearchCriteria", "")
-	else
-	local:get-query-criteria-param()
-:)	
 
 let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $search:default-search-criteria)
 let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzích parse-xml :)
 
-let $queries := search:get-queries-from-search-criteria($query-criteria(://a:SearchCriteriaContract[a:Key = 'Fulltext']:))
+let $queries := search:get-queries-from-search-criteria($query-criteria)
 
 
 let $result-params := $query-criteria/r:ResultSearchCriteriaContract/r:ResultSpecifications
@@ -49,57 +45,36 @@ let $kwic-count := if($result-params/sc:HitSettingsContract/sc:Count) then xs:in
 (:~ počet znaků zleva a zprava pro zobrazení dokladů :)
 let $kwic-context-length := if($result-params/sc:HitSettingsContract/sc:ContextLength) then xs:int($result-params/sc:HitSettingsContract/sc:ContextLength) else 50
 
-(:~ kriterium použité pro seřazení výsledků :)
-let $sort-criterion := if($result-params/sc:Sorting) then
-	if($result-params/sc:Sorting[@i:nil='true']) then
-		"Title"
-	else $result-params/sc:Sorting/text() 
-	else "Title"
-	
-(:~ kriterium použité pro seřazení výsledků :)
-let $sort-direction := if($result-params/sc:Direction) then $result-params/sc:Direction/text() else "Ascending" (: Descending :)
 
-
+let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $search:default-search-criteria)
+let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzích parse-xml :)
+let $queries := search:get-queries-from-search-criteria($query-criteria)
 
 
 (:~ pomocná proměnná; vrací všechny požadované knihy z dotazu :)
 let $books := $query-criteria/r:ResultSearchCriteriaContract/r:ResultBooks/a:BookVersionPairContract
-(:~ sekvence všech identifikátorů zdrojů, které se mají prohledat :)
-let $book-ids := $books/a:Guid/text()
-(:~ sekvence všech verzí zdrojů, které se mají prohledat; upraveno tak, aby se dalo odkazovat na hodnotu @change :)
-let $book-version-ids := $books/a:VersionId/concat('#', text())
+(:~ první identifikátor v sekvenci všech identifikátorů zdrojů, které se mají prohledat; používá se k sestavení cesty ke kolekci  :)
+let $document-id := $books[1]/a:Guid/text()
+(:~ první verze v sekvenci verzí, které se mají prohledat; používá se k sestavení cesty ke kolekci :)
+let $document-version-id := $books[1]/a:VersionId/text()
 
-(:~ relativní cesta k prohledávané kolekci :)
-let $collection-path := "/apps/jacob/data/"
-(:~ výchozí kolekce prohledávaných dokumentů :)
-let $collection := collection($collection-path)
+(:return ($query-criteria, $queries, $books, $document-id, $document-version-id):)
 
-let $collection := $collection[./tei:TEI[@n = $book-ids][@change = $book-version-ids]] 
+let $collection := coll:get-collection("/db/apps/jacob/data", $document-id, $document-version-id)
 
 
 (:~ dokumenty, které obsahují hledaný výraz :)
 (:~ TODO: dodat řazení, více proledávaných elementů :)
-let $documents := search:get-query-documents-matches($collection, $queries)
-let $documents := for $document in $documents 
-	(:order by $document/tei:TEI/tei:teiHeader//tei:origDate[@notBefore]:)
-		order by $document/tei:TEI/tei:teiHeader//tei:titleStmt/tei:title
-	return $document
-	
-let $result-documents := if($result-count = 0) then
-		subsequence($documents, $result-start)
-	else
-		subsequence($documents, $result-start, $result-count)
-
+let $page-hits := search:get-document-hits-pages-using-fragments($collection, $queries)
 return
-<SearchResultContractList xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-<SearchResults>
-	{
-for $document in $result-documents
-	let $hits := search:get-document-search-hits($document, $queries, $kwic-start, $kwic-count, $kwic-context-length)
-	return <SearchResultContract>
-					<BookXmlId>{string($document/tei:TEI/@n)}</BookXmlId>
-					{$hits}
-					<VersionXmlId>{$document/tei:TEI/substring-after(@change, '#')}</VersionXmlId>
-				</SearchResultContract>
-} </SearchResults>
-</SearchResultContractList>
+<PageListContract xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<PageList>
+		{
+		for $page-hit in $page-hits
+			return <PageDescriptionContract>
+			<PageName>{string($page-hit/@n)}</PageName>
+			<PageXmlId>{string($page-hit/@xml:id)}</PageXmlId>
+		</PageDescriptionContract>
+		}
+	</PageList>
+</PageListContract>
