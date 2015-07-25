@@ -102,6 +102,7 @@ namespace ITJakub.SearchService.Core.Exist
         private ResultSearchCriteriaContract GetFilteredResultSearchCriterias(IList<SearchCriteriaContract> searchCriterias)
         {
             ResultRestrictionCriteriaContract resultRestrictionCriteriaContract = null;
+            ResultCriteriaContract resultCriteriaContract = null;
             RegexCriteriaBuilder.ConvertWildcardToRegex(searchCriterias);
             var filteredCriterias = new List<SearchCriteriaContract>();
             foreach (var searchCriteriaContract in searchCriterias)
@@ -112,13 +113,18 @@ namespace ITJakub.SearchService.Core.Exist
                 }
                 else if (searchCriteriaContract.Key == CriteriaKey.ResultRestriction)
                 {
-                    resultRestrictionCriteriaContract = (ResultRestrictionCriteriaContract)searchCriteriaContract;
+                    resultRestrictionCriteriaContract = (ResultRestrictionCriteriaContract) searchCriteriaContract;
+                }
+                else if (searchCriteriaContract.Key == CriteriaKey.Result)
+                {
+                    resultCriteriaContract = (ResultCriteriaContract) searchCriteriaContract;
                 }
             }
 
             return new ResultSearchCriteriaContract
             {
                 ConjunctionSearchCriterias = filteredCriterias,
+                ResultSpecifications = resultCriteriaContract,
                 ResultBooks = resultRestrictionCriteriaContract != null
                     ? resultRestrictionCriteriaContract.ResultBooks
                     : null,
@@ -183,7 +189,9 @@ namespace ITJakub.SearchService.Core.Exist
             var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
             if (resultSearchCriteria.ResultBooks == null)
                 return null;
-            
+
+            AdjustStartIndexes(resultSearchCriteria.ResultSpecifications);
+
             var stringResult = m_client.ListSearchDictionariesResults(resultSearchCriteria.ToXml());
             return stringResult;
         }
