@@ -1,1 +1,14 @@
-﻿
+﻿.itj-page {
+  font-family: 'Times New Roman', Times, serif;
+  text-align: justify;
+  font-size: 120%;
+}
+.itj-page .note-ref,
+.itj-note .note-ref {
+  vertical-align: super;
+  font-size: 70%;
+}
+.itj-note .corr {
+  font-style: italic;
+}
+/*# sourceMappingURL=itjakub.editions.css.map */

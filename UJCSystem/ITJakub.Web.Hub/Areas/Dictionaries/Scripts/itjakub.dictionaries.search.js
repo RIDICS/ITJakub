@@ -15,10 +15,10 @@ var DictionarySearch = (function () {
         this.dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize, this.tabs, this.dictionarySelector);
         this.search = new Search($("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this));
         this.disabledShowOptions = [
-            SearchTypeEnum.Author,
-            SearchTypeEnum.Title,
-            SearchTypeEnum.Editor,
-            SearchTypeEnum.Dating
+            0 /* Author */,
+            1 /* Title */,
+            2 /* Editor */,
+            3 /* Dating */
         ];
     }
     DictionarySearch.prototype.create = function () {
@@ -26,10 +26,10 @@ var DictionarySearch = (function () {
             //TODO notify typeahead
         };
         var disabledOptions = new Array();
-        disabledOptions.push(SearchTypeEnum.Fulltext);
-        disabledOptions.push(SearchTypeEnum.TokenDistance);
-        disabledOptions.push(SearchTypeEnum.Sentence);
-        disabledOptions.push(SearchTypeEnum.Heading);
+        disabledOptions.push(4 /* Fulltext */);
+        disabledOptions.push(9 /* TokenDistance */);
+        disabledOptions.push(6 /* Sentence */);
+        disabledOptions.push(5 /* Heading */);
         this.dictionarySelector.makeDropdown();
         this.search.makeSearch(disabledOptions);
     };

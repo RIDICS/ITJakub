@@ -124,5 +124,9 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
+            string pageXmlId, OutputFormatEnumContract resultFormat);
     }
 }

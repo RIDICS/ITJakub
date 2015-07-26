@@ -206,6 +206,19 @@ namespace ITJakub.SearchService.Core.Exist
             return result;
         }
 
+        public string GetEditionPageFromSearch(string serializedSearchCriteria, string bookId, string versionId, string pageXmlId, string outputFormat)
+        {
+            return GetEditionPageFromSearch(serializedSearchCriteria, bookId, versionId, pageXmlId, outputFormat, null);
+        }
+
+        public string GetEditionPageFromSearch(string serializedSearchCriteria, string bookId, string versionId, string pageXmlId, string outputFormat, string xslPath)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, xslPath, serializedSearchCriteria, bookId, versionId, pageXmlId, outputFormat);
+            var pageText = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+            return pageText;
+        }
+
         #region Helpers
 
         private static Uri SetParamsToUri(string uriTemplate, params object[] args)

@@ -518,5 +518,25 @@ namespace ITJakub.ITJakubService.Core
         {
             return m_searchServiceClient.GetSearchEditionsPageList(searchCriterias.ToList());
         }
+
+        public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
+    string pageXmlId, OutputFormatEnumContract resultFormat)
+        {
+            OutputFormat outputFormat;
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
+
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookXmlId);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat,
+                bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
+            var transformationName = transformation.Name;
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+            var pageText = m_searchServiceClient.GetEditionPageFromSearch(searchCriterias.ToList(),
+                bookXmlId, bookVersion.VersionId, pageXmlId, transformationName, resultFormat, transformationLevel);
+
+            return pageText;
+        }
     }
 }

@@ -206,5 +206,11 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.GetSearchEditionsPageList(searchCriterias);
         }
+
+        public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
+             string pageXmlId, OutputFormatEnumContract resultFormat)
+        {
+            return m_searchManager.GetDictionaryEntryFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
+        }
     }
 }
