@@ -38,7 +38,9 @@ let $entryFragment := search:match-hits-for-entry-element($entryFragment, $queri
 (:let $xslPath := "/db/apps/jacob/transformations/pageToHtml.xsl":)
 let $template := doc(escape-html-uri($xslPath)) 
 let $transformation := 
-	if($outputFormat = "Html") 
+	if ($outputFormat = "Xml") then
+		$entryFragment
+	else if($outputFormat = "Html") 
 	then transform:stream-transform($entryFragment, $template, ())
 	else if($outputFormat = "Rtf") 
 		then vwtrans:transform-document-to-rtf($entryFragment, $template)

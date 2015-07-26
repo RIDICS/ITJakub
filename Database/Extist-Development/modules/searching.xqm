@@ -153,6 +153,8 @@ declare function search:match-hits-for-entry-element($root as node()*,
 				else
 				()
 	return if ($hits) then $hits else $root
+(:	return ($headword-query, $entry-query):)
+(:	return $hits:)
 };
 
 
@@ -213,7 +215,7 @@ declare function search:get-document-fragments-with-hits($collection as node()*,
 	let $headwords := search:get-document-fragments-with-hits-entry-and-headwords($collection, $queries)
 	let $entry := ()
 
-	let $hits := search:union-results($fulltext, $heading, $sentence,
+	let $hits := search:intersect-results($fulltext, $heading, $sentence,
 		$token-distance,  $headwords, $entry)
 		
 		return $hits
@@ -304,7 +306,7 @@ declare function search:get-document-search-hits-pages($root as node()*,
 	let $headwords := search:get-hits-by-entry-and-headwords($root, $queries)
 	let $entry := ()
 
-	let $hits := search:union-results($fulltext, $heading, $sentence,
+	let $hits := search:intersect-results($fulltext, $heading, $sentence,
 		$token-distance,  $headwords, $entry)
 		
 		return $hits
@@ -320,14 +322,14 @@ declare function search:get-query-documents-matches($root as node()*, $queries a
 	let $headwords := search:get-query-documents-matches-headwords($root, $queries)
 	let $entry := search:get-query-documents-matches-entry($root, $queries)
 	
-	let $results := search:union-results($fulltext, $heading, $sentence,
+	let $results := search:intersect-results($fulltext, $heading, $sentence,
 		$token-distance,  $headwords, $entry)
 	
 	return $results
 		
 } ;
 
-declare function search:union-results($fulltext, $heading, $sentence,
+declare function search:intersect-results($fulltext, $heading, $sentence,
 	$token-distance,  $headwords, $entry) {
 		
 		let $union := $fulltext | $heading | $sentence | $token-distance |  $headwords | $entry
@@ -377,6 +379,56 @@ declare function search:get-pb-for-hit($document as node(), $expanded-hit as ele
 	return $pb
 } ;
 
+declare function search:get-document-search-hits-by-fragments($document as node()?, 
+	$queries as item()?, 
+	$kwic-start as xs:double,
+	$kwic-count as xs:double,
+	$kwic-context-length as xs:int) as element()* {
+	
+	let $root := $document
+		let $document-id := string($document/tei:TEI/@n)
+		let $version-id := substring-after($document/tei:TEI/@change, '#')
+		let $uri := document-uri($root)
+		let $collection-path := substring-before($uri, $version-id) || $version-id
+		let $collection := collection($collection-path)
+		let $hits := search:get-document-fragments-with-hits($collection, $queries)
+		let $kwic-options := <config width="{$kwic-context-length}" />
+		let $match-position := 0
+	
+	
+		let $all-matches :=
+			for $hit in $hits
+				let $pb := $hit//tei:pb[1]
+				let $expanded := kwic:expand($hit)
+				let $matches := kwic:get-matches($hit)
+				let $matches-count := count($matches)
+				let $match-position := $match-position + $matches-count
+				let $summary := kwic:summarize($hit, $kwic-options)
+				let $content := search:get-kwic-summary-as-xml-content-structure($summary)
+(:			for $match in $matches:)
+(:		return <result> {( <count>{$matches-count}</count>, <position>{$match-position}</position>, $matches)} </result>:)
+				for $content-item in $content
+				return <PageResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+								{ ($content-item)}
+								<PageName>{string($pb/@n)}</PageName>
+								<PageXmlId>{string($pb/@xml:id)}</PageXmlId>
+								</PageResultContext>
+(:	return $hits:)
+	
+		let $selected-matches := subsequence($all-matches, $kwic-start, $kwic-count)
+		
+		return 
+			(<Results xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+			{$selected-matches}
+			</Results>,
+			<TotalHitCount xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">{count($all-matches)} </TotalHitCount>)
+	
+	} ;
+
+declare function search:get-hits-from-fragments() as element()* {
+	""
+} ;
+	
 declare function search:get-document-search-hits($document as node()?, 
 	$queries as item()?, 
 	$kwic-start as xs:double,
@@ -390,7 +442,7 @@ declare function search:get-document-search-hits($document as node()?,
 	let $sentence := search:get-query-document-hits-sentence($root, $queries)
 	let $token-distance := search:get-query-document-hits-token-distance($root, $queries)
 
-	let $hits := ($fulltext, $heading, $sentence, $token-distance)
+	let $hits := search:intersect-results($fulltext, $heading, $sentence, $token-distance, (), ())
 	
 (:	return ($root):)
 	
@@ -425,6 +477,15 @@ declare function search:get-document-search-hits($document as node()?,
 		}
 		</Results>,
 		<TotalHitCount xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">{$hits-count}</TotalHitCount>)	
+} ;
+
+declare function search:get-kwic-summary-as-xml-content-structure($summary as item()*) {
+	for $summary-item in $summary
+				return <ContextStructure xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+					<After>{search:get-kwic-summary-content($summary-item, 'following')}</After>
+					<Before>{search:get-kwic-summary-content($summary-item, 'previous')}</Before>
+					<Match>{search:get-kwic-summary-content($summary-item, 'hi')}</Match>
+				</ContextStructure>
 } ;
 
 declare function search:get-kwic-summary-content($summary as node()*, $class as xs:string) as xs:string {
