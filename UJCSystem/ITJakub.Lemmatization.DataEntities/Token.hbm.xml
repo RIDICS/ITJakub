@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.Lemmatization.DataEntities" namespace="ITJakub.Lemmatization.DataEntities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Token" table="[Token]">
+    
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+      
+    <property name="Text"/>
+    
+    <!--<many-to-one name="TokenCharacteristics" class="TokenCharacteristic" cascade="all-delete-orphan"/>-->
+
+    <bag name="TokenCharacteristics" cascade="all-delete-orphan">
+      <key column="Token" />
+      <one-to-many class="TokenCharacteristic" />
+    </bag> 
+
+  </class>
+</hibernate-mapping>

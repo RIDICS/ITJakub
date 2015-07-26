@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,14 +13,15 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ITJakub.Lemmatization.Service</RootNamespace>
     <AssemblyName>ITJakub.Lemmatization.Service</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,12 +69,12 @@
     <Reference Include="NHibernate">
       <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
@@ -109,17 +110,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
-      <Project>{92e907e3-ace0-4fc6-8919-040031e5192e}</Project>
-      <Name>ITJakub.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
-      <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
+      <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
       <Name>ITJakub.DataEntities</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Lemmatization.Core\ITJakub.Lemmatization.Core.csproj">
       <Project>{0ccc8005-5a92-4a47-93df-05fb6e333279}</Project>
       <Name>ITJakub.Lemmatization.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Lemmatization.DataEntities\ITJakub.Lemmatization.DataEntities.csproj">
+      <Project>{69076b65-4268-497a-abf6-64d7ffa50911}</Project>
+      <Name>ITJakub.Lemmatization.DataEntities</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
@@ -139,9 +140,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>3283</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/ITJakub.LemmatizationService</IISUrl>
+          <IISUrl>http://localhost:3283/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
