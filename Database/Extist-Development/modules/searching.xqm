@@ -136,6 +136,7 @@ declare function search:match-hits-by-entry-elements($root as node()*, $query as
 	
 };
 
+
 declare function search:match-hits-for-entry-element($root as node()*, 
 	$queries as element()?) as node()? {
 
