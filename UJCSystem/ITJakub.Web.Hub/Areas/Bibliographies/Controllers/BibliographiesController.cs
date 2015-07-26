@@ -54,7 +54,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.BibliographicalItem);
+            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.BibliographicalItem, null, null);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

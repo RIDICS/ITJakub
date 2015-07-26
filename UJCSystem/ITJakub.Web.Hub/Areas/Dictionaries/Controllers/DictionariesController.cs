@@ -223,7 +223,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 listSearchCriteriaContracts = new List<SearchCriteriaContract>
                 {
-                    CreateWordListContract(CriteriaKey.Headword, criteria),
                     CreateWordListContract(CriteriaKey.HeadwordDescription, criteria)
                 };
             }

@@ -94,7 +94,7 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType);
 
         [OperationContract]
-        IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType);
+        IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
 
         #endregion
 
