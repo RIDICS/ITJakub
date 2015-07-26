@@ -121,5 +121,8 @@ namespace ITJakub.ITJakubService.DataContracts
         
         [OperationContract]
         string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
+
+        [OperationContract]
+        PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias);
     }
 }

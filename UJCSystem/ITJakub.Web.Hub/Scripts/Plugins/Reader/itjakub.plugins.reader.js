@@ -630,9 +630,7 @@ var ReaderModule = (function () {
         }
         $(panel.panelHtml).css('z-index', max + 1);
     };
-    ReaderModule.prototype.showSearch = function (searchResults) {
-        for (var i = 0; i < searchResults.length; i++) {
-        }
+    ReaderModule.prototype.showSearchInPanel = function (searchResults) {
         this.getSearchPanel().showResults(searchResults);
     };
     ReaderModule.prototype.setResultsPaging = function (itemsCount, pageChangedCallback) {
@@ -650,6 +648,13 @@ var ReaderModule = (function () {
             this.searchPanel = searchPanel;
         }
         return this.searchPanel;
+    };
+    ReaderModule.prototype.showSearchResultInPages = function (pages) {
+        for (var i = 0; i < pages.length; i++) {
+            var page = pages[i];
+            var pageDiv = document.getElementById(page.PageXmlId);
+            $(pageDiv).addClass("search-unloaded");
+        }
     };
     return ReaderModule;
 })();
@@ -1172,9 +1177,15 @@ var TextPanel = (function (_super) {
     TextPanel.prototype.displayPage = function (page, scrollTo) {
         var pageDiv = document.getElementById(page.xmlId);
         var pageLoaded = !($(pageDiv).hasClass('unloaded'));
+        var pageSearchUnloaded = $(pageDiv).hasClass('search-unloaded');
         var pageLoading = $(pageDiv).hasClass('loading');
-        if (!pageLoaded && !pageLoading) {
-            this.downloadPageByXmlId(page);
+        if (!pageLoading) {
+            if (pageSearchUnloaded) {
+                this.downloadSearchPageByXmlId(page);
+            }
+            else if (!pageLoaded) {
+                this.downloadPageByXmlId(page);
+            }
         }
         if (scrollTo) {
             this.scrollTextToPositionFromTop(0);
@@ -1228,32 +1239,43 @@ var TextPanel = (function (_super) {
                     $(_this.windowBody).find('#' + page.xmlId).removeClass("loading");
                     $(_this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
                 }
-                //TODO in text will be comments and notes too. Styles for css classes are in reader less files already. Structure will be as follows:
-                /*  divs with class 'itj-.*' WILL BE FROM EXIST HTML XSLT
-                  <div class="page-wrapper">
-                     <div class="page" id="t-1.body-1.div-2.div-1.div-1.p-1.pb-1">
-                        <div class="itj-page">
-                           <div class="itj-page-text">
-                                <span class="info pb space" data-title="číslo strany rukopisu" data-page-name="2v"></span>ten nebude dokonalý lékař, aniž muož býti. Ale máť býti nazván nedouk, a to proto, že se jest tomu nenaučil, neboť mnozí hojie, a nevědie, co hojie. A to proto, že sú se tomu neučili, i protož tomu právě vyrozuměti nemohú, nebo v tom obyčeje nemají. I protož mistr Anton praví a přikazuje a řka: „Radím každému lékaři takovému, a zvláště neumělému, aby se v takové věci neznámé všetečně neuvazoval a nepletl se v to, což provésti neumie, aby svým neuměním člověka nezavedl a nebo jeho
-                            </div>
-                            <div class="itj-page-notes">
-                                <div class="itj-page-note">Moje malinkata poznamka o zrozeni divu</div>
-                                <div class="itj-page-note">Moje malinkata poznamka o zrozeni divu 2</div>
-                                <div class="itj-page-note">Moje malinkata poznamka o zrozeni divu 2</div>
-                                <div class="itj-page-note">Moje malinkata dosnvfoirhogidhfbibhuidrfsbhidhbfgibhnighd9fsg poznamka o zrozeni divu 2</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="page-name">[2v]</div>
-                  </div>
-                  
-                 */
-                //TODO if we add class "show-notes" to div with class "reader-text" notes will be showed.If class "show-notes" is removed then notes are hidden;
             },
             error: function (response) {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).append("Chyba při načítání stránky '" + page.text + "'");
+            }
+        });
+    };
+    TextPanel.prototype.downloadSearchPageByXmlId = function (page) {
+        var _this = this;
+        var pageContainer = document.getElementById(page.xmlId);
+        $(pageContainer).addClass("loading");
+        if (typeof this.windowBody !== 'undefined') {
+            $(this.windowBody).find('#' + page.xmlId).addClass("loading");
+        }
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            url: getBaseUrl() + "Reader/GetBookSearchPageByXmlId",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                $(pageContainer).empty();
+                $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
+                $(pageContainer).removeClass('unloaded');
+                $(pageContainer).removeClass('search-unloaded');
+                if (typeof _this.windowBody !== 'undefined') {
+                    $(_this.windowBody).find('#' + page.xmlId).removeClass("loading");
+                    $(_this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
+                }
+            },
+            error: function (response) {
+                $(pageContainer).empty();
+                $(pageContainer).removeClass("loading");
+                $(pageContainer).append("Chyba při načítání stránky '" + page.text + "' s výsledky vyhledávání");
             }
         });
     };
@@ -1329,5 +1351,10 @@ var SearchResult = (function () {
     function SearchResult() {
     }
     return SearchResult;
+})();
+var PageDescription = (function () {
+    function PageDescription() {
+    }
+    return PageDescription;
 })();
 //# sourceMappingURL=itjakub.plugins.reader.js.map

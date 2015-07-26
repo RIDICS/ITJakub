@@ -76,16 +76,10 @@ class BibliographyModule {
     private makeBibliography(bibItem: IBookInfo): HTMLLIElement {
         var liElement: HTMLLIElement = document.createElement('li');
         $(liElement).addClass('list-item');
-        $(liElement).attr("data-bookid", bibItem.BookId);
+        $(liElement).attr("data-bookid", bibItem.BookXmlId);
         $(liElement).attr("data-booktype", bibItem.BookType);
         $(liElement).attr("data-name", bibItem.Title);
         $(liElement).attr("data-century", bibItem.Century);
-        //TODO toggle uncommented with commented code after testing
-        //$(liElement).data('bookid', bibItem.BookXmlId);
-        //$(liElement).data('booktype', bibItem.BookType);
-        //$(liElement).data('name', bibItem.Title);
-        //$(liElement).data('century', bibItem.Century); //TODO add values for sorting
-
 
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
@@ -159,7 +153,7 @@ class BibliographyModule {
 }
 
 interface IBookInfo {
-    BookId: string;
+    BookXmlId: string;
     BookType: BookTypeEnum;
     Title: string;
     Editor: string;
@@ -181,30 +175,30 @@ interface IBookInfo {
 }
 
 
-//TODO remove or move to separated file
-class BookInfo implements IBookInfo {
-    BookId = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
-    //BookXmlId = "%7BFA10177B-25E6-4BB6-B061-0DB988AD3840%7D";
-    BookType: BookTypeEnum;
-    Title = "PasKal";
-    Editor: string;
-    Pattern: string;
-    SourceAbbreviation: string;
-    RelicAbbreviation: string;
-    LiteraryType: string;
-    LiteraryGenre: string;
-    LastEditation: string;
-    EditationNote: string; //anchor href?
-    Copyright: string;
-    Pages: IPage[];
-    Archive: IArchive;
-    Century: number;
-    Sign: string;
-    Authors: IAuthor[];
-    Description: string;
-    Year: number;
+////TODO remove or move to separated file
+//class BookInfo implements IBookInfo {
+//    BookXmlId = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
+//    //BookXmlId = "%7BFA10177B-25E6-4BB6-B061-0DB988AD3840%7D";
+//    BookType: BookTypeEnum;
+//    Title = "PasKal";
+//    Editor: string;
+//    Pattern: string;
+//    SourceAbbreviation: string;
+//    RelicAbbreviation: string;
+//    LiteraryType: string;
+//    LiteraryGenre: string;
+//    LastEditation: string;
+//    EditationNote: string; //anchor href?
+//    Copyright: string;
+//    Pages: IPage[];
+//    Archive: IArchive;
+//    Century: number;
+//    Sign: string;
+//    Authors: IAuthor[];
+//    Description: string;
+//    Year: number;
 
-}
+//}
 
 
 //

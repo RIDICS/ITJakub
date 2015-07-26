@@ -519,5 +519,10 @@ namespace ITJakub.ITJakubService.Core
             public Dictionary<string, object> MetadataParameters { get; set; }
             public ResultCriteriaContract ResultCriteria { get; set; }
         }
+
+        public PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchServiceClient.GetSearchEditionsPageList(searchCriterias.ToList());
+        }
     }
 }
