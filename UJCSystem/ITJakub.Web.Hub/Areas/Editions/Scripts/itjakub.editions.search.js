@@ -82,6 +82,9 @@ $(document).ready(function () {
     }
     search = new Search($("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
     search.makeSearch();
+    var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
+    typeaheadSearchBox.addDataSet("Title", "Název");
+    typeaheadSearchBox.create();
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
         bookIds = new Array();
@@ -92,6 +95,10 @@ $(document).ready(function () {
         for (var i = 0; i < state.SelectedCategories.length; i++) {
             categoryIds.push(state.SelectedCategories[i].Id);
         }
+        var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
+        typeaheadSearchBox.clearAndDestroy();
+        typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
+        typeaheadSearchBox.create();
     };
     var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();

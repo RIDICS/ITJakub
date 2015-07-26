@@ -145,9 +145,6 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                if (categoryIds == null || categoryIds.Count == 0)
-                    return new List<long>();
-
                 return session.GetNamedQuery("GetBookIdsFromCategoryHierarchy")
                     .SetParameterList("categoryIds", categoryIds)
                     .List<long>();

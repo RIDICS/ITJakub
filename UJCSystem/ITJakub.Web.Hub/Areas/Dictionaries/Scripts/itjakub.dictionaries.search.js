@@ -4,9 +4,13 @@ $(document).ready(function () {
 });
 var DictionarySearch = (function () {
     function DictionarySearch() {
+        var _this = this;
         var pageSize = 25;
         this.tabs = new DictionarySearchTabs();
         this.callbackDelegate = new DropDownSelectCallbackDelegate();
+        this.callbackDelegate.selectedChangedCallback = function (state) {
+            _this.updateTypeaheadSearchBox(state);
+        };
         this.dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, this.callbackDelegate);
         this.dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
         this.dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#description-fulltext", true);
@@ -14,6 +18,7 @@ var DictionarySearch = (function () {
         this.dictionaryWrapperBasic = new DictionaryViewerTextWrapper(this.dictionaryViewerHeadword, this.dictionaryViewerFulltext, pageSize, this.tabs, this.dictionarySelector);
         this.dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(this.dictionaryViewerAdvanced, pageSize, this.tabs, this.dictionarySelector);
         this.search = new Search($("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this));
+        this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Dictionaries/Dictionaries");
         this.disabledShowOptions = [
             0 /* Author */,
             1 /* Title */,
@@ -23,9 +28,6 @@ var DictionarySearch = (function () {
     }
     DictionarySearch.prototype.create = function () {
         var _this = this;
-        this.callbackDelegate.selectedChangedCallback = function (state) {
-            //TODO notify typeahead
-        };
         var disabledOptions = new Array();
         disabledOptions.push(4 /* Fulltext */);
         disabledOptions.push(9 /* TokenDistance */);
@@ -33,6 +35,8 @@ var DictionarySearch = (function () {
         disabledOptions.push(5 /* Heading */);
         this.dictionarySelector.makeDropdown();
         this.search.makeSearch(disabledOptions);
+        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+        this.typeaheadSearchBox.create();
         $("#printDescription").click(function () {
             _this.getCurrentDictionaryViewer().print();
         });
@@ -41,6 +45,12 @@ var DictionarySearch = (function () {
                 _this.getCurrentDictionaryViewer().loadAllHeadwords();
             }
         });
+    };
+    DictionarySearch.prototype.updateTypeaheadSearchBox = function (state) {
+        var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
+        this.typeaheadSearchBox.clearAndDestroy();
+        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla", parametersUrl);
+        this.typeaheadSearchBox.create();
     };
     DictionarySearch.prototype.processSearchJson = function (json) {
         var filteredJsonForShowing = this.search.getFilteredQuery(json, this.disabledShowOptions);

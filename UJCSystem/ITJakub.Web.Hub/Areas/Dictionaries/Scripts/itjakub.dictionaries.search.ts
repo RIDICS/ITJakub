@@ -14,12 +14,16 @@ class DictionarySearch {
     private search: Search;
     private dictionarySelector: DropDownSelect2;
     private disabledShowOptions: Array<SearchTypeEnum>;
+    private typeaheadSearchBox: SearchBox;
 
     constructor() {
         var pageSize = 25;
 
         this.tabs = new DictionarySearchTabs();
         this.callbackDelegate = new DropDownSelectCallbackDelegate();
+        this.callbackDelegate.selectedChangedCallback = (state) => {
+            this.updateTypeaheadSearchBox(state);
+        };
         this.dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, this.callbackDelegate);
         
         this.dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
@@ -29,7 +33,8 @@ class DictionarySearch {
         this.dictionaryWrapperBasic = new DictionaryViewerTextWrapper(this.dictionaryViewerHeadword, this.dictionaryViewerFulltext, pageSize, this.tabs, this.dictionarySelector);
         this.dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(this.dictionaryViewerAdvanced, pageSize, this.tabs, this.dictionarySelector);
         this.search = new Search(<any>$("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this));
-
+        this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Dictionaries/Dictionaries");
+        
         this.disabledShowOptions = [
             SearchTypeEnum.Author,
             SearchTypeEnum.Title,
@@ -40,10 +45,6 @@ class DictionarySearch {
     }
 
     create() {
-        this.callbackDelegate.selectedChangedCallback = (state) => {
-            //TODO notify typeahead
-        };
-
         var disabledOptions = new Array<SearchTypeEnum>();
         disabledOptions.push(SearchTypeEnum.Fulltext);
         disabledOptions.push(SearchTypeEnum.TokenDistance);
@@ -52,6 +53,9 @@ class DictionarySearch {
 
         this.dictionarySelector.makeDropdown();
         this.search.makeSearch(disabledOptions);
+
+        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+        this.typeaheadSearchBox.create();
 
         $("#printDescription").click(() => {
             this.getCurrentDictionaryViewer().print();
@@ -64,12 +68,19 @@ class DictionarySearch {
         });
     }
 
-    processSearchJson(json: string) {
+    private updateTypeaheadSearchBox(state: State) {
+        var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
+        this.typeaheadSearchBox.clearAndDestroy();
+        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla", parametersUrl);
+        this.typeaheadSearchBox.create();
+    }
+
+    private processSearchJson(json: string) {
         var filteredJsonForShowing = this.search.getFilteredQuery(json, this.disabledShowOptions);
         this.dictionaryWrapperAdvanced.loadCount(json, filteredJsonForShowing);
     }
 
-    processSearchText(text: string) {
+    private processSearchText(text: string) {
         this.dictionaryWrapperBasic.loadCount(text);
     }
 
@@ -109,7 +120,7 @@ class DictionarySearchTabs {
         });
     }
 
-    show(id: string) {
+    private show(id: string) {
         var index = DictionaryTabsEnum.Headwords;
         switch (id) {
             case "#headwords":
