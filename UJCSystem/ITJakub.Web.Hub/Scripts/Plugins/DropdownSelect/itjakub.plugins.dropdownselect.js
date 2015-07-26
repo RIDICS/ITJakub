@@ -233,14 +233,10 @@ var DropDownSelect = (function () {
             }
         }
     };
-    DropDownSelect.prototype.onCreateCategoryCheckBox = function (categoryId, checkBox) {
-    };
-    DropDownSelect.prototype.propagateRootSelectChange = function (item) {
-    };
-    DropDownSelect.prototype.propagateLeafSelectChange = function (item, info) {
-    };
-    DropDownSelect.prototype.propagateCategorySelectChange = function (item, info) {
-    };
+    DropDownSelect.prototype.onCreateCategoryCheckBox = function (categoryId, checkBox) { };
+    DropDownSelect.prototype.propagateRootSelectChange = function (item) { };
+    DropDownSelect.prototype.propagateLeafSelectChange = function (item, info) { };
+    DropDownSelect.prototype.propagateCategorySelectChange = function (item, info) { };
     DropDownSelect.prototype.propagateSelectChange = function (concreteItemSource) {
         var actualItem = $(concreteItemSource).parent().closest(".concrete-item");
         var actualItemInput;

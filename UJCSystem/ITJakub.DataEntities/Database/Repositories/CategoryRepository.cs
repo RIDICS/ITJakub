@@ -70,13 +70,13 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<Category> FindCategoriesByBookType(BookTypeEnum type)
+        public virtual IList<Category> FindCategoriesByBookTypeii(BookTypeEnum type)
         {
-            Category categoryAlias = null;
-            BookType bookTypeAlias = null;
-
             using (var session = GetSession())
             {
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+
                 var rootCategory = session.QueryOver(() => categoryAlias)
                     .JoinAlias(x => x.BookType, () => bookTypeAlias)
                     .Where(() => bookTypeAlias.Type == type && categoryAlias.ParentCategory == null)
@@ -84,12 +84,12 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 if (rootCategory == null)
                 {
-                  return new List<Category>();  
+                    return new List<Category>();
                 }
 
                 var resultCategories = new List<Category>();
                 IList<Category> childCategories = new List<Category> {rootCategory};
-                
+
                 while (childCategories != null && childCategories.Count() != 0)
                 {
                     resultCategories.AddRange(childCategories);
@@ -104,6 +104,29 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return resultCategories;
             }
         }
+
+        public virtual IList<Category> FindCategoriesByBookType(BookTypeEnum type)
+        {
+            using (var session = GetSession())
+            {
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+
+                var rootCategory = session.QueryOver(() => categoryAlias)
+                    .JoinAlias(x => x.BookType, () => bookTypeAlias)
+                    .Where(() => bookTypeAlias.Type == type && categoryAlias.ParentCategory == null)
+                    .SingleOrDefault<Category>();
+
+                if (rootCategory == null)
+                    return new List<Category>();
+
+                return session.QueryOver<Category>()
+                    .WhereRestrictionOn(x => x.Path)
+                    .IsLike(rootCategory.Path, MatchMode.Start)
+                    .List<Category>();
+            }
+        }
+
 
         [Transaction(TransactionMode.Requires)]
         public virtual BookType FindBookTypeByCategory(Category category)
