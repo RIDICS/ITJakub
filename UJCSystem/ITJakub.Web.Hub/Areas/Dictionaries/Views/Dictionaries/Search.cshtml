@@ -62,6 +62,11 @@
                         <a href="#advanced">Pokročilé vyhledávání <span class="badge" id="search-advanced-count"></span></a>
                     </li>
                 </ul>
+                @*<div class="dictionary-header-buttons">
+                    <a href="#" alt="Tisk" id="printList">
+                        <span class="glyphicon glyphicon-print"></span>
+                    </a>
+                </div>*@
             </div>
             @*<div class="dictionary-header dictionary-subheader">
                 <span>Vše ()</span>
@@ -85,12 +90,31 @@
         </div>
         <div class="dictionary-result-word-search-description">
             <div class="dictionary-header">
-                Heslové stati
+                <span>Heslové stati</span>
+                <div class="dictionary-header-buttons">
+                    <a href="#" alt="Tisk" id="printDescription">
+                        <span class="glyphicon glyphicon-print"></span>
+                    </a>
+                </div>
             </div>
             <div class="dictionary-result-word-search-description-body tab-content" id="headword-description">
                 <div id="description-headwords"></div>
                 <div id="description-fulltext"></div>
                 <div id="description-advanced"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="print-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Načítání heslových statí</h4>
+                </div>
+                <div class="modal-body">
+                    <span>Probíhá načítání heslových statí pro tisk</span>
+                    <div class="loading loading-modal"></div>
+                </div>
             </div>
         </div>
     </div>

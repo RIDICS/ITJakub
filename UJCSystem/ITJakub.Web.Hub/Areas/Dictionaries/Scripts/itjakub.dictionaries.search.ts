@@ -6,6 +6,9 @@
 class DictionarySearch {
     private tabs: DictionarySearchTabs;
     private callbackDelegate: DropDownSelectCallbackDelegate;
+    private dictionaryViewerHeadword: DictionaryViewer;
+    private dictionaryViewerFulltext: DictionaryViewer;
+    private dictionaryViewerAdvanced: DictionaryViewer;
     private dictionaryWrapperBasic: DictionaryViewerTextWrapper;
     private dictionaryWrapperAdvanced: DictionaryViewerJsonWrapper;
     private search: Search;
@@ -19,12 +22,12 @@ class DictionarySearch {
         this.callbackDelegate = new DropDownSelectCallbackDelegate();
         this.dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, this.callbackDelegate);
         
-        var dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
-        var dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#description-fulltext", true);
-        var dictionaryViewerAdvanced = new DictionaryViewer("#headwords-list-advanced", "#headwords-pagination-advanced", "#description-advanced", true);
+        this.dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
+        this.dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#description-fulltext", true);
+        this.dictionaryViewerAdvanced = new DictionaryViewer("#headwords-list-advanced", "#headwords-pagination-advanced", "#description-advanced", true);
 
-        this.dictionaryWrapperBasic = new DictionaryViewerTextWrapper(dictionaryViewerHeadword, dictionaryViewerFulltext, pageSize, this.tabs, this.dictionarySelector);
-        this.dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize, this.tabs, this.dictionarySelector);
+        this.dictionaryWrapperBasic = new DictionaryViewerTextWrapper(this.dictionaryViewerHeadword, this.dictionaryViewerFulltext, pageSize, this.tabs, this.dictionarySelector);
+        this.dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(this.dictionaryViewerAdvanced, pageSize, this.tabs, this.dictionarySelector);
         this.search = new Search(<any>$("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this));
 
         this.disabledShowOptions = [
@@ -49,6 +52,16 @@ class DictionarySearch {
 
         this.dictionarySelector.makeDropdown();
         this.search.makeSearch(disabledOptions);
+
+        $("#printDescription").click(() => {
+            this.getCurrentDictionaryViewer().print();
+        });
+
+        window.matchMedia("print").addListener(mql => {
+            if (mql.matches) {
+                this.getCurrentDictionaryViewer().loadAllHeadwords();
+            }
+        });
     }
 
     processSearchJson(json: string) {
@@ -59,10 +72,25 @@ class DictionarySearch {
     processSearchText(text: string) {
         this.dictionaryWrapperBasic.loadCount(text);
     }
+
+    private getCurrentDictionaryViewer(): DictionaryViewer {
+        var currentTab = this.tabs.getCurrentTab();
+        switch (currentTab) {
+            case DictionaryTabsEnum.Headwords:
+                return this.dictionaryViewerHeadword;
+            case DictionaryTabsEnum.Fulltext:
+                return this.dictionaryViewerFulltext;
+            case DictionaryTabsEnum.Advanced:
+                return this.dictionaryViewerAdvanced;
+            default:
+                return this.dictionaryViewerHeadword;
+        }
+    }
 }
 
 class DictionarySearchTabs {
     private searchTabs: Array<SearchTab>;
+    private currentTab: DictionaryTabsEnum;
 
     constructor() {
         this.searchTabs = [
@@ -70,12 +98,14 @@ class DictionarySearchTabs {
             new SearchTab("#tab-fulltext", "#list-fulltext", "#description-fulltext"),
             new SearchTab("#tab-advanced", "#list-advanced", "#description-advanced")
         ];
+        this.currentTab = DictionaryTabsEnum.Headwords;
         
         $("#search-tabs li").addClass("hidden");
         $("#search-tabs a").click(e => {
             e.preventDefault();
             $(e.target).tab("show");
             this.show(e.target.getAttribute("href"));
+            $(window).trigger("scroll");
         });
     }
 
@@ -93,6 +123,7 @@ class DictionarySearchTabs {
                 break;
         }
 
+        this.currentTab = index;
         var searchTab = this.searchTabs[index];
         $("#headword-description > div").removeClass("active");
         $(".tab-content > div").removeClass("active");
@@ -113,6 +144,10 @@ class DictionarySearchTabs {
         $("#search-tabs li").removeClass("hidden");
         $(advancedSearchTab.tabLi).addClass("hidden");
         $(headwordSearchTab.tabLi).children().trigger("click");
+    }
+
+    getCurrentTab(): DictionaryTabsEnum {
+        return this.currentTab;
     }
 }
 

@@ -1,18 +1,12 @@
 /// <reference path="../../../Scripts/Plugins/itjakub.plugins.pagination.ts" />
 var DictionaryViewer = (function () {
     function DictionaryViewer(headwordListContainer, paginationContainer, headwordDescriptionContainer, lazyLoad) {
-        var _this = this;
         this.isRequestToPrint = false;
         this.headwordDescriptionContainer = headwordDescriptionContainer;
         this.paginationContainer = paginationContainer;
         this.headwordListContainer = headwordListContainer;
         this.isLazyLoad = lazyLoad;
         this.pagination = new Pagination(paginationContainer);
-        window.matchMedia("print").addListener(function (mql) {
-            if (mql.matches) {
-                _this.loadAllHeadwords();
-            }
-        });
     }
     DictionaryViewer.prototype.createViewer = function (recordCount, showPageCallback, pageSize, searchCriteria, isCriteriaJson) {
         if (searchCriteria === void 0) { searchCriteria = null; }
@@ -210,7 +204,7 @@ var DictionaryViewer = (function () {
     DictionaryViewer.prototype.isAllLoaded = function () {
         var descriptions = $(this.headwordDescriptionContainer);
         var notLoaded = $(".loading-background", descriptions);
-        var notLoadedVisible = notLoaded.parent(":not(.hidden)");
+        var notLoadedVisible = notLoaded.filter(":not(.hidden)");
         return notLoadedVisible.length === 0;
     };
     DictionaryViewer.prototype.loadAllHeadwords = function () {
