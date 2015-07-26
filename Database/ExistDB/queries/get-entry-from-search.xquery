@@ -8,6 +8,8 @@ import module namespace search = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/se
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
 declare namespace exist = "http://exist.sourceforge.net/NS/exist"; 
+declare namespace itj = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/exist";
+
 
 declare option exist:serialize "highlight-matches=elements";
 
@@ -17,36 +19,35 @@ declare option exist:serialize "highlight-matches=elements";
  : http://localhost:8080/exist/rest/db/apps/jacob-test/queries/get-pages.xquery?document={125A0032-03B5-40EC-B68D-80473CC5653A}&page=2
  :)
 
-
-
-let $documentId := request:get-parameter("bookId", "")
-let $versionId := request:get-parameter("versionId", "")
-let $entryXmlId := request:get-parameter("xmlEntryId", "")
+let $document-id := request:get-parameter("bookId", "")
+let $version-id := request:get-parameter("versionId", "")
+let $entry-xml-id := request:get-parameter("xmlEntryId", "")
 let $outputFormat := request:get-parameter("outputFormat", "")
-let $xslPath := request:get-parameter("_xsl", "")
+let $xsl-path := request:get-parameter("_xsl", "")
 
 let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $search:default-search-criteria)
 let $queries := search:get-queries-from-search-criteria-string($query-criteria-param)
 
 
-let $document := vwcoll:getDocument($documentId, $versionId)
+let $document := vwcoll:getDocument($document-id, $version-id)
 
-let $entryFragment := $document/id($entryXmlId)
+let $entry := $document/id($entry-xml-id)
 
-let $entryFragment := search:match-hits-for-entry-element($entryFragment, $queries)
+let $entry-fragment := search:match-hits-for-entry-element($entry, $queries)
+(: vracený prvek musí být obalen elementem s xmlns:exist, jinak se <exist:match> nevygeneruje do výstupu :)
+let $entry-fragment := <itj:result xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/exist" xmlns:exist="http://exist.sourceforge.net/NS/exist">{$entry-fragment}</itj:result>
 
-(:let $xslPath := "/db/apps/jacob/transformations/pageToHtml.xsl":)
-let $template := doc(escape-html-uri($xslPath)) 
+
+let $template := doc(escape-html-uri($xsl-path)) 
 let $transformation := 
 	if($outputFormat = "Xml") then
-			$entryFragment
-	else 
-	if($outputFormat = "Html") 
-	then transform:stream-transform($entryFragment, $template, ())
+			$entry-fragment
+	else if($outputFormat = "Html") 
+	then transform:stream-transform($entry-fragment, $template, ())
 	else if($outputFormat = "Rtf") 
-		then vwtrans:transform-document-to-rtf($entryFragment, $template)
+		then vwtrans:transform-document-to-rtf($entry-fragment, $template)
 		else if($outputFormat = "Pdf") 
-		then vwtrans:transform-document-to-pdf($entryFragment, $template)
+		then vwtrans:transform-document-to-pdf($entry-fragment, $template)
 		else()
 
-return $transformation
+return ($transformation)

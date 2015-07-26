@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.SearchService.Core.Exist;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -81,7 +82,7 @@ namespace ITJakub.SearchService
             return m_existManager.ListSearchEditionsResults(searchCriterias);
         }
 
-        public string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
+        public HeadwordListContract ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias)
         {
             return m_existManager.ListSearchDictionariesResults(searchCriterias);
         }

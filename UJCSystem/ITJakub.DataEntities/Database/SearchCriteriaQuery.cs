@@ -5,6 +5,5 @@ namespace ITJakub.DataEntities.Database
         public string Join { get; set; }
         
         public string Where { get; set; }
-
     }
 }

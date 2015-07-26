@@ -231,7 +231,9 @@ namespace ITJakub.ITJakubService.Core.Search
             foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
                 if (whereBuilder.Length > 0)
+                {
                     whereBuilder.Append(" or");
+                }
 
                 var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
                 whereBuilder.AppendFormat(" {0}.Headword like (:{1})", bookHeadwordAlias, uniqueParameterName);
@@ -241,8 +243,7 @@ namespace ITJakub.ITJakubService.Core.Search
             return new SearchCriteriaQuery
             {
                 Join = string.Format("inner join bv.BookHeadwords {0}", bookHeadwordAlias),
-                Where = whereBuilder.ToString(),
-                // TODO add new where for getting result headwords (not bookGuids)
+                Where = whereBuilder.ToString()
             };
         }
     }

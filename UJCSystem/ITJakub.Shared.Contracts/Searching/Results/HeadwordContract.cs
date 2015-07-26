@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace ITJakub.ITJakubService.DataContracts
+namespace ITJakub.ITJakubService.DataContracts // TODO fix namespace together with change xquery
 {
     [DataContract]
     public class HeadwordSearchResultContract

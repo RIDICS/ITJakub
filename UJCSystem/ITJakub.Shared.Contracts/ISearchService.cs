@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 
@@ -34,7 +35,7 @@ namespace ITJakub.Shared.Contracts
         SearchResultContractList ListSearchEditionsResults(List<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
-        string ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias);
+        HeadwordListContract ListSearchDictionariesResults(List<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
         int ListSearchDictionariesResultsCount(List<SearchCriteriaContract> searchCriterias);

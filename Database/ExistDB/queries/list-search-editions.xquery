@@ -21,6 +21,39 @@ declare option exist:serialize "highlight-matches=elements";
 	local:get-query-criteria-param()
 :)	
 
+
+declare function local:get-search-result-old($result-documents as node()*, $queries as element(), 
+	$kwic-start as xs:int, $kwic-count as xs:int, $kwic-context-length as xs:int) {
+		<SearchResultContractList xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+<SearchResults>
+	{
+for $document in $result-documents
+	let $hits := search:get-document-search-hits($document, $queries, $kwic-start, $kwic-count, $kwic-context-length)
+	return <SearchResultContract>
+					<BookXmlId>{string($document/tei:TEI/@n)}</BookXmlId>
+					{$hits}
+					<VersionXmlId>{$document/tei:TEI/substring-after(@change, '#')}</VersionXmlId>
+				</SearchResultContract>
+} </SearchResults>
+</SearchResultContractList>
+	} ;
+	
+	declare function local:get-search-result-new($result-documents as node()*, $queries as element(), 
+	$kwic-start as xs:int, $kwic-count as xs:int, $kwic-context-length as xs:int) {
+		<SearchResultContractList xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+<SearchResults>
+	{
+for $document in $result-documents
+	let $hits := search:get-document-search-hits-by-fragments($document, $queries, $kwic-start, $kwic-count, $kwic-context-length)
+	return <SearchResultContract>
+					<BookXmlId>{string($document/tei:TEI/@n)}</BookXmlId>
+					{$hits}
+					<VersionXmlId>{$document/tei:TEI/substring-after(@change, '#')}</VersionXmlId>
+				</SearchResultContract>
+} </SearchResults>
+</SearchResultContractList>
+	} ;
+
 let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $search:default-search-criteria)
 let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzích parse-xml :)
 
@@ -90,16 +123,4 @@ let $result-documents := if($result-count = 0) then
 	else
 		subsequence($documents, $result-start, $result-count)
 
-return
-<SearchResultContractList xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-<SearchResults>
-	{
-for $document in $result-documents
-	let $hits := search:get-document-search-hits($document, $queries, $kwic-start, $kwic-count, $kwic-context-length)
-	return <SearchResultContract>
-					<BookXmlId>{string($document/tei:TEI/@n)}</BookXmlId>
-					{$hits}
-					<VersionXmlId>{$document/tei:TEI/substring-after(@change, '#')}</VersionXmlId>
-				</SearchResultContract>
-} </SearchResults>
-</SearchResultContractList>
+return local:get-search-result-new($result-documents, $queries, $kwic-start, $kwic-count, $kwic-context-length)
