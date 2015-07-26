@@ -285,6 +285,12 @@
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.min.css">
       <DependentUpon>itjakub.dictionaries.css</DependentUpon>
     </Content>
+    <Content Include="Areas\Editions\Content\itjabuk.editions.content.css">
+      <DependentUpon>itjabuk.editions.content.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\Editions\Content\itjabuk.editions.content.min.css">
+      <DependentUpon>itjabuk.editions.content.css</DependentUpon>
+    </Content>
     <Content Include="Areas\Editions\Content\itjakub.editions.css">
       <DependentUpon>itjakub.editions.less</DependentUpon>
     </Content>
@@ -577,6 +583,10 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css.map">
       <DependentUpon>itjakub.bibliographies.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\Editions\Content\itjabuk.editions.content.less" />
+    <Content Include="Areas\Editions\Content\itjabuk.editions.content.css.map">
+      <DependentUpon>itjabuk.editions.content.css</DependentUpon>
     </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
