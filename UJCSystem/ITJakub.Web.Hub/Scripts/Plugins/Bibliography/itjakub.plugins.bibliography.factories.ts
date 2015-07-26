@@ -51,7 +51,12 @@ class BibliographyFactory {
             $(spanBook).addClass('glyphicon glyphicon-book');
             bookButton.appendChild(spanBook);
             $(bookButton).click((event) => {
-                window.location.href = config.getReadButton(bookInfo);
+                var buttonScript = config.getReadButtonOnClick(bookInfo);
+                if (typeof buttonScript !== "undefined" && buttonScript != null) {
+                    eval(buttonScript);
+                } else {
+                    window.location.href = config.getReadButtonUrl(bookInfo);
+                }
             });
             rightPanel.appendChild(bookButton);
         }
@@ -64,7 +69,12 @@ class BibliographyFactory {
             $(spanInfo).addClass('glyphicon glyphicon-info-sign');
             infoButton.appendChild(spanInfo);
             $(infoButton).click((event) => {
-                window.location.href = config.getInfoButton(bookInfo);
+                var buttonScript = config.getInfoButtonOnClick(bookInfo);
+                if (typeof buttonScript !== "undefined" && buttonScript != null) {
+                    eval(buttonScript);
+                } else {
+                    window.location.href = config.getInfoButtonUrl(bookInfo);
+                }
             });
             rightPanel.appendChild(infoButton);
         }

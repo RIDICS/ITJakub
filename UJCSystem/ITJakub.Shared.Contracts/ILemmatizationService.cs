@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 
-namespace ITJakub.Shared.Contracts
+namespace   ITJakub.Shared.Contracts
 {
     [ServiceContract]
     public interface ILemmatizationService
