@@ -8,7 +8,7 @@
             <xd:p>Obecně použitelné blokové (odstavcové) prvky transformace z formátu TEI na HTML.</xd:p>
         </xd:desc>
     </xd:doc>
-    <xsl:output method="html" indent="yes" encoding="UTF-8"/>
+    <xsl:output method="html" encoding="UTF-8"/>
     <xd:doc>
         <xd:desc>
             <xd:p>Šablona pro původní titul díla, uvedený v prameni.</xd:p>
