@@ -2,7 +2,7 @@ var SortBar = (function () {
     function SortBar() {
         this.comparatorResolver = new ComparatorResolver();
         this.actualSortOrder = 1;
-        this.actualSortOptionValue = SortEnum.Title;
+        this.actualSortOptionValue = 1 /* Title */;
     }
     SortBar.prototype.makeSortBar = function (booksContainer, sortBarContainer) {
         var _this = this;
@@ -15,10 +15,10 @@ var SortBar = (function () {
             var comparator = _this.comparatorResolver.getComparatorForOptionValue(selectedOptionValue);
             _this.sort(comparator, _this.actualSortOrder, booksContainer);
         });
-        this.addOption(select, "Název", SortEnum.Title.toString());
-        this.addOption(select, "Datace", SortEnum.Dating.toString()); //TODO add options to json config
-        this.addOption(select, "Autor", SortEnum.Author.toString());
-        this.addOption(select, "Editor", SortEnum.Editor.toString());
+        this.addOption(select, "Název", 1 /* Title */.toString());
+        this.addOption(select, "Datace", 3 /* Dating */.toString()); //TODO add options to json config
+        this.addOption(select, "Autor", 0 /* Author */.toString());
+        this.addOption(select, "Editor", 2 /* Editor */.toString());
         sortBarDiv.appendChild(select);
         var sortOrderButton = document.createElement('button');
         sortOrderButton.type = 'button';
@@ -37,7 +37,9 @@ var SortBar = (function () {
     };
     SortBar.prototype.sort = function (comparator, order, booksContainer) {
         var elems = $(booksContainer).children('ul.bib-listing').children('li').detach();
-        var sortFunction = function (a, b) { return order * comparator(a, b); };
+        var sortFunction = function (a, b) {
+            return order * comparator(a, b);
+        };
         elems.sort(sortFunction);
         $(booksContainer).children('ul.bib-listing').append(elems);
     };

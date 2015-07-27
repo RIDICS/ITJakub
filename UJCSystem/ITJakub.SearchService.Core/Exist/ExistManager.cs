@@ -198,5 +198,18 @@ namespace ITJakub.SearchService.Core.Exist
 
             return PageListContract.FromXml(m_client.GetSearchEditionsPageList(filteredCriterias.ToXml()));
         }
+
+        public string GetEditionPageFromSearch(IList<SearchCriteriaContract> searchCriterias, string bookId, string versionId, string pageXmlId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        {
+            var resultSearchConjunctions = new ResultConjunctionsCriteriaContract
+            {
+                ConjunctionSearchCriterias = GetFilteredResultSearchCriterias(searchCriterias).ConjunctionSearchCriterias
+            };
+
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
+                transformationLevel, bookId, versionId);
+            return m_client.GetEditionPageFromSearch(resultSearchConjunctions.ToXml(), bookId, versionId, pageXmlId,
+                Enum.GetName(typeof(OutputFormatEnumContract), outputFormat), xslPath);
+        }
     }
 }

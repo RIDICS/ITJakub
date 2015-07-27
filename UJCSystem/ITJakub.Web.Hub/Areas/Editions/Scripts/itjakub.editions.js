@@ -85,7 +85,7 @@ function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) 
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                readerPlugin.showSearchResultInPages(response["pages"]);
+                readerPlugin.showSearchResultInPages(text, false, response["pages"]);
             }
         });
     }
@@ -112,19 +112,19 @@ function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) 
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                readerPlugin.showSearchResultInPages(response["pages"]);
+                readerPlugin.showSearchResultInPages(json, true, response["pages"]);
             }
         });
     }
     search = new Search($("#SearchDiv")[0], advancedSearch, basicSearch);
     var disabledOptions = new Array();
-    disabledOptions.push(SearchTypeEnum.Author);
-    disabledOptions.push(SearchTypeEnum.Dating);
-    disabledOptions.push(SearchTypeEnum.Editor);
-    disabledOptions.push(SearchTypeEnum.Headword);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
-    disabledOptions.push(SearchTypeEnum.Title);
+    disabledOptions.push(0 /* Author */);
+    disabledOptions.push(3 /* Dating */);
+    disabledOptions.push(2 /* Editor */);
+    disabledOptions.push(10 /* Headword */);
+    disabledOptions.push(11 /* HeadwordDescription */);
+    disabledOptions.push(12 /* HeadwordDescriptionTokenDistance */);
+    disabledOptions.push(1 /* Title */);
     search.makeSearch(disabledOptions);
     if (typeof searchedText !== "undefined" && searchedText !== null) {
         var decodedText = decodeURIComponent(searchedText);

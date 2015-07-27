@@ -900,5 +900,32 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
+        public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId, string pageXmlId,
+            OutputFormatEnumContract resultFormat)
+        {
+            try
+            {
+                return Channel.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetEditionPageFromSearch failed with: {0}", ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetEditionPageFromSearch failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetEditionPageFromSearch timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

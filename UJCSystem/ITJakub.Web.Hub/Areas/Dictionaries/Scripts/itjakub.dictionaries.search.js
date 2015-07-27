@@ -20,19 +20,19 @@ var DictionarySearch = (function () {
         this.search = new Search($("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this));
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Dictionaries/Dictionaries");
         this.disabledShowOptions = [
-            SearchTypeEnum.Author,
-            SearchTypeEnum.Title,
-            SearchTypeEnum.Editor,
-            SearchTypeEnum.Dating
+            0 /* Author */,
+            1 /* Title */,
+            2 /* Editor */,
+            3 /* Dating */
         ];
     }
     DictionarySearch.prototype.create = function () {
         var _this = this;
         var disabledOptions = new Array();
-        disabledOptions.push(SearchTypeEnum.Fulltext);
-        disabledOptions.push(SearchTypeEnum.TokenDistance);
-        disabledOptions.push(SearchTypeEnum.Sentence);
-        disabledOptions.push(SearchTypeEnum.Heading);
+        disabledOptions.push(4 /* Fulltext */);
+        disabledOptions.push(9 /* TokenDistance */);
+        disabledOptions.push(6 /* Sentence */);
+        disabledOptions.push(5 /* Heading */);
         this.dictionarySelector.makeDropdown();
         this.search.makeSearch(disabledOptions);
         this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
@@ -62,11 +62,11 @@ var DictionarySearch = (function () {
     DictionarySearch.prototype.getCurrentDictionaryViewer = function () {
         var currentTab = this.tabs.getCurrentTab();
         switch (currentTab) {
-            case DictionaryTabsEnum.Headwords:
+            case 0 /* Headwords */:
                 return this.dictionaryViewerHeadword;
-            case DictionaryTabsEnum.Fulltext:
+            case 1 /* Fulltext */:
                 return this.dictionaryViewerFulltext;
-            case DictionaryTabsEnum.Advanced:
+            case 2 /* Advanced */:
                 return this.dictionaryViewerAdvanced;
             default:
                 return this.dictionaryViewerHeadword;
@@ -82,7 +82,7 @@ var DictionarySearchTabs = (function () {
             new SearchTab("#tab-fulltext", "#list-fulltext", "#description-fulltext"),
             new SearchTab("#tab-advanced", "#list-advanced", "#description-advanced")
         ];
-        this.currentTab = DictionaryTabsEnum.Headwords;
+        this.currentTab = 0 /* Headwords */;
         $("#search-tabs li").addClass("hidden");
         $("#search-tabs a").click(function (e) {
             e.preventDefault();
@@ -92,16 +92,16 @@ var DictionarySearchTabs = (function () {
         });
     }
     DictionarySearchTabs.prototype.show = function (id) {
-        var index = DictionaryTabsEnum.Headwords;
+        var index = 0 /* Headwords */;
         switch (id) {
             case "#headwords":
-                index = DictionaryTabsEnum.Headwords;
+                index = 0 /* Headwords */;
                 break;
             case "#fulltext":
-                index = DictionaryTabsEnum.Fulltext;
+                index = 1 /* Fulltext */;
                 break;
             case "#advanced":
-                index = DictionaryTabsEnum.Advanced;
+                index = 2 /* Advanced */;
                 break;
         }
         this.currentTab = index;
@@ -112,14 +112,14 @@ var DictionarySearchTabs = (function () {
         $(searchTab.listDiv).addClass("active");
     };
     DictionarySearchTabs.prototype.showAdvanced = function () {
-        var advancedSearchTab = this.searchTabs[DictionaryTabsEnum.Advanced];
+        var advancedSearchTab = this.searchTabs[2 /* Advanced */];
         $("#search-tabs li").addClass("hidden");
         $(advancedSearchTab.tabLi).removeClass("hidden");
         $(advancedSearchTab.tabLi).children().trigger("click");
     };
     DictionarySearchTabs.prototype.showBasic = function () {
-        var advancedSearchTab = this.searchTabs[DictionaryTabsEnum.Advanced];
-        var headwordSearchTab = this.searchTabs[DictionaryTabsEnum.Headwords];
+        var advancedSearchTab = this.searchTabs[2 /* Advanced */];
+        var headwordSearchTab = this.searchTabs[0 /* Headwords */];
         $("#search-tabs li").removeClass("hidden");
         $(advancedSearchTab.tabLi).addClass("hidden");
         $(headwordSearchTab.tabLi).children().trigger("click");

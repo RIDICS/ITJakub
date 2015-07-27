@@ -775,7 +775,12 @@ class ReaderModule {
         return this.searchPanel;
     }
 
-    showSearchResultInPages(pages: Array<PageDescription>) {
+    showSearchResultInPages(searchQuery: string, isQueryJson: boolean, pages: Array<PageDescription>) {
+        this.textPanel.setSearchedQuery(searchQuery, isQueryJson);
+        $(".search-unloaded").removeClass(".search-unloaded");
+        var previousSearchPages = $(".search-loaded");
+        $(previousSearchPages).removeClass(".search-loaded");
+        $(previousSearchPages).addClass("unloaded");
         for (var i = 0; i < pages.length; i++) {
             var page = pages[i];
             var pageDiv = document.getElementById(page.PageXmlId);
@@ -1343,7 +1348,10 @@ class ImagePanel extends RightSidePanel {
 
 class TextPanel extends RightSidePanel {
     preloadPagesBefore:number;
-    preloadPagesAfter:number;
+    preloadPagesAfter: number;
+
+    private query: string; //search for text search
+    private queryIsJson: boolean;
 
     constructor(identificator: string, readerModule: ReaderModule) {
         super(identificator, "Text", readerModule);
@@ -1418,7 +1426,7 @@ class TextPanel extends RightSidePanel {
         var pageLoading: boolean = $(pageDiv).hasClass('loading');
         if (!pageLoading) {
             if (pageSearchUnloaded) {
-                this.downloadSearchPageByXmlId(page);
+                this.downloadSearchPageByXmlId(this.query, this.queryIsJson, page);
             }
             else if (!pageLoaded){
                 this.downloadPageByXmlId(page);
@@ -1490,7 +1498,7 @@ class TextPanel extends RightSidePanel {
         });
     }
 
-    private downloadSearchPageByXmlId(page: BookPage) {
+    private downloadSearchPageByXmlId(query: string, queryIsJson: boolean, page: BookPage) {
         var pageContainer = document.getElementById(page.xmlId);
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== 'undefined') {
@@ -1499,7 +1507,7 @@ class TextPanel extends RightSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            data: { query: query, isQueryJson: queryIsJson, bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
             url: getBaseUrl() +"Reader/GetBookSearchPageByXmlId",
             dataType: 'json',
             contentType: 'application/json',
@@ -1509,6 +1517,7 @@ class TextPanel extends RightSidePanel {
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).removeClass('unloaded');
                 $(pageContainer).removeClass('search-unloaded');
+                $(pageContainer).addClass('search-loaded');
 
                 if (typeof this.windowBody !== 'undefined') {
                     $(this.windowBody).find('#' + page.xmlId).removeClass("loading");
@@ -1522,6 +1531,11 @@ class TextPanel extends RightSidePanel {
                 $(pageContainer).append("Chyba při načítání stránky '"+page.text+"' s výsledky vyhledávání" );
             }
         });
+    }
+
+    public setSearchedQuery(query: string, isJson: boolean) {
+        this.query = query;
+        this.queryIsJson = isJson;
     }
 }
 

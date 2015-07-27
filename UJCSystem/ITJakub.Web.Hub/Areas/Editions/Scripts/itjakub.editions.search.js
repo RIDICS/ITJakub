@@ -3,7 +3,7 @@ $(document).ready(function () {
     var booksCountOnPage = 3;
     var bookIds = new Array();
     var categoryIds = new Array();
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", BookTypeEnum.Edition);
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", 0 /* Edition */);
     function editionAdvancedSearchPaged(json, pageNumber) {
         if (typeof json === "undefined" || json === null || json === "")
             return;
