@@ -10,8 +10,7 @@ var Pagination = (function () {
         this.pageClickCallback = pageClickCallback;
         $(this.paginationContainer).empty();
         var paginationUl = document.createElement("ul");
-        $(paginationUl).addClass("pagination")
-            .addClass("pagination-sm");
+        $(paginationUl).addClass("pagination").addClass("pagination-sm");
         var previousPageLi = this.createPageElement("&laquo;", "previous");
         paginationUl.appendChild(previousPageLi);
         for (var i = 1; i <= this.pageCount; i++) {
@@ -66,8 +65,7 @@ var Pagination = (function () {
     };
     Pagination.prototype.createThreeDots = function () {
         var element = document.createElement("li");
-        $(element).addClass("disabled")
-            .addClass("three-dots");
+        $(element).addClass("disabled").addClass("three-dots");
         var contentElement = document.createElement("span");
         contentElement.innerHTML = "&hellip;";
         element.appendChild(contentElement);
