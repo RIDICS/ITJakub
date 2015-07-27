@@ -73,7 +73,7 @@ div.container {
   background-color: #84ced7;
   color: white;
   padding: 5px;
-  min-height: 30px;
+  height: 34px;
 }
 .dictionary-subheader {
   margin-top: 1px;
@@ -99,6 +99,7 @@ div.container {
   width: 30%;
   float: left;
   overflow: hidden;
+  margin-top: 5px;
 }
 .dictionary-selects {
   height: 5vh;
@@ -300,5 +301,8 @@ div .sense {
 }
 .cap {
   font-variant: small-caps;
+}
+.dicitonaries-search .searchbar-inputs {
+  margin-right: 75px;
 }
 /*# sourceMappingURL=itjakub.dictionaries.css.map */
