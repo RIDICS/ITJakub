@@ -49,5 +49,24 @@ let $page-hits-result :=
 				{$page-hits-result}
 		</itj:result>
 
+let $template := doc(escape-html-uri($xsl-path)) 
+let $transformation := 
+	if($output-format = "Xml") then
+			$page-hits-result
+	else if($output-format = "Html") 
+	then transform:stream-transform($page-hits-result, $template, ())
+	else if($output-format = "Rtf") 
+		then trans:transform-document-to-rtf($page-hits-result, $template)
+		else if($output-format = "Pdf") 
+		then trans:transform-document-to-pdf($page-hits-result, $template)
+		else()
+
+return ($transformation)
+
+
 (:return trans:transform-document($page-hits-result, "Xml", $xsl-path) :)
-return trans:transform-document($page-hits-result, $output-format, $xsl-path) 
+(:return trans:transform-document($page-hits-result, $output-format, $xsl-path) :)
+(:let $template := doc(escape-html-uri($xsl-path)) 
+return  ($template)
+:)
+(:return ($page-hits-result, $output-format, $xsl-path):)
