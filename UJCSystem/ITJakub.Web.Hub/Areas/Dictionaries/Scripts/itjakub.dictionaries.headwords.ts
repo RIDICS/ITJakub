@@ -54,6 +54,9 @@
         });
     });
 
+    var favoriteHeadwords = new DictionaryFavoriteHeadwords("#saved-word-area", "#saved-word-area .saved-words-body", "#saved-word-area .saved-word-area-more");
+    favoriteHeadwords.create();
+
     loadHeadwordsFunction(dictionarySelector.getState());
 });
 

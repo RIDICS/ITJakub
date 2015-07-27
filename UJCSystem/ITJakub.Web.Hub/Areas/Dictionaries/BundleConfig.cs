@@ -15,6 +15,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries
 
             bundles.Add(new ScriptBundle("~/itjakub/dictionaries/headwordsjs").Include(
                "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.headwords.js",
+               "~/Areas/Dictionaries/Scripts/itjakub.dictionariesFavoriteHeadwords.js",
                "~/Areas/Dictionaries/Scripts/itjakub.dictionariesViewer.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/dictionaries/css").Include(

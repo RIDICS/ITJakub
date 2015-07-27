@@ -28,8 +28,16 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         void RemoveBookmark(string bookId, string pageName, string userName);
 
+        [OperationContract]
+        IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName);
+
+        [OperationContract]
+        void AddHeadwordBookmark(string bookId, string entryXmlId, string userName);
+
+        [OperationContract]
+        void RemoveHeadwordBookmark(string bookId, string entryXmlId, string userName);
+
         #endregion
 
-     
     }
 }

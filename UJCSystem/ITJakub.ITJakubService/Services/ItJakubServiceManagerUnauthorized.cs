@@ -49,6 +49,21 @@ namespace ITJakub.ITJakubService.Services
             m_favoriteManager.RemoveBookmark(bookId, pageName, userName);
         }
 
+        public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)
+        {
+            return m_favoriteManager.GetHeadwordBookmarks(userName);
+        }
+
+        public void AddHeadwordBookmark(string bookId, string entryXmlId, string userName)
+        {
+            m_favoriteManager.AddHeadwordBookmark(bookId, entryXmlId, userName);
+        }
+
+        public void RemoveHeadwordBookmark(string bookId, string entryXmlId, string userName)
+        {
+            m_favoriteManager.RemoveHeadwordBookmark(bookId, entryXmlId, userName);
+        }
+
         #endregion
     }
 }

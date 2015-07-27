@@ -154,6 +154,87 @@ namespace ITJakub.Web.Hub
         
             
         
-        }        
+        }
+
+        public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)
+        {
+            try
+            {
+                return Channel.GetHeadwordBookmarks(userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordBookmarks failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordBookmarks failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordBookmarks timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public void AddHeadwordBookmark(string bookId, string entryXmlId, string userName)
+        {
+            try
+            {
+                Channel.AddHeadwordBookmark(bookId, entryXmlId, userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AddHeadwordBookmark failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AddHeadwordBookmark failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AddHeadwordBookmark timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public void RemoveHeadwordBookmark(string bookId, string entryXmlId, string userName)
+        {
+            try
+            {
+                Channel.RemoveHeadwordBookmark(bookId, entryXmlId, userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("RemoveHeadwordBookmark failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("RemoveHeadwordBookmark failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("RemoveHeadwordBookmark timeouted with: {0}", ex);
+                throw;
+            }
+        }
     }
 }

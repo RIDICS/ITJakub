@@ -27,4 +27,14 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.PageXmlId, opt => opt.MapFrom(src => src.PageXmlId));
         }
     }
+
+    public class HeadwordBookmarkProfile : Profile
+    {
+        protected override void Configure()
+        {
+            CreateMap<HeadwordBookmark, HeadwordBookmarkContract>()
+                .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Book.Guid))
+                .ForMember(dest => dest.EntryXmlId, opt => opt.MapFrom(src => src.XmlEntryId));
+        }
+    }
 }
