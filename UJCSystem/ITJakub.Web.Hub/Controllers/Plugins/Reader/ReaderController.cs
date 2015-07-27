@@ -28,11 +28,33 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
         }
 
-        //TODO add json or text parameter (2 methods) and move it to right controller by module
-        public ActionResult GetBookSearchPageByXmlId(string json, string bookId, string pageXmlId)
+        
+        public ActionResult GetBookSearchPageByXmlId(string query,bool isQueryJson, string bookId, string pageXmlId)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            IList<SearchCriteriaContract> listSearchCriteriaContracts;
+            if (isQueryJson)
+            {
+                var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(query, new ConditionCriteriaDescriptionConverter());
+                listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            }
+            else
+            {
+                listSearchCriteriaContracts = new List<SearchCriteriaContract>
+                {
+                    new WordListCriteriaContract
+                    {
+                        Key = CriteriaKey.Fulltext,
+                        Disjunctions = new List<WordCriteriaContract>
+                        {
+                            new WordCriteriaContract
+                            {
+                                Contains = new List<string>{query}
+                            }
+                        }
+                    }
+                };
+            }
 
             var text = m_mainServiceClient.GetEditionPageFromSearch(listSearchCriteriaContracts, bookId, pageXmlId, OutputFormatEnumContract.Html); //TODO change on method for retrieve page with search result
             return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);

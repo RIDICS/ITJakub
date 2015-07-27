@@ -85,7 +85,7 @@ function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) 
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                readerPlugin.showSearchResultInPages(response["pages"]);
+                readerPlugin.showSearchResultInPages(text, false, response["pages"]);
             }
         });
     }
@@ -112,7 +112,7 @@ function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) 
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                readerPlugin.showSearchResultInPages(response["pages"]);
+                readerPlugin.showSearchResultInPages(json, true, response["pages"]);
             }
         });
     }

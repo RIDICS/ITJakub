@@ -649,7 +649,12 @@ var ReaderModule = (function () {
         }
         return this.searchPanel;
     };
-    ReaderModule.prototype.showSearchResultInPages = function (pages) {
+    ReaderModule.prototype.showSearchResultInPages = function (searchQuery, isQueryJson, pages) {
+        this.textPanel.setSearchedQuery(searchQuery, isQueryJson);
+        $(".search-unloaded").removeClass(".search-unloaded");
+        var previousSearchPages = $(".search-loaded");
+        $(previousSearchPages).removeClass(".search-loaded");
+        $(previousSearchPages).addClass("unloaded");
         for (var i = 0; i < pages.length; i++) {
             var page = pages[i];
             var pageDiv = document.getElementById(page.PageXmlId);
@@ -1187,7 +1192,7 @@ var TextPanel = (function (_super) {
         var pageLoading = $(pageDiv).hasClass('loading');
         if (!pageLoading) {
             if (pageSearchUnloaded) {
-                this.downloadSearchPageByXmlId(page);
+                this.downloadSearchPageByXmlId(this.query, this.queryIsJson, page);
             }
             else if (!pageLoaded) {
                 this.downloadPageByXmlId(page);
@@ -1253,7 +1258,7 @@ var TextPanel = (function (_super) {
             }
         });
     };
-    TextPanel.prototype.downloadSearchPageByXmlId = function (page) {
+    TextPanel.prototype.downloadSearchPageByXmlId = function (query, queryIsJson, page) {
         var _this = this;
         var pageContainer = document.getElementById(page.xmlId);
         $(pageContainer).addClass("loading");
@@ -1263,7 +1268,7 @@ var TextPanel = (function (_super) {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            data: { query: query, isQueryJson: queryIsJson, bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
             url: getBaseUrl() + "Reader/GetBookSearchPageByXmlId",
             dataType: 'json',
             contentType: 'application/json',
@@ -1273,6 +1278,7 @@ var TextPanel = (function (_super) {
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).removeClass('unloaded');
                 $(pageContainer).removeClass('search-unloaded');
+                $(pageContainer).addClass('search-loaded');
                 if (typeof _this.windowBody !== 'undefined') {
                     $(_this.windowBody).find('#' + page.xmlId).removeClass("loading");
                     $(_this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
@@ -1284,6 +1290,10 @@ var TextPanel = (function (_super) {
                 $(pageContainer).append("Chyba při načítání stránky '" + page.text + "' s výsledky vyhledávání");
             }
         });
+    };
+    TextPanel.prototype.setSearchedQuery = function (query, isJson) {
+        this.query = query;
+        this.queryIsJson = isJson;
     };
     return TextPanel;
 })(RightSidePanel);
