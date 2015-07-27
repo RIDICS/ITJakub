@@ -33,7 +33,7 @@ $(document).ready(function () {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearchCount",
+            url: getBaseUrl() + "Editions/Editions/TextSearchPaged",
             data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
