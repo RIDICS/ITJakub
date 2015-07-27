@@ -78,5 +78,13 @@ BEGIN TRAN
 	  ('output-scholary_literature','Odborna literatura',NULL,@ProfessionalLiteratureTypeId,'/output-scholary_literature/'),
 	  ('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId,'/output-digitized-grammar/')
 	  
+
+    INSERT INTO [dbo].[DatabaseVersion]
+		(DatabaseVersion)
+    VALUES
+		('011' )
+		-- DatabaseVersion - varchar
+
+
 	--ROLLBACK
 COMMIT

@@ -1,5 +1,5 @@
 /// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -741,9 +741,7 @@ var SidePanel = (function () {
     SidePanel.prototype.makePanelWindow = function (documentWindow) {
         return this.makePanelBody($(this.innerContent).clone(true), this, window);
     };
-    SidePanel.prototype.decorateSidePanel = function (htmlDivElement) {
-        throw new Error("Not implemented");
-    };
+    SidePanel.prototype.decorateSidePanel = function (htmlDivElement) { throw new Error("Not implemented"); };
     SidePanel.prototype.onNewWindowButtonClick = function (sidePanelDiv) {
         var _this = this;
         this.closeButton.click();
@@ -769,12 +767,8 @@ var SidePanel = (function () {
         $(this.windowBody).val('');
         $(this.childwindow).val('');
     };
-    SidePanel.prototype.onPinButtonClick = function (sidePanelDiv) {
-        throw new Error("Not implemented");
-    };
-    SidePanel.prototype.onCloseButtonClick = function (sidePanelDiv) {
-        throw new Error("Not implemented");
-    };
+    SidePanel.prototype.onPinButtonClick = function (sidePanelDiv) { throw new Error("Not implemented"); };
+    SidePanel.prototype.onCloseButtonClick = function (sidePanelDiv) { throw new Error("Not implemented"); };
     return SidePanel;
 })();
 var LeftSidePanel = (function (_super) {

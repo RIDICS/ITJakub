@@ -4,16 +4,21 @@ $(document).ready(function () {
 });
 var DictionarySearch = (function () {
     function DictionarySearch() {
+        var _this = this;
         var pageSize = 25;
         this.tabs = new DictionarySearchTabs();
         this.callbackDelegate = new DropDownSelectCallbackDelegate();
+        this.callbackDelegate.selectedChangedCallback = function (state) {
+            _this.updateTypeaheadSearchBox(state);
+        };
         this.dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, this.callbackDelegate);
-        var dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
-        var dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#description-fulltext", true);
-        var dictionaryViewerAdvanced = new DictionaryViewer("#headwords-list-advanced", "#headwords-pagination-advanced", "#description-advanced", true);
-        this.dictionaryWrapperBasic = new DictionaryViewerTextWrapper(dictionaryViewerHeadword, dictionaryViewerFulltext, pageSize, this.tabs, this.dictionarySelector);
-        this.dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(dictionaryViewerAdvanced, pageSize, this.tabs, this.dictionarySelector);
+        this.dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
+        this.dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#description-fulltext", true);
+        this.dictionaryViewerAdvanced = new DictionaryViewer("#headwords-list-advanced", "#headwords-pagination-advanced", "#description-advanced", true);
+        this.dictionaryWrapperBasic = new DictionaryViewerTextWrapper(this.dictionaryViewerHeadword, this.dictionaryViewerFulltext, pageSize, this.tabs, this.dictionarySelector);
+        this.dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(this.dictionaryViewerAdvanced, pageSize, this.tabs, this.dictionarySelector);
         this.search = new Search($("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this));
+        this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Dictionaries/Dictionaries");
         this.disabledShowOptions = [
             0 /* Author */,
             1 /* Title */,
@@ -22,9 +27,7 @@ var DictionarySearch = (function () {
         ];
     }
     DictionarySearch.prototype.create = function () {
-        this.callbackDelegate.selectedChangedCallback = function (state) {
-            //TODO notify typeahead
-        };
+        var _this = this;
         var disabledOptions = new Array();
         disabledOptions.push(4 /* Fulltext */);
         disabledOptions.push(9 /* TokenDistance */);
@@ -32,6 +35,22 @@ var DictionarySearch = (function () {
         disabledOptions.push(5 /* Heading */);
         this.dictionarySelector.makeDropdown();
         this.search.makeSearch(disabledOptions);
+        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+        this.typeaheadSearchBox.create();
+        $("#printDescription").click(function () {
+            _this.getCurrentDictionaryViewer().print();
+        });
+        window.matchMedia("print").addListener(function (mql) {
+            if (mql.matches) {
+                _this.getCurrentDictionaryViewer().loadAllHeadwords();
+            }
+        });
+    };
+    DictionarySearch.prototype.updateTypeaheadSearchBox = function (state) {
+        var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
+        this.typeaheadSearchBox.clearAndDestroy();
+        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla", parametersUrl);
+        this.typeaheadSearchBox.create();
     };
     DictionarySearch.prototype.processSearchJson = function (json) {
         var filteredJsonForShowing = this.search.getFilteredQuery(json, this.disabledShowOptions);
@@ -39,6 +58,19 @@ var DictionarySearch = (function () {
     };
     DictionarySearch.prototype.processSearchText = function (text) {
         this.dictionaryWrapperBasic.loadCount(text);
+    };
+    DictionarySearch.prototype.getCurrentDictionaryViewer = function () {
+        var currentTab = this.tabs.getCurrentTab();
+        switch (currentTab) {
+            case DictionaryTabsEnum.Headwords:
+                return this.dictionaryViewerHeadword;
+            case DictionaryTabsEnum.Fulltext:
+                return this.dictionaryViewerFulltext;
+            case DictionaryTabsEnum.Advanced:
+                return this.dictionaryViewerAdvanced;
+            default:
+                return this.dictionaryViewerHeadword;
+        }
     };
     return DictionarySearch;
 })();
@@ -50,26 +82,29 @@ var DictionarySearchTabs = (function () {
             new SearchTab("#tab-fulltext", "#list-fulltext", "#description-fulltext"),
             new SearchTab("#tab-advanced", "#list-advanced", "#description-advanced")
         ];
+        this.currentTab = DictionaryTabsEnum.Headwords;
         $("#search-tabs li").addClass("hidden");
         $("#search-tabs a").click(function (e) {
             e.preventDefault();
             $(e.target).tab("show");
             _this.show(e.target.getAttribute("href"));
+            $(window).trigger("scroll");
         });
     }
     DictionarySearchTabs.prototype.show = function (id) {
-        var index = 0 /* Headwords */;
+        var index = DictionaryTabsEnum.Headwords;
         switch (id) {
             case "#headwords":
-                index = 0 /* Headwords */;
+                index = DictionaryTabsEnum.Headwords;
                 break;
             case "#fulltext":
-                index = 1 /* Fulltext */;
+                index = DictionaryTabsEnum.Fulltext;
                 break;
             case "#advanced":
-                index = 2 /* Advanced */;
+                index = DictionaryTabsEnum.Advanced;
                 break;
         }
+        this.currentTab = index;
         var searchTab = this.searchTabs[index];
         $("#headword-description > div").removeClass("active");
         $(".tab-content > div").removeClass("active");
@@ -77,17 +112,20 @@ var DictionarySearchTabs = (function () {
         $(searchTab.listDiv).addClass("active");
     };
     DictionarySearchTabs.prototype.showAdvanced = function () {
-        var advancedSearchTab = this.searchTabs[2 /* Advanced */];
+        var advancedSearchTab = this.searchTabs[DictionaryTabsEnum.Advanced];
         $("#search-tabs li").addClass("hidden");
         $(advancedSearchTab.tabLi).removeClass("hidden");
         $(advancedSearchTab.tabLi).children().trigger("click");
     };
     DictionarySearchTabs.prototype.showBasic = function () {
-        var advancedSearchTab = this.searchTabs[2 /* Advanced */];
-        var headwordSearchTab = this.searchTabs[0 /* Headwords */];
+        var advancedSearchTab = this.searchTabs[DictionaryTabsEnum.Advanced];
+        var headwordSearchTab = this.searchTabs[DictionaryTabsEnum.Headwords];
         $("#search-tabs li").removeClass("hidden");
         $(advancedSearchTab.tabLi).addClass("hidden");
         $(headwordSearchTab.tabLi).children().trigger("click");
+    };
+    DictionarySearchTabs.prototype.getCurrentTab = function () {
+        return this.currentTab;
     };
     return DictionarySearchTabs;
 })();

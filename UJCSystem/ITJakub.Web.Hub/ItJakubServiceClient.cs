@@ -633,11 +633,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType)
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
             try
             {
-                return Channel.GetTypeaheadTitlesByBookType(query, bookType);
+                return Channel.GetTypeaheadTitlesByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
             }
             catch (CommunicationException ex)
             {

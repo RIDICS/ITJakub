@@ -217,22 +217,22 @@ namespace ITJakub.ITJakubService.Core
             return m_bookRepository.GetTypeaheadTitles(query, PrefetchRecordCount);
         }
 
-        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookTypeContract)
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookTypeContract, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
+            var bookIdList = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
             var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
             if (string.IsNullOrWhiteSpace(query))
-                return m_bookRepository.GetLastTitlesByBookType(PrefetchRecordCount, bookType);
+                return m_bookRepository.GetLastTitlesByBookType(PrefetchRecordCount, bookType, bookIdList);
 
             query = PrepareQuery(query);
-            return m_bookRepository.GetTypeaheadTitlesByBookType(query, bookType, PrefetchRecordCount);
+            return m_bookRepository.GetTypeaheadTitlesByBookType(query, bookType, bookIdList, PrefetchRecordCount);
         }
 
         public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
             string query)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
-            if (bookIds.Count == 0)
-                bookIds = null;
 
             if (string.IsNullOrWhiteSpace(query))
                 return m_bookRepository.GetLastTypeaheadHeadwords(PrefetchRecordCount, bookIds);
@@ -293,10 +293,16 @@ namespace ITJakub.ITJakubService.Core
 
         private IList<long> GetCompleteBookIdList(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
-            var bookIdsFromCategory = m_categoryRepository.GetBookIdsFromCategory(selectedCategoryIds);
-            return selectedBookIds != null
-                ? bookIdsFromCategory.Concat(selectedBookIds).ToList()
-                : bookIdsFromCategory;
+            if (selectedCategoryIds != null && selectedCategoryIds.Count > 0)
+            {
+                var bookIdsFromCategory = m_categoryRepository.GetBookIdsFromCategory(selectedCategoryIds);
+
+                return selectedBookIds == null
+                    ? bookIdsFromCategory
+                    : bookIdsFromCategory.Concat(selectedBookIds).ToList();
+            }
+
+            return selectedBookIds;
         }
 
         private string GetSingleHeadwordQuery(IList<SearchCriteriaContract> searchCriteria)
@@ -320,7 +326,7 @@ namespace ITJakub.ITJakubService.Core
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
-            return bookIds.Count == 0
+            return bookIds == null
                 ? m_bookVersionRepository.GetHeadwordCount()
                 : m_bookVersionRepository.GetHeadwordCount(bookIds);
         }
@@ -330,7 +336,7 @@ namespace ITJakub.ITJakubService.Core
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
-            var databaseResult = bookIds.Count == 0
+            var databaseResult = bookIds == null
                 ? m_bookVersionRepository.GetHeadwordList(start, end)
                 : m_bookVersionRepository.GetHeadwordList(start, end, bookIds);
             var result = ConvertHeadwordSearchToContract(databaseResult);

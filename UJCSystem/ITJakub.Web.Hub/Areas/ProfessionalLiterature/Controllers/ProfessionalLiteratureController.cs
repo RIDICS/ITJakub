@@ -42,7 +42,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.ProfessionalLiterature);
+            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.ProfessionalLiterature, null, null);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

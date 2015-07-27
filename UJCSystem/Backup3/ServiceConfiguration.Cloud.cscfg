@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceConfiguration serviceName="ITJakub.MobileApps.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+<ServiceConfiguration serviceName="ITJakub.MobileApps.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2014-06.2.4">
   <Role name="ITJakub.MobileApps.Service">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="azureTableConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="azureTableConnectionString" value="DefaultEndpointsProtocol=https;AccountName=mobileazuretables;AccountKey=bNfxZTdWNCFclatzPO9/g1ak2BTrxz+RQGcGnHGw+2WVNqialU3GfmZeehKpiBVQlx3SxTvE1A1TW4f2yUkXQQ==" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="itjakub" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEDwSUS8MP/CcRwWjIPNef48wDQYJKoZIhvcNAQEBBQAEggEAa6pWI6XgiWhsTIKiyW6K6nw68KX2q15ThNgRexEMLHizOf0ncm5VnafwViiqgX8SVXPCKmciBL+mIuCxsZGQATRMJwbLhYilc2/m6E++RzItCKh8ZvrBx+Ybc+t2sOWaZaRdqrCJR4Uz+H9aGy+AgVGq1knYw7URlS7yMF3vxAbM4srfb7llMYcx7GeCB/XsetYyRImtrMOQehEXz1vQFF7S4L3+wT/jRq3b451ibB1MHsbft8/B7LNponapYUDvSnmBfyYefOeQqze4/nqUATzZvns2GNo4HvrJ0XE0fPRA5jIvPn+OkpbeudWWr+M3DLhItvoV8HD2qwSXvvgu4TAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECMQ1UpLHO4c1gBCJSH5rLSm+vrw+0YHoMD8M" />

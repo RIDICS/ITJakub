@@ -48,8 +48,14 @@ $(document).ready(function () {
 });
 var DictionaryViewerListWrapper = (function () {
     function DictionaryViewerListWrapper(dictionaryViewer, pageSize) {
+        var _this = this;
         this.pageSize = pageSize;
         this.dictionaryViewer = dictionaryViewer;
+        window.matchMedia("print").addListener(function (mql) {
+            if (mql.matches) {
+                _this.dictionaryViewer.loadAllHeadwords();
+            }
+        });
     }
     DictionaryViewerListWrapper.prototype.loadCount = function (state) {
         var _this = this;
