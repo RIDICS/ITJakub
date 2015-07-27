@@ -56,7 +56,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
                 };
             }
 
-            var text = m_mainServiceClient.GetEditionPageFromSearch(listSearchCriteriaContracts, bookId, pageXmlId, OutputFormatEnumContract.Html); //TODO change on method for retrieve page with search result
+            var text = m_mainServiceClient.GetEditionPageFromSearch(listSearchCriteriaContracts, bookId, pageXmlId, OutputFormatEnumContract.Html);
             return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
         }
 

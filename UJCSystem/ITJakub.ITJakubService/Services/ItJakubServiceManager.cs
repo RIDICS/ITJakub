@@ -210,7 +210,7 @@ namespace ITJakub.ITJakubService.Services
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
              string pageXmlId, OutputFormatEnumContract resultFormat)
         {
-            return m_searchManager.GetDictionaryEntryFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
+            return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
         }
     }
 }
