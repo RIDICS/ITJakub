@@ -10,5 +10,8 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [DataMember]
         public string BookId { get; set; }
+
+        [DataMember]
+        public string Headword { get; set; }
     }
 }

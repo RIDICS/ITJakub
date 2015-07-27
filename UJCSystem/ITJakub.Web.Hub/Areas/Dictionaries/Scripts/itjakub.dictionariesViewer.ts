@@ -98,6 +98,16 @@ class DictionaryViewer {
                 $(commentsLink).text("Připomínky");
                 commentsLink.href = "#";
                 $(commentsDiv).addClass("dictionary-entry-comments");
+
+                var addToFavoriteLink = document.createElement("a");
+                addToFavoriteLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
+                $(addToFavoriteLink).text("Do oblíbených ");
+                $(addToFavoriteLink).click(event => {
+                    var index: number = $(event.target).data("entry-index");
+                    this.addNewFavoriteHeadword(index);
+                });
+
+                commentsDiv.appendChild(addToFavoriteLink);
                 commentsDiv.appendChild(commentsLink);
 
                 var dictionaryDiv = document.createElement("div");
@@ -142,6 +152,25 @@ class DictionaryViewer {
 
         $(this.headwordListContainer).append(listUl);
         $(this.headwordDescriptionContainer).append(descriptionsDiv);
+    }
+
+    private addNewFavoriteHeadword(index: number) {
+        var dictionaryInfo = this.dictionariesInfo[index];
+        
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/AddHeadwordBookmark",
+            data: {
+                bookId: dictionaryInfo.BookXmlId,
+                entryXmlId: dictionaryInfo.EntryXmlId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                // TODO reload favorite list
+            }
+        });
     }
 
     private createLinkListener(aLink: HTMLAnchorElement, headword: string, headwordInfo: IHeadwordBookInfo, container: HTMLDivElement) {

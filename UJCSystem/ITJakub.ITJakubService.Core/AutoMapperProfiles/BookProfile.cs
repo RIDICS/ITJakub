@@ -34,7 +34,8 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         {
             CreateMap<HeadwordBookmark, HeadwordBookmarkContract>()
                 .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Book.Guid))
-                .ForMember(dest => dest.EntryXmlId, opt => opt.MapFrom(src => src.XmlEntryId));
+                .ForMember(dest => dest.EntryXmlId, opt => opt.MapFrom(src => src.XmlEntryId))
+                ;
         }
     }
 }

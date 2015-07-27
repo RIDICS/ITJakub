@@ -79,7 +79,7 @@
             $(removeWordSpan).addClass("saved-word-remove")
                 .addClass("glyphicon")
                 .addClass("glyphicon-remove-circle");
-            $(removeWordSpan).data("xmlId", favoriteHeadword.XmlEntryId);
+            $(removeWordSpan).data("xmlId", favoriteHeadword.EntryXmlId);
             $(removeWordSpan).click(event => {
                 var element = event.target;
                 $(element).parent(".saved-word").fadeOut(function () {
@@ -89,7 +89,7 @@
 
             $(textWordSpan).addClass("saved-word-text");
             $(textWordSpan).text(favoriteHeadword.Headword);
-            $(textWordSpan).data("xmlId", favoriteHeadword.XmlEntryId);
+            $(textWordSpan).data("xmlId", favoriteHeadword.EntryXmlId);
             $(textWordSpan).click(event => {
                 alert("here should be request for new search with word: " + $(event.target).text());
             });
@@ -105,5 +105,6 @@
 
 interface IDictionaryFavoriteHeadword {
     Headword: string;
-    XmlEntryId: string;
+    EntryXmlId: string;
+    BookId: string;
 }

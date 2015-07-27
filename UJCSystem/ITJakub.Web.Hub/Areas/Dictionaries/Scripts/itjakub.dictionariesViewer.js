@@ -31,6 +31,7 @@ var DictionaryViewer = (function () {
         this.showPageCallback(pageNumber);
     };
     DictionaryViewer.prototype.showHeadwords = function (headwords) {
+        var _this = this;
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
         this.headwordDescriptionDivs = [];
@@ -70,6 +71,14 @@ var DictionaryViewer = (function () {
                 $(commentsLink).text("Připomínky");
                 commentsLink.href = "#";
                 $(commentsDiv).addClass("dictionary-entry-comments");
+                var addToFavoriteLink = document.createElement("a");
+                addToFavoriteLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
+                $(addToFavoriteLink).text("Do oblíbených ");
+                $(addToFavoriteLink).click(function (event) {
+                    var index = $(event.target).data("entry-index");
+                    _this.addNewFavoriteHeadword(index);
+                });
+                commentsDiv.appendChild(addToFavoriteLink);
                 commentsDiv.appendChild(commentsLink);
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
@@ -105,6 +114,23 @@ var DictionaryViewer = (function () {
         }
         $(this.headwordListContainer).append(listUl);
         $(this.headwordDescriptionContainer).append(descriptionsDiv);
+    };
+    DictionaryViewer.prototype.addNewFavoriteHeadword = function (index) {
+        var dictionaryInfo = this.dictionariesInfo[index];
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/AddHeadwordBookmark",
+            data: {
+                bookId: dictionaryInfo.BookXmlId,
+                entryXmlId: dictionaryInfo.EntryXmlId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                // TODO reload favorite list
+            }
+        });
     };
     DictionaryViewer.prototype.createLinkListener = function (aLink, headword, headwordInfo, container) {
         var _this = this;
