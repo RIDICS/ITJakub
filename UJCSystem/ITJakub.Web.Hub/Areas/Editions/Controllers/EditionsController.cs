@@ -63,7 +63,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     VersionXmlId = book.LastVersionXmlId,
                     BookTitle = book.Title,
                     BookPages = book.BookPages,
-                    SearchText = HttpUtility.UrlDecode(searchText)
+                    SearchText = searchText
                 });
         }
 
