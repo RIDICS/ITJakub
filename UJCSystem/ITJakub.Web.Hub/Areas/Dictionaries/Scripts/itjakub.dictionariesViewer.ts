@@ -13,6 +13,7 @@ class DictionaryViewer {
     private headwordList: string[];
     private dictionariesMetadataList: IBookListDictionary;
     private showPageCallback: (pageNumber: number) => void;
+    private addNewFavoriteCallback: (bookId: string, entryXmlId: string) => void;
     private searchCriteria: string;
     private isCriteriaJson: boolean;
 
@@ -24,12 +25,15 @@ class DictionaryViewer {
         this.pagination = new Pagination(paginationContainer);
     }
 
-    public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, searchCriteria: string = null, isCriteriaJson: boolean = false) {
+    public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, searchCriteria: string = null,
+        isCriteriaJson: boolean = false, addNewFavoriteCallback: (bookId: string, entryXmlId: string) => void = null)
+    {
         this.recordCount = recordCount;
         this.showPageCallback = showPageCallback;
         this.pageSize = pageSize;
         this.searchCriteria = searchCriteria;
         this.isCriteriaJson = isCriteriaJson;
+        this.addNewFavoriteCallback = addNewFavoriteCallback;
 
         this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
     }
@@ -66,14 +70,22 @@ class DictionaryViewer {
             var headwordSpan = document.createElement("span");
             $(headwordSpan).text(record.Headword);
             $(headwordSpan).addClass("dictionary-result-headword");
-
-            var favoriteGlyphSpan = document.createElement("span");
-            $(favoriteGlyphSpan).addClass("glyphicon")
-                .addClass("glyphicon-star-empty")
-                .addClass("dictionary-result-headword-favorite");
-
             headwordLi.appendChild(headwordSpan);
-            headwordLi.appendChild(favoriteGlyphSpan);
+
+            if (this.addNewFavoriteCallback != null) {
+                var favoriteGlyphSpan = document.createElement("span");
+                favoriteGlyphSpan.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
+                $(favoriteGlyphSpan).addClass("glyphicon")
+                    .addClass("glyphicon-star-empty")
+                    .addClass("dictionary-result-headword-favorite");
+                $(favoriteGlyphSpan).click(event => {
+                    var index: number = $(event.target).data("entry-index");
+                    this.addNewFavoriteHeadword(index);
+                });
+
+                headwordLi.appendChild(favoriteGlyphSpan);
+            }
+            
             var dictionaryListDiv = document.createElement("div");
             $(dictionaryListDiv).addClass("dictionary-result-book-list");
 
@@ -98,16 +110,6 @@ class DictionaryViewer {
                 $(commentsLink).text("Připomínky");
                 commentsLink.href = "#";
                 $(commentsDiv).addClass("dictionary-entry-comments");
-
-                var addToFavoriteLink = document.createElement("a");
-                addToFavoriteLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
-                $(addToFavoriteLink).text("Do oblíbených ");
-                $(addToFavoriteLink).click(event => {
-                    var index: number = $(event.target).data("entry-index");
-                    this.addNewFavoriteHeadword(index);
-                });
-
-                commentsDiv.appendChild(addToFavoriteLink);
                 commentsDiv.appendChild(commentsLink);
 
                 var dictionaryDiv = document.createElement("div");
@@ -156,21 +158,7 @@ class DictionaryViewer {
 
     private addNewFavoriteHeadword(index: number) {
         var dictionaryInfo = this.dictionariesInfo[index];
-        
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/AddHeadwordBookmark",
-            data: {
-                bookId: dictionaryInfo.BookXmlId,
-                entryXmlId: dictionaryInfo.EntryXmlId
-            },
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                // TODO reload favorite list
-            }
-        });
+        this.addNewFavoriteCallback(dictionaryInfo.BookXmlId, dictionaryInfo.EntryXmlId);
     }
 
     private createLinkListener(aLink: HTMLAnchorElement, headword: string, headwordInfo: IHeadwordBookInfo, container: HTMLDivElement) {

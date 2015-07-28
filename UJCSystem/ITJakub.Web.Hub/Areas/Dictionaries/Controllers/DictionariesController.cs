@@ -233,6 +233,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(resultPageNumber, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetHeadwordPageNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId, int pageSize)
+        {
+            var rowNumber = m_mainServiceClient.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId, headwordEntryXmlId);
+            var resultPageNumber = (rowNumber - 1) / pageSize + 1;
+            return Json(resultPageNumber, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query);

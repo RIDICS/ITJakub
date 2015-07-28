@@ -4,6 +4,9 @@ using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.SelectResults;
+using NHibernate.Criterion;
+using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -95,19 +98,31 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<HeadwordBookmark> GetAllHeadwordBookmarks(string userName)
+        public virtual IList<HeadwordBookmarkResult> GetAllHeadwordBookmarks(string userName)
         {
             using (var session = GetSession())
             {
+                HeadwordBookmarkResult resultAlias = null;
                 HeadwordBookmark headwordBookmarkAlias = null;
                 User userAlias = null;
                 Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                BookHeadword bookHeadwordAlias = null;
 
                 return session.QueryOver(() => headwordBookmarkAlias)
                     .JoinQueryOver(() => headwordBookmarkAlias.Book, () => bookAlias)
                     .JoinQueryOver(() => headwordBookmarkAlias.User, () => userAlias)
+                    .JoinQueryOver(() => bookAlias.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(() => bookVersionAlias.BookHeadwords, () => bookHeadwordAlias)
+                    .Select(Projections.Distinct(Projections.ProjectionList()
+                        .Add(Projections.Property(() => headwordBookmarkAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
+                        .Add(Projections.Property(() => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid))
+                        .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
+                        ))
                     .Where(() => userAlias.UserName == userName)
-                    .List<HeadwordBookmark>();
+                    .And(() => headwordBookmarkAlias.XmlEntryId == bookHeadwordAlias.XmlEntryId)
+                    .TransformUsing(Transformers.AliasToBean<HeadwordBookmarkResult>())
+                    .List<HeadwordBookmarkResult>();
             }
         }
     }

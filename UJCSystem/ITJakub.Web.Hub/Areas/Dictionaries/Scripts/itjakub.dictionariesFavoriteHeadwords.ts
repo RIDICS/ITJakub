@@ -2,6 +2,7 @@
     private expandButton: string;
     private listContainer: string;
     private mainContainer: string;
+    private headwordClickCallback: (bookId: string, entryXmlId: string) => void;
 
     constructor(mainContainer: string, listContainer: string, expandButton: string) {
         this.expandButton = expandButton;
@@ -9,7 +10,8 @@
         this.mainContainer = mainContainer;
     }
 
-    public create() {
+    public create(headwordClickCallback: (bookId: string, entryXmlId: string) => void) {
+        this.headwordClickCallback = headwordClickCallback;
         var self = this;
         $(this.expandButton).click(function () {
             var area = $(self.mainContainer);
@@ -34,18 +36,6 @@
             }
         });
 
-
-        //$(".saved-word-remove").click(function () {
-        //    $(this).parent(".saved-word").fadeOut(function () {
-        //        $(this).remove();
-        //    }); //TODO populate request to remove on server
-        //});
-
-        //$(".saved-word-text").click(function () {
-        //    alert("here should be request for new search with word: " + $(this).text());
-        //}); //TODO populate request to add word on server
-
-
         this.getAllHeadwords();
     }
 
@@ -59,6 +49,23 @@
             contentType: "application/json",
             success: (response) => {
                 this.showHeadwordList(response);
+            }
+        });
+    }
+
+    public addNewHeadword(bookId: string, entryXmlId: string) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/AddHeadwordBookmark",
+            data: {
+                bookId: bookId,
+                entryXmlId: entryXmlId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                this.getAllHeadwords();
             }
         });
     }
@@ -79,19 +86,22 @@
             $(removeWordSpan).addClass("saved-word-remove")
                 .addClass("glyphicon")
                 .addClass("glyphicon-remove-circle");
-            $(removeWordSpan).data("xmlId", favoriteHeadword.EntryXmlId);
+            $(removeWordSpan).data("entryXmlId", favoriteHeadword.EntryXmlId);
+            $(removeWordSpan).data("bookId", favoriteHeadword.BookId);
             $(removeWordSpan).click(event => {
                 var element = event.target;
                 $(element).parent(".saved-word").fadeOut(function () {
                     $(element).remove();
-                }); //TODO populate request to remove on server
+                });
+                this.removeHeadword(element);
             });
 
             $(textWordSpan).addClass("saved-word-text");
             $(textWordSpan).text(favoriteHeadword.Headword);
-            $(textWordSpan).data("xmlId", favoriteHeadword.EntryXmlId);
+            $(textWordSpan).data("entryXmlId", favoriteHeadword.EntryXmlId);
+            $(textWordSpan).data("bookId", favoriteHeadword.BookId);
             $(textWordSpan).click(event => {
-                alert("here should be request for new search with word: " + $(event.target).text());
+                this.goToPageWithSelectedHeadword(event.target);
             });
 
             wordSpan.appendChild(removeWordSpan);
@@ -100,6 +110,33 @@
         }
 
         $(this.listContainer).append(listDiv);
+    }
+
+    private goToPageWithSelectedHeadword(element: Element) {
+        var entryXmlId = $(element).data("entryXmlId");
+        var bookId = $(element).data("bookId");
+
+        this.headwordClickCallback(bookId, entryXmlId);
+    }
+
+    private removeHeadword(element: Element) {
+        var entryXmlId = $(element).data("entryXmlId");
+        var bookId = $(element).data("bookId");
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/RemoveHeadwordBookmark",
+            data: {
+                bookId: bookId,
+                entryXmlId: entryXmlId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                
+            }
+        });
     }
 }
 

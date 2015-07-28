@@ -8,14 +8,16 @@ var DictionaryViewer = (function () {
         this.isLazyLoad = lazyLoad;
         this.pagination = new Pagination(paginationContainer);
     }
-    DictionaryViewer.prototype.createViewer = function (recordCount, showPageCallback, pageSize, searchCriteria, isCriteriaJson) {
+    DictionaryViewer.prototype.createViewer = function (recordCount, showPageCallback, pageSize, searchCriteria, isCriteriaJson, addNewFavoriteCallback) {
         if (searchCriteria === void 0) { searchCriteria = null; }
         if (isCriteriaJson === void 0) { isCriteriaJson = false; }
+        if (addNewFavoriteCallback === void 0) { addNewFavoriteCallback = null; }
         this.recordCount = recordCount;
         this.showPageCallback = showPageCallback;
         this.pageSize = pageSize;
         this.searchCriteria = searchCriteria;
         this.isCriteriaJson = isCriteriaJson;
+        this.addNewFavoriteCallback = addNewFavoriteCallback;
         this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
     };
     DictionaryViewer.prototype.goToPage = function (pageNumber) {
@@ -46,10 +48,17 @@ var DictionaryViewer = (function () {
             var headwordSpan = document.createElement("span");
             $(headwordSpan).text(record.Headword);
             $(headwordSpan).addClass("dictionary-result-headword");
-            var favoriteGlyphSpan = document.createElement("span");
-            $(favoriteGlyphSpan).addClass("glyphicon").addClass("glyphicon-star-empty").addClass("dictionary-result-headword-favorite");
             headwordLi.appendChild(headwordSpan);
-            headwordLi.appendChild(favoriteGlyphSpan);
+            if (this.addNewFavoriteCallback != null) {
+                var favoriteGlyphSpan = document.createElement("span");
+                favoriteGlyphSpan.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
+                $(favoriteGlyphSpan).addClass("glyphicon").addClass("glyphicon-star-empty").addClass("dictionary-result-headword-favorite");
+                $(favoriteGlyphSpan).click(function (event) {
+                    var index = $(event.target).data("entry-index");
+                    _this.addNewFavoriteHeadword(index);
+                });
+                headwordLi.appendChild(favoriteGlyphSpan);
+            }
             var dictionaryListDiv = document.createElement("div");
             $(dictionaryListDiv).addClass("dictionary-result-book-list");
             for (var j = 0; j < record.Dictionaries.length; j++) {
@@ -71,14 +80,6 @@ var DictionaryViewer = (function () {
                 $(commentsLink).text("Připomínky");
                 commentsLink.href = "#";
                 $(commentsDiv).addClass("dictionary-entry-comments");
-                var addToFavoriteLink = document.createElement("a");
-                addToFavoriteLink.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
-                $(addToFavoriteLink).text("Do oblíbených ");
-                $(addToFavoriteLink).click(function (event) {
-                    var index = $(event.target).data("entry-index");
-                    _this.addNewFavoriteHeadword(index);
-                });
-                commentsDiv.appendChild(addToFavoriteLink);
                 commentsDiv.appendChild(commentsLink);
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
@@ -117,20 +118,7 @@ var DictionaryViewer = (function () {
     };
     DictionaryViewer.prototype.addNewFavoriteHeadword = function (index) {
         var dictionaryInfo = this.dictionariesInfo[index];
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/AddHeadwordBookmark",
-            data: {
-                bookId: dictionaryInfo.BookXmlId,
-                entryXmlId: dictionaryInfo.EntryXmlId
-            },
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                // TODO reload favorite list
-            }
-        });
+        this.addNewFavoriteCallback(dictionaryInfo.BookXmlId, dictionaryInfo.EntryXmlId);
     };
     DictionaryViewer.prototype.createLinkListener = function (aLink, headword, headwordInfo, container) {
         var _this = this;

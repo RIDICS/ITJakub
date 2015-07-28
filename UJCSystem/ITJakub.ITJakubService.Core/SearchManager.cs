@@ -351,6 +351,13 @@ namespace ITJakub.ITJakubService.Core
             return m_bookVersionRepository.GetHeadwordRowNumber(bookIds, query);
         }
 
+        public int GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
+        {
+            var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            return m_bookVersionRepository.GetHeadwordRowNumberById(bookIds, headwordBookId, headwordEntryXmlId);
+        }
+
         public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias,
             DictionarySearchTarget searchTarget)
         {
@@ -526,7 +533,7 @@ namespace ITJakub.ITJakubService.Core
         }
 
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
-    string pageXmlId, OutputFormatEnumContract resultFormat)
+            string pageXmlId, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))

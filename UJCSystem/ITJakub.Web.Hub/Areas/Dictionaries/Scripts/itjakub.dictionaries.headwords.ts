@@ -7,10 +7,6 @@
     searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
     searchBox.create();
 
-    var loadHeadwordsFunction = (state: State) => {
-        dictionaryViewerWrapper.loadCount(state);
-    };
-
     var updateSearchBox = (state: State) => {
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
         searchBox.clearAndDestroy();
@@ -21,7 +17,7 @@
 
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
-        loadHeadwordsFunction(state);
+        dictionaryViewerWrapper.loadCount(state);
         updateSearchBox(state);
     };
 
@@ -53,14 +49,12 @@
             }
         });
     });
-
-    var favoriteHeadwords = new DictionaryFavoriteHeadwords("#saved-word-area", "#saved-word-area .saved-words-body", "#saved-word-area .saved-word-area-more");
-    favoriteHeadwords.create();
-
-    loadHeadwordsFunction(dictionarySelector.getState());
+    
+    dictionaryViewerWrapper.loadCount(dictionarySelector.getState());
 });
 
 class DictionaryViewerListWrapper {
+    private favoriteHeadwords: DictionaryFavoriteHeadwords;
     private pageSize: number;
     private dictionaryViewer: DictionaryViewer;
     private selectedBookIds: Array<number>;
@@ -75,6 +69,34 @@ class DictionaryViewerListWrapper {
                 this.dictionaryViewer.loadAllHeadwords();
             }
         });
+
+        this.favoriteHeadwords = new DictionaryFavoriteHeadwords("#saved-word-area", "#saved-word-area .saved-words-body", "#saved-word-area .saved-word-area-more");
+        this.favoriteHeadwords.create(this.goToPageWithHeadword.bind(this));
+    }
+
+    private goToPageWithHeadword(bookId: string, entryXmlId: string) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordPageNumberById",
+            data: {
+                selectedBookIds: this.selectedBookIds,
+                selectedCategoryIds: this.selectedCategoryIds,
+                headwordBookId: bookId,
+                headwordEntryXmlId: entryXmlId,
+                pageSize: this.pageSize
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                var resultPageNumber = response;
+                this.dictionaryViewer.goToPage(resultPageNumber);
+            }
+        });
+    }
+
+    private addNewFavoriteHeadword(bookId: string, entryXmlId: string) {
+        this.favoriteHeadwords.addNewHeadword(bookId, entryXmlId);
     }
 
     loadCount(state: State) {
@@ -92,7 +114,7 @@ class DictionaryViewerListWrapper {
             contentType: "application/json",
             success: (response) => {
                 var resultCount = response;
-                this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize);
+                this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, null, null, this.addNewFavoriteHeadword.bind(this));
             }
         });
     }

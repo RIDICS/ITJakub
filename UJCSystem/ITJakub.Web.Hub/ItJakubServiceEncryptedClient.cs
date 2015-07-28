@@ -84,7 +84,6 @@ namespace ITJakub.Web.Hub
                     m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
                 throw;
             }
-
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
@@ -99,61 +98,56 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void AddBookmark(string bookId, string pageName, string userName)
+        public void AddPageBookmark(string bookId, string pageName, string userName)
         {
             try
             {
-                Channel.AddBookmark(bookId,pageName, userName);
+                Channel.AddPageBookmark(bookId,pageName, userName);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
+                    m_log.ErrorFormat("AddPageBookmark failed with: {0}", ex);
                 throw;
             }
-
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
+                    m_log.ErrorFormat("AddPageBookmark failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetPageBookmarks timeouted with: {0}", ex);
+                    m_log.ErrorFormat("AddPageBookmark timeouted with: {0}", ex);
                 throw;
             }
         }
 
-        public void RemoveBookmark(string bookId, string pageName, string userName)
+        public void RemovePageBookmark(string bookId, string pageName, string userName)
         {
             try
             {
-                Channel.RemoveBookmark(bookId,pageName, userName);
+                Channel.RemovePageBookmark(bookId,pageName, userName);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
+                    m_log.ErrorFormat("RemovePageBookmark failed with: {0}", ex);
                 throw;
             }
-
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
+                    m_log.ErrorFormat("RemovePageBookmark failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetPageBookmarks timeouted with: {0}", ex);
+                    m_log.ErrorFormat("RemovePageBookmark timeouted with: {0}", ex);
                 throw;
             }
-        
-            
-        
         }
 
         public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)
@@ -168,7 +162,6 @@ namespace ITJakub.Web.Hub
                     m_log.ErrorFormat("GetHeadwordBookmarks failed with: {0}", ex);
                 throw;
             }
-
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
@@ -195,7 +188,6 @@ namespace ITJakub.Web.Hub
                     m_log.ErrorFormat("AddHeadwordBookmark failed with: {0}", ex);
                 throw;
             }
-
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
@@ -222,7 +214,6 @@ namespace ITJakub.Web.Hub
                     m_log.ErrorFormat("RemoveHeadwordBookmark failed with: {0}", ex);
                 throw;
             }
-
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)

@@ -340,6 +340,15 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual int GetHeadwordRowNumberById(IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
+        {
+            using (var session = GetSession())
+            {
+                return 200; //TODO
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual int GetSearchHeadwordCount(SearchCriteriaQueryCreator creator)
         {
             using (var session = GetSession())

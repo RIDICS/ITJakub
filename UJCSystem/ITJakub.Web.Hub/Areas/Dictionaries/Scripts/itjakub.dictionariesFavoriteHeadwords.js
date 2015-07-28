@@ -4,7 +4,8 @@ var DictionaryFavoriteHeadwords = (function () {
         this.listContainer = listContainer;
         this.mainContainer = mainContainer;
     }
-    DictionaryFavoriteHeadwords.prototype.create = function () {
+    DictionaryFavoriteHeadwords.prototype.create = function (headwordClickCallback) {
+        this.headwordClickCallback = headwordClickCallback;
         var self = this;
         $(this.expandButton).click(function () {
             var area = $(self.mainContainer);
@@ -28,14 +29,6 @@ var DictionaryFavoriteHeadwords = (function () {
                 });
             }
         });
-        //$(".saved-word-remove").click(function () {
-        //    $(this).parent(".saved-word").fadeOut(function () {
-        //        $(this).remove();
-        //    }); //TODO populate request to remove on server
-        //});
-        //$(".saved-word-text").click(function () {
-        //    alert("here should be request for new search with word: " + $(this).text());
-        //}); //TODO populate request to add word on server
         this.getAllHeadwords();
     };
     DictionaryFavoriteHeadwords.prototype.getAllHeadwords = function () {
@@ -52,7 +45,25 @@ var DictionaryFavoriteHeadwords = (function () {
             }
         });
     };
+    DictionaryFavoriteHeadwords.prototype.addNewHeadword = function (bookId, entryXmlId) {
+        var _this = this;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/AddHeadwordBookmark",
+            data: {
+                bookId: bookId,
+                entryXmlId: entryXmlId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                _this.getAllHeadwords();
+            }
+        });
+    };
     DictionaryFavoriteHeadwords.prototype.showHeadwordList = function (list) {
+        var _this = this;
         $(this.listContainer).empty();
         var listDiv = document.createElement("div");
         for (var i = 0; i < list.length; i++) {
@@ -62,24 +73,49 @@ var DictionaryFavoriteHeadwords = (function () {
             var textWordSpan = document.createElement("span");
             $(wordSpan).addClass("saved-word");
             $(removeWordSpan).addClass("saved-word-remove").addClass("glyphicon").addClass("glyphicon-remove-circle");
-            $(removeWordSpan).data("xmlId", favoriteHeadword.EntryXmlId);
+            $(removeWordSpan).data("entryXmlId", favoriteHeadword.EntryXmlId);
+            $(removeWordSpan).data("bookId", favoriteHeadword.BookId);
             $(removeWordSpan).click(function (event) {
                 var element = event.target;
                 $(element).parent(".saved-word").fadeOut(function () {
                     $(element).remove();
-                }); //TODO populate request to remove on server
+                });
+                _this.removeHeadword(element);
             });
             $(textWordSpan).addClass("saved-word-text");
             $(textWordSpan).text(favoriteHeadword.Headword);
-            $(textWordSpan).data("xmlId", favoriteHeadword.EntryXmlId);
+            $(textWordSpan).data("entryXmlId", favoriteHeadword.EntryXmlId);
+            $(textWordSpan).data("bookId", favoriteHeadword.BookId);
             $(textWordSpan).click(function (event) {
-                alert("here should be request for new search with word: " + $(event.target).text());
+                _this.goToPageWithSelectedHeadword(event.target);
             });
             wordSpan.appendChild(removeWordSpan);
             wordSpan.appendChild(textWordSpan);
             listDiv.appendChild(wordSpan);
         }
         $(this.listContainer).append(listDiv);
+    };
+    DictionaryFavoriteHeadwords.prototype.goToPageWithSelectedHeadword = function (element) {
+        var entryXmlId = $(element).data("entryXmlId");
+        var bookId = $(element).data("bookId");
+        this.headwordClickCallback(bookId, entryXmlId);
+    };
+    DictionaryFavoriteHeadwords.prototype.removeHeadword = function (element) {
+        var entryXmlId = $(element).data("entryXmlId");
+        var bookId = $(element).data("bookId");
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/RemoveHeadwordBookmark",
+            data: {
+                bookId: bookId,
+                entryXmlId: entryXmlId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+            }
+        });
     };
     return DictionaryFavoriteHeadwords;
 })();

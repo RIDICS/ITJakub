@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 
@@ -32,10 +33,10 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<HeadwordBookmark, HeadwordBookmarkContract>()
-                .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Book.Guid))
+            CreateMap<HeadwordBookmarkResult, HeadwordBookmarkContract>()
+                .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.BookGuid))
                 .ForMember(dest => dest.EntryXmlId, opt => opt.MapFrom(src => src.XmlEntryId))
-                ;
+                .ForMember(dest => dest.Headword, opt => opt.MapFrom(src => src.Headword));
         }
     }
 }

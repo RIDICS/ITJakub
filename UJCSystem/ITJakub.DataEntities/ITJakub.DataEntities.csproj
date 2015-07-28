@@ -73,6 +73,7 @@
     <Compile Include="Database\CriteriaConditionBuilder.cs" />
     <Compile Include="Database\Entities\BookHeadword.cs" />
     <Compile Include="Database\Entities\Enums\VisibilityEnum.cs" />
+    <Compile Include="Database\Entities\SelectResults\HeadwordBookmarkResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordCountResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordSearchResult.cs" />
     <Compile Include="Database\Repositories\LemmatizationRepository.cs" />
