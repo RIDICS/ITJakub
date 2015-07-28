@@ -94,7 +94,7 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType);
 
         [OperationContract]
-        IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType);
+        IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
 
         #endregion
 
@@ -121,5 +121,12 @@ namespace ITJakub.ITJakubService.DataContracts
         
         [OperationContract]
         string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
+
+        [OperationContract]
+        PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
+            string pageXmlId, OutputFormatEnumContract resultFormat);
     }
 }

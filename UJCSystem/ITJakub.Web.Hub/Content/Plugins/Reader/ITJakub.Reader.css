@@ -256,9 +256,12 @@ body {
   height: auto;
   min-height: 100px;
 }
-.loading {
+.page.loading {
   background: url(../../Images/Plugins/Reader/loading.gif) no-repeat center;
   margin: 0 auto;
+}
+.page.loading div {
+  display: none;
 }
 .reader-left-panel {
   float: left;
@@ -518,5 +521,9 @@ div.dummy-page {
 }
 .reader-search-result-paging {
   text-align: center;
+}
+/*testing class for displaying correct pages that contains search match */
+.search-unloaded {
+  background-color: palegoldenrod;
 }
 /*# sourceMappingURL=ITJakub.Reader.css.map */

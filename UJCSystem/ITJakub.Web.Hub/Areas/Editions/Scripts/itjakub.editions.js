@@ -32,7 +32,7 @@ function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) 
             contentType: 'application/json',
             success: function (response) {
                 var convertedResults = convertSearchResults(response["results"]);
-                readerPlugin.showSearch(convertedResults);
+                readerPlugin.showSearchInPanel(convertedResults);
             }
         });
     }
@@ -50,7 +50,7 @@ function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) 
             contentType: 'application/json',
             success: function (response) {
                 var convertedResults = convertSearchResults(response["results"]);
-                readerPlugin.showSearch(convertedResults);
+                readerPlugin.showSearchInPanel(convertedResults);
             }
         });
     }
@@ -77,6 +77,17 @@ function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) 
                 readerPlugin.setResultsPaging(response["count"], pageClickCallback);
             }
         });
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/TextSearchInBookPagesWithMatchHit",
+            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                readerPlugin.showSearchResultInPages(text, false, response["pages"]);
+            }
+        });
     }
     function advancedSearch(json) {
         if (typeof json === "undefined" || json === null || json === "")
@@ -91,6 +102,17 @@ function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) 
             success: function (response) {
                 updateQueryStringParameter("searchText", json);
                 readerPlugin.setResultsPaging(response["count"], pageClickCallback);
+            }
+        });
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPagesWithMatchHit",
+            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                readerPlugin.showSearchResultInPages(json, true, response["pages"]);
             }
         });
     }

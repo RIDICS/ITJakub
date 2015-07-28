@@ -751,10 +751,7 @@ class ReaderModule {
         $(panel.panelHtml).css('z-index', max + 1);
     }
 
-    showSearch(searchResults: Array<SearchResult>) {
-        for (var i = 0; i < searchResults.length; i++) {
-            //this.invalidatePage(searchResults[i].pageXmlId); //TODO make invalidating page and loading
-        }
+    showSearchInPanel(searchResults: Array<SearchResult>) {
         this.getSearchPanel().showResults(searchResults);
     }
 
@@ -776,6 +773,19 @@ class ReaderModule {
         }
 
         return this.searchPanel;
+    }
+
+    showSearchResultInPages(searchQuery: string, isQueryJson: boolean, pages: Array<PageDescription>) {
+        this.textPanel.setSearchedQuery(searchQuery, isQueryJson);
+        $(".search-unloaded").removeClass(".search-unloaded");
+        var previousSearchPages = $(".search-loaded");
+        $(previousSearchPages).removeClass(".search-loaded");
+        $(previousSearchPages).addClass("unloaded");
+        for (var i = 0; i < pages.length; i++) {
+            var page = pages[i];
+            var pageDiv = document.getElementById(page.PageXmlId);
+            $(pageDiv).addClass("search-unloaded");
+        }
     }
 }
 
@@ -1338,7 +1348,10 @@ class ImagePanel extends RightSidePanel {
 
 class TextPanel extends RightSidePanel {
     preloadPagesBefore:number;
-    preloadPagesAfter:number;
+    preloadPagesAfter: number;
+
+    private query: string; //search for text search
+    private queryIsJson: boolean;
 
     constructor(identificator: string, readerModule: ReaderModule) {
         super(identificator, "Text", readerModule);
@@ -1409,9 +1422,15 @@ class TextPanel extends RightSidePanel {
     displayPage(page: BookPage, scrollTo: boolean) {
         var pageDiv = document.getElementById(page.xmlId);
         var pageLoaded: boolean = !($(pageDiv).hasClass('unloaded'));
+        var pageSearchUnloaded: boolean = $(pageDiv).hasClass('search-unloaded');
         var pageLoading: boolean = $(pageDiv).hasClass('loading');
-        if (!pageLoaded && !pageLoading) {
-            this.downloadPageByXmlId(page);
+        if (!pageLoading) {
+            if (pageSearchUnloaded) {
+                this.downloadSearchPageByXmlId(this.query, this.queryIsJson, page);
+            }
+            else if (!pageLoaded){
+                this.downloadPageByXmlId(page);
+            }
         }
         if (scrollTo) {
             this.scrollTextToPositionFromTop(0);
@@ -1470,28 +1489,6 @@ class TextPanel extends RightSidePanel {
                     $(this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
                 }
 
-                //TODO in text will be comments and notes too. Styles for css classes are in reader less files already. Structure will be as follows:
-                /*  divs with class 'itj-.*' WILL BE FROM EXIST HTML XSLT
-                  <div class="page-wrapper">
-                     <div class="page" id="t-1.body-1.div-2.div-1.div-1.p-1.pb-1">
-                        <div class="itj-page"> 
-                           <div class="itj-page-text">
-                                <span class="info pb space" data-title="číslo strany rukopisu" data-page-name="2v"></span>ten nebude dokonalý lékař, aniž muož býti. Ale máť býti nazván nedouk, a to proto, že se jest tomu nenaučil, neboť mnozí hojie, a nevědie, co hojie. A to proto, že sú se tomu neučili, i protož tomu právě vyrozuměti nemohú, nebo v tom obyčeje nemají. I protož mistr Anton praví a přikazuje a řka: „Radím každému lékaři takovému, a zvláště neumělému, aby se v takové věci neznámé všetečně neuvazoval a nepletl se v to, což provésti neumie, aby svým neuměním člověka nezavedl a nebo jeho 
-                            </div>
-                            <div class="itj-page-notes">
-                                <div class="itj-page-note">Moje malinkata poznamka o zrozeni divu</div>
-                                <div class="itj-page-note">Moje malinkata poznamka o zrozeni divu 2</div>
-                                <div class="itj-page-note">Moje malinkata poznamka o zrozeni divu 2</div>
-                                <div class="itj-page-note">Moje malinkata dosnvfoirhogidhfbibhuidrfsbhidhbfgibhnighd9fsg poznamka o zrozeni divu 2</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="page-name">[2v]</div>
-                  </div>
-                  
-                 */
-
-                //TODO if we add class "show-notes" to div with class "reader-text" notes will be showed.If class "show-notes" is removed then notes are hidden;
             },
             error: (response) => {
                 $(pageContainer).empty();
@@ -1499,6 +1496,46 @@ class TextPanel extends RightSidePanel {
                 $(pageContainer).append("Chyba při načítání stránky '"+page.text+"'");
             }
         });
+    }
+
+    private downloadSearchPageByXmlId(query: string, queryIsJson: boolean, page: BookPage) {
+        var pageContainer = document.getElementById(page.xmlId);
+        $(pageContainer).addClass("loading");
+        if (typeof this.windowBody !== 'undefined') {
+            $(this.windowBody).find('#' + page.xmlId).addClass("loading");
+        }
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { query: query, isQueryJson: queryIsJson, bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            url: getBaseUrl() +"Reader/GetBookSearchPageByXmlId",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                $(pageContainer).empty();
+                $(pageContainer).append(response["pageText"]);
+                $(pageContainer).removeClass("loading");
+                $(pageContainer).removeClass('unloaded');
+                $(pageContainer).removeClass('search-unloaded');
+                $(pageContainer).addClass('search-loaded');
+
+                if (typeof this.windowBody !== 'undefined') {
+                    $(this.windowBody).find('#' + page.xmlId).removeClass("loading");
+                    $(this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
+                }
+
+            },
+            error: (response) => {
+                $(pageContainer).empty();
+                $(pageContainer).removeClass("loading");
+                $(pageContainer).append("Chyba při načítání stránky '"+page.text+"' s výsledky vyhledávání" );
+            }
+        });
+    }
+
+    public setSearchedQuery(query: string, isJson: boolean) {
+        this.query = query;
+        this.queryIsJson = isJson;
     }
 }
 
@@ -1564,4 +1601,9 @@ class SearchResult {
     before: string;
     after: string;
     match; string;
+}
+
+class PageDescription {
+    PageXmlId: string;
+    PageName: string;
 }

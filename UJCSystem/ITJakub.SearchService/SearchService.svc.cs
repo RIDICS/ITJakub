@@ -77,6 +77,12 @@ namespace ITJakub.SearchService
             return m_searchServiceManager.GetSearchEditionsPageList(searchCriterias);
         }
 
+        public string GetEditionPageFromSearch(IList<SearchCriteriaContract> searchCriterias, string bookId, string versionId, string pageXmlId,
+            string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        {
+            return m_searchServiceManager.GetEditionPageFromSearch(searchCriterias, bookId, versionId, pageXmlId, transformationName, outputFormat, transformationLevel);
+        }
+
         public string GetBookPageByName(string bookId, string versionId, string pageName, string transformationName,
             OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {

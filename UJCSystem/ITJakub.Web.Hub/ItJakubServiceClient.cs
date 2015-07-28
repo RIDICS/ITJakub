@@ -633,11 +633,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType)
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
             try
             {
-                return Channel.GetTypeaheadTitlesByBookType(query, bookType);
+                return Channel.GetTypeaheadTitlesByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
             }
             catch (CommunicationException ex)
             {
@@ -871,6 +871,59 @@ namespace ITJakub.Web.Hub
             {
                 if (m_log.IsErrorEnabled)
                     m_log.ErrorFormat("GetDictionaryEntryFromSearch timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetSearchEditionsPageList(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetSearchEditionsPageList failed with: {0}", ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetSearchEditionsPageList failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetSearchEditionsPageList timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
+        public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId, string pageXmlId,
+            OutputFormatEnumContract resultFormat)
+        {
+            try
+            {
+                return Channel.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetEditionPageFromSearch failed with: {0}", ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetEditionPageFromSearch failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetEditionPageFromSearch timeouted with: {0}", ex);
                 throw;
             }
         }

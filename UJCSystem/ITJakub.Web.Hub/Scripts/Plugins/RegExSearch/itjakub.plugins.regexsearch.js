@@ -79,18 +79,16 @@ var Search = (function () {
         $(searchbarInputDiv).addClass("regex-searchbar-advanced-editor");
         $(searchAreaDiv).append(searchbarAdvancedEditor);
         this.searchbarAdvancedEditorContainer = searchbarAdvancedEditor;
+        this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer, function (json) { return _this.closeAdvancedSearchEditorWithImport(json); }, function (json) { return _this.closeAdvancedSearchEditor(); });
+        this.advancedRegexEditor.setDisabledOptions(disabledOptions);
+        this.advancedRegexEditor.makeRegExSearch();
+        $(this.searchbarAdvancedEditorContainer).hide();
         $(this.container).append(searchAreaDiv);
         $(this.searchButton).click(function (event) {
             _this.processSearch();
         });
         $(this.advancedButton).click(function () {
             $(_this.advancedButton).css("visibility", "hidden");
-            if (_this.searchbarAdvancedEditorContainer.children.length === 0) {
-                _this.advancedRegexEditor = new RegExAdvancedSearchEditor(_this.searchbarAdvancedEditorContainer, function (json) { return _this.closeAdvancedSearchEditorWithImport(json); }, function (json) { return _this.closeAdvancedSearchEditor(); });
-                _this.advancedRegexEditor.setDisabledOptions(disabledOptions);
-                _this.advancedRegexEditor.makeRegExSearch();
-                $(_this.searchbarAdvancedEditorContainer).hide();
-            }
             if ($(_this.searchbarAdvancedEditorContainer).is(":hidden")) {
                 var textboxValue = $(_this.searchInputTextbox).val();
                 if (_this.isValidJson(textboxValue)) {
@@ -103,7 +101,7 @@ var Search = (function () {
         });
     };
     Search.prototype.closeAdvancedSearchEditorWithImport = function (jsonData) {
-        this.importJsonToTextField(jsonData);
+        this.writeJsonToTextField(jsonData);
         this.closeAdvancedSearchEditor();
     };
     Search.prototype.closeAdvancedSearchEditor = function () {
@@ -112,13 +110,13 @@ var Search = (function () {
         $(this.searchButton).prop('disabled', false);
         $(this.advancedButton).css("visibility", "visible");
     };
-    Search.prototype.importJsonToTextField = function (json) {
+    Search.prototype.writeJsonToTextField = function (json) {
         $(this.searchInputTextbox).text(json);
         $(this.searchInputTextbox).val(json);
         $(this.searchInputTextbox).change();
     };
     Search.prototype.processSearchQuery = function (query) {
-        this.importJsonToTextField(query);
+        this.writeJsonToTextField(query);
         this.processSearch();
     };
     Search.prototype.isValidJson = function (data) {
@@ -136,6 +134,7 @@ var Search = (function () {
         if (this.isValidJson(searchboxValue)) {
             this.lastQueryWasJson = true;
             var query = this.getFilteredQuery(searchboxValue, this.disabledOptions); //filter disabled options
+            this.writeJsonToTextField(query);
             this.processSearchJsonCallback(query);
         }
         else {

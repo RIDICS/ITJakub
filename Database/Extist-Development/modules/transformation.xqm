@@ -10,6 +10,23 @@ declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
 declare namespace util = "http://exist-db.org/xquery/util";
 declare namespace exist = "http://exist.sourceforge.net/NS/exist";
 
+declare function vw:transform-document($node-to-transform as node(), $output-format as xs:string, $xsl-path as xs:string) as item() {
+	let $template := doc(escape-html-uri($xsl-path)) 
+let $transformation := 
+	if($output-format = "Xml") then
+			$node-to-transform
+	else if($output-format = "Html") then
+		transform:stream-transform($node-to-transform, $template, ())
+	else if($output-format = "Rtf") 
+		then vw:transform-document-to-rtf($node-to-transform, $template)
+		else if($output-format = "Pdf") 
+		then vw:transform-document-to-pdf($node-to-transform, $template)
+		else()
+
+return ($transformation)
+
+} ;
+
 declare function vw:transform-document-to-rtf($xml-document as node()?, $xslt-template as item()) as item() {
 	let $extension := "rtf"
 	return vw:transform-document-by-xslfo($xml-document, $xslt-template, 

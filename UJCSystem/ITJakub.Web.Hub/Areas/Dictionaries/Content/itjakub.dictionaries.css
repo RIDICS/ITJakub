@@ -73,7 +73,7 @@ div.container {
   background-color: #84ced7;
   color: white;
   padding: 5px;
-  min-height: 30px;
+  height: 34px;
 }
 .dictionary-subheader {
   margin-top: 1px;
@@ -99,6 +99,7 @@ div.container {
   width: 30%;
   float: left;
   overflow: hidden;
+  margin-top: 5px;
 }
 .dictionary-selects {
   height: 5vh;
@@ -268,5 +269,40 @@ ul.pagination-sm {
 }
 .dictionary-entry-description-container {
   min-height: 24px;
+}
+.entryFree {
+  padding-left: 15px;
+  padding-right: 15px;
+  font-family: 'Times New Roman', Times, serif;
+  text-align: justify;
+  font-size: 120%;
+}
+.bo {
+  position: relative;
+  font-weight: bold;
+  font-size: 100%;
+  left: 0;
+}
+.note {
+  font-size: 80%;
+}
+.match {
+  background-color: yellow;
+}
+.nonp {
+  font-size: 80%;
+}
+.def {
+  font-style: italic;
+}
+div .sense {
+  margin-left: 1em;
+  text-indent: -1em;
+}
+.cap {
+  font-variant: small-caps;
+}
+.dicitonaries-search .searchbar-inputs {
+  margin-right: 75px;
 }
 /*# sourceMappingURL=itjakub.dictionaries.css.map */

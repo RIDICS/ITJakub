@@ -66,6 +66,12 @@ class DictionaryViewerListWrapper {
     constructor(dictionaryViewer: DictionaryViewer, pageSize: number) {
         this.pageSize = pageSize;
         this.dictionaryViewer = dictionaryViewer;
+
+        window.matchMedia("print").addListener(mql => {
+            if (mql.matches) {
+                this.dictionaryViewer.loadAllHeadwords();
+            }
+        });
     }
 
     loadCount(state: State) {

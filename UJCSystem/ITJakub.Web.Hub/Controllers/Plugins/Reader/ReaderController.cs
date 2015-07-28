@@ -1,6 +1,13 @@
-﻿using System.Web.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Helpers;
 using System.Web.Mvc;
+using AutoMapper;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 {
@@ -17,8 +24,39 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult GetBookPageByXmlId(string bookId, string pageXmlId)
         {
-            var mainServiceClient = new ItJakubServiceClient();
-            var text = mainServiceClient.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html, BookTypeEnumContract.Edition);
+            var text = m_mainServiceClient.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html, BookTypeEnumContract.Edition);
+            return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
+        }
+
+        
+        public ActionResult GetBookSearchPageByXmlId(string query,bool isQueryJson, string bookId, string pageXmlId)
+        {
+
+            IList<SearchCriteriaContract> listSearchCriteriaContracts;
+            if (isQueryJson)
+            {
+                var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(query, new ConditionCriteriaDescriptionConverter());
+                listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            }
+            else
+            {
+                listSearchCriteriaContracts = new List<SearchCriteriaContract>
+                {
+                    new WordListCriteriaContract
+                    {
+                        Key = CriteriaKey.Fulltext,
+                        Disjunctions = new List<WordCriteriaContract>
+                        {
+                            new WordCriteriaContract
+                            {
+                                Contains = new List<string>{query}
+                            }
+                        }
+                    }
+                };
+            }
+
+            var text = m_mainServiceClient.GetEditionPageFromSearch(listSearchCriteriaContracts, bookId, pageXmlId, OutputFormatEnumContract.Html);
             return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
         }
 

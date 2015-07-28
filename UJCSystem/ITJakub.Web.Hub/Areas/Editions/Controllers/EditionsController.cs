@@ -103,9 +103,9 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetTypeaheadTitle(string query)
+        public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Edition);
+            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Edition, selectedCategoryIds, selectedBookIds);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -222,6 +222,27 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AdvancedSearchInBookPagesWithMatchHit(string json, string bookXmlId, string versionXmlId)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            {
+                Start = 0,
+                Count = 1,
+            });
+
+            listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
+            {
+                ResultBooks = new List<BookVersionPairContract> { new BookVersionPairContract { Guid = bookXmlId, VersionId = versionXmlId } }
+            });
+
+            var result = m_serviceClient.GetSearchEditionsPageList(listSearchCriteriaContracts);
+
+            return Json(new { pages = result.PageList }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult TextSearchInBookPaged(string text, int start, int count, string bookXmlId, string versionXmlId)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
@@ -305,6 +326,41 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             }
 
             return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult TextSearchInBookPagesWithMatchHit(string text, string bookXmlId, string versionXmlId)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                    Key = CriteriaKey.Fulltext,
+                    Disjunctions = new List<WordCriteriaContract>
+                    {
+                        new WordCriteriaContract
+                        {
+                            Contains = new List<string> {text}
+                        }
+                    }
+                },
+                new ResultCriteriaContract
+                {
+                    Start = 0,
+                    Count = 1
+                },
+                new ResultRestrictionCriteriaContract
+                {
+                    ResultBooks =
+                        new List<BookVersionPairContract>
+                        {
+                            new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}
+                        }
+                }
+            };
+
+            var result = m_serviceClient.GetSearchEditionsPageList(listSearchCriteriaContracts);
+
+            return Json(new { pages = result.PageList }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)

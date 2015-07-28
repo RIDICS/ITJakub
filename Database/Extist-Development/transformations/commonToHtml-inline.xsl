@@ -8,7 +8,7 @@
             <xd:p>Obecně použitelné inline (řádkové) prvky transformace z formátu TEI na HTML.</xd:p>
         </xd:desc>
     </xd:doc>
-    <xsl:output method="html" indent="yes" encoding="UTF-8"/>
+    <xsl:output method="html" encoding="UTF-8"/>
     <xsl:variable name="svislice" select="']'"/>
     <xsl:variable name="svisliceSMezerou" select="concat($svislice, ' ')"/>
     <xsl:variable name="zacatekRelace" select="'‹'"/>

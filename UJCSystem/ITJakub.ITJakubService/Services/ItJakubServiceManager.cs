@@ -158,10 +158,11 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetTypeaheadAuthorsByBookType(query, bookType);
         }
 
-        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType)
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
-            return m_searchManager.GetTypeaheadTitlesByBookType(query, bookType);
+            return m_searchManager.GetTypeaheadTitlesByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
         }
+
         public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
             return m_searchManager.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
@@ -186,6 +187,7 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.SearchHeadwordByCriteriaResultsCount(searchCriterias, searchTarget);
         }
+
         public int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             return m_searchManager.SearchCriteriaResultsCount(searchCriterias);
@@ -200,6 +202,17 @@ namespace ITJakub.ITJakubService.Services
             OutputFormatEnumContract resultFormat)
         {
             return m_searchManager.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat);
+        }
+
+        public PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetSearchEditionsPageList(searchCriterias);
+        }
+
+        public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
+             string pageXmlId, OutputFormatEnumContract resultFormat)
+        {
+            return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
         }
     }
 }
