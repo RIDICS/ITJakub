@@ -5,7 +5,8 @@ var Pagination = (function () {
         this.maxPageElements = maxVisiblePageElements;
         this.paginationContainer = paginationContainer;
     }
-    Pagination.prototype.createPagination = function (itemsCount, itemsOnPage, pageClickCallback) {
+    Pagination.prototype.createPagination = function (itemsCount, itemsOnPage, pageClickCallback, defaultPageNumber) {
+        if (defaultPageNumber === void 0) { defaultPageNumber = 1; }
         this.pageCount = Math.ceil(itemsCount / itemsOnPage);
         this.pageClickCallback = pageClickCallback;
         $(this.paginationContainer).empty();
@@ -25,7 +26,7 @@ var Pagination = (function () {
             $(paginationUl.children[this.pageCount]).after(this.createThreeDots());
         }
         $(this.paginationContainer).append(paginationUl);
-        this.updateCurrentPage(1);
+        this.updateCurrentPage(defaultPageNumber);
     };
     Pagination.prototype.updateCurrentPage = function (newPageNumber) {
         this.getCurrentPageElement().removeClass("active");

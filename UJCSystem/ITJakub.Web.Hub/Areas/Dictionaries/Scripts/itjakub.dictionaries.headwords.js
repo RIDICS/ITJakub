@@ -1,4 +1,17 @@
-$(document).ready(function () {
+function initDictionaryViewer(categoryIdList, bookIdList, pageNumber) {
+    var selectedCategoryIds = [];
+    var selectedBookIds = [];
+    var defaultPageNumber = Number(pageNumber);
+    try {
+        selectedCategoryIds = JSON.parse(categoryIdList);
+    }
+    catch (e) {
+    }
+    try {
+        selectedBookIds = JSON.parse(bookIdList);
+    }
+    catch (e) {
+    }
     var pageSize = 50;
     var dictionaryViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription", true);
     var dictionaryViewerWrapper = new DictionaryViewerListWrapper(dictionaryViewer, pageSize);
@@ -13,11 +26,11 @@ $(document).ready(function () {
     };
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
-        dictionaryViewerWrapper.loadCount(state);
+        dictionaryViewerWrapper.loadHeadwordList(state);
         updateSearchBox(state);
     };
     var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
-    dictionarySelector.makeDropdown();
+    dictionarySelector.makeAndRestore(selectedCategoryIds, selectedBookIds);
     $("#printDescription").click(function () {
         dictionaryViewer.print();
     });
@@ -41,8 +54,9 @@ $(document).ready(function () {
             }
         });
     });
-    dictionaryViewerWrapper.loadCount(dictionarySelector.getState());
-});
+    dictionaryViewerWrapper.loadDefault(selectedCategoryIds, selectedBookIds, defaultPageNumber);
+}
+;
 var DictionaryViewerListWrapper = (function () {
     function DictionaryViewerListWrapper(dictionaryViewer, pageSize) {
         var _this = this;
@@ -80,10 +94,19 @@ var DictionaryViewerListWrapper = (function () {
     DictionaryViewerListWrapper.prototype.addNewFavoriteHeadword = function (bookId, entryXmlId) {
         this.favoriteHeadwords.addNewHeadword(bookId, entryXmlId);
     };
-    DictionaryViewerListWrapper.prototype.loadCount = function (state) {
-        var _this = this;
+    DictionaryViewerListWrapper.prototype.loadDefault = function (categoryIds, bookIds, defaultPageNumber) {
+        this.selectedBookIds = bookIds;
+        this.selectedCategoryIds = categoryIds;
+        this.dictionaryViewer.setDefaultPageNumber(defaultPageNumber);
+        this.loadCount();
+    };
+    DictionaryViewerListWrapper.prototype.loadHeadwordList = function (state) {
         this.selectedBookIds = DropDownSelect.getBookIdsFromState(state);
         this.selectedCategoryIds = DropDownSelect.getCategoryIdsFromState(state);
+        this.loadCount();
+    };
+    DictionaryViewerListWrapper.prototype.loadCount = function () {
+        var _this = this;
         $.ajax({
             type: "GET",
             traditional: true,

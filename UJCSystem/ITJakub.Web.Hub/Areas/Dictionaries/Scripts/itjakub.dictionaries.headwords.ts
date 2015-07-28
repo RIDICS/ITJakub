@@ -1,4 +1,15 @@
-﻿$(document).ready(() => {
+﻿function initDictionaryViewer(categoryIdList: string, bookIdList: string, pageNumber: string) {
+    var selectedCategoryIds: Array<number> = [];
+    var selectedBookIds: Array<number> = [];
+    var defaultPageNumber: number = Number(pageNumber);
+    
+    try {
+        selectedCategoryIds = JSON.parse(categoryIdList);
+    } catch (e) { }
+    try {
+        selectedBookIds = JSON.parse(bookIdList);
+    } catch (e) { }
+    
     var pageSize = 50;
     var dictionaryViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription", true);
     var dictionaryViewerWrapper = new DictionaryViewerListWrapper(dictionaryViewer, pageSize);
@@ -17,12 +28,13 @@
 
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
-        dictionaryViewerWrapper.loadCount(state);
+        dictionaryViewerWrapper.loadHeadwordList(state);
         updateSearchBox(state);
     };
 
     var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
-    dictionarySelector.makeDropdown();
+    dictionarySelector.makeAndRestore(selectedCategoryIds, selectedBookIds);
+        
     
     
     $("#printDescription").click(() => {
@@ -50,8 +62,8 @@
         });
     });
     
-    dictionaryViewerWrapper.loadCount(dictionarySelector.getState());
-});
+    dictionaryViewerWrapper.loadDefault(selectedCategoryIds, selectedBookIds, defaultPageNumber);
+};
 
 class DictionaryViewerListWrapper {
     private favoriteHeadwords: DictionaryFavoriteHeadwords;
@@ -99,9 +111,22 @@ class DictionaryViewerListWrapper {
         this.favoriteHeadwords.addNewHeadword(bookId, entryXmlId);
     }
 
-    loadCount(state: State) {
+    loadDefault(categoryIds: Array<number>, bookIds: Array<number>, defaultPageNumber: number) {
+        this.selectedBookIds = bookIds;
+        this.selectedCategoryIds = categoryIds;
+        this.dictionaryViewer.setDefaultPageNumber(defaultPageNumber);
+
+        this.loadCount();
+    }
+
+    loadHeadwordList(state: State) {
         this.selectedBookIds = DropDownSelect.getBookIdsFromState(state);
         this.selectedCategoryIds = DropDownSelect.getCategoryIdsFromState(state);
+
+        this.loadCount();
+    }
+
+    private loadCount() {
         $.ajax({
             type: "GET",
             traditional: true,

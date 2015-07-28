@@ -16,6 +16,7 @@ class DictionaryViewer {
     private addNewFavoriteCallback: (bookId: string, entryXmlId: string) => void;
     private searchCriteria: string;
     private isCriteriaJson: boolean;
+    private defaultPageNumber: number;
 
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
@@ -35,7 +36,14 @@ class DictionaryViewer {
         this.isCriteriaJson = isCriteriaJson;
         this.addNewFavoriteCallback = addNewFavoriteCallback;
 
-        this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
+        if (this.defaultPageNumber)
+            this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this), this.defaultPageNumber);
+        else
+            this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
+    }
+
+    public setDefaultPageNumber(pageNumber: number) {
+        this.defaultPageNumber = pageNumber;
     }
 
     public goToPage(pageNumber: number) {

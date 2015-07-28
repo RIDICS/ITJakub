@@ -38,7 +38,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult Headwords()
+        public ActionResult Listing()
         {
             return View();
         }

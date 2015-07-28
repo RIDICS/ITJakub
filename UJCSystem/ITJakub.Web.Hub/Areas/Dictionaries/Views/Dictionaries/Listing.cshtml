@@ -6,6 +6,12 @@
     @Scripts.Render("~/itjakub/dictionaries/headwordsjs")
 }
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        initDictionaryViewer("@Request["categoryIdList"]", "@Request["bookIdList"]", "@Request["pageNumber"]");
+    });
+</script>
+
 <div class="transparent-content-container">
     <div class="search-with-saved-word-area">
         <div class="search-area transparent-content-container">

@@ -18,7 +18,13 @@ var DictionaryViewer = (function () {
         this.searchCriteria = searchCriteria;
         this.isCriteriaJson = isCriteriaJson;
         this.addNewFavoriteCallback = addNewFavoriteCallback;
-        this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
+        if (this.defaultPageNumber)
+            this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this), this.defaultPageNumber);
+        else
+            this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
+    };
+    DictionaryViewer.prototype.setDefaultPageNumber = function (pageNumber) {
+        this.defaultPageNumber = pageNumber;
     };
     DictionaryViewer.prototype.goToPage = function (pageNumber) {
         this.pagination.goToPage(pageNumber);
