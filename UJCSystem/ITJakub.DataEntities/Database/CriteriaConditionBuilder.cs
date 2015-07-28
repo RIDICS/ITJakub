@@ -27,6 +27,9 @@ namespace ITJakub.DataEntities.Database
                 stringBuilder.Append("%").Append(word.EndsWith);
             }
 
+            // Escape unwanted characters
+            stringBuilder.Replace("[", "[[]");
+
             return stringBuilder.ToString();
         }
     }

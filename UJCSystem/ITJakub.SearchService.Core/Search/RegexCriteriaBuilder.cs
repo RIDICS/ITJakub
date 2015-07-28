@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ITJakub.Shared.Contracts.Searching;
+using System.Text.RegularExpressions;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 
 namespace ITJakub.SearchService.Core.Search
@@ -10,9 +10,11 @@ namespace ITJakub.SearchService.Core.Search
     {
         private static string ConvertWildcardToRegex(string stringWithWildcard)
         {
-            return stringWithWildcard == null
-                ? null
-                : stringWithWildcard.Replace(".", "\\.")
+            if (stringWithWildcard == null)
+                return null;
+
+            var escapedString = Regex.Escape(stringWithWildcard);
+            return escapedString
                     .Replace("_", ".")
                     .Replace("%", ".*");
         }

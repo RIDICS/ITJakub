@@ -40,7 +40,8 @@ namespace ITJakub.ITJakubService.Core
 
         public List<SearchResultContract> Search(string term)
         {
-            var bookVersionResults = m_bookRepository.SearchByTitle(term);
+            var escapedTerm = EscapeQuery(term);
+            var bookVersionResults = m_bookRepository.SearchByTitle(escapedTerm);
             return Mapper.Map<List<SearchResultContract>>(bookVersionResults);
         }
 
@@ -56,6 +57,11 @@ namespace ITJakub.ITJakubService.Core
                 Books = Mapper.Map<IList<Shared.Contracts.BookContract>>(books),
                 Categories = Mapper.Map<IList<CategoryContract>>(categories)
             };
+        }
+
+        private string EscapeQuery(string query)
+        {
+            return query.Replace("[", "[[]");
         }
 
         private FilteredCriterias FilterSearchCriterias(IEnumerable<SearchCriteriaContract> searchCriterias)
@@ -186,6 +192,7 @@ namespace ITJakub.ITJakubService.Core
         private string PrepareQuery(string query)
         {
             query = query.TrimStart().TrimEnd().Replace(" ", "% %");
+            query = query.Replace("[", "[[]"); // escape character
             return string.Format("%{0}%", query);
         }
 
@@ -238,6 +245,7 @@ namespace ITJakub.ITJakubService.Core
                 return m_bookRepository.GetLastTypeaheadHeadwords(PrefetchRecordCount, bookIds);
 
             query = string.Format("{0}%", query);
+            query = EscapeQuery(query);
             return m_bookRepository.GetTypeaheadHeadwords(query, PrefetchRecordCount, bookIds);
         }
 
@@ -347,6 +355,7 @@ namespace ITJakub.ITJakubService.Core
         public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+            query = EscapeQuery(query);
 
             return m_bookVersionRepository.GetHeadwordRowNumber(bookIds, query);
         }
