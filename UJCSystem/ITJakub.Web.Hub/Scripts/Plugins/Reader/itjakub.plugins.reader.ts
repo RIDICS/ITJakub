@@ -787,6 +787,19 @@ class ReaderModule {
             $(pageDiv).addClass("search-unloaded");
         }
     }
+
+    searchPanelShowLoading() {
+        this.searchPanel.showLoading();
+
+    }
+
+    searchPanelRemoveLoading() {
+        this.searchPanel.clearLoading();
+    }
+
+    searchPanelClearResults() {
+        this.searchPanel.clearResults();
+    }
 }
 
 
@@ -1106,6 +1119,20 @@ class SearchResultPanel extends LeftSidePanel {
     constructor(identificator: string, readerModule: ReaderModule) {
         super(identificator, "Vyhledávání", readerModule);
     }
+
+    showLoading() {
+        $(this.searchResultItemsDiv).addClass("loader");    
+        
+    }
+
+    clearLoading() {
+        $(this.searchResultItemsDiv).removeClass("loader");    
+    }
+
+    clearResults() {
+        $(this.searchResultItemsDiv).empty();
+    }
+    
     
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
@@ -1192,6 +1219,9 @@ class ContentPanel extends LeftSidePanel {
 
     private downloadBookContent() {
         
+        $(this.panelBodyHtml).empty();
+        $(this.panelBodyHtml).addClass("loader");
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -1208,6 +1238,7 @@ class ContentPanel extends LeftSidePanel {
                     $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
                 }
                 
+                $(this.panelBodyHtml).removeClass("loader");
                 $(this.panelBodyHtml).empty();
                 $(this.panelBodyHtml).append(ulElement);
 

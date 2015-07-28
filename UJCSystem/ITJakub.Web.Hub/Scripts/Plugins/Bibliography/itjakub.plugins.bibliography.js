@@ -35,7 +35,8 @@ var BibliographyModule = (function () {
     }
     BibliographyModule.prototype.showBooks = function (books) {
         var _this = this;
-        $(this.booksContainer).empty();
+        this.clearBooks();
+        this.clearLoading();
         if (books.length > 0) {
             var rootElement = document.createElement('ul');
             $(rootElement).addClass('bib-listing');
@@ -51,6 +52,15 @@ var BibliographyModule = (function () {
             divElement.innerHTML = "Žádné výsledky k zobrazení";
             $(this.booksContainer).append(divElement);
         }
+    };
+    BibliographyModule.prototype.clearBooks = function () {
+        $(this.booksContainer).empty();
+    };
+    BibliographyModule.prototype.clearLoading = function () {
+        $(this.booksContainer).removeClass("loader");
+    };
+    BibliographyModule.prototype.showLoading = function () {
+        $(this.booksContainer).addClass("loader");
     };
     BibliographyModule.prototype.makeBibliography = function (bibItem) {
         var liElement = document.createElement('li');

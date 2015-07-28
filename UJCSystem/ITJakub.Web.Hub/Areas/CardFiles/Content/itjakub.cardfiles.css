@@ -43,6 +43,7 @@ body {
 }
 .module-content {
   margin: 115px 0 0 0;
+  min-height: 74vh;
 }
 .content-container {
   background-color: white;

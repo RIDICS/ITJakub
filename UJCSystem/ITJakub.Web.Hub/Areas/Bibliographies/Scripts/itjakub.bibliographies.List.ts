@@ -8,6 +8,9 @@ $(document).ready(function() {
     $('#searchButton').click(function() {
         var text = $('#searchbox').val();
 
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -17,7 +20,6 @@ $(document).ready(function() {
             contentType: 'application/json',
             success: function(response) {
                 bibliographyModule.showBooks(response.books);
-
             }
         });
     });

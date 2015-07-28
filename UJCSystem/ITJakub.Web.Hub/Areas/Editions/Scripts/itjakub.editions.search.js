@@ -1,6 +1,6 @@
 var search;
 $(document).ready(function () {
-    var booksCountOnPage = 3;
+    var booksCountOnPage = 5;
     var bookIds = new Array();
     var categoryIds = new Array();
     var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", 0 /* Edition */);
@@ -11,6 +11,8 @@ $(document).ready(function () {
         var count = bibliographyModule.getBooksCountOnPage();
         var sortAsc = bibliographyModule.isSortedAsc();
         var sortingEnum = bibliographyModule.getSortCriteria();
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
         $.ajax({
             type: "GET",
             traditional: true,
@@ -30,6 +32,8 @@ $(document).ready(function () {
         var count = bibliographyModule.getBooksCountOnPage();
         var sortAsc = bibliographyModule.isSortedAsc();
         var sortingEnum = bibliographyModule.getSortCriteria();
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
         $.ajax({
             type: "GET",
             traditional: true,
@@ -53,6 +57,8 @@ $(document).ready(function () {
     function editionBasicSearch(text) {
         if (typeof text === "undefined" || text === null || text === "")
             return;
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
         $.ajax({
             type: "GET",
             traditional: true,
@@ -68,6 +74,8 @@ $(document).ready(function () {
     function editionAdvancedSearch(json) {
         if (typeof json === "undefined" || json === null || json === "")
             return;
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
         $.ajax({
             type: "GET",
             traditional: true,

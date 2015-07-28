@@ -11,4 +11,13 @@
 .itj-note .corr {
   font-style: italic;
 }
+.bib-listing-books-div.loader {
+  margin-top: 30%;
+}
+/*.bib-listing-books-div {
+    height: 57vh;
+}*/
+.bib-listing-books-div.loader + .bib-listing-pagination-div {
+  margin-top: 30%;
+}
 /*# sourceMappingURL=itjakub.editions.css.map */

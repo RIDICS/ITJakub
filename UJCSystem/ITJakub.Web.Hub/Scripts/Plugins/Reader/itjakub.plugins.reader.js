@@ -661,6 +661,15 @@ var ReaderModule = (function () {
             $(pageDiv).addClass("search-unloaded");
         }
     };
+    ReaderModule.prototype.searchPanelShowLoading = function () {
+        this.searchPanel.showLoading();
+    };
+    ReaderModule.prototype.searchPanelRemoveLoading = function () {
+        this.searchPanel.clearLoading();
+    };
+    ReaderModule.prototype.searchPanelClearResults = function () {
+        this.searchPanel.clearResults();
+    };
     return ReaderModule;
 })();
 var SidePanel = (function () {
@@ -919,6 +928,15 @@ var SearchResultPanel = (function (_super) {
     function SearchResultPanel(identificator, readerModule) {
         _super.call(this, identificator, "Vyhledávání", readerModule);
     }
+    SearchResultPanel.prototype.showLoading = function () {
+        $(this.searchResultItemsDiv).addClass("loader");
+    };
+    SearchResultPanel.prototype.clearLoading = function () {
+        $(this.searchResultItemsDiv).removeClass("loader");
+    };
+    SearchResultPanel.prototype.clearResults = function () {
+        $(this.searchResultItemsDiv).empty();
+    };
     SearchResultPanel.prototype.makeBody = function (rootReference, window) {
         var innerContent = window.document.createElement("div");
         var searchResultItemsDiv = window.document.createElement("div");
@@ -988,6 +1006,8 @@ var ContentPanel = (function (_super) {
     };
     ContentPanel.prototype.downloadBookContent = function () {
         var _this = this;
+        $(this.panelBodyHtml).empty();
+        $(this.panelBodyHtml).addClass("loader");
         $.ajax({
             type: "GET",
             traditional: true,
@@ -1003,6 +1023,7 @@ var ContentPanel = (function (_super) {
                     var jsonItem = rootContentItems[i];
                     $(ulElement).append(_this.makeContentItem(_this.parseJsonItemToContentItem(jsonItem)));
                 }
+                $(_this.panelBodyHtml).removeClass("loader");
                 $(_this.panelBodyHtml).empty();
                 $(_this.panelBodyHtml).append(ulElement);
                 _this.innerContent = _this.panelBodyHtml;

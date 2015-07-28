@@ -2,6 +2,8 @@ $(document).ready(function () {
     var bibliographyModule = new BibliographyModule("#biblListResults", "#biblListResultsHeader");
     $('#searchButton').click(function () {
         var text = $('#searchbox').val();
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
         $.ajax({
             type: "GET",
             traditional: true,

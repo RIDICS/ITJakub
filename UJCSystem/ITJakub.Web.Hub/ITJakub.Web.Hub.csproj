@@ -322,6 +322,12 @@
     <Content Include="Content\ITJakub.Footer.min.css">
       <DependentUpon>ITJakub.Footer.css</DependentUpon>
     </Content>
+    <Content Include="Content\ITJakub.HorizontalLoader.css">
+      <DependentUpon>ITJakub.HorizontalLoader.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.HorizontalLoader.min.css">
+      <DependentUpon>ITJakub.HorizontalLoader.css</DependentUpon>
+    </Content>
     <Content Include="Content\ITJakub.PluginMenu.css.map">
       <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
     </Content>
@@ -588,6 +594,10 @@
     <Content Include="Areas\Editions\Content\itjakub.editions.content.css.map">
       <DependentUpon>itjakub.editions.content.css</DependentUpon>
     </Content>
+    <Content Include="Content\ITJakub.HorizontalLoader.css.map">
+      <DependentUpon>ITJakub.HorizontalLoader.css</DependentUpon>
+    </Content>
+    <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
