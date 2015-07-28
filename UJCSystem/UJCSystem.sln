@@ -216,8 +216,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.Slov
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Lemmatization.Core", "ITJakub.Lemmatization.Core\ITJakub.Lemmatization.Core.csproj", "{0CCC8005-5A92-4A47-93DF-05FB6E333279}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Storage.FileSystem", "ITJakub.Storage.FileSystem\ITJakub.Storage.FileSystem.csproj", "{4D73837E-B90C-45E0-862F-C512A7E4F64D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Shared.Contracts.Test", "ITJakub.Shared.Contracts.Test\ITJakub.Shared.Contracts.Test.csproj", "{EFF05D42-A0F9-49EC-B581-1D6F750A3419}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Lemmatization.DataEntities", "ITJakub.Lemmatization.DataEntities\ITJakub.Lemmatization.DataEntities.csproj", "{69076B65-4268-497A-ABF6-64D7FFA50911}"
@@ -2545,46 +2543,6 @@ Global
 		{0CCC8005-5A92-4A47-93DF-05FB6E333279}.TranskriptorVBA|x64.Build.0 = Release|Any CPU
 		{0CCC8005-5A92-4A47-93DF-05FB6E333279}.TranskriptorVBA|x86.ActiveCfg = Release|Any CPU
 		{0CCC8005-5A92-4A47-93DF-05FB6E333279}.TranskriptorVBA|x86.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Debug|ARM.Build.0 = Debug|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Debug|x64.Build.0 = Debug|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Debug|x86.Build.0 = Debug|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.JenTest|Any CPU.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.JenTest|Any CPU.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.JenTest|ARM.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.JenTest|ARM.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.JenTest|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.JenTest|Mixed Platforms.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.JenTest|x64.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.JenTest|x64.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.JenTest|x86.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.JenTest|x86.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Release|ARM.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Release|ARM.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Release|x64.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Release|x64.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Release|x86.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.Release|x86.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|Any CPU.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|Any CPU.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|ARM.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|ARM.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|Mixed Platforms.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|x64.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|x64.Build.0 = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|x86.ActiveCfg = Release|Any CPU
-		{4D73837E-B90C-45E0-862F-C512A7E4F64D}.TranskriptorVBA|x86.Build.0 = Release|Any CPU
 		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFF05D42-A0F9-49EC-B581-1D6F750A3419}.Debug|ARM.ActiveCfg = Debug|Any CPU

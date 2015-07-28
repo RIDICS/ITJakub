@@ -14,27 +14,37 @@ BEGIN TRAN
     CREATE TABLE [dbo].[Token]
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Token(Id)] PRIMARY KEY CLUSTERED,
-	   [Text] varchar(255) NOT NULL UNIQUE,  	   	   
-	   
-    )
+	   [Text] varchar(255) NOT NULL UNIQUE,
+	   [Description] varchar(255) NOT NULL
+    )    
 
     CREATE TABLE [dbo].[TokenCharacteristic]
     (
        [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TokenCharacteristic(Id)] PRIMARY KEY CLUSTERED,
 	  [Token] bigint NULL FOREIGN KEY REFERENCES [dbo].[Token](Id),
-	  [CanonicalForm] bigint NULL,
+	  [MorphologicalCharakteristic] nvarchar(16) NOT NULL,
+	  [Description] varchar(255) NOT NULL
     )
+
+    
 
     CREATE TABLE [dbo].[CanonicalForm]
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_CanonicalForm(Id)] PRIMARY KEY CLUSTERED,
 	   [Text] varchar(255) NOT NULL,
-	   [Type] smallint NOT NULL,
-	   [TokenCharacteristic] BIGINT NULL FOREIGN KEY REFERENCES [dbo].[TokenCharacteristic](Id)
+	   [Type] smallint NOT NULL,	   
+	   [Description] varchar(255) NOT NULL,
+	   [HyperCanonicalForm] BIGINT NULL FOREIGN KEY REFERENCES [dbo].HyperCanonicalForm(Id)
+    )
+
+
+    CREATE TABLE [dbo].[CanonicalForm_TokenCharacteristic]
+    (
+	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_CanonicalForm_TokenCharacteristic(Id)] PRIMARY KEY CLUSTERED,
+	   [TokenCharacteristic] BIGINT NOT NULL FOREIGN KEY REFERENCES [dbo].[TokenCharacteristic](Id),
+	   [CanonicalForm] bigint NOT NULL FOREIGN KEY REFERENCES [dbo].CanonicalForm(Id)
     )
     
-
-
 
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)

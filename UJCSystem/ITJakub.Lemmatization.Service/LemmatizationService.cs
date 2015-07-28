@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Castle.Windsor.Diagnostics;
-
 using ITJakub.Lemmatization.DataEntities;
 using ITJakub.Lemmatization.DataEntities.Repositories;
 using ITJakub.Shared.Contracts;
@@ -23,14 +22,12 @@ namespace ITJakub.Lemmatization.Service
         {
             var tokenCharacteristics = new TokenCharacteristic();
 
-
-
             Token token = new Token();
             token.Text = "TestovaciToken";
-            //token.TokenCharacteristics = new List<TokenCharacteristic>
-            //{
-            //    tokenCharacteristics
-            //};
+            token.TokenCharacteristics = new List<TokenCharacteristic>
+            {
+                tokenCharacteristics
+            };
 
             //var canonicalForm = new CanonicalForm
             //{
