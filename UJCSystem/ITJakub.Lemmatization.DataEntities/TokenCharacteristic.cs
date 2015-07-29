@@ -5,9 +5,13 @@ namespace ITJakub.Lemmatization.DataEntities
 {
     public class TokenCharacteristic : IEquatable<TokenCharacteristic>
     {
-        public virtual long Id { get; set; }               
+        public virtual long Id { get; set; }
 
-        public virtual IList<CanonicalForm> CanonicalForms { get; set; }
+        public virtual string Description { get; set; }
+
+        public virtual string MorphologicalCharakteristic { get; set; }
+
+        public virtual IList<CanonicalForm> CanonicalForms { get; set; }        
 
         public virtual bool Equals(TokenCharacteristic other)
         {
@@ -28,14 +32,5 @@ namespace ITJakub.Lemmatization.DataEntities
         {
             return Id.GetHashCode();
         }
-    }
-
-    public class HyperCanonicalForm
-    {
-        public virtual long Id { get; protected set; }
-
-        public virtual IList<CanonicalForm> CanonicalForms { get; set; }
-
-
     }
 }

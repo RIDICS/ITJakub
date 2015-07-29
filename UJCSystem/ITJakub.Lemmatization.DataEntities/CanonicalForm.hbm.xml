@@ -10,6 +10,17 @@
            
     <property name="Type" not-null="true"/>
     
+    <property name="Description" not-null="true"/>
     
+    <many-to-one name="HyperCanonicalForm"
+                 class="HyperCanonicalForm"
+                 cascade="all-delete-orphan"/>
+
+
+    <bag name="CanonicalFormFor" cascade="all" table="CanonicalForm_TokenCharacteristic">
+      <key column ="CanonicalForm"/>
+      <many-to-many class="TokenCharacteristic" column="TokenCharacteristic"/>
+    </bag>
+        
   </class>
 </hibernate-mapping>

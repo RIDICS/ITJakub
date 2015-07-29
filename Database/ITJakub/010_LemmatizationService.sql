@@ -6,8 +6,9 @@ BEGIN TRAN
     CREATE TABLE [dbo].[HyperCanonicalForm]
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_HyperCanonicalForm(Id)] PRIMARY KEY CLUSTERED,
-	   [Value] varchar(255) NOT NULL,
+	   [Text] varchar(255) NOT NULL,
 	   [Type] smallint NOT NULL,
+	   [Description] varchar(255) NULL
     )
         
 
@@ -22,7 +23,7 @@ BEGIN TRAN
     (
        [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TokenCharacteristic(Id)] PRIMARY KEY CLUSTERED,
 	  [Token] bigint NULL FOREIGN KEY REFERENCES [dbo].[Token](Id),
-	  [MorphologicalCharakteristic] nvarchar(16) NOT NULL,
+	  [MorphologicalCharakteristic] nvarchar(17) NOT NULL,
 	  [Description] varchar(255) NOT NULL
     )
 
@@ -32,7 +33,7 @@ BEGIN TRAN
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_CanonicalForm(Id)] PRIMARY KEY CLUSTERED,
 	   [Text] varchar(255) NOT NULL,
-	   [Type] smallint NOT NULL,	   
+	   [Type] smallint NOT NULL,
 	   [Description] varchar(255) NOT NULL,
 	   [HyperCanonicalForm] BIGINT NULL FOREIGN KEY REFERENCES [dbo].HyperCanonicalForm(Id)
     )

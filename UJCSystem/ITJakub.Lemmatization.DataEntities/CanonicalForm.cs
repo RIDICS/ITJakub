@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ITJakub.Lemmatization.DataEntities
 {
@@ -8,7 +10,13 @@ namespace ITJakub.Lemmatization.DataEntities
 
         public virtual string Text { get; set; }
 
-        public virtual CanonicalFormType Type { get; set; }        
+        public virtual string Description { get; set; }
+
+        public virtual CanonicalFormType Type { get; set; }    
+        
+        public virtual HyperCanonicalForm HyperCanonicalForm { get; set; }
+
+        public virtual IList<TokenCharacteristic> CanonicalFormFor { get; set; }
 
         public virtual bool Equals(CanonicalForm other)
         {
@@ -37,7 +45,8 @@ namespace ITJakub.Lemmatization.DataEntities
         Stemma,
         LemmaOld,
         StemmaOld,
-        HyperLemma,
-        HyperStemma,
+        
     }
+
+    
 }

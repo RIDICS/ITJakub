@@ -6,10 +6,13 @@
       <generator class="identity" />
     </id>
       
-    <property name="Text"/>
+    <property name="Text" not-null="true" unique="true"/>
+    
+    <property name="Description"/>
     
     <!--<many-to-one name="TokenCharacteristics" class="TokenCharacteristic" cascade="all-delete-orphan"/>-->
 
+    
     <bag name="TokenCharacteristics" cascade="all-delete-orphan">
       <key column="Token" />
       <one-to-many class="TokenCharacteristic" />

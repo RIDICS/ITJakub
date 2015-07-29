@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CanonicalForm.cs" />
+    <Compile Include="HyperCanonicalForm.cs" />
     <Compile Include="Repositories\LemmatizationRepository.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,7 +65,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CanonicalForm.hbm.xml">
+    <EmbeddedResource Include="HyperCanonicalForm.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -76,6 +77,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.Lemmatization.DataEntities.Container.Config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CanonicalForm.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

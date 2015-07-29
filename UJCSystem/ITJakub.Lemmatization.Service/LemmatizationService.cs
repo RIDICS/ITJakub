@@ -20,25 +20,47 @@ namespace ITJakub.Lemmatization.Service
 
         public string GetLemma(string word)
         {
-            var tokenCharacteristics = new TokenCharacteristic();
-
-            Token token = new Token();
-            token.Text = "TestovaciToken";
-            token.TokenCharacteristics = new List<TokenCharacteristic>
+            var tokenCharacteristics = new TokenCharacteristic
             {
-                tokenCharacteristics
+                Description = "popisek charakteristiky",
+                MorphologicalCharakteristic = ""
             };
 
-            //var canonicalForm = new CanonicalForm
-            //{
-            //    Text = "TestLemma",
-            //    Type = CanonicalFormType.Lemma
-            //};
+            Token token = new Token
+            {
+                Text = "TestovaciToken",
+                Description = "Testovaci popisek",
+                TokenCharacteristics = new List<TokenCharacteristic>
+                {
+                    tokenCharacteristics
+                }
+            };
 
-            //tokenCharacteristics.CanonicalForms = new List<CanonicalForm>
-            //{
-            //    canonicalForm
-            //};
+            var canonicalForm = new CanonicalForm
+            {
+                Text = "TestLemma",
+                Description = "Testovaci popisek",
+                Type = CanonicalFormType.Lemma,
+                HyperCanonicalForm = new HyperCanonicalForm
+                {
+                    Text = "Testovaci HyperLemma",
+                    Type = HyperCanonicalFormType.HyperLemma,
+                    Description = "Testovaci popisek hyperlemmatu"
+                }
+            };
+
+            var canonicalForm2 = new CanonicalForm
+            {
+                Text = "TestStemma",
+                Description = "Testovaci popisek steamma",
+                Type = CanonicalFormType.Stemma
+            };
+
+            tokenCharacteristics.CanonicalForms = new List<CanonicalForm>
+            {
+                canonicalForm,
+                canonicalForm2
+            };
 
             m_lemmaRepository.Save(token);
 

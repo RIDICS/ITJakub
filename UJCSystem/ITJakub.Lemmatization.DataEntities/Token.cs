@@ -12,6 +12,8 @@ namespace ITJakub.Lemmatization.DataEntities
 
         public virtual string Text { get; set; }
 
+        public virtual string Description { get; set; }
+
         public virtual IList<TokenCharacteristic> TokenCharacteristics { get; set; }
 
         public virtual bool Equals(Token other)
