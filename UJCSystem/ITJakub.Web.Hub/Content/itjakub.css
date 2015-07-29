@@ -42,7 +42,7 @@ body {
   text-decoration: none;
 }
 .module-content {
-  margin: 87px 0 0 0;
+  margin: 88px 0 0 0;
   min-height: 74vh;
 }
 .content-container {
@@ -351,7 +351,7 @@ ol.numbered > li:before {
   filter: none;
   display: block;
   line-height: 120%;
-  padding: 10px;
+  padding: 8px 10px 8px 10px;
   color: #ffffff;
 }
 #main-plugins-menu .has-sub ul li:hover a {
@@ -1411,8 +1411,8 @@ a.main_logo_href img {
 }
 .main_logo_text {
   position: absolute;
-  top: 12px;
-  left: 45px;
+  top: 14px;
+  left: 40px;
   margin-right: 50px;
   margin-left: 5px;
   color: white;
@@ -1426,14 +1426,12 @@ a.main_logo_href img {
   font-size: 22px;
   font-weight: bold;
   margin: 0;
-  font-family: 'Times New Roman';
 }
 .main_logo_text h2 {
   display: inline;
   font-size: 15px;
   font-weight: normal;
-  margin: 0 0 0 7px;
-  font-family: 'Times New Roman';
+  margin: 0 0 0 2px;
 }
 .main-navbar-container {
   margin-left: 2px;
