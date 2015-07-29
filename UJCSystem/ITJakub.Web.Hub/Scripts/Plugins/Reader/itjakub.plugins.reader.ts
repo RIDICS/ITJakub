@@ -788,6 +788,7 @@ class ReaderModule {
             var pageDiv = document.getElementById(page.PageXmlId);
             $(pageDiv).addClass("search-unloaded");
         }
+        this.moveToPageNumber(this.actualPageIndex, true);
     }
 
     searchPanelShowLoading() {

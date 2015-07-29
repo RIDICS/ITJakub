@@ -1001,7 +1001,8 @@ body {
 div.dummy-page {
   display: inherit!important;
 }
-.reader-search-result-match {
+.reader-search-result-match,
+.match {
   background-color: yellow;
 }
 .reader-search-result-item:hover {
@@ -1569,4 +1570,4 @@ ul {
 .navbar-login li a:hover {
   color: #84ced7;
 }
-/*# sourceMappingURL=ITJakub.css.map */
+/*# sourceMappingURL=itjakub.css.map */

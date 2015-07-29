@@ -661,6 +661,7 @@ var ReaderModule = (function () {
             var pageDiv = document.getElementById(page.PageXmlId);
             $(pageDiv).addClass("search-unloaded");
         }
+        this.moveToPageNumber(this.actualPageIndex, true);
     };
     ReaderModule.prototype.searchPanelShowLoading = function () {
         this.searchPanel.showLoading();
