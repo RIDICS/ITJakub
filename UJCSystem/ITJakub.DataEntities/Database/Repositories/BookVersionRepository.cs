@@ -380,5 +380,20 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return result;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookHeadword GetFirstHeadwordInfo(string bookXmlId, string entryXmlId)
+        {
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<BookHeadword>()
+                    .Fetch(x => x.BookVersion).Eager
+                    .Where(x => x.XmlEntryId == entryXmlId && x.BookVersion.Book.Guid == bookXmlId)
+                    .Take(1)
+                    .SingleOrDefault<BookHeadword>();
+
+                return result;
+            }
+        }
     }
 }

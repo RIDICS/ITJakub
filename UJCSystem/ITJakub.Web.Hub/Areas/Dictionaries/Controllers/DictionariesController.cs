@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Mime;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
@@ -262,6 +263,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             m_mainServiceEncryptedClient.RemoveHeadwordBookmark(bookId, entryXmlId, HttpContext.User.Identity.Name);
             return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileResult GetHeadwordImage(string bookXmlId, string entryXmlId)
+        {
+            var resultStream = m_mainServiceClient.GetHeadwordImage(bookXmlId, entryXmlId);
+            return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
         }
     }
 }

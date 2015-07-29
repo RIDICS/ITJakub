@@ -324,6 +324,7 @@ class DictionaryViewer {
 interface IHeadwordBookInfo {
     BookXmlId: string;
     EntryXmlId: string;
+    ImageUrl: string;
 }
 
 interface IHeadword {

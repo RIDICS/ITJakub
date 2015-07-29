@@ -54,14 +54,14 @@ namespace ITJakub.ITJakubService.Services
             return m_favoriteManager.GetHeadwordBookmarks(userName);
         }
 
-        public void AddHeadwordBookmark(string bookId, string entryXmlId, string userName)
+        public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
-            m_favoriteManager.AddHeadwordBookmark(bookId, entryXmlId, userName);
+            m_favoriteManager.AddHeadwordBookmark(bookXmlId, entryXmlId, userName);
         }
 
-        public void RemoveHeadwordBookmark(string bookId, string entryXmlId, string userName)
+        public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
-            m_favoriteManager.RemoveHeadwordBookmark(bookId, entryXmlId, userName);
+            m_favoriteManager.RemoveHeadwordBookmark(bookXmlId, entryXmlId, userName);
         }
 
         #endregion

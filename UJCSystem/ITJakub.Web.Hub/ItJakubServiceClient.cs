@@ -310,6 +310,33 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public Stream GetHeadwordImage(string bookXmlId, string entryXmlId)
+        {
+            try
+            {
+                return Channel.GetHeadwordImage(bookXmlId, entryXmlId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordImage failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordImage failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetHeadwordImage timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
         public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             try

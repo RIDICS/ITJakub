@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="BookHeadword" table="[BookHeadword]" lazy="true" >
+  <class name="BookHeadword" table="[BookHeadword]">
     
     <id name="Id" column="Id">
       <generator class="identity" />
@@ -15,6 +15,10 @@
     <property name="Headword" />
     
     <property name="Visibility" />
+
+    <property name="Image" />
+
+    <property name="SortOrder" />
     
   </class>
 </hibernate-mapping>

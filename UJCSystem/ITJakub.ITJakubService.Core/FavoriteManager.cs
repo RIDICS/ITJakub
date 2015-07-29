@@ -89,7 +89,7 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<HeadwordBookmarkContract>>(headwordResults);
         }
 
-        public void AddHeadwordBookmark(string bookId, string entryXmlId, string userName)
+        public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
@@ -112,7 +112,7 @@ namespace ITJakub.ITJakubService.Core
 
             var bookmark = new HeadwordBookmark
             {
-                Book = m_bookRepository.FindBookByGuid(bookId),
+                Book = m_bookRepository.FindBookByGuid(bookXmlId),
                 User = user,
                 XmlEntryId = entryXmlId
             };
@@ -120,9 +120,9 @@ namespace ITJakub.ITJakubService.Core
             m_favoritesRepository.Save(bookmark);
         }
 
-        public void RemoveHeadwordBookmark(string bookId, string entryXmlId, string userName)
+        public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
-            m_favoritesRepository.DeleteHeadwordBookmark(bookId, entryXmlId, userName);
+            m_favoritesRepository.DeleteHeadwordBookmark(bookXmlId, entryXmlId, userName);
         }
     }
 }

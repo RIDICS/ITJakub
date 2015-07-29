@@ -176,11 +176,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void AddHeadwordBookmark(string bookId, string entryXmlId, string userName)
+        public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
             try
             {
-                Channel.AddHeadwordBookmark(bookId, entryXmlId, userName);
+                Channel.AddHeadwordBookmark(bookXmlId, entryXmlId, userName);
             }
             catch (CommunicationException ex)
             {
@@ -202,11 +202,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void RemoveHeadwordBookmark(string bookId, string entryXmlId, string userName)
+        public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
             try
             {
-                Channel.RemoveHeadwordBookmark(bookId, entryXmlId, userName);
+                Channel.RemoveHeadwordBookmark(bookXmlId, entryXmlId, userName);
             }
             catch (CommunicationException ex)
             {

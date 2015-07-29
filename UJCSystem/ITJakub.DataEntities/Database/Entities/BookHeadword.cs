@@ -11,6 +11,8 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string DefaultHeadword { get; set; }
         public virtual string Headword { get; set; }
         public virtual VisibilityEnum Visibility { get; set; }
+        public virtual string Image { get; set; }
+        public virtual string SortOrder { get; set; }
 
         public virtual bool Equals(BookHeadword other)
         {

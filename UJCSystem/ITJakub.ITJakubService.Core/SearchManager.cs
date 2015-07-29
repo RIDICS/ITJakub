@@ -274,7 +274,8 @@ namespace ITJakub.ITJakubService.Core
                 var bookInfoContract = new HeadwordBookInfoContract
                 {
                     BookXmlId = headword.BookGuid,
-                    EntryXmlId = headword.XmlEntryId
+                    EntryXmlId = headword.XmlEntryId,
+                    ImageUrl = headword.Image
                 };
 
                 if (headword.Headword == headwordContract.Headword)

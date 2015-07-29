@@ -96,6 +96,11 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageImage(bookPageImageContract);
         }
 
+        public Stream GetHeadwordImage(string bookXmlId, string entryXmlId)
+        {
+            return m_bookManager.GetHeadwordImage(bookXmlId, entryXmlId);
+        }
+
         public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             return m_searchManager.SearchByCriteria(searchCriterias);
