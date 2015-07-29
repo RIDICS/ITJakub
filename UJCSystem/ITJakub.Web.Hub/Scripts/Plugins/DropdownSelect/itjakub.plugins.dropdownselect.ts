@@ -208,13 +208,13 @@ class DropDownSelect {
     private showBody() {
         $(this.moreSpan).children().removeClass("glyphicon-chevron-down");
         $(this.moreSpan).children().addClass("glyphicon-chevron-up");
-        $(this.dropDownBodyDiv).slideDown();
+        $(this.dropDownBodyDiv).slideDown("fast");
     }
 
     private hideBody() {
         $(this.moreSpan).children().removeClass("glyphicon-chevron-up");
         $(this.moreSpan).children().addClass("glyphicon-chevron-down");
-        $(this.dropDownBodyDiv).slideUp();
+        $(this.dropDownBodyDiv).slideUp("fast");
     }
 
     private makeBody(dropDownDiv: HTMLDivElement) {

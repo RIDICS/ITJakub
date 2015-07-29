@@ -133,12 +133,12 @@ var DropDownSelect = (function () {
     DropDownSelect.prototype.showBody = function () {
         $(this.moreSpan).children().removeClass("glyphicon-chevron-down");
         $(this.moreSpan).children().addClass("glyphicon-chevron-up");
-        $(this.dropDownBodyDiv).slideDown();
+        $(this.dropDownBodyDiv).slideDown("fast");
     };
     DropDownSelect.prototype.hideBody = function () {
         $(this.moreSpan).children().removeClass("glyphicon-chevron-up");
         $(this.moreSpan).children().addClass("glyphicon-chevron-down");
-        $(this.dropDownBodyDiv).slideUp();
+        $(this.dropDownBodyDiv).slideUp("fast");
     };
     DropDownSelect.prototype.makeBody = function (dropDownDiv) {
         var dropDownBodyDiv = document.createElement("div");

@@ -186,10 +186,12 @@ class ReaderModule {
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
         $(pageInputText).addClass('page-input-text');
+
         pageInputDiv.appendChild(pageInputText);
 
         var pageInputButton = document.createElement("button");
         pageInputButton.innerHTML = "Přejít na stránku";
+        $(pageInputButton).addClass('btn btn-default');
         $(pageInputButton).addClass('page-input-button');
         $(pageInputButton).click((event: Event) => {
             var pageName = $('#pageInputText').val();

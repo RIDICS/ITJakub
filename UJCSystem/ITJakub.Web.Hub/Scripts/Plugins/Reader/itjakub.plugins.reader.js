@@ -140,6 +140,7 @@ var ReaderModule = (function () {
         pageInputDiv.appendChild(pageInputText);
         var pageInputButton = document.createElement("button");
         pageInputButton.innerHTML = "Přejít na stránku";
+        $(pageInputButton).addClass('btn btn-default');
         $(pageInputButton).addClass('page-input-button');
         $(pageInputButton).click(function (event) {
             var pageName = $('#pageInputText').val();
