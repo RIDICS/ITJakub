@@ -346,7 +346,9 @@ namespace Ujc.Ovj.Ooxml.Conversion
 									{
 										EntryId = item.Parent.Parent.Attribute("corresp").Value.Replace("#", ""),
 										DefaultHw = item.Parent.Parent.Element(nsTei + "head").Value,
+                                        DefaultHwSorting = (from i in item.Parent.Parent.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp") where i.Attribute("type").Value == "sorting" select i).FirstOrDefault(),
 										Headword = item.Element(nsTei + "head").Value,
+                                        HeadwordSorting = (from i in item.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp") where i.Attribute("type").Value == "sorting" select i).FirstOrDefault(), 
 										Visibility = item.Parent.Parent.Attribute("type") != null ? item.Parent.Parent.Attribute("type").Value : null,
 										Type = item.Attribute("type") != null ? item.Attribute("type").Value : null
 									};
@@ -355,7 +357,9 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				doc.Root.Add(new XElement(nsItj + "headword",
 						new XAttribute("entryId", item.EntryId),
 						new XAttribute("defaultHw", item.DefaultHw),
-						new XAttribute("hw", item.Headword),
+                        item.DefaultHwSorting != null ? new XAttribute("defaultHw-sorting", item.DefaultHwSorting.Value) : null,
+                        item.HeadwordSorting != null ? new XAttribute("hw", item.DefaultHwSorting.Value) : null, 
+                        item.Headword != null ? new XAttribute("hw-original", item.Headword) : null,
 						item.Visibility != null ? new XAttribute("visibility", item.Visibility) : null,
 						item.Type != null ? new XAttribute("type", item.Type) : null
 						));
@@ -492,6 +496,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				new XElement(nsTei + "item", new XAttribute("corresp", "#" + corresp),
 					type,
 					new XElement(nsTei + "head", new XText(item.HeadInfo.HeadText)),
+                    new XElement(nsTei + "interp", new XAttribute("type", "sorting"), new XText(item.HeadInfo.HeadSort())),
 					item.PageBreakInfo.PageBreak == null
 						? null
 						: new XElement(nsTei + "ref", new XAttribute("target", "#" + item.PageBreakInfo.PageBreakXmlId),
