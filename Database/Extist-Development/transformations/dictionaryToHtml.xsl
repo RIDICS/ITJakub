@@ -2,7 +2,7 @@
 	<?itj-book-type Dictionary?>
 	<?itj-output-format Html?>
     <xsl:import href="pageToHtml.xsl"/>
-    <xsl:output method="html" indent="no"/>
+    <xsl:output method="html" encoding="UTF-8"/>
     <xsl:strip-space elements="*"/>
     <xsl:template match="result | itj:result">
         <div class="itj-dictionary">

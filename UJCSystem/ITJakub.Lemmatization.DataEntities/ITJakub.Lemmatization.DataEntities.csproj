@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0CCC8005-5A92-4A47-93DF-05FB6E333279}</ProjectGuid>
+    <ProjectGuid>{69076B65-4268-497A-ABF6-64D7FFA50911}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ITJakub.Lemmatization.Core</RootNamespace>
-    <AssemblyName>ITJakub.Lemmatization.Core</AssemblyName>
+    <RootNamespace>ITJakub.Lemmatization.DataEntities</RootNamespace>
+    <AssemblyName>ITJakub.Lemmatization.DataEntities</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Facilities.NHibernateIntegration">
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Facilities.NHibernateIntegration.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Services.Transaction">
+      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Services.Transaction.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,11 +47,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CanonicalForm.cs" />
+    <Compile Include="HyperCanonicalForm.cs" />
+    <Compile Include="Repositories\LemmatizationRepository.cs" />
+    <Compile Include="Token.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TokenCharacteristic.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ITJakub.Lemmatization.Core.Container.Config" />
+    <EmbeddedResource Include="Token.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TokenCharacteristic.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HyperCanonicalForm.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
+      <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
+      <Name>ITJakub.DataEntities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ITJakub.Lemmatization.DataEntities.Container.Config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CanonicalForm.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
