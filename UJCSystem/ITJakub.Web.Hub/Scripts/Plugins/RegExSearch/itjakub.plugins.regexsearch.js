@@ -75,10 +75,13 @@ var Search = (function () {
         $(searchbarInput).addClass("form-control searchbar-input");
         $(searchbarInputDiv).append(searchbarInput);
         this.searchInputTextbox = searchbarInput;
-        $(this.searchInputTextbox).keyup(function (eventData) {
-            var keyCode = eventData.which || eventData.keyCode;
+        $(this.searchInputTextbox).keypress(function (event) {
+            var keyCode = event.which || event.keyCode;
             if (keyCode === 13) {
                 $(_this.searchButton).click();
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
             }
         });
         var searchbarAdvancedEditor = document.createElement("div");
@@ -120,7 +123,6 @@ var Search = (function () {
     Search.prototype.writeJsonToTextField = function (json) {
         $(this.searchInputTextbox).text(json);
         $(this.searchInputTextbox).val(json);
-        $(this.searchInputTextbox).change();
     };
     Search.prototype.processSearchQuery = function (query) {
         this.writeJsonToTextField(query);

@@ -112,9 +112,9 @@ $(document).ready(() => {
     search = new Search(<any>$("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
     search.makeSearch();
 
-    var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
-    typeaheadSearchBox.addDataSet("Title", "Název");
-    typeaheadSearchBox.create();
+    //var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
+    //typeaheadSearchBox.addDataSet("Title", "Název");
+    //typeaheadSearchBox.create();
 
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
@@ -131,9 +131,9 @@ $(document).ready(() => {
         }
 
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
-        typeaheadSearchBox.clearAndDestroy();
-        typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
-        typeaheadSearchBox.create();
+        //typeaheadSearchBox.clearAndDestroy();
+        //typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
+        //typeaheadSearchBox.create();
     };
 
     var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);

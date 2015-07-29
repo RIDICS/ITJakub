@@ -102,10 +102,13 @@ class Search {
 
         this.searchInputTextbox = searchbarInput;
 
-        $(this.searchInputTextbox).keyup((eventData: any) => {
-            var keyCode = eventData.which || eventData.keyCode; 
+        $(this.searchInputTextbox).keypress((event: any) => {
+            var keyCode = event.which || event.keyCode; 
             if (keyCode === 13) {     //13 = Enter
                 $(this.searchButton).click();
+                event.preventDefault(); 
+                event.stopPropagation();
+                return false;
             }
         });
 
@@ -158,7 +161,6 @@ class Search {
     writeJsonToTextField(json: string) {
         $(this.searchInputTextbox).text(json);
         $(this.searchInputTextbox).val(json);
-        $(this.searchInputTextbox).change();
     }
 
     public processSearchQuery(query: string) {
