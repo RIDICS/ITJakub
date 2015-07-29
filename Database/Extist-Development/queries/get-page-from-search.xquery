@@ -63,9 +63,9 @@ let $transformation :=
 
 return ($transformation)
 
+(:return trans:transform-document($page-hits-result, $output-format, $xsl-path) :)
 
 (:return trans:transform-document($page-hits-result, "Xml", $xsl-path) :)
-(:return trans:transform-document($page-hits-result, $output-format, $xsl-path) :)
 (:let $template := doc(escape-html-uri($xsl-path)) 
 return  ($template)
 :)
