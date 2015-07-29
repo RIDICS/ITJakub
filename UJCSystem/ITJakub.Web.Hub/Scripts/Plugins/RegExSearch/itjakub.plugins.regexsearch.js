@@ -123,6 +123,7 @@ var Search = (function () {
     Search.prototype.writeJsonToTextField = function (json) {
         $(this.searchInputTextbox).text(json);
         $(this.searchInputTextbox).val(json);
+        $(this.searchInputTextbox).change();
     };
     Search.prototype.processSearchQuery = function (query) {
         this.writeJsonToTextField(query);

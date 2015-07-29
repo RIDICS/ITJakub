@@ -161,6 +161,7 @@ class Search {
     writeJsonToTextField(json: string) {
         $(this.searchInputTextbox).text(json);
         $(this.searchInputTextbox).val(json);
+        $(this.searchInputTextbox).change();
     }
 
     public processSearchQuery(query: string) {

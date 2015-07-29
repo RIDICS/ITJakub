@@ -18,6 +18,10 @@
          };
      }
 
+     value(value: any):void {
+         $(this.inputField).typeahead('val', value);
+     }
+
      create(): void {
          $(this.inputField).typeahead(this.options, this.datasets);
      }

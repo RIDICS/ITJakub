@@ -90,9 +90,10 @@ $(document).ready(function () {
     }
     search = new Search($("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
     search.makeSearch();
-    //var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
-    //typeaheadSearchBox.addDataSet("Title", "Název");
-    //typeaheadSearchBox.create();
+    var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
+    typeaheadSearchBox.addDataSet("Title", "Název");
+    typeaheadSearchBox.create();
+    typeaheadSearchBox.value($(".searchbar-input").val());
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
         bookIds = new Array();
@@ -104,12 +105,16 @@ $(document).ready(function () {
             categoryIds.push(state.SelectedCategories[i].Id);
         }
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
-        //typeaheadSearchBox.clearAndDestroy();
-        //typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
-        //typeaheadSearchBox.create();
+        typeaheadSearchBox.clearAndDestroy();
+        typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
+        typeaheadSearchBox.create();
+        typeaheadSearchBox.value($(".searchbar-input").val());
     };
     var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
+    $(".searchbar-input").change(function () {
+        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+    });
 });
 function listBook(target) {
     var bookId = $(target).parents("li.list-item").attr("data-bookid");
