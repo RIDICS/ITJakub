@@ -3,7 +3,7 @@ $(document).ready(function () {
     var booksCountOnPage = 5;
     var bookIds = new Array();
     var categoryIds = new Array();
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", BookTypeEnum.Edition);
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", 0 /* Edition */);
     function editionAdvancedSearchPaged(json, pageNumber) {
         if (typeof json === "undefined" || json === null || json === "")
             return;
@@ -93,7 +93,7 @@ $(document).ready(function () {
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
     typeaheadSearchBox.addDataSet("Title", "Název");
     typeaheadSearchBox.create();
-    typeaheadSearchBox.value($(".searchbar-input").val());
+    typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = function (state) {
         bookIds = new Array();
@@ -108,11 +108,11 @@ $(document).ready(function () {
         typeaheadSearchBox.clearAndDestroy();
         typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
         typeaheadSearchBox.create();
-        typeaheadSearchBox.value($(".searchbar-input").val());
+        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     };
     var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
-    $(".searchbar-input").change(function () {
+    $(".searchbar-input.tt-input").change(function () {
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     });
 });

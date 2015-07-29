@@ -115,7 +115,7 @@ $(document).ready(() => {
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
     typeaheadSearchBox.addDataSet("Title", "Název");
     typeaheadSearchBox.create();
-    typeaheadSearchBox.value($(".searchbar-input").val());
+    typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     
 
     var callbackDelegate = new DropDownSelectCallbackDelegate();
@@ -136,14 +136,14 @@ $(document).ready(() => {
         typeaheadSearchBox.clearAndDestroy();
         typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
         typeaheadSearchBox.create();
-        typeaheadSearchBox.value($(".searchbar-input").val());
+        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     };
 
     var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
 
 
-    $(".searchbar-input").change(() => {        //prevent clearing input value on blur() 
+    $(".searchbar-input.tt-input").change(() => {        //prevent clearing input value on blur() 
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     });
 
