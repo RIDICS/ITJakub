@@ -61,11 +61,6 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             return View();
         }
 
-        public ActionResult TermsOfUse()
-        {
-            return View();
-        }
-
         public ActionResult Feedback()
         {
             return View();

@@ -258,7 +258,7 @@ ol.numbered > li:before {
   color: black;
   display: block;
   font-family: Helvetica, Arial, Verdana, sans-serif;
-  padding: 10px 20px;
+  padding: 5px 20px;
   text-decoration: none;
 }
 #main-plugins-menu ul {
@@ -271,7 +271,6 @@ ol.numbered > li:before {
   display: inline-block;
   float: left;
   margin: 0;
-  max-width: 135px;
   height: 100%;
 }
 #main-plugins-menu.align-center {
@@ -296,7 +295,7 @@ ol.numbered > li:before {
   background-position: center 90%;
   background-repeat: no-repeat;
   background-size: 10px;
-  padding-bottom: 15px;
+  /*padding-bottom: 15px;*/
   vertical-align: middle;
 }
 #main-plugins-menu > ul > li:hover:after {
@@ -334,7 +333,7 @@ ol.numbered > li:before {
 #main-plugins-menu .has-sub ul {
   display: none;
   position: absolute;
-  width: 200px;
+  width: 148px;
   top: 100%;
   left: 0;
 }

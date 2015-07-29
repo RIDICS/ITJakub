@@ -29,11 +29,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             return View();
         }
 
-        public ActionResult TermsOfUse()
-        {
-            return View();
-        }
-
         public ActionResult Feedback()
         {
             return View();

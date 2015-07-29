@@ -14,7 +14,7 @@ $(document).ready(function() {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl()+"Bibliographies/Bibliographies/Search",
+            url: getBaseUrl()+"Bibliographies/Bibliographies/SearchTerm",
             data: { term: text },
             dataType: 'json',
             contentType: 'application/json',

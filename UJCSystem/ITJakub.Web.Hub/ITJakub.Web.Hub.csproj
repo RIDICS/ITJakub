@@ -334,9 +334,8 @@
     <Content Include="Areas\Bibliographies\Views\web.config" />
     <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.less" />
     <Content Include="Areas\Bibliographies\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Bibliographies\Views\Bibliographies\List.cshtml" />
+    <Content Include="Areas\Bibliographies\Views\Bibliographies\Search.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
-    <Content Include="Areas\Bibliographies\Views\Bibliographies\TermsOfUse.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Feedback.cshtml" />
     <Content Include="Content\Plugins\Bibliography\configuration.json" />
     <Content Include="Content\ITJakub.css">
@@ -458,7 +457,6 @@
     <Content Include="Areas\Editions\Views\Editions\Search.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
-    <Content Include="Areas\Editions\Views\Editions\TermsOfUse.cshtml" />
     <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.less" />
     <Content Include="Areas\CardFiles\Views\web.config" />
     <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.less" />
@@ -466,7 +464,6 @@
       <DependentUpon>itjakub.cardfiles.css</DependentUpon>
     </Content>
     <Content Include="Areas\CardFiles\Views\CardFiles\List.cshtml" />
-    <Content Include="Areas\CardFiles\Views\CardFiles\TermsOfUse.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Information.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Feedback.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Search.cshtml" />
@@ -484,13 +481,11 @@
       <DependentUpon>itjakub.bohemiantextbank.css</DependentUpon>
     </Content>
     <Content Include="Areas\BohemianTextBank\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\TermsOfUse.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Search.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\List.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Information.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Feedback.cshtml" />
     <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.less" />
-    <Content Include="Areas\OldGrammar\Views\OldGrammar\TermsOfUse.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Search.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\List.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Feedback.cshtml" />
@@ -498,7 +493,7 @@
     <Content Include="Areas\OldGrammar\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.less" />
     <Content Include="Areas\ProfessionalLiterature\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\TermsOfUse.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\List.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Search.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Information.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Feedback.cshtml" />
@@ -508,7 +503,6 @@
     </Content>
     <Content Include="Areas\Editions\Views\Editions\Feedback.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Feedback.cshtml" />
-    <Content Include="Areas\Dictionaries\Views\Dictionaries\TermsOfUse.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\List.cshtml" />
     <Content Include="Content\bootstrap-theme.css.map" />

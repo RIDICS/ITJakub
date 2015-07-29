@@ -87,11 +87,6 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View();
         }
 
-        public ActionResult TermsOfUse()
-        {
-            return View();
-        }
-
         public ActionResult FeedBack()
         {
             return View();
