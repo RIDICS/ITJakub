@@ -213,6 +213,10 @@ ul.pagination-sm {
     a:link:after, a:visited:after {  
         content: normal;  
     }
+
+    .dictionary-entry-image-switch {
+        display: none;
+    }
 }
 
 #search-tabs {
@@ -258,6 +262,29 @@ ul.pagination-sm {
     max-width: 100%;
     padding-right: 15px;
     padding-left: 15px;
+    padding-top: 6px;
+}
+
+.dictionary-entry-image-switch .btn-primary {
+    background-color: transparent;
+    border-color: @item-background-color;
+    color: @item-background-color;
+    margin: 5px 15px 5px 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 0;
+}
+
+.dictionary-entry-image-switch .btn-primary:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+    color: #333333;
+}
+
+.dictionary-entry-image-switch .active {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
 }
 
 

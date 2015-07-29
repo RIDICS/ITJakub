@@ -75,20 +75,24 @@ var DictionaryViewer = (function () {
                 if (dictionary.ImageUrl) {
                     var imageCheckBoxDiv = document.createElement("div");
                     var imageCheckBox = document.createElement("input");
-                    var imageLabel = document.createElement("span");
+                    var imageIconSpan = document.createElement("span");
+                    var imageCheckBoxLabel = document.createElement("label");
                     imageCheckBox.type = "checkbox";
-                    $(imageLabel).text("Obrázek");
-                    $(imageCheckBoxDiv).addClass("dictionary-entry-image-switch");
+                    imageCheckBox.autocomplete = "off";
                     $(imageCheckBox).change(function (event) {
                         _this.updateImageVisibility(event.target);
                     });
-                    imageCheckBoxDiv.appendChild(imageCheckBox);
-                    imageCheckBoxDiv.appendChild(imageLabel);
-                    var imageContainerDiv = document.createElement("div");
-                    $(imageContainerDiv).addClass("dictionary-entry-image");
+                    imageCheckBoxDiv.setAttribute("data-toggle", "buttons");
+                    $(imageCheckBoxDiv).addClass("dictionary-entry-image-switch").addClass("btn-group");
+                    $(imageIconSpan).addClass("glyphicon").addClass("glyphicon-picture");
+                    $(imageCheckBoxLabel).addClass("btn").addClass("btn-primary");
+                    imageCheckBoxLabel.appendChild(imageCheckBox);
+                    imageCheckBoxLabel.appendChild(imageIconSpan);
+                    imageCheckBoxDiv.appendChild(imageCheckBoxLabel);
                     mainHeadwordDiv.appendChild(imageCheckBoxDiv);
-                    mainHeadwordDiv.appendChild(imageContainerDiv);
                 }
+                var imageContainerDiv = document.createElement("div");
+                $(imageContainerDiv).addClass("dictionary-entry-image");
                 var descriptionDiv = document.createElement("div");
                 $(mainHeadwordDiv).addClass("loading-background");
                 $(descriptionDiv).addClass("dictionary-entry-description-container");
@@ -111,6 +115,7 @@ var DictionaryViewer = (function () {
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
                 mainHeadwordDiv.appendChild(descriptionDiv);
+                mainHeadwordDiv.appendChild(imageContainerDiv);
                 mainHeadwordDiv.appendChild(commentsDiv);
                 mainHeadwordDiv.appendChild(dictionaryDiv);
                 mainHeadwordDiv.appendChild(document.createElement("hr"));
@@ -140,7 +145,7 @@ var DictionaryViewer = (function () {
         $(this.headwordDescriptionContainer).append(descriptionsDiv);
     };
     DictionaryViewer.prototype.updateImageVisibility = function (checkBox) {
-        var mainDiv = $(checkBox).parent().parent();
+        var mainDiv = $(checkBox).closest("[data-entry-index]");
         var imageContainer = $(".dictionary-entry-image", mainDiv);
         if (checkBox.checked) {
             if (imageContainer.hasClass("hidden")) {
