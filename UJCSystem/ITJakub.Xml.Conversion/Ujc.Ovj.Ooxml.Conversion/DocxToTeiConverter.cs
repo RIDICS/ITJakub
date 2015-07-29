@@ -82,6 +82,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		private string _documentId = null;
 		private VersionInfoSkeleton _currentVersionInfoSkeleton;
 
+	    private DocxToTeiConverterSettings ConverterSettings { get; set; }
+
 		public string GetDocumentId()
 		{
 			return _documentId;
@@ -89,17 +91,18 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 		public ConversionResult Convert(DocxToTeiConverterSettings settings)
 		{
-
+		    ConverterSettings = settings;
+		    CheckIfDirectoryPathsExists(ConverterSettings);
 			_result = new ConversionResult();
 			string documentType = null;
 
-			FileInfo inputFileInfo = new FileInfo(settings.InputFilePath);
+            FileInfo inputFileInfo = new FileInfo(ConverterSettings.InputFilePath);
 
 			string inputFileName = inputFileInfo.Name;
 
-			ResolveDefaultSettingsValues(settings);
+            ResolveDefaultSettingsValues(ConverterSettings);
 
-			List<IPrepis> glsPrepisy = GetPrepisy(settings, inputFileName);
+            List<IPrepis> glsPrepisy = GetPrepisy(ConverterSettings, inputFileName);
 
 			if (glsPrepisy == null || glsPrepisy.Count == 0 || glsPrepisy[0] == null)
 			{
@@ -121,7 +124,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				return _result;
 			}
 
-			string tempDirectoryPath = settings.TempDirectoryPath;
+            string tempDirectoryPath = ConverterSettings.TempDirectoryPath;
 			//vytvoří se adresářová struktura, pokud neexistuje, pro ukládání výsledných a dočasných souborů
 			AdresarovaStruktura ads = new AdresarovaStruktura(tempDirectoryPath, documentType);
 			ads.VytvorStrukturu();
@@ -143,7 +146,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			//Zatím pouze konverze z DOCX do základního XML
 			try
 			{
-				ConvertDocxToXml(settings.InputFilePath, docxToXmlFilePath, docxToXmlOutput);
+                ConvertDocxToXml(ConverterSettings.InputFilePath, docxToXmlFilePath, docxToXmlOutput);
 			}
 			catch (Exception exception)
 			{
@@ -154,7 +157,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			if (!Directory.Exists(finalOutputDirectory))
 				Directory.CreateDirectory(finalOutputDirectory);
 
-			IExportNastaveni exportSettings = GetExportSettings(documentType, settings, xsltTransformationsPath, xsltTemplatesPath, ads, glsPrepisy);
+            IExportNastaveni exportSettings = GetExportSettings(documentType, ConverterSettings, xsltTransformationsPath, xsltTemplatesPath, ads, glsPrepisy);
 			ExportBase export = GetExportModule(documentType, exportSettings);
 
 			if (export == null || exportSettings == null)
@@ -222,7 +225,19 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			return _result;
 		}
 
-		/// <summary>
+	    private void CheckIfDirectoryPathsExists(DocxToTeiConverterSettings converterSettings)
+	    {
+	        if(!Directory.Exists(converterSettings.DataDirectoryPath))
+                throw new DirectoryNotFoundException(String.Format("Složka s daty neexistuje. Složka: {0}", converterSettings.DataDirectoryPath));
+	        string xsltTemplatesPath = GetXsltTemplatesPath();
+	        string xsltTransformationsPath = GetXsltTransformationsPath();
+            if(!Directory.Exists(xsltTemplatesPath))
+                throw new DirectoryNotFoundException(String.Format("Složka s šablonami XSLT neexistuje. Složka: {0}", xsltTemplatesPath));
+            if (!Directory.Exists(xsltTransformationsPath))
+                throw new DirectoryNotFoundException(String.Format("Složka s transformacemi děl neexistuje. Složka: {0}", xsltTransformationsPath));
+        }
+
+	    /// <summary>
 		/// Sets default values to properties with null value.
 		/// It assumes that all conversion is made in one directory.
 		/// </summary>
@@ -704,15 +719,16 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 		}
 
-		private static string GetDataDirectoryPath()
+		private string GetDataDirectoryPath()
 		{
 			string directory = AssemblyDirectory;
 			//cstrSablonyXslt = cstrSablonyXslt.Substring(0, cstrSablonyXslt.LastIndexOf(Path.DirectorySeparatorChar));
-			directory = Path.GetFullPath(Path.Combine(directory, @"Data"));
+            //directory = Path.GetFullPath(Path.Combine(directory, @"Data"));
+            directory = ConverterSettings.DataDirectoryPath;
 			return directory;
 		}
 
-		private static string GetXsltTemplatesPath()
+		private string GetXsltTemplatesPath()
 		{
 			string cstrSablonyXslt = GetDataDirectoryPath();
 			//cstrSablonyXslt = cstrSablonyXslt.Substring(0, cstrSablonyXslt.LastIndexOf(Path.DirectorySeparatorChar));
@@ -725,7 +741,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// Path to diractory with XSLT transformations definition files.
 		/// </summary>
 		/// <returns></returns>
-		private static string GetXsltTransformationsPath()
+		private string GetXsltTransformationsPath()
 		{
 			string directory = GetDataDirectoryPath();
 			//cstrSablonyXslt = cstrSablonyXslt.Substring(0, cstrSablonyXslt.LastIndexOf(Path.DirectorySeparatorChar));

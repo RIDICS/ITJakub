@@ -15,12 +15,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private readonly string m_conversionMetadataPath;
         private readonly BookRepository m_bookRepository;
         private readonly VersionIdGenerator m_versionIdGenerator;
+        private string m_dataDirectoryPath;
 
-        public XmlConversionProcessor(string conversionMetadataPath, BookRepository bookRepository, VersionIdGenerator versionIdGenerator)
+        public XmlConversionProcessor(string conversionMetadataPath, string dataDirectoryPath,
+                BookRepository bookRepository, VersionIdGenerator versionIdGenerator)
         {
             m_conversionMetadataPath = conversionMetadataPath;
             m_bookRepository = bookRepository;
             m_versionIdGenerator = versionIdGenerator;
+            m_dataDirectoryPath = dataDirectoryPath;
         }
 
 
@@ -66,7 +69,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 OutputFilePath = bookResource.FullPath,
                 TempDirectoryPath = tmpDirPath,
                 GetVersionList = versionProviderHelper.GetVersionsByBookId,
-                SplitDocumentByPageBreaks = true
+                SplitDocumentByPageBreaks = true,
+                DataDirectoryPath = m_dataDirectoryPath
             };
 
             var converter = new DocxToTeiConverter();
