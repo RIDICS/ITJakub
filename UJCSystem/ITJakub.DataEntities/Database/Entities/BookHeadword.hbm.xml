@@ -21,4 +21,33 @@
     <property name="SortOrder" />
     
   </class>
+
+  <sql-query name="GetHeadwordRowNumber">
+    <![CDATA[
+SELECT TOP (1) rowNumberAlias
+  FROM( 
+        SELECT * , 
+               ROW_NUMBER() OVER(ORDER BY q_.defaultHeadwordAlias) AS rowNumberAlias
+          FROM( 
+        SELECT DISTINCT bookAlias.Id AS bookIdAlias , 
+                        bookheadwo2_.DefaultHeadword AS defaultHeadwordAlias , 
+                        bookheadwo2_.XmlEntryId AS xmlEntryIdAlias
+          FROM
+               Book bookAlias INNER JOIN
+                              BookVersion bookversio1_
+          ON bookAlias.LastVersion
+             = 
+             bookversio1_.Id
+                              INNER JOIN
+                              BookHeadword bookheadwo2_
+          ON bookversio1_.Id
+             = 
+             bookheadwo2_.BookVersion
+          WHERE bookAlias.Id IN( :bookIds )
+              ) AS q_
+      ) AS query
+  WHERE query.xmlEntryIdAlias = :xmlEntryId
+  ORDER BY query.rowNumberAlias;
+    ]]>
+  </sql-query>
 </hibernate-mapping>
