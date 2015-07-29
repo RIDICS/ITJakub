@@ -31,7 +31,8 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
                 XmlEntryId = entryId,
                 DefaultHeadword = defaultHw,
                 Headword = hw,
-                Visibility = visibilityEnum
+                Visibility = visibilityEnum,
+                SortOrder = string.Empty // TODO get correct value
             };
 
             bookVersion.BookHeadwords.Add(bookHeadword);

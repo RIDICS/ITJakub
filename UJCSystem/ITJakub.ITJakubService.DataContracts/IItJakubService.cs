@@ -105,7 +105,7 @@ namespace ITJakub.ITJakubService.DataContracts
         int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds);
 
         [OperationContract]
-        HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int end);
+        HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count);
 
         [OperationContract]
         int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);

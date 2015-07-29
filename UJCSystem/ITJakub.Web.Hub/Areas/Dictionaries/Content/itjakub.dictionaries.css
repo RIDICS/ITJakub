@@ -269,6 +269,18 @@ ul.pagination-sm {
 .dictionary-entry-description-container {
   min-height: 24px;
 }
+.dictionary-entry-image-switch {
+  text-align: right;
+  float: right;
+}
+.dictionary-entry-image.loading {
+  min-height: 50px;
+}
+.dictionary-entry-image img {
+  max-width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+}
 .entryFree {
   padding-left: 15px;
   padding-right: 15px;

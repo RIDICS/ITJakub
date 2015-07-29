@@ -241,7 +241,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<HeadwordSearchResult> GetHeadwordList(int start, int end, IList<long> selectedBookIds = null)
+        public virtual IList<HeadwordSearchResult> GetHeadwordList(int start, int count, IList<long> selectedBookIds = null)
         {
             using (var session = GetSession())
             {
@@ -262,11 +262,12 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Add(Projections.Property(() => bookVersionAlias.Title).WithAlias(() => resultAlias.BookTitle))
                         .Add(Projections.Property(() => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym))
                         .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
-                        .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))))
+                        .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
+                        .Add(Projections.Property(() => bookHeadwordAlias.Image).WithAlias(() => resultAlias.Image))))
                     .OrderBy(x => x.DefaultHeadword).Asc
                     .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
-                    .Skip(start - 1)
-                    .Take(end - start + 1)
+                    .Skip(start)
+                    .Take(count)
                     .List<HeadwordSearchResult>();
 
                 return result;
@@ -386,9 +387,14 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
+                BookVersion bookVersionAlias = null;
+                Book bookAlias = null;
+
                 var result = session.QueryOver<BookHeadword>()
                     .Fetch(x => x.BookVersion).Eager
-                    .Where(x => x.XmlEntryId == entryXmlId && x.BookVersion.Book.Guid == bookXmlId)
+                    .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
+                    .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
+                    .Where(x => x.XmlEntryId == entryXmlId && bookAlias.Guid == bookXmlId)
                     .Take(1)
                     .SingleOrDefault<BookHeadword>();
 

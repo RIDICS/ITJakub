@@ -714,11 +714,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int end)
+        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count)
         {
             try
             {
-                return Channel.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, end);
+                return Channel.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, count);
             }
             catch (CommunicationException ex)
             {

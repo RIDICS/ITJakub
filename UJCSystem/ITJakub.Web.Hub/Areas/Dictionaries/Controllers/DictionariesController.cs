@@ -221,9 +221,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
         {
-            var start = (page - 1)*pageSize + 1;
-            var end = page*pageSize;
-            var result = m_mainServiceClient.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, end);
+            var start = (page - 1)*pageSize;
+            var result = m_mainServiceClient.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, pageSize);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

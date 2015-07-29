@@ -173,9 +173,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
         }
 
-        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int end)
+        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count)
         {
-            return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, end);
+            return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, count);
         }
 
         public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)

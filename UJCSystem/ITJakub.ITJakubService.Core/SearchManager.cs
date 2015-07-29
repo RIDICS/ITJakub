@@ -341,13 +341,13 @@ namespace ITJakub.ITJakubService.Core
         }
 
         public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
-            int start, int end)
+            int start, int count)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
             var databaseResult = bookIds == null
-                ? m_bookVersionRepository.GetHeadwordList(start, end)
-                : m_bookVersionRepository.GetHeadwordList(start, end, bookIds);
+                ? m_bookVersionRepository.GetHeadwordList(start, count)
+                : m_bookVersionRepository.GetHeadwordList(start, count, bookIds);
             var result = ConvertHeadwordSearchToContract(databaseResult);
 
             return result;

@@ -103,6 +103,28 @@ class DictionaryViewer {
 
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
+
+                if (dictionary.ImageUrl) {
+                    var imageCheckBoxDiv = document.createElement("div");
+                    var imageCheckBox = document.createElement("input");
+                    var imageLabel = document.createElement("span");
+                    imageCheckBox.type = "checkbox";
+                    $(imageLabel).text("Obrázek");
+                    $(imageCheckBoxDiv).addClass("dictionary-entry-image-switch");
+                    $(imageCheckBox).change(event => {
+                        this.updateImageVisibility(<HTMLInputElement>event.target);
+                    });
+
+                    imageCheckBoxDiv.appendChild(imageCheckBox);
+                    imageCheckBoxDiv.appendChild(imageLabel);
+
+                    var imageContainerDiv = document.createElement("div");
+                    $(imageContainerDiv).addClass("dictionary-entry-image");
+
+                    mainHeadwordDiv.appendChild(imageCheckBoxDiv);
+                    mainHeadwordDiv.appendChild(imageContainerDiv);
+                }
+
                 var descriptionDiv = document.createElement("div");
                 $(mainHeadwordDiv).addClass("loading-background");
                 $(descriptionDiv).addClass("dictionary-entry-description-container");
@@ -123,7 +145,7 @@ class DictionaryViewer {
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
                 $(dictionaryLink).text(dictionaryMetadata.BookTitle);
-                dictionaryLink.href = "?guid=" + dictionary.BookXmlId;
+                dictionaryLink.href = "?bookId=" + dictionary.BookXmlId;
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
 
@@ -162,6 +184,32 @@ class DictionaryViewer {
 
         $(this.headwordListContainer).append(listUl);
         $(this.headwordDescriptionContainer).append(descriptionsDiv);
+    }
+
+    private updateImageVisibility(checkBox: HTMLInputElement) {
+        var mainDiv = $(checkBox).parent().parent();
+        var imageContainer = $(".dictionary-entry-image", mainDiv);
+        if (checkBox.checked) {
+            if (imageContainer.hasClass("hidden")) {
+                imageContainer.removeClass("hidden");
+                return;
+            }
+
+            var index = $(mainDiv).data("entry-index");
+            var entryInfo = this.dictionariesInfo[index];
+            var imageLink = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordImage?bookXmlId=" + entryInfo.BookXmlId + "&entryXmlId=" + entryInfo.EntryXmlId;
+            var imageElement = document.createElement("img");
+            imageElement.setAttribute("src", imageLink);
+            imageContainer.append(imageElement);
+
+            $(imageContainer).addClass("loading");
+            imageElement.onload = () => {
+                $(imageContainer).removeClass("loading");
+            }
+
+        } else {
+            imageContainer.addClass("hidden");
+        }
     }
 
     private addNewFavoriteHeadword(index: number) {
