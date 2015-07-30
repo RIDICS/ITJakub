@@ -741,7 +741,7 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             try
             {
@@ -768,7 +768,7 @@ namespace ITJakub.Web.Hub
             }
         }
         
-        public int GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
+        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
         {
             try
             {

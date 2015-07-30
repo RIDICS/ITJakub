@@ -353,19 +353,26 @@ namespace ITJakub.ITJakubService.Core
             return result;
         }
 
-        public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+            query = string.Format("{0}%", query);
             query = EscapeQuery(query);
 
-            return m_bookVersionRepository.GetHeadwordRowNumber(bookIds, query);
+            var bookHeadword = m_bookVersionRepository.FindFirstHeadword(bookIds, query);
+            return m_bookVersionRepository.GetHeadwordRowNumberById(bookIds, bookHeadword.BookVersion.Book.Guid,
+                bookHeadword.XmlEntryId);
         }
 
-        public int GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
+        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
-            return m_bookVersionRepository.GetHeadwordRowNumberById(bookIds, headwordBookId, headwordEntryXmlId);
+            var resultRowNumber = m_bookVersionRepository.GetHeadwordRowNumberById(bookIds, headwordBookId, headwordEntryXmlId);
+            if (resultRowNumber == 0)
+                throw new ArgumentException("Headword not found.");
+
+            return resultRowNumber;
         }
 
         public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias,

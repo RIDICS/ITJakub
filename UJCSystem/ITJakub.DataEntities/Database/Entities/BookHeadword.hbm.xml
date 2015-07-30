@@ -27,11 +27,40 @@
 SELECT TOP (1) rowNumberAlias
   FROM( 
         SELECT * , 
-               ROW_NUMBER() OVER(ORDER BY q_.defaultHeadwordAlias) AS rowNumberAlias
+               ROW_NUMBER() OVER(ORDER BY q_.sortOrderAlias) AS rowNumberAlias
           FROM( 
-        SELECT DISTINCT bookAlias.Id AS bookIdAlias , 
+        SELECT DISTINCT bookAlias.Guid AS bookGuidAlias , 
                         bookheadwo2_.DefaultHeadword AS defaultHeadwordAlias , 
-                        bookheadwo2_.XmlEntryId AS xmlEntryIdAlias
+                        bookheadwo2_.XmlEntryId AS xmlEntryIdAlias ,
+                        bookheadwo2_.SortOrder AS sortOrderAlias
+          FROM
+               Book bookAlias INNER JOIN
+                              BookVersion bookversio1_
+          ON bookAlias.LastVersion
+             = 
+             bookversio1_.Id
+                              INNER JOIN
+                              BookHeadword bookheadwo2_
+          ON bookversio1_.Id
+             = 
+             bookheadwo2_.BookVersion
+              ) AS q_
+      ) AS query
+  WHERE query.xmlEntryIdAlias = :xmlEntryId and query.bookGuidAlias = :bookGuid
+  ORDER BY query.rowNumberAlias;
+    ]]>
+  </sql-query>
+  <sql-query name="GetHeadwordRowNumberFiltered">
+    <![CDATA[
+SELECT TOP (1) rowNumberAlias
+  FROM( 
+        SELECT * , 
+               ROW_NUMBER() OVER(ORDER BY q_.sortOrderAlias) AS rowNumberAlias
+          FROM( 
+        SELECT DISTINCT bookAlias.Guid AS bookGuidAlias , 
+                        bookheadwo2_.DefaultHeadword AS defaultHeadwordAlias , 
+                        bookheadwo2_.XmlEntryId AS xmlEntryIdAlias ,
+                        bookheadwo2_.SortOrder AS sortOrderAlias
           FROM
                Book bookAlias INNER JOIN
                               BookVersion bookversio1_
@@ -46,7 +75,7 @@ SELECT TOP (1) rowNumberAlias
           WHERE bookAlias.Id IN( :bookIds )
               ) AS q_
       ) AS query
-  WHERE query.xmlEntryIdAlias = :xmlEntryId
+  WHERE query.xmlEntryIdAlias = :xmlEntryId and query.bookGuidAlias = :bookGuid
   ORDER BY query.rowNumberAlias;
     ]]>
   </sql-query>

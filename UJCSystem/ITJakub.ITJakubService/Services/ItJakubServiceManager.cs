@@ -178,13 +178,12 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, count);
         }
 
-        public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             return m_searchManager.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query);
         }
 
-        public int GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId,
-            string headwordEntryXmlId)
+        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
         {
             return m_searchManager.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId,
                 headwordEntryXmlId);

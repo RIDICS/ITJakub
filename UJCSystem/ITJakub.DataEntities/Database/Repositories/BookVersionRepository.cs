@@ -8,6 +8,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.Shared.Contracts.Searching;
 using log4net;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 
@@ -333,21 +334,54 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int GetHeadwordRowNumber(IList<long> selectedBookIds, string headwordQuery)
+        public virtual BookHeadword FindFirstHeadword(IList<long> selectedBookIds, string headwordQuery)
         {
             using (var session = GetSession())
             {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                BookHeadword bookHeadwordAlias = null;
 
-                return 100; //TODO
+                var query = session.QueryOver(() => bookHeadwordAlias)
+                    .JoinQueryOver(() => bookHeadwordAlias.BookVersion, () => bookVersionAlias)
+                    .JoinQueryOver(() => bookVersionAlias.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(() => bookHeadwordAlias.Headword).IsLike(headwordQuery);
+
+                if (selectedBookIds != null)
+                    query.AndRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds);
+
+                var result = query.OrderBy(() => bookHeadwordAlias.SortOrder).Asc
+                    .Take(1)
+                    .SingleOrDefault<BookHeadword>();
+
+                return result;
             }
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int GetHeadwordRowNumberById(IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
+        public virtual long GetHeadwordRowNumberById(IList<long> selectedBookIds, string headwordBookGuid, string headwordEntryXmlId)
         {
             using (var session = GetSession())
             {
-                return 200; //TODO
+                IQuery query;
+
+                if (selectedBookIds == null)
+                {
+                    query = session.GetNamedQuery("GetHeadwordRowNumber");
+                }
+                else
+                {
+                    query = session.GetNamedQuery("GetHeadwordRowNumberFiltered")
+                        .SetParameterList("bookIds", selectedBookIds);
+                }
+                
+                var result = query
+                    .SetParameter("bookGuid", headwordBookGuid)
+                    .SetParameter("xmlEntryId", headwordEntryXmlId)
+                    .UniqueResult<long>();
+
+                return result;
             }
         }
 
