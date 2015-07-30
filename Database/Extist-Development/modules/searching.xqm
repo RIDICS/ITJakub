@@ -672,9 +672,9 @@ declare function search:get-queries-from-search-criteria($search-criteria  as no
 	</xsl:template>
 	
 	<xsl:template match="a:RegexTokenDistanceCriteriaContract">
-		<near slop="{{a:Distance}}">
+		<phrase slop="{{a:Distance}}">
 			<xsl:apply-templates />
-		</near>
+		</phrase>
 	</xsl:template>
 	
 	<xsl:template match="a:Distance" />

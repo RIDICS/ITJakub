@@ -58,6 +58,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// <remarks>Default value is <value>true</value>.</remarks>
 		public bool SplitDocumentByPageBreaks { get; set; }
 
+        public string DataDirectoryPath { get; set; }
+
 		/// <summary>
 		/// Function which returns list of version for document (by document id).
 		/// </summary>

@@ -35,19 +35,26 @@ let $entry := $document/id($entry-xml-id)
 
 let $entry-fragment := search:match-hits-for-entry-element($entry, $queries)
 (: vracený prvek musí být obalen elementem s xmlns:exist, jinak se <exist:match> nevygeneruje do výstupu :)
-let $entry-fragment := <itj:result xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/exist" xmlns:exist="http://exist.sourceforge.net/NS/exist">{$entry-fragment}</itj:result>
+let $entry-fragment :=
+	if($entry-fragment) then
+	<itj:result xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/exist" xmlns:exist="http://exist.sourceforge.net/NS/exist">{$entry-fragment}</itj:result>
+	else ()
 
 
 let $template := doc(escape-html-uri($xsl-path)) 
 let $transformation := 
 	if($outputFormat = "Xml") then
 			$entry-fragment
-	else if($outputFormat = "Html") 
-	then transform:stream-transform($entry-fragment, $template, ())
-	else if($outputFormat = "Rtf") 
-		then vwtrans:transform-document-to-rtf($entry-fragment, $template)
-		else if($outputFormat = "Pdf") 
-		then vwtrans:transform-document-to-pdf($entry-fragment, $template)
-		else()
+	else if ($entry-fragment) then
+		if($outputFormat = "Html") 
+		then transform:stream-transform($entry-fragment, $template, ())
+		else if($outputFormat = "Rtf") 
+			then vwtrans:transform-document-to-rtf($entry-fragment, $template)
+			else if($outputFormat = "Pdf") 
+			then vwtrans:transform-document-to-pdf($entry-fragment, $template)
+			else()
+		else ()
 
-return ($transformation)
+return if($transformation) then
+	$transformation
+	else response:set-status-code(404)

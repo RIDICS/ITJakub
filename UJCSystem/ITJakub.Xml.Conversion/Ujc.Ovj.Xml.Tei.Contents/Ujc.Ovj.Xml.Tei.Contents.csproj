@@ -43,7 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HeadInfo.cs" />
+    <Compile Include="HeadwordCleaner.cs" />
     <Compile Include="HeadwordInfo.cs" />
+    <Compile Include="OrtographyEnum.cs" />
     <Compile Include="TableOfContentItem.cs" />
     <Compile Include="PageBreakInfo.cs" />
     <Compile Include="ContentInfoBuilder.cs" />

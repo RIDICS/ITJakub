@@ -40,12 +40,16 @@ let $template := doc(escape-html-uri($xslPath))
 let $transformation := 
 	if ($outputFormat = "Xml") then
 		$entryFragment
-	else if($outputFormat = "Html") 
-	then transform:stream-transform($entryFragment, $template, ())
-	else if($outputFormat = "Rtf") 
-		then vwtrans:transform-document-to-rtf($entryFragment, $template)
-		else if($outputFormat = "Pdf") 
-		then vwtrans:transform-document-to-pdf($entryFragment, $template)
-		else()
+	else if ($entryFragment) then
+		if($outputFormat = "Html") 
+		then transform:stream-transform($entryFragment, $template, ())
+		else if($outputFormat = "Rtf") 
+			then vwtrans:transform-document-to-rtf($entryFragment, $template)
+			else if($outputFormat = "Pdf") 
+			then vwtrans:transform-document-to-pdf($entryFragment, $template)
+			else()
+		else ()
 
-return $transformation
+return if($transformation) then
+	$transformation
+	else response:set-status-code(404)
