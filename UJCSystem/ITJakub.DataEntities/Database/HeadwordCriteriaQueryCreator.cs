@@ -37,8 +37,9 @@ namespace ITJakub.DataEntities.Database
             m_criteriaList.Add(newCriteria);
         }
 
-        public Conjunction GetCondition(BookHeadword bookHeadwordAlias)
+        public Conjunction GetCondition()
         {
+            BookHeadword bookHeadwordAlias = null;
             var conjunction = new Conjunction();
 
             foreach (var criteria in m_criteriaList)

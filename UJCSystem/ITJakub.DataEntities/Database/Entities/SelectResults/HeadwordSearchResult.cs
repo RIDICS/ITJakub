@@ -8,5 +8,6 @@ namespace ITJakub.DataEntities.Database.Entities.SelectResults
         public string BookAcronym { get; set; }
         public string BookTitle { get; set; }
         public string Image { get; set; }
+        public string SortOrder { get; set; }
     }
 }

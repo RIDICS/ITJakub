@@ -263,8 +263,9 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Add(Projections.Property(() => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym))
                         .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
                         .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
+                        .Add(Projections.Property(() => bookHeadwordAlias.SortOrder).WithAlias(() => resultAlias.SortOrder))
                         .Add(Projections.Property(() => bookHeadwordAlias.Image).WithAlias(() => resultAlias.Image))))
-                    .OrderBy(x => x.DefaultHeadword).Asc
+                    .OrderBy(x => x.SortOrder).Asc
                     .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
                     .Skip(start)
                     .Take(count)
@@ -291,7 +292,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Add(Projections.Group(() => bookAlias.Id).WithAlias(() => headwordCountAlias.BookId))
                     )
                     .WhereRestrictionOn(() => bookAlias.Guid).IsInG(selectedGuidList)
-                    .And(creator.GetCondition(bookHeadwordAlias))
+                    .And(creator.GetCondition())
                     .TransformUsing(Transformers.AliasToBean<HeadwordCountResult>())
                     .List<HeadwordCountResult>();
 
@@ -317,10 +318,11 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Add(Projections.Property(() => bookVersionAlias.Title).WithAlias(() => resultAlias.BookTitle))
                         .Add(Projections.Property(() => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym))
                         .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
+                        .Add(Projections.Property(() => bookHeadwordAlias.SortOrder).WithAlias(() => resultAlias.SortOrder))
                         .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))))
                     .WhereRestrictionOn(() => bookAlias.Guid).IsInG(selectedGuidList)
-                    .And(creator.GetCondition(bookHeadwordAlias))
-                    .OrderBy(x => x.DefaultHeadword).Asc
+                    .And(creator.GetCondition())
+                    .OrderBy(x => x.SortOrder).Asc
                     .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
                     .Skip(start)
                     .Take(count)
