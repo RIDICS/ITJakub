@@ -167,7 +167,10 @@ var DictionaryViewer = (function () {
             imageElement.onerror = function () {
                 $(imageContainer).removeClass("loading");
                 $(imageContainer).empty();
-                $(imageContainer).text("Chyba při načítání obrázku k heslu '" + _this.headwordList[index] + "'.");
+                var errorDiv = document.createElement("div");
+                $(errorDiv).text("Chyba při načítání obrázku k heslu '" + _this.headwordList[index] + "'.");
+                $(errorDiv).addClass("entry-load-error");
+                imageContainer.append(errorDiv);
             };
         }
         else {
@@ -212,7 +215,10 @@ var DictionaryViewer = (function () {
     DictionaryViewer.prototype.showLoadError = function (headword, container) {
         $(container).empty();
         $(container).parent().removeClass("loading-background");
-        $(container).text("Chyba při náčítání hesla '" + headword + "'.");
+        var errorDiv = document.createElement("div");
+        $(errorDiv).text("Chyba při náčítání hesla '" + headword + "'.");
+        $(errorDiv).addClass("entry-load-error");
+        container.appendChild(errorDiv);
         if (this.isRequestToPrint)
             this.print();
     };
@@ -224,7 +230,7 @@ var DictionaryViewer = (function () {
         var toggleButtonLabel = $(".dictionary-entry-image-switch label", mainDiv);
         var checkBox = $("input", toggleButtonLabel);
         var headwordLabelSpan = document.createElement("span");
-        $(headwordLabelSpan).addClass("bo");
+        $(headwordLabelSpan).addClass("entry-image-header");
         $(headwordLabelSpan).text(this.headwordList[index]);
         headwordDescriptionContainer.append(headwordLabelSpan);
         if (checkBox.length !== 0 && !checkBox.get(0).checked) {

@@ -6,6 +6,8 @@ var DictionaryFavoriteHeadwords = (function () {
     }
     DictionaryFavoriteHeadwords.prototype.create = function (headwordClickCallback) {
         this.headwordClickCallback = headwordClickCallback;
+        var areaInitHeight = $(".dictionary-header", $(this.mainContainer)).innerHeight();
+        $(this.mainContainer).height(areaInitHeight);
         var self = this;
         $(this.expandButton).click(function () {
             var area = $(self.mainContainer);
@@ -24,8 +26,9 @@ var DictionaryFavoriteHeadwords = (function () {
                 $(this).children().removeClass("glyphicon-collapse-up");
                 $(this).children().addClass("glyphicon-collapse-down");
                 area.removeClass("uncollapsed");
+                var targetHeight = $(".dictionary-header", area).innerHeight();
                 area.animate({
-                    height: "100%"
+                    height: targetHeight
                 });
             }
         });

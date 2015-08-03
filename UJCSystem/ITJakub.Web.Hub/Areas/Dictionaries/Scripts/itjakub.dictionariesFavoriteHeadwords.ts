@@ -12,6 +12,9 @@
 
     public create(headwordClickCallback: (bookId: string, entryXmlId: string) => void) {
         this.headwordClickCallback = headwordClickCallback;
+        var areaInitHeight = $(".dictionary-header", $(this.mainContainer)).innerHeight();
+        $(this.mainContainer).height(areaInitHeight);
+
         var self = this;
         $(this.expandButton).click(function () {
             var area = $(self.mainContainer);
@@ -30,8 +33,9 @@
                 $(this).children().removeClass("glyphicon-collapse-up");
                 $(this).children().addClass("glyphicon-collapse-down");
                 area.removeClass("uncollapsed");
+                var targetHeight = $(".dictionary-header", area).innerHeight();
                 area.animate({
-                    height: "100%"
+                    height: targetHeight
                 });
             }
         });

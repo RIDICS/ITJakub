@@ -222,7 +222,12 @@ class DictionaryViewer {
             imageElement.onerror = () => {
                 $(imageContainer).removeClass("loading");
                 $(imageContainer).empty();
-                $(imageContainer).text("Chyba při načítání obrázku k heslu '" + this.headwordList[index] + "'.");
+
+                var errorDiv = document.createElement("div");
+                $(errorDiv).text("Chyba při načítání obrázku k heslu '" + this.headwordList[index] + "'.");
+                $(errorDiv).addClass("entry-load-error");
+
+                imageContainer.append(errorDiv);
             };
 
         } else {
@@ -272,7 +277,13 @@ class DictionaryViewer {
     private showLoadError(headword: string, container: HTMLDivElement) {
         $(container).empty();
         $(container).parent().removeClass("loading-background");
-        $(container).text("Chyba při náčítání hesla '" + headword + "'.");
+
+        var errorDiv = document.createElement("div");
+        $(errorDiv).text("Chyba při náčítání hesla '" + headword + "'.");
+        $(errorDiv).addClass("entry-load-error");
+
+        container.appendChild(errorDiv);
+
         if (this.isRequestToPrint)
             this.print();
     }
@@ -287,7 +298,7 @@ class DictionaryViewer {
         var checkBox = $("input", toggleButtonLabel);
 
         var headwordLabelSpan = document.createElement("span");
-        $(headwordLabelSpan).addClass("bo");
+        $(headwordLabelSpan).addClass("entry-image-header");
         $(headwordLabelSpan).text(this.headwordList[index]);
         headwordDescriptionContainer.append(headwordLabelSpan);
 

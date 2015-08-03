@@ -30,13 +30,30 @@
     float: left;
 }
 
+.short-search-area {
+    width: 65%;
+}
+
+.searchbar-inputs {
+    margin-right: 74px;
+}
 
 .saved-word-area {
     background-color: white;
     height: 100%;
-    width: 30%;
+    width: 35%;
     float: left;
     overflow: hidden;
+    margin-top: 5px;
+}
+
+.saved-word-area > .dictionary-header {
+    height: 34px;
+    padding: 6px 8px 5px 8px;
+}
+
+.saved-word-area > .dictionary-header span {
+    vertical-align: middle;
 }
 
 .dictionary-selects {
@@ -91,6 +108,11 @@ a.dictionary-result-headword-book {
 
 .dictionary-result-headword-favorite {
     float: right;
+    cursor: pointer;
+}
+
+.dictionary-result-headword-favorite:hover {
+    color: @item-background-color;
 }
 
 .saved-words-body {
@@ -126,22 +148,6 @@ a.dictionary-result-headword-book {
 
 .saved-word-area-more:hover {
     cursor: pointer;
-}
-
-.entryFree {
-    padding-left: @dictionary-entry-margin;
-    padding-right: @dictionary-entry-margin;
-}
-
-.bo {
-    position: relative;
-    left: -@dictionary-entry-margin;
-    font-size: 120%;
-    font-weight: bold;
-}
-
-.note {
-    font-style: italic;
 }
 
 .dictionary-entry-comments {
@@ -269,7 +275,7 @@ ul.pagination-sm {
     background-color: transparent;
     border-color: @item-background-color;
     color: @item-background-color;
-    margin: 5px 15px 5px 10px;
+    margin: 0 15px 2px 10px;
     padding-top: 3px;
     padding-bottom: 3px;
     border-radius: 0;
@@ -287,44 +293,59 @@ ul.pagination-sm {
     border-color: #337ab7;
 }
 
+.entry-load-error {
+    padding-left: @dictionary-entry-margin;
+    padding-right: @dictionary-entry-margin;
+}
+
+.entry-image-header {
+    padding-left: @dictionary-entry-margin;
+    padding-right: @dictionary-entry-margin;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 120%;
+    font-weight: bold;
+    min-height: 30px;
+    display: block;
+}
 
 .entryFree {
     padding-left: @dictionary-entry-margin;
     padding-right: @dictionary-entry-margin;
-		font-family: 'Times New Roman', Times, serif;
-		text-align: justify;
-		font-size: 120%;
+    font-family: 'Times New Roman', Times, serif;
+    text-align: justify;
+    font-size: 120%;
 }
 
 .bo {
     position: relative;
     font-weight: bold;
-		font-size: 100%;
-		left: 0;
+    font-size: 100%;
+    left: 0;
 }
 
 .note {
+    font-style: italic;
     font-size: 80%;
 }
 
 .match {
-	background-color: yellow;
+    background-color: yellow;
 }
 
 
 .nonp {
-	font-size: 80%;
+    font-size: 80%;
 }
 
 .def {
-	font-style: italic;
+    font-style: italic;
 }
 
 div .sense {
-	  margin-left: 1em;
+    margin-left: 1em;
     text-indent: -1em;
 }
 
 .cap {
-	font-variant: small-caps;
+    font-variant: small-caps;
 }
