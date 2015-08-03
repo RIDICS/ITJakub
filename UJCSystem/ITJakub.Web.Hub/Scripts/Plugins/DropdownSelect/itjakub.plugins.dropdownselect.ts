@@ -165,7 +165,7 @@ class DropDownSelect {
 
         var textSpan = document.createElement("span");
         $(textSpan).addClass("dropdown-select-text");
-        textSpan.innerText = ""; //TODO read from parameter when root is not unique or is not description
+        $(textSpan).text(""); //TODO read from parameter when root is not unique or is not description
 
         dropDownHeadDiv.appendChild(textSpan);
 
@@ -503,7 +503,7 @@ class DropDownSelect {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("concrete-item-name");
-        nameSpan.innerText = this.getCategoryName(currentCategory);
+        $(nameSpan).text(this.getCategoryName(currentCategory));
         itemDiv.appendChild(nameSpan);
 
         var childsDiv = document.createElement("div");

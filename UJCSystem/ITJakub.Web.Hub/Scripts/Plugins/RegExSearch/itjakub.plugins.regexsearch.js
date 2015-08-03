@@ -1349,7 +1349,7 @@ var RegExWordInput = (function () {
         $(this.conditionInput).addClass("regexsearch-condition-input");
         lineDiv.appendChild(this.conditionInput);
         var regExButton = document.createElement("button");
-        regExButton.innerText = "R";
+        $(regExButton).text("R");
         regExButton.type = "button";
         $(regExButton).addClass("btn");
         $(regExButton).addClass("regexsearch-condition-input-button");

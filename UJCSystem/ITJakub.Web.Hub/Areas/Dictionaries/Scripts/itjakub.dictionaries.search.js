@@ -20,25 +20,28 @@ var DictionarySearch = (function () {
         this.search = new Search($("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this));
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Dictionaries/Dictionaries");
         this.disabledShowOptions = [
-            0 /* Author */,
-            1 /* Title */,
-            2 /* Editor */,
-            3 /* Dating */
+            SearchTypeEnum.Author,
+            SearchTypeEnum.Title,
+            SearchTypeEnum.Editor,
+            SearchTypeEnum.Dating
         ];
     }
     DictionarySearch.prototype.create = function () {
         var _this = this;
         var disabledOptions = new Array();
-        disabledOptions.push(4 /* Fulltext */);
-        disabledOptions.push(9 /* TokenDistance */);
-        disabledOptions.push(6 /* Sentence */);
-        disabledOptions.push(5 /* Heading */);
+        disabledOptions.push(SearchTypeEnum.Fulltext);
+        disabledOptions.push(SearchTypeEnum.TokenDistance);
+        disabledOptions.push(SearchTypeEnum.Sentence);
+        disabledOptions.push(SearchTypeEnum.Heading);
         this.dictionarySelector.makeDropdown();
         this.search.makeSearch(disabledOptions);
         this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
         this.typeaheadSearchBox.create();
         $("#printDescription").click(function () {
             _this.getCurrentDictionaryViewer().print();
+        });
+        $("#printList").click(function () {
+            _this.getCurrentDictionaryViewer().printList();
         });
         window.matchMedia("print").addListener(function (mql) {
             if (mql.matches) {

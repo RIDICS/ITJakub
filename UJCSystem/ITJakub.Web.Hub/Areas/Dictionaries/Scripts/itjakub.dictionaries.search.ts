@@ -61,6 +61,10 @@ class DictionarySearch {
             this.getCurrentDictionaryViewer().print();
         });
 
+        $("#printList").click(() => {
+            this.getCurrentDictionaryViewer().printList();
+        });
+
         window.matchMedia("print").addListener(mql => {
             if (mql.matches) {
                 this.getCurrentDictionaryViewer().loadAllHeadwords();
