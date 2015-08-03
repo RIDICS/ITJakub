@@ -6,9 +6,11 @@ var __extends = this.__extends || function (d, b) {
 };
 var DropDownSelect2 = (function (_super) {
     __extends(DropDownSelect2, _super);
-    function DropDownSelect2(dropDownSelectContainer, dataUrl, showStar, callbackDelegate) {
+    function DropDownSelect2(dropDownSelectContainer, dataUrl, showStar, callbackDelegate, selectionDescriptionContainer) {
         var _this = this;
+        if (selectionDescriptionContainer === void 0) { selectionDescriptionContainer = null; }
         _super.call(this, dropDownSelectContainer, dataUrl, showStar, callbackDelegate);
+        this.descriptionContainer = selectionDescriptionContainer;
         this.selectedChangedCallback = callbackDelegate.selectedChangedCallback;
         callbackDelegate.selectedChangedCallback = null;
         callbackDelegate.getRootCategoryCallback = function (categories) {
@@ -78,12 +80,14 @@ var DropDownSelect2 = (function (_super) {
                 _this.makeTreeStructure(_this.categories, _this.books, dropDownItemsDiv);
                 _this.rootCategory.checkBox = ($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0));
                 _this.restore();
+                _this.updateSelectionInfo(0, 0);
             }
         });
     };
     DropDownSelect2.prototype.processDownloadedData = function (result) {
         this.books = {};
         this.categories = {};
+        this.bookIdList = [];
         for (var i = 0; i < result.Categories.length; i++) {
             var resultCategory = result.Categories[i];
             var category = new DropDownCategory();
@@ -111,6 +115,7 @@ var DropDownSelect2 = (function (_super) {
             book.categoryIds = resultBook.CategoryIds;
             book.checkboxes = [];
             this.books[book.id] = book;
+            this.bookIdList.push(book.id);
             for (var k = 0; k < book.categoryIds.length; k++) {
                 var categoryId = book.categoryIds[k];
                 if (this.categories[categoryId])
@@ -173,11 +178,43 @@ var DropDownSelect2 = (function (_super) {
         itemDiv.appendChild(nameSpan);
         container.appendChild(itemDiv);
     };
+    DropDownSelect2.prototype.updateSelectionInfo = function (categoriesCount, booksCount) {
+        if (!this.descriptionContainer)
+            return;
+        var categoriesCountString = String(categoriesCount);
+        var booksCountString = String(booksCount);
+        if (!this.rootCategory.checkBox.indeterminate) {
+            categoriesCountString = "Všechny";
+            booksCountString = "Všechna";
+        }
+        var infoDiv = document.createElement("div");
+        var infoText = "Prohledávané kategorie: " + categoriesCountString + "<br>" + "Prohledávaná díla: " + booksCountString;
+        infoDiv.innerHTML = infoText;
+        $(this.descriptionContainer).empty();
+        $(this.descriptionContainer).append(infoDiv);
+    };
+    DropDownSelect2.prototype.getSelectedBookCount = function () {
+        var count = 0;
+        for (var i = 0; i < this.bookIdList.length; i++) {
+            var bookId = this.bookIdList[i];
+            var firstCheckBox = this.books[bookId].checkboxes[0];
+            if (firstCheckBox.checked)
+                count++;
+        }
+        return count;
+    };
     DropDownSelect2.prototype.onCreateCategoryCheckBox = function (categoryId, checkBox) {
         this.categories[categoryId].checkBox = checkBox;
     };
+    DropDownSelect2.prototype.onSelectionChanged = function () {
+        var currentState = this.getState();
+        var categoriesCount = currentState.SelectedCategories.length;
+        var booksCount = this.getSelectedBookCount();
+        this.selectedChangedCallback(currentState);
+        this.updateSelectionInfo(categoriesCount, booksCount);
+    };
     DropDownSelect2.prototype.propagateRootSelectChange = function (item) {
-        this.selectedChangedCallback(this.getState());
+        this.onSelectionChanged();
     };
     DropDownSelect2.prototype.propagateLeafSelectChange = function (item, info) {
         var sameBookCheckBoxes = this.books[info.ItemId].checkboxes;
@@ -189,7 +226,7 @@ var DropDownSelect2 = (function (_super) {
                 this.propagateSelectChange($(otherCheckBox).parent(".concrete-item")[0]);
             }
         }
-        this.selectedChangedCallback(this.getState());
+        this.onSelectionChanged();
     };
     DropDownSelect2.prototype.propagateCategorySelectChange = function (item, info) {
         var isChecked = $(item).prop("checked");
@@ -206,7 +243,7 @@ var DropDownSelect2 = (function (_super) {
                 }
             }
         }
-        this.selectedChangedCallback(this.getState());
+        this.onSelectionChanged();
     };
     DropDownSelect2.prototype.getBookIdsForUpdate = function (category, bookIds) {
         for (var i = 0; i < category.bookIds.length; i++) {

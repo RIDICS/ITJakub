@@ -1,14 +1,17 @@
 ﻿class DropDownSelect2 extends DropDownSelect {
+    private bookIdList: Array<number>;
     private books: IDropDownBookDictionary;
     private categories: IDropDownCategoryDictionary;
     private rootCategory: DropDownCategory;
     private selectedChangedCallback: (state: State) => void;
+    private descriptionContainer: string;
     private restoreCategoryIds: Array<number>;
     private restoreBookIds: Array<number>;
 
-    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
+    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate, selectionDescriptionContainer: string = null) {
         super(dropDownSelectContainer, dataUrl, showStar, callbackDelegate);
 
+        this.descriptionContainer = selectionDescriptionContainer;
         this.selectedChangedCallback = callbackDelegate.selectedChangedCallback;
         callbackDelegate.selectedChangedCallback = null;
 
@@ -88,6 +91,7 @@
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
                 this.rootCategory.checkBox = <HTMLInputElement>($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0));
                 this.restore();
+                this.updateSelectionInfo(0, 0);
             }
         });
     }
@@ -95,6 +99,7 @@
     private processDownloadedData(result: IDropDownRequestResult) {
         this.books = {};
         this.categories = {};
+        this.bookIdList = [];
 
         for (var i = 0; i < result.Categories.length; i++) {
             var resultCategory = result.Categories[i];
@@ -127,6 +132,7 @@
             book.categoryIds = resultBook.CategoryIds;
             book.checkboxes = [];
             this.books[book.id] = book;
+            this.bookIdList.push(book.id);
 
             for (var k = 0; k < book.categoryIds.length; k++) {
                 var categoryId = book.categoryIds[k];
@@ -207,12 +213,54 @@
         container.appendChild(itemDiv);
     }
 
+    private updateSelectionInfo(categoriesCount: number, booksCount: number) {
+        if (!this.descriptionContainer)
+            return;
+
+        var categoriesCountString = String(categoriesCount);
+        var booksCountString = String(booksCount);
+
+        if (!this.rootCategory.checkBox.indeterminate) {
+            categoriesCountString = "Všechny";
+            booksCountString = "Všechna";
+        }
+        
+        var infoDiv = document.createElement("div");
+        var infoText = "Prohledávané kategorie: " + categoriesCountString + "<br>"
+            + "Prohledávaná díla: " + booksCountString;
+        
+        infoDiv.innerHTML = infoText;
+
+        $(this.descriptionContainer).empty();
+        $(this.descriptionContainer).append(infoDiv);
+    }
+
+    private getSelectedBookCount(): number {
+        var count = 0;
+        for (var i = 0; i < this.bookIdList.length; i++) {
+            var bookId = this.bookIdList[i];
+            var firstCheckBox = this.books[bookId].checkboxes[0];
+            if (firstCheckBox.checked)
+                count++;
+        }
+        return count;
+    }
+
     protected onCreateCategoryCheckBox(categoryId, checkBox: HTMLInputElement) {
         this.categories[categoryId].checkBox = checkBox;
     }
 
+    private onSelectionChanged() {
+        var currentState = this.getState();
+        var categoriesCount = currentState.SelectedCategories.length;
+        var booksCount = this.getSelectedBookCount();
+
+        this.selectedChangedCallback(currentState);
+        this.updateSelectionInfo(categoriesCount, booksCount);
+    }
+
     protected propagateRootSelectChange(item: HTMLInputElement) {
-        this.selectedChangedCallback(this.getState());
+        this.onSelectionChanged();
     }
 
     protected propagateLeafSelectChange(item: HTMLInputElement, info: CallbackInfo) {
@@ -226,7 +274,7 @@
             }
         }
 
-        this.selectedChangedCallback(this.getState());
+        this.onSelectionChanged();
     }
 
     protected propagateCategorySelectChange(item: HTMLInputElement, info: CallbackInfo) {
@@ -248,7 +296,7 @@
             }
         }
 
-        this.selectedChangedCallback(this.getState());
+        this.onSelectionChanged();
     }
 
     private getBookIdsForUpdate(category: DropDownCategory, bookIds: Array<number>) {

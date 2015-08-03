@@ -164,4 +164,9 @@ div.container {
   background-size: contain;
   display: inline-block;
 }
+.dropdown-description {
+  color: #9a9a9a;
+  font-size: 80%;
+  margin-top: 3px;
+}
 /*# sourceMappingURL=ITJakub.DropdownSelect.css.map */
