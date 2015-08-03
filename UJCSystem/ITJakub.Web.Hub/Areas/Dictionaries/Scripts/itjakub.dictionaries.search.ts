@@ -57,6 +57,11 @@ class DictionarySearch {
         this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
         this.typeaheadSearchBox.create();
 
+        $("#cancelFilter").click(() => {
+            this.getCurrentDictionaryViewer().cancelFilter();
+            $("#cancelFilter").addClass("hidden");
+        });
+
         $("#printDescription").click(() => {
             this.getCurrentDictionaryViewer().print();
         });

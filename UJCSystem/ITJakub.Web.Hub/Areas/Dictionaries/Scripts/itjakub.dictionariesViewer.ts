@@ -250,6 +250,7 @@ class DictionaryViewer {
                 $(this.headwordDescriptionDivs[k]).addClass("hidden");
             }
             $(headwordDiv).removeClass("hidden");
+            $("#cancelFilter").removeClass("hidden");
 
             if ($(headwordDiv).hasClass("lazy-loading")) {
                 this.loadHeadwordDescription(index);
@@ -408,6 +409,12 @@ class DictionaryViewer {
 
     private hidePrintModal() {
         $("#print-modal").modal("hide");
+    }
+
+    public cancelFilter() {
+        for (var i = 0; i < this.headwordDescriptionDivs.length; i++) {
+            $(this.headwordDescriptionDivs[i]).removeClass("hidden");
+        }
     }
 
     public print() {

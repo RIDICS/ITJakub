@@ -31,6 +31,10 @@ function initDictionaryViewer(categoryIdList, bookIdList, pageNumber) {
     };
     var dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeAndRestore(selectedCategoryIds, selectedBookIds);
+    $("#cancelFilter").click(function () {
+        dictionaryViewer.cancelFilter();
+        $("#cancelFilter").addClass("hidden");
+    });
     $("#printDescription").click(function () {
         dictionaryViewer.print();
     });

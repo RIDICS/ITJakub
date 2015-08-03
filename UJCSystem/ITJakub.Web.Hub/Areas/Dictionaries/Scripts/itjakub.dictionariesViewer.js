@@ -191,6 +191,7 @@ var DictionaryViewer = (function () {
                 $(_this.headwordDescriptionDivs[k]).addClass("hidden");
             }
             $(headwordDiv).removeClass("hidden");
+            $("#cancelFilter").removeClass("hidden");
             if ($(headwordDiv).hasClass("lazy-loading")) {
                 _this.loadHeadwordDescription(index);
             }
@@ -332,6 +333,11 @@ var DictionaryViewer = (function () {
     };
     DictionaryViewer.prototype.hidePrintModal = function () {
         $("#print-modal").modal("hide");
+    };
+    DictionaryViewer.prototype.cancelFilter = function () {
+        for (var i = 0; i < this.headwordDescriptionDivs.length; i++) {
+            $(this.headwordDescriptionDivs[i]).removeClass("hidden");
+        }
     };
     DictionaryViewer.prototype.print = function () {
         // check if all entries are loaded
