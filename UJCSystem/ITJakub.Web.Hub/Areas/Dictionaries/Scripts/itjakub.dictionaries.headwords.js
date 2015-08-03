@@ -34,6 +34,9 @@ function initDictionaryViewer(categoryIdList, bookIdList, pageNumber) {
     $("#printDescription").click(function () {
         dictionaryViewer.print();
     });
+    $("#printList").click(function () {
+        dictionaryViewer.printList();
+    });
     $("#searchButton").click(function () {
         var query = $("#searchbox").val();
         $.ajax({

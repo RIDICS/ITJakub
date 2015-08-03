@@ -428,6 +428,35 @@ class DictionaryViewer {
 
         window.print();
     }
+
+    public printList() {
+        var listHtml = $(this.headwordListContainer).html();
+        var pageHtml = $(this.paginationContainer).html();
+        var printWindow = window.open("", "", "toolbar=no,location=no,status=no,menubar=no,scrollbars=yes");
+        var doc = printWindow.document;
+        
+        doc.write("<div>");
+        doc.write(listHtml);
+        doc.write("</div><div>");
+        doc.write(pageHtml);
+        doc.write("</div>");
+        doc.close();
+        
+        $("link, style").each((index, element) => {
+            $(doc.head).append($(element).clone());
+        });
+
+        var css = "body { background-color: white; padding: 0 10px; }"
+            + ".dictionary-result-headword-favorite { display: none; }"
+            + ".dictionary-result-book-list { margin-left: 16px; }";
+        var style = doc.createElement("style");
+        style.type = "text/css";
+        style.appendChild(document.createTextNode(css));
+        doc.head.appendChild(style);
+
+        printWindow.focus();
+        printWindow.print();
+    }
 }
 
 interface IHeadwordBookInfo {

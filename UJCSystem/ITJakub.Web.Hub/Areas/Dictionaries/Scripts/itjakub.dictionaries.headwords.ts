@@ -41,6 +41,10 @@
         dictionaryViewer.print();
     });
 
+    $("#printList").click(() => {
+        dictionaryViewer.printList();
+    });
+
     $("#searchButton").click(() => {
         var query = $("#searchbox").val();
         $.ajax({
