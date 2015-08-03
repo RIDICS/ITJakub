@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Připomínky";
+}
+
+@section scripts{
+    @Scripts.Render("~/itjakub/home/javascript")
+}
+
+<div class="content-container top-offset-without-submenu">
+    <h1>Připomínky</h1>
+
+    <p>
+        Na této stránce nám můžete napsat své připomínky k provozu či k informacím <i>Vokabuláře webového</i>. Pro připomínky ke konkrétním částem <i>Vokabuláře webového</i> (např. slovníkům, edicím, mluvnicím, korpusu atd.) používejte laskavě <i>Připomínek</i> na stranách jednotlivých typů informačních zdrojů.
+    </p>
+    <p>
+        Pokud si přejete, abychom na Vaši připomínku odpověděli, uveďte tuto skutečnost v textu Vaší zprávy a vyplňte laskavě kolonku <i>Jméno</i> a <i>E-mail</i>. Vynasnažíme se, abychom na Vaši připomínku reagovali co nejdříve. Upozorňujeme, že <b>neřešíme domácí úkoly a další školní práce</b>. V těchto případech Vám může pomoci dostupná <a href='@Url.Action("Index", "ProfessionalLiterature", "ProfessionalLiterature")'>odborná literatura</a> či <a href='@Url.Action("Links", "Home", "")'>další zdroje</a>. Pokud má Vaše připomínka charakter dotazu, upozorňujeme, že <b>odpovědi na dotazy v Ústavu pro jazyk český AV ČR mohou být zpoplatněny.</b>
+    </p>
+    <p>
+        <a href="http://www.ujc.cas.cz/zakladni-informace/oddeleni/oddeleni-vyvoje-jazyka/">Provozovatel</a> stránek si vyhrazuje právo nereagovat na připomínky, které jsou pro provoz <i>Vokabuláře webového</i> zcela nepřínosné či které jsou v rozporu s dobrými mravy.
+    </p>
+</div>

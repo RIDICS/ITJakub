@@ -247,13 +247,13 @@
 
                 <div class="footer-text-area">
                     <ul>
-                        <li class="footer-first"><a href="#">O Vokabuláři webovém</a></li>
-                        <li><a href="#">Copyright</a></li>
-                        <li><a href="#">Kontakty</a></li>   @*TODO make pages and link them*@
-                        <li><a href="#">Odkazy</a></li>
-                        <li><a href="#">Podpora</a></li>
-                        <li><a href="#">Jak citovat</a></li>
-                        <li class="footer-last"><a href="#">Připomínky</a></li>
+                        <li class="footer-first"><a href='@Url.Action("About", "Home", new {area = ""})'>O Vokabuláři webovém</a></li>
+                        <li><a href='@Url.Action("Copyright", "Home", new {area = ""})'>Copyright</a></li>
+                        <li><a href='@Url.Action("Contacts", "Home", new {area = ""})'>Kontakty</a></li>
+                        <li><a href='@Url.Action("Links", "Home", new {area = ""})'>Odkazy</a></li>
+                        <li><a href='@Url.Action("Support", "Home", new {area = ""})'>Podpora</a></li>
+                        <li><a href='@Url.Action("HowToCite", "Home", new {area = ""})'>Jak citovat</a></li>
+                        <li class="footer-last"><a href='@Url.Action("Feedback", "Home", new {area = ""})'>Připomínky</a></li>
                     </ul>
                     <div class="footer-text">VOKABULÁŘ WEBOVÝ byl spuštěn před 6 lety, 5 měsíci a 13 dny</div> @*TODO make updated by JS*@
                 </div>

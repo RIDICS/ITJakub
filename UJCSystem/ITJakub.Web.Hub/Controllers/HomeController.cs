@@ -15,6 +15,40 @@ namespace ITJakub.Web.Hub.Controllers
         {
             return View();
         }
+        public ActionResult About()
+        {
+            return View();
+        }
+
+        public ActionResult Contacts()
+        {
+            return View();
+        }
+
+        public ActionResult Copyright()
+        {
+            return View();
+        }
+
+        public ActionResult Feedback()
+        {
+            return View();
+        }
+
+        public ActionResult HowToCite()
+        {
+            return View();
+        }
+
+        public ActionResult Links()
+        {
+            return View();
+        }
+
+        public ActionResult Support()
+        {
+            return View();
+        }
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
