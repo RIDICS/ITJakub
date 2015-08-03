@@ -58,7 +58,7 @@
                             <a href='@Url.Action("Headwords", "Dictionaries", new {area = "Dictionaries"})'><span>Listování</span></a>
                         </li>
                         <li>
-                            <a href='#'><span>Nápověda</span></a>
+                            <a href='@Url.Action("Help", "Dictionaries", new {area = "Dictionaries"})'><span>Nápověda</span></a>
                         </li>
                         <li>
                             <a href='@Url.Action("Feedback", "Dictionaries", new {area = "Dictionaries"})'><span>Připomínky</span></a>
@@ -78,10 +78,10 @@
                             <a href='@Url.Action("Search", "Editions", new {area = "Editions"})'><span>Vyhledávání</span></a>
                         </li>
                         <li>
-                            <a href='#'><span>Ediční zásady</span></a>
+                            <a href='@Url.Action("EditionPrinciples", "Editions", new {area = "Editions"})'><span>Ediční zásady</span></a>
                         </li>
                         <li>
-                            <a href='#'><span>Nápověda</span></a>
+                            <a href='@Url.Action("Help", "Editions", new {area = "Editions"})'><span>Nápověda</span></a>
                         </li>
                         <li>
                             <a href='@Url.Action("Feedback", "Editions", new {area = "Editions"})'><span>Připomínky</span></a>
@@ -101,7 +101,7 @@
                             <a href='@Url.Action("Search", "BohemianTextBank", new {area = "BohemianTextBank"})'><span>Vyhledávání</span></a>
                         </li>
                         <li>
-                            <a href='#'><span>Nápověda</span></a>
+                            <a href='@Url.Action("Help", "BohemianTextBank", new {area = "BohemianTextBank"})'><span>Nápověda</span></a>
                         </li>
                         <li>
                             <a href='@Url.Action("Feedback", "BohemianTextBank", new {area = "BohemianTextBank"})'><span>Připomínky</span></a>
@@ -119,6 +119,9 @@
                         </li>
                         <li>
                             <a href='@Url.Action("Search", "OldGrammar", new {area = "OldGrammar"})'><span>Vyhledávání</span></a>
+                        </li>
+                        <li>
+                            <a href='@Url.Action("Help", "OldGrammar", new { area = "OldGrammar" })'><span>Nápověda</span></a>
                         </li>
                         <li>
                             <a href='@Url.Action("Feedback", "OldGrammar", new {area = "OldGrammar"})'><span>Připomínky</span></a>

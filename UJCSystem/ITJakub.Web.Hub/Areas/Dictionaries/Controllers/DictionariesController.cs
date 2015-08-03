@@ -21,12 +21,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             m_mainServiceClient = new ItJakubServiceClient();
         }
 
-        // GET: Dictionaries/Dictionaries
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public ActionResult Search()
         {
             return View();
@@ -38,6 +32,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         }
 
         public ActionResult Headwords()
+        {
+            return View();
+        }
+        public ActionResult Help()
         {
             return View();
         }

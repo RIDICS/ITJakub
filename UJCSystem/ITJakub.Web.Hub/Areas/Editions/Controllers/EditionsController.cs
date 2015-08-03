@@ -92,6 +92,16 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View();
         }
 
+        public ActionResult Help()
+        {
+            return View();
+        }
+        
+        public ActionResult EditionPrinciples()
+        {
+            return View();
+        }
+
         public ActionResult GetTypeaheadAuthor(string query)
         {
             var result = m_serviceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Edition);

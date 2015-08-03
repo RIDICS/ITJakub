@@ -4,7 +4,7 @@
 }
 .hovered-link {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
 .black-link {
   color: black;
@@ -12,13 +12,11 @@
 }
 a:hover {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
-a,
-a:visited {
-  color: black;
-  text-decoration: none;
-}
+/*a, a:visited {
+    .black-link;
+}*/
 .styled-background {
   background-color: #84ced7;
 }
@@ -33,13 +31,12 @@ body {
   width: 1100px;
   margin: auto;
 }
-.page-body-content a {
-  color: black;
-  text-decoration: none;
-}
+/*.page-body-content a {
+    .black-link;
+}*/
 .page-body-content a:hover {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
 .module-content {
   margin: 88px 0 0 0;
@@ -1444,7 +1441,7 @@ a.main_logo_href img {
 }
 .main-navbar-container a:hover {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
 ul.navbar-right.navbar-login {
   margin-right: 20px!important;

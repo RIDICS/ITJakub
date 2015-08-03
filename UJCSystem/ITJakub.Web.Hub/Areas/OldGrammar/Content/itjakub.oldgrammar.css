@@ -67,60 +67,21 @@ div.container {
   background-color: #84ced7;
   color: white;
 }
-.loader:before,
-.loader:after,
-.loader {
-  border-radius: 50%;
-  width: 1.5em;
-  height: 1.5em;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation: load7 1.8s infinite ease-in-out;
-  animation: load7 1.8s infinite ease-in-out;
+.search-area {
+  height: 100%;
+  width: 70%;
+  float: left;
 }
-.loader {
-  font-size: 10px;
-  margin: 40px auto;
-  position: relative;
-  text-indent: -9999em;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
+ul.first-level {
+  list-style-type: disc;
 }
-.loader:before {
-  left: -3.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
+ul.first-level li {
+  margin-left: 25px;
 }
-.loader:after {
-  left: 3.5em;
+ul.second-level {
+  list-style-type: circle;
 }
-.loader:before,
-.loader:after {
-  content: '';
-  position: absolute;
-  top: 0;
+ul.second-level li {
+  margin-left: 20px;
 }
-@-webkit-keyframes load7 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 2.5em 0 -1.3em #84ced7;
-  }
-  40% {
-    box-shadow: 0 2.5em 0 0 #84ced7;
-  }
-}
-@keyframes load7 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 2.5em 0 -1.3em #84ced7;
-  }
-  40% {
-    box-shadow: 0 2.5em 0 0 #84ced7;
-  }
-}
-/*# sourceMappingURL=ITJakub.HorizontalLoader.css.map */
+/*# sourceMappingURL=itjakub.oldgrammar.css.map */

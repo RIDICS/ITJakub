@@ -33,6 +33,11 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             return View();
         }
+        
+        public ActionResult Help()
+        {
+            return View();
+        }
 
         public ActionResult GetTypeaheadAuthor(string query)
         {

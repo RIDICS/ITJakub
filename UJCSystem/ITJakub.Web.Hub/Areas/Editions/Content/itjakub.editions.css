@@ -25,4 +25,16 @@
   text-align: center;
   padding-top: 20vh;
 }
+ul.first-level {
+  list-style-type: disc;
+}
+ul.first-level li {
+  margin-left: 25px;
+}
+ul.second-level {
+  list-style-type: circle;
+}
+ul.second-level li {
+  margin-left: 20px;
+}
 /*# sourceMappingURL=itjakub.editions.css.map */
