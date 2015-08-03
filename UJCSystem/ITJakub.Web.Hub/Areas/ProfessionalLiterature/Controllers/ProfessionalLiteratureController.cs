@@ -11,7 +11,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult Index()
         {
-            return View("Search");
+            return View("List");
         }
 
         public ActionResult Search()

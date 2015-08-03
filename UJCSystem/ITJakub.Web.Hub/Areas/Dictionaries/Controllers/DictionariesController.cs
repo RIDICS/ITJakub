@@ -21,6 +21,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             m_mainServiceClient = new ItJakubServiceClient();
         }
 
+        public ActionResult Index()
+        {
+            return View("Search");
+        }
+
         public ActionResult Search()
         {
             return View();

@@ -13,7 +13,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult Index()
         {
-            return View("Information");
+            return View("Search");
         }
 
         public ActionResult Search()
