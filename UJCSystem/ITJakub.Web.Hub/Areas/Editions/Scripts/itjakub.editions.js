@@ -137,6 +137,11 @@ function initReader(bookXmlId, versionXmlId, bookTitle, pageList, searchedText) 
 }
 function listBook(target) {
     var bookId = $(target).parents("li.list-item").attr("data-bookid");
-    window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
+    if (search.isLastQueryJson()) {
+        window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
+    }
+    else {
+        window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId;
+    }
 }
 //# sourceMappingURL=itjakub.editions.js.map

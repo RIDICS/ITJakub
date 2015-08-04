@@ -3,7 +3,7 @@ $(document).ready(function () {
     var booksCountOnPage = 5;
     var bookIds = new Array();
     var categoryIds = new Array();
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", BookTypeEnum.Edition);
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", 0 /* Edition */);
     function editionAdvancedSearchPaged(json, pageNumber) {
         if (typeof json === "undefined" || json === null || json === "")
             return;
@@ -89,13 +89,13 @@ $(document).ready(function () {
         });
     }
     var disabledOptions = new Array();
-    disabledOptions.push(SearchTypeEnum.Fulltext);
-    disabledOptions.push(SearchTypeEnum.Heading);
-    disabledOptions.push(SearchTypeEnum.Headword);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
-    disabledOptions.push(SearchTypeEnum.Sentence);
-    disabledOptions.push(SearchTypeEnum.TokenDistance);
+    disabledOptions.push(4 /* Fulltext */);
+    disabledOptions.push(5 /* Heading */);
+    disabledOptions.push(10 /* Headword */);
+    disabledOptions.push(11 /* HeadwordDescription */);
+    disabledOptions.push(12 /* HeadwordDescriptionTokenDistance */);
+    disabledOptions.push(6 /* Sentence */);
+    disabledOptions.push(9 /* TokenDistance */);
     search = new Search($("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
     search.makeSearch(disabledOptions);
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
