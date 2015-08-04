@@ -188,9 +188,12 @@ function createListing() {
     });
 }
 function createList() {
+    var _this = this;
     var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader");
     $('#searchButton').click(function () {
         var text = $('#searchbox').val();
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
         $.ajax({
             type: "GET",
             traditional: true,
@@ -202,6 +205,15 @@ function createList() {
                 bibliographyModule.showBooks(response.books);
             }
         });
+    });
+    $("#searchbox").keypress(function (event) {
+        var keyCode = event.which || event.keyCode;
+        if (keyCode === 13) {
+            $(_this.searchButton).click();
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
     });
     $('#searchButton').click();
 }

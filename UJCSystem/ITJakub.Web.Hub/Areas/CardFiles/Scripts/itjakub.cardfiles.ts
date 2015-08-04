@@ -221,6 +221,8 @@ function createList() {
 
        $('#searchButton').click(() => {
            var text = $('#searchbox').val();
+           bibliographyModule.clearBooks();
+           bibliographyModule.showLoading();
            $.ajax({
                type: "GET",
                traditional: true,
@@ -233,6 +235,16 @@ function createList() {
                }
            });
     });
+
+       $("#searchbox").keypress((event: any) => {
+           var keyCode = event.which || event.keyCode;
+           if (keyCode === 13) {     //13 = Enter
+               $(this.searchButton).click();
+               event.preventDefault();
+               event.stopPropagation();
+               return false;
+           }
+     });
 
     $('#searchButton').click();
 

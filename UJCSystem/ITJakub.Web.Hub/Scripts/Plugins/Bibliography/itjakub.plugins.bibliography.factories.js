@@ -46,7 +46,7 @@ var BibliographyFactory = (function () {
             bookButton.appendChild(spanBook);
             $(bookButton).click(function (event) {
                 var buttonScript = config.getReadButtonOnClick(bookInfo);
-                if (typeof buttonScript !== "undefined" && buttonScript != null) {
+                if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
                     eval(buttonScript);
                 }
                 else {
