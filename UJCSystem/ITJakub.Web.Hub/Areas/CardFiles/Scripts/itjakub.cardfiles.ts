@@ -4,6 +4,16 @@
     var cardFileManager = new CardFileManager("div.cardfile-result-area");
     cardfileSelector.makeDropdown();
 
+    $("#searchbox").keypress((event: any) => {
+        var keyCode = event.which || event.keyCode;
+        if (keyCode === 13) {     //13 = Enter
+            $(this.searchButton).click();
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+    });
+
     $("#searchButton").click(() => {
         var noResultDiv = $("div.no-result");
         $(noResultDiv).hide();
@@ -236,7 +246,7 @@ function createList() {
            });
     });
 
-       $("#searchbox").keypress((event: any) => {
+    $("#searchbox").keypress((event: any) => {
            var keyCode = event.which || event.keyCode;
            if (keyCode === 13) {     //13 = Enter
                $(this.searchButton).click();

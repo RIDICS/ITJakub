@@ -1,8 +1,18 @@
 function createSearch() {
+    var _this = this;
     var callbackDelegate = createDelegate();
     var cardfileSelector = new DropDownSelect("div.cardfile-selects", getBaseUrl() + "CardFiles/CardFiles/CardFiles", true, callbackDelegate);
     var cardFileManager = new CardFileManager("div.cardfile-result-area");
     cardfileSelector.makeDropdown();
+    $("#searchbox").keypress(function (event) {
+        var keyCode = event.which || event.keyCode;
+        if (keyCode === 13) {
+            $(_this.searchButton).click();
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+    });
     $("#searchButton").click(function () {
         var noResultDiv = $("div.no-result");
         $(noResultDiv).hide();
