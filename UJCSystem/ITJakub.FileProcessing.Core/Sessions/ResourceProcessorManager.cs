@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using ITJakub.FileProcessing.Core.Sessions.Processors;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.Core.Sessions
 {
@@ -24,11 +26,15 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
         public bool ProcessSessionResources(ResourceSessionDirector resourceDirector)
         {
-            ProcessXmlConversion(resourceDirector); //call of library to convert docx to xml resources which are added to resources in paramater
+            if(resourceDirector.Resources.Any(x=>x.ResourceType == ResourceType.SourceDocument))
+                ProcessXmlConversion(resourceDirector); //call of library to convert docx to xml resources which are added to resources in paramater
+
             ProcessMetaData(resourceDirector); //obtain entity information from processing metadata
+
             var existTask = Task.Factory.StartNew(() => ProcessExistDbStore(resourceDirector)); //saves xmls to Exist
             var resourceTask = Task.Factory.StartNew(() => ProcessFileDbStore(resourceDirector));//saves images, docx etc on physical disk
             Task.WaitAll(existTask, resourceTask);
+
             ProcessRelationalDbStore(resourceDirector); //if everything was ok then saves entity into relational database
             //TODO add try catch with rollback and return false
             return true;
