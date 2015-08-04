@@ -127,6 +127,10 @@ var DictionaryViewerListWrapper = (function () {
             contentType: "application/json",
             success: function (response) {
                 var resultCount = response;
+                if (resultCount === 0) {
+                    _this.currentPageNumber = 1;
+                    _this.updateUrl();
+                }
                 _this.dictionaryViewer.createViewer(resultCount, _this.loadHeadwords.bind(_this), _this.pageSize, null, null, _this.addNewFavoriteHeadword.bind(_this));
             }
         });

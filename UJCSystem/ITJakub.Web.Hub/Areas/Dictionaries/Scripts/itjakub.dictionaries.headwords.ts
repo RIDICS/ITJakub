@@ -149,6 +149,11 @@ class DictionaryViewerListWrapper {
             contentType: "application/json",
             success: (response) => {
                 var resultCount = response;
+                if (resultCount === 0) {
+                    this.currentPageNumber = 1;
+                    this.updateUrl();
+                }
+
                 this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, null, null, this.addNewFavoriteHeadword.bind(this));
             }
         });
