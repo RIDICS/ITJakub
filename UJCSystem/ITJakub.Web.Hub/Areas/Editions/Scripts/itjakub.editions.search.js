@@ -88,6 +88,10 @@ $(document).ready(function () {
             }
         });
     }
+    //var disabledOptions = new Array<SearchTypeEnum>();
+    //disabledOptions.push(SearchTypeEnum.Headword);
+    //disabledOptions.push(SearchTypeEnum.HeadwordDescription);
+    //disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
     search = new Search($("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
     search.makeSearch();
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
@@ -116,8 +120,4 @@ $(document).ready(function () {
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     });
 });
-function listBook(target) {
-    var bookId = $(target).parents("li.list-item").attr("data-bookid");
-    window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
-}
 //# sourceMappingURL=itjakub.editions.search.js.map

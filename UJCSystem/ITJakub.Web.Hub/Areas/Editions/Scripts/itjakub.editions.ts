@@ -155,3 +155,10 @@
         search.processSearchQuery(decodedText);    
     }
 }
+
+
+
+function listBook(target) {
+    var bookId = $(target).parents("li.list-item").attr("data-bookid");
+    window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
+}

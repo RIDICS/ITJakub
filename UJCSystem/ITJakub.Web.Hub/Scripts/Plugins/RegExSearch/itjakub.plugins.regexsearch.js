@@ -110,7 +110,7 @@ var Search = (function () {
         });
     };
     Search.prototype.closeAdvancedSearchEditorWithImport = function (jsonData) {
-        this.writeJsonToTextField(jsonData);
+        this.writeTextToTextField(jsonData);
         this.closeAdvancedSearchEditor();
     };
     Search.prototype.closeAdvancedSearchEditor = function () {
@@ -120,13 +120,13 @@ var Search = (function () {
         $(this.advancedButton).css("visibility", "visible");
         $(this.searchInputTextbox).focus();
     };
-    Search.prototype.writeJsonToTextField = function (json) {
-        $(this.searchInputTextbox).text(json);
-        $(this.searchInputTextbox).val(json);
+    Search.prototype.writeTextToTextField = function (text) {
+        $(this.searchInputTextbox).text(text);
+        $(this.searchInputTextbox).val(text);
         $(this.searchInputTextbox).change();
     };
     Search.prototype.processSearchQuery = function (query) {
-        this.writeJsonToTextField(query);
+        this.writeTextToTextField(query);
         this.processSearch();
     };
     Search.prototype.isValidJson = function (data) {
@@ -144,7 +144,7 @@ var Search = (function () {
         if (this.isValidJson(searchboxValue)) {
             this.lastQueryWasJson = true;
             var query = this.getFilteredQuery(searchboxValue, this.disabledOptions); //filter disabled options
-            this.writeJsonToTextField(query);
+            this.writeTextToTextField(query);
             this.processSearchJsonCallback(query);
         }
         else {
