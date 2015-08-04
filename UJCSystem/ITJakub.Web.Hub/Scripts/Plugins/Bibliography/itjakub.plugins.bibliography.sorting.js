@@ -1,8 +1,8 @@
 var SortBar = (function () {
-    function SortBar() {
-        this.comparatorResolver = new ComparatorResolver();
+    function SortBar(sortChangeCallback) {
         this.actualSortOrder = 1;
         this.actualSortOptionValue = 1 /* Title */;
+        this.sortChangeCallback = sortChangeCallback;
     }
     SortBar.prototype.makeSortBar = function (booksContainer, sortBarContainer) {
         var _this = this;
@@ -11,12 +11,10 @@ var SortBar = (function () {
         var select = document.createElement('select');
         $(select).change(function () {
             var selectedOptionValue = $(sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected").val();
-            _this.actualSortOptionValue = parseInt(selectedOptionValue);
-            var comparator = _this.comparatorResolver.getComparatorForOptionValue(selectedOptionValue);
-            _this.sort(comparator, _this.actualSortOrder, booksContainer);
+            _this.changeSortCriteria(parseInt(selectedOptionValue));
         });
         this.addOption(select, "Název", 1 /* Title */.toString());
-        this.addOption(select, "Datace", 3 /* Dating */.toString()); //TODO add options to json config
+        this.addOption(select, "Datace", 3 /* Dating */.toString());
         this.addOption(select, "Autor", 0 /* Author */.toString());
         this.addOption(select, "Editor", 2 /* Editor */.toString());
         sortBarDiv.appendChild(select);
@@ -28,8 +26,6 @@ var SortBar = (function () {
         sortOrderButton.appendChild(spanSortAsc);
         $(sortOrderButton).click(function (event) {
             _this.changeSortOrder();
-            var comparator = _this.comparatorResolver.getComparatorForOptionValue(_this.actualSortOptionValue.toString());
-            _this.sort(comparator, _this.actualSortOrder, booksContainer);
             $(event.currentTarget).children('span').toggleClass('glyphicon-arrow-up glyphicon-arrow-down');
         });
         sortBarDiv.appendChild(sortOrderButton);
@@ -45,6 +41,14 @@ var SortBar = (function () {
     };
     SortBar.prototype.changeSortOrder = function () {
         this.actualSortOrder = -this.actualSortOrder;
+        this.sortingChanged();
+    };
+    SortBar.prototype.changeSortCriteria = function (sortOptionValue) {
+        this.actualSortOptionValue = sortOptionValue;
+        this.sortingChanged();
+    };
+    SortBar.prototype.sortingChanged = function () {
+        this.sortChangeCallback();
     };
     SortBar.prototype.addOption = function (selectbox, text, value) {
         var option = document.createElement('option');
@@ -56,32 +60,9 @@ var SortBar = (function () {
         return this.actualSortOrder > 0;
     };
     SortBar.prototype.getSortCriteria = function () {
-        return this.actualSortOptionValue; //TODO make enum
+        return this.actualSortOptionValue;
     };
     return SortBar;
-})();
-var ComparatorResolver = (function () {
-    function ComparatorResolver() {
-        this.comparators = new Array();
-        this.comparators['Default'] = function (value) {
-            return function (a, b) {
-                var aval = $(a).data(value);
-                var bval = $(b).data(value);
-                if (aval == bval) {
-                    aval = $(a).data("bookid");
-                    bval = $(b).data("bookid");
-                }
-                return aval > bval ? 1 : -1;
-            };
-        };
-    }
-    ComparatorResolver.prototype.getComparatorForOptionValue = function (optionValue) {
-        if (typeof this.comparators[optionValue] !== 'undefined') {
-            return this.comparators[optionValue](optionValue);
-        }
-        return this.comparators['Default'](optionValue);
-    };
-    return ComparatorResolver;
 })();
 /*
  *

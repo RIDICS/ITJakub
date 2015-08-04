@@ -1,7 +1,12 @@
 $(document).ready(function () {
-    var bibliographyModule = new BibliographyModule("#biblListResults", "#biblListResultsHeader");
+    var searchboxLastSearchedText;
+    function sortOrderChanged() {
+        //TODO make ordering
+    }
+    var bibliographyModule = new BibliographyModule("#biblListResults", "#biblListResultsHeader", sortOrderChanged);
     $('#searchButton').click(function () {
         var text = $('#searchbox').val();
+        searchboxLastSearchedText = text;
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
         $.ajax({

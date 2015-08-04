@@ -197,9 +197,12 @@ function createListing() {
         cardFileManager.makeCardFile(cardFileIdListed, cardFileNameListed, bucketId, bucketText);
     });
 }
+function sortOrderChanged() {
+    //TODO make ordering
+}
 function createList() {
     var _this = this;
-    var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader");
+    var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader", sortOrderChanged);
     $('#searchButton').click(function () {
         var text = $('#searchbox').val();
         bibliographyModule.clearBooks();

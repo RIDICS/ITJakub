@@ -226,8 +226,12 @@ function createListing() {
 
 }
 
+function sortOrderChanged() {
+    //TODO make ordering
+}
+
 function createList() {
-    var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader");
+    var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader", sortOrderChanged);
 
        $('#searchButton').click(() => {
            var text = $('#searchbox').val();

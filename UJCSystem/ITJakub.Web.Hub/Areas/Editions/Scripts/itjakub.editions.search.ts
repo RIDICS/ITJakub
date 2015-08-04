@@ -7,7 +7,11 @@ $(document).ready(() => {
     var bookIds = new Array();
     var categoryIds = new Array();
 
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", BookTypeEnum.Edition);
+    function sortOrderChanged() {
+        search.processSearch();
+    }
+
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition);
 
     function editionAdvancedSearchPaged(json: string, pageNumber: number) {
 

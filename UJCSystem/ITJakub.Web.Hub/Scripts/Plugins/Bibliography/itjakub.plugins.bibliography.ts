@@ -19,8 +19,11 @@ class BibliographyModule {
 
     private sortBar: SortBar;
 
-    constructor(resultsContainer: string, sortBarContainer: string, forcedBookType?: BookTypeEnum) {
+    private sortChangeCallback: () => void;
+
+    constructor(resultsContainer: string, sortBarContainer: string, sortChangeCallback: () => void, forcedBookType?: BookTypeEnum) {
         this.resultsContainer = $(resultsContainer);
+        this.sortChangeCallback = sortChangeCallback;
 
         this.booksContainer = document.createElement("div");
         $(this.booksContainer).addClass("bib-listing-books-div");
@@ -49,7 +52,7 @@ class BibliographyModule {
         this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
         $(this.sortBarContainer).empty();
-        this.sortBar = new SortBar();
+        this.sortBar = new SortBar(this.sortChangeCallback);
         var sortBarHtml = this.sortBar.makeSortBar(<any>this.booksContainer, this.sortBarContainer);
         $(this.sortBarContainer).append(sortBarHtml);
     }

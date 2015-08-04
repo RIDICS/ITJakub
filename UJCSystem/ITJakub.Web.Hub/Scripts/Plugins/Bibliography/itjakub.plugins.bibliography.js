@@ -3,8 +3,9 @@
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
 /// <reference path="../itjakub.plugins.pagination.ts" />
 var BibliographyModule = (function () {
-    function BibliographyModule(resultsContainer, sortBarContainer, forcedBookType) {
+    function BibliographyModule(resultsContainer, sortBarContainer, sortChangeCallback, forcedBookType) {
         this.resultsContainer = $(resultsContainer);
+        this.sortChangeCallback = sortChangeCallback;
         this.booksContainer = document.createElement("div");
         $(this.booksContainer).addClass("bib-listing-books-div");
         this.paginatorContainer = document.createElement("div");
@@ -29,7 +30,7 @@ var BibliographyModule = (function () {
         this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
         $(this.sortBarContainer).empty();
-        this.sortBar = new SortBar();
+        this.sortBar = new SortBar(this.sortChangeCallback);
         var sortBarHtml = this.sortBar.makeSortBar(this.booksContainer, this.sortBarContainer);
         $(this.sortBarContainer).append(sortBarHtml);
     }
