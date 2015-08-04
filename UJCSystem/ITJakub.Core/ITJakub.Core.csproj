@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FilesystemManager.cs" />
+    <Compile Include="PathResolvers\AudioPathResolver.cs" />
     <Compile Include="PathResolvers\BookPathResolver.cs" />
     <Compile Include="PathResolvers\ImagePathResolver.cs" />
     <Compile Include="PathResolvers\IResourceTypePathResolver.cs" />

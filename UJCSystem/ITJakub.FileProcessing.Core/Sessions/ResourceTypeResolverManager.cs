@@ -61,10 +61,11 @@ namespace ITJakub.FileProcessing.Core.Sessions
             get { return ResourceType.SourceDocument; }
         }
     }
-      public class MetadataTypeResolver : ResourceTypeResolverBase
+    
+    public class MetadataTypeResolver : ResourceTypeResolverBase
     {
-          public MetadataTypeResolver(string[] fileExtensions)
-              : base(fileExtensions)
+        public MetadataTypeResolver(string[] fileExtensions)
+            : base(fileExtensions)
         {
         }
 
@@ -97,6 +98,19 @@ namespace ITJakub.FileProcessing.Core.Sessions
         public override ResourceType ResolveResourceType
         {
             get { return ResourceType.Transformation; }
+        }
+    }
+
+    public class AudioTypeResolver : ResourceTypeResolverBase
+    {
+        public AudioTypeResolver(string[] fileExtensions)
+            : base(fileExtensions)
+        {
+        }
+
+        public override ResourceType ResolveResourceType
+        {
+            get { return ResourceType.Audio; }
         }
     }
 }

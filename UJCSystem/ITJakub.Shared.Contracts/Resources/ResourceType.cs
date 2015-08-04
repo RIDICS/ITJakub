@@ -9,5 +9,6 @@
         Page = 4,
         Transformation = 5,
         Image = 6,
+        Audio = 7,
     }
 }
