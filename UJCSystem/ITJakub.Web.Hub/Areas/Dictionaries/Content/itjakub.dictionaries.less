@@ -76,6 +76,8 @@
 
 .dictionary-result-word-search-list-body {
     padding: 5px;
+    position: relative;
+    min-height: 450px;
 }
 
 .dictionary-result-pagination {
@@ -92,6 +94,8 @@
 
 .dictionary-result-word-search-description-body {
     padding: 5px;
+    position: relative;
+    min-height: 450px;
 }
 
 .dictionary-result-headword {
@@ -189,6 +193,26 @@ ul.pagination-sm {
 .loading-modal {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.dictionary-loading {
+    background: rgba(45,45,45,0.3);
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.dictionary-loading > div {
+    background: white url(../../../Content/Images/loading.gif) no-repeat center;
+    width: 120px;
+    height: 64px;
+    margin: auto;
+    vertical-align: middle;
+    position: relative;
+    top: 50%;
+    margin-top: -60px;
 }
 
 @media print {

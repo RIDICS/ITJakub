@@ -44,6 +44,7 @@
     }
 
     public getAllHeadwords() {
+        $(this.listContainer).addClass("loading");
         $.ajax({
             type: "GET",
             traditional: true,
@@ -52,6 +53,7 @@
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
+                $(this.listContainer).removeClass("loading");
                 this.showHeadwordList(response);
             }
         });

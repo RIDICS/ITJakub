@@ -57,8 +57,21 @@ class DictionaryViewer {
             $(this.headwordDescriptionContainer).empty();
             return;
         }
-        
+
+        this.showLoadingBars();
         this.showPageCallback(pageNumber);
+    }
+
+    private showLoadingBars() {
+        var backgroundDiv1 = document.createElement("div");
+        var backgroundDiv2 = document.createElement("div");
+        var loadingDiv = document.createElement("div");
+
+        $(backgroundDiv1).addClass("dictionary-loading");
+        $(backgroundDiv2).addClass("dictionary-loading");
+        $(backgroundDiv1).append(loadingDiv);
+        $(this.headwordListContainer).append(backgroundDiv1);
+        $(this.headwordDescriptionContainer).append(backgroundDiv2);
     }
 
     public showHeadwords(headwords: IHeadwordList) {

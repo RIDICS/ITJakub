@@ -36,6 +36,7 @@ var DictionaryFavoriteHeadwords = (function () {
     };
     DictionaryFavoriteHeadwords.prototype.getAllHeadwords = function () {
         var _this = this;
+        $(this.listContainer).addClass("loading");
         $.ajax({
             type: "GET",
             traditional: true,
@@ -44,6 +45,7 @@ var DictionaryFavoriteHeadwords = (function () {
             dataType: "json",
             contentType: "application/json",
             success: function (response) {
+                $(_this.listContainer).removeClass("loading");
                 _this.showHeadwordList(response);
             }
         });

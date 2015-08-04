@@ -176,9 +176,9 @@ class DictionaryViewerListWrapper {
     }
 
     private updateUrl() {
-        var url = "?categoryIdList=" + JSON.stringify(this.selectedCategoryIds)
-            + "&bookIdList=" + JSON.stringify(this.selectedBookIds)
-            + "&pageNumber=" + this.currentPageNumber;
+        var url = "?categories=" + JSON.stringify(this.selectedCategoryIds)
+            + "&books=" + JSON.stringify(this.selectedBookIds)
+            + "&page=" + this.currentPageNumber;
 
         window.history.replaceState(null, null, url);
     }
