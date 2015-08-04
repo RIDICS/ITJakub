@@ -73,10 +73,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Daliboris.Pomucky.Xml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Daliboris.Pomucky.Xml.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -93,18 +89,14 @@
     <Compile Include="SplittingResult.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+      <Project>{457fef12-bd22-4498-924f-941b31dccd6b}</Project>
+      <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ujc.Ovj.Xml.Info\Ujc.Ovj.Xml.Info.csproj">
       <Project>{2f50f763-2aef-4647-918a-87b65af2a6c9}</Project>
       <Name>Ujc.Ovj.Xml.Info</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Libraries\Daliboris.Pomucky.Xml.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Daliboris.Pomucky.Xml.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

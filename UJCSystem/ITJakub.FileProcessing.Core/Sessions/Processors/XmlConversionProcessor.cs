@@ -31,18 +31,18 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 resourceSessionDirector.Resources.First(
                     resource => resource.ResourceType == ResourceType.SourceDocument);
 
-            string metaDataFileName;            
-            if (!resourceSessionDirector.Resources.Any(x => x.ResourceType == ResourceType.UploadedMetadata))
+            string metaDataFileName;
+            if (resourceSessionDirector.Resources.Any(x => x.ResourceType == ResourceType.UploadedMetadata))
             {
-                metaDataFileName = string.Format("{0}_converted.xmd", Path.GetFileNameWithoutExtension(inputFileResource.FileName));                
+                metaDataFileName = string.Format("{0}_converted.xmd", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
             }
             else
             {
-                metaDataFileName = string.Format("{0}.xmd", Path.GetFileNameWithoutExtension(inputFileResource.FileName));    
+                metaDataFileName = string.Format("{0}.xmd", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
             }
-            
 
-            
+
+
             var metaDataResource = new Resource
             {
                 FileName = metaDataFileName,
@@ -76,6 +76,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 InputFilePath = inputFileResource.FullPath,
                 MetadataFilePath = m_conversionMetadataPath,
                 OutputFilePath = bookResource.FullPath,
+                OutputMetadataFilePath = metaDataResource.FullPath,
                 TempDirectoryPath = tmpDirPath,
                 GetVersionList = versionProviderHelper.GetVersionsByBookId,
                 SplitDocumentByPageBreaks = true,

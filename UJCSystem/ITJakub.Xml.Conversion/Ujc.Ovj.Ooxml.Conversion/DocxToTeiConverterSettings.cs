@@ -37,10 +37,15 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// </summary>
 		public string OutputFilePath { get; set; }
 
-		/// <summary>
-		/// Path to the file with metadata about converted texts.
-		/// </summary>
-		public string MetadataFilePath { get; set; }
+        /// <summary>
+        /// Output full path for metadata file (XMD)
+        /// </summary>
+        public string OutputMetadataFilePath { get; set; }
+
+        /// <summary>
+        /// Path to the file with metadata about converted texts.
+        /// </summary>
+        public string MetadataFilePath { get; set; }
 
 		/// <summary>
 		/// Path of temp directory. Used to store temporary files.
@@ -65,7 +70,9 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// </summary>
 		public Func<string, List<VersionInfoSkeleton>> GetVersionList { get; set; }
 
-		#endregion
+	    
+
+	    #endregion
 
 		#region Methods
 
