@@ -1,6 +1,6 @@
 ﻿@import "../../ITJakub.DefaultTheme.less";
 @reader-body-height: 77vh;
-@reader-computed-height : calc(~'100vh - 355px');
+@reader-computed-height : calc(~'100vh - 367px');
 @reader-computed-height-fullscreen : calc(~'100vh - 140px');
 
 html,body {    
@@ -62,6 +62,7 @@ html,body {
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 5px;
+    margin-left: 10px;
 }
 
 .reader-controls .page-input-button {
@@ -551,3 +552,10 @@ div.dummy-page {
 /*.search-unloaded {
     background-color: palegoldenrod;
 }*/
+
+.reader .content-container {
+    background-color: white;
+    padding: 0; 
+    padding-top: 5px; 
+    min-height: 0; 
+}
