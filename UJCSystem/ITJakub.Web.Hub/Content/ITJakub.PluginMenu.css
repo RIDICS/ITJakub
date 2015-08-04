@@ -188,6 +188,11 @@ div.container {
 }
 #main-plugins-menu .has-sub:hover > ul {
   display: block;
+  border: 1px solid white;
+}
+#main-plugins-menu .has-sub.active:hover > ul {
+  display: block;
+  border: none;
 }
 #main-plugins-menu .has-sub ul {
   display: none;
@@ -267,5 +272,9 @@ div.container {
   position: relative;
   display: inline;
   float: left;
+}
+#main-plugins-menu ul > li.active > ul {
+  background-color: #84ced7;
+  padding-bottom: 0;
 }
 /*# sourceMappingURL=ITJakub.PluginMenu.css.map */
