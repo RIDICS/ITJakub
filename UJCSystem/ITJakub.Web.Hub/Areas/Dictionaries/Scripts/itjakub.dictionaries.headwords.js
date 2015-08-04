@@ -110,6 +110,7 @@ var DictionaryViewerListWrapper = (function () {
     DictionaryViewerListWrapper.prototype.loadHeadwordList = function (state) {
         this.selectedBookIds = DropDownSelect.getBookIdsFromState(state);
         this.selectedCategoryIds = DropDownSelect.getCategoryIdsFromState(state);
+        this.dictionaryViewer.setDefaultPageNumber(null);
         this.loadCount();
     };
     DictionaryViewerListWrapper.prototype.loadCount = function () {
@@ -132,6 +133,8 @@ var DictionaryViewerListWrapper = (function () {
     };
     DictionaryViewerListWrapper.prototype.loadHeadwords = function (pageNumber) {
         var _this = this;
+        this.currentPageNumber = pageNumber;
+        this.updateUrl();
         $.ajax({
             type: "GET",
             traditional: true,
@@ -148,6 +151,10 @@ var DictionaryViewerListWrapper = (function () {
                 _this.dictionaryViewer.showHeadwords(response);
             }
         });
+    };
+    DictionaryViewerListWrapper.prototype.updateUrl = function () {
+        var url = "?categoryIdList=" + JSON.stringify(this.selectedCategoryIds) + "&bookIdList=" + JSON.stringify(this.selectedBookIds) + "&pageNumber=" + this.currentPageNumber;
+        window.history.replaceState(null, null, url);
     };
     return DictionaryViewerListWrapper;
 })();

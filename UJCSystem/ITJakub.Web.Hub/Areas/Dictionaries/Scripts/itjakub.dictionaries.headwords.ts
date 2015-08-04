@@ -76,6 +76,7 @@
 class DictionaryViewerListWrapper {
     private favoriteHeadwords: DictionaryFavoriteHeadwords;
     private pageSize: number;
+    private currentPageNumber: number;
     private dictionaryViewer: DictionaryViewer;
     private selectedBookIds: Array<number>;
     private selectedCategoryIds: Array<number>;
@@ -130,6 +131,7 @@ class DictionaryViewerListWrapper {
     loadHeadwordList(state: State) {
         this.selectedBookIds = DropDownSelect.getBookIdsFromState(state);
         this.selectedCategoryIds = DropDownSelect.getCategoryIdsFromState(state);
+        this.dictionaryViewer.setDefaultPageNumber(null);
 
         this.loadCount();
     }
@@ -153,6 +155,8 @@ class DictionaryViewerListWrapper {
     }
 
     loadHeadwords(pageNumber: number) {
+        this.currentPageNumber = pageNumber;
+        this.updateUrl();
         $.ajax({
             type: "GET",
             traditional: true,
@@ -169,5 +173,13 @@ class DictionaryViewerListWrapper {
                 this.dictionaryViewer.showHeadwords(response);
             }
         });
+    }
+
+    private updateUrl() {
+        var url = "?categoryIdList=" + JSON.stringify(this.selectedCategoryIds)
+            + "&bookIdList=" + JSON.stringify(this.selectedBookIds)
+            + "&pageNumber=" + this.currentPageNumber;
+
+        window.history.replaceState(null, null, url);
     }
 }

@@ -46,29 +46,35 @@
     }
 
     private restore() {
+        var categoriesCount = 0;
+        var booksCount = 0;
+
         if (this.restoreCategoryIds) {
             for (var i = 0; i < this.restoreCategoryIds.length; i++) {
                 var category = this.categories[this.restoreCategoryIds[i]];
                 category.checkBox.checked = true;
                 this.propagateSelectChange(<HTMLDivElement>$(category.checkBox).parent(".concrete-item")[0]);
             }
+            categoriesCount = this.restoreCategoryIds.length;
         }
 
-        if (!this.restoreBookIds)
-            return;
+        if (this.restoreBookIds) {
+            for (var j = 0; j < this.restoreBookIds.length; j++) {
+                var book = this.books[this.restoreBookIds[j]];
 
-        for (var j = 0; j < this.restoreBookIds.length; j++) {
-            var book = this.books[this.restoreBookIds[j]];
+                for (var k = 0; k < book.checkboxes.length; k++) {
+                    var checkbox = book.checkboxes[k];
+                    if (checkbox.checked)
+                        continue;
 
-            for (var k = 0; k < book.checkboxes.length; k++) {
-                var checkbox = book.checkboxes[k];
-                if (checkbox.checked)
-                    continue;
-
-                checkbox.checked = true;
-                this.propagateSelectChange(<HTMLDivElement>$(checkbox).parent(".concrete-item")[0]);
+                    checkbox.checked = true;
+                    this.propagateSelectChange(<HTMLDivElement>$(checkbox).parent(".concrete-item")[0]);
+                }
             }
+            booksCount = this.getSelectedBookCount();
         }
+        
+        this.updateSelectionInfo(categoriesCount, booksCount);
     }
 
     protected downloadData(dropDownItemsDiv: HTMLDivElement) {
@@ -91,7 +97,6 @@
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
                 this.rootCategory.checkBox = <HTMLInputElement>($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0));
                 this.restore();
-                this.updateSelectionInfo(0, 0);
             }
         });
     }
