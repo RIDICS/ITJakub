@@ -61,6 +61,18 @@ namespace ITJakub.FileProcessing.Core.Sessions
             get { return ResourceType.SourceDocument; }
         }
     }
+      public class MetadataTypeResolver : ResourceTypeResolverBase
+    {
+          public MetadataTypeResolver(string[] fileExtensions)
+              : base(fileExtensions)
+        {
+        }
+
+        public override ResourceType ResolveResourceType
+        {
+            get { return ResourceType.UploadedMetadata; }
+        }
+    }
 
     public class ImageTypeResolver : ResourceTypeResolverBase
     {

@@ -4,9 +4,10 @@
     {
         SourceDocument = 0,
         Book = 1,
-        Metadata = 2,
-        Page = 3,
-        Transformation = 4,
-        Image = 5,
+        UploadedMetadata = 2,
+        ConvertedMetadata = 3,
+        Page = 4,
+        Transformation = 5,
+        Image = 6,
     }
 }

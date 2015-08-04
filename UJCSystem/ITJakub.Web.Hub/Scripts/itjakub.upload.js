@@ -27,8 +27,8 @@
         autoProcessQueue: true,
         paralelUploads: 5,
         previewsContainer: "#dropzoneFileFormPreview",
-        acceptedFiles: ".doc,.docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt",
-        dictInvalidFileType: "Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc,.docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt",
+        acceptedFiles: ".doc,.docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd",
+        dictInvalidFileType: "Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd",
 
         init: function() {
             var fileDropzone = this;
