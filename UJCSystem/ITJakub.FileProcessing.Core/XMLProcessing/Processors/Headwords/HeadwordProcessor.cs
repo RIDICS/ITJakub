@@ -25,6 +25,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
             var hw = xmlReader.GetAttribute("hw");
             var visibility = xmlReader.GetAttribute("visibility");
             var visibilityEnum = ParseEnum<VisibilityEnum>(visibility);
+            var image = xmlReader.GetAttribute("image-name");
 
             var bookHeadword = new BookHeadword
             {
@@ -33,7 +34,8 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
                 DefaultHeadword = defaultHw,
                 Headword = hw,
                 Visibility = visibilityEnum,
-                SortOrder = defaultHwSorting
+                SortOrder = defaultHwSorting,
+                Image = image
             };
 
             bookVersion.BookHeadwords.Add(bookHeadword);
