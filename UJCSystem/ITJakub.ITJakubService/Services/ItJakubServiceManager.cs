@@ -5,6 +5,7 @@ using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
@@ -19,6 +20,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly ResourceManager m_resourceManager;
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
+        private readonly NotesManager m_notesManager;        
         private readonly WindsorContainer m_container = Container.Current;
 
         public ItJakubServiceManager()
@@ -28,6 +30,7 @@ namespace ITJakub.ITJakubService.Services
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
+            m_notesManager = m_container.Resolve<NotesManager>();
             m_cardFileManager = m_container.Resolve<CardFileManager>();
         }
 
@@ -224,6 +227,21 @@ namespace ITJakub.ITJakubService.Services
              string pageXmlId, OutputFormatEnumContract resultFormat)
         {
             return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
+        }
+
+        public void CreateNote(string note, int? userId)
+        {
+            m_notesManager.CreateNote(note, userId);
+        }
+
+        public void CreateNoteForHeadword(string note, string bookXmlId, string versionXmlId, string entryXmlId, int? userId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public List<NoteContract> GetAllNotes()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

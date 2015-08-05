@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities"
+                   xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Note" 
+         table="[Notes]" 
+         discriminator-value="GenericNote">
+
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+
+    <discriminator column="NoteType"
+                   not-null="true"
+                   type="System.String" />    
+
+    
+    <property name ="Text"/>
+    
+    <property name ="CreateDate"/>
+    
+    <many-to-one name="User"
+                 column="[User]"
+                 class="User"
+                 lazy="proxy" />
+
+    <subclass
+      name="HeadwordNote"
+      discriminator-value="HeadwordNote">
+      
+
+      <many-to-one name="BookHeadword"
+                   column="BookHeadword"
+                   class="BookHeadword"
+                   lazy="proxy" />
+
+    </subclass>
+  </class>
+</hibernate-mapping>

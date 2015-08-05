@@ -47,6 +47,7 @@
     <Compile Include="BookPageContract.cs" />
     <Compile Include="BookTypeEnumContract.cs" />
     <Compile Include="BookTypeSearchResultContract.cs" />
+    <Compile Include="Notes\NoteContract.cs" />
     <Compile Include="Searching\Results\HeadwordContract.cs" />
     <Compile Include="Searching\BookVersionPairContract.cs" />
     <Compile Include="Categories\CategoryShowType.cs" />

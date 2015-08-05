@@ -2,6 +2,7 @@
 using System.IO;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
@@ -134,5 +135,19 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
             string pageXmlId, OutputFormatEnumContract resultFormat);
+
+
+        #region Notes
+
+        [OperationContract]
+        void CreateNote(string note, int? userId);
+
+        [OperationContract]
+        void CreateNoteForHeadword(string note, string bookXmlId, string versionXmlId, string entryXmlId, int? userId);
+
+        List<NoteContract> GetAllNotes();
+
+        #endregion
+
     }
 }

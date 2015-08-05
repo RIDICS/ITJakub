@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
@@ -62,7 +64,8 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public string GetBookPageByXmlId(string documentId, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
+        public string GetBookPageByXmlId(string documentId, string pageXmlId, OutputFormatEnumContract resultFormat,
+            BookTypeEnumContract bookTypeContract)
         {
             try
             {
@@ -390,7 +393,7 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
-        
+
         public IEnumerable<BucketShortContract> GetBuckets(string cardFileId)
         {
             try
@@ -416,7 +419,8 @@ namespace ITJakub.Web.Hub
                     m_log.ErrorFormat("GetBuckets timeouted with: {0}", ex);
                 throw;
             }
-        }        
+        }
+
         public IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword)
         {
             try
@@ -470,6 +474,7 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+
         public IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
         {
             try
@@ -501,7 +506,7 @@ namespace ITJakub.Web.Hub
         {
             try
             {
-                return Channel.GetCard(cardFileId, bucketId,cardId);
+                return Channel.GetCard(cardFileId, bucketId, cardId);
             }
             catch (CommunicationException ex)
             {
@@ -524,7 +529,8 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize)
+        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId,
+            ImageSizeEnum imageSize)
         {
             try
             {
@@ -550,7 +556,6 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
-
 
         public IList<string> GetTypeaheadAuthors(string query)
         {
@@ -606,7 +611,8 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
+            string query)
         {
             try
             {
@@ -632,7 +638,7 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
-        
+
         public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType)
         {
             try
@@ -660,7 +666,8 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType,
+            IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
             try
             {
@@ -714,7 +721,8 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count)
+        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
+            int start, int count)
         {
             try
             {
@@ -767,12 +775,14 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
-        
-        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
+
+        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
+            string headwordBookId, string headwordEntryXmlId)
         {
             try
             {
-                return Channel.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId, headwordEntryXmlId);
+                return Channel.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId,
+                    headwordEntryXmlId);
             }
             catch (CommunicationException ex)
             {
@@ -794,7 +804,8 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
+        public HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias,
+            DictionarySearchTarget searchTarget)
         {
             try
             {
@@ -821,7 +832,8 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
+        public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias,
+            DictionarySearchTarget searchTarget)
         {
             try
             {
@@ -875,7 +887,8 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId,
+            OutputFormatEnumContract resultFormat)
         {
             try
             {
@@ -901,7 +914,8 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid,
+            string xmlEntryId,
             OutputFormatEnumContract resultFormat)
         {
             try
@@ -937,24 +951,25 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetSearchEditionsPageList failed with: {0}", ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetSearchEditionsPageList failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetSearchEditionsPageList timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
         }
 
-        public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId, string pageXmlId,
+        public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
+            string pageXmlId,
             OutputFormatEnumContract resultFormat)
         {
             try
@@ -964,21 +979,105 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetEditionPageFromSearch failed with: {0}", ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetEditionPageFromSearch failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetEditionPageFromSearch timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public void CreateNote(string note, int? userId)
+        {
+            try
+            {
+                Channel.CreateNote(note, userId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public void CreateNoteForHeadword(string note, string bookXmlId, string versionXmlId, string entryXmlId,
+            int? userId)
+        {
+            try
+            {
+                Channel.CreateNoteForHeadword(note,bookXmlId,  versionXmlId,  entryXmlId, userId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public List<NoteContract> GetAllNotes()
+        {
+            try
+            {
+               return Channel.GetAllNotes();
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        private string GetCurrentMethod([CallerMemberName] string methodName = null)
+        {
+            return methodName;
         }
     }
 }
