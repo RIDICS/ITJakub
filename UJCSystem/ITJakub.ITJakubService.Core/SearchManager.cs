@@ -262,11 +262,9 @@ namespace ITJakub.ITJakubService.Core
                     dictionaryContract = new DictionaryContract
                     {
                         BookAcronym = headword.BookAcronym,
-                        BookId = 0, // TODO
                         BookTitle = headword.BookTitle,
                         BookXmlId = headword.BookGuid,
-                        BookVersionXmlId = null, //TODO
-                        BookVersionId = 0 // TODO
+                        BookVersionXmlId = headword.BookVersionId,
                     };
                     dictionaryList.Add(dictionaryContract.BookXmlId, dictionaryContract);
                 }

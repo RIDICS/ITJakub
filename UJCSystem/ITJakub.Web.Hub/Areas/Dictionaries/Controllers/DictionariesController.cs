@@ -269,5 +269,17 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var resultStream = m_mainServiceClient.GetHeadwordImage(bookXmlId, entryXmlId);
             return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
         }
+
+        public ActionResult GetHeadwordInfo(string bookXmlId, string bookVersionXmlId, string entryXmlId)
+        {
+
+            return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddHeadwordRemark(string bookXmlId, string bookVersionXmlId, string entryXmlId, string name,
+            string email, string remark, bool publicationAgreement)
+        {
+            return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
     }
 }

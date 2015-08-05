@@ -111,7 +111,7 @@ var DictionaryViewer = (function () {
                 var commentsDiv = document.createElement("div");
                 var commentsLink = document.createElement("a");
                 $(commentsLink).text("Připomínky");
-                commentsLink.href = "#";
+                commentsLink.href = "Feedback?bookId=" + dictionaryMetadata.BookXmlId + "&versionId=" + dictionaryMetadata.BookVersionXmlId + "&entryId=" + dictionary.EntryXmlId + "&headword=" + record.Headword + "&dictionary=" + encodeURIComponent(dictionaryMetadata.BookTitle);
                 $(commentsDiv).addClass("dictionary-entry-comments");
                 commentsDiv.appendChild(commentsLink);
                 var dictionaryDiv = document.createElement("div");
