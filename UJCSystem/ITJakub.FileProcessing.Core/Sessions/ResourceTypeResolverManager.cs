@@ -47,6 +47,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
         }
 
         public abstract ResourceType ResolveResourceType { get; }
+
         public string[] FileExtensions { get; private set; }
     }
 

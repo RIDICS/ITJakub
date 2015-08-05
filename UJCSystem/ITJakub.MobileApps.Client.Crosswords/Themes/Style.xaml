@@ -206,8 +206,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    
     <Style TargetType="TextBox" x:Key="EditorTextBoxStyle">
         <Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}" />
         <Setter Property="MinHeight" Value="{ThemeResource TextControlThemeMinHeight}" />

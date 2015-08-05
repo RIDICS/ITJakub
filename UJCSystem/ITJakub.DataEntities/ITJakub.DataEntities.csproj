@@ -77,7 +77,6 @@
     <Compile Include="Database\Entities\SelectResults\HeadwordBookmarkResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordCountResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordSearchResult.cs" />
-    <Compile Include="Database\Repositories\LemmatizationRepository.cs" />
     <Compile Include="Database\HeadwordCriteriaQueryCreator.cs" />
     <Compile Include="Database\Repositories\NoteRepository.cs" />
     <Compile Include="Database\SearchCriteriaQuery.cs" />
