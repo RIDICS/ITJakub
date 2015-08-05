@@ -73,3 +73,6 @@ UJCSystem/ITJakub.Xml.Conversion/Ujc.Ovj.Ooxml.Conversion.Test/Data/Temp/
 #typescript
 *js.[Mm]ap
 *.js
+
+#Less
+*.css
