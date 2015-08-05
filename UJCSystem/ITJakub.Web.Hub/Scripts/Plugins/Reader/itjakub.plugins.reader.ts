@@ -36,7 +36,7 @@ class ReaderModule {
         this.pagerDisplayPages = 5;
     }
 
-    public makeReader(bookXmlId : string, versionXmlId: string, bookTitle : string, pageList) {
+    public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList) {
         this.bookId = bookXmlId;
         this.versionId = versionXmlId;
         this.actualPageIndex = 0;
@@ -45,7 +45,7 @@ class ReaderModule {
         this.leftSidePanels = new Array<SidePanel>();
         this.rightSidePanels = new Array<SidePanel>();
 
-        $(window).on("beforeunload",(event: Event) => {
+        $(window).on("beforeunload", (event: Event) => {
             for (var k = 0; k < this.leftSidePanels.length; k++) {
                 this.leftSidePanels[k].childwindow.close();
             }
@@ -54,10 +54,10 @@ class ReaderModule {
                 this.rightSidePanels[k].childwindow.close();
             }
         });
-        
+
         for (var i = 0; i < pageList.length; i++) { //load pageList
             var page = pageList[i];
-            this.pages.push(new BookPage(page["XmlId"],page["Text"],page["Position"]));
+            this.pages.push(new BookPage(page["XmlId"], page["Text"], page["Position"]));
         }
 
         $(this.readerContainer).empty();
@@ -116,7 +116,7 @@ class ReaderModule {
         return this.versionId;
     }
 
-    private makeTitle(bookTitle : string): HTMLDivElement {
+    private makeTitle(bookTitle: string): HTMLDivElement {
         var titleDiv: HTMLDivElement = document.createElement('div');
         $(titleDiv).addClass('title');
         titleDiv.innerHTML = bookTitle;
@@ -186,10 +186,12 @@ class ReaderModule {
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
         $(pageInputText).addClass('page-input-text');
+
         pageInputDiv.appendChild(pageInputText);
 
         var pageInputButton = document.createElement("button");
         pageInputButton.innerHTML = "Přejít na stránku";
+        $(pageInputButton).addClass('btn btn-default');
         $(pageInputButton).addClass('page-input-button');
         $(pageInputButton).click((event: Event) => {
             var pageName = $('#pageInputText').val();
@@ -355,7 +357,7 @@ class ReaderModule {
         $(commentButton).click((event: Event) => {
             var panelId = this.settingsPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
-                var settingsPanel: SettingsPanel = new SettingsPanel(panelId , this);
+                var settingsPanel: SettingsPanel = new SettingsPanel(panelId, this);
                 this.loadSidePanel(settingsPanel.panelHtml);
                 this.leftSidePanels.push(settingsPanel);
                 this.settingsPanel = settingsPanel;
@@ -382,7 +384,7 @@ class ReaderModule {
             if (!this.existSidePanel(panelId)) {
                 var searchPanel = new SearchResultPanel(panelId, this);
                 this.loadSidePanel(searchPanel.panelHtml);
-                this.leftSidePanels.push(searchPanel);
+                this.leftSidePanels.push(<any>searchPanel);
                 this.searchPanel = searchPanel;
             }
             this.changeSidePanelVisibility(this.searchPanelIdentificator, 'left');
@@ -410,7 +412,7 @@ class ReaderModule {
                 this.leftSidePanels.push(contentPanel);
                 this.contentPanel = contentPanel;
             }
-            this.changeSidePanelVisibility(this.contentPanelIdentificator,'left');
+            this.changeSidePanelVisibility(this.contentPanelIdentificator, 'left');
         });
 
         buttonsDiv.appendChild(contentButton);
@@ -537,7 +539,7 @@ class ReaderModule {
         this.notifyPanelsMovePage(pageIndex, scrollTo);
     }
 
-    notifyPanelsMovePage(pageIndex : number, scrollTo: boolean) {
+    notifyPanelsMovePage(pageIndex: number, scrollTo: boolean) {
         for (var k = 0; k < this.leftSidePanels.length; k++) {
             this.leftSidePanels[k].onMoveToPage(pageIndex, scrollTo);
         }
@@ -557,7 +559,7 @@ class ReaderModule {
         }
         if (pageIndex >= 0 && pageIndex < this.pages.length) {
             this.moveToPageNumber(pageIndex, scrollTo);
-            
+
         } else {
             console.log("Page with id '" + pageXmlId + "' does not exist");
             //TODO tell user page not exist  
@@ -585,7 +587,7 @@ class ReaderModule {
         var pages = $(pager).find('.page');
         $(pages).css('display', 'none');
         $(pages).removeClass('page-active');
-        var actualPage = $(pages).filter(function(index) {
+        var actualPage = $(pages).filter(function (index) {
             return $(this).data("page-index") === pageIndex;
         });
 
@@ -602,7 +604,7 @@ class ReaderModule {
             pager.find('li.more-pages-right').css('visibility', 'hidden');
         }
 
-        var displayedPages = $(pages).filter(function(index) {
+        var displayedPages = $(pages).filter(function (index) {
             var itemPageIndex = $(this).data("page-index");
             return (itemPageIndex >= pageIndex - displayOnLeft && itemPageIndex <= pageIndex + displayOnRight);
         });
@@ -611,7 +613,7 @@ class ReaderModule {
 
     }
 
-    createBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string):HTMLSpanElement {
+    createBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string): HTMLSpanElement {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
         $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
@@ -628,14 +630,14 @@ class ReaderModule {
     }
 
     addBookmark() {
-        var pageIndex:number = this.actualPageIndex;
+        var pageIndex: number = this.actualPageIndex;
         var page: BookPage = this.pages[pageIndex];
         var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, page.text, page.xmlId);
 
         $.ajax({
             type: "POST",
             traditional: true,
-            data: JSON.stringify({ bookId: this.bookId, pageXmlId: page.xmlId}),
+            data: JSON.stringify({ bookId: this.bookId, pageXmlId: page.xmlId }),
             url: getBaseUrl() + "Reader/AddBookmark",
             dataType: 'json',
             contentType: 'application/json',
@@ -656,11 +658,11 @@ class ReaderModule {
         }
 
         var actualPage: BookPage = this.pages[this.actualPageIndex];
-        var targetBookmark = $(bookmarks).filter(function(index) {
+        var targetBookmark = $(bookmarks).filter(function (index) {
             return $(this).data("page-xmlId") === actualPage.xmlId;
         });
 
-        if (typeof targetBookmark === 'undefined' || targetBookmark == null|| targetBookmark.length === 0) {
+        if (typeof targetBookmark === 'undefined' || targetBookmark == null || targetBookmark.length === 0) {
             return false;
         }
 
@@ -765,10 +767,10 @@ class ReaderModule {
 
     private getSearchPanel(): SearchResultPanel {
         var panelId = this.searchPanelIdentificator;
-        if (!this.existSidePanel(panelId)){
+        if (!this.existSidePanel(panelId)) {
             var searchPanel = new SearchResultPanel(panelId, this);
             this.loadSidePanel(searchPanel.panelHtml);
-            this.leftSidePanels.push(searchPanel);
+            this.leftSidePanels.push(<any>searchPanel);
             this.searchPanel = searchPanel;
         }
 
@@ -786,15 +788,29 @@ class ReaderModule {
             var pageDiv = document.getElementById(page.PageXmlId);
             $(pageDiv).addClass("search-unloaded");
         }
+        this.moveToPageNumber(this.actualPageIndex, true);
+    }
+
+    searchPanelShowLoading() {
+        this.searchPanel.showLoading();
+
+    }
+
+    searchPanelRemoveLoading() {
+        this.searchPanel.clearLoading();
+    }
+
+    searchPanelClearResults() {
+        this.searchPanel.clearResults();
     }
 }
 
 
 class SidePanel {
-    panelHtml : HTMLDivElement;
+    panelHtml: HTMLDivElement;
     panelBodyHtml: HTMLDivElement;
-    closeButton : HTMLButtonElement;
-    pinButton : HTMLButtonElement;
+    closeButton: HTMLButtonElement;
+    pinButton: HTMLButtonElement;
     newWindowButton: HTMLButtonElement;
     identificator: string;
     headerName: string;
@@ -866,33 +882,33 @@ class SidePanel {
 
         sidePanelDiv.appendChild(panelHeaderDiv);
 
-        this.innerContent = this.makeBody(this,window);
+        this.innerContent = this.makeBody(this, window);
         var panelBodyDiv = this.makePanelBody(this.innerContent, this, window);
 
         $(sidePanelDiv).append(panelBodyDiv);
 
-        $(sidePanelDiv).mousedown((event:Event)=> {
+        $(sidePanelDiv).mousedown((event: Event) => {
             this.parentReader.populatePanelOnTop(this);
         });
 
         this.panelHtml = sidePanelDiv;
         this.panelBodyHtml = panelBodyDiv;
 
-        
+
     }
 
-    protected  makePanelBody(innerContent, rootReference, window: Window) : HTMLDivElement {
+    protected  makePanelBody(innerContent, rootReference, window: Window): HTMLDivElement {
         var panelBodyDiv: HTMLDivElement = window.document.createElement('div');
         $(panelBodyDiv).addClass('reader-left-panel-body');
         $(panelBodyDiv).append(innerContent);
         return panelBodyDiv;
     }
 
-    protected makeBody(rootReference: SidePanel, window:Window): HTMLElement {
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         throw new Error("Not implemented");
     }
 
-    public onMoveToPage(pageIndex: number, scrollTo:boolean) {
+    public onMoveToPage(pageIndex: number, scrollTo: boolean) {
     }
 
     protected placeOnDragStartPosition(sidePanelDiv: HTMLDivElement) {
@@ -917,7 +933,7 @@ class SidePanel {
         newWindow.document.open();
         newWindow.document.close();
 
-        $(newWindow).on("beforeunload",(event: Event) => {
+        $(newWindow).on("beforeunload", (event: Event) => {
             this.onUnloadWindowMode();
         });
 
@@ -995,7 +1011,7 @@ class SettingsPanel extends LeftSidePanel {
     constructor(identificator: string, readerModule: ReaderModule) {
         super(identificator, "Zobrazení", readerModule);
     }
-    
+
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var textButtonSpan = window.document.createElement("span");
         $(textButtonSpan).addClass("glyphicon glyphicon-text-size");
@@ -1039,7 +1055,7 @@ class SettingsPanel extends LeftSidePanel {
             } else {
                 $(readerText).removeClass("reader-text-show-page-names");
             }
-            
+
         });
 
         var showPageNameSpan: HTMLSpanElement = window.document.createElement("span");
@@ -1096,7 +1112,7 @@ class SettingsPanel extends LeftSidePanel {
 }
 
 class SearchResultPanel extends LeftSidePanel {
-    private searchResultItemsDiv : HTMLDivElement;
+    private searchResultItemsDiv: HTMLDivElement;
     private searchPagingDiv: HTMLDivElement;
 
     private paginator: Pagination;
@@ -1106,7 +1122,21 @@ class SearchResultPanel extends LeftSidePanel {
     constructor(identificator: string, readerModule: ReaderModule) {
         super(identificator, "Vyhledávání", readerModule);
     }
-    
+
+    showLoading() {
+        $(this.searchResultItemsDiv).addClass("loader");
+
+    }
+
+    clearLoading() {
+        $(this.searchResultItemsDiv).removeClass("loader");
+    }
+
+    clearResults() {
+        $(this.searchResultItemsDiv).empty();
+    }
+
+
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
 
@@ -1159,7 +1189,7 @@ class SearchResultPanel extends LeftSidePanel {
         var resultBeforeSpan = document.createElement("span");
         $(resultBeforeSpan).addClass("reader-search-result-before");
         resultBeforeSpan.innerHTML = result.before;
-        
+
         var resultMatchSpan = document.createElement("span");
         $(resultMatchSpan).addClass("reader-search-result-match");
         resultMatchSpan.innerHTML = result.match;
@@ -1191,11 +1221,14 @@ class ContentPanel extends LeftSidePanel {
     }
 
     private downloadBookContent() {
-        
+
+        $(this.panelBodyHtml).empty();
+        $(this.panelBodyHtml).addClass("loader");
+
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId},
+            data: { bookId: this.parentReader.bookId },
             url: getBaseUrl() + "Reader/GetBookContent",
             dataType: 'json',
             contentType: 'application/json',
@@ -1207,7 +1240,8 @@ class ContentPanel extends LeftSidePanel {
                     var jsonItem: JSON = rootContentItems[i];
                     $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
                 }
-                
+
+                $(this.panelBodyHtml).removeClass("loader");
                 $(this.panelBodyHtml).empty();
                 $(this.panelBodyHtml).append(ulElement);
 
@@ -1231,12 +1265,12 @@ class ContentPanel extends LeftSidePanel {
     }
 
     private makeContentItemChilds(contentItem: ContentItem): HTMLUListElement {
-        var childItems:JSON[] = contentItem.childBookContentItems;
-        if (childItems.length === 0 ) return null;
+        var childItems: JSON[] = contentItem.childBookContentItems;
+        if (childItems.length === 0) return null;
         var ulElement = document.createElement("ul");
         $(ulElement).addClass("content-item-list");
         for (var i = 0; i < childItems.length; i++) {
-            var jsonItem:JSON = childItems[i];
+            var jsonItem: JSON = childItems[i];
             $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
         }
         return ulElement;
@@ -1251,7 +1285,7 @@ class ContentPanel extends LeftSidePanel {
         $(hrefElement).click(() => {
             this.parentReader.moveToPage(contentItem.referredPageXmlId, true);
         });
-        
+
 
         var textSpanElement = document.createElement("span");
         $(textSpanElement).addClass("content-item-text");
@@ -1259,8 +1293,8 @@ class ContentPanel extends LeftSidePanel {
 
         var pageNameSpanElement = document.createElement("span");
         $(pageNameSpanElement).addClass("content-item-page-name");
-        pageNameSpanElement.innerHTML = "["+contentItem.referredPageName+"]";
-        
+        pageNameSpanElement.innerHTML = "[" + contentItem.referredPageName + "]";
+
         $(hrefElement).append(pageNameSpanElement);
         $(hrefElement).append(textSpanElement);
 
@@ -1293,7 +1327,7 @@ class RightSidePanel extends SidePanel {
             var width = $(sidePanelDiv).css("width");
             $(sidePanelDiv).draggable({ containment: "body", appendTo: "body", cursor: "move" });
             $(sidePanelDiv).resizable({ handles: "all", minWidth: 100 });
-            $(sidePanelDiv).css("width",width);
+            $(sidePanelDiv).css("width", width);
             $(sidePanelDiv).css("height", height);
             this.placeOnDragStartPosition(sidePanelDiv);
             this.isDraggable = true;
@@ -1327,17 +1361,17 @@ class ImagePanel extends RightSidePanel {
         super(identificator, "Obrázky", readerModule);
     }
 
-    protected makeBody(rootReference: SidePanel, window: Window):HTMLElement {
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var imageContainerDiv: HTMLDivElement = window.document.createElement('div');
         $(imageContainerDiv).addClass('reader-image-container');
         return imageContainerDiv;
     }
 
-    public onMoveToPage(pageIndex: number, scrollTo: boolean) { 
+    public onMoveToPage(pageIndex: number, scrollTo: boolean) {
         var pagePosition = pageIndex + 1;
         $(this.innerContent).empty();
-        var image : HTMLImageElement = document.createElement("img");
-        image.src = getBaseUrl()+"Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
+        var image: HTMLImageElement = document.createElement("img");
+        image.src = getBaseUrl() + "Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
         $(this.innerContent).append(image);
         if (typeof this.windowBody !== 'undefined') {
             $(this.windowBody).empty();
@@ -1347,7 +1381,7 @@ class ImagePanel extends RightSidePanel {
 }
 
 class TextPanel extends RightSidePanel {
-    preloadPagesBefore:number;
+    preloadPagesBefore: number;
     preloadPagesAfter: number;
 
     private query: string; //search for text search
@@ -1363,11 +1397,11 @@ class TextPanel extends RightSidePanel {
         var textContainerDiv: HTMLDivElement = window.document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
 
-        $(textContainerDiv).scroll(function(event: Event) {
+        $(textContainerDiv).scroll(function (event: Event) {
             var pages = $(this).find('.page');
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
-            $.each(pages,(index, page) => {
+            $.each(pages, (index, page) => {
                 var pageOfsset = Math.abs($(page).offset().top - $(this).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
@@ -1428,7 +1462,7 @@ class TextPanel extends RightSidePanel {
             if (pageSearchUnloaded) {
                 this.downloadSearchPageByXmlId(this.query, this.queryIsJson, page);
             }
-            else if (!pageLoaded){
+            else if (!pageLoaded) {
                 this.downloadPageByXmlId(page);
             }
         }
@@ -1439,7 +1473,7 @@ class TextPanel extends RightSidePanel {
 
             if (typeof this.childwindow !== 'undefined') {
                 $(".reader-text-container", this.childwindow.document).scrollTop(0);
-                var pageToScrollOffset = $('#'+ page.xmlId, this.childwindow.document).offset().top;
+                var pageToScrollOffset = $('#' + page.xmlId, this.childwindow.document).offset().top;
                 $(".reader-text-container", this.childwindow.document).scrollTop(pageToScrollOffset);
             }
         }
@@ -1475,7 +1509,7 @@ class TextPanel extends RightSidePanel {
             type: "GET",
             traditional: true,
             data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
-            url: getBaseUrl() +"Reader/GetBookPageByXmlId",
+            url: getBaseUrl() + "Reader/GetBookPageByXmlId",
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
@@ -1493,7 +1527,7 @@ class TextPanel extends RightSidePanel {
             error: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
-                $(pageContainer).append("Chyba při načítání stránky '"+page.text+"'");
+                $(pageContainer).append("Chyba při načítání stránky '" + page.text + "'");
             }
         });
     }
@@ -1508,7 +1542,7 @@ class TextPanel extends RightSidePanel {
             type: "GET",
             traditional: true,
             data: { query: query, isQueryJson: queryIsJson, bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
-            url: getBaseUrl() +"Reader/GetBookSearchPageByXmlId",
+            url: getBaseUrl() + "Reader/GetBookSearchPageByXmlId",
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
@@ -1528,7 +1562,7 @@ class TextPanel extends RightSidePanel {
             error: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
-                $(pageContainer).append("Chyba při načítání stránky '"+page.text+"' s výsledky vyhledávání" );
+                $(pageContainer).append("Chyba při načítání stránky '" + page.text + "' s výsledky vyhledávání");
             }
         });
     }
