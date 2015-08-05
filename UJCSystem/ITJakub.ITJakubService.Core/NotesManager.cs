@@ -7,7 +7,7 @@ namespace ITJakub.ITJakubService.Core
     public class FeedbackManager
     {
         private readonly FeedbackRepository m_feedbackRepository;
-        private UserRepository m_userRepository;
+        private readonly UserRepository m_userRepository;
 
         public FeedbackManager(UserRepository userRepository, FeedbackRepository feedbackRepository)
         {
