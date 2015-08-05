@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using ITJakub.Web.Hub.Models;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -33,6 +34,18 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult Feedback()
         {
             return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public  ActionResult Feedback(FeedbackViewModel model)
+        {
+            var name = model.Name;
+            var email = model.Email;
+            var text = model.Text;
+            //TODO implement call to add to DB
+            return View(model);
         }
 
         public ActionResult HowToCite()

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ITJakub.Web.Hub.Models.FeedbackViewModel
+@{
     ViewBag.Title = "Připomínky";
 }
 
@@ -20,22 +21,55 @@
     </p>
 
     <p>
-        <div class="form-group">
-            <textarea name="feedbackText" rows="7" cols="130" placeholder="Zde napište vaši připomínku..."></textarea> <br/>
-        </div>
+        @using (Html.BeginForm("Feedback", "Home", new {}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.TextAreaFor(m => m.Text, new {@class = "form-control feedback-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = "Zde napište vaši připomínku..."})
+            </div>
 
-        <div class="form-group">
-            <label for="feedbackUserName" class="col-md-1">Jméno: </label>
-            <input id="feedbackUserName" name="feedbackUserName" type="text" placeholder="Zde zadejte Vaše jméno..." class="col-md-3"> <br/>
-        </div>
+            <div class="text-area-info" style="float: right;margin-right:140px;">
+                Max. <span class="text-area-max-chars"></span> znaků <br/>
+                Zbývá: <span class="text-area-remaining-chars" style="color: lightseagreen"></span> znaků <br/>
+                Můžete používat diakritiku
+            </div>
+            
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name, new {@class = "col-md-1 control-label"})
+                <div class="col-md-3">
+                    @Html.TextBoxFor(m => m.Name, new {@class = "form-control", @placeholder = "Zde zadejte Vaše jméno..."})
+                </div>
+            </div>
 
-        <div class="form-group">
-            <label for="feedbackEmail" class="col-md-1">E-mail: </label>
-            <input id="feedbackEmail" name="feedbackEmail" type="text" placeholder="Zde zadejte Váš e-mail..." class="col-md-3"> <br />
-        </div>
-
-        <div class="form-group">
-            <input type="submit" value="Odeslat" class="btn btn-default" style="margin-left: 900px;">
-        </div>
-</p>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new {@class = "col-md-1 control-label"})
+                <div class="col-md-3">
+                    @Html.TextBoxFor(m => m.Email, new {@class = "form-control", @placeholder = "Zde zadejte Váš e-mail..."})
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Odeslat" class="btn btn-default" style="margin-left: 900px;">
+            </div>
+        }
+    </p>
 </div>
+
+<script>
+    $(document).ready(function () {
+        var maxChars = $(".feedback-text-area").attr("data-val-maxlength-max");
+        $(".text-area-max-chars").html(maxChars);
+        $(".text-area-remaining-chars").html(maxChars);
+
+        $(".feedback-text-area").keyup(function () {
+            var text = $(this).val();
+            var actualCharsRemaining = maxChars - text.length;
+            if (actualCharsRemaining < 0) {
+                actualCharsRemaining = 0;
+                $(this).val(text.substring(0,maxChars));
+            }
+            $(".text-area-remaining-chars").html(actualCharsRemaining);
+        });
+
+    });
+</script>

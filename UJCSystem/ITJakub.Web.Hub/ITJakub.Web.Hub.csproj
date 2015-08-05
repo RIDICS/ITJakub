@@ -215,6 +215,7 @@
     <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\WordListCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />
     <Compile Include="Areas\Dictionaries\RouteConfig.cs" />
     <Compile Include="Areas\Editions\BundleConfig.cs" />
