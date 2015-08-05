@@ -32,6 +32,7 @@ SELECT TOP (1) rowNumberAlias
         SELECT DISTINCT bookAlias.Guid AS bookGuidAlias , 
                         bookheadwo2_.DefaultHeadword AS defaultHeadwordAlias , 
                         bookheadwo2_.XmlEntryId AS xmlEntryIdAlias ,
+                        bookheadwo2_.Image AS imageAlias ,
                         bookheadwo2_.SortOrder AS sortOrderAlias
           FROM
                Book bookAlias INNER JOIN
@@ -60,6 +61,7 @@ SELECT TOP (1) rowNumberAlias
         SELECT DISTINCT bookAlias.Guid AS bookGuidAlias , 
                         bookheadwo2_.DefaultHeadword AS defaultHeadwordAlias , 
                         bookheadwo2_.XmlEntryId AS xmlEntryIdAlias ,
+                        bookheadwo2_.Image AS imageAlias ,
                         bookheadwo2_.SortOrder AS sortOrderAlias
           FROM
                Book bookAlias INNER JOIN

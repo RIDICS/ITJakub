@@ -79,6 +79,7 @@
     private showHeadwordList(list: Array<IDictionaryFavoriteHeadword>) {
         $(this.listContainer).empty();
         var listDiv = document.createElement("div");
+        var self = this;
 
         for (var i = 0; i < list.length; i++) {
             var favoriteHeadword = list[i];
@@ -98,6 +99,7 @@
                 var element = event.target;
                 $(element).parent(".saved-word").fadeOut(function () {
                     $(element).remove();
+                    self.updateVisibleHeight();
                 });
                 this.removeHeadword(element);
             });
@@ -116,6 +118,20 @@
         }
 
         $(this.listContainer).append(listDiv);
+        this.updateVisibleHeight();
+    }
+
+    private updateVisibleHeight() {
+        var area = $(this.mainContainer);
+        if (!area.hasClass("uncollapsed"))
+            return;
+
+        var actualHeight = area.height();
+        var targetHeight = area.css("height", 'auto').height();
+        area.height(actualHeight);
+        area.animate({
+            height: targetHeight
+        });
     }
 
     private goToPageWithSelectedHeadword(element: Element) {

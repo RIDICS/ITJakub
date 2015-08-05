@@ -30,6 +30,7 @@ var DictionaryViewer = (function () {
         this.pagination.goToPage(pageNumber);
     };
     DictionaryViewer.prototype.searchAndDisplay = function (pageNumber) {
+        $("#cancelFilter").addClass("hidden");
         this.isRequestToPrint = false;
         if (this.recordCount === 0) {
             $(this.headwordListContainer).empty();
@@ -51,6 +52,7 @@ var DictionaryViewer = (function () {
     };
     DictionaryViewer.prototype.showHeadwords = function (headwords) {
         var _this = this;
+        $("#cancelFilter").addClass("hidden");
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
         this.headwordDescriptionDivs = [];

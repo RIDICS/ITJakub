@@ -51,6 +51,7 @@ class DictionaryViewer {
     }
 
     private searchAndDisplay(pageNumber: number) {
+        $("#cancelFilter").addClass("hidden");
         this.isRequestToPrint = false;
         if (this.recordCount === 0) {
             $(this.headwordListContainer).empty();
@@ -75,6 +76,7 @@ class DictionaryViewer {
     }
 
     public showHeadwords(headwords: IHeadwordList) {
+        $("#cancelFilter").addClass("hidden");
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
         this.headwordDescriptionDivs = [];
