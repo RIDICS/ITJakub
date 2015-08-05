@@ -227,7 +227,7 @@
                 <ControlTemplate TargetType="TextBox">
                     <Grid>
                         <Grid.Resources>
-                            <Style x:Name="DeleteButtonStyle" TargetType="Button">
+                            <Style TargetType="Button">
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="Button">

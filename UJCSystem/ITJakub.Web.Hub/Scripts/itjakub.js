@@ -41,5 +41,5 @@ function getBaseUrl() {
     return baseUrl;
 }
 // jQuery case-insensitive contains
-jQuery.expr[':'].containsCI = function (a, i, m) { return (jQuery(a).text().toLowerCase().indexOf(m[3].toLowerCase()) >= 0); };
-//# sourceMappingURL=itjakub.js.map
+jQuery.expr[':'].containsCI = function (a, i, m) { return (jQuery(a).text().toLowerCase()
+    .indexOf(m[3].toLowerCase()) >= 0); };

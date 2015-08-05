@@ -46,7 +46,9 @@ var DictionaryViewer = (function () {
             $(headwordSpan).text(record.Headword);
             $(headwordSpan).addClass("dictionary-result-headword");
             var favoriteGlyphSpan = document.createElement("span");
-            $(favoriteGlyphSpan).addClass("glyphicon").addClass("glyphicon-star-empty").addClass("dictionary-result-headword-favorite");
+            $(favoriteGlyphSpan).addClass("glyphicon")
+                .addClass("glyphicon-star-empty")
+                .addClass("dictionary-result-headword-favorite");
             headwordLi.appendChild(headwordSpan);
             headwordLi.appendChild(favoriteGlyphSpan);
             var dictionaryListDiv = document.createElement("div");
@@ -242,4 +244,3 @@ var DictionaryViewer = (function () {
     };
     return DictionaryViewer;
 })();
-//# sourceMappingURL=itjakub.dictionariesViewer.js.map

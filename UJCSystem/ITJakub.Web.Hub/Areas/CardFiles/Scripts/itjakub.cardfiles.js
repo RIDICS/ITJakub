@@ -205,4 +205,3 @@ function createList() {
     });
     $('#searchButton').click();
 }
-//# sourceMappingURL=itjakub.cardfiles.js.map

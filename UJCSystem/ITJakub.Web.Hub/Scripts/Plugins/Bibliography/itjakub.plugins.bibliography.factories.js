@@ -1,4 +1,4 @@
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -7,10 +7,10 @@ var __extends = this.__extends || function (d, b) {
 var BibliographyFactoryResolver = (function () {
     function BibliographyFactoryResolver(booksConfigurations) {
         this.factories = new Array();
-        this.factories[0 /* Edition */] = new EditionFactory(new BookTypeConfiguration(0 /* Edition */, booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
-        this.factories[1 /* Dictionary */] = new DictionaryFactory(new BookTypeConfiguration(1 /* Dictionary */, booksConfigurations["Dictionary"]));
-        this.factories[4 /* TextBank */] = new TextBankFactory(new BookTypeConfiguration(4 /* TextBank */, booksConfigurations["TextBank"]));
-        this.factories[6 /* CardFile */] = new CardFileFactory(new BookTypeConfiguration(6 /* CardFile */, booksConfigurations["CardFile"]));
+        this.factories[BookTypeEnum.Edition] = new EditionFactory(new BookTypeConfiguration(BookTypeEnum.Edition, booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
+        this.factories[BookTypeEnum.Dictionary] = new DictionaryFactory(new BookTypeConfiguration(BookTypeEnum.Dictionary, booksConfigurations["Dictionary"]));
+        this.factories[BookTypeEnum.TextBank] = new TextBankFactory(new BookTypeConfiguration(BookTypeEnum.TextBank, booksConfigurations["TextBank"]));
+        this.factories[BookTypeEnum.CardFile] = new CardFileFactory(new BookTypeConfiguration(BookTypeEnum.CardFile, booksConfigurations["CardFile"]));
         //this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
     }
     BibliographyFactoryResolver.prototype.getFactoryForType = function (bookType) {
@@ -234,4 +234,3 @@ var EditionFactory = (function (_super) {
     }
     return EditionFactory;
 })(BibliographyFactory);
-//# sourceMappingURL=itjakub.plugins.bibliography.factories.js.map

@@ -13,4 +13,3 @@ $(document).ready(function () {
         }
     });
 });
-//# sourceMappingURL=itjakub.editions.list.js.map

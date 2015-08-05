@@ -7,9 +7,7 @@ var CardFileManager = (function () {
         var _this = this;
         var bucket = this.getBucket(cardFileId, bucketId, bucketName);
         var cardFile = new CardFileViewer(cardFileId, cardFileName, bucket, initCardPosition);
-        cardFile.onErrorCallback = function (cardFileViewer) {
-            _this.moveViewerWithErrorOnTheEnd(cardFileViewer);
-        };
+        cardFile.onErrorCallback = function (cardFileViewer) { _this.moveViewerWithErrorOnTheEnd(cardFileViewer); };
         $(this.cardFilesContainer).append(cardFile.getHtml());
     };
     CardFileManager.prototype.moveViewerWithErrorOnTheEnd = function (cardFile) {
@@ -577,4 +575,3 @@ var CardDetail = (function () {
     };
     return CardDetail;
 })();
-//# sourceMappingURL=itjakub.cardfileManager.js.map

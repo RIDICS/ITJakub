@@ -98,4 +98,3 @@ var DictionaryViewerListWrapper = (function () {
     };
     return DictionaryViewerListWrapper;
 })();
-//# sourceMappingURL=itjakub.dictionaries.headwords.js.map

@@ -382,7 +382,7 @@ class ReaderModule {
             if (!this.existSidePanel(panelId)) {
                 var searchPanel = new SearchResultPanel(panelId, this);
                 this.loadSidePanel(searchPanel.panelHtml);
-                this.leftSidePanels.push(searchPanel);
+                this.leftSidePanels.push(<any>(searchPanel));
                 this.searchPanel = searchPanel;
             }
             this.changeSidePanelVisibility(this.searchPanelIdentificator, 'left');
@@ -768,7 +768,7 @@ class ReaderModule {
         if (!this.existSidePanel(panelId)){
             var searchPanel = new SearchResultPanel(panelId, this);
             this.loadSidePanel(searchPanel.panelHtml);
-            this.leftSidePanels.push(searchPanel);
+            this.leftSidePanels.push(<any>searchPanel);
             this.searchPanel = searchPanel;
         }
 
