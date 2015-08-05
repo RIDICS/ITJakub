@@ -25,6 +25,7 @@
     <RestorePackages>true</RestorePackages>
     <TypeScriptToolsVersion>1.4</TypeScriptToolsVersion>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -312,6 +313,15 @@
     <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.min.css">
       <DependentUpon>itjakub.oldgrammar.css</DependentUpon>
     </Content>
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.css">
+      <DependentUpon>itjakub.professionalliterature.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.min.css">
+      <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\Tools\Content\itjakub.tools.css">
+      <DependentUpon>itjakub.tools.less</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -342,6 +352,12 @@
     </Content>
     <Content Include="Content\ITJakub.HorizontalLoader.min.css">
       <DependentUpon>ITJakub.HorizontalLoader.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.NumberedOrderedList.css">
+      <DependentUpon>ITJakub.NumberedOrderedList.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.NumberedOrderedList.min.css">
+      <DependentUpon>ITJakub.NumberedOrderedList.css</DependentUpon>
     </Content>
     <Content Include="Content\ITJakub.PluginMenu.css.map">
       <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
@@ -625,6 +641,7 @@
     <Content Include="Areas\Tools\Views\Tools\Information.cshtml" />
     <Content Include="Areas\Tools\Views\Tools\List.cshtml" />
     <Content Include="Areas\Tools\Views\_ViewStart.cshtml" />
+    <None Include="compilerconfig.json" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
