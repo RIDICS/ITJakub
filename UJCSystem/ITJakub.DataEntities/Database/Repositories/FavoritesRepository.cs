@@ -25,13 +25,13 @@ namespace ITJakub.DataEntities.Database.Repositories
                 Book bookAlias = null;
 
 
-                var bookmark = session.QueryOver<PageBookmark>(()=>pageBookmarkAlias)
+                var bookmarks = session.QueryOver<PageBookmark>(()=>pageBookmarkAlias)
                     .JoinQueryOver(() => pageBookmarkAlias.Book, () => bookAlias)     
                     .JoinQueryOver(()=>pageBookmarkAlias.User, ()=>userAlias)
                     .Where(() => pageBookmarkAlias.PageXmlId == pageXmlId && bookAlias.Guid == bookId && userAlias.UserName == userName)
-                    .SingleOrDefault<PageBookmark>();
+                    .List<PageBookmark>();
 
-                if (bookmark == null)
+                if (bookmarks == null)
                 {
                     string message = string.Format("bookmark not found for bookId: '{0}' and page xmlId: '{1}' for user: '{2}'", bookId, pageXmlId, userName);
                     if (m_log.IsErrorEnabled)
@@ -39,7 +39,10 @@ namespace ITJakub.DataEntities.Database.Repositories
                     throw new ArgumentException(message);
                 }
 
-                Delete(bookmark);
+                foreach (var bookmark in bookmarks)
+                {
+                    Delete(bookmark);
+                }                
             }
         }
 

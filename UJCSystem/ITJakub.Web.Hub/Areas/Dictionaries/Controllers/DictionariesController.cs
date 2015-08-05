@@ -75,11 +75,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult TermsOfUse()
-        {
-            return View();
-        }
-
         public ActionResult FeedBack()
         {
             return View();

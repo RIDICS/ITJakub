@@ -2,7 +2,7 @@
 var search: Search;
  
 $(document).ready(() => {
-    var booksCountOnPage = 3;
+    var booksCountOnPage = 5;
 
     var bookIds = new Array();
     var categoryIds = new Array();
@@ -17,6 +17,9 @@ $(document).ready(() => {
         var count = bibliographyModule.getBooksCountOnPage();
         var sortAsc = bibliographyModule.isSortedAsc();
         var sortingEnum = bibliographyModule.getSortCriteria();
+
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
 
         $.ajax({
             type: "GET",
@@ -40,10 +43,13 @@ $(document).ready(() => {
         var sortAsc = bibliographyModule.isSortedAsc();
         var sortingEnum = bibliographyModule.getSortCriteria();
 
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
+
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearchCount",
+            url: getBaseUrl() + "Editions/Editions/TextSearchPaged",
             data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -64,7 +70,10 @@ $(document).ready(() => {
 
     function editionBasicSearch(text: string) {
 
-        if (typeof text === "undefined" ||text === null || text === "") return;
+        if (typeof text === "undefined" || text === null || text === "") return;
+
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
 
         $.ajax({
             type: "GET",
@@ -81,6 +90,9 @@ $(document).ready(() => {
 
     function editionAdvancedSearch(json: string) {
         if (typeof json === "undefined" || json === null || json === "") return;
+
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
         
         $.ajax({
             type: "GET",
@@ -103,6 +115,8 @@ $(document).ready(() => {
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
     typeaheadSearchBox.addDataSet("Title", "Název");
     typeaheadSearchBox.create();
+    typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+    
 
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
@@ -122,11 +136,16 @@ $(document).ready(() => {
         typeaheadSearchBox.clearAndDestroy();
         typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
         typeaheadSearchBox.create();
+        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     };
 
     var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
 
+
+    $(".searchbar-input.tt-input").change(() => {        //prevent clearing input value on blur() 
+        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+    });
 
 });
 

@@ -42,7 +42,8 @@ body {
   text-decoration: none;
 }
 .module-content {
-  margin: 115px 0 0 0;
+  margin: 87px 0 0 0;
+  min-height: 74vh;
 }
 .content-container {
   background-color: white;
@@ -187,5 +188,11 @@ div.container {
   height: 20px;
   background: url(/Content/Images/loading.gif) no-repeat center;
   background-size: contain;
+}
+#cardfileSearchDiv .searchbar-inputs {
+  margin-right: 75px;
+}
+#cardFilesListSearchDiv .searchbar-inputs {
+  margin-right: 75px;
 }
 /*# sourceMappingURL=itjakub.cardfiles.css.map */

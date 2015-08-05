@@ -8,16 +8,18 @@ $(document).ready(function() {
     $('#searchButton').click(function() {
         var text = $('#searchbox').val();
 
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
+
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl()+"Bibliographies/Bibliographies/Search",
+            url: getBaseUrl()+"Bibliographies/Bibliographies/SearchTerm",
             data: { term: text },
             dataType: 'json',
             contentType: 'application/json',
             success: function(response) {
                 bibliographyModule.showBooks(response.books);
-
             }
         });
     });

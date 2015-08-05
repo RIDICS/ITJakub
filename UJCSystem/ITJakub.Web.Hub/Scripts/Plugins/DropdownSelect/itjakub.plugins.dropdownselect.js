@@ -84,13 +84,20 @@ var DropDownSelect = (function () {
         return this.callbackDelegate.getChildLeafItemsCallback(leafItems, currentCategory);
     };
     DropDownSelect.prototype.makeDropdown = function () {
+        var _this = this;
         var dropDownDiv = document.createElement("div");
         $(dropDownDiv).addClass("dropdown-select");
         this.makeHeader(dropDownDiv);
         this.makeBody(dropDownDiv);
+        $(document).click(function (event) {
+            if (!$(event.target).parents().is(dropDownDiv)) {
+                _this.hideBody();
+            }
+        });
         $(this.dropDownSelectContainer).append(dropDownDiv);
     };
     DropDownSelect.prototype.makeHeader = function (dropDownDiv) {
+        var _this = this;
         var dropDownHeadDiv = document.createElement("div");
         $(dropDownHeadDiv).addClass("dropdown-select-header");
         var checkBoxSpan = document.createElement("span");
@@ -109,27 +116,34 @@ var DropDownSelect = (function () {
         var moreSpan = document.createElement("span");
         $(moreSpan).addClass("dropdown-select-more");
         $(moreSpan).click(function () {
-            var body = $(this).parents(".dropdown-select").children(".dropdown-select-body");
-            if (body.is(":hidden")) {
-                $(this).children().removeClass("glyphicon-chevron-down");
-                $(this).children().addClass("glyphicon-chevron-up");
-                body.slideDown();
+            if ($(_this.dropDownBodyDiv).is(":hidden")) {
+                _this.showBody();
             }
             else {
-                $(this).children().removeClass("glyphicon-chevron-up");
-                $(this).children().addClass("glyphicon-chevron-down");
-                body.slideUp();
+                _this.hideBody();
             }
         });
+        this.moreSpan = moreSpan;
         var iconSpan = document.createElement("span");
         $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
         moreSpan.appendChild(iconSpan);
         dropDownHeadDiv.appendChild(moreSpan);
         dropDownDiv.appendChild(dropDownHeadDiv);
     };
+    DropDownSelect.prototype.showBody = function () {
+        $(this.moreSpan).children().removeClass("glyphicon-chevron-down");
+        $(this.moreSpan).children().addClass("glyphicon-chevron-up");
+        $(this.dropDownBodyDiv).slideDown("fast");
+    };
+    DropDownSelect.prototype.hideBody = function () {
+        $(this.moreSpan).children().removeClass("glyphicon-chevron-up");
+        $(this.moreSpan).children().addClass("glyphicon-chevron-down");
+        $(this.dropDownBodyDiv).slideUp("fast");
+    };
     DropDownSelect.prototype.makeBody = function (dropDownDiv) {
         var dropDownBodyDiv = document.createElement("div");
         $(dropDownBodyDiv).addClass("dropdown-select-body");
+        this.dropDownBodyDiv = dropDownBodyDiv;
         var filterDiv = document.createElement("div");
         $(filterDiv).addClass("dropdown-filter");
         var filterInput = document.createElement("input");

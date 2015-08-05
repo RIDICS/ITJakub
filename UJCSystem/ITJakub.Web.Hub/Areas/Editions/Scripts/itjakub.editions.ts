@@ -1,6 +1,4 @@
-﻿//window.onload = () => { alert("hello from editions!"); }
-
-function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string) {
+﻿function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string) {
     var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0]);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     var search: Search;
@@ -38,6 +36,7 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             contentType: 'application/json',
             success: response => {
                 var convertedResults = convertSearchResults(response["results"]);
+                readerPlugin.searchPanelRemoveLoading();
                 readerPlugin.showSearchInPanel(convertedResults);
             }
         });
@@ -59,12 +58,16 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             contentType: 'application/json',
             success: response => {
                 var convertedResults = convertSearchResults(response["results"]);
+                readerPlugin.searchPanelRemoveLoading();
                 readerPlugin.showSearchInPanel(convertedResults);
             }
         });
     }
 
     function pageClickCallback(pageNumber: number) {
+        
+        readerPlugin.searchPanelClearResults();
+        readerPlugin.searchPanelShowLoading();
 
         if (search.isLastQueryJson()) {
             editionAdvancedSearchPaged(search.getLastQuery(), pageNumber);

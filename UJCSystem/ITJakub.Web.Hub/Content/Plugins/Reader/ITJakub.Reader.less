@@ -65,11 +65,17 @@ html,body {
 }
 
 .reader-controls .page-input-button {
-    color: white;
+    border-radius: 0;
     background-color: @item-background-color;
-    border: none;
-    outline: 0;
+    color: white;
     height: 25px;
+    padding: 3px;
+    margin-top: -2px;
+}
+
+.reader-controls .page-input-button:hover {
+    background-color: lightgray;
+    color: black;
 }
 
 .reader-controls .page-input-text {
@@ -224,9 +230,13 @@ html,body {
     min-height: 100px;
 }
 
-.loading {
+.page.loading {
     background: url(../../Images/Plugins/Reader/loading.gif) no-repeat center;
     margin: 0 auto;
+}
+
+.page.loading div{
+    display: none;
 }
 
 
@@ -538,6 +548,6 @@ div.dummy-page {
 }
 
 /*testing class for displaying correct pages that contains search match */
-.search-unloaded {
+/*.search-unloaded {
     background-color: palegoldenrod;
-}
+}*/

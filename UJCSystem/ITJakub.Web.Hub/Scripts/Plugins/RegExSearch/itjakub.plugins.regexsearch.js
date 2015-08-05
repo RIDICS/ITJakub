@@ -75,6 +75,15 @@ var Search = (function () {
         $(searchbarInput).addClass("form-control searchbar-input");
         $(searchbarInputDiv).append(searchbarInput);
         this.searchInputTextbox = searchbarInput;
+        $(this.searchInputTextbox).keypress(function (event) {
+            var keyCode = event.which || event.keyCode;
+            if (keyCode === 13) {
+                $(_this.searchButton).click();
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            }
+        });
         var searchbarAdvancedEditor = document.createElement("div");
         $(searchbarInputDiv).addClass("regex-searchbar-advanced-editor");
         $(searchAreaDiv).append(searchbarAdvancedEditor);
@@ -109,6 +118,7 @@ var Search = (function () {
         $(this.searchInputTextbox).prop('disabled', false);
         $(this.searchButton).prop('disabled', false);
         $(this.advancedButton).css("visibility", "visible");
+        $(this.searchInputTextbox).focus();
     };
     Search.prototype.writeJsonToTextField = function (json) {
         $(this.searchInputTextbox).text(json);

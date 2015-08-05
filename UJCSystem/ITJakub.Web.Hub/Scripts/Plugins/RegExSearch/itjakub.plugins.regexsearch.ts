@@ -102,6 +102,16 @@ class Search {
 
         this.searchInputTextbox = searchbarInput;
 
+        $(this.searchInputTextbox).keypress((event: any) => {
+            var keyCode = event.which || event.keyCode; 
+            if (keyCode === 13) {     //13 = Enter
+                $(this.searchButton).click();
+                event.preventDefault(); 
+                event.stopPropagation();
+                return false;
+            }
+        });
+
         var searchbarAdvancedEditor = document.createElement("div");
         $(searchbarInputDiv).addClass("regex-searchbar-advanced-editor");
         $(searchAreaDiv).append(searchbarAdvancedEditor);
@@ -145,6 +155,7 @@ class Search {
         $(this.searchInputTextbox).prop('disabled', false);
         $(this.searchButton).prop('disabled', false);
         $(this.advancedButton).css("visibility", "visible");
+        $(this.searchInputTextbox).focus();
     }
 
     writeJsonToTextField(json: string) {

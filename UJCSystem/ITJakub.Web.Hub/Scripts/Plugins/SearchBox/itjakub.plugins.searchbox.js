@@ -10,6 +10,9 @@ var SearchBox = (function () {
             minLength: 1
         };
     }
+    SearchBox.prototype.value = function (value) {
+        $(this.inputField).typeahead('val', value);
+    };
     SearchBox.prototype.create = function () {
         $(this.inputField).typeahead(this.options, this.datasets);
     };

@@ -1,5 +1,20 @@
 ﻿@import "itjakub.editions.content.less";
 
-/*body {
-    background-color:green;
-}*/
+.bib-listing-books-div.loader {
+    margin-top: 30vh;
+}
+
+
+.bib-listing-books-div:not(.loader) {
+    min-height: 58vh;
+}
+
+.bib-listing-books-div.loader + .bib-listing-pagination-div {
+    margin-top: 25vh;
+}
+
+.bib-listing-empty {
+    font-size: 18px;
+    text-align: center;
+    padding-top: 20vh;
+}

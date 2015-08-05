@@ -42,7 +42,8 @@ body {
   text-decoration: none;
 }
 .module-content {
-  margin: 115px 0 0 0;
+  margin: 87px 0 0 0;
+  min-height: 74vh;
 }
 .content-container {
   background-color: white;
@@ -121,11 +122,16 @@ body {
   margin-bottom: 5px;
 }
 .reader-controls .page-input-button {
-  color: white;
+  border-radius: 0;
   background-color: #84ced7;
-  border: none;
-  outline: 0;
+  color: white;
   height: 25px;
+  padding: 3px;
+  margin-top: -2px;
+}
+.reader-controls .page-input-button:hover {
+  background-color: lightgray;
+  color: black;
 }
 .reader-controls .page-input-text {
   height: 25px;
@@ -256,9 +262,12 @@ body {
   height: auto;
   min-height: 100px;
 }
-.loading {
+.page.loading {
   background: url(../../Images/Plugins/Reader/loading.gif) no-repeat center;
   margin: 0 auto;
+}
+.page.loading div {
+  display: none;
 }
 .reader-left-panel {
   float: left;
@@ -518,9 +527,5 @@ div.dummy-page {
 }
 .reader-search-result-paging {
   text-align: center;
-}
-/*testing class for displaying correct pages that contains search match */
-.search-unloaded {
-  background-color: palegoldenrod;
 }
 /*# sourceMappingURL=ITJakub.Reader.css.map */

@@ -55,7 +55,8 @@ class BibliographyModule {
     }
 
     public showBooks(books: IBookInfo[]) {
-        $(this.booksContainer).empty();
+        this.clearBooks();
+        this.clearLoading();
         if (books.length > 0) {
             var rootElement: HTMLUListElement = document.createElement('ul');
             $(rootElement).addClass('bib-listing');
@@ -71,6 +72,18 @@ class BibliographyModule {
             $(this.booksContainer).append(divElement);
         }
 
+    }
+
+    public clearBooks() {
+        $(this.booksContainer).empty();
+    }
+
+    public clearLoading() {
+        $(this.booksContainer).removeClass("loader");
+    }
+
+    public showLoading() {
+        $(this.booksContainer).addClass("loader");
     }
 
     private makeBibliography(bibItem: IBookInfo): HTMLLIElement {

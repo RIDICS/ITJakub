@@ -114,12 +114,16 @@
       <Name>ITJakub.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
-      <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
+      <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
       <Name>ITJakub.DataEntities</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Lemmatization.Core\ITJakub.Lemmatization.Core.csproj">
       <Project>{0ccc8005-5a92-4a47-93df-05fb6e333279}</Project>
       <Name>ITJakub.Lemmatization.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Lemmatization.DataEntities\ITJakub.Lemmatization.DataEntities.csproj">
+      <Project>{69076b65-4268-497a-abf6-64d7ffa50911}</Project>
+      <Name>ITJakub.Lemmatization.DataEntities</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>

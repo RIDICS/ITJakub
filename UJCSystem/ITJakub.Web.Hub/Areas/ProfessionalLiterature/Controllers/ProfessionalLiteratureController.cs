@@ -23,11 +23,12 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         {
             return View();
         }
-
-        public ActionResult TermsOfUse()
+        
+        public ActionResult List()
         {
             return View();
         }
+
 
         public ActionResult Feedback()
         {

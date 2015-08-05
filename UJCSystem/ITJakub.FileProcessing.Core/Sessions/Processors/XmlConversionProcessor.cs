@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ITJakub.Core.Resources;
-using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts.Resources;
 using Ujc.Ovj.Ooxml.Conversion;
@@ -12,8 +11,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class XmlConversionProcessor : IResourceProcessor
     {
-        private readonly string m_conversionMetadataPath;
         private readonly BookRepository m_bookRepository;
+        private readonly string m_conversionMetadataPath;
         private readonly VersionIdGenerator m_versionIdGenerator;
         private string m_dataDirectoryPath;
 
@@ -26,14 +25,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             m_dataDirectoryPath = dataDirectoryPath;
         }
 
-
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            Resource inputFileResource =
+            var inputFileResource =
                 resourceSessionDirector.Resources.First(
                     resource => resource.ResourceType == ResourceType.SourceDocument);
 
-            string metaDataFileName = string.Format("{0}.xmd",
+            var metaDataFileName = string.Format("{0}.xmd",
                 Path.GetFileNameWithoutExtension(inputFileResource.FileName));
             var metaDataResource = new Resource
             {
@@ -42,7 +40,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 ResourceType = ResourceType.Metadata
             };
 
-            string bookFileName = string.Format("{0}.xml", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
+            var bookFileName = string.Format("{0}.xml", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
             var bookResource = new Resource
             {
                 FileName = bookFileName,
@@ -50,7 +48,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 ResourceType = ResourceType.Book
             };
 
-            string tmpDirPath = Path.Combine(resourceSessionDirector.SessionPath, "tmp");
+            var tmpDirPath = Path.Combine(resourceSessionDirector.SessionPath, "tmp");
             if (!Directory.Exists(tmpDirPath))
             {
                 Directory.CreateDirectory(tmpDirPath);
@@ -74,36 +72,36 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             };
 
             var converter = new DocxToTeiConverter();
-						ConversionResult conversionResult = converter.Convert(settings);
+            var conversionResult = converter.Convert(settings);
 
-					if(conversionResult.IsConverted)
-					{ 
-            resourceSessionDirector.Resources.Add(metaDataResource);
-            resourceSessionDirector.Resources.Add(bookResource);
-					}
-					else
-					{
-                        throw new ConversionException(string.Format("Soubor se nepodařilo konvertovat. Viz vnitřní výjimka : '{0}'", conversionResult.Errors.FirstOrDefault()));
-					}
+            if (conversionResult.IsConverted)
+            {
+                resourceSessionDirector.Resources.Add(metaDataResource);
+                resourceSessionDirector.Resources.Add(bookResource);
+            }
+            else
+            {
+                throw new ConversionException(string.Format("Soubor se nepodařilo konvertovat. Viz vnitřní výjimka : '{0}'", conversionResult.Errors.FirstOrDefault()));
+            }
         }
     }
 
-	public class ConversionException : Exception
-	{
+    public class ConversionException : Exception
+    {
+        public ConversionException(string message) : base(message)
+        {
+        }
 
-		public ConversionException(string message) : base(message)
-		{
-		}
+        public ConversionException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+    }
 
-		public ConversionException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
-	}
     public class VersionProviderHelper
     {
-        private readonly string m_message;
-        private readonly DateTime m_createTime;
         private readonly BookRepository m_bookRepository;
+        private readonly DateTime m_createTime;
+        private readonly string m_message;
         private readonly VersionIdGenerator m_versionIdGenerator;
 
         public VersionProviderHelper(string message, DateTime createTime, BookRepository bookRepository, VersionIdGenerator versionIdGenerator)
@@ -116,7 +114,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public List<VersionInfoSkeleton> GetVersionsByBookId(string bookId)
         {
-            IEnumerable<BookVersion> versions = m_bookRepository.GetAllVersionsByBookId(bookId);
+            var versions = m_bookRepository.GetAllVersionsByBookId(bookId);
             var vers = versions.Select(x => new VersionInfoSkeleton(x.Description, x.CreateTime)).ToList();
             vers.Add(new VersionInfoSkeleton(m_message, m_createTime, m_versionIdGenerator.Generate(m_createTime)));
             return vers;

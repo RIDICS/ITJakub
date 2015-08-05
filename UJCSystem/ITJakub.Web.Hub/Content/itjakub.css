@@ -42,7 +42,8 @@ body {
   text-decoration: none;
 }
 .module-content {
-  margin: 115px 0 0 0;
+  margin: 87px 0 0 0;
+  min-height: 74vh;
 }
 .content-container {
   background-color: white;
@@ -152,6 +153,62 @@ ol.numbered > li:before {
   font-weight: bold;
   text-align: center;
 }
+.loader:before,
+.loader:after,
+.loader {
+  border-radius: 50%;
+  width: 1.5em;
+  height: 1.5em;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation: load7 1.8s infinite ease-in-out;
+  animation: load7 1.8s infinite ease-in-out;
+}
+.loader {
+  font-size: 10px;
+  margin: 40px auto;
+  position: relative;
+  text-indent: -9999em;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.loader:before {
+  left: -3.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader:after {
+  left: 3.5em;
+}
+.loader:before,
+.loader:after {
+  content: '';
+  position: absolute;
+  top: 0;
+}
+@-webkit-keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em #84ced7;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0 #84ced7;
+  }
+}
+@keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em #84ced7;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0 #84ced7;
+  }
+}
 #main-plugins-menu span,
 #main-plugins-menu a {
   margin: 0;
@@ -201,7 +258,7 @@ ol.numbered > li:before {
   color: black;
   display: block;
   font-family: Helvetica, Arial, Verdana, sans-serif;
-  padding: 10px 20px;
+  padding: 5px 20px;
   text-decoration: none;
 }
 #main-plugins-menu ul {
@@ -214,7 +271,6 @@ ol.numbered > li:before {
   display: inline-block;
   float: left;
   margin: 0;
-  max-width: 135px;
   height: 100%;
 }
 #main-plugins-menu.align-center {
@@ -239,7 +295,7 @@ ol.numbered > li:before {
   background-position: center 90%;
   background-repeat: no-repeat;
   background-size: 10px;
-  padding-bottom: 15px;
+  /*padding-bottom: 15px;*/
   vertical-align: middle;
 }
 #main-plugins-menu > ul > li:hover:after {
@@ -277,7 +333,7 @@ ol.numbered > li:before {
 #main-plugins-menu .has-sub ul {
   display: none;
   position: absolute;
-  width: 200px;
+  width: 148px;
   top: 100%;
   left: 0;
 }
@@ -563,11 +619,16 @@ body {
   margin-bottom: 5px;
 }
 .reader-controls .page-input-button {
-  color: white;
+  border-radius: 0;
   background-color: #84ced7;
-  border: none;
-  outline: 0;
+  color: white;
   height: 25px;
+  padding: 3px;
+  margin-top: -2px;
+}
+.reader-controls .page-input-button:hover {
+  background-color: lightgray;
+  color: black;
 }
 .reader-controls .page-input-text {
   height: 25px;
@@ -698,9 +759,12 @@ body {
   height: auto;
   min-height: 100px;
 }
-.loading {
+.page.loading {
   background: url(Images/Plugins/Reader/loading.gif) no-repeat center;
   margin: 0 auto;
+}
+.page.loading div {
+  display: none;
 }
 .reader-left-panel {
   float: left;
@@ -960,10 +1024,6 @@ div.dummy-page {
 }
 .reader-search-result-paging {
   text-align: center;
-}
-/*testing class for displaying correct pages that contains search match */
-.search-unloaded {
-  background-color: palegoldenrod;
 }
 .dropdown-select {
   margin-right: 5px;
@@ -1346,26 +1406,30 @@ a.main_logo_href {
   text-decoration: none;
 }
 a.main_logo_href img {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 .main_logo_text {
   position: absolute;
-  top: 7px;
+  top: 12px;
   left: 45px;
   margin-right: 50px;
   margin-left: 5px;
   color: white;
   line-height: normal;
 }
+.main_logo_text:hover {
+  color: #84ced7;
+}
 .main_logo_text h1 {
-  display: block;
+  display: inline;
   font-size: 22px;
   font-weight: bold;
   margin: 0;
   font-family: 'Times New Roman';
 }
 .main_logo_text h2 {
+  display: inline;
   font-size: 15px;
   font-weight: normal;
   margin: 0 0 0 7px;
@@ -1391,7 +1455,7 @@ ul {
   display: inline;
   margin-left: 5px;
   list-style: none;
-  margin-top: 20px;
+  margin-top: 15px;
   margin-right: 5px!important;
 }
 .file-upload-metadata label,
@@ -1507,4 +1571,4 @@ ul {
 .navbar-login li a:hover {
   color: #84ced7;
 }
-/*# sourceMappingURL=itjakub.css.map */
+/*# sourceMappingURL=ITJakub.css.map */

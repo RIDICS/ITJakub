@@ -186,10 +186,12 @@ class ReaderModule {
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
         $(pageInputText).addClass('page-input-text');
+
         pageInputDiv.appendChild(pageInputText);
 
         var pageInputButton = document.createElement("button");
         pageInputButton.innerHTML = "Přejít na stránku";
+        $(pageInputButton).addClass('btn btn-default');
         $(pageInputButton).addClass('page-input-button');
         $(pageInputButton).click((event: Event) => {
             var pageName = $('#pageInputText').val();
@@ -787,6 +789,19 @@ class ReaderModule {
             $(pageDiv).addClass("search-unloaded");
         }
     }
+
+    searchPanelShowLoading() {
+        this.searchPanel.showLoading();
+
+    }
+
+    searchPanelRemoveLoading() {
+        this.searchPanel.clearLoading();
+    }
+
+    searchPanelClearResults() {
+        this.searchPanel.clearResults();
+    }
 }
 
 
@@ -1106,6 +1121,20 @@ class SearchResultPanel extends LeftSidePanel {
     constructor(identificator: string, readerModule: ReaderModule) {
         super(identificator, "Vyhledávání", readerModule);
     }
+
+    showLoading() {
+        $(this.searchResultItemsDiv).addClass("loader");    
+        
+    }
+
+    clearLoading() {
+        $(this.searchResultItemsDiv).removeClass("loader");    
+    }
+
+    clearResults() {
+        $(this.searchResultItemsDiv).empty();
+    }
+    
     
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
@@ -1192,6 +1221,9 @@ class ContentPanel extends LeftSidePanel {
 
     private downloadBookContent() {
         
+        $(this.panelBodyHtml).empty();
+        $(this.panelBodyHtml).addClass("loader");
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -1208,6 +1240,7 @@ class ContentPanel extends LeftSidePanel {
                     $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
                 }
                 
+                $(this.panelBodyHtml).removeClass("loader");
                 $(this.panelBodyHtml).empty();
                 $(this.panelBodyHtml).append(ulElement);
 
