@@ -5,6 +5,7 @@ using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
@@ -63,6 +64,15 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult FeedBack()
         {
             return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult Feedback(HeadwordFeedbackViewModel model)
+        {
+            m_mainServiceClient.CreateAnonymousFeedbackForHeadword(model.Text, model.BookXmlId, model.BookVersionXmlId, model.EntryXmlId, model.Name, model.Email);
+            return View("Search");
         }
 
         private IList<SearchCriteriaContract> DeserializeJsonSearchCriteria(string json)

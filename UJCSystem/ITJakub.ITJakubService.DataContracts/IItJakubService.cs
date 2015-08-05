@@ -148,9 +148,12 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, int? userId);
 
+        [OperationContract]
+        void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string name, string email);
+
+        [OperationContract]
         List<FeedbackContract> GetAllFeedback();
 
         #endregion
-
     }
 }
