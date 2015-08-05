@@ -6,8 +6,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.CardFile", "ITJakub
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.CardFile.Core", "ITJakub.CardFile.Core\ITJakub.CardFile.Core.csproj", "{F00801BF-D6B2-4F6C-B808-68BABF177055}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{A3D22A1E-01F7-4491-802F-D4F5BF3BEFEB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.SearchService", "ITJakub.SearchService\ITJakub.SearchService.csproj", "{A12068E9-19A4-45E4-924B-C9D509C6B950}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.ITJakubService", "ITJakub.ITJakubService\ITJakub.ITJakubService.csproj", "{AF3E2B33-A604-4A22-BA84-68FF447E266C}"
