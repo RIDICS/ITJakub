@@ -52,7 +52,7 @@ namespace ITJakub.ITJakubService.DataContracts
         Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
 
         [OperationContract]
-        Stream GetHeadwordImage(string bookXmlId, string entryXmlId);
+        Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName);
 
         [OperationContract]
         IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
@@ -134,5 +134,8 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
             string pageXmlId, OutputFormatEnumContract resultFormat);
+
+        [OperationContract]
+        void AddHeadwordFeedback(string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email, string content, bool publicationAgreement);
     }
 }

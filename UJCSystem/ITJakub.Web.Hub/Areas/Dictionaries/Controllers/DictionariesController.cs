@@ -264,21 +264,16 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
-        public FileResult GetHeadwordImage(string bookXmlId, string entryXmlId)
+        public FileResult GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
         {
-            var resultStream = m_mainServiceClient.GetHeadwordImage(bookXmlId, entryXmlId);
+            var resultStream = m_mainServiceClient.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
             return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
         }
 
-        public ActionResult GetHeadwordInfo(string bookXmlId, string bookVersionXmlId, string entryXmlId)
+        public ActionResult AddHeadwordFeedback(string bookXmlId, string bookVersionXmlId, string entryXmlId, string name,
+            string email, string content, bool publicationAgreement)
         {
-
-            return Json(new {}, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult AddHeadwordRemark(string bookXmlId, string bookVersionXmlId, string entryXmlId, string name,
-            string email, string remark, bool publicationAgreement)
-        {
+            m_mainServiceClient.AddHeadwordFeedback(bookXmlId, bookVersionXmlId, entryXmlId, name, email, content, publicationAgreement);
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
     }

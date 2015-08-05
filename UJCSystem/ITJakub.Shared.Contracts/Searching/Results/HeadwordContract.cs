@@ -34,7 +34,7 @@ namespace ITJakub.ITJakubService.DataContracts // TODO fix namespace together wi
         public string BookXmlId { get; set; }
 
         [DataMember]
-        public string ImageUrl { get; set; }
+        public string Image { get; set; }
     }
 
     [DataContract]

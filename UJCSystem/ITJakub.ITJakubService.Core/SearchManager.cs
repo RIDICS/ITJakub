@@ -273,7 +273,7 @@ namespace ITJakub.ITJakubService.Core
                 {
                     BookXmlId = headword.BookGuid,
                     EntryXmlId = headword.XmlEntryId,
-                    ImageUrl = headword.Image
+                    Image = headword.Image
                 };
 
                 if (headword.Headword == headwordContract.Headword)

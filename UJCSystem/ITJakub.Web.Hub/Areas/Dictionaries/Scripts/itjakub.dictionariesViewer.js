@@ -84,7 +84,7 @@ var DictionaryViewer = (function () {
                 var currentIndex = this.headwordDescriptionDivs.length;
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
-                if (dictionary.ImageUrl) {
+                if (dictionary.Image) {
                     var imageCheckBoxDiv = document.createElement("div");
                     var imageCheckBox = document.createElement("input");
                     var imageIconSpan = document.createElement("span");
@@ -167,7 +167,8 @@ var DictionaryViewer = (function () {
             }
             var index = $(mainDiv).data("entry-index");
             var entryInfo = this.dictionariesInfo[index];
-            var imageLink = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordImage?bookXmlId=" + entryInfo.BookXmlId + "&entryXmlId=" + entryInfo.EntryXmlId;
+            var bookVersionXmlId = this.dictionariesMetadataList[entryInfo.BookXmlId].BookVersionXmlId;
+            var imageLink = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordImage?bookXmlId=" + entryInfo.BookXmlId + "&bookVersionXmlId=" + bookVersionXmlId + "&fileName=" + entryInfo.Image;
             var imageElement = document.createElement("img");
             imageElement.setAttribute("src", imageLink);
             imageContainer.append(imageElement);
@@ -275,7 +276,7 @@ var DictionaryViewer = (function () {
                 _this.showLoadHeadword(response, container);
             },
             error: function () {
-                if (!headwordInfo.ImageUrl) {
+                if (!headwordInfo.Image) {
                     _this.showLoadError(headword, container);
                 }
                 else {
@@ -304,7 +305,7 @@ var DictionaryViewer = (function () {
                 _this.showLoadHeadword(response, container);
             },
             error: function () {
-                if (!headwordInfo.ImageUrl) {
+                if (!headwordInfo.Image) {
                     _this.showLoadError(headword, container);
                 }
                 else {

@@ -20,6 +20,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
         private readonly WindsorContainer m_container = Container.Current;
+        private readonly FeedbackManager m_feedbackManager;
 
         public ItJakubServiceManager()
         {
@@ -29,6 +30,7 @@ namespace ITJakub.ITJakubService.Services
             m_resourceManager = m_container.Resolve<ResourceManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
             m_cardFileManager = m_container.Resolve<CardFileManager>();
+            m_feedbackManager = m_container.Resolve<FeedbackManager>();
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -96,9 +98,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageImage(bookPageImageContract);
         }
 
-        public Stream GetHeadwordImage(string bookXmlId, string entryXmlId)
+        public Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
         {
-            return m_bookManager.GetHeadwordImage(bookXmlId, entryXmlId);
+            return m_bookManager.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
         }
 
         public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
@@ -224,6 +226,12 @@ namespace ITJakub.ITJakubService.Services
              string pageXmlId, OutputFormatEnumContract resultFormat)
         {
             return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
+        }
+
+        public void AddHeadwordFeedback(string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email,
+            string content, bool publicationAgreement)
+        {
+            m_feedbackManager.AddHeadwordFeedback(bookXmlId, bookVersionXmlId, entryXmlId, name, email, content, publicationAgreement);
         }
     }
 }
