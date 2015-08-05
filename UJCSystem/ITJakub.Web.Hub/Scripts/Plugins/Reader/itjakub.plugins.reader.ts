@@ -13,6 +13,8 @@ class ReaderModule {
     versionId: string;
     loadedBookContent: boolean;
 
+    clickedMoveToPage: boolean;
+
     leftSidePanels: Array<SidePanel>;
     rightSidePanels: Array<SidePanel>;
 
@@ -533,6 +535,11 @@ class ReaderModule {
         } else if (pageIndex >= this.pages.length) {
             pageIndex = this.pages.length - 1;
         }
+
+        if (!scrollTo) {
+            this.clickedMoveToPage = true;
+        }
+
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
@@ -1397,12 +1404,14 @@ class TextPanel extends RightSidePanel {
         var textContainerDiv: HTMLDivElement = window.document.createElement('div');
         $(textContainerDiv).addClass('reader-text-container');
 
-        $(textContainerDiv).scroll(function (event: Event) {
-            var pages = $(this).find('.page');
+        $(textContainerDiv).scroll((event: Event) => {
+            this.parentReader.clickedMoveToPage = false;
+
+            var pages = $(event.target).find('.page');
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
             $.each(pages, (index, page) => {
-                var pageOfsset = Math.abs($(page).offset().top - $(this).offset().top);
+                var pageOfsset = Math.abs($(page).offset().top - $(event.target).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
                     pageWithMinOffset = page;
@@ -1523,6 +1532,9 @@ class TextPanel extends RightSidePanel {
                     $(this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
                 }
 
+                if (this.parentReader.clickedMoveToPage) {
+                    this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
+                }
             },
             error: (response) => {
                 $(pageContainer).empty();
@@ -1556,6 +1568,10 @@ class TextPanel extends RightSidePanel {
                 if (typeof this.windowBody !== 'undefined') {
                     $(this.windowBody).find('#' + page.xmlId).removeClass("loading");
                     $(this.windowBody).find('#' + page.xmlId).append(response["pageText"]);
+                }
+
+                if (this.parentReader.clickedMoveToPage) {
+                    this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
                 }
 
             },

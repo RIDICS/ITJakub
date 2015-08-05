@@ -641,8 +641,14 @@
     <Content Include="Areas\Tools\Views\Tools\Information.cshtml" />
     <Content Include="Areas\Tools\Views\Tools\List.cshtml" />
     <Content Include="Areas\Tools\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.css.map">
+      <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
+    </Content>
     <None Include="compilerconfig.json" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
+    <Content Include="Content\ITJakub.NumberedOrderedList.css.map">
+      <DependentUpon>ITJakub.NumberedOrderedList.css</DependentUpon>
+    </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>

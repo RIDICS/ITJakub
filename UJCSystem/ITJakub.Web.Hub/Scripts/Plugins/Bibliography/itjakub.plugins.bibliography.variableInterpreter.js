@@ -234,3 +234,4 @@ var TableBuilder = (function () {
     };
     return TableBuilder;
 })();
+//# sourceMappingURL=itjakub.plugins.bibliography.variableInterpreter.js.map

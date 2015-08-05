@@ -172,3 +172,4 @@ var BookTypeEnum;
     BookTypeEnum[BookTypeEnum["BibliographicalItem"] = 5] = "BibliographicalItem";
     BookTypeEnum[BookTypeEnum["CardFile"] = 6] = "CardFile";
 })(BookTypeEnum || (BookTypeEnum = {}));
+//# sourceMappingURL=itjakub.plugins.bibliography.js.map

@@ -26,3 +26,4 @@ $(document).ready(function () {
     searchBox.addDataSet("Author", "Autoři");
     searchBox.create();
 });
+//# sourceMappingURL=itjakub.bibliographies.List.js.map
